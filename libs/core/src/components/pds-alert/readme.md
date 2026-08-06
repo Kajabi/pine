@@ -7,14 +7,15 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                                                                                                    | Type                                                        | Default     |
-| ------------- | -------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ----------- |
-| `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute.                                          | `string`                                                    | `undefined` |
-| `dismissible` | `dismissible`  | If true, shows the dismiss button. If false, the dismiss button is hidden.                                     | `boolean`                                                   | `false`     |
-| `heading`     | `heading`      | Text displayed as the heading of the alert.                                                                    | `string`                                                    | `undefined` |
-| `hideIcon`    | `hide-icon`    | If true, the leading icon is hidden.                                                                           | `boolean`                                                   | `false`     |
-| `small`       | `small`        | If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed. | `boolean`                                                   | `false`     |
-| `variant`     | `variant`      | Sets the style variant of the alert.                                                                           | `"danger" \| "default" \| "info" \| "success" \| "warning"` | `'default'` |
+| Property       | Attribute       | Description                                                                                                    | Type                                                        | Default           |
+| -------------- | --------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ----------------- |
+| `componentId`  | `component-id`  | A unique identifier used for the underlying component `id` attribute.                                          | `string`                                                    | `undefined`       |
+| `dismissLabel` | `dismiss-label` | Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.         | `string`                                                    | `'Dismiss alert'` |
+| `dismissible`  | `dismissible`   | If true, shows the dismiss button. If false, the dismiss button is hidden.                                     | `boolean`                                                   | `false`           |
+| `heading`      | `heading`       | Text displayed as the heading of the alert.                                                                    | `string`                                                    | `undefined`       |
+| `hideIcon`     | `hide-icon`     | If true, the leading icon is hidden.                                                                           | `boolean`                                                   | `false`           |
+| `small`        | `small`         | If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed. | `boolean`                                                   | `false`           |
+| `variant`      | `variant`       | Sets the style variant of the alert.                                                                           | `"danger" \| "default" \| "info" \| "success" \| "warning"` | `'default'`       |
 
 
 ## Events

@@ -3,6 +3,8 @@ import { computePosition, flip, offset, shift, size, autoUpdate } from '@floatin
 import { debounceEvent } from '@utils/utils';
 import { isSpecTest, messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
+import { formatMessage, pluralize } from '../../i18n';
+import type { PluralForms } from '../../i18n';
 import type {
   MultiselectOption,
   MultiselectChangeEventDetail,
@@ -53,15 +55,82 @@ export class PdsMultiselect {
   @Prop() label?: string;
 
   /**
-   * Placeholder text for the input field.
+   * Placeholder text for the input field. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Select...'
    */
-  @Prop() placeholder?: string = 'Select...';
+  @Prop() placeholder = 'Select...';
 
   /**
-   * Placeholder text for the search input inside the dropdown panel.
-   * @default 'Find...'
+   * Placeholder text for the search input inside the dropdown panel. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Find...'
    */
-  @Prop() searchPlaceholder: string = 'Find...';
+  @Prop() searchPlaceholder = 'Find...';
+
+  /**
+   * Accessible label for the search input. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Search options'
+   */
+  @Prop() searchOptionsLabel = 'Search options';
+
+  /**
+   * Accessible label for the selected-items region. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Selected items'
+   */
+  @Prop() selectedItemsLabel = 'Selected items';
+
+  /**
+   * Accessible label for the options listbox (falls back to this when `label` is unset). Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Options'
+   */
+  @Prop() optionsLabel = 'Options';
+
+  /**
+   * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'No options found'
+   */
+  @Prop() noOptionsFoundLabel = 'No options found';
+
+  /**
+   * Visible label for the create-new-option row. Pass a translated string to localize it; `{text}` is interpolated.
+   * @defaultValue 'Add "{text}"'
+   */
+  @Prop() createOptionLabel = 'Add "{text}"';
+
+  /**
+   * Accessible label for the create-new-option row. Pass a translated string to localize it; `{text}` is interpolated.
+   * @defaultValue 'Create new tag: {text}'
+   */
+  @Prop() createOptionAriaLabel = 'Create new tag: {text}';
+
+  /**
+   * Screen-reader announcement when an item is removed. Pass a translated string to localize it; `{item}` is interpolated.
+   * @defaultValue '{item} removed'
+   */
+  @Prop() itemRemovedLabel = '{item} removed';
+
+  /**
+   * Accessible label for the remove button on each selected-item pill. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Remove'
+   */
+  @Prop() pillRemoveLabel = 'Remove';
+
+  /**
+   * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated.
+   * @defaultValue '{count} item'
+   */
+  @Prop() selectedCountLabelOne = '{count} item';
+
+  /**
+   * Plural (and fallback) form of the selected-count trigger text — used for English and any locale whose selected plural category isn't supplied via `selectedCountLabels`. Pass a translated string to localize it; `{count}` is interpolated.
+   * @defaultValue '{count} items'
+   */
+  @Prop() selectedCountLabelOther = '{count} items';
+
+  /**
+   * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated.
+   * @defaultValue undefined
+   */
+  @Prop() selectedCountLabels?: PluralForms | string;
 
   /**
    * Whether to close the panel after an option is selected.
@@ -1151,7 +1220,7 @@ export class PdsMultiselect {
         role="option"
         aria-selected={isSelected ? 'true' : 'false'}
         aria-disabled={isDisabled || isCreateDisabled ? 'true' : undefined}
-        aria-label={isCreateOption ? `Create new tag: ${option.text}` : undefined}
+        aria-label={isCreateOption ? formatMessage(this.createOptionAriaLabel, { text: option.text }) : undefined}
         data-index={index}
         onMouseDown={this.handleOptionMouseDown(option)}
         onMouseEnter={this.handleOptionMouseEnter(index, option)}
@@ -1159,7 +1228,7 @@ export class PdsMultiselect {
         {isCreateOption ? (
           <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
             <pds-icon name="add" size="small" />
-            <pds-text>Add "{option.text}"</pds-text>
+            <pds-text>{formatMessage(this.createOptionLabel, { text: option.text })}</pds-text>
           </pds-box>
         ) : (
           <pds-checkbox
@@ -1213,7 +1282,7 @@ export class PdsMultiselect {
             class="pds-multiselect__search-input"
             placeholder={this.searchPlaceholder}
             value={this.searchQuery}
-            aria-label="Search options"
+            aria-label={this.searchOptionsLabel}
             aria-controls={`${this.componentId}-listbox`}
             aria-activedescendant={this.highlightedIndex >= 0 ? `${this.componentId}-option-${this.highlightedIndex}` : undefined}
             role="combobox"
@@ -1234,7 +1303,7 @@ export class PdsMultiselect {
           class="pds-multiselect__listbox"
           role="listbox"
           aria-multiselectable="true"
-          aria-label={this.label || 'Options'}
+          aria-label={this.label || this.optionsLabel}
           id={`${this.componentId}-listbox`}
           ref={el => (this.listboxEl = el)}
           style={{ maxHeight: this.maxHeight }}
@@ -1255,7 +1324,7 @@ export class PdsMultiselect {
               {hasSlottedEmpty ? (
                 <slot name="empty" />
               ) : (
-                <span>No options found</span>
+                <span>{this.noOptionsFoundLabel}</span>
               )}
             </li>
           )}
@@ -1300,7 +1369,7 @@ export class PdsMultiselect {
     this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems });
     // Clear first so screen readers re-announce even when the same item is removed twice
     this.removalAnnouncement = '';
-    queueMicrotask(() => { this.removalAnnouncement = `${item.text} removed`; });
+    queueMicrotask(() => { this.removalAnnouncement = formatMessage(this.itemRemovedLabel, { item: item.text }); });
     this.isClosingViaSelection = true;
     if (this.isOpen) {
       this.searchInputEl?.focus();
@@ -1325,7 +1394,7 @@ export class PdsMultiselect {
     return (
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--inline"
-        aria-label="Selected items"
+        aria-label={this.selectedItemsLabel}
       >
         {visibleItems.map(item => (
           <pds-chip
@@ -1334,6 +1403,7 @@ export class PdsMultiselect {
             variant={variant}
             size="sm"
             sentiment="neutral"
+            dismiss-label={this.pillRemoveLabel}
             onPdsTagCloseClick={this.handlePillRemove(item)}
           >{item.text}</pds-chip>
         ))}
@@ -1350,7 +1420,7 @@ export class PdsMultiselect {
     return (
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--below"
-        aria-label="Selected items"
+        aria-label={this.selectedItemsLabel}
       >
         {this.selectedItems.map(item => (
           <pds-chip
@@ -1359,6 +1429,7 @@ export class PdsMultiselect {
             variant={variant}
             size="md"
             sentiment="neutral"
+            dismiss-label={this.pillRemoveLabel}
             onPdsTagCloseClick={this.handlePillRemove(item)}
           >{item.text}</pds-chip>
         ))}
@@ -1369,9 +1440,35 @@ export class PdsMultiselect {
   private getTriggerText(): string {
     const count = this.selectedItems.length;
     if (count === 0 || (this.selectedDisplay === 'pill' && this.pillPosition === 'below')) {
+      // Fall back to a non-empty string: the trigger's accessible name comes from
+      // this text, so an empty/undefined placeholder must never leave it nameless
+      // (WCAG 4.1.2). The prop is localizable; this last-resort default is not.
       return this.placeholder || 'Select...';
     }
-    return `${count} item${count === 1 ? '' : 's'}`;
+    return pluralize(this.el, count, this.resolveCountForms());
+  }
+
+  /**
+   * The `one`/`other` props are the ergonomic English defaults; `selectedCountLabels`
+   * (object or JSON-string attribute) layers full CLDR forms on top for locales
+   * that need `few`/`many`/`two`/`zero`. Malformed JSON degrades to the defaults.
+   */
+  private resolveCountForms(): PluralForms {
+    const base: PluralForms = {
+      one: this.selectedCountLabelOne,
+      other: this.selectedCountLabelOther,
+    };
+    const extra = this.selectedCountLabels;
+    if (!extra) return base;
+    if (typeof extra === 'string') {
+      try {
+        const parsed = JSON.parse(extra);
+        return parsed && typeof parsed === 'object' ? { ...base, ...parsed } : base;
+      } catch {
+        return base; // not valid JSON → fall back to the English-shape defaults
+      }
+    }
+    return { ...base, ...extra };
   }
 
   render() {

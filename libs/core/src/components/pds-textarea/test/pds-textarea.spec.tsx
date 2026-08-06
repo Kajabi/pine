@@ -1051,4 +1051,27 @@ it('should set focus on the input element when setFocus is called', async() => {
       expect(textarea?.hasAttribute('disabled')).toBe(true);
     });
   });
+
+  describe('i18n (characterCountLabel prop)', () => {
+    const counterLabelOf = (page: { root: HTMLElement }) =>
+      page.root.shadowRoot
+        .querySelector('.pds-textarea__character-counter')
+        ?.getAttribute('aria-label');
+
+    it('interpolates {current}/{max} into the default English char-counter label', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="ta-i18n" label="Bio" max-length="150"></pds-textarea>`,
+      });
+      expect(counterLabelOf(page)).toBe('0 of 150 characters');
+    });
+
+    it('interpolates into a translated character-count-label when provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="ta-i18n" label="Bio" max-length="150" character-count-label="{current} de {max} caracteres"></pds-textarea>`,
+      });
+      expect(counterLabelOf(page)).toBe('0 de 150 caracteres');
+    });
+  });
 });

@@ -77,6 +77,12 @@ export class PdsChip {
   @Prop() removeTarget?: '_blank' | '_self' | '_parent' | '_top';
 
   /**
+   * Accessible label for the remove button. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Remove'
+   */
+  @Prop() dismissLabel = 'Remove';
+
+  /**
    * Event emitted when the close button is clicked on a tag variant chip.
    */
   @Event() pdsTagCloseClick: EventEmitter<void>;
@@ -158,7 +164,7 @@ export class PdsChip {
         const linkAttrs: any = {
           class: 'pds-chip__close',
           href: this.removeUrl,
-          'aria-label': 'Remove',
+          'aria-label': this.dismissLabel,
         };
 
         // Add target if specified
@@ -197,7 +203,7 @@ export class PdsChip {
       return {
         class: 'pds-chip__close',
         type: 'button',
-        'aria-label': 'Remove',
+        'aria-label': this.dismissLabel,
       };
     };
 

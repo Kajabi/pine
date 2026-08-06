@@ -48,6 +48,13 @@ export class PdsAlert {
   @Prop() variant: 'default' | 'danger' | 'info' | 'success' | 'warning' = 'default';
 
   /**
+   * Accessible label for the dismiss button. Pass a translated string to
+   * localize it; defaults to English.
+   * @defaultValue 'Dismiss alert'
+   */
+  @Prop() dismissLabel = 'Dismiss alert';
+
+  /**
    * Event emitted when the dismiss button is clicked.
    */
   @Event() pdsAlertDismissClick: EventEmitter<void>;
@@ -142,7 +149,7 @@ export class PdsAlert {
             </pds-box>
 
             {this.dismissible && (
-              <button class="pds-alert__dismiss" type="button" part="dismiss" aria-label="Dismiss alert" onClick={this.handleCloseClick}>
+              <button class="pds-alert__dismiss" type="button" part="dismiss" aria-label={this.dismissLabel} onClick={this.handleCloseClick}>
                 <pds-icon icon="remove" size="var(--pds-alert-icon-size)" aria-hidden="true" color="var(--pds-alert-color-dismiss)" />
               </button>
             )}

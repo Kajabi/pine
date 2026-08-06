@@ -5,25 +5,27 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
+import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
+import { PluralForms } from "./i18n";
 import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
-export { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
+export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
+export { PluralForms } from "./i18n";
 export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 export { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
@@ -85,6 +87,11 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Dismiss alert'
+         */
+        "dismissLabel": string;
         /**
           * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false
@@ -150,6 +157,11 @@ export namespace Components {
   | 'sm' // 32px
   | 'xs' // 24px
   | string;
+        /**
+          * Accessible label for the dropdown trigger button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Avatar dropdown trigger'
+         */
+        "triggerLabel": string;
         /**
           * Determines the variant of avatar. Changes appearance accordingly.
           * @defaultValue customer
@@ -839,6 +851,11 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Accessible label for the remove button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Remove'
+         */
+        "dismissLabel": string;
+        /**
           * Determines whether a dot should be displayed on the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue false
          */
@@ -1486,6 +1503,16 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Accessible label for the create-new-option row. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Create new tag: {text}'
+         */
+        "createOptionAriaLabel": string;
+        /**
+          * Visible label for the create-new-option row. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Add "{text}"'
+         */
+        "createOptionLabel": string;
+        /**
           * URL endpoint for creating new options. When set, shows "Add" option when no matches found.
          */
         "createUrl"?: string;
@@ -1540,6 +1567,11 @@ export namespace Components {
          */
         "invalid"?: boolean;
         /**
+          * Screen-reader announcement when an item is removed. Pass a translated string to localize it; `{item}` is interpolated.
+          * @defaultValue '{item} removed'
+         */
+        "itemRemovedLabel": string;
+        /**
           * Text to be displayed as the multiselect label.
          */
         "label"?: string;
@@ -1572,9 +1604,19 @@ export namespace Components {
          */
         "name"?: string;
         /**
+          * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'No options found'
+         */
+        "noOptionsFoundLabel": string;
+        /**
           * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
         "options"?: MultiselectOption[];
+        /**
+          * Accessible label for the options listbox (falls back to this when `label` is unset). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Options'
+         */
+        "optionsLabel": string;
         /**
           * Width of the dropdown panel. Defaults to the trigger width.
          */
@@ -1585,25 +1627,55 @@ export namespace Components {
          */
         "pillPosition": 'inline' | 'below';
         /**
-          * Placeholder text for the input field.
-          * @default 'Select...'
+          * Accessible label for the remove button on each selected-item pill. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Remove'
          */
-        "placeholder"?: string;
+        "pillRemoveLabel": string;
+        /**
+          * Placeholder text for the input field. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Select...'
+         */
+        "placeholder": string;
         /**
           * If true, the multiselect is required.
           * @default false
          */
         "required": boolean;
         /**
-          * Placeholder text for the search input inside the dropdown panel.
-          * @default 'Find...'
+          * Accessible label for the search input. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Search options'
+         */
+        "searchOptionsLabel": string;
+        /**
+          * Placeholder text for the search input inside the dropdown panel. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Find...'
          */
         "searchPlaceholder": string;
+        /**
+          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated.
+          * @defaultValue '{count} item'
+         */
+        "selectedCountLabelOne": string;
+        /**
+          * Plural (and fallback) form of the selected-count trigger text — used for English and any locale whose selected plural category isn't supplied via `selectedCountLabels`. Pass a translated string to localize it; `{count}` is interpolated.
+          * @defaultValue '{count} items'
+         */
+        "selectedCountLabelOther": string;
+        /**
+          * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated.
+          * @defaultValue undefined
+         */
+        "selectedCountLabels"?: PluralForms | string;
         /**
           * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
          */
         "selectedDisplay": 'count' | 'pill';
+        /**
+          * Accessible label for the selected-items region. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Selected items'
+         */
+        "selectedItemsLabel": string;
         /**
           * Sets focus on the trigger button.
          */
@@ -2167,19 +2239,7 @@ export namespace Components {
         /**
           * Sets the font size.
          */
-        "size"?: | '2xl'
-    | 'xl'
-    | 'lg'
-    | 'md'
-    | 'sm'
-    | 'xs'
-    | '2xs'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6';
+        "size"?: TextSizeType;
         /**
           * Determines what semantic text tag to render.
           * @default 'p'
@@ -2215,6 +2275,11 @@ export namespace Components {
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
          */
         "autocomplete": string;
+        /**
+          * Template for the character-counter's accessible label. Pass a translated string to localize it; `{current}` and `{max}` are interpolated.
+          * @defaultValue '{current} of {max} characters'
+         */
+        "characterCountLabel": string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -2296,6 +2361,11 @@ export namespace Components {
          */
         "componentId": string;
         "dismiss": () => Promise<void>;
+        /**
+          * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Dismiss message'
+         */
+        "dismissLabel": string;
         /**
           * Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies.
           * @default true
@@ -3198,6 +3268,11 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
+          * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Dismiss alert'
+         */
+        "dismissLabel"?: string;
+        /**
           * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false
          */
@@ -3266,6 +3341,11 @@ declare namespace LocalJSX {
   | 'sm' // 32px
   | 'xs' // 24px
   | string;
+        /**
+          * Accessible label for the dropdown trigger button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Avatar dropdown trigger'
+         */
+        "triggerLabel"?: string;
         /**
           * Determines the variant of avatar. Changes appearance accordingly.
           * @defaultValue customer
@@ -3965,6 +4045,11 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
+          * Accessible label for the remove button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Remove'
+         */
+        "dismissLabel"?: string;
+        /**
           * Determines whether a dot should be displayed on the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue false
          */
@@ -4648,6 +4733,16 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * Accessible label for the create-new-option row. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Create new tag: {text}'
+         */
+        "createOptionAriaLabel"?: string;
+        /**
+          * Visible label for the create-new-option row. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Add "{text}"'
+         */
+        "createOptionLabel"?: string;
+        /**
           * URL endpoint for creating new options. When set, shows "Add" option when no matches found.
          */
         "createUrl"?: string;
@@ -4706,6 +4801,11 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
+          * Screen-reader announcement when an item is removed. Pass a translated string to localize it; `{item}` is interpolated.
+          * @defaultValue '{item} removed'
+         */
+        "itemRemovedLabel"?: string;
+        /**
           * Text to be displayed as the multiselect label.
          */
         "label"?: string;
@@ -4738,6 +4838,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
+          * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'No options found'
+         */
+        "noOptionsFoundLabel"?: string;
+        /**
           * Emitted when selection changes.
          */
         "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
@@ -4762,6 +4867,11 @@ declare namespace LocalJSX {
          */
         "options"?: MultiselectOption[];
         /**
+          * Accessible label for the options listbox (falls back to this when `label` is unset). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Options'
+         */
+        "optionsLabel"?: string;
+        /**
           * Width of the dropdown panel. Defaults to the trigger width.
          */
         "panelWidth"?: string;
@@ -4771,8 +4881,13 @@ declare namespace LocalJSX {
          */
         "pillPosition"?: 'inline' | 'below';
         /**
-          * Placeholder text for the input field.
-          * @default 'Select...'
+          * Accessible label for the remove button on each selected-item pill. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Remove'
+         */
+        "pillRemoveLabel"?: string;
+        /**
+          * Placeholder text for the input field. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Select...'
          */
         "placeholder"?: string;
         /**
@@ -4781,15 +4896,40 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Placeholder text for the search input inside the dropdown panel.
-          * @default 'Find...'
+          * Accessible label for the search input. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Search options'
+         */
+        "searchOptionsLabel"?: string;
+        /**
+          * Placeholder text for the search input inside the dropdown panel. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Find...'
          */
         "searchPlaceholder"?: string;
+        /**
+          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated.
+          * @defaultValue '{count} item'
+         */
+        "selectedCountLabelOne"?: string;
+        /**
+          * Plural (and fallback) form of the selected-count trigger text — used for English and any locale whose selected plural category isn't supplied via `selectedCountLabels`. Pass a translated string to localize it; `{count}` is interpolated.
+          * @defaultValue '{count} items'
+         */
+        "selectedCountLabelOther"?: string;
+        /**
+          * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated.
+          * @defaultValue undefined
+         */
+        "selectedCountLabels"?: PluralForms | string;
         /**
           * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
          */
         "selectedDisplay"?: 'count' | 'pill';
+        /**
+          * Accessible label for the selected-items region. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Selected items'
+         */
+        "selectedItemsLabel"?: string;
         /**
           * Width of the trigger button (and reference for dropdown positioning).
           * @default '100%'
@@ -5393,19 +5533,7 @@ declare namespace LocalJSX {
         /**
           * Sets the font size.
          */
-        "size"?: | '2xl'
-    | 'xl'
-    | 'lg'
-    | 'md'
-    | 'sm'
-    | 'xs'
-    | '2xs'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6';
+        "size"?: TextSizeType;
         /**
           * Determines what semantic text tag to render.
           * @default 'p'
@@ -5441,6 +5569,11 @@ declare namespace LocalJSX {
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
          */
         "autocomplete"?: string;
+        /**
+          * Template for the character-counter's accessible label. Pass a translated string to localize it; `{current}` and `{max}` are interpolated.
+          * @defaultValue '{current} of {max} characters'
+         */
+        "characterCountLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -5542,6 +5675,11 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Dismiss message'
+         */
+        "dismissLabel"?: string;
+        /**
           * Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies.
           * @default true
          */
@@ -5619,6 +5757,7 @@ declare namespace LocalJSX {
         "dismissible": boolean;
         "hideIcon": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
+        "dismissLabel": string;
     }
     interface PdsAvatarAttributes {
         "alt": string | null;
@@ -5634,6 +5773,7 @@ declare namespace LocalJSX {
   | 'xs' // 24px
   | string;
         "variant": 'customer' | 'admin';
+        "triggerLabel": string;
     }
     interface PdsBoxAttributes {
         "alignItems": `start` | `center` | `end` | `baseline` | `stretch`;
@@ -5796,6 +5936,7 @@ declare namespace LocalJSX {
         "removeUrl": string;
         "removeHttpMethod": 'get' | 'post' | 'put' | 'patch' | 'delete';
         "removeTarget": '_blank' | '_self' | '_parent' | '_top';
+        "dismissLabel": string;
     }
     interface PdsComboboxAttributes {
         "componentId": string;
@@ -5940,6 +6081,17 @@ declare namespace LocalJSX {
         "label": string;
         "placeholder": string;
         "searchPlaceholder": string;
+        "searchOptionsLabel": string;
+        "selectedItemsLabel": string;
+        "optionsLabel": string;
+        "noOptionsFoundLabel": string;
+        "createOptionLabel": string;
+        "createOptionAriaLabel": string;
+        "itemRemovedLabel": string;
+        "pillRemoveLabel": string;
+        "selectedCountLabelOne": string;
+        "selectedCountLabelOther": string;
+        "selectedCountLabels": PluralForms | string;
         "closePanelOnSelect": boolean;
         "name": string;
         "disabled": boolean;
@@ -6118,19 +6270,7 @@ declare namespace LocalJSX {
         "decoration": 'strikethrough' | 'underline-dotted';
         "gutter": '2xl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs' | '2xs';
         "italic": boolean;
-        "size": | '2xl'
-    | 'xl'
-    | 'lg'
-    | 'md'
-    | 'sm'
-    | 'xs'
-    | '2xs'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6';
+        "size": TextSizeType;
         "weight": | 'extra-light'
     | 'light'
     | 'regular'
@@ -6169,6 +6309,7 @@ declare namespace LocalJSX {
         "maxLength": number;
         "highlight": boolean;
         "value": string | null;
+        "characterCountLabel": string;
     }
     interface PdsToastAttributes {
         "componentId": string;
@@ -6176,6 +6317,7 @@ declare namespace LocalJSX {
         "duration": number;
         "icon": string;
         "type": 'default' | 'danger' | 'loading';
+        "dismissLabel": string;
     }
     interface PdsTooltipAttributes {
         "content": string;

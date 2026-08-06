@@ -5,6 +5,7 @@ import { debounceEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
 import { inheritAttributes, inheritAriaAttributes } from '@utils/attributes';
 import { danger } from '@pine-ds/icons/icons';
+import { formatMessage } from '../../i18n';
 
 /**
  * @slot action - Content to be displayed in the label area, typically for help icons or links
@@ -172,6 +173,13 @@ export class PdsTextarea {
    * If true, the textarea has action content in the label area
    */
   @State() hasAction = false;
+
+  /**
+   * Template for the character-counter's accessible label. Pass a translated
+   * string to localize it; `{current}` and `{max}` are interpolated.
+   * @defaultValue '{current} of {max} characters'
+   */
+  @Prop() characterCountLabel = '{current} of {max} characters';
 
   @Watch('debounce')
   protected debounceChanged() {
@@ -417,7 +425,7 @@ export class PdsTextarea {
         ref={(el) => this.characterCounter = el}
         role="status"
         aria-live="polite"
-        aria-label={`${currentLength} of ${this.maxLength} characters`}
+        aria-label={formatMessage(this.characterCountLabel, { current: currentLength, max: this.maxLength })}
       >
         {currentLength} / {this.maxLength}
       </div>

@@ -7,13 +7,14 @@
 
 ## Properties
 
-| Property                   | Attribute      | Description                                                                                                                                             | Type                                 | Default     |
-| -------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ----------- |
-| `componentId` _(required)_ | `component-id` | A unique identifier used for the underlying component `id` attribute.                                                                                   | `string`                             | `undefined` |
-| `dismissible`              | `dismissible`  | Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies. | `boolean`                            | `true`      |
-| `duration`                 | `duration`     | The duration in milliseconds to show the toast before auto-dismissing. Set to 0 to disable auto-dismiss.                                                | `number`                             | `4500`      |
-| `icon`                     | `icon`         | The name of the icon to display in the toast.                                                                                                           | `string`                             | `undefined` |
-| `type`                     | `type`         | The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation                           | `"danger" \| "default" \| "loading"` | `'default'` |
+| Property                   | Attribute       | Description                                                                                                                                             | Type                                 | Default             |
+| -------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------- |
+| `componentId` _(required)_ | `component-id`  | A unique identifier used for the underlying component `id` attribute.                                                                                   | `string`                             | `undefined`         |
+| `dismissLabel`             | `dismiss-label` | Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.                                                  | `string`                             | `'Dismiss message'` |
+| `dismissible`              | `dismissible`   | Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies. | `boolean`                            | `true`              |
+| `duration`                 | `duration`      | The duration in milliseconds to show the toast before auto-dismissing. Set to 0 to disable auto-dismiss.                                                | `number`                             | `4500`              |
+| `icon`                     | `icon`          | The name of the icon to display in the toast.                                                                                                           | `string`                             | `undefined`         |
+| `type`                     | `type`          | The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation                           | `"danger" \| "default" \| "loading"` | `'default'`         |
 
 
 ## Events

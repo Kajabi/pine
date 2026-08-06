@@ -62,6 +62,7 @@
     "lint": "run-p lint.*",
     "lint.eslint": "eslint src",
     "lint.styles": "stylelint \"./src/**/*.*css\"",
+    "i18n.audit": "node lint-rules/i18n-audit.cjs",
     "prettier": "prettier \"./src/**/*.{html,ts,tsx,js,jsx}\"",
     "prestart": "npm run build",
     "start": "run-p start.*",

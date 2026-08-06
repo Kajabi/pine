@@ -49,6 +49,13 @@ export class PdsToast {
   @Prop() type: 'default' | 'danger' | 'loading' = 'default';
 
   /**
+   * Accessible label for the dismiss button. Pass a translated string to
+   * localize it; defaults to English.
+   * @defaultValue 'Dismiss message'
+   */
+  @Prop() dismissLabel = 'Dismiss message';
+
+  /**
    * Whether the toast is currently visible.
    */
   @State() isVisible: boolean = true;
@@ -200,7 +207,7 @@ export class PdsToast {
               onClick={() => {
                 this.dismiss();
               }}
-              aria-label="Dismiss message"
+              aria-label={this.dismissLabel}
             >
               <pds-icon name="remove" />
             </button>

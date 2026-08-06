@@ -66,6 +66,13 @@ export class PdsAvatar {
    */
   @Prop({ reflect: true }) variant?: 'customer' | 'admin' = 'customer';
 
+  /**
+   * Accessible label for the dropdown trigger button. Pass a translated string
+   * to localize it; defaults to English.
+   * @defaultValue 'Avatar dropdown trigger'
+   */
+  @Prop() triggerLabel = 'Avatar dropdown trigger';
+
   private avatarSize() {
     const sizes: { [key: string]: any } = {
       xs: '24px',
@@ -100,7 +107,7 @@ export class PdsAvatar {
     return (
       this.dropdown
         ?
-        <button class="pds-avatar__button" type="button" part="button" aria-label="Avatar dropdown trigger">
+        <button class="pds-avatar__button" type="button" part="button" aria-label={this.triggerLabel}>
         {this.renderAssetWrapper()}
         </button>
         :

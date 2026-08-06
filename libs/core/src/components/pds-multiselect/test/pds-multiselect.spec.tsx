@@ -1991,4 +1991,141 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('i18n (selected-count plural forms)', () => {
+    const triggerTextOf = (page: { root: HTMLElement }) =>
+      page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text')?.textContent;
+
+    const selectTwo = async (page: Awaited<ReturnType<typeof newSpecPage>>) => {
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+    };
+
+    it('uses translated one/other count labels', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-count-label-one="{count} elemento" selected-count-label-other="{count} elementos"></pds-multiselect>`,
+      });
+      await selectTwo(page);
+      expect(triggerTextOf(page)).toBe('2 elementos');
+    });
+
+    it('uses full CLDR forms from a JSON selected-count-labels attribute (Polish "few")', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" lang="pl" selected-count-labels='{"one":"{count} element","few":"{count} elementy","many":"{count} elementów","other":"{count} elementu"}'></pds-multiselect>`,
+      });
+      await selectTwo(page); // count 2 → Polish "few" (locale from the element's lang)
+      expect(triggerTextOf(page)).toBe('2 elementy');
+    });
+
+    it('accepts the CLDR forms as an object property (framework consumers)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" lang="pl"></pds-multiselect>`,
+      });
+      page.rootInstance.selectedCountLabels = {
+        one: '{count} element',
+        few: '{count} elementy',
+        many: '{count} elementów',
+        other: '{count} elementu',
+      };
+      await selectTwo(page); // count 2 → Polish "few"
+      expect(triggerTextOf(page)).toBe('2 elementy');
+    });
+
+    it('degrades to the one/other defaults when selected-count-labels is malformed JSON', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-count-labels="not json"></pds-multiselect>`,
+      });
+      await selectTwo(page);
+      expect(triggerTextOf(page)).toBe('2 items');
+    });
+  });
+
+  describe('i18n (a11y + visible string props)', () => {
+    it('keeps a non-empty accessible name on the trigger when placeholder is empty', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" placeholder=""></pds-multiselect>`,
+      });
+      const triggerText = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text');
+      expect(triggerText.textContent).toBe('Select...'); // never nameless (WCAG 4.1.2)
+    });
+
+    it('defaults and localizes the search-input aria-label (searchOptionsLabel)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" search-options-label="Buscar opciones"></pds-multiselect>`,
+      });
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      const search = page.root.shadowRoot.querySelector('.pds-multiselect__search-input');
+      expect(search.getAttribute('aria-label')).toBe('Buscar opciones');
+    });
+
+    it('defaults and localizes the listbox aria-label (optionsLabel)', async () => {
+      const dflt = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+      dflt.rootInstance.isOpen = true;
+      await dflt.waitForChanges();
+      expect(dflt.root.shadowRoot.querySelector('.pds-multiselect__listbox').getAttribute('aria-label')).toBe('Options');
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" options-label="Opciones"></pds-multiselect>`,
+      });
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__listbox').getAttribute('aria-label')).toBe('Opciones');
+    });
+
+    it('localizes the no-options-found text (noOptionsFoundLabel)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" no-options-found-label="Sin resultados"></pds-multiselect>`,
+      });
+      page.rootInstance.internalOptions = [];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__empty').textContent).toContain('Sin resultados');
+    });
+
+    it('localizes the create-option visible text and aria-label (createOptionLabel / createOptionAriaLabel)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags" create-option-label='Añadir "{text}"' create-option-aria-label="Crear etiqueta: {text}"></pds-multiselect>`,
+      });
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Marketing' }];
+      page.rootInstance.searchQuery = 'NewTag';
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      const createOption = page.root.shadowRoot.querySelector('.pds-multiselect__option--create');
+      expect(createOption.textContent).toContain('Añadir "NewTag"');
+      expect(createOption.getAttribute('aria-label')).toBe('Crear etiqueta: NewTag');
+    });
+
+    it('defaults and localizes the selected-items region label and pill remove label (pill mode)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" selected-items-label="Elementos seleccionados" pill-remove-label="Quitar"></pds-multiselect>`,
+      });
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.selectedItems = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+      const pillList = page.root.shadowRoot.querySelector('.pds-multiselect__pill-list');
+      expect(pillList.getAttribute('aria-label')).toBe('Elementos seleccionados');
+      const chip = page.root.shadowRoot.querySelector('pds-chip');
+      expect(chip.getAttribute('dismiss-label')).toBe('Quitar');
+    });
+  });
+
 });

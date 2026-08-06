@@ -160,6 +160,27 @@ describe('pds-alert', () => {
     }
   });
 
+  describe('i18n (dismissLabel prop)', () => {
+    const dismissLabelOf = (page: { root: HTMLElement }) =>
+      page.root.shadowRoot.querySelector('.pds-alert__dismiss')?.getAttribute('aria-label');
+
+    it('defaults the dismiss aria-label to English', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert dismissible="true"></pds-alert>`,
+      });
+      expect(dismissLabelOf(page)).toBe('Dismiss alert');
+    });
+
+    it('uses a translated dismiss-label when provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert dismissible="true" dismiss-label="Descartar alerta"></pds-alert>`,
+      });
+      expect(dismissLabelOf(page)).toBe('Descartar alerta');
+    });
+  });
+
   it('renders action slot content correctly', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],

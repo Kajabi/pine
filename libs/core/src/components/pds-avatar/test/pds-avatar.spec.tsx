@@ -238,4 +238,25 @@ describe('pds-avatar', () => {
     `);
   });
 
+  describe('i18n (triggerLabel prop)', () => {
+    const triggerLabelOf = (page: { root: HTMLElement }) =>
+      page.root.shadowRoot.querySelector('.pds-avatar__button')?.getAttribute('aria-label');
+
+    it('defaults the dropdown-trigger aria-label to English', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar dropdown="true"></pds-avatar>`,
+      });
+      expect(triggerLabelOf(page)).toBe('Avatar dropdown trigger');
+    });
+
+    it('uses a translated trigger-label when provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar dropdown="true" trigger-label="Menú de la cuenta"></pds-avatar>`,
+      });
+      expect(triggerLabelOf(page)).toBe('Menú de la cuenta');
+    });
+  });
+
 });

@@ -401,6 +401,38 @@ describe('pds-chip', () => {
     expect(eventSpy).toHaveBeenCalled();
   });
 
+  describe('i18n (dismissLabel prop)', () => {
+    const closeLabelOf = (page: { body: HTMLElement }) =>
+      page.body
+        .querySelector('pds-chip')
+        ?.shadowRoot?.querySelector('.pds-chip__close')
+        ?.getAttribute('aria-label');
+
+    it('defaults the remove-button aria-label to English', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip variant="tag">Tag</pds-chip>`,
+      });
+      expect(closeLabelOf(page)).toBe('Remove');
+    });
+
+    it('uses a translated dismiss-label on the button variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip variant="tag" dismiss-label="Quitar">Tag</pds-chip>`,
+      });
+      expect(closeLabelOf(page)).toBe('Quitar');
+    });
+
+    it('uses a translated dismiss-label on the link variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip variant="tag" remove-url="/tags/1" dismiss-label="Quitar">Tag</pds-chip>`,
+      });
+      expect(closeLabelOf(page)).toBe('Quitar');
+    });
+  });
+
   it('renders close button as link when removeUrl prop is provided', async () => {
     const page = await newSpecPage({
       components: [PdsChip],

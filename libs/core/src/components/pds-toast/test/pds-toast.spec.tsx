@@ -317,4 +317,25 @@ describe('pds-toast', () => {
     expect(component.duration).toBe(0);
     expect(component.isVisible).toBe(true);
   });
+
+  describe('i18n (dismissLabel prop)', () => {
+    const dismissLabelOf = (page: { root: HTMLElement }) =>
+      page.root.shadowRoot.querySelector('.pds-toast__button')?.getAttribute('aria-label');
+
+    it('defaults the dismiss aria-label to English', async () => {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast component-id="test-toast"></pds-toast>`,
+      });
+      expect(dismissLabelOf(page)).toBe('Dismiss message');
+    });
+
+    it('uses a translated dismiss-label when provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast component-id="test-toast" dismiss-label="Descartar mensaje"></pds-toast>`,
+      });
+      expect(dismissLabelOf(page)).toBe('Descartar mensaje');
+    });
+  });
 });
