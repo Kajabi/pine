@@ -1,3 +1,13 @@
+## 3.28.0 (2026-08-07)
+
+### Features 🚀
+
+- **i18n:** prop-based localization pass-through (pilot) ([#786](https://github.com/Kajabi/pine/pull/786))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.27.0 (2026-07-20)
 
 ### Features 🚀
