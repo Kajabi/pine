@@ -15,16 +15,19 @@ This skill builds Stencil, serves Storybook, discovers the stories for the
 components the PR touched, captures Playwright screenshots across **theme
 (light/dark)**, viewport, and interactive state, evaluates each against the
 rules below, and loops until every shot passes or a structural blocker
-requires human input. It complements — does not replace — Chromatic: this is
-the fast, local, agent-evaluated pass you run before pushing, and before
-Chromatic runs in CI.
+requires human input. As of today this is the **only** pixel-level regression
+check Pine has: `@chromatic-com/storybook` is installed as a local Storybook
+panel, but the Chromatic **CI** job is not merged (it lives on an open PR). So
+a clean result here is currently the whole pixel-level signal — weigh it
+accordingly. Once Chromatic CI lands, this stays useful as the fast, local,
+agent-evaluated pass you run before pushing and before that job.
 
 ## When to Use
 
 - After changing any `libs/core/src/components/pds-*/**` file (`.tsx`, `.scss`/`.tokens.scss`, `.stories.*`)
 - As a complement to `pine-design-review` (token/a11y code review) and `pine-run-gauntlet`
 - Before requesting human review, to pre-validate rendered output in both themes
-- To sanity-check a change locally without waiting for the Chromatic CI job
+- To sanity-check a change locally before pushing (and, once the Chromatic CI job lands, without waiting for it)
 
 **Not the right tool when:** the PR only touches docs (`*.mdx`), build config, or non-component TypeScript with no rendered surface — there is nothing to screenshot. Say so and stop.
 
@@ -95,21 +98,22 @@ Also verify Playwright MCP is reachable by calling `mcp__playwright__browser_sna
 
 ## Phase 1 — PR Resolution + Component Scope
 
-1. **If PR number argument provided:** use it.
-2. **Otherwise:** auto-detect from current branch:
+1. **Resolve the PR number into `<number>` and thread it through every `gh` call below.** A bare `gh pr diff` / `gh pr view` resolves against the *current branch's* PR — so if the skill is invoked with an explicit number while checked out on a different branch (exactly what the `argument-hint` promotes), an un-numbered call silently scopes the wrong PR. Always pass `<number>` explicitly.
+   - **If a PR number argument was provided:** use it as `<number>`.
+   - **Otherwise:** auto-detect from the current branch and read the number back out:
+     ```bash
+     gh pr view --json number,url,title,headRefName,baseRefName,body   # <number> = .number
+     ```
+2. **Get changed files** (always numbered):
    ```bash
-   gh pr view --json number,url,title,headRefName,baseRefName,body
+   gh pr diff <number> --name-only
    ```
-3. **Get changed files:**
+3. **Determine component scope.** Reduce the diff to the set of changed components:
    ```bash
-   gh pr diff --name-only
-   ```
-4. **Determine component scope.** Reduce the diff to the set of changed components:
-   ```bash
-   gh pr diff --name-only | grep -oE 'libs/core/src/components/[^/]+' | sort -u
+   gh pr diff <number> --name-only | grep -oE 'libs/core/src/components/[^/]+' | sort -u
    ```
    Each entry is a component directory (e.g. `pds-button`, `pds-alert`). This is the scope — the skill only screenshots stories for these components (plus their child components, e.g. `pds-tabs` → `pds-tab`, `pds-tabpanel`).
-5. **Classify each changed file** to predict the visual risk (drives the capture plan):
+4. **Classify each changed file** to predict the visual risk (drives the capture plan):
    | Changed file | Visual risk | Emphasis |
    |---|---|---|
    | `*.tokens.scss` / `*.scss` | color, spacing, dark-mode | **both themes**, all variants |
@@ -138,7 +142,7 @@ Pine's visual surface is Storybook. Stories render compiled components from `dis
    ```bash
    curl -s -o /dev/null -w "%{http_code}" http://localhost:6006/index.json
    ```
-   Retry until `200`. If it never comes up, read the background process output for the failure (common: port 6006 already taken → the existing server is fine to reuse; or a Stencil build error → fix and rebuild).
+   Retry until `200`. If it never comes up, read the background process output for the failure (common: port 6006 already taken → a server **for this same branch** is fine to reuse, but one left over from another branch is **not** — stop it with `lsof -ti:6006 | xargs kill` and start fresh, or you'll screenshot the wrong bundle; or a Stencil build error → fix and rebuild).
 4. **Fetch the story index** and keep it — this is the authoritative story list (the Pine analog of `worktree-server list`):
    ```bash
    curl -s http://localhost:6006/index.json > /tmp/pine-stories.json
@@ -182,7 +186,8 @@ For every in-scope story, the capture matrix is:
   - `disabled` (usually already a dedicated story — prefer the story over synthesizing)
   - `error`/`invalid` for form components (`pds-input`, `pds-select`, `pds-textarea`, `pds-radio`, `pds-checkbox`, `pds-combobox`, `pds-multiselect`)
   - `open`/expanded for overlay components (`pds-modal`, `pds-dropdown-menu`, `pds-tooltip`, `pds-accordion`, `pds-combobox`)
-- **Direction (optional):** `rtl` via `globals=direction:rtl`, only if the PR touches logical-property / layout SCSS or the component is directional.
+
+> **RTL is intentionally out of scope for now.** Storybook does expose a `direction` global (`.storybook/preview.js` defines the `withDirection` decorator), but this skill does not yet plumb it through the Phase 5 loop or add a mirroring rule to evaluate it against. Rather than ship a half-wired axis, RTL is omitted; add it as a full axis (loop + URL param + rule) in a later iteration if needed.
 
 ### Variant coverage
 
@@ -195,7 +200,6 @@ Capture from the chrome-free iframe endpoint (no Storybook toolbar/sidebar in fr
 ```
 $SB/iframe.html?id=<storyId>&viewMode=story&globals=theme:dark
 $SB/iframe.html?id=<storyId>&viewMode=story&globals=theme:light
-# with direction:  &globals=theme:dark;direction:rtl   (semicolon-separated)
 ```
 
 ### Output location (absolute path — important)
@@ -235,7 +239,7 @@ Decide, per component, whether to also capture a **baseline** (the component as 
 
 If capturing baselines, note that it requires rebuilding Stencil on the base branch — do it in one batch after the PR-branch capture (Phase 5b), not interleaved. If the working tree is dirty or the user is mid-task, ask before switching branches.
 
-Skipping baselines is always acceptable — say so in the report and rely on the rules-based evaluation. Chromatic remains the authoritative pixel-diff in CI; this baseline mode is a local convenience.
+Skipping baselines is always acceptable — say so in the report and rely on the rules-based evaluation. (Once Chromatic CI lands it will be the authoritative pixel-diff; until then this baseline mode is the closest thing to one, so prefer running it on token/SCSS diffs.)
 
 ---
 
@@ -258,31 +262,35 @@ mcp__playwright__browser_wait_for({ timeout: 500 })                    # let fon
 ```
 Confirm the custom element actually upgraded (has a shadow root / rendered content) — a bare unstyled tag means `dist/` wasn't loaded (see Rule 2 retry).
 
-**Step 3 — Capture default, both themes** (repeat Steps 1–2 for `theme:light` and `theme:dark`):
+**Step 3 — Capture both themes, reading the console after *each* navigation.** Run this block for `theme:light`, then `theme:dark`. Read the console **immediately after each navigation** — Playwright MCP's per-navigation read (`all` omitted) only reports errors since the last `navigate`, so a single read at the end of the story would miss the earlier theme entirely:
 ```
-mcp__playwright__browser_take_screenshot({ filename: "<component>__<story>__desktop__<theme>.png" })
+# for THEME in light, dark:
+mcp__playwright__browser_navigate({ url: "$SB/iframe.html?id=<storyId>&viewMode=story&globals=theme:<THEME>" })
+mcp__playwright__browser_resize({ width: 1280, height: 800 })       # 375×812 for flagged responsive
+mcp__playwright__browser_wait_for({ selector: "<pds-component>" })
+mcp__playwright__browser_wait_for({ timeout: 500 })
+mcp__playwright__browser_take_screenshot({ filename: "<REPORT_DIR>/<component>__<story>__desktop__<THEME>.png" })
+mcp__playwright__browser_console_messages({ level: "error" })       # per-navigation; judge per Step 5
 ```
+`<REPORT_DIR>` is the **absolute** per-run directory from Phase 3 (`<repo-abs>/.claude/visual-test-reports/pr-<number>`). Never pass a bare relative filename — the MCP browser's cwd is not your shell's, so a relative name lands the PNG outside the repo (see "Output location" in Phase 3).
 
-**Step 4 — Capture interactive states** (desktop only, per the plan):
+**Step 4 — Capture interactive states** (desktop, per the plan; capture per theme where the state is theme-sensitive, e.g. the focus ring). Read the console again after interacting, still per-navigation:
 ```
-# hover
 mcp__playwright__browser_hover({ selector: "<interactive part>" })
-mcp__playwright__browser_take_screenshot({ filename: "<component>__<story>__desktop__<theme>__hover.png" })
+mcp__playwright__browser_take_screenshot({ filename: "<REPORT_DIR>/<component>__<story>__desktop__<theme>__hover.png" })
 
 # keyboard focus (focus ring is a frequent dark-mode regression)
 mcp__playwright__browser_press_key({ key: "Tab" })
-mcp__playwright__browser_take_screenshot({ filename: "<component>__<story>__desktop__<theme>__focus.png" })
+mcp__playwright__browser_take_screenshot({ filename: "<REPORT_DIR>/<component>__<story>__desktop__<theme>__focus.png" })
 
 # open/expanded overlays
 mcp__playwright__browser_click({ selector: "<trigger>" })
-mcp__playwright__browser_take_screenshot({ filename: "<component>__<story>__desktop__<theme>__open.png" })
+mcp__playwright__browser_take_screenshot({ filename: "<REPORT_DIR>/<component>__<story>__desktop__<theme>__open.png" })
+
+mcp__playwright__browser_console_messages({ level: "error" })       # after interaction, still per-navigation
 ```
 
-**Step 5 — Console check.** Read `error`-level console messages **for this navigation only** — do not pass `all: true`:
-```
-mcp__playwright__browser_console_messages({ level: "error" })
-```
-`all: true` returns the whole session's history, which after any Storybook restart floods with stale `ERR_CONNECTION_REFUSED` (the dead server) and `NoStoryMatchError` (a tab pointed at a story the new index lacks) — none of which are findings. Reading per-navigation gives the clean, current-story truth (and it matches the per-page `Console: N errors` counter the navigate call reports). **Filter harness noise before judging** — a `favicon.ico` (or other static-asset) 404 and Vite HMR chatter are expected and are **not** findings. A message fails Rule 4 only when it originates from the component bundle (stack/URL includes `pine-core/*.js`) or the story itself — e.g. a Stencil render/hydration error, a missing-token throw, or a thrown event listener. Those are real findings: capture the full message text into the report.
+**Step 5 — Judge the console reads.** The per-navigation reads from Steps 3–4 are what you judge — **never pass `all: true`**: it returns the whole session and, after any Storybook restart, floods with stale `ERR_CONNECTION_REFUSED` (the dead server) and `NoStoryMatchError` (a tab pointed at a story the new index lacks), none of which are findings. **Filter harness noise before judging** — a `favicon.ico` (or other static-asset) 404 and Vite HMR chatter are expected and are **not** findings. A message fails Rule 4 only when it originates from the component bundle (stack/URL includes `pine-core/*.js`) or the story itself — e.g. a Stencil render/hydration error, a missing-token throw, or a thrown event listener. Those are real findings: capture the full message text into the report.
 
 **Step 6 — Evaluate every screenshot against the rules below.**
 
@@ -321,11 +329,18 @@ mcp__playwright__browser_console_messages({ level: "error" })
 
 After all PR-branch shots are approved:
 
-1. Confirm a clean tree; record the current branch.
-2. **`build.stencil` dirties tracked generated files** — `libs/core/src/components.d.ts` and `libs/react/src/components/react-component-lib/createComponent.tsx` are checked in but regenerated on every build, so a branch switch **aborts** ("would be overwritten") after you've built. Reset them before each `git checkout`: `git checkout -- libs/core/src/components.d.ts libs/react/src/components/react-component-lib/createComponent.tsx`. (These are generated, not authored — safe to discard. If a genuine unrelated WIP file is also dirty, `git stash` it and restore after.)
-3. `git checkout <baseRef>` → `( cd libs/core && npm run build.stencil )` → **restart** Storybook (don't reuse the head-branch server — its story index is stale and every open tab will throw `NoStoryMatchError` against the new bundle).
-4. Re-capture the **same** story×theme×viewport matrix into `*__baseline.png` filenames. Note that **stories new in the PR won't exist on base** — compare only shared stories (e.g. `--default`); a new story with no baseline is validated against the rules alone.
-5. Reset generated files again (step 2), `git checkout <headRef>`, rebuild Stencil to restore the PR state.
+1. Confirm a clean tree (`git status`); record the current branch. If it's dirty with genuine WIP, `git stash` it and restore after — never discard the user's work (see the error-handling row).
+2. **`build.stencil` dirties two tracked files** — `libs/core/src/components.d.ts` and `libs/react/src/components/react-component-lib/createComponent.tsx` — so a branch switch **aborts** ("would be overwritten") after you've built. Restore them to their committed state before each `git checkout`:
+   ```bash
+   git checkout -- libs/core/src/components.d.ts libs/react/src/components/react-component-lib/createComponent.tsx
+   ```
+   ⚠️ `createComponent.tsx` is **not** purely generated: it carries a hand-authored double-registration guard the stock `@stencil/react-output-target` template lacks, and `build.stencil` strips it back to the vendor version. `git checkout --` is the right move *because* it restores the **committed** (guarded) copy — but never resolve this by deleting the file, keeping the built version, or `git add`-ing the stripped one.
+3. **Stop the running Storybook first, then** `git checkout <baseRef>` → `( cd libs/core && npm run build.stencil )` → start Storybook again. You must stop first — nothing else frees port 6006, and a second `start.storybook` either errors (address in use) or the health check falls through to Phase 2's "reuse the existing server", which would screenshot the **wrong branch's** bundle (the `NoStoryMatchError` trap):
+   ```bash
+   lsof -ti:6006 | xargs kill 2>/dev/null      # or KillShell the Phase 2 background task
+   ```
+4. Re-capture the **same** story×theme×viewport matrix into `*__baseline.png` filenames (same absolute `<REPORT_DIR>`). Note that **stories new in the PR won't exist on base** — compare only shared stories (e.g. `--default`); a new story with no baseline is validated against the rules alone.
+5. Stop Storybook again, reset the generated files again (step 2), `git checkout <headRef>`, rebuild Stencil, **then run the step-2 `git checkout --` once more** — the rebuild re-strips `createComponent.tsx`'s authored guard, so without this final reset you'd leave the tree with a real fix silently reverted. Confirm `git status` is clean before finishing.
 6. For each pair, compare before/after and note: **intended** (matches the PR's stated change) vs **regression** (unexpected delta, esp. in a theme/variant the PR didn't claim to touch). A console error present on a new story but absent from the shared `--default` on both branches is **PR-introduced and scoped to that story** — the highest-signal verdict this mode produces.
 
 ### Loop termination
@@ -338,11 +353,23 @@ After all PR-branch shots are approved:
 
 ## Phase 6 — Report
 
-Generate a markdown report and post it as a PR comment.
+Write the filled-in report to a file, then post it **once**.
 
-```bash
-mkdir -p .claude/visual-test-reports
-```
+**Screenshots can't be auto-attached.** `gh` cannot upload images or video to a PR comment — GitHub only accepts them via drag-drop in the browser. So the posted comment is a **text** report (scope, findings, verdict) that references the local screenshot filenames; the PNGs stay in `<REPORT_DIR>` for the user to drag in if they want them inline. Do **not** write `![](local-path)` — local files won't render on GitHub.
+
+1. **Write the report to a file** — the post step reads it back, so it must exist on disk; don't just print the template:
+   ```bash
+   REPORT=".claude/visual-test-reports/pr-<number>-visual-test.md"
+   mkdir -p "$(dirname "$REPORT")"
+   ```
+   Fill the template below and write it to `$REPORT` with the **Write tool**.
+
+2. **Dedup guard — do not double-post.** This skill is built to be re-run (Phase 5 retry loop, Phase 5b baseline), so re-posting is the normal case, not the edge case. Before posting, check for a prior run's comment and **skip unless the user explicitly asks to post again** (mirrors the guard `pine-run-gauntlet` added after #746):
+   ```bash
+   gh pr view <number> --repo Kajabi/pine --json comments \
+     --jq '.comments[].body' | grep -q "Posted by pine-visual-test-pr" && echo "already posted — skip or edit the existing comment"
+   ```
+   If found, tell the user in-chat and stop (or edit the existing comment) rather than adding another.
 
 ### Report template
 
@@ -356,7 +383,7 @@ mkdir -p .claude/visual-test-reports
 **Result:** PASS (<N>/<N>) | PARTIAL (<N>/<M> — see findings/blockers) | BLOCKED
 
 ## Components in scope
-- <component> — <n stories> — <light+dark | +mobile | +rtl>
+- <component> — <n stories> — <light+dark | +mobile>
 
 ## Approved Screenshots
 
@@ -380,11 +407,16 @@ mkdir -p .claude/visual-test-reports
 - [x] Component renders  - [x] Assets loaded  - [x] Both themes  - [x] No console errors
 - [x] Focus visible  - [x] Viewport  - [x] No clipping  - [x] Token discipline
 - [x] Naming  - [x] Variant coverage
+
+---
+_Posted by pine-visual-test-pr_
 ```
 
-Post it:
+The `_Posted by pine-visual-test-pr_` footer is the marker the Step 2 dedup guard greps for — keep it in the template.
+
+3. **Post from the file** — never a double-quoted `--body "$(cat …)"` (report bodies contain backticks, quotes, and `$`-sequences the shell would re-evaluate); always pass `--repo` so it targets Pine even when run from another checkout:
 ```bash
-gh pr comment <number> --body "$(cat .claude/visual-test-reports/pr-<number>-visual-test.md)"
+gh pr comment <number> --repo Kajabi/pine --body-file "$REPORT"
 ```
 
 ---
@@ -403,7 +435,7 @@ gh pr comment <number> --body "$(cat .claude/visual-test-reports/pr-<number>-vis
 <url>
 ```
 
-If there are real findings, tell the user which components/themes regressed before they request review. If clean, note it's pre-validated locally and Chromatic in CI is the authoritative pixel-diff gate.
+If there are real findings, tell the user which components/themes regressed before they request review. If clean, note it's pre-validated locally — and that, until Chromatic CI lands, this is currently Pine's only pixel-level check, so treat it as the main signal rather than a secondary one.
 
 ---
 
@@ -415,7 +447,7 @@ If there are real findings, tell the user which components/themes regressed befo
 | 0 | `gh` not authenticated | `gh auth login`, stop |
 | 0 | root deps missing | `npm install` at root, stop |
 | 2 | Stencil build fails | Surface the Stencil error, fix/rebuild — Storybook renders nothing without `dist/` |
-| 2 | Storybook never serves `/index.json` | Read background output; port 6006 taken → reuse; else stop with the error |
+| 2 | Storybook never serves `/index.json` | Read background output; port 6006 taken by a server for **this same branch** → reuse; after a branch switch (5b) never reuse — `lsof -ti:6006 \| xargs kill` first, then start fresh; else stop with the error |
 | 2 | Title→id mapping empty | Component may have no stories — note it; nothing to capture for that component |
 | 5 | Blank/unstyled render | Rebuild Stencil, hard-reload; 3x → structural blocker |
 | 5b | Dirty tree at branch switch | Ask before `git checkout`; never discard the user's work |
@@ -429,11 +461,12 @@ If there are real findings, tell the user which components/themes regressed befo
 - Do NOT loop indefinitely — 3 retries per item, then blocker.
 - Do NOT include blank/unstyled or error screenshots in the approved set.
 - Do NOT switch branches for a baseline without confirming a clean tree.
-- Do NOT treat this as a replacement for Chromatic — it's the fast local pass that runs before it.
+- Do NOT `git add` the vendor-stripped `createComponent.tsx` after a build — restore the committed (guarded) copy with `git checkout --`.
+- Do NOT describe Chromatic CI as an existing gate — only the local Storybook panel is merged today; hedge to "once Chromatic CI lands".
 
 ## Related Skills
 
 - `pine-design-review` — token / SCSS / a11y / Figma code review (pair with this; it reads code, this reads pixels)
 - `pine-run-gauntlet` — parallel multi-reviewer pass before a PR (code/security/design/existence)
 - `pine-existence-review` — checks whether a component/API already exists before adding new
-- Chromatic (`@chromatic-com/storybook`, in CI) — authoritative cloud pixel-diff; this skill is the local complement
+- Chromatic — `@chromatic-com/storybook` is installed as a local Storybook panel; the Chromatic **CI** pixel-diff job is not merged yet. Until it lands, this skill is Pine's only pixel-level regression check; after it lands, this is the fast local complement.
