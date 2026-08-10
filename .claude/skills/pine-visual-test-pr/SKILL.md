@@ -347,7 +347,7 @@ After all PR-branch shots are approved:
    lsof -ti:6006 | xargs kill 2>/dev/null      # or KillShell the Phase 2 background task
    ```
 5. Re-capture the **same** story×theme×viewport matrix into `*__baseline.png` filenames (same absolute `<REPORT_DIR>`). Note that **stories new in the PR won't exist on base** — compare only shared stories (e.g. `--default`); a new story with no baseline is validated against the rules alone.
-6. Stop Storybook again, re-run step 2's reset, `git checkout <headRef>`, rebuild Stencil, **then run step 2's reset once more** — the rebuild re-strips `createComponent.tsx`'s authored guard, so without this final reset you'd leave the tree with a real fix silently reverted. Restore any step-3 stash, then confirm `git status` is clean before finishing.
+6. Stop Storybook again, re-run step 2's reset, `git checkout <headRef>`, rebuild Stencil, **then run step 2's reset once more** — the rebuild re-strips `createComponent.tsx`'s authored guard, so without this final reset you'd leave the tree with a real fix silently reverted. Now confirm the tree is clean of **skill-induced** changes (the two generated files match committed). **Restore any step-3 stash last** — that re-dirties the tree with the user's own WIP, which is expected and is **not** a failure of this clean check.
 7. For each pair, compare before/after and note: **intended** (matches the PR's stated change) vs **regression** (unexpected delta, esp. in a theme/variant the PR didn't claim to touch). A console error present on a new story but absent from the shared `--default` on both branches is **PR-introduced and scoped to that story** — the highest-signal verdict this mode produces.
 
 ### Loop termination
