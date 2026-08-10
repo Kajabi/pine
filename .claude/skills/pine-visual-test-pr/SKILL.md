@@ -278,11 +278,11 @@ mcp__playwright__browser_click({ selector: "<trigger>" })
 mcp__playwright__browser_take_screenshot({ filename: "<component>__<story>__desktop__<theme>__open.png" })
 ```
 
-**Step 5 — Console check.** Read `error`-level console messages for the story:
+**Step 5 — Console check.** Read `error`-level console messages **for this navigation only** — do not pass `all: true`:
 ```
-mcp__playwright__browser_console_messages({ level: "error", all: true })
+mcp__playwright__browser_console_messages({ level: "error" })
 ```
-**Filter harness noise before judging** — a `favicon.ico` (or other static-asset) 404 and Vite HMR chatter are expected and are **not** findings. A message fails Rule 4 only when it originates from the component bundle (stack/URL includes `pine-core/*.js`) or the story itself — e.g. a Stencil render/hydration error, a missing-token throw, or a thrown event listener. Those are real findings: capture the full message text into the report.
+`all: true` returns the whole session's history, which after any Storybook restart floods with stale `ERR_CONNECTION_REFUSED` (the dead server) and `NoStoryMatchError` (a tab pointed at a story the new index lacks) — none of which are findings. Reading per-navigation gives the clean, current-story truth (and it matches the per-page `Console: N errors` counter the navigate call reports). **Filter harness noise before judging** — a `favicon.ico` (or other static-asset) 404 and Vite HMR chatter are expected and are **not** findings. A message fails Rule 4 only when it originates from the component bundle (stack/URL includes `pine-core/*.js`) or the story itself — e.g. a Stencil render/hydration error, a missing-token throw, or a thrown event listener. Those are real findings: capture the full message text into the report.
 
 **Step 6 — Evaluate every screenshot against the rules below.**
 
@@ -321,11 +321,12 @@ mcp__playwright__browser_console_messages({ level: "error", all: true })
 
 After all PR-branch shots are approved:
 
-1. Stash/confirm a clean tree; record current branch.
-2. `git checkout <baseRef>` → `( cd libs/core && npm run build.stencil )` → reuse the running Storybook (or restart it).
-3. Re-capture the **same** story×theme×viewport matrix into `*__baseline.png` filenames.
-4. `git checkout <headRef>`, rebuild Stencil to restore the PR state.
-5. For each pair, compare before/after and note: **intended** (matches the PR's stated change) vs **regression** (unexpected delta, esp. in a theme/variant the PR didn't claim to touch).
+1. Confirm a clean tree; record the current branch.
+2. **`build.stencil` dirties tracked generated files** — `libs/core/src/components.d.ts` and `libs/react/src/components/react-component-lib/createComponent.tsx` are checked in but regenerated on every build, so a branch switch **aborts** ("would be overwritten") after you've built. Reset them before each `git checkout`: `git checkout -- libs/core/src/components.d.ts libs/react/src/components/react-component-lib/createComponent.tsx`. (These are generated, not authored — safe to discard. If a genuine unrelated WIP file is also dirty, `git stash` it and restore after.)
+3. `git checkout <baseRef>` → `( cd libs/core && npm run build.stencil )` → **restart** Storybook (don't reuse the head-branch server — its story index is stale and every open tab will throw `NoStoryMatchError` against the new bundle).
+4. Re-capture the **same** story×theme×viewport matrix into `*__baseline.png` filenames. Note that **stories new in the PR won't exist on base** — compare only shared stories (e.g. `--default`); a new story with no baseline is validated against the rules alone.
+5. Reset generated files again (step 2), `git checkout <headRef>`, rebuild Stencil to restore the PR state.
+6. For each pair, compare before/after and note: **intended** (matches the PR's stated change) vs **regression** (unexpected delta, esp. in a theme/variant the PR didn't claim to touch). A console error present on a new story but absent from the shared `--default` on both branches is **PR-introduced and scoped to that story** — the highest-signal verdict this mode produces.
 
 ### Loop termination
 
