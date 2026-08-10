@@ -156,7 +156,14 @@ Story IDs are `slug(title)` + `--` + `slug(exportName)` (e.g. title `components/
    ```bash
    grep -h "title:" libs/core/src/components/<component>/**/stories/*.stories.* 
    ```
-2. Match that title against the `title` column of the index dump from step 4. Every matching entry's `id` is a story to capture.
+2. Match that title against the index by **exact equality** on the title (or an exact nested-path prefix like `components/Tabs` → also `components/Tabs/Tab`, `components/Tabs/Tabpanel`). Do **not** use a loose substring match — `includes('tab')` wrongly pulls in `components/Table` and `components/Sortable`. Every entry whose title equals (or is nested under) a scoped title is a story to capture.
+
+```bash
+# exact + nested-path match for a set of scoped titles
+node -e "const e=require('/tmp/pine-stories.json').entries; const t=process.argv.slice(1);
+Object.values(e).filter(x=>x.type==='story' && t.some(p=>x.title===p||x.title.startsWith(p+'/')))
+ .forEach(x=>console.log(x.id))" 'components/Tabs'
+```
 
 ---
 
@@ -190,6 +197,20 @@ $SB/iframe.html?id=<storyId>&viewMode=story&globals=theme:dark
 $SB/iframe.html?id=<storyId>&viewMode=story&globals=theme:light
 # with direction:  &globals=theme:dark;direction:rtl   (semicolon-separated)
 ```
+
+### Output location (absolute path — important)
+
+The Playwright MCP browser runs in its **own** working directory, which is often **not** your shell's cwd (in practice it may be a parent folder). A relative `filename` silently lands the PNG outside the repo. Always pass an **absolute** path into a per-run directory, and create it first:
+
+```bash
+mkdir -p "$(pwd)/.claude/visual-test-reports/pr-<number>"
+```
+```
+mcp__playwright__browser_take_screenshot({
+  filename: "<repo-abs-path>/.claude/visual-test-reports/pr-<number>/<name>.png"
+})
+```
+After the first capture, confirm the file exists at that absolute path before continuing — if it's missing, the MCP wrote it relative to its own cwd; fix the path, don't keep shooting into the void.
 
 ### Naming convention
 
@@ -257,11 +278,11 @@ mcp__playwright__browser_click({ selector: "<trigger>" })
 mcp__playwright__browser_take_screenshot({ filename: "<component>__<story>__desktop__<theme>__open.png" })
 ```
 
-**Step 5 — Console check.** Read console messages for the story:
+**Step 5 — Console check.** Read `error`-level console messages for the story:
 ```
-mcp__playwright__browser_console_messages()
+mcp__playwright__browser_console_messages({ level: "error", all: true })
 ```
-Any `error`-level message (Stencil hydration error, missing token, thrown listener) fails Rule 4.
+**Filter harness noise before judging** — a `favicon.ico` (or other static-asset) 404 and Vite HMR chatter are expected and are **not** findings. A message fails Rule 4 only when it originates from the component bundle (stack/URL includes `pine-core/*.js`) or the story itself — e.g. a Stencil render/hydration error, a missing-token throw, or a thrown event listener. Those are real findings: capture the full message text into the report.
 
 **Step 6 — Evaluate every screenshot against the rules below.**
 
@@ -272,7 +293,7 @@ Any `error`-level message (Stencil hydration error, missing token, thrown listen
 | 1 | Component renders | Not blank; the custom element upgraded and shows its expected content/shape |
 | 2 | Assets loaded | Styles applied (not raw unstyled DOM), icons/fonts present — a flash-of-unstyled tag means `dist/` didn't load |
 | 3 | Both themes correct | Light **and** dark both render; no invisible text, no unthemed white box on dark, contrast holds |
-| 4 | No console errors | No `error`-level console output for the story |
+| 4 | No console errors | No **component-origin** `error`-level output (stack/URL points at `pine-core/*.js` or the story). Ignore harness noise: `favicon.ico` and other static-asset 404s, and Vite HMR chatter — these are not findings |
 | 5 | Focus visible | Keyboard focus produces a visible focus ring in both themes (Pine a11y requirement) |
 | 6 | Correct viewport | Frame matches 1280×800 (or 375×812 for flagged responsive components) |
 | 7 | No clipping | Overlays (modal/tooltip/dropdown) fully visible, not cut by the iframe; no truncated content |
