@@ -25,16 +25,32 @@ tells the agent to stop rather than guess.
 claude mcp add --transport http pine "https://pine-mcp.netlify.app/mcp"
 ```
 
-**Discovery.** A manifest is published on the docs domain at
-`/.well-known/skills/index.json`, listing this skill and where to fetch it.
+**Recommended — `npx skills add`.** The docs site serves a discovery manifest at
+`/.well-known/skills/index.json` (the [vercel-labs/skills](https://github.com/vercel-labs/skills)
+convention). Point the CLI at the docs domain and it installs this skill into
+whichever agent you use (Claude Code, Cursor, Copilot, …):
+```bash
+npx skills add https://<pine-docs-domain>
+```
 
-**Manual install (works today).** Copy `skills/pine/` into your repo's skills
-directory (e.g. `.claude/skills/pine/`), or point your agent at the raw files on
-`main`.
+**Manual install.** Copy `skills/pine/` into your repo's skills directory (e.g.
+`.claude/skills/pine/`), or fetch the served files under
+`/.well-known/skills/pine/`.
 
-> The `npx skills add` registry entry and a docs-domain mirror of the skill
-> files are the remaining distribution wiring — see the PR for status. The
-> manifest and raw-GitHub URLs make the skill installable in the meantime.
+### How the manifest is served (compiled, not hand-written)
+
+The `/.well-known/skills/` tree — the manifest **and** the served skill files —
+is **generated from `skills/pine/` at docs-build time** by `.storybook/main.js`
+(mirroring the existing CHANGELOG copy step) into Storybook's `static`
+staticDir. So the served copy is regenerated on every deploy and cannot drift
+from source; `skills/pine/` remains the single source of truth.
+
+Manifest schema (per the `vercel-labs/skills` convention):
+```json
+{ "skills": [ { "name": "pine", "description": "…", "files": ["SKILL.md", "reference/…"] } ] }
+```
+`files` are paths relative to `/.well-known/skills/pine/`. The `description` is
+taken from this skill's `SKILL.md` frontmatter at generation time.
 
 ## Relationship to `kp-pine-patterns` (in kajabi-products)
 
