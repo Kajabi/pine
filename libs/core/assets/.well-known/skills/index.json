@@ -1,0 +1,29 @@
+{
+  "$comment": "Discovery manifest for Pine agent skills, served at https://<docs-domain>/.well-known/skills/index.json via Storybook's `assets` staticDir. Field names follow the emerging /.well-known/skills/ convention and are pending alignment with the `skills` CLI spec — see skills/pine/README.md.",
+  "version": 1,
+  "skills": [
+    {
+      "name": "pine",
+      "title": "Building with Pine",
+      "description": "Build UI with the Pine design system (pds-* web components + Pine tokens/icons). Resolves every component, token, and icon through the Pine MCP instead of trained memory, then gates the result behind Pine's own layout validators.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "entrypoint": "https://raw.githubusercontent.com/Kajabi/pine/main/skills/pine/SKILL.md",
+      "files": [
+        "https://raw.githubusercontent.com/Kajabi/pine/main/skills/pine/SKILL.md",
+        "https://raw.githubusercontent.com/Kajabi/pine/main/skills/pine/reference/workflow.md",
+        "https://raw.githubusercontent.com/Kajabi/pine/main/skills/pine/reference/tokens.md",
+        "https://raw.githubusercontent.com/Kajabi/pine/main/skills/pine/reference/components.md",
+        "https://raw.githubusercontent.com/Kajabi/pine/main/skills/pine/reference/icons.md",
+        "https://raw.githubusercontent.com/Kajabi/pine/main/skills/pine/reference/validation.md"
+      ],
+      "requires": {
+        "mcp": {
+          "name": "pine",
+          "transport": "http",
+          "url": "https://pine-mcp.netlify.app/mcp"
+        }
+      }
+    }
+  ]
+}
