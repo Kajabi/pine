@@ -231,28 +231,28 @@ describe('pds-link', () => {
   });
 
   describe('active (nav tab)', () => {
-    it('adds the active class and aria-current when active is set', async () => {
+    it('sets aria-current and reflects active to the host when active is set', async () => {
       const { root } = await newSpecPage({
         components: [PdsLink],
         html: `<pds-link href="/page" active="true">Page</pds-link>`,
       });
 
       const anchor = root?.shadowRoot?.querySelector('a');
-      expect(anchor?.classList.contains('pds-link--active')).toBe(true);
       expect(anchor?.getAttribute('aria-current')).toBe('page');
-      // Reflected to the host so `:host([active])` styles outrank the color presets.
+      // Reflected to the host so the `:host([active])` styles outrank the color
+      // presets — that reflected attribute is the styling contract, not a class.
       expect(root?.hasAttribute('active')).toBe(true);
     });
 
-    it('omits the active class and aria-current by default', async () => {
+    it('omits aria-current and the reflected active attribute by default', async () => {
       const { root } = await newSpecPage({
         components: [PdsLink],
         html: `<pds-link href="/page">Page</pds-link>`,
       });
 
       const anchor = root?.shadowRoot?.querySelector('a');
-      expect(anchor?.classList.contains('pds-link--active')).toBe(false);
       expect(anchor?.hasAttribute('aria-current')).toBe(false);
+      expect(root?.hasAttribute('active')).toBe(false);
     });
   });
 });
