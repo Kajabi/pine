@@ -98,10 +98,17 @@ export class PdsTab {
     this.pdsTabClick.emit([index, parentComponentId]);
   }
 
+  // An empty string is treated as "no destination" everywhere (isNav fallback,
+  // href attribute, role) so a nav tab never renders `href=""` (which would
+  // navigate to the current page).
+  private get hasHref() {
+    return this.href != null && this.href !== '';
+  }
+
   private get isNav() {
     // The parent `pds-tabs` is authoritative when present (via `navMode`), so its
-    // tabs share one mode. Standalone, fall back to a non-empty `href`.
-    return this.navMode ?? (this.href != null && this.href !== '');
+    // tabs share one mode. Standalone, fall back to a usable `href`.
+    return this.navMode ?? this.hasHref;
   }
 
   private get isActive() {
@@ -143,11 +150,11 @@ export class PdsTab {
       return (
         <Host variant={this.variant} slot="tabs" index={this.index}>
           <a
-            href={this.disabled ? undefined : this.href}
+            href={this.disabled || !this.hasHref ? undefined : this.href}
             // An anchor without an href (disabled, or forced into nav mode with no
-            // href set) loses its implicit link role; restore it explicitly so
+            // usable href) loses its implicit link role; restore it explicitly so
             // assistive tech still announces the item rather than as plain text.
-            role={this.disabled || this.href == null ? "link" : undefined}
+            role={this.disabled || !this.hasHref ? "link" : undefined}
             id={this.parentComponentId + "__" + this.name}
             class={this.classNames()}
             target={this.target}

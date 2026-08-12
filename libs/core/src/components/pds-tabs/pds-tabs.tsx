@@ -111,7 +111,11 @@ export class PdsTabs {
   // rather than silently rendering a link with no destination, or ignoring an href.
   private warnOnNavConfig() {
     if (!this.tabs?.length) return;
-    const withHref = this.tabs.filter((tab) => tab.hasAttribute('href')).length;
+    // An empty `href=""` is not a usable destination, so it counts as missing.
+    const withHref = this.tabs.filter((tab) => {
+      const href = tab.getAttribute('href');
+      return href != null && href !== '';
+    }).length;
     if (this.nav && withHref < this.tabs.length) {
       console.warn('pds-tabs: `nav` is set, so every pds-tab needs an `href`.');
     } else if (!this.nav && withHref > 0) {
@@ -168,10 +172,12 @@ export class PdsTabs {
   private passPropsToChildren() {
     // Panel mode needs a selected tab so the tablist stays keyboard-reachable
     // (an all-unselected tablist has every button at tabindex="-1"). Default to
-    // the first tab when the consumer omits `activeTabName`. Nav mode has no
-    // roving/selection, so it's left unset there.
+    // the first ENABLED tab when the consumer omits `activeTabName` — a disabled
+    // tab is itself tabindex="-1", so selecting it would recreate the trap. Nav
+    // mode has no roving/selection, so it's left unset there.
     if (!this.nav && this.activeTabName == null && this.tabs.length) {
-      this.activeTabName = this.tabs[0].name;
+      const firstEnabled = this.tabs.find((tab) => !tab.disabled) ?? this.tabs[0];
+      this.activeTabName = firstEnabled.name;
     }
 
     this.tabs.forEach((child, index) => {
