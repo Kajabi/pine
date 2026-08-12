@@ -251,3 +251,28 @@ Sizes.args = {
   type: 'button',
   variant: 'primary'
 }
+
+// Demonstrates the supported `::part(button)` hook: a compact fixed-size,
+// inverse-surface icon button (e.g. a chat composer send affordance) that the
+// stock size/variant props don't express.
+export const CompactIconButtonViaPart = {
+  render: () => html`
+    <style>
+      .compact-inverse-icon-button::part(button) {
+        width: var(--pine-dimension-400);
+        height: var(--pine-dimension-400);
+        min-width: 0;
+        padding: 0;
+        border-radius: var(--pine-border-radius-md);
+        background: var(--pine-color-background-inverse-inset);
+        color: var(--pine-color-text-primary);
+      }
+    </style>
+    <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only icon="arrow-up">
+      Send message
+    </pds-button>
+  `,
+  parameters: {
+    controls: { exclude: ['icon'] },
+  },
+};

@@ -4,7 +4,7 @@ import { hasShadowDom } from '../../utils/utils';
 import { caretDown, addCircle } from '@pine-ds/icons/icons';
 
 /**
- * @part button - Exposes the button element for styling.
+ * @part button - Exposes the underlying button (or anchor) element for styling, including custom size, shape, or surface on icon-only placements (e.g. a compact square or inverse icon button).
  * @part button-content - Exposes the button content for styling.
  * @part button-text - Exposes the button text for styling.
  * @part caret - Exposes the caret icon component for styling. Appears only on the disclosure variant.

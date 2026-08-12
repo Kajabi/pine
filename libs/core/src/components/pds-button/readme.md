@@ -43,14 +43,14 @@
 
 ## Shadow Parts
 
-| Part               | Description                                                                           |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| `"button"`         | Exposes the button element for styling.                                               |
-| `"button-content"` | Exposes the button content for styling.                                               |
-| `"button-text"`    | Exposes the button text for styling.                                                  |
-| `"caret"`          | Exposes the caret icon component for styling. Appears only on the disclosure variant. |
-| `"icon"`           | Exposes the icon component for styling.                                               |
-| `"loader-svg"`     | Exposes the loader SVG element for color customization. Appears only when loading.    |
+| Part               | Description                                                                                                                                                                     |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"button"`         | Exposes the underlying button (or anchor) element for styling, including custom size, shape, or surface on icon-only placements (e.g. a compact square or inverse icon button). |
+| `"button-content"` | Exposes the button content for styling.                                                                                                                                         |
+| `"button-text"`    | Exposes the button text for styling.                                                                                                                                            |
+| `"caret"`          | Exposes the caret icon component for styling. Appears only on the disclosure variant.                                                                                           |
+| `"icon"`           | Exposes the icon component for styling.                                                                                                                                         |
+| `"loader-svg"`     | Exposes the loader SVG element for color customization. Appears only when loading.                                                                                              |
 
 
 ## Dependencies
