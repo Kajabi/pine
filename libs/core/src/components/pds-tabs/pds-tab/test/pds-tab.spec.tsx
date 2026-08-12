@@ -115,8 +115,30 @@ describe('pds-tabs', () => {
       expect(page.root?.querySelector('button')).toBeNull();
       expect(anchor?.hasAttribute('role')).toBe(false);
       expect(anchor?.hasAttribute('aria-selected')).toBe(false);
-      // Not the current tab, so no aria-current.
+      // Not the current tab, so no aria-current and no active treatment.
       expect(anchor?.hasAttribute('aria-current')).toBe(false);
+      expect(anchor?.classList.contains('is-active')).toBe(false);
+    });
+
+    it('passes the target through to the anchor', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" target="_blank" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor?.getAttribute('target')).toBe('_blank');
+      // Opening a new context must not leak window.opener.
+      expect(anchor?.getAttribute('rel')).toBe('noopener noreferrer');
+    });
+
+    it('does not set rel when target is not _blank', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" target="_self" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      expect(page.root?.querySelector('a')?.hasAttribute('rel')).toBe(false);
     });
 
     it('marks the active nav tab with aria-current and is-active', async () => {
@@ -162,6 +184,9 @@ describe('pds-tabs', () => {
       expect(anchor?.hasAttribute('href')).toBe(false);
       expect(anchor?.getAttribute('aria-disabled')).toBe('true');
       expect(anchor?.getAttribute('tabindex')).toBe('-1');
+      // Without href the anchor loses its implicit link role; restore it so AT
+      // still announces the disabled item.
+      expect(anchor?.getAttribute('role')).toBe('link');
     });
   });
 });

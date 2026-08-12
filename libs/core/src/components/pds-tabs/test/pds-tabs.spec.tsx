@@ -336,5 +336,57 @@ it('renders variant prop', async () => {
       expect(shadow?.querySelector('div.pds-tabs__tablist[role="tablist"]')).not.toBeNull();
       expect(shadow?.querySelector('nav')).toBeNull();
     });
+
+    it('selects no panel tab when activeTabName is omitted', async () => {
+      const page = await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="panels" tablist-label="Foo" variant="primary">
+            <pds-tab name="one">One</pds-tab>
+            <pds-tab name="two">Two</pds-tab>
+          </pds-tabs>
+        `,
+      });
+      await page.waitForChanges();
+
+      // Still a panel-mode tablist (no href), just with nothing selected.
+      expect(page.root?.shadowRoot?.querySelector('div.pds-tabs__tablist[role="tablist"]')).not.toBeNull();
+      expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
+      expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
+    });
+
+    it('warns when navigation and panel tabs are mixed', async () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="mixed" tablist-label="Foo" variant="primary">
+            <pds-tab href="/clubs/1/chat" name="chat">Chat</pds-tab>
+            <pds-tab name="two">Two</pds-tab>
+          </pds-tabs>
+        `,
+      });
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('mixing navigation tabs'));
+      warnSpy.mockRestore();
+    });
+
+    it('does not warn when every tab is a navigation tab', async () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="all-nav" tablist-label="Foo" variant="primary">
+            <pds-tab href="/clubs/1/chat" name="chat">Chat</pds-tab>
+            <pds-tab href="/clubs/1/members" name="members">Members</pds-tab>
+          </pds-tabs>
+        `,
+      });
+
+      expect(warnSpy).not.toHaveBeenCalled();
+      warnSpy.mockRestore();
+    });
   });
 });
