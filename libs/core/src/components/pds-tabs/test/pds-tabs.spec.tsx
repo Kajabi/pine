@@ -299,4 +299,42 @@ it('renders variant prop', async () => {
     });
     expect(page.root.classList.contains('pds-tabs--stretch')).toBe(true);
   });
+
+  describe('navigation mode (tabs with href)', () => {
+    it('renders the tab strip as a <nav>, not a role=tablist, when its tabs are links', async () => {
+      const page = await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="clubs" tablist-label="Club sections" variant="primary">
+            <pds-tab href="/clubs/1/chat" active="true" name="chat">Chat</pds-tab>
+            <pds-tab href="/clubs/1/members" name="members">Members</pds-tab>
+          </pds-tabs>
+        `,
+      });
+      await page.waitForChanges();
+
+      const shadow = page.root?.shadowRoot;
+      expect(shadow?.querySelector('nav.pds-tabs__tablist')).not.toBeNull();
+      expect(shadow?.querySelector('nav')?.getAttribute('aria-label')).toBe('Club sections');
+      // No panel-switcher tablist in nav mode.
+      expect(shadow?.querySelector('[role="tablist"]')).toBeNull();
+    });
+
+    it('keeps the role=tablist for panel-mode tabs (no href)', async () => {
+      const page = await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="panels" tablist-label="Foo" variant="primary" active-tab-name="one">
+            <pds-tab name="one">One</pds-tab>
+            <pds-tab name="two">Two</pds-tab>
+          </pds-tabs>
+        `,
+      });
+      await page.waitForChanges();
+
+      const shadow = page.root?.shadowRoot;
+      expect(shadow?.querySelector('div.pds-tabs__tablist[role="tablist"]')).not.toBeNull();
+      expect(shadow?.querySelector('nav')).toBeNull();
+    });
+  });
 });
