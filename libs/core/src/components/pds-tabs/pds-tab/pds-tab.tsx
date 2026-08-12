@@ -81,9 +81,9 @@ export class PdsTab {
   @Prop() selected = false;
 
   /**
-   * Set by the parent `pds-tabs` to force navigation vs panel rendering, so the
-   * whole strip stays in one mode. Standalone (no parent), the tab falls back to
-   * whether it has an `href`.
+   * Set by the parent `pds-tabs` to force navigation vs panel rendering, so tabs
+   * present when the strip initializes share one mode. Standalone (no parent), the
+   * tab falls back to whether it has an `href`.
    */
   /** @internal */
   @Prop() navMode?: boolean;
@@ -99,8 +99,8 @@ export class PdsTab {
   }
 
   private get isNav() {
-    // The parent `pds-tabs` is authoritative when present (via `navMode`), so a
-    // strip can't mix link and panel tabs. Standalone, fall back to a non-empty `href`.
+    // The parent `pds-tabs` is authoritative when present (via `navMode`), so its
+    // tabs share one mode. Standalone, fall back to a non-empty `href`.
     return this.navMode ?? (this.href != null && this.href !== '');
   }
 
@@ -144,10 +144,10 @@ export class PdsTab {
         <Host variant={this.variant} slot="tabs" index={this.index}>
           <a
             href={this.disabled ? undefined : this.href}
-            // A disabled tab drops its href, so the anchor loses its implicit
-            // link role; restore it explicitly so assistive tech still announces
-            // the item (as disabled) rather than as plain text.
-            role={this.disabled ? "link" : undefined}
+            // An anchor without an href (disabled, or forced into nav mode with no
+            // href set) loses its implicit link role; restore it explicitly so
+            // assistive tech still announces the item rather than as plain text.
+            role={this.disabled || this.href == null ? "link" : undefined}
             id={this.parentComponentId + "__" + this.name}
             class={this.classNames()}
             target={this.target}

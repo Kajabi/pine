@@ -100,7 +100,9 @@ export class PdsTabs {
 
   // Navigation mode is an explicit, single source of truth: `nav` drives both the
   // container (<nav> of links vs role=tablist of buttons) and every child tab (via
-  // `navMode`), so a strip can't mix the two.
+  // `navMode`), so the tabs present when the strip initializes can't mix the two.
+  // (Child discovery is load-time only, like `variant`/`id`; tabs added after load
+  // aren't managed.)
   private get isNav() {
     return !!this.nav;
   }
@@ -164,6 +166,14 @@ export class PdsTabs {
   }
 
   private passPropsToChildren() {
+    // Panel mode needs a selected tab so the tablist stays keyboard-reachable
+    // (an all-unselected tablist has every button at tabindex="-1"). Default to
+    // the first tab when the consumer omits `activeTabName`. Nav mode has no
+    // roving/selection, so it's left unset there.
+    if (!this.nav && this.activeTabName == null && this.tabs.length) {
+      this.activeTabName = this.tabs[0].name;
+    }
+
     this.tabs.forEach((child, index) => {
       if (this.activeTabName === child.name) this.activeTabIndex = index;
       this.propGeneration(child, index);
