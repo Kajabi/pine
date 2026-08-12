@@ -94,8 +94,8 @@ export const Stretch = () => html`
 // No pds-tabpanels; the destination URL renders the content.
 export const NavTabs = () => html`
 <pds-tabs component-id="nav" tablist-label="Club sections" variant="primary" divider>
-  <pds-tab href="/clubs/1/chat" active>Chat</pds-tab>
-  <pds-tab href="/clubs/1/resources">Resources</pds-tab>
-  <pds-tab href="/clubs/1/members">Members</pds-tab>
+  <pds-tab name="chat" href="/clubs/1/chat" active>Chat</pds-tab>
+  <pds-tab name="resources" href="/clubs/1/resources">Resources</pds-tab>
+  <pds-tab name="members" href="/clubs/1/members">Members</pds-tab>
 </pds-tabs>
 `;
