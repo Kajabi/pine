@@ -96,6 +96,19 @@ export class PdsTabs {
     return !!this.tabs?.some((tab) => tab.hasAttribute('href'));
   }
 
+  // Navigation and panel tabs can't be mixed: one `href` flips the container to
+  // a <nav> (dropping role=tablist and arrow roving), leaving any non-href tab
+  // as an orphaned role=tab button. Warn in dev rather than render invalid ARIA.
+  private warnOnMixedNavTabs() {
+    if (!this.tabs?.length) return;
+    const navTabCount = this.tabs.filter((tab) => tab.hasAttribute('href')).length;
+    if (navTabCount > 0 && navTabCount < this.tabs.length) {
+      console.warn(
+        'pds-tabs: mixing navigation tabs (with `href`) and panel tabs (without) is not supported — set `href` on all tabs or none.',
+      );
+    }
+  }
+
   private moveActiveTab(key: string) {
     const firstTabNumber = 0;
     const lastTabNumber = this.tabs.length - 1;
@@ -170,6 +183,7 @@ export class PdsTabs {
 
   componentWillLoad() {
     this.findAllChildren();
+    this.warnOnMixedNavTabs();
   }
 
   componentWillRender() {
@@ -180,11 +194,11 @@ export class PdsTabs {
     // Navigation mode: a <nav> landmark of links (aria-current marks the current
     // page). Panel mode: the ARIA tablist of role=tab buttons over tabpanels.
     const tabList = this.isNav ? (
-      <nav class="pds-tabs__tablist" aria-label={this.tablistLabel} part="tab-list">
+      <nav class="pds-tabs__tablist" aria-label={this.tablistLabel || undefined} part="tab-list">
         <slot name="tabs" />
       </nav>
     ) : (
-      <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel} part="tab-list">
+      <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel || undefined} part="tab-list">
         <slot name="tabs" />
       </div>
     );

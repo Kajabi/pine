@@ -19,7 +19,8 @@ export class PdsTab {
    * an `<a href>` (marked `aria-current="page"` when `active`) instead of a
    * `role="tab"` button, so each tab is its own page/URL — for tab strips that
    * navigate rather than switch in-page panels. Pairs with `pds-tabs` navigation
-   * mode; no `pds-tabpanel`s are needed.
+   * mode; no `pds-tabpanel`s are needed. Apply `href` to all tabs in a
+   * `pds-tabs` or none — mixing navigation and panel tabs is not supported.
    */
   @Prop() href?: string;
 
@@ -133,9 +134,14 @@ export class PdsTab {
         <Host variant={this.variant} slot="tabs" index={this.index}>
           <a
             href={this.disabled ? undefined : this.href}
+            // A disabled tab drops its href, so the anchor loses its implicit
+            // link role; restore it explicitly so assistive tech still announces
+            // the item (as disabled) rather than as plain text.
+            role={this.disabled ? "link" : undefined}
             id={this.parentComponentId + "__" + this.name}
             class={this.classNames()}
             target={this.target}
+            rel={this.target === "_blank" ? "noopener noreferrer" : undefined}
             aria-current={this.isActive ? "page" : undefined}
             aria-disabled={this.disabled ? "true" : null}
             tabindex={this.disabled ? "-1" : null}
