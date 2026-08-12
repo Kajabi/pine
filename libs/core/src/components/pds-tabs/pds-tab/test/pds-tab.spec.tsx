@@ -224,5 +224,19 @@ describe('pds-tabs', () => {
       expect(page.root?.querySelector('a')).toBeNull();
       expect(page.root?.querySelector('button[role="tab"]')).not.toBeNull();
     });
+
+    it('does not render href="" on a nav tab forced into nav mode with an empty href', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab nav-mode="true" href="" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor).not.toBeNull();
+      // An empty href would navigate to the current page — render no href at all,
+      // and keep the link announced via role.
+      expect(anchor?.hasAttribute('href')).toBe(false);
+      expect(anchor?.getAttribute('role')).toBe('link');
+    });
   });
 });

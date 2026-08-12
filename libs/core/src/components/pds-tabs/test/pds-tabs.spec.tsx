@@ -380,6 +380,42 @@ it('renders variant prop', async () => {
       expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
     });
 
+    it('defaults to the first ENABLED tab when the first tab is disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="panels" tablist-label="Foo" variant="primary">
+            <pds-tab name="one" disabled>One</pds-tab>
+            <pds-tab name="two">Two</pds-tab>
+          </pds-tabs>
+        `,
+      });
+      await page.waitForChanges();
+
+      // Selecting the disabled first tab would leave every button at tabindex="-1"
+      // (a trap); the first enabled tab must be selected/tabbable instead.
+      expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
+      expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');
+      expect(page.body.querySelector('pds-tab[name="two"] > button')?.getAttribute('tabindex')).toBe('0');
+    });
+
+    it('warns when `nav` is set but a tab has only an empty href', async () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="nav-empty" tablist-label="Foo" variant="primary" nav>
+            <pds-tab href="/clubs/1/chat" name="chat">Chat</pds-tab>
+            <pds-tab href="" name="two">Two</pds-tab>
+          </pds-tabs>
+        `,
+      });
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('every pds-tab needs an `href`'));
+      warnSpy.mockRestore();
+    });
+
     it('ignores arrow-key roving in nav mode', async () => {
       const page = await newSpecPage({
         components: [PdsTabs, PdsTab],
