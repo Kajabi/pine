@@ -207,8 +207,12 @@ describe('pds-tabs', () => {
         html: `<pds-tab nav-mode="true" parent-component-id="foo" name="chat">Chat</pds-tab>`,
       });
 
-      expect(page.root?.querySelector('a')).not.toBeNull();
+      const anchor = page.root?.querySelector('a');
+      expect(anchor).not.toBeNull();
       expect(page.root?.querySelector('button')).toBeNull();
+      // No href, so the implicit link role is gone — restore it so AT still
+      // announces the (misconfigured) tab rather than treating it as plain text.
+      expect(anchor?.getAttribute('role')).toBe('link');
     });
 
     it('treats an empty href as panel mode when standalone', async () => {

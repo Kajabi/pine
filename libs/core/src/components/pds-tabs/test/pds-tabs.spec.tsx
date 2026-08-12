@@ -361,7 +361,7 @@ it('renders variant prop', async () => {
       warnSpy.mockRestore();
     });
 
-    it('selects no panel tab when activeTabName is omitted', async () => {
+    it('defaults to the first tab in panel mode when activeTabName is omitted', async () => {
       const page = await newSpecPage({
         components: [PdsTabs, PdsTab],
         html: `
@@ -373,10 +373,33 @@ it('renders variant prop', async () => {
       });
       await page.waitForChanges();
 
-      // Still a panel-mode tablist (no `nav`), just with nothing selected.
+      // Panel mode must stay keyboard-reachable, so the first tab is selected/tabbable.
       expect(page.root?.shadowRoot?.querySelector('div.pds-tabs__tablist[role="tablist"]')).not.toBeNull();
-      expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
+      expect(page.body.querySelector('pds-tab[name="one"] > button')).toHaveClass('is-active');
+      expect(page.body.querySelector('pds-tab[name="one"] > button')?.getAttribute('tabindex')).toBe('0');
       expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
+    });
+
+    it('ignores arrow-key roving in nav mode', async () => {
+      const page = await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="clubs" tablist-label="Foo" variant="primary" nav>
+            <pds-tab href="/a" name="a" active="true">A</pds-tab>
+            <pds-tab href="/b" name="b">B</pds-tab>
+          </pds-tabs>
+        `,
+      });
+      await page.waitForChanges();
+
+      const event = new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true });
+      page.body.querySelector('pds-tab[name="a"] a')?.dispatchEvent(event);
+      await page.waitForChanges();
+
+      // Nav mode uses native link focus; roving is disabled, so the current link is unchanged.
+      expect(page.body.querySelector('pds-tab[name="a"] a')?.getAttribute('aria-current')).toBe('page');
+      expect(page.body.querySelector('pds-tab[name="a"] a')).toHaveClass('is-active');
+      expect(page.body.querySelector('pds-tab[name="b"] a')?.hasAttribute('aria-current')).toBe(false);
     });
 
     it('warns when `nav` is set but a tab is missing an href', async () => {
