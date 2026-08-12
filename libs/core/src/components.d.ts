@@ -2098,6 +2098,7 @@ export namespace Components {
           * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
+        "navMode"?: boolean;
         "parentComponentId": string;
         /**
           * @default false
@@ -2251,6 +2252,7 @@ export namespace Components {
           * @defaultValue false
          */
         "divider"?: boolean;
+        "nav"?: boolean;
         /**
           * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
           * @defaultValue false
@@ -5434,6 +5436,7 @@ declare namespace LocalJSX {
           * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
+        "navMode"?: boolean;
         "onPdsTabClick"?: (event: PdsTabCustomEvent<object>) => void;
         "parentComponentId"?: string;
         /**
@@ -5595,6 +5598,7 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "divider"?: boolean;
+        "nav"?: boolean;
         /**
           * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
           * @defaultValue false
@@ -6329,6 +6333,7 @@ declare namespace LocalJSX {
         "variant": string;
         "index": number;
         "selected": boolean;
+        "navMode": boolean;
         "active": boolean;
         "href": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
@@ -6376,6 +6381,7 @@ declare namespace LocalJSX {
         "componentId": string;
         "variant": 'primary' | 'availability' | 'filter' | 'pill';
         "divider": boolean;
+        "nav": boolean;
         "stretch": boolean;
         "activeTabName": string;
         "activeTabIndex": number;

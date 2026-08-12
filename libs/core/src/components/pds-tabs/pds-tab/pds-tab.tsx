@@ -81,6 +81,14 @@ export class PdsTab {
   @Prop() selected = false;
 
   /**
+   * Set by the parent `pds-tabs` to force navigation vs panel rendering, so the
+   * whole strip stays in one mode. Standalone (no parent), the tab falls back to
+   * whether it has an `href`.
+   */
+  /** @internal */
+  @Prop() navMode?: boolean;
+
+  /**
    * Emits an event upon tab click for `pds-tab` and `pds-tabpanel` to listen for
    */
   /** @internal */
@@ -91,7 +99,9 @@ export class PdsTab {
   }
 
   private get isNav() {
-    return this.href != null;
+    // The parent `pds-tabs` is authoritative when present (via `navMode`), so a
+    // strip can't mix link and panel tabs. Standalone, fall back to a non-empty `href`.
+    return this.navMode ?? (this.href != null && this.href !== '');
   }
 
   private get isActive() {
@@ -144,7 +154,6 @@ export class PdsTab {
             rel={this.target === "_blank" ? "noopener noreferrer" : undefined}
             aria-current={this.isActive ? "page" : undefined}
             aria-disabled={this.disabled ? "true" : null}
-            tabindex={this.disabled ? "-1" : null}
             data-turbo-frame={this.turboFrame || undefined}
             data-turbo-action={this.turboAction || undefined}
           >

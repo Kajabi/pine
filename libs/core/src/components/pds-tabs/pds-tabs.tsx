@@ -45,9 +45,18 @@ export class PdsTabs {
   @Prop() stretch?: boolean = false;
 
   /**
+   * Renders the tab strip as navigation instead of an in-page panel switcher: each
+   * `pds-tab` becomes an `<a href>` inside a `<nav>` landmark (with `aria-current`
+   * on the `active` tab) rather than a `role="tab"` button over a `pds-tabpanel`.
+   * Give every `pds-tab` an `href` and omit `pds-tabpanel`s.
+   * @defaultValue false
+   */
+  @Prop() nav?: boolean = false;
+
+  /**
    * Sets the starting active tab name and maintains the name as the component re-renders.
-   * Panel mode only — in navigation mode (tabs with `href`) the active tab is set
-   * per-tab via `active`, so this is not required there.
+   * Panel mode only — in navigation mode (`nav`) the active tab is set per-tab via
+   * `active`, so this is not required there.
    */
   @Prop({mutable: true}) activeTabName?: string;
 
@@ -89,22 +98,23 @@ export class PdsTabs {
     }
   }
 
-  // Navigation mode: any child tab carries an `href`, so the strip navigates
-  // between URLs instead of switching in-page panels. Rendered as a <nav> of
-  // links with aria-current, not a role=tablist of buttons.
+  // Navigation mode is an explicit, single source of truth: `nav` drives both the
+  // container (<nav> of links vs role=tablist of buttons) and every child tab (via
+  // `navMode`), so a strip can't mix the two.
   private get isNav() {
-    return !!this.tabs?.some((tab) => tab.hasAttribute('href'));
+    return !!this.nav;
   }
 
-  // Navigation and panel tabs can't be mixed: one `href` flips the container to
-  // a <nav> (dropping role=tablist and arrow roving), leaving any non-href tab
-  // as an orphaned role=tab button. Warn in dev rather than render invalid ARIA.
-  private warnOnMixedNavTabs() {
+  // `nav` and per-tab `href` should agree. Warn on the two authoring mistakes
+  // rather than silently rendering a link with no destination, or ignoring an href.
+  private warnOnNavConfig() {
     if (!this.tabs?.length) return;
-    const navTabCount = this.tabs.filter((tab) => tab.hasAttribute('href')).length;
-    if (navTabCount > 0 && navTabCount < this.tabs.length) {
+    const withHref = this.tabs.filter((tab) => tab.hasAttribute('href')).length;
+    if (this.nav && withHref < this.tabs.length) {
+      console.warn('pds-tabs: `nav` is set, so every pds-tab needs an `href`.');
+    } else if (!this.nav && withHref > 0) {
       console.warn(
-        'pds-tabs: mixing navigation tabs (with `href`) and panel tabs (without) is not supported — set `href` on all tabs or none.',
+        'pds-tabs: a pds-tab has an `href` but `nav` is not set — add `nav` to pds-tabs for navigation mode; the href is ignored in panel mode.',
       );
     }
   }
@@ -157,6 +167,7 @@ export class PdsTabs {
     this.tabs.forEach((child, index) => {
       if (this.activeTabName === child.name) this.activeTabIndex = index;
       this.propGeneration(child, index);
+      child.navMode = this.nav;
     });
 
     this.tabPanels.forEach((child) => {
@@ -183,7 +194,7 @@ export class PdsTabs {
 
   componentWillLoad() {
     this.findAllChildren();
-    this.warnOnMixedNavTabs();
+    this.warnOnNavConfig();
   }
 
   componentWillRender() {
@@ -198,7 +209,7 @@ export class PdsTabs {
         <slot name="tabs" />
       </nav>
     ) : (
-      <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel || undefined} part="tab-list">
+      <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel} part="tab-list">
         <slot name="tabs" />
       </div>
     );
