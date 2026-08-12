@@ -41,7 +41,7 @@ pds-tab {
     }
   }
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled, .is-disabled) {
     color: var(--pine-color-text);
   }
 
@@ -109,7 +109,7 @@ pds-tab {
       }
     }
 
-    &:hover:not(.is-active, [aria-selected='true'], :disabled) {
+    &:hover:not(.is-active, [aria-selected='true'], :disabled, .is-disabled) {
       --color-background-tab: var(--pine-color-secondary-hover);
       color: var(--pine-color-text);
     }
@@ -176,12 +176,12 @@ pds-tab {
       color: var(--pine-color-text-primary);
     }
 
-    &.is-active:hover:not(:disabled),
-    &[aria-selected='true']:hover:not(:disabled) {
+    &.is-active:hover:not(:disabled, .is-disabled),
+    &[aria-selected='true']:hover:not(:disabled, .is-disabled) {
       background-color: var(--pine-color-primary-hover);
     }
 
-    &:hover:not(.is-active, [aria-selected='true'], :disabled) {
+    &:hover:not(.is-active, [aria-selected='true'], :disabled, .is-disabled) {
       background-color: var(--pine-color-border-disabled);
     }
 
