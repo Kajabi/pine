@@ -229,4 +229,30 @@ describe('pds-link', () => {
       expect(anchor?.getAttribute('data-turbo-action')).toBe('advance');
     });
   });
+
+  describe('active (nav tab)', () => {
+    it('adds the active class and aria-current when active is set', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="/page" active="true">Page</pds-link>`,
+      });
+
+      const anchor = root?.shadowRoot?.querySelector('a');
+      expect(anchor?.classList.contains('pds-link--active')).toBe(true);
+      expect(anchor?.getAttribute('aria-current')).toBe('page');
+      // Reflected to the host so `:host([active])` styles outrank the color presets.
+      expect(root?.hasAttribute('active')).toBe(true);
+    });
+
+    it('omits the active class and aria-current by default', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="/page">Page</pds-link>`,
+      });
+
+      const anchor = root?.shadowRoot?.querySelector('a');
+      expect(anchor?.classList.contains('pds-link--active')).toBe(false);
+      expect(anchor?.hasAttribute('aria-current')).toBe(false);
+    });
+  });
 });

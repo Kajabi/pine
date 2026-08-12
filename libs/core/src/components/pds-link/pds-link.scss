@@ -88,3 +88,19 @@
     text-decoration: underline;
   }
 }
+
+// Active navigation item (tab strips / nav rails). Persistent underline + strong
+// text so the current page reads without a color prop; pairs with aria-current.
+// Active navigation item (tab strips / nav rails). Scoped to :host([active]) so
+// it outranks the `:host([color=...]) .pds-link` presets — the current item
+// always gets the strong-text treatment (and never falls back to the on-dark
+// `secondary` hue on hover), even when a color prop is also set.
+:host([active]) .pds-link {
+  color: var(--pine-color-text-strong);
+  text-decoration: underline;
+}
+
+:host([active]) .pds-link:hover {
+  color: var(--pine-color-text-strong);
+  text-decoration: underline;
+}

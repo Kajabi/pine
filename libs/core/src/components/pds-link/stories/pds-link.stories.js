@@ -58,3 +58,15 @@ WithoutCustomTextInSlot.args = {
   fontSize: 'lg',
   variant: 'inline'
 };
+
+// A per-URL tab strip built from links (pds-tabs is an in-page panel switcher,
+// not navigation). `active` gives the current tab its treatment + aria-current.
+export const NavTabs = {
+  render: () => html`
+    <nav aria-label="Page sections" style="display: flex; gap: var(--pine-dimension-md);">
+      <pds-link href="#chat" font-size="md" ?active=${true}>Chat</pds-link>
+      <pds-link href="#resources" font-size="md" variant="plain">Resources</pds-link>
+      <pds-link href="#members" font-size="md" variant="plain">Members</pds-link>
+    </nav>
+  `,
+};
