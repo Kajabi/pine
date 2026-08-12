@@ -259,4 +259,83 @@ describe('pds-avatar', () => {
     });
   });
 
+  it('does not render a status indicator by default', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar></pds-avatar>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('[part="status"]')).toBeNull();
+  });
+
+  it('renders a status indicator and reflects the status attribute when status is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar status="online"></pds-avatar>`,
+    });
+
+    const status = page.root.shadowRoot.querySelector('[part="status"]');
+    expect(status).not.toBeNull();
+    expect(status.getAttribute('aria-label')).toBe('online status');
+    expect(status.getAttribute('role')).toBe('img');
+    expect(page.root.getAttribute('status')).toBe('online');
+  });
+
+  it.each(['away', 'offline'])('renders and reflects the "%s" status', async (status) => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar status="${status}"></pds-avatar>`,
+    });
+
+    const dot = page.root.shadowRoot.querySelector('[part="status"]');
+    expect(dot).not.toBeNull();
+    expect(dot.getAttribute('aria-label')).toBe(`${status} status`);
+    expect(page.root.getAttribute('status')).toBe(status);
+  });
+
+  it('adds the status-ring class only when statusRing is set alongside status', async () => {
+    const withRing = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar status="away" status-ring="true"></pds-avatar>`,
+    });
+    expect(withRing.root.classList.contains('pds-avatar--status-ring')).toBe(true);
+
+    const ringWithoutStatus = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar status-ring="true"></pds-avatar>`,
+    });
+    expect(ringWithoutStatus.root.classList.contains('pds-avatar--status-ring')).toBe(false);
+  });
+
+  it('uses a translated statusLabel for the status aria-label when provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar status="online" status-label="en línea"></pds-avatar>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('[part="status"]').getAttribute('aria-label')).toBe('en línea');
+  });
+
+  it('gives status precedence over badge (they share the same corner)', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar badge="true" status="online"></pds-avatar>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('.pds-avatar__status')).not.toBeNull();
+    expect(page.root.shadowRoot.querySelector('.pds-avatar__badge')).toBeNull();
+  });
+
+  it('marks the status dot decorative inside a dropdown trigger', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar dropdown="true" status="online"></pds-avatar>`,
+    });
+
+    const dot = page.root.shadowRoot.querySelector('[part="status"]');
+    expect(dot.getAttribute('aria-hidden')).toBe('true');
+    expect(dot.hasAttribute('aria-label')).toBe(false);
+    expect(dot.hasAttribute('role')).toBe(false);
+  });
+
 });

@@ -11,6 +11,8 @@ export default {
     image: null,
     initials: null,
     size: null,
+    status: null,
+    statusRing: false,
     variant: 'customer',
   },
   component: 'pds-avatar',
@@ -25,6 +27,8 @@ const BaseTemplate = (args) => html`<pds-avatar
 	image="${args.image}"
 	initials="${args.initials}"
 	size="${args.size}"
+	status="${args.status}"
+	status-ring="${args.statusRing}"
 	variant="${args.variant}"
 >
 </pds-avatar>`;
@@ -76,3 +80,22 @@ InitialsWithBadge.args = {
 	initials: 'KJ',
 	size: 'lg'
 }
+
+export const Status = BaseTemplate.bind();
+Status.args = {
+	initials: 'KJ',
+	size: 'lg',
+	status: 'online'
+}
+
+export const AllStatuses = () => html`<div style="display: flex; gap: 16px; align-items: center;">
+	<pds-avatar initials="KJ" size="lg" status="online"></pds-avatar>
+	<pds-avatar initials="KJ" size="lg" status="away"></pds-avatar>
+	<pds-avatar initials="KJ" size="lg" status="offline"></pds-avatar>
+</div>`;
+
+export const StatusRing = () => html`<div style="display: flex; gap: 16px; align-items: center;">
+	<pds-avatar initials="KJ" size="lg" status="online" status-ring="true"></pds-avatar>
+	<pds-avatar initials="KJ" size="lg" status="away" status-ring="true"></pds-avatar>
+	<pds-avatar initials="KJ" size="lg" status="offline" status-ring="true"></pds-avatar>
+</div>`;

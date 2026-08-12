@@ -61,6 +61,32 @@ export class PdsAvatar {
   | string = 'lg';
 
   /**
+   * Displays a presence status indicator (a dot) on the avatar: `online`
+   * (success), `away` (warning), or `offline` (neutral). For a simple
+   * active/inactive presence, map active to `online` and inactive to `offline`.
+   * Takes precedence over `badge` — they share the same corner, so the badge is
+   * hidden while `status` is set.
+   * @defaultValue null
+   */
+  @Prop({ reflect: true }) status?: 'online' | 'away' | 'offline' | null = null;
+
+  /**
+   * Accessible label for the presence status indicator. Pass a translated
+   * string to localize it; defaults to English (`"{status} status"`). Has no
+   * effect on dropdown avatars, where the trigger's `triggerLabel` owns the
+   * accessible name — fold presence into `triggerLabel` there.
+   * @defaultValue null
+   */
+  @Prop() statusLabel?: string;
+
+  /**
+   * Determines whether a ring is shown around the avatar in the `status` color.
+   * Has no effect unless `status` is set.
+   * @defaultValue false
+   */
+  @Prop() statusRing? = false;
+
+  /**
    * Determines the variant of avatar. Changes appearance accordingly.
    * @defaultValue customer
    */
@@ -99,6 +125,7 @@ export class PdsAvatar {
       <div style={style} part="asset-wrapper">
         {this.renderIconOrImage()}
         {this.renderBadge()}
+        {this.renderStatus()}
       </div>
     )
   };
@@ -116,12 +143,34 @@ export class PdsAvatar {
   };
 
   private renderBadge = () => (
-    this.badge
+    // `badge` and `status` share the bottom-end corner; `status` wins so the
+    // presence dot is never painted over the badge.
+    this.badge && !this.status
     // Percentage is average size of icon in relation to total avatar size
     // of all preset sizes found in Figma.
     // Used to allow icons to scale to container size
       && <pds-icon color="var(--pine-color-purple-600)" class="pds-avatar__badge" icon={checkCircleFilled} size="33.53%"></pds-icon>
   );
+
+  private renderStatus = () => {
+    if (!this.status) return null;
+
+    // Inside the dropdown trigger, the button's aria-label owns the accessible
+    // name, so the dot's own label is never announced. Mark it decorative there
+    // and let consumers convey presence via `triggerLabel`.
+    if (this.dropdown) {
+      return <span class="pds-avatar__status" part="status" aria-hidden="true"></span>;
+    }
+
+    return (
+      <span
+        class="pds-avatar__status"
+        part="status"
+        role="img"
+        aria-label={this.statusLabel ?? `${this.status} status`}
+      ></span>
+    );
+  };
 
   private renderIconOrImage = () => {
     if (this.image) {
@@ -147,7 +196,8 @@ export class PdsAvatar {
       'pds-avatar': true,
       [`pds-avatar--has-image`]: this.image !== '' && this.image !== null, // Remove when FF supports :has selector
       [`pds-avatar--has-initials`]: this.initials !== '' && this.initials !== null,
-      [`pds-avatar--${this.variant}`]: this.variant === 'admin'
+      [`pds-avatar--${this.variant}`]: this.variant === 'admin',
+      [`pds-avatar--status-ring`]: !!this.status && this.statusRing,
     }
   );
 

@@ -158,6 +158,21 @@ export namespace Components {
   | 'xs' // 24px
   | string;
         /**
+          * Displays a presence status indicator (a dot) on the avatar: `online` (success), `away` (warning), or `offline` (neutral). For a simple active/inactive presence, map active to `online` and inactive to `offline`. Takes precedence over `badge` — they share the same corner, so the badge is hidden while `status` is set.
+          * @defaultValue null
+         */
+        "status"?: 'online' | 'away' | 'offline' | null;
+        /**
+          * Accessible label for the presence status indicator. Pass a translated string to localize it; defaults to English (`"{status} status"`). Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name — fold presence into `triggerLabel` there.
+          * @defaultValue null
+         */
+        "statusLabel"?: string;
+        /**
+          * Determines whether a ring is shown around the avatar in the `status` color. Has no effect unless `status` is set.
+          * @defaultValue false
+         */
+        "statusRing"?: boolean;
+        /**
           * Accessible label for the dropdown trigger button. Pass a translated string to localize it; defaults to English.
           * @defaultValue 'Avatar dropdown trigger'
          */
@@ -3341,6 +3356,21 @@ declare namespace LocalJSX {
   | 'sm' // 32px
   | 'xs' // 24px
   | string;
+        /**
+          * Displays a presence status indicator (a dot) on the avatar: `online` (success), `away` (warning), or `offline` (neutral). For a simple active/inactive presence, map active to `online` and inactive to `offline`. Takes precedence over `badge` — they share the same corner, so the badge is hidden while `status` is set.
+          * @defaultValue null
+         */
+        "status"?: 'online' | 'away' | 'offline' | null;
+        /**
+          * Accessible label for the presence status indicator. Pass a translated string to localize it; defaults to English (`"{status} status"`). Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name — fold presence into `triggerLabel` there.
+          * @defaultValue null
+         */
+        "statusLabel"?: string;
+        /**
+          * Determines whether a ring is shown around the avatar in the `status` color. Has no effect unless `status` is set.
+          * @defaultValue false
+         */
+        "statusRing"?: boolean;
         /**
           * Accessible label for the dropdown trigger button. Pass a translated string to localize it; defaults to English.
           * @defaultValue 'Avatar dropdown trigger'
