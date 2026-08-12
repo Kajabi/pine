@@ -300,12 +300,12 @@ it('renders variant prop', async () => {
     expect(page.root.classList.contains('pds-tabs--stretch')).toBe(true);
   });
 
-  describe('navigation mode (tabs with href)', () => {
-    it('renders the tab strip as a <nav>, not a role=tablist, when its tabs are links', async () => {
+  describe('navigation mode (nav)', () => {
+    it('renders the tab strip as a <nav> of links when `nav` is set', async () => {
       const page = await newSpecPage({
         components: [PdsTabs, PdsTab],
         html: `
-          <pds-tabs component-id="clubs" tablist-label="Club sections" variant="primary">
+          <pds-tabs component-id="clubs" tablist-label="Club sections" variant="primary" nav>
             <pds-tab href="/clubs/1/chat" active="true" name="chat">Chat</pds-tab>
             <pds-tab href="/clubs/1/members" name="members">Members</pds-tab>
           </pds-tabs>
@@ -318,9 +318,12 @@ it('renders variant prop', async () => {
       expect(shadow?.querySelector('nav')?.getAttribute('aria-label')).toBe('Club sections');
       // No panel-switcher tablist in nav mode.
       expect(shadow?.querySelector('[role="tablist"]')).toBeNull();
+      // Parent drives the children: every tab renders as a link, not a role=tab button.
+      expect(page.body.querySelectorAll('pds-tab a').length).toBe(2);
+      expect(page.body.querySelector('pds-tab button')).toBeNull();
     });
 
-    it('keeps the role=tablist for panel-mode tabs (no href)', async () => {
+    it('keeps the role=tablist and buttons in panel mode (no `nav`)', async () => {
       const page = await newSpecPage({
         components: [PdsTabs, PdsTab],
         html: `
@@ -337,6 +340,27 @@ it('renders variant prop', async () => {
       expect(shadow?.querySelector('nav')).toBeNull();
     });
 
+    it('keeps a tab a panel button even if it has an href, when `nav` is not set', async () => {
+      // Structural guarantee: the parent is authoritative, so a stray href can't
+      // turn a single child into a link inside a role=tablist.
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const page = await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="panels" tablist-label="Foo" variant="primary" active-tab-name="one">
+            <pds-tab name="one" href="/one">One</pds-tab>
+            <pds-tab name="two">Two</pds-tab>
+          </pds-tabs>
+        `,
+      });
+      await page.waitForChanges();
+
+      expect(page.root?.shadowRoot?.querySelector('div.pds-tabs__tablist[role="tablist"]')).not.toBeNull();
+      expect(page.body.querySelector('pds-tab[name="one"] a')).toBeNull();
+      expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toBeNull();
+      warnSpy.mockRestore();
+    });
+
     it('selects no panel tab when activeTabName is omitted', async () => {
       const page = await newSpecPage({
         components: [PdsTabs, PdsTab],
@@ -349,36 +373,53 @@ it('renders variant prop', async () => {
       });
       await page.waitForChanges();
 
-      // Still a panel-mode tablist (no href), just with nothing selected.
+      // Still a panel-mode tablist (no `nav`), just with nothing selected.
       expect(page.root?.shadowRoot?.querySelector('div.pds-tabs__tablist[role="tablist"]')).not.toBeNull();
       expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
       expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
     });
 
-    it('warns when navigation and panel tabs are mixed', async () => {
+    it('warns when `nav` is set but a tab is missing an href', async () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
       await newSpecPage({
         components: [PdsTabs, PdsTab],
         html: `
-          <pds-tabs component-id="mixed" tablist-label="Foo" variant="primary">
+          <pds-tabs component-id="nav-missing" tablist-label="Foo" variant="primary" nav>
             <pds-tab href="/clubs/1/chat" name="chat">Chat</pds-tab>
             <pds-tab name="two">Two</pds-tab>
           </pds-tabs>
         `,
       });
 
-      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('mixing navigation tabs'));
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('every pds-tab needs an `href`'));
       warnSpy.mockRestore();
     });
 
-    it('does not warn when every tab is a navigation tab', async () => {
+    it('warns when a tab has an href but `nav` is not set', async () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
       await newSpecPage({
         components: [PdsTabs, PdsTab],
         html: `
-          <pds-tabs component-id="all-nav" tablist-label="Foo" variant="primary">
+          <pds-tabs component-id="href-no-nav" tablist-label="Foo" variant="primary" active-tab-name="chat">
+            <pds-tab href="/clubs/1/chat" name="chat">Chat</pds-tab>
+            <pds-tab name="two">Two</pds-tab>
+          </pds-tabs>
+        `,
+      });
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('`nav` is not set'));
+      warnSpy.mockRestore();
+    });
+
+    it('does not warn when `nav` is set and every tab has an href', async () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      await newSpecPage({
+        components: [PdsTabs, PdsTab],
+        html: `
+          <pds-tabs component-id="all-nav" tablist-label="Foo" variant="primary" nav>
             <pds-tab href="/clubs/1/chat" name="chat">Chat</pds-tab>
             <pds-tab href="/clubs/1/members" name="members">Members</pds-tab>
           </pds-tabs>

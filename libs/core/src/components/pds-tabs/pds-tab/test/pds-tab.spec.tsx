@@ -183,10 +183,42 @@ describe('pds-tabs', () => {
       const anchor = page.root?.querySelector('a');
       expect(anchor?.hasAttribute('href')).toBe(false);
       expect(anchor?.getAttribute('aria-disabled')).toBe('true');
-      expect(anchor?.getAttribute('tabindex')).toBe('-1');
+      // No href already removes it from tab order, so no redundant tabindex.
+      expect(anchor?.hasAttribute('tabindex')).toBe(false);
       // Without href the anchor loses its implicit link role; restore it so AT
       // still announces the disabled item.
       expect(anchor?.getAttribute('role')).toBe('link');
+    });
+
+    it('renders a panel button, ignoring href, when the parent forces panel mode', async () => {
+      // `navMode` is pushed by the parent pds-tabs and is authoritative over href.
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" nav-mode="false" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      expect(page.root?.querySelector('a')).toBeNull();
+      expect(page.root?.querySelector('button[role="tab"]')).not.toBeNull();
+    });
+
+    it('renders a link when the parent forces nav mode even without an href', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab nav-mode="true" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      expect(page.root?.querySelector('a')).not.toBeNull();
+      expect(page.root?.querySelector('button')).toBeNull();
+    });
+
+    it('treats an empty href as panel mode when standalone', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      expect(page.root?.querySelector('a')).toBeNull();
+      expect(page.root?.querySelector('button[role="tab"]')).not.toBeNull();
     });
   });
 });
