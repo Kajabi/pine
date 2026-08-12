@@ -376,6 +376,72 @@ Sizes also apply to icon-only buttons, adjusting the button dimensions according
   <pds-button variant="primary" icon-only="true" size="micro"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
 </DocCanvas>
 
+### Compact / custom-surface icon buttons
+
+When a placement needs an icon button the size and variant props don't express — for
+example a chat composer's **send** affordance: a compact fixed square with an inverse
+surface — target the exposed `button` shadow part rather than reaching into internals.
+`::part(button)` is public API, so this is a supported customization.
+
+The example pairs the override with `variant="unstyled"`. That's a recommendation, not a
+requirement: `unstyled` is a state-neutral base (transparent background across default/
+hover/disabled, no padding, border, or min-width), so the `::part(button)` rules fully own
+the appearance instead of layering over — and fighting the hover/focus surface of — another
+variant. Any variant works, but a non-`unstyled` one will still apply its own interaction-
+state colors underneath.
+
+> ***Note:*** Reach for this only when the built-in `variant` and `size` props can't
+> get you there. Keep the accessible label (the visually-hidden slot text) so the
+> control is still announced.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <style>{\`
+      .compact-inverse-icon-button::part(button) {
+        width: var(--pine-dimension-400);
+        height: var(--pine-dimension-400);
+        min-width: 0;
+        padding: 0;
+        border-radius: var(--pine-border-radius-md);
+        background: var(--pine-color-background-inverse-inset);
+        color: var(--pine-color-text-primary);
+      }
+    \`}</style>
+
+    <PdsButton className="compact-inverse-icon-button" variant="unstyled" iconOnly="true" icon="arrow-up">Send message</PdsButton>
+    `,
+    webComponent: `
+    <style>
+      .compact-inverse-icon-button::part(button) {
+        width: var(--pine-dimension-400);
+        height: var(--pine-dimension-400);
+        min-width: 0;
+        padding: 0;
+        border-radius: var(--pine-border-radius-md);
+        background: var(--pine-color-background-inverse-inset);
+        color: var(--pine-color-text-primary);
+      }
+    </style>
+
+    <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only="true" icon="arrow-up">Send message</pds-button>
+    `
+}}>
+  <style>{`
+    .compact-inverse-icon-button::part(button) {
+      width: var(--pine-dimension-400);
+      height: var(--pine-dimension-400);
+      min-width: 0;
+      padding: 0;
+      border-radius: var(--pine-border-radius-md);
+      background: var(--pine-color-background-inverse-inset);
+      color: var(--pine-color-text-primary);
+    }
+  `}</style>
+
+  <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only="true" icon="arrow-up">Send message</pds-button>
+</DocCanvas>
+
 ### Button Link
 
 The button link variant allows a `pds-button` to function as a link. By providing an `href` attribute, the button will render as an anchor (`<a>`) element while maintaining the visual appearance of a button. This is useful for creating call-to-action buttons that navigate to external resources or different parts of your application.
