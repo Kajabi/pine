@@ -42,4 +42,22 @@ describe('pds-tabpanel', () => {
       </pds-tabpanel>
     `);
   });
+
+  it('adds the stretch-active class when stretch and selected are both set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTabpanel],
+      html: `<pds-tabpanel stretch="true" selected="true" parent-component-id="foo" name="two">Content</pds-tabpanel>`,
+    });
+    await page.waitForChanges();
+    expect(page.root.classList.contains('pds-tabpanel--stretch-active')).toBe(true);
+  });
+
+  it('does not add the stretch-active class when the panel is not selected', async () => {
+    const page = await newSpecPage({
+      components: [PdsTabpanel],
+      html: `<pds-tabpanel stretch="true" parent-component-id="foo" name="two">Content</pds-tabpanel>`,
+    });
+    await page.waitForChanges();
+    expect(page.root.classList.contains('pds-tabpanel--stretch-active')).toBe(false);
+  });
 });

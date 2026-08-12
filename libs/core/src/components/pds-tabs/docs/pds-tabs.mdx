@@ -233,6 +233,84 @@ Individual tabs can be disabled using the `disabled` prop. Disabled tabs cannot 
   </pds-tabs>
 </DocCanvas>
 
+### Divider
+
+The `divider` prop adds a full-width rule beneath the tab list, separating the tabs from their panel. Useful when tabs sit directly above dense content and need a visual seam.
+
+<DocCanvas mdxSource={{
+  react: `
+<PdsTabs activeTabName="Dollop" variant="primary" componentId="divider-example" tablistLabel="Foo" divider>
+  <PdsTab name="Sturdy">Sturdy</PdsTab>
+  <PdsTab name="Dollop">Dollop</PdsTab>
+  <PdsTab name="Waffle">Waffle</PdsTab>
+  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
+  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
+  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+</PdsTabs>
+`,
+  webComponent: `
+<pds-tabs active-tab-name="Dollop" variant="primary" component-id="divider-example" tablist-label="Foo" divider>
+  <pds-tab name="Sturdy">Sturdy</pds-tab>
+  <pds-tab name="Dollop">Dollop</pds-tab>
+  <pds-tab name="Waffle">Waffle</pds-tab>
+  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+</pds-tabs>
+`
+}}>
+  <pds-tabs active-tab-name="Dollop" variant="primary" component-id="divider-example" tablist-label="Foo" divider>
+    <pds-tab name="Sturdy">Sturdy</pds-tab>
+    <pds-tab name="Dollop">Dollop</pds-tab>
+    <pds-tab name="Waffle">Waffle</pds-tab>
+    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  </pds-tabs>
+</DocCanvas>
+
+### Stretch
+
+The `stretch` prop makes the component fill its container's height and lets the active panel take the remaining space below the tab list — for tab sets inside a height-bounded region (a rail, a modal body, a split-pane column) where the panel should scroll on its own rather than the page. Give the parent a fixed height for the effect to show.
+
+<DocCanvas mdxSource={{
+  react: `
+<div style={{ height: '240px', border: '1px solid var(--pine-color-border-subtle)' }}>
+  <PdsTabs activeTabName="Dollop" variant="primary" componentId="stretch-example" tablistLabel="Foo" stretch>
+    <PdsTab name="Sturdy">Sturdy</PdsTab>
+    <PdsTab name="Dollop">Dollop</PdsTab>
+    <PdsTab name="Waffle">Waffle</PdsTab>
+    <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
+    <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
+    <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+  </PdsTabs>
+</div>
+`,
+  webComponent: `
+<div style="height: 240px; border: 1px solid var(--pine-color-border-subtle);">
+  <pds-tabs active-tab-name="Dollop" variant="primary" component-id="stretch-example" tablist-label="Foo" stretch>
+    <pds-tab name="Sturdy">Sturdy</pds-tab>
+    <pds-tab name="Dollop">Dollop</pds-tab>
+    <pds-tab name="Waffle">Waffle</pds-tab>
+    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  </pds-tabs>
+</div>
+`
+}}>
+  <div style={{height: '240px', border: '1px solid var(--pine-color-border-subtle)'}}>
+    <pds-tabs active-tab-name="Dollop" variant="primary" component-id="stretch-example" tablist-label="Foo" stretch>
+      <pds-tab name="Sturdy">Sturdy</pds-tab>
+      <pds-tab name="Dollop">Dollop</pds-tab>
+      <pds-tab name="Waffle">Waffle</pds-tab>
+      <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+      <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+      <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+    </pds-tabs>
+  </div>
+</DocCanvas>
+
 ## Additional Resources
 
 [W3C: Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)

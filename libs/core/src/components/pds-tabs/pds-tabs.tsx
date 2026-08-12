@@ -32,6 +32,19 @@ export class PdsTabs {
   @Prop() variant!: 'primary' | 'availability' | 'filter' | 'pill';
 
   /**
+   * Adds a divider rule beneath the tab list.
+   * @defaultValue false
+   */
+  @Prop() divider?: boolean = false;
+
+  /**
+   * Stretches the component so the active tab panel fills the remaining height.
+   * Requires the component to have a constrained height (e.g. a flex parent).
+   * @defaultValue false
+   */
+  @Prop() stretch?: boolean = false;
+
+  /**
    * Sets the starting active tab name and maintains the name as the component re-renders
    */
   @Prop({mutable: true}) activeTabName!: string;
@@ -122,6 +135,7 @@ export class PdsTabs {
 
     this.tabPanels.forEach((child) => {
       this.propGeneration(child);
+      child.stretch = this.stretch;
     });
   }
 
@@ -130,6 +144,12 @@ export class PdsTabs {
     if (this.variant && this.variant != 'primary') {
       const variantClassName = `pds-tabs--${this.variant}`;
       className += ' ' + variantClassName;
+    }
+    if (this.divider) {
+      className += ' pds-tabs--divider';
+    }
+    if (this.stretch) {
+      className += ' pds-tabs--stretch';
     }
 
     return className;

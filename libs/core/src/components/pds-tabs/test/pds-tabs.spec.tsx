@@ -283,4 +283,20 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('pds-tab[name="one"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
   });
+
+  it('adds the divider class when the divider prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTabs],
+      html: `<pds-tabs component-id="test" divider="true"></pds-tabs>`,
+    });
+    expect(page.root.classList.contains('pds-tabs--divider')).toBe(true);
+  });
+
+  it('adds the stretch class when the stretch prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTabs],
+      html: `<pds-tabs component-id="test" stretch="true"></pds-tabs>`,
+    });
+    expect(page.root.classList.contains('pds-tabs--stretch')).toBe(true);
+  });
 });
