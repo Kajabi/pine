@@ -45,9 +45,11 @@ export class PdsTabs {
   @Prop() stretch?: boolean = false;
 
   /**
-   * Sets the starting active tab name and maintains the name as the component re-renders
+   * Sets the starting active tab name and maintains the name as the component re-renders.
+   * Panel mode only — in navigation mode (tabs with `href`) the active tab is set
+   * per-tab via `active`, so this is not required there.
    */
-  @Prop({mutable: true}) activeTabName!: string;
+  @Prop({mutable: true}) activeTabName?: string;
 
   /**
    * Sets the starting active tab index number and maintains the index number as the component re-renders
@@ -67,6 +69,10 @@ export class PdsTabs {
 
   @Listen('keydown', {})
   handleKeyDown(ev: KeyboardEvent) {
+    // Navigation mode uses real links: Tab moves focus, Enter follows the href.
+    // The roving/arrow model is a panel-mode (role=tab) concern only.
+    if (this.isNav) return;
+
     const keySet = ["ArrowLeft", "ArrowRight", "Home", "End"];
 
     // Only handle keyboard navigation if the event originated from a tab button
@@ -81,6 +87,13 @@ export class PdsTabs {
       ev.preventDefault();
       this.moveActiveTab(ev.key);
     }
+  }
+
+  // Navigation mode: any child tab carries an `href`, so the strip navigates
+  // between URLs instead of switching in-page panels. Rendered as a <nav> of
+  // links with aria-current, not a role=tablist of buttons.
+  private get isNav() {
+    return !!this.tabs?.some((tab) => tab.hasAttribute('href'));
   }
 
   private moveActiveTab(key: string) {
@@ -164,11 +177,21 @@ export class PdsTabs {
   }
 
   render() {
+    // Navigation mode: a <nav> landmark of links (aria-current marks the current
+    // page). Panel mode: the ARIA tablist of role=tab buttons over tabpanels.
+    const tabList = this.isNav ? (
+      <nav class="pds-tabs__tablist" aria-label={this.tablistLabel} part="tab-list">
+        <slot name="tabs" />
+      </nav>
+    ) : (
+      <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel} part="tab-list">
+        <slot name="tabs" />
+      </div>
+    );
+
     return (
       <Host active-tab-name={this.activeTabName} class={this.classNames()} id={this.componentId}>
-        <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel} part="tab-list">
-          <slot name="tabs" />
-        </div>
+        {tabList}
         <slot name="tabpanels" />
       </Host>
     );
