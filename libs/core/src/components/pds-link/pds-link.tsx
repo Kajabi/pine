@@ -129,10 +129,6 @@ export class PdsLink {
       classNames.push('pds-link--' + this.variant);
     }
 
-    if (this.active) {
-      classNames.push('pds-link--active');
-    }
-
     return classNames.join(' ');
   }
 
