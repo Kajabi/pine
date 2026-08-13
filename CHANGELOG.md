@@ -1,3 +1,22 @@
+## 3.29.0 (2026-08-13)
+
+### Features 🚀
+
+- **pds-avatar:** add status presence indicator with optional ring ([#784](https://github.com/Kajabi/pine/pull/784))
+- **pds-link:** add active prop for nav-tab styling ([#791](https://github.com/Kajabi/pine/pull/791))
+- **pds-tabs:** add divider and stretch (fill-height) props ([#785](https://github.com/Kajabi/pine/pull/785))
+- **pds-tabs:** navigation mode — pds-tab as a link (href + Turbo) ([#792](https://github.com/Kajabi/pine/pull/792))
+
+### Documentation 📄
+
+- **mcp-patterns:** update empty-state-pine to bordered icon square with stacked actions ([#781](https://github.com/Kajabi/pine/pull/781))
+- **pds-button:** document ::part(button) for compact/inverse icon buttons ([#790](https://github.com/Kajabi/pine/pull/790))
+
+### ❤️ Thank You
+
+- Quinton Jason
+- Sam Croswell
+
 ## 3.28.0 (2026-08-07)
 
 ### Features 🚀
