@@ -52,7 +52,9 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Parse Code Connect files (validate, no publish)
         shell: bash
-        run: npx -y --package=@figma/code-connect@${CODE_CONNECT_VERSION} figma connect parse
+        # --exit-on-unreadable-files: fail instead of silently skipping a file the
+        # CLI can't parse — otherwise a broken mapping passes the gate green.
+        run: npx -y --package=@figma/code-connect@${CODE_CONNECT_VERSION} figma connect parse --exit-on-unreadable-files
 
   # Publish on merge to main or manual dispatch. Requires the FIGMA_ACCESS_TOKEN
   # secret (a Figma personal access token with Code Connect write scope).
@@ -78,4 +80,6 @@ jobs:
         shell: bash
         env:
           FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
-        run: npx -y --package=@figma/code-connect@${CODE_CONNECT_VERSION} figma connect publish
+        # --exit-on-unreadable-files: fail the publish rather than shipping a
+        # partial set and leaving stale Dev Mode snippets for the skipped files.
+        run: npx -y --package=@figma/code-connect@${CODE_CONNECT_VERSION} figma connect publish --exit-on-unreadable-files
