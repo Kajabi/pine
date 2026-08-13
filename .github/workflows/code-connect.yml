@@ -1,0 +1,81 @@
+name: 'Figma Code Connect'
+
+# Keeps the Figma Code Connect mappings (libs/figma/*.figma.ts) in sync with
+# Figma. Previously this was only ever run by hand — `@figma/code-connect` isn't
+# even a declared dependency — so Dev Mode was only as fresh as the last person
+# who remembered to run `figma connect publish` locally with a personal token.
+#
+#   - On PRs touching the mappings: `parse` (validate every file locally, no
+#     token, no publish) so a broken mapping fails the PR instead of silently
+#     shipping stale code snippets.
+#   - On merge to main (or manual dispatch): `publish` the mappings to Figma so
+#     each connected component emits its `pds-*` example in Dev Mode.
+
+on:
+  pull_request:
+    branches: ['**']
+    paths:
+      - 'libs/figma/**'
+      - 'figma.config.json'
+      - '.github/workflows/code-connect.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'libs/figma/**'
+      - 'figma.config.json'
+      - '.github/workflows/code-connect.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: code-connect-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Bump to upgrade the Code Connect CLI. Kept as an npx pin (not a package.json
+  # dependency) so this workflow stays self-contained and matches how the CLI is
+  # run today; promote to a pinned devDependency if it ever needs to run inside
+  # the normal build/lint pipeline.
+  CODE_CONNECT_VERSION: '1.3.4'
+
+jobs:
+  # PR gate: parse the *.figma.ts files against figma.config.json. Local only —
+  # no Figma access, no token — so it's safe to run on forks and validates that
+  # every mapping still compiles and resolves its imports/substitutions.
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Node.js (pinned npm)
+        uses: ./.github/workflows/actions/setup-node-with-pinned-npm
+        with:
+          node-version-file: '.nvmrc'
+      - name: Parse Code Connect files (validate, no publish)
+        shell: bash
+        run: npx -y --package=@figma/code-connect@${CODE_CONNECT_VERSION} figma connect parse
+
+  # Publish on merge to main or manual dispatch. Requires the FIGMA_ACCESS_TOKEN
+  # secret (a Figma personal access token with Code Connect write scope).
+  publish:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Node.js (pinned npm)
+        uses: ./.github/workflows/actions/setup-node-with-pinned-npm
+        with:
+          node-version-file: '.nvmrc'
+      - name: Guard — require FIGMA_ACCESS_TOKEN
+        shell: bash
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+        run: |
+          if [ -z "${FIGMA_ACCESS_TOKEN}" ]; then
+            echo "::error::FIGMA_ACCESS_TOKEN secret is not set — cannot publish Code Connect. Add a Figma personal access token (Code Connect write scope) under repo Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+      - name: Publish Code Connect to Figma
+        shell: bash
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+        run: npx -y --package=@figma/code-connect@${CODE_CONNECT_VERSION} figma connect publish
