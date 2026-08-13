@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Element, Fragment, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'pds-tab',
@@ -13,6 +13,43 @@ export class PdsTab {
    * @defaultValue false
    */
   @Prop() disabled? = false;
+
+  /**
+   * Turns the tab into a navigation link to this URL. When set, the tab renders
+   * an `<a href>` (marked `aria-current="page"` when `active`) instead of a
+   * `role="tab"` button, so each tab is its own page/URL — for tab strips that
+   * navigate rather than switch in-page panels. Pairs with `pds-tabs` navigation
+   * mode; no `pds-tabpanel`s are needed. Apply `href` to all tabs in a
+   * `pds-tabs` or none — mixing navigation and panel tabs is not supported.
+   */
+  @Prop() href?: string;
+
+  /**
+   * Marks this tab as the current one in navigation mode (`href` set). Applies
+   * the active treatment and `aria-current="page"`. Ignored in panel mode, where
+   * the active tab is derived from the parent's `activeTabName`.
+   * @defaultValue false
+   */
+  @Prop() active? = false;
+
+  /**
+   * Where to open the linked URL, in navigation mode. Maps to the anchor's
+   * `target` attribute.
+   */
+  @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
+
+  /**
+   * Navigation mode: the Turbo Frame to target. Maps to `data-turbo-frame` on the
+   * anchor, so a tab can swap a single frame (e.g. a page body) while leaving the
+   * rest of the page in place.
+   */
+  @Prop() turboFrame?: string;
+
+  /**
+   * Navigation mode: the Turbo visit action. Maps to `data-turbo-action` on the
+   * anchor (`advance` gives each tab its own history entry).
+   */
+  @Prop() turboAction?: 'advance' | 'replace';
 
   /**
    * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
@@ -44,6 +81,14 @@ export class PdsTab {
   @Prop() selected = false;
 
   /**
+   * Set by the parent `pds-tabs` to force navigation vs panel rendering, so tabs
+   * present when the strip initializes share one mode. Standalone (no parent), the
+   * tab falls back to whether it has an `href`.
+   */
+  /** @internal */
+  @Prop() navMode?: boolean;
+
+  /**
    * Emits an event upon tab click for `pds-tab` and `pds-tabpanel` to listen for
    */
   /** @internal */
@@ -53,10 +98,29 @@ export class PdsTab {
     this.pdsTabClick.emit([index, parentComponentId]);
   }
 
+  // An empty string is treated as "no destination" everywhere (isNav fallback,
+  // href attribute, role) so a nav tab never renders `href=""` (which would
+  // navigate to the current page).
+  private get hasHref() {
+    return this.href != null && this.href !== '';
+  }
+
+  private get isNav() {
+    // The parent `pds-tabs` is authoritative when present (via `navMode`), so its
+    // tabs share one mode. Standalone, fall back to a usable `href`.
+    return this.navMode ?? this.hasHref;
+  }
+
+  private get isActive() {
+    // Navigation mode is server-driven via `active`; panel mode is parent-driven
+    // via `selected` (from `activeTabName`).
+    return this.isNav ? this.active : this.selected;
+  }
+
   private classNames() {
     const classes = [
       'pds-tab',
-      this.selected && 'is-active',
+      this.isActive && 'is-active',
       this.disabled && 'is-disabled',
     ];
     return classes.filter(Boolean).join(' ');
@@ -71,6 +135,41 @@ export class PdsTab {
       <span class="pds-tab-edge pds-tab-edge--end" role="presentation"></span>
     )
 
+    const content = (
+      <Fragment>
+        {this.variant === "availability" && availabilityTabEdgeInlineStart}
+        {this.variant === "availability" && availabilityTabEdgeInlineEnd}
+        <div class="pds-tab__content"><slot/></div>
+      </Fragment>
+    )
+
+    // Navigation mode: a real anchor, so keyboard activation and navigation are
+    // native (and Turbo-driven when framed) with no controller — and the current
+    // item carries `aria-current="page"` rather than `role="tab"`/`aria-selected`.
+    if (this.isNav) {
+      return (
+        <Host variant={this.variant} slot="tabs" index={this.index}>
+          <a
+            href={this.disabled || !this.hasHref ? undefined : this.href}
+            // An anchor without an href (disabled, or forced into nav mode with no
+            // usable href) loses its implicit link role; restore it explicitly so
+            // assistive tech still announces the item rather than as plain text.
+            role={this.disabled || !this.hasHref ? "link" : undefined}
+            id={this.parentComponentId + "__" + this.name}
+            class={this.classNames()}
+            target={this.target}
+            rel={this.target === "_blank" ? "noopener noreferrer" : undefined}
+            aria-current={this.isActive ? "page" : undefined}
+            aria-disabled={this.disabled ? "true" : null}
+            data-turbo-frame={this.turboFrame || undefined}
+            data-turbo-action={this.turboAction || undefined}
+          >
+            {content}
+          </a>
+        </Host>
+      );
+    }
+
     return (
       <Host variant={this.variant} slot="tabs" index={this.index}>
         <button
@@ -84,9 +183,7 @@ export class PdsTab {
           class={this.classNames()}
           onClick={this.onTabClick.bind(this, this.index, this.parentComponentId)}
         >
-          {this.variant === "availability" && availabilityTabEdgeInlineStart}
-          {this.variant === "availability" && availabilityTabEdgeInlineEnd}
-          <div class="pds-tab__content"><slot/></div>
+          {content}
         </button>
       </Host>
     );

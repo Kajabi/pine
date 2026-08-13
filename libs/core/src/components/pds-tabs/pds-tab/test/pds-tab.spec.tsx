@@ -99,4 +99,144 @@ describe('pds-tabs', () => {
     component?.click();
     expect(eventSpy).not.toHaveBeenCalled();
   });
+
+  describe('navigation mode (href)', () => {
+    it('renders an anchor instead of a role=tab button when href is set', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor).not.toBeNull();
+      expect(anchor?.getAttribute('href')).toBe('/clubs/1/chat');
+      expect(anchor?.classList.contains('pds-tab')).toBe(true);
+      // No panel-switcher semantics in nav mode.
+      expect(page.root?.querySelector('button')).toBeNull();
+      expect(anchor?.hasAttribute('role')).toBe(false);
+      expect(anchor?.hasAttribute('aria-selected')).toBe(false);
+      // Not the current tab, so no aria-current and no active treatment.
+      expect(anchor?.hasAttribute('aria-current')).toBe(false);
+      expect(anchor?.classList.contains('is-active')).toBe(false);
+    });
+
+    it('passes the target through to the anchor', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" target="_blank" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor?.getAttribute('target')).toBe('_blank');
+      // Opening a new context must not leak window.opener.
+      expect(anchor?.getAttribute('rel')).toBe('noopener noreferrer');
+    });
+
+    it('does not set rel when target is not _blank', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" target="_self" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      expect(page.root?.querySelector('a')?.hasAttribute('rel')).toBe(false);
+    });
+
+    it('marks the active nav tab with aria-current and is-active', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" active="true" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor?.getAttribute('aria-current')).toBe('page');
+      expect(anchor?.classList.contains('is-active')).toBe(true);
+    });
+
+    it('passes Turbo frame/action through to the anchor', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" turbo-frame="clubs-body" turbo-action="advance" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor?.getAttribute('data-turbo-frame')).toBe('clubs-body');
+      expect(anchor?.getAttribute('data-turbo-action')).toBe('advance');
+    });
+
+    it('does not emit pdsTabClick from a nav tab', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+      const eventSpy = jest.fn();
+      document.addEventListener('pdsTabClick', eventSpy);
+      page.root?.querySelector('a')?.click();
+      expect(eventSpy).not.toHaveBeenCalled();
+    });
+
+    it('drops href and marks aria-disabled when a nav tab is disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" disabled="true" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor?.hasAttribute('href')).toBe(false);
+      expect(anchor?.getAttribute('aria-disabled')).toBe('true');
+      // No href already removes it from tab order, so no redundant tabindex.
+      expect(anchor?.hasAttribute('tabindex')).toBe(false);
+      // Without href the anchor loses its implicit link role; restore it so AT
+      // still announces the disabled item.
+      expect(anchor?.getAttribute('role')).toBe('link');
+    });
+
+    it('renders a panel button, ignoring href, when the parent forces panel mode', async () => {
+      // `navMode` is pushed by the parent pds-tabs and is authoritative over href.
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="/clubs/1/chat" nav-mode="false" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      expect(page.root?.querySelector('a')).toBeNull();
+      expect(page.root?.querySelector('button[role="tab"]')).not.toBeNull();
+    });
+
+    it('renders a link when the parent forces nav mode even without an href', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab nav-mode="true" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor).not.toBeNull();
+      expect(page.root?.querySelector('button')).toBeNull();
+      // No href, so the implicit link role is gone — restore it so AT still
+      // announces the (misconfigured) tab rather than treating it as plain text.
+      expect(anchor?.getAttribute('role')).toBe('link');
+    });
+
+    it('treats an empty href as panel mode when standalone', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab href="" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      expect(page.root?.querySelector('a')).toBeNull();
+      expect(page.root?.querySelector('button[role="tab"]')).not.toBeNull();
+    });
+
+    it('does not render href="" on a nav tab forced into nav mode with an empty href', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab nav-mode="true" href="" parent-component-id="foo" name="chat">Chat</pds-tab>`,
+      });
+
+      const anchor = page.root?.querySelector('a');
+      expect(anchor).not.toBeNull();
+      // An empty href would navigate to the current page — render no href at all,
+      // and keep the link announced via role.
+      expect(anchor?.hasAttribute('href')).toBe(false);
+      expect(anchor?.getAttribute('role')).toBe('link');
+    });
+  });
 });

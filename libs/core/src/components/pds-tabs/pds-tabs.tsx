@@ -45,9 +45,20 @@ export class PdsTabs {
   @Prop() stretch?: boolean = false;
 
   /**
-   * Sets the starting active tab name and maintains the name as the component re-renders
+   * Renders the tab strip as navigation instead of an in-page panel switcher: each
+   * `pds-tab` becomes an `<a href>` inside a `<nav>` landmark (with `aria-current`
+   * on the `active` tab) rather than a `role="tab"` button over a `pds-tabpanel`.
+   * Give every `pds-tab` an `href` and omit `pds-tabpanel`s.
+   * @defaultValue false
    */
-  @Prop({mutable: true}) activeTabName!: string;
+  @Prop() nav?: boolean = false;
+
+  /**
+   * Sets the starting active tab name and maintains the name as the component re-renders.
+   * Panel mode only — in navigation mode (`nav`) the active tab is set per-tab via
+   * `active`, so this is not required there.
+   */
+  @Prop({mutable: true}) activeTabName?: string;
 
   /**
    * Sets the starting active tab index number and maintains the index number as the component re-renders
@@ -67,6 +78,10 @@ export class PdsTabs {
 
   @Listen('keydown', {})
   handleKeyDown(ev: KeyboardEvent) {
+    // Navigation mode uses real links: Tab moves focus, Enter follows the href.
+    // The roving/arrow model is a panel-mode (role=tab) concern only.
+    if (this.isNav) return;
+
     const keySet = ["ArrowLeft", "ArrowRight", "Home", "End"];
 
     // Only handle keyboard navigation if the event originated from a tab button
@@ -80,6 +95,33 @@ export class PdsTabs {
     if (keySet.includes(ev.key) && isOwnTab) {
       ev.preventDefault();
       this.moveActiveTab(ev.key);
+    }
+  }
+
+  // Navigation mode is an explicit, single source of truth: `nav` drives both the
+  // container (<nav> of links vs role=tablist of buttons) and every child tab (via
+  // `navMode`), so the tabs present when the strip initializes can't mix the two.
+  // (Child discovery is load-time only, like `variant`/`id`; tabs added after load
+  // aren't managed.)
+  private get isNav() {
+    return !!this.nav;
+  }
+
+  // `nav` and per-tab `href` should agree. Warn on the two authoring mistakes
+  // rather than silently rendering a link with no destination, or ignoring an href.
+  private warnOnNavConfig() {
+    if (!this.tabs?.length) return;
+    // An empty `href=""` is not a usable destination, so it counts as missing.
+    const withHref = this.tabs.filter((tab) => {
+      const href = tab.getAttribute('href');
+      return href != null && href !== '';
+    }).length;
+    if (this.nav && withHref < this.tabs.length) {
+      console.warn('pds-tabs: `nav` is set, so every pds-tab needs an `href`.');
+    } else if (!this.nav && withHref > 0) {
+      console.warn(
+        'pds-tabs: a pds-tab has an `href` but `nav` is not set — add `nav` to pds-tabs for navigation mode; the href is ignored in panel mode.',
+      );
     }
   }
 
@@ -128,9 +170,20 @@ export class PdsTabs {
   }
 
   private passPropsToChildren() {
+    // Panel mode needs a selected tab so the tablist stays keyboard-reachable
+    // (an all-unselected tablist has every button at tabindex="-1"). Default to
+    // the first ENABLED tab when the consumer omits `activeTabName` — a disabled
+    // tab is itself tabindex="-1", so selecting it would recreate the trap. Nav
+    // mode has no roving/selection, so it's left unset there.
+    if (!this.nav && this.activeTabName == null && this.tabs.length) {
+      const firstEnabled = this.tabs.find((tab) => !tab.disabled) ?? this.tabs[0];
+      this.activeTabName = firstEnabled.name;
+    }
+
     this.tabs.forEach((child, index) => {
       if (this.activeTabName === child.name) this.activeTabIndex = index;
       this.propGeneration(child, index);
+      child.navMode = this.nav;
     });
 
     this.tabPanels.forEach((child) => {
@@ -157,6 +210,7 @@ export class PdsTabs {
 
   componentWillLoad() {
     this.findAllChildren();
+    this.warnOnNavConfig();
   }
 
   componentWillRender() {
@@ -164,11 +218,21 @@ export class PdsTabs {
   }
 
   render() {
+    // Navigation mode: a <nav> landmark of links (aria-current marks the current
+    // page). Panel mode: the ARIA tablist of role=tab buttons over tabpanels.
+    const tabList = this.isNav ? (
+      <nav class="pds-tabs__tablist" aria-label={this.tablistLabel || undefined} part="tab-list">
+        <slot name="tabs" />
+      </nav>
+    ) : (
+      <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel} part="tab-list">
+        <slot name="tabs" />
+      </div>
+    );
+
     return (
       <Host active-tab-name={this.activeTabName} class={this.classNames()} id={this.componentId}>
-        <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel} part="tab-list">
-          <slot name="tabs" />
-        </div>
+        {tabList}
         <slot name="tabpanels" />
       </Host>
     );

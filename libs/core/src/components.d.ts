@@ -2080,20 +2080,42 @@ export namespace Components {
     }
     interface PdsTab {
         /**
+          * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`.
+          * @defaultValue false
+         */
+        "active"?: boolean;
+        /**
           * Determines the tab's disabled state.
           * @defaultValue false
          */
         "disabled"?: boolean;
+        /**
+          * Turns the tab into a navigation link to this URL. Renders an `<a href>` (aria-current when active) instead of a role=tab button.
+         */
+        "href"?: string;
         "index": number;
         /**
           * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
+        "navMode"?: boolean;
         "parentComponentId": string;
         /**
           * @default false
          */
         "selected": boolean;
+        /**
+          * Where to open the linked URL, in navigation mode.
+         */
+        "target"?: '_blank' | '_self' | '_parent' | '_top';
+        /**
+          * Navigation mode: the Turbo visit action (`data-turbo-action`).
+         */
+        "turboAction"?: 'advance' | 'replace';
+        /**
+          * Navigation mode: the Turbo Frame to target (`data-turbo-frame`).
+         */
+        "turboFrame"?: string;
         "variant": string;
     }
     interface PdsTable {
@@ -2218,9 +2240,9 @@ export namespace Components {
     interface PdsTabs {
         "activeTabIndex": number;
         /**
-          * Sets the starting active tab name and maintains the name as the component re-renders
+          * Sets the starting active tab name and maintains the name as the component re-renders. Panel mode only — navigation mode sets the active tab per-tab via `active`.
          */
-        "activeTabName": string;
+        "activeTabName"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -2230,6 +2252,7 @@ export namespace Components {
           * @defaultValue false
          */
         "divider"?: boolean;
+        "nav"?: boolean;
         /**
           * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
           * @defaultValue false
@@ -5395,21 +5418,43 @@ declare namespace LocalJSX {
     }
     interface PdsTab {
         /**
+          * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`.
+          * @defaultValue false
+         */
+        "active"?: boolean;
+        /**
           * Determines the tab's disabled state.
           * @defaultValue false
          */
         "disabled"?: boolean;
+        /**
+          * Turns the tab into a navigation link to this URL. Renders an `<a href>` (aria-current when active) instead of a role=tab button.
+         */
+        "href"?: string;
         "index"?: number;
         /**
           * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
+        "navMode"?: boolean;
         "onPdsTabClick"?: (event: PdsTabCustomEvent<object>) => void;
         "parentComponentId"?: string;
         /**
           * @default false
          */
         "selected"?: boolean;
+        /**
+          * Where to open the linked URL, in navigation mode.
+         */
+        "target"?: '_blank' | '_self' | '_parent' | '_top';
+        /**
+          * Navigation mode: the Turbo visit action (`data-turbo-action`).
+         */
+        "turboAction"?: 'advance' | 'replace';
+        /**
+          * Navigation mode: the Turbo Frame to target (`data-turbo-frame`).
+         */
+        "turboFrame"?: string;
         "variant"?: string;
     }
     interface PdsTable {
@@ -5541,9 +5586,9 @@ declare namespace LocalJSX {
     interface PdsTabs {
         "activeTabIndex"?: number;
         /**
-          * Sets the starting active tab name and maintains the name as the component re-renders
+          * Sets the starting active tab name and maintains the name as the component re-renders. Panel mode only — navigation mode sets the active tab per-tab via `active`.
          */
-        "activeTabName": string;
+        "activeTabName"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -5553,6 +5598,7 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "divider"?: boolean;
+        "nav"?: boolean;
         /**
           * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
           * @defaultValue false
@@ -6287,6 +6333,12 @@ declare namespace LocalJSX {
         "variant": string;
         "index": number;
         "selected": boolean;
+        "navMode": boolean;
+        "active": boolean;
+        "href": string;
+        "target": '_blank' | '_self' | '_parent' | '_top';
+        "turboAction": 'advance' | 'replace';
+        "turboFrame": string;
     }
     interface PdsTableAttributes {
         "compact": boolean;
@@ -6329,6 +6381,7 @@ declare namespace LocalJSX {
         "componentId": string;
         "variant": 'primary' | 'availability' | 'filter' | 'pill';
         "divider": boolean;
+        "nav": boolean;
         "stretch": boolean;
         "activeTabName": string;
         "activeTabIndex": number;
@@ -6443,7 +6496,7 @@ declare namespace LocalJSX {
         "pds-table-head-cell": Omit<PdsTableHeadCell, keyof PdsTableHeadCellAttributes> & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes]?: PdsTableHeadCell[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `attr:${K}`]?: PdsTableHeadCellAttributes[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `prop:${K}`]?: PdsTableHeadCell[K] };
         "pds-table-row": Omit<PdsTableRow, keyof PdsTableRowAttributes> & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes]?: PdsTableRow[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `attr:${K}`]?: PdsTableRowAttributes[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `prop:${K}`]?: PdsTableRow[K] };
         "pds-tabpanel": Omit<PdsTabpanel, keyof PdsTabpanelAttributes> & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes]?: PdsTabpanel[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `attr:${K}`]?: PdsTabpanelAttributes[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `prop:${K}`]?: PdsTabpanel[K] } & OneOf<"name", PdsTabpanel["name"], PdsTabpanelAttributes["name"]>;
-        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]> & OneOf<"variant", PdsTabs["variant"], PdsTabsAttributes["variant"]> & OneOf<"activeTabName", PdsTabs["activeTabName"], PdsTabsAttributes["activeTabName"]>;
+        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]> & OneOf<"variant", PdsTabs["variant"], PdsTabsAttributes["variant"]>;
         "pds-text": Omit<PdsText, keyof PdsTextAttributes> & { [K in keyof PdsText & keyof PdsTextAttributes]?: PdsText[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `attr:${K}`]?: PdsTextAttributes[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `prop:${K}`]?: PdsText[K] };
         "pds-textarea": Omit<PdsTextarea, keyof PdsTextareaAttributes> & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes]?: PdsTextarea[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `attr:${K}`]?: PdsTextareaAttributes[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `prop:${K}`]?: PdsTextarea[K] } & OneOf<"componentId", PdsTextarea["componentId"], PdsTextareaAttributes["componentId"]>;
         "pds-toast": Omit<PdsToast, keyof PdsToastAttributes> & { [K in keyof PdsToast & keyof PdsToastAttributes]?: PdsToast[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `attr:${K}`]?: PdsToastAttributes[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `prop:${K}`]?: PdsToast[K] } & OneOf<"componentId", PdsToast["componentId"], PdsToastAttributes["componentId"]>;

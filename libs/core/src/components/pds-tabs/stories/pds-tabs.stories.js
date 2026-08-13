@@ -87,3 +87,20 @@ export const Stretch = () => html`
   </pds-tabs>
 </div>
 `;
+
+// Navigation mode: set `nav` on pds-tabs and give each pds-tab an `href` (plus
+// optional Turbo props). The strip renders as a <nav> of links with aria-current
+// on the active one — for per-URL tab strips (e.g. deep-linkable page tabs) rather
+// than in-page panels. No pds-tabpanels; the destination URL renders the content.
+//
+// This story exercises every nav-mode prop: the active tab drives a Turbo Frame
+// (turbo-frame/turbo-action), a disabled tab is dropped from tab order, and an
+// external tab opens in a new tab (target="_blank" → rel="noopener noreferrer").
+export const NavTabs = () => html`
+<pds-tabs component-id="nav" tablist-label="Club sections" variant="primary" divider nav>
+  <pds-tab name="chat" href="/clubs/1/chat" active turbo-frame="clubs-body" turbo-action="advance">Chat</pds-tab>
+  <pds-tab name="resources" href="/clubs/1/resources" turbo-frame="clubs-body" turbo-action="advance">Resources</pds-tab>
+  <pds-tab name="members" href="/clubs/1/members" disabled>Members</pds-tab>
+  <pds-tab name="help" href="https://help.example.com/clubs" target="_blank">Help</pds-tab>
+</pds-tabs>
+`;
