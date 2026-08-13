@@ -14,6 +14,14 @@ import { launch } from '@pine-ds/icons/icons';
 })
 export class PdsLink {
   /**
+   * Marks the link as the current/active navigation item — for tab strips and
+   * nav rails built from links. Applies the active treatment (persistent
+   * underline + strong text) and sets `aria-current="page"`.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) active = false;
+
+  /**
    * Sets the link color.
    */
   @Prop() color?: string;
@@ -150,6 +158,7 @@ export class PdsLink {
         href={this.href}
         id={this.componentId}
         part="link"
+        aria-current={this.active ? 'page' : undefined}
         target={targetValue}
         rel={relValue}
         style={this.setLinkStyles()}

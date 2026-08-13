@@ -229,4 +229,30 @@ describe('pds-link', () => {
       expect(anchor?.getAttribute('data-turbo-action')).toBe('advance');
     });
   });
+
+  describe('active (nav tab)', () => {
+    it('sets aria-current and reflects active to the host when active is set', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="/page" active="true">Page</pds-link>`,
+      });
+
+      const anchor = root?.shadowRoot?.querySelector('a');
+      expect(anchor?.getAttribute('aria-current')).toBe('page');
+      // Reflected to the host so the `:host([active])` styles outrank the color
+      // presets — that reflected attribute is the styling contract, not a class.
+      expect(root?.hasAttribute('active')).toBe(true);
+    });
+
+    it('omits aria-current and the reflected active attribute by default', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="/page">Page</pds-link>`,
+      });
+
+      const anchor = root?.shadowRoot?.querySelector('a');
+      expect(anchor?.hasAttribute('aria-current')).toBe(false);
+      expect(root?.hasAttribute('active')).toBe(false);
+    });
+  });
 });

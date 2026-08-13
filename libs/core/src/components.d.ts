@@ -1352,6 +1352,11 @@ export namespace Components {
     }
     interface PdsLink {
         /**
+          * Marks the link as the current/active navigation item — for tab strips and nav rails built from links. Applies the active treatment (persistent underline + strong text) and sets `aria-current="page"`.
+          * @defaultValue false
+         */
+        "active": boolean;
+        /**
           * Sets the link color.
          */
         "color"?: string;
@@ -4638,6 +4643,11 @@ declare namespace LocalJSX {
     }
     interface PdsLink {
         /**
+          * Marks the link as the current/active navigation item — for tab strips and nav rails built from links. Applies the active treatment (persistent underline + strong text) and sets `aria-current="page"`.
+          * @defaultValue false
+         */
+        "active"?: boolean;
+        /**
           * Sets the link color.
          */
         "color"?: string;
@@ -6150,6 +6160,7 @@ declare namespace LocalJSX {
         "highlight": boolean;
     }
     interface PdsLinkAttributes {
+        "active": boolean;
         "color": string;
         "download": string;
         "componentId": string;
