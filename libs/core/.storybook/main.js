@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "path";
-import { copyFileSync, mkdirSync, existsSync } from "fs";
+import { copyFileSync, mkdirSync, existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import react from '@vitejs/plugin-react';
 
 // Get directory paths
@@ -22,6 +22,52 @@ const copyChangelog = () => {
 
 // Run immediately when config is loaded
 copyChangelog();
+
+// Generate the /.well-known/skills/ agent-skill tree (discovery manifest +
+// served skill files) from skills/pine/ at build time, mirroring copyChangelog.
+// Source of truth stays skills/pine/; the served copy is regenerated on every
+// build/deploy so the manifest and files cannot drift from source. Consumers
+// install via `npx skills add https://<docs-domain>` — the vercel-labs/skills
+// CLI reads /.well-known/skills/index.json and fetches each skill's files from
+// /.well-known/skills/<name>/.
+const skillSource = join(currentDir, '../../../skills/pine');
+const wellKnownSkillsDir = join(staticDir, '.well-known', 'skills');
+const skillDest = join(wellKnownSkillsDir, 'pine');
+
+const copyWellKnownSkills = () => {
+  if (!existsSync(join(skillSource, 'SKILL.md'))) {
+    return;
+  }
+  mkdirSync(skillDest, { recursive: true });
+
+  const files = ['SKILL.md'];
+  copyFileSync(join(skillSource, 'SKILL.md'), join(skillDest, 'SKILL.md'));
+
+  const referenceSource = join(skillSource, 'reference');
+  if (existsSync(referenceSource)) {
+    mkdirSync(join(skillDest, 'reference'), { recursive: true });
+    for (const file of readdirSync(referenceSource).filter((n) => n.endsWith('.md')).sort()) {
+      copyFileSync(join(referenceSource, file), join(skillDest, 'reference', file));
+      files.push(`reference/${file}`);
+    }
+  }
+
+  // Take the one-line description straight from the SKILL.md frontmatter so the
+  // manifest stays in sync with the skill's own metadata.
+  const frontmatter = readFileSync(join(skillSource, 'SKILL.md'), 'utf8');
+  const descriptionMatch = frontmatter.match(/^description:\s*(.+)$/m);
+  const description = descriptionMatch
+    ? descriptionMatch[1].trim()
+    : 'Build UI with the Pine design system.';
+
+  // Manifest schema per the vercel-labs/skills convention: { skills: [{ name,
+  // description, files }] }, with files relative to /.well-known/skills/<name>/.
+  const manifest = { skills: [{ name: 'pine', description, files }] };
+  writeFileSync(join(wellKnownSkillsDir, 'index.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+};
+
+// Run immediately when config is loaded, before staticDirs are validated
+copyWellKnownSkills();
 
 const config = {
   stories: [
@@ -56,12 +102,16 @@ const config = {
       name: 'copy-changelog',
       buildStart() {
         copyChangelog();
+        copyWellKnownSkills();
       },
       configureServer(server) {
         server.watcher.add(changelogSource);
+        server.watcher.add(skillSource);
         server.watcher.on('change', (file) => {
           if (file === changelogSource) {
             copyChangelog();
+          } else if (file.startsWith(skillSource)) {
+            copyWellKnownSkills();
           }
         });
       },
