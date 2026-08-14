@@ -338,4 +338,16 @@ describe('pds-avatar', () => {
     expect(dot.hasAttribute('role')).toBe(false);
   });
 
+  it('exposes an "initials" shadow part so consumers can restyle the initials', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar initials="QJ"></pds-avatar>`,
+    });
+
+    const initials = page.root.shadowRoot.querySelector('[part="initials"]');
+    expect(initials).not.toBeNull();
+    expect(initials.tagName.toLowerCase()).toBe('svg');
+    expect(initials.textContent).toContain('QJ');
+  });
+
 });
