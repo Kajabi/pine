@@ -5,6 +5,7 @@ import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
  * @part asset-wrapper
  * @part button
  * @part image - The main image element that represents the avatar component.
+ * @part initials - The text element that renders the avatar's initials, for restyling their color.
 */
 @Component({
   tag: 'pds-avatar',
@@ -179,7 +180,7 @@ export class PdsAvatar {
 
     if (this.initials) {
       return (
-        <svg class="pds-avatar__initials" viewBox="0 0 32 32">
+        <svg class="pds-avatar__initials" part="initials" viewBox="0 0 32 32">
           <text x="16" y="20">{this.initials}</text>
         </svg>
       );

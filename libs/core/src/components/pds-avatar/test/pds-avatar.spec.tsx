@@ -194,7 +194,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar pds-avatar--has-initials" initials="KJ" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <svg class="pds-avatar__initials" viewBox="0 0 32 32">
+            <svg class="pds-avatar__initials" part="initials" viewBox="0 0 32 32">
               <text x="16" y="20">KJ</text>
             </svg>
           </div>
@@ -228,7 +228,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar pds-avatar--has-initials" initials="KJ" badge="true" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <svg class="pds-avatar__initials" viewBox="0 0 32 32">
+            <svg class="pds-avatar__initials" part="initials" viewBox="0 0 32 32">
               <text x="16" y="20">KJ</text>
             </svg>
             <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
@@ -336,6 +336,18 @@ describe('pds-avatar', () => {
     expect(dot.getAttribute('aria-hidden')).toBe('true');
     expect(dot.hasAttribute('aria-label')).toBe(false);
     expect(dot.hasAttribute('role')).toBe(false);
+  });
+
+  it('exposes an "initials" shadow part so consumers can restyle the initials', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar initials="QJ"></pds-avatar>`,
+    });
+
+    const initials = page.root.shadowRoot.querySelector('[part="initials"]');
+    expect(initials).not.toBeNull();
+    expect(initials.tagName.toLowerCase()).toBe('svg');
+    expect(initials.textContent).toContain('QJ');
   });
 
 });
