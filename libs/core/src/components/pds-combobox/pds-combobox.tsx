@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch, Method } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
-import { isSpecTest } from '../../utils/form';
+import { assignDescription, isSpecTest, messageId } from '../../utils/form';
 import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
@@ -59,6 +59,11 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() disabled: boolean = false;
 
   /**
+   * Error message to display.
+   */
+  @Prop() errorMessage?: string;
+
+  /**
    * Placement of the dropdown relative to the trigger.
    * @default 'bottom-start'
    */
@@ -84,11 +89,21 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() dropdownMount: 'host' | 'body' = 'host';
 
   /**
+   * Helper message to display below the combobox.
+   */
+  @Prop() helperMessage?: string;
+
+  /**
    * Visually hides the label text for instances where only the combobox should be displayed.
    * The visible `<label>` is omitted (same pattern as `pds-select`) so label spacing does not reserve layout;
    * the trigger uses `aria-label` so the name stays available to assistive technology.
    */
   @Prop() hideLabel: boolean = false;
+
+  /**
+   * If true, the combobox is in an invalid state.
+   */
+  @Prop() invalid?: boolean;
 
   /**
    * Text to be displayed as the combobox label.
@@ -1861,6 +1876,31 @@ export class PdsCombobox implements BasePdsProps {
 
 
 
+  // Mirrors pds-multiselect and pds-select: an error message on its own puts the
+  // field in an invalid state, so assistive tech agrees with the visual treatment.
+  private isInvalid(): boolean {
+    return Boolean(this.invalid) || Boolean(this.errorMessage);
+  }
+
+  private renderMessages() {
+    const hasErrorMessage = Boolean(this.errorMessage);
+    const showHelperMessage = Boolean(this.helperMessage) && !hasErrorMessage;
+
+    return [
+      showHelperMessage && (
+        <p class="pds-combobox__helper" id={messageId(this.componentId, 'helper')}>
+          {this.helperMessage}
+        </p>
+      ),
+      hasErrorMessage && (
+        <p class="pds-combobox__error" id={messageId(this.componentId, 'error')} aria-live="assertive">
+          <pds-icon icon="danger" size="small" aria-hidden="true" />
+          {this.errorMessage}
+        </p>
+      ),
+    ];
+  }
+
   render() {
     const triggerClass = [
       'pds-combobox__button-trigger',
@@ -1884,11 +1924,16 @@ export class PdsCombobox implements BasePdsProps {
                   this.inputEl = el as HTMLInputElement;
                   this.triggerEl = el as HTMLElement;
                 }}
-                class="pds-combobox__input"
+                class={{
+                  'pds-combobox__input': true,
+                  'pds-combobox__input--invalid': this.isInvalid(),
+                }}
                 type="text"
                 role="combobox"
                 aria-autocomplete="list"
                 aria-controls={this.listboxId}
+                aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
+                aria-invalid={this.isInvalid() ? 'true' : undefined}
                 aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
                 aria-expanded={this.isOpen ? 'true' : 'false'}
                 aria-disabled={this.disabled ? 'true' : 'false'}
@@ -1912,6 +1957,8 @@ export class PdsCombobox implements BasePdsProps {
               role="combobox"
               aria-haspopup="listbox"
               aria-controls={this.listboxId}
+              aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
+              aria-invalid={this.isInvalid() ? 'true' : undefined}
               aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
@@ -1934,6 +1981,8 @@ export class PdsCombobox implements BasePdsProps {
               role="combobox"
               aria-haspopup="listbox"
               aria-controls={this.listboxId}
+              aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
+              aria-invalid={this.isInvalid() ? 'true' : undefined}
               aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
@@ -1950,6 +1999,7 @@ export class PdsCombobox implements BasePdsProps {
               {this.renderButtonTriggerContent()}
             </div>
           )}
+          {this.renderMessages()}
           {/* Hide the slot so options are not visible */}
           <div style={{ display: 'none' }}>
             <slot onSlotchange={() => this.updateOptions()}></slot>

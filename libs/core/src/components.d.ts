@@ -982,6 +982,10 @@ export namespace Components {
          */
         "dropdownWidth": string;
         /**
+          * Error message to display.
+         */
+        "errorMessage"?: string;
+        /**
           * Timeout in milliseconds for async fetch requests.
           * @default 30000
          */
@@ -995,10 +999,18 @@ export namespace Components {
          */
         "getSelectedValue": () => Promise<string | null>;
         /**
+          * Helper message to display below the combobox.
+         */
+        "helperMessage"?: string;
+        /**
           * Visually hides the label text for instances where only the combobox should be displayed. The visible `<label>` is omitted (same pattern as `pds-select`) so label spacing does not reserve layout; the trigger uses `aria-label` so the name stays available to assistive technology.
           * @default false
          */
         "hideLabel": boolean;
+        /**
+          * If true, the combobox is in an invalid state.
+         */
+        "invalid"?: boolean;
         /**
           * Text to be displayed as the combobox label.
          */
@@ -4241,6 +4253,10 @@ declare namespace LocalJSX {
          */
         "dropdownWidth"?: string;
         /**
+          * Error message to display.
+         */
+        "errorMessage"?: string;
+        /**
           * Timeout in milliseconds for async fetch requests.
           * @default 30000
          */
@@ -4254,10 +4270,18 @@ declare namespace LocalJSX {
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
         /**
+          * Helper message to display below the combobox.
+         */
+        "helperMessage"?: string;
+        /**
           * Visually hides the label text for instances where only the combobox should be displayed. The visible `<label>` is omitted (same pattern as `pds-select`) so label spacing does not reserve layout; the trigger uses `aria-label` so the name stays available to assistive technology.
           * @default false
          */
         "hideLabel"?: boolean;
+        /**
+          * If true, the combobox is in an invalid state.
+         */
+        "invalid"?: boolean;
         /**
           * Text to be displayed as the combobox label.
          */
@@ -6069,10 +6093,13 @@ declare namespace LocalJSX {
         "customOptionLayouts": boolean;
         "customTriggerContent": boolean;
         "disabled": boolean;
+        "errorMessage": string;
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         "dropdownWidth": string;
         "dropdownMount": 'host' | 'body';
+        "helperMessage": string;
         "hideLabel": boolean;
+        "invalid": boolean;
         "label": string;
         "maxHeight": string;
         "mode": 'filter' | 'select-only';
