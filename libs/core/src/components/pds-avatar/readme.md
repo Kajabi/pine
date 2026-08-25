@@ -25,12 +25,13 @@
 
 ## Shadow Parts
 
-| Part              | Description                                                  |
-| ----------------- | ------------------------------------------------------------ |
-| `"asset-wrapper"` |                                                              |
-| `"button"`        |                                                              |
-| `"image"`         | The main image element that represents the avatar component. |
-| `"status"`        |                                                              |
+| Part              | Description                                                                     |
+| ----------------- | ------------------------------------------------------------------------------- |
+| `"asset-wrapper"` |                                                                                 |
+| `"button"`        |                                                                                 |
+| `"image"`         | The main image element that represents the avatar component.                    |
+| `"initials"`      | The text element that renders the avatar's initials, for restyling their color. |
+| `"status"`        |                                                                                 |
 
 
 ## Dependencies

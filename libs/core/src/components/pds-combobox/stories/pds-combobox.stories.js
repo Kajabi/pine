@@ -10,7 +10,10 @@ export default {
     dropdownPlacement: 'bottom-start',
     dropdownMount: 'host',
     dropdownWidth: '236px',
+    errorMessage: null,
+    helperMessage: null,
     hideLabel: false,
+    invalid: false,
     maxHeight: null,
     mode: 'filter',
     trigger: 'input',
@@ -38,7 +41,10 @@ const BaseTemplate = (args) => html`
   dropdown-placement=${args.dropdownPlacement}
   dropdown-mount=${args.dropdownMount}
   dropdown-width=${args.dropdownWidth}
+  error-message=${args.errorMessage}
+  helper-message=${args.helperMessage}
   hide-label=${args.hideLabel}
+  invalid=${args.invalid}
   max-height=${args.maxHeight}
   label=${args.label}
   placeholder=${args.placeholder}
@@ -68,6 +74,25 @@ Default.args = {
   triggerVariant: 'secondary',
   mode: 'filter',
   value: 'panda',
+};
+
+export const HelperMessage = BaseTemplate.bind();
+HelperMessage.args = {
+  componentId: 'combobox-helper-story',
+  name: 'favoriteAnimal',
+  label: 'Favorite Animal',
+  placeholder: 'placeholder_text',
+  helperMessage: 'Start typing to filter the list.',
+};
+
+export const ErrorMessage = BaseTemplate.bind();
+ErrorMessage.args = {
+  componentId: 'combobox-error-story',
+  name: 'favoriteAnimal',
+  label: 'Favorite Animal',
+  placeholder: 'placeholder_text',
+  errorMessage: 'Please choose an animal.',
+  invalid: true,
 };
 
 export const ButtonTrigger = BaseTemplate.bind();

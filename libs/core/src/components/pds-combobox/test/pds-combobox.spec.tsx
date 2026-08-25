@@ -1979,3 +1979,93 @@ describe('pds-combobox', () => {
     });
   });
 });
+
+describe('pds-combobox validation messages', () => {
+  const render = async (attrs: string) => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="cb" ${attrs}></pds-combobox>`,
+    });
+
+    const shadow = root.shadowRoot;
+    const trigger = shadow.querySelector('[role="combobox"]');
+
+    return {
+      shadow,
+      trigger,
+      describedBy: trigger.getAttribute('aria-describedby'),
+      ariaInvalid: trigger.getAttribute('aria-invalid'),
+      describedText: (id: string) => shadow.querySelector(`#${id}`)?.textContent,
+    };
+  };
+
+  it('renders the error message with an id the trigger can reference', async () => {
+    const { shadow, describedBy, ariaInvalid, describedText } = await render(
+      'invalid error-message="Please choose one"'
+    );
+
+    expect(shadow.querySelector('.pds-combobox__error')).toBeTruthy();
+    expect(describedBy).toBe('cb__error-message');
+    expect(ariaInvalid).toBe('true');
+    expect(describedText(describedBy)).toContain('Please choose one');
+  });
+
+  it('treats an error message on its own as an invalid state', async () => {
+    const { describedBy, ariaInvalid } = await render('error-message="Please choose one"');
+
+    expect(describedBy).toBe('cb__error-message');
+    expect(ariaInvalid).toBe('true');
+  });
+
+  it('renders the helper message and describes it when valid', async () => {
+    const { shadow, describedBy, ariaInvalid, describedText } = await render(
+      'helper-message="Start typing to filter"'
+    );
+
+    expect(shadow.querySelector('.pds-combobox__helper')).toBeTruthy();
+    expect(describedBy).toBe('cb__helper-message');
+    expect(ariaInvalid).toBeNull();
+    expect(describedText(describedBy)).toContain('Start typing to filter');
+  });
+
+  it('hides the helper message while an error message is shown', async () => {
+    const { shadow, describedBy } = await render(
+      'invalid helper-message="Start typing" error-message="Required"'
+    );
+
+    expect(shadow.querySelector('.pds-combobox__helper')).toBeNull();
+    expect(shadow.querySelector('.pds-combobox__error')).toBeTruthy();
+    expect(describedBy).toBe('cb__error-message');
+  });
+
+  it('describes nothing and is not invalid without messages', async () => {
+    const { shadow, describedBy, ariaInvalid } = await render('label="Country"');
+
+    expect(shadow.querySelector('.pds-combobox__helper')).toBeNull();
+    expect(shadow.querySelector('.pds-combobox__error')).toBeNull();
+    expect(describedBy).toBeNull();
+    expect(ariaInvalid).toBeNull();
+  });
+
+  it('applies the invalid modifier to the input trigger', async () => {
+    const { trigger } = await render('invalid error-message="Required"');
+
+    expect(trigger.classList.contains('pds-combobox__input--invalid')).toBe(true);
+  });
+
+  it('does not apply the invalid modifier when valid', async () => {
+    const { trigger } = await render('helper-message="Pick one"');
+
+    expect(trigger.classList.contains('pds-combobox__input--invalid')).toBe(false);
+  });
+
+  it.each(['input', 'button', 'chip'])('wires the error association on the %s trigger', async (trigger) => {
+    const { describedBy, ariaInvalid, describedText } = await render(
+      `trigger="${trigger}" invalid error-message="Required"`
+    );
+
+    expect(describedBy).toBe('cb__error-message');
+    expect(ariaInvalid).toBe('true');
+    expect(describedText(describedBy)).toContain('Required');
+  });
+});
