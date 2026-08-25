@@ -125,7 +125,7 @@ describe('pds-radio', () => {
     expect(page.root).toEqualHtml(`
       <pds-radio class="is-invalid" component-id="default" error-message="This is a short error message." invalid="true" label="Label text">
         <label for="default">
-          <input aria-invalid="true" id="default" type="radio">
+          <input aria-describedby="default__error-message" aria-invalid="true" id="default" type="radio">
           <span>Label text</span>
         </label>
         <div aria-live="assertive" class="pds-radio__message pds-radio__message--error" id="default__error-message">

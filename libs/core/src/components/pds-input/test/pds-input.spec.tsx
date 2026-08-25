@@ -1048,4 +1048,17 @@ describe('pds-input', () => {
       expect(wrapper?.classList.contains('is-disabled')).toBe(true);
     });
   });
+  it('describes the error message when invalid with no helper message', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" invalid error-message="Required"></pds-input>`,
+    });
+
+    const shadow = page.root.shadowRoot;
+    const describedBy = shadow.querySelector('input').getAttribute('aria-describedby');
+
+    expect(describedBy).toBe('field-1__error-message');
+    expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Required');
+  });
+
 });

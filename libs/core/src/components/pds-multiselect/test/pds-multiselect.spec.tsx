@@ -2128,4 +2128,17 @@ describe('pds-multiselect', () => {
     });
   });
 
+  it('describes the error message when invalid with no helper message', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test" invalid error-message="Required"></pds-multiselect>`,
+    });
+
+    const shadow = page.root.shadowRoot;
+    const describedBy = shadow.querySelector('[aria-describedby]').getAttribute('aria-describedby');
+
+    expect(describedBy).toBe('test__error-message');
+    expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Required');
+  });
+
 });
