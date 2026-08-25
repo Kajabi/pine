@@ -68,6 +68,12 @@
     label {
       color: var(--pine-color-text-label-disabled);
       cursor: not-allowed;
+
+      // The overlay owns the hit test at z-index 1, and its own cursor
+      // declaration beats the value inherited from this rule.
+      &::after {
+        cursor: not-allowed;
+      }
     }
   }
 
@@ -297,6 +303,12 @@ label:has(input:disabled) {
     label {
       color: var(--pine-color-text-label-disabled);
       cursor: not-allowed;
+
+      // The overlay owns the hit test at z-index 1, and its own cursor
+      // declaration beats the value inherited from this rule.
+      &::after {
+        cursor: not-allowed;
+      }
     }
 
     .pds-radio__message {
