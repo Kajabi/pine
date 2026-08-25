@@ -7,15 +7,23 @@ export const messageId = (id: string, messageType: string) => {
 
 /**
  * Assign aria-description id to relate messages with form element
+ *
+ * Returns the error message id when invalid, otherwise the helper message id.
+ * Pass only messages the component renders — a described id must exist in the DOM.
  */
-export const assignDescription = (id: string, invalid: boolean, helperMessage: string) => {
-  if (!helperMessage) return
+export const assignDescription = (
+  id: string,
+  invalid: boolean,
+  helperMessage?: string,
+  errorMessage?: string
+) => {
+  const hasErrorMessage = Boolean(errorMessage);
+  const hasHelperMessage = Boolean(helperMessage);
 
-  let relatedId = messageId(id, 'helper')
+  if (invalid && hasErrorMessage) return messageId(id, 'error');
+  if (hasHelperMessage) return messageId(id, 'helper');
 
-  if (invalid) relatedId = messageId(id, 'error');
-
-  return relatedId;
+  return undefined;
 };
 
 /**

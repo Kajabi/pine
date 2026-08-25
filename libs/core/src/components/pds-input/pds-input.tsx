@@ -561,7 +561,7 @@ export class PdsInput {
             <input
               ref={(input) => (this.nativeInput = input)}
               class="pds-input__field"
-              aria-describedby={assignDescription(componentId, invalid, helperMessage)}
+              aria-describedby={assignDescription(componentId, invalid, helperMessage, errorMessage)}
               aria-invalid={invalid ? "true" : undefined}
               autocomplete={this.autocomplete}
               disabled={disabled}

@@ -244,4 +244,17 @@ describe('pds-switch', () => {
     expect(eventSpy).not.toHaveBeenCalled();
   });
 
+  it('describes the helper message when invalid with no error message', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `<pds-switch component-id="sw" invalid helper-message="Pick one"></pds-switch>`,
+    });
+
+    const shadow = page.root.shadowRoot;
+    const describedBy = shadow.querySelector('input').getAttribute('aria-describedby');
+
+    expect(describedBy).toBe('sw__helper-message');
+    expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Pick one');
+  });
+
 });

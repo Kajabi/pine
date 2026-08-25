@@ -223,4 +223,17 @@ describe('pds-checkbox', () => {
 
     expect(eventSpy).not.toHaveBeenCalled();
   });
+  it('describes the helper message when invalid with no error message', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="cb" invalid helper-message="Pick one"></pds-checkbox>`,
+    });
+
+    const shadow = page.root.shadowRoot;
+    const describedBy = shadow.querySelector('input').getAttribute('aria-describedby');
+
+    expect(describedBy).toBe('cb__helper-message');
+    expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Pick one');
+  });
+
 });

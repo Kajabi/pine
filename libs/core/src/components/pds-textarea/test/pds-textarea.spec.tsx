@@ -52,7 +52,7 @@ describe('pds-textarea', () => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__field-wrapper">
-              <textarea aria-invalid="true" class="pds-textarea__field is-invalid" id="pds-textarea-error" name="pds-textarea-error"></textarea>
+              <textarea aria-describedby="pds-textarea-error__error-message" aria-invalid="true" class="pds-textarea__field is-invalid" id="pds-textarea-error" name="pds-textarea-error"></textarea>
             </div>
             <p aria-live="assertive" class="pds-textarea__error-message" id="pds-textarea-error__error-message">
               <pds-icon icon="${danger}" size="small"></pds-icon>
