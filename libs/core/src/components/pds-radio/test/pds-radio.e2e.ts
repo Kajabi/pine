@@ -107,6 +107,48 @@ describe('pds-radio', () => {
     expect(eventSpy).toHaveReceivedEvent();
   });
 
+  it('shows a not-allowed cursor on the bordered card overlay when disabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-radio component-id="default" label="Label text" has-border />');
+
+    const overlayCursor = () =>
+      page.evaluate(() => {
+        const label = document.querySelector('pds-radio label');
+        return label ? getComputedStyle(label, '::after').cursor : '';
+      });
+
+    expect(await overlayCursor()).toBe('pointer');
+
+    const component = await page.find('pds-radio');
+    component.setProperty('disabled', true);
+    await page.waitForChanges();
+
+    expect(await overlayCursor()).toBe('not-allowed');
+  });
+
+  it('shows a not-allowed cursor on the image card overlay when disabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-radio component-id="default" label="Label text"><span slot="image"></span></pds-radio>'
+    );
+
+    const component = await page.find('pds-radio');
+    expect(component).toHaveClass('has-image');
+
+    const overlayCursor = () =>
+      page.evaluate(() => {
+        const label = document.querySelector('pds-radio label');
+        return label ? getComputedStyle(label, '::after').cursor : '';
+      });
+
+    expect(await overlayCursor()).toBe('pointer');
+
+    component.setProperty('disabled', true);
+    await page.waitForChanges();
+
+    expect(await overlayCursor()).toBe('not-allowed');
+  });
+
   it('combines has-border with other state classes', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-radio component-id="default" label="Label text" has-border invalid disabled />');
