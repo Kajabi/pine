@@ -147,7 +147,7 @@ export class PdsRadio {
     const renderLabelAndMessages = () => [
       <label htmlFor={this.componentId} key={`${this.componentId}-label`}>
         <input
-          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage, this.errorMessage)}
           aria-invalid={this.invalid ? "true" : undefined}
           type="radio"
           id={this.componentId}

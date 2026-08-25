@@ -1526,7 +1526,8 @@ export class PdsMultiselect {
                   aria-describedby={assignDescription(
                     this.componentId,
                     this.invalid || !!this.errorMessage,
-                    this.errorMessage || this.helperMessage
+                    this.helperMessage,
+                    this.errorMessage
                   )}
                   aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
                   onKeyDown={this.handleTriggerKeyDown}
@@ -1554,7 +1555,8 @@ export class PdsMultiselect {
                 aria-describedby={assignDescription(
                   this.componentId,
                   this.invalid || !!this.errorMessage,
-                  this.errorMessage || this.helperMessage
+                  this.helperMessage,
+                  this.errorMessage
                 )}
                 aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
                 onClick={this.handleTriggerClick}

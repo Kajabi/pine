@@ -519,7 +519,7 @@ export class PdsTextarea {
           <div class="pds-textarea__field-wrapper">
             <textarea
               ref={(el) => this.nativeTextarea = el }
-              aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+              aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage, this.errorMessage)}
               aria-invalid={this.invalid ? "true" : undefined}
               autocomplete={this.autocomplete}
               class={this.textareaClassNames()}
