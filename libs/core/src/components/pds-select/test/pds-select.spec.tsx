@@ -171,7 +171,7 @@ describe('pds-select', () => {
                 <span></span>
               </label>
             </div>
-            <select class="pds-select__field" id="field-1" part="select">
+            <select aria-invalid="true" class="pds-select__field" id="field-1" part="select">
               <slot></slot>
             </select>
             <div aria-hidden="true" class="hidden">
@@ -901,5 +901,65 @@ describe('highlight', () => {
 
     // Disabled state should apply (CSS selector excludes disabled)
     expect(root?.classList.contains('is-disabled')).toBe(true);
+  });
+});
+
+describe('aria associations', () => {
+  const renderSelect = async (attrs: string) => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" ${attrs}></pds-select>`,
+    });
+
+    const shadow = page.root.shadowRoot;
+    const select = shadow.querySelector('select');
+
+    return {
+      describedBy: select.getAttribute('aria-describedby'),
+      invalid: select.getAttribute('aria-invalid'),
+      describedText: (id: string) => shadow.querySelector(`#${id}`)?.textContent,
+    };
+  };
+
+  it('describes the error message when invalid', async () => {
+    const { describedBy, invalid, describedText } = await renderSelect(
+      'invalid="true" error-message="Please select a country"'
+    );
+
+    expect(describedBy).toBe('field-1__error-message');
+    expect(invalid).toBe('true');
+    expect(describedText(describedBy)).toContain('Please select a country');
+  });
+
+  it('describes the error message when only error-message is set', async () => {
+    const { describedBy, invalid, describedText } = await renderSelect(
+      'error-message="Please select a country"'
+    );
+
+    expect(describedBy).toBe('field-1__error-message');
+    expect(invalid).toBe('true');
+    expect(describedText(describedBy)).toContain('Please select a country');
+  });
+
+  it('prefers the error message over the helper message', async () => {
+    const { describedBy } = await renderSelect(
+      'invalid="true" helper-message="Pick one" error-message="Required"'
+    );
+
+    expect(describedBy).toBe('field-1__error-message');
+  });
+
+  it('describes the helper message when valid', async () => {
+    const { describedBy, invalid, describedText } = await renderSelect('helper-message="Pick one"');
+
+    expect(describedBy).toBe('field-1__helper-message');
+    expect(invalid).toBeNull();
+    expect(describedText(describedBy)).toContain('Pick one');
+  });
+
+  it('describes nothing when there are no messages', async () => {
+    const { describedBy } = await renderSelect('label="Country"');
+
+    expect(describedBy).toBeNull();
   });
 });
