@@ -2085,7 +2085,7 @@ export namespace Components {
     }
     interface PdsTab {
         /**
-          * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`.
+          * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`. Ignored in panel mode, where the active tab is derived from the parent's `activeTabName`.
           * @defaultValue false
          */
         "active"?: boolean;
@@ -2095,7 +2095,7 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
-          * Turns the tab into a navigation link to this URL. Renders an `<a href>` (aria-current when active) instead of a role=tab button.
+          * Turns the tab into a navigation link to this URL. When set, the tab renders an `<a href>` (marked `aria-current="page"` when `active`) instead of a `role="tab"` button, so each tab is its own page/URL — for tab strips that navigate rather than switch in-page panels. Pairs with `pds-tabs` navigation mode; no `pds-tabpanel`s are needed. Apply `href` to all tabs in a `pds-tabs` or none — mixing navigation and panel tabs is not supported.
          */
         "href"?: string;
         "index": number;
@@ -2110,15 +2110,15 @@ export namespace Components {
          */
         "selected": boolean;
         /**
-          * Where to open the linked URL, in navigation mode.
+          * Where to open the linked URL, in navigation mode. Maps to the anchor's `target` attribute.
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
-          * Navigation mode: the Turbo visit action (`data-turbo-action`).
+          * Navigation mode: the Turbo visit action. Maps to `data-turbo-action` on the anchor (`advance` gives each tab its own history entry).
          */
         "turboAction"?: 'advance' | 'replace';
         /**
-          * Navigation mode: the Turbo Frame to target (`data-turbo-frame`).
+          * Navigation mode: the Turbo Frame to target. Maps to `data-turbo-frame` on the anchor, so a tab can swap a single frame (e.g. a page body) while leaving the rest of the page in place.
          */
         "turboFrame"?: string;
         "variant": string;
@@ -2245,7 +2245,7 @@ export namespace Components {
     interface PdsTabs {
         "activeTabIndex": number;
         /**
-          * Sets the starting active tab name and maintains the name as the component re-renders. Panel mode only — navigation mode sets the active tab per-tab via `active`.
+          * Sets the starting active tab name and maintains the name as the component re-renders. Panel mode only — in navigation mode (`nav`) the active tab is set per-tab via `active`, so this is not required there.
          */
         "activeTabName"?: string;
         /**
@@ -2257,6 +2257,10 @@ export namespace Components {
           * @defaultValue false
          */
         "divider"?: boolean;
+        /**
+          * Renders the tab strip as navigation instead of an in-page panel switcher: each `pds-tab` becomes an `<a href>` inside a `<nav>` landmark (with `aria-current` on the `active` tab) rather than a `role="tab"` button over a `pds-tabpanel`. Give every `pds-tab` an `href` and omit `pds-tabpanel`s.
+          * @defaultValue false
+         */
         "nav"?: boolean;
         /**
           * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
@@ -5428,7 +5432,7 @@ declare namespace LocalJSX {
     }
     interface PdsTab {
         /**
-          * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`.
+          * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`. Ignored in panel mode, where the active tab is derived from the parent's `activeTabName`.
           * @defaultValue false
          */
         "active"?: boolean;
@@ -5438,7 +5442,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Turns the tab into a navigation link to this URL. Renders an `<a href>` (aria-current when active) instead of a role=tab button.
+          * Turns the tab into a navigation link to this URL. When set, the tab renders an `<a href>` (marked `aria-current="page"` when `active`) instead of a `role="tab"` button, so each tab is its own page/URL — for tab strips that navigate rather than switch in-page panels. Pairs with `pds-tabs` navigation mode; no `pds-tabpanel`s are needed. Apply `href` to all tabs in a `pds-tabs` or none — mixing navigation and panel tabs is not supported.
          */
         "href"?: string;
         "index"?: number;
@@ -5454,15 +5458,15 @@ declare namespace LocalJSX {
          */
         "selected"?: boolean;
         /**
-          * Where to open the linked URL, in navigation mode.
+          * Where to open the linked URL, in navigation mode. Maps to the anchor's `target` attribute.
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
-          * Navigation mode: the Turbo visit action (`data-turbo-action`).
+          * Navigation mode: the Turbo visit action. Maps to `data-turbo-action` on the anchor (`advance` gives each tab its own history entry).
          */
         "turboAction"?: 'advance' | 'replace';
         /**
-          * Navigation mode: the Turbo Frame to target (`data-turbo-frame`).
+          * Navigation mode: the Turbo Frame to target. Maps to `data-turbo-frame` on the anchor, so a tab can swap a single frame (e.g. a page body) while leaving the rest of the page in place.
          */
         "turboFrame"?: string;
         "variant"?: string;
@@ -5596,7 +5600,7 @@ declare namespace LocalJSX {
     interface PdsTabs {
         "activeTabIndex"?: number;
         /**
-          * Sets the starting active tab name and maintains the name as the component re-renders. Panel mode only — navigation mode sets the active tab per-tab via `active`.
+          * Sets the starting active tab name and maintains the name as the component re-renders. Panel mode only — in navigation mode (`nav`) the active tab is set per-tab via `active`, so this is not required there.
          */
         "activeTabName"?: string;
         /**
@@ -5608,6 +5612,10 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "divider"?: boolean;
+        /**
+          * Renders the tab strip as navigation instead of an in-page panel switcher: each `pds-tab` becomes an `<a href>` inside a `<nav>` landmark (with `aria-current` on the `active` tab) rather than a `role="tab"` button over a `pds-tabpanel`. Give every `pds-tab` an `href` and omit `pds-tabpanel`s.
+          * @defaultValue false
+         */
         "nav"?: boolean;
         /**
           * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
@@ -5886,6 +5894,9 @@ declare namespace LocalJSX {
   | 'sm' // 32px
   | 'xs' // 24px
   | string;
+        "status": 'online' | 'away' | 'offline' | null;
+        "statusLabel": string;
+        "statusRing": boolean;
         "variant": 'customer' | 'admin';
         "triggerLabel": string;
     }
@@ -6339,17 +6350,17 @@ declare namespace LocalJSX {
     }
     interface PdsTabAttributes {
         "disabled": boolean;
+        "href": string;
+        "active": boolean;
+        "target": '_blank' | '_self' | '_parent' | '_top';
+        "turboFrame": string;
+        "turboAction": 'advance' | 'replace';
         "name": string;
         "parentComponentId": string;
         "variant": string;
         "index": number;
         "selected": boolean;
         "navMode": boolean;
-        "active": boolean;
-        "href": string;
-        "target": '_blank' | '_self' | '_parent' | '_top';
-        "turboAction": 'advance' | 'replace';
-        "turboFrame": string;
     }
     interface PdsTableAttributes {
         "compact": boolean;
@@ -6392,8 +6403,8 @@ declare namespace LocalJSX {
         "componentId": string;
         "variant": 'primary' | 'availability' | 'filter' | 'pill';
         "divider": boolean;
-        "nav": boolean;
         "stretch": boolean;
+        "nav": boolean;
         "activeTabName": string;
         "activeTabIndex": number;
     }
