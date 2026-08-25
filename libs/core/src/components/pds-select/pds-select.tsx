@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
-import { isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
+import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
 /**
@@ -264,6 +264,12 @@ export class PdsSelect {
     );
   }
 
+  // The field also renders as invalid whenever an error message is present, via
+  // `select:has(~ .pds-select__message .pds-select__error-message)` in the styles.
+  private isInvalid(): boolean {
+    return Boolean(this.invalid) || Boolean(this.errorMessage);
+  }
+
   private classNames() {
     const classNames = [];
 
@@ -372,6 +378,8 @@ export class PdsSelect {
             </div>
           )}
           <select
+            aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
+            aria-invalid={this.isInvalid() ? 'true' : undefined}
             aria-label={this.hideLabel ? this.label : undefined}
             autocomplete={this.autocomplete || undefined}
             class="pds-select__field"
