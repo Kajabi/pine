@@ -46,7 +46,8 @@ export class PdsModal {
    * When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so
    * overlays rendered elsewhere in the DOM (file pickers, editor menus) can display
    * above it via `z-index`. The page is not made inert and focus is not trapped in
-   * this mode.
+   * this mode. Read when the modal opens; changing it while the modal is open is
+   * not supported.
    * @default false
    */
   @Prop() disableTopLayer = false;
@@ -272,6 +273,13 @@ export class PdsModal {
 
     // Handle Escape key to close the modal
     if (e.key === 'Escape') {
+      // In non-top-layer mode, focus can move into an overlay stacked above the
+      // modal (the reason disableTopLayer exists). If that overlay owns focus,
+      // leave Escape to it rather than dismissing this modal out from under it.
+      const active = document.activeElement;
+      if (this.disableTopLayer && active && active !== document.body && !this.el.contains(active)) {
+        return;
+      }
       // Always prevent native dialog close behavior
       e.preventDefault();
       // Only close if backdropDismiss is enabled and this is the innermost modal
