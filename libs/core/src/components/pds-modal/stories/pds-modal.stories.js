@@ -704,7 +704,7 @@ const DisableTopLayerTemplate = (args) => html`
           </p>
           <pds-button
             variant="secondary"
-            onclick="(function(){var o=document.createElement('div');o.textContent='I am an overlay appended to document.body, on top of the modal. Click to dismiss.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4)');o.onclick=function(){o.remove()};document.body.appendChild(o);})()"
+            onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;text-align:start;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4)');o.onclick=function(){o.remove()};document.body.appendChild(o);o.focus();})()"
           >
             Show overlay above modal
           </pds-button>

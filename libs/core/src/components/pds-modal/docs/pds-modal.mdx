@@ -1324,7 +1324,7 @@ By default a modal opens with the native `dialog.showModal()`, which promotes it
 
 Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`) in the normal stacking context instead. Overlays with a higher `z-index` can then display above it.
 
-> **Note:** In this mode the browser does not make the rest of the page `inert`. Use it only when you specifically need an external overlay to appear above the modal. Focus trapping, Escape handling, and the backdrop still work.
+> **Note:** This mode is for letting a higher-`z-index` overlay (a file picker, an editor menu) appear _above_ the modal &mdash; not for making the modal itself non-blocking. The dimming backdrop still covers the page and an outside click still dismisses it (unless `backdrop-dismiss="false"`), and Escape still closes it. What changes: the page is **not** made `inert` and **focus is not trapped**, so controls in an overlay stacked above the modal stay reachable by keyboard and assistive tech (which is why `aria-modal` is `false` in this mode). Two caveats: because the dialog now participates in normal stacking, a page element with its own higher stacking context can overlap it; and avoid mixing a `disable-top-layer` modal with a default (top-layer) modal in the same stack, since backdrop/Escape dismiss targeting is resolved by `z-index`.
 
 <DocCanvas
   mdxSource={{
@@ -1356,11 +1356,13 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
           <PdsBox fit direction="column" gap="sm" paddingInlineStart="md" paddingInlineEnd="md">
             <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
             <PdsButton variant="secondary" onClick={() => {
-              const o = document.createElement('div');
-              o.textContent = 'Overlay appended to document.body, above the modal. Click to dismiss.';
-              o.setAttribute('style', 'position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer');
+              const o = document.createElement('button');
+              o.type = 'button';
+              o.textContent = 'Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';
+              o.setAttribute('style', 'position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;border-radius:8px;text-align:start;background:#111;color:#fff;z-index:2147483647;cursor:pointer');
               o.onclick = () => o.remove();
               document.body.appendChild(o);
+              o.focus();
             }}>Show overlay above modal</PdsButton>
           </PdsBox>
         </PdsModalContent>
@@ -1399,7 +1401,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
         <pds-modal-content>
           <pds-box fit direction="column" gap="sm" padding-inline-start="md" padding-inline-end="md">
             <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
-            <pds-button variant="secondary" onclick="(function(){var o=document.createElement('div');o.textContent='Overlay appended to document.body, above the modal. Click to dismiss.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer');o.onclick=function(){o.remove()};document.body.appendChild(o);})()">Show overlay above modal</pds-button>
+            <pds-button variant="secondary" onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;border-radius:8px;text-align:start;background:#111;color:#fff;z-index:2147483647;cursor:pointer');o.onclick=function(){o.remove()};document.body.appendChild(o);o.focus();})()">Show overlay above modal</pds-button>
           </pds-box>
         </pds-modal-content>
         <pds-modal-footer>
@@ -1438,7 +1440,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
       <pds-modal-content>
         <pds-box fit direction="column" gap="sm" padding-inline-start="md" padding-inline-end="md">
           <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
-          <pds-button variant="secondary" onclick="(function(){var o=document.createElement('div');o.textContent='Overlay appended to document.body, above the modal. Click to dismiss.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer');o.onclick=function(){o.remove()};document.body.appendChild(o);})()">Show overlay above modal</pds-button>
+          <pds-button variant="secondary" onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;border-radius:8px;text-align:start;background:#111;color:#fff;z-index:2147483647;cursor:pointer');o.onclick=function(){o.remove()};document.body.appendChild(o);o.focus();})()">Show overlay above modal</pds-button>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
