@@ -1,3 +1,32 @@
+## 3.30.0 (2026-08-27)
+
+### Features 🚀
+
+- **pds-avatar:** expose an initials shadow part ([#795](https://github.com/Kajabi/pine/pull/795))
+- **pds-combobox:** add invalid, error-message and helper-message props ([#801](https://github.com/Kajabi/pine/pull/801))
+- **pds-modal:** add disableTopLayer to opt out of the browser top layer ([#802](https://github.com/Kajabi/pine/pull/802))
+
+### Bug Fixes 🐛
+
+- **form:** describe the error message when a field is invalid without a helper message ([#799](https://github.com/Kajabi/pine/pull/799))
+- **pds-radio:** show a not-allowed cursor on disabled card overlays ([#798](https://github.com/Kajabi/pine/pull/798))
+- **pds-select:** announce the error message to assistive technology ([#800](https://github.com/Kajabi/pine/pull/800))
+
+### Documentation 📄
+
+- **skills:** add pine-visual-test-pr visual regression skill ([#788](https://github.com/Kajabi/pine/pull/788))
+- **skills:** add pine-figma authoring skill (design-side companion to pine) ([#793](https://github.com/Kajabi/pine/pull/793))
+- **skills:** canonical 'pine' consumer agent skill ([#789](https://github.com/Kajabi/pine/pull/789))
+
+### Styles 🎨
+
+- **pds-multiselect:** match error and helper message weight to sibling form fields ([#797](https://github.com/Kajabi/pine/pull/797))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.29.0 (2026-08-13)
 
 ### Features 🚀
