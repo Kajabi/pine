@@ -8,6 +8,7 @@ export default {
   args: {
     backdropDismiss: true,
     componentId: 'modal-demo',
+    disableTopLayer: false,
     open: false,
     scrollable: true,
     size: 'md',
@@ -26,6 +27,7 @@ const BaseTemplate = (args) => html`
       component-id="${args.componentId}"
       size="${args.size}"
       ?backdrop-dismiss=${args.backdropDismiss}
+      ?disable-top-layer=${args.disableTopLayer}
       scrollable="${args.scrollable}"
       ?open=${args.open}
       key="${args.scrollable ? 'scrollable' : 'non-scrollable'}"
@@ -651,4 +653,79 @@ const CustomBordersTemplate = () => html`
 export const CustomBorders = CustomBordersTemplate.bind({});
 CustomBorders.args = {
   componentId: 'custom-borders-modal',
+};
+
+// Demonstrates `disable-top-layer`: the modal opens as a non-modal dialog
+// (dialog.show()) so an overlay appended to document.body can display above it.
+// With the default top-layer behavior the same overlay would render behind the
+// modal and be unreachable.
+const DisableTopLayerTemplate = (args) => html`
+  <div style="padding: 1rem;">
+    <pds-button onClick="document.querySelector('#${args.componentId}').open = true">
+      Open Modal (disable-top-layer)
+    </pds-button>
+
+    <pds-modal
+      id="${args.componentId}"
+      component-id="${args.componentId}"
+      size="${args.size}"
+      ?backdrop-dismiss=${args.backdropDismiss}
+      ?disable-top-layer=${args.disableTopLayer}
+      ?open=${args.open}
+    >
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Modal Title</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#${args.componentId}').open = false"
+              aria-label="Close modal"
+              part="close-button"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md" gap="sm">
+          <p>
+            This modal uses <code>disable-top-layer</code>, so it renders in the normal stacking
+            context instead of the browser top layer.
+          </p>
+          <p>
+            An overlay appended to <code>document.body</code> with a higher <code>z-index</code> can
+            therefore display above it &mdash; useful for file pickers, rich-text editor menus, and
+            other body-mounted overlays that would otherwise be trapped behind a top-layer dialog.
+          </p>
+          <pds-button
+            variant="secondary"
+            onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;text-align:start;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4)');var modal=document.querySelector('#${args.componentId}');var remove=function(){o.remove()};o.onclick=remove;o.addEventListener('keydown',function(e){if(e.key==='Escape')remove()});if(modal)modal.addEventListener('pdsModalClose',remove,{once:true});document.body.appendChild(o);o.focus();})()"
+          >
+            Show overlay above modal
+          </pds-button>
+        </pds-box>
+      </pds-modal-content>
+
+      <pds-modal-footer>
+        <pds-box justify-content="end" fit padding="md" gap="sm">
+          <pds-button variant="secondary" onclick="document.querySelector('#${args.componentId}').open = false">
+            Close
+          </pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+`;
+
+export const DisableTopLayer = DisableTopLayerTemplate.bind({});
+DisableTopLayer.args = {
+  componentId: 'disable-top-layer-modal',
+  disableTopLayer: true,
+  size: 'md',
+  open: false,
 };

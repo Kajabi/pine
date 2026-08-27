@@ -42,6 +42,17 @@ export class PdsModal {
   @Prop() scrollable = true;
 
   /**
+   * Whether the modal opens outside the browser top layer as a non-modal dialog.
+   * When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so
+   * overlays rendered elsewhere in the DOM (file pickers, editor menus) can display
+   * above it via `z-index`. The page is not made inert and focus is not trapped in
+   * this mode. Read when the modal opens; changing it while the modal is open is
+   * not supported.
+   * @default false
+   */
+  @Prop() disableTopLayer = false;
+
+  /**
    * Emitted when the modal is opened
    */
   @Event() pdsModalOpen: EventEmitter<void>;
@@ -163,8 +174,15 @@ export class PdsModal {
         // Store the currently focused element to restore focus when modal closes
         this.previousActiveElement = document.activeElement as HTMLElement;
 
-        // Use native dialog showModal method which makes the rest of the page inert
-        this.modalRef.showModal();
+        // showModal() promotes the dialog to the browser top layer (and makes the
+        // rest of the page inert), which prevents any overlay outside the dialog
+        // from ever painting above it. show() opens a non-modal dialog that stays
+        // in the normal stacking context so those overlays can stack above it.
+        if (this.disableTopLayer) {
+          this.modalRef.show();
+        } else {
+          this.modalRef.showModal();
+        }
         this.open = true;
 
         // Update focusable elements and set initial focus
@@ -255,6 +273,13 @@ export class PdsModal {
 
     // Handle Escape key to close the modal
     if (e.key === 'Escape') {
+      // In non-top-layer mode, focus can move into an overlay stacked above the
+      // modal (the reason disableTopLayer exists). If that overlay owns focus,
+      // leave Escape to it rather than dismissing this modal out from under it.
+      const active = document.activeElement;
+      if (this.disableTopLayer && active && active !== document.body && !this.el.contains(active)) {
+        return;
+      }
       // Always prevent native dialog close behavior
       e.preventDefault();
       // Only close if backdropDismiss is enabled and this is the innermost modal
@@ -266,6 +291,11 @@ export class PdsModal {
 
     // Handle Tab key for focus trapping
     if (e.key === 'Tab') {
+      // In non-top-layer mode the modal is deliberately not focus-isolated: focus
+      // must be able to leave it into overlays stacked above (the whole point of
+      // disableTopLayer), so do not trap Tab here.
+      if (this.disableTopLayer) return;
+
       // If there are no focusable elements, do nothing
       if (this.focusableElements.length === 0) return;
 
@@ -303,7 +333,7 @@ export class PdsModal {
           'pds-modal__backdrop': true,
           'open': this.open
         }}
-        aria-modal="true"
+        aria-modal={this.disableTopLayer ? 'false' : 'true'}
         aria-labelledby={`${this.componentId}-heading`}
         onClick={this.handleBackdropClick}
       >

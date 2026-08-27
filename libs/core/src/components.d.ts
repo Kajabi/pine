@@ -1477,6 +1477,11 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Whether the modal opens outside the browser top layer as a non-modal dialog. When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so overlays rendered elsewhere in the DOM (file pickers, editor menus) can display above it via `z-index`. The page is not made inert and focus is not trapped in this mode. Read when the modal opens; changing it while the modal is open is not supported.
+          * @default false
+         */
+        "disableTopLayer": boolean;
+        /**
           * Closes the modal
          */
         "hideModal": () => Promise<void>;
@@ -4784,6 +4789,11 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
+          * Whether the modal opens outside the browser top layer as a non-modal dialog. When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so overlays rendered elsewhere in the DOM (file pickers, editor menus) can display above it via `z-index`. The page is not made inert and focus is not trapped in this mode. Read when the modal opens; changing it while the modal is open is not supported.
+          * @default false
+         */
+        "disableTopLayer"?: boolean;
+        /**
           * Emitted when the modal is closed
          */
         "onPdsModalClose"?: (event: PdsModalCustomEvent<void>) => void;
@@ -6233,6 +6243,7 @@ declare namespace LocalJSX {
         "open": boolean;
         "size": 'sm' | 'md' | 'lg' | 'fullscreen';
         "scrollable": boolean;
+        "disableTopLayer": boolean;
     }
     interface PdsModalContentAttributes {
         "border": 'none' | 'both' | 'top' | 'bottom';
