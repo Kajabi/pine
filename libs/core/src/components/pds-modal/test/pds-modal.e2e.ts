@@ -93,6 +93,76 @@ describe('pds-modal', () => {
     expect(await modal.getProperty('backdropDismiss')).toBe(false);
   });
 
+  describe('disableTopLayer', () => {
+    // The top-layer contract is only observable in a real browser: showModal()
+    // promotes the dialog to the top layer (:modal true), show() does not.
+    const dialogState = (page) =>
+      page.evaluate(() => {
+        const dialog = document.querySelector('pds-modal dialog') as HTMLDialogElement | null;
+        return {
+          isModal: dialog ? dialog.matches(':modal') : null,
+          isOpen: dialog ? dialog.hasAttribute('open') : null,
+          ariaModal: dialog ? dialog.getAttribute('aria-modal') : null,
+        };
+      });
+
+    it('opens in the top layer by default (:modal)', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`<pds-modal component-id="tl-default"><div>Content</div></pds-modal>`);
+
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+
+      const state = await dialogState(page);
+      expect(state.isOpen).toBe(true);
+      expect(state.isModal).toBe(true);
+      expect(state.ariaModal).toBe('true');
+    });
+
+    it('opens outside the top layer as a non-modal dialog when disableTopLayer is set', async () => {
+      const page = await newE2EPage();
+      await page.setContent(
+        `<pds-modal component-id="tl-off" disable-top-layer="true"><div>Content</div></pds-modal>`,
+      );
+
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+
+      const state = await dialogState(page);
+      // Open, but NOT in the top layer — so a higher-z overlay can paint above it.
+      expect(state.isOpen).toBe(true);
+      expect(state.isModal).toBe(false);
+      expect(state.ariaModal).toBe('false');
+    });
+
+    it('lets a higher z-index overlay paint above the non-modal dialog', async () => {
+      const page = await newE2EPage();
+      await page.setContent(
+        `<pds-modal component-id="tl-stack" disable-top-layer="true"><div>Content</div></pds-modal>`,
+      );
+
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+
+      // A fixed, higher-z element appended to the body should sit on top of the
+      // (non-top-layer) dialog — impossible when the dialog is in the top layer.
+      const overlayOnTop = await page.evaluate(() => {
+        const o = document.createElement('div');
+        o.id = 'probe-overlay';
+        o.setAttribute(
+          'style',
+          'position:fixed;top:0;left:0;width:100px;height:100px;z-index:2147483647',
+        );
+        document.body.appendChild(o);
+        return document.elementFromPoint(10, 10) === o;
+      });
+      expect(overlayOnTop).toBe(true);
+    });
+  });
+
   describe('accessibility', () => {
     it('has no axe violations when closed', async () => {
       const page = await newE2EPage();
