@@ -704,7 +704,7 @@ const DisableTopLayerTemplate = (args) => html`
           </p>
           <pds-button
             variant="secondary"
-            onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;text-align:start;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4)');o.onclick=function(){o.remove()};document.body.appendChild(o);o.focus();})()"
+            onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;text-align:start;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4)');var modal=document.querySelector('#${args.componentId}');var remove=function(){o.remove()};o.onclick=remove;o.addEventListener('keydown',function(e){if(e.key==='Escape')remove()});if(modal)modal.addEventListener('pdsModalClose',remove,{once:true});document.body.appendChild(o);o.focus();})()"
           >
             Show overlay above modal
           </pds-button>
