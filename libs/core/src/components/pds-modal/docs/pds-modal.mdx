@@ -1318,9 +1318,141 @@ Modals can be nested, with only the topmost modal responding to escape key and b
     </pds-modal>
   </div>
 </DocCanvas>
+### Overlays Above the Modal
+
+By default a modal opens with the native `dialog.showModal()`, which promotes it to the browser [top layer](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer). Nothing outside the dialog can paint above the top layer &mdash; not even with a higher `z-index` &mdash; so an overlay mounted elsewhere in the DOM (a file picker, a rich-text editor menu, a third-party widget appended to `document.body`) renders _behind_ the modal and becomes unreachable.
+
+Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`) in the normal stacking context instead. Overlays with a higher `z-index` can then display above it.
+
+> **Note:** In this mode the browser does not make the rest of the page `inert`. Use it only when you specifically need an external overlay to appear above the modal. Focus trapping, Escape handling, and the backdrop still work.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <div>
+      <PdsButton onClick={() => {
+        const modal = document.querySelector('#top-layer-modal');
+        if (modal) modal.open = true;
+      }}>Open Modal</PdsButton>
+
+      <PdsModal id="top-layer-modal" componentId="top-layer-modal" disableTopLayer>
+        <PdsModalHeader>
+          <PdsBox direction="column" fit padding="md">
+            <PdsBox alignItems="center" fit justifyContent="space-between">
+              <PdsText tag="h2" size="h3">Overlays Above the Modal</PdsText>
+              <PdsButton
+                class="pds-modal__close"
+                variant="unstyled"
+                iconOnly
+                onclick="document.querySelector('#top-layer-modal').open = false"
+                aria-label="Close modal"
+              >
+                <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
+              </PdsButton>
+            </PdsBox>
+          </PdsBox>
+        </PdsModalHeader>
+        <PdsModalContent>
+          <PdsBox fit direction="column" gap="sm" paddingInlineStart="md" paddingInlineEnd="md">
+            <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
+            <PdsButton variant="secondary" onClick={() => {
+              const o = document.createElement('div');
+              o.textContent = 'Overlay appended to document.body, above the modal. Click to dismiss.';
+              o.setAttribute('style', 'position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer');
+              o.onclick = () => o.remove();
+              document.body.appendChild(o);
+            }}>Show overlay above modal</PdsButton>
+          </PdsBox>
+        </PdsModalContent>
+        <PdsModalFooter>
+          <PdsBox fit justifyContent="end" padding="md" gap="sm">
+            <PdsButton onClick={() => {
+              const modal = document.querySelector('#top-layer-modal');
+              if (modal) modal.open = false;
+            }}>Close</PdsButton>
+          </PdsBox>
+        </PdsModalFooter>
+      </PdsModal>
+    </div>
+    `,
+    webComponent: `
+    <div>
+      <pds-button onclick="document.querySelector('#top-layer-modal').open = true">Open Modal</pds-button>
+
+      <pds-modal id="top-layer-modal" component-id="top-layer-modal" disable-top-layer="true">
+        <pds-modal-header>
+          <pds-box direction="column" fit padding="md">
+            <pds-box align-items="center" fit justify-content="space-between">
+              <pds-text tag="h2" size="h3">Overlays Above the Modal</pds-text>
+              <pds-button
+                class="pds-modal__close"
+                variant="unstyled"
+                icon-only="true"
+                onclick="document.querySelector('#top-layer-modal').open = false"
+                aria-label="Close modal"
+              >
+                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              </pds-button>
+            </pds-box>
+          </pds-box>
+        </pds-modal-header>
+        <pds-modal-content>
+          <pds-box fit direction="column" gap="sm" padding-inline-start="md" padding-inline-end="md">
+            <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
+            <pds-button variant="secondary" onclick="(function(){var o=document.createElement('div');o.textContent='Overlay appended to document.body, above the modal. Click to dismiss.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer');o.onclick=function(){o.remove()};document.body.appendChild(o);})()">Show overlay above modal</pds-button>
+          </pds-box>
+        </pds-modal-content>
+        <pds-modal-footer>
+          <pds-box fit justify-content="end" padding="md" gap="sm">
+            <pds-button onclick="document.querySelector('#top-layer-modal').open = false">Close</pds-button>
+          </pds-box>
+        </pds-modal-footer>
+      </pds-modal>
+    </div>
+    `
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#top-layer-modal');
+      if (modal) modal.open = true;
+    }}>Open Modal</pds-button>
+
+    <pds-modal id="top-layer-modal" component-id="top-layer-modal" disable-top-layer="true">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Overlays Above the Modal</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#top-layer-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content>
+        <pds-box fit direction="column" gap="sm" padding-inline-start="md" padding-inline-end="md">
+          <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
+          <pds-button variant="secondary" onclick="(function(){var o=document.createElement('div');o.textContent='Overlay appended to document.body, above the modal. Click to dismiss.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer');o.onclick=function(){o.remove()};document.body.appendChild(o);})()">Show overlay above modal</pds-button>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit justify-content="end" padding="md" gap="sm">
+          <pds-button onclick="document.querySelector('#top-layer-modal').open = false">Close</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+</DocCanvas>
+
 ## Technical Notes
 
-- The component renders a native `<dialog>` with `aria-modal="true"` and automatically sets `aria-labelledby` based on the slotted heading content (`${componentId}-heading`). Ensure your modal header contains a semantic heading (`<pds-text tag="h2">`) so assistive technologies announce it.
+- The component renders a native `<dialog>` and automatically sets `aria-labelledby` based on the slotted heading content (`${componentId}-heading`). Ensure your modal header contains a semantic heading (`<pds-text tag="h2">`) so assistive technologies announce it. `aria-modal` is `true` by default and `false` when `disable-top-layer` is set (a non-modal dialog).
 - Focus trapping is managed internally. When `open` becomes `true`, the component stores the previously focused element, queries for focusable nodes inside the modal, and moves focus to the first match. When `hideModal()` is called (directly or indirectly), focus is restored to the element that opened the modal.
 - Nested modals respect z-index order: backdrop clicks and Escape close only the top-most modal. Use this when stacking wizard dialogs or confirm prompts.
 
