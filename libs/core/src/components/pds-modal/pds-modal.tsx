@@ -42,12 +42,11 @@ export class PdsModal {
   @Prop() scrollable = true;
 
   /**
-   * When `true`, the modal opens as a non-modal dialog (`dialog.show()`) in the
-   * normal stacking context instead of the browser top layer
-   * (`dialog.showModal()`). This lets overlays rendered elsewhere in the DOM —
-   * e.g. file pickers, rich-text editor menus — display above the modal via
-   * `z-index`, which is impossible while the modal sits in the top layer. Note
-   * that the rest of the page is not made inert in this mode.
+   * Whether the modal opens outside the browser top layer as a non-modal dialog.
+   * When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so
+   * overlays rendered elsewhere in the DOM (file pickers, editor menus) can display
+   * above it via `z-index`. The page is not made inert and focus is not trapped in
+   * this mode.
    * @default false
    */
   @Prop() disableTopLayer = false;
@@ -284,6 +283,11 @@ export class PdsModal {
 
     // Handle Tab key for focus trapping
     if (e.key === 'Tab') {
+      // In non-top-layer mode the modal is deliberately not focus-isolated: focus
+      // must be able to leave it into overlays stacked above (the whole point of
+      // disableTopLayer), so do not trap Tab here.
+      if (this.disableTopLayer) return;
+
       // If there are no focusable elements, do nothing
       if (this.focusableElements.length === 0) return;
 

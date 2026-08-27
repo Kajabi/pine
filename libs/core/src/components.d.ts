@@ -1477,7 +1477,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * When `true`, the modal opens as a non-modal dialog (`dialog.show()`) in the normal stacking context instead of the browser top layer (`dialog.showModal()`). This lets overlays rendered elsewhere in the DOM — e.g. file pickers, rich-text editor menus — display above the modal via `z-index`, which is impossible while the modal sits in the top layer. Note that the rest of the page is not made inert in this mode.
+          * Whether the modal opens outside the browser top layer as a non-modal dialog. When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so overlays rendered elsewhere in the DOM (file pickers, editor menus) can display above it via `z-index`. The page is not made inert and focus is not trapped in this mode.
           * @default false
          */
         "disableTopLayer": boolean;
@@ -4789,7 +4789,7 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * When `true`, the modal opens as a non-modal dialog (`dialog.show()`) in the normal stacking context instead of the browser top layer (`dialog.showModal()`). This lets overlays rendered elsewhere in the DOM — e.g. file pickers, rich-text editor menus — display above the modal via `z-index`, which is impossible while the modal sits in the top layer. Note that the rest of the page is not made inert in this mode.
+          * Whether the modal opens outside the browser top layer as a non-modal dialog. When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so overlays rendered elsewhere in the DOM (file pickers, editor menus) can display above it via `z-index`. The page is not made inert and focus is not trapped in this mode.
           * @default false
          */
         "disableTopLayer"?: boolean;
