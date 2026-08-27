@@ -42,6 +42,17 @@ export class PdsModal {
   @Prop() scrollable = true;
 
   /**
+   * When `true`, the modal opens as a non-modal dialog (`dialog.show()`) in the
+   * normal stacking context instead of the browser top layer
+   * (`dialog.showModal()`). This lets overlays rendered elsewhere in the DOM —
+   * e.g. file pickers, rich-text editor menus — display above the modal via
+   * `z-index`, which is impossible while the modal sits in the top layer. Note
+   * that the rest of the page is not made inert in this mode.
+   * @default false
+   */
+  @Prop() disableTopLayer = false;
+
+  /**
    * Emitted when the modal is opened
    */
   @Event() pdsModalOpen: EventEmitter<void>;
@@ -163,8 +174,15 @@ export class PdsModal {
         // Store the currently focused element to restore focus when modal closes
         this.previousActiveElement = document.activeElement as HTMLElement;
 
-        // Use native dialog showModal method which makes the rest of the page inert
-        this.modalRef.showModal();
+        // showModal() promotes the dialog to the browser top layer (and makes the
+        // rest of the page inert), which prevents any overlay outside the dialog
+        // from ever painting above it. show() opens a non-modal dialog that stays
+        // in the normal stacking context so those overlays can stack above it.
+        if (this.disableTopLayer) {
+          this.modalRef.show();
+        } else {
+          this.modalRef.showModal();
+        }
         this.open = true;
 
         // Update focusable elements and set initial focus
@@ -303,7 +321,7 @@ export class PdsModal {
           'pds-modal__backdrop': true,
           'open': this.open
         }}
-        aria-modal="true"
+        aria-modal={this.disableTopLayer ? 'false' : 'true'}
         aria-labelledby={`${this.componentId}-heading`}
         onClick={this.handleBackdropClick}
       >

@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { MockPdsModal } from './mock-pds-modal';
+import { PdsModal } from '../pds-modal';
 
 // Test the modal component using our mock implementation
 describe('pds-modal', () => {
@@ -191,5 +192,65 @@ describe('pds-modal', () => {
     expect(mockEvent.preventDefault).toHaveBeenCalled();
     // Modal should still be open
     expect(page.rootInstance.open).toBe(true);
+  });
+
+  // disableTopLayer — exercises the real component (the mock does not touch the
+  // <dialog> API). modalRef is stubbed so show()/showModal() are observable
+  // without a real dialog element.
+  describe('disableTopLayer', () => {
+    // showModal() schedules a post-open setTimeout that focuses inside modalRef.
+    // Stub the dialog + focus helpers so that deferred callback is inert and
+    // cannot throw into a later test if it fires after this one completes.
+    const stubDialog = (instance: PdsModal) => {
+      const show = jest.fn();
+      const showModal = jest.fn();
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      (instance as any).modalRef = { show, showModal, close: jest.fn(), querySelectorAll: () => [] };
+      (instance as any).updateFocusableElements = jest.fn();
+      (instance as any).setInitialFocus = jest.fn();
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+      return { show, showModal };
+    };
+
+    it('opens with showModal() (top layer) by default', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal></pds-modal>`,
+      });
+      const { show, showModal } = stubDialog(page.rootInstance);
+
+      await page.rootInstance.showModal();
+
+      expect(showModal).toHaveBeenCalled();
+      expect(show).not.toHaveBeenCalled();
+    });
+
+    it('opens with show() (non-modal) when disableTopLayer is true', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal disable-top-layer="true"></pds-modal>`,
+      });
+      const { show, showModal } = stubDialog(page.rootInstance);
+
+      await page.rootInstance.showModal();
+
+      expect(show).toHaveBeenCalled();
+      expect(showModal).not.toHaveBeenCalled();
+      expect(page.rootInstance.open).toBe(true);
+    });
+
+    it('reflects the mode on aria-modal', async () => {
+      const topLayer = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal></pds-modal>`,
+      });
+      expect(topLayer.root?.querySelector('dialog')?.getAttribute('aria-modal')).toBe('true');
+
+      const nonModal = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal disable-top-layer="true"></pds-modal>`,
+      });
+      expect(nonModal.root?.querySelector('dialog')?.getAttribute('aria-modal')).toBe('false');
+    });
   });
 });
