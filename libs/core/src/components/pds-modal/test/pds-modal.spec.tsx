@@ -252,5 +252,10 @@ describe('pds-modal', () => {
       });
       expect(nonModal.root?.querySelector('dialog')?.getAttribute('aria-modal')).toBe('false');
     });
+
+    // The Escape-ownership behavior (leave Escape to an overlay that holds focus,
+    // close otherwise) depends on document.activeElement and dialog.close(), which
+    // the spec mock-doc environment does not implement — it is covered in the e2e
+    // suite where a real browser exercises focus and key events.
   });
 });

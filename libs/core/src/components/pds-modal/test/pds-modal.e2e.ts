@@ -137,6 +137,39 @@ describe('pds-modal', () => {
       expect(state.ariaModal).toBe('false');
     });
 
+    it('leaves Escape to an overlay above it and closes normally when focus is inside', async () => {
+      const page = await newE2EPage();
+      await page.setContent(
+        `<pds-modal component-id="tl-esc" disable-top-layer="true"><div>Content</div></pds-modal>`,
+      );
+
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(true);
+
+      // An overlay mounted on the body owns focus — Escape should not dismiss the modal.
+      await page.evaluate(() => {
+        const o = document.createElement('button');
+        o.id = 'probe-overlay';
+        o.textContent = 'Overlay';
+        document.body.appendChild(o);
+        o.focus();
+      });
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(true);
+
+      // Remove the overlay so focus is no longer held outside the modal — Escape
+      // now dismisses the modal as usual.
+      await page.evaluate(() => {
+        (document.getElementById('probe-overlay') as HTMLElement)?.remove();
+      });
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+
     it('lets a higher z-index overlay paint above the non-modal dialog', async () => {
       const page = await newE2EPage();
       await page.setContent(
