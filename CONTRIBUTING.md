@@ -78,6 +78,16 @@ npm run size
 
 When a budget fails, the CLI prints each tracked file with its gzipped size and limit.
 
+### Visual regression (Chromatic)
+
+Pull requests and pushes to `main` / `next` run [Chromatic](https://www.chromatic.com/) via [`.github/workflows/chromatic.yml`](.github/workflows/chromatic.yml). The workflow publishes the static Storybook build from `libs/core/storybook-static`.
+
+Repository maintainers must add a **`CHROMATIC_PROJECT_TOKEN`** secret (from the Chromatic project for this Storybook) so the job can authenticate. Forked pull requests skip Chromatic because secrets are not available to them.
+
+### Releases
+
+`Pine Continuous Deployment` ([`.github/workflows/schedule-release.yml`](.github/workflows/schedule-release.yml)) is triggered **manually** with `workflow_dispatch` (or by another workflow via `workflow_call`). There is no scheduled npm publish cron enabled in-repo yet; see the comment block at the top of that workflow when enabling a cadence.
+
 ### Submitting a Pull Request
 
 Once the desired changes have been made, add and commit the necessary files. We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), so please be sure that your commit messages adhere to these standards.
