@@ -340,7 +340,7 @@ jobs:
         shell: bash
 
       - name: Send Slack Notification
-        uses: slackapi/slack-github-action@v3.0.3
+        uses: slackapi/slack-github-action@v4.0.0
         env:
           DATE: ${{ env.CURRENT_DATE }}
           RELEASE_URL: ${{ env.RELEASE_URL }}
