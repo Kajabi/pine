@@ -22,7 +22,11 @@ const withFormAssociationEnabled = async (run: () => void | Promise<void>) => {
   try {
     await run();
   } finally {
-    process.env.__STENCIL_SPEC_TESTS__ = previous;
+    if (previous === undefined) {
+      delete process.env.__STENCIL_SPEC_TESTS__;
+    } else {
+      process.env.__STENCIL_SPEC_TESTS__ = previous;
+    }
   }
 };
 
