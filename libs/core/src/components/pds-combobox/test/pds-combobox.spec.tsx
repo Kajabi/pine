@@ -14,6 +14,18 @@ const createMockOption = (value: string, label: string, selected: boolean = fals
   getAttribute: jest.fn(),
 } as unknown as HTMLOptionElement);
 
+// updateFormValue() no-ops while isSpecTest() is true, so form association has to be
+// re-enabled for a test to observe what reaches ElementInternals.setFormValue().
+const withFormAssociationEnabled = async (run: () => void | Promise<void>) => {
+  const previous = process.env.__STENCIL_SPEC_TESTS__;
+  process.env.__STENCIL_SPEC_TESTS__ = 'false';
+  try {
+    await run();
+  } finally {
+    process.env.__STENCIL_SPEC_TESTS__ = previous;
+  }
+};
+
 describe('pds-combobox', () => {
   it('renders default combobox with input trigger', async () => {
     const { root } = await newSpecPage({
@@ -1603,6 +1615,245 @@ describe('pds-combobox', () => {
 
       const selectedValue = await component.getSelectedValue();
       expect(selectedValue).toBeNull();
+    });
+
+    it('clear resets the value, display text and selected option', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      const mockOptions = [createMockOption('access_call_limits', 'Access call limits')];
+      component.optionEls = mockOptions;
+      component.allItems = mockOptions;
+      (component as any).setSelectedOption(mockOptions[0]);
+      component.displayText = 'Access call limits';
+      component.value = 'access_call_limits';
+      await page.waitForChanges();
+
+      await component.clear();
+      await page.waitForChanges();
+
+      expect(component.value).toBe('');
+      expect(component.displayText).toBe('');
+      expect(component.selectedOption).toBeNull();
+      expect(await component.getSelectedValue()).toBeNull();
+    });
+
+    it('clear resets the value submitted with the form', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" name="plan"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      const mockOptions = [createMockOption('access_call_limits', 'Access call limits')];
+      component.optionEls = mockOptions;
+      component.allItems = mockOptions;
+      (component as any).setSelectedOption(mockOptions[0]);
+      component.displayText = 'Access call limits';
+      component.value = 'access_call_limits';
+      await page.waitForChanges();
+
+      const setFormValue = jest.fn();
+      (component as any).internals = { setFormValue };
+
+      await withFormAssociationEnabled(() => component.clear());
+
+      expect(setFormValue).toHaveBeenCalledWith('');
+      expect(setFormValue).not.toHaveBeenCalledWith('access_call_limits');
+    });
+
+    it('clear resets the submitted value when no option ever matched', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" name="plan" value="access_call_limits"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      await page.waitForChanges();
+
+      expect(component.selectedOption).toBeNull();
+
+      const setFormValue = jest.fn();
+      (component as any).internals = { setFormValue };
+
+      await withFormAssociationEnabled(() => component.clear());
+
+      expect(component.value).toBe('');
+      expect(setFormValue).toHaveBeenCalledWith('');
+    });
+
+    it('keeps the submitted value when only the filter text is emptied', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" name="plan"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      const mockOptions = [createMockOption('access_call_limits', 'Access call limits')];
+      component.optionEls = mockOptions;
+      component.allItems = mockOptions;
+      (component as any).setSelectedOption(mockOptions[0]);
+      component.displayText = 'Access call limits';
+      component.value = 'access_call_limits';
+      await page.waitForChanges();
+
+      const setFormValue = jest.fn();
+      (component as any).internals = { setFormValue };
+
+      const input = page.root?.shadowRoot?.querySelector('input') as HTMLInputElement;
+      input.value = '';
+      const inputEvent = new Event('input');
+      Object.defineProperty(inputEvent, 'target', { value: input, enumerable: true });
+
+      await withFormAssociationEnabled(async () => {
+        input.dispatchEvent(inputEvent);
+        await page.waitForChanges();
+      });
+
+      expect(component.displayText).toBe('');
+      expect(component.value).toBe('access_call_limits');
+      expect(setFormValue).not.toHaveBeenCalled();
+    });
+
+    it('clear emits pdsComboboxChange once with an empty value', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      const mockOptions = [createMockOption('access_call_limits', 'Access call limits')];
+      component.optionEls = mockOptions;
+      component.allItems = mockOptions;
+      (component as any).setSelectedOption(mockOptions[0]);
+      component.displayText = 'Access call limits';
+      component.value = 'access_call_limits';
+      await page.waitForChanges();
+
+      const changeSpy = jest.spyOn(component.pdsComboboxChange, 'emit');
+
+      await component.clear();
+      await page.waitForChanges();
+
+      expect(changeSpy).toHaveBeenCalledTimes(1);
+      expect(changeSpy).toHaveBeenCalledWith({ value: '' });
+    });
+
+    it('clear does not emit pdsComboboxChange when nothing was selected', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      const changeSpy = jest.spyOn(component.pdsComboboxChange, 'emit');
+
+      await component.clear();
+      await page.waitForChanges();
+
+      expect(changeSpy).not.toHaveBeenCalled();
+    });
+
+    it('clear emits pdsComboboxChange when only filter text was present', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      component.displayText = 'acc';
+      await page.waitForChanges();
+
+      const changeSpy = jest.spyOn(component.pdsComboboxChange, 'emit');
+
+      await component.clear();
+      await page.waitForChanges();
+
+      expect(component.displayText).toBe('');
+      expect(changeSpy).toHaveBeenCalledTimes(1);
+      expect(changeSpy).toHaveBeenCalledWith({ value: '' });
+    });
+
+    it('clear restores the placeholder in the button trigger', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="button" placeholder="Select option"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      const mockOptions = [createMockOption('cat', 'Cat')];
+      component.optionEls = mockOptions;
+      component.allItems = mockOptions;
+      (component as any).setSelectedOption(mockOptions[0]);
+      component.displayText = 'Cat';
+      component.value = 'cat';
+      await page.waitForChanges();
+
+      expect(page.root?.shadowRoot?.querySelector('.pds-combobox__button-trigger-label')?.textContent).toBe('Cat');
+
+      await component.clear();
+      await page.waitForChanges();
+
+      expect(page.root?.shadowRoot?.querySelector('.pds-combobox__button-trigger-label')?.textContent).toBe(
+        'Select option',
+      );
+    });
+
+    it('clear restores the placeholder in the chip trigger', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="chip" placeholder="Select option"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      const mockOptions = [createMockOption('cat', 'Cat')];
+      component.optionEls = mockOptions;
+      component.allItems = mockOptions;
+      (component as any).setSelectedOption(mockOptions[0]);
+      component.displayText = 'Cat';
+      component.value = 'cat';
+      await page.waitForChanges();
+
+      expect(page.root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger-label')?.textContent).toBe('Cat');
+
+      await component.clear();
+      await page.waitForChanges();
+
+      expect(page.root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger-label')?.textContent).toBe(
+        'Select option',
+      );
+      expect(component.selectedOptionChipProps).toBeNull();
+    });
+
+    it('clear restores the unfiltered option list and resets the highlighted index', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      const mockOptions = [
+        createMockOption('cat', 'Cat'),
+        createMockOption('dog', 'Dog'),
+        createMockOption('bird', 'Bird'),
+      ];
+      component.optionEls = mockOptions;
+      component.allItems = mockOptions;
+      component.displayText = 'ca';
+      (component as any).filterOptions();
+      component.highlightedIndex = 0;
+      await page.waitForChanges();
+
+      expect(component.filteredItems).toHaveLength(1);
+
+      await component.clear();
+      await page.waitForChanges();
+
+      expect(component.filteredItems).toHaveLength(3);
+      expect(component.highlightedIndex).toBe(-1);
     });
   });
 
