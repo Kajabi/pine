@@ -943,6 +943,10 @@ export namespace Components {
          */
         "chipSentiment": ChipSentimentType;
         /**
+          * Clears the selected value and resets the component.
+         */
+        "clear": () => Promise<void>;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;

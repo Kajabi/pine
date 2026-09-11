@@ -54,6 +54,16 @@
 
 ## Methods
 
+### `clear() => Promise<void>`
+
+Clears the selected value and resets the component.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `getSelectedValue() => Promise<string | null>`
 
 Gets the value of the currently selected option.
