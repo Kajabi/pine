@@ -174,6 +174,60 @@ describe('pds-input', () => {
     expect(paddingBefore).toBe(paddingAfter);
   });
 
+  it('keeps the prefix one step below the raised overlay level', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-input component-id="test-prefix-stacking" label="Search" hide-label>
+        <pds-icon name="search" slot="prefix"></pds-icon>
+      </pds-input>
+    `);
+    await page.waitForChanges();
+
+    const zIndexes = await page.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.style.position = 'absolute';
+      probe.style.setProperty('z-index', 'var(--pine-z-index-raised)');
+      document.body.appendChild(probe);
+      const raised = getComputedStyle(probe).zIndex;
+      probe.remove();
+
+      const prefix = document.querySelector('pds-input')?.shadowRoot?.querySelector('[part="prefix"]');
+
+      return { prefix: prefix ? getComputedStyle(prefix).zIndex : '', raised };
+    });
+
+    expect(Number(zIndexes.raised)).toBe(1000);
+    expect(Number(zIndexes.prefix)).toBe(Number(zIndexes.raised) - 1);
+  });
+
+  it('keeps the prefix above the field while the field is focused', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-input component-id="test-prefix-focus-stacking" label="Search" hide-label>
+        <pds-icon name="search" slot="prefix"></pds-icon>
+      </pds-input>
+    `);
+    await page.waitForChanges();
+
+    const input = await page.find('pds-input >>> input');
+    await input.focus();
+    await page.waitForChanges();
+
+    const zIndexes = await page.evaluate(() => {
+      const root = document.querySelector('pds-input')?.shadowRoot;
+      const prefix = root?.querySelector('[part="prefix"]');
+      const field = root?.querySelector('input');
+
+      return {
+        prefix: prefix ? getComputedStyle(prefix).zIndex : '',
+        field: field ? getComputedStyle(field).zIndex : '',
+      };
+    });
+
+    expect(Number(zIndexes.field)).toBe(1);
+    expect(Number(zIndexes.prefix)).toBeGreaterThan(Number(zIndexes.field));
+  });
+
   it('applies highlight styling when highlight prop is set', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-input highlight value="test"></pds-input>');

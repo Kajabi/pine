@@ -139,6 +139,33 @@ describe('pds-select', () => {
     // Should not have highlight attribute
     expect(component).not.toHaveAttribute('highlight');
   });
+
+  it('keeps the select icon one step below the raised overlay level', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-select component-id="country" label="Country">
+        <option value="us">United States</option>
+        <option value="ca">Canada</option>
+      </pds-select>
+    `);
+    await page.waitForChanges();
+
+    const zIndexes = await page.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.style.position = 'absolute';
+      probe.style.setProperty('z-index', 'var(--pine-z-index-raised)');
+      document.body.appendChild(probe);
+      const raised = getComputedStyle(probe).zIndex;
+      probe.remove();
+
+      const icon = document.querySelector('pds-select')?.shadowRoot?.querySelector('.pds-select__select-icon');
+
+      return { icon: icon ? getComputedStyle(icon).zIndex : '', raised };
+    });
+
+    expect(Number(zIndexes.raised)).toBe(1000);
+    expect(Number(zIndexes.icon)).toBe(Number(zIndexes.raised) - 1);
+  });
 });
 
 describe('pds-select accessibility', () => {
