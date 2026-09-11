@@ -108,6 +108,41 @@ ButtonTrigger.args = {
   value: 'dog',
 };
 
+export const ProgrammaticClear = (args) => html`
+<pds-box direction="column" gap="sm" align-items="start">
+  <pds-combobox
+    id="combobox-clear-story"
+    component-id=${args.componentId}
+    name=${args.name}
+    label=${args.label}
+    placeholder=${args.placeholder}
+    trigger=${args.trigger}
+    mode=${args.mode}
+    value=${args.value}
+  >
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+  <pds-button
+    variant="secondary"
+    size="sm"
+    @click=${() => document.querySelector('#combobox-clear-story').clear()}
+  >
+    Reset
+  </pds-button>
+</pds-box>`;
+ProgrammaticClear.args = {
+  componentId: 'combobox-clear-story',
+  name: 'favoriteAnimal',
+  label: 'Favorite Animal',
+  placeholder: 'Select an animal',
+  trigger: 'input',
+  mode: 'filter',
+  value: 'panda',
+};
+
 export const ChipTriggerAndLayout = (args) => html`
 <pds-box min-width="100%" direction="row" gap="sm" wrap>
   <pds-combobox
