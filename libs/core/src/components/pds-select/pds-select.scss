@@ -174,7 +174,7 @@ select {
   height: var(--pds-select-min-height);
   pointer-events: none;
   position: relative;
-  z-index: var(--pine-z-index-raised);
+  z-index: calc(var(--pine-z-index-raised) - 1);
 }
 
 .visually-hidden {
