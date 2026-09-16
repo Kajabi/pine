@@ -1348,6 +1348,56 @@ When using async data loading:
 5. **Test timeout behavior**: Set `fetchTimeout` based on your API's typical response time
 6. **Validate formatResult**: Ensure the function always returns objects with `id` and `text` properties
 
+## Programmatic Clear
+
+Call the `clear()` method on the element to return the combobox to its empty state. It resets the selected option, the trigger text, and the value submitted with the form, then emits `pdsComboboxChange` with an empty `value` (only when something was actually selected or typed).
+
+Emptying the input text does **not** clear the selection. In `mode="filter"` the text is a filter over the option list, so the committed value persists until an option is chosen or `clear()` is called. Use `clear()` whenever a "reset" affordance needs to genuinely empty the control.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox id="combobox-clear" component-id="combobox-clear" name="favoriteAnimal" label="Favorite Animal" placeholder="Select an animal" value="panda">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+</pds-combobox>
+
+<pds-button variant="secondary" size="sm" onclick="document.querySelector('#combobox-clear').clear()">
+  Reset
+</pds-button>`,
+    react: `const comboboxRef = useRef(null);
+
+<PdsCombobox
+  ref={comboboxRef}
+  componentId="combobox-clear"
+  name="favoriteAnimal"
+  label="Favorite Animal"
+  placeholder="Select an animal"
+  value="panda"
+>
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+</PdsCombobox>
+
+<button onClick={() => comboboxRef.current?.clear()}>
+  Reset
+</button>`,
+  }}
+>
+  <div>
+    <pds-combobox id="combobox-clear" component-id="combobox-clear" name="favoriteAnimal" label="Favorite Animal" placeholder="Select an animal" value="panda">
+      <option value="cat">Cat</option>
+      <option value="dog">Dog</option>
+      <option value="panda">Panda</option>
+    </pds-combobox>
+    <pds-button style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="sm" onClick={() => {
+      const el = document.querySelector('#combobox-clear');
+      if (el) el.clear();
+    }}>Reset</pds-button>
+  </div>
+</DocCanvas>
+
 ## Form Integration
 
 `pds-combobox` is a <pds-link href="https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals/formAssociated" external>form-associated custom element</pds-link>. This means the component participates in `<form>` submission just like native `<select>` / `<input>` controls.
@@ -1357,6 +1407,7 @@ When using async data loading:
 - `mode="filter"` behaves like an `<input>` plus `<datalist>`: users can type new text, but the submitted value will still be one of the predefined options.
 - `mode="select-only"` works closer to a `<select>`: typing is disabled for button/chip triggers, and only explicit option values can be submitted.
 - Update the `value` prop to control the selection from a parent component (React state, framework store, etc.). The component automatically syncs the input text/trigger label to match the selected option.
+- Call [`clear()`](#programmatic-clear) to reset the submitted value. Emptying the input text only filters the option list and leaves the committed value in place.
 
 ## Playground
 

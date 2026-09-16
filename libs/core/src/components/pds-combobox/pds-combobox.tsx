@@ -1325,6 +1325,24 @@ export class PdsCombobox implements BasePdsProps {
     return this.selectedOption ? this.selectedOption.value : null;
   }
 
+  /**
+   * Clears the selected value and resets the component.
+   */
+  @Method()
+  async clear() {
+    const hadValue = this.value !== '' || this.displayText !== '';
+
+    this.displayText = '';
+    this.setSelectedOption(null);
+    this.value = '';
+    this.filterOptions();
+    this.updateFormValue('');
+
+    if (hadValue) {
+      this.pdsComboboxChange.emit({ value: '' });
+    }
+  }
+
   // Event handler for option click
   private onOptionClick = (event: Event) => {
     const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
