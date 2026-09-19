@@ -6,6 +6,9 @@ describe('pds-dropdown-menu', () => {
     const page = await newE2EPage();
     await page.setContent('<pds-dropdown-menu></pds-dropdown-menu>');
 
+    // Wait for initial render to complete
+    await page.waitForChanges();
+
     const element = await page.find('pds-dropdown-menu');
     expect(element).toHaveClass('hydrated');
   });
