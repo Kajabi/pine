@@ -297,6 +297,25 @@ describe('pds-tabs', () => {
       expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
     });
 
+    // Clearing the wrapper's content div in componentDidRender could, in theory, detach
+    // whatever reference Stencil uses to relocate that content on a later prop-driven
+    // re-render. Verified it doesn't: content survives a normal update after cleanup.
+    it('survives a genuine Stencil re-render after cleanup', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab selected="true" parent-component-id="foo" name="two">
+            <button role="tab" id="foo__two" aria-controls="foo__two-panel" aria-selected="true" class="pds-tab is-active" tabindex="0">
+              <div class="pds-tab__content">Content</div>
+            </button>
+          </pds-tab>
+        `,
+      });
+      page.rootInstance.disabled = true;
+      await page.waitForChanges();
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
+    });
+
     it('leaves pristine (never-hydrated) content alone', async () => {
       const page = await newSpecPage({
         components: [PdsTab],
