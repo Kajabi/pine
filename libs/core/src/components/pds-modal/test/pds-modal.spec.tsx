@@ -283,6 +283,35 @@ describe('pds-modal', () => {
       expect(page.root?.querySelector('.pds-modal')?.textContent?.trim()).toContain('Body');
     });
 
+    // pds-modal is the only adopter where the container class (`.pds-modal`) differs
+    // from the staleness selector (`dialog.pds-modal__backdrop`) — the two-wrapper-level
+    // structure is unique to this component, so this is verified directly rather than
+    // relying solely on the generic reconnected-content.spec.ts coverage.
+    it('drains a doubly-nested dialog to a single one with content intact', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `
+          <pds-modal>
+            <dialog class="pds-modal__backdrop">
+              <div class="pds-modal pds-modal--md" part="modal">
+                <dialog class="pds-modal__backdrop">
+                  <div class="pds-modal pds-modal--md" part="modal">
+                    <pds-modal-header>Title</pds-modal-header>
+                    <p>Body</p>
+                  </div>
+                </dialog>
+              </div>
+            </dialog>
+          </pds-modal>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('dialog').length).toBe(1);
+      expect(page.root?.querySelectorAll('.pds-modal').length).toBe(1);
+      expect(page.root?.querySelector('pds-modal-header')).not.toBeNull();
+      expect(page.root?.querySelector('.pds-modal')?.textContent?.trim()).toContain('Body');
+    });
+
     it('leaves pristine (never-hydrated) content alone', async () => {
       const page = await newSpecPage({
         components: [PdsModal],

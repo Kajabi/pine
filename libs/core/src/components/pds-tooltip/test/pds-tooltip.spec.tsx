@@ -152,6 +152,36 @@ describe('pds-tooltip', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
+    // unwrapReconnectedSlots is the one adopter that reroutes nodes into a
+    // DIFFERENT Stencil-rendered element (contentWrapper.appendChild), unlike
+    // pds-tab which only ever moves nodes within a single container — this
+    // cross-container reroute needs its own re-render guard.
+    it('keeps content in the right wrapper after a genuine re-render post-cleanup', async () => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+         <pds-tooltip placement="right">
+          <span class="pds-tooltip__trigger">
+            <pds-button variant="secondary">Secondary</pds-button>
+          </span>
+          <div class="pds-tooltip__content-slot-wrapper" hidden>
+            <div slot="content">Rich content</div>
+          </div>
+         </pds-tooltip>`,
+      });
+
+      page.rootInstance.placement = 'left';
+      await page.waitForChanges();
+
+      expect(page.root?.querySelectorAll('.pds-tooltip__trigger').length).toBe(1);
+      expect(page.root?.querySelectorAll('.pds-tooltip__content-slot-wrapper').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tooltip__trigger pds-button')).not.toBeNull();
+      expect(
+        page.root?.querySelector('.pds-tooltip__content-slot-wrapper')?.textContent?.trim()
+      ).toBe('Rich content');
+      expect(page.root?.querySelector('.pds-tooltip__trigger [slot="content"]')).toBeNull();
+    });
+
     it('is reconnect-safe (generic guard)', async () => {
       await expectReconnectSafe(
         [PdsTooltip],
