@@ -279,6 +279,46 @@ describe('pds-tabs', () => {
       expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
     });
 
+    // A restore of a page that was itself restored while this bug was live nests two
+    // levels deep; slot relocation splits that into sibling controls in the content div.
+    it('flattens a doubly-nested snapshot without losing the label', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab selected="true" parent-component-id="foo" name="two">
+            <button role="tab" class="pds-tab is-active">
+              <div class="pds-tab__content">
+                <button role="tab" class="pds-tab is-active">
+                  <div class="pds-tab__content">Content</div>
+                </button>
+              </div>
+            </button>
+          </pds-tab>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('button').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
+    });
+
+    it('preserves element-rich label content (icon + text) when unwrapping', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab href="/clubs/1/chat" active="true" parent-component-id="foo" name="chat">
+            <a href="/clubs/1/chat" class="pds-tab is-active">
+              <div class="pds-tab__content"><span class="icon">🔔</span>Chat</div>
+            </a>
+          </pds-tab>
+        `,
+      });
+
+      const anchors = page.root?.querySelectorAll('a');
+      expect(anchors?.length).toBe(1);
+      expect(page.root?.querySelector('.icon')).not.toBeNull();
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('🔔Chat');
+    });
+
     it('is idempotent across repeated re-renders on the same already-hydrated snapshot', async () => {
       const page = await newSpecPage({
         components: [PdsTab],

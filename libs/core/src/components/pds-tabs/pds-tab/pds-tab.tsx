@@ -8,16 +8,20 @@ import { Component, Element, Fragment, Host, h, Prop, Event, EventEmitter } from
 export class PdsTab {
   @Element() el: HTMLPdsTabElement;
 
-  // Flattens a nested <a>/<button> left when a page-cache restore (Turbo, bfcache) reconnects this light-DOM element over its own prior render.
+  // Unwraps a nested <a>/<button> in place (move-then-remove) left by a page-cache (Turbo, bfcache) reconnect.
   componentDidRender() {
     const contentDiv = this.el.querySelector('.pds-tab__content');
-    const nestedControl = contentDiv?.firstElementChild;
-    if (!nestedControl?.matches('a.pds-tab, button.pds-tab')) return;
+    if (contentDiv === null) return;
 
-    const nestedContent = nestedControl.querySelector('.pds-tab__content');
-    const nodes = Array.from((nestedContent ?? nestedControl).childNodes);
-    while (contentDiv.firstChild !== null) contentDiv.removeChild(contentDiv.firstChild);
-    nodes.forEach((node) => contentDiv.appendChild(node));
+    let nestedControl = contentDiv.firstElementChild;
+    while (nestedControl?.matches('a.pds-tab, button.pds-tab')) {
+      const nestedContent = nestedControl.querySelector('.pds-tab__content');
+      Array.from((nestedContent ?? nestedControl).childNodes).forEach((node) =>
+        contentDiv.insertBefore(node, nestedControl)
+      );
+      nestedControl.remove();
+      nestedControl = contentDiv.firstElementChild;
+    }
   }
 
   /**
