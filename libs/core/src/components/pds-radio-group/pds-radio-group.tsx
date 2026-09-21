@@ -158,6 +158,24 @@ export class PdsRadioGroup {
     this.updateChildRadios();
   }
 
+  // Unwraps a stale nested .pds-radio-group__radios and discards stale label/message siblings left by a page-cache (Turbo, bfcache) reconnect.
+  componentDidRender() {
+    const radiosContainer = this.el.querySelector('.pds-radio-group__radios');
+    if (radiosContainer === null) return;
+
+    const staleSelector = '.pds-radio-group__radios, .pds-radio-group__label, .pds-radio-group__message';
+    const findStale = () => Array.from(radiosContainer.children).find((child) => child.matches(staleSelector));
+
+    let stale = findStale();
+    while (stale !== undefined) {
+      if (stale.matches('.pds-radio-group__radios')) {
+        Array.from(stale.childNodes).forEach((node) => radiosContainer.insertBefore(node, stale));
+      }
+      stale.remove();
+      stale = findStale();
+    }
+  }
+
   private classNames() {
     const classNames = [];
 

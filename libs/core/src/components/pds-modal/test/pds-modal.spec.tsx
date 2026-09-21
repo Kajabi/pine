@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { MockPdsModal } from './mock-pds-modal';
 import { PdsModal } from '../pds-modal';
+import { expectReconnectSafe } from '../../../utils/test/reconnect-safety';
 
 // Test the modal component using our mock implementation
 describe('pds-modal', () => {
@@ -257,5 +258,72 @@ describe('pds-modal', () => {
     // close otherwise) depends on document.activeElement and dialog.close(), which
     // the spec mock-doc environment does not implement — it is covered in the e2e
     // suite where a real browser exercises focus and key events.
+  });
+
+  describe('reconnecting over an already-hydrated snapshot', () => {
+    // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
+    // prior render already in its light DOM, nesting a stale dialog inside the fresh one.
+    it('does not nest a second dialog', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `
+          <pds-modal>
+            <dialog class="pds-modal__backdrop">
+              <div class="pds-modal pds-modal--md" part="modal">
+                <pds-modal-header>Title</pds-modal-header>
+                <p>Body</p>
+              </div>
+            </dialog>
+          </pds-modal>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('dialog').length).toBe(1);
+      expect(page.root?.querySelector('pds-modal-header')).not.toBeNull();
+      expect(page.root?.querySelector('.pds-modal')?.textContent?.trim()).toContain('Body');
+    });
+
+    // pds-modal is the only adopter where the container class (`.pds-modal`) differs
+    // from the staleness selector (`dialog.pds-modal__backdrop`) — the two-wrapper-level
+    // structure is unique to this component, so this is verified directly rather than
+    // relying solely on the generic reconnected-content.spec.ts coverage.
+    it('drains a doubly-nested dialog to a single one with content intact', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `
+          <pds-modal>
+            <dialog class="pds-modal__backdrop">
+              <div class="pds-modal pds-modal--md" part="modal">
+                <dialog class="pds-modal__backdrop">
+                  <div class="pds-modal pds-modal--md" part="modal">
+                    <pds-modal-header>Title</pds-modal-header>
+                    <p>Body</p>
+                  </div>
+                </dialog>
+              </div>
+            </dialog>
+          </pds-modal>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('dialog').length).toBe(1);
+      expect(page.root?.querySelectorAll('.pds-modal').length).toBe(1);
+      expect(page.root?.querySelector('pds-modal-header')).not.toBeNull();
+      expect(page.root?.querySelector('.pds-modal')?.textContent?.trim()).toContain('Body');
+    });
+
+    it('leaves pristine (never-hydrated) content alone', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal><p>Body</p></pds-modal>`,
+      });
+
+      expect(page.root?.querySelectorAll('dialog').length).toBe(1);
+      expect(page.root?.querySelector('.pds-modal')?.textContent?.trim()).toBe('Body');
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe([PdsModal], `<pds-modal><p>Body</p></pds-modal>`);
+    });
   });
 });

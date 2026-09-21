@@ -1,4 +1,5 @@
 import { Component, h, Host, Prop, Element, State } from '@stencil/core';
+import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 @Component({
   tag: 'pds-modal-content',
@@ -7,6 +8,11 @@ import { Component, h, Host, Prop, Element, State } from '@stencil/core';
 export class PdsModalContent {
 
   @Element() el: HTMLPdsModalContentElement;
+
+  // Unwraps a nested .pds-modal-content left by a page-cache (Turbo, bfcache) reconnect.
+  componentDidRender() {
+    unwrapReconnectedContent(this.el.querySelector('.pds-modal-content'), '.pds-modal-content');
+  }
 
   /**
    * The border style for the content area. When not explicitly set, automatically determined based on scroll state.

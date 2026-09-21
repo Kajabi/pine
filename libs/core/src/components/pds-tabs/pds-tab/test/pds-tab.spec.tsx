@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 
 import { PdsTab } from '../pds-tab';
+import { expectReconnectSafe } from '../../../../utils/test/reconnect-safety';
 
 describe('pds-tabs', () => {
   it('renders', async () => {
@@ -364,6 +365,13 @@ describe('pds-tabs', () => {
 
       expect(page.root?.querySelectorAll('button').length).toBe(1);
       expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe(
+        [PdsTab],
+        `<pds-tab href="/a" active="true" parent-component-id="foo" name="a">Chat</pds-tab>`,
+      );
     });
   });
 });

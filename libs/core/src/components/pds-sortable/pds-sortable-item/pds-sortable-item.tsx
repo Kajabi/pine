@@ -29,6 +29,23 @@ export class PdsSortableItem {
    */
   @Prop({ mutable: true }) showHandle = false;
 
+  // Discards stale handle/actions siblings left by a page-cache (Turbo, bfcache) reconnect; the fresh handle is always first, the fresh actions wrapper always last.
+  componentDidRender() {
+    const handles = Array.from(this.el.children).filter((child) => child.matches('.pds-sortable-item__handle'));
+    handles.slice(1).forEach((stale) => stale.remove());
+
+    const actionsWrappers = Array.from(this.el.children).filter((child) =>
+      child.matches('.pds-sortable-item__actions')
+    );
+    const freshActions = actionsWrappers[actionsWrappers.length - 1];
+    actionsWrappers.slice(0, -1).forEach((stale) => {
+      if (freshActions !== undefined) {
+        Array.from(stale.children).forEach((node) => freshActions.appendChild(node));
+      }
+      stale.remove();
+    });
+  }
+
   componentWillRender() {
     // When the parent sortable has a type of 'handle', the sortable items
     // will automatically set showHandle to 'true'.

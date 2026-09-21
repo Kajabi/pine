@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsTabpanel } from '../pds-tabpanel';
+import { expectReconnectSafe } from '../../../../utils/test/reconnect-safety';
 
 describe('pds-tabpanel', () => {
   it('renders', async () => {
@@ -59,5 +60,41 @@ describe('pds-tabpanel', () => {
     });
     await page.waitForChanges();
     expect(page.root.classList.contains('pds-tabpanel--stretch-active')).toBe(false);
+  });
+
+  describe('reconnecting over an already-hydrated snapshot', () => {
+    // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
+    // prior render already in its light DOM, nesting a stale .pds-tabpanel inside
+    // the fresh one.
+    it('does not nest a second .pds-tabpanel', async () => {
+      const page = await newSpecPage({
+        components: [PdsTabpanel],
+        html: `
+          <pds-tabpanel selected="true" parent-component-id="foo" name="two">
+            <div role="tabpanel" class="pds-tabpanel is-active">Content</div>
+          </pds-tabpanel>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('.pds-tabpanel').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tabpanel')?.textContent?.trim()).toBe('Content');
+    });
+
+    it('leaves pristine (never-hydrated) content alone', async () => {
+      const page = await newSpecPage({
+        components: [PdsTabpanel],
+        html: `<pds-tabpanel parent-component-id="foo" name="two">Content</pds-tabpanel>`,
+      });
+
+      expect(page.root?.querySelectorAll('.pds-tabpanel').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tabpanel')?.textContent?.trim()).toBe('Content');
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe(
+        [PdsTabpanel],
+        `<pds-tabpanel selected="true" parent-component-id="foo" name="two">Content</pds-tabpanel>`,
+      );
+    });
   });
 });
