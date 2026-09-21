@@ -1,4 +1,5 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
+import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 @Component({
   tag: 'pds-tabpanel',
@@ -7,6 +8,11 @@ import { Component, Element, Host, h, Prop } from '@stencil/core';
 })
 export class PdsTabpanel {
   @Element() el: HTMLPdsTabpanelElement;
+
+  // Unwraps a nested .pds-tabpanel left by a page-cache (Turbo, bfcache) reconnect.
+  componentDidRender() {
+    unwrapReconnectedContent(this.el.querySelector('.pds-tabpanel'), '.pds-tabpanel');
+  }
 
   /**
    * Sets the related tab name, this name must match a `pds-tab`'s tab name property

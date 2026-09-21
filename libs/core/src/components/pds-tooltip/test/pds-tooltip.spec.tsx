@@ -55,6 +55,49 @@ describe('pds-tooltip', () => {
     `);
   });
 
+  describe('reconnecting over an already-hydrated snapshot', () => {
+    // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
+    // prior render already in its light DOM. Both stale wrappers land as siblings
+    // inside the fresh trigger (neither carries its own `slot` attribute) — content
+    // meant for the content slot must be rerouted there, not just flattened in place.
+    it('separates default and content-slot content back into their own wrappers', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+         <pds-tooltip placement="right">
+          <span class="pds-tooltip__trigger">
+            <pds-button variant="secondary">Secondary</pds-button>
+          </span>
+          <div class="pds-tooltip__content-slot-wrapper" hidden>
+            <div slot="content">Rich content</div>
+          </div>
+         </pds-tooltip>`,
+      });
+
+      expect(root?.querySelectorAll('.pds-tooltip__trigger').length).toBe(1);
+      expect(root?.querySelectorAll('.pds-tooltip__content-slot-wrapper').length).toBe(1);
+      expect(root?.querySelector('.pds-tooltip__trigger pds-button')).not.toBeNull();
+      expect(
+        root?.querySelector('.pds-tooltip__content-slot-wrapper')?.textContent?.trim()
+      ).toBe('Rich content');
+      // The content-slot content must not also leak into the trigger.
+      expect(root?.querySelector('.pds-tooltip__trigger [slot="content"]')).toBeNull();
+    });
+
+    it('leaves pristine (never-hydrated) content alone', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+         <pds-tooltip placement="right">
+          <pds-button variant="secondary">Secondary</pds-button>
+         </pds-tooltip>`,
+      });
+
+      expect(root?.querySelectorAll('.pds-tooltip__trigger').length).toBe(1);
+      expect(root?.querySelector('.pds-tooltip__trigger pds-button')).not.toBeNull();
+    });
+  });
+
   it('should be able to call method to show tooltip', async () => {
     const page = await newSpecPage({
       components: [PdsTooltip],

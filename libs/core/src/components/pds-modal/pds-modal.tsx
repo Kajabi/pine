@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
+import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 @Component({
   tag: 'pds-modal',
@@ -71,6 +72,11 @@ export class PdsModal {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
     // Add keyboard event listener
     document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  // Unwraps a nested dialog.pds-modal__backdrop left by a page-cache (Turbo, bfcache) reconnect.
+  componentDidRender() {
+    unwrapReconnectedContent(this.el.querySelector('.pds-modal'), 'dialog.pds-modal__backdrop', '.pds-modal');
   }
 
   disconnectedCallback() {
