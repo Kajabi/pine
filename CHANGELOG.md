@@ -1,3 +1,22 @@
+## 3.31.0 (2026-09-21)
+
+### Features 🚀
+
+- **pds-combobox:** add clear method to reset the selected value ([#804](https://github.com/Kajabi/pine/pull/804))
+
+### Bug Fixes 🐛
+
+- **pds-tab:** flatten a nested control left by a page-cache restore ([#805](https://github.com/Kajabi/pine/pull/805))
+
+### Styles 🎨
+
+- **form:** move form control icons below the raised z-index step ([#803](https://github.com/Kajabi/pine/pull/803))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.30.0 (2026-08-27)
 
 ### Features 🚀
