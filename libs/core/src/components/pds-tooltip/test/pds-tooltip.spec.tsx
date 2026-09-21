@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsTooltip } from '../pds-tooltip';
+import { expectReconnectSafe } from '../../../utils/test/reconnect-safety';
 
 // Mock MutationObserver
 global.MutationObserver = jest.fn().mockImplementation(() => ({
@@ -95,6 +96,67 @@ describe('pds-tooltip', () => {
 
       expect(root?.querySelectorAll('.pds-tooltip__trigger').length).toBe(1);
       expect(root?.querySelector('.pds-tooltip__trigger pds-button')).not.toBeNull();
+    });
+
+    // A reconnect stacking on top of an earlier reconnect that never got a cleanup
+    // pass buries a second stale pair inside the content wrapper — content rerouted
+    // there must itself be drained, not just moved and left nested.
+    it('drains a stale trigger/content-wrapper pair nested inside the content wrapper', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+         <pds-tooltip placement="right">
+          <span class="pds-tooltip__trigger">
+            <pds-button variant="secondary">Secondary</pds-button>
+          </span>
+          <div class="pds-tooltip__content-slot-wrapper" hidden>
+            <span class="pds-tooltip__trigger"></span>
+            <div class="pds-tooltip__content-slot-wrapper" hidden>
+              <div slot="content">Rich content</div>
+            </div>
+          </div>
+         </pds-tooltip>`,
+      });
+
+      expect(root?.querySelectorAll('.pds-tooltip__trigger').length).toBe(1);
+      expect(root?.querySelectorAll('.pds-tooltip__content-slot-wrapper').length).toBe(1);
+      expect(root?.querySelector('.pds-tooltip__trigger pds-button')).not.toBeNull();
+      expect(
+        root?.querySelector('.pds-tooltip__content-slot-wrapper')?.textContent?.trim()
+      ).toBe('Rich content');
+    });
+
+    it('only unwraps once per connect, not on every re-render', async () => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+         <pds-tooltip placement="right">
+          <span class="pds-tooltip__trigger">
+            <span class="pds-tooltip__trigger">
+              <pds-button variant="secondary">Secondary</pds-button>
+            </span>
+          </span>
+          <div class="pds-tooltip__content-slot-wrapper" hidden></div>
+         </pds-tooltip>`,
+      });
+      const spy = jest.spyOn(
+        page.rootInstance as unknown as { unwrapReconnectedSlots: () => void },
+        'unwrapReconnectedSlots' as never
+      );
+
+      // A later re-render (e.g. a hover-driven prop change) should not re-invoke
+      // the reconnect-cleanup scan.
+      page.rootInstance.placement = 'left';
+      await page.waitForChanges();
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe(
+        [PdsTooltip],
+        `<pds-tooltip placement="right"><pds-button variant="secondary">Secondary</pds-button></pds-tooltip>`,
+      );
     });
   });
 

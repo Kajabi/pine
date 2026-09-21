@@ -114,6 +114,15 @@ export class PdsTooltip {
     // no return; Stencil ignores teardown functions here
   }
 
+  // connectedCallback fires on every reconnect (unlike componentWillLoad/componentDidLoad,
+  // which are one-time), so resetting this here re-arms exactly one reconnect-cleanup pass
+  // per connect instead of re-scanning on every render for the component's whole lifetime.
+  private hasCheckedReconnect = false;
+
+  connectedCallback() {
+    this.hasCheckedReconnect = false;
+  }
+
   disconnectedCallback() {
     window.removeEventListener('pageshow', this.handlePageShow);
     if (this.slotMutationObserver !== null) {
@@ -135,7 +144,7 @@ export class PdsTooltip {
     }
   }
 
-  // Unwraps stale nested trigger/content-slot-wrapper siblings left by a page-cache (Turbo, bfcache) reconnect, rerouting content-slot content back to the real content wrapper.
+  // Unwraps stale nested trigger/content-slot-wrapper siblings left by a page-cache (Turbo, bfcache) reconnect, rerouting content-slot content back to the real content wrapper. Drains both wrappers (not just trigger) so content rerouted into contentWrapper is itself re-checked for further nesting.
   private unwrapReconnectedSlots() {
     // Direct children only — querySelector would find a stale nested wrapper first.
     const trigger = Array.from(this.el.children).find((child) => child.matches('.pds-tooltip__trigger'));
@@ -145,21 +154,26 @@ export class PdsTooltip {
     if (trigger === undefined || contentWrapper === undefined) return;
 
     const staleSelector = '.pds-tooltip__trigger, .pds-tooltip__content-slot-wrapper';
-    const findStale = () => Array.from(trigger.children).find((child) => child.matches(staleSelector));
+    const findStaleIn = (root: Element) => Array.from(root.children).find((child) => child.matches(staleSelector));
 
-    let stale = findStale();
-    while (stale !== undefined) {
-      const destination = stale.matches('.pds-tooltip__content-slot-wrapper') ? contentWrapper : trigger;
-      Array.from(stale.childNodes).forEach((node) =>
-        destination === trigger ? trigger.insertBefore(node, stale) : destination.appendChild(node)
-      );
-      stale.remove();
-      stale = findStale();
-    }
+    [trigger, contentWrapper].forEach((root) => {
+      let stale = findStaleIn(root);
+      while (stale !== undefined) {
+        const destination = stale.matches('.pds-tooltip__content-slot-wrapper') ? contentWrapper : trigger;
+        Array.from(stale.childNodes).forEach((node) =>
+          destination === root ? root.insertBefore(node, stale) : destination.appendChild(node)
+        );
+        stale.remove();
+        stale = findStaleIn(root);
+      }
+    });
   }
 
   componentDidRender() {
-    this.unwrapReconnectedSlots();
+    if (!this.hasCheckedReconnect) {
+      this.unwrapReconnectedSlots();
+      this.hasCheckedReconnect = true;
+    }
 
     if (this.opened && this.portalEl === null) {
       this.createPortal();
