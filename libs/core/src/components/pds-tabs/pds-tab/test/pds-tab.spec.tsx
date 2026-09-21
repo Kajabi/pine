@@ -239,4 +239,131 @@ describe('pds-tabs', () => {
       expect(anchor?.getAttribute('role')).toBe('link');
     });
   });
+
+  describe('reconnecting over an already-hydrated snapshot', () => {
+    // Simulates a Turbo/bfcache restore reconnecting this element over its own prior render.
+    it('does not nest a second anchor around an already-hydrated nav tab', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab href="/clubs/1/chat" active="true" parent-component-id="foo" name="chat">
+            <a href="/clubs/1/chat" id="foo__chat" class="pds-tab is-active" aria-current="page">
+              <div class="pds-tab__content">Chat</div>
+            </a>
+          </pds-tab>
+        `,
+      });
+
+      const anchors = page.root?.querySelectorAll('a');
+      expect(anchors?.length).toBe(1);
+      expect(anchors?.[0].classList.contains('is-active')).toBe(true);
+      expect(page.root?.querySelectorAll('.pds-tab__content').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Chat');
+    });
+
+    it('does not nest a second button around an already-hydrated panel tab', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab selected="true" parent-component-id="foo" name="two">
+            <button role="tab" id="foo__two" aria-controls="foo__two-panel" aria-selected="true" class="pds-tab is-active" tabindex="0">
+              <div class="pds-tab__content">Content</div>
+            </button>
+          </pds-tab>
+        `,
+      });
+
+      const buttons = page.root?.querySelectorAll('button');
+      expect(buttons?.length).toBe(1);
+      expect(page.root?.querySelectorAll('.pds-tab__content').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
+    });
+
+    // A restore of a page that was itself restored while this bug was live nests two
+    // levels deep; slot relocation splits that into sibling controls in the content div.
+    it('flattens a doubly-nested snapshot without losing the label', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab selected="true" parent-component-id="foo" name="two">
+            <button role="tab" class="pds-tab is-active">
+              <div class="pds-tab__content">
+                <button role="tab" class="pds-tab is-active">
+                  <div class="pds-tab__content">Content</div>
+                </button>
+              </div>
+            </button>
+          </pds-tab>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('button').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
+    });
+
+    it('preserves element-rich label content (icon + text) when unwrapping', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab href="/clubs/1/chat" active="true" parent-component-id="foo" name="chat">
+            <a href="/clubs/1/chat" class="pds-tab is-active">
+              <div class="pds-tab__content"><span class="icon">🔔</span>Chat</div>
+            </a>
+          </pds-tab>
+        `,
+      });
+
+      const anchors = page.root?.querySelectorAll('a');
+      expect(anchors?.length).toBe(1);
+      expect(page.root?.querySelector('.icon')).not.toBeNull();
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('🔔Chat');
+    });
+
+    it('is idempotent across repeated re-renders on the same already-hydrated snapshot', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab selected="true" parent-component-id="foo" name="two">
+            <button role="tab" id="foo__two" aria-controls="foo__two-panel" aria-selected="true" class="pds-tab is-active" tabindex="0">
+              <div class="pds-tab__content">Content</div>
+            </button>
+          </pds-tab>
+        `,
+      });
+      await page.rootInstance.componentDidRender();
+      await page.rootInstance.componentDidRender();
+
+      expect(page.root?.querySelectorAll('button').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
+    });
+
+    // Clearing the wrapper's content div in componentDidRender could, in theory, detach
+    // whatever reference Stencil uses to relocate that content on a later prop-driven
+    // re-render. Verified it doesn't: content survives a normal update after cleanup.
+    it('survives a genuine Stencil re-render after cleanup', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `
+          <pds-tab selected="true" parent-component-id="foo" name="two">
+            <button role="tab" id="foo__two" aria-controls="foo__two-panel" aria-selected="true" class="pds-tab is-active" tabindex="0">
+              <div class="pds-tab__content">Content</div>
+            </button>
+          </pds-tab>
+        `,
+      });
+      page.rootInstance.disabled = true;
+      await page.waitForChanges();
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
+    });
+
+    it('leaves pristine (never-hydrated) content alone', async () => {
+      const page = await newSpecPage({
+        components: [PdsTab],
+        html: `<pds-tab parent-component-id="foo" name="two">Content</pds-tab>`,
+      });
+
+      expect(page.root?.querySelectorAll('button').length).toBe(1);
+      expect(page.root?.querySelector('.pds-tab__content')?.textContent?.trim()).toBe('Content');
+    });
+  });
 });

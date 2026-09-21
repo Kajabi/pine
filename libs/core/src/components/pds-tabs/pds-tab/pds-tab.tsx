@@ -8,6 +8,22 @@ import { Component, Element, Fragment, Host, h, Prop, Event, EventEmitter } from
 export class PdsTab {
   @Element() el: HTMLPdsTabElement;
 
+  // Unwraps a nested <a>/<button> in place (move-then-remove) left by a page-cache (Turbo, bfcache) reconnect.
+  componentDidRender() {
+    const contentDiv = this.el.querySelector('.pds-tab__content');
+    if (contentDiv === null) return;
+
+    let nestedControl = contentDiv.firstElementChild;
+    while (nestedControl?.matches('a.pds-tab, button.pds-tab')) {
+      const nestedContent = nestedControl.querySelector('.pds-tab__content');
+      Array.from((nestedContent ?? nestedControl).childNodes).forEach((node) =>
+        contentDiv.insertBefore(node, nestedControl)
+      );
+      nestedControl.remove();
+      nestedControl = contentDiv.firstElementChild;
+    }
+  }
+
   /**
    * Determines the tab's disabled state.
    * @defaultValue false
