@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsModalFooter } from '../pds-modal-footer';
+import { expectReconnectSafe } from '../../../../utils/test/reconnect-safety';
 
 describe('pds-modal-footer', () => {
   it('renders the slotted content inside a footer wrapper', async () => {
@@ -40,6 +41,10 @@ describe('pds-modal-footer', () => {
 
       expect(page.root?.querySelectorAll('footer').length).toBe(1);
       expect(page.root?.querySelector('footer')?.textContent?.trim()).toBe('Actions');
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe([PdsModalFooter], `<pds-modal-footer>Actions</pds-modal-footer>`);
     });
   });
 });

@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { MockPdsModal } from './mock-pds-modal';
 import { PdsModal } from '../pds-modal';
+import { expectReconnectSafe } from '../../../utils/test/reconnect-safety';
 
 // Test the modal component using our mock implementation
 describe('pds-modal', () => {
@@ -290,6 +291,10 @@ describe('pds-modal', () => {
 
       expect(page.root?.querySelectorAll('dialog').length).toBe(1);
       expect(page.root?.querySelector('.pds-modal')?.textContent?.trim()).toBe('Body');
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe([PdsModal], `<pds-modal><p>Body</p></pds-modal>`);
     });
   });
 });

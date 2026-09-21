@@ -143,6 +143,21 @@ export class PdsRadio {
     exposeTypeProperty(this.el, () => this._type);
   }
 
+  // Discards stale hidden label/message/wrapper copies left by a page-cache (Turbo, bfcache) reconnect, rescuing real [slot="image"] content stranded inside a stale image-container first.
+  componentDidRender() {
+    const freshImageContainer = this.el.querySelector('.pds-radio__image-container:not([hidden])');
+    const staleSelector =
+      '.pds-radio__image-container[hidden], .pds-radio__content-wrapper[hidden], label[hidden], .pds-radio__message[hidden]';
+
+    Array.from(this.el.querySelectorAll(staleSelector)).forEach((stale) => {
+      const imageSlotContent = stale.querySelector('[slot="image"]');
+      if (imageSlotContent !== null && freshImageContainer !== null) {
+        freshImageContainer.appendChild(imageSlotContent);
+      }
+      stale.remove();
+    });
+  }
+
   render() {
     const renderLabelAndMessages = () => [
       <label htmlFor={this.componentId} key={`${this.componentId}-label`}>

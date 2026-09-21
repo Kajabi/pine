@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsRadioGroup } from '../pds-radio-group';
 import { PdsRadio } from '../../pds-radio/pds-radio';
+import { expectReconnectSafe } from '../../../utils/test/reconnect-safety';
 
 describe('pds-radio-group', () => {
   it('renders', async () => {
@@ -26,6 +27,7 @@ describe('pds-radio-group', () => {
     const radios = page.root?.querySelectorAll('pds-radio');
     expect(radios?.length).toBe(2);
   });
+
 
   it('applies name attribute to all child radios', async () => {
     const page = await newSpecPage({
@@ -446,6 +448,57 @@ describe('pds-radio-group', () => {
 
     const style = page.root?.style.getPropertyValue('--pds-radio-group-gap');
     expect(style).toBe('var(--pine-dimension-100)');
+  });
+
+  describe('reconnecting over an already-hydrated snapshot', () => {
+    // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
+    // prior render already in its light DOM — label, radios wrapper, and helper/error
+    // messages all sweep into the fresh radios wrapper since none carry a `slot`.
+    it('unwraps the radios and discards duplicate label/message siblings', async () => {
+      const page = await newSpecPage({
+        components: [PdsRadioGroup, PdsRadio],
+        html: `
+          <pds-radio-group name="test-group" group-label="Pick one" helper-message="Helper" error-message="Error" component-id="grp1">
+            <div class="pds-radio-group__label">Pick one</div>
+            <div class="pds-radio-group__radios">
+              <pds-radio component-id="radio1" label="Option 1" value="1"></pds-radio>
+            </div>
+            <div class="pds-radio-group__message" id="grp1-helper">Helper</div>
+            <div class="pds-radio-group__message pds-radio-group__message--error" id="grp1-error">Error</div>
+          </pds-radio-group>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('.pds-radio-group__label').length).toBe(1);
+      expect(page.root?.querySelectorAll('.pds-radio-group__radios').length).toBe(1);
+      expect(page.root?.querySelectorAll('.pds-radio-group__message').length).toBe(2);
+      expect(page.root?.querySelectorAll('pds-radio').length).toBe(1);
+      expect(page.root?.querySelector('.pds-radio-group__radios pds-radio')).not.toBeNull();
+      // The duplicate stale ids must not survive alongside the real ones.
+      const helperIds = Array.from(page.root?.querySelectorAll('#grp1-helper, [id$="__helper-message"]') ?? []);
+      expect(helperIds.length).toBe(1);
+    });
+
+    it('leaves pristine (never-hydrated) content alone', async () => {
+      const page = await newSpecPage({
+        components: [PdsRadioGroup, PdsRadio],
+        html: `
+          <pds-radio-group name="test-group">
+            <pds-radio component-id="radio1" label="Option 1" value="1"></pds-radio>
+          </pds-radio-group>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('.pds-radio-group__radios').length).toBe(1);
+      expect(page.root?.querySelectorAll('pds-radio').length).toBe(1);
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe(
+        [PdsRadioGroup, PdsRadio],
+        `<pds-radio-group name="test-group" group-label="Pick one" helper-message="Helper" error-message="Error" component-id="grp1"><pds-radio component-id="radio1" label="Option 1" value="1"></pds-radio></pds-radio-group>`,
+      );
+    });
   });
 });
 

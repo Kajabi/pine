@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsTabpanel } from '../pds-tabpanel';
+import { expectReconnectSafe } from '../../../../utils/test/reconnect-safety';
 
 describe('pds-tabpanel', () => {
   it('renders', async () => {
@@ -87,6 +88,13 @@ describe('pds-tabpanel', () => {
 
       expect(page.root?.querySelectorAll('.pds-tabpanel').length).toBe(1);
       expect(page.root?.querySelector('.pds-tabpanel')?.textContent?.trim()).toBe('Content');
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe(
+        [PdsTabpanel],
+        `<pds-tabpanel selected="true" parent-component-id="foo" name="two">Content</pds-tabpanel>`,
+      );
     });
   });
 });

@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsModalHeader } from '../pds-modal-header';
+import { expectReconnectSafe } from '../../../../utils/test/reconnect-safety';
 
 describe('pds-modal-header', () => {
   it('renders the slotted content inside a header wrapper', async () => {
@@ -40,6 +41,10 @@ describe('pds-modal-header', () => {
 
       expect(page.root?.querySelectorAll('header').length).toBe(1);
       expect(page.root?.querySelector('header')?.textContent?.trim()).toBe('Title');
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe([PdsModalHeader], `<pds-modal-header>Title</pds-modal-header>`);
     });
   });
 });

@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsRadio } from '../pds-radio';
 import { danger } from '@pine-ds/icons/icons';
+import { expectReconnectSafe } from '../../../utils/test/reconnect-safety';
 
 describe('pds-radio', () => {
   it('renders', async () => {
@@ -17,6 +18,74 @@ describe('pds-radio', () => {
         </label>
       </pds-radio>
     `);
+  });
+
+  describe('reconnecting over an already-hydrated snapshot', () => {
+    // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
+    // prior render already in its light DOM. None of the label/message/image markup
+    // is slotted, so Stencil hides (but doesn't remove) the stale copy — leaving a
+    // duplicate `id` in the DOM even though it's visually hidden.
+    it('discards stale hidden label/message copies, keeping only the fresh ones', async () => {
+      const page = await newSpecPage({
+        components: [PdsRadio],
+        html: `
+          <pds-radio component-id="default" label="Label text" helper-message="Helper" error-message="Error">
+            <label for="default">
+              <input type="radio" id="default">
+              <span>Label text</span>
+            </label>
+            <div class="pds-radio__message" id="default__helper-message">Helper</div>
+            <div class="pds-radio__message pds-radio__message--error" id="default__error-message">Error</div>
+          </pds-radio>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('label').length).toBe(1);
+      expect(page.root?.querySelectorAll('#default').length).toBe(1);
+      expect(page.root?.querySelectorAll('.pds-radio__message').length).toBe(2);
+      expect(page.root?.querySelector('label[hidden]')).toBeNull();
+    });
+
+    it('rescues real [slot="image"] content stranded inside a stale image-container', async () => {
+      const page = await newSpecPage({
+        components: [PdsRadio],
+        html: `
+          <pds-radio component-id="default" label="Label text">
+            <div class="pds-radio__image-container" part="image-container">
+              <img slot="image" src="x.png" />
+            </div>
+            <div class="pds-radio__content-wrapper">
+              <label for="default">
+                <input type="radio" id="default" class="visually-hidden">
+                <span>Label text</span>
+              </label>
+            </div>
+          </pds-radio>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('.pds-radio__image-container').length).toBe(1);
+      expect(page.root?.querySelectorAll('.pds-radio__content-wrapper').length).toBe(1);
+      expect(page.root?.querySelector('.pds-radio__image-container img[slot="image"]')).not.toBeNull();
+      expect(page.root?.querySelector('.pds-radio__image-container[hidden]')).toBeNull();
+    });
+
+    it('leaves pristine (never-hydrated) content alone', async () => {
+      const page = await newSpecPage({
+        components: [PdsRadio],
+        html: `<pds-radio component-id="default" label="Label text"></pds-radio>`,
+      });
+
+      expect(page.root?.querySelectorAll('label').length).toBe(1);
+      expect(page.root?.querySelectorAll('#default').length).toBe(1);
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe(
+        [PdsRadio],
+        `<pds-radio component-id="default" label="Label text" helper-message="Helper" error-message="Error"></pds-radio>`,
+      );
+    });
   });
 
   it('renders with id when componentId prop is set', async () => {
