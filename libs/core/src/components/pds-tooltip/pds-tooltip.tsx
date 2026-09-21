@@ -135,7 +135,32 @@ export class PdsTooltip {
     }
   }
 
+  // Unwraps stale nested trigger/content-slot-wrapper siblings left by a page-cache (Turbo, bfcache) reconnect, rerouting content-slot content back to the real content wrapper.
+  private unwrapReconnectedSlots() {
+    // Direct children only — querySelector would find a stale nested wrapper first.
+    const trigger = Array.from(this.el.children).find((child) => child.matches('.pds-tooltip__trigger'));
+    const contentWrapper = Array.from(this.el.children).find((child) =>
+      child.matches('.pds-tooltip__content-slot-wrapper')
+    );
+    if (trigger === undefined || contentWrapper === undefined) return;
+
+    const staleSelector = '.pds-tooltip__trigger, .pds-tooltip__content-slot-wrapper';
+    const findStale = () => Array.from(trigger.children).find((child) => child.matches(staleSelector));
+
+    let stale = findStale();
+    while (stale !== undefined) {
+      const destination = stale.matches('.pds-tooltip__content-slot-wrapper') ? contentWrapper : trigger;
+      Array.from(stale.childNodes).forEach((node) =>
+        destination === trigger ? trigger.insertBefore(node, stale) : destination.appendChild(node)
+      );
+      stale.remove();
+      stale = findStale();
+    }
+  }
+
   componentDidRender() {
+    this.unwrapReconnectedSlots();
+
     if (this.opened && this.portalEl === null) {
       this.createPortal();
     } else if (!this.opened && this.portalEl !== null) {

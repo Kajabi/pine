@@ -258,4 +258,38 @@ describe('pds-modal', () => {
     // the spec mock-doc environment does not implement — it is covered in the e2e
     // suite where a real browser exercises focus and key events.
   });
+
+  describe('reconnecting over an already-hydrated snapshot', () => {
+    // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
+    // prior render already in its light DOM, nesting a stale dialog inside the fresh one.
+    it('does not nest a second dialog', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `
+          <pds-modal>
+            <dialog class="pds-modal__backdrop">
+              <div class="pds-modal pds-modal--md" part="modal">
+                <pds-modal-header>Title</pds-modal-header>
+                <p>Body</p>
+              </div>
+            </dialog>
+          </pds-modal>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('dialog').length).toBe(1);
+      expect(page.root?.querySelector('pds-modal-header')).not.toBeNull();
+      expect(page.root?.querySelector('.pds-modal')?.textContent?.trim()).toContain('Body');
+    });
+
+    it('leaves pristine (never-hydrated) content alone', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal><p>Body</p></pds-modal>`,
+      });
+
+      expect(page.root?.querySelectorAll('dialog').length).toBe(1);
+      expect(page.root?.querySelector('.pds-modal')?.textContent?.trim()).toBe('Body');
+    });
+  });
 });
