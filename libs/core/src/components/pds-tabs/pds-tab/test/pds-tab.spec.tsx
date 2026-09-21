@@ -241,10 +241,7 @@ describe('pds-tabs', () => {
   });
 
   describe('reconnecting over an already-hydrated snapshot', () => {
-    // A page-cache restore (Turbo, browser bfcache) can reconnect this element
-    // with its own previous render already sitting in its light DOM. Stencil's
-    // slot relocation nests that stale wrapper inside the freshly rendered one;
-    // componentDidRender cleans that up after the fact.
+    // Simulates a Turbo/bfcache restore reconnecting this element over its own prior render.
     it('does not nest a second anchor around an already-hydrated nav tab', async () => {
       const page = await newSpecPage({
         components: [PdsTab],

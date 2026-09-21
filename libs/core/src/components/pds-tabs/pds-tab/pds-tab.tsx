@@ -8,17 +8,7 @@ import { Component, Element, Fragment, Host, h, Prop, Event, EventEmitter } from
 export class PdsTab {
   @Element() el: HTMLPdsTabElement;
 
-  // A page-cache restore (Turbo, browser bfcache) or any other DOM move can
-  // reconnect this element with its own previous render still in its light DOM —
-  // shadow: false means that markup IS this element's children, not hidden behind
-  // a shadow boundary. Stencil's light-DOM slot relocation captures that stale
-  // markup as "the" slotted content and nests it into the freshly rendered
-  // wrapper's .pds-tab__content, giving a second <a>/<button> (and a second
-  // active-tab underline) inside the first. That capture happens before
-  // componentWillLoad runs, so unwrapping there is too late to stop the nesting.
-  // Instead, clean it up here, once Stencil has actually rendered: if the wrapper
-  // we just rendered contains another wrapper instead of plain content, pull the
-  // real (innermost) content out and drop the stale nested one.
+  // Flattens a nested <a>/<button> left when a page-cache restore (Turbo, bfcache) reconnects this light-DOM element over its own prior render.
   componentDidRender() {
     const contentDiv = this.el.querySelector('.pds-tab__content');
     const nestedControl = contentDiv?.firstElementChild;

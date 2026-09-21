@@ -10,12 +10,7 @@ describe('pds-tab', () => {
   });
 
   describe('reconnecting over an already-hydrated snapshot', () => {
-    // Reproduces a Turbo page-cache (or browser bfcache) restore: the DOM that
-    // gets reconnected already contains this component's own previous render.
-    // Simulated here by re-parsing an already-hydrated tab's outerHTML into a
-    // fresh element, the same way the browser upgrades newly-parsed markup on a
-    // cache restore. Without the componentWillLoad unwrap, this nests a second
-    // <a> (and a second active-tab underline) inside the first.
+    // Re-parses an already-hydrated tab's outerHTML, the way a Turbo/bfcache restore reconnects it.
     it('does not nest a second anchor around an already-hydrated nav tab', async () => {
       const page = await newE2EPage();
       await page.setContent(`
