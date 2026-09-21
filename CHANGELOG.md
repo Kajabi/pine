@@ -1,3 +1,13 @@
+## 3.31.1 (2026-09-21)
+
+### Bug Fixes 🐛
+
+- **pds-modal:** fix page-cache reconnect bug across modal, tabpanel, tooltip, radio and sortable ([#806](https://github.com/Kajabi/pine/pull/806))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.31.0 (2026-09-21)
 
 ### Features 🚀
