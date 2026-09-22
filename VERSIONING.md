@@ -93,8 +93,9 @@ before/after snippet:
 - **Version:** Nx Release computes the bump from the Conventional Commits since the
   last release (`feat` → minor, `fix` → patch, `feat!`/`BREAKING CHANGE:` →
   major). Writing the right commit type is part of getting the version right.
-- **Publish:** to npm with provenance (`NPM_CONFIG_PROVENANCE: true`); the version
-  commit and tag are pushed by CI.
+- **Publish:** to npm through [trusted publishing](https://docs.npmjs.com/trusted-publishers)
+  (a short-lived OIDC token from the workflow run, no stored npm token) with
+  provenance; the version commit and tag are pushed by CI.
 - **Changelog:** `CHANGELOG.md` is generated from commit history; migration notes
   for breaking changes should be reflected there.
 
