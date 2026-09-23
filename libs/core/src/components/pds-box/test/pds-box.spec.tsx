@@ -265,6 +265,7 @@ describe('pds-box', () => {
 
       expect(page.root).toHaveClass(`pds-box--border-${side}`);
       expect(page.root).not.toHaveClass(`pds-box--border-${side}-none`);
+      expect(page.root).not.toHaveClass('pds-box--border');
     });
 
     it.each(sides)('renders the none class for "%s" when set to false', async (side) => {
@@ -277,24 +278,16 @@ describe('pds-box', () => {
       expect(page.root).not.toHaveClass(`pds-box--border-${side}`);
     });
 
-    it.each(sides)('renders no border class for "%s" when unset', async (side) => {
+    it('renders no per-side border classes when unset', async () => {
       const page = await newSpecPage({
         components: [PdsBox],
         html: `<pds-box></pds-box>`,
       });
 
-      expect(page.root).not.toHaveClass(`pds-box--border-${side}`);
-      expect(page.root).not.toHaveClass(`pds-box--border-${side}-none`);
-    });
-
-    it('does not render the all-sides border class when only a side is set', async () => {
-      const page = await newSpecPage({
-        components: [PdsBox],
-        html: `<pds-box border-block-end="true"></pds-box>`,
+      sides.forEach((side) => {
+        expect(page.root).not.toHaveClass(`pds-box--border-${side}`);
+        expect(page.root).not.toHaveClass(`pds-box--border-${side}-none`);
       });
-
-      expect(page.root).toHaveClass('pds-box--border-block-end');
-      expect(page.root).not.toHaveClass('pds-box--border');
     });
 
     it('renders both classes when a side overrides border', async () => {

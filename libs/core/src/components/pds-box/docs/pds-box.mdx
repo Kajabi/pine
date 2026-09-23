@@ -406,8 +406,6 @@ By default, `border` applies to all four sides. Use `border-block-start`, `borde
 
 These follow the same longhand-over-shorthand rules as CSS: `border` sets every side, and a per-side property overrides the side it names. Set a side to `true` to add a border, `false` to remove one, or leave it unset to inherit whatever `border` specifies.
 
-Use these for dividers between stacked rows, a rail alongside a sidebar, or a bordered card that drops one edge where it meets a neighbor.
-
 <DocCanvas
   mdxSource={{
     react: `<PdsBox border-block-end="true" padding="sm">Divider row</PdsBox>
@@ -424,7 +422,7 @@ Use these for dividers between stacked rows, a rail alongside a sidebar, or a bo
   </pds-box>
 </DocCanvas>
 
-Per-side borders use the same color and width as `border`, so `border-color` applies to every edge you turn on.
+For a standalone rule between unrelated blocks of content, reach for `pds-divider` instead — these props are for edges that belong to the box itself.
 
 ### Border Color
 Please refer to the color brand guidelines for the appropriate color to use. Use `border-color` to change the color of the border. Accepts any valid color token or CSS color value.

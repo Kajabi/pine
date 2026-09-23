@@ -120,23 +120,24 @@ $pine-spacing-tokens: (
   width: 100%;
 }
 
+$border-sides: ('block-start', 'block-end', 'inline-start', 'inline-end');
+$box-border-color: var(--color-border-box, var(--pine-color-border));
+
 .pds-box--border {
-  border-color: var(--color-border-box, var(--pine-color-border));
+  border-color: $box-border-color;
   border-style: solid;
   border-width: var(--border-width-default);
 }
 
 // Per-side border helpers
-@each $side in ('block-start', 'block-end', 'inline-start', 'inline-end') {
+@each $side in $border-sides {
   .pds-box--border-#{$side} {
-    border-#{$side}: var(--border-width-default) solid var(--color-border-box, var(--pine-color-border));
+    border-#{$side}: var(--border-width-default) solid $box-border-color;
   }
-}
 
-// Must stay after the rules above; equal specificity means source order decides which wins
-@each $side in ('block-start', 'block-end', 'inline-start', 'inline-end') {
-  .pds-box--border-#{$side}-none {
-    border-#{$side}: 0;
+  // Element selector outranks .pds-box--border so an explicit `false` wins regardless of rule order
+  pds-box.pds-box--border-#{$side}-none {
+    border-#{$side}: var(--pine-border-width-none);
   }
 }
 
