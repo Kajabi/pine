@@ -22,6 +22,28 @@ $pds-divider-offsets: (
   width: 1px;
 }
 
+.pds-divider--labeled {
+  align-items: center;
+  background: none;
+  color: var(--pine-color-text);
+  font: var(--pine-typography-body-sm-medium);
+  gap: var(--pine-dimension-sm);
+  height: auto;
+  width: auto;
+
+  &::before,
+  &::after {
+    background: var(--pine-color-border);
+    content: '';
+    flex: 1;
+    height: var(--pine-border-width);
+  }
+}
+
+.pds-divider__label {
+  text-align: center;
+}
+
 @each $offset, $value in $pds-divider-offsets {
   .pds-divider--offset-#{$offset} {
     margin: 0 calc($value * -1);
@@ -30,6 +52,11 @@ $pds-divider-offsets: (
     &.pds-divider--vertical {
       margin: calc($value * -1) 0;
       padding: $value 0;
+    }
+
+    // Lines are pseudo-elements inside the content box, so padding would inset them instead of bleeding.
+    &.pds-divider--labeled {
+      padding: 0;
     }
   }
 }

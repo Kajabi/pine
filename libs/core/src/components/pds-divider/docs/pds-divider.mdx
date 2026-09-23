@@ -108,6 +108,24 @@ Below, you will see a vertical divider using a large offset.
   </div>
 </DocCanvas>
 
+### With label
+
+Set the `label` prop to display text centered between two lines, such as a date separator in a chat or a heading between groups of content. The label is announced to screen readers as the name of the separator.
+
+**Note**: The `label` prop is ignored when `vertical` is `true`.
+
+To customize the label styles, such as its color, target the `label` part: `pds-divider::part(label) { color: var(--pine-color-text-secondary); }`.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsDivider label="Today" />',
+    webComponent: '<pds-divider label="Today"></pds-divider>'
+}}>
+  <div style={{width: '100%'}}>
+    <pds-divider label="Today"></pds-divider>
+  </div>
+</DocCanvas>
+
 ## Playground
 
 <Canvas of={stories.Default} />
