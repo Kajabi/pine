@@ -90,6 +90,19 @@ describe('pds-divider accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  it('exposes the label once, as the separator name', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-divider label="Today"></pds-divider>');
+
+    const tree = await page.accessibility.snapshot({ interestingOnly: false });
+    const findSeparator = (node) => node.role === 'separator' ? node : node.children?.map(findSeparator).find(Boolean);
+    const collectText = (node) => [node.role === 'StaticText' ? node.name : null, ...(node.children ?? []).flatMap(collectText)].filter(Boolean);
+    const separator = findSeparator(tree);
+
+    expect(separator.name).toBe('Today');
+    expect(collectText(separator)).toEqual([]);
+  });
+
   it('has no axe violations with a label', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-divider label="Today"></pds-divider>');

@@ -67,7 +67,7 @@ describe('pds-divider', () => {
       <pds-divider label="Today">
         <mock:shadow-root>
           <div class="pds-divider pds-divider--labeled" role="separator" aria-label="Today">
-            <span class="pds-divider__label" part="label">Today</span>
+            <span class="pds-divider__label" part="label" aria-hidden="true">Today</span>
           </div>
         </mock:shadow-root>
       </pds-divider>
@@ -96,6 +96,15 @@ describe('pds-divider', () => {
         </mock:shadow-root>
       </pds-divider>
     `);
+  });
+
+  it('renders a plain divider when label is whitespace only', async () => {
+    const page = await newSpecPage({
+      components: [PdsDivider],
+      html: `<pds-divider label="   " />`,
+    });
+    expect(page.root.shadowRoot.querySelector('hr')).not.toBeNull();
+    expect(page.root.shadowRoot.querySelector('[role="separator"]')).toBeNull();
   });
 
   it('renders a plain divider when label is empty', async () => {
