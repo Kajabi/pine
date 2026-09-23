@@ -14,6 +14,17 @@ const createMockOption = (value: string, label: string, selected: boolean = fals
   getAttribute: jest.fn(),
 } as unknown as HTMLOptionElement);
 
+const createMockChipOption = (value: string, label: string, attrs: Record<string, string>) => ({
+  value,
+  label,
+  tagName: 'OPTION',
+  textContent: label,
+  hasAttribute: jest.fn((attr: string) => attr in attrs),
+  getAttribute: jest.fn((attr: string) => attrs[attr] ?? null),
+  setAttribute: jest.fn(),
+  removeAttribute: jest.fn(),
+} as unknown as HTMLOptionElement);
+
 // updateFormValue() no-ops while isSpecTest() is true, so form association has to be
 // re-enabled for a test to observe what reaches ElementInternals.setFormValue().
 const withFormAssociationEnabled = async (run: () => void | Promise<void>) => {
@@ -268,6 +279,91 @@ describe('pds-combobox', () => {
 
     const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
     expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--large')).toBe(true);
+  });
+
+  it('renders the selected chip option at size lg when the option has chip-large', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const option = createMockChipOption('cat', 'Cat', { 'chip-sentiment': 'accent', 'chip-large': '' });
+    component.optionEls = [option];
+    component.allItems = [option];
+    (component as any).setSelectedOption(option);
+    await page.waitForChanges();
+
+    const chip = page.root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger-auto');
+    expect(chip?.getAttribute('size')).toBe('lg');
+  });
+
+  it('renders the selected chip option without a size when the option lacks chip-large', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const option = createMockChipOption('cat', 'Cat', { 'chip-sentiment': 'accent' });
+    component.optionEls = [option];
+    component.allItems = [option];
+    (component as any).setSelectedOption(option);
+    await page.waitForChanges();
+
+    const chip = page.root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger-auto');
+    expect(chip).not.toBeNull();
+    expect(chip?.hasAttribute('size')).toBe(false);
+  });
+
+  it('renders dropdown chip options at size lg when the option has chip-large', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const option = createMockChipOption('cat', 'Cat', { 'chip-sentiment': 'accent', 'chip-large': '' });
+    component.optionEls = [option];
+    component.allItems = [option];
+    component.filteredItems = [option];
+    component.isOpen = true;
+    await page.waitForChanges();
+
+    const chip = page.root?.shadowRoot?.querySelector('.pds-combobox__option-chip');
+    expect(chip?.getAttribute('size')).toBe('lg');
+  });
+
+  it('sizes the chip trigger large when slotted trigger content is a size lg chip', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" custom-trigger-content><pds-chip slot="trigger-content" size="lg">Status</pds-chip></pds-combobox>`,
+    });
+
+    expect((page.rootInstance as any).selectedChipLarge).toBe(true);
+  });
+
+  it('sizes the chip trigger large when the selected layout option contains a size lg chip', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" custom-option-layouts></pds-combobox>`,
+    });
+
+    const layoutChip = { getAttribute: jest.fn((attr: string) => (attr === 'size' ? 'lg' : null)) };
+    const option = {
+      value: 'paid',
+      label: 'Paid',
+      tagName: 'OPTION',
+      textContent: 'Paid',
+      hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+      getAttribute: jest.fn(() => null),
+      querySelector: jest.fn((selector: string) => (selector === 'pds-chip' ? layoutChip : null)),
+      setAttribute: jest.fn(),
+      removeAttribute: jest.fn(),
+    } as unknown as HTMLOptionElement;
+    page.rootInstance.selectedOption = option;
+
+    expect((page.rootInstance as any).selectedChipLarge).toBe(true);
   });
 
   it('renders with select-only mode', async () => {

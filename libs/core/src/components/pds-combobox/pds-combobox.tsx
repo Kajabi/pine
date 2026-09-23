@@ -1422,13 +1422,13 @@ export class PdsCombobox implements BasePdsProps {
     // Second priority: Check selected option's layout content (existing custom layout approach)
     if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
       const chipElement = this.selectedOption.querySelector('pds-chip');
-      if (chipElement?.hasAttribute('large')) return true;
+      if (chipElement?.getAttribute('size') === 'lg') return true;
     }
 
     // Third priority: Check if we have custom trigger content with a chip (initial state)
     if (this.customTriggerContent) {
       const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
-      if (slottedChip && slottedChip.hasAttribute('large')) {
+      if (slottedChip && slottedChip.getAttribute('size') === 'lg') {
         return true;
       }
     }
@@ -1828,7 +1828,7 @@ export class PdsCombobox implements BasePdsProps {
       <pds-chip
         sentiment={this.selectedOptionChipProps.sentiment as any}
         variant="dropdown" // Always use dropdown variant for triggers
-        large={this.selectedOptionChipProps.large}
+        size={this.selectedOptionChipProps.large ? 'lg' : undefined}
         icon={this.selectedOptionChipProps.icon}
         dot={this.selectedOptionChipProps.dot}
         class="pds-combobox__chip-trigger-auto"
@@ -1882,7 +1882,7 @@ export class PdsCombobox implements BasePdsProps {
       <pds-chip
         sentiment={chipProps.sentiment as any}
         variant="text" // Dropdown options use text variant, not dropdown
-        large={chipProps.large}
+        size={chipProps.large ? 'lg' : undefined}
         icon={chipProps.icon}
         dot={chipProps.dot}
         class="pds-combobox__option-chip"
