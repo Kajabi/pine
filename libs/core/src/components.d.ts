@@ -880,12 +880,6 @@ export namespace Components {
          */
         "icon"?: string;
         /**
-          * Determines whether the chip should be displayed in a larger size. DEPRECATED.
-          * @defaultValue false
-          * @deprecated Use `size` prop instead. Set `size="lg"` for the large variant.
-         */
-        "large": boolean;
-        /**
           * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
         "maxWidth"?: string;
@@ -4160,12 +4154,6 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Determines whether the chip should be displayed in a larger size. DEPRECATED.
-          * @defaultValue false
-          * @deprecated Use `size` prop instead. Set `size="lg"` for the large variant.
-         */
-        "large"?: boolean;
-        /**
           * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
         "maxWidth"?: string;
@@ -6100,7 +6088,6 @@ declare namespace LocalJSX {
         "componentId": string;
         "dot": boolean;
         "icon": string;
-        "large": boolean;
         "size": ChipSizeType;
         "sentiment": ChipSentimentType;
         "variant": ChipVariantType;

@@ -26,14 +26,6 @@ describe('pds-chip', () => {
     expect(element).toHaveClass('pds-chip--lg');
   });
 
-  it('renders large size via deprecated large prop with pds-chip--lg class', async () => {
-    const page = await newE2EPage();
-    await page.setContent('<pds-chip large>Large</pds-chip>');
-
-    const element = await page.find('pds-chip');
-    expect(element).toHaveClass('pds-chip--lg');
-  });
-
   it('shrinks a bare-text default (text variant) label below its content width when max-width is set', async () => {
     const page = await newE2EPage();
     await page.setContent(`

@@ -97,40 +97,10 @@ describe('pds-chip', () => {
     `);
   });
 
-  it('renders large size when deprecated large prop is set (backward compat)', async () => {
+  it('renders no size modifier class when size prop is md', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
-      html: `<pds-chip large="true" />`,
-    });
-
-    expect(page.root).toEqualHtml(`
-    <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--text" large="true">
-      <mock:shadow-root>
-        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
-      </mock:shadow-root>
-    </pds-chip>
-    `);
-  });
-
-  it('size prop takes precedence over large prop when both are set', async () => {
-    const page = await newSpecPage({
-      components: [PdsChip],
-      html: `<pds-chip size="sm" large="true" />`,
-    });
-
-    expect(page.root).toEqualHtml(`
-    <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--text" size="sm" large="true">
-      <mock:shadow-root>
-        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
-      </mock:shadow-root>
-    </pds-chip>
-    `);
-  });
-
-  it('explicit size="md" takes precedence over large prop', async () => {
-    const page = await newSpecPage({
-      components: [PdsChip],
-      html: `<pds-chip size="md" large="true" />`,
+      html: `<pds-chip size="md" />`,
     });
 
     expect(page.root.className).not.toContain('pds-chip--lg');

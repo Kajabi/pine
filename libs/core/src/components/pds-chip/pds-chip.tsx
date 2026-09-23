@@ -40,13 +40,6 @@ export class PdsChip {
   @Prop() icon?: string;
 
   /**
-   * Determines whether the chip should be displayed in a larger size. DEPRECATED.
-   * @defaultValue false
-   * @deprecated Use `size` prop instead. Set `size="lg"` for the large variant.
-   */
-  @Prop() large = false;
-
-  /**
    * Sets the size of the chip.
    * @defaultValue 'md'
    */
@@ -148,9 +141,7 @@ export class PdsChip {
   };
 
   private get effectiveSize(): ChipSizeType {
-    if (this.size != null) return this.size;
-    if (this.large) return 'lg';
-    return 'md';
+    return this.size ?? 'md';
   }
 
   private classNames() {
