@@ -168,6 +168,29 @@ describe('pds-chip', () => {
     expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
   });
 
+  it('re-binds the tooltip to the new label node after the variant changes', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>',
+    );
+
+    // Switching variant remounts the label span; the tooltip must re-attach to
+    // the current node rather than the detached original.
+    const chip = await page.find('pds-chip');
+    chip.setProperty('variant', 'dropdown');
+    await page.waitForChanges();
+
+    await page.hover('pds-chip');
+    await page.waitForChanges();
+
+    const tooltipText = await page.evaluate(() => {
+      const portal = document.querySelector('.pds-truncation-tooltip');
+      return portal ? portal.textContent.trim() : null;
+    });
+
+    expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
+  });
+
   it('emits "pdsTagCloseClick" event when close button is clicked in tag variant', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-chip variant="tag" label="Tag Chip" />');

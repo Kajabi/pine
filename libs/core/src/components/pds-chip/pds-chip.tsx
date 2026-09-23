@@ -1,5 +1,5 @@
 import { downSmall, remove } from '@pine-ds/icons/icons';
-import { Component, Host, h, Prop, Event, EventEmitter, Element, Watch } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
 import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
 import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 
@@ -18,6 +18,8 @@ export class PdsChip {
 
   /** The label span that clips; the overflow anchor for the truncation tooltip. */
   private labelTextEl?: HTMLElement;
+  /** The node the tooltip is currently bound to, so a remount can re-bind. */
+  private tooltipBoundEl?: HTMLElement | null;
   private truncationCleanup: (() => void) | null = null;
 
   /**
@@ -100,18 +102,17 @@ export class PdsChip {
    */
   @Event() pdsTagCloseClick: EventEmitter<void>;
 
-  @Watch('maxWidth')
-  handleMaxWidthChange(newValue?: string) {
-    if (newValue) {
-      this.initTruncationTooltip();
-    } else {
+  // Bind (and re-bind) here, not just on load: changing variant/size remounts
+  // the label span, so the tooltip has to re-attach to the current node or it
+  // would keep measuring a detached one. Keyed on node identity so an unrelated
+  // re-render doesn't tear a working tooltip down.
+  componentDidRender() {
+    if (this.maxWidth && this.labelTextEl) {
+      if (this.labelTextEl !== this.tooltipBoundEl) {
+        this.initTruncationTooltip();
+      }
+    } else if (this.tooltipBoundEl) {
       this.destroyTruncationTooltip();
-    }
-  }
-
-  componentDidLoad() {
-    if (this.maxWidth) {
-      this.initTruncationTooltip();
     }
   }
 
@@ -130,6 +131,7 @@ export class PdsChip {
         contentEl: this.labelTextEl,
         getTooltipText: () => this.el.textContent || '',
       });
+      this.tooltipBoundEl = this.labelTextEl;
     }
   }
 
@@ -138,6 +140,7 @@ export class PdsChip {
       this.truncationCleanup();
       this.truncationCleanup = null;
     }
+    this.tooltipBoundEl = null;
   }
 
   private handleCloseClick = () => {
