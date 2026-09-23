@@ -1,3 +1,19 @@
+# 4.0.0 (2026-09-23)
+
+### Features 🚀
+
+- **pds-box:** support per-side border control ([#811](https://github.com/Kajabi/pine/pull/811))
+- **pds-chip:** add maxWidth prop to auto-truncate the slotted label ([#808](https://github.com/Kajabi/pine/pull/808))
+
+### Bug Fixes 🐛
+
+- **pds-text:** make truncate actually shrink the host, not just style its inner tag ([#809](https://github.com/Kajabi/pine/pull/809))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.31.1 (2026-09-21)
 
 ### Bug Fixes 🐛
