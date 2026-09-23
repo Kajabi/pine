@@ -66,6 +66,15 @@ strong {
   font-weight: bolder;
 }
 
+// A plain `display: inline` host (the default) ignores width/max-width
+// entirely, so setting one on it does nothing — and a flex/grid item's
+// default min-width: auto refuses to shrink below its content's own width
+// regardless. Both silently defeat the "must add a width" contract below.
+:host([truncate]) {
+  display: block;
+  min-width: 0;
+}
+
 :host([truncate]) > * {
   overflow: hidden;
   text-overflow: ellipsis;
