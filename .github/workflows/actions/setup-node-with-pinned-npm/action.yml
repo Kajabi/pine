@@ -1,5 +1,5 @@
 name: 'Set up Node.js with pinned npm'
-description: 'Runs actions/setup-node then installs the npm version from package.json packageManager.'
+description: 'Runs actions/setup-node then installs the npm version from package.json packageManager (or the npm-version input).'
 
 inputs:
   node-version:
@@ -8,6 +8,10 @@ inputs:
     default: ''
   node-version-file:
     description: 'File with Node version (e.g. .nvmrc).'
+    required: false
+    default: ''
+  npm-version:
+    description: 'npm version to install instead of the package.json packageManager pin (e.g. "11"). Leave empty to use the pin.'
     required: false
     default: ''
 
@@ -27,11 +31,18 @@ runs:
       with:
         node-version-file: ${{ inputs.node-version-file }}
 
-    - name: Pin npm to package.json packageManager
+    - name: Pin npm (package.json packageManager unless overridden)
       shell: bash
+      env:
+        NPM_VERSION_OVERRIDE: ${{ inputs.npm-version }}
       run: |
-        NPM_VERSION=$(node -p "require('./package.json').packageManager.replace('npm@', '')")
-        echo "Pinning npm to ${NPM_VERSION}"
+        if [ -n "${NPM_VERSION_OVERRIDE}" ]; then
+          NPM_VERSION="${NPM_VERSION_OVERRIDE}"
+          echo "Installing npm ${NPM_VERSION} (overriding the package.json pin)"
+        else
+          NPM_VERSION=$(node -p "require('./package.json').packageManager.replace('npm@', '')")
+          echo "Pinning npm to ${NPM_VERSION}"
+        fi
         for attempt in 1 2 3; do
           npm install -g "npm@${NPM_VERSION}" && break
           if [ "$attempt" -eq 3 ]; then
