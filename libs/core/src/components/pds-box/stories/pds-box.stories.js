@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 export default {
   args: {
@@ -15,6 +16,10 @@ const BaseTemplate = (args) => html`
   auto="${args.auto}"
   background-color="${args.backgroundColor}"
 	?border=${args.border}
+  border-block-start="${ifDefined(args.borderBlockStart)}"
+  border-block-end="${ifDefined(args.borderBlockEnd)}"
+  border-inline-start="${ifDefined(args.borderInlineStart)}"
+  border-inline-end="${ifDefined(args.borderInlineEnd)}"
   border-color="${args.borderColor}"
 	border-radius="${args.borderRadius}"
   direction="${args.direction}"

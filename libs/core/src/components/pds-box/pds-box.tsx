@@ -121,9 +121,33 @@ export class PdsBox {
   @Prop() border? = false;
 
   /**
+   * If `true`, the box will have a border on the block-end edge. If `false`, the block-end edge will have no border.
+   * Overrides `border` for this edge.
+   */
+  @Prop() borderBlockEnd?: boolean;
+
+  /**
+   * If `true`, the box will have a border on the block-start edge. If `false`, the block-start edge will have no border.
+   * Overrides `border` for this edge.
+   */
+  @Prop() borderBlockStart?: boolean;
+
+  /**
    *  Defines the border color of the box.
    */
   @Prop() borderColor?: string;
+
+  /**
+   * If `true`, the box will have a border on the inline-end edge. If `false`, the inline-end edge will have no border.
+   * Overrides `border` for this edge.
+   */
+  @Prop() borderInlineEnd?: boolean;
+
+  /**
+   * If `true`, the box will have a border on the inline-start edge. If `false`, the inline-start edge will have no border.
+   * Overrides `border` for this edge.
+   */
+  @Prop() borderInlineStart?: boolean;
 
   /**
    * Defines how rounded the box corners are.
@@ -712,6 +736,14 @@ export class PdsBox {
     ${this.autoLg ? 'pds-box--auto-lg' : ''}
     ${this.autoXl ? 'pds-box--auto-xl' : ''}
     ${this.border ? 'pds-box--border' : ''}
+    ${this.borderBlockStart === true ? 'pds-box--border-block-start' : ''}
+    ${this.borderBlockStart === false ? 'pds-box--border-block-start-none' : ''}
+    ${this.borderBlockEnd === true ? 'pds-box--border-block-end' : ''}
+    ${this.borderBlockEnd === false ? 'pds-box--border-block-end-none' : ''}
+    ${this.borderInlineStart === true ? 'pds-box--border-inline-start' : ''}
+    ${this.borderInlineStart === false ? 'pds-box--border-inline-start-none' : ''}
+    ${this.borderInlineEnd === true ? 'pds-box--border-inline-end' : ''}
+    ${this.borderInlineEnd === false ? 'pds-box--border-inline-end-none' : ''}
     ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
     ${this.direction !== undefined && this.direction.trim() !== '' ? `pds-box-direction-${this.direction}` : ''}
     ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
