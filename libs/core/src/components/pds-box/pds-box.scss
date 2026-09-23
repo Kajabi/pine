@@ -126,6 +126,20 @@ $pine-spacing-tokens: (
   border-width: var(--border-width-default);
 }
 
+// Per-side border helpers
+@each $side in ('block-start', 'block-end', 'inline-start', 'inline-end') {
+  .pds-box--border-#{$side} {
+    border-#{$side}: var(--border-width-default) solid var(--color-border-box, var(--pine-color-border));
+  }
+}
+
+// Must stay after the rules above; equal specificity means source order decides which wins
+@each $side in ('block-start', 'block-end', 'inline-start', 'inline-end') {
+  .pds-box--border-#{$side}-none {
+    border-#{$side}: 0;
+  }
+}
+
 // Display helpers
 .pds-box--display-flex {
   display: flex;

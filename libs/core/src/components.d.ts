@@ -273,9 +273,25 @@ export namespace Components {
          */
         "border"?: boolean;
         /**
+          * If `true`, the box will have a border on the block-end edge. If `false`, the block-end edge will have no border. Overrides `border` for this edge.
+         */
+        "borderBlockEnd"?: boolean;
+        /**
+          * If `true`, the box will have a border on the block-start edge. If `false`, the block-start edge will have no border. Overrides `border` for this edge.
+         */
+        "borderBlockStart"?: boolean;
+        /**
           * Defines the border color of the box.
          */
         "borderColor"?: string;
+        /**
+          * If `true`, the box will have a border on the inline-end edge. If `false`, the inline-end edge will have no border. Overrides `border` for this edge.
+         */
+        "borderInlineEnd"?: boolean;
+        /**
+          * If `true`, the box will have a border on the inline-start edge. If `false`, the inline-start edge will have no border. Overrides `border` for this edge.
+         */
+        "borderInlineStart"?: boolean;
         /**
           * Defines how rounded the box corners are.
           * @defaultValue none
@@ -3539,9 +3555,25 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
+          * If `true`, the box will have a border on the block-end edge. If `false`, the block-end edge will have no border. Overrides `border` for this edge.
+         */
+        "borderBlockEnd"?: boolean;
+        /**
+          * If `true`, the box will have a border on the block-start edge. If `false`, the block-start edge will have no border. Overrides `border` for this edge.
+         */
+        "borderBlockStart"?: boolean;
+        /**
           * Defines the border color of the box.
          */
         "borderColor"?: string;
+        /**
+          * If `true`, the box will have a border on the inline-end edge. If `false`, the inline-end edge will have no border. Overrides `border` for this edge.
+         */
+        "borderInlineEnd"?: boolean;
+        /**
+          * If `true`, the box will have a border on the inline-start edge. If `false`, the inline-start edge will have no border. Overrides `border` for this edge.
+         */
+        "borderInlineStart"?: boolean;
         /**
           * Defines how rounded the box corners are.
           * @defaultValue none
@@ -5959,7 +5991,11 @@ declare namespace LocalJSX {
         "autoXl": boolean;
         "backgroundColor": string;
         "border": boolean;
+        "borderBlockEnd": boolean;
+        "borderBlockStart": boolean;
         "borderColor": string;
+        "borderInlineEnd": boolean;
+        "borderInlineStart": boolean;
         "borderRadius": `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         "direction": `row` | `column`;
         "display": `flex` | `inline-flex` | `block` | `inline-block`;
