@@ -241,9 +241,18 @@ jobs:
       ### Steps below are used for releasing a specified version type (major, minor, patch, etc.)
       - name: Release with Input Version
         if: ${{ inputs.version != '' }}
-        run: npx nx release ${{ inputs.version }} --preid ${{ inputs.preid }} --skip-publish
+        shell: bash
+        # Pass the inputs through the environment instead of interpolating ${{ }}
+        # into the shell, so a caller-supplied value cannot be injected into the
+        # command (template-injection hardening, as in pine-icons).
+        run: |
+          ARGS=("$VERSION_INPUT")
+          if [ -n "$PREID_INPUT" ]; then ARGS+=(--preid "$PREID_INPUT"); fi
+          npx nx release "${ARGS[@]}" --skip-publish
         env:
           GH_TOKEN: ${{ secrets.KAJABI_CI_GH_TOKEN }}
+          VERSION_INPUT: ${{ inputs.version }}
+          PREID_INPUT: ${{ inputs.preid }}
 
       # Publishing is its own step so its exit code counts. The release steps
       # above run `nx release --skip-publish`, which versions and writes the
