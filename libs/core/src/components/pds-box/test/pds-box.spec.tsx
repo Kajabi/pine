@@ -254,6 +254,70 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box--border');
   });
 
+  describe('per-side border props', () => {
+    const sides = ['block-start', 'block-end', 'inline-start', 'inline-end'];
+
+    it.each(sides)('renders the border class for "%s" when set to true', async (side) => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border-${side}="true"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass(`pds-box--border-${side}`);
+      expect(page.root).not.toHaveClass(`pds-box--border-${side}-none`);
+    });
+
+    it.each(sides)('renders the none class for "%s" when set to false', async (side) => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border-${side}="false"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass(`pds-box--border-${side}-none`);
+      expect(page.root).not.toHaveClass(`pds-box--border-${side}`);
+    });
+
+    it.each(sides)('renders no border class for "%s" when unset', async (side) => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box></pds-box>`,
+      });
+
+      expect(page.root).not.toHaveClass(`pds-box--border-${side}`);
+      expect(page.root).not.toHaveClass(`pds-box--border-${side}-none`);
+    });
+
+    it('does not render the all-sides border class when only a side is set', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border-block-end="true"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass('pds-box--border-block-end');
+      expect(page.root).not.toHaveClass('pds-box--border');
+    });
+
+    it('renders both classes when a side overrides border', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border="true" border-block-end="false"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass('pds-box--border');
+      expect(page.root).toHaveClass('pds-box--border-block-end-none');
+    });
+
+    it('renders multiple sides together', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border-block-end="true" border-inline-start="true"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass('pds-box--border-block-end');
+      expect(page.root).toHaveClass('pds-box--border-inline-start');
+    });
+  });
+
   it('renders border-color class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
