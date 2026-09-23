@@ -34,6 +34,19 @@ describe('pds-chip', () => {
     expect(element).toHaveClass('pds-chip--lg');
   });
 
+  it('shrinks a bare-text default (text variant) label below its content width when max-width is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip max-width="100px">
+        A very long label that would otherwise overflow the chip
+      </pds-chip>
+    `);
+
+    const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
+
+    expect(width).toBeLessThan(150);
+  });
+
   it('shrinks a bare-text tag label below its content width when max-width is set', async () => {
     const page = await newE2EPage();
     await page.setContent(`
