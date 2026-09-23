@@ -346,7 +346,7 @@ Sizes work across all variants and sentiments:
 
 ### Truncating a long label
 
-By default `pds-chip` has no size limit of its own — it sizes to whatever is slotted in. A long label (a filename, say) will keep the chip growing rather than wrap or overflow silently, which is usually not what you want next to other fixed-width UI.
+By default `pds-chip` has no size limit of its own — it sizes to whatever is slotted in, wrapping the label if its container runs out of room. A long label (a filename, say) will keep the chip growing to fit, which is usually not what you want next to other fixed-width UI.
 
 The `max-width` property caps the chip and ellipsizes the label once it no longer fits — no styling of your own required, even for a plain slotted text label like the one below.
 
