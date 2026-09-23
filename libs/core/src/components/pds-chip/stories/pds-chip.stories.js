@@ -150,3 +150,16 @@ TagWithRemoveTarget.args = {
   removeUrl: "/clear-filters",
   removeTarget: "_blank",
 }
+
+// A long label truncates only when both the host and the slotted label opt
+// in: max-width/min-width: 0 on the host (pds-chip has no width of its own),
+// and overflow/text-overflow/white-space/min-width: 0 on the slotted node
+// (pds-chip only owns markup up to the default slot). Neither alone is
+// enough — see pds-chip.scss for why .pds-chip__label needs min-width: 0
+// to let either work at all.
+export const TruncatedLabel = () => html`
+<pds-chip variant="tag" style="max-width: 200px; min-width: 0;">
+  <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">
+    A very long label that would otherwise overflow the chip
+  </span>
+</pds-chip>`;

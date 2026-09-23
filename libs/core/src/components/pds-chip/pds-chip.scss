@@ -88,6 +88,11 @@ $pds-chip-sentiment-hover: (
 .pds-chip__label {
   align-items: center;
   display: flex;
+  // A flex item's default min-width: auto refuses to shrink below its
+  // content's unwrapped size. A consumer constraining the host with
+  // max-width (e.g. to ellipsis a long slotted label) has no selector that
+  // reaches this shadow-internal element, so the override has to live here.
+  min-width: 0;
 
   pds-icon {
     margin-inline-end: var(--pine-dimension-2xs);

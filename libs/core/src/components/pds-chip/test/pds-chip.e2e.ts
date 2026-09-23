@@ -34,6 +34,26 @@ describe('pds-chip', () => {
     expect(element).toHaveClass('pds-chip--lg');
   });
 
+  it('lets a max-width host shrink its label below the label text width', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="tag" style="max-width: 100px; min-width: 0;">
+        <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">
+          A very long label that would otherwise overflow the chip
+        </span>
+      </pds-chip>
+    `);
+
+    const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
+
+    // Not pixel-exact against the 100px cap: the tag variant's own padding,
+    // border, and remove button add up to more than that on their own. The
+    // regression this guards is min-width: auto on .pds-chip__label ignoring
+    // max-width entirely and rendering at the label's full ~400px content
+    // width.
+    expect(width).toBeLessThan(150);
+  });
+
   it('emits "pdsTagCloseClick" event when close button is clicked in tag variant', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-chip variant="tag" label="Tag Chip" />');
