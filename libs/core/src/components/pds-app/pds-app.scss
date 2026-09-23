@@ -1,0 +1,38 @@
+:host {
+  background: var(--pine-color-background-app);
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  min-height: 0;
+}
+
+.pds-app__header {
+  flex: none;
+
+  &--empty {
+    display: none;
+  }
+}
+
+.pds-app__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.pds-app__nav {
+  flex: none;
+  overflow-y: auto;
+
+  &--empty {
+    display: none;
+  }
+}
+
+.pds-app__main {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}

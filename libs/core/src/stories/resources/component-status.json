@@ -18,6 +18,7 @@
   "components": {
     "pds-accordion": { "status": "stable" },
     "pds-alert": { "status": "stable" },
+    "pds-app": { "status": "beta", "note": "Proposal for DSS-237 — not yet design-reviewed." },
     "pds-avatar": { "status": "stable" },
     "pds-box": { "status": "stable" },
     "pds-button": { "status": "stable" },
@@ -51,6 +52,7 @@
     "pds-text": { "status": "stable" },
     "pds-textarea": { "status": "stable" },
     "pds-toast": { "status": "stable" },
-    "pds-tooltip": { "status": "stable" }
+    "pds-tooltip": { "status": "stable" },
+    "pds-topbar": { "status": "beta", "note": "Proposal for DSS-238 — not yet design-reviewed." }
   }
 }
