@@ -886,7 +886,7 @@ export namespace Components {
          */
         "large": boolean;
         /**
-          * Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
+          * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
         "maxWidth"?: string;
         /**
@@ -4166,7 +4166,7 @@ declare namespace LocalJSX {
          */
         "large"?: boolean;
         /**
-          * Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
+          * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
         "maxWidth"?: string;
         /**

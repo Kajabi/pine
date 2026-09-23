@@ -1,6 +1,7 @@
 import { downSmall, remove } from '@pine-ds/icons/icons';
-import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Element, Watch } from '@stencil/core';
 import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
+import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 
 /**
  * @slot (default) - The chip's label text.
@@ -13,6 +14,12 @@ import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/ty
   shadow: true,
 })
 export class PdsChip {
+  @Element() el: HTMLPdsChipElement;
+
+  /** The label span that clips; the overflow anchor for the truncation tooltip. */
+  private labelTextEl?: HTMLElement;
+  private truncationCleanup: (() => void) | null = null;
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -83,6 +90,7 @@ export class PdsChip {
   @Prop() dismissLabel = 'Remove';
 
   /**
+   * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows.
    * Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
    */
   @Prop({ reflect: true }) maxWidth?: string;
@@ -91,6 +99,46 @@ export class PdsChip {
    * Event emitted when the close button is clicked on a tag variant chip.
    */
   @Event() pdsTagCloseClick: EventEmitter<void>;
+
+  @Watch('maxWidth')
+  handleMaxWidthChange(newValue?: string) {
+    if (newValue) {
+      this.initTruncationTooltip();
+    } else {
+      this.destroyTruncationTooltip();
+    }
+  }
+
+  componentDidLoad() {
+    if (this.maxWidth) {
+      this.initTruncationTooltip();
+    }
+  }
+
+  disconnectedCallback() {
+    this.destroyTruncationTooltip();
+  }
+
+  // Reveal the clipped label on hover/focus, matching pds-text / pds-table-cell.
+  // getTooltipText reads the host's textContent — the slotted label.
+  private initTruncationTooltip() {
+    this.destroyTruncationTooltip();
+
+    if (this.labelTextEl) {
+      this.truncationCleanup = setupTruncationTooltip({
+        hostEl: this.el,
+        contentEl: this.labelTextEl,
+        getTooltipText: () => this.el.textContent || '',
+      });
+    }
+  }
+
+  private destroyTruncationTooltip() {
+    if (this.truncationCleanup) {
+      this.truncationCleanup();
+      this.truncationCleanup = null;
+    }
+  }
 
   private handleCloseClick = () => {
     this.pdsTagCloseClick.emit();
@@ -146,11 +194,16 @@ export class PdsChip {
     // node — and a plain `<pds-chip>Some text</pds-chip>` slots text with no
     // wrapping element. Wrapping the slot itself in an internal span gives
     // maxWidth something to ellipsize regardless of what's slotted.
+    // A focus-triggered tooltip needs a focusable anchor. The dropdown's own
+    // button already takes focus (focusin bubbles to the host), so only the
+    // text/tag label span needs a tabindex — and only when it can truncate.
+    const labelTabindex = this.maxWidth ? '0' : undefined;
+
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button" part="button">
         {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
         {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
-        <span class="pds-chip__label-text">
+        <span class="pds-chip__label-text" ref={(el) => (this.labelTextEl = el)}>
           <slot></slot>
         </span>
         <pds-icon icon={downSmall} size={this.iconSize} aria-hidden="true"></pds-icon>
@@ -159,7 +212,7 @@ export class PdsChip {
       <span class="pds-chip__label">
         {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
         {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
-        <span class="pds-chip__label-text">
+        <span class="pds-chip__label-text" tabindex={labelTabindex} ref={(el) => (this.labelTextEl = el)}>
           <slot></slot>
         </span>
       </span>
@@ -169,10 +222,12 @@ export class PdsChip {
   }
 
   private get hostStyles() {
-    // min-width: 0 overrides a flex item's default min-width: auto, which
-    // otherwise refuses to shrink below the slotted content's unwrapped
-    // width and makes maxWidth alone do nothing.
-    return this.maxWidth ? { maxWidth: this.maxWidth, minWidth: '0' } : {};
+    // Hand maxWidth to the stylesheet as a custom property rather than an inline
+    // max-width, so a consumer can override it from a stylesheet (e.g. a media
+    // query) without !important — the same pattern pds-box uses for min-width.
+    // The width and the min-width/box-sizing that make it work are applied in
+    // pds-chip.scss under :host([max-width]).
+    return this.maxWidth ? { '--pds-chip-max-width': this.maxWidth } : {};
   }
 
   private renderCloseButton() {

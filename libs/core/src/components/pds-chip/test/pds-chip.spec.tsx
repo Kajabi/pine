@@ -434,14 +434,18 @@ describe('pds-chip', () => {
   });
 
   describe('maxWidth prop', () => {
-    it('sets max-width and min-width on the host when provided', async () => {
+    it('hands max-width to the stylesheet as a custom property and reflects the attribute when provided', async () => {
       const page = await newSpecPage({
         components: [PdsChip],
         html: `<pds-chip max-width="200px">Label</pds-chip>`,
       });
 
-      expect(page.root?.style.maxWidth).toBe('200px');
-      expect(page.root?.style.minWidth).toBe('0');
+      // The width/min-width/box-sizing live in :host([max-width]) in the SCSS,
+      // consuming this custom property — so a consumer can override the cap from
+      // a stylesheet without !important. The reflected attribute is what gates
+      // those rules.
+      expect(page.root?.style.getPropertyValue('--pds-chip-max-width')).toBe('200px');
+      expect(page.root?.getAttribute('max-width')).toBe('200px');
     });
 
     it('sets no inline host style when unset', async () => {
