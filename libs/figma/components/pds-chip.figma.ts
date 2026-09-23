@@ -15,7 +15,7 @@ figma.connect('<FIGMA_CHIP>', {
       "warning (yellow)": "warning",
     }),
     size: figma.enum("size", {
-      lg: "true",
+      lg: "lg",
     }),
     variant: figma.enum('variant', {
       "text": "text",
@@ -25,8 +25,8 @@ figma.connect('<FIGMA_CHIP>', {
   },
   example: (props) => html`<pds-chip
     dot=${props.dot}
-    large=${props.size}
     sentiment=${props.sentiment}
+    size=${props.size}
     variant=${props.variant}
   >Label</pds-chip>`,
 });
