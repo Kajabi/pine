@@ -365,9 +365,9 @@ The `max-width` property caps the chip and ellipsizes the label once it no longe
     </pds-chip>
     `
 }}>
-  <pds-chip variant="tag" max-width="200px">
-    A very long label that would otherwise overflow the chip
-  </pds-chip>
+  {/* Kept on one line: MDX wraps a label on its own line in a <p>, whose margins
+      would inflate the chip's height in the rendered example. */}
+  <pds-chip variant="tag" max-width="200px">A very long label that would otherwise overflow the chip</pds-chip>
 </DocCanvas>
 
 ## Playground
