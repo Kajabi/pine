@@ -38,6 +38,7 @@ import { defineCustomElement as definePdsRadio } from '@pine-ds/core/components/
 import { defineCustomElement as definePdsRadioGroup } from '@pine-ds/core/components/pds-radio-group.js';
 import { defineCustomElement as definePdsRow } from '@pine-ds/core/components/pds-row.js';
 import { defineCustomElement as definePdsSelect } from '@pine-ds/core/components/pds-select.js';
+import { defineCustomElement as definePdsSkeleton } from '@pine-ds/core/components/pds-skeleton.js';
 import { defineCustomElement as definePdsSortable } from '@pine-ds/core/components/pds-sortable.js';
 import { defineCustomElement as definePdsSortableItem } from '@pine-ds/core/components/pds-sortable-item.js';
 import { defineCustomElement as definePdsSwitch } from '@pine-ds/core/components/pds-switch.js';
@@ -88,6 +89,7 @@ export const PdsRadio = /*@__PURE__*/createReactComponent<JSX.PdsRadio, HTMLPdsR
 export const PdsRadioGroup = /*@__PURE__*/createReactComponent<JSX.PdsRadioGroup, HTMLPdsRadioGroupElement>('pds-radio-group', undefined, undefined, definePdsRadioGroup);
 export const PdsRow = /*@__PURE__*/createReactComponent<JSX.PdsRow, HTMLPdsRowElement>('pds-row', undefined, undefined, definePdsRow);
 export const PdsSelect = /*@__PURE__*/createReactComponent<JSX.PdsSelect, HTMLPdsSelectElement>('pds-select', undefined, undefined, definePdsSelect);
+export const PdsSkeleton = /*@__PURE__*/createReactComponent<JSX.PdsSkeleton, HTMLPdsSkeletonElement>('pds-skeleton', undefined, undefined, definePdsSkeleton);
 export const PdsSortable = /*@__PURE__*/createReactComponent<JSX.PdsSortable, HTMLPdsSortableElement>('pds-sortable', undefined, undefined, definePdsSortable);
 export const PdsSortableItem = /*@__PURE__*/createReactComponent<JSX.PdsSortableItem, HTMLPdsSortableItemElement>('pds-sortable-item', undefined, undefined, definePdsSortableItem);
 export const PdsSwitch = /*@__PURE__*/createReactComponent<JSX.PdsSwitch, HTMLPdsSwitchElement>('pds-switch', undefined, undefined, definePdsSwitch);
