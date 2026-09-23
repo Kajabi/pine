@@ -66,6 +66,12 @@ strong {
   font-weight: bolder;
 }
 
+// Inline hosts ignore width entirely, and flex/grid items refuse to shrink below content width — both defeat the width contract below.
+:host([truncate]) {
+  display: block;
+  min-width: 0;
+}
+
 :host([truncate]) > * {
   overflow: hidden;
   text-overflow: ellipsis;
