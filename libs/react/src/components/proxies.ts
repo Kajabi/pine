@@ -8,6 +8,7 @@ import type { JSX } from '@pine-ds/core/components';
 import { defineCustomElement as defineMockPdsModal } from '@pine-ds/core/components/mock-pds-modal.js';
 import { defineCustomElement as definePdsAccordion } from '@pine-ds/core/components/pds-accordion.js';
 import { defineCustomElement as definePdsAlert } from '@pine-ds/core/components/pds-alert.js';
+import { defineCustomElement as definePdsApp } from '@pine-ds/core/components/pds-app.js';
 import { defineCustomElement as definePdsAvatar } from '@pine-ds/core/components/pds-avatar.js';
 import { defineCustomElement as definePdsBox } from '@pine-ds/core/components/pds-box.js';
 import { defineCustomElement as definePdsButton } from '@pine-ds/core/components/pds-button.js';
@@ -54,10 +55,12 @@ import { defineCustomElement as definePdsText } from '@pine-ds/core/components/p
 import { defineCustomElement as definePdsTextarea } from '@pine-ds/core/components/pds-textarea.js';
 import { defineCustomElement as definePdsToast } from '@pine-ds/core/components/pds-toast.js';
 import { defineCustomElement as definePdsTooltip } from '@pine-ds/core/components/pds-tooltip.js';
+import { defineCustomElement as definePdsTopbar } from '@pine-ds/core/components/pds-topbar.js';
 
 export const MockPdsModal = /*@__PURE__*/createReactComponent<JSX.MockPdsModal, HTMLMockPdsModalElement>('mock-pds-modal', undefined, undefined, defineMockPdsModal);
 export const PdsAccordion = /*@__PURE__*/createReactComponent<JSX.PdsAccordion, HTMLPdsAccordionElement>('pds-accordion', undefined, undefined, definePdsAccordion);
 export const PdsAlert = /*@__PURE__*/createReactComponent<JSX.PdsAlert, HTMLPdsAlertElement>('pds-alert', undefined, undefined, definePdsAlert);
+export const PdsApp = /*@__PURE__*/createReactComponent<JSX.PdsApp, HTMLPdsAppElement>('pds-app', undefined, undefined, definePdsApp);
 export const PdsAvatar = /*@__PURE__*/createReactComponent<JSX.PdsAvatar, HTMLPdsAvatarElement>('pds-avatar', undefined, undefined, definePdsAvatar);
 export const PdsBox = /*@__PURE__*/createReactComponent<JSX.PdsBox, HTMLPdsBoxElement>('pds-box', undefined, undefined, definePdsBox);
 export const PdsButton = /*@__PURE__*/createReactComponent<JSX.PdsButton, HTMLPdsButtonElement>('pds-button', undefined, undefined, definePdsButton);
@@ -104,3 +107,4 @@ export const PdsText = /*@__PURE__*/createReactComponent<JSX.PdsText, HTMLPdsTex
 export const PdsTextarea = /*@__PURE__*/createReactComponent<JSX.PdsTextarea, HTMLPdsTextareaElement>('pds-textarea', undefined, undefined, definePdsTextarea);
 export const PdsToast = /*@__PURE__*/createReactComponent<JSX.PdsToast, HTMLPdsToastElement>('pds-toast', undefined, undefined, definePdsToast);
 export const PdsTooltip = /*@__PURE__*/createReactComponent<JSX.PdsTooltip, HTMLPdsTooltipElement>('pds-tooltip', undefined, undefined, definePdsTooltip);
+export const PdsTopbar = /*@__PURE__*/createReactComponent<JSX.PdsTopbar, HTMLPdsTopbarElement>('pds-topbar', undefined, undefined, definePdsTopbar);
