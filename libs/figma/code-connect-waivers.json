@@ -1,0 +1,20 @@
+{
+  "$comment": "Machine-readable source of truth for INTENTIONALLY unmapped Pine components. A top-level pds-* component passes the Figma Code Connect coverage guard (libs/core/scripts/check-figma-coverage.mjs) when it has a matching libs/figma/components/<name>.figma.ts OR an entry here. Remove a component's entry once it is mapped. Keep CODE_CONNECT_COVERAGE.md in sync (a future change can render that doc from this file).",
+  "waived": {
+    "pds-accordion": "No Figma Code Connect mapping yet; add components/pds-accordion.figma.ts when the Figma node is ready.",
+    "pds-box": "Layout primitive; may map to layout frames rather than a single component node.",
+    "pds-combobox": "No Figma Code Connect mapping yet; add components/pds-combobox.figma.ts when the Figma node is ready.",
+    "pds-container": "No Figma Code Connect mapping yet; add components/pds-container.figma.ts when the Figma node is ready.",
+    "pds-copytext": "No Figma Code Connect mapping yet; add components/pds-copytext.figma.ts when the Figma node is ready.",
+    "pds-dropdown-menu": "No Figma Code Connect mapping yet; add components/pds-dropdown-menu.figma.ts when the Figma node is ready.",
+    "pds-icon": "Icon set lives in @pine-ds/icons; map if Figma documents a dedicated icon wrapper.",
+    "pds-image": "No Figma Code Connect mapping yet; add components/pds-image.figma.ts when the Figma node is ready.",
+    "pds-multiselect": "No Figma Code Connect mapping yet; add components/pds-multiselect.figma.ts when the Figma node is ready.",
+    "pds-popover": "No Figma Code Connect mapping yet; add components/pds-popover.figma.ts when the Figma node is ready.",
+    "pds-row": "Often used with pds-box; may share layout documentation.",
+    "pds-sortable": "Figma substitutions exist for sortable list patterns; wire components/pds-sortable.figma.ts when aligned.",
+    "pds-table": "Composite; consider per-subcomponent mappings (row, cell, head) if needed.",
+    "pds-text": "No Figma Code Connect mapping yet; add components/pds-text.figma.ts when the Figma node is ready.",
+    "pds-tooltip": "No Figma Code Connect mapping yet; add components/pds-tooltip.figma.ts when the Figma node is ready."
+  }
+}
