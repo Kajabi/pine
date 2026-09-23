@@ -12,7 +12,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--text">
         <mock:shadow-root>
-          <span class="pds-chip__label"><slot></slot></span>
+          <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         </mock:shadow-root>
       </pds-chip>
     `);
@@ -27,7 +27,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
       <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" component-id="test" id="test">
         <mock:shadow-root>
-          <span class="pds-chip__label"><slot></slot></span>
+          <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         </mock:shadow-root>
       </pds-chip>
     `);
@@ -42,7 +42,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--text">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
       </mock:shadow-root>
       Progress
     </pds-chip>
@@ -58,7 +58,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--accent pds-chip--text" sentiment="accent">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
       </mock:shadow-root>
     </pds-chip>
     `);
@@ -75,7 +75,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label">
           <i class="pds-chip__dot" aria-hidden="true"></i>
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
     </pds-chip>
@@ -91,7 +91,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--text" size="lg">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
       </mock:shadow-root>
     </pds-chip>
     `);
@@ -106,7 +106,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--text" large="true">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
       </mock:shadow-root>
     </pds-chip>
     `);
@@ -121,7 +121,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--text" size="sm" large="true">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
       </mock:shadow-root>
     </pds-chip>
     `);
@@ -146,7 +146,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--text" size="sm">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
       </mock:shadow-root>
     </pds-chip>
     `);
@@ -163,7 +163,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label">
           <pds-icon icon="archive" size="10px" aria-hidden="true"></pds-icon>
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
     </pds-chip>
@@ -179,7 +179,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--tag" size="sm" variant="tag">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <button class="pds-chip__close" type="button" aria-label="Remove">
           <pds-icon icon="${removeIcon}" size="10px"></pds-icon>
         </button>
@@ -198,7 +198,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--sm pds-chip--dropdown pds-chip--neutral" size="sm" variant="dropdown">
       <mock:shadow-root>
         <button class="pds-chip__button" part="button" type="button">
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
           <pds-icon icon="${downSmall}" size="10px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
@@ -226,7 +226,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <button class="pds-chip__close" type="button" aria-label="Remove" >
           <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
         </button>
@@ -245,7 +245,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" variant="dropdown">
       <mock:shadow-root>
         <button class="pds-chip__button" part="button" type="button">
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
@@ -264,7 +264,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label">
           <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
     </pds-chip>
@@ -282,7 +282,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <button class="pds-chip__button" part="button" type="button">
           <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
@@ -301,7 +301,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label">
           <pds-icon icon="archive" size="14px" aria-hidden="true"></pds-icon>
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
     </pds-chip>
@@ -320,7 +320,7 @@ describe('pds-chip', () => {
         <span class="pds-chip__label">
           <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
           <i class="pds-chip__dot" aria-hidden="true"></i>
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
     </pds-chip>
@@ -338,7 +338,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label">
           <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
     </pds-chip>
@@ -354,7 +354,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--tag" variant="tag" size="lg">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <button class="pds-chip__close" type="button" aria-label="Remove" >
           <pds-icon icon="${removeIcon}" size="14px"></pds-icon>
         </button>
@@ -374,7 +374,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <button class="pds-chip__button" part="button" type="button">
           <i class="pds-chip__dot" aria-hidden="true"></i>
-          <slot></slot>
+          <span class="pds-chip__label-text"><slot></slot></span>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
@@ -433,6 +433,37 @@ describe('pds-chip', () => {
     });
   });
 
+  describe('maxWidth prop', () => {
+    it('sets max-width and min-width on the host when provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip max-width="200px">Label</pds-chip>`,
+      });
+
+      expect(page.root?.style.maxWidth).toBe('200px');
+      expect(page.root?.style.minWidth).toBe('0');
+    });
+
+    it('sets no inline host style when unset', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip>Label</pds-chip>`,
+      });
+
+      expect(page.root?.getAttribute('style')).toBeNull();
+    });
+
+    it('wraps the slot in an internal span regardless of variant, so a bare-text label has something ::slotted() could never target', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip variant="dropdown" max-width="150px">Label</pds-chip>`,
+      });
+
+      const chip = page.body.querySelector('pds-chip');
+      expect(chip?.shadowRoot?.querySelector('.pds-chip__button > .pds-chip__label-text')).toBeTruthy();
+    });
+  });
+
   it('renders close button as link when removeUrl prop is provided', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
@@ -442,7 +473,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag" remove-url="/filters/remove/1">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <a class="pds-chip__close" href="/filters/remove/1" aria-label="Remove">
           <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
         </a>
@@ -460,7 +491,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag" remove-url="/tags/1" remove-http-method="delete">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <a class="pds-chip__close" href="/tags/1" aria-label="Remove" data-method="delete" data-turbo-method="delete" rel="nofollow">
           <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
         </a>
@@ -492,7 +523,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag" remove-url="/clear" remove-target="_blank">
       <mock:shadow-root>
-        <span class="pds-chip__label"><slot></slot></span>
+        <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <a class="pds-chip__close" href="/clear" aria-label="Remove" target="_blank" rel="noopener noreferrer">
           <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
         </a>

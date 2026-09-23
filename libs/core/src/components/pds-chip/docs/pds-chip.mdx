@@ -346,36 +346,27 @@ Sizes work across all variants and sentiments:
 
 ### Truncating a long label
 
-`pds-chip` has no `max-width` prop and no size limit of its own — it sizes to whatever is slotted in. A long label (a filename, say) will keep the chip growing rather than wrap or overflow silently, which is usually not what you want next to other fixed-width UI.
+By default `pds-chip` has no size limit of its own — it sizes to whatever is slotted in. A long label (a filename, say) will keep the chip growing rather than wrap or overflow silently, which is usually not what you want next to other fixed-width UI.
 
-Truncating with an ellipsis is a two-sided contract between the host and the slotted label — `pds-chip` only owns markup up to the default `<slot>`, so both sides have to opt in:
+The `max-width` property caps the chip and ellipsizes the label once it no longer fits — no styling of your own required, even for a plain slotted text label like the one below.
 
-- On the **host**, set `max-width` (whatever cap makes sense in your layout) and `min-width: 0` — a flex item's default `min-width: auto` refuses to shrink below its content's width otherwise, so `max-width` alone has no visible effect.
-- On the **slotted label**, set `overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0` — the same flex-shrink rule applies to it as a flex item inside the chip's internal label row.
-
-Neither alone is enough: skip the host styles and the label overflows the chip's bounds unclipped; skip the label styles and the chip clips at `max-width` with no ellipsis.
+> **Note**: The slot is documented as label text. Slotting richer markup (multiple elements, for example) with `max-width` set may truncate it in a way you don't expect, since the whole slot is wrapped in a single `white-space: nowrap` box internally.
 
 <DocCanvas
   mdxSource={{
     react: `
-    <PdsChip variant="tag" style={{ maxWidth: '200px', minWidth: 0 }}>
-      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-        A very long label that would otherwise overflow the chip
-      </span>
+    <PdsChip variant="tag" maxWidth="200px">
+      A very long label that would otherwise overflow the chip
     </PdsChip>
     `,
     webComponent: `
-    <pds-chip variant="tag" style="max-width: 200px; min-width: 0;">
-      <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">
-        A very long label that would otherwise overflow the chip
-      </span>
+    <pds-chip variant="tag" max-width="200px">
+      A very long label that would otherwise overflow the chip
     </pds-chip>
     `
 }}>
-  <pds-chip variant="tag" style="max-width: 200px; min-width: 0;">
-    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">
-      A very long label that would otherwise overflow the chip
-    </span>
+  <pds-chip variant="tag" max-width="200px">
+    A very long label that would otherwise overflow the chip
   </pds-chip>
 </DocCanvas>
 

@@ -32,6 +32,7 @@ const BaseTemplate = (args) => html`
   remove-url="${args.removeUrl}"
   remove-http-method="${args.removeHttpMethod}"
   remove-target="${args.removeTarget}"
+  max-width="${args.maxWidth}"
 >
   ${args.slot}
 </pds-chip>`;
@@ -151,15 +152,16 @@ TagWithRemoveTarget.args = {
   removeTarget: "_blank",
 }
 
-// A long label truncates only when both the host and the slotted label opt
-// in: max-width/min-width: 0 on the host (pds-chip has no width of its own),
-// and overflow/text-overflow/white-space/min-width: 0 on the slotted node
-// (pds-chip only owns markup up to the default slot). Neither alone is
-// enough — see pds-chip.scss for why .pds-chip__label needs min-width: 0
-// to let either work at all.
-export const TruncatedLabel = () => html`
-<pds-chip variant="tag" style="max-width: 200px; min-width: 0;">
-  <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">
-    A very long label that would otherwise overflow the chip
-  </span>
-</pds-chip>`;
+// maxWidth ellipsizes plain slotted text with no styling of its own required
+// — pds-chip wraps the slot internally so this works even though the
+// slotted content here is bare text, not an element ::slotted() could target.
+export const TruncatedLabel = BaseTemplate.bind();
+TruncatedLabel.args = {
+  dot: false,
+  icon: "",
+  size: "md",
+  sentiment: "neutral",
+  slot: "A very long label that would otherwise overflow the chip",
+  variant: "tag",
+  maxWidth: "200px",
+}

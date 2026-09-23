@@ -83,6 +83,11 @@ export class PdsChip {
   @Prop() dismissLabel = 'Remove';
 
   /**
+   * Truncates the slotted label with an ellipsis once the chip reaches this width, instead of growing to fit it. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text; slotting richer markup with maxWidth set may truncate it unexpectedly.
+   */
+  @Prop({ reflect: true }) maxWidth?: string;
+
+  /**
    * Event emitted when the close button is clicked on a tag variant chip.
    */
   @Event() pdsTagCloseClick: EventEmitter<void>;
@@ -137,22 +142,37 @@ export class PdsChip {
     // For brand sentiment, ignore dot prop
     const showDot = this.sentiment === 'brand' ? false : this.dot;
 
+    // ::slotted() can only select an assigned element, never a bare text
+    // node — and a plain `<pds-chip>Some text</pds-chip>` slots text with no
+    // wrapping element. Wrapping the slot itself in an internal span gives
+    // maxWidth something to ellipsize regardless of what's slotted.
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button" part="button">
         {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
         {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
-        <slot></slot>
+        <span class="pds-chip__label-text">
+          <slot></slot>
+        </span>
         <pds-icon icon={downSmall} size={this.iconSize} aria-hidden="true"></pds-icon>
       </button>
     ) : (
       <span class="pds-chip__label">
         {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
         {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
-        <slot></slot>
+        <span class="pds-chip__label-text">
+          <slot></slot>
+        </span>
       </span>
     );
 
     return chipContent;
+  }
+
+  private get hostStyles() {
+    // min-width: 0 overrides a flex item's default min-width: auto, which
+    // otherwise refuses to shrink below the slotted content's unwrapped
+    // width and makes maxWidth alone do nothing.
+    return this.maxWidth ? { maxWidth: this.maxWidth, minWidth: '0' } : {};
   }
 
   private renderCloseButton() {
@@ -216,7 +236,7 @@ export class PdsChip {
 
   render() {
     return (
-      <Host class={this.classNames()} id={this.componentId}>
+      <Host class={this.classNames()} id={this.componentId} style={this.hostStyles}>
         {this.setChipContent()}
         {this.effectiveVariant === 'tag' && this.renderCloseButton()}
       </Host>

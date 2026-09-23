@@ -34,13 +34,11 @@ describe('pds-chip', () => {
     expect(element).toHaveClass('pds-chip--lg');
   });
 
-  it('lets a max-width host shrink its label below the label text width', async () => {
+  it('shrinks a bare-text tag label below its content width when max-width is set', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-chip variant="tag" style="max-width: 100px; min-width: 0;">
-        <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">
-          A very long label that would otherwise overflow the chip
-        </span>
+      <pds-chip variant="tag" max-width="100px">
+        A very long label that would otherwise overflow the chip
       </pds-chip>
     `);
 
@@ -48,10 +46,35 @@ describe('pds-chip', () => {
 
     // Not pixel-exact against the 100px cap: the tag variant's own padding,
     // border, and remove button add up to more than that on their own. The
-    // regression this guards is min-width: auto on .pds-chip__label ignoring
-    // max-width entirely and rendering at the label's full ~400px content
-    // width.
+    // regression this guards is min-width: auto ignoring max-width entirely
+    // and rendering at the label's full ~400px content width — and this is
+    // bare text, with no wrapping element ::slotted() could ever have
+    // targeted, to guard the internal .pds-chip__label-text wrapper.
     expect(width).toBeLessThan(150);
+  });
+
+  it('shrinks a bare-text dropdown label below its content width when max-width is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="dropdown" max-width="100px">
+        A very long label that would otherwise overflow the chip
+      </pds-chip>
+    `);
+
+    const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
+
+    expect(width).toBeLessThan(150);
+  });
+
+  it('does not constrain width when max-width is unset', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="tag">A very long label that would otherwise overflow the chip</pds-chip>
+    `);
+
+    const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
+
+    expect(width).toBeGreaterThan(300);
   });
 
   it('emits "pdsTagCloseClick" event when close button is clicked in tag variant', async () => {
