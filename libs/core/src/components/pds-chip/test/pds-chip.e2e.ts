@@ -44,12 +44,6 @@ describe('pds-chip', () => {
 
     const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
 
-    // Not pixel-exact against the 100px cap: the tag variant's own padding,
-    // border, and remove button add up to more than that on their own. The
-    // regression this guards is min-width: auto ignoring max-width entirely
-    // and rendering at the label's full ~400px content width — and this is
-    // bare text, with no wrapping element ::slotted() could ever have
-    // targeted, to guard the internal .pds-chip__label-text wrapper.
     expect(width).toBeLessThan(150);
   });
 

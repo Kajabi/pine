@@ -886,7 +886,7 @@ export namespace Components {
          */
         "large": boolean;
         /**
-          * Truncates the slotted label with an ellipsis once the chip reaches this width, instead of growing to fit it. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text; slotting richer markup with maxWidth set may truncate it unexpectedly.
+          * Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
         "maxWidth"?: string;
         /**
@@ -4166,7 +4166,7 @@ declare namespace LocalJSX {
          */
         "large"?: boolean;
         /**
-          * Truncates the slotted label with an ellipsis once the chip reaches this width, instead of growing to fit it. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text; slotting richer markup with maxWidth set may truncate it unexpectedly.
+          * Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
         "maxWidth"?: string;
         /**

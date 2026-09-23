@@ -152,9 +152,6 @@ TagWithRemoveTarget.args = {
   removeTarget: "_blank",
 }
 
-// maxWidth ellipsizes plain slotted text with no styling of its own required
-// — pds-chip wraps the slot internally so this works even though the
-// slotted content here is bare text, not an element ::slotted() could target.
 export const TruncatedLabel = BaseTemplate.bind();
 TruncatedLabel.args = {
   dot: false,

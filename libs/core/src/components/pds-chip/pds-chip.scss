@@ -98,10 +98,6 @@ $pds-chip-sentiment-hover: (
   }
 }
 
-// Wraps the default slot so maxWidth can ellipsize it regardless of what's
-// slotted — including bare text, which ::slotted() can't select at all.
-// min-width: 0 for the same flex-shrink reason as .pds-chip__label above:
-// this is itself a flex item, of .pds-chip__label or .pds-chip__button.
 .pds-chip__label-text {
   display: block;
   min-width: 0;
@@ -129,8 +125,6 @@ $pds-chip-sentiment-hover: (
   border-radius: var(--pine-dimension-sm);
   cursor: pointer;
   display: flex;
-  // Same reason as .pds-chip__label: without this, maxWidth on the host has
-  // no effect on the dropdown variant either.
   min-width: 0;
   padding: var(--pine-dimension-025) var(--pine-dimension-100);
 
