@@ -32,7 +32,7 @@ export class PdsDivider {
   @Prop() vertical = false;
 
   private get hasLabel() {
-    return Boolean(this.label) && !this.vertical;
+    return Boolean(this.label?.trim()) && !this.vertical;
   }
 
   private classNames() {
@@ -59,7 +59,7 @@ export class PdsDivider {
       <Host id={this.componentId}>
         {this.hasLabel ? (
           <div class={this.classNames()} role="separator" aria-label={this.label}>
-            <span class="pds-divider__label" part="label">{this.label}</span>
+            <span class="pds-divider__label" part="label" aria-hidden="true">{this.label}</span>
           </div>
         ) : (
           <hr class={this.classNames()} />
