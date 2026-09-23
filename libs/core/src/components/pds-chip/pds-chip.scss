@@ -80,6 +80,9 @@ $pds-chip-sentiment-hover: (
   border: var(--pine-border-width) solid transparent;
   border-radius: var(--pine-border-radius-full);
   display: inline-block;
+  // The dot is an empty <i> with 0 min-content, so once maxWidth lets the label
+  // shrink it would squeeze into an oval; hold its size like the other flex rows.
+  flex-shrink: 0;
   height: var(--pine-dimension-2xs);
   margin-inline-end: var(--pine-dimension-2xs);
   width: var(--pine-dimension-2xs);
@@ -91,6 +94,33 @@ $pds-chip-sentiment-hover: (
 
   pds-icon {
     margin-inline-end: var(--pine-dimension-2xs);
+  }
+}
+
+// Truncation applies ONLY to a chip with an explicit maxWidth. maxWidth
+// reflects, so [max-width] gates every rule that lets the label shrink and clip
+// — and box-sizing: border-box so the cap includes the chip's padding rather
+// than sitting on top of it (one maxWidth value renders one width across
+// variants). Without the prop a chip sizes to its content and wraps as before.
+:host([max-width]) {
+  box-sizing: border-box;
+  // min-width: 0 overrides a flex item's default min-width: auto, which
+  // otherwise refuses to shrink below the slotted content and makes maxWidth do
+  // nothing.
+  max-width: var(--pds-chip-max-width);
+  min-width: 0;
+
+  .pds-chip__label,
+  .pds-chip__button {
+    min-width: 0;
+  }
+
+  .pds-chip__label-text {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

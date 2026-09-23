@@ -34,6 +34,163 @@ describe('pds-chip', () => {
     expect(element).toHaveClass('pds-chip--lg');
   });
 
+  it('shrinks a bare-text default (text variant) label below its content width when max-width is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip max-width="100px">
+        A very long label that would otherwise overflow the chip
+      </pds-chip>
+    `);
+
+    const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
+
+    // border-box, so the cap is the OUTER width incl. padding, not on top of it.
+    expect(width).toBeLessThanOrEqual(101);
+  });
+
+  it('shrinks a bare-text tag label below its content width when max-width is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="tag" max-width="100px">
+        A very long label that would otherwise overflow the chip
+      </pds-chip>
+    `);
+
+    const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
+
+    // border-box, so the cap is the OUTER width incl. padding, not on top of it.
+    expect(width).toBeLessThanOrEqual(101);
+  });
+
+  it('shrinks a bare-text dropdown label below its content width when max-width is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="dropdown" max-width="100px">
+        A very long label that would otherwise overflow the chip
+      </pds-chip>
+    `);
+
+    const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
+
+    // border-box, so the cap is the OUTER width incl. padding, not on top of it.
+    expect(width).toBeLessThanOrEqual(101);
+  });
+
+  it('does not constrain width when max-width is unset', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="tag">A very long label that would otherwise overflow the chip</pds-chip>
+    `);
+
+    const width = await page.$eval('pds-chip', (el) => el.getBoundingClientRect().width);
+
+    expect(width).toBeGreaterThan(300);
+  });
+
+  it('wraps rather than truncating a long label in a narrow container when max-width is unset', async () => {
+    const page = await newE2EPage();
+    // Without max-width the label must not be forced to nowrap/ellipsis — it
+    // wraps and the chip stays within its container instead of overflowing.
+    await page.setContent(`
+      <div style="width: 160px;">
+        <pds-chip>Quarterly revenue report final</pds-chip>
+      </div>
+    `);
+
+    const { width, whiteSpace } = await page.$eval('pds-chip', (el) => ({
+      width: el.getBoundingClientRect().width,
+      whiteSpace: getComputedStyle(
+        el.shadowRoot.querySelector('.pds-chip__label-text'),
+      ).whiteSpace,
+    }));
+
+    expect(width).toBeLessThanOrEqual(160);
+    expect(whiteSpace).toBe('normal');
+  });
+
+  it('forces the label to nowrap only when max-width is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip max-width="120px">Quarterly revenue report final</pds-chip>');
+
+    const whiteSpace = await page.$eval(
+      'pds-chip',
+      (el) => getComputedStyle(el.shadowRoot.querySelector('.pds-chip__label-text')).whiteSpace,
+    );
+
+    expect(whiteSpace).toBe('nowrap');
+  });
+
+  it('keeps the dot from shrinking when max-width squeezes the label', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-chip dot max-width="120px">A very long label that would otherwise overflow the chip</pds-chip>',
+    );
+
+    const dotWidth = await page.$eval(
+      'pds-chip',
+      (el) => el.shadowRoot.querySelector('.pds-chip__dot').getBoundingClientRect().width,
+    );
+
+    // Unconstrained the dot is 6px (4px box + 1px border each side); it must not
+    // collapse into an oval when the row is squeezed.
+    expect(dotWidth).toBeGreaterThanOrEqual(5);
+  });
+
+  it('makes the label focusable only when max-width is set, so a focus tooltip can fire', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip max-width="120px">Truncated</pds-chip>
+      <pds-chip>Plain</pds-chip>
+    `);
+
+    const [truncated, plain] = await page.$$eval('pds-chip', (els) =>
+      els.map((el) => el.shadowRoot.querySelector('.pds-chip__label-text').getAttribute('tabindex')),
+    );
+
+    expect(truncated).toBe('0');
+    expect(plain).toBeNull();
+  });
+
+  it('shows a tooltip with the full label on hover when the label is truncated', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>',
+    );
+
+    await page.hover('pds-chip');
+    await page.waitForChanges();
+
+    const tooltipText = await page.evaluate(() => {
+      const portal = document.querySelector('.pds-truncation-tooltip');
+      return portal ? portal.textContent.trim() : null;
+    });
+
+    expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
+  });
+
+  it('re-binds the tooltip to the new label node after the variant changes', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>',
+    );
+
+    // Switching variant remounts the label span; the tooltip must re-attach to
+    // the current node rather than the detached original.
+    const chip = await page.find('pds-chip');
+    chip.setProperty('variant', 'dropdown');
+    await page.waitForChanges();
+
+    await page.hover('pds-chip');
+    await page.waitForChanges();
+
+    const tooltipText = await page.evaluate(() => {
+      const portal = document.querySelector('.pds-truncation-tooltip');
+      return portal ? portal.textContent.trim() : null;
+    });
+
+    expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
+  });
+
   it('emits "pdsTagCloseClick" event when close button is clicked in tag variant', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-chip variant="tag" label="Tag Chip" />');

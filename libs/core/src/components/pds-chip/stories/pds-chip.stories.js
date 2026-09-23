@@ -32,6 +32,7 @@ const BaseTemplate = (args) => html`
   remove-url="${args.removeUrl}"
   remove-http-method="${args.removeHttpMethod}"
   remove-target="${args.removeTarget}"
+  max-width="${args.maxWidth}"
 >
   ${args.slot}
 </pds-chip>`;
@@ -149,4 +150,15 @@ TagWithRemoveTarget.args = {
   variant: "tag",
   removeUrl: "/clear-filters",
   removeTarget: "_blank",
+}
+
+export const TruncatedLabel = BaseTemplate.bind();
+TruncatedLabel.args = {
+  dot: false,
+  icon: "",
+  size: "md",
+  sentiment: "neutral",
+  slot: "A very long label that would otherwise overflow the chip",
+  variant: "tag",
+  maxWidth: "200px",
 }

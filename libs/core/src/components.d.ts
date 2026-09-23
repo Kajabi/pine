@@ -886,6 +886,10 @@ export namespace Components {
          */
         "large": boolean;
         /**
+          * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
+         */
+        "maxWidth"?: string;
+        /**
           * HTTP method to use for the remove action. Adds data-method and data-turbo-method attributes for Rails/Turbo compatibility. Only applies when removeUrl is provided.
          */
         "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -4162,6 +4166,10 @@ declare namespace LocalJSX {
          */
         "large"?: boolean;
         /**
+          * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
+         */
+        "maxWidth"?: string;
+        /**
           * Event emitted when the close button is clicked on a tag variant chip.
          */
         "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<void>) => void;
@@ -6100,6 +6108,7 @@ declare namespace LocalJSX {
         "removeHttpMethod": 'get' | 'post' | 'put' | 'patch' | 'delete';
         "removeTarget": '_blank' | '_self' | '_parent' | '_top';
         "dismissLabel": string;
+        "maxWidth": string;
     }
     interface PdsComboboxAttributes {
         "componentId": string;
