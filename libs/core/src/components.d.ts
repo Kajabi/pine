@@ -1136,6 +1136,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Text to be displayed as the divider label, centered between two lines. Ignored when `vertical` is `true`.
+         */
+        "label"?: string;
+        /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
         "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
@@ -4438,6 +4442,10 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
+          * Text to be displayed as the divider label, centered between two lines. Ignored when `vertical` is `true`.
+         */
+        "label"?: string;
+        /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
         "offset"?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
@@ -6179,6 +6187,7 @@ declare namespace LocalJSX {
     }
     interface PdsDividerAttributes {
         "componentId": string;
+        "label": string;
         "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
         "vertical": boolean;
     }
