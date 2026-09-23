@@ -401,6 +401,31 @@ Controls external spacing around the container using logical properties (accepts
 
 ## Alignment Properties
 
+### Border Sides
+By default, `border` applies to all four sides. Use `border-block-start`, `border-block-end`, `border-inline-start`, and `border-inline-end` to control individual edges.
+
+These follow the same longhand-over-shorthand rules as CSS: `border` sets every side, and a per-side property overrides the side it names. Set a side to `true` to add a border, `false` to remove one, or leave it unset to inherit whatever `border` specifies.
+
+Use these for dividers between stacked rows, a rail alongside a sidebar, or a bordered card that drops one edge where it meets a neighbor.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsBox border-block-end="true" padding="sm">Divider row</PdsBox>
+<PdsBox border-inline-start="true" padding="sm">Inline-start rail</PdsBox>
+<PdsBox border="true" border-block-end="false" padding="sm">All sides except block-end</PdsBox>`,
+    webComponent: `<pds-box border-block-end="true" padding="sm">Divider row</pds-box>
+<pds-box border-inline-start="true" padding="sm">Inline-start rail</pds-box>
+<pds-box border="true" border-block-end="false" padding="sm">All sides except block-end</pds-box>`
+}}>
+  <pds-box direction="column" gap="sm">
+    <pds-box border-block-end="true" padding="sm">Divider row</pds-box>
+    <pds-box border-inline-start="true" padding="sm">Inline-start rail</pds-box>
+    <pds-box border="true" border-block-end="false" padding="sm">All sides except block-end</pds-box>
+  </pds-box>
+</DocCanvas>
+
+Per-side borders use the same color and width as `border`, so `border-color` applies to every edge you turn on.
+
 ### Border Color
 Please refer to the color brand guidelines for the appropriate color to use. Use `border-color` to change the color of the border. Accepts any valid color token or CSS color value.
 
