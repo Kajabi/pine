@@ -2030,6 +2030,21 @@ export namespace Components {
          */
         "value"?: string | string[];
     }
+    interface PdsSkeleton {
+        /**
+          * Sets the height of the placeholder. Accepts any CSS length. When unset, the height comes from `variant`.
+         */
+        "height"?: string;
+        /**
+          * Sets the shape of the placeholder.
+          * @defaultValue 'text'
+         */
+        "variant"?: 'text' | 'rect' | 'circle';
+        /**
+          * Sets the width of the placeholder. Accepts any CSS length. When unset, the width comes from `variant`.
+         */
+        "width"?: string;
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -3050,6 +3065,12 @@ declare global {
         prototype: HTMLPdsSelectElement;
         new (): HTMLPdsSelectElement;
     };
+    interface HTMLPdsSkeletonElement extends Components.PdsSkeleton, HTMLStencilElement {
+    }
+    var HTMLPdsSkeletonElement: {
+        prototype: HTMLPdsSkeletonElement;
+        new (): HTMLPdsSkeletonElement;
+    };
     interface HTMLPdsSortableElementEventMap {
         "pdsSortableItemMoved": SortableEvent;
     }
@@ -3283,6 +3304,7 @@ declare global {
         "pds-radio-group": HTMLPdsRadioGroupElement;
         "pds-row": HTMLPdsRowElement;
         "pds-select": HTMLPdsSelectElement;
+        "pds-skeleton": HTMLPdsSkeletonElement;
         "pds-sortable": HTMLPdsSortableElement;
         "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
@@ -5400,6 +5422,21 @@ declare namespace LocalJSX {
          */
         "value"?: string | string[];
     }
+    interface PdsSkeleton {
+        /**
+          * Sets the height of the placeholder. Accepts any CSS length. When unset, the height comes from `variant`.
+         */
+        "height"?: string;
+        /**
+          * Sets the shape of the placeholder.
+          * @defaultValue 'text'
+         */
+        "variant"?: 'text' | 'rect' | 'circle';
+        /**
+          * Sets the width of the placeholder. Accepts any CSS length. When unset, the width comes from `variant`.
+         */
+        "width"?: string;
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -6406,6 +6443,11 @@ declare namespace LocalJSX {
         "highlight": boolean;
         "value": string | string[];
     }
+    interface PdsSkeletonAttributes {
+        "height": string;
+        "variant": 'text' | 'rect' | 'circle';
+        "width": string;
+    }
     interface PdsSortableAttributes {
         "border": boolean;
         "disabled": boolean;
@@ -6590,6 +6632,7 @@ declare namespace LocalJSX {
         "pds-radio-group": Omit<PdsRadioGroup, keyof PdsRadioGroupAttributes> & { [K in keyof PdsRadioGroup & keyof PdsRadioGroupAttributes]?: PdsRadioGroup[K] } & { [K in keyof PdsRadioGroup & keyof PdsRadioGroupAttributes as `attr:${K}`]?: PdsRadioGroupAttributes[K] } & { [K in keyof PdsRadioGroup & keyof PdsRadioGroupAttributes as `prop:${K}`]?: PdsRadioGroup[K] };
         "pds-row": Omit<PdsRow, keyof PdsRowAttributes> & { [K in keyof PdsRow & keyof PdsRowAttributes]?: PdsRow[K] } & { [K in keyof PdsRow & keyof PdsRowAttributes as `attr:${K}`]?: PdsRowAttributes[K] } & { [K in keyof PdsRow & keyof PdsRowAttributes as `prop:${K}`]?: PdsRow[K] };
         "pds-select": Omit<PdsSelect, keyof PdsSelectAttributes> & { [K in keyof PdsSelect & keyof PdsSelectAttributes]?: PdsSelect[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `attr:${K}`]?: PdsSelectAttributes[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `prop:${K}`]?: PdsSelect[K] } & OneOf<"componentId", PdsSelect["componentId"], PdsSelectAttributes["componentId"]> & OneOf<"name", PdsSelect["name"], PdsSelectAttributes["name"]>;
+        "pds-skeleton": Omit<PdsSkeleton, keyof PdsSkeletonAttributes> & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes]?: PdsSkeleton[K] } & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes as `attr:${K}`]?: PdsSkeletonAttributes[K] } & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes as `prop:${K}`]?: PdsSkeleton[K] };
         "pds-sortable": Omit<PdsSortable, keyof PdsSortableAttributes> & { [K in keyof PdsSortable & keyof PdsSortableAttributes]?: PdsSortable[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `attr:${K}`]?: PdsSortableAttributes[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `prop:${K}`]?: PdsSortable[K] } & OneOf<"componentId", PdsSortable["componentId"], PdsSortableAttributes["componentId"]>;
         "pds-sortable-item": Omit<PdsSortableItem, keyof PdsSortableItemAttributes> & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes]?: PdsSortableItem[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `attr:${K}`]?: PdsSortableItemAttributes[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `prop:${K}`]?: PdsSortableItem[K] };
         "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]> & OneOf<"label", PdsSwitch["label"], PdsSwitchAttributes["label"]>;
@@ -6655,6 +6698,7 @@ declare module "@stencil/core" {
             "pds-radio-group": LocalJSX.IntrinsicElements["pds-radio-group"] & JSXBase.HTMLAttributes<HTMLPdsRadioGroupElement>;
             "pds-row": LocalJSX.IntrinsicElements["pds-row"] & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
             "pds-select": LocalJSX.IntrinsicElements["pds-select"] & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
+            "pds-skeleton": LocalJSX.IntrinsicElements["pds-skeleton"] & JSXBase.HTMLAttributes<HTMLPdsSkeletonElement>;
             "pds-sortable": LocalJSX.IntrinsicElements["pds-sortable"] & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
             "pds-sortable-item": LocalJSX.IntrinsicElements["pds-sortable-item"] & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.IntrinsicElements["pds-switch"] & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
