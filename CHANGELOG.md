@@ -1,3 +1,13 @@
+## 4.1.0 (2026-09-24)
+
+### Features 🚀
+
+- **pds-divider:** add label prop ([#814](https://github.com/Kajabi/pine/pull/814))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 # 4.0.0 (2026-09-23)
 
 ### Features 🚀
