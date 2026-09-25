@@ -56,6 +56,26 @@ describe('pds-text', () => {
     const width = await page.$eval('pds-text', (el) => el.getBoundingClientRect().width);
     expect(width).toBeGreaterThan(100);
   });
+
+  // The tab stop is there to reach the tooltip, and the tooltip only appears
+  // when there is hidden text — so text that fits stays out of the tab order
+  // even though it opted into truncate.
+  it('is focusable only while the text is actually clipped', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-text truncate style="width: 60px;">A very long sentence that cannot possibly fit</pds-text>
+      <pds-text truncate style="width: 600px;">Short</pds-text>
+      <pds-text style="width: 60px;">A very long sentence that cannot possibly fit</pds-text>
+    `);
+
+    const [clipped, fits, plain] = await page.$$eval('pds-text', (els) =>
+      els.map((el) => el.shadowRoot.querySelector('[part="content"]').getAttribute('tabindex')),
+    );
+
+    expect(clipped).toBe('0');
+    expect(fits).toBeNull();
+    expect(plain).toBeNull();
+  });
 });
 
 describe('pds-text accessibility', () => {

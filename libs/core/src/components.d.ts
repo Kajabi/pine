@@ -2211,7 +2211,7 @@ export namespace Components {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
         "truncate": boolean;
     }
@@ -2357,7 +2357,7 @@ export namespace Components {
     | 'strong'
     | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order.
          */
         "truncate"?: boolean;
         /**
@@ -5598,7 +5598,7 @@ declare namespace LocalJSX {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
         "truncate"?: boolean;
     }
@@ -5747,7 +5747,7 @@ declare namespace LocalJSX {
     | 'strong'
     | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order.
          */
         "truncate"?: boolean;
         /**
