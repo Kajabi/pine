@@ -206,16 +206,9 @@ describe('pds-text', () => {
     expect(tooltip).toBeNull();
   });
 
-  it('adds tabindex="0" when truncate is enabled', async () => {
-    const page = await newSpecPage({
-      components: [PdsText],
-      html: `<pds-text tag="p" truncate>Text</pds-text>`,
-    });
-
-    const contentEl = page.root!.shadowRoot!.querySelector('[part="content"]') as HTMLElement;
-    expect(contentEl.getAttribute('tabindex')).toBe('0');
-  });
-
+  // The tabindex is driven by measured overflow, which jsdom cannot report
+  // (scrollWidth and clientWidth are both 0 here, so nothing ever overflows).
+  // Its coverage lives in pds-text.e2e.ts, where layout is real.
   it('does not add tabindex when truncate is disabled', async () => {
     const page = await newSpecPage({
       components: [PdsText],

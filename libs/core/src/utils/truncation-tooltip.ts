@@ -85,6 +85,8 @@ function isOverflowing(el: HTMLElement): boolean {
  * will display a tooltip showing the full text content. The tooltip is
  * rendered as a portal on document.body and positioned with Floating UI.
  *
+ * Also owns the element's `tabindex` while it is clipped — see syncTabIndex.
+ *
  * @returns A cleanup function that removes all listeners, observers, and DOM elements.
  */
 export function setupTruncationTooltip(options: TruncationTooltipOptions): () => void {
@@ -99,6 +101,31 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   let hideTimeout: ReturnType<typeof setTimeout> | null = null;
   let resizeObserver: ResizeObserver | null = null;
   let resizeDebounce: ReturnType<typeof setTimeout> | null = null;
+  let ownsTabIndex = false;
+  let disposed = false;
+
+  /**
+   * The tab stop exists only to give the tooltip a focusable anchor, so it
+   * belongs on the element while the text is actually clipped and not a moment
+   * longer. Deriving it from the caller's prop instead leaves a dead stop on
+   * every element that opted into truncation but happens to fit — in a row of
+   * chips that doubles the tab stops, half of them landing on a span with no
+   * role, no name of its own, and nothing to reveal.
+   *
+   * Ownership is tracked rather than inferred from the value: if the consumer
+   * already put a tabindex on the element (a roving -1, say), that is theirs
+   * and we never touch it.
+   */
+  function syncTabIndex(): void {
+    if (isOverflowing(contentEl)) {
+      if (!ownsTabIndex && contentEl.hasAttribute('tabindex')) return;
+      ownsTabIndex = true;
+      contentEl.setAttribute('tabindex', '0');
+    } else if (ownsTabIndex) {
+      ownsTabIndex = false;
+      contentEl.removeAttribute('tabindex');
+    }
+  }
 
   // Use ResizeObserver to re-evaluate overflow when the element resizes
   // Debounced to prevent performance issues during rapid window resizing
@@ -109,6 +136,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
       }
       resizeDebounce = setTimeout(() => {
         resizeDebounce = null;
+        syncTabIndex();
         // If tooltip is showing but text no longer overflows, hide it
         if (portalEl && portalEl.isConnected && !isOverflowing(contentEl)) {
           hideTooltip();
@@ -116,6 +144,19 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
       }, 100);
     });
     resizeObserver.observe(contentEl);
+  }
+
+  // Measure now so the common case is right on the first paint, rather than
+  // waiting out the observer's debounce.
+  syncTabIndex();
+
+  // A web font swapping in changes scrollWidth without changing the clipped
+  // box's size, so ResizeObserver never fires for it — the element would keep
+  // whatever the fallback font measured. Re-measure once the fonts settle.
+  if (typeof document !== 'undefined' && document.fonts !== undefined) {
+    document.fonts.ready.then(() => {
+      if (!disposed) syncTabIndex();
+    });
   }
 
   function createPortal(): void {
@@ -266,6 +307,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   // Return cleanup function
   return () => {
+    disposed = true;
     cancelHideTimeout();
     if (resizeDebounce) {
       clearTimeout(resizeDebounce);
@@ -273,6 +315,12 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     }
     if (resizeObserver) {
       resizeObserver.disconnect();
+    }
+    // Hand the element back as we found it — truncation may simply have been
+    // turned off, in which case the element outlives this teardown.
+    if (ownsTabIndex) {
+      ownsTabIndex = false;
+      contentEl.removeAttribute('tabindex');
     }
     hostEl.removeEventListener('mouseenter', handleMouseEnter);
     hostEl.removeEventListener('mouseleave', handleMouseLeave);
