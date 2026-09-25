@@ -188,11 +188,11 @@ export class PdsChip {
     // node — and a plain `<pds-chip>Some text</pds-chip>` slots text with no
     // wrapping element. Wrapping the slot itself in an internal span gives
     // maxWidth something to ellipsize regardless of what's slotted.
-    // A focus-triggered tooltip needs a focusable anchor. The dropdown's own
-    // button already takes focus (focusin bubbles to the host), so only the
-    // text/tag label span needs a tabindex — and only when it can truncate.
-    const labelTabindex = this.maxWidth ? '0' : undefined;
-
+    // A focus-triggered tooltip needs a focusable anchor, but the label span
+    // only earns a tab stop while its text is actually clipped — a chip whose
+    // label fits has nothing to reveal. setupTruncationTooltip owns that
+    // tabindex off the measurement. (The dropdown's own button already takes
+    // focus, and focusin bubbles to the host, so it needs nothing here.)
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button" part="button">
         {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
@@ -206,7 +206,7 @@ export class PdsChip {
       <span class="pds-chip__label">
         {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
         {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
-        <span class="pds-chip__label-text" tabindex={labelTabindex} ref={(el) => (this.labelTextEl = el)}>
+        <span class="pds-chip__label-text" ref={(el) => (this.labelTextEl = el)}>
           <slot></slot>
         </span>
       </span>
