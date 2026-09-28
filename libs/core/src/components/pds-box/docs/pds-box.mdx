@@ -1352,13 +1352,8 @@ The base breakpoint is what a phone renders. A base `size` below `12` is
 therefore a narrow column **on the smallest screen**, not just on large ones —
 `size="6"` is half the viewport on a phone, and nothing overrides it.
 
-Avoid the base prop for content that should stack on small screens. Start at
-full width and widen upward instead:
-
-```html
-<!-- Full width on mobile, half width from md up -->
-<pds-box size="12" size-md="6"></pds-box>
-```
+Avoid the base prop for content that should stack on small screens — use the
+full-width-then-widen pattern above (`size="12" size-md="6"`) instead.
 
 Use the base prop when the element genuinely should stay narrow at every width —
 a checkbox or icon gutter beside a body column, for example, where a full-width
