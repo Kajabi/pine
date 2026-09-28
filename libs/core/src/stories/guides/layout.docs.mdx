@@ -141,13 +141,13 @@ Use `pds-row` for Multi-Column Layouts:
     react: `
       <PdsBox fit="true">
         <PdsRow col-gap="sm">
-          <PdsBox size="8">
+          <PdsBox sizeMd="8">
             <PdsBox border padding="md">Column 1</PdsBox>
           </PdsBox>
-          <PdsBox size="4">
+          <PdsBox sizeMd="4">
             <PdsBox border padding="md">Column 2</PdsBox>
           </PdsBox>
-          <PdsBox size="4">
+          <PdsBox sizeMd="4">
             <PdsBox border padding="md">Column 2</PdsBox>
           </PdsBox>
         </pds-row>
@@ -156,13 +156,13 @@ Use `pds-row` for Multi-Column Layouts:
     webComponent: `
       <pds-box fit="true">
         <pds-row col-gap="sm">
-          <pds-box size="8">
+          <pds-box size-md="8">
             <pds-box border padding="md">Column 1</pds-box>
           </pds-box>
-          <pds-box size="4">
+          <pds-box size-md="4">
             <pds-box border padding="md">Column 2</pds-box>
           </pds-box>
-          <pds-box size="4">
+          <pds-box size-md="4">
             <pds-box border padding="md">Column 2</pds-box>
           </pds-box>
         </pds-row>
@@ -171,13 +171,13 @@ Use `pds-row` for Multi-Column Layouts:
 }}>
   <pds-box fit="true">
     <pds-row col-gap="sm">
-      <pds-box size="8">
+      <pds-box size-md="8">
         <pds-box border padding="md">Column 1</pds-box>
       </pds-box>
-      <pds-box size="4">
+      <pds-box size-md="4">
         <pds-box border padding="md">Column 2</pds-box>
       </pds-box>
-      <pds-box size="4">
+      <pds-box size-md="4">
         <pds-box border padding="md">Column 2</pds-box>
       </pds-box>
     </pds-row>
@@ -191,10 +191,10 @@ Use `pds-container` to constrain content width before applying the grid:
     react: `
       <PdsContainer size="lg">
         <PdsRow colGap="sm">
-          <PdsBox size="8">
+          <PdsBox sizeMd="8">
             <PdsBox border padding="md">Main content</PdsBox>
           </PdsBox>
-          <PdsBox size="4">
+          <PdsBox sizeMd="4">
             <PdsBox border padding="md">Sidebar</PdsBox>
           </PdsBox>
         </PdsRow>
@@ -203,10 +203,10 @@ Use `pds-container` to constrain content width before applying the grid:
     webComponent: `
       <pds-container size="lg">
         <pds-row col-gap="sm">
-          <pds-box size="8">
+          <pds-box size-md="8">
             <pds-box border padding="md">Main content</pds-box>
           </pds-box>
-          <pds-box size="4">
+          <pds-box size-md="4">
             <pds-box border padding="md">Sidebar</pds-box>
           </pds-box>
         </pds-row>
@@ -215,10 +215,10 @@ Use `pds-container` to constrain content width before applying the grid:
 }}>
   <pds-container size="lg">
     <pds-row col-gap="sm">
-      <pds-box size="8">
+      <pds-box size-md="8">
         <pds-box border padding="md">Main content</pds-box>
       </pds-box>
-      <pds-box size="4">
+      <pds-box size-md="4">
         <pds-box border padding="md">Sidebar</pds-box>
       </pds-box>
     </pds-row>
@@ -779,12 +779,12 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
     react: `
       <PdsBox display="block">
         <PdsRow col-gap="sm">
-          <PdsBox size="4">
+          <PdsBox sizeMd="4">
             <PdsBox border>
               <PdsText gutter="sm">Content for column 1</PdsText>
             </PdsBox>
           </PdsBox>
-          <PdsBox size="8">
+          <PdsBox sizeMd="8">
             <PdsText gutter="sm">Content for column 2</PdsText>
             </PdsBox>
           </PdsBox>
@@ -794,12 +794,12 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
     webComponent: `
       <pds-box display="block">
         <pds-row col-gap="sm">
-          <pds-box size="4">
+          <pds-box size-md="4">
             <pds-box border>
               <pds-text gutter="sm">Content for column 1</pds-text>
             </pds-box>
           </pds-box>
-          <pds-box size="8">
+          <pds-box size-md="8">
             <pds-box border>
               <pds-text gutter="sm">Content for column 2</pds-text>
             </pds-box>
@@ -810,12 +810,12 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
 }}>
   <pds-box display="block">
     <pds-row col-gap="sm">
-      <pds-box size="4">
+      <pds-box size-md="4">
         <pds-box border>
           <pds-text gutter="sm">Content for column 1</pds-text>
         </pds-box>
       </pds-box>
-      <pds-box size="8">
+      <pds-box size-md="8">
         <pds-box border>Content for column 2</pds-box>
       </pds-box>
     </pds-row>
@@ -984,10 +984,10 @@ Use the `offset` property to offset columns to the right. The `offset` property 
     react: `
       <PdsBox direction="column" fit>
         <PdsRow col-gap="sm">
-          <PdsBox size="4">
+          <PdsBox sizeMd="4">
             <PdsBox border>Item 1</PdsBox>
           </PdsBox>
-          <PdsBox offset="4" size="4">
+          <PdsBox offsetMd="4" sizeMd="4">
             <PdsBox border>Item 2</PdsBox>
           </PdsBox>
         </PdsRow>
@@ -1009,10 +1009,10 @@ Use the `offset` property to offset columns to the right. The `offset` property 
     webComponent: `
       <pds-box direction="column" fit>
         <pds-row col-gap="sm">
-          <pds-box size="4">
+          <pds-box size-md="4">
             <pds-box border>Item 1</pds-box>
           </pds-box>
-          <pds-box offset="4" size="4">
+          <pds-box offset-md="4" size-md="4">
             <pds-box border>Item 2</pds-box>
           </pds-box>
         </pds-row>
@@ -1034,10 +1034,10 @@ Use the `offset` property to offset columns to the right. The `offset` property 
 }}>
   <pds-box direction="column" fit>
     <pds-row>
-      <pds-box size="4">
+      <pds-box size-md="4">
         <pds-box border>Item 1</pds-box>
       </pds-box>
-      <pds-box offset="4" size="4">
+      <pds-box offset-md="4" size-md="4">
         <pds-box border>Item 2</pds-box>
       </pds-box>
     </pds-row>
@@ -1064,7 +1064,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     react: `
       <PdsBox display="block">
         <PdsRow minHeight="100px" colGap="sm">
-          <PdsBox size="2">
+          <PdsBox sizeXs="2">
             <PdsBox
               align-items="start"
               border="true"
@@ -1103,7 +1103,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     webComponent: `
       <pds-box display="block">
         <pds-row min-height="100px" col-gap="sm">
-          <pds-box size="2">
+          <pds-box size-xs="2">
             <pds-box
               align-items="start"
               border="true"
@@ -1137,7 +1137,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
 }}>
   <pds-box display="block">
     <pds-row min-height="100px" col-gap="sm">
-      <pds-box size="2">
+      <pds-box size-xs="2">
         <pds-box
           align-items="start"
           border="true"
@@ -1176,7 +1176,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     react: `
       <PdsBox display="block">
         <PdsRow col-gap="sm">
-          <PdsBox size="2">
+          <PdsBox sizeXs="2">
             <PdsBox
               alignItems="start"
               border="true"
@@ -1196,7 +1196,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
             >
             Content2
           </PdsBox>
-          <PdsBox size="2">
+          <PdsBox sizeXs="2">
             <PdsBox
               alignItems="end"
               border="true"
@@ -1212,7 +1212,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     webComponent: `
       <pds-box display="block">
         <pds-row col-gap="sm">
-          <pds-box size="2">
+          <pds-box size-xs="2">
             <pds-box
               align-items="start"
               border="true"
@@ -1230,7 +1230,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
               padding="sm"
             >Content2</pds-box>
           </pds-box>
-          <pds-box size="2">
+          <pds-box size-xs="2">
             <pds-box
               align-items="end"
               border="true"
@@ -1245,7 +1245,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
 }}>
   <pds-box display="block">
     <pds-row col-gap="sm">
-      <pds-box size="2">
+      <pds-box size-xs="2">
         <pds-box
           align-items="start"
           border="true"
@@ -1263,7 +1263,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
           padding="sm"
         >Content2</pds-box>
       </pds-box>
-      <pds-box size="2">
+      <pds-box size-xs="2">
         <pds-box
           align-items="end"
           border="true"
@@ -1426,7 +1426,7 @@ If you encounter issues with your layout, here are some common problems and thei
 
 ### 6. **Flex Properties Not Working in Grid Layouts**
   - **Issue:** Using `flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex values like `flex="1"` on `pds-box` inside `pds-row` has no effect.
-  - **Solution:** Flex properties only work when the immediate parent is another `pds-box`, not when inside `pds-row`. Use `size` props (e.g., `size="6"`) to control column width within rows. For flex behavior, nest the box inside another `pds-box` container instead of using it directly in `pds-row`.
+  - **Solution:** Flex properties only work when the immediate parent is another `pds-box`, not when inside `pds-row`. Use responsive `size-*` props (e.g., `size-md="6"`) to control column width within rows; the base breakpoint stays full width so the column stacks on mobile. For flex behavior, nest the box inside another `pds-box` container instead of using it directly in `pds-row`.
 
 ## Related Components
 - <pds-link href="../?path=/docs/components-box--docs">Box</pds-link>
