@@ -193,22 +193,32 @@ const preview = {
   initialGlobals: {
     theme: 'light',
     direction: 'ltr',
-  },
 
-  parameters: {
     a11y: {
       /**
-       * The Accessibility panel stays available in the Storybook UI; this turns
-       * off only the addon's *automated* axe run. Pine's accessibility gate
+       * Puts `@storybook/addon-a11y` in manual mode: it no longer runs axe
+       * automatically after each story render, but the Accessibility panel stays
+       * live and developers can still scan a story on demand from it.
+       *
+       * The automatic run has to go. Pine's accessibility gate
        * (`npm run test.a11y`) runs axe itself so it can diff findings against
        * `.storybook/a11y-baseline.json` at rule level, and two axe instances on
        * one page collide ("Axe is already running").
        *
+       * Suppressing it via this global rather than `parameters.a11y.test: 'off'`
+       * is deliberate — both stop the automatic run (the addon's `afterEach`
+       * skips when either `parameters.a11y.test === 'off'` or
+       * `globals.a11y.manual === true`), but `test: 'off'` *also* makes the panel
+       * render a bare "Accessibility tests are disabled for this story" message,
+       * which would take the interactive scan away from developers.
+       *
        * @see .storybook/a11y-hooks.js
        */
-      test: 'off',
+      manual: true,
     },
+  },
 
+  parameters: {
     options: {
       storySort: {
         method: 'alphabetical',

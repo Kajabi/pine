@@ -9,7 +9,13 @@
  *
  * Pre-existing violations are tolerated via `a11y-baseline.json` — a story/rule
  * allowlist. A violation whose rule is not already recorded for that story fails
- * the run. Nothing new gets in; the baseline only shrinks.
+ * the run, and the baseline is only ever pruned, never appended to by hand.
+ *
+ * Note the granularity: matching is per story *and rule*, not per element. A
+ * story already baselined for `color-contrast` still fails on a new `select-name`,
+ * but a *second* `color-contrast` failure on a different element inside that same
+ * story is absorbed by the existing entry. Tightening this to node level is the
+ * obvious next step once the current backlog is burnt down.
  *
  * Run it with `npm run test.a11y` (from `libs/core`) — the runner script starts
  * a static server for `storybook-static` and drives these hooks.
@@ -92,9 +98,10 @@ const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PA
  * Reads the story's `a11y` parameter, honouring the same shape
  * `@storybook/addon-a11y` uses so the panel and the gate stay consistent.
  *
- * Only `a11y.disable` opts a story out. `a11y.test` is deliberately ignored:
- * `preview.js` sets it to `'off'` globally to stop the addon running its own
- * axe pass against this one, so reading it here would skip every story.
+ * Only `a11y.disable` opts a story out. `a11y.test` is deliberately ignored: it
+ * configures how the *addon* grades its own run (`'todo'` vs `'error'`), which
+ * says nothing about whether this gate should audit the story. Opting out of the
+ * gate is `a11y.disable`, or a per-rule override — see `axeOptionsFor`.
  */
 function a11yParametersFor(storyContext) {
   const params = storyContext.parameters?.a11y ?? {};
@@ -167,7 +174,7 @@ function runAxe(page, options) {
  * through on the timeout rather than failing the run; axe still audits whatever
  * did render.
  */
-async function waitForPineHydration(page) {
+async function waitForPineHydration(page, storyId) {
   const allHydrated = () => {
     const root = document.querySelector('#storybook-root');
     if (!root) return false;
@@ -188,6 +195,9 @@ async function waitForPineHydration(page) {
     await page.waitForFunction(allHydrated, undefined, { timeout: HYDRATION_TIMEOUT_MS });
   } catch {
     // Timed out — audit what rendered rather than failing on the wait itself.
+    // Say so, though: an unhydrated page can under-report violations, so a run
+    // that recorded a baseline while this was firing is not trustworthy.
+    console.warn(`[a11y] "${storyId}" did not finish hydrating in ${HYDRATION_TIMEOUT_MS}ms — auditing it as rendered; results may be incomplete.`);
   }
 
   await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -232,7 +242,7 @@ export async function postVisit(page, context) {
   // own hydration. Both matter — `color-contrast` in particular is meaningless
   // against unstyled or mid-transition markup.
   await waitForPageReady(page);
-  await waitForPineHydration(page);
+  await waitForPineHydration(page, context.id);
 
   const violations = await collectViolations(page, axeOptionsFor(ruleOverrides));
 

@@ -50,10 +50,15 @@ stories that `affected` would not flag. The full run takes well under two minute
 Two implementation details are load-bearing:
 
 - **Pine's own axe run, not the addon's.** Storybook 10's `addon-a11y` runs axe
-  itself, and two axe instances on one page throw "Axe is already running." The
-  addon's automated check is therefore set to `test: 'off'` in `preview.js` (the
-  panel is untouched). Its native baseline — marking a story `test: 'todo'` — is
-  per story, not per rule, and would scatter the baseline across 17 story files.
+  itself after each story renders, and two axe instances on one page throw "Axe
+  is already running." That automatic run is therefore suppressed in `preview.js`
+  with `initialGlobals.a11y.manual = true`. The addon skips it when *either* that
+  global is set or `parameters.a11y.test` is `'off'`, but `'off'` additionally
+  replaces the Accessibility panel with a "tests are disabled" placeholder,
+  taking the on-demand scan away from developers; the `manual` global keeps the
+  panel working and costs nothing. The addon's native baseline — marking a story
+  `test: 'todo'` — is per story, not per rule, and would scatter the baseline
+  across 17 story files.
 - **Settle before auditing.** Stencil renders through an async task queue, so
   stories are not painted when Playwright calls the page loaded. The audit waits
   for every `pds-*` element (shadow roots included) to carry Stencil's `hydrated`
@@ -80,6 +85,10 @@ Two implementation details are load-bearing:
   downloaded. New job, new wall-clock on every PR.
 - Intersecting three axe samples will miss a violation that appears in fewer than
   three — the deliberate price of a gate people will not learn to ignore.
+- Baseline entries are per story and rule, not per element. A story already
+  tolerated for `color-contrast` absorbs a *second*, unrelated contrast failure
+  inside that same story. Node-level entries are the obvious next tightening,
+  and are more tractable once the current 71 are burnt down.
 - `@storybook/test-runner` cannot auto-load `.storybook/test-runner.js` here:
   Storybook 10's loader calls `module.register()`, which Jest 30 rejects. The
   hooks are wired in through `test-runner-jest.config.js`, the runner's own eject
