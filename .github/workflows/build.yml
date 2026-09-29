@@ -51,18 +51,20 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
+  # Not matrixed: @storybook/test-runner (and the Playwright it drives) requires
+  # Node >=20, so running this on Node 18 — the lowest entry in NODE_VERSIONS —
+  # fails outright ("Playwright requires Node.js 20 or higher"). The audited
+  # Storybook build is static HTML/JS; its result doesn't vary by the Node
+  # version that produced core's dist, so one run is correct, not a coverage cut.
   test-a11y:
     needs: [build-core]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
 
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/workflows/actions/test-a11y
         with:
-          node-version: ${{ matrix.node }}
+          node-version: '22'
 
   size-check:
     needs: [build-core]
