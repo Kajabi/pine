@@ -196,6 +196,19 @@ const preview = {
   },
 
   parameters: {
+    a11y: {
+      /**
+       * The Accessibility panel stays available in the Storybook UI; this turns
+       * off only the addon's *automated* axe run. Pine's accessibility gate
+       * (`npm run test.a11y`) runs axe itself so it can diff findings against
+       * `.storybook/a11y-baseline.json` at rule level, and two axe instances on
+       * one page collide ("Axe is already running").
+       *
+       * @see .storybook/a11y-hooks.js
+       */
+      test: 'off',
+    },
+
     options: {
       storySort: {
         method: 'alphabetical',

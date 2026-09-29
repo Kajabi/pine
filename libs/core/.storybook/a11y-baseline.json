@@ -1,0 +1,190 @@
+{
+  "$schema": "Story ID -> axe rule IDs that already failed when the gate landed.",
+  "$docs": "See CONTRIBUTING.md § Accessibility gate. Entries may be removed, never added by hand.",
+  "generatedAt": "2026-09-29",
+  "storyCount": 55,
+  "violationCount": 71,
+  "stories": {
+    "components-avatar--admin": [
+      "role-img-alt"
+    ],
+    "components-avatar--badge": [
+      "role-img-alt"
+    ],
+    "components-avatar--custom-size": [
+      "role-img-alt"
+    ],
+    "components-avatar--default": [
+      "role-img-alt"
+    ],
+    "components-avatar--dropdown-trigger": [
+      "role-img-alt"
+    ],
+    "components-avatar--initials-with-badge": [
+      "role-img-alt"
+    ],
+    "components-checkbox--invalid": [
+      "role-img-alt"
+    ],
+    "components-chip--tag": [
+      "role-img-alt"
+    ],
+    "components-chip--tag-with-http-method": [
+      "role-img-alt"
+    ],
+    "components-chip--tag-with-remove-target": [
+      "role-img-alt"
+    ],
+    "components-chip--tag-with-remove-url": [
+      "role-img-alt"
+    ],
+    "components-chip--truncated-label": [
+      "role-img-alt"
+    ],
+    "components-combobox--button-trigger": [
+      "aria-input-field-name"
+    ],
+    "components-combobox--chip-trigger-and-layout": [
+      "aria-input-field-name"
+    ],
+    "components-combobox--chip-trigger-layout-with-icons": [
+      "aria-input-field-name"
+    ],
+    "components-combobox--custom": [
+      "aria-input-field-name"
+    ],
+    "components-combobox--option-groups-optgroup": [
+      "aria-input-field-name"
+    ],
+    "components-filters--default": [
+      "color-contrast"
+    ],
+    "components-filters-filter--all-variants": [
+      "color-contrast"
+    ],
+    "components-filters-filter--default": [
+      "color-contrast"
+    ],
+    "components-filters-filter--more": [
+      "color-contrast"
+    ],
+    "components-input--with-append-select": [
+      "select-name"
+    ],
+    "components-input--with-prefix-and-append": [
+      "select-name"
+    ],
+    "components-input--with-prepend-and-suffix": [
+      "select-name"
+    ],
+    "components-link--external": [
+      "role-img-alt"
+    ],
+    "components-multiselect--close-panel-on-select": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--consumer-managed-async": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--custom-empty-state": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--custom-search-placeholder": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--custom-widths": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--default": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--disabled": [
+      "role-img-alt"
+    ],
+    "components-multiselect--disabled-options": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--grouped-options": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--grouped-options-via-options": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--hidden-label": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--hidden-selected-items": [
+      "role-img-alt"
+    ],
+    "components-multiselect--invalid": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--long-list": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--max-selections": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--pill-below": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--pill-disabled": [
+      "role-img-alt"
+    ],
+    "components-multiselect--pill-inline": [
+      "role-img-alt"
+    ],
+    "components-multiselect--pill-inline-overflow": [
+      "role-img-alt"
+    ],
+    "components-multiselect--with-create-option": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--with-message": [
+      "color-contrast",
+      "role-img-alt"
+    ],
+    "components-multiselect--with-preselected-values": [
+      "role-img-alt"
+    ],
+    "components-radio-group--invalid": [
+      "role-img-alt"
+    ],
+    "components-radio-group-radio--invalid": [
+      "role-img-alt"
+    ],
+    "components-sortable--disabled": [
+      "color-contrast"
+    ],
+    "components-switch--invalid": [
+      "role-img-alt"
+    ],
+    "components-table--default-sorting": [
+      "role-img-alt"
+    ],
+    "components-table--sortable": [
+      "role-img-alt"
+    ],
+    "components-tabs-tabpanel--default": [
+      "aria-valid-attr-value"
+    ],
+    "components-textarea--invalid": [
+      "role-img-alt"
+    ]
+  }
+}
