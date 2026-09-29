@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-This directory records significant decisions made about the Pine Design System — *why* the codebase looks the way it does, not just *what* it does.
+This directory records significant decisions made about the Pine Design System — _why_ the codebase looks the way it does, not just _what_ it does.
 
 ## Why ADRs?
 
@@ -19,18 +19,19 @@ See [`0000-template.md`](./0000-template.md).
 
 ## Index
 
-| # | Title | Status |
-| --- | --- | --- |
-| [0001](./0001-externalized-token-package.md) | Externalize design tokens to `@kajabi-ui/styles` | Accepted (retrospective) |
-| [0002](./0002-stencil-and-nx-monorepo.md) | Stencil.js components in an Nx monorepo | Accepted (retrospective) |
-| [0003](./0003-pine-custom-lint-plugins.md) | Custom Pine lint plugins enforce semantic-token usage | Accepted (retrospective) |
-| [0004](./0004-mcp-server-delivery.md) | Ship a Pine MCP server for AI tooling | Accepted (retrospective) |
-| [0005](./0005-dark-mode-via-semantic-tokens.md) | Roll out dark mode via semantic-token migration | Accepted (retrospective) |
-| [0006](./0006-react-wrappers-via-output-target.md) | Generate React wrappers via Stencil's output target | Accepted (retrospective) |
-| [0007](./0007-slots-for-content-props-for-config.md) | Slots for content, props for configuration | Accepted (retrospective) |
-| [0008](./0008-cdn-and-npm-distribution.md) | Dual distribution via npm and CDN with a lazy loader | Accepted (retrospective) |
-| [0009](./0009-vetted-runtime-dependencies.md) | Use vetted third-party libraries for positioning and sanitization | Accepted (retrospective) |
-| [0010](./0010-api-extractor-public-api-reports.md) | Enforce the public API contract with API Extractor reports | Accepted |
+| #                                                    | Title                                                             | Status                   |
+| ---------------------------------------------------- | ----------------------------------------------------------------- | ------------------------ |
+| [0001](./0001-externalized-token-package.md)         | Externalize design tokens to `@kajabi-ui/styles`                  | Accepted (retrospective) |
+| [0002](./0002-stencil-and-nx-monorepo.md)            | Stencil.js components in an Nx monorepo                           | Accepted (retrospective) |
+| [0003](./0003-pine-custom-lint-plugins.md)           | Custom Pine lint plugins enforce semantic-token usage             | Accepted (retrospective) |
+| [0004](./0004-mcp-server-delivery.md)                | Ship a Pine MCP server for AI tooling                             | Accepted (retrospective) |
+| [0005](./0005-dark-mode-via-semantic-tokens.md)      | Roll out dark mode via semantic-token migration                   | Accepted (retrospective) |
+| [0006](./0006-react-wrappers-via-output-target.md)   | Generate React wrappers via Stencil's output target               | Accepted (retrospective) |
+| [0007](./0007-slots-for-content-props-for-config.md) | Slots for content, props for configuration                        | Accepted (retrospective) |
+| [0008](./0008-cdn-and-npm-distribution.md)           | Dual distribution via npm and CDN with a lazy loader              | Accepted (retrospective) |
+| [0009](./0009-vetted-runtime-dependencies.md)        | Use vetted third-party libraries for positioning and sanitization | Accepted (retrospective) |
+| [0010](./0010-api-extractor-public-api-reports.md)   | Enforce the public API contract with API Extractor reports        | Accepted                 |
+| [0011](./0011-storybook-accessibility-gate.md)       | Gate accessibility in CI against a story-level baseline           | Accepted                 |
 
 ADRs 0001–0009 were authored retrospectively to capture decisions already in the codebase. The **Maintainers** field on each names the team that owns the area today, not the original deciders.
 
