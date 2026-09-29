@@ -172,7 +172,7 @@ noisy" is not a justification, and neither is silence.
 
 ### Visual regression (Chromatic)
 
-Pull requests and pushes to `main` / `next` run [Chromatic](https://www.chromatic.com/) via [`.github/workflows/chromatic.yml`](.github/workflows/chromatic.yml). The workflow publishes the static Storybook build from `libs/core/storybook-static`.
+Pull requests and pushes to `main` / `next` run [Chromatic](https://www.chromatic.com/) via the `chromatic` job in [`.github/workflows/build.yml`](.github/workflows/build.yml). It consumes the Storybook build shared with the accessibility gate rather than building its own — see `build-storybook` in the same file.
 
 Repository maintainers must add a **`CHROMATIC_PROJECT_TOKEN`** secret (from the Chromatic project for this Storybook) so the job can authenticate. Forked pull requests skip Chromatic because secrets are not available to them.
 

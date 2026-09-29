@@ -1,0 +1,68 @@
+name: 'Chromatic'
+description: 'Publishes the Storybook that build-storybook produced to Chromatic'
+
+inputs:
+  chromatic-project-token:
+    description: 'Chromatic project token. Empty on forks, where the publish is skipped.'
+    required: true
+  github-token:
+    description: 'Token Chromatic uses to post its own PR status check'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check Chromatic token is configured
+      id: chromatic-token
+      shell: bash
+      env:
+        CHROMATIC_PROJECT_TOKEN: ${{ inputs.chromatic-project-token }}
+      run: |
+        if [ -n "$CHROMATIC_PROJECT_TOKEN" ]; then
+          echo "configured=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "configured=false" >> "$GITHUB_OUTPUT"
+          echo "CHROMATIC_PROJECT_TOKEN is not configured; skipping Chromatic publish."
+        fi
+
+    # Chromatic needs full history to resolve the baseline commit.
+    - name: Check out latest
+      if: steps.chromatic-token.outputs.configured == 'true'
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    # Pointing Chromatic at a prebuilt Storybook means this job runs no build of
+    # its own, and needs no npm install: chromaui/action bundles the Chromatic
+    # CLI, which is not a dependency of this repository. With storybookBuildDir
+    # set the CLI takes its metadata from storybook-static/project.json and never
+    # evaluates .storybook/main.js, so having no node_modules here is safe —
+    # verified by running the CLI against this artifact in an empty workspace,
+    # where it reaches authentication with no module-resolution error.
+    - name: Download Storybook static from build-storybook
+      if: steps.chromatic-token.outputs.configured == 'true'
+      uses: ./.github/workflows/actions/download-archive
+      with:
+        name: pine-storybook-static-${{ github.sha }}
+        path: /tmp/pine-storybook-static
+        filename: storybook-static.zip
+
+    - name: Publish to Chromatic
+      if: steps.chromatic-token.outputs.configured == 'true'
+      # Pin to full SHA (v16.9.1) for supply-chain security
+      uses: chromaui/action@c231f99a49d72bfcf68eca3f1ef3187f471e352b
+      with:
+        projectToken: ${{ inputs.chromatic-project-token }}
+        workingDir: libs/core
+        storybookBuildDir: storybook-static
+        token: ${{ inputs.github-token }}
+        # PRs: do not fail the workflow on visual changes — Chromatic
+        # posts its own PR status check that blocks merge when changes
+        # are unapproved. This keeps the workflow itself green so other
+        # required checks can render their state independently.
+        exitZeroOnChanges: true
+        # Main and next: accept visual diffs into the baseline automatically.
+        # By the time something is on main or next it has been reviewed, so
+        # re-approving in Chromatic adds friction without catching anything new.
+        autoAcceptChanges: '@(main|next)'

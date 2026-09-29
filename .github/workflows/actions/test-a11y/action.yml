@@ -38,25 +38,25 @@ runs:
       run: npm ci
       shell: bash
 
-    # Storybook's preview imports libs/core/dist/docs.json, so the Stencil build
-    # has to be present before Storybook can be built. Reuse build-core's
-    # artifact rather than rebuilding it, exactly as size-check does.
-    - name: Download core dist from build-core
-      uses: actions/download-artifact@v4
+    # The gate audits a static Storybook, which build-storybook has already built
+    # and Chromatic also consumes. Restores libs/core/storybook-static, which is
+    # the only build output scripts/a11y.mjs needs — core's dist no longer has to
+    # be restored separately because .storybook/main.js lists '../dist' in
+    # staticDirs, so Storybook copies it into storybook-static at build time.
+    # That copy is load-bearing: preview-head.html fetches /pine-core/*.js and
+    # .css at render time, and both the hydration wait and the colour-contrast
+    # checks depend on them being served. Dropping '../dist' from staticDirs
+    # would not fail this job — it would quietly audit unhydrated, unstyled
+    # markup.
+    - name: Download Storybook static from build-storybook
+      uses: ./.github/workflows/actions/download-archive
       with:
-        name: pine-core-dist-${{ inputs.node-version }}-${{ github.sha }}
-        path: /tmp/pine-core-dist
-
-    - name: Extract core dist
-      run: unzip -q -o /tmp/pine-core-dist/core-dist.zip -d .
-      shell: bash
+        name: pine-storybook-static-${{ github.sha }}
+        path: /tmp/pine-storybook-static
+        filename: storybook-static.zip
 
     - name: Install Playwright Chromium
       run: npx playwright install --with-deps chromium
-      shell: bash
-
-    - name: Build Storybook
-      run: npm run build.storybook --workspace=@pine-ds/core
       shell: bash
 
     - name: Run accessibility gate
