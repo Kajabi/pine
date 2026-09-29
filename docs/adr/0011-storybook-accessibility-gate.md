@@ -36,7 +36,7 @@ baseline.
 
 - The audit lives in `libs/core/.storybook/a11y-hooks.js`.
 - `libs/core/.storybook/a11y-baseline.json` maps story ID → the axe rule IDs that
-  already failed for it. Baselining is **per story *and* per rule**: a story
+  already failed for it. Baselining is **per story _and_ per rule**: a story
   tolerated for `role-img-alt` still fails on a new `select-name`.
 - `libs/core/scripts/a11y.mjs` serves the static Storybook, drives the runner, and
   reports baseline entries that no longer reproduce so the baseline ratchets down.
@@ -52,7 +52,7 @@ Two implementation details are load-bearing:
 - **Pine's own axe run, not the addon's.** Storybook 10's `addon-a11y` runs axe
   itself after each story renders, and two axe instances on one page throw "Axe
   is already running." That automatic run is therefore suppressed in `preview.js`
-  with `initialGlobals.a11y.manual = true`. The addon skips it when *either* that
+  with `initialGlobals.a11y.manual = true`. The addon skips it when _either_ that
   global is set or `parameters.a11y.test` is `'off'`, but `'off'` additionally
   replaces the Accessibility panel with a "tests are disabled" placeholder,
   taking the on-demand scan away from developers; the `manual` global keeps the
@@ -86,7 +86,7 @@ Two implementation details are load-bearing:
 - Intersecting three axe samples will miss a violation that appears in fewer than
   three — the deliberate price of a gate people will not learn to ignore.
 - Baseline entries are per story and rule, not per element. A story already
-  tolerated for `color-contrast` absorbs a *second*, unrelated contrast failure
+  tolerated for `color-contrast` absorbs a _second_, unrelated contrast failure
   inside that same story. Node-level entries are the obvious next tightening,
   and are more tractable once the current 71 are burnt down.
 - `@storybook/test-runner` cannot auto-load `.storybook/test-runner.js` here:

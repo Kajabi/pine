@@ -106,7 +106,7 @@ Every Storybook story is rendered in headless Chromium and audited with
 [axe-core](https://github.com/dequelabs/axe-core) against WCAG 2.1 AA. This runs
 as the `test-a11y` job on every PR.
 
-This is the *themed* half of Pine's accessibility testing. The other half is
+This is the _themed_ half of Pine's accessibility testing. The other half is
 component-level: `runAxe` in `libs/core/src/utils/test/axe.ts`, used from
 `*.e2e.ts` specs, which runs under `npm run test.all`. That harness renders
 without the global stylesheet, so it cannot judge `color-contrast` — the
