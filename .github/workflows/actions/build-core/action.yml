@@ -56,12 +56,27 @@ runs:
     # branch, the committed files are stale -- most often because a hand-authored
     # patch in libs/core/scripts/react-output-target-with-patches.ts was stripped by
     # a build and committed in its unpatched form.
+    #
+    # This check is only meaningful because the "Build Core" step above really runs:
+    # libs/react/src is not a declared Nx output of @pine-ds/core:build, so a build
+    # served from the Nx task cache regenerates nothing and would leave this
+    # comparison vacuously green. CI persists only the npm cache (not .nx/cache), so
+    # every run builds for real. If .nx/cache is ever cached or Nx Cloud is enabled,
+    # this step must regenerate explicitly (e.g. append --skip-nx-cache) or it will
+    # silently stop verifying anything.
+    #
+    # Use `git status --porcelain` rather than `git diff`: a vendor upgrade that adds
+    # or removes a file under react-component-lib/ shows up as an untracked or deleted
+    # path, and `git diff` reports neither.
     - name: Verify generated React bindings are in sync
       shell: bash
       run: |
-        if ! git diff --exit-code -- libs/react/src; then
-          echo "::error::Generated React bindings in libs/react/src are out of sync with the build output (diff above)."
-          echo "Run 'npx nx run @pine-ds/core:build' locally and commit the result."
+        if [ -n "$(git status --porcelain -- libs/react/src)" ]; then
+          echo "::error::Generated React bindings in libs/react/src are out of sync with the build output (details below)."
+          git status --porcelain -- libs/react/src
+          git diff -- libs/react/src
+          echo "Run 'npx nx run @pine-ds/core:build --skip-nx-cache' locally and commit the result."
+          echo "(--skip-nx-cache matters: a cached build regenerates nothing.)"
           exit 1
         fi
         echo "Generated React bindings are in sync."
