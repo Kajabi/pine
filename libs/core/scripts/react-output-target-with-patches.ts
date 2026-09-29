@@ -1,7 +1,16 @@
-import type { Config, OutputTargetCustom } from '@stencil/core/internal';
 import { reactOutputTarget } from '@stencil/react-output-target';
 import * as fs from 'fs';
 import * as path from 'path';
+
+/**
+ * The vendor output target's own type. Deliberately derived from `reactOutputTarget`
+ * rather than imported as `OutputTargetCustom` from `@stencil/core/internal`: the
+ * workspace resolves two different copies of `@stencil/core` (the root hoists one for
+ * `@stencil/react-output-target`, `libs/core` pins its own), so importing the type
+ * directly makes this module straddle both copies and fail to typecheck. Deriving it
+ * from the vendor keeps us on whichever copy the vendor itself uses.
+ */
+type VendorReactOutputTarget = ReturnType<typeof reactOutputTarget>;
 
 /**
  * Pine-local patches for the generated React component library.
@@ -14,9 +23,13 @@ import * as path from 'path';
  * target runs, so the deviation survives rebuilds without anyone having to
  * remember to `git checkout --` the file.
  *
- * If a `@stencil/react-output-target` upgrade changes the vendor source such that
- * a patch no longer applies, the build FAILS rather than quietly emitting an
- * unpatched file — that loud failure is the whole point of this module.
+ * If a `@stencil/react-output-target` upgrade changes the vendor source such that a
+ * patch no longer applies, this module throws. Stencil soft-catches a custom output
+ * target's error into a build diagnostic, so `stencil build` still finishes and leaves
+ * the unpatched file on disk, but it reports the error and exits non-zero — so CI fails
+ * rather than publishing an unpatched binding. That loud failure is the point of this
+ * module. Note `stencil build --watch` never exits, so there the failure is logged only;
+ * the CI drift check on `libs/react/src` is the backstop for both cases.
  */
 interface ReactComponentLibPatch {
   /** File to patch, relative to the generated `react-component-lib/` directory. */
@@ -56,13 +69,23 @@ const PATCHES: ReactComponentLibPatch[] = [
 
 /**
  * Resolve the directory `@stencil/react-output-target` copies `react-component-lib/`
- * into. It mirrors the vendor's own calculation: the directory is a sibling of the
- * configured `proxiesFile`.
+ * into, mirroring exactly where the vendor actually writes.
+ *
+ * The vendor only absolutizes `proxiesFile` when the legacy `directivesProxyFile`
+ * option is also set (see `normalizeOutputTarget` in the vendor source) — Pine does
+ * not set it, so `proxiesFile` reaches the vendor's `copyResources()` exactly as
+ * configured here: relative. It is handed to `config.sys.copy()` unresolved, so Node
+ * resolves it against `process.cwd()`, NOT against `config.rootDir`.
+ *
+ * Resolving it the same way therefore points at the files the vendor really wrote.
+ * Resolving against `config.rootDir` instead would agree only while the build happens
+ * to run with `cwd === rootDir` (true today: `nx run @pine-ds/core:build` runs
+ * `stencil build` from `libs/core/`). If that ever changes, this resolves to the
+ * directory the vendor actually wrote — and if that directory does not exist,
+ * `applyPatches` throws loudly instead of silently patching a stale copy.
  */
-function resolveReactComponentLibDir(config: Config, proxiesFile: string): string {
-  const base = config.rootDir ?? process.cwd();
-  const absoluteProxiesFile = path.isAbsolute(proxiesFile) ? proxiesFile : path.join(base, proxiesFile);
-  return path.join(path.dirname(absoluteProxiesFile), 'react-component-lib');
+function resolveReactComponentLibDir(proxiesFile: string): string {
+  return path.resolve(path.dirname(proxiesFile), 'react-component-lib');
 }
 
 /**
@@ -85,8 +108,18 @@ function applyPatches(reactComponentLibDir: string): void {
 
     const source = fs.readFileSync(filePath, 'utf-8');
 
-    // Already patched (e.g. an incremental build that didn't re-copy the file).
+    // Already patched, so re-applying would be a no-op. The vendor re-copies the
+    // pristine template on every build we have observed, so reaching this branch means
+    // the copy did not happen — and the vendor passes `warn: false` to `config.sys.copy`,
+    // which swallows per-file copy errors. Say so out loud rather than reporting success,
+    // so a silently broken vendor copy is visible instead of looking healthy.
     if (source.includes(patch.marker)) {
+      console.warn(
+        `⚠️  react-component-lib/${patch.file} already contains the Pine patch marker, so ` +
+          `@stencil/react-output-target did not re-copy the vendor template this build. ` +
+          `Leaving the existing file untouched; if this appears in a clean build, the vendor ` +
+          `copy step may be failing silently.`
+      );
       continue;
     }
 
@@ -115,15 +148,18 @@ function applyPatches(reactComponentLibDir: string): void {
  */
 export default function reactOutputTargetWithPatches(
   options: Parameters<typeof reactOutputTarget>[0]
-): OutputTargetCustom {
+): VendorReactOutputTarget {
   const base = reactOutputTarget(options);
 
   return {
     ...base,
     name: 'react-library-with-pine-patches',
-    async generator(config, compilerCtx, buildCtx) {
-      await base.generator(config, compilerCtx, buildCtx);
-      applyPatches(resolveReactComponentLibDir(config, options.proxiesFile));
+    // Forward every argument through verbatim. Stencil's `generator` contract takes a
+    // fourth `docs` argument that the vendor happens to ignore today; spreading means a
+    // future vendor version that starts reading it still receives it.
+    async generator(...args: Parameters<VendorReactOutputTarget['generator']>) {
+      await base.generator(...args);
+      applyPatches(resolveReactComponentLibDir(options.proxiesFile));
     },
   };
 }
