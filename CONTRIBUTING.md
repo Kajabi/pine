@@ -100,6 +100,76 @@ unions are **major** changes. See [VERSIONING.md](./VERSIONING.md#automated-enfo
 for the mapping and for what the reports deliberately don't cover (slots, `--pds-*`
 custom properties, and prop defaults).
 
+### Accessibility gate
+
+Every Storybook story is rendered in headless Chromium and audited with
+[axe-core](https://github.com/dequelabs/axe-core) against WCAG 2.1 AA. This runs
+as the `test-a11y` job on every PR.
+
+This is the *themed* half of Pine's accessibility testing. The other half is
+component-level: `runAxe` in `libs/core/src/utils/test/axe.ts`, used from
+`*.e2e.ts` specs, which runs under `npm run test.all`. That harness renders
+without the global stylesheet, so it cannot judge `color-contrast` — the
+Storybook gate can, and does.
+
+Run it locally from `libs/core`:
+
+```zsh
+npm run build.stencil        # Storybook reads dist/docs.json
+npm run build.storybook
+npm run test.a11y
+```
+
+Or from the repo root, against an already-built Storybook: `npm run test.a11y`.
+
+To audit a Storybook you already have running, skip the static build:
+
+```zsh
+npm run test.a11y -- --url http://localhost:6006
+```
+
+#### The baseline
+
+Pine had pre-existing violations when the gate landed, so the gate is a ratchet,
+not a cliff. `libs/core/.storybook/a11y-baseline.json` maps each story ID to the
+axe rules that already failed for it. A violation whose rule is not recorded for
+that story fails CI; everything in the baseline is tolerated.
+
+The baseline is expected to shrink and **must never grow by hand**. When you fix
+a violation the runner tells you the entry is stale — prune it with:
+
+```zsh
+npm run test.a11y -- --update-baseline
+```
+
+Regenerating is also the right move after adding stories to a component that
+still has baselined violations. Review the diff: only removals, or additions for
+genuinely new stories of an already-violating component, should appear. A new
+rule appearing for an existing story means you introduced a regression.
+
+#### Justified exceptions
+
+When a story legitimately cannot satisfy a rule — it demonstrates the failure
+case, or the rule does not apply to a fragment rendered out of context — disable
+that one rule on that one story and say why:
+
+```js
+export const Default = {
+  parameters: {
+    a11y: {
+      // pds-tooltip is positioned by Floating UI outside the story root, so
+      // axe cannot resolve aria-describedby here. Covered by pds-tooltip.e2e.ts.
+      config: { rules: [{ id: 'aria-valid-attr-value', enabled: false }] },
+    },
+  },
+};
+```
+
+Skip a story entirely with `parameters: { a11y: { disable: true } }`. Prefer the
+narrow per-rule form — a blanket `disable` also hides regressions in rules the
+story does pass today. Both are reviewed like any other code change; "it was
+noisy" is not a justification, and neither is silence.
+
 ### Visual regression (Chromatic)
 
 Pull requests and pushes to `main` / `next` run [Chromatic](https://www.chromatic.com/) via [`.github/workflows/chromatic.yml`](.github/workflows/chromatic.yml). The workflow publishes the static Storybook build from `libs/core/storybook-static`.

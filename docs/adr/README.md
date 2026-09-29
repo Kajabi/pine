@@ -31,6 +31,7 @@ See [`0000-template.md`](./0000-template.md).
 | [0008](./0008-cdn-and-npm-distribution.md) | Dual distribution via npm and CDN with a lazy loader | Accepted (retrospective) |
 | [0009](./0009-vetted-runtime-dependencies.md) | Use vetted third-party libraries for positioning and sanitization | Accepted (retrospective) |
 | [0010](./0010-api-extractor-public-api-reports.md) | Enforce the public API contract with API Extractor reports | Accepted |
+| [0011](./0011-storybook-accessibility-gate.md) | Gate accessibility in CI against a story-level baseline | Accepted |
 
 ADRs 0001–0009 were authored retrospectively to capture decisions already in the codebase. The **Maintainers** field on each names the team that owns the area today, not the original deciders.
 
