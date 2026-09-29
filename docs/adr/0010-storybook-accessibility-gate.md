@@ -82,8 +82,18 @@ Two implementation details are load-bearing:
 
 - 71 known violations ship tolerated. The gate stops regressions; it does not fix
   the backlog, and nothing yet forces the backlog to shrink on a schedule.
-- Storybook must be built in CI (roughly a minute) and Playwright Chromium
-  downloaded. New job, new wall-clock on every PR.
+- The gate downloads Playwright Chromium and runs the audit on every PR. It no
+  longer builds Storybook itself: the `build-storybook` job does that once and
+  Chromatic consumes the same artifact, so the build is shared rather than
+  charged to this gate.
+- The gate runs on one Node version (22, matching `.nvmrc`) rather than the full
+  `NODE_VERSIONS` matrix. axe's verdict is a function of the rendered DOM and
+  Chromium, not of the Node that ran Vite, and `build-core` still covers the
+  matrix — so no accessibility signal is lost. What is given up is narrower:
+  "does `storybook build` succeed on every supported Node" is no longer covered
+  here. 22 is not a free choice — `@storybook/test-runner` and `playwright` both
+  declare `node >= 20`, so the older `NODE_VERSIONS` entries cannot run this gate
+  at all.
 - Intersecting three axe samples will miss a violation that appears in fewer than
   three — the deliberate price of a gate people will not learn to ignore.
 - Baseline entries are per story and rule, not per element. A story already
@@ -124,6 +134,10 @@ Two implementation details are load-bearing:
 - `libs/core/scripts/a11y.mjs`
 - `.github/workflows/actions/test-a11y/action.yml`
 - `.github/workflows/actions/build-storybook/action.yml` (the shared build)
+- `.github/workflows/actions/chromatic/action.yml` (the other consumer — the
+  standalone `chromatic.yml` workflow was folded into `build.yml`, since
+  artifacts are scoped to a single workflow run)
+- `.github/workflows/build.yml` (`build-storybook` → `test-a11y` / `chromatic`)
 - `libs/core/src/utils/test/axe.ts` (component-level counterpart)
 - CONTRIBUTING.md § Accessibility gate
 - Linear DSS-290, DSS-294 (sharing the Storybook build with Chromatic)
