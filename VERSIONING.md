@@ -44,6 +44,70 @@ generated files, and anything not exported or documented.
 When in doubt, size up. Shipping a breaking change as a minor is far more
 expensive for consumers than an over-cautious major.
 
+## Automated enforcement — the API report
+
+The TypeScript half of the contract above is enforced in CI, not left to reviewer
+vigilance. [API Extractor](https://api-extractor.com/) snapshots each published
+package's public surface into a checked-in **API report**:
+
+| Package | Report |
+| --- | --- |
+| `@pine-ds/core` | [`libs/core/etc/core.api.md`](./libs/core/etc/core.api.md) |
+| `@pine-ds/react` | [`libs/react/etc/react.api.md`](./libs/react/etc/react.api.md) |
+
+`core.api.md` is the substantive one: it lists every component's props with their exact
+types and optionality (the `Components.*` interfaces), every `onPds*` event handler
+(the `LocalJSX.*` interfaces), and every exported event-detail and union type.
+`react.api.md` covers the wrapper surface — which `Pds*` components `@pine-ds/react`
+exports and each `forwardRef` signature.
+
+The `api-check` CI job runs `npm run api.check`, which regenerates both reports and
+**fails if either differs from the committed copy**. Check locally with the same command.
+
+### When the check fails
+
+A failure is not automatically a bug — it means the public API moved and a human has to
+classify the move. Read the diff the job prints, then:
+
+1. **Unintentional?** Fix the code. A prop you didn't mean to rename, a type you
+   accidentally narrowed — that's the check doing its job.
+2. **Intentional?** Update the baseline and commit it in the same PR:
+
+   ```zsh
+   npm run api.update
+   ```
+
+   The updated `libs/*/etc/*.api.md` is then part of the diff, so the API change is
+   reviewed explicitly rather than buried in generated output.
+3. **Size the release.** Map the diff to the levels above — this is the step that makes
+   the check more than a red X:
+
+   | Diff in the report | Version level |
+   | --- | --- |
+   | A prop / event / method / exported type **disappears** or is **renamed** | **MAJOR** — and it should have been deprecated first |
+   | A type union **loses** a member, or an optional prop (`"x"?:`) becomes required (`"x":`) | **MAJOR** |
+   | A new prop / event / method / exported type **appears** | MINOR |
+   | A type union **gains** a member, or a required prop becomes optional | MINOR |
+   | Report unchanged | PATCH as far as the TS contract goes |
+
+   A MAJOR-level diff also needs a migration note (see below) and a `feat!` /
+   `BREAKING CHANGE:` commit so Nx Release computes the right bump.
+
+### What the report does not cover
+
+The report is generated from TypeScript declarations, so parts of the contract that
+aren't TypeScript stay a **review** responsibility:
+
+- **Named slots** — not expressed in the generated types.
+- **Public `--pds-*` custom properties** — CSS, invisible to the extractor.
+- **Default-value changes** — Stencil's declarations carry the prop type, not the
+  default, so flipping a default is still a MAJOR change the report won't flag.
+
+Two mechanical notes: the report names the JSX namespace `LocalJSX` rather than `JSX`
+(see `libs/core/scripts/prepare-api-types.mjs` for why), and it is generated from a
+build, so run `npx nx run-many -t build` — or just use `npm run api.check`, which builds
+first — before comparing.
+
 ## Deprecation — prefer it over removal
 
 This codifies the convention Pine already follows (see live examples below).
