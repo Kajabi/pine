@@ -10,8 +10,6 @@ import type { JSX as JSX_2 } from '@pine-ds/core/components';
 import { default as React_2 } from 'react';
 import { RefAttributes } from 'react';
 
-// Warning: (ae-forgotten-export) The symbol "StyleReactProps" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const MockPdsModal: ForwardRefExoticComponent<JSX_2.MockPdsModal & Omit<HTMLAttributes<HTMLMockPdsModalElement>, "style"> & StyleReactProps & RefAttributes<HTMLMockPdsModalElement>>;
 
@@ -63,11 +61,24 @@ export const PdsFilter: ForwardRefExoticComponent<JSX_2.PdsFilter & Omit<HTMLAtt
 // @public (undocumented)
 export const PdsFilters: ForwardRefExoticComponent<JSX_2.PdsFilters & Omit<HTMLAttributes<HTMLPdsFiltersElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsFiltersElement>>;
 
-// Warning: (ae-forgotten-export) The symbol "PdsIconProps" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "PdsReactProps" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const PdsIcon: React_2.ForwardRefExoticComponent<PdsIconProps & PdsReactProps & Omit<React_2.HTMLAttributes<HTMLPdsIconElement>, "style"> & StyleReactProps & React_2.RefAttributes<HTMLPdsIconElement>>;
+
+// @public (undocumented)
+export interface PdsIconProps {
+    // (undocumented)
+    color?: string;
+    // (undocumented)
+    flipRtl?: boolean;
+    // (undocumented)
+    icon?: string;
+    // (undocumented)
+    name?: string;
+    // (undocumented)
+    size?: string;
+    // (undocumented)
+    src?: string;
+}
 
 // @public (undocumented)
 export const PdsImage: ForwardRefExoticComponent<JSX_2.PdsImage & Omit<HTMLAttributes<HTMLPdsImageElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsImageElement>>;
@@ -110,6 +121,16 @@ export const PdsRadio: ForwardRefExoticComponent<JSX_2.PdsRadio & Omit<HTMLAttri
 
 // @public (undocumented)
 export const PdsRadioGroup: ForwardRefExoticComponent<JSX_2.PdsRadioGroup & Omit<HTMLAttributes<HTMLPdsRadioGroupElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsRadioGroupElement>>;
+
+// @public (undocumented)
+export interface PdsReactProps {
+    // (undocumented)
+    className?: string;
+    // (undocumented)
+    style?: {
+        [key: string]: any;
+    };
+}
 
 // @public (undocumented)
 export const PdsRow: ForwardRefExoticComponent<JSX_2.PdsRow & Omit<HTMLAttributes<HTMLPdsRowElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsRowElement>>;
@@ -164,6 +185,18 @@ export const PdsToast: ForwardRefExoticComponent<JSX_2.PdsToast & Omit<HTMLAttri
 
 // @public (undocumented)
 export const PdsTooltip: ForwardRefExoticComponent<JSX_2.PdsTooltip & Omit<HTMLAttributes<HTMLPdsTooltipElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsTooltipElement>>;
+
+// @public (undocumented)
+export interface StyleReactProps {
+    // (undocumented)
+    class?: string;
+    // (undocumented)
+    className?: string;
+    // (undocumented)
+    style?: {
+        [key: string]: any;
+    };
+}
 
 // (No @packageDocumentation comment for this package)
 

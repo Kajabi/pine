@@ -3181,6 +3181,9 @@ export interface RadioGroupChangeEventDetail {
 export { SortableEvent }
 
 // @public (undocumented)
+export const TEXT_SIZES: readonly ["2xl", "xl", "lg", "md", "sm", "xs", "2xs", "h1", "h2", "h3", "h4", "h5", "h6"];
+
+// @public (undocumented)
 export interface TextareaChangeEventDetail {
     // (undocumented)
     event?: Event;
@@ -3196,8 +3199,6 @@ export interface TextareaInputEventDetail {
     value?: string | null;
 }
 
-// Warning: (ae-forgotten-export) The symbol "TEXT_SIZES" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export type TextSizeType = (typeof TEXT_SIZES)[number];
 

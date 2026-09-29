@@ -38,8 +38,12 @@
       "ae-internal-missing-underscore": { "logLevel": "none" },
 
       /**
-       * `StyleReactProps` is part of every wrapper's signature but is not re-exported from
-       * the entry point. It still appears in the report, so changes to it are still caught.
+       * `PdsIconProps`, `PdsReactProps`, and `StyleReactProps` are re-exported from the
+       * entry point specifically so their shapes are fully expanded in this report — a
+       * forgotten export only shows a bare type-reference name, which does NOT catch a
+       * change to the referenced type's own members. Any *new* forgotten-export warning
+       * here means a real Pine-owned type just went blind to the gate; investigate before
+       * silencing.
        */
       "ae-forgotten-export": { "logLevel": "none" }
     },

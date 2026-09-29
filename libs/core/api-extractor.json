@@ -65,9 +65,14 @@
       "ae-internal-missing-underscore": { "logLevel": "none" },
 
       /**
-       * Stencil's generated components.d.ts references helper types it does not
-       * re-export. They still appear in the report, so changes to them are still
-       * caught — we just don't need the per-symbol warning.
+       * `TEXT_SIZES` is re-exported from the entry point so its actual values are
+       * expanded in this report (a forgotten export shows only a bare type-reference
+       * name, which does NOT catch a change to the referenced value/type's own shape).
+       * The one remaining forgotten export, `EventDecorator`, is `@stencil/core`'s own
+       * vendor type (re-exported incidentally as `Event` by Stencil's generated
+       * components.d.ts) — Pine doesn't own its shape, so a bare reference is fine there.
+       * Any *new* forgotten-export warning means a Pine-owned type just went blind to
+       * the gate; investigate before silencing.
        */
       "ae-forgotten-export": { "logLevel": "none" }
     },
