@@ -9,8 +9,8 @@
   },
   "packageManager": "npm@10.8.2",
   "scripts": {
-    "api.check": "npx nx run-many --target=api.check",
-    "api.update": "npx nx run-many --target=api.update",
+    "api.check": "npx nx run @pine-ds/core:api.check && npx nx run @pine-ds/react:api.check",
+    "api.update": "npx nx run @pine-ds/core:api.update && npx nx run @pine-ds/react:api.update",
     "build.all": "npx nx run-many --target=build",
     "commit": "npx cz",
     "postinstall": "node libs/core/scripts/vscode-settings-patcher.cjs || true",

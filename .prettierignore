@@ -3,3 +3,7 @@
 /coverage
 /.nx/cache
 /.nx/workspace-data
+
+# API Extractor owns the formatting of its reports. Reformatting them would make
+# `npm run api.check` fail permanently, since it regenerates them its own way.
+libs/*/etc/*.api.md

@@ -99,6 +99,7 @@ A report diff is also a release-sizing signal — removals, renames, and narrowe
 unions are **major** changes. See [VERSIONING.md](./VERSIONING.md#automated-enforcement--the-api-report)
 for the mapping and for what the reports deliberately don't cover (slots, `--pds-*`
 custom properties, and prop defaults).
+
 ### Visual regression (Chromatic)
 
 Pull requests and pushes to `main` / `next` run [Chromatic](https://www.chromatic.com/) via [`.github/workflows/chromatic.yml`](.github/workflows/chromatic.yml). The workflow publishes the static Storybook build from `libs/core/storybook-static`.

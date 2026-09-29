@@ -18,7 +18,7 @@
  * Nothing under `dist/` is modified; Stencil's output is left untouched.
  */
 import { cp, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -35,13 +35,32 @@ const fail = (message) => {
 
 await rm(stagingDir, { force: true, recursive: true });
 
-// `dist/types/Users/...` is a stray absolute-path artifact of the Stencil build and is
-// not reachable from the entry point; skip it so the staged tree stays clean.
+/**
+ * Stencil mirrors the *absolute* checkout path into `dist/types/` for the few declarations it
+ * emits from outside `src` (e.g. `.stencil/scripts/…`). That mirrored subtree is rooted at the
+ * first segment of the absolute package path, so it is `dist/types/Users/…` on macOS but
+ * `dist/types/home/…` on the Linux CI runner — derive the segment rather than hardcoding one,
+ * or the filter silently does nothing in the environment that actually gates merges.
+ *
+ * Match the directory exactly, too: a substring test would also drop a legitimately named
+ * sibling such as `UsersGuide.d.ts`, quietly shrinking the surface this report exists to cover.
+ */
+const [strayRootSegment] = relative(resolve(sep), packageRoot).split(sep);
+
+if (!strayRootSegment) {
+  fail(`could not derive the stray declaration root from ${packageRoot}.`);
+}
+
+const strayDir = resolve(sourceDir, strayRootSegment);
+
 await cp(sourceDir, stagingDir, {
   recursive: true,
-  filter: (src) => !src.includes(`${sourceDir}/Users`),
-}).catch(() =>
-  fail(`could not read ${sourceDir}. Run \`npx nx run @pine-ds/core:build\` first.`)
+  filter: (src) => src !== strayDir && !src.startsWith(`${strayDir}${sep}`),
+}).catch((error) =>
+  fail(
+    `could not stage ${sourceDir}: ${error.message}\n` +
+      'If the directory is missing, run `npx nx run @pine-ds/core:build` first.'
+  )
 );
 
 const componentsPath = resolve(stagingDir, 'components.d.ts');
