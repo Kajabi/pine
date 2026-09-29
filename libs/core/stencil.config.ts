@@ -1,10 +1,10 @@
 import { Config } from '@stencil/core';
-import { reactOutputTarget } from '@stencil/react-output-target';
 
 // Plugins
 import { sass } from '@stencil/sass';
 
 // Custom output targets
+import reactOutputTargetWithPatches from './scripts/react-output-target-with-patches';
 import vscodeCustomDataOutputTarget from './scripts/vscode-custom-data-generator';
 
 export const config: Config = {
@@ -57,7 +57,10 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null, // disable service workers
     },
-    reactOutputTarget({
+    // Wraps @stencil/react-output-target so Pine's hand-authored patches to the
+    // generated react-component-lib/ survive every rebuild. See
+    // ./scripts/react-output-target-with-patches.ts.
+    reactOutputTargetWithPatches({
       componentCorePackage: '@pine-ds/core',
       includeImportCustomElements: true,
       includePolyfills: false,
