@@ -1,0 +1,79 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+
+  "projectFolder": ".",
+
+  /**
+   * Stencil emits the full public contract into dist/types — the `Components.*` prop
+   * interfaces, the `LocalJSX.*` prop + `onPds*` event-handler interfaces, and every
+   * exported event-detail and union type.
+   *
+   * We analyze a staged copy rather than dist/types itself: `scripts/prepare-api-types.mjs`
+   * rewrites one line that API Extractor cannot parse (see that file for the details).
+   * Run `npm run api.update -w @pine-ds/core` — or the nx target — which stages first.
+   */
+  "mainEntryPointFilePath": "<projectFolder>/temp/api-types/index.d.ts",
+
+  "compiler": {
+    /**
+     * The package tsconfig maps `@utils/*` back to `src/utils/*` and includes `src`, which
+     * makes API Extractor follow the alias into TypeScript source and fail with
+     * `ae-wrong-input-file-type`. Analyze only the staged declarations instead.
+     */
+    "overrideTsconfig": {
+      "compilerOptions": {
+        "baseUrl": ".",
+        "target": "es2017",
+        "lib": ["dom", "es2017"],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "strict": false,
+        "types": []
+      },
+      "include": ["temp/api-types/**/*.d.ts"],
+      "exclude": ["node_modules"]
+    }
+  },
+
+  "apiReport": {
+    "enabled": true,
+    "reportFolder": "<projectFolder>/etc/",
+    "reportTempFolder": "<projectFolder>/temp/api-report/"
+  },
+
+  /** The doc model and .d.ts rollup are review aids we don't consume; keep the diff small. */
+  "docModel": { "enabled": false },
+  "dtsRollup": { "enabled": false },
+  "tsdocMetadata": { "enabled": false },
+
+  "messages": {
+    "compilerMessageReporting": {
+      "default": { "logLevel": "warning" }
+    },
+
+    "extractorMessageReporting": {
+      "default": { "logLevel": "warning" },
+
+      /**
+       * Pine does not use API Extractor release tags. Per VERSIONING.md everything
+       * exported from the package entry point is public by definition, so the tags
+       * would be noise on ~200 Stencil-generated declarations.
+       */
+      "ae-missing-release-tag": { "logLevel": "none" },
+      "ae-internal-missing-underscore": { "logLevel": "none" },
+
+      /**
+       * Stencil's generated components.d.ts references helper types it does not
+       * re-export. They still appear in the report, so changes to them are still
+       * caught — we just don't need the per-symbol warning.
+       */
+      "ae-forgotten-export": { "logLevel": "none" }
+    },
+
+    "tsdocMessageReporting": {
+      "default": { "logLevel": "none" }
+    }
+  }
+}

@@ -51,6 +51,8 @@
     "loader/"
   ],
   "scripts": {
+    "api.check": "node scripts/prepare-api-types.mjs && api-extractor run --verbose",
+    "api.update": "node scripts/prepare-api-types.mjs && api-extractor run --local --verbose",
     "build": "npm run build.stencil",
     "build.all": "run-s build.stencil build.storybook",
     "build.stencil": "stencil build --docs && mkdir -p dist/scripts && cp scripts/vscode-settings-patcher.cjs dist/scripts/",
