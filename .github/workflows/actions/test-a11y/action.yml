@@ -1,0 +1,64 @@
+name: 'Test A11y'
+description: 'Enforces the accessibility baseline by running axe against every Storybook story'
+
+inputs:
+  node-version:
+    description: 'The version of node to use'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out latest
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Set up Node.js (pinned npm)
+      uses: ./.github/workflows/actions/setup-node-with-pinned-npm
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: '.nvmrc'
+
+    - name: Get NPM cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+    - name: Cache npm
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-npm-${{ github.sha }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
+    - name: Install Dependencies
+      run: npm ci
+      shell: bash
+
+    # Storybook's preview imports libs/core/dist/docs.json, so the Stencil build
+    # has to be present before Storybook can be built. Reuse build-core's
+    # artifact rather than rebuilding it, exactly as size-check does.
+    - name: Download core dist from build-core
+      uses: actions/download-artifact@v4
+      with:
+        name: pine-core-dist-${{ inputs.node-version }}-${{ github.sha }}
+        path: /tmp/pine-core-dist
+
+    - name: Extract core dist
+      run: unzip -q -o /tmp/pine-core-dist/core-dist.zip -d .
+      shell: bash
+
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+      shell: bash
+
+    - name: Build Storybook
+      run: npm run build.storybook --workspace=@pine-ds/core
+      shell: bash
+
+    - name: Run accessibility gate
+      run: npm run test.a11y --workspace=@pine-ds/core
+      shell: bash

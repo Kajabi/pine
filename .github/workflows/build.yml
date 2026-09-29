@@ -51,6 +51,19 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
+  test-a11y:
+    needs: [build-core]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/workflows/actions/test-a11y
+        with:
+          node-version: ${{ matrix.node }}
+
   size-check:
     needs: [build-core]
     runs-on: ubuntu-latest
