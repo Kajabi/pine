@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "**" ]
 
+# The repository default for GITHUB_TOKEN is write. Every job here only reads
+# the checkout, so drop to read and let the one job that needs more (chromatic)
+# widen it for itself. Mirrors schedule-release.yml.
+permissions:
+  contents: read
+
 # When pushing a new commit we should cancel
 # the previous run
 concurrency:
@@ -55,8 +61,16 @@ jobs:
   # consumer. Both the accessibility gate and Chromatic audit the same static
   # output, so a second build would be identical work. Single job, not a matrix:
   # the artifact is static HTML and JS, and neither consumer's result depends on
-  # the Node version that produced it. NODE_VERSIONS[0] is the primary version,
-  # and has to be one of them so build-core's dist artifact resolves.
+  # the Node version that produced it.
+  #
+  # Pinned to 22 rather than an index into vars.NODE_VERSIONS ([18, 20, 22]):
+  # it has to match .nvmrc and satisfy the >= 20 floor that package.json engines,
+  # @storybook/test-runner and playwright all declare, and it has to be one of
+  # NODE_VERSIONS so build-core's pine-core-dist-<node>-<sha> artifact resolves.
+  # 22 is the only value that satisfies all three.
+  #
+  # This waits on every build-core matrix leg although it consumes only the 22
+  # one; Actions cannot express a dependency on a single leg. Accepted cost.
   build-storybook:
     needs: [build-core]
     runs-on: ubuntu-latest
@@ -65,8 +79,10 @@ jobs:
       - uses: actions/checkout@v7
       - uses: ./.github/workflows/actions/build-storybook
         with:
-          node-version: ${{ fromJSON(vars.NODE_VERSIONS)[0] }}
+          node-version: '22'
 
+  # Same pin as build-storybook, for the same reasons — notably
+  # @storybook/test-runner, which this gate drives, requires node >= 20.
   test-a11y:
     needs: [build-storybook]
     runs-on: ubuntu-latest
@@ -75,18 +91,25 @@ jobs:
       - uses: actions/checkout@v7
       - uses: ./.github/workflows/actions/test-a11y
         with:
-          node-version: ${{ fromJSON(vars.NODE_VERSIONS)[0] }}
+          node-version: '22'
 
   # Previously its own workflow, which built Storybook a second time. Folded in
   # here because artifacts are scoped to a single workflow run, so sharing the
   # build means sharing the run. The guard keeps the old triggers: fork PRs
   # cannot read repository secrets, and only PRs targeting main or next publish.
+  #
+  # Written as an explicit allow-list of (event, branch) pairs rather than
+  # "not a pull_request or ...", so that adding a trigger to this workflow later
+  # — pull_request_target, workflow_dispatch, issue_comment — cannot fall
+  # through into this secret-bearing job by default. New triggers fail closed.
   chromatic:
     needs: [build-storybook]
     runs-on: ubuntu-latest
     if: >-
-      github.event_name != 'pull_request' ||
-      (github.event.pull_request.head.repo.full_name == github.repository &&
+      (github.event_name == 'push' &&
+       (github.ref_name == 'main' || github.ref_name == 'next')) ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.full_name == github.repository &&
        (github.base_ref == 'main' || github.base_ref == 'next'))
     permissions:
       contents: read

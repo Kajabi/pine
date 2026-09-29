@@ -40,7 +40,14 @@ runs:
 
     # The gate audits a static Storybook, which build-storybook has already built
     # and Chromatic also consumes. Restores libs/core/storybook-static, which is
-    # the only build output scripts/a11y.mjs needs.
+    # the only build output scripts/a11y.mjs needs — core's dist no longer has to
+    # be restored separately because .storybook/main.js lists '../dist' in
+    # staticDirs, so Storybook copies it into storybook-static at build time.
+    # That copy is load-bearing: preview-head.html fetches /pine-core/*.js and
+    # .css at render time, and both the hydration wait and the colour-contrast
+    # checks depend on them being served. Dropping '../dist' from staticDirs
+    # would not fail this job — it would quietly audit unhydrated, unstyled
+    # markup.
     - name: Download Storybook static from build-storybook
       uses: ./.github/workflows/actions/download-archive
       with:

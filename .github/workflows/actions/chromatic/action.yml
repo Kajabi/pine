@@ -35,7 +35,11 @@ runs:
 
     # Pointing Chromatic at a prebuilt Storybook means this job runs no build of
     # its own, and needs no npm install: chromaui/action bundles the Chromatic
-    # CLI, which is not a dependency of this repository.
+    # CLI, which is not a dependency of this repository. With storybookBuildDir
+    # set the CLI takes its metadata from storybook-static/project.json and never
+    # evaluates .storybook/main.js, so having no node_modules here is safe —
+    # verified by running the CLI against this artifact in an empty workspace,
+    # where it reaches authentication with no module-resolution error.
     - name: Download Storybook static from build-storybook
       if: steps.chromatic-token.outputs.configured == 'true'
       uses: ./.github/workflows/actions/download-archive

@@ -42,21 +42,19 @@ runs:
 
     # Storybook's preview imports libs/core/dist/docs.json, so the Stencil build
     # has to be present before Storybook can be built. Reuse build-core's
-    # artifact rather than rebuilding it, exactly as size-check does.
+    # artifact rather than rebuilding it, as size-check does.
     - name: Download core dist from build-core
-      uses: actions/download-artifact@v4
+      uses: ./.github/workflows/actions/download-archive
       with:
         name: pine-core-dist-${{ inputs.node-version }}-${{ github.sha }}
         path: /tmp/pine-core-dist
+        filename: core-dist.zip
 
-    - name: Extract core dist
-      run: unzip -q -o /tmp/pine-core-dist/core-dist.zip -d .
-      shell: bash
-
-    - name: Build doc components
-      run: npx nx run @pine-ds/doc-components:build
-      shell: bash
-
+    # No doc-components build here, unlike the Chromatic workflow this replaces.
+    # libs/core/.storybook/main.js aliases @pine-ds/doc-components straight at
+    # ../../doc-components/src, so libs/doc-components/dist is never read and
+    # building it was dead work. Verified: deleting that dist and rebuilding
+    # produces an identical story set.
     - name: Build Storybook
       run: npm run build.storybook --workspace=@pine-ds/core
       shell: bash
