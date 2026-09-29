@@ -1,0 +1,62 @@
+name: 'API Check'
+description: 'Fails when a package public API drifts from its committed API Extractor report'
+
+inputs:
+  node-version:
+    description: 'The version of node to use'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out latest
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Set up Node.js (pinned npm)
+      uses: ./.github/workflows/actions/setup-node-with-pinned-npm
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: '.nvmrc'
+
+    - name: Get NPM cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+    - name: Cache npm
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-npm-${{ github.sha }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
+    - name: Install Dependencies
+      run: npm ci
+      shell: bash
+
+    # `api.check` depends on `build` in nx.json, so this builds core (and react) first.
+    - name: Check public API against committed reports
+      id: api-check
+      run: npm run api.check
+      shell: bash
+
+    # API Extractor reports *that* the surface moved but not *how*. Print the diff so a
+    # reviewer can judge intent straight from the log.
+    - name: Show what changed
+      if: failure() && steps.api-check.outcome == 'failure'
+      shell: bash
+      run: |
+        for pkg in core react; do
+          baseline="libs/${pkg}/etc/${pkg}.api.md"
+          current="libs/${pkg}/temp/api-report/${pkg}.api.md"
+          if [ -f "$current" ] && ! diff -q "$baseline" "$current" > /dev/null 2>&1; then
+            echo "::group::Public API diff for @pine-ds/${pkg}"
+            diff -u "$baseline" "$current" || true
+            echo "::endgroup::"
+          fi
+        done
+        echo "::error title=Public API changed::A package's public API no longer matches its committed report. If the change is intentional, run 'npm run api.update' and commit the updated libs/*/etc/*.api.md. Removing or renaming a prop, event, method, or exported type is a BREAKING change requiring a major bump — see VERSIONING.md."
