@@ -51,20 +51,53 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-  # Not matrixed: @storybook/test-runner (and the Playwright it drives) requires
-  # Node >=20, so running this on Node 18 — the lowest entry in NODE_VERSIONS —
-  # fails outright ("Playwright requires Node.js 20 or higher"). The audited
-  # Storybook build is static HTML/JS; its result doesn't vary by the Node
-  # version that produced core's dist, so one run is correct, not a coverage cut.
-  test-a11y:
+  # Storybook is built once here and shared, rather than rebuilt by each
+  # consumer. Both the accessibility gate and Chromatic audit the same static
+  # output, so a second build would be identical work. Single job, not a matrix:
+  # the artifact is static HTML and JS, and neither consumer's result depends on
+  # the Node version that produced it. NODE_VERSIONS[0] is the primary version,
+  # and has to be one of them so build-core's dist artifact resolves.
+  build-storybook:
     needs: [build-core]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/workflows/actions/build-storybook
+        with:
+          node-version: ${{ fromJSON(vars.NODE_VERSIONS)[0] }}
+
+  test-a11y:
+    needs: [build-storybook]
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/workflows/actions/test-a11y
         with:
-          node-version: '22'
+          node-version: ${{ fromJSON(vars.NODE_VERSIONS)[0] }}
+
+  # Previously its own workflow, which built Storybook a second time. Folded in
+  # here because artifacts are scoped to a single workflow run, so sharing the
+  # build means sharing the run. The guard keeps the old triggers: fork PRs
+  # cannot read repository secrets, and only PRs targeting main or next publish.
+  chromatic:
+    needs: [build-storybook]
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name != 'pull_request' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       (github.base_ref == 'main' || github.base_ref == 'next'))
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/workflows/actions/chromatic
+        with:
+          chromatic-project-token: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   size-check:
     needs: [build-core]
