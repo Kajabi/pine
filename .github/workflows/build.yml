@@ -63,3 +63,20 @@ jobs:
       - uses: ./.github/workflows/actions/size-check
         with:
           node-version: ${{ matrix.node }}
+
+  api-check:
+    needs: [build-core]
+    runs-on: ubuntu-latest
+    # The job only reads the tree to rebuild and compare the reports; it needs no write
+    # scope, and it runs PR-authored build code (`npm ci` postinstall, the Stencil build).
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/workflows/actions/api-check
+        with:
+          node-version: ${{ matrix.node }}

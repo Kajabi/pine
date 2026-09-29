@@ -51,3 +51,6 @@ testem.log
 Thumbs.db
 .nx
 tmp/
+
+# API Extractor staging + temp reports (baselines live in libs/*/etc/)
+temp/

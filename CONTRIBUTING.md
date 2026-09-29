@@ -78,6 +78,28 @@ npm run size
 
 When a budget fails, the CLI prints each tracked file with its gzipped size and limit.
 
+### Public API reports
+
+PR CI also enforces the published packages' public TypeScript surface against committed
+[API Extractor](https://api-extractor.com/) reports (`libs/core/etc/core.api.md` and
+`libs/react/etc/react.api.md`), so a renamed or removed prop, event, method, or exported
+type fails the build instead of reaching consumers unnoticed. Check locally with:
+
+```zsh
+npm run api.check
+```
+
+If the change is intentional, refresh the baselines and commit them in the same PR:
+
+```zsh
+npm run api.update
+```
+
+A report diff is also a release-sizing signal — removals, renames, and narrowed type
+unions are **major** changes. See [VERSIONING.md](./VERSIONING.md#automated-enforcement--the-api-report)
+for the mapping and for what the reports deliberately don't cover (slots, `--pds-*`
+custom properties, and prop defaults).
+
 ### Visual regression (Chromatic)
 
 Pull requests and pushes to `main` / `next` run [Chromatic](https://www.chromatic.com/) via [`.github/workflows/chromatic.yml`](.github/workflows/chromatic.yml). The workflow publishes the static Storybook build from `libs/core/storybook-static`.

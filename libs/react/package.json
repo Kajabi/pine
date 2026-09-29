@@ -31,6 +31,8 @@
     "dist/"
   ],
   "scripts": {
+    "api.check": "api-extractor run --verbose",
+    "api.update": "api-extractor run --local --verbose",
     "build": "npm run clean && npm run compile",
     "clean": "rm -rf dist",
     "compile": "rollup -c",

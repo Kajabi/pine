@@ -53,4 +53,4 @@
 ## Boundaries
 - **Always:** follow existing component patterns, run lint and tests before committing, use conventional commits with component scope, match JSDoc terminology from similar components
 - **Ask first:** adding new dependencies, creating files outside component directories, making breaking API changes (removing props/events), modifying CI/CD or build config
-- **Never:** skip lefthook hooks, edit auto-generated files (`readme.md`, `components.d.ts`) manually, commit secrets or `.env` files, modify `node_modules/` or `dist/`
+- **Never:** skip lefthook hooks, edit auto-generated files (`readme.md`, `components.d.ts`, `libs/*/etc/*.api.md` — refresh the API reports with `npm run api.update`) manually, commit secrets or `.env` files, modify `node_modules/` or `dist/`
