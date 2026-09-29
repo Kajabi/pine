@@ -2,9 +2,12 @@
 /**
  * Accessibility gate runner.
  *
- * Serves the static Storybook build, drives `@storybook/test-runner` over every
- * story (the axe audit itself lives in `.storybook/test-runner.js`), and diffs
- * the result against `.storybook/a11y-baseline.json`.
+ * Serves the static Storybook build and drives `@storybook/test-runner` over
+ * every story. The audit itself — and the pass/fail call against
+ * `.storybook/a11y-baseline.json` — lives in `.storybook/a11y-hooks.js`, which
+ * throws per story and so sets the runner's exit code. This script orchestrates:
+ * static server, child process, then reporting baseline entries that no longer
+ * reproduce and regenerating the baseline on `--update-baseline`.
  *
  * Usage:
  *   node scripts/a11y.mjs                    # gate: fail on violations not in the baseline
@@ -59,26 +62,36 @@ const MIME_TYPES = {
  */
 function startStaticServer(root) {
   const server = createServer((req, res) => {
-    const requestPath = decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname);
-    let filePath = join(root, normalize(requestPath).replace(/^(\.\.[/\\])+/, ''));
+    try {
+      const requestPath = decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname);
+      let filePath = join(root, normalize(requestPath).replace(/^(\.\.[/\\])+/, ''));
 
-    // Never serve outside the static root, whatever the request path claims.
-    if (!filePath.startsWith(root + sep) && filePath !== root) {
-      res.writeHead(403).end('Forbidden');
-      return;
+      // Never serve outside the static root, whatever the request path claims.
+      // `pathname` is always absolute, so normalize() collapses any `..` without
+      // escaping the leading slash; this check is the backstop that makes that
+      // invariant explicit rather than assumed.
+      if (!filePath.startsWith(root + sep) && filePath !== root) {
+        res.writeHead(403).end('Forbidden');
+        return;
+      }
+
+      if (existsSync(filePath) && statSync(filePath).isDirectory()) {
+        filePath = join(filePath, 'index.html');
+      }
+
+      if (!existsSync(filePath)) {
+        res.writeHead(404).end('Not found');
+        return;
+      }
+
+      res.writeHead(200, { 'Content-Type': MIME_TYPES[extname(filePath)] ?? 'application/octet-stream' });
+      createReadStream(filePath).pipe(res);
+    } catch {
+      // A malformed path (bad percent-encoding, a null byte) makes decodeURIComponent
+      // or the fs calls throw. Answer 400 instead of taking the process down from
+      // inside a request handler.
+      res.writeHead(400).end('Bad request');
     }
-
-    if (existsSync(filePath) && statSync(filePath).isDirectory()) {
-      filePath = join(filePath, 'index.html');
-    }
-
-    if (!existsSync(filePath)) {
-      res.writeHead(404).end('Not found');
-      return;
-    }
-
-    res.writeHead(200, { 'Content-Type': MIME_TYPES[extname(filePath)] ?? 'application/octet-stream' });
-    createReadStream(filePath).pipe(res);
   });
 
   return new Promise((resolvePromise) => {
@@ -107,12 +120,22 @@ function runTestRunner(url, resultsDir) {
     const child = spawn('npx', ['test-storybook', '--url', url, '--maxWorkers', '2', ...passthroughArgs()], {
       cwd: CORE_ROOT,
       stdio: 'inherit',
+      // `npx` is a .cmd shim on Windows, which bare spawn() cannot exec.
+      shell: process.platform === 'win32',
       env: {
         ...process.env,
         PINE_A11Y_RESULTS_DIR: resultsDir,
         ...(updateBaseline ? { PINE_A11Y_UPDATE: '1' } : {}),
       },
     });
+
+    // Spawn itself failing (no npx on PATH, missing binary) never emits 'close',
+    // so without this the run would hang instead of reporting anything.
+    child.on('error', (error) => {
+      console.error(`\nCould not start test-storybook: ${error.message}\n`);
+      resolvePromise(1);
+    });
+
     child.on('close', (code) => resolvePromise(code ?? 1));
   });
 }
@@ -123,16 +146,41 @@ function collectResults(resultsDir) {
   const merged = {};
   for (const file of readdirSync(resultsDir)) {
     if (!file.endsWith('.json')) continue;
-    const { storyId, ruleIds } = JSON.parse(readFileSync(join(resultsDir, file), 'utf8'));
-    merged[storyId] = ruleIds;
+    try {
+      const { storyId, ruleIds } = JSON.parse(readFileSync(join(resultsDir, file), 'utf8'));
+      merged[storyId] = ruleIds;
+    } catch (error) {
+      // A worker killed mid-write leaves a truncated shard. Skip it loudly
+      // rather than taking down the whole merge over one unreadable file.
+      console.warn(`Ignoring unreadable result shard ${file}: ${error.message}`);
+    }
   }
   return merged;
 }
 
+/**
+ * Rewrites the baseline from this run's results, merged over what is already
+ * recorded.
+ *
+ * Merging matters because a run can be partial: extra args are forwarded to
+ * `test-storybook` (see `passthroughArgs`), so `--update-baseline pds-chip`
+ * audits one component. Replacing the file wholesale there would silently drop
+ * every other story's entries. Stories this run did audit are authoritative —
+ * one that came back clean is deleted, which is how the ratchet tightens — and
+ * stories it never visited are left exactly as they were.
+ */
 function writeBaseline(results) {
+  const previous = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf8')) : { stories: {} };
+  const merged = { ...(previous.stories ?? {}) };
+
+  for (const [storyId, ruleIds] of Object.entries(results)) {
+    if (ruleIds.length > 0) merged[storyId] = ruleIds;
+    else delete merged[storyId];
+  }
+
   const stories = {};
-  for (const storyId of Object.keys(results).sort()) {
-    if (results[storyId].length > 0) stories[storyId] = results[storyId];
+  for (const storyId of Object.keys(merged).sort()) {
+    stories[storyId] = merged[storyId];
   }
 
   const violationCount = Object.values(stories).reduce((n, ids) => n + ids.length, 0);
@@ -183,6 +231,14 @@ async function main() {
     const results = collectResults(resultsDir);
 
     if (updateBaseline) {
+      // No shards means no story was audited — the runner died before it got
+      // going (unbuilt Storybook, missing Chromium, a crash). Writing here would
+      // replace a real baseline with an empty one, so refuse and say why.
+      if (Object.keys(results).length === 0) {
+        console.error('\nNo stories were audited, so the baseline was left untouched.\n' + 'Check the test-storybook output above for the underlying failure.\n');
+        process.exit(exitCode === 0 ? 1 : exitCode);
+      }
+
       const baseline = writeBaseline(results);
       console.log(
         `\nBaseline written to ${BASELINE_PATH}\n` +
@@ -194,7 +250,7 @@ async function main() {
 
     const stale = staleEntries(results);
     if (stale.length > 0) {
-      console.log('\nBaseline entries that no longer reproduce (these violations are fixed):');
+      console.log('\nBaseline entries that no longer reproduce (fixed, or no longer audited):');
       for (const { storyId, fixed } of stale) console.log(`  ${storyId}: ${fixed.join(', ')}`);
       console.log('\nRun `npm run test.a11y -- --update-baseline` to prune them.\n');
     }
@@ -209,4 +265,7 @@ async function main() {
   }
 }
 
-main();
+main().catch((error) => {
+  console.error(`\nAccessibility gate failed to run:\n${error?.stack ?? error}\n`);
+  process.exit(1);
+});
