@@ -1348,11 +1348,20 @@ See the [Responsive Breakpoints](#responsive-breakpoints) section above for deta
 
 #### When to use/avoid the base `size` prop
 
-If you want consistent sizing across all breakpoints:
+The base breakpoint is what a phone renders. A base `size` below `12` is
+therefore a narrow column **on the smallest screen**, not just on large ones —
+`size="6"` is half the viewport on a phone, and nothing overrides it.
+
+Avoid the base prop for content that should stack on small screens — use the
+full-width-then-widen pattern above (`size="12" size-md="6"`) instead.
+
+Use the base prop when the element genuinely should stay narrow at every width —
+a checkbox or icon gutter beside a body column, for example, where a full-width
+phone layout would be wrong:
 
 ```html
-<!-- Same width across all breakpoints -->
-<pds-box size="6"></pds-box>
+<!-- Deliberately narrow at every breakpoint, including mobile -->
+<pds-box size="2"></pds-box>
 ```
 
 If you need different sizes at different breakpoints:
