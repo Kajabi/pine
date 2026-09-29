@@ -15,6 +15,16 @@ export interface TruncationTooltipOptions {
   getTooltipText: () => string;
   /** Tooltip placement preference (default: 'top') */
   placement?: PlacementType;
+  /**
+   * Whether to give `contentEl` a tab stop while its text is clipped (default: true).
+   *
+   * Set to `false` when `contentEl` already sits inside its own focusable
+   * control (e.g. a wrapping `<button>` or `<pds-button>`) that already
+   * receives focus and triggers this tooltip via `hostEl`'s `focusin`
+   * listener. Managing the tabindex there too would nest a second, nameless
+   * tab stop inside an already-interactive element.
+   */
+  manageTabIndex?: boolean;
 }
 
 /** CSS class prefix used for truncation tooltip portal elements */
@@ -90,7 +100,7 @@ function isOverflowing(el: HTMLElement): boolean {
  * @returns A cleanup function that removes all listeners, observers, and DOM elements.
  */
 export function setupTruncationTooltip(options: TruncationTooltipOptions): () => void {
-  const { hostEl, contentEl, getTooltipText, placement = 'top' } = options;
+  const { hostEl, contentEl, getTooltipText, placement = 'top', manageTabIndex = true } = options;
 
   injectStyles();
 
@@ -117,6 +127,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
    * and we never touch it.
    */
   function syncTabIndex(): void {
+    if (!manageTabIndex) return;
     if (isOverflowing(contentEl)) {
       if (!ownsTabIndex && contentEl.hasAttribute('tabindex')) return;
       ownsTabIndex = true;

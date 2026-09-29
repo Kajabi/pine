@@ -123,6 +123,11 @@ export class PdsChip {
         hostEl: this.el,
         contentEl: this.labelTextEl,
         getTooltipText: () => this.el.textContent || '',
+        // The dropdown variant's label span already sits inside
+        // `<button class="pds-chip__button">`, which is already focusable and
+        // bubbles focusin to the host — a tabindex on the span too would nest
+        // a second tab stop inside the button.
+        manageTabIndex: this.effectiveVariant !== 'dropdown',
       });
       this.tooltipBoundEl = this.labelTextEl;
     }
@@ -191,8 +196,11 @@ export class PdsChip {
     // A focus-triggered tooltip needs a focusable anchor, but the label span
     // only earns a tab stop while its text is actually clipped — a chip whose
     // label fits has nothing to reveal. setupTruncationTooltip owns that
-    // tabindex off the measurement. (The dropdown's own button already takes
-    // focus, and focusin bubbles to the host, so it needs nothing here.)
+    // tabindex off the measurement for every variant except dropdown: its
+    // label span already sits inside `<button class="pds-chip__button">`,
+    // which is already focusable and bubbles focusin to the host, so
+    // initTruncationTooltip passes `manageTabIndex: false` there to avoid
+    // nesting a second tab stop inside the button.
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button" part="button">
         {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}

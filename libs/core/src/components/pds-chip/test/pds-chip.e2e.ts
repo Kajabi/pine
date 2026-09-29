@@ -168,6 +168,26 @@ describe('pds-chip', () => {
     expect(await labelTabindex()).toBeNull();
   });
 
+  // The dropdown variant's label span sits inside `<button class="pds-chip__button">`,
+  // which is already focusable. Giving the clipped span its own tabindex too
+  // would nest a second tab stop inside the button — invalid HTML and an axe
+  // nested-interactive violation.
+  it('never gives the dropdown label its own tab stop, even while clipped', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="dropdown" max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
+    `);
+
+    const labelTabindex = await page.$eval('pds-chip', (el) =>
+      el.shadowRoot.querySelector('.pds-chip__label-text').getAttribute('tabindex'),
+    );
+
+    expect(labelTabindex).toBeNull();
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
   it('shows a tooltip with the full label on hover when the label is truncated', async () => {
     const page = await newE2EPage();
     await page.setContent(
