@@ -8,9 +8,13 @@ on:
 
 # The repository default for GITHUB_TOKEN is write. Every job here only reads
 # the checkout, so drop to read and let the one job that needs more (chromatic)
-# widen it for itself. Mirrors schedule-release.yml.
+# widen it for itself. Mirrors schedule-release.yml. `actions: read` is required
+# here (unlike schedule-release.yml) because build-core/build-react/build-doc-components
+# all use nrwl/nx-set-shas@v4, which queries the Actions API for the last
+# successful run — contents:read alone gives it a 403.
 permissions:
   contents: read
+  actions: read
 
 # When pushing a new commit we should cancel
 # the previous run
