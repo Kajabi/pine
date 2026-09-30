@@ -66,9 +66,13 @@ const VAR_REF_REGEX = /var\(\s*(--[\w-]+)/g;
  * zero value, or already token-based).
  */
 function findLaunderedLiteral(value) {
-  if (value.includes('--pine-motion-duration-')) {
-    return null;
-  }
+  // Deliberately no early return for values that already mention a motion
+  // token. A property can hold several durations, and returning "clean" as
+  // soon as one token appears made the rule blind to the rest -- including the
+  // ones --fix left behind, which is the worst version of it: the autofix
+  // created the blind spot. TIME_REGEX's `(?<![\w-])` lookbehind means a token
+  // reference cannot itself match as a literal, so scanning the whole value is
+  // safe.
   TIME_REGEX.lastIndex = 0;
   let match;
   while ((match = TIME_REGEX.exec(value)) !== null) {
@@ -204,36 +208,42 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
           continue;
         }
 
+        if (context && context.fix) {
+          // The referenced custom property may already have been fixed by an
+          // earlier `transition` that resolves through this same property (a
+          // component's own transition and its `::after` knob can share one).
+          if (!laundered.fixed) {
+            // Rewrite every literal that maps to an exact token, not only the
+            // first. Fixing one per run meant the rest sat in the file
+            // unreported, because a value containing a token used to read as
+            // clean.
+            TIME_REGEX.lastIndex = 0;
+            laundered.decl.value = laundered.decl.value.replace(TIME_REGEX, (literal) => {
+              if (isZeroTime(literal)) {
+                return literal;
+              }
+              const exact = DURATION_TOKENS[literal];
+              return exact ? `var(--pine-motion-duration-${exact})` : literal;
+            });
+            laundered.fixed = true;
+          }
+          // Whatever is still hard-coded has no exact token, so it needs a
+          // person. Report that rather than calling the property handled.
+          const leftover = findLaunderedLiteral(laundered.decl.value);
+          if (leftover === null) {
+            continue;
+          }
+          laundered.raw = leftover;
+        }
+
         const token = DURATION_TOKENS[laundered.raw];
         const tokenVar = token ? `var(--pine-motion-duration-${token})` : null;
 
-        if (tokenVar && context && context.fix) {
-          // The referenced custom property may already have been fixed by an
-          // earlier `transition`/`transition-duration` declaration that
-          // resolves through this same property (e.g. a component's own
-          // transition and its `::after` knob both consuming one shared
-          // custom property). Once fixed, `laundered.raw` no longer appears
-          // in the (mutated) declaration, so re-deriving `idx` here would
-          // wrongly fall through to a "not fixed" report on this second
-          // reference despite the source already being correct.
-          if (!laundered.fixed) {
-            const declValue = laundered.decl.value;
-            const idx = declValue.indexOf(laundered.raw);
-            if (idx !== -1) {
-              laundered.decl.value = declValue.slice(0, idx) + tokenVar + declValue.slice(idx + laundered.raw.length);
-              laundered.fixed = true;
-            }
-          }
-          if (laundered.fixed) {
-            continue;
-          }
-        }
-
-        // Report on the custom property, not on the `transition` that reads
-        // it. The hard-coded literal lives here, and a
-        // `stylelint-disable-next-line` is only honoured on the line the
-        // report is anchored to -- anchoring to the transition made the rule's
-        // own advice ("disable on its declaration") impossible to follow.
+        // Report on the custom property, not the `transition` that reads it:
+        // the literal lives here, and a `stylelint-disable-next-line` is only
+        // honoured on the line the report is anchored to. One property can be
+        // consumed by several transitions; it is still one literal in one
+        // place, so it reports once.
         if (reportedLaunderedDecls.has(laundered.decl)) {
           continue;
         }
