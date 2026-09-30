@@ -76,6 +76,10 @@ export class PdsCopytext {
         hostEl: this.el,
         contentEl: this.valueSpanEl,
         getTooltipText: () => this.value || '',
+        // valueSpanEl already sits inside the `<pds-button>` below, which is
+        // already focusable and bubbles focusin to the host — a tabindex on
+        // the span too would nest a second tab stop inside the button.
+        manageTabIndex: false,
       });
     }
   }
