@@ -188,6 +188,27 @@ describe('pds-chip', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  // Without a tab stop of its own, the clipped label still needs to be
+  // reachable by keyboard: hostEl's focusin listener catches focus bubbling
+  // up from the dropdown's own button.
+  it('shows the tooltip when the dropdown button itself is focused', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="dropdown" max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
+    `);
+
+    const button = await page.find('pds-chip >>> .pds-chip__button');
+    await button.focus();
+    await page.waitForChanges();
+
+    const tooltipText = await page.evaluate(() => {
+      const portal = document.querySelector('.pds-truncation-tooltip');
+      return portal ? portal.textContent.trim() : null;
+    });
+
+    expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
+  });
+
   it('shows a tooltip with the full label on hover when the label is truncated', async () => {
     const page = await newE2EPage();
     await page.setContent(
