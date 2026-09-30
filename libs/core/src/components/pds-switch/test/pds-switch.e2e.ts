@@ -1,5 +1,6 @@
 import { newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
+import { expectRespectsReducedMotion } from '../../../utils/test/reduced-motion';
 
 describe('pds-switch', () => {
   it('renders a checked input when toggled', async () => {
@@ -93,6 +94,23 @@ describe('pds-switch', () => {
     expect(ariaDesc).toBe('switch-with-description__error-message');
     expect(helperMessage.textContent).toEqual(`This is a helper message`);
     expect(errorMessage.textContent).toEqual(`This is an error message`);
+  });
+});
+
+describe('pds-switch reduced motion', () => {
+  // --number-transition-timing previously hard-coded 0.15s directly, invisible
+  // to prefers-reduced-motion. Covers both the input's own transition and the
+  // toggle knob's ::after transition — both consume the same custom property.
+  it('zeroes out the input transition under prefers-reduced-motion', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch></pds-switch>');
+    await expectRespectsReducedMotion(page, 'pds-switch', 'input');
+  });
+
+  it('zeroes out the toggle knob transition under prefers-reduced-motion', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch></pds-switch>');
+    await expectRespectsReducedMotion(page, 'pds-switch', 'input', 'after');
   });
 });
 

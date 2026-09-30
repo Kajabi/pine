@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectRespectsReducedMotion } from '../../../../utils/test/reduced-motion';
 
 describe('pds-filter e2e', () => {
   it('renders', async () => {
@@ -337,5 +338,13 @@ describe('pds-filter e2e', () => {
     expect(await customTitle.textContent).toBe('Custom Title');
     expect(customButton).toBeTruthy();
     expect(await customButton.textContent).toBe('Custom Button');
+  });
+});
+
+describe('pds-filter reduced motion', () => {
+  it('zeroes out the trigger transition under prefers-reduced-motion', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-filter component-id="test" text="Test Filter"></pds-filter>');
+    await expectRespectsReducedMotion(page, 'pds-filter', '.pds-filter__trigger');
   });
 });

@@ -1,5 +1,6 @@
 import { newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
+import { expectRespectsReducedMotion } from '../../../utils/test/reduced-motion';
 
 describe('pds-modal', () => {
   it('renders', async () => {
@@ -231,5 +232,13 @@ describe('pds-modal', () => {
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
+  });
+});
+
+describe('pds-modal reduced motion', () => {
+  it('zeroes out the backdrop transition under prefers-reduced-motion', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-modal></pds-modal>');
+    await expectRespectsReducedMotion(page, 'pds-modal', '.pds-modal__backdrop');
   });
 });
