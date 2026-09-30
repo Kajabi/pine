@@ -128,19 +128,85 @@ describe('pds-chip', () => {
     expect(dotWidth).toBeGreaterThanOrEqual(5);
   });
 
-  it('makes the label focusable only when max-width is set, so a focus tooltip can fire', async () => {
+  // The tab stop only earns its place while there is hidden text to reveal.
+  // A chip that sets max-width but whose label fits would otherwise be a dead
+  // stop — and chips come in rows, so every one of them would be.
+  it('makes the label focusable only while the label is actually clipped', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-chip max-width="120px">Truncated</pds-chip>
+      <pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
+      <pds-chip max-width="400px">Short</pds-chip>
       <pds-chip>Plain</pds-chip>
     `);
 
-    const [truncated, plain] = await page.$$eval('pds-chip', (els) =>
+    const [clipped, fits, plain] = await page.$$eval('pds-chip', (els) =>
       els.map((el) => el.shadowRoot.querySelector('.pds-chip__label-text').getAttribute('tabindex')),
     );
 
-    expect(truncated).toBe('0');
+    expect(clipped).toBe('0');
+    expect(fits).toBeNull();
     expect(plain).toBeNull();
+  });
+
+  it('drops the tab stop when the label stops overflowing', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>',
+    );
+
+    const labelTabindex = () =>
+      page.$eval('pds-chip', (el) => el.shadowRoot.querySelector('.pds-chip__label-text').getAttribute('tabindex'));
+
+    expect(await labelTabindex()).toBe('0');
+
+    const chip = await page.find('pds-chip');
+    chip.setProperty('maxWidth', '600px');
+    await page.waitForChanges();
+    // The ResizeObserver re-measure is debounced by 100ms.
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    expect(await labelTabindex()).toBeNull();
+  });
+
+  // The dropdown variant's label span sits inside `<button class="pds-chip__button">`,
+  // which is already focusable. Giving the clipped span its own tabindex too
+  // would nest a second tab stop inside the button — invalid HTML and an axe
+  // nested-interactive violation.
+  it('never gives the dropdown label its own tab stop, even while clipped', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="dropdown" max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
+    `);
+
+    const labelTabindex = await page.$eval('pds-chip', (el) =>
+      el.shadowRoot.querySelector('.pds-chip__label-text').getAttribute('tabindex'),
+    );
+
+    expect(labelTabindex).toBeNull();
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  // Without a tab stop of its own, the clipped label still needs to be
+  // reachable by keyboard: hostEl's focusin listener catches focus bubbling
+  // up from the dropdown's own button.
+  it('shows the tooltip when the dropdown button itself is focused', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="dropdown" max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
+    `);
+
+    const button = await page.find('pds-chip >>> .pds-chip__button');
+    await button.focus();
+    await page.waitForChanges();
+
+    const tooltipText = await page.evaluate(() => {
+      const portal = document.querySelector('.pds-truncation-tooltip');
+      return portal ? portal.textContent.trim() : null;
+    });
+
+    expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
   });
 
   it('shows a tooltip with the full label on hover when the label is truncated', async () => {

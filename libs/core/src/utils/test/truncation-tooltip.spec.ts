@@ -334,4 +334,120 @@ describe('truncation-tooltip', () => {
     cleanup();
     expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
   });
+
+  describe('tabindex management', () => {
+    it('gives the content element a tab stop when it overflows', () => {
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+      Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+      });
+
+      expect(contentEl.getAttribute('tabindex')).toBe('0');
+
+      cleanup();
+    });
+
+    it('does not give the content element a tab stop when it fits', () => {
+      // beforeEach's default fixture already has no overflow (scrollWidth < clientWidth)
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Short text',
+      });
+
+      expect(contentEl.hasAttribute('tabindex')).toBe(false);
+
+      cleanup();
+    });
+
+    it('drops the tab stop once a resize makes the content fit again', () => {
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+      Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+      });
+      expect(contentEl.getAttribute('tabindex')).toBe('0');
+
+      // Simulate the element growing until the text fits.
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 100, configurable: true });
+      const observer = MockResizeObserver.instances[MockResizeObserver.instances.length - 1];
+      observer.trigger();
+      jest.advanceTimersByTime(150); // resize handling is debounced 100ms
+
+      expect(contentEl.hasAttribute('tabindex')).toBe(false);
+
+      cleanup();
+    });
+
+    it('leaves a consumer-owned tabindex alone', () => {
+      contentEl.setAttribute('tabindex', '-1');
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+      Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+      });
+
+      // Ownership is tracked, not inferred from value — a pre-existing
+      // tabindex (a roving -1, say) is the consumer's and must not be
+      // overwritten or removed on cleanup.
+      expect(contentEl.getAttribute('tabindex')).toBe('-1');
+
+      cleanup();
+      expect(contentEl.getAttribute('tabindex')).toBe('-1');
+    });
+
+    it('never sets a tab stop when manageTabIndex is false, even while overflowing', () => {
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+      Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+        manageTabIndex: false,
+      });
+
+      expect(contentEl.hasAttribute('tabindex')).toBe(false);
+
+      // Still holds after a resize re-measure.
+      const observer = MockResizeObserver.instances[MockResizeObserver.instances.length - 1];
+      observer.trigger();
+      jest.advanceTimersByTime(150);
+      expect(contentEl.hasAttribute('tabindex')).toBe(false);
+
+      cleanup();
+    });
+
+    it('still shows the tooltip on focusin when manageTabIndex is false', () => {
+      // Covers the case this option exists for: contentEl sits inside its own
+      // focusable control, which triggers the tooltip via focusin bubbling to
+      // hostEl rather than via a tabindex on contentEl itself.
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+      Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+        manageTabIndex: false,
+      });
+
+      hostEl.dispatchEvent(new FocusEvent('focusin'));
+
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+      expect(contentEl.hasAttribute('tabindex')).toBe(false);
+
+      cleanup();
+    });
+  });
 });
