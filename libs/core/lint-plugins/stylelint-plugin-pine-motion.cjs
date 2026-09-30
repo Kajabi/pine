@@ -103,10 +103,21 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
     // reuse the same custom-property name (e.g. `--timing` in two unconnected
     // components' styles) would leak into each other's checks.
     const HOST_OR_ROOT_SELECTOR = /^(:host\b|:root\b)/;
+    // One custom property can be consumed by several transitions; the literal
+    // is still a single mistake in a single place, so report it once.
+    const reportedLaunderedDecls = new Set();
     const globalLaunderedTimingProps = new Map();
     const localLaunderedTimingProps = new Map(); // rule node -> Map(prop -> entry)
 
     root.walkDecls(/^--/, (decl) => {
+      // The motion tokens are *defined* as time literals -- that is what a
+      // token is. Registering them here makes a file that defines a token and
+      // also uses it fail its own rule, and --fix rewrites the definition to
+      // `--pine-motion-duration-fast: var(--pine-motion-duration-fast)`, a
+      // self-reference that silently invalidates the token for every consumer.
+      if (decl.prop.startsWith('--pine-motion-duration-')) {
+        return;
+      }
       const raw = findLaunderedLiteral(decl.value);
       if (!raw) {
         return;
@@ -218,21 +229,32 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
           }
         }
 
-        const { line, column } = laundered.decl.source.start;
+        // Report on the custom property, not on the `transition` that reads
+        // it. The hard-coded literal lives here, and a
+        // `stylelint-disable-next-line` is only honoured on the line the
+        // report is anchored to -- anchoring to the transition made the rule's
+        // own advice ("disable on its declaration") impossible to follow.
+        if (reportedLaunderedDecls.has(laundered.decl)) {
+          continue;
+        }
+        reportedLaunderedDecls.add(laundered.decl);
+
+        const { line, column } = decl.source.start;
         const message = tokenVar
-          ? `"${decl.prop}" resolves its duration through ${propName} (${line}:${column}), which ` +
-            `hard-codes "${laundered.raw}" instead of the motion token ${tokenVar}.`
-          : `"${decl.prop}" resolves its duration through ${propName} (${line}:${column}), which ` +
-            `hard-codes "${laundered.raw}" — no exact Pine motion token (fast 120ms / base 200ms / ` +
-            `slow 300ms). Route ${propName} through the nearest token, or add a justified ` +
-            `\`stylelint-disable-next-line ${ruleName}\` on its declaration when an off-grid value is intentional.`;
+          ? `${propName} hard-codes "${laundered.raw}" instead of the motion token ${tokenVar}; ` +
+            `"${decl.prop}" (${line}:${column}) resolves its duration through it.`
+          : `${propName} hard-codes "${laundered.raw}" — no exact Pine motion token (fast 120ms / ` +
+            `base 200ms / slow 300ms); "${decl.prop}" (${line}:${column}) resolves its duration ` +
+            `through it. Route ${propName} through the nearest token, or add a justified ` +
+            `\`stylelint-disable-next-line ${ruleName}\` on this declaration when an off-grid ` +
+            `value is intentional.`;
 
         stylelint.utils.report({
           ruleName,
           result,
-          node: decl,
+          node: laundered.decl,
           message: messages.rejected(message),
-          word: propName,
+          word: laundered.raw,
         });
       }
     });

@@ -21,7 +21,16 @@ async function readTransitionDuration(
   innerSelector: string | null,
   pseudoElement: string | null,
 ): Promise<string> {
-  const argsJson = JSON.stringify({ hostTag, innerSelector, pseudoElement });
+  // Normalise to the `::` form. Chrome, which is what these e2e tests drive,
+  // accepts a bare `after` and returns the pseudo-element's style -- verified,
+  // so no assertion is wrong today. The CSSOM spec treats a colonless value as
+  // invalid and returns the originating element's style instead, which would
+  // turn a knob assertion into a silent re-test of its host. Cheap to not
+  // depend on the lenient reading.
+  const normalisedPseudo = pseudoElement
+    ? `::${pseudoElement.replace(/^:{1,2}/, '')}`
+    : null;
+  const argsJson = JSON.stringify({ hostTag, innerSelector, pseudoElement: normalisedPseudo });
   return page.evaluate(`
     (() => {
       const args = ${argsJson};
