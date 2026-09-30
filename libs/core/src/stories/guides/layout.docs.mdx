@@ -772,7 +772,7 @@ By combining the `pds-box` and `pds-row` components, you can easily create a 12-
 </DocCanvas>
 
 By default, adding `pds-row`s with no `size` property will create equal width columns.
-This creates a two-column layout, and you can customize the `size` and arrangement of the columns to achieve the desired layout for your application. The `size` property affects the width of the column across all viewports.
+This creates a two-column layout, and you can customize the size and arrangement of the columns to achieve the desired layout for your application. The example below sizes from `md` up, so the columns stack full width on phones and split at 768px and above. A bare `size` would apply at every viewport, including the narrowest one.
 
 <DocCanvas client:only
   mdxSource={{
@@ -1059,12 +1059,14 @@ Use the `offset` property to offset columns to the right. The `offset` property 
 
 Adding either `flex` **`display`** property to the box will initiate alignment values. Use `align-items` to change the vertical alignment of the box. Use `justify-content` to change the horizontal alignment of the box.
 
+The columns below keep a base `size` on purpose, unlike the rest of this guide. These examples exist to show alignment inside a narrow column, and `size-xs` alone would not hold that shape — `xs` is the one breakpoint defined with `max-width`, so it stops applying at 576px and the columns would flex to fill the row.
+
 <DocCanvas client:only
   mdxSource={{
     react: `
       <PdsBox display="block">
         <PdsRow minHeight="100px" colGap="sm">
-          <PdsBox sizeXs="2">
+          <PdsBox size="2">
             <PdsBox
               align-items="start"
               border="true"
@@ -1103,7 +1105,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     webComponent: `
       <pds-box display="block">
         <pds-row min-height="100px" col-gap="sm">
-          <pds-box size-xs="2">
+          <pds-box size="2">
             <pds-box
               align-items="start"
               border="true"
@@ -1137,7 +1139,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
 }}>
   <pds-box display="block">
     <pds-row min-height="100px" col-gap="sm">
-      <pds-box size-xs="2">
+      <pds-box size="2">
         <pds-box
           align-items="start"
           border="true"
@@ -1176,7 +1178,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     react: `
       <PdsBox display="block">
         <PdsRow col-gap="sm">
-          <PdsBox sizeXs="2">
+          <PdsBox size="2">
             <PdsBox
               alignItems="start"
               border="true"
@@ -1196,7 +1198,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
             >
             Content2
           </PdsBox>
-          <PdsBox sizeXs="2">
+          <PdsBox size="2">
             <PdsBox
               alignItems="end"
               border="true"
@@ -1212,7 +1214,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     webComponent: `
       <pds-box display="block">
         <pds-row col-gap="sm">
-          <pds-box size-xs="2">
+          <pds-box size="2">
             <pds-box
               align-items="start"
               border="true"
@@ -1230,7 +1232,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
               padding="sm"
             >Content2</pds-box>
           </pds-box>
-          <pds-box size-xs="2">
+          <pds-box size="2">
             <pds-box
               align-items="end"
               border="true"
@@ -1245,7 +1247,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
 }}>
   <pds-box display="block">
     <pds-row col-gap="sm">
-      <pds-box size-xs="2">
+      <pds-box size="2">
         <pds-box
           align-items="start"
           border="true"
@@ -1263,7 +1265,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
           padding="sm"
         >Content2</pds-box>
       </pds-box>
-      <pds-box size-xs="2">
+      <pds-box size="2">
         <pds-box
           align-items="end"
           border="true"
