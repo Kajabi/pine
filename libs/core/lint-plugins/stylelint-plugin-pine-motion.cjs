@@ -94,13 +94,42 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
     // a non-zero, non-token time literal. A `transition` that only ever
     // references one of these by name never shows a literal in its own value,
     // so the second pass below has to check against this map to see through it.
-    const launderedTimingProps = new Map();
+    //
+    // Scope matters here: a property declared in `:host` / `:host(...)` / `:root`
+    // is Pine's convention for a private, file-wide component custom property
+    // (declared once, consumed from any sibling rule in the same file), so those
+    // are tracked globally. A property declared in any other selector is scoped
+    // to that exact rule only — otherwise two unrelated rules that happen to
+    // reuse the same custom-property name (e.g. `--timing` in two unconnected
+    // components' styles) would leak into each other's checks.
+    const HOST_OR_ROOT_SELECTOR = /^(:host\b|:root\b)/;
+    const globalLaunderedTimingProps = new Map();
+    const localLaunderedTimingProps = new Map(); // rule node -> Map(prop -> entry)
+
     root.walkDecls(/^--/, (decl) => {
       const raw = findLaunderedLiteral(decl.value);
-      if (raw) {
-        launderedTimingProps.set(decl.prop, { decl, raw });
+      if (!raw) {
+        return;
+      }
+      const entry = { decl, raw };
+      const parentRule = decl.parent;
+      if (parentRule && parentRule.selector && HOST_OR_ROOT_SELECTOR.test(parentRule.selector.trim())) {
+        globalLaunderedTimingProps.set(decl.prop, entry);
+      } else {
+        if (!localLaunderedTimingProps.has(parentRule)) {
+          localLaunderedTimingProps.set(parentRule, new Map());
+        }
+        localLaunderedTimingProps.get(parentRule).set(decl.prop, entry);
       }
     });
+
+    function resolveLaundered(propName, decl) {
+      const local = decl.parent && localLaunderedTimingProps.get(decl.parent);
+      if (local && local.has(propName)) {
+        return local.get(propName);
+      }
+      return globalLaunderedTimingProps.get(propName) || null;
+    }
 
     root.walkDecls((decl) => {
       if (!TIMING_PROPS.has(decl.prop.toLowerCase())) {
@@ -159,15 +188,37 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
       VAR_REF_REGEX.lastIndex = 0;
       while ((match = VAR_REF_REGEX.exec(value)) !== null) {
         const propName = match[1];
-        const laundered = launderedTimingProps.get(propName);
+        const laundered = resolveLaundered(propName, decl);
         if (!laundered) {
           continue;
         }
 
         const token = DURATION_TOKENS[laundered.raw];
         const tokenVar = token ? `var(--pine-motion-duration-${token})` : null;
-        const { line, column } = laundered.decl.source.start;
 
+        if (tokenVar && context && context.fix) {
+          // The referenced custom property may already have been fixed by an
+          // earlier `transition`/`transition-duration` declaration that
+          // resolves through this same property (e.g. a component's own
+          // transition and its `::after` knob both consuming one shared
+          // custom property). Once fixed, `laundered.raw` no longer appears
+          // in the (mutated) declaration, so re-deriving `idx` here would
+          // wrongly fall through to a "not fixed" report on this second
+          // reference despite the source already being correct.
+          if (!laundered.fixed) {
+            const declValue = laundered.decl.value;
+            const idx = declValue.indexOf(laundered.raw);
+            if (idx !== -1) {
+              laundered.decl.value = declValue.slice(0, idx) + tokenVar + declValue.slice(idx + laundered.raw.length);
+              laundered.fixed = true;
+            }
+          }
+          if (laundered.fixed) {
+            continue;
+          }
+        }
+
+        const { line, column } = laundered.decl.source.start;
         const message = tokenVar
           ? `"${decl.prop}" resolves its duration through ${propName} (${line}:${column}), which ` +
             `hard-codes "${laundered.raw}" instead of the motion token ${tokenVar}.`
@@ -175,15 +226,6 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
             `hard-codes "${laundered.raw}" — no exact Pine motion token (fast 120ms / base 200ms / ` +
             `slow 300ms). Route ${propName} through the nearest token, or add a justified ` +
             `\`stylelint-disable-next-line ${ruleName}\` on its declaration when an off-grid value is intentional.`;
-
-        if (tokenVar && context && context.fix) {
-          const declValue = laundered.decl.value;
-          const idx = declValue.indexOf(laundered.raw);
-          if (idx !== -1) {
-            laundered.decl.value = declValue.slice(0, idx) + tokenVar + declValue.slice(idx + laundered.raw.length);
-            continue;
-          }
-        }
 
         stylelint.utils.report({
           ruleName,
