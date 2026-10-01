@@ -3,7 +3,10 @@
   --sizing-input-toggle-size: calc(var(--pine-dimension-250) - (var(--pine-dimension-025) * 2));
   --pine-dimension-025: 2px;
   --spacing-message-inline: calc(var(--pine-dimension-450) + var(--pine-dimension-150));
-  --number-transition-timing: 0.15s ease-out;
+  // Routed through the motion token (not a literal) so this collapses to 0
+  // under `prefers-reduced-motion: reduce` along with everything else that
+  // opts into `--pine-motion-duration-*` — see _motion.scss.
+  --number-transition-timing: var(--pine-motion-duration-fast) ease-out;
 
   align-items: flex-start;
   color: var(--pine-color-text);

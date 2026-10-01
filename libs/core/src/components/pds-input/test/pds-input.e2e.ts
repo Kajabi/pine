@@ -1,5 +1,6 @@
 import { newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
+import { expectRespectsReducedMotion } from '../../../utils/test/reduced-motion';
 
 describe('pds-input', () => {
   it('renders toggle of disabled state', async () => {
@@ -294,5 +295,13 @@ describe('pds-input', () => {
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
+  });
+});
+
+describe('pds-input reduced motion', () => {
+  it('zeroes out the field border-color transition under prefers-reduced-motion', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-input></pds-input>');
+    await expectRespectsReducedMotion(page, 'pds-input', '.pds-input__field');
   });
 });

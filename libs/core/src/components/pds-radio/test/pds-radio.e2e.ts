@@ -1,5 +1,6 @@
 import { newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
+import { expectRespectsReducedMotion } from '../../../utils/test/reduced-motion';
 
 describe('pds-radio', () => {
   it('renders', async () => {
@@ -166,5 +167,16 @@ describe('pds-radio accessibility', () => {
     await page.setContent('<pds-radio component-id="opt-1" label="Option one"></pds-radio>');
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+describe('pds-radio reduced motion', () => {
+  it('zeroes out the image-container transition under prefers-reduced-motion', async () => {
+    const page = await newE2EPage();
+    // .pds-radio__image-container only renders when an [slot="image"] is present.
+    await page.setContent(
+      '<pds-radio component-id="opt-1" label="Option one"><span slot="image"></span></pds-radio>',
+    );
+    await expectRespectsReducedMotion(page, 'pds-radio', '.pds-radio__image-container');
   });
 });
