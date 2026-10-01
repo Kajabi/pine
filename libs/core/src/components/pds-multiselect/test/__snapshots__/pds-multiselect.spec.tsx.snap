@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pds-multiselect renders with label 1`] = `
+<pds-multiselect component-id="test" label="Select Tags">
+  <template shadowrootmode="open">
+    <div class="pds-multiselect">
+      <label class="pds-multiselect__label" htmlfor="test">
+        Select Tags
+      </label>
+      <div class="pds-multiselect__wrapper">
+        <button aria-expanded="false" aria-haspopup="listbox" class="pds-multiselect__trigger" id="test" type="button">
+          <span class="pds-multiselect__trigger-text pds-multiselect__trigger-text--placeholder">
+            Select...
+          </span>
+          <pds-icon class="pds-multiselect__icon" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' class='pdsicon'><path fill-rule='evenodd' d='M11.293 3.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1-1.414 1.414L12 5.414 7.707 9.707a1 1 0 0 1-1.414-1.414zm-5 11a1 1 0 0 1 1.414 0L12 18.586l4.293-4.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1 0-1.414'/></svg>"></pds-icon>
+        </button>
+      </div>
+      <div style="display: none;">
+        <slot></slot>
+      </div>
+    </div>
+  </template>
+</pds-multiselect>
+`;
