@@ -1,0 +1,106 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-skeleton.stories.js';
+
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+import { StatusBadge } from '../../../stories/_helpers';
+
+<Meta of={stories} />
+
+<StatusBadge component="pds-skeleton" />
+
+# Skeleton
+
+Skeletons stand in for content that has not arrived yet, echoing the shape of what is about to render. Use them for the first load of a surface, where they make the eventual layout predictable and reduce the sense of waiting.
+
+## Guidelines
+
+### When to use
+
+- On the initial load of a page, panel, or list, where the shape of the incoming content is known.
+- When the placeholder can reasonably mirror the real layout — a row of text lines, a card, an avatar.
+- When several pieces of content load together and a single spinner would say less than the shape of the result.
+
+### When not to use
+
+- For operations without a known result shape — use `pds-loader` instead.
+- For actions that complete quickly; a placeholder that flashes for 100ms is noise.
+- For refreshes of content that is already on screen. Replacing rendered content with placeholders reads as data loss. Leave the content in place and indicate the refresh some other way.
+- As a progress indicator. Skeletons say "not yet", not "how far" — use `pds-progress` when completion is measurable.
+
+### Accessibility
+
+A skeleton carries no information, so `<pds-skeleton>` always sets `aria-hidden="true"` on itself. This is deliberate and not configurable: a placeholder announced individually is noise, and a group of eight of them is eight times the noise.
+
+Announce the load once, from a region that wraps the group:
+
+```html
+<div role="status" aria-label="Loading results">
+  <pds-skeleton width="200px"></pds-skeleton>
+  <pds-skeleton width="140px"></pds-skeleton>
+</div>
+```
+
+Putting `aria-label` on the placeholder elements themselves does **not** work. A bare element with no role gives the label nothing to attach to, so most assistive tech drops it entirely — the load then goes unannounced while appearing to be handled.
+
+### Technical Details
+
+- The fill and the moving sheen are both resolved inside the component and adjust per theme. Consumers never pick a grey — that is the point of the component, and the reason a hand-rolled placeholder tends to break in dark mode.
+- The fill is a property of the element, not of the animation. Removing the sheen therefore leaves a visible static placeholder rather than an empty box. This matters under `prefers-reduced-motion: reduce`, where the sheen is hidden.
+- `prefers-reduced-motion: reduce` hides the sheen entirely. Pine's `--pine-motion-duration-*` tokens collapse to `0ms` under that query, but they describe transition durations (120–300ms) rather than a multi-second ambient loop, so this component handles the preference directly.
+- `width` and `height` accept any CSS length and override the variant's defaults. Leave them unset to take the shape the variant implies.
+- The sheen is exposed as a `::part(sheen)` so it can be restyled or removed without forking the component.
+
+## Properties
+
+<DocArgsTable componentName="pds-skeleton" docSource={components} />
+
+## Examples
+
+### Text
+
+The default variant. Sized for a line of body copy, full-width unless you constrain it.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsSkeleton variant="text" width="240px"></PdsSkeleton>',
+    webComponent: '<pds-skeleton variant="text" width="240px"></pds-skeleton>'
+}}>
+  <pds-skeleton variant="text" width="240px"></pds-skeleton>
+</DocCanvas>
+
+### Rect
+
+For blocks — cards, thumbnails, media. Set `height` to match what is loading.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsSkeleton variant="rect" width="320px"></PdsSkeleton>',
+    webComponent: '<pds-skeleton variant="rect" width="320px"></pds-skeleton>'
+}}>
+  <pds-skeleton variant="rect" width="320px"></pds-skeleton>
+</DocCanvas>
+
+### Circle
+
+For avatars and other round media. Square by default so the full border radius reads as a circle; set `width` and `height` together to resize.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsSkeleton variant="circle"></PdsSkeleton>',
+    webComponent: '<pds-skeleton variant="circle"></pds-skeleton>'
+}}>
+  <pds-skeleton variant="circle"></pds-skeleton>
+</DocCanvas>
+
+### Composing a shape
+
+Skeletons are single shapes by design — compose them to mirror the layout that is loading, and wrap the group in one status region.
+
+<Canvas of={stories.MediaObject} />
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
