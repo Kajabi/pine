@@ -1,0 +1,112 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-topbar.stories.js';
+
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+import { StatusBadge } from '../../../stories/_helpers';
+
+<Meta of={stories} />
+
+<StatusBadge component="pds-topbar" />
+
+# Topbar
+
+> **Proposal, not yet design-reviewed.** Filed as <a href="https://linear.app/kajabi/issue/DSS-238">DSS-238</a>. This is a scaffold matching that ticket's acceptance criteria, built to make the shape concrete for review — treat every visual and API decision here as a starting point, not a settled answer.
+
+`pds-topbar` is the branded global top bar — logo, optional nav toggle, and right-aligned actions — replacing Sage's `SageAssistant` (the dark `#1a1a19` bar) and the ad-hoc `pds-box` top bars teams have been hand-rolling for lack of a real component.
+
+## Guidelines
+
+### When to use
+
+- The `header` slot of a `pds-app`.
+- Anywhere currently rendering `SageAssistant`, or a hand-composed `pds-box` acting as a global nav bar.
+
+## Properties
+
+<DocArgsTable componentName="pds-topbar" docSource={components} />
+
+## Examples
+
+### Default
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsTopbar logoSrc="/brand/logo.svg" logoAlt="Acme" logoHref="/">
+      <PdsButton size="small" variant="tertiary">Sign out</PdsButton>
+    </PdsTopbar>
+    `,
+    webComponent: `
+    <pds-topbar logo-src="/brand/logo.svg" logo-alt="Acme" logo-href="/">
+      <pds-button size="small" variant="tertiary">Sign out</pds-button>
+    </pds-topbar>
+    `
+}}>
+  <pds-topbar logo-src="https://pine-design-system.netlify.app/favicon.svg" logo-alt="Pine" logo-href="/">
+    <pds-button size="small" variant="tertiary">Sign out</pds-button>
+  </pds-topbar>
+</DocCanvas>
+
+### With a menu-toggle button
+
+The `menu-button` renders before the logo, wired to `aria-controls`/`aria-expanded`. It emits `pdsMenuToggle` — the consumer (typically a `pds-app` nav region) reacts to that event; `pds-topbar` doesn't reach into `pds-app` itself.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsTopbar
+      menuButton
+      menuButtonControls="app-nav"
+      logoSrc="/brand/logo.svg"
+      logoAlt="Acme"
+    >
+      <PdsAvatar initials="QJ" />
+    </PdsTopbar>
+    `,
+    webComponent: `
+    <pds-topbar
+      menu-button
+      menu-button-controls="app-nav"
+      logo-src="/brand/logo.svg"
+      logo-alt="Acme"
+    >
+      <pds-avatar initials="QJ"></pds-avatar>
+    </pds-topbar>
+    `
+}}>
+  <pds-topbar menu-button menu-button-controls="app-nav" logo-src="https://pine-design-system.netlify.app/favicon.svg" logo-alt="Pine">
+    <pds-avatar initials="QJ"></pds-avatar>
+  </pds-topbar>
+</DocCanvas>
+
+### Custom logo markup
+
+The `logo` slot takes priority over `logoSrc` when it has content — use it for a wordmark, an SVG, or anything an `<img>` can't express.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsTopbar>
+      <span slot="logo">ACME</span>
+      <PdsButton size="small" variant="tertiary">Help</PdsButton>
+    </PdsTopbar>
+    `,
+    webComponent: `
+    <pds-topbar>
+      <span slot="logo">ACME</span>
+      <pds-button size="small" variant="tertiary">Help</pds-button>
+    </pds-topbar>
+    `
+}}>
+  <pds-topbar>
+    <span slot="logo" style={{ fontWeight: 700, letterSpacing: '0.02em' }}>ACME</span>
+    <pds-button size="small" variant="tertiary">Help</pds-button>
+  </pds-topbar>
+</DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
