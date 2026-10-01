@@ -11,6 +11,9 @@ interface Token {
   [key: string]: TokenEntry | Token;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CoreTokens = Record<string, any>;
+
 interface DocTokenTableProps {
   category: string;
   tier: string;
@@ -80,11 +83,96 @@ const formattedCategoryName = {
 
 const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) => {
   const [pineTokens, setPineTokens] = useState<Token | null>(null);
+  const [coreTokens, setCoreTokens] = useState<CoreTokens | null>(null);
+
+  // Look up a single reference path in the core tokens
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lookupCoreValue = (refPath: string, cores: CoreTokens): any => {
+    const parts = refPath.split('.');
+
+    // Navigate through the core tokens to find the value
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let current: any = cores;
+    for (const part of parts) {
+      if (current && typeof current === 'object' && part in current) {
+        current = current[part];
+      } else {
+        return null; // Path not found
+      }
+    }
+
+    // If we found a token entry with a value, return it
+    if (current && typeof current === 'object' && 'value' in current) {
+      return current.value;
+    }
+
+    return null;
+  };
+
+  // Convert a complex value (like box-shadow object) to a string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const complexValueToString = (value: any): string => {
+    if (typeof value === 'string') return value;
+
+    // Helper to build box-shadow string from object, filtering out missing values
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const boxShadowObjectToString = (obj: any): string => {
+      const { x, y, blur, spread, color } = obj;
+      return [x, y, blur, spread, color]
+        .filter(v => v != null && v !== '')
+        .join(' ');
+    };
+
+    // Handle box-shadow array of objects
+    if (Array.isArray(value)) {
+      return value.map(item => {
+        if (typeof item === 'object' && item !== null) {
+          return boxShadowObjectToString(item);
+        }
+        return String(item);
+      }).join(', ');
+    }
+
+    // Handle single box-shadow object
+    if (typeof value === 'object' && value !== null) {
+      const { x } = value;
+      if (x !== undefined) {
+        return boxShadowObjectToString(value);
+      }
+      // For other objects, try to extract values
+      return Object.values(value)
+        .filter(v => v != null && v !== '' && v !== 'dropShadow')
+        .join(' ');
+    }
+
+    return String(value);
+  };
+
+  // Resolve references in a value string to actual core values
+  const resolveReferences = (value: string, cores: CoreTokens): string => {
+    if (typeof value !== 'string') return String(value);
+
+    // Replace all references like {color.grey.100} with their resolved values
+    return value.replace(/\{([^}]+)\}/g, (match, refPath) => {
+      const resolvedValue = lookupCoreValue(refPath, cores);
+      if (resolvedValue !== null) {
+        return complexValueToString(resolvedValue);
+      }
+      return match; // Keep original if not found
+    });
+  };
 
   useEffect(() => {
     const loadTokens = async () => {
       try {
         const tokenModule = await import(`../../../../../node_modules/@kajabi-ui/styles/dist/tokens/${tier}.json`);
+
+        // Also load core tokens when viewing semantic tier
+        if (tier === 'semantic') {
+          const coreModule = await import(`../../../../../node_modules/@kajabi-ui/styles/dist/tokens/core.json`);
+          setCoreTokens(coreModule.default as CoreTokens);
+        }
+
         const categories = categoryLookup[category]?.[tier] || null;
         if (categories) {
           const tempTokens: Token[] = [];
@@ -162,6 +250,11 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
               cssPropertyValue = buildValue(token.value);
             }
           }
+        }
+
+        // Resolve references to actual values for semantic tier
+        if (tier === 'semantic' && coreTokens && cssPropertyValue) {
+          cssPropertyValue = resolveReferences(cssPropertyValue, coreTokens);
         }
 
         let style: React.CSSProperties = {};
