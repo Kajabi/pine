@@ -86,6 +86,17 @@ export class PdsModal {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
     // Add keyboard event listener
     document.addEventListener('keydown', this.handleKeyDown);
+
+    // @Watch('open') only fires on a later change, not the prop's initial
+    // value — a modal mounted with `open` already true (static markup, or a
+    // framework passing it on first render) would otherwise never call
+    // show()/showModal(): the panel still appears, since that's driven by the
+    // `open` CSS class, but the native <dialog> itself was never opened, so
+    // there's no top-layer promotion, no dialog focusing steps, and no
+    // focusable-elements list or previousActiveElement captured.
+    if (this.open) {
+      this.showModal();
+    }
   }
 
   // Unwraps a nested dialog.pds-modal__backdrop left by a page-cache (Turbo, bfcache) reconnect.
@@ -205,11 +216,8 @@ export class PdsModal {
         }
         this.open = true;
 
-        // show()/showModal() move focus into the dialog as native browser
-        // behavior — the "dialog focusing steps" in the HTML spec — entirely
-        // independent of setInitialFocus() below. disableInitialFocus must
-        // counteract that native move, not just skip our own redundant call,
-        // or focus visibly jumps into the modal for one tick and back.
+        // show()/showModal() also move focus into the dialog natively (the HTML
+        // spec's "dialog focusing steps"), independent of setInitialFocus() below — counter it here too.
         if (this.disableInitialFocus && this.previousActiveElement && typeof this.previousActiveElement.focus === 'function') {
           this.previousActiveElement.focus();
         }
@@ -273,8 +281,7 @@ export class PdsModal {
   }
 
   /**
-   * Whether `active` sits inside a surface actually stacked above this modal —
-   * a positioned ancestor with a higher z-index than this modal's own backdrop.
+   * Whether `active` sits inside a surface actually stacked above this modal.
    *
    * Used to decide whether an Escape keypress belongs to that surface instead
    * of this modal. Focus being merely *outside* this modal is not enough on
@@ -282,8 +289,21 @@ export class PdsModal {
    * point of a non-modal usage like a drawer), so focus will routinely be on
    * ordinary page content while the modal is open, and that must not be
    * mistaken for "an overlay owns Escape."
+   *
+   * Two ways a surface can be above: it is itself promoted to the browser's
+   * top layer (a regular `showModal()` dialog, which paints above everything
+   * outside the top layer regardless of z-index — a sibling pds-modal opened
+   * over a `disableTopLayer` drawer typically shares the exact same z-index
+   * token, so a numeric comparison alone would miss it), or it has a higher
+   * z-index than this modal's own backdrop (a `disableTopLayer` overlay, or
+   * anything else deliberately raised above it).
    */
   private isStackedAboveOverlay(active: Element): boolean {
+    const topLayerDialog = active.closest('dialog');
+    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialog.matches(':modal')) {
+      return true;
+    }
+
     const ownZIndex = this.getBackdropZIndex(this.el);
 
     let node: Element | null = active;
@@ -333,12 +353,21 @@ export class PdsModal {
 
     // Handle Escape key to close the modal
     if (e.key === 'Escape') {
-      // In non-top-layer mode, focus can move into an overlay stacked above the
-      // modal (the reason disableTopLayer exists). If that overlay owns focus,
-      // leave Escape to it rather than dismissing this modal out from under it —
-      // but only when focus is actually inside a surface stacked above this one,
-      // not merely outside this modal (see isStackedAboveOverlay).
-      const active = document.activeElement;
+      // Every open pds-modal shares this document-level listener for the
+      // same keydown event. Whichever one runs first can synchronously move
+      // focus (hideModal() restores it), which would make a later instance's
+      // own read of document.activeElement reflect that side effect instead
+      // of where focus actually was when the key was pressed — stacking two
+      // sibling modals closing on one Escape instead of just the top one.
+      // Snapshot it once on the event itself so every instance sees the same
+      // value regardless of listener order.
+      const eventSnapshot = e as KeyboardEvent & { __pdsActiveElementAtEscape?: Element | null };
+      if (!('__pdsActiveElementAtEscape' in eventSnapshot)) {
+        eventSnapshot.__pdsActiveElementAtEscape = document.activeElement;
+      }
+      // Leave Escape to a genuinely stacked-above overlay (disableTopLayer's
+      // reason for existing) — not just to anything outside this modal.
+      const active = eventSnapshot.__pdsActiveElementAtEscape;
       if (
         this.disableTopLayer &&
         active &&
