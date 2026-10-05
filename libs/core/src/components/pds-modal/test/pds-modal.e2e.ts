@@ -227,29 +227,54 @@ describe('pds-modal', () => {
       expect(overlayOnTop).toBe(true);
     });
 
-    it('leaves Escape to a sibling top-layer modal that shares the same z-index tier', async () => {
-      // Regression: a sibling pds-modal (not nested inside this one — e.g. a
-      // confirm dialog mounted alongside a disableTopLayer drawer) gets the
-      // same default z-index token as this modal's own backdrop, so a plain
-      // "strictly greater" z-index comparison missed it entirely. A top-layer
-      // dialog paints above everything outside the top layer regardless of
-      // z-index, which isStackedAboveOverlay now checks for directly.
-      const page = await newE2EPage();
-      await page.setContent(`
-        <pds-modal component-id="drawer-stub" disable-top-layer="true" open><div>Drawer content</div></pds-modal>
-        <pds-modal component-id="confirm-stub" open><button id="confirm-btn">Confirm</button></pds-modal>
-      `);
-      await page.waitForChanges();
+    // Regression: a sibling pds-modal (not nested inside this one — e.g. a
+    // confirm dialog mounted alongside a disableTopLayer drawer) gets the
+    // same default z-index token as this modal's own backdrop, so a plain
+    // "strictly greater" z-index comparison missed it entirely. A top-layer
+    // dialog paints above everything outside the top layer regardless of
+    // z-index, which isStackedAboveOverlay now checks for directly.
+    //
+    // Both DOM orders are covered deliberately: every open pds-modal shares
+    // one document-level keydown listener, dispatched in registration order,
+    // and the confirm's own hideModal() clears its :modal state the moment
+    // it runs — if the confirm is registered first (the typical shape for an
+    // app-root confirm dialog mounted ahead of a drawer), it closes itself
+    // before the drawer's listener ever gets a chance to check, so reading
+    // :modal live there would already see it as closed. The fix snapshots
+    // that determination once per keydown, before either instance acts.
+    const mountOrders: Array<{ name: string; markup: string }> = [
+      {
+        name: 'drawer mounted before the confirm',
+        markup: `
+          <pds-modal component-id="drawer-stub" disable-top-layer="true" open><div>Drawer content</div></pds-modal>
+          <pds-modal component-id="confirm-stub" open><button id="confirm-btn">Confirm</button></pds-modal>
+        `,
+      },
+      {
+        name: 'confirm mounted before the drawer',
+        markup: `
+          <pds-modal component-id="confirm-stub" open><button id="confirm-btn">Confirm</button></pds-modal>
+          <pds-modal component-id="drawer-stub" disable-top-layer="true" open><div>Drawer content</div></pds-modal>
+        `,
+      },
+    ];
 
-      await page.evaluate(() => (document.getElementById('confirm-btn') as HTMLElement)?.focus());
-      await page.keyboard.press('Escape');
-      await page.waitForChanges();
+    for (const { name, markup } of mountOrders) {
+      it(`leaves Escape to a sibling top-layer modal that shares the same z-index tier (${name})`, async () => {
+        const page = await newE2EPage();
+        await page.setContent(markup);
+        await page.waitForChanges();
 
-      const outer = await page.find('pds-modal[component-id="drawer-stub"]');
-      const inner = await page.find('pds-modal[component-id="confirm-stub"]');
-      expect(await inner.getProperty('open')).toBe(false);
-      expect(await outer.getProperty('open')).toBe(true);
-    });
+        await page.evaluate(() => (document.getElementById('confirm-btn') as HTMLElement)?.focus());
+        await page.keyboard.press('Escape');
+        await page.waitForChanges();
+
+        const outer = await page.find('pds-modal[component-id="drawer-stub"]');
+        const inner = await page.find('pds-modal[component-id="confirm-stub"]');
+        expect(await inner.getProperty('open')).toBe(false);
+        expect(await outer.getProperty('open')).toBe(true);
+      });
+    }
   });
 
   describe('initial open state', () => {
