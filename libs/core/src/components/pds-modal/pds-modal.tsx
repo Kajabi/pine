@@ -226,15 +226,27 @@ export class PdsModal {
             // necessarily done by the time this task runs either, so counter it
             // here, in the same deferred slot setInitialFocus() below uses for
             // the same reason, rather than racing it synchronously above.
-            if (this.previousActiveElement !== document.body && typeof this.previousActiveElement?.focus === 'function') {
-              this.previousActiveElement.focus();
-            } else if (document.activeElement instanceof HTMLElement) {
-              // Nothing was focused before opening (previousActiveElement is
-              // body), so there's nothing to restore focus to — body.focus()
-              // would be a no-op and leave focus wherever the native focusing
-              // steps put it, inside the dialog. Blur that instead so focus
-              // ends up nowhere, matching the state before opening.
-              document.activeElement.blur();
+            //
+            // disableInitialFocus exists for a drawer that can open in the
+            // background while the user is mid-task elsewhere — by the time
+            // this runs, they may have already clicked into something of
+            // their own outside the dialog. Only act if focus is still where
+            // the native steps (or nothing) left it, so that isn't stolen.
+            const activeElement = document.activeElement;
+            const focusAlreadyClaimedElsewhere =
+              activeElement !== null && activeElement !== document.body && !this.modalRef?.contains(activeElement);
+
+            if (!focusAlreadyClaimedElsewhere) {
+              if (this.previousActiveElement !== document.body && typeof this.previousActiveElement?.focus === 'function') {
+                this.previousActiveElement.focus();
+              } else if (activeElement instanceof HTMLElement) {
+                // Nothing was focused before opening (previousActiveElement is
+                // body), so there's nothing to restore focus to — body.focus()
+                // would be a no-op and leave focus wherever the native focusing
+                // steps put it, inside the dialog. Blur that instead so focus
+                // ends up nowhere, matching the state before opening.
+                activeElement.blur();
+              }
             }
           } else {
             this.setInitialFocus();
