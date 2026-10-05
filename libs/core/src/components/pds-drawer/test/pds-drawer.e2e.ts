@@ -469,6 +469,47 @@ describe('pds-drawer', () => {
       expect(await getPanelWidth(page)).toBe('580px');
     });
 
+    describe('RTL', () => {
+      it('widens the panel when dragged toward the page (side=end, dir=rtl)', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`
+          <div dir="rtl">
+            <pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>
+          </div>
+        `);
+        await page.waitForChanges();
+
+        expect(await getPanelWidth(page)).toBe('500px');
+        // side="end" is the inline-end edge, which is physically LEFT under
+        // RTL — the handle sits on the panel's right (page-facing) edge, so
+        // dragging right widens it (the mirror image of the LTR case above).
+        await dragHandleBy(page, 80);
+        await page.waitForChanges();
+
+        expect(await getPanelWidth(page)).toBe('580px');
+      });
+
+      it('widens the panel when dragged toward the page (side=start, dir=rtl)', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`
+          <div dir="rtl">
+            <pds-drawer component-id="test" open resizable side="start" size="md"><div>Content</div></pds-drawer>
+          </div>
+        `);
+        await page.waitForChanges();
+
+        // side="start" is the inline-start edge, physically RIGHT under RTL
+        // — the handle sits on the panel's left (page-facing) edge, so
+        // dragging left widens it.
+        await dragHandleBy(page, -80);
+        await page.waitForChanges();
+
+        expect(await getPanelWidth(page)).toBe('580px');
+      });
+    });
+
     it('clamps a drag past maxWidth', async () => {
       const page = await newE2EPage();
       page.setViewport({ width: 1200, height: 800 });
@@ -481,6 +522,38 @@ describe('pds-drawer', () => {
       await page.waitForChanges();
 
       expect(await getPanelWidth(page)).toBe('550px');
+    });
+
+    // Regression: the rendered CSS clamp() falls back to 280/720 for any
+    // bound not reflected as a custom property. A maxWidth inside that range
+    // (550, above) wouldn't have caught the bug — this one (900) is outside
+    // it, so it only passes once --pds-drawer-max-width is actually set.
+    it('honors a maxWidth outside the clamp()s hardcoded 280/720 fallback range', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(
+        `<pds-drawer component-id="test" open resizable side="end" size="md" max-width="900"><div>Content</div></pds-drawer>`,
+      );
+      await page.waitForChanges();
+
+      await dragHandleBy(page, -1000);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('900px');
+    });
+
+    it('honors a minWidth outside the clamp()s hardcoded 280/720 fallback range', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(
+        `<pds-drawer component-id="test" open resizable side="end" size="md" min-width="150"><div>Content</div></pds-drawer>`,
+      );
+      await page.waitForChanges();
+
+      await dragHandleBy(page, 1000);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('150px');
     });
 
     it('clamps a drag past minWidth', async () => {
@@ -615,14 +688,45 @@ describe('pds-drawer', () => {
       await page.waitForChanges();
       expect(await getPanelWidth(page)).toBe('360px');
 
-      // Once the user has resized, further `size` prop changes don't fight them.
-      await dragHandleBy(page, 50);
+      // Once the user has resized, further `size` prop changes don't reset
+      // the width back to the new size's default. Drag to 480 — the top of
+      // sm's own bounds, but also inside md's (360-720) — so switching back
+      // to md exercises only "size doesn't fight a manual resize," not the
+      // separate, correct behavior of bounds re-clamping a width that falls
+      // outside the new size's range (covered below).
+      await dragHandleBy(page, -120);
       await page.waitForChanges();
-      const widthAfterResize = await getPanelWidth(page);
+      expect(await getPanelWidth(page)).toBe('480px');
 
       drawer.setProperty('size', 'md');
       await page.waitForChanges();
-      expect(await getPanelWidth(page)).toBe(widthAfterResize);
+      expect(await getPanelWidth(page)).toBe('480px');
+    });
+
+    // Bounds track the current size when minWidth/maxWidth aren't pinned
+    // (per the ticket: "Drag bounds, defaulted from the size scale") — that
+    // applies even to a manually-set width, so switching to a size whose
+    // bounds no longer contain it re-clamps the rendered width AND the
+    // component's own state (aria-valuenow), not just the CSS clamp().
+    it('re-clamps a manually-resized width that falls outside the new size default bounds', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable size="sm"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      // sm's bounds are 280-480; drag to 310, valid under sm but below md's
+      // min of 360.
+      await dragHandleBy(page, 50);
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('310px');
+
+      const drawer = await page.find('pds-drawer');
+      const handle = await page.find('pds-drawer .pds-drawer__handle');
+      drawer.setProperty('size', 'md');
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('360px');
+      expect(handle.getAttribute('aria-valuenow')).toBe('360');
     });
 
     it('hides the handle below the mobile (md, 768px) breakpoint', async () => {

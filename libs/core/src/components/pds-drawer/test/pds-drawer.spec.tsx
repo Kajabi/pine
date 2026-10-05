@@ -136,6 +136,85 @@ describe('pds-drawer', () => {
       const handle = page.root?.querySelector('.pds-drawer__handle');
       expect(handle?.getAttribute('aria-label')).toBe('Resize panel');
     });
+
+    // Regression: the CSS clamp() driving the rendered width reads
+    // --pds-drawer-min-width/-max-width — a prior version only ever set
+    // --pds-drawer-width, so minWidth/maxWidth drove the JS-side clamp and
+    // aria-valuemin/-valuemax but never the actual visible width.
+    it('reflects effective minWidth/maxWidth as CSS custom properties on the host', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test" resizable size="md" min-width="320" max-width="640"></pds-drawer>`,
+      });
+
+      const style = (page.root as HTMLElement).style;
+      expect(style.getPropertyValue('--pds-drawer-min-width')).toBe('320px');
+      expect(style.getPropertyValue('--pds-drawer-max-width')).toBe('640px');
+    });
+
+    it('reflects the size-scale default bounds as CSS custom properties when minWidth/maxWidth are unset', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test" resizable size="md"></pds-drawer>`,
+      });
+
+      const style = (page.root as HTMLElement).style;
+      expect(style.getPropertyValue('--pds-drawer-min-width')).toBe('360px');
+      expect(style.getPropertyValue('--pds-drawer-max-width')).toBe('720px');
+    });
+
+    // Regression: the initial width came straight from the size scale with
+    // no clamp, so a maxWidth narrower than the size default produced an
+    // invalid ARIA state (aria-valuenow > aria-valuemax) until the first
+    // interaction.
+    it('clamps the initial width against an explicit maxWidth narrower than the size default', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test" resizable size="md" max-width="400"></pds-drawer>`,
+      });
+
+      const handle = page.root?.querySelector('.pds-drawer__handle');
+      expect(handle?.getAttribute('aria-valuenow')).toBe('400');
+    });
+
+    it('clamps the width after a size change against an explicit maxWidth narrower than the new default', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test" resizable size="sm" max-width="400"></pds-drawer>`,
+      });
+
+      page.rootInstance.size = 'md';
+      await page.waitForChanges();
+
+      const handle = page.root?.querySelector('.pds-drawer__handle');
+      expect(handle?.getAttribute('aria-valuenow')).toBe('400');
+    });
+
+    it('describes the Enter-to-collapse/restore behavior via aria-describedby', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test" resizable></pds-drawer>`,
+      });
+
+      const handle = page.root?.querySelector('.pds-drawer__handle');
+      const describedById = handle?.getAttribute('aria-describedby');
+      expect(describedById).toBe('test-panel-resize-description');
+
+      const description = page.root?.querySelector(`#${describedById}`);
+      expect(description).not.toBeNull();
+      expect(description).toHaveClass('visually-hidden');
+      expect(description?.textContent).toContain('Enter');
+    });
+
+    it('uses a custom resizeHandleDescription when provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test" resizable resize-handle-description="Custom description"></pds-drawer>`,
+      });
+
+      const describedById = page.root?.querySelector('.pds-drawer__handle')?.getAttribute('aria-describedby');
+      expect(page.root?.querySelector(`#${describedById}`)?.textContent).toBe('Custom description');
+    });
   });
 
   describe('reconnecting over an already-hydrated snapshot', () => {
