@@ -6,6 +6,7 @@ pds-drawer-footer {
 
 .pds-drawer__footer {
   border-block-start: 1px solid var(--pine-color-border-subtle);
+  box-sizing: border-box;
   display: flex;
   gap: var(--pine-dimension-sm);
   justify-content: flex-end;

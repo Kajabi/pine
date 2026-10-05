@@ -6,6 +6,7 @@ pds-drawer-content {
 }
 
 .pds-drawer-content {
+  box-sizing: border-box;
   display: block;
   height: 100%;
   padding: var(--pine-dimension-md);
