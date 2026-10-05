@@ -248,6 +248,35 @@ export class PdsModal {
   }
 
   /**
+   * Whether `active` sits inside a surface actually stacked above this modal —
+   * a positioned ancestor with a higher z-index than this modal's own backdrop.
+   *
+   * Used to decide whether an Escape keypress belongs to that surface instead
+   * of this modal. Focus being merely *outside* this modal is not enough on
+   * its own: in `disableTopLayer` mode the page stays interactive (that's the
+   * point of a non-modal usage like a drawer), so focus will routinely be on
+   * ordinary page content while the modal is open, and that must not be
+   * mistaken for "an overlay owns Escape."
+   */
+  private isStackedAboveOverlay(active: Element): boolean {
+    const ownZIndex = this.getBackdropZIndex(this.el);
+
+    let node: Element | null = active;
+    while (node && node !== document.body) {
+      const style = getComputedStyle(node);
+      const zIndex = parseInt(style.zIndex, 10);
+
+      if (style.position !== 'static' && !isNaN(zIndex) && zIndex > ownZIndex) {
+        return true;
+      }
+
+      node = node.parentElement;
+    }
+
+    return false;
+  }
+
+  /**
    * Checks if this modal is the innermost (highest z-index) modal
    */
   private isInnermostModal(): boolean {
@@ -281,9 +310,17 @@ export class PdsModal {
     if (e.key === 'Escape') {
       // In non-top-layer mode, focus can move into an overlay stacked above the
       // modal (the reason disableTopLayer exists). If that overlay owns focus,
-      // leave Escape to it rather than dismissing this modal out from under it.
+      // leave Escape to it rather than dismissing this modal out from under it —
+      // but only when focus is actually inside a surface stacked above this one,
+      // not merely outside this modal (see isStackedAboveOverlay).
       const active = document.activeElement;
-      if (this.disableTopLayer && active && active !== document.body && !this.el.contains(active)) {
+      if (
+        this.disableTopLayer &&
+        active &&
+        active !== document.body &&
+        !this.el.contains(active) &&
+        this.isStackedAboveOverlay(active)
+      ) {
         return;
       }
       // Always prevent native dialog close behavior

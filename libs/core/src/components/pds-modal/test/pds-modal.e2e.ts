@@ -138,7 +138,7 @@ describe('pds-modal', () => {
       expect(state.ariaModal).toBe('false');
     });
 
-    it('leaves Escape to an overlay above it and closes normally when focus is inside', async () => {
+    it('leaves Escape to an overlay stacked above it and closes normally once focus leaves', async () => {
       const page = await newE2EPage();
       await page.setContent(
         `<pds-modal component-id="tl-esc" disable-top-layer="true"><div>Content</div></pds-modal>`,
@@ -149,11 +149,17 @@ describe('pds-modal', () => {
       await page.waitForChanges();
       expect(await modal.getProperty('open')).toBe(true);
 
-      // An overlay mounted on the body owns focus — Escape should not dismiss the modal.
+      // A real overlay actually stacked above this modal — positioned, with a
+      // higher z-index than the modal's own backdrop — owns focus. Escape
+      // should not dismiss the modal out from under it.
       await page.evaluate(() => {
+        const backdrop = document.querySelector('pds-modal dialog') as HTMLElement;
+        const backdropZIndex = parseInt(getComputedStyle(backdrop).zIndex, 10);
         const o = document.createElement('button');
         o.id = 'probe-overlay';
         o.textContent = 'Overlay';
+        o.style.position = 'fixed';
+        o.style.zIndex = String(backdropZIndex + 1);
         document.body.appendChild(o);
         o.focus();
       });
@@ -161,10 +167,35 @@ describe('pds-modal', () => {
       await page.waitForChanges();
       expect(await modal.getProperty('open')).toBe(true);
 
-      // Remove the overlay so focus is no longer held outside the modal — Escape
-      // now dismisses the modal as usual.
+      // Remove the overlay so focus is no longer held inside a stacked surface —
+      // Escape now dismisses the modal as usual.
       await page.evaluate(() => {
         (document.getElementById('probe-overlay') as HTMLElement)?.remove();
+      });
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+
+    it('still closes on Escape when focus is simply back in the page, not inside a stacked overlay', async () => {
+      // This is the non-modal-drawer scenario disableTopLayer exists for: the
+      // page stays interactive, so the user will routinely have focus on
+      // ordinary page content while the modal is open. That must not be
+      // mistaken for "an overlay owns Escape" — only a focused element inside
+      // a surface actually stacked above this modal should suppress it.
+      const page = await newE2EPage();
+      await page.setContent(`
+        <button id="page-button">Page button</button>
+        <pds-modal component-id="tl-esc-page" disable-top-layer="true"><div>Content</div></pds-modal>
+      `);
+
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(true);
+
+      await page.evaluate(() => {
+        (document.getElementById('page-button') as HTMLElement)?.focus();
       });
       await page.keyboard.press('Escape');
       await page.waitForChanges();
