@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsDrawer } from '../pds-drawer';
 import { PdsModal } from '../../pds-modal/pds-modal';
+import { expectReconnectSafe } from '../../../utils/test/reconnect-safety';
 
 describe('pds-drawer', () => {
   it('renders with default props', async () => {
@@ -60,5 +61,61 @@ describe('pds-drawer', () => {
 
     const modal = page.root?.querySelector('pds-modal') as HTMLPdsModalElement;
     expect(modal.disableInitialFocus).toBe(true);
+  });
+
+  describe('reconnecting over an already-hydrated snapshot', () => {
+    // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
+    // prior render already in its light DOM — render() always wraps slotted content
+    // in a fresh pds-modal, so a stale one from a prior render ends up nested inside it.
+    it('does not nest a second pds-modal', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `
+          <pds-drawer component-id="test">
+            <pds-modal>
+              <div>Body</div>
+            </pds-modal>
+          </pds-drawer>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('pds-modal').length).toBe(1);
+      expect(page.root?.querySelector('pds-modal')?.textContent?.trim()).toBe('Body');
+    });
+
+    it('drains a doubly-nested pds-modal to a single one with content intact', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `
+          <pds-drawer component-id="test">
+            <pds-modal>
+              <pds-modal>
+                <div>Body</div>
+              </pds-modal>
+            </pds-modal>
+          </pds-drawer>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('pds-modal').length).toBe(1);
+      expect(page.root?.querySelector('pds-modal')?.textContent?.trim()).toBe('Body');
+    });
+
+    it('leaves pristine (never-hydrated) content alone', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test"><div>Body</div></pds-drawer>`,
+      });
+
+      expect(page.root?.querySelectorAll('pds-modal').length).toBe(1);
+      expect(page.root?.querySelector('pds-modal')?.textContent?.trim()).toBe('Body');
+    });
+
+    it('is reconnect-safe (generic guard)', async () => {
+      await expectReconnectSafe(
+        [PdsDrawer, PdsModal],
+        `<pds-drawer component-id="test"><div>Body</div></pds-drawer>`,
+      );
+    });
   });
 });

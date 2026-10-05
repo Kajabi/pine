@@ -119,6 +119,35 @@ describe('pds-drawer', () => {
   });
 
   describe('lightDismiss', () => {
+    it('does not steal focus from a page field the user just clicked', async () => {
+      // Regression: hideModal() runs on the next frame under Stencil's async
+      // task queue, by which point the browser has already focused whatever
+      // the user's click landed on. Restoring previousActiveElement there
+      // would pull focus back to the (now closed) drawer's opener instead of
+      // leaving it on the field the user actually clicked.
+      const page = await newE2EPage();
+      await page.setContent(`
+        <button id="trigger">Open</button>
+        <input id="page-input" />
+        <pds-drawer component-id="test"><button id="inside">Inside</button></pds-drawer>
+      `);
+
+      await page.evaluate(() => (document.getElementById('trigger') as HTMLElement)?.focus());
+      const drawer = await page.find('pds-drawer');
+      drawer.setProperty('open', true);
+      await page.waitForChanges();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      const pageInput = await page.find('#page-input');
+      await pageInput.click();
+      await page.waitForChanges();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(await drawer.getProperty('open')).toBe(false);
+      const activeId = await page.evaluate(() => document.activeElement?.id);
+      expect(activeId).toBe('page-input');
+    });
+
     it('closes on a pointerdown outside the drawer by default', async () => {
       const page = await newE2EPage();
       await page.setContent(`
