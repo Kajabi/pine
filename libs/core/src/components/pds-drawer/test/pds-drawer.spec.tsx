@@ -127,6 +127,23 @@ describe('pds-drawer', () => {
       expect(handle?.getAttribute('aria-valuemax')).toBe('640');
     });
 
+    // Regression: Stencil coerces a number prop's attribute string via
+    // Number(), so a non-numeric min-width/max-width attribute yields NaN
+    // rather than undefined — falls back to the size scale instead of
+    // poisoning the CSS custom property / aria-valuemin / aria-valuemax.
+    it('falls back to the size scale when minWidth/maxWidth are non-numeric', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test" resizable size="md" min-width="abc" max-width="xyz"></pds-drawer>`,
+      });
+
+      const handle = page.root?.querySelector('.pds-drawer__handle');
+      expect(handle?.getAttribute('aria-valuemin')).toBe('360');
+      expect(handle?.getAttribute('aria-valuemax')).toBe('720');
+      expect((page.root as HTMLElement).style.getPropertyValue('--pds-drawer-min-width')).toBe('360px');
+      expect((page.root as HTMLElement).style.getPropertyValue('--pds-drawer-max-width')).toBe('720px');
+    });
+
     it('uses a custom resizeHandleLabel when provided', async () => {
       const page = await newSpecPage({
         components: [PdsDrawer],

@@ -556,6 +556,73 @@ describe('pds-drawer', () => {
       expect(await getPanelWidth(page)).toBe('150px');
     });
 
+    it('Escape cancels an in-progress drag and reverts to the pre-drag width', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const { x, y } = await getHandleCenter(page);
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x - 80, y, { steps: 10 });
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('580px');
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('500px');
+
+      // Pointer capture was released by the cancel — releasing the mouse now
+      // shouldn't commit anything (no further pointermove/pointerup effect).
+      await page.mouse.up();
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('500px');
+    });
+
+    it('does not let Escape also close the drawer while cancelling a drag', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const { x, y } = await getHandleCenter(page);
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x - 80, y, { steps: 10 });
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+
+      expect(await drawer.getProperty('open')).toBe(true);
+      await page.mouse.up();
+    });
+
+    it('reverts to the pre-drag width on pointercancel', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const { x, y } = await getHandleCenter(page);
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x - 80, y, { steps: 10 });
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('580px');
+
+      await page.evaluate(() => {
+        const handle = document.querySelector('pds-drawer .pds-drawer__handle') as HTMLElement;
+        handle.dispatchEvent(new PointerEvent('pointercancel', { pointerId: 1, bubbles: true }));
+      });
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('500px');
+      await page.mouse.up();
+    });
+
     it('clamps a drag past minWidth', async () => {
       const page = await newE2EPage();
       page.setViewport({ width: 1200, height: 800 });
