@@ -153,6 +153,13 @@ export class PdsDrawer {
     if (!target) return;
     if (this.el.contains(target)) return;
     if (target.closest(PORTALED_OVERLAY_SELECTOR)) return;
+    // A sibling pds-modal — e.g. a confirm dialog opened from inside the
+    // drawer but mounted at the document root rather than nested in our own
+    // content — is neither a descendant of the drawer nor on the portaled
+    // list above, so without this it reads as "outside" and a click inside
+    // it (or on its own backdrop) would close the drawer underneath it. That
+    // modal already owns its own dismiss semantics; defer to them instead.
+    if (target.closest('pds-modal')) return;
     this.open = false;
   }
 
