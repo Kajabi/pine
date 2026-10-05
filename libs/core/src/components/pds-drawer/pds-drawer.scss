@@ -3,42 +3,51 @@
 // modal: the full-viewport dimmed, click-blocking backdrop becomes an
 // invisible, non-blocking area so the page stays interactive, and the
 // centered panel becomes an edge-docked one at `--pds-drawer-width`.
+//
+// `.pds-drawer__modal` (set on the drawer's own inner pds-modal in the
+// render) is the scoping anchor below, not the bare `pds-modal` tag or a
+// chain through `.pds-drawer` — both would also reach a pds-modal nested
+// *inside* the drawer's own content (e.g. a confirm dialog), since that one
+// sits inside ours too. Only our own wrapper carries the marker.
+.pds-drawer__modal > .pds-modal__backdrop {
+  align-items: stretch;
+  background-color: transparent;
+  pointer-events: none;
+
+  @supports (backdrop-filter: blur(3px)) {
+    backdrop-filter: none;
+  }
+}
+
+.pds-drawer__modal > .pds-modal__backdrop > .pds-modal {
+  border-radius: 0;
+  height: 100%;
+  margin: 0;
+  max-height: 100%;
+  max-width: 100%;
+  pointer-events: auto;
+  width: var(--pds-drawer-width, 500px);
+}
+
 .pds-drawer {
   display: contents;
 
-  pds-modal .pds-modal__backdrop {
-    align-items: stretch;
-    background-color: transparent;
-    pointer-events: none;
-
-    @supports (backdrop-filter: blur(3px)) {
-      backdrop-filter: none;
-    }
-  }
-
-  pds-modal .pds-modal {
-    border-radius: 0;
-    height: 100%;
-    margin: 0;
-    max-height: 100%;
-    max-width: 100%;
-    pointer-events: auto;
-    width: var(--pds-drawer-width, 500px);
-  }
-
-  &.pds-drawer--end pds-modal .pds-modal__backdrop {
+  &.pds-drawer--end .pds-drawer__modal > .pds-modal__backdrop {
     justify-content: flex-end;
   }
 
-  &.pds-drawer--start pds-modal .pds-modal__backdrop {
+  &.pds-drawer--start .pds-drawer__modal > .pds-modal__backdrop {
     justify-content: flex-start;
   }
 
-  &.pds-drawer--sm pds-modal .pds-modal {
+  // Custom properties inherit through the DOM regardless of where they're
+  // declared, so these can live on the host itself rather than needing to
+  // reach all the way down to the `.pds-modal` div that reads them.
+  &.pds-drawer--sm {
     --pds-drawer-width: 360px;
   }
 
-  &.pds-drawer--md pds-modal .pds-modal {
+  &.pds-drawer--md {
     --pds-drawer-width: 500px;
   }
 }

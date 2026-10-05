@@ -1150,8 +1150,7 @@ export namespace Components {
         "vertical": boolean;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-     * follow-up and is not part of this component yet.
+     * A non-modal side panel composed from `pds-modal`.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
      * `pds-modal` internally with `disableTopLayer` always on and its backdrop
@@ -1190,7 +1189,7 @@ export namespace Components {
          */
         "side": 'start' | 'end';
         /**
-          * The drawer's width. This is currently the only width control.
+          * The drawer's width.
           * @default 'md'
          */
         "size": 'sm' | 'md';
@@ -2876,8 +2875,7 @@ declare global {
         "pdsDrawerClose": void;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-     * follow-up and is not part of this component yet.
+     * A non-modal side panel composed from `pds-modal`.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
      * `pds-modal` internally with `disableTopLayer` always on and its backdrop
@@ -4579,8 +4577,7 @@ declare namespace LocalJSX {
         "vertical"?: boolean;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-     * follow-up and is not part of this component yet.
+     * A non-modal side panel composed from `pds-modal`.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
      * `pds-modal` internally with `disableTopLayer` always on and its backdrop
@@ -4627,7 +4624,7 @@ declare namespace LocalJSX {
          */
         "side"?: 'start' | 'end';
         /**
-          * The drawer's width. This is currently the only width control.
+          * The drawer's width.
           * @default 'md'
          */
         "size"?: 'sm' | 'md';
@@ -6837,8 +6834,7 @@ declare module "@stencil/core" {
             "pds-copytext": LocalJSX.IntrinsicElements["pds-copytext"] & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             /**
-             * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-             * follow-up and is not part of this component yet.
+             * A non-modal side panel composed from `pds-modal`.
              * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
              * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
              * `pds-modal` internally with `disableTopLayer` always on and its backdrop

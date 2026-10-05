@@ -7,8 +7,7 @@
 
 ## Overview
 
-A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-follow-up and is not part of this component yet.
+A non-modal side panel composed from `pds-modal`.
 
 Unlike `pds-modal`, the page stays interactive while a drawer is open: no
 dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
@@ -27,7 +26,7 @@ those come from `pds-modal` unchanged.
 | `open`         | `open`          | Whether the drawer is open                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `boolean`          | `false`     |
 | `scrollable`   | `scrollable`    | Whether the drawer content should be scrollable                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | `boolean`          | `true`      |
 | `side`         | `side`          | Which edge of the viewport the drawer is docked to. Logical, so this is free under RTL — `end` is the inline-end edge regardless of direction.                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `"end" \| "start"` | `'end'`     |
-| `size`         | `size`          | The drawer's width. This is currently the only width control.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `"md" \| "sm"`     | `'md'`      |
+| `size`         | `size`          | The drawer's width.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `"md" \| "sm"`     | `'md'`      |
 
 
 ## Events

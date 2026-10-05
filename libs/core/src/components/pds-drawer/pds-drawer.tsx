@@ -9,8 +9,7 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal';
 
 /**
- * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
- * follow-up and is not part of this component yet.
+ * A non-modal side panel composed from `pds-modal`.
  *
  * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
  * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
@@ -34,12 +33,25 @@ export class PdsDrawer {
   private modalEl?: HTMLPdsModalElement;
 
   // Unwraps a nested pds-modal left by a page-cache (Turbo, bfcache) reconnect
-  // — the same bug class #806 fixed for pds-modal-header/-content/-footer.
-  // Every render wraps the slotted content in a fresh pds-modal; a reconnect
+  // — the same bug class fixed for pds-modal-header/-content/-footer. Every
+  // render wraps the slotted content in a fresh, marked pds-modal; a reconnect
   // that restores a prior render's pds-modal in our light DOM ends up with
-  // that stale one nested inside the new one.
+  // that stale one nested inside the new one's content.
+  //
+  // The container has to be the inner `.pds-modal` content div, not the
+  // `<pds-modal>` tag itself — that tag's first child is always its own
+  // rendered `dialog.pds-modal__backdrop`, never another `<pds-modal>`, so a
+  // bare-tag check there never matches. The `.pds-drawer__modal` marker on
+  // the staleness selector (rather than the bare `pds-modal` tag) keeps this
+  // from also unwrapping a consumer's own nested pds-modal, like a confirm
+  // dialog placed first in the drawer's content — only a stale copy of our
+  // own wrapper carries that class.
   componentDidRender() {
-    unwrapReconnectedContent(this.el.querySelector('pds-modal'), 'pds-modal');
+    unwrapReconnectedContent(
+      this.el.querySelector('pds-modal.pds-drawer__modal .pds-modal'),
+      'pds-modal.pds-drawer__modal',
+      '.pds-modal',
+    );
   }
 
   /**
@@ -61,7 +73,7 @@ export class PdsDrawer {
   @Prop() side: 'start' | 'end' = 'end';
 
   /**
-   * The drawer's width. This is currently the only width control.
+   * The drawer's width.
    * @default 'md'
    */
   @Prop() size: 'sm' | 'md' = 'md';
@@ -154,6 +166,7 @@ export class PdsDrawer {
         }}
       >
         <pds-modal
+          class="pds-drawer__modal"
           ref={(el) => (this.modalEl = el as HTMLPdsModalElement)}
           componentId={this.componentId}
           open={this.open}
