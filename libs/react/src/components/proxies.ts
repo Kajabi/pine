@@ -17,6 +17,10 @@ import { defineCustomElement as definePdsCombobox } from '@pine-ds/core/componen
 import { defineCustomElement as definePdsContainer } from '@pine-ds/core/components/pds-container.js';
 import { defineCustomElement as definePdsCopytext } from '@pine-ds/core/components/pds-copytext.js';
 import { defineCustomElement as definePdsDivider } from '@pine-ds/core/components/pds-divider.js';
+import { defineCustomElement as definePdsDrawer } from '@pine-ds/core/components/pds-drawer.js';
+import { defineCustomElement as definePdsDrawerContent } from '@pine-ds/core/components/pds-drawer-content.js';
+import { defineCustomElement as definePdsDrawerFooter } from '@pine-ds/core/components/pds-drawer-footer.js';
+import { defineCustomElement as definePdsDrawerHeader } from '@pine-ds/core/components/pds-drawer-header.js';
 import { defineCustomElement as definePdsDropdownMenu } from '@pine-ds/core/components/pds-dropdown-menu.js';
 import { defineCustomElement as definePdsDropdownMenuItem } from '@pine-ds/core/components/pds-dropdown-menu-item.js';
 import { defineCustomElement as definePdsDropdownMenuSeparator } from '@pine-ds/core/components/pds-dropdown-menu-separator.js';
@@ -67,6 +71,10 @@ export const PdsCombobox = /*@__PURE__*/createReactComponent<JSX.PdsCombobox, HT
 export const PdsContainer = /*@__PURE__*/createReactComponent<JSX.PdsContainer, HTMLPdsContainerElement>('pds-container', undefined, undefined, definePdsContainer);
 export const PdsCopytext = /*@__PURE__*/createReactComponent<JSX.PdsCopytext, HTMLPdsCopytextElement>('pds-copytext', undefined, undefined, definePdsCopytext);
 export const PdsDivider = /*@__PURE__*/createReactComponent<JSX.PdsDivider, HTMLPdsDividerElement>('pds-divider', undefined, undefined, definePdsDivider);
+export const PdsDrawer = /*@__PURE__*/createReactComponent<JSX.PdsDrawer, HTMLPdsDrawerElement>('pds-drawer', undefined, undefined, definePdsDrawer);
+export const PdsDrawerContent = /*@__PURE__*/createReactComponent<JSX.PdsDrawerContent, HTMLPdsDrawerContentElement>('pds-drawer-content', undefined, undefined, definePdsDrawerContent);
+export const PdsDrawerFooter = /*@__PURE__*/createReactComponent<JSX.PdsDrawerFooter, HTMLPdsDrawerFooterElement>('pds-drawer-footer', undefined, undefined, definePdsDrawerFooter);
+export const PdsDrawerHeader = /*@__PURE__*/createReactComponent<JSX.PdsDrawerHeader, HTMLPdsDrawerHeaderElement>('pds-drawer-header', undefined, undefined, definePdsDrawerHeader);
 export const PdsDropdownMenu = /*@__PURE__*/createReactComponent<JSX.PdsDropdownMenu, HTMLPdsDropdownMenuElement>('pds-dropdown-menu', undefined, undefined, definePdsDropdownMenu);
 export const PdsDropdownMenuItem = /*@__PURE__*/createReactComponent<JSX.PdsDropdownMenuItem, HTMLPdsDropdownMenuItemElement>('pds-dropdown-menu-item', undefined, undefined, definePdsDropdownMenuItem);
 export const PdsDropdownMenuSeparator = /*@__PURE__*/createReactComponent<JSX.PdsDropdownMenuSeparator, HTMLPdsDropdownMenuSeparatorElement>('pds-dropdown-menu-separator', undefined, undefined, definePdsDropdownMenuSeparator);

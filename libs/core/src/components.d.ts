@@ -1149,6 +1149,63 @@ export namespace Components {
          */
         "vertical": boolean;
     }
+    /**
+     * A resizable, non-modal side panel composed from `pds-modal`.
+     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
+     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
+     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+     * suppressed, and adds the edge, width and dismiss behavior a side panel
+     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * those come from `pds-modal` unchanged.
+     */
+    interface PdsDrawer {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance.
+          * @default 'auto'
+         */
+        "initialFocus": 'auto' | 'none';
+        /**
+          * Whether the drawer can be dismissed with a pointerdown outside it. Replaces `pds-modal`'s `backdropDismiss` — there is no backdrop to click. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.
+          * @default true
+         */
+        "lightDismiss": boolean;
+        /**
+          * Whether the drawer is open
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Whether the drawer content should be scrollable
+          * @default true
+         */
+        "scrollable": boolean;
+        /**
+          * Which edge of the viewport the drawer is docked to. Logical, so this is free under RTL — `end` is the inline-end edge regardless of direction.
+          * @default 'end'
+         */
+        "side": 'start' | 'end';
+        /**
+          * The drawer's width. This is the only width control; use `pds-drawer`'s `resizable` mode (coming separately) to let the user adjust it.
+          * @default 'md'
+         */
+        "size": 'sm' | 'md';
+    }
+    /**
+     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
+     * which caps itself against the viewport for a centered, possibly-shorter
+     * modal, a drawer panel is already edge-to-edge, so its content can simply
+     * flex to fill whatever space the header and footer leave.
+     */
+    interface PdsDrawerContent {
+    }
+    interface PdsDrawerFooter {
+    }
+    interface PdsDrawerHeader {
+    }
     interface PdsDropdownMenu {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -1498,6 +1555,11 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Whether to skip moving focus into the modal when it opens — both our own `setInitialFocus()` and the browser's native "dialog focusing steps", which move focus into the dialog as soon as `show()`/`showModal()` is called regardless of application code. Focus return on close is unaffected either way. For a modal opened by something other than a direct user click — a redirect, a deep link, a background event — stealing focus on open can interrupt whatever the user was already doing. Default `false` preserves today's behavior for every existing consumer.
+          * @default false
+         */
+        "disableInitialFocus": boolean;
         /**
           * Whether the modal opens outside the browser top layer as a non-modal dialog. When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so overlays rendered elsewhere in the DOM (file pickers, editor menus) can display above it via `z-index`. The page is not made inert and focus is not trapped in this mode. Read when the modal opens; changing it while the modal is open is not supported.
           * @default false
@@ -2562,6 +2624,10 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsCopytextElement;
 }
+export interface PdsDrawerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsDrawerElement;
+}
 export interface PdsDropdownMenuItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsDropdownMenuItemElement;
@@ -2803,6 +2869,57 @@ declare global {
     var HTMLPdsDividerElement: {
         prototype: HTMLPdsDividerElement;
         new (): HTMLPdsDividerElement;
+    };
+    interface HTMLPdsDrawerElementEventMap {
+        "pdsDrawerOpen": void;
+        "pdsDrawerClose": void;
+    }
+    /**
+     * A resizable, non-modal side panel composed from `pds-modal`.
+     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
+     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
+     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+     * suppressed, and adds the edge, width and dismiss behavior a side panel
+     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * those come from `pds-modal` unchanged.
+     */
+    interface HTMLPdsDrawerElement extends Components.PdsDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsDrawerElementEventMap>(type: K, listener: (this: HTMLPdsDrawerElement, ev: PdsDrawerCustomEvent<HTMLPdsDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsDrawerElementEventMap>(type: K, listener: (this: HTMLPdsDrawerElement, ev: PdsDrawerCustomEvent<HTMLPdsDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsDrawerElement: {
+        prototype: HTMLPdsDrawerElement;
+        new (): HTMLPdsDrawerElement;
+    };
+    /**
+     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
+     * which caps itself against the viewport for a centered, possibly-shorter
+     * modal, a drawer panel is already edge-to-edge, so its content can simply
+     * flex to fill whatever space the header and footer leave.
+     */
+    interface HTMLPdsDrawerContentElement extends Components.PdsDrawerContent, HTMLStencilElement {
+    }
+    var HTMLPdsDrawerContentElement: {
+        prototype: HTMLPdsDrawerContentElement;
+        new (): HTMLPdsDrawerContentElement;
+    };
+    interface HTMLPdsDrawerFooterElement extends Components.PdsDrawerFooter, HTMLStencilElement {
+    }
+    var HTMLPdsDrawerFooterElement: {
+        prototype: HTMLPdsDrawerFooterElement;
+        new (): HTMLPdsDrawerFooterElement;
+    };
+    interface HTMLPdsDrawerHeaderElement extends Components.PdsDrawerHeader, HTMLStencilElement {
+    }
+    var HTMLPdsDrawerHeaderElement: {
+        prototype: HTMLPdsDrawerHeaderElement;
+        new (): HTMLPdsDrawerHeaderElement;
     };
     interface HTMLPdsDropdownMenuElement extends Components.PdsDropdownMenu, HTMLStencilElement {
     }
@@ -3262,6 +3379,10 @@ declare global {
         "pds-container": HTMLPdsContainerElement;
         "pds-copytext": HTMLPdsCopytextElement;
         "pds-divider": HTMLPdsDividerElement;
+        "pds-drawer": HTMLPdsDrawerElement;
+        "pds-drawer-content": HTMLPdsDrawerContentElement;
+        "pds-drawer-footer": HTMLPdsDrawerFooterElement;
+        "pds-drawer-header": HTMLPdsDrawerHeaderElement;
         "pds-dropdown-menu": HTMLPdsDropdownMenuElement;
         "pds-dropdown-menu-item": HTMLPdsDropdownMenuItemElement;
         "pds-dropdown-menu-separator": HTMLPdsDropdownMenuSeparatorElement;
@@ -4455,6 +4576,71 @@ declare namespace LocalJSX {
          */
         "vertical"?: boolean;
     }
+    /**
+     * A resizable, non-modal side panel composed from `pds-modal`.
+     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
+     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
+     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+     * suppressed, and adds the edge, width and dismiss behavior a side panel
+     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * those come from `pds-modal` unchanged.
+     */
+    interface PdsDrawer {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance.
+          * @default 'auto'
+         */
+        "initialFocus"?: 'auto' | 'none';
+        /**
+          * Whether the drawer can be dismissed with a pointerdown outside it. Replaces `pds-modal`'s `backdropDismiss` — there is no backdrop to click. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.
+          * @default true
+         */
+        "lightDismiss"?: boolean;
+        /**
+          * Emitted when the drawer is closed
+         */
+        "onPdsDrawerClose"?: (event: PdsDrawerCustomEvent<void>) => void;
+        /**
+          * Emitted when the drawer is opened
+         */
+        "onPdsDrawerOpen"?: (event: PdsDrawerCustomEvent<void>) => void;
+        /**
+          * Whether the drawer is open
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Whether the drawer content should be scrollable
+          * @default true
+         */
+        "scrollable"?: boolean;
+        /**
+          * Which edge of the viewport the drawer is docked to. Logical, so this is free under RTL — `end` is the inline-end edge regardless of direction.
+          * @default 'end'
+         */
+        "side"?: 'start' | 'end';
+        /**
+          * The drawer's width. This is the only width control; use `pds-drawer`'s `resizable` mode (coming separately) to let the user adjust it.
+          * @default 'md'
+         */
+        "size"?: 'sm' | 'md';
+    }
+    /**
+     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
+     * which caps itself against the viewport for a centered, possibly-shorter
+     * modal, a drawer panel is already edge-to-edge, so its content can simply
+     * flex to fill whatever space the header and footer leave.
+     */
+    interface PdsDrawerContent {
+    }
+    interface PdsDrawerFooter {
+    }
+    interface PdsDrawerHeader {
+    }
     interface PdsDropdownMenu {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -4828,6 +5014,11 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Whether to skip moving focus into the modal when it opens — both our own `setInitialFocus()` and the browser's native "dialog focusing steps", which move focus into the dialog as soon as `show()`/`showModal()` is called regardless of application code. Focus return on close is unaffected either way. For a modal opened by something other than a direct user click — a redirect, a deep link, a background event — stealing focus on open can interrupt whatever the user was already doing. Default `false` preserves today's behavior for every existing consumer.
+          * @default false
+         */
+        "disableInitialFocus"?: boolean;
         /**
           * Whether the modal opens outside the browser top layer as a non-modal dialog. When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so overlays rendered elsewhere in the DOM (file pickers, editor menus) can display above it via `z-index`. The page is not made inert and focus is not trapped in this mode. Read when the modal opens; changing it while the modal is open is not supported.
           * @default false
@@ -6191,6 +6382,15 @@ declare namespace LocalJSX {
         "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
         "vertical": boolean;
     }
+    interface PdsDrawerAttributes {
+        "componentId": string;
+        "open": boolean;
+        "side": 'start' | 'end';
+        "size": 'sm' | 'md';
+        "scrollable": boolean;
+        "lightDismiss": boolean;
+        "initialFocus": 'auto' | 'none';
+    }
     interface PdsDropdownMenuAttributes {
         "componentId": string;
         "placement": PlacementType;
@@ -6289,6 +6489,7 @@ declare namespace LocalJSX {
         "size": 'sm' | 'md' | 'lg' | 'fullscreen';
         "scrollable": boolean;
         "disableTopLayer": boolean;
+        "disableInitialFocus": boolean;
     }
     interface PdsModalContentAttributes {
         "border": 'none' | 'both' | 'top' | 'bottom';
@@ -6569,6 +6770,10 @@ declare namespace LocalJSX {
         "pds-container": Omit<PdsContainer, keyof PdsContainerAttributes> & { [K in keyof PdsContainer & keyof PdsContainerAttributes]?: PdsContainer[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `attr:${K}`]?: PdsContainerAttributes[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `prop:${K}`]?: PdsContainer[K] };
         "pds-copytext": Omit<PdsCopytext, keyof PdsCopytextAttributes> & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes]?: PdsCopytext[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `attr:${K}`]?: PdsCopytextAttributes[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `prop:${K}`]?: PdsCopytext[K] } & OneOf<"value", PdsCopytext["value"], PdsCopytextAttributes["value"]>;
         "pds-divider": Omit<PdsDivider, keyof PdsDividerAttributes> & { [K in keyof PdsDivider & keyof PdsDividerAttributes]?: PdsDivider[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `attr:${K}`]?: PdsDividerAttributes[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `prop:${K}`]?: PdsDivider[K] };
+        "pds-drawer": Omit<PdsDrawer, keyof PdsDrawerAttributes> & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes]?: PdsDrawer[K] } & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes as `attr:${K}`]?: PdsDrawerAttributes[K] } & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes as `prop:${K}`]?: PdsDrawer[K] };
+        "pds-drawer-content": PdsDrawerContent;
+        "pds-drawer-footer": PdsDrawerFooter;
+        "pds-drawer-header": PdsDrawerHeader;
         "pds-dropdown-menu": Omit<PdsDropdownMenu, keyof PdsDropdownMenuAttributes> & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes]?: PdsDropdownMenu[K] } & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes as `attr:${K}`]?: PdsDropdownMenuAttributes[K] } & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes as `prop:${K}`]?: PdsDropdownMenu[K] };
         "pds-dropdown-menu-item": Omit<PdsDropdownMenuItem, keyof PdsDropdownMenuItemAttributes> & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes]?: PdsDropdownMenuItem[K] } & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes as `attr:${K}`]?: PdsDropdownMenuItemAttributes[K] } & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes as `prop:${K}`]?: PdsDropdownMenuItem[K] };
         "pds-dropdown-menu-separator": Omit<PdsDropdownMenuSeparator, keyof PdsDropdownMenuSeparatorAttributes> & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes]?: PdsDropdownMenuSeparator[K] } & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes as `attr:${K}`]?: PdsDropdownMenuSeparatorAttributes[K] } & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes as `prop:${K}`]?: PdsDropdownMenuSeparator[K] };
@@ -6628,6 +6833,25 @@ declare module "@stencil/core" {
             "pds-container": LocalJSX.IntrinsicElements["pds-container"] & JSXBase.HTMLAttributes<HTMLPdsContainerElement>;
             "pds-copytext": LocalJSX.IntrinsicElements["pds-copytext"] & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
+            /**
+             * A resizable, non-modal side panel composed from `pds-modal`.
+             * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
+             * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
+             * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+             * suppressed, and adds the edge, width and dismiss behavior a side panel
+             * needs on top. It does not reimplement focus, Escape or dialog semantics —
+             * those come from `pds-modal` unchanged.
+             */
+            "pds-drawer": LocalJSX.IntrinsicElements["pds-drawer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerElement>;
+            /**
+             * Fills the drawer panel's height by default — unlike `pds-modal-content`,
+             * which caps itself against the viewport for a centered, possibly-shorter
+             * modal, a drawer panel is already edge-to-edge, so its content can simply
+             * flex to fill whatever space the header and footer leave.
+             */
+            "pds-drawer-content": LocalJSX.IntrinsicElements["pds-drawer-content"] & JSXBase.HTMLAttributes<HTMLPdsDrawerContentElement>;
+            "pds-drawer-footer": LocalJSX.IntrinsicElements["pds-drawer-footer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerFooterElement>;
+            "pds-drawer-header": LocalJSX.IntrinsicElements["pds-drawer-header"] & JSXBase.HTMLAttributes<HTMLPdsDrawerHeaderElement>;
             "pds-dropdown-menu": LocalJSX.IntrinsicElements["pds-dropdown-menu"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;
             "pds-dropdown-menu-item": LocalJSX.IntrinsicElements["pds-dropdown-menu-item"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
             "pds-dropdown-menu-separator": LocalJSX.IntrinsicElements["pds-dropdown-menu-separator"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;

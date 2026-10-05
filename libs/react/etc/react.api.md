@@ -47,6 +47,18 @@ export const PdsCopytext: ForwardRefExoticComponent<JSX_2.PdsCopytext & Omit<HTM
 export const PdsDivider: ForwardRefExoticComponent<JSX_2.PdsDivider & Omit<HTMLAttributes<HTMLPdsDividerElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsDividerElement>>;
 
 // @public (undocumented)
+export const PdsDrawer: ForwardRefExoticComponent<any>;
+
+// @public (undocumented)
+export const PdsDrawerContent: ForwardRefExoticComponent<any>;
+
+// @public (undocumented)
+export const PdsDrawerFooter: ForwardRefExoticComponent<any>;
+
+// @public (undocumented)
+export const PdsDrawerHeader: ForwardRefExoticComponent<any>;
+
+// @public (undocumented)
 export const PdsDropdownMenu: ForwardRefExoticComponent<JSX_2.PdsDropdownMenu & Omit<HTMLAttributes<HTMLPdsDropdownMenuElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsDropdownMenuElement>>;
 
 // @public (undocumented)
