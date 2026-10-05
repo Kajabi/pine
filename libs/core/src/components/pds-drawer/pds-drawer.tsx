@@ -1,5 +1,12 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, h } from '@stencil/core';
 
+// Known selectors for content Pine components portal to document.body rather
+// than rendering in place — pds-popover, pds-tooltip, pds-combobox's dropdown.
+// A pointerdown landing on one of these is not "outside" the drawer in the
+// sense light dismiss cares about: it belongs to an overlay something inside
+// the drawer opened, even though it is not a DOM descendant of the drawer.
+const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal';
+
 /**
  * A resizable, non-modal side panel composed from `pds-modal`.
  *
@@ -17,6 +24,12 @@ import { Component, Element, Event, EventEmitter, Host, Listen, Prop, h } from '
 })
 export class PdsDrawer {
   @Element() el: HTMLPdsDrawerElement;
+
+  // The drawer's own direct inner pds-modal, so pdsModalOpen/pdsModalClose
+  // handlers below can tell it apart from a confirm dialog or similar nested
+  // pds-modal rendered inside the drawer's own slotted content — both bubble
+  // the same event names, and only the former should drive our open state.
+  private modalEl?: HTMLPdsModalElement;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -85,14 +98,19 @@ export class PdsDrawer {
   // button toggling its own `open`) and only updates its own `open` prop —
   // mirror that back onto ours so a consumer's binding stays correct, and
   // re-emit as our own event rather than leaking pds-modal's event name.
+  // Both events bubble, so a nested pds-modal (a confirm dialog inside the
+  // drawer's own content) would otherwise trigger these too — only react to
+  // our own direct inner modal.
   @Listen('pdsModalClose')
-  handleModalClose() {
+  handleModalClose(e: CustomEvent<void>) {
+    if (e.target !== this.modalEl) return;
     this.open = false;
     this.pdsDrawerClose.emit();
   }
 
   @Listen('pdsModalOpen')
-  handleModalOpen() {
+  handleModalOpen(e: CustomEvent<void>) {
+    if (e.target !== this.modalEl) return;
     this.pdsDrawerOpen.emit();
   }
 
@@ -104,9 +122,11 @@ export class PdsDrawer {
   @Listen('pointerdown', { target: 'document' })
   handleOutsidePointerDown(e: PointerEvent) {
     if (!this.lightDismiss || !this.open) return;
-    if (!this.el.contains(e.target as Node)) {
-      this.open = false;
-    }
+    const target = e.target as Element | null;
+    if (!target) return;
+    if (this.el.contains(target)) return;
+    if (target.closest(PORTALED_OVERLAY_SELECTOR)) return;
+    this.open = false;
   }
 
   render() {
@@ -119,6 +139,7 @@ export class PdsDrawer {
         }}
       >
         <pds-modal
+          ref={(el) => (this.modalEl = el as HTMLPdsModalElement)}
           componentId={this.componentId}
           open={this.open}
           scrollable={this.scrollable}
