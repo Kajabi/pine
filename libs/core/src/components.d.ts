@@ -1150,14 +1150,13 @@ export namespace Components {
         "vertical": boolean;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-     * follow-up and is not part of this component yet.
+     * A non-modal side panel composed from `pds-modal`.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
      * `pds-modal` internally with `disableTopLayer` always on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
-     * those come from `pds-modal` unchanged.
+     * suppressed, and adds the edge, width, resize and dismiss behavior a side
+     * panel needs on top. It does not reimplement focus, Escape or dialog
+     * semantics — those come from `pds-modal` unchanged.
      */
     interface PdsDrawer {
         /**
@@ -1175,10 +1174,28 @@ export namespace Components {
          */
         "lightDismiss": boolean;
         /**
+          * The maximum width, in px, the panel can be dragged or keyed up to. Defaults from the `size` scale when unset. Only meaningful when `resizable` is true.
+         */
+        "maxWidth"?: number;
+        /**
+          * The minimum width, in px, the panel can be dragged or keyed down to. Defaults from the `size` scale when unset. Only meaningful when `resizable` is true.
+         */
+        "minWidth"?: number;
+        /**
           * Whether the drawer is open
           * @default false
          */
         "open": boolean;
+        /**
+          * Whether the drawer's page-facing edge can be dragged to resize it. Opt-in, so simple cases are unaffected. The handle supports pointer dragging and the WAI-ARIA Window Splitter keyboard pattern (arrow keys, Home/End, Enter), and is hidden below the `md` (768px) breakpoint, where the panel already occupies nearly the full viewport.
+          * @default false
+         */
+        "resizable": boolean;
+        /**
+          * Accessible name for the resize handle.
+          * @default 'Resize drawer'
+         */
+        "resizeHandleLabel": string;
         /**
           * Whether the drawer content should be scrollable
           * @default true
@@ -2874,16 +2891,17 @@ declare global {
     interface HTMLPdsDrawerElementEventMap {
         "pdsDrawerOpen": void;
         "pdsDrawerClose": void;
+        "pdsDrawerResize": { width: number };
+        "pdsDrawerResizeEnd": { width: number };
     }
     /**
-     * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-     * follow-up and is not part of this component yet.
+     * A non-modal side panel composed from `pds-modal`.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
      * `pds-modal` internally with `disableTopLayer` always on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
-     * those come from `pds-modal` unchanged.
+     * suppressed, and adds the edge, width, resize and dismiss behavior a side
+     * panel needs on top. It does not reimplement focus, Escape or dialog
+     * semantics — those come from `pds-modal` unchanged.
      */
     interface HTMLPdsDrawerElement extends Components.PdsDrawer, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsDrawerElementEventMap>(type: K, listener: (this: HTMLPdsDrawerElement, ev: PdsDrawerCustomEvent<HTMLPdsDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4579,14 +4597,13 @@ declare namespace LocalJSX {
         "vertical"?: boolean;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-     * follow-up and is not part of this component yet.
+     * A non-modal side panel composed from `pds-modal`.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
      * `pds-modal` internally with `disableTopLayer` always on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
-     * those come from `pds-modal` unchanged.
+     * suppressed, and adds the edge, width, resize and dismiss behavior a side
+     * panel needs on top. It does not reimplement focus, Escape or dialog
+     * semantics — those come from `pds-modal` unchanged.
      */
     interface PdsDrawer {
         /**
@@ -4604,6 +4621,14 @@ declare namespace LocalJSX {
          */
         "lightDismiss"?: boolean;
         /**
+          * The maximum width, in px, the panel can be dragged or keyed up to. Defaults from the `size` scale when unset. Only meaningful when `resizable` is true.
+         */
+        "maxWidth"?: number;
+        /**
+          * The minimum width, in px, the panel can be dragged or keyed down to. Defaults from the `size` scale when unset. Only meaningful when `resizable` is true.
+         */
+        "minWidth"?: number;
+        /**
           * Emitted when the drawer is closed
          */
         "onPdsDrawerClose"?: (event: PdsDrawerCustomEvent<void>) => void;
@@ -4612,10 +4637,28 @@ declare namespace LocalJSX {
          */
         "onPdsDrawerOpen"?: (event: PdsDrawerCustomEvent<void>) => void;
         /**
+          * Emitted continuously while the panel is being resized — on every pointer move and on every keyboard step — with the in-progress width in px.
+         */
+        "onPdsDrawerResize"?: (event: PdsDrawerCustomEvent<{ width: number }>) => void;
+        /**
+          * Emitted once a resize settles: on pointer release, or after each discrete keyboard step. Pine does not persist the width across reloads — whether it survives one, and whether it is per-user or per-surface, is a consumer decision.
+         */
+        "onPdsDrawerResizeEnd"?: (event: PdsDrawerCustomEvent<{ width: number }>) => void;
+        /**
           * Whether the drawer is open
           * @default false
          */
         "open"?: boolean;
+        /**
+          * Whether the drawer's page-facing edge can be dragged to resize it. Opt-in, so simple cases are unaffected. The handle supports pointer dragging and the WAI-ARIA Window Splitter keyboard pattern (arrow keys, Home/End, Enter), and is hidden below the `md` (768px) breakpoint, where the panel already occupies nearly the full viewport.
+          * @default false
+         */
+        "resizable"?: boolean;
+        /**
+          * Accessible name for the resize handle.
+          * @default 'Resize drawer'
+         */
+        "resizeHandleLabel"?: string;
         /**
           * Whether the drawer content should be scrollable
           * @default true
@@ -6393,6 +6436,10 @@ declare namespace LocalJSX {
         "scrollable": boolean;
         "lightDismiss": boolean;
         "initialFocus": 'auto' | 'none';
+        "resizable": boolean;
+        "minWidth": number;
+        "maxWidth": number;
+        "resizeHandleLabel": string;
     }
     interface PdsDropdownMenuAttributes {
         "componentId": string;
@@ -6837,14 +6884,13 @@ declare module "@stencil/core" {
             "pds-copytext": LocalJSX.IntrinsicElements["pds-copytext"] & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             /**
-             * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
-             * follow-up and is not part of this component yet.
+             * A non-modal side panel composed from `pds-modal`.
              * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
              * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
              * `pds-modal` internally with `disableTopLayer` always on and its backdrop
-             * suppressed, and adds the edge, width and dismiss behavior a side panel
-             * needs on top. It does not reimplement focus, Escape or dialog semantics —
-             * those come from `pds-modal` unchanged.
+             * suppressed, and adds the edge, width, resize and dismiss behavior a side
+             * panel needs on top. It does not reimplement focus, Escape or dialog
+             * semantics — those come from `pds-modal` unchanged.
              */
             "pds-drawer": LocalJSX.IntrinsicElements["pds-drawer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerElement>;
             /**
