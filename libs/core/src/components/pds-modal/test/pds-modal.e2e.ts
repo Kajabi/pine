@@ -296,6 +296,48 @@ describe('pds-modal', () => {
     });
   });
 
+  describe('disableInitialFocus', () => {
+    it('restores focus to the previously focused element', async () => {
+      const page = await newE2EPage();
+      // disable-top-layer: a true modal dialog makes the rest of the page
+      // inert, which would itself block focus from moving back outside it —
+      // not what this test is after.
+      await page.setContent(`
+        <button id="trigger">Trigger</button>
+        <pds-modal component-id="test" disable-top-layer="true" disable-initial-focus="true"><button id="first">First</button></pds-modal>
+      `);
+      await page.waitForChanges();
+      const modal = await page.find('pds-modal');
+
+      await page.evaluate(() => (document.getElementById('trigger') as HTMLElement)?.focus());
+
+      await modal.setProperty('open', true);
+      await page.waitForChanges();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      const activeId = await page.evaluate(() => document.activeElement?.id);
+      expect(activeId).toBe('trigger');
+    });
+
+    // Regression: when nothing was focused before opening, previousActiveElement
+    // is <body>. body.focus() is a no-op, so the old code left focus wherever
+    // the native dialog focusing steps had already put it — inside the dialog,
+    // defeating disableInitialFocus. It should end up nowhere (body) instead.
+    it('blurs focus when nothing was focused before opening', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`<pds-modal component-id="test" disable-initial-focus="true"><button id="first">First</button></pds-modal>`);
+      await page.evaluate(() => (document.activeElement as HTMLElement)?.blur?.());
+
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      const activeTag = await page.evaluate(() => document.activeElement?.tagName);
+      expect(activeTag).toBe('BODY');
+    });
+  });
+
   describe('accessibility', () => {
     it('has no axe violations when closed', async () => {
       const page = await newE2EPage();
