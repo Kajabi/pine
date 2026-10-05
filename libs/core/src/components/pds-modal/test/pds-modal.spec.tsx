@@ -260,6 +260,46 @@ describe('pds-modal', () => {
     // suite where a real browser exercises focus and key events.
   });
 
+  describe('disableInitialFocus', () => {
+    const stubDialog = (instance: PdsModal) => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      (instance as any).modalRef = { show: jest.fn(), showModal: jest.fn(), close: jest.fn(), querySelectorAll: () => [] };
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    };
+
+    it('moves initial focus by default', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal></pds-modal>`,
+      });
+      stubDialog(page.rootInstance);
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const setInitialFocus = jest.spyOn(page.rootInstance as any, 'setInitialFocus');
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      await page.rootInstance.showModal();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(setInitialFocus).toHaveBeenCalled();
+    });
+
+    it('skips moving initial focus when set', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal disable-initial-focus="true"></pds-modal>`,
+      });
+      stubDialog(page.rootInstance);
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const setInitialFocus = jest.spyOn(page.rootInstance as any, 'setInitialFocus');
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      await page.rootInstance.showModal();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(setInitialFocus).not.toHaveBeenCalled();
+    });
+  });
+
   describe('reconnecting over an already-hydrated snapshot', () => {
     // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
     // prior render already in its light DOM, nesting a stale dialog inside the fresh one.

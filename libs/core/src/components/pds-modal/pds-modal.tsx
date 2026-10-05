@@ -54,6 +54,18 @@ export class PdsModal {
   @Prop() disableTopLayer = false;
 
   /**
+   * Whether to skip moving focus into the modal when it opens. The modal still
+   * receives `setInitialFocus()`'s effect everywhere else (focus return on
+   * close is unaffected); this only opts out of the initial move. For a modal
+   * opened by something other than a direct user click — a redirect, a
+   * deep link, a background event — stealing focus on open can interrupt
+   * whatever the user was already doing. Default `false` preserves today's
+   * behavior for every existing consumer.
+   * @default false
+   */
+  @Prop() disableInitialFocus = false;
+
+  /**
    * Emitted when the modal is opened
    */
   @Event() pdsModalOpen: EventEmitter<void>;
@@ -195,7 +207,9 @@ export class PdsModal {
         // Using a longer timeout to ensure all components are fully rendered
         setTimeout(() => {
           this.updateFocusableElements();
-          this.setInitialFocus();
+          if (!this.disableInitialFocus) {
+            this.setInitialFocus();
+          }
           this.pdsModalOpen.emit();
         }, 100);
       } catch (error) {
