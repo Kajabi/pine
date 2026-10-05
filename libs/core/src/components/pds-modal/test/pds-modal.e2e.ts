@@ -336,6 +336,35 @@ describe('pds-modal', () => {
       const activeTag = await page.evaluate(() => document.activeElement?.tagName);
       expect(activeTag).toBe('BODY');
     });
+
+    // Regression: disableInitialFocus exists for a drawer that can open in
+    // the background while the user is mid-task elsewhere on the page — if
+    // they focus something of their own before the deferred correction above
+    // runs, it must not steal that focus back.
+    it('does not steal focus from somewhere the user moved to during the deferred window', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <button id="trigger">Trigger</button>
+        <input id="elsewhere" />
+        <pds-modal component-id="test" disable-top-layer="true" disable-initial-focus="true"><button id="first">First</button></pds-modal>
+      `);
+      await page.waitForChanges();
+      const modal = await page.find('pds-modal');
+
+      await page.evaluate(() => (document.getElementById('trigger') as HTMLElement)?.focus());
+
+      await modal.setProperty('open', true);
+      await page.waitForChanges();
+
+      // Simulate the user clicking into something of their own, elsewhere on
+      // the page, before the component's own 100ms deferred correction fires.
+      await page.evaluate(() => (document.getElementById('elsewhere') as HTMLElement)?.focus());
+
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      const activeId = await page.evaluate(() => document.activeElement?.id);
+      expect(activeId).toBe('elsewhere');
+    });
   });
 
   describe('accessibility', () => {

@@ -263,7 +263,13 @@ describe('pds-modal', () => {
   describe('disableInitialFocus', () => {
     const stubDialog = (instance: PdsModal) => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
-      (instance as any).modalRef = { show: jest.fn(), showModal: jest.fn(), close: jest.fn(), querySelectorAll: () => [] };
+      (instance as any).modalRef = {
+        show: jest.fn(),
+        showModal: jest.fn(),
+        close: jest.fn(),
+        querySelectorAll: () => [],
+        contains: () => false,
+      };
       /* eslint-enable @typescript-eslint/no-explicit-any */
     };
 
