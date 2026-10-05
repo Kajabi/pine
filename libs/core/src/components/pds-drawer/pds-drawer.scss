@@ -87,7 +87,9 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--pine-color-focus-ring);
+    // Negative offset (unlike most siblings' positive one) keeps the ring
+    // inside the narrow 12px hit box instead of spilling past it.
+    outline: var(--pine-outline-focus);
     outline-offset: -2px;
   }
 
@@ -106,4 +108,17 @@
   @media (max-width: 767px) {
     display: none;
   }
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

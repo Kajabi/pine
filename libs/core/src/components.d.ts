@@ -1192,6 +1192,11 @@ export namespace Components {
          */
         "resizable": boolean;
         /**
+          * Accessible description for the resize handle, surfaced via `aria-describedby` rather than `aria-label` so it doesn't override the name above. The WAI-ARIA Window Splitter pattern calls this out explicitly: since Enter can collapse the panel, assistive technology users need to be told that behavior exists, not just left to discover it by pressing keys.
+          * @default 'Use arrow keys to resize. Press Enter to collapse to the minimum width, or to restore the last width you set.'
+         */
+        "resizeHandleDescription": string;
+        /**
           * Accessible name for the resize handle.
           * @default 'Resize drawer'
          */
@@ -1207,7 +1212,7 @@ export namespace Components {
          */
         "side": 'start' | 'end';
         /**
-          * The drawer's width. This is currently the only width control.
+          * The drawer's initial width. This is the only width control when `resizable` is off; once `resizable` is on, it's the starting point a drag or keyboard step moves from.
           * @default 'md'
          */
         "size": 'sm' | 'md';
@@ -4655,6 +4660,11 @@ declare namespace LocalJSX {
          */
         "resizable"?: boolean;
         /**
+          * Accessible description for the resize handle, surfaced via `aria-describedby` rather than `aria-label` so it doesn't override the name above. The WAI-ARIA Window Splitter pattern calls this out explicitly: since Enter can collapse the panel, assistive technology users need to be told that behavior exists, not just left to discover it by pressing keys.
+          * @default 'Use arrow keys to resize. Press Enter to collapse to the minimum width, or to restore the last width you set.'
+         */
+        "resizeHandleDescription"?: string;
+        /**
           * Accessible name for the resize handle.
           * @default 'Resize drawer'
          */
@@ -4670,7 +4680,7 @@ declare namespace LocalJSX {
          */
         "side"?: 'start' | 'end';
         /**
-          * The drawer's width. This is currently the only width control.
+          * The drawer's initial width. This is the only width control when `resizable` is off; once `resizable` is on, it's the starting point a drag or keyboard step moves from.
           * @default 'md'
          */
         "size"?: 'sm' | 'md';
@@ -6440,6 +6450,7 @@ declare namespace LocalJSX {
         "minWidth": number;
         "maxWidth": number;
         "resizeHandleLabel": string;
+        "resizeHandleDescription": string;
     }
     interface PdsDropdownMenuAttributes {
         "componentId": string;

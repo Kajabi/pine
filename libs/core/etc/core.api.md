@@ -341,6 +341,7 @@ export namespace Components {
         "minWidth"?: number;
         "open": boolean;
         "resizable": boolean;
+        "resizeHandleDescription": string;
         "resizeHandleLabel": string;
         "scrollable": boolean;
         "side": 'start' | 'end';
@@ -1747,6 +1748,7 @@ export namespace LocalJSX {
         "onPdsDrawerResizeEnd"?: (event: PdsDrawerCustomEvent<{ width: number }>) => void;
         "open"?: boolean;
         "resizable"?: boolean;
+        "resizeHandleDescription"?: string;
         "resizeHandleLabel"?: string;
         "scrollable"?: boolean;
         "side"?: 'start' | 'end';
@@ -1769,6 +1771,8 @@ export namespace LocalJSX {
         "open": boolean;
         // (undocumented)
         "resizable": boolean;
+        // (undocumented)
+        "resizeHandleDescription": string;
         // (undocumented)
         "resizeHandleLabel": string;
         // (undocumented)

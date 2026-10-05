@@ -85,7 +85,7 @@ export class PdsDrawer {
   }
 
   componentWillLoad() {
-    this.currentWidth = SIZE_SCALE[this.size].width;
+    this.currentWidth = this.clampWidth(SIZE_SCALE[this.size].width);
   }
 
   /**
@@ -107,7 +107,9 @@ export class PdsDrawer {
   @Prop() side: 'start' | 'end' = 'end';
 
   /**
-   * The drawer's width. This is currently the only width control.
+   * The drawer's initial width. This is the only width control when
+   * `resizable` is off; once `resizable` is on, it's the starting point a
+   * drag or keyboard step moves from.
    * @default 'md'
    */
   @Prop() size: 'sm' | 'md' = 'md';
@@ -176,6 +178,18 @@ export class PdsDrawer {
   @Prop() resizeHandleLabel = 'Resize drawer';
 
   /**
+   * Accessible description for the resize handle, surfaced via
+   * `aria-describedby` rather than `aria-label` so it doesn't override the
+   * name above. The WAI-ARIA Window Splitter pattern calls this out
+   * explicitly: since Enter can collapse the panel, assistive technology
+   * users need to be told that behavior exists, not just left to discover
+   * it by pressing keys.
+   * @default 'Use arrow keys to resize. Press Enter to collapse to the minimum width, or to restore the last width you set.'
+   */
+  @Prop() resizeHandleDescription =
+    'Use arrow keys to resize. Press Enter to collapse to the minimum width, or to restore the last width you set.';
+
+  /**
    * Emitted when the drawer is opened
    */
   @Event() pdsDrawerOpen: EventEmitter<void>;
@@ -206,11 +220,18 @@ export class PdsDrawer {
   // attribute on the handle.
   @State() currentWidth: number;
 
+  // Not manually resized yet: reset to the new size's default width (a
+  // no-op clamp, since a size default is always within its own bounds).
+  // Already manually resized: keep the user's width, but bounds track
+  // `size` whenever minWidth/maxWidth aren't explicitly pinned (per the
+  // ticket: "Drag bounds, defaulted from the size scale"), so re-clamp it
+  // against the new bounds rather than leaving `currentWidth`/aria-valuenow
+  // out of sync with what the CSS clamp() would render anyway.
   @Watch('size')
   handleSizeChange(newSize: 'sm' | 'md') {
-    if (!this.hasBeenManuallyResized) {
-      this.currentWidth = SIZE_SCALE[newSize].width;
-    }
+    this.currentWidth = this.hasBeenManuallyResized
+      ? this.clampWidth(this.currentWidth)
+      : this.clampWidth(SIZE_SCALE[newSize].width);
   }
 
   // pds-modal closes itself (Escape, light dismiss, a consumer's close
@@ -353,10 +374,14 @@ export class PdsDrawer {
     this.commitWidth(width);
   };
 
+  private get handleDescriptionId(): string {
+    return `${this.panelId}-resize-description`;
+  }
+
   private renderHandle() {
     if (!this.resizable) return null;
 
-    return (
+    return [
       <div
         class="pds-drawer__handle"
         part="handle"
@@ -367,6 +392,7 @@ export class PdsDrawer {
         aria-valuemax={this.effectiveMaxWidth}
         aria-controls={this.panelId}
         aria-label={this.resizeHandleLabel}
+        aria-describedby={this.handleDescriptionId}
         tabindex="0"
         ref={(el) => (this.handleEl = el as HTMLDivElement)}
         onPointerDown={this.handleHandlePointerDown}
@@ -374,8 +400,11 @@ export class PdsDrawer {
         onPointerUp={this.handleHandlePointerUp}
         onPointerCancel={this.handleHandlePointerUp}
         onKeyDown={this.handleHandleKeyDown}
-      ></div>
-    );
+      ></div>,
+      <span id={this.handleDescriptionId} class="visually-hidden">
+        {this.resizeHandleDescription}
+      </span>,
+    ];
   }
 
   render() {
@@ -387,7 +416,20 @@ export class PdsDrawer {
           [`pds-drawer--${this.size}`]: true,
           'pds-drawer--resizable': this.resizable,
         }}
-        style={this.resizable ? { '--pds-drawer-width': `${this.currentWidth}px` } : {}}
+        style={
+          this.resizable
+            ? {
+                '--pds-drawer-width': `${this.currentWidth}px`,
+                // The CSS clamp() in pds-drawer.scss reads these two — without
+                // reflecting them here, minWidth/maxWidth only ever drove the
+                // JS-side clamp and aria-valuemin/-valuemax, while the actual
+                // rendered width silently fell back to clamp()'s own 280/720
+                // defaults for any bound outside that range.
+                '--pds-drawer-min-width': `${this.effectiveMinWidth}px`,
+                '--pds-drawer-max-width': `${this.effectiveMaxWidth}px`,
+              }
+            : {}
+        }
       >
         <pds-modal
           id={this.panelId}
