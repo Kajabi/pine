@@ -216,17 +216,27 @@ export class PdsModal {
         }
         this.open = true;
 
-        // show()/showModal() also move focus into the dialog natively (the HTML
-        // spec's "dialog focusing steps"), independent of setInitialFocus() below — counter it here too.
-        if (this.disableInitialFocus && this.previousActiveElement && typeof this.previousActiveElement.focus === 'function') {
-          this.previousActiveElement.focus();
-        }
-
         // Update focusable elements and set initial focus
         // Using a longer timeout to ensure all components are fully rendered
         setTimeout(() => {
           this.updateFocusableElements();
-          if (!this.disableInitialFocus) {
+          if (this.disableInitialFocus) {
+            // show()/showModal() also move focus into the dialog natively (the
+            // HTML spec's "dialog focusing steps") — that native step isn't
+            // necessarily done by the time this task runs either, so counter it
+            // here, in the same deferred slot setInitialFocus() below uses for
+            // the same reason, rather than racing it synchronously above.
+            if (this.previousActiveElement !== document.body && typeof this.previousActiveElement?.focus === 'function') {
+              this.previousActiveElement.focus();
+            } else if (document.activeElement instanceof HTMLElement) {
+              // Nothing was focused before opening (previousActiveElement is
+              // body), so there's nothing to restore focus to — body.focus()
+              // would be a no-op and leave focus wherever the native focusing
+              // steps put it, inside the dialog. Blur that instead so focus
+              // ends up nowhere, matching the state before opening.
+              document.activeElement.blur();
+            }
+          } else {
             this.setInitialFocus();
           }
           this.pdsModalOpen.emit();
