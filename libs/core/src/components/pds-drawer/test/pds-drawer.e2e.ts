@@ -223,6 +223,53 @@ describe('pds-drawer', () => {
 
       expect(await drawer.getProperty('open')).toBe(true);
     });
+
+    // Regression: a confirm dialog opened from inside the drawer but mounted
+    // as a sibling at the document root — not nested in the drawer's own
+    // content — is neither a descendant of the drawer nor on the portaled
+    // overlay list above, so without the fix it reads as "outside" and a
+    // click inside it, or on its own backdrop, closes the drawer underneath.
+    it('does not close on a pointerdown inside a sibling pds-modal (e.g. a confirm dialog)', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-drawer component-id="test" open><div>Content</div></pds-drawer>
+        <pds-modal component-id="confirm"><button id="confirm-button">Confirm</button></pds-modal>
+      `);
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      const confirm = await page.find('pds-modal[component-id="confirm"]');
+      await confirm.callMethod('showModal');
+      await page.waitForChanges();
+
+      const confirmButton = await page.find('#confirm-button');
+      await confirmButton.click();
+      await page.waitForChanges();
+
+      expect(await drawer.getProperty('open')).toBe(true);
+    });
+
+    it('does not close on a pointerdown on a sibling pds-modal\'s own backdrop', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-drawer component-id="test" open><div>Content</div></pds-drawer>
+        <pds-modal component-id="confirm"><button id="confirm-button">Confirm</button></pds-modal>
+      `);
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      const confirm = await page.find('pds-modal[component-id="confirm"]');
+      await confirm.callMethod('showModal');
+      await page.waitForChanges();
+
+      await page.evaluate(() => {
+        const backdrop = document.querySelector('pds-modal[component-id="confirm"] .pds-modal__backdrop') as HTMLElement;
+        backdrop.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+      });
+      await page.waitForChanges();
+
+      expect(await drawer.getProperty('open')).toBe(true);
+    });
   });
 
   describe('nested pds-modal', () => {
