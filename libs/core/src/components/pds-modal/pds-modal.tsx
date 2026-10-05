@@ -244,11 +244,27 @@ export class PdsModal {
   async hideModal() {
     if (this.modalRef) {
       try {
+        // Capture before close(): with the async task queue, a prop change
+        // that triggers hideModal() (e.g. light dismiss setting `open` false
+        // on a pointerdown elsewhere) doesn't run until the next frame — by
+        // then the browser has already moved focus to whatever the user's
+        // click actually landed on. Restoring previousActiveElement in that
+        // case would steal focus back from a real new destination; only
+        // restore it when focus is still inside the modal (or nowhere, i.e.
+        // document.body), meaning nothing else has claimed it since.
+        const activeElement = document.activeElement;
+        const focusAlreadyMovedElsewhere =
+          activeElement !== null && activeElement !== document.body && !this.modalRef.contains(activeElement);
+
         this.modalRef.close();
         this.open = false;
 
         // Restore focus to the element that was focused before the modal was opened
-        if (this.previousActiveElement && typeof this.previousActiveElement.focus === 'function') {
+        if (
+          !focusAlreadyMovedElsewhere &&
+          this.previousActiveElement &&
+          typeof this.previousActiveElement.focus === 'function'
+        ) {
           this.previousActiveElement.focus();
         }
 
@@ -297,10 +313,15 @@ export class PdsModal {
    * token, so a numeric comparison alone would miss it), or it has a higher
    * z-index than this modal's own backdrop (a `disableTopLayer` overlay, or
    * anything else deliberately raised above it).
+   *
+   * `topLayerDialog` / `topLayerDialogWasModal` come pre-snapshotted from the
+   * keydown event (see handleKeyDown) rather than being re-derived here: by
+   * the time a later sibling modal's listener runs, an earlier one may have
+   * already closed itself, which clears `:modal` — reading it live here would
+   * lose that evidence depending on listener order.
    */
-  private isStackedAboveOverlay(active: Element): boolean {
-    const topLayerDialog = active.closest('dialog');
-    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialog.matches(':modal')) {
+  private isStackedAboveOverlay(active: Element, topLayerDialog: Element | null, topLayerDialogWasModal: boolean): boolean {
+    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialogWasModal) {
       return true;
     }
 
@@ -359,11 +380,24 @@ export class PdsModal {
       // own read of document.activeElement reflect that side effect instead
       // of where focus actually was when the key was pressed — stacking two
       // sibling modals closing on one Escape instead of just the top one.
-      // Snapshot it once on the event itself so every instance sees the same
-      // value regardless of listener order.
-      const eventSnapshot = e as KeyboardEvent & { __pdsActiveElementAtEscape?: Element | null };
+      // That alone isn't enough, though: isStackedAboveOverlay's `:modal`
+      // check reads LIVE top-layer state, and hideModal()'s close() clears it
+      // synchronously — so whichever sibling's listener runs first (DOM
+      // order, not z-index) can close itself and erase the very evidence a
+      // later listener needs to recognize it was stacked above. Snapshot that
+      // determination too, in the same first-listener-wins block, before any
+      // instance has had a chance to act on this keypress.
+      const eventSnapshot = e as KeyboardEvent & {
+        __pdsActiveElementAtEscape?: Element | null;
+        __pdsTopLayerDialogAtEscape?: Element | null;
+        __pdsTopLayerDialogWasModalAtEscape?: boolean;
+      };
       if (!('__pdsActiveElementAtEscape' in eventSnapshot)) {
-        eventSnapshot.__pdsActiveElementAtEscape = document.activeElement;
+        const activeAtDispatch = document.activeElement;
+        eventSnapshot.__pdsActiveElementAtEscape = activeAtDispatch;
+        const topLayerDialog = activeAtDispatch?.closest('dialog') ?? null;
+        eventSnapshot.__pdsTopLayerDialogAtEscape = topLayerDialog;
+        eventSnapshot.__pdsTopLayerDialogWasModalAtEscape = !!(topLayerDialog && topLayerDialog.matches(':modal'));
       }
       // Leave Escape to a genuinely stacked-above overlay (disableTopLayer's
       // reason for existing) — not just to anything outside this modal.
@@ -373,7 +407,11 @@ export class PdsModal {
         active &&
         active !== document.body &&
         !this.el.contains(active) &&
-        this.isStackedAboveOverlay(active)
+        this.isStackedAboveOverlay(
+          active,
+          eventSnapshot.__pdsTopLayerDialogAtEscape ?? null,
+          eventSnapshot.__pdsTopLayerDialogWasModalAtEscape ?? false,
+        )
       ) {
         return;
       }
