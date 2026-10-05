@@ -22,6 +22,15 @@ describe('pds-drawer', () => {
     expect(await dialog.getProperty('open')).toBe(true);
   });
 
+  it('opens the inner dialog when open is already set on initial render', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-drawer component-id="test" open><div>Content</div></pds-drawer>`);
+    await page.waitForChanges();
+
+    const dialog = await page.find('pds-drawer pds-modal dialog');
+    expect(await dialog.getProperty('open')).toBe(true);
+  });
+
   it('opens as non-modal — not in the top layer, aria-modal false', async () => {
     const page = await newE2EPage();
     await page.setContent(`<pds-drawer component-id="test"><div>Content</div></pds-drawer>`);
@@ -157,6 +166,69 @@ describe('pds-drawer', () => {
       await page.waitForChanges();
 
       expect(await drawer.getProperty('open')).toBe(true);
+    });
+
+    it('does not close on a pointerdown inside a popover opened from within the drawer', async () => {
+      // Regression: pds-popover portals its content to document.body, so a
+      // plain `this.el.contains()` check sees it as "outside" even though it
+      // belongs to an overlay the drawer's own content opened.
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-drawer component-id="test" open>
+          <pds-popover component-id="inner-popover">
+            <button slot="trigger">Open popover</button>
+            <p id="popover-text">Popover content</p>
+          </pds-popover>
+        </pds-drawer>
+      `);
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      const trigger = await page.find('pds-drawer button[slot="trigger"]');
+      await trigger.click();
+      await page.waitForChanges();
+
+      const portaledText = await page.find('#inner-popover-portal #popover-text');
+      await portaledText.click();
+      await page.waitForChanges();
+
+      expect(await drawer.getProperty('open')).toBe(true);
+    });
+  });
+
+  describe('nested pds-modal', () => {
+    it('does not close when a nested pds-modal (e.g. a confirm dialog) opens and closes', async () => {
+      // Regression: pdsModalOpen/pdsModalClose bubble, so a confirm dialog
+      // rendered inside the drawer's own content would otherwise trigger the
+      // drawer's own open/close handlers too.
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-drawer component-id="test" open>
+          <pds-modal component-id="confirm">
+            <button id="confirm-trigger">Open confirm</button>
+          </pds-modal>
+        </pds-drawer>
+      `);
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      const closeSpy = await drawer.spyOnEvent('pdsDrawerClose');
+      const openSpy = await drawer.spyOnEvent('pdsDrawerOpen');
+
+      const confirm = await page.find('pds-modal[component-id="confirm"]');
+      await confirm.callMethod('showModal');
+      await page.waitForChanges();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(await drawer.getProperty('open')).toBe(true);
+      expect(closeSpy).toHaveReceivedEventTimes(0);
+      expect(openSpy).toHaveReceivedEventTimes(0);
+
+      await confirm.callMethod('hideModal');
+      await page.waitForChanges();
+
+      expect(await drawer.getProperty('open')).toBe(true);
+      expect(closeSpy).toHaveReceivedEventTimes(0);
     });
   });
 
