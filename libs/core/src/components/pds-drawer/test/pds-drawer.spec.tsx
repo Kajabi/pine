@@ -67,12 +67,21 @@ describe('pds-drawer', () => {
     // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
     // prior render already in its light DOM — render() always wraps slotted content
     // in a fresh pds-modal, so a stale one from a prior render ends up nested inside it.
+    // A stale copy carries class="pds-drawer__modal" — the exact marker pds-drawer
+    // always puts on the one pds-modal it creates — because that's what a real
+    // reconnect snapshot preserves verbatim from the prior render's output. That
+    // marker is also the signal the unwrap keys on, so it doesn't mistake a
+    // legitimate nested pds-modal (e.g. a confirm dialog) for stale debris.
+    //
+    // PdsModal must be registered alongside PdsDrawer here: the container the
+    // unwrap looks for is PdsModal's own `.pds-modal` content div, which only
+    // exists once PdsModal actually renders.
     it('does not nest a second pds-modal', async () => {
       const page = await newSpecPage({
-        components: [PdsDrawer],
+        components: [PdsDrawer, PdsModal],
         html: `
           <pds-drawer component-id="test">
-            <pds-modal>
+            <pds-modal class="pds-drawer__modal">
               <div>Body</div>
             </pds-modal>
           </pds-drawer>
@@ -85,11 +94,11 @@ describe('pds-drawer', () => {
 
     it('drains a doubly-nested pds-modal to a single one with content intact', async () => {
       const page = await newSpecPage({
-        components: [PdsDrawer],
+        components: [PdsDrawer, PdsModal],
         html: `
           <pds-drawer component-id="test">
-            <pds-modal>
-              <pds-modal>
+            <pds-modal class="pds-drawer__modal">
+              <pds-modal class="pds-drawer__modal">
                 <div>Body</div>
               </pds-modal>
             </pds-modal>
@@ -99,6 +108,22 @@ describe('pds-drawer', () => {
 
       expect(page.root?.querySelectorAll('pds-modal').length).toBe(1);
       expect(page.root?.querySelector('pds-modal')?.textContent?.trim()).toBe('Body');
+    });
+
+    it('leaves a legitimately nested pds-modal (e.g. a confirm dialog) alone — it does not carry our marker', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer, PdsModal],
+        html: `
+          <pds-drawer component-id="test">
+            <pds-modal component-id="confirm">
+              <div>Confirm body</div>
+            </pds-modal>
+          </pds-drawer>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('pds-modal').length).toBe(2);
+      expect(page.root?.querySelector('pds-modal[component-id="confirm"]')?.textContent?.trim()).toBe('Confirm body');
     });
 
     it('leaves pristine (never-hydrated) content alone', async () => {
