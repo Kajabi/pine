@@ -47,6 +47,8 @@ export class PdsDrawer {
   private modalEl?: HTMLPdsModalElement;
 
   private handleEl?: HTMLDivElement;
+  private isDragging = false;
+  private activePointerId: number | null = null;
   private dragStartClientX = 0;
   private dragStartWidth = 0;
   // Resolved once per drag from the computed writing direction and the
@@ -150,9 +152,12 @@ export class PdsDrawer {
   /**
    * Whether the drawer's page-facing edge can be dragged to resize it.
    * Opt-in, so simple cases are unaffected. The handle supports pointer
-   * dragging and the WAI-ARIA Window Splitter keyboard pattern (arrow keys,
-   * Home/End, Enter), and is hidden below the `md` (768px) breakpoint, where
-   * the panel already occupies nearly the full viewport.
+   * dragging (Escape cancels an in-progress drag and reverts to the
+   * pre-drag width) and the WAI-ARIA Window Splitter keyboard pattern:
+   * arrow keys step, Shift+arrow steps further, Home/End jump to the
+   * bounds, and Enter toggles between the minimum width and the last width
+   * you set. Hidden below the `md` (768px) breakpoint, where the panel
+   * already occupies nearly the full viewport.
    * @default false
    */
   @Prop() resizable = false;
@@ -213,11 +218,9 @@ export class PdsDrawer {
    */
   @Event() pdsDrawerResizeEnd: EventEmitter<{ width: number }>;
 
-  // The committed (at-rest) width. During a pointer drag the live value is
-  // written directly to the DOM instead (see applyWidthLive) rather than
-  // through this — a re-render per pointermove is unnecessary overhead for
-  // something already fully expressed as a CSS custom property + an
-  // attribute on the handle.
+  // The panel's current width in px, including live updates during a drag
+  // or keyboard step (see setWidth) — the single source of truth the CSS
+  // custom property and the handle's aria-valuenow both render from.
   @State() currentWidth: number;
 
   // Not manually resized yet: reset to the new size's default width (a
@@ -269,12 +272,17 @@ export class PdsDrawer {
     this.open = false;
   }
 
+  // Number.isFinite rather than a plain ?? — Stencil coerces a number prop's
+  // attribute string via Number(), so a non-numeric min-width/max-width
+  // attribute (e.g. "abc") yields NaN rather than undefined. NaN would
+  // otherwise propagate into the CSS custom property, aria-valuemin/-valuemax
+  // and clampWidth's Math.min/Math.max — NaN poisons all of those silently.
   private get effectiveMinWidth(): number {
-    return this.minWidth ?? SIZE_SCALE[this.size].min;
+    return Number.isFinite(this.minWidth) ? (this.minWidth as number) : SIZE_SCALE[this.size].min;
   }
 
   private get effectiveMaxWidth(): number {
-    return this.maxWidth ?? SIZE_SCALE[this.size].max;
+    return Number.isFinite(this.maxWidth) ? (this.maxWidth as number) : SIZE_SCALE[this.size].max;
   }
 
   private get panelId(): string {
@@ -285,13 +293,14 @@ export class PdsDrawer {
     return Math.min(Math.max(width, this.effectiveMinWidth), this.effectiveMaxWidth);
   }
 
-  // Writes the in-progress width straight to the DOM — the CSS custom
-  // property driving layout, and the handle's own aria-valuenow — without
-  // going through Stencil's render cycle. commitWidth (below) is what
-  // syncs this back into reactive state, once the drag/step settles.
-  private applyWidthLive(width: number) {
-    this.el.style.setProperty('--pds-drawer-width', `${width}px`);
-    this.handleEl?.setAttribute('aria-valuenow', String(width));
+  // Updates the in-progress width through reactive @State — a prior version
+  // bypassed this with a direct DOM write for perf, but that let an
+  // unrelated re-render mid-drag reassert the stale pre-drag style/
+  // aria-valuenow and silently clobber it. Stencil's task queue coalesces
+  // same-tick writes to one render regardless, so there's no real perf cost
+  // to going through state consistently instead.
+  private setWidth(width: number) {
+    this.currentWidth = width;
     this.pdsDrawerResize.emit({ width });
   }
 
@@ -300,8 +309,18 @@ export class PdsDrawer {
     if (width !== this.effectiveMinWidth) {
       this.lastCommittedWidth = width;
     }
-    this.currentWidth = width;
+    this.setWidth(width);
     this.pdsDrawerResizeEnd.emit({ width });
+  }
+
+  // Reverts to the width the drag started at, without committing — used by
+  // both Escape and pointercancel (a browser-interrupted gesture, not a
+  // user-intentional release, so landing wherever the pointer happened to
+  // be isn't the right call).
+  private cancelDrag() {
+    this.setWidth(this.dragStartWidth);
+    this.isDragging = false;
+    this.activePointerId = null;
   }
 
   private handleHandlePointerDown = (e: PointerEvent) => {
@@ -310,6 +329,8 @@ export class PdsDrawer {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
 
     this.handleEl.setPointerCapture(e.pointerId);
+    this.isDragging = true;
+    this.activePointerId = e.pointerId;
     this.dragStartClientX = e.clientX;
     this.dragStartWidth = this.currentWidth;
 
@@ -322,19 +343,26 @@ export class PdsDrawer {
   };
 
   private handleHandlePointerMove = (e: PointerEvent) => {
-    if (!this.handleEl?.hasPointerCapture(e.pointerId)) return;
+    if (!this.isDragging || e.pointerId !== this.activePointerId) return;
     const delta = e.clientX - this.dragStartClientX;
     const width = this.clampWidth(this.dragStartWidth + this.dragDirection * delta);
-    this.applyWidthLive(width);
+    this.setWidth(width);
   };
 
   private handleHandlePointerUp = (e: PointerEvent) => {
-    if (!this.handleEl?.hasPointerCapture(e.pointerId)) return;
-    this.handleEl.releasePointerCapture(e.pointerId);
+    if (!this.isDragging || e.pointerId !== this.activePointerId) return;
+    this.handleEl?.releasePointerCapture(e.pointerId);
     const delta = e.clientX - this.dragStartClientX;
     const width = this.clampWidth(this.dragStartWidth + this.dragDirection * delta);
-    this.applyWidthLive(width);
     this.commitWidth(width);
+    this.isDragging = false;
+    this.activePointerId = null;
+  };
+
+  private handleHandlePointerCancel = (e: PointerEvent) => {
+    if (!this.isDragging || e.pointerId !== this.activePointerId) return;
+    this.handleEl?.releasePointerCapture(e.pointerId);
+    this.cancelDrag();
   };
 
   // ArrowRight always widens and ArrowLeft always narrows — a
@@ -343,6 +371,19 @@ export class PdsDrawer {
   // (unlike pointer dragging, which does — see handleHandlePointerDown).
   private handleHandleKeyDown = (e: KeyboardEvent) => {
     if (!this.resizable) return;
+
+    if (e.key === 'Escape' && this.isDragging) {
+      e.preventDefault();
+      // Don't let this Escape also bubble to pds-modal's own document-level
+      // Escape handler — cancelling an in-progress resize is what the user
+      // means here, not also closing the drawer in the same keypress.
+      e.stopPropagation();
+      if (this.activePointerId !== null) {
+        this.handleEl?.releasePointerCapture(this.activePointerId);
+      }
+      this.cancelDrag();
+      return;
+    }
 
     let next: number;
     switch (e.key) {
@@ -369,9 +410,7 @@ export class PdsDrawer {
     }
 
     e.preventDefault();
-    const width = this.clampWidth(next);
-    this.applyWidthLive(width);
-    this.commitWidth(width);
+    this.commitWidth(this.clampWidth(next));
   };
 
   private get handleDescriptionId(): string {
@@ -398,7 +437,7 @@ export class PdsDrawer {
         onPointerDown={this.handleHandlePointerDown}
         onPointerMove={this.handleHandlePointerMove}
         onPointerUp={this.handleHandlePointerUp}
-        onPointerCancel={this.handleHandlePointerUp}
+        onPointerCancel={this.handleHandlePointerCancel}
         onKeyDown={this.handleHandleKeyDown}
       ></div>,
       <span id={this.handleDescriptionId} class="visually-hidden">

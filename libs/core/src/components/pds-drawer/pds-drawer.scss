@@ -61,11 +61,15 @@
 // The drag handle on the panel's page-facing edge: inline-start when docked
 // `end`, inline-end when docked `start` — mirrored again here under RTL,
 // same as the edge-docking above.
+//
+// The hit area (24px, meeting WCAG 2.5.8's minimum target size) is wider
+// than the visual line (2px) it's centered on — a plain hover/active cursor
+// change over a 1:1 hit box is too thin a target on touch-capable devices.
 .pds-drawer__handle {
   background: transparent;
   block-size: 100%;
   cursor: ew-resize;
-  inline-size: 12px;
+  inline-size: 24px;
   inset-block-start: 0;
   position: absolute;
   touch-action: none;
@@ -76,29 +80,34 @@
     block-size: 100%;
     content: '';
     display: block;
-    inline-size: 1px;
+    inline-size: 2px;
     margin-inline: auto;
-    transition: background-color var(--pine-motion-duration-base) var(--pine-motion-easing-in);
+    transition:
+      background-color var(--pine-motion-duration-base) var(--pine-motion-easing-in),
+      inline-size var(--pine-motion-duration-base) var(--pine-motion-easing-in);
   }
 
+  // Thickens the line in addition to shifting its color, so the affordance
+  // isn't communicated by hue alone.
   &:hover::after,
   &:focus-visible::after {
     background: var(--pine-color-border-active);
+    inline-size: 3px;
   }
 
   &:focus-visible {
     // Negative offset (unlike most siblings' positive one) keeps the ring
-    // inside the narrow 12px hit box instead of spilling past it.
+    // inside the handle's own hit box instead of spilling past it.
     outline: var(--pine-outline-focus);
     outline-offset: -2px;
   }
 
   .pds-drawer--end & {
-    inset-inline-start: calc(-1 * 6px);
+    inset-inline-start: calc(-1 * 12px);
   }
 
   .pds-drawer--start & {
-    inset-inline-end: calc(-1 * 6px);
+    inset-inline-end: calc(-1 * 12px);
   }
 
   // The panel already occupies nearly the full viewport below this

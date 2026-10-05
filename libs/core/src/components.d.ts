@@ -1187,7 +1187,7 @@ export namespace Components {
          */
         "open": boolean;
         /**
-          * Whether the drawer's page-facing edge can be dragged to resize it. Opt-in, so simple cases are unaffected. The handle supports pointer dragging and the WAI-ARIA Window Splitter keyboard pattern (arrow keys, Home/End, Enter), and is hidden below the `md` (768px) breakpoint, where the panel already occupies nearly the full viewport.
+          * Whether the drawer's page-facing edge can be dragged to resize it. Opt-in, so simple cases are unaffected. The handle supports pointer dragging (Escape cancels an in-progress drag and reverts to the pre-drag width) and the WAI-ARIA Window Splitter keyboard pattern: arrow keys step, Shift+arrow steps further, Home/End jump to the bounds, and Enter toggles between the minimum width and the last width you set. Hidden below the `md` (768px) breakpoint, where the panel already occupies nearly the full viewport.
           * @default false
          */
         "resizable": boolean;
@@ -4655,7 +4655,7 @@ declare namespace LocalJSX {
          */
         "open"?: boolean;
         /**
-          * Whether the drawer's page-facing edge can be dragged to resize it. Opt-in, so simple cases are unaffected. The handle supports pointer dragging and the WAI-ARIA Window Splitter keyboard pattern (arrow keys, Home/End, Enter), and is hidden below the `md` (768px) breakpoint, where the panel already occupies nearly the full viewport.
+          * Whether the drawer's page-facing edge can be dragged to resize it. Opt-in, so simple cases are unaffected. The handle supports pointer dragging (Escape cancels an in-progress drag and reverts to the pre-drag width) and the WAI-ARIA Window Splitter keyboard pattern: arrow keys step, Shift+arrow steps further, Home/End jump to the bounds, and Enter toggles between the minimum width and the last width you set. Hidden below the `md` (768px) breakpoint, where the panel already occupies nearly the full viewport.
           * @default false
          */
         "resizable"?: boolean;
