@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, h } from '@stencil/core';
+import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 // Known selectors for content Pine components portal to document.body rather
 // than rendering in place — pds-popover, pds-tooltip, pds-combobox's dropdown.
@@ -8,7 +9,8 @@ import { Component, Element, Event, EventEmitter, Host, Listen, Prop, h } from '
 const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal';
 
 /**
- * A resizable, non-modal side panel composed from `pds-modal`.
+ * A non-modal side panel composed from `pds-modal`. Resizing is planned for a
+ * follow-up and is not part of this component yet.
  *
  * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
  * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
@@ -31,6 +33,15 @@ export class PdsDrawer {
   // the same event names, and only the former should drive our open state.
   private modalEl?: HTMLPdsModalElement;
 
+  // Unwraps a nested pds-modal left by a page-cache (Turbo, bfcache) reconnect
+  // — the same bug class #806 fixed for pds-modal-header/-content/-footer.
+  // Every render wraps the slotted content in a fresh pds-modal; a reconnect
+  // that restores a prior render's pds-modal in our light DOM ends up with
+  // that stale one nested inside the new one.
+  componentDidRender() {
+    unwrapReconnectedContent(this.el.querySelector('pds-modal'), 'pds-modal');
+  }
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -50,8 +61,7 @@ export class PdsDrawer {
   @Prop() side: 'start' | 'end' = 'end';
 
   /**
-   * The drawer's width. This is the only width control; use `pds-drawer`'s
-   * `resizable` mode (coming separately) to let the user adjust it.
+   * The drawer's width. This is currently the only width control.
    * @default 'md'
    */
   @Prop() size: 'sm' | 'md' = 'md';
@@ -68,6 +78,11 @@ export class PdsDrawer {
    * This also gates Escape, matching how `backdropDismiss` gates Escape on
    * `pds-modal` today: setting this to `false` means the close button is the
    * only way out.
+   *
+   * A trigger outside the drawer should only ever set `open` to `true` and
+   * leave closing to the drawer itself. A toggle-style trigger (`open =
+   * !open`) fights light dismiss: clicking it while open closes the drawer
+   * on `pointerdown`, then the trigger's own click handler re-opens it.
    * @default true
    */
   @Prop() lightDismiss = true;
