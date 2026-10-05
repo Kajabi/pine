@@ -340,6 +340,41 @@ describe('pds-drawer', () => {
     });
   });
 
+  describe('layout', () => {
+    // Regression: .pds-drawer__header/__footer and .pds-drawer-content all
+    // combine width:100% with padding — without box-sizing:border-box, the
+    // padding adds on top of 100%, overflowing the panel's own edge instead
+    // of being measured inside it.
+    it('keeps header, content and footer within the panel width — no padding overflow', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-drawer component-id="layout-drawer" open>
+          <pds-drawer-header><pds-text tag="h2">Drawer heading</pds-text></pds-drawer-header>
+          <pds-drawer-content><p>Drawer body content.</p></pds-drawer-content>
+          <pds-drawer-footer><pds-button variant="primary">Save</pds-button></pds-drawer-footer>
+        </pds-drawer>
+      `);
+      await page.waitForChanges();
+
+      const widths = await page.evaluate(() => {
+        const panel = document.querySelector('pds-drawer pds-modal .pds-modal') as HTMLElement;
+        const header = document.querySelector('pds-drawer .pds-drawer__header') as HTMLElement;
+        const content = document.querySelector('pds-drawer .pds-drawer-content') as HTMLElement;
+        const footer = document.querySelector('pds-drawer .pds-drawer__footer') as HTMLElement;
+        return {
+          panel: panel.getBoundingClientRect().width,
+          header: header.getBoundingClientRect().width,
+          content: content.getBoundingClientRect().width,
+          footer: footer.getBoundingClientRect().width,
+        };
+      });
+
+      expect(widths.header).toBeLessThanOrEqual(widths.panel);
+      expect(widths.content).toBeLessThanOrEqual(widths.panel);
+      expect(widths.footer).toBeLessThanOrEqual(widths.panel);
+    });
+  });
+
   describe('accessibility', () => {
     it('has no axe violations when open with header, content and footer', async () => {
       const page = await newE2EPage();
