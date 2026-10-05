@@ -226,6 +226,49 @@ describe('pds-modal', () => {
       });
       expect(overlayOnTop).toBe(true);
     });
+
+    it('leaves Escape to a sibling top-layer modal that shares the same z-index tier', async () => {
+      // Regression: a sibling pds-modal (not nested inside this one — e.g. a
+      // confirm dialog mounted alongside a disableTopLayer drawer) gets the
+      // same default z-index token as this modal's own backdrop, so a plain
+      // "strictly greater" z-index comparison missed it entirely. A top-layer
+      // dialog paints above everything outside the top layer regardless of
+      // z-index, which isStackedAboveOverlay now checks for directly.
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="drawer-stub" disable-top-layer="true" open><div>Drawer content</div></pds-modal>
+        <pds-modal component-id="confirm-stub" open><button id="confirm-btn">Confirm</button></pds-modal>
+      `);
+      await page.waitForChanges();
+
+      await page.evaluate(() => (document.getElementById('confirm-btn') as HTMLElement)?.focus());
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+
+      const outer = await page.find('pds-modal[component-id="drawer-stub"]');
+      const inner = await page.find('pds-modal[component-id="confirm-stub"]');
+      expect(await inner.getProperty('open')).toBe(false);
+      expect(await outer.getProperty('open')).toBe(true);
+    });
+  });
+
+  describe('initial open state', () => {
+    it('opens the native dialog automatically when open is set from the start', async () => {
+      // Regression: @Watch('open') only fires on a later change, not the
+      // prop's initial value, so a modal mounted with `open` already true
+      // never called show()/showModal() — the panel still appeared (driven
+      // by the `open` CSS class), but the native <dialog> itself stayed
+      // closed: no top-layer promotion, no dialog focusing steps.
+      const page = await newE2EPage();
+      await page.setContent(`<pds-modal component-id="initially-open" open><div>Content</div></pds-modal>`);
+      await page.waitForChanges();
+
+      const dialogOpen = await page.evaluate(() => {
+        const dialog = document.querySelector('pds-modal dialog') as HTMLDialogElement | null;
+        return dialog ? dialog.open : null;
+      });
+      expect(dialogOpen).toBe(true);
+    });
   });
 
   describe('accessibility', () => {
