@@ -54,13 +54,15 @@ export class PdsModal {
   @Prop() disableTopLayer = false;
 
   /**
-   * Whether to skip moving focus into the modal when it opens. The modal still
-   * receives `setInitialFocus()`'s effect everywhere else (focus return on
-   * close is unaffected); this only opts out of the initial move. For a modal
-   * opened by something other than a direct user click — a redirect, a
-   * deep link, a background event — stealing focus on open can interrupt
-   * whatever the user was already doing. Default `false` preserves today's
-   * behavior for every existing consumer.
+   * Whether to skip moving focus into the modal when it opens — both our own
+   * `setInitialFocus()` and the browser's native "dialog focusing steps",
+   * which move focus into the dialog as soon as `show()`/`showModal()` is
+   * called regardless of application code. Focus return on close is
+   * unaffected either way. For a modal opened by something other than a
+   * direct user click — a redirect, a deep link, a background event —
+   * stealing focus on open can interrupt whatever the user was already
+   * doing. Default `false` preserves today's behavior for every existing
+   * consumer.
    * @default false
    */
   @Prop() disableInitialFocus = false;
@@ -202,6 +204,15 @@ export class PdsModal {
           this.modalRef.showModal();
         }
         this.open = true;
+
+        // show()/showModal() move focus into the dialog as native browser
+        // behavior — the "dialog focusing steps" in the HTML spec — entirely
+        // independent of setInitialFocus() below. disableInitialFocus must
+        // counteract that native move, not just skip our own redundant call,
+        // or focus visibly jumps into the modal for one tick and back.
+        if (this.disableInitialFocus && this.previousActiveElement && typeof this.previousActiveElement.focus === 'function') {
+          this.previousActiveElement.focus();
+        }
 
         // Update focusable elements and set initial focus
         // Using a longer timeout to ensure all components are fully rendered
