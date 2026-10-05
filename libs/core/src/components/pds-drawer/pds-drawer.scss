@@ -1,0 +1,44 @@
+// pds-drawer wraps a pds-modal (shadow: false, so its internal DOM is
+// reachable from here) and overrides the parts of it that make a modal feel
+// modal: the full-viewport dimmed, click-blocking backdrop becomes an
+// invisible, non-blocking area so the page stays interactive, and the
+// centered panel becomes an edge-docked one at `--pds-drawer-width`.
+.pds-drawer {
+  display: contents;
+
+  pds-modal .pds-modal__backdrop {
+    align-items: stretch;
+    background-color: transparent;
+    pointer-events: none;
+
+    @supports (backdrop-filter: blur(3px)) {
+      backdrop-filter: none;
+    }
+  }
+
+  pds-modal .pds-modal {
+    border-radius: 0;
+    height: 100%;
+    margin: 0;
+    max-height: 100%;
+    max-width: 100%;
+    pointer-events: auto;
+    width: var(--pds-drawer-width, 500px);
+  }
+
+  &.pds-drawer--end pds-modal .pds-modal__backdrop {
+    justify-content: flex-end;
+  }
+
+  &.pds-drawer--start pds-modal .pds-modal__backdrop {
+    justify-content: flex-start;
+  }
+
+  &.pds-drawer--sm pds-modal .pds-modal {
+    --pds-drawer-width: 360px;
+  }
+
+  &.pds-drawer--md pds-modal .pds-modal {
+    --pds-drawer-width: 500px;
+  }
+}

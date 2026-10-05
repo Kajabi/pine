@@ -1,0 +1,24 @@
+pds-drawer-content {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.pds-drawer-content {
+  display: block;
+  height: 100%;
+  padding: var(--pine-dimension-md);
+  width: 100%;
+}
+
+// pds-drawer passes its own `scrollable` prop straight through to the inner
+// pds-modal, which already reflects it as this class on `.pds-modal` — reuse
+// that instead of threading a second copy of the prop through pds-drawer.
+.pds-modal--scrollable pds-drawer-content {
+  overflow-y: auto;
+}
+
+.pds-modal:not(.pds-modal--scrollable) pds-drawer-content {
+  overflow-y: visible;
+}
