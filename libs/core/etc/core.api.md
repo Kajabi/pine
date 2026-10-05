@@ -337,7 +337,12 @@ export namespace Components {
         "componentId": string;
         "initialFocus": 'auto' | 'none';
         "lightDismiss": boolean;
+        "maxWidth"?: number;
+        "minWidth"?: number;
         "open": boolean;
+        "resizable": boolean;
+        "resizeHandleDescription": string;
+        "resizeHandleLabel": string;
         "scrollable": boolean;
         "side": 'start' | 'end';
         "size": 'sm' | 'md';
@@ -1735,9 +1740,16 @@ export namespace LocalJSX {
         "componentId"?: string;
         "initialFocus"?: 'auto' | 'none';
         "lightDismiss"?: boolean;
+        "maxWidth"?: number;
+        "minWidth"?: number;
         "onPdsDrawerClose"?: (event: PdsDrawerCustomEvent<void>) => void;
         "onPdsDrawerOpen"?: (event: PdsDrawerCustomEvent<void>) => void;
+        "onPdsDrawerResize"?: (event: PdsDrawerCustomEvent<{ width: number }>) => void;
+        "onPdsDrawerResizeEnd"?: (event: PdsDrawerCustomEvent<{ width: number }>) => void;
         "open"?: boolean;
+        "resizable"?: boolean;
+        "resizeHandleDescription"?: string;
+        "resizeHandleLabel"?: string;
         "scrollable"?: boolean;
         "side"?: 'start' | 'end';
         "size"?: 'sm' | 'md';
@@ -1752,7 +1764,17 @@ export namespace LocalJSX {
         // (undocumented)
         "lightDismiss": boolean;
         // (undocumented)
+        "maxWidth": number;
+        // (undocumented)
+        "minWidth": number;
+        // (undocumented)
         "open": boolean;
+        // (undocumented)
+        "resizable": boolean;
+        // (undocumented)
+        "resizeHandleDescription": string;
+        // (undocumented)
+        "resizeHandleLabel": string;
         // (undocumented)
         "scrollable": boolean;
         // (undocumented)

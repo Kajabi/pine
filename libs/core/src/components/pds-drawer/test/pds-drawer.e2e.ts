@@ -390,5 +390,423 @@ describe('pds-drawer', () => {
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
+
+    it('has no axe violations with the resize handle present', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-drawer component-id="a11y-resizable-drawer" open resizable>
+          <pds-drawer-content><p>Drawer body content.</p></pds-drawer-content>
+        </pds-drawer>
+      `);
+      await page.waitForChanges();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
+
+  describe('resizable', () => {
+    async function getPanelWidth(page) {
+      return page.evaluate(() => {
+        const panel = document.querySelector('pds-drawer pds-modal .pds-modal') as HTMLElement;
+        return getComputedStyle(panel).width;
+      });
+    }
+
+    async function getHandleCenter(page) {
+      return page.evaluate(() => {
+        const handle = document.querySelector('pds-drawer .pds-drawer__handle') as HTMLElement;
+        const rect = handle.getBoundingClientRect();
+        return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      });
+    }
+
+    async function dragHandleBy(page, deltaX: number) {
+      const { x, y } = await getHandleCenter(page);
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x + deltaX, y, { steps: 10 });
+      await page.mouse.up();
+    }
+
+    it('renders no handle and leaves the width unchanged when resizable is false', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`<pds-drawer component-id="test" open size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const handle = await page.find('pds-drawer .pds-drawer__handle');
+      expect(handle).toBeNull();
+      expect(await getPanelWidth(page)).toBe('500px');
+    });
+
+    it('widens the panel when the handle is dragged toward the page (side=end)', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('500px');
+      // side="end" docks the panel to the physical right edge in LTR; the
+      // handle sits on its left (page-facing) edge, so dragging left widens it.
+      await dragHandleBy(page, -80);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('580px');
+    });
+
+    it('widens the panel when the handle is dragged toward the page (side=start)', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="start" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      // side="start" docks the panel to the physical left edge in LTR; the
+      // handle sits on its right (page-facing) edge, so dragging right widens it.
+      await dragHandleBy(page, 80);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('580px');
+    });
+
+    describe('RTL', () => {
+      it('widens the panel when dragged toward the page (side=end, dir=rtl)', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`
+          <div dir="rtl">
+            <pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>
+          </div>
+        `);
+        await page.waitForChanges();
+
+        expect(await getPanelWidth(page)).toBe('500px');
+        // side="end" is the inline-end edge, which is physically LEFT under
+        // RTL — the handle sits on the panel's right (page-facing) edge, so
+        // dragging right widens it (the mirror image of the LTR case above).
+        await dragHandleBy(page, 80);
+        await page.waitForChanges();
+
+        expect(await getPanelWidth(page)).toBe('580px');
+      });
+
+      it('widens the panel when dragged toward the page (side=start, dir=rtl)', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`
+          <div dir="rtl">
+            <pds-drawer component-id="test" open resizable side="start" size="md"><div>Content</div></pds-drawer>
+          </div>
+        `);
+        await page.waitForChanges();
+
+        // side="start" is the inline-start edge, physically RIGHT under RTL
+        // — the handle sits on the panel's left (page-facing) edge, so
+        // dragging left widens it.
+        await dragHandleBy(page, -80);
+        await page.waitForChanges();
+
+        expect(await getPanelWidth(page)).toBe('580px');
+      });
+    });
+
+    it('clamps a drag past maxWidth', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(
+        `<pds-drawer component-id="test" open resizable side="end" size="md" max-width="550"><div>Content</div></pds-drawer>`,
+      );
+      await page.waitForChanges();
+
+      await dragHandleBy(page, -400);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('550px');
+    });
+
+    // Regression: the rendered CSS clamp() falls back to 280/720 for any
+    // bound not reflected as a custom property. A maxWidth inside that range
+    // (550, above) wouldn't have caught the bug — this one (900) is outside
+    // it, so it only passes once --pds-drawer-max-width is actually set.
+    it('honors a maxWidth outside the clamp()s hardcoded 280/720 fallback range', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(
+        `<pds-drawer component-id="test" open resizable side="end" size="md" max-width="900"><div>Content</div></pds-drawer>`,
+      );
+      await page.waitForChanges();
+
+      await dragHandleBy(page, -1000);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('900px');
+    });
+
+    it('honors a minWidth outside the clamp()s hardcoded 280/720 fallback range', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(
+        `<pds-drawer component-id="test" open resizable side="end" size="md" min-width="150"><div>Content</div></pds-drawer>`,
+      );
+      await page.waitForChanges();
+
+      await dragHandleBy(page, 1000);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('150px');
+    });
+
+    it('Escape cancels an in-progress drag and reverts to the pre-drag width', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const { x, y } = await getHandleCenter(page);
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x - 80, y, { steps: 10 });
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('580px');
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('500px');
+
+      // Pointer capture was released by the cancel — releasing the mouse now
+      // shouldn't commit anything (no further pointermove/pointerup effect).
+      await page.mouse.up();
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('500px');
+    });
+
+    it('does not let Escape also close the drawer while cancelling a drag', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const { x, y } = await getHandleCenter(page);
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x - 80, y, { steps: 10 });
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+
+      expect(await drawer.getProperty('open')).toBe(true);
+      await page.mouse.up();
+    });
+
+    it('reverts to the pre-drag width on pointercancel', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const { x, y } = await getHandleCenter(page);
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x - 80, y, { steps: 10 });
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('580px');
+
+      await page.evaluate(() => {
+        const handle = document.querySelector('pds-drawer .pds-drawer__handle') as HTMLElement;
+        handle.dispatchEvent(new PointerEvent('pointercancel', { pointerId: 1, bubbles: true }));
+      });
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('500px');
+      await page.mouse.up();
+    });
+
+    it('clamps a drag past minWidth', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(
+        `<pds-drawer component-id="test" open resizable side="end" size="md" min-width="420"><div>Content</div></pds-drawer>`,
+      );
+      await page.waitForChanges();
+
+      await dragHandleBy(page, 400);
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('420px');
+    });
+
+    it('emits pdsDrawerResize during the drag and pdsDrawerResizeEnd once on release', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      const resizeSpy = await drawer.spyOnEvent('pdsDrawerResize');
+      const resizeEndSpy = await drawer.spyOnEvent('pdsDrawerResizeEnd');
+
+      await dragHandleBy(page, -60);
+      await page.waitForChanges();
+
+      expect(resizeSpy.length).toBeGreaterThan(0);
+      expect(resizeEndSpy).toHaveReceivedEventTimes(1);
+      expect(resizeEndSpy.firstEvent.detail).toEqual({ width: 560 });
+    });
+
+    describe('keyboard (Window Splitter pattern)', () => {
+      it('ArrowRight widens by a step and ArrowLeft narrows by a step', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`<pds-drawer component-id="test" open resizable size="md"><div>Content</div></pds-drawer>`);
+        await page.waitForChanges();
+
+        const handle = await page.find('pds-drawer .pds-drawer__handle');
+        await handle.focus();
+        await page.keyboard.press('ArrowRight');
+        await page.waitForChanges();
+        expect(await getPanelWidth(page)).toBe('516px');
+
+        await page.keyboard.press('ArrowLeft');
+        await page.keyboard.press('ArrowLeft');
+        await page.waitForChanges();
+        expect(await getPanelWidth(page)).toBe('484px');
+      });
+
+      it('Shift+ArrowRight widens by the larger step', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`<pds-drawer component-id="test" open resizable size="md"><div>Content</div></pds-drawer>`);
+        await page.waitForChanges();
+
+        const handle = await page.find('pds-drawer .pds-drawer__handle');
+        await handle.focus();
+        await page.keyboard.down('Shift');
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.up('Shift');
+        await page.waitForChanges();
+
+        expect(await getPanelWidth(page)).toBe('564px');
+      });
+
+      it('Home jumps to minWidth and End jumps to maxWidth', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`<pds-drawer component-id="test" open resizable size="md"><div>Content</div></pds-drawer>`);
+        await page.waitForChanges();
+
+        const handle = await page.find('pds-drawer .pds-drawer__handle');
+        await handle.focus();
+
+        await page.keyboard.press('Home');
+        await page.waitForChanges();
+        expect(await getPanelWidth(page)).toBe('360px');
+
+        await page.keyboard.press('End');
+        await page.waitForChanges();
+        expect(await getPanelWidth(page)).toBe('720px');
+      });
+
+      it('Enter toggles between minWidth and the last committed width', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`<pds-drawer component-id="test" open resizable size="md"><div>Content</div></pds-drawer>`);
+        await page.waitForChanges();
+
+        const handle = await page.find('pds-drawer .pds-drawer__handle');
+        await handle.focus();
+        await page.keyboard.press('ArrowRight');
+        await page.waitForChanges();
+        expect(await getPanelWidth(page)).toBe('516px');
+
+        await page.keyboard.press('Enter');
+        await page.waitForChanges();
+        expect(await getPanelWidth(page)).toBe('360px');
+
+        await page.keyboard.press('Enter');
+        await page.waitForChanges();
+        expect(await getPanelWidth(page)).toBe('516px');
+      });
+
+      it('keeps aria-valuenow in sync with the current width', async () => {
+        const page = await newE2EPage();
+        page.setViewport({ width: 1200, height: 800 });
+        await page.setContent(`<pds-drawer component-id="test" open resizable size="md"><div>Content</div></pds-drawer>`);
+        await page.waitForChanges();
+
+        const handle = await page.find('pds-drawer .pds-drawer__handle');
+        await handle.focus();
+        await page.keyboard.press('End');
+        await page.waitForChanges();
+
+        expect(handle.getAttribute('aria-valuenow')).toBe('720');
+      });
+    });
+
+    it('resets to the size scale width on size change until manually resized', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      drawer.setProperty('size', 'sm');
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('360px');
+
+      // Once the user has resized, further `size` prop changes don't reset
+      // the width back to the new size's default. Drag to 480 — the top of
+      // sm's own bounds, but also inside md's (360-720) — so switching back
+      // to md exercises only "size doesn't fight a manual resize," not the
+      // separate, correct behavior of bounds re-clamping a width that falls
+      // outside the new size's range (covered below).
+      await dragHandleBy(page, -120);
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('480px');
+
+      drawer.setProperty('size', 'md');
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('480px');
+    });
+
+    // Bounds track the current size when minWidth/maxWidth aren't pinned
+    // (per the ticket: "Drag bounds, defaulted from the size scale") — that
+    // applies even to a manually-set width, so switching to a size whose
+    // bounds no longer contain it re-clamps the rendered width AND the
+    // component's own state (aria-valuenow), not just the CSS clamp().
+    it('re-clamps a manually-resized width that falls outside the new size default bounds', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable size="sm"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      // sm's bounds are 280-480; drag to 310, valid under sm but below md's
+      // min of 360.
+      await dragHandleBy(page, 50);
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('310px');
+
+      const drawer = await page.find('pds-drawer');
+      const handle = await page.find('pds-drawer .pds-drawer__handle');
+      drawer.setProperty('size', 'md');
+      await page.waitForChanges();
+
+      expect(await getPanelWidth(page)).toBe('360px');
+      expect(handle.getAttribute('aria-valuenow')).toBe('360');
+    });
+
+    it('hides the handle below the mobile (md, 768px) breakpoint', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 500, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const display = await page.evaluate(() => {
+        const handle = document.querySelector('pds-drawer .pds-drawer__handle') as HTMLElement;
+        return getComputedStyle(handle).display;
+      });
+      expect(display).toBe('none');
+    });
   });
 });

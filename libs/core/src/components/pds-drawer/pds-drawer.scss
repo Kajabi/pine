@@ -3,6 +3,14 @@
 // modal: the full-viewport dimmed, click-blocking backdrop becomes an
 // invisible, non-blocking area so the page stays interactive, and the
 // centered panel becomes an edge-docked one at `--pds-drawer-width`.
+//
+// `--pds-drawer-width` is declared on the HOST (`.pds-drawer--sm`/`--md`
+// below), not on `pds-modal .pds-modal` directly, so it cascades down as an
+// inherited custom property rather than being re-declared on that nested
+// element. That matters for `resizable`: the component sets this same
+// property as an inline style directly on the host during a drag, which
+// only wins over the stylesheet's `.pds-drawer--sm`/`--md` rule because
+// nothing re-declares the property closer to `.pds-modal` itself.
 .pds-drawer {
   display: contents;
 
@@ -23,6 +31,7 @@
     max-height: 100%;
     max-width: 100%;
     pointer-events: auto;
+    position: relative;
     width: var(--pds-drawer-width, 500px);
   }
 
@@ -34,11 +43,91 @@
     justify-content: flex-start;
   }
 
-  &.pds-drawer--sm pds-modal .pds-modal {
+  &.pds-drawer--sm {
     --pds-drawer-width: 360px;
   }
 
-  &.pds-drawer--md pds-modal .pds-modal {
+  &.pds-drawer--md {
     --pds-drawer-width: 500px;
   }
+
+  // Bounds stay declarative in CSS rather than clamped in JS, so consumer
+  // CSS overriding --pds-drawer-min-width/-max-width still participates.
+  &.pds-drawer--resizable pds-modal .pds-modal {
+    width: clamp(var(--pds-drawer-min-width, 280px), var(--pds-drawer-width), var(--pds-drawer-max-width, 720px));
+  }
+}
+
+// The drag handle on the panel's page-facing edge: inline-start when docked
+// `end`, inline-end when docked `start` — mirrored again here under RTL,
+// same as the edge-docking above.
+//
+// The hit area (24px, meeting WCAG 2.5.8's minimum target size) is wider
+// than the visual line (2px) it's centered on — a plain hover/active cursor
+// change over a 1:1 hit box is too thin a target on touch-capable devices.
+.pds-drawer__handle {
+  background: transparent;
+  block-size: 100%;
+  cursor: ew-resize;
+  inline-size: 24px;
+  inset-block-start: 0;
+  position: absolute;
+  touch-action: none;
+  z-index: 1;
+
+  &::after {
+    background: var(--pine-color-border);
+    block-size: 100%;
+    content: '';
+    display: block;
+    inline-size: 2px;
+    margin-inline: auto;
+    transition:
+      background-color var(--pine-motion-duration-base) var(--pine-motion-easing-in),
+      inline-size var(--pine-motion-duration-base) var(--pine-motion-easing-in);
+  }
+
+  // Thickens the line in addition to shifting its color, so the affordance
+  // isn't communicated by hue alone.
+  &:hover::after,
+  &:focus-visible::after {
+    background: var(--pine-color-border-active);
+    inline-size: 3px;
+  }
+
+  &:focus-visible {
+    // Negative offset (unlike most siblings' positive one) keeps the ring
+    // inside the handle's own hit box instead of spilling past it.
+    outline: var(--pine-outline-focus);
+    outline-offset: -2px;
+  }
+
+  .pds-drawer--end & {
+    inset-inline-start: calc(-1 * 12px);
+  }
+
+  .pds-drawer--start & {
+    inset-inline-end: calc(-1 * 12px);
+  }
+
+  // The panel already occupies nearly the full viewport below this
+  // breakpoint (mirrors Pine's `md` breakpoint) — there's nothing
+  // meaningful to drag and no pointer precision to do it with. Hidden
+  // rather than just pointer-events:none so it also drops out of tab order.
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

@@ -37,7 +37,31 @@ behavior a side panel needs.
   use it for a drawer that can open from a background event while the user
   is mid-task elsewhere on the page.
 
+## Resizable
+
+```html
+<pds-drawer open component-id="automation-settings" resizable min-width="320" max-width="720">
+  …
+</pds-drawer>
+```
+
+<Canvas of={PdsDrawerStories.Resizable} />
+
+- `resizable` (default `false`) adds a drag handle on the panel's page-facing
+  edge. `min-width` / `max-width` (px) bound the drag and default from the
+  `size` scale when unset.
+- The handle supports pointer dragging and the WAI-ARIA Window Splitter
+  keyboard pattern: arrow keys step, Shift+arrow steps further, Home/End jump
+  to the bounds, Enter toggles between the minimum and the last width you
+  set.
+- `pdsDrawerResize` fires continuously while resizing; `pdsDrawerResizeEnd`
+  fires once it settles. Pine does not persist the width — whether it
+  survives a reload is a consumer decision.
+- Hidden below the `md` (768px) breakpoint, where the panel already occupies
+  nearly the full viewport.
+
 ## Not yet available
 
-Resizing (`resizable`, `min-width`, `max-width`, drag-to-resize) ships in a
-follow-up slice.
+Exact `sm`/`md` pixel values and the resize handle's visual affordance still
+need design sign-off — see the ticket's "Needs a design call" section. Figma
+parity and full docs polish ship in a follow-up slice.

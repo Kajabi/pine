@@ -11,6 +11,7 @@ export default {
     lightDismiss: true,
     initialFocus: 'auto',
     open: false,
+    resizable: false,
   },
   parameters: {},
 };
@@ -30,6 +31,7 @@ const BaseTemplate = (args) => html`
       light-dismiss="${args.lightDismiss}"
       initial-focus="${args.initialFocus}"
       ?open=${args.open}
+      ?resizable=${args.resizable}
     >
       <pds-drawer-header>
         <pds-box align-items="center" justify-content="space-between" fit>
@@ -70,3 +72,6 @@ StartSide.args = { side: 'start' };
 
 export const Small = BaseTemplate.bind({});
 Small.args = { size: 'sm' };
+
+export const Resizable = BaseTemplate.bind({});
+Resizable.args = { resizable: true };
