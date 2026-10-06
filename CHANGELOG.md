@@ -1,3 +1,26 @@
+## 4.2.0 (2026-10-06)
+
+### Features 🚀
+
+- **pds-drawer:** resizable, non-modal side panel composed from pds-modal (Slice 1) ([#827](https://github.com/Kajabi/pine/pull/827))
+
+### Bug Fixes 🐛
+
+- preserve createComponent.tsx registration guard across builds ([#823](https://github.com/Kajabi/pine/pull/823))
+- **createComponent:** remove redundant double-registration guard ([#824](https://github.com/Kajabi/pine/pull/824))
+- **pds-chip:** give the truncated label a tab stop only while it is clipped ([#816](https://github.com/Kajabi/pine/pull/816))
+- **pds-switch:** route toggle transition through the motion token ([#825](https://github.com/Kajabi/pine/pull/825))
+- **pds-table-cell:** give the truncation e2e a width the table honours ([#826](https://github.com/Kajabi/pine/pull/826))
+
+### Documentation 📄
+
+- **layout:** size the guide's examples from a responsive breakpoint ([#817](https://github.com/Kajabi/pine/pull/817))
+- **pds-box:** say what the base size prop costs on a phone ([#818](https://github.com/Kajabi/pine/pull/818))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 4.1.0 (2026-09-24)
 
 ### Features 🚀
