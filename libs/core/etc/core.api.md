@@ -333,6 +333,23 @@ export namespace Components {
         "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
         "vertical": boolean;
     }
+    export interface PdsDrawer {
+        "componentId": string;
+        "initialFocus": 'auto' | 'none';
+        "lightDismiss": boolean;
+        "open": boolean;
+        "scrollable": boolean;
+        "side": 'start' | 'end';
+        "size": 'sm' | 'md';
+    }
+    export interface PdsDrawerContent {
+    }
+    // (undocumented)
+    export interface PdsDrawerFooter {
+    }
+    // (undocumented)
+    export interface PdsDrawerHeader {
+    }
     // (undocumented)
     export interface PdsDropdownMenu {
         "componentId": string;
@@ -441,6 +458,7 @@ export namespace Components {
     export interface PdsModal {
         "backdropDismiss": boolean;
         "componentId": string;
+        "disableInitialFocus": boolean;
         "disableTopLayer": boolean;
         "hideModal": () => Promise<void>;
         "open": boolean;
@@ -820,6 +838,14 @@ export namespace LocalJSX {
         "pds-copytext": Omit<PdsCopytext, keyof PdsCopytextAttributes> & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes]?: PdsCopytext[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `attr:${K}`]?: PdsCopytextAttributes[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `prop:${K}`]?: PdsCopytext[K] } & OneOf<"value", PdsCopytext["value"], PdsCopytextAttributes["value"]>;
         // (undocumented)
         "pds-divider": Omit<PdsDivider, keyof PdsDividerAttributes> & { [K in keyof PdsDivider & keyof PdsDividerAttributes]?: PdsDivider[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `attr:${K}`]?: PdsDividerAttributes[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `prop:${K}`]?: PdsDivider[K] };
+        // (undocumented)
+        "pds-drawer": Omit<PdsDrawer, keyof PdsDrawerAttributes> & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes]?: PdsDrawer[K] } & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes as `attr:${K}`]?: PdsDrawerAttributes[K] } & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes as `prop:${K}`]?: PdsDrawer[K] };
+        // (undocumented)
+        "pds-drawer-content": PdsDrawerContent;
+        // (undocumented)
+        "pds-drawer-footer": PdsDrawerFooter;
+        // (undocumented)
+        "pds-drawer-header": PdsDrawerHeader;
         // (undocumented)
         "pds-dropdown-menu": Omit<PdsDropdownMenu, keyof PdsDropdownMenuAttributes> & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes]?: PdsDropdownMenu[K] } & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes as `attr:${K}`]?: PdsDropdownMenuAttributes[K] } & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes as `prop:${K}`]?: PdsDropdownMenu[K] };
         // (undocumented)
@@ -1705,6 +1731,47 @@ export namespace LocalJSX {
         "vertical": boolean;
     }
 
+    export interface PdsDrawer {
+        "componentId"?: string;
+        "initialFocus"?: 'auto' | 'none';
+        "lightDismiss"?: boolean;
+        "onPdsDrawerClose"?: (event: PdsDrawerCustomEvent<void>) => void;
+        "onPdsDrawerOpen"?: (event: PdsDrawerCustomEvent<void>) => void;
+        "open"?: boolean;
+        "scrollable"?: boolean;
+        "side"?: 'start' | 'end';
+        "size"?: 'sm' | 'md';
+    }
+
+    // (undocumented)
+    export interface PdsDrawerAttributes {
+        // (undocumented)
+        "componentId": string;
+        // (undocumented)
+        "initialFocus": 'auto' | 'none';
+        // (undocumented)
+        "lightDismiss": boolean;
+        // (undocumented)
+        "open": boolean;
+        // (undocumented)
+        "scrollable": boolean;
+        // (undocumented)
+        "side": 'start' | 'end';
+        // (undocumented)
+        "size": 'sm' | 'md';
+    }
+
+    export interface PdsDrawerContent {
+    }
+
+    // (undocumented)
+    export interface PdsDrawerFooter {
+    }
+
+    // (undocumented)
+    export interface PdsDrawerHeader {
+    }
+
     // (undocumented)
     export interface PdsDropdownMenu {
         "componentId"?: string;
@@ -2005,6 +2072,7 @@ export namespace LocalJSX {
     export interface PdsModal {
         "backdropDismiss"?: boolean;
         "componentId"?: string;
+        "disableInitialFocus"?: boolean;
         "disableTopLayer"?: boolean;
         "onPdsModalClose"?: (event: PdsModalCustomEvent<void>) => void;
         "onPdsModalOpen"?: (event: PdsModalCustomEvent<void>) => void;
@@ -2019,6 +2087,8 @@ export namespace LocalJSX {
         "backdropDismiss": boolean;
         // (undocumented)
         "componentId": string;
+        // (undocumented)
+        "disableInitialFocus": boolean;
         // (undocumented)
         "disableTopLayer": boolean;
         // (undocumented)
@@ -2977,6 +3047,14 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     // (undocumented)
     target: HTMLPdsCopytextElement;
+}
+
+// @public (undocumented)
+export interface PdsDrawerCustomEvent<T> extends CustomEvent<T> {
+    // (undocumented)
+    detail: T;
+    // (undocumented)
+    target: HTMLPdsDrawerElement;
 }
 
 // @public (undocumented)

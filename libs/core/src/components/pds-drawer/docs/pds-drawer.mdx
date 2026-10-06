@@ -1,0 +1,38 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as PdsDrawerStories from '../stories/pds-drawer.stories.js';
+
+<Meta of={PdsDrawerStories} />
+
+# Drawer
+
+A non-modal side panel. Unlike `pds-modal`, the page stays
+interactive while a drawer is open — no dimming, no blur, no scroll lock, no
+click blocking.
+
+`pds-drawer` composes `pds-modal` internally and inherits its focus-return,
+Escape and dialog semantics unchanged. It adds the edge, width and dismiss
+behavior a side panel needs.
+
+<Canvas of={PdsDrawerStories.Default} />
+<Controls of={PdsDrawerStories.Default} />
+
+## Usage
+
+```html
+<pds-drawer open component-id="automation-settings" side="end" size="md">
+  <pds-drawer-header>…</pds-drawer-header>
+  <pds-drawer-content>…</pds-drawer-content>
+  <pds-drawer-footer>…</pds-drawer-footer>
+</pds-drawer>
+```
+
+- `pds-drawer-content` fills the panel's height by default — no copy-pasted
+  height patch needed per consumer.
+- `side` is logical (`start` / `end`), so RTL is free.
+- `light-dismiss` (default `true`) replaces `backdrop-dismiss` — there is no
+  backdrop to click, so a pointerdown anywhere outside the drawer closes it.
+  Setting it to `false` also disables Escape, matching how `backdropDismiss`
+  gates Escape on `pds-modal` today.
+- `initial-focus="none"` opts out of moving focus into the drawer on open —
+  use it for a drawer that can open from a background event while the user
+  is mid-task elsewhere on the page.

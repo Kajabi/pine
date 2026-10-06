@@ -138,7 +138,7 @@ describe('pds-modal', () => {
       expect(state.ariaModal).toBe('false');
     });
 
-    it('leaves Escape to an overlay above it and closes normally when focus is inside', async () => {
+    it('leaves Escape to an overlay stacked above it and closes normally once focus leaves', async () => {
       const page = await newE2EPage();
       await page.setContent(
         `<pds-modal component-id="tl-esc" disable-top-layer="true"><div>Content</div></pds-modal>`,
@@ -149,11 +149,17 @@ describe('pds-modal', () => {
       await page.waitForChanges();
       expect(await modal.getProperty('open')).toBe(true);
 
-      // An overlay mounted on the body owns focus — Escape should not dismiss the modal.
+      // A real overlay actually stacked above this modal — positioned, with a
+      // higher z-index than the modal's own backdrop — owns focus. Escape
+      // should not dismiss the modal out from under it.
       await page.evaluate(() => {
+        const backdrop = document.querySelector('pds-modal dialog') as HTMLElement;
+        const backdropZIndex = parseInt(getComputedStyle(backdrop).zIndex, 10);
         const o = document.createElement('button');
         o.id = 'probe-overlay';
         o.textContent = 'Overlay';
+        o.style.position = 'fixed';
+        o.style.zIndex = String(backdropZIndex + 1);
         document.body.appendChild(o);
         o.focus();
       });
@@ -161,10 +167,35 @@ describe('pds-modal', () => {
       await page.waitForChanges();
       expect(await modal.getProperty('open')).toBe(true);
 
-      // Remove the overlay so focus is no longer held outside the modal — Escape
-      // now dismisses the modal as usual.
+      // Remove the overlay so focus is no longer held inside a stacked surface —
+      // Escape now dismisses the modal as usual.
       await page.evaluate(() => {
         (document.getElementById('probe-overlay') as HTMLElement)?.remove();
+      });
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+
+    it('still closes on Escape when focus is simply back in the page, not inside a stacked overlay', async () => {
+      // This is the non-modal-drawer scenario disableTopLayer exists for: the
+      // page stays interactive, so the user will routinely have focus on
+      // ordinary page content while the modal is open. That must not be
+      // mistaken for "an overlay owns Escape" — only a focused element inside
+      // a surface actually stacked above this modal should suppress it.
+      const page = await newE2EPage();
+      await page.setContent(`
+        <button id="page-button">Page button</button>
+        <pds-modal component-id="tl-esc-page" disable-top-layer="true"><div>Content</div></pds-modal>
+      `);
+
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(true);
+
+      await page.evaluate(() => {
+        (document.getElementById('page-button') as HTMLElement)?.focus();
       });
       await page.keyboard.press('Escape');
       await page.waitForChanges();
@@ -194,6 +225,145 @@ describe('pds-modal', () => {
         return document.elementFromPoint(10, 10) === o;
       });
       expect(overlayOnTop).toBe(true);
+    });
+
+    // Regression: a sibling pds-modal (not nested inside this one — e.g. a
+    // confirm dialog mounted alongside a disableTopLayer drawer) gets the
+    // same default z-index token as this modal's own backdrop, so a plain
+    // "strictly greater" z-index comparison missed it entirely. A top-layer
+    // dialog paints above everything outside the top layer regardless of
+    // z-index, which isStackedAboveOverlay now checks for directly.
+    //
+    // Both DOM orders are covered deliberately: every open pds-modal shares
+    // one document-level keydown listener, dispatched in registration order,
+    // and the confirm's own hideModal() clears its :modal state the moment
+    // it runs — if the confirm is registered first (the typical shape for an
+    // app-root confirm dialog mounted ahead of a drawer), it closes itself
+    // before the drawer's listener ever gets a chance to check, so reading
+    // :modal live there would already see it as closed. The fix snapshots
+    // that determination once per keydown, before either instance acts.
+    const mountOrders: Array<{ name: string; markup: string }> = [
+      {
+        name: 'drawer mounted before the confirm',
+        markup: `
+          <pds-modal component-id="drawer-stub" disable-top-layer="true" open><div>Drawer content</div></pds-modal>
+          <pds-modal component-id="confirm-stub" open><button id="confirm-btn">Confirm</button></pds-modal>
+        `,
+      },
+      {
+        name: 'confirm mounted before the drawer',
+        markup: `
+          <pds-modal component-id="confirm-stub" open><button id="confirm-btn">Confirm</button></pds-modal>
+          <pds-modal component-id="drawer-stub" disable-top-layer="true" open><div>Drawer content</div></pds-modal>
+        `,
+      },
+    ];
+
+    for (const { name, markup } of mountOrders) {
+      it(`leaves Escape to a sibling top-layer modal that shares the same z-index tier (${name})`, async () => {
+        const page = await newE2EPage();
+        await page.setContent(markup);
+        await page.waitForChanges();
+
+        await page.evaluate(() => (document.getElementById('confirm-btn') as HTMLElement)?.focus());
+        await page.keyboard.press('Escape');
+        await page.waitForChanges();
+
+        const outer = await page.find('pds-modal[component-id="drawer-stub"]');
+        const inner = await page.find('pds-modal[component-id="confirm-stub"]');
+        expect(await inner.getProperty('open')).toBe(false);
+        expect(await outer.getProperty('open')).toBe(true);
+      });
+    }
+  });
+
+  describe('initial open state', () => {
+    it('opens the native dialog automatically when open is set from the start', async () => {
+      // Regression: @Watch('open') only fires on a later change, not the
+      // prop's initial value, so a modal mounted with `open` already true
+      // never called show()/showModal() — the panel still appeared (driven
+      // by the `open` CSS class), but the native <dialog> itself stayed
+      // closed: no top-layer promotion, no dialog focusing steps.
+      const page = await newE2EPage();
+      await page.setContent(`<pds-modal component-id="initially-open" open><div>Content</div></pds-modal>`);
+      await page.waitForChanges();
+
+      const dialogOpen = await page.evaluate(() => {
+        const dialog = document.querySelector('pds-modal dialog') as HTMLDialogElement | null;
+        return dialog ? dialog.open : null;
+      });
+      expect(dialogOpen).toBe(true);
+    });
+  });
+
+  describe('disableInitialFocus', () => {
+    it('restores focus to the previously focused element', async () => {
+      const page = await newE2EPage();
+      // disable-top-layer: a true modal dialog makes the rest of the page
+      // inert, which would itself block focus from moving back outside it —
+      // not what this test is after.
+      await page.setContent(`
+        <button id="trigger">Trigger</button>
+        <pds-modal component-id="test" disable-top-layer="true" disable-initial-focus="true"><button id="first">First</button></pds-modal>
+      `);
+      await page.waitForChanges();
+      const modal = await page.find('pds-modal');
+
+      await page.evaluate(() => (document.getElementById('trigger') as HTMLElement)?.focus());
+
+      await modal.setProperty('open', true);
+      await page.waitForChanges();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      const activeId = await page.evaluate(() => document.activeElement?.id);
+      expect(activeId).toBe('trigger');
+    });
+
+    // Regression: when nothing was focused before opening, previousActiveElement
+    // is <body>. body.focus() is a no-op, so the old code left focus wherever
+    // the native dialog focusing steps had already put it — inside the dialog,
+    // defeating disableInitialFocus. It should end up nowhere (body) instead.
+    it('blurs focus when nothing was focused before opening', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`<pds-modal component-id="test" disable-initial-focus="true"><button id="first">First</button></pds-modal>`);
+      await page.evaluate(() => (document.activeElement as HTMLElement)?.blur?.());
+
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      const activeTag = await page.evaluate(() => document.activeElement?.tagName);
+      expect(activeTag).toBe('BODY');
+    });
+
+    // Regression: disableInitialFocus exists for a drawer that can open in
+    // the background while the user is mid-task elsewhere on the page — if
+    // they focus something of their own before the deferred correction above
+    // runs, it must not steal that focus back.
+    it('does not steal focus from somewhere the user moved to during the deferred window', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <button id="trigger">Trigger</button>
+        <input id="elsewhere" />
+        <pds-modal component-id="test" disable-top-layer="true" disable-initial-focus="true"><button id="first">First</button></pds-modal>
+      `);
+      await page.waitForChanges();
+      const modal = await page.find('pds-modal');
+
+      await page.evaluate(() => (document.getElementById('trigger') as HTMLElement)?.focus());
+
+      await modal.setProperty('open', true);
+      await page.waitForChanges();
+
+      // Simulate the user clicking into something of their own, elsewhere on
+      // the page, before the component's own 100ms deferred correction fires.
+      await page.evaluate(() => (document.getElementById('elsewhere') as HTMLElement)?.focus());
+
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      const activeId = await page.evaluate(() => document.activeElement?.id);
+      expect(activeId).toBe('elsewhere');
     });
   });
 

@@ -54,6 +54,20 @@ export class PdsModal {
   @Prop() disableTopLayer = false;
 
   /**
+   * Whether to skip moving focus into the modal when it opens — both our own
+   * `setInitialFocus()` and the browser's native "dialog focusing steps",
+   * which move focus into the dialog as soon as `show()`/`showModal()` is
+   * called regardless of application code. Focus return on close is
+   * unaffected either way. For a modal opened by something other than a
+   * direct user click — a redirect, a deep link, a background event —
+   * stealing focus on open can interrupt whatever the user was already
+   * doing. Default `false` preserves today's behavior for every existing
+   * consumer.
+   * @default false
+   */
+  @Prop() disableInitialFocus = false;
+
+  /**
    * Emitted when the modal is opened
    */
   @Event() pdsModalOpen: EventEmitter<void>;
@@ -72,6 +86,17 @@ export class PdsModal {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
     // Add keyboard event listener
     document.addEventListener('keydown', this.handleKeyDown);
+
+    // @Watch('open') only fires on a later change, not the prop's initial
+    // value — a modal mounted with `open` already true (static markup, or a
+    // framework passing it on first render) would otherwise never call
+    // show()/showModal(): the panel still appears, since that's driven by the
+    // `open` CSS class, but the native <dialog> itself was never opened, so
+    // there's no top-layer promotion, no dialog focusing steps, and no
+    // focusable-elements list or previousActiveElement captured.
+    if (this.open) {
+      this.showModal();
+    }
   }
 
   // Unwraps a nested dialog.pds-modal__backdrop left by a page-cache (Turbo, bfcache) reconnect.
@@ -195,7 +220,37 @@ export class PdsModal {
         // Using a longer timeout to ensure all components are fully rendered
         setTimeout(() => {
           this.updateFocusableElements();
-          this.setInitialFocus();
+          if (this.disableInitialFocus) {
+            // show()/showModal() also move focus into the dialog natively (the
+            // HTML spec's "dialog focusing steps") — that native step isn't
+            // necessarily done by the time this task runs either, so counter it
+            // here, in the same deferred slot setInitialFocus() below uses for
+            // the same reason, rather than racing it synchronously above.
+            //
+            // disableInitialFocus exists for a drawer that can open in the
+            // background while the user is mid-task elsewhere — by the time
+            // this runs, they may have already clicked into something of
+            // their own outside the dialog. Only act if focus is still where
+            // the native steps (or nothing) left it, so that isn't stolen.
+            const activeElement = document.activeElement;
+            const focusAlreadyClaimedElsewhere =
+              activeElement !== null && activeElement !== document.body && !this.modalRef?.contains(activeElement);
+
+            if (!focusAlreadyClaimedElsewhere) {
+              if (this.previousActiveElement !== document.body && typeof this.previousActiveElement?.focus === 'function') {
+                this.previousActiveElement.focus();
+              } else if (activeElement instanceof HTMLElement) {
+                // Nothing was focused before opening (previousActiveElement is
+                // body), so there's nothing to restore focus to — body.focus()
+                // would be a no-op and leave focus wherever the native focusing
+                // steps put it, inside the dialog. Blur that instead so focus
+                // ends up nowhere, matching the state before opening.
+                activeElement.blur();
+              }
+            }
+          } else {
+            this.setInitialFocus();
+          }
           this.pdsModalOpen.emit();
         }, 100);
       } catch (error) {
@@ -211,11 +266,27 @@ export class PdsModal {
   async hideModal() {
     if (this.modalRef) {
       try {
+        // Capture before close(): with the async task queue, a prop change
+        // that triggers hideModal() (e.g. light dismiss setting `open` false
+        // on a pointerdown elsewhere) doesn't run until the next frame — by
+        // then the browser has already moved focus to whatever the user's
+        // click actually landed on. Restoring previousActiveElement in that
+        // case would steal focus back from a real new destination; only
+        // restore it when focus is still inside the modal (or nowhere, i.e.
+        // document.body), meaning nothing else has claimed it since.
+        const activeElement = document.activeElement;
+        const focusAlreadyMovedElsewhere =
+          activeElement !== null && activeElement !== document.body && !this.modalRef.contains(activeElement);
+
         this.modalRef.close();
         this.open = false;
 
         // Restore focus to the element that was focused before the modal was opened
-        if (this.previousActiveElement && typeof this.previousActiveElement.focus === 'function') {
+        if (
+          !focusAlreadyMovedElsewhere &&
+          this.previousActiveElement &&
+          typeof this.previousActiveElement.focus === 'function'
+        ) {
           this.previousActiveElement.focus();
         }
 
@@ -245,6 +316,52 @@ export class PdsModal {
   private getBackdropZIndex(modal: Element): number {
     const backdrop = modal.querySelector('.pds-modal__backdrop');
     return backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
+  }
+
+  /**
+   * Whether `active` sits inside a surface actually stacked above this modal.
+   *
+   * Used to decide whether an Escape keypress belongs to that surface instead
+   * of this modal. Focus being merely *outside* this modal is not enough on
+   * its own: in `disableTopLayer` mode the page stays interactive (that's the
+   * point of a non-modal usage like a drawer), so focus will routinely be on
+   * ordinary page content while the modal is open, and that must not be
+   * mistaken for "an overlay owns Escape."
+   *
+   * Two ways a surface can be above: it is itself promoted to the browser's
+   * top layer (a regular `showModal()` dialog, which paints above everything
+   * outside the top layer regardless of z-index — a sibling pds-modal opened
+   * over a `disableTopLayer` drawer typically shares the exact same z-index
+   * token, so a numeric comparison alone would miss it), or it has a higher
+   * z-index than this modal's own backdrop (a `disableTopLayer` overlay, or
+   * anything else deliberately raised above it).
+   *
+   * `topLayerDialog` / `topLayerDialogWasModal` come pre-snapshotted from the
+   * keydown event (see handleKeyDown) rather than being re-derived here: by
+   * the time a later sibling modal's listener runs, an earlier one may have
+   * already closed itself, which clears `:modal` — reading it live here would
+   * lose that evidence depending on listener order.
+   */
+  private isStackedAboveOverlay(active: Element, topLayerDialog: Element | null, topLayerDialogWasModal: boolean): boolean {
+    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialogWasModal) {
+      return true;
+    }
+
+    const ownZIndex = this.getBackdropZIndex(this.el);
+
+    let node: Element | null = active;
+    while (node && node !== document.body) {
+      const style = getComputedStyle(node);
+      const zIndex = parseInt(style.zIndex, 10);
+
+      if (style.position !== 'static' && !isNaN(zIndex) && zIndex > ownZIndex) {
+        return true;
+      }
+
+      node = node.parentElement;
+    }
+
+    return false;
   }
 
   /**
@@ -279,11 +396,45 @@ export class PdsModal {
 
     // Handle Escape key to close the modal
     if (e.key === 'Escape') {
-      // In non-top-layer mode, focus can move into an overlay stacked above the
-      // modal (the reason disableTopLayer exists). If that overlay owns focus,
-      // leave Escape to it rather than dismissing this modal out from under it.
-      const active = document.activeElement;
-      if (this.disableTopLayer && active && active !== document.body && !this.el.contains(active)) {
+      // Every open pds-modal shares this document-level listener for the
+      // same keydown event. Whichever one runs first can synchronously move
+      // focus (hideModal() restores it), which would make a later instance's
+      // own read of document.activeElement reflect that side effect instead
+      // of where focus actually was when the key was pressed — stacking two
+      // sibling modals closing on one Escape instead of just the top one.
+      // That alone isn't enough, though: isStackedAboveOverlay's `:modal`
+      // check reads LIVE top-layer state, and hideModal()'s close() clears it
+      // synchronously — so whichever sibling's listener runs first (DOM
+      // order, not z-index) can close itself and erase the very evidence a
+      // later listener needs to recognize it was stacked above. Snapshot that
+      // determination too, in the same first-listener-wins block, before any
+      // instance has had a chance to act on this keypress.
+      const eventSnapshot = e as KeyboardEvent & {
+        __pdsActiveElementAtEscape?: Element | null;
+        __pdsTopLayerDialogAtEscape?: Element | null;
+        __pdsTopLayerDialogWasModalAtEscape?: boolean;
+      };
+      if (!('__pdsActiveElementAtEscape' in eventSnapshot)) {
+        const activeAtDispatch = document.activeElement;
+        eventSnapshot.__pdsActiveElementAtEscape = activeAtDispatch;
+        const topLayerDialog = activeAtDispatch?.closest('dialog') ?? null;
+        eventSnapshot.__pdsTopLayerDialogAtEscape = topLayerDialog;
+        eventSnapshot.__pdsTopLayerDialogWasModalAtEscape = !!(topLayerDialog && topLayerDialog.matches(':modal'));
+      }
+      // Leave Escape to a genuinely stacked-above overlay (disableTopLayer's
+      // reason for existing) — not just to anything outside this modal.
+      const active = eventSnapshot.__pdsActiveElementAtEscape;
+      if (
+        this.disableTopLayer &&
+        active &&
+        active !== document.body &&
+        !this.el.contains(active) &&
+        this.isStackedAboveOverlay(
+          active,
+          eventSnapshot.__pdsTopLayerDialogAtEscape ?? null,
+          eventSnapshot.__pdsTopLayerDialogWasModalAtEscape ?? false,
+        )
+      ) {
         return;
       }
       // Always prevent native dialog close behavior
