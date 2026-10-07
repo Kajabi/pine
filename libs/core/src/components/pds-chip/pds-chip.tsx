@@ -2,10 +2,22 @@ import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
 import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
 import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { normalizeColorValue } from '../../utils/utils';
+
+const SENTIMENT_DOT_COLORS: Record<string, string> = {
+  accent: 'var(--pine-chip-color-accent-dot)',
+  danger: 'var(--pine-chip-color-danger-dot)',
+  info: 'var(--pine-chip-color-info-dot)',
+  neutral: 'var(--pine-chip-color-neutral-dot)',
+  success: 'var(--pine-chip-color-success-dot)',
+  warning: 'var(--pine-chip-color-warning-dot)',
+};
 
 /**
  * @slot (default) - The chip's label text.
  * @part button
+ * @part dot - Exposes the dot for styling, such as a custom color. Appears only when `dot` is set.
+ * @part icon - Exposes the icon component for styling, such as a custom color. Appears only when `icon` is set.
  */
 
 @Component({
@@ -35,9 +47,21 @@ export class PdsChip {
   @Prop() dot = false;
 
   /**
+   * Sets the dot color. Accepts a sentiment name (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   * Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
+   */
+  @Prop() dotColor?: string;
+
+  /**
    * The name of the icon to display before the chip text.
    */
   @Prop() icon?: string;
+
+  /**
+   * Sets the icon color. Accepts a sentiment name (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   * Defaults to the chip's text color. Only applies when `icon` is set.
+   */
+  @Prop() iconColor?: string;
 
   /**
    * Sets the size of the chip.
@@ -203,8 +227,8 @@ export class PdsChip {
     // nesting a second tab stop inside the button.
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button" part="button">
-        {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
-        {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
+        {this.icon && <pds-icon class="pds-chip__icon" part="icon" icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
+        {showDot && <i class="pds-chip__dot" part="dot" aria-hidden="true"></i>}
         <span class="pds-chip__label-text" ref={(el) => (this.labelTextEl = el)}>
           <slot></slot>
         </span>
@@ -212,8 +236,8 @@ export class PdsChip {
       </button>
     ) : (
       <span class="pds-chip__label">
-        {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
-        {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
+        {this.icon && <pds-icon class="pds-chip__icon" part="icon" icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
+        {showDot && <i class="pds-chip__dot" part="dot" aria-hidden="true"></i>}
         <span class="pds-chip__label-text" ref={(el) => (this.labelTextEl = el)}>
           <slot></slot>
         </span>
@@ -229,7 +253,25 @@ export class PdsChip {
     // query) without !important — the same pattern pds-box uses for min-width.
     // The width and the min-width/box-sizing that make it work are applied in
     // pds-chip.scss under :host([max-width]).
-    return this.maxWidth ? { '--pds-chip-max-width': this.maxWidth } : {};
+    const styles: Record<string, string> = {};
+
+    if (this.maxWidth) {
+      styles['--pds-chip-max-width'] = this.maxWidth;
+    }
+
+    // Custom properties rather than inline colors on the dot/icon, so a
+    // consumer's ::part(dot) or ::part(icon) rule still wins over the prop.
+    const dotColor = normalizeColorValue(this.dotColor, { semanticMap: SENTIMENT_DOT_COLORS });
+    if (dotColor !== undefined) {
+      styles['--pds-chip-dot-color'] = dotColor;
+    }
+
+    const iconColor = normalizeColorValue(this.iconColor, { semanticMap: SENTIMENT_DOT_COLORS });
+    if (iconColor !== undefined) {
+      styles['--pds-chip-icon-color'] = iconColor;
+    }
+
+    return styles;
   }
 
   private renderCloseButton() {
