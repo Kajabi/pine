@@ -1,8 +1,11 @@
 import { html } from 'lit';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 
 export default {
+  args: {
+    dotColor: '',
+    iconColor: '',
+  },
   argTypes: {
     // `dot` and `icon` are also CSS part names; without these the parts
     // entries replace the prop controls in the Controls panel.
@@ -36,9 +39,9 @@ const BaseTemplate = (args) => html`
 <pds-chip
   component-id="${args.componentId}"
   ?dot=${args.dot}
-  dot-color="${ifDefined(args.dotColor)}"
+  dot-color="${args.dotColor}"
   icon="${args.icon}"
-  icon-color="${ifDefined(args.iconColor)}"
+  icon-color="${args.iconColor}"
   size="${args.size}"
   sentiment="${args.sentiment}"
   variant="${args.variant}"
