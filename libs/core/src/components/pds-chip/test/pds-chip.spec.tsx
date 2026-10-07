@@ -74,7 +74,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" dot="true">
       <mock:shadow-root>
         <span class="pds-chip__label">
-          <i class="pds-chip__dot" aria-hidden="true"></i>
+          <i class="pds-chip__dot" part="dot" aria-hidden="true"></i>
           <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
@@ -132,7 +132,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--text" size="sm" icon="archive">
       <mock:shadow-root>
         <span class="pds-chip__label">
-          <pds-icon icon="archive" size="10px" aria-hidden="true"></pds-icon>
+          <pds-icon class="pds-chip__icon" part="icon" icon="archive" size="10px" aria-hidden="true"></pds-icon>
           <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
@@ -233,7 +233,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" icon="archive">
       <mock:shadow-root>
         <span class="pds-chip__label">
-          <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
+          <pds-icon class="pds-chip__icon" part="icon" icon="archive" size="12px" aria-hidden="true"></pds-icon>
           <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
@@ -251,7 +251,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" icon="archive" variant="dropdown">
       <mock:shadow-root>
         <button class="pds-chip__button" part="button" type="button">
-          <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
+          <pds-icon class="pds-chip__icon" part="icon" icon="archive" size="12px" aria-hidden="true"></pds-icon>
           <span class="pds-chip__label-text"><slot></slot></span>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
@@ -270,7 +270,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--text" icon="archive" size="lg">
       <mock:shadow-root>
         <span class="pds-chip__label">
-          <pds-icon icon="archive" size="14px" aria-hidden="true"></pds-icon>
+          <pds-icon class="pds-chip__icon" part="icon" icon="archive" size="14px" aria-hidden="true"></pds-icon>
           <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
@@ -288,8 +288,8 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" icon="archive" dot="true">
       <mock:shadow-root>
         <span class="pds-chip__label">
-          <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
-          <i class="pds-chip__dot" aria-hidden="true"></i>
+          <pds-icon class="pds-chip__icon" part="icon" icon="archive" size="12px" aria-hidden="true"></pds-icon>
+          <i class="pds-chip__dot" part="dot" aria-hidden="true"></i>
           <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
@@ -307,7 +307,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--brand pds-chip--text" icon="archive" dot="true" sentiment="brand">
       <mock:shadow-root>
         <span class="pds-chip__label">
-          <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
+          <pds-icon class="pds-chip__icon" part="icon" icon="archive" size="12px" aria-hidden="true"></pds-icon>
           <span class="pds-chip__label-text"><slot></slot></span>
         </span>
       </mock:shadow-root>
@@ -343,7 +343,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" variant="dropdown" dot="true">
       <mock:shadow-root>
         <button class="pds-chip__button" part="button" type="button">
-          <i class="pds-chip__dot" aria-hidden="true"></i>
+          <i class="pds-chip__dot" part="dot" aria-hidden="true"></i>
           <span class="pds-chip__label-text"><slot></slot></span>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
@@ -435,6 +435,110 @@ describe('pds-chip', () => {
 
       const chip = page.body.querySelector('pds-chip');
       expect(chip?.shadowRoot?.querySelector('.pds-chip__button > .pds-chip__label-text')).toBeTruthy();
+    });
+  });
+
+  describe('dotColor prop', () => {
+    it('maps a sentiment name to that sentiment\'s dot token', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip dot dot-color="success">Label</pds-chip>`,
+      });
+
+      expect(page.root?.style.getPropertyValue('--pds-chip-dot-color')).toBe('var(--pine-chip-color-success-dot)');
+    });
+
+    it('wraps a raw token in var()', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip dot dot-color="--pine-color-purple-500">Label</pds-chip>`,
+      });
+
+      expect(page.root?.style.getPropertyValue('--pds-chip-dot-color')).toBe('var(--pine-color-purple-500)');
+    });
+
+    it('passes a literal color value through unchanged', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip dot dot-color="#7c3aed">Label</pds-chip>`,
+      });
+
+      expect(page.root?.style.getPropertyValue('--pds-chip-dot-color')).toBe('#7c3aed');
+    });
+
+    it('sets no custom property for a blank value', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip dot dot-color="  ">Label</pds-chip>`,
+      });
+
+      expect(page.root?.getAttribute('style')).toBeNull();
+    });
+
+    it('updates the custom property when the prop changes', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip dot dot-color="success">Label</pds-chip>`,
+      });
+
+      page.root!.dotColor = 'danger';
+      await page.waitForChanges();
+
+      expect(page.root?.style.getPropertyValue('--pds-chip-dot-color')).toBe('var(--pine-chip-color-danger-dot)');
+    });
+
+    it('sets alongside max-width without dropping either', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip dot dot-color="info" max-width="200px">Label</pds-chip>`,
+      });
+
+      expect(page.root?.style.getPropertyValue('--pds-chip-dot-color')).toBe('var(--pine-chip-color-info-dot)');
+      expect(page.root?.style.getPropertyValue('--pds-chip-max-width')).toBe('200px');
+    });
+  });
+
+  describe('iconColor prop', () => {
+    it('maps a sentiment name to that sentiment\'s dot token', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip icon="archive" icon-color="warning">Label</pds-chip>`,
+      });
+
+      expect(page.root?.style.getPropertyValue('--pds-chip-icon-color')).toBe('var(--pine-chip-color-warning-dot)');
+    });
+
+    it('passes a var() reference through unchanged', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip icon="archive" icon-color="var(--pine-color-blue-600)">Label</pds-chip>`,
+      });
+
+      expect(page.root?.style.getPropertyValue('--pds-chip-icon-color')).toBe('var(--pine-color-blue-600)');
+    });
+
+    it('does not pass a color to the leading pds-icon, so ::part(icon) can still override it', async () => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip icon="archive" icon-color="success">Label</pds-chip>`,
+      });
+
+      const icon = page.root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      expect(icon?.getAttribute('color')).toBeNull();
+    });
+
+    it('leaves the dropdown caret and tag close icons without the icon part', async () => {
+      const dropdown = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip icon="archive" variant="dropdown" icon-color="success">Label</pds-chip>`,
+      });
+      const tag = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip icon="archive" variant="tag" icon-color="success">Label</pds-chip>`,
+      });
+
+      expect(dropdown.root?.shadowRoot?.querySelectorAll('[part="icon"]')).toHaveLength(1);
+      expect(tag.root?.shadowRoot?.querySelectorAll('[part="icon"]')).toHaveLength(1);
     });
   });
 

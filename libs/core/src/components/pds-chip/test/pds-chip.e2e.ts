@@ -299,6 +299,78 @@ describe('pds-chip', () => {
   });
 });
 
+describe('pds-chip dot and icon colors', () => {
+  const dotBackground = (page, selector: string) =>
+    page.$eval(selector, (el) => getComputedStyle(el.shadowRoot.querySelector('[part="dot"]')).backgroundColor);
+  const iconColor = (page, selector: string) =>
+    page.$eval(selector, (el) => getComputedStyle(el.shadowRoot.querySelector('[part="icon"]')).color);
+
+  it('colors the dot with another sentiment\'s dot token when dot-color is a sentiment name', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip id="custom" dot dot-color="success">Custom</pds-chip>
+      <pds-chip id="reference" sentiment="success" dot>Reference</pds-chip>
+    `);
+
+    expect(await dotBackground(page, '#custom')).toBe(await dotBackground(page, '#reference'));
+  });
+
+  it('colors the dot with a literal color value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip dot dot-color="rgb(255, 0, 0)">Label</pds-chip>');
+
+    expect(await dotBackground(page, 'pds-chip')).toBe('rgb(255, 0, 0)');
+  });
+
+  it('keeps the sentiment dot color when dot-color is unset', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip id="default" sentiment="danger" dot>Default</pds-chip>
+      <pds-chip id="explicit" dot dot-color="danger">Explicit</pds-chip>
+    `);
+
+    expect(await dotBackground(page, '#default')).toBe(await dotBackground(page, '#explicit'));
+  });
+
+  it('colors the icon with a literal color value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip icon="check" icon-color="rgb(255, 0, 0)">Label</pds-chip>');
+
+    expect(await iconColor(page, 'pds-chip')).toBe('rgb(255, 0, 0)');
+  });
+
+  it('keeps the icon on the label text color when icon-color is unset', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip sentiment="info" icon="check">Label</pds-chip>');
+
+    const labelColor = await page.$eval('pds-chip', (el) =>
+      getComputedStyle(el.shadowRoot.querySelector('.pds-chip__label')).color,
+    );
+    expect(await iconColor(page, 'pds-chip')).toBe(labelColor);
+  });
+
+  it('lets a ::part() rule override dot-color and icon-color', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <style>
+        pds-chip::part(dot) { background: rgb(0, 0, 255); }
+        pds-chip::part(icon) { color: rgb(0, 0, 255); }
+      </style>
+      <pds-chip dot dot-color="rgb(255, 0, 0)" icon="check" icon-color="rgb(255, 0, 0)">Label</pds-chip>
+    `);
+
+    expect(await dotBackground(page, 'pds-chip')).toBe('rgb(0, 0, 255)');
+    expect(await iconColor(page, 'pds-chip')).toBe('rgb(0, 0, 255)');
+  });
+
+  it('has no axe violations with a custom dot and icon color', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip dot dot-color="success" icon="check" icon-color="success">Active</pds-chip>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});
+
 describe('pds-chip accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
