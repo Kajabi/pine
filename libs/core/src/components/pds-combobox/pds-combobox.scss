@@ -1,4 +1,5 @@
 @use './pds-combobox-dropdown-panel.scss' as *;
+@use '~@kajabi-ui/styles/dist/pine/components/pds-chip/pds-chip.tokens';
 
 :host {
   display: block;
@@ -312,7 +313,9 @@
 .pds-combobox__chip-trigger--success,
 .pds-combobox__chip-trigger--warning,
 .pds-combobox__chip-trigger--danger,
-.pds-combobox__chip-trigger--info {
+.pds-combobox__chip-trigger--info,
+.pds-combobox__chip-trigger--solid,
+.pds-combobox__chip-trigger--subtle {
   background: var(--chip-bg);
   border: var(--pine-border-width) solid var(--chip-border);
   color: var(--chip-text);
@@ -367,6 +370,20 @@
   --chip-bg-hover: var(--pine-chip-color-info-hover);
   --chip-border: var(--pine-chip-color-info-hover);
   --chip-text: var(--pine-color-text-info);
+}
+
+.pds-combobox__chip-trigger--solid {
+  --chip-bg: var(--pine-chip-color-solid);
+  --chip-bg-hover: var(--pine-chip-color-solid-hover);
+  --chip-border: transparent;
+  --chip-text: var(--pine-chip-color-solid-text);
+}
+
+.pds-combobox__chip-trigger--subtle {
+  --chip-bg: var(--pine-chip-color-subtle);
+  --chip-bg-hover: var(--pine-chip-color-subtle-hover);
+  --chip-border: var(--pine-chip-color-subtle-hover);
+  --chip-text: var(--pine-chip-color-subtle-text);
 }
 
 .pds-combobox__chip-trigger--brand {
