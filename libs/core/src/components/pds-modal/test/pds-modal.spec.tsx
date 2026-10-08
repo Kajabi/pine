@@ -406,6 +406,34 @@ describe('pds-modal', () => {
       expect(warn).toHaveBeenCalledWith(expect.stringContaining('size "xl"'));
     });
 
+    it('refuses a value that would add declarations, even where CSS.supports accepts anything', async () => {
+      jest.spyOn(globalThis, 'CSS', 'get').mockReturnValue({ supports: () => true } as unknown as typeof CSS);
+      jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal size="1px; position: fixed; inset: 0"></pds-modal>`,
+      });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--md');
+      expect(modalBox(page).getAttribute('style')).toBeNull();
+    });
+
+    it('treats keywords like none as invalid, not as an uncapped custom size', async () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size="none"></pds-modal>` });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--md');
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('size "none"'));
+    });
+
+    it('reads a preset padded with spaces as that preset', async () => {
+      const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size=" lg "></pds-modal>` });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--lg');
+    });
+
     it('switches between a custom length and a preset', async () => {
       const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size="80vw"></pds-modal>` });
 
