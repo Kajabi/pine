@@ -204,8 +204,7 @@
   --color-border-hover: var(--pine-color-accent-hover);
   --color-border-disabled: var(--pine-color-accent-disabled);
   --color-border-focus: var(--pine-color-accent);
-  /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
-  --color-text-default: var(--pine-color-white);
+  --color-text-default: var(--pine-color-text-primary);
   --color-text-disabled: var(--pine-color-text-accent-disabled);
   --color-outline: var(--pine-color-focus-ring);
 }
