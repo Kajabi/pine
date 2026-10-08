@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop } from '@stencil/core';
+import { normalizeColorValue } from '../../utils/utils';
 
 @Component({
   tag: 'pds-progress',
@@ -41,6 +42,8 @@ export class PdsProgress {
   @Prop() showPercent = false;
 
   render() {
+    const normalizedFillColor = normalizeColorValue(this.fillColor);
+
     return (
       <Host class={this.animated ? { 'is-animated': this.animated } : ''}>
         <div class="pds-progress">
@@ -50,7 +53,7 @@ export class PdsProgress {
           <progress
             id={this.componentId}
             max="100"
-            style={this.fillColor ? { '--color-progress-fill': this.fillColor } : {}}
+            style={normalizedFillColor ? { '--color-progress-fill': normalizedFillColor } : {}}
             value={this.percent}
           >
           </progress>
