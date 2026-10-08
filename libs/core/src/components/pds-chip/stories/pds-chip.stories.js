@@ -19,7 +19,7 @@ export default {
     },
     sentiment: {
       control: { type: 'select' },
-      options: ['accent', 'brand', 'danger', 'info', 'neutral', 'success', 'warning'],
+      options: ['accent', 'brand', 'danger', 'info', 'neutral', 'solid', 'subtle', 'success', 'warning'],
     },
     size: {
       control: { type: 'select' },

@@ -9,6 +9,8 @@ const SENTIMENT_DOT_COLORS: Record<string, string> = {
   danger: 'var(--pine-chip-color-danger-dot)',
   info: 'var(--pine-chip-color-info-dot)',
   neutral: 'var(--pine-chip-color-neutral-dot)',
+  solid: 'var(--pine-chip-color-solid-dot)',
+  subtle: 'var(--pine-chip-color-subtle-dot)',
   success: 'var(--pine-chip-color-success-dot)',
   warning: 'var(--pine-chip-color-warning-dot)',
 };

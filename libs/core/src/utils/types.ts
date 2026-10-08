@@ -71,6 +71,8 @@ export type ChipSentimentType =
   | 'danger'
   | 'info'
   | 'neutral'
+  | 'solid'
+  | 'subtle'
   | 'success'
   | 'warning';
 

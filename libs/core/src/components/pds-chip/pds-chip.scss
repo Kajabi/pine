@@ -15,6 +15,8 @@ $pds-chip-sentiment: (
   danger: var(--pine-chip-color-danger),
   info: var(--pine-chip-color-info),
   neutral: var(--pine-chip-color-neutral),
+  solid: var(--pine-chip-color-solid),
+  subtle: var(--pine-chip-color-subtle),
   success: var(--pine-chip-color-success),
   warning: var(--pine-chip-color-warning),
 );
@@ -24,6 +26,8 @@ $pds-chip-sentiment-text: (
   danger: var(--pine-chip-color-danger-text),
   info: var(--pine-chip-color-info-text),
   neutral: var(--pine-chip-color-neutral-text),
+  solid: var(--pine-chip-color-solid-text),
+  subtle: var(--pine-chip-color-subtle-text),
   success: var(--pine-chip-color-success-text),
   warning: var(--pine-chip-color-warning-text),
 );
@@ -33,6 +37,8 @@ $pds-chip-sentiment-dots: (
   danger: var(--pine-chip-color-danger-dot),
   info: var(--pine-chip-color-info-dot),
   neutral: var(--pine-chip-color-neutral-dot),
+  solid: var(--pine-chip-color-solid-dot),
+  subtle: var(--pine-chip-color-subtle-dot),
   success: var(--pine-chip-color-success-dot),
   warning: var(--pine-chip-color-warning-dot),
 );
@@ -42,6 +48,8 @@ $pds-chip-sentiment-hover: (
   danger: var(--pine-chip-color-danger-hover),
   info: var(--pine-chip-color-info-hover),
   neutral: var(--pine-chip-color-neutral-hover),
+  solid: var(--pine-chip-color-solid-hover),
+  subtle: var(--pine-chip-color-subtle-hover),
   success: var(--pine-chip-color-success-hover),
   warning: var(--pine-chip-color-warning-hover),
 );
@@ -74,6 +82,12 @@ $pds-chip-sentiment-hover: (
     /* stylelint-disable-next-line */
     background: map.get($pds-chip-sentiment-hover, $sentiment);
   }
+}
+
+// Solid has no visible edge. A transparent border shows the background beneath
+// it, so it keeps matching on dropdown hover; the hover token stays hover-only.
+:host(.pds-chip--solid) {
+  border-color: transparent;
 }
 
 .pds-chip__dot {
