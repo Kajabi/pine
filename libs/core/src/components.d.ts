@@ -892,9 +892,17 @@ export namespace Components {
          */
         "dot": boolean;
         /**
+          * Sets the dot color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
+         */
+        "dotColor"?: string;
+        /**
           * The name of the icon to display before the chip text.
          */
         "icon"?: string;
+        /**
+          * Sets the icon color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the chip's text color. Only applies when `icon` is set.
+         */
+        "iconColor"?: string;
         /**
           * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
@@ -4307,9 +4315,17 @@ declare namespace LocalJSX {
          */
         "dot"?: boolean;
         /**
+          * Sets the dot color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
+         */
+        "dotColor"?: string;
+        /**
           * The name of the icon to display before the chip text.
          */
         "icon"?: string;
+        /**
+          * Sets the icon color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the chip's text color. Only applies when `icon` is set.
+         */
+        "iconColor"?: string;
         /**
           * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
@@ -6322,7 +6338,9 @@ declare namespace LocalJSX {
     interface PdsChipAttributes {
         "componentId": string;
         "dot": boolean;
+        "dotColor": string;
         "icon": string;
+        "iconColor": string;
         "size": ChipSizeType;
         "sentiment": ChipSentimentType;
         "variant": ChipVariantType;

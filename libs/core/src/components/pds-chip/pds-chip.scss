@@ -54,7 +54,7 @@ $pds-chip-sentiment-hover: (
     // dot colors
     .pds-chip__dot {
       /* stylelint-disable-next-line */
-      background: map.get($pds-chip-sentiment-dots, $sentiment);
+      background: var(--pds-chip-dot-color, #{map.get($pds-chip-sentiment-dots, $sentiment)});
     }
 
     .pds-chip__label, .pds-chip__button, .pds-chip__close {
@@ -86,6 +86,10 @@ $pds-chip-sentiment-hover: (
   height: var(--pine-dimension-2xs);
   margin-inline-end: var(--pine-dimension-2xs);
   width: var(--pine-dimension-2xs);
+}
+
+.pds-chip__icon {
+  color: var(--pds-chip-icon-color, currentColor);
 }
 
 .pds-chip__label {

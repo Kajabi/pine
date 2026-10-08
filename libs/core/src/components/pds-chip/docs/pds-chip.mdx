@@ -132,6 +132,35 @@ A small circular indicator displayed within a chip. Dot colors are determined by
   <pds-chip sentiment="warning" dot>Warning</pds-chip>
 </DocCanvas>
 
+#### Dot color
+
+The `dot-color` property overrides the dot's color independently of the chip's `sentiment`. It accepts a sentiment name other than `brand` (which uses that sentiment's dot color), a color token, or any valid CSS color value, such as a hex value. Hex values must include the leading `#`.
+
+> **Note**: In most cases, let `sentiment` set the dot color. The sentiment colors are designed to work together and adjust automatically for dark mode. Use `dot-color` for the less common case where the dot needs to differ from the chip, such as a status dot on a neutral chip. When you do, prefer a sentiment name: it adapts to dark mode, while hex values and palette tokens like `--pine-color-purple-500` stay the same in both themes.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsChip dot dotColor="success">Active</PdsChip>
+    <PdsChip dot dotColor="danger">Overdue</PdsChip>
+    <PdsChip dot dotColor="--pine-color-purple-500">Custom token</PdsChip>
+    <PdsChip dot dotColor="#0891b2">Hex value</PdsChip>
+    `,
+    webComponent: `
+    <pds-chip dot dot-color="success">Active</pds-chip>
+    <pds-chip dot dot-color="danger">Overdue</pds-chip>
+    <pds-chip dot dot-color="--pine-color-purple-500">Custom token</pds-chip>
+    <pds-chip dot dot-color="#0891b2">Hex value</pds-chip>
+    `
+}}>
+  <pds-chip dot dot-color="success">Active</pds-chip>
+  <pds-chip dot dot-color="danger">Overdue</pds-chip>
+  <pds-chip dot dot-color="--pine-color-purple-500">Custom token</pds-chip>
+  <pds-chip dot dot-color="#0891b2">Hex value</pds-chip>
+</DocCanvas>
+
+> **Note**: The dot is decorative and hidden from assistive technology, so the label text must carry the meaning on its own.
+
 ### Icon
 
 The `icon` property can be used to display an icon within a chip.
@@ -165,6 +194,37 @@ The `icon` property can be used to display an icon within a chip.
   <pds-chip sentiment="success" icon="check">Success</pds-chip>
   <pds-chip sentiment="warning" icon="warning">Warning</pds-chip>
 </DocCanvas>
+
+#### Icon color
+
+The `icon-color` property overrides the color of the icon set by `icon`, which otherwise matches the label text. It accepts the same values as `dot-color`. The dropdown and tag icons always match the label text.
+
+> **Note**: The same guidance as `dot-color` applies. In most cases, the default icon color is the right choice. Reserve `icon-color` for icons that need to stand apart from the label, and prefer a sentiment name when you do.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsChip icon="check" iconColor="success">Paid</PdsChip>
+    <PdsChip icon="danger" iconColor="danger">Failed</PdsChip>
+    <PdsChip icon="tag" iconColor="--pine-color-purple-500">Custom token</PdsChip>
+    <PdsChip icon="star" iconColor="#0891b2">Hex value</PdsChip>
+    `,
+    webComponent: `
+    <pds-chip icon="check" icon-color="success">Paid</pds-chip>
+    <pds-chip icon="danger" icon-color="danger">Failed</pds-chip>
+    <pds-chip icon="tag" icon-color="--pine-color-purple-500">Custom token</pds-chip>
+    <pds-chip icon="star" icon-color="#0891b2">Hex value</pds-chip>
+    `
+}}>
+  <pds-chip icon="check" icon-color="success">Paid</pds-chip>
+  <pds-chip icon="danger" icon-color="danger">Failed</pds-chip>
+  <pds-chip icon="tag" icon-color="--pine-color-purple-500">Custom token</pds-chip>
+  <pds-chip icon="star" icon-color="#0891b2">Hex value</pds-chip>
+</DocCanvas>
+
+#### Custom styling
+
+For styling beyond color, target the `dot` and `icon` parts. A `::part()` rule takes precedence over `dot-color` and `icon-color`: `pds-chip::part(dot) { height: var(--pine-dimension-xs); width: var(--pine-dimension-xs); }`.
 
 ### Dropdown
 

@@ -2,7 +2,21 @@ import { html } from 'lit';
 
 
 export default {
+  args: {
+    dotColor: '',
+    iconColor: '',
+  },
   argTypes: {
+    // `dot` and `icon` are also CSS part names; without these the parts
+    // entries replace the prop controls in the Controls panel.
+    dot: {
+      control: { type: 'boolean' },
+      table: { category: 'properties' },
+    },
+    icon: {
+      control: { type: 'text' },
+      table: { category: 'properties' },
+    },
     sentiment: {
       control: { type: 'select' },
       options: ['accent', 'brand', 'danger', 'info', 'neutral', 'success', 'warning'],
@@ -25,7 +39,9 @@ const BaseTemplate = (args) => html`
 <pds-chip
   component-id="${args.componentId}"
   ?dot=${args.dot}
+  dot-color="${args.dotColor}"
   icon="${args.icon}"
+  icon-color="${args.iconColor}"
   size="${args.size}"
   sentiment="${args.sentiment}"
   variant="${args.variant}"
@@ -74,6 +90,28 @@ Icon.args = {
   size: "md",
   sentiment: "neutral",
   slot: "label",
+  variant: "text",
+}
+
+export const DotColor = BaseTemplate.bind();
+DotColor.args = {
+  dot: true,
+  dotColor: "success",
+  icon: "",
+  size: "md",
+  sentiment: "neutral",
+  slot: "Active",
+  variant: "text",
+}
+
+export const IconColor = BaseTemplate.bind();
+IconColor.args = {
+  dot: false,
+  icon: "check",
+  iconColor: "success",
+  size: "md",
+  sentiment: "neutral",
+  slot: "Paid",
   variant: "text",
 }
 

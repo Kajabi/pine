@@ -265,7 +265,9 @@ export namespace Components {
         "componentId": string;
         "dismissLabel": string;
         "dot": boolean;
+        "dotColor"?: string;
         "icon"?: string;
+        "iconColor"?: string;
         "maxWidth"?: string;
         "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
         "removeTarget"?: '_blank' | '_self' | '_parent' | '_top';
@@ -1529,7 +1531,9 @@ export namespace LocalJSX {
         "componentId"?: string;
         "dismissLabel"?: string;
         "dot"?: boolean;
+        "dotColor"?: string;
         "icon"?: string;
+        "iconColor"?: string;
         "maxWidth"?: string;
         "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<void>) => void;
         "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -1549,7 +1553,11 @@ export namespace LocalJSX {
         // (undocumented)
         "dot": boolean;
         // (undocumented)
+        "dotColor": string;
+        // (undocumented)
         "icon": string;
+        // (undocumented)
+        "iconColor": string;
         // (undocumented)
         "maxWidth": string;
         // (undocumented)
