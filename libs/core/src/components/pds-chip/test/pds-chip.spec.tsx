@@ -499,7 +499,7 @@ describe('pds-chip', () => {
   });
 
   describe('iconColor prop', () => {
-    it('maps a sentiment name to that sentiment\'s dot token', async () => {
+    it('maps a sentiment name to that sentiment\'s dot token, shared with dotColor', async () => {
       const page = await newSpecPage({
         components: [PdsChip],
         html: `<pds-chip icon="archive" icon-color="warning">Label</pds-chip>`,
