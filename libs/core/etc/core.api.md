@@ -24,7 +24,7 @@ export interface CheckboxChangeEventDetail<T = any> {
 }
 
 // @public (undocumented)
-export type ChipSentimentType = 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+export type ChipSentimentType = 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'solid' | 'subtle' | 'success' | 'warning';
 
 // @public (undocumented)
 export type ChipSizeType = 'sm' | 'md' | 'lg';
