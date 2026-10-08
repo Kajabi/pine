@@ -43,3 +43,24 @@ describe('pds-combobox', () => {
     expect(Number(stacking.icon)).toBe(Number(stacking.raised) - 1);
   });
 });
+
+describe('pds-combobox chip trigger sentiments', () => {
+  it.each(['neutral', 'accent', 'success', 'warning', 'danger', 'info'])('matches pds-chip colors for the %s sentiment', async (sentiment) => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-combobox component-id="combo" trigger="chip" chip-sentiment="${sentiment}" placeholder="Status"></pds-combobox>
+      <pds-chip sentiment="${sentiment}" variant="dropdown">Status</pds-chip>
+    `);
+
+    const trigger = await page.$eval('pds-combobox', (el) => {
+      const s = getComputedStyle(el.shadowRoot.querySelector('.pds-combobox__chip-trigger'));
+      return { background: s.backgroundColor, border: s.borderTopColor };
+    });
+    const chip = await page.$eval('pds-chip', (el) => {
+      const host = getComputedStyle(el);
+      return { background: host.backgroundColor, border: host.borderTopColor };
+    });
+
+    expect(trigger).toEqual(chip);
+  });
+});
