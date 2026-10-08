@@ -1,8 +1,19 @@
 import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
+import type { ModalSizeType } from '@utils/types';
 
-const PRESET_SIZES = ['sm', 'md', 'lg', 'fullscreen'] as const;
-type PresetSize = (typeof PRESET_SIZES)[number];
+const PRESET_SIZES: readonly ModalSizeType[] = ['sm', 'md', 'lg', 'fullscreen'];
+
+/**
+ * Whether a custom size is a usable max-width length. Lengths, calc(), min() and clamp() only: no
+ * keywords like none or auto, and nothing that could add declarations to the inline style (mock-doc's
+ * CSS.supports, used when Pine is server-rendered, accepts anything).
+ */
+const isCustomLength = (value: string): boolean => {
+  if (!/^[a-z0-9.%+\-*/(), ]+$/i.test(value) || !/\d/.test(value)) return false;
+  if (typeof CSS === 'undefined' || typeof CSS.supports !== 'function') return true;
+  return CSS.supports('max-width', value);
+};
 
 @Component({
   tag: 'pds-modal',
@@ -39,7 +50,7 @@ export class PdsModal {
    * A value that is neither falls back to 'md'.
    * @default 'md'
    */
-  @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' | string = 'md';
+  @Prop() size: ModalSizeType | (string & Record<never, never>) = 'md';
 
   /**
    * Whether the modal content should be scrollable
@@ -497,32 +508,26 @@ export class PdsModal {
     }
   };
 
-  private isPresetSize(size = this.size): size is PresetSize {
-    return (PRESET_SIZES as readonly string[]).includes(size);
-  }
-
-  /** The custom max-width, when size is a valid CSS length rather than a preset. */
-  private customSize(): string | undefined {
+  /**
+   * Resolves `size` once for render and the warning: a preset keeps its class; a CSS length becomes
+   * the custom max-width; anything else falls back to md.
+   */
+  private resolveSize(): { sizeClass: string; customSize?: string; invalid: boolean } {
     const size = (this.size ?? '').trim();
-    if (size === '' || this.isPresetSize(size)) return undefined;
-    // Without CSS.supports (some test environments), trust the value.
-    if (typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('max-width', size) === false) {
-      return undefined;
-    }
-    return size;
+    if (size === '') return { sizeClass: 'md', invalid: false };
+    if ((PRESET_SIZES as readonly string[]).includes(size)) return { sizeClass: size, invalid: false };
+    if (isCustomLength(size)) return { sizeClass: 'custom', customSize: size, invalid: false };
+    return { sizeClass: 'md', invalid: true };
   }
 
   private warnOnInvalidSize() {
-    const size = (this.size ?? '').trim();
-    if (size === '' || this.isPresetSize(size) || this.customSize() !== undefined) return;
-    console.warn(`pds-modal: size "${this.size}" is not a preset or a valid CSS length, so it falls back to "md".`);
+    if (!this.resolveSize().invalid) return;
+    const shown = String(this.size).slice(0, 50);
+    console.warn(`pds-modal: size "${shown}" is not a preset or a valid CSS length, so it falls back to "md".`);
   }
 
   render() {
-    const customSize = this.customSize();
-    let sizeClass = 'md';
-    if (this.isPresetSize()) sizeClass = this.size;
-    else if (customSize !== undefined) sizeClass = 'custom';
+    const { sizeClass, customSize } = this.resolveSize();
 
     return (
       <dialog

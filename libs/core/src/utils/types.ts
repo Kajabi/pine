@@ -74,6 +74,8 @@ export type ChipSentimentType =
   | 'success'
   | 'warning';
 
+export type ModalSizeType = 'sm' | 'md' | 'lg' | 'fullscreen';
+
 export type ChipSizeType =
   'sm'
   | 'md'

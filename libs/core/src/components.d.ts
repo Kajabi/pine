@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
+import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
@@ -21,7 +21,7 @@ import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./component
 export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
+export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
@@ -1595,7 +1595,7 @@ export namespace Components {
           * The size of the modal. Can be a predefined value ('sm', 'md', 'lg', 'fullscreen') or a custom max-width as a CSS length (e.g., '1250px', '80vw'). A custom width stays fluid below that size. A value that is neither falls back to 'md'.
           * @default 'md'
          */
-        "size": 'sm' | 'md' | 'lg' | 'fullscreen' | string;
+        "size": ModalSizeType | (string & Record<never, never>);
     }
     interface PdsModalContent {
         /**
@@ -5062,7 +5062,7 @@ declare namespace LocalJSX {
           * The size of the modal. Can be a predefined value ('sm', 'md', 'lg', 'fullscreen') or a custom max-width as a CSS length (e.g., '1250px', '80vw'). A custom width stays fluid below that size. A value that is neither falls back to 'md'.
           * @default 'md'
          */
-        "size"?: 'sm' | 'md' | 'lg' | 'fullscreen' | string;
+        "size"?: ModalSizeType | (string & Record<never, never>);
     }
     interface PdsModalContent {
         /**
@@ -6504,7 +6504,7 @@ declare namespace LocalJSX {
         "backdropDismiss": boolean;
         "componentId": string;
         "open": boolean;
-        "size": 'sm' | 'md' | 'lg' | 'fullscreen' | string;
+        "size": ModalSizeType | (string & Record<never, never>);
         "scrollable": boolean;
         "disableTopLayer": boolean;
         "disableInitialFocus": boolean;
