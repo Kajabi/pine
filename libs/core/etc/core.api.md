@@ -466,7 +466,7 @@ export namespace Components {
         "open": boolean;
         "scrollable": boolean;
         "showModal": () => Promise<void>;
-        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size": ModalSizeType | (string & Record<never, never>);
     }
     // (undocumented)
     export interface PdsModalContent {
@@ -2086,7 +2086,7 @@ export namespace LocalJSX {
         "onPdsModalOpen"?: (event: PdsModalCustomEvent<void>) => void;
         "open"?: boolean;
         "scrollable"?: boolean;
-        "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size"?: ModalSizeType | (string & Record<never, never>);
     }
 
     // (undocumented)
@@ -2104,7 +2104,7 @@ export namespace LocalJSX {
         // (undocumented)
         "scrollable": boolean;
         // (undocumented)
-        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size": ModalSizeType | (string & Record<never, never>);
     }
 
     // (undocumented)
@@ -2956,6 +2956,9 @@ export interface MockPdsModalCustomEvent<T> extends CustomEvent<T> {
     // (undocumented)
     target: HTMLMockPdsModalElement;
 }
+
+// @public (undocumented)
+export type ModalSizeType = 'sm' | 'md' | 'lg' | 'fullscreen';
 
 // @public (undocumented)
 export interface MultiselectChangeEventDetail {

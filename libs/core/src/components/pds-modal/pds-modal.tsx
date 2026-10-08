@@ -1,5 +1,13 @@
 import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
+import type { ModalSizeType } from '@utils/types';
+
+const PRESET_SIZES: readonly ModalSizeType[] = ['sm', 'md', 'lg', 'fullscreen'];
+
+const isCustomLength = (value: string): boolean =>
+  /^[a-z0-9.%+\-*/(), ]+$/i.test(value) &&
+  /\d/.test(value) &&
+  (typeof CSS === 'undefined' || CSS.supports('max-width', value));
 
 @Component({
   tag: 'pds-modal',
@@ -31,10 +39,12 @@ export class PdsModal {
   @Prop({ mutable: true }) open = false;
 
   /**
-   * The size of the modal
+   * The size of the modal. Can be a predefined value ('sm', 'md', 'lg', 'fullscreen') or a custom
+   * max-width as a CSS length (e.g., '1250px', '80vw'). A custom width stays fluid below that size.
+   * A value that is neither falls back to 'md'.
    * @default 'md'
    */
-  @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' = 'md';
+  @Prop() size: ModalSizeType | (string & Record<never, never>) = 'md';
 
   /**
    * Whether the modal content should be scrollable
@@ -81,6 +91,15 @@ export class PdsModal {
    * Stores the list of focusable elements in the modal
    */
   @State() focusableElementsArray: HTMLElement[] = [];
+
+  componentWillLoad() {
+    this.warnOnInvalidSize();
+  }
+
+  @Watch('size')
+  sizeChanged() {
+    this.warnOnInvalidSize();
+  }
 
   componentDidLoad() {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
@@ -483,7 +502,20 @@ export class PdsModal {
     }
   };
 
+  private resolveSize(): [string | undefined, string?] {
+    const size = (this.size ?? '').trim() || 'md';
+    if ((PRESET_SIZES as readonly string[]).includes(size)) return [size];
+    return isCustomLength(size) ? ['custom', size] : [undefined];
+  }
+
+  private warnOnInvalidSize() {
+    if (this.resolveSize()[0] !== undefined) return;
+    console.warn(`pds-modal: invalid size "${String(this.size).slice(0, 50)}", using md`);
+  }
+
   render() {
+    const [sizeClass = 'md', customSize] = this.resolveSize();
+
     return (
       <dialog
         class={{
@@ -497,9 +529,10 @@ export class PdsModal {
         <div
           class={{
             'pds-modal': true,
-            [`pds-modal--${this.size}`]: true,
+            [`pds-modal--${sizeClass}`]: true,
             'pds-modal--scrollable': this.scrollable
           }}
+          style={customSize !== undefined ? { '--pds-modal-max-width': customSize } : undefined}
           part="modal"
         >
           <slot></slot>

@@ -86,6 +86,22 @@ describe('pds-modal', () => {
 
   // Modal is always scrollable by default, no need to test scrollable property
 
+  it('caps its width at a custom size, and falls back to md for an invalid one', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1600, height: 900 });
+    await page.setContent(`
+      <pds-modal id="custom" component-id="custom" size="1250px" open="true"><p>Custom</p></pds-modal>
+      <pds-modal id="invalid" component-id="invalid" size="xl"><p>Invalid</p></pds-modal>
+    `);
+    await page.waitForChanges();
+
+    const maxWidth = (id: string) =>
+      page.$eval(`#${id} .pds-modal`, (el) => getComputedStyle(el).maxWidth);
+
+    expect(await maxWidth('custom')).toBe('1250px');
+    expect(await maxWidth('invalid')).toBe('700px');
+  });
+
   it('should handle backdropDismiss prop', async () => {
     const page = await newE2EPage();
     await page.setContent(`<pds-modal backdrop-dismiss="false"></pds-modal>`);

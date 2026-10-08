@@ -13,6 +13,12 @@ export default {
     scrollable: true,
     size: 'md',
   },
+  argTypes: {
+    size: {
+      control: 'text',
+      description: "A preset ('sm', 'md', 'lg', 'fullscreen') or a CSS length such as '1100px'.",
+    },
+  },
   parameters: {}
 }
 
@@ -86,6 +92,14 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'demo-modal',
   size: 'md',
+  open: false,
+};
+
+// Any CSS length works as a size; it becomes the modal's max-width.
+export const CustomSize = BaseTemplate.bind({});
+CustomSize.args = {
+  componentId: 'custom-size-modal',
+  size: '1100px',
   open: false,
 };
 
