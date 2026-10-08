@@ -89,6 +89,14 @@ Default.args = {
   open: false,
 };
 
+// Any CSS length works as a size; it becomes the modal's max-width.
+export const CustomSize = BaseTemplate.bind({});
+CustomSize.args = {
+  componentId: 'custom-size-modal',
+  size: '1100px',
+  open: false,
+};
+
 const DestructiveTemplate = (args) => html`
   <div>
     <pds-button id="show-modal" onClick="document.querySelector('#${args.componentId}').open = true">
