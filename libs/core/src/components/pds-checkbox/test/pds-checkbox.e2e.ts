@@ -56,6 +56,38 @@ describe('pds-checkbox', () => {
   });
 });
 
+describe('pds-checkbox checkmark color', () => {
+  const markColor = (page, selector: string) =>
+    page.$eval(selector, (el) => {
+      const input = (el.shadowRoot || el).querySelector('input');
+      return getComputedStyle(input, '::after').borderRightColor;
+    });
+
+  it('flips the checkmark with the theme on the accent fill', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox id="light" component-id="light" label="Light" checked></pds-checkbox>
+      <div data-theme="dark">
+        <pds-checkbox id="dark" component-id="dark" label="Dark" checked></pds-checkbox>
+      </div>
+    `);
+
+    expect(await markColor(page, '#light')).toBe('rgb(255, 255, 255)');
+    expect(await markColor(page, '#dark')).toBe('rgb(0, 0, 0)');
+  });
+
+  it('keeps the checkmark white on the invalid fill in dark mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div data-theme="dark">
+        <pds-checkbox component-id="invalid" label="Invalid" checked invalid></pds-checkbox>
+      </div>
+    `);
+
+    expect(await markColor(page, 'pds-checkbox')).toBe('rgb(255, 255, 255)');
+  });
+});
+
 describe('pds-checkbox accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
