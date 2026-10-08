@@ -47,7 +47,7 @@ export class PdsChip {
   @Prop() dot = false;
 
   /**
-   * Sets the dot color. Accepts a sentiment name (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   * Sets the dot color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
    * Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
    */
   @Prop() dotColor?: string;
@@ -58,7 +58,7 @@ export class PdsChip {
   @Prop() icon?: string;
 
   /**
-   * Sets the icon color. Accepts a sentiment name (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   * Sets the icon color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
    * Defaults to the chip's text color. Only applies when `icon` is set.
    */
   @Prop() iconColor?: string;

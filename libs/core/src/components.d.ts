@@ -892,7 +892,7 @@ export namespace Components {
          */
         "dot": boolean;
         /**
-          * Sets the dot color. Accepts a sentiment name (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
+          * Sets the dot color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
          */
         "dotColor"?: string;
         /**
@@ -900,7 +900,7 @@ export namespace Components {
          */
         "icon"?: string;
         /**
-          * Sets the icon color. Accepts a sentiment name (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the chip's text color. Only applies when `icon` is set.
+          * Sets the icon color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the chip's text color. Only applies when `icon` is set.
          */
         "iconColor"?: string;
         /**
@@ -4315,7 +4315,7 @@ declare namespace LocalJSX {
          */
         "dot"?: boolean;
         /**
-          * Sets the dot color. Accepts a sentiment name (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
+          * Sets the dot color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
          */
         "dotColor"?: string;
         /**
@@ -4323,7 +4323,7 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Sets the icon color. Accepts a sentiment name (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the chip's text color. Only applies when `icon` is set.
+          * Sets the icon color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the chip's text color. Only applies when `icon` is set.
          */
         "iconColor"?: string;
         /**

@@ -134,7 +134,7 @@ A small circular indicator displayed within a chip. Dot colors are determined by
 
 #### Dot color
 
-The `dot-color` property overrides the dot's color independently of the chip's `sentiment`. It accepts a sentiment name (which uses that sentiment's dot color), a color token, or any valid CSS color value, such as a hex value. Hex values must include the leading `#`.
+The `dot-color` property overrides the dot's color independently of the chip's `sentiment`. It accepts a sentiment name other than `brand` (which uses that sentiment's dot color), a color token, or any valid CSS color value, such as a hex value. Hex values must include the leading `#`.
 
 > **Note**: In most cases, let `sentiment` set the dot color. The sentiment colors are designed to work together and adjust automatically for dark mode. Use `dot-color` for the less common case where the dot needs to differ from the chip, such as a status dot on a neutral chip. When you do, prefer a sentiment name: it adapts to dark mode, while hex values and palette tokens like `--pine-color-purple-500` stay the same in both themes.
 
