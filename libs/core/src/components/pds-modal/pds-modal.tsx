@@ -1,6 +1,9 @@
 import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
+const PRESET_SIZES = ['sm', 'md', 'lg', 'fullscreen'] as const;
+type PresetSize = (typeof PRESET_SIZES)[number];
+
 @Component({
   tag: 'pds-modal',
   styleUrl: 'pds-modal.scss',
@@ -31,10 +34,12 @@ export class PdsModal {
   @Prop({ mutable: true }) open = false;
 
   /**
-   * The size of the modal
+   * The size of the modal. Can be a predefined value ('sm', 'md', 'lg', 'fullscreen') or a custom
+   * max-width as a CSS length (e.g., '1250px', '80vw'). A custom width stays fluid below that size.
+   * A value that is neither falls back to 'md'.
    * @default 'md'
    */
-  @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' = 'md';
+  @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' | string = 'md';
 
   /**
    * Whether the modal content should be scrollable
@@ -81,6 +86,15 @@ export class PdsModal {
    * Stores the list of focusable elements in the modal
    */
   @State() focusableElementsArray: HTMLElement[] = [];
+
+  componentWillLoad() {
+    this.warnOnInvalidSize();
+  }
+
+  @Watch('size')
+  sizeChanged() {
+    this.warnOnInvalidSize();
+  }
 
   componentDidLoad() {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
@@ -483,7 +497,33 @@ export class PdsModal {
     }
   };
 
+  private isPresetSize(size = this.size): size is PresetSize {
+    return (PRESET_SIZES as readonly string[]).includes(size);
+  }
+
+  /** The custom max-width, when size is a valid CSS length rather than a preset. */
+  private customSize(): string | undefined {
+    const size = (this.size ?? '').trim();
+    if (size === '' || this.isPresetSize(size)) return undefined;
+    // Without CSS.supports (some test environments), trust the value.
+    if (typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('max-width', size) === false) {
+      return undefined;
+    }
+    return size;
+  }
+
+  private warnOnInvalidSize() {
+    const size = (this.size ?? '').trim();
+    if (size === '' || this.isPresetSize(size) || this.customSize() !== undefined) return;
+    console.warn(`pds-modal: size "${this.size}" is not a preset or a valid CSS length, so it falls back to "md".`);
+  }
+
   render() {
+    const customSize = this.customSize();
+    let sizeClass = 'md';
+    if (this.isPresetSize()) sizeClass = this.size;
+    else if (customSize !== undefined) sizeClass = 'custom';
+
     return (
       <dialog
         class={{
@@ -497,9 +537,10 @@ export class PdsModal {
         <div
           class={{
             'pds-modal': true,
-            [`pds-modal--${this.size}`]: true,
+            [`pds-modal--${sizeClass}`]: true,
             'pds-modal--scrollable': this.scrollable
           }}
+          style={customSize !== undefined ? { '--pds-modal-max-width': customSize } : undefined}
           part="modal"
         >
           <slot></slot>

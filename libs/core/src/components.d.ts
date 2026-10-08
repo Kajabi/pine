@@ -1592,10 +1592,10 @@ export namespace Components {
          */
         "showModal": () => Promise<void>;
         /**
-          * The size of the modal
+          * The size of the modal. Can be a predefined value ('sm', 'md', 'lg', 'fullscreen') or a custom max-width as a CSS length (e.g., '1250px', '80vw'). A custom width stays fluid below that size. A value that is neither falls back to 'md'.
           * @default 'md'
          */
-        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size": 'sm' | 'md' | 'lg' | 'fullscreen' | string;
     }
     interface PdsModalContent {
         /**
@@ -5059,10 +5059,10 @@ declare namespace LocalJSX {
          */
         "scrollable"?: boolean;
         /**
-          * The size of the modal
+          * The size of the modal. Can be a predefined value ('sm', 'md', 'lg', 'fullscreen') or a custom max-width as a CSS length (e.g., '1250px', '80vw'). A custom width stays fluid below that size. A value that is neither falls back to 'md'.
           * @default 'md'
          */
-        "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size"?: 'sm' | 'md' | 'lg' | 'fullscreen' | string;
     }
     interface PdsModalContent {
         /**
@@ -6504,7 +6504,7 @@ declare namespace LocalJSX {
         "backdropDismiss": boolean;
         "componentId": string;
         "open": boolean;
-        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size": 'sm' | 'md' | 'lg' | 'fullscreen' | string;
         "scrollable": boolean;
         "disableTopLayer": boolean;
         "disableInitialFocus": boolean;

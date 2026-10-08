@@ -85,6 +85,11 @@
   max-width: 900px;
 }
 
+// A custom size: the length is set inline from the size prop.
+.pds-modal--custom {
+  max-width: var(--pds-modal-max-width);
+}
+
 .pds-modal--fullscreen {
   border-radius: 0;
   height: 100%;
