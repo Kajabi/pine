@@ -389,21 +389,11 @@ The standard modal with a header, content area, and footer. By default, it can b
 
 ### Sizes
 
-Modals come in four sizes:
+Modals come in four preset sizes, or a custom width:
 - `sm` (520px) - For simple confirmations or short forms
 - `md` (700px) - Default size, suitable for most use cases
 - `lg` (900px) - For complex forms or detailed content
 - `fullscreen` - Takes up the entire viewport
-
-#### Custom Width
-
-For a width outside the presets, pass a CSS length to `size`. It becomes the modal's `max-width`, so the modal still narrows to fit smaller screens:
-
-```html
-<pds-modal component-id="wide-modal" size="1250px">…</pds-modal>
-```
-
-A value that is neither a preset nor a valid CSS length (a typo like `xl`, for example) falls back to `md` and logs a console warning.
 
 <div>
   <pds-box gap="sm">
@@ -520,6 +510,49 @@ A value that is neither a preset nor a valid CSS length (a typo like `xl`, for e
     <pds-modal-content>
       <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
         <p>This is a fullscreen modal that takes up the entire viewport.</p>
+      </pds-box>
+    </pds-modal-content>
+  </pds-modal>
+</div>
+
+#### Custom Width
+
+For a width outside the presets, pass a CSS length to `size`. It becomes the modal's `max-width`, so the modal still narrows to fit smaller screens. Lengths, `calc()`, `min()` and `clamp()` work; keywords such as `none` or `auto` don't.
+
+```html
+<pds-modal component-id="wide-modal" size="1100px">…</pds-modal>
+```
+
+A value that is neither a preset nor a valid CSS length (a typo like `xl`, for example) falls back to `md` and logs a console warning.
+
+Custom widths are a code-only option: the Figma component has the preset sizes only, so a custom-width modal won't match a Figma variant.
+
+<div>
+  <pds-button onClick={() => {
+    const modal = document.querySelector('#size-modal-custom');
+    if (modal) modal.open = true;
+  }}>Custom Width Modal (1100px)</pds-button>
+
+  <pds-modal id="size-modal-custom" component-id="size-modal-custom" size="1100px">
+    <pds-modal-header>
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Custom Width Modal</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#size-modal-custom').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </pds-modal-header>
+    <pds-modal-content>
+      <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
+        <p>This modal uses <code>size="1100px"</code>. It narrows to fit smaller screens.</p>
       </pds-box>
     </pds-modal-content>
   </pds-modal>

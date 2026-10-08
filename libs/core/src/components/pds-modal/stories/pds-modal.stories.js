@@ -13,6 +13,12 @@ export default {
     scrollable: true,
     size: 'md',
   },
+  argTypes: {
+    size: {
+      control: 'text',
+      description: "A preset ('sm', 'md', 'lg', 'fullscreen') or a CSS length such as '1100px'.",
+    },
+  },
   parameters: {}
 }
 
