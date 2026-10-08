@@ -39,8 +39,7 @@
     }
 
     &::after {
-      /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
-      border: 1px solid var(--pine-color-white);
+      border: 1px solid var(--pine-color-text-primary);
       border-block-end: var(--pine-border-width-none);
       border-block-start: var(--pine-border-width-none);
       border-inline-start: var(--pine-border-width-none);
@@ -83,8 +82,7 @@ input {
     }
 
     &::after {
-      /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
-      border: 1px solid var(--pine-color-white);
+      border: 1px solid var(--pine-color-text-primary);
       border-block-start: var(--pine-border-width-none);
       border-inline-start: var(--pine-border-width-none);
       content: "";
