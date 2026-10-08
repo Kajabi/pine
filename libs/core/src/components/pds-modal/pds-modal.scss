@@ -87,7 +87,7 @@
 
 // A custom size: the length is set inline from the size prop.
 .pds-modal--custom {
-  max-width: var(--pds-modal-max-width);
+  max-width: var(--pds-modal-max-width, 700px);
 }
 
 .pds-modal--fullscreen {
