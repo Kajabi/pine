@@ -1,3 +1,25 @@
+## 4.3.0 (2026-10-08)
+
+### Features 🚀
+
+- **pds-chip:** add dot-color and icon-color props with dot and icon parts ([#830](https://github.com/Kajabi/pine/pull/830))
+- **pds-chip:** add subtle and solid sentiments ([#836](https://github.com/Kajabi/pine/pull/836))
+- **pds-modal:** accept a custom CSS length as size ([#834](https://github.com/Kajabi/pine/pull/834))
+
+### Bug Fixes 🐛
+
+- keep accent fills readable in dark mode ([#835](https://github.com/Kajabi/pine/pull/835))
+- **pds-progress:** normalize fillColor through normalizeColorValue ([#831](https://github.com/Kajabi/pine/pull/831))
+
+### Documentation 📄
+
+- **utils:** clarify normalizeColorValue vs setColor relationship ([#832](https://github.com/Kajabi/pine/pull/832))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.2.0 (2026-10-06)
 
 ### Features 🚀
