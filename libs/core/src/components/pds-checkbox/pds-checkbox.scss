@@ -11,6 +11,12 @@
     &:checked {
       background: var( --pine-color-danger);
 
+      // The danger fill is the same in both themes, so its mark stays white too.
+      &::after {
+        /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
+        border-color: var(--pine-color-white);
+      }
+
       &:hover {
         background: var(--pine-color-danger-hover);
         border-color: var(--pine-color-border-danger-hover);
