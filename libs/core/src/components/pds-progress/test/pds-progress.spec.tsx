@@ -109,4 +109,24 @@ describe('pds-progress', () => {
       </pds-progress>
     `);
   });
+
+  it('normalizes fillColor when a raw token is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsProgress],
+      html: `<pds-progress component-id="default" label="Label text" fill-color="--pine-color-purple-500"></pds-progress>`,
+    });
+
+    const progress = page.root.shadowRoot.querySelector('progress');
+    expect(progress.getAttribute('style')).toBe('--color-progress-fill: var(--pine-color-purple-500);');
+  });
+
+  it('passes through var(...) for fillColor', async () => {
+    const page = await newSpecPage({
+      components: [PdsProgress],
+      html: `<pds-progress component-id="default" label="Label text" fill-color="var(--pine-color-purple-500)"></pds-progress>`,
+    });
+
+    const progress = page.root.shadowRoot.querySelector('progress');
+    expect(progress.getAttribute('style')).toBe('--color-progress-fill: var(--pine-color-purple-500);');
+  });
 });
