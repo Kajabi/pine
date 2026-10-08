@@ -371,6 +371,66 @@ describe('pds-chip dot and icon colors', () => {
   });
 });
 
+describe('pds-chip subtle and solid sentiments', () => {
+  const colors = (page, selector: string) =>
+    page.$eval(selector, (el) => {
+      const host = getComputedStyle(el);
+      const label = el.shadowRoot.querySelector('.pds-chip__label, .pds-chip__button');
+      return { background: host.backgroundColor, border: host.borderTopColor, text: getComputedStyle(label).color };
+    });
+
+  const WHITE = 'rgb(255, 255, 255)';
+  const GREY_900 = 'rgb(52, 51, 50)';
+
+  it('renders subtle as a white chip with a grey border in light mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip sentiment="subtle">Beta</pds-chip>');
+
+    expect(await colors(page, 'pds-chip')).toEqual({ background: WHITE, border: 'rgb(210, 209, 209)', text: GREY_900 });
+  });
+
+  it('renders solid as a dark chip with no visible border in light mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip sentiment="solid">New</pds-chip>');
+
+    expect(await colors(page, 'pds-chip')).toEqual({ background: GREY_900, border: 'rgba(0, 0, 0, 0)', text: WHITE });
+  });
+
+  it('flips subtle and solid in dark mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div data-theme="dark">
+        <pds-chip id="subtle" sentiment="subtle">Beta</pds-chip>
+        <pds-chip id="solid" sentiment="solid">New</pds-chip>
+      </div>
+    `);
+
+    expect(await colors(page, '#subtle')).toEqual({ background: GREY_900, border: 'rgb(155, 154, 152)', text: WHITE });
+    expect(await colors(page, '#solid')).toEqual({ background: WHITE, border: 'rgba(0, 0, 0, 0)', text: GREY_900 });
+  });
+
+  it('keeps the solid border invisible while the dropdown is hovered', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip sentiment="solid" variant="dropdown">Menu</pds-chip>');
+
+    await (await page.find('pds-chip')).hover();
+
+    const { background, border } = await colors(page, 'pds-chip');
+    expect(background).toBe('rgb(26, 26, 25)');
+    expect(border).toBe('rgba(0, 0, 0, 0)');
+  });
+
+  it('has no axe violations for subtle and solid chips', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip sentiment="subtle" dot>Beta</pds-chip>
+      <pds-chip sentiment="solid" dot>New</pds-chip>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});
+
 describe('pds-chip accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();

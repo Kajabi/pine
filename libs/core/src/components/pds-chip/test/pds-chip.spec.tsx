@@ -542,6 +542,35 @@ describe('pds-chip', () => {
     });
   });
 
+  describe('subtle and solid sentiments', () => {
+    it.each(['subtle', 'solid'])('applies the %s sentiment class', async (sentiment) => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip sentiment="${sentiment}">Label</pds-chip>`,
+      });
+
+      expect(page.root).toHaveClass(`pds-chip--${sentiment}`);
+    });
+
+    it.each(['subtle', 'solid'])('keeps the dot for the %s sentiment', async (sentiment) => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip sentiment="${sentiment}" dot>Label</pds-chip>`,
+      });
+
+      expect(page.root?.shadowRoot?.querySelector('[part="dot"]')).not.toBeNull();
+    });
+
+    it.each(['subtle', 'solid'])('maps dot-color="%s" to that sentiment\'s dot token', async (sentiment) => {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip dot dot-color="${sentiment}">Label</pds-chip>`,
+      });
+
+      expect(page.root?.style.getPropertyValue('--pds-chip-dot-color')).toBe(`var(--pine-chip-color-${sentiment}-dot)`);
+    });
+  });
+
   it('renders close button as link when removeUrl prop is provided', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
