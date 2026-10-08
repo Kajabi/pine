@@ -4,16 +4,10 @@ import type { ModalSizeType } from '@utils/types';
 
 const PRESET_SIZES: readonly ModalSizeType[] = ['sm', 'md', 'lg', 'fullscreen'];
 
-/**
- * Whether a custom size is a usable max-width length. Lengths, calc(), min() and clamp() only: no
- * keywords like none or auto, and nothing that could add declarations to the inline style (mock-doc's
- * CSS.supports, used when Pine is server-rendered, accepts anything).
- */
-const isCustomLength = (value: string): boolean => {
-  if (!/^[a-z0-9.%+\-*/(), ]+$/i.test(value) || !/\d/.test(value)) return false;
-  if (typeof CSS === 'undefined' || typeof CSS.supports !== 'function') return true;
-  return CSS.supports('max-width', value);
-};
+const isCustomLength = (value: string): boolean =>
+  /^[a-z0-9.%+\-*/(), ]+$/i.test(value) &&
+  /\d/.test(value) &&
+  (typeof CSS === 'undefined' || CSS.supports('max-width', value));
 
 @Component({
   tag: 'pds-modal',
@@ -508,26 +502,19 @@ export class PdsModal {
     }
   };
 
-  /**
-   * Resolves `size` once for render and the warning: a preset keeps its class; a CSS length becomes
-   * the custom max-width; anything else falls back to md.
-   */
-  private resolveSize(): { sizeClass: string; customSize?: string; invalid: boolean } {
-    const size = (this.size ?? '').trim();
-    if (size === '') return { sizeClass: 'md', invalid: false };
-    if ((PRESET_SIZES as readonly string[]).includes(size)) return { sizeClass: size, invalid: false };
-    if (isCustomLength(size)) return { sizeClass: 'custom', customSize: size, invalid: false };
-    return { sizeClass: 'md', invalid: true };
+  private resolveSize(): [string | undefined, string?] {
+    const size = (this.size ?? '').trim() || 'md';
+    if ((PRESET_SIZES as readonly string[]).includes(size)) return [size];
+    return isCustomLength(size) ? ['custom', size] : [undefined];
   }
 
   private warnOnInvalidSize() {
-    if (!this.resolveSize().invalid) return;
-    const shown = String(this.size).slice(0, 50);
-    console.warn(`pds-modal: size "${shown}" is not a preset or a valid CSS length, so it falls back to "md".`);
+    if (this.resolveSize()[0] !== undefined) return;
+    console.warn(`pds-modal: invalid size "${String(this.size).slice(0, 50)}", using md`);
   }
 
   render() {
-    const { sizeClass, customSize } = this.resolveSize();
+    const [sizeClass = 'md', customSize] = this.resolveSize();
 
     return (
       <dialog
