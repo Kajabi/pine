@@ -48,6 +48,8 @@ The `dropdown` variant and the icon within the `tag` variant of the chip compone
 
 The `sentiment` property represents the named color scheme of the chip component.
 
+`subtle` is a white chip with a grey border, and `solid` is a dark filled chip; both flip in dark mode. The chip's `subtle` is white, unlike Pine's grey `--pine-color-background-subtle` token.
+
 <DocCanvas
   mdxSource={{
     react: `
@@ -56,6 +58,8 @@ The `sentiment` property represents the named color scheme of the chip component
     <PdsChip sentiment="danger">Danger</PdsChip>
     <PdsChip sentiment="info">Info</PdsChip>
     <PdsChip sentiment="neutral">Neutral</PdsChip>
+    <PdsChip sentiment="solid">Solid</PdsChip>
+    <PdsChip sentiment="subtle">Subtle</PdsChip>
     <PdsChip sentiment="success">Success</PdsChip>
     <PdsChip sentiment="warning">Warning</PdsChip>
     `,
@@ -65,6 +69,8 @@ The `sentiment` property represents the named color scheme of the chip component
     <pds-chip sentiment="danger">Danger</pds-chip>
     <pds-chip sentiment="info">Info</pds-chip>
     <pds-chip sentiment="neutral">Neutral</pds-chip>
+    <pds-chip sentiment="solid">Solid</pds-chip>
+    <pds-chip sentiment="subtle">Subtle</pds-chip>
     <pds-chip sentiment="success">Success</pds-chip>
     <pds-chip sentiment="warning">Warning</pds-chip>
     `
@@ -74,6 +80,8 @@ The `sentiment` property represents the named color scheme of the chip component
   <pds-chip sentiment="danger">Danger</pds-chip>
   <pds-chip sentiment="info">Info</pds-chip>
   <pds-chip sentiment="neutral">Neutral</pds-chip>
+  <pds-chip sentiment="solid">Solid</pds-chip>
+  <pds-chip sentiment="subtle">Subtle</pds-chip>
   <pds-chip sentiment="success">Success</pds-chip>
   <pds-chip sentiment="warning">Warning</pds-chip>
 </DocCanvas>
