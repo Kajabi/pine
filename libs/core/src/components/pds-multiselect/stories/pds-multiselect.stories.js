@@ -435,6 +435,37 @@ export const CustomWidths = {
   `,
 };
 
+export const InsideScrollContainer = {
+  args: {
+    componentId: 'multiselect-scroll-container',
+    label: 'Select Tags',
+    placeholder: 'Select...',
+    value: [],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <div
+      style="border: var(--pine-border); border-radius: var(--pine-dimension-125); max-height: 160px; max-width: 320px; overflow: auto; padding: var(--pine-dimension-sm);"
+    >
+      <pds-multiselect
+        component-id="${args.componentId}"
+        label="${args.label}"
+        placeholder="${args.placeholder}"
+        .value=${args.value}
+        @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+      >
+        ${unsafeHTML(defaultOptions)}
+      </pds-multiselect>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'The panel uses fixed positioning, so it is not clipped when the multiselect sits inside a container with `overflow: auto` or `overflow: hidden`, such as a filter panel or modal body.',
+      },
+    },
+  },
+};
+
 export const ConsumerManagedAsync = {
   args: {
     componentId: 'multiselect-async-consumer',
