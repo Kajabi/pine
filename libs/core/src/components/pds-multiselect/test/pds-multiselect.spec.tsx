@@ -9,6 +9,10 @@ if (typeof MutationObserver === 'undefined') {
   };
 }
 
+// Spy on the required module: jest.mock() factories don't intercept in Stencil's spec runtime.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const floatingUI = require('@floating-ui/dom');
+
 // Capture original fetch for cleanup
 const originalFetch = global.fetch;
 
@@ -582,6 +586,34 @@ describe('pds-multiselect', () => {
 
       expect(changeSpy).toHaveBeenCalled();
       expect(changeSpy.mock.calls[0][0].detail.values).toEqual(['1']);
+    });
+
+    it('positions the panel with the fixed strategy so scrolling ancestors do not clip it', async () => {
+      const computePositionSpy = jest
+        .spyOn(floatingUI, 'computePosition')
+        .mockResolvedValue({ x: 10, y: 20, placement: 'bottom-start' });
+      jest.spyOn(floatingUI, 'autoUpdate').mockReturnValue(jest.fn());
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      page.rootInstance.positionDropdown();
+      await page.waitForChanges();
+
+      expect(computePositionSpy).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.objectContaining({ strategy: 'fixed' }),
+      );
+
+      const panel = page.root.shadowRoot.querySelector('.pds-multiselect__panel') as HTMLElement;
+      expect(panel.style.left).toBe('10px');
+      expect(panel.style.top).toBe('20px');
     });
   });
 
