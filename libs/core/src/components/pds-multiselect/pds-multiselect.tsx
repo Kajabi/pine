@@ -1049,7 +1049,7 @@ export class PdsMultiselect {
     const updatePosition = () => {
       computePosition(referenceEl!, this.panelEl!, {
         placement: 'bottom-start',
-        strategy: 'absolute',
+        strategy: 'fixed',
         middleware: [
           offset(12),
           flip(),
