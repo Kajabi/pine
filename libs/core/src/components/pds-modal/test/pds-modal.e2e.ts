@@ -312,6 +312,62 @@ describe('pds-modal', () => {
     });
   });
 
+  describe('focus trap', () => {
+    const activeId = (page) => page.evaluate(() => document.activeElement?.id);
+    // showModal() lists the focusable elements and moves focus 100ms after opening.
+    const settle = () => new Promise((resolve) => setTimeout(resolve, 150));
+
+    it('skips elements inside a hidden ancestor', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <span hidden><pds-button id="back">Back</pds-button></span>
+          <input id="first" aria-label="Search">
+          <a id="last" href="#last">Last</a>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+      expect(await activeId(page)).toBe('first');
+
+      await page.evaluate(() => (document.getElementById('last') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('first');
+
+      await page.keyboard.down('Shift');
+      await page.keyboard.press('Tab');
+      await page.keyboard.up('Shift');
+      expect(await activeId(page)).toBe('last');
+    });
+
+    it('wraps around elements added after opening', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <button id="first">First</button>
+          <button id="original-last">Original last</button>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => {
+        const late = document.createElement('button');
+        late.id = 'late';
+        late.textContent = 'Late';
+        document.getElementById('original-last').after(late);
+        (document.getElementById('original-last') as HTMLElement).focus();
+      });
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('late');
+
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('first');
+    });
+  });
+
   describe('disableInitialFocus', () => {
     it('restores focus to the previously focused element', async () => {
       const page = await newE2EPage();
