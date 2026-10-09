@@ -164,8 +164,11 @@ export class PdsModal {
       this.modalRef.querySelectorAll(selector)
     ) as HTMLElement[];
 
-    // Filter out elements with display: none or visibility: hidden
+    // checkVisibility() also drops an element inside a hidden ancestor, whose own computed
+    // display isn't none; such an element can't take focus, so it can't anchor the trap.
     this.focusableElements = this.focusableElements.filter(el => {
+      if (typeof el.checkVisibility === 'function') return el.checkVisibility({ checkVisibilityCSS: true });
+
       const style = window.getComputedStyle(el);
       return style.display !== 'none' && style.visibility !== 'hidden';
     });
@@ -471,6 +474,10 @@ export class PdsModal {
       // must be able to leave it into overlays stacked above (the whole point of
       // disableTopLayer), so do not trap Tab here.
       if (this.disableTopLayer) return;
+
+      // Content can change while the modal is open (rows fetched in, sections shown), so the
+      // first and last elements are read now rather than from the list taken on opening.
+      this.updateFocusableElements();
 
       // If there are no focusable elements, do nothing
       if (this.focusableElements.length === 0) return;
