@@ -60,6 +60,16 @@
     background: var(--pine-color-background-muted);
   }
 
+  // Listed but not choosable: muted, and the pointer says so. Disabled text needn't meet contrast.
+  .pds-combobox__option--disabled,
+  .pds-combobox__group-row--disabled > .pds-combobox__group-row-trigger {
+    color: var(--pine-color-text-disabled);
+  }
+
+  .pds-combobox__option--disabled {
+    cursor: not-allowed;
+  }
+
   .pds-combobox__option-check {
     color: currentColor;
     font-size: var(--pine-dimension-150);
