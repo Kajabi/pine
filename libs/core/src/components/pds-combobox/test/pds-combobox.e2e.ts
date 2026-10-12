@@ -350,8 +350,8 @@ describe('pds-combobox', () => {
       { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
       { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
     ];
-    // The button trigger's missing accessible name is fixed in its own PR (#841, DSS-335); this
-    // branch predates it, so these axe runs leave that one rule to that PR's test.
+    // The button trigger has no accessible name until its label is wired to it, which lands
+    // separately with its own axe test. Remove this override once that's on main.
     const axeRules = { 'aria-input-field-name': { enabled: false } };
 
     const setUp = async (attrs: string, viewportWidth = 1200) => {
@@ -361,6 +361,7 @@ describe('pds-combobox', () => {
         <div style="padding: 40px;">
           <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only"
             dropdown-width="300px" ${attrs}></pds-combobox>
+          <button id="after">After</button>
         </div>
       `);
       await page.$eval(
@@ -424,6 +425,77 @@ describe('pds-combobox', () => {
         const root = document.querySelector('pds-combobox')!.shadowRoot!;
         return { flyout: !!root.querySelector('.pds-combobox__flyout'), back: !!root.querySelector('.pds-combobox__group-back') };
       });
+      expect(shape).toEqual({ flyout: false, back: true });
+    });
+
+    const isOpen = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => !!document.querySelector('.pds-combobox__listbox, pds-combobox')?.shadowRoot?.querySelector('.pds-combobox__listbox') || !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__listbox'));
+
+    it('closes a portaled panel-search dropdown on a click outside', async () => {
+      const page = await setUp('panel-search dropdown-mount="body"');
+      expect(await isOpen(page)).toBe(true);
+
+      await page.mouse.click(1100, 700);
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+
+      expect(await isOpen(page)).toBe(false);
+    });
+
+    it('closes when the trigger is clicked while the search field has focus', async () => {
+      const page = await setUp('panel-search');
+      expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+
+      expect(await isOpen(page)).toBe(false);
+    });
+
+    it('lands on the trigger when Tab leaves the search field, then tabs on from there', async () => {
+      const page = await setUp('panel-search');
+
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+
+      expect(await isOpen(page)).toBe(false);
+      expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
+
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id ?? '')).toBe('after');
+    });
+
+    it('drills in when a portaled dropdown at the right edge has no room for a flyout', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 520, height: 800 });
+      await page.setContent(`
+        <div style="display: flex; justify-content: flex-end; padding: 40px 8px;">
+          <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only"
+            group-display="flyout" dropdown-mount="body" dropdown-width="300px"></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        actions,
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 50)));
+
+      const row = await page.$('.pds-combobox-dropdown-portal .pds-combobox__group-row-trigger');
+      await row!.click();
+      await page.waitForChanges();
+
+      const shape = await page.evaluate(() => ({
+        flyout: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__flyout'),
+        back: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__group-back'),
+      }));
       expect(shape).toEqual({ flyout: false, back: true });
     });
 

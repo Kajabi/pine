@@ -2808,6 +2808,58 @@ describe('pds-combobox', () => {
       expect(root.querySelectorAll('.pds-combobox__group-row')).toHaveLength(2);
     });
 
+    it("names the drilled-in options by their group, and announces the group", async () => {
+      const { page, component, root } = await openDrillIn();
+
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      const group = root.querySelector('ul[role="group"]')!;
+      expect(group.getAttribute('aria-label')).toBe('Tag');
+      expect(group.querySelectorAll('[role="option"]')).toHaveLength(2);
+      expect(root.querySelector('[role="status"]')?.textContent).toBe('Tag');
+    });
+
+    it('clears the highlight on the way back, so the next arrow does not drill straight back in', async () => {
+      const { page, component, root } = await openDrillIn();
+
+      component.openGroup = groupNamed(component, 'Tag');
+      component.highlightedIndex = 1;
+      await page.waitForChanges();
+      (root.querySelector('.pds-combobox__group-back-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBeNull();
+      expect(component.highlightedIndex).toBe(-1);
+    });
+
+    it('steps back to the groups with ArrowLeft', async () => {
+      const { page, component } = await openDrillIn();
+
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBeNull();
+    });
+
+    it('steps back with Backspace on an empty panel search, but not while there is text', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
+      const input = () => root.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement;
+
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+      component.panelQuery = 'ta';
+      input().dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+      expect(component.openGroup).toBe(groupNamed(component, 'Tag'));
+
+      component.panelQuery = '';
+      input().dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
+    });
+
     it('does not open a group on hover', async () => {
       const { page, component, root } = await openDrillIn();
 
@@ -2926,6 +2978,58 @@ describe('pds-combobox', () => {
       search(root).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
       await page.waitForChanges();
       expect(component.value).toBe('tag-remove');
+    });
+
+    it('leaves Home and End to move the caret in the search field', async () => {
+      const { page, component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+
+      component.highlightedIndex = 1;
+      for (const key of ['Home', 'End']) {
+        const event = new KeyboardEvent('keydown', { key, cancelable: true });
+        search(root).dispatchEvent(event);
+        expect(event.defaultPrevented).toBe(false);
+      }
+      await page.waitForChanges();
+      expect(component.highlightedIndex).toBe(1);
+    });
+
+    it('keeps options out of the tab order, since focus stays in the search field', async () => {
+      const { page, component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+
+      component.highlightedIndex = 0;
+      await page.waitForChanges();
+
+      expect(Array.from(root.querySelectorAll('[role="option"]')).map(o => o.getAttribute('tabindex'))).toEqual(['-1', '-1', '-1']);
+    });
+
+    it('fetches from async-url as you type in the panel, and loads more for that query', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="remote" trigger="button" mode="select-only" panel-search async-url="/api/actions"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const fetchSpy = jest.spyOn(component, 'debouncedFetchAsyncOptions').mockImplementation(() => undefined);
+      component.isOpen = true;
+      await page.waitForChanges();
+
+      const input = page.root!.shadowRoot!.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement;
+      input.value = 'tag';
+      input.dispatchEvent(new Event('input'));
+      expect(fetchSpy).toHaveBeenCalledWith('tag', 1);
+
+      component.hasMore = true;
+      component.currentPage = 1;
+      component.handleScroll({ target: { scrollHeight: 100, scrollTop: 90, clientHeight: 10 } } as unknown as Event);
+      expect(fetchSpy).toHaveBeenLastCalledWith('tag', 2);
+    });
+
+    it('stays open when focus moves to the trigger inside the shadow root', async () => {
+      const { component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+
+      const trigger = root.querySelector('[part="button-trigger"]') as HTMLElement;
+      component.onComboboxFocusOut({ relatedTarget: trigger } as unknown as FocusEvent);
+
+      expect(component.isOpen).toBe(true);
     });
 
     it('puts aria-activedescendant on the search field, not the trigger', async () => {
