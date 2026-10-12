@@ -295,8 +295,6 @@ describe('pds-combobox', () => {
       expect(flyout.right).toBeLessThanOrEqual(panel.left);
     });
 
-    // The input trigger: the button trigger has no accessible name today with or without groups
-    // (its <label for> points at a div), which is fixed separately from the flyout.
     // Email, not Tag: the highlight starts on the first option (in Tag), so this catches an
     // aria-activedescendant left pointing at an option that isn't rendered.
     it('has no axe violations with a flyout open', async () => {
