@@ -1103,16 +1103,18 @@ When options come from the `options` prop, set `group` on each option, and optio
 
 | Display | Use it when | Avoid it when |
 | --- | --- | --- |
-| `inline` (default) | A few groups, or a short list where seeing every option at once helps. Server-searched lists (`async-url`), where results arrive as you type. | The full list runs much past the dropdown's height. |
-| `flyout` | Many groups, each a clear category, with room beside the dropdown, such as choosing an automation action. | The dropdown sits in a narrow side panel, or groups have only one or two options. |
-| `drill-in` | Many groups in a narrow space, such as a filter in a side panel. | People need to compare options across groups. |
+| `inline` (default) | A few groups, or a short list where seeing every option at once helps people compare across groups. Server-searched lists (`async-url`): results replace the groups as soon as you type, so a group list adds a step without helping. | The full list runs much past the dropdown's height. |
+| `flyout` | Many groups, each a clear category, with room beside the dropdown, such as choosing an automation action. | The dropdown sits in a narrow side panel, groups have only one or two options, or people need to compare options across groups. |
+| `drill-in` | Many groups in a narrow space, such as a filter in a side panel. | People switch between groups often: each switch is two steps, back and then into the next group. |
 
 - **One level only.** Groups don't nest.
-- **Name groups as categories** ("Contact", "Membership"), and give options verb phrases ("Add a tag"). Search matches both, so typing a group's name finds all of its options.
+- **Name groups as categories** ("Contact", "Membership"), and give options verb phrases ("Add a tag"). With `flyout` and `drill-in`, search matches both, so typing a group's name finds all of its options.
+- **Keep option labels unique across groups.** Once chosen, only the option's label shows in the trigger, so "Send a direct message" under two groups can't be told apart.
+- **Pass `drill-in-back-label` with `flyout` too.** A flyout drills in when there's no room beside the dropdown, and the back row's screen-reader prefix is English by default.
 - **Give every group an icon or none.** A mix reads as unfinished.
 - **List ungrouped options first.** One placed after a group reads as part of it.
 - **Use `panel-search` with the `button` and `chip` triggers** once a grouped list is long enough to need searching. The `input` trigger already searches.
-- **Inside a modal, set `dropdown-mount="body"`.** The flyout moves with the dropdown, and focus stays inside the dialog.
+- **Inside a `pds-modal` (or any `<dialog>`), set `dropdown-mount="body"`.** The flyout moves with the dropdown, and focus stays inside the dialog. For other focus traps, see [Searching From the Panel](#searching-from-the-panel).
 
 <DocCanvas
   mdxSource={{
@@ -1125,7 +1127,8 @@ When options come from the `options` prop, set `group` on each option, and optio
   group-display="flyout"
   panel-search
   search-placeholder="Search actions"
-  search-options-label="Search actions">
+  search-options-label="Search actions"
+  drill-in-back-label="Back">
   <optgroup label="Contact" data-icon="contact">
     <option value="contact_tag_add">Add a tag</option>
     <option value="contact_tag_remove">Remove a tag</option>
@@ -1149,6 +1152,7 @@ When options come from the `options` prop, set `group` on each option, and optio
   panelSearch
   searchPlaceholder="Search actions"
   searchOptionsLabel="Search actions"
+  drillInBackLabel="Back"
   options={[
     { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
     { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
@@ -1171,7 +1175,8 @@ When options come from the `options` prop, set `group` on each option, and optio
       group-display="flyout"
       panel-search
       search-placeholder="Search actions"
-      search-options-label="Search actions">
+      search-options-label="Search actions"
+      drill-in-back-label="Back">
       <optgroup label="Contact" data-icon="contact">
         <option value="contact_tag_add">Add a tag</option>
         <option value="contact_tag_remove">Remove a tag</option>
@@ -1192,6 +1197,9 @@ When options come from the `options` prop, set `group` on each option, and optio
 
 The `options` prop is JavaScript-only. In ERB or other server-rendered markup, slot `<optgroup>` elements instead, with each group's icon in `data-icon`, and listen for `pdsComboboxChange` in a script. The `name` attribute submits the value with the form.
 
+- `data-icon` takes a Pine icon name; URLs and other values are ignored.
+- Keep labels and values in escaped output (`<%= %>`). Option content is rendered as markup, so never pass user-supplied text through `raw` or `html_safe`.
+
 ```erb
 <pds-combobox
   component-id="automation-action"
@@ -1204,6 +1212,7 @@ The `options` prop is JavaScript-only. In ERB or other server-rendered markup, s
   panel-search
   search-placeholder="<%= t(".search_actions") %>"
   search-options-label="<%= t(".search_actions") %>"
+  drill-in-back-label="<%= t(".back") %>"
   value="<%= @automation.action %>">
   <% @action_groups.each do |group| %>
     <optgroup label="<%= group.label %>" data-icon="<%= group.icon %>">

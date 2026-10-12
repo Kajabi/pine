@@ -512,7 +512,8 @@ GroupDisplayDrillInWithPanelSearch.args = {
   ],
 };
 
-// The automation wizard's action catalog: many groups, a button trigger and a search field.
+// A large action catalog: many groups, a button trigger and panel search. The narrower widths
+// leave room for the flyout beside the dropdown on a narrow canvas.
 export const GroupDisplayActionCatalog = (args) => html`
 <div style="min-height: 520px;">
   <pds-combobox
@@ -537,8 +538,8 @@ GroupDisplayActionCatalog.args = {
   groupDisplay: 'flyout',
   searchPlaceholder: 'Search actions',
   searchOptionsLabel: 'Search actions',
-  triggerWidth: '320px',
-  dropdownWidth: '240px',
+  triggerWidth: '280px',
+  dropdownWidth: '280px',
   options: [
     { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
     { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
@@ -558,14 +559,14 @@ GroupDisplayActionCatalog.args = {
     { id: 'community_channel_member_add', text: 'Add to a channel', group: 'Communities', groupIcon: 'users' },
     { id: 'community_channel_member_remove', text: 'Remove from a channel', group: 'Communities' },
     { id: 'community_post_to_channel', text: 'Post to a channel', group: 'Communities' },
-    { id: 'community_send_dm', text: 'Send a direct message', group: 'Communities' },
+    { id: 'community_send_dm', text: 'Send a community message', group: 'Communities' },
     { id: 'coaching_invoice_reminder', text: 'Send an invoice reminder', group: 'Coaching', groupIcon: 'one-off-session' },
     { id: 'coaching_sessions_cancel', text: 'Cancel sessions', group: 'Coaching' },
     { id: 'coaching_sessions_remove', text: 'Remove sessions', group: 'Coaching' },
-    { id: 'instagram_direct_message', text: 'Send a direct message', group: 'Instagram', groupIcon: 'logo-instagram' },
-    { id: 'instagram_reply', text: 'Reply to a comment', group: 'Instagram' },
-    { id: 'facebook_direct_message', text: 'Send a direct message', group: 'Facebook', groupIcon: 'logo-facebook' },
-    { id: 'facebook_reply', text: 'Reply to a comment', group: 'Facebook' },
+    { id: 'instagram_direct_message', text: 'Send an Instagram message', group: 'Instagram', groupIcon: 'logo-instagram' },
+    { id: 'instagram_reply', text: 'Reply to an Instagram comment', group: 'Instagram' },
+    { id: 'facebook_direct_message', text: 'Send a Facebook message', group: 'Facebook', groupIcon: 'logo-facebook' },
+    { id: 'facebook_reply', text: 'Reply to a Facebook comment', group: 'Facebook' },
   ],
 };
 
