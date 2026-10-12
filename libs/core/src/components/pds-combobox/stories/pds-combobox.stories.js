@@ -476,6 +476,42 @@ GroupDisplayFlyout.args = {
   ],
 };
 
+export const GroupDisplayDrillInWithPanelSearch = (args) => html`
+<div style="min-height: 360px;">
+  <pds-combobox
+    component-id="combobox-group-drill-in"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    trigger="button"
+    mode="select-only"
+    group-display="drill-in"
+    panel-search
+    search-placeholder=${args.searchPlaceholder}
+    search-options-label=${args.searchOptionsLabel}
+    drill-in-back-label=${args.drillInBackLabel}
+    trigger-width=${args.triggerWidth}
+    dropdown-width=${args.dropdownWidth}
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+GroupDisplayDrillInWithPanelSearch.args = {
+  label: 'Filter',
+  placeholder: 'Choose a filter',
+  searchPlaceholder: 'Search filters',
+  searchOptionsLabel: 'Search filters',
+  drillInBackLabel: 'Back',
+  triggerWidth: '320px',
+  dropdownWidth: '320px',
+  options: [
+    { id: 'email-status', text: 'Marketing status', group: 'Email', groupIcon: 'mail' },
+    { id: 'email-activity', text: 'Email activity', group: 'Email' },
+    { id: 'email-broadcasts', text: 'Broadcasts', group: 'Email' },
+    { id: 'contact-added', text: 'Was added', group: 'Contact', groupIcon: 'hashtag' },
+    { id: 'contact-hidden', text: 'Is hidden', group: 'Contact' },
+  ],
+};
+
 export const OptionGroupsPdsText = (args) => html`
 <pds-combobox
   component-id="combobox-pds-text-groups"

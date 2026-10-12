@@ -1120,6 +1120,28 @@ Set `group-display="flyout"` to list the groups instead of every option. Hoverin
 />
 ```
 
+### Drill-In Groups
+
+Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`).
+
+### Searching From the Panel
+
+The `button` and `chip` triggers can't be typed into. Add `panel-search` to put a search field at the top of the dropdown: it takes focus when the dropdown opens, filters the options as you type (matching group labels too in a grouped display), and arrow keys and Enter pick from the results. Pass translated `search-placeholder` and `search-options-label` strings; both default to English. `panel-search` has no effect on the `input` trigger, which already searches.
+
+```jsx
+<PdsCombobox
+  componentId="combobox-panel-search-example"
+  label="Action"
+  trigger="button"
+  mode="select-only"
+  groupDisplay="flyout"
+  panelSearch
+  searchPlaceholder="Search actions"
+  searchOptionsLabel="Search actions"
+  options={actions}
+/>
+```
+
 ### Using PDS Text Components
 
 Alternatively, use `<pds-text>` components as group labels for more styling control:
