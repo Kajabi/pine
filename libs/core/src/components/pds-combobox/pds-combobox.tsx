@@ -640,30 +640,46 @@ export class PdsCombobox implements BasePdsProps {
     this.allItems = [];
 
     // Create option elements from async data. Grouped options are nested in an optgroup, as
-    // slotted markup would be, so grouping, filtering and labels work the same either way.
+    // slotted markup would be, so grouping, filtering and labels work the same either way. Each
+    // group is listed where it first appears with all of its options, even when the data
+    // interleaves groups, so an option never renders under another group's label.
     const asyncOptions = this.options || this.internalOptions;
     const groups = new Map<string, HTMLOptGroupElement>();
+    const entries: (HTMLOptGroupElement | HTMLOptionElement)[] = [];
     asyncOptions.forEach(opt => {
       const optionEl = document.createElement('option') as HTMLOptionElement;
       optionEl.value = String(opt.id);
       optionEl.textContent = opt.text;
 
-      if (opt.group !== undefined && opt.group !== '') {
-        let optgroup = groups.get(opt.group);
-        if (!optgroup) {
-          optgroup = document.createElement('optgroup');
-          optgroup.label = opt.group;
-          if (opt.groupIcon !== undefined && opt.groupIcon !== '') {
-            optgroup.setAttribute('data-icon', opt.groupIcon);
-          }
-          groups.set(opt.group, optgroup);
-          this.allItems.push(optgroup);
-        }
-        optgroup.appendChild(optionEl);
+      if (opt.group === undefined || opt.group === '') {
+        entries.push(optionEl);
+        return;
       }
 
-      this.optionEls.push(optionEl);
-      this.allItems.push(optionEl);
+      let optgroup = groups.get(opt.group);
+      if (!optgroup) {
+        optgroup = document.createElement('optgroup');
+        optgroup.label = opt.group;
+        groups.set(opt.group, optgroup);
+        entries.push(optgroup);
+      }
+      if (!optgroup.hasAttribute('data-icon') && opt.groupIcon !== undefined && opt.groupIcon !== '') {
+        optgroup.setAttribute('data-icon', opt.groupIcon);
+      }
+      optgroup.appendChild(optionEl);
+    });
+
+    entries.forEach(entry => {
+      if (entry.tagName === 'OPTGROUP') {
+        this.allItems.push(entry);
+        Array.from(entry.children).forEach(child => {
+          this.optionEls.push(child as HTMLOptionElement);
+          this.allItems.push(child as HTMLOptionElement);
+        });
+      } else {
+        this.optionEls.push(entry as HTMLOptionElement);
+        this.allItems.push(entry);
+      }
     });
 
     // Re-apply preselection if a value is set but no option has been selected yet.
@@ -1698,10 +1714,10 @@ export class PdsCombobox implements BasePdsProps {
                   'pds-combobox__group-label--with-icon': hasGroupIcon,
                 }}
                 role="presentation"
-                aria-label={optgroup.label}
               >
                 {hasGroupIcon && (
-                  <pds-icon icon={groupIcon} size="small" aria-hidden="true" class="pds-combobox__group-icon" />
+                  // `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized.
+                  <pds-icon name={groupIcon} size="small" aria-hidden="true" class="pds-combobox__group-icon" />
                 )}
                 {optgroup.label}
               </li>
