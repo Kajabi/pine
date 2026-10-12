@@ -127,14 +127,25 @@
     flex-shrink: 0;
   }
 
+  // The Figma frames inset rows 4px and space them 4px apart in both the panel and the flyout.
+  .pds-combobox__listbox--grouped,
+  .pds-combobox__flyout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+    padding: var(--pine-dimension-2xs);
+  }
+
   .pds-combobox__flyout {
     background: var(--pine-color-background-overlay);
     border-radius: var(--pine-dimension-125);
     box-shadow: var(--pine-box-shadow);
     list-style: none;
     margin: 0;
-    padding: var(--pine-dimension-xs);
+    overflow-y: auto;
     position: fixed;
+    // Revealed once Floating UI has placed it, so it never flashes inside the row first.
+    visibility: hidden;
     width: max-content;
     z-index: 1;
   }
