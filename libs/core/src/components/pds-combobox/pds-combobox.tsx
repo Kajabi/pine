@@ -1337,6 +1337,8 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     if (this.handleGroupedPanelKey(e)) return;
+    // The input trigger's text keeps Space, Home and End while the grouped panel shows.
+    if (this.showsGroupedPanel && this.trigger === 'input' && (e.key === ' ' || e.key === 'Home' || e.key === 'End')) return;
 
     // Get only the option elements (skip group labels) for navigation
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
@@ -1435,14 +1437,16 @@ export class PdsCombobox implements BasePdsProps {
    */
   private handleGroupedPanelKey(e: KeyboardEvent): boolean {
     if (!this.showsGroupedPanel) return false;
-    // In the input trigger, Left and Right still move the caret through typed text.
-    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && this.trigger === 'input' && this.displayText !== '') {
-      return false;
+    // In the input trigger, Left and Right still move the caret through typed text, and Space,
+    // Home and End edit it, as they do in the panel's search field.
+    if (this.trigger === 'input') {
+      if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && this.displayText !== '') return false;
+      if (e.key === ' ' || e.key === 'Home' || e.key === 'End') return false;
     }
 
     const entries = buildPanelEntries(this.filteredItems);
     const drilledIn = this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null;
-    const current: PanelItem | null = this.highlightedIndex >= 0 ? this.highlightedIndex : this.highlightedGroup;
+    const current = this.currentPanelItem();
     const column = panelColumn(entries, this.openGroup, current, drilledIn);
     if (column.length === 0) return false;
     const position = current === null ? -1 : column.indexOf(current);
@@ -1465,7 +1469,7 @@ export class PdsCombobox implements BasePdsProps {
       case 'PageDown':
         return moveTo(position < 0 ? 0 : position + 10);
       case 'PageUp':
-        return moveTo(position < 0 ? 0 : position - 10);
+        return moveTo(position < 0 ? column.length - 1 : position - 10);
       case 'ArrowRight':
       case 'Enter':
       case ' ': {
@@ -1491,6 +1495,18 @@ export class PdsCombobox implements BasePdsProps {
       }
     }
     return false;
+  }
+
+  /**
+   * Where the keyboard is in the grouped panel. An option highlighted in a group that has since
+   * closed (the pointer left its flyout) counts as its group's row, so the keys carry on from
+   * what's showing rather than from an option that isn't.
+   */
+  private currentPanelItem(): PanelItem | null {
+    if (this.highlightedIndex < 0) return this.highlightedGroup;
+    const selectable = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
+    const group = parentOptgroupOf(selectable[this.highlightedIndex]);
+    return group !== null && group !== this.openGroup ? group : this.highlightedIndex;
   }
 
   /** Highlights a group row or an option, opening or closing flyouts to match. */
@@ -1550,6 +1566,8 @@ export class PdsCombobox implements BasePdsProps {
       const selectedIndex = selectableOptions.findIndex(option => option === this.selectedOption);
       if (selectedIndex >= 0) {
         this.highlightedIndex = selectedIndex;
+        // In the grouped panel, open on the selection's group, however the dropdown was opened.
+        if (this.showsGroupedPanel) this.openGroup = parentOptgroupOf(this.selectedOption);
         return;
       }
     }
@@ -1629,7 +1647,11 @@ export class PdsCombobox implements BasePdsProps {
         this.flyout.reset();
         this.openGroup = null;
       }
-      this.listboxEl.querySelector(`[id="${this.groupDomId(groupRow)}"]`)?.scrollIntoView({ block: 'nearest' });
+      // Matched by id, not a selector: componentId is consumer text and may not be selector-safe.
+      const id = this.groupDomId(groupRow);
+      Array.from(this.listboxEl.querySelectorAll('[role="treeitem"]'))
+        .find(row => row.id === id)
+        ?.scrollIntoView({ block: 'nearest' });
       this.updateAriaActiveDescendant();
       return;
     }
@@ -2003,8 +2025,8 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger keyboard events
   private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
-    // Escape and Enter mean something else on a group row; the tree keys go first.
-    if (this.isOpen && this.handleGroupedPanelKey(e)) return;
+    // Escape closes an open group before the dropdown. Other keys reach the tree through handleKeyDown.
+    if (this.isOpen && e.key === 'Escape' && this.handleGroupedPanelKey(e)) return;
     if ((e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') && !this.isOpen) {
       e.preventDefault();
       e.stopPropagation(); // Prevent the event from bubbling and triggering click
@@ -2254,6 +2276,15 @@ export class PdsCombobox implements BasePdsProps {
     return this.showsGroupedPanel ? 'tree' : 'listbox';
   }
 
+  /**
+   * The button and chip triggers' `aria-haspopup`. With panel search the trigger opens the panel,
+   * which starts as a tree in a grouped display, so typing in the panel doesn't change it.
+   */
+  private get triggerPopupRole(): 'tree' | 'listbox' {
+    if (!this.usesPanelSearch) return this.popupRole;
+    return this.groupDisplay === 'inline' ? 'listbox' : 'tree';
+  }
+
   /** The grouped panel is showing groups rather than search results. */
   private get showsGroupedPanel(): boolean {
     if (this.effectiveGroupDisplay === 'inline') return false;
@@ -2355,7 +2386,8 @@ export class PdsCombobox implements BasePdsProps {
         key={option.value}
         id={this.optionDomId(index)}
         role={tree ? 'treeitem' : 'option'}
-        aria-selected={isSelected ? 'true' : 'false'}
+        // A single-select tree marks only the selected item; a listbox marks every option.
+        aria-selected={isSelected ? 'true' : tree ? undefined : 'false'}
         aria-level={level}
         aria-setsize={setsize}
         aria-posinset={posinset}
@@ -2770,7 +2802,7 @@ export class PdsCombobox implements BasePdsProps {
               class={this.getChipTriggerClass()}
               style={{ width: this.triggerWidth }}
               role={this.usesPanelSearch ? 'button' : 'combobox'}
-              aria-haspopup={this.popupRole}
+              aria-haspopup={this.triggerPopupRole}
               aria-controls={this.listboxId}
               aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
               aria-invalid={this.isInvalid() ? 'true' : undefined}
@@ -2795,7 +2827,7 @@ export class PdsCombobox implements BasePdsProps {
               class={triggerClass}
               style={{ width: this.triggerWidth }}
               role={this.usesPanelSearch ? 'button' : 'combobox'}
-              aria-haspopup={this.popupRole}
+              aria-haspopup={this.triggerPopupRole}
               aria-controls={this.listboxId}
               aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
               aria-invalid={this.isInvalid() ? 'true' : undefined}
