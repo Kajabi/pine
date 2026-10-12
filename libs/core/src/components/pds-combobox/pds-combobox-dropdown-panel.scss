@@ -150,6 +150,76 @@
     z-index: 1;
   }
 
+  // panel-search: the search field above the options, as in pds-multiselect.
+  .pds-combobox__listbox--with-search {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .pds-combobox__listbox-options {
+    flex: 1;
+    list-style: none;
+    margin: 0;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--pine-dimension-xs);
+  }
+
+  .pds-combobox__listbox-options.pds-combobox__listbox--grouped {
+    padding: var(--pine-dimension-2xs);
+  }
+
+  .pds-combobox__panel-search {
+    align-items: center;
+    border-block-end: var(--pine-border);
+    border-block-end-color: var(--pine-color-border-subtle);
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--pine-dimension-xs);
+    padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+
+    pds-icon {
+      color: var(--pine-color-text-muted);
+      flex-shrink: 0;
+    }
+  }
+
+  .pds-combobox__panel-search-input {
+    background: transparent;
+    border: 0;
+    color: var(--pine-color-text-strong);
+    flex: 1;
+    font: var(--pine-typography-body);
+    letter-spacing: var(--pine-letter-spacing);
+    min-width: 0;
+    outline: none;
+
+    &::placeholder {
+      color: var(--pine-color-text-placeholder);
+    }
+  }
+
+  // group-display="drill-in": the row back to the groups, above the open group's options.
+  .pds-combobox__group-back {
+    list-style: none;
+  }
+
+  .pds-combobox__group-back-trigger {
+    color: var(--pine-color-text-tertiary);
+    justify-content: flex-start;
+  }
+
+  .pds-combobox__visually-hidden {
+    block-size: 1px;
+    clip-path: inset(50%);
+    inline-size: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+  }
+
   .pds-combobox__loading {
     align-items: center;
     display: flex;
