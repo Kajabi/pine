@@ -325,8 +325,6 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
 
-    // The input trigger: the button trigger has no accessible name today with or without groups
-    // (its <label for> points at a div), which is fixed separately from the flyout.
     // Email, not Tag: the highlight starts on the Tag row, so this checks aria-activedescendant
     // stays on a rendered row while another group's flyout is open.
     it('has no axe violations with a flyout open', async () => {
