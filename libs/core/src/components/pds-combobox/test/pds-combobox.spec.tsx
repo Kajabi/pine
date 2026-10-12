@@ -2177,8 +2177,36 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="typed" label="Animal"><option value="a">A</option></pds-combobox>`,
       });
 
+      const label = page.root!.shadowRoot!.querySelector('label')!;
       expect(triggerFor(page, 'input').hasAttribute('aria-labelledby')).toBe(false);
-      expect(page.root!.shadowRoot!.querySelector('label')!.getAttribute('htmlFor') ?? page.root!.shadowRoot!.querySelector('label')!.getAttribute('for')).toBe('typed');
+      expect(label.getAttribute('for')).toBe('typed');
+    });
+
+    it('drops <label for> on a div trigger, which it cannot label, and focuses the trigger on click', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="clicky" label="Action" trigger="button"><option value="a">A</option></pds-combobox>`,
+      });
+
+      const label = page.root!.shadowRoot!.querySelector('label')!;
+      const trigger = triggerFor(page, 'button-trigger');
+      const focus = jest.spyOn(trigger, 'focus');
+      expect(label.hasAttribute('for')).toBe(false);
+
+      label.click();
+
+      expect(focus).toHaveBeenCalled();
+    });
+
+    it('uses aria-label on a chip trigger when the label is hidden', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="hidden-chip" label="Status" hide-label trigger="chip"><option value="a">A</option></pds-combobox>`,
+      });
+
+      const trigger = triggerFor(page, 'chip-trigger');
+      expect(trigger.hasAttribute('aria-labelledby')).toBe(false);
+      expect(trigger.getAttribute('aria-label')).toBe('Status');
     });
   });
 
