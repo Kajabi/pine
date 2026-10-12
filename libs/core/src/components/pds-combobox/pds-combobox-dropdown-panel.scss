@@ -96,6 +96,13 @@
     padding: 0;
   }
 
+  // A grouped display's search results keep the panel's 4px spacing between options.
+  .pds-combobox__listbox--grouped .pds-combobox__group-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+  }
+
   .pds-combobox__group-label--with-icon {
     align-items: center;
     display: flex;
@@ -132,6 +139,13 @@
   .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger,
   .pds-combobox__group-row-trigger:hover {
     background: var(--pine-color-background-muted);
+  }
+
+  // The keyboard's place among the rows, which share a background with hover, open and selection.
+  .pds-combobox__group-row--highlighted > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger {
+    outline: var(--pine-outline-focus);
+    outline-offset: calc(var(--pine-border-width) * -2);
   }
 
   .pds-combobox__group-row-label {
