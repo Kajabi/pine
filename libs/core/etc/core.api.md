@@ -44,6 +44,8 @@ export interface ComboboxLoadOptionsEventDetail {
 export interface ComboboxOption {
     // (undocumented)
     [key: string]: unknown;
+    group?: string;
+    groupIcon?: string;
     // (undocumented)
     id: string | number;
     // (undocumented)

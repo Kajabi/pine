@@ -639,12 +639,28 @@ export class PdsCombobox implements BasePdsProps {
     this.optionEls = [];
     this.allItems = [];
 
-    // Create option elements from async data
+    // Create option elements from async data. Grouped options are nested in an optgroup, as
+    // slotted markup would be, so grouping, filtering and labels work the same either way.
     const asyncOptions = this.options || this.internalOptions;
+    const groups = new Map<string, HTMLOptGroupElement>();
     asyncOptions.forEach(opt => {
       const optionEl = document.createElement('option') as HTMLOptionElement;
       optionEl.value = String(opt.id);
       optionEl.textContent = opt.text;
+
+      if (opt.group !== undefined && opt.group !== '') {
+        let optgroup = groups.get(opt.group);
+        if (!optgroup) {
+          optgroup = document.createElement('optgroup');
+          optgroup.label = opt.group;
+          if (opt.groupIcon !== undefined && opt.groupIcon !== '') {
+            optgroup.setAttribute('data-icon', opt.groupIcon);
+          }
+          groups.set(opt.group, optgroup);
+          this.allItems.push(optgroup);
+        }
+        optgroup.appendChild(optionEl);
+      }
 
       this.optionEls.push(optionEl);
       this.allItems.push(optionEl);
@@ -1672,13 +1688,21 @@ export class PdsCombobox implements BasePdsProps {
         {this.filteredItems.map((item, itemIdx) => {
           if (item.tagName === 'OPTGROUP') {
             const optgroup = item as HTMLOptGroupElement;
+            const groupIcon = optgroup.getAttribute('data-icon');
+            const hasGroupIcon = groupIcon !== null && groupIcon !== '';
             return (
               <li
                 key={`optgroup-${itemIdx}`}
-                class="pds-combobox__group-label"
+                class={{
+                  'pds-combobox__group-label': true,
+                  'pds-combobox__group-label--with-icon': hasGroupIcon,
+                }}
                 role="presentation"
                 aria-label={optgroup.label}
               >
+                {hasGroupIcon && (
+                  <pds-icon icon={groupIcon} size="small" aria-hidden="true" class="pds-combobox__group-icon" />
+                )}
                 {optgroup.label}
               </li>
             );
