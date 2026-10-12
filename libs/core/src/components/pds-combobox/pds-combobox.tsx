@@ -5,7 +5,17 @@ import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import DOMPurify from 'dompurify';
-import { FlyoutController, buildPanelEntries, findGroup, groupIconOf, groupLabelOf, panelColumn, parentOptgroupOf } from './grouped-options-panel';
+import {
+  FlyoutController,
+  buildPanelEntries,
+  findGroup,
+  groupIconOf,
+  groupLabelOf,
+  isGroupDisabled,
+  isOptionDisabled,
+  panelColumn,
+  parentOptgroupOf,
+} from './grouped-options-panel';
 import type { PanelGroup, PanelItem } from './grouped-options-panel';
 import type {
   ComboboxOption,
@@ -819,6 +829,7 @@ export class PdsCombobox implements BasePdsProps {
       const optionEl = document.createElement('option') as HTMLOptionElement;
       optionEl.value = String(opt.id);
       optionEl.textContent = opt.text;
+      if (opt.disabled === true) optionEl.setAttribute('disabled', '');
 
       // Only strings group an option or name an icon; anything else from JS is ignored, not coerced.
       if (typeof opt.group !== 'string' || opt.group === '') {
@@ -1362,71 +1373,46 @@ export class PdsCombobox implements BasePdsProps {
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        // If no option is highlighted and we have options, start at 0
-        if (this.highlightedIndex < 0 && selectableOptions.length > 0) {
-          this.highlightedIndex = 0;
-        } else {
-          this.highlightedIndex = Math.min(this.highlightedIndex + 1, selectableOptions.length - 1);
-        }
-        this.updateOptionFocus();
+        // If no option is highlighted, start at the first; disabled options are skipped
+        this.highlightEnabledOption(selectableOptions, this.highlightedIndex < 0 ? 0 : this.highlightedIndex + 1, 1);
         break;
       case 'ArrowUp':
         e.preventDefault();
-        // If no option is highlighted and we have options, start at last option
-        if (this.highlightedIndex < 0 && selectableOptions.length > 0) {
-          this.highlightedIndex = selectableOptions.length - 1;
-        } else {
-          this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
-        }
-        this.updateOptionFocus();
+        // If no option is highlighted, start at the last
+        this.highlightEnabledOption(
+          selectableOptions,
+          this.highlightedIndex < 0 ? selectableOptions.length - 1 : this.highlightedIndex - 1,
+          -1,
+        );
         break;
       case 'Home':
         e.preventDefault();
-        if (selectableOptions.length > 0) {
-          this.highlightedIndex = 0;
-          this.updateOptionFocus();
-        }
+        this.highlightEnabledOption(selectableOptions, 0, 1);
         break;
       case 'End':
         e.preventDefault();
-        if (selectableOptions.length > 0) {
-          this.highlightedIndex = selectableOptions.length - 1;
-          this.updateOptionFocus();
-        }
+        this.highlightEnabledOption(selectableOptions, selectableOptions.length - 1, -1);
         break;
       case 'PageDown':
         e.preventDefault();
-        if (selectableOptions.length > 0) {
-          const nextIndex = Math.min(this.highlightedIndex + 10, selectableOptions.length - 1);
-          this.highlightedIndex = nextIndex;
-          this.updateOptionFocus();
-        }
+        this.highlightEnabledOption(selectableOptions, Math.min(this.highlightedIndex + 10, selectableOptions.length - 1), 1, true);
         break;
       case 'PageUp':
         e.preventDefault();
-        if (selectableOptions.length > 0) {
-          const prevIndex = Math.max(this.highlightedIndex - 10, 0);
-          this.highlightedIndex = prevIndex;
-          this.updateOptionFocus();
-        }
+        this.highlightEnabledOption(selectableOptions, Math.max(this.highlightedIndex - 10, 0), -1, true);
         break;
       case 'Enter':
+      case ' ': {
         e.preventDefault();
         // An option in a flyout the pointer has since closed isn't on screen; don't choose it.
         if (this.showsGroupedPanel && this.activeDescendantId === undefined) break;
-        if (this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
-          this.handleOptionClick(selectableOptions[this.highlightedIndex]);
+        const option = selectableOptions[this.highlightedIndex];
+        if (option !== undefined && !isOptionDisabled(option)) {
+          this.handleOptionClick(option);
           this.restoreFocusToTrigger();
         }
         break;
-      case ' ':
-        e.preventDefault();
-        if (this.showsGroupedPanel && this.activeDescendantId === undefined) break;
-        if (this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
-          this.handleOptionClick(selectableOptions[this.highlightedIndex]);
-          this.restoreFocusToTrigger();
-        }
-        break;
+      }
       case 'Escape':
         e.preventDefault();
         this.isOpen = false;
@@ -1526,6 +1512,25 @@ export class PdsCombobox implements BasePdsProps {
     return group !== null && group !== this.openGroup ? group : this.highlightedIndex;
   }
 
+  /**
+   * Highlights the first enabled option from `from`, stepping by `step`. Without one, the
+   * highlight stays, unless `turnBack` lets a page jump that lands past the last enabled option
+   * look the other way.
+   */
+  private highlightEnabledOption(options: HTMLOptionElement[], from: number, step: 1 | -1, turnBack = false) {
+    const find = (start: number, by: 1 | -1) => {
+      for (let i = start; i >= 0 && i < options.length; i += by) {
+        if (!isOptionDisabled(options[i])) return i;
+      }
+      return -1;
+    };
+    let index = find(from, step);
+    if (index < 0 && turnBack) index = find(from, step === 1 ? -1 : 1);
+    if (index < 0) return;
+    this.highlightedIndex = index;
+    this.updateOptionFocus();
+  }
+
   /** Highlights a group row or an option, opening or closing flyouts to match. */
   private highlightPanelItem(item: PanelItem) {
     if (typeof item === 'number') {
@@ -1539,7 +1544,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private expandGroup(entries: ReturnType<typeof buildPanelEntries>, optgroup: HTMLOptGroupElement) {
     this.flyout.open(optgroup);
-    const first = findGroup(entries, optgroup)?.options[0];
+    const first = findGroup(entries, optgroup)?.options.find(({ option }) => !isOptionDisabled(option));
     if (first !== undefined) this.highlightPanelItem(first.index);
     // Its options render after this change; scroll to the first one then.
     this.pendingOptionFocus = true;
@@ -1578,8 +1583,9 @@ export class PdsCombobox implements BasePdsProps {
       return;
     }
 
-    // If there's a selected option, find its index in the filtered options
-    if (this.selectedOption) {
+    // If there's a selected option, find its index in the filtered options. A disabled one can be
+    // the value, as in a native select, but it isn't highlighted.
+    if (this.selectedOption && !isOptionDisabled(this.selectedOption)) {
       const selectedIndex = selectableOptions.findIndex(option => option === this.selectedOption);
       if (selectedIndex >= 0) {
         this.highlightedIndex = selectedIndex;
@@ -1593,18 +1599,17 @@ export class PdsCombobox implements BasePdsProps {
       }
     }
 
-    // In the grouped panel, the first row: a group stays closed until it's opened.
+    // In the grouped panel, the first row with something to choose: a group stays closed until
+    // it's opened.
     if (this.showsGroupedPanel) {
-      const [first] = buildPanelEntries(this.filteredItems);
-      if (first?.kind === 'group') {
-        this.highlightedIndex = -1;
-        this.highlightedGroup = first.group.optgroup;
-        return;
-      }
+      const [first] = panelColumn(buildPanelEntries(this.filteredItems), null, null, false);
+      this.highlightedIndex = typeof first === 'number' ? first : -1;
+      this.highlightedGroup = typeof first === 'number' || first === undefined ? null : first;
+      return;
     }
 
-    // No selected option or selected option not in filtered results, highlight first option
-    this.highlightedIndex = 0;
+    // No selected option or selected option not in filtered results, highlight the first enabled option
+    this.highlightedIndex = selectableOptions.findIndex(option => !isOptionDisabled(option));
   }
 
   /**
@@ -1826,6 +1831,7 @@ export class PdsCombobox implements BasePdsProps {
     const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
     const option = selectableOptions[idx];
+    if (isOptionDisabled(option)) return;
     this.handleOptionClick(option);
     // The search field closes with the panel; send focus back to the trigger instead of losing it.
     // (Enter and Space already restore focus in the key handler.)
@@ -1835,6 +1841,8 @@ export class PdsCombobox implements BasePdsProps {
   // Event handler for mouse enter on option
   private onOptionMouseEnter = (event: Event) => {
     const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
+    // A disabled option takes no highlight, so the keys carry on from the last one that could.
+    if ((event.currentTarget as HTMLElement).getAttribute('aria-disabled') === 'true') return;
     this.highlightedIndex = idx;
     this.keyboardNavigating = false;
   };
@@ -1857,8 +1865,10 @@ export class PdsCombobox implements BasePdsProps {
 
   // The pointer highlights a group's row as it does an option, so the keys carry on from there.
   private onGroupRowTriggerMouseEnter = (event: Event) => {
-    const group = this.groupFromEvent(event);
-    if (group !== null) this.highlightGroupRowByPointer(group);
+    const index = Number((event.currentTarget as HTMLElement).getAttribute('data-group-index'));
+    const group = this.renderedGroups[index];
+    // A group with nothing to choose still opens, but takes no highlight, as a disabled option doesn't.
+    if (group !== undefined && !isGroupDisabled(group)) this.highlightGroupRowByPointer(group.optgroup);
   };
 
   private onGroupBackMouseEnter = () => {
@@ -2123,6 +2133,7 @@ export class PdsCombobox implements BasePdsProps {
   };
 
   private handleOptionClick(option: HTMLOptionElement) {
+    if (isOptionDisabled(option)) return;
     // Update reactive state - single source of truth
     // The @Watch('selectedOption') will handle displayText, value, and form internals
     this.setSelectedOption(option);
@@ -2241,7 +2252,13 @@ export class PdsCombobox implements BasePdsProps {
       const { optgroup, key, options } = group;
       const groupIcon = groupIconOf(optgroup);
       rendered.push(
-        <li key={key} class="pds-combobox__group" role="group" aria-label={optgroup.label}>
+        <li
+          key={key}
+          class="pds-combobox__group"
+          role="group"
+          aria-label={optgroup.label}
+          aria-disabled={optgroup.hasAttribute('disabled') ? 'true' : undefined}
+        >
           <div
             class={{ 'pds-combobox__group-label': true, 'pds-combobox__group-label--with-icon': groupIcon !== null }}
             aria-hidden="true"
@@ -2418,6 +2435,7 @@ export class PdsCombobox implements BasePdsProps {
     const isHighlighted = this.highlightedIndex === index;
     const isLayout = this.isOptionLayout(option);
     const isChip = this.isOptionChip(option);
+    const isDisabled = isOptionDisabled(option);
     const tree = level !== undefined;
 
     return (
@@ -2427,6 +2445,7 @@ export class PdsCombobox implements BasePdsProps {
         role={tree ? 'treeitem' : 'option'}
         // A single-select tree marks only the selected item; a listbox marks every option.
         aria-selected={isSelected ? 'true' : tree ? undefined : 'false'}
+        aria-disabled={isDisabled ? 'true' : undefined}
         aria-level={level}
         aria-setsize={setsize}
         aria-posinset={posinset}
@@ -2437,6 +2456,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__option--highlighted': isHighlighted,
           'pds-combobox__option--layout': isLayout,
           'pds-combobox__option--chip': isChip,
+          'pds-combobox__option--disabled': isDisabled,
         }}
         data-option-index={index}
         onMouseDown={this.onOptionMouseDown}
@@ -2532,6 +2552,7 @@ export class PdsCombobox implements BasePdsProps {
     const flyout = this.effectiveGroupDisplay === 'flyout';
     const isOpen = flyout && this.openGroup === group.optgroup;
     const hasSelection = group.options.some(({ option }) => this.isOptionSelected(option));
+    const disabled = isGroupDisabled(group);
     const id = this.groupDomId(group.optgroup);
 
     return (
@@ -2544,9 +2565,11 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__group-row--has-selection': hasSelection,
           'pds-combobox__group-row--highlighted': this.highlightedGroupRow === group.optgroup,
           'pds-combobox__group-row--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
+          'pds-combobox__group-row--disabled': disabled,
         }}
         role="treeitem"
         aria-expanded={isOpen ? 'true' : 'false'}
+        aria-disabled={disabled ? 'true' : undefined}
         aria-level={1}
         aria-posinset={posinset}
         aria-setsize={setsize}

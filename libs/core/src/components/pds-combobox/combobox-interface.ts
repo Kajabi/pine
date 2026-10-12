@@ -13,6 +13,11 @@ export interface ComboboxOption {
    * one wins, the same as `data-icon` on a slotted `<optgroup>`.
    */
   groupIcon?: string;
+  /**
+   * Lists the option but stops it being chosen, as `<option disabled>` does. Keyboard
+   * navigation skips it.
+   */
+  disabled?: boolean;
   [key: string]: unknown;
 }
 

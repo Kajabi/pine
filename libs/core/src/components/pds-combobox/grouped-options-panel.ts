@@ -43,6 +43,17 @@ export function groupIconOf(optgroup: HTMLOptGroupElement): string | null {
   return icon !== null && PINE_ICON_NAME.test(icon) ? icon : null;
 }
 
+/** An option is disabled by its own `disabled` or its optgroup's, as in a native select. */
+export function isOptionDisabled(option: HTMLOptionElement | null | undefined): boolean {
+  if (option === null || option === undefined) return false;
+  return option.hasAttribute('disabled') || parentOptgroupOf(option)?.hasAttribute('disabled') === true;
+}
+
+/** A group with no option left to choose. It still opens, so its options can be seen. */
+export function isGroupDisabled(group: PanelGroup): boolean {
+  return group.options.every(({ option }) => isOptionDisabled(option));
+}
+
 /**
  * Groups the combobox's filtered items for the panel: each optgroup becomes one entry holding its
  * options, and ungrouped options stay where they are. Indexes count options in list order, the
@@ -86,6 +97,7 @@ export type PanelItem = HTMLOptGroupElement | number;
  * The items Up and Down move through from `current`, one tree level at a time: the panel's rows
  * (groups and ungrouped options), or the open group's options. Drilled into a group, its row
  * (drawn as the row back) comes first, above its options, as a tree draws a parent above its children.
+ * Disabled options, and groups with nothing to choose, are skipped; the row back never is.
  */
 export function panelColumn(
   entries: PanelEntry[],
@@ -95,11 +107,13 @@ export function panelColumn(
 ): PanelItem[] {
   const open = openGroup === null ? undefined : findGroup(entries, openGroup);
   if (open !== undefined) {
-    const options = open.options.map(({ index }) => index);
+    const options = open.options.filter(({ option }) => !isOptionDisabled(option)).map(({ index }) => index);
     if (drilledIn) return [open.optgroup, ...options];
-    if (typeof current === 'number' && options.includes(current)) return options;
+    if (typeof current === 'number' && open.options.some(({ index }) => index === current)) return options;
   }
-  return entries.map(entry => (entry.kind === 'group' ? entry.group.optgroup : entry.index));
+  return entries
+    .filter(entry => (entry.kind === 'group' ? !isGroupDisabled(entry.group) : !isOptionDisabled(entry.option)))
+    .map(entry => (entry.kind === 'group' ? entry.group.optgroup : entry.index));
 }
 
 /** The panel's group for an optgroup, if it's showing. */
