@@ -344,4 +344,97 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('drill-in and panel-search', () => {
+    const actions = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    ];
+    // The button trigger's missing accessible name is fixed in its own PR (#841, DSS-335); this
+    // branch predates it, so these axe runs leave that one rule to that PR's test.
+    const axeRules = { 'aria-input-field-name': { enabled: false } };
+
+    const setUp = async (attrs: string, viewportWidth = 1200) => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: viewportWidth, height: 800 });
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only"
+            dropdown-width="300px" ${attrs}></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        actions,
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    const activeClass = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => (document.querySelector('pds-combobox')!.shadowRoot!.activeElement as HTMLElement | null)?.className ?? '');
+
+    it('searches from the panel by keyboard and returns focus to the trigger', async () => {
+      const page = await setUp('panel-search search-placeholder="Search actions"');
+      expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+
+      await page.keyboard.type('tag');
+      await page.waitForChanges();
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('tag-remove');
+      expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
+    });
+
+    it('drills into a group and back', async () => {
+      const page = await setUp('group-display="drill-in"');
+      const rows = () =>
+        page.evaluate(() =>
+          Array.from(
+            document
+              .querySelector('pds-combobox')!
+              .shadowRoot!.querySelectorAll('.pds-combobox__group-row-trigger, .pds-combobox__group-back-trigger, [role="option"]'),
+          ).map(el => el.textContent),
+        );
+
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      expect(await rows()).toEqual(['Back: Tag', 'Add a tag', 'Remove a tag']);
+
+      await (await page.find('pds-combobox >>> .pds-combobox__group-back-trigger')).click();
+      await page.waitForChanges();
+      expect(await rows()).toEqual(['Tag', 'Email']);
+    });
+
+    it('drills in from flyout mode when the viewport has no room beside the dropdown', async () => {
+      const page = await setUp('group-display="flyout" dropdown-width="340px"', 420);
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+
+      const shape = await page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        return { flyout: !!root.querySelector('.pds-combobox__flyout'), back: !!root.querySelector('.pds-combobox__group-back') };
+      });
+      expect(shape).toEqual({ flyout: false, back: true });
+    });
+
+    it('has no axe violations with panel search and a drilled-in group open', async () => {
+      const page = await setUp('group-display="drill-in" panel-search');
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+
+      const violations = await runAxe(page, { rules: axeRules });
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
 });
+

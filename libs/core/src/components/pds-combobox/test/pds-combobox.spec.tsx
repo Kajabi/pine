@@ -2763,6 +2763,194 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('group-display="drill-in"', () => {
+    const actions = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    ];
+
+    const openDrillIn = async (attrs = 'group-display="drill-in" mode="select-only"') => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="drill" ${attrs}></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      component.options = actions;
+      await page.waitForChanges();
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component, root: page.root!.shadowRoot! };
+    };
+
+    const groupNamed = (component: { optionEls: HTMLOptionElement[] }, label: string) =>
+      component.optionEls.map(o => o.parentElement as HTMLOptGroupElement).find(g => g?.label === label)!;
+
+    it('replaces the group list with the clicked group and a row back', async () => {
+      const { page, component, root } = await openDrillIn();
+
+      expect(root.querySelectorAll('.pds-combobox__group-row')).toHaveLength(2);
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBe(groupNamed(component, 'Email'));
+      expect(root.querySelector('.pds-combobox__group-row')).toBeNull();
+      expect(root.querySelector('.pds-combobox__flyout')).toBeNull();
+      expect(root.querySelector('.pds-combobox__group-back')?.textContent).toBe('Back: Email');
+      expect(Array.from(root.querySelectorAll('[role="option"]')).map(o => [o.textContent, o.getAttribute('data-option-index')])).toEqual([
+        ['Send an email', '2'],
+      ]);
+
+      (root.querySelector('.pds-combobox__group-back-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
+      expect(root.querySelectorAll('.pds-combobox__group-row')).toHaveLength(2);
+    });
+
+    it('does not open a group on hover', async () => {
+      const { page, component, root } = await openDrillIn();
+
+      root.querySelector('.pds-combobox__group-row')!.dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBeNull();
+    });
+
+    it('uses a translated back label', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" drill-in-back-label="Volver"');
+
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      expect(root.querySelector('.pds-combobox__group-back')?.textContent).toBe('Volver: Tag');
+    });
+
+    it('drills in from flyout mode when there is no room for a flyout', async () => {
+      const { page, component, root } = await openDrillIn('group-display="flyout" mode="select-only"');
+
+      component.flyoutFallback = true;
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      expect(root.querySelector('.pds-combobox__flyout')).toBeNull();
+      expect(root.querySelector('.pds-combobox__group-back')).not.toBeNull();
+    });
+  });
+
+  describe('panel-search', () => {
+    const actions = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email' },
+    ];
+
+    const openWithSearch = async (attrs: string) => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="searchy" label="Action" ${attrs}></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      component.options = actions;
+      await page.waitForChanges();
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component, root: page.root!.shadowRoot! };
+    };
+
+    const search = (root: ShadowRoot) => root.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement;
+    const visibleValues = (component: { filteredItems: HTMLElement[] }) =>
+      component.filteredItems.filter(i => i.tagName === 'OPTION').map(o => (o as HTMLOptionElement).value);
+
+    it('puts a labelled search field above the options for the button trigger', async () => {
+      const { root } = await openWithSearch(
+        'trigger="button" panel-search search-placeholder="Search actions" search-options-label="Search actions"',
+      );
+
+      const panel = root.querySelector('.pds-combobox__listbox--with-search')!;
+      expect(panel.querySelector('.pds-combobox__panel-search-input')?.getAttribute('placeholder')).toBe('Search actions');
+      expect(search(root).getAttribute('aria-label')).toBe('Search actions');
+      expect(search(root).getAttribute('aria-controls')).toBe('searchy-listbox');
+      expect(panel.querySelector('ul[role="listbox"]')?.id).toBe('searchy-listbox');
+    });
+
+    it('ignores panel-search on the input trigger, which already searches', async () => {
+      const { root } = await openWithSearch('panel-search');
+
+      expect(search(root)).toBeNull();
+      expect(root.querySelector('ul.pds-combobox__listbox[role="listbox"]')).not.toBeNull();
+    });
+
+    it('leaves the dropdown markup unchanged without panel-search', async () => {
+      const { root } = await openWithSearch('trigger="button" mode="select-only"');
+
+      expect(root.querySelector('.pds-combobox__listbox--with-search')).toBeNull();
+      expect(root.querySelector('ul.pds-combobox__listbox[role="listbox"]')).not.toBeNull();
+    });
+
+    it('filters as you type, matching group labels in a grouped display', async () => {
+      const { page, component, root } = await openWithSearch('trigger="button" panel-search group-display="flyout"');
+
+      search(root).value = 'email';
+      search(root).dispatchEvent(new Event('input'));
+      await page.waitForChanges();
+      expect(visibleValues(component)).toEqual(['email-send']);
+
+      search(root).value = 'tag';
+      search(root).dispatchEvent(new Event('input'));
+      await page.waitForChanges();
+      expect(visibleValues(component)).toEqual(['tag-add', 'tag-remove']);
+      // Results are listed, not the group rows.
+      expect(root.querySelector('.pds-combobox__group-row')).toBeNull();
+    });
+
+    it('filters a select-only button trigger too', async () => {
+      const { page, component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+
+      search(root).value = 'remove';
+      search(root).dispatchEvent(new Event('input'));
+      await page.waitForChanges();
+
+      expect(visibleValues(component)).toEqual(['tag-remove']);
+    });
+
+    it('types a space instead of selecting, and selects on Enter', async () => {
+      const { page, component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+
+      component.highlightedIndex = 1;
+      search(root).dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      await page.waitForChanges();
+      expect(component.value).toBe('');
+
+      search(root).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await page.waitForChanges();
+      expect(component.value).toBe('tag-remove');
+    });
+
+    it('puts aria-activedescendant on the search field, not the trigger', async () => {
+      const { page, component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+
+      component.highlightedIndex = 2;
+      await page.waitForChanges();
+
+      expect(search(root).getAttribute('aria-activedescendant')).toBe('searchy-option-2');
+      expect(root.querySelector('[part="button-trigger"]')!.hasAttribute('aria-activedescendant')).toBe(false);
+    });
+
+    it('clears the search when the dropdown closes', async () => {
+      const { page, component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+
+      search(root).value = 'remove';
+      search(root).dispatchEvent(new Event('input'));
+      await page.waitForChanges();
+      component.isOpen = false;
+      await page.waitForChanges();
+
+      expect(component.panelQuery).toBe('');
+    });
+  });
+
   describe('dropdownMount body', () => {
     afterEach(() => {
       document.querySelectorAll('.pds-combobox-dropdown-portal').forEach(el => el.remove());
