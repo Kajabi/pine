@@ -2462,6 +2462,10 @@ describe('pds-combobox', () => {
       return { page, component, root: page.root!.shadowRoot! };
     };
 
+    // Groups are identified by their optgroup element, since two may share a label.
+    const groupNamed = (component: { optionEls: HTMLOptionElement[] }, label: string) =>
+      component.optionEls.map(o => o.parentElement as HTMLOptGroupElement).find(g => g?.label === label)!;
+
     it('lists one row per group, with its icon and a caret, and no flyout until one opens', async () => {
       const { root } = await openFlyoutPanel();
 
@@ -2476,7 +2480,7 @@ describe('pds-combobox', () => {
     it("opens a group's options in a flyout, keeping their indexes", async () => {
       const { page, component, root } = await openFlyoutPanel();
 
-      component.openGroup = 'Email';
+      component.openGroup = groupNamed(component, 'Email');
       await page.waitForChanges();
 
       const flyout = root.querySelector('.pds-combobox__flyout')!;
@@ -2490,7 +2494,7 @@ describe('pds-combobox', () => {
     it('selects an option clicked in a flyout', async () => {
       const { page, component, root } = await openFlyoutPanel();
 
-      component.openGroup = 'Tag';
+      component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
       (root.querySelector('[data-option-index="1"]') as HTMLElement).click();
       await page.waitForChanges();
@@ -2503,7 +2507,7 @@ describe('pds-combobox', () => {
     it('highlights the group holding the selection, and checks the option in its flyout', async () => {
       const { page, component, root } = await openFlyoutPanel('mode="select-only" value="tag-remove"');
 
-      component.openGroup = 'Tag';
+      component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
 
       const rows = Array.from(root.querySelectorAll('.pds-combobox__group-row'));
@@ -2519,7 +2523,7 @@ describe('pds-combobox', () => {
       component.updateOptionFocus();
       await page.waitForChanges();
 
-      expect(component.openGroup).toBe('Email');
+      expect(component.openGroup).toBe(groupNamed(component, 'Email'));
       expect(root.querySelector('.pds-combobox__flyout [data-option-index="2"]')).not.toBeNull();
     });
 
@@ -2579,7 +2583,7 @@ describe('pds-combobox', () => {
     it('closes the open group when the dropdown closes', async () => {
       const { page, component } = await openFlyoutPanel();
 
-      component.openGroup = 'Tag';
+      component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
       component.isOpen = false;
       await page.waitForChanges();
@@ -2592,7 +2596,7 @@ describe('pds-combobox', () => {
     it('renders the flyout inside the portaled listbox when dropdown-mount is body', async () => {
       const { page, component } = await openFlyoutPanel('mode="select-only" dropdown-mount="body"');
 
-      component.openGroup = 'Tag';
+      component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
 
       const portalFlyout = page.doc.querySelector('.pds-combobox-dropdown-portal .pds-combobox__flyout');
@@ -2604,12 +2608,60 @@ describe('pds-combobox', () => {
       page.doc.querySelectorAll('.pds-combobox-dropdown-portal').forEach(el => el.remove());
     });
 
+    it('keeps two groups with the same label apart', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="dup" group-display="flyout" mode="select-only"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const doc = page.doc;
+      const makeGroup = (values: string[]) => {
+        const group = doc.createElement('optgroup') as HTMLOptGroupElement;
+        group.label = 'Other';
+        values.forEach(value => {
+          const option = doc.createElement('option') as HTMLOptionElement;
+          option.value = value;
+          option.textContent = value;
+          group.appendChild(option);
+        });
+        return group;
+      };
+      const first = makeGroup(['a']);
+      const second = makeGroup(['b']);
+      component.optionEls = [first.children[0], second.children[0]];
+      component.allItems = [first, first.children[0], second, second.children[0]];
+      component.isOpen = true;
+      component.filterOptions();
+      component.openGroup = second;
+      await page.waitForChanges();
+
+      const root = page.root!.shadowRoot!;
+      expect(root.querySelectorAll('.pds-combobox__group-row')).toHaveLength(2);
+      expect(root.querySelectorAll('.pds-combobox__group-row--open')).toHaveLength(1);
+      expect(Array.from(root.querySelectorAll('.pds-combobox__flyout [role="option"]')).map(o => o.textContent)).toEqual(['b']);
+    });
+
+    // aria-activedescendant must not name an option that isn't in the DOM.
+    it('points aria-activedescendant only at an option that is rendered', async () => {
+      const { page, component, root } = await openFlyoutPanel();
+      const trigger = root.querySelector('[role="combobox"]')!;
+
+      component.highlightedIndex = 2;
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+      expect(trigger.hasAttribute('aria-activedescendant')).toBe(false);
+
+      component.openGroup = groupNamed(component, 'Email');
+      await page.waitForChanges();
+      expect(trigger.getAttribute('aria-activedescendant')).toBe('actions-option-2');
+    });
+
     it('applies the flyout width props', async () => {
       const { page, component, root } = await openFlyoutPanel(
         'mode="select-only" flyout-min-width="200px" flyout-max-width="320px"',
       );
 
-      component.openGroup = 'Tag';
+      component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
 
       const flyout = root.querySelector('.pds-combobox__flyout') as HTMLElement;

@@ -165,9 +165,14 @@ describe('pds-combobox', () => {
       { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
     ];
 
-    const setUp = async (wrapperStyle = '', trigger: 'button' | 'input' = 'button') => {
+    const setUp = async (
+      wrapperStyle = '',
+      trigger: 'button' | 'input' = 'button',
+      options: unknown[] = actions,
+      viewportHeight = 800,
+    ) => {
       const page = await newE2EPage();
-      await page.setViewport({ width: 1200, height: 800 });
+      await page.setViewport({ width: 1200, height: viewportHeight });
       const mode = trigger === 'button' ? 'select-only' : 'filter';
       await page.setContent(`
         <div style="${wrapperStyle}">
@@ -180,7 +185,7 @@ describe('pds-combobox', () => {
         (el: HTMLElement & { options?: unknown }, options) => {
           el.options = options;
         },
-        actions,
+        options,
       );
       await page.waitForChanges();
       const triggerSelector = trigger === 'button' ? '.pds-combobox__button-trigger' : 'input';
@@ -249,6 +254,39 @@ describe('pds-combobox', () => {
       expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('tag-remove');
     });
 
+    it('keeps a hovered group open when its row is clicked', async () => {
+      const page = await setUp('padding: 40px;');
+      await hoverGroup(page, 'Tag');
+
+      const row = await page.evaluate(() => {
+        const trigger = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-row-trigger')!;
+        const rect = trigger.getBoundingClientRect();
+        return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+      });
+      await page.mouse.click(row.x, row.y);
+      await page.waitForChanges();
+
+      const flyoutOpen = await page.evaluate(
+        () => !!document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__flyout'),
+      );
+      expect(flyoutOpen).toBe(true);
+    });
+
+    it('keeps a long group on screen and scrolls it', async () => {
+      const longGroup = Array.from({ length: 30 }, (_, i) => ({ id: `item-${i}`, text: `Item ${i}`, group: 'Many' }));
+      const page = await setUp('padding: 40px;', 'button', longGroup, 400);
+      await hoverGroup(page, 'Many');
+
+      const fit = await page.evaluate(() => {
+        const flyout = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__flyout') as HTMLElement;
+        const { top, bottom } = flyout.getBoundingClientRect();
+        return { top, bottom, viewport: window.innerHeight, scrolls: flyout.scrollHeight > flyout.clientHeight };
+      });
+      expect(fit.top).toBeGreaterThanOrEqual(0);
+      expect(fit.bottom).toBeLessThanOrEqual(fit.viewport);
+      expect(fit.scrolls).toBe(true);
+    });
+
     it('flips the flyout to the left when there is no room on the right', async () => {
       const page = await setUp('display: flex; justify-content: flex-end; padding: 40px 8px;');
       await hoverGroup(page, 'Tag');
@@ -259,9 +297,11 @@ describe('pds-combobox', () => {
 
     // The input trigger: the button trigger has no accessible name today with or without groups
     // (its <label for> points at a div), which is fixed separately from the flyout.
+    // Email, not Tag: the highlight starts on the first option (in Tag), so this catches an
+    // aria-activedescendant left pointing at an option that isn't rendered.
     it('has no axe violations with a flyout open', async () => {
       const page = await setUp('padding: 40px;', 'input');
-      await hoverGroup(page, 'Tag');
+      await hoverGroup(page, 'Email');
 
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');

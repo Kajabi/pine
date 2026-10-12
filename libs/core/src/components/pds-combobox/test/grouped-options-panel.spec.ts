@@ -1,4 +1,4 @@
-import { FlyoutController, buildPanelEntries, groupLabelOf } from '../grouped-options-panel';
+import { FlyoutController, buildPanelEntries, groupIconOf, groupLabelOf, parentOptgroupOf } from '../grouped-options-panel';
 
 const optgroup = (label: string, icon?: string, ...values: string[]) => {
   const group = document.createElement('optgroup');
@@ -35,6 +35,7 @@ describe('buildPanelEntries', () => {
     ]);
     const [, tagEntry, emailEntry] = entries;
     expect(tagEntry.kind === 'group' && tagEntry.group.icon).toBe('hashtag');
+    expect(tagEntry.kind === 'group' && tagEntry.group.optgroup).toBe(tag.group);
     expect(tagEntry.kind === 'group' && tagEntry.group.options.map(o => o.index)).toEqual([1, 2]);
     expect(emailEntry.kind === 'group' && emailEntry.group.icon).toBeNull();
     expect(emailEntry.kind === 'group' && emailEntry.group.options.map(o => o.index)).toEqual([3]);
@@ -61,9 +62,20 @@ describe('groupLabelOf', () => {
   });
 });
 
+describe('parentOptgroupOf / groupIconOf', () => {
+  it('finds the optgroup, and treats a missing or empty data-icon as no icon', () => {
+    const withIcon = optgroup('Tag', 'hashtag', 'tag-add');
+    const empty = optgroup('Email', '', 'email-send');
+    expect(parentOptgroupOf(withIcon.options[0])).toBe(withIcon.group);
+    expect(parentOptgroupOf(option('loose'))).toBeNull();
+    expect(groupIconOf(withIcon.group)).toBe('hashtag');
+    expect(groupIconOf(empty.group)).toBeNull();
+  });
+});
+
 describe('FlyoutController', () => {
   let open: string | null;
-  let controller: FlyoutController;
+  let controller: FlyoutController<string>;
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -117,10 +129,18 @@ describe('FlyoutController', () => {
     expect(open).toBeNull();
   });
 
-  it('toggles a group on click', () => {
-    controller.toggle('Tag');
+  // Hover opens the group before the click lands, and a tap fires an emulated mouseenter first.
+  it('keeps a hovered group open when its row is clicked', () => {
+    controller.enter('Tag');
+    controller.open('Tag');
     expect(open).toBe('Tag');
-    controller.toggle('Tag');
-    expect(open).toBeNull();
+  });
+
+  it('opens a group on click, cancelling a pending switch or close', () => {
+    controller.enter('Tag');
+    controller.enter('Email');
+    controller.open('Coupon');
+    jest.runAllTimers();
+    expect(open).toBe('Coupon');
   });
 });
