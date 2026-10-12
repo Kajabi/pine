@@ -86,6 +86,10 @@
     gap: var(--pine-dimension-xs);
   }
 
+  .pds-combobox__group-icon {
+    flex-shrink: 0;
+  }
+
   .pds-combobox__loading {
     align-items: center;
     display: flex;
