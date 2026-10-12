@@ -2441,6 +2441,183 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('group-display="flyout"', () => {
+    const actions = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    ];
+
+    const openFlyoutPanel = async (attrs = 'mode="select-only"') => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="actions" group-display="flyout" ${attrs}></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      component.options = actions;
+      await page.waitForChanges();
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component, root: page.root!.shadowRoot! };
+    };
+
+    it('lists one row per group, with its icon and a caret, and no flyout until one opens', async () => {
+      const { root } = await openFlyoutPanel();
+
+      const rows = Array.from(root.querySelectorAll('.pds-combobox__group-row'));
+      expect(rows.map(row => row.querySelector('.pds-combobox__group-row-label')?.textContent)).toEqual(['Tag', 'Email']);
+      expect(rows[0].querySelector('.pds-combobox__group-icon')?.getAttribute('name')).toBe('hashtag');
+      expect(rows[0].querySelector('.pds-combobox__group-row-caret')?.getAttribute('name')).toBe('caret-right');
+      expect(root.querySelector('.pds-combobox__flyout')).toBeNull();
+      expect(root.querySelectorAll('[role="option"]')).toHaveLength(0);
+    });
+
+    it("opens a group's options in a flyout, keeping their indexes", async () => {
+      const { page, component, root } = await openFlyoutPanel();
+
+      component.openGroup = 'Email';
+      await page.waitForChanges();
+
+      const flyout = root.querySelector('.pds-combobox__flyout')!;
+      expect(flyout.getAttribute('aria-label')).toBe('Email');
+      expect(Array.from(flyout.querySelectorAll('[role="option"]')).map(o => [o.textContent, o.getAttribute('data-option-index')])).toEqual([
+        ['Send an email', '2'],
+      ]);
+      expect(root.querySelector('.pds-combobox__group-row--open .pds-combobox__group-row-label')?.textContent).toBe('Email');
+    });
+
+    it('selects an option clicked in a flyout', async () => {
+      const { page, component, root } = await openFlyoutPanel();
+
+      component.openGroup = 'Tag';
+      await page.waitForChanges();
+      (root.querySelector('[data-option-index="1"]') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(component.value).toBe('tag-remove');
+      expect(component.isOpen).toBe(false);
+      expect(component.openGroup).toBeNull();
+    });
+
+    it('highlights the group holding the selection, and checks the option in its flyout', async () => {
+      const { page, component, root } = await openFlyoutPanel('mode="select-only" value="tag-remove"');
+
+      component.openGroup = 'Tag';
+      await page.waitForChanges();
+
+      const rows = Array.from(root.querySelectorAll('.pds-combobox__group-row'));
+      expect(rows.map(row => row.classList.contains('pds-combobox__group-row--has-selection'))).toEqual([true, false]);
+      expect(root.querySelector('[data-option-index="1"] .pds-combobox__option-check')).not.toBeNull();
+      expect(root.querySelector('[data-option-index="0"] .pds-combobox__option-check')).toBeNull();
+    });
+
+    it("opens the highlighted option's group when arrowing", async () => {
+      const { page, component, root } = await openFlyoutPanel();
+
+      component.highlightedIndex = 2;
+      component.updateOptionFocus();
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBe('Email');
+      expect(root.querySelector('.pds-combobox__flyout [data-option-index="2"]')).not.toBeNull();
+    });
+
+    it('searches group labels too, and lists results under their groups', async () => {
+      const { page, component, root } = await openFlyoutPanel('');
+
+      component.displayText = 'tag';
+      component.filterOptions();
+      await page.waitForChanges();
+
+      expect(component.filteredItems.filter((i: HTMLElement) => i.tagName === 'OPTION').map((o: HTMLOptionElement) => o.value)).toEqual([
+        'tag-add',
+        'tag-remove',
+      ]);
+      expect(root.querySelector('.pds-combobox__group-row')).toBeNull();
+      expect(Array.from(root.querySelectorAll('.pds-combobox__group-label')).map(l => l.textContent)).toEqual(['Tag']);
+
+      component.displayText = 'email';
+      component.filterOptions();
+      expect(component.filteredItems.filter((i: HTMLElement) => i.tagName === 'OPTION').map((o: HTMLOptionElement) => o.value)).toEqual([
+        'email-send',
+      ]);
+    });
+
+    it('does not search group labels in inline mode', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="inline-actions"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      component.options = actions;
+      await page.waitForChanges();
+
+      component.displayText = 'email';
+      component.filterOptions();
+
+      // Only "Send an email" matches on its own text; the Email group label doesn't add anything.
+      expect(component.filteredItems.filter((i: HTMLElement) => i.tagName === 'OPTION').map((o: HTMLOptionElement) => o.value)).toEqual([
+        'email-send',
+      ]);
+      component.displayText = 'tag';
+      component.filterOptions();
+      expect(component.filteredItems.filter((i: HTMLElement) => i.tagName === 'OPTION').map((o: HTMLOptionElement) => o.value)).toEqual([
+        'tag-add',
+        'tag-remove',
+      ]);
+      component.displayText = 'mail';
+      component.filterOptions();
+      expect(component.filteredItems.filter((i: HTMLElement) => i.tagName === 'OPTION').map((o: HTMLOptionElement) => o.value)).toEqual([
+        'email-send',
+      ]);
+      component.displayText = 'Email';
+      component.filterOptions();
+      expect(component.filteredItems.filter((i: HTMLElement) => i.tagName === 'OPTION')).toHaveLength(1);
+    });
+
+    it('closes the open group when the dropdown closes', async () => {
+      const { page, component } = await openFlyoutPanel();
+
+      component.openGroup = 'Tag';
+      await page.waitForChanges();
+      component.isOpen = false;
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBeNull();
+    });
+
+    // Inside a modal the listbox is portaled into the dialog; the flyout renders inside the
+    // listbox, so it goes with it rather than needing a portal of its own.
+    it('renders the flyout inside the portaled listbox when dropdown-mount is body', async () => {
+      const { page, component } = await openFlyoutPanel('mode="select-only" dropdown-mount="body"');
+
+      component.openGroup = 'Tag';
+      await page.waitForChanges();
+
+      const portalFlyout = page.doc.querySelector('.pds-combobox-dropdown-portal .pds-combobox__flyout');
+      expect(portalFlyout).not.toBeNull();
+      expect(Array.from(portalFlyout!.querySelectorAll('[role="option"]')).map(o => o.textContent)).toEqual([
+        'Add a tag',
+        'Remove a tag',
+      ]);
+      page.doc.querySelectorAll('.pds-combobox-dropdown-portal').forEach(el => el.remove());
+    });
+
+    it('applies the flyout width props', async () => {
+      const { page, component, root } = await openFlyoutPanel(
+        'mode="select-only" flyout-min-width="200px" flyout-max-width="320px"',
+      );
+
+      component.openGroup = 'Tag';
+      await page.waitForChanges();
+
+      const flyout = root.querySelector('.pds-combobox__flyout') as HTMLElement;
+      expect(flyout.style.minWidth).toBe('200px');
+      expect(flyout.style.maxWidth).toBe('320px');
+    });
+  });
+
   describe('dropdownMount body', () => {
     afterEach(() => {
       document.querySelectorAll('.pds-combobox-dropdown-portal').forEach(el => el.remove());

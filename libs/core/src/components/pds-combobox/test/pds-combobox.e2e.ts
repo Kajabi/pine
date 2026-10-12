@@ -157,4 +157,115 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
   });
+
+  describe('group-display="flyout"', () => {
+    const actions = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    ];
+
+    const setUp = async (wrapperStyle = '', trigger: 'button' | 'input' = 'button') => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      const mode = trigger === 'button' ? 'select-only' : 'filter';
+      await page.setContent(`
+        <div style="${wrapperStyle}">
+          <pds-combobox component-id="actions" label="Action" trigger="${trigger}" mode="${mode}"
+            group-display="flyout" dropdown-width="300px"></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        actions,
+      );
+      await page.waitForChanges();
+      const triggerSelector = trigger === 'button' ? '.pds-combobox__button-trigger' : 'input';
+      await (await page.find(`pds-combobox >>> ${triggerSelector}`)).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    const hoverGroup = async (page: Awaited<ReturnType<typeof newE2EPage>>, label: string) => {
+      const box = await page.evaluate(text => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const row = Array.from(root.querySelectorAll('.pds-combobox__group-row-trigger')).find(
+          el => el.textContent === text,
+        )!;
+        const rect = row.getBoundingClientRect();
+        return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+      }, label);
+      await page.mouse.move(box.x, box.y);
+      await page.waitForChanges();
+      // autoUpdate positions on the next frame.
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    };
+
+    const geometry = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        // DOMRect doesn't serialize out of the page; copy the edges we compare.
+        const rect = (selector: string) => {
+          const { left, right, top } = root.querySelector(selector)!.getBoundingClientRect();
+          return { left, right, top };
+        };
+        return {
+          panel: rect('.pds-combobox__listbox'),
+          row: rect('.pds-combobox__group-row--open .pds-combobox__group-row-trigger'),
+          flyout: rect('.pds-combobox__flyout'),
+          first: rect('.pds-combobox__flyout [role="option"]'),
+        };
+      });
+
+    it("opens a group's flyout on hover beside the panel, its first option level with the row", async () => {
+      const page = await setUp('padding: 40px;');
+      await hoverGroup(page, 'Tag');
+
+      const { panel, row, flyout, first } = await geometry(page);
+      expect(flyout.left - panel.right).toBeGreaterThanOrEqual(2);
+      expect(flyout.left - panel.right).toBeLessThanOrEqual(6);
+      expect(Math.abs(first.top - row.top)).toBeLessThanOrEqual(2);
+    });
+
+    it('selects an option from the flyout', async () => {
+      const page = await setUp('padding: 40px;');
+      await hoverGroup(page, 'Tag');
+
+      const target = await page.evaluate(() => {
+        const option = document
+          .querySelector('pds-combobox')!
+          .shadowRoot!.querySelector('.pds-combobox__flyout [data-option-index="1"]')!;
+        const rect = option.getBoundingClientRect();
+        return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+      });
+      // Slide right along the row into the flyout, then click.
+      await page.mouse.move(target.x, target.y, { steps: 8 });
+      await page.mouse.click(target.x, target.y);
+      await page.waitForChanges();
+
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('tag-remove');
+    });
+
+    it('flips the flyout to the left when there is no room on the right', async () => {
+      const page = await setUp('display: flex; justify-content: flex-end; padding: 40px 8px;');
+      await hoverGroup(page, 'Tag');
+
+      const { panel, flyout } = await geometry(page);
+      expect(flyout.right).toBeLessThanOrEqual(panel.left);
+    });
+
+    // The input trigger: the button trigger has no accessible name today with or without groups
+    // (its <label for> points at a div), which is fixed separately from the flyout.
+    it('has no axe violations with a flyout open', async () => {
+      const page = await setUp('padding: 40px;', 'input');
+      await hoverGroup(page, 'Tag');
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
+
 });
