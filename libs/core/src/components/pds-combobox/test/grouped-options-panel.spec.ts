@@ -100,7 +100,7 @@ describe('disabled options', () => {
     expect(isOptionDisabled(undefined)).toBe(false);
   });
 
-  it('skips disabled options and groups with nothing to choose, but never the row back', () => {
+  it('keeps disabled options and groups in the column, so the keys can reach them', () => {
     const tag = optgroup('Tag', undefined, 'tag-add', 'tag-remove');
     tag.options[0].setAttribute('disabled', '');
     const coupon = optgroup('Coupon', undefined, 'coupon-send');
@@ -112,9 +112,9 @@ describe('disabled options', () => {
 
     expect(tagEntry.kind === 'group' && isGroupDisabled(tagEntry.group)).toBe(false);
     expect(couponEntry.kind === 'group' && isGroupDisabled(couponEntry.group)).toBe(true);
-    expect(panelColumn(entries, null, null, false)).toEqual([tag.group]);
-    expect(panelColumn(entries, tag.group, 2, false)).toEqual([2]);
-    expect(panelColumn(entries, coupon.group, null, true)).toEqual([coupon.group]);
+    expect(panelColumn(entries, null, null, false)).toEqual([0, tag.group, coupon.group]);
+    expect(panelColumn(entries, tag.group, 2, false)).toEqual([1, 2]);
+    expect(panelColumn(entries, coupon.group, null, true)).toEqual([coupon.group, 3]);
   });
 });
 
