@@ -1122,7 +1122,7 @@ Set `group-display="flyout"` to list the groups instead of every option. Hoverin
 
 ### Drill-In Groups
 
-Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`). From the keyboard, the arrow keys move through every option across the groups, drilling into each option's group as they reach it; ArrowLeft, or Backspace on an empty panel search, steps back to the groups. With `panel-search`, typing a group's name is the quickest way to a group.
+Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`). ArrowLeft, Escape, or Backspace on an empty panel search, also steps back to the groups.
 
 ```jsx
 <PdsCombobox
@@ -1140,11 +1140,25 @@ Set `group-display="drill-in"` where nothing can open beside the dropdown, such 
 />
 ```
 
+### Keyboard and Screen Readers in Grouped Displays
+
+With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each group is an item that expands to its options, one level down. Keyboard focus stays on the trigger, or on the panel's search field, and `aria-activedescendant` follows the highlighted row.
+
+| Key | Action |
+| --- | --- |
+| Up / Down | Move through the current level: the groups, or the open group's options. |
+| Home / End, PageUp / PageDown | Jump within the current level. In the panel's search field, Home and End move the cursor instead. |
+| Right, Enter, Space | On a group, open it and move to its first option. On an option, Enter or Space selects it. |
+| Left | Close the open group and return to its row. |
+| Escape | Close the open group first, then the dropdown. |
+
+The dropdown opens on the group holding the selection, or on the first group. While searching, the results are a flat list of options, each set under its group's name.
+
 ### Searching From the Panel
 
 The `button` and `chip` triggers can't be typed into. Add `panel-search` to put a search field at the top of the dropdown: it takes focus when the dropdown opens, filters the options as you type (matching group labels too in a grouped display), and arrow keys and Enter pick from the results. Pass translated `search-placeholder` and `search-options-label` strings; both default to English. `panel-search` has no effect on the `input` trigger, which already searches. The typed query is also emitted on `pdsComboboxSearch`, as it is for the `input` trigger; it's untrusted user text, so escape it before rendering it and treat it as untrusted when building a request from it.
 
-Unlike the other triggers, `panel-search` moves keyboard focus into the dropdown. With `dropdown-mount="body"` inside a `<dialog>` (including `pds-modal`) that's fine, because the dropdown mounts in the dialog. Inside a focus trap that isn't a `<dialog>`, such as a custom side panel, check that the trap allows focus into the portaled dropdown, or use `dropdown-mount="host"`.
+With `panel-search`, the trigger is a button that opens the dropdown, and the search field is the combobox. Unlike the other triggers, `panel-search` moves keyboard focus into the dropdown. With `dropdown-mount="body"` inside a `<dialog>` (including `pds-modal`) that's fine, because the dropdown mounts in the dialog. Inside a focus trap that isn't a `<dialog>`, such as a custom side panel, check that the trap allows focus into the portaled dropdown, or use `dropdown-mount="host"`.
 
 ```jsx
 <PdsCombobox
@@ -1244,10 +1258,10 @@ When using group labels:
 
 ### ARIA and Accessibility Considerations
 
-Both `<optgroup>` and `<pds-text>` group labels are rendered as presentational items in the dropdown:
+`<optgroup>` and `<pds-text>` group labels are rendered differently in the dropdown:
 
-- **`<optgroup>` elements**: The `label` renders as a visual caption above the group's options. Screen readers don't announce it with each option, so an option's own text has to make sense without its group.
-- **`<pds-text>` elements**: Serve as visual group headers and are likewise presentational.
+- **`<optgroup>` elements**: Each optgroup's options sit in a `role="group"` named by its `label`, which assistive technology announces on entering the group, helping users understand the relationship between options and their categories.
+- **`<pds-text>` elements**: Serve as visual group headers but are purely presentational. They do not provide semantic grouping information to screen readers.
 
 **Recommendation**: Use `<optgroup>` for groups of options, since it groups them in the markup and works with `data-icon`. Use `<pds-text>` for a heading over options that don't belong to an optgroup.
 
