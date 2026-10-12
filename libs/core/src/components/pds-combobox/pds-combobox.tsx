@@ -937,8 +937,8 @@ export class PdsCombobox implements BasePdsProps {
       }
 
       // For chip triggers, ensure we always have a selected option
-      if (!initialSelected && this.trigger === 'chip' && this.optionEls.length > 0) {
-        initialSelected = this.optionEls[0]; // Select first option as default
+      if (initialSelected === null && this.trigger === 'chip' && this.optionEls.some(opt => !isOptionDisabled(opt))) {
+        initialSelected = this.optionEls.find(opt => !isOptionDisabled(opt))!; // Select the first enabled option as default
         this.value = initialSelected.value;
         this.displayText = this.getOptionLabel(initialSelected);
         console.warn('PDS Combobox: Chip triggers should always have a selected option. Automatically selected the first option.');
@@ -1373,33 +1373,29 @@ export class PdsCombobox implements BasePdsProps {
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        // If no option is highlighted, start at the first; disabled options are skipped
-        this.highlightEnabledOption(selectableOptions, this.highlightedIndex < 0 ? 0 : this.highlightedIndex + 1, 1);
+        // If no option is highlighted, start at the first
+        this.highlightOptionAt(selectableOptions, this.highlightedIndex < 0 ? 0 : this.highlightedIndex + 1);
         break;
       case 'ArrowUp':
         e.preventDefault();
         // If no option is highlighted, start at the last
-        this.highlightEnabledOption(
-          selectableOptions,
-          this.highlightedIndex < 0 ? selectableOptions.length - 1 : this.highlightedIndex - 1,
-          -1,
-        );
+        this.highlightOptionAt(selectableOptions, this.highlightedIndex < 0 ? selectableOptions.length - 1 : this.highlightedIndex - 1);
         break;
       case 'Home':
         e.preventDefault();
-        this.highlightEnabledOption(selectableOptions, 0, 1);
+        this.highlightOptionAt(selectableOptions, 0);
         break;
       case 'End':
         e.preventDefault();
-        this.highlightEnabledOption(selectableOptions, selectableOptions.length - 1, -1);
+        this.highlightOptionAt(selectableOptions, selectableOptions.length - 1);
         break;
       case 'PageDown':
         e.preventDefault();
-        this.highlightEnabledOption(selectableOptions, Math.min(this.highlightedIndex + 10, selectableOptions.length - 1), 1, true);
+        this.highlightOptionAt(selectableOptions, this.highlightedIndex + 10);
         break;
       case 'PageUp':
         e.preventDefault();
-        this.highlightEnabledOption(selectableOptions, Math.max(this.highlightedIndex - 10, 0), -1, true);
+        this.highlightOptionAt(selectableOptions, this.highlightedIndex - 10);
         break;
       case 'Enter':
       case ' ': {
@@ -1513,21 +1509,12 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Highlights the first enabled option from `from`, stepping by `step`. Without one, the
-   * highlight stays, unless `turnBack` lets a page jump that lands past the last enabled option
-   * look the other way.
+   * Highlights the option at `index`, kept within the list. Disabled options can be highlighted,
+   * so assistive tech announces them as unavailable, but not chosen.
    */
-  private highlightEnabledOption(options: HTMLOptionElement[], from: number, step: 1 | -1, turnBack = false) {
-    const find = (start: number, by: 1 | -1) => {
-      for (let i = start; i >= 0 && i < options.length; i += by) {
-        if (!isOptionDisabled(options[i])) return i;
-      }
-      return -1;
-    };
-    let index = find(from, step);
-    if (index < 0 && turnBack) index = find(from, step === 1 ? -1 : 1);
-    if (index < 0) return;
-    this.highlightedIndex = index;
+  private highlightOptionAt(options: HTMLOptionElement[], index: number) {
+    if (options.length === 0) return;
+    this.highlightedIndex = Math.max(0, Math.min(options.length - 1, index));
     this.updateOptionFocus();
   }
 
@@ -1544,7 +1531,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private expandGroup(entries: ReturnType<typeof buildPanelEntries>, optgroup: HTMLOptGroupElement) {
     this.flyout.open(optgroup);
-    const first = findGroup(entries, optgroup)?.options.find(({ option }) => !isOptionDisabled(option));
+    const first = findGroup(entries, optgroup)?.options[0];
     if (first !== undefined) this.highlightPanelItem(first.index);
     // Its options render after this change; scroll to the first one then.
     this.pendingOptionFocus = true;
@@ -1602,9 +1589,11 @@ export class PdsCombobox implements BasePdsProps {
     // In the grouped panel, the first row with something to choose: a group stays closed until
     // it's opened.
     if (this.showsGroupedPanel) {
-      const [first] = panelColumn(buildPanelEntries(this.filteredItems), null, null, false);
-      this.highlightedIndex = typeof first === 'number' ? first : -1;
-      this.highlightedGroup = typeof first === 'number' || first === undefined ? null : first;
+      const first = buildPanelEntries(this.filteredItems).find(entry =>
+        entry.kind === 'group' ? !isGroupDisabled(entry.group) : !isOptionDisabled(entry.option),
+      );
+      this.highlightedIndex = first?.kind === 'option' ? first.index : -1;
+      this.highlightedGroup = first?.kind === 'group' ? first.group.optgroup : null;
       return;
     }
 
@@ -1841,8 +1830,6 @@ export class PdsCombobox implements BasePdsProps {
   // Event handler for mouse enter on option
   private onOptionMouseEnter = (event: Event) => {
     const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
-    // A disabled option takes no highlight, so the keys carry on from the last one that could.
-    if ((event.currentTarget as HTMLElement).getAttribute('aria-disabled') === 'true') return;
     this.highlightedIndex = idx;
     this.keyboardNavigating = false;
   };
@@ -1865,10 +1852,8 @@ export class PdsCombobox implements BasePdsProps {
 
   // The pointer highlights a group's row as it does an option, so the keys carry on from there.
   private onGroupRowTriggerMouseEnter = (event: Event) => {
-    const index = Number((event.currentTarget as HTMLElement).getAttribute('data-group-index'));
-    const group = this.renderedGroups[index];
-    // A group with nothing to choose still opens, but takes no highlight, as a disabled option doesn't.
-    if (group !== undefined && !isGroupDisabled(group)) this.highlightGroupRowByPointer(group.optgroup);
+    const group = this.groupFromEvent(event);
+    if (group !== null) this.highlightGroupRowByPointer(group);
   };
 
   private onGroupBackMouseEnter = () => {
@@ -2245,19 +2230,21 @@ export class PdsCombobox implements BasePdsProps {
   private renderListboxItems(setSize: number) {
     const rendered = [];
     let optionIndex = 0;
-    let group: { optgroup: HTMLOptGroupElement; key: string; options: unknown[] } | null = null;
+    let group: { optgroup: HTMLOptGroupElement; key: string; options: unknown[]; members: HTMLOptionElement[] } | null = null;
 
     const closeGroup = () => {
       if (group === null) return;
-      const { optgroup, key, options } = group;
+      const { optgroup, key, options, members } = group;
       const groupIcon = groupIconOf(optgroup);
+      // As in the grouped displays: disabled when there's nothing left in it to choose.
+      const disabled = members.length > 0 && members.every(member => isOptionDisabled(member));
       rendered.push(
         <li
           key={key}
-          class="pds-combobox__group"
+          class={{ 'pds-combobox__group': true, 'pds-combobox__group--disabled': disabled }}
           role="group"
           aria-label={optgroup.label}
-          aria-disabled={optgroup.hasAttribute('disabled') ? 'true' : undefined}
+          aria-disabled={disabled ? 'true' : undefined}
         >
           <div
             class={{ 'pds-combobox__group-label': true, 'pds-combobox__group-label--with-icon': groupIcon !== null }}
@@ -2280,7 +2267,7 @@ export class PdsCombobox implements BasePdsProps {
     this.filteredItems.forEach((item, itemIdx) => {
       if (item.tagName === 'OPTGROUP') {
         closeGroup();
-        group = { optgroup: item as HTMLOptGroupElement, key: `optgroup-${itemIdx}`, options: [] };
+        group = { optgroup: item as HTMLOptGroupElement, key: `optgroup-${itemIdx}`, options: [], members: [] };
       } else if (item.tagName === 'PDS-TEXT') {
         closeGroup();
         rendered.push(
@@ -2295,6 +2282,7 @@ export class PdsCombobox implements BasePdsProps {
         optionIndex++;
         if (group !== null) {
           group.options.push(rendering);
+          group.members.push(option);
         } else {
           rendered.push(rendering);
         }

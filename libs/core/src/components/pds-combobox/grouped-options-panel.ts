@@ -97,7 +97,8 @@ export type PanelItem = HTMLOptGroupElement | number;
  * The items Up and Down move through from `current`, one tree level at a time: the panel's rows
  * (groups and ungrouped options), or the open group's options. Drilled into a group, its row
  * (drawn as the row back) comes first, above its options, as a tree draws a parent above its children.
- * Disabled options, and groups with nothing to choose, are skipped; the row back never is.
+ * Disabled options and groups stay in it, as the APG listbox and tree patterns advise, so they're
+ * announced as unavailable rather than hidden from the keyboard.
  */
 export function panelColumn(
   entries: PanelEntry[],
@@ -107,13 +108,11 @@ export function panelColumn(
 ): PanelItem[] {
   const open = openGroup === null ? undefined : findGroup(entries, openGroup);
   if (open !== undefined) {
-    const options = open.options.filter(({ option }) => !isOptionDisabled(option)).map(({ index }) => index);
+    const options = open.options.map(({ index }) => index);
     if (drilledIn) return [open.optgroup, ...options];
-    if (typeof current === 'number' && open.options.some(({ index }) => index === current)) return options;
+    if (typeof current === 'number' && options.includes(current)) return options;
   }
-  return entries
-    .filter(entry => (entry.kind === 'group' ? !isGroupDisabled(entry.group) : !isOptionDisabled(entry.option)))
-    .map(entry => (entry.kind === 'group' ? entry.group.optgroup : entry.index));
+  return entries.map(entry => (entry.kind === 'group' ? entry.group.optgroup : entry.index));
 }
 
 /** The panel's group for an optgroup, if it's showing. */
