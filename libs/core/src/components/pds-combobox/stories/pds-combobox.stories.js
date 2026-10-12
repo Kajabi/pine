@@ -576,6 +576,41 @@ GroupDisplayActionCatalog.argTypes = {
   groupDisplay: { control: 'inline-radio', options: ['inline', 'flyout', 'drill-in'] },
 };
 
+export const DisabledOptions = (args) => html`
+<div style="min-height: 320px;">
+  <pds-combobox
+    component-id="combobox-disabled-options"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    helper-message=${args.helperMessage}
+    trigger="button"
+    mode="select-only"
+    group-display=${args.groupDisplay}
+    trigger-width="280px"
+    dropdown-width="280px"
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+DisabledOptions.args = {
+  label: 'Action',
+  placeholder: 'Choose an action',
+  helperMessage: 'Text messages and coaching actions need the Pro plan.',
+  groupDisplay: 'flyout',
+  options: [
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
+    { id: 'email_send', text: 'Send an email', group: 'Communication', groupIcon: 'mail' },
+    { id: 'sms_send', text: 'Send a text message', group: 'Communication', disabled: true },
+    { id: 'coaching_invoice_reminder', text: 'Send an invoice reminder', group: 'Coaching', groupIcon: 'one-off-session', disabled: true },
+    { id: 'coaching_sessions_cancel', text: 'Cancel sessions', group: 'Coaching', disabled: true },
+  ],
+};
+
+DisabledOptions.argTypes = {
+  groupDisplay: { control: 'inline-radio', options: ['inline', 'flyout', 'drill-in'] },
+};
+
 export const OptionGroupsPdsText = (args) => html`
 <pds-combobox
   component-id="combobox-pds-text-groups"

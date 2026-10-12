@@ -1315,6 +1315,74 @@ With `panel-search`, the trigger is a button that opens the dropdown, and the se
 />
 ```
 
+### Disabled Options
+
+Disable an option to keep it listed but stop it being chosen, such as an action that needs a plan upgrade. Use `<option disabled>`, `<optgroup disabled>` for a whole group, or `disabled: true` on an `options` entry.
+
+- Disabled options are muted, marked `aria-disabled`, and do nothing when clicked or when Enter or Space is pressed on them.
+- The arrow keys, Home, End, PageUp and PageDown skip them, and the dropdown never opens with one highlighted.
+- In `flyout` and `drill-in`, a group whose options are all disabled is marked disabled and skipped by the keys. It still opens on hover, so people can see what it holds.
+- Search still finds disabled options, so people learn they exist.
+- A `value` that matches a disabled option still shows as the selection, as it does in a native `<select>`.
+- Say why an option is disabled nearby, for example in `helper-message`, since a disabled option can't explain itself.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-disabled-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  group-display="flyout"
+  helper-message="Text messages need the Pro plan.">
+  <optgroup label="Contact" data-icon="contact">
+    <option value="contact_tag_add">Add a tag</option>
+    <option value="contact_tag_remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Communication" data-icon="mail">
+    <option value="email_send">Send an email</option>
+    <option value="sms_send" disabled>Send a text message</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-disabled-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  groupDisplay="flyout"
+  helperMessage="Text messages need the Pro plan."
+  options={[
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
+    { id: 'email_send', text: 'Send an email', group: 'Communication', groupIcon: 'mail' },
+    { id: 'sms_send', text: 'Send a text message', group: 'Communication', disabled: true },
+  ]}
+/>`,
+  }}
+>
+  <div style={{ minHeight: '240px' }}>
+    <pds-combobox
+      component-id="combobox-disabled-example"
+      label="Action"
+      placeholder="Choose an action"
+      trigger="button"
+      mode="select-only"
+      group-display="flyout"
+      helper-message="Text messages need the Pro plan.">
+      <optgroup label="Contact" data-icon="contact">
+        <option value="contact_tag_add">Add a tag</option>
+        <option value="contact_tag_remove">Remove a tag</option>
+      </optgroup>
+      <optgroup label="Communication" data-icon="mail">
+        <option value="email_send">Send an email</option>
+        <option value="sms_send" disabled>Send a text message</option>
+      </optgroup>
+    </pds-combobox>
+  </div>
+</DocCanvas>
+
 ### Using PDS Text Components
 
 Alternatively, use `<pds-text>` components as group labels for more styling control:
