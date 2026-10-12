@@ -221,7 +221,7 @@ describe('pds-combobox', () => {
           panel: rect('.pds-combobox__listbox'),
           row: rect('.pds-combobox__group-row--open .pds-combobox__group-row-trigger'),
           flyout: rect('.pds-combobox__flyout'),
-          first: rect('.pds-combobox__flyout [role="option"]'),
+          first: rect('.pds-combobox__flyout .pds-combobox__option'),
         };
       });
 
@@ -297,39 +297,31 @@ describe('pds-combobox', () => {
 
     // Email, not Tag: the highlight starts on the first option (in Tag), so this catches an
     // aria-activedescendant left pointing at an option that isn't rendered.
-    it('arrows across groups with the button trigger, keeping the dropdown open and focus on the trigger', async () => {
-      const page = await setUp('padding: 40px;');
-      await page.keyboard.press('ArrowDown');
-      await page.keyboard.press('ArrowDown');
-      await page.waitForChanges();
-      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const activeDescendant = (page: Awaited<ReturnType<typeof newE2EPage>>, selector: string) =>
+      page.evaluate(sel => document.querySelector('pds-combobox')!.shadowRoot!.querySelector(sel)!.getAttribute('aria-activedescendant'), selector);
 
-      const state = await page.evaluate(() => {
-        const root = document.querySelector('pds-combobox')!.shadowRoot!;
-        return {
-          open: root.querySelector('.pds-combobox__listbox') !== null,
-          flyout: root.querySelector('.pds-combobox__group-row--open .pds-combobox__group-row-label')?.textContent,
-          activeDescendant: root.querySelector('.pds-combobox__button-trigger')!.getAttribute('aria-activedescendant'),
-          focused: (root.activeElement as HTMLElement | null)?.className ?? '',
-        };
-      });
-      expect(state).toEqual({
-        open: true,
-        flyout: 'Email',
-        activeDescendant: 'actions-option-2',
-        focused: expect.stringContaining('pds-combobox__button-trigger'),
-      });
+    it('opens a group from the keyboard and selects in its flyout, focus staying on the trigger', async () => {
+      const page = await setUp('padding: 40px;');
+      const trigger = '.pds-combobox__button-trigger';
+      const tagRowId = await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-row')!.id);
+      expect(await activeDescendant(page, trigger)).toBe(tagRowId);
+
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowRight');
+      await page.waitForChanges();
+      expect(await activeDescendant(page, trigger)).toBe('actions-option-2');
+      expect(await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.className)).toContain('pds-combobox__button-trigger');
 
       await page.keyboard.press('Enter');
       await page.waitForChanges();
       expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('email-send');
     });
 
-    it('has no axe violations with the button trigger and a flyout opened by the keys', async () => {
-      const page = await setUp('padding: 40px;');
-      await page.keyboard.press('ArrowDown');
-      await page.keyboard.press('ArrowDown');
+    it('has no axe violations as a tree with a group opened from the keyboard', async () => {
+      const page = await setUp('padding: 40px;', 'input');
+      await page.keyboard.press('ArrowRight');
       await page.waitForChanges();
+      expect(await activeDescendant(page, 'input')).toBe('actions-option-0');
 
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
@@ -400,7 +392,7 @@ describe('pds-combobox', () => {
           Array.from(
             document
               .querySelector('pds-combobox')!
-              .shadowRoot!.querySelectorAll('.pds-combobox__group-row-trigger, .pds-combobox__group-back-trigger, [role="option"]'),
+              .shadowRoot!.querySelectorAll('.pds-combobox__group-row-trigger, .pds-combobox__group-back-trigger, .pds-combobox__option'),
           ).map(el => el.textContent),
         );
 
@@ -462,6 +454,30 @@ describe('pds-combobox', () => {
 
       await page.keyboard.press('Tab');
       expect(await page.evaluate(() => document.activeElement?.id ?? '')).toBe('after');
+    });
+
+    it('drills in and back from the search field by keyboard, then closes with Escape', async () => {
+      const page = await setUp('group-display="drill-in" panel-search');
+      const searchAD = () =>
+        page.evaluate(() =>
+          document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__panel-search-input')!.getAttribute('aria-activedescendant'),
+        );
+
+      await page.keyboard.press('ArrowRight');
+      await page.waitForChanges();
+      expect(await searchAD()).toBe('actions-option-0');
+
+      await page.keyboard.press('ArrowLeft');
+      await page.waitForChanges();
+      const tagRowId = await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-row')!.id);
+      expect(await searchAD()).toBe(tagRowId);
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('');
+      expect(await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox'))).toBeNull();
+      expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
     });
 
     it('drills in when a portaled dropdown at the right edge has no room for a flyout', async () => {

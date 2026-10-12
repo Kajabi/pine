@@ -1,4 +1,4 @@
-import { FlyoutController, buildPanelEntries, groupIconOf, groupLabelOf, parentOptgroupOf, scrollIntoViewWithin } from '../grouped-options-panel';
+import { FlyoutController, buildPanelEntries, findGroup, groupIconOf, groupLabelOf, panelColumn, parentOptgroupOf, scrollIntoViewWithin } from '../grouped-options-panel';
 
 const optgroup = (label: string, icon?: string, ...values: string[]) => {
   const group = document.createElement('optgroup');
@@ -50,6 +50,29 @@ describe('buildPanelEntries', () => {
     expect(entries[0].kind === 'group' && entries[0].group.options.map(o => [o.option.value, o.index])).toEqual([
       ['tag-remove', 0],
     ]);
+  });
+});
+
+describe('panelColumn', () => {
+  const tag = optgroup('Tag', undefined, 'tag-add', 'tag-remove');
+  const email = optgroup('Email', undefined, 'email-send');
+  const loose = option('loose');
+  const entries = buildPanelEntries([loose, tag.group, ...tag.options, email.group, ...email.options]);
+
+  it('is the top level, rows and ungrouped options, unless the keyboard is inside the open group', () => {
+    expect(panelColumn(entries, null, null, false)).toEqual([0, tag.group, email.group]);
+    expect(panelColumn(entries, tag.group, tag.group, false)).toEqual([0, tag.group, email.group]);
+    expect(panelColumn(entries, tag.group, 2, false)).toEqual([1, 2]);
+  });
+
+  it('puts the drilled-in group above its options', () => {
+    expect(panelColumn(entries, email.group, null, true)).toEqual([email.group, 3]);
+  });
+
+  it('falls back to the top level when the open group is not showing', () => {
+    const other = optgroup('Other', undefined, 'other');
+    expect(panelColumn(entries, other.group, 0, true)).toEqual([0, tag.group, email.group]);
+    expect(findGroup(entries, other.group)).toBeUndefined();
   });
 });
 
