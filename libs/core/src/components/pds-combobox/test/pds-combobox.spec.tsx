@@ -2210,6 +2210,125 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('grouped options', () => {
+    const groupedOptions = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'email' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    ];
+
+    const openWith = async (html: string, options?: unknown[]) => {
+      const page = await newSpecPage({ components: [PdsCombobox], html });
+      const component = page.rootInstance;
+      if (options) {
+        component.options = options;
+        await page.waitForChanges();
+      }
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component };
+    };
+
+    // The spec environment doesn't populate slot assignment, so slotted markup is handed to the
+    // component the way updateOptions() would collect it.
+    const openWithSlottedGroup = async (componentId: string, label: string, icon?: string) => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="${componentId}" mode="select-only"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const optgroup = page.doc.createElement('optgroup') as HTMLOptGroupElement;
+      optgroup.label = label;
+      if (icon !== undefined) optgroup.setAttribute('data-icon', icon);
+      const option = page.doc.createElement('option') as HTMLOptionElement;
+      option.value = 'first';
+      option.textContent = 'First';
+      optgroup.appendChild(option);
+      component.optionEls = [option];
+      component.allItems = [optgroup, option];
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component };
+    };
+
+    const groupLabels = (page: { root?: HTMLElement }) =>
+      Array.from(page.root!.shadowRoot!.querySelectorAll('.pds-combobox__group-label'));
+
+    it('nests options that share a group under one optgroup, in the order groups first appear', async () => {
+      const { component } = await openWith(
+        `<pds-combobox component-id="grouped" mode="select-only"></pds-combobox>`,
+        groupedOptions,
+      );
+
+      const items = component.allItems.map((item: HTMLElement) =>
+        item.tagName === 'OPTGROUP' ? `group:${(item as HTMLOptGroupElement).label}` : (item as HTMLOptionElement).value,
+      );
+      expect(items).toEqual(['group:Tag', 'tag-add', 'group:Email', 'email-send', 'tag-remove']);
+      const removeTag = component.optionEls.find((o: HTMLOptionElement) => o.value === 'tag-remove');
+      expect((removeTag.parentElement as HTMLOptGroupElement).label).toBe('Tag');
+    });
+
+    it('leaves options without a group at the top level', async () => {
+      const { component } = await openWith(
+        `<pds-combobox component-id="ungrouped" mode="select-only"></pds-combobox>`,
+        [
+          { id: '1', text: 'One' },
+          { id: '2', text: 'Two' },
+        ],
+      );
+
+      expect(component.allItems.every((item: HTMLElement) => item.tagName === 'OPTION')).toBe(true);
+      expect(component.optionEls[0].parentElement).toBeNull();
+    });
+
+    it("renders each group's icon from the options prop beside its label", async () => {
+      const { page } = await openWith(
+        `<pds-combobox component-id="grouped-icons" mode="select-only"></pds-combobox>`,
+        groupedOptions,
+      );
+
+      const labels = groupLabels(page);
+      expect(labels.map(label => label.textContent)).toEqual(['Tag', 'Email']);
+      expect(labels.map(label => label.querySelector('pds-icon')?.getAttribute('icon'))).toEqual(['hashtag', 'email']);
+      expect(labels[0].classList.contains('pds-combobox__group-label--with-icon')).toBe(true);
+      expect(labels[0].querySelector('pds-icon')?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('renders the icon from data-icon on a slotted optgroup', async () => {
+      const { page } = await openWithSlottedGroup('slotted-icons', 'Tag', 'hashtag');
+
+      const [label] = groupLabels(page);
+      expect(label.querySelector('pds-icon')?.getAttribute('icon')).toBe('hashtag');
+    });
+
+    it('renders a slotted optgroup without data-icon exactly as before', async () => {
+      const { page } = await openWithSlottedGroup('slotted-plain', 'Fruits');
+
+      const [label] = groupLabels(page);
+      expect(label.querySelector('pds-icon')).toBeNull();
+      expect(label.classList.contains('pds-combobox__group-label--with-icon')).toBe(false);
+      expect(label.textContent).toBe('Fruits');
+    });
+
+    it("keeps a matching option's group label when filtering options from the prop", async () => {
+      const { page, component } = await openWith(
+        `<pds-combobox component-id="grouped-filter"></pds-combobox>`,
+        groupedOptions,
+      );
+
+      component.displayText = 'remove';
+      component.filterOptions();
+      await page.waitForChanges();
+
+      const visible = component.filteredItems.map((item: HTMLElement) =>
+        item.tagName === 'OPTGROUP' ? `group:${(item as HTMLOptGroupElement).label}` : (item as HTMLOptionElement).value,
+      );
+      expect(visible).toEqual(['group:Tag', 'tag-remove']);
+    });
+  });
+
   describe('dropdownMount body', () => {
     afterEach(() => {
       document.querySelectorAll('.pds-combobox-dropdown-portal').forEach(el => el.remove());
