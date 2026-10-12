@@ -2134,6 +2134,54 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('trigger accessible name', () => {
+    const triggerFor = (page: { root?: HTMLElement }, part: string) =>
+      page.root!.shadowRoot!.querySelector(`[part="${part}"]`) as HTMLElement;
+
+    it('names a button trigger by its visible label', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="named" label="Action" trigger="button"><option value="a">A</option></pds-combobox>`,
+      });
+
+      const label = page.root!.shadowRoot!.querySelector('label')!;
+      const trigger = triggerFor(page, 'button-trigger');
+      expect(label.id).toBe('named-label');
+      expect(trigger.getAttribute('aria-labelledby')).toBe('named-label');
+      expect(trigger.hasAttribute('aria-label')).toBe(false);
+    });
+
+    it('names a chip trigger by its visible label', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="named-chip" label="Status" trigger="chip"><option value="a">A</option></pds-combobox>`,
+      });
+
+      expect(triggerFor(page, 'chip-trigger').getAttribute('aria-labelledby')).toBe('named-chip-label');
+    });
+
+    it('uses aria-label instead when the label is hidden', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="hidden" label="Action" hide-label trigger="button"><option value="a">A</option></pds-combobox>`,
+      });
+
+      const trigger = triggerFor(page, 'button-trigger');
+      expect(trigger.hasAttribute('aria-labelledby')).toBe(false);
+      expect(trigger.getAttribute('aria-label')).toBe('Action');
+    });
+
+    it('leaves the input trigger named by <label for>', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="typed" label="Animal"><option value="a">A</option></pds-combobox>`,
+      });
+
+      expect(triggerFor(page, 'input').hasAttribute('aria-labelledby')).toBe(false);
+      expect(page.root!.shadowRoot!.querySelector('label')!.getAttribute('htmlFor') ?? page.root!.shadowRoot!.querySelector('label')!.getAttribute('for')).toBe('typed');
+    });
+  });
+
   describe('dropdownMount body', () => {
     afterEach(() => {
       document.querySelectorAll('.pds-combobox-dropdown-portal').forEach(el => el.remove());
