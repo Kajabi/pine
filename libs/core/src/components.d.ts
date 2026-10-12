@@ -1035,7 +1035,7 @@ export namespace Components {
          */
         "getSelectedValue": () => Promise<string | null>;
         /**
-          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels.
+          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped.
           * @default 'inline'
          */
         "groupDisplay": 'inline' | 'flyout';
@@ -4473,7 +4473,7 @@ declare namespace LocalJSX {
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
         /**
-          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels.
+          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped.
           * @default 'inline'
          */
         "groupDisplay"?: 'inline' | 'flyout';

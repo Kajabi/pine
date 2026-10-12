@@ -1,4 +1,4 @@
-import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { autoUpdate, computePosition, flip, hide, offset, shift, size } from '@floating-ui/dom';
 import type { VirtualElement } from '@floating-ui/dom';
 
 /**
@@ -14,6 +14,8 @@ export interface PanelOption {
 }
 
 export interface PanelGroup {
+  /** The group's identity: two optgroups may share a label. */
+  optgroup: HTMLOptGroupElement;
   label: string;
   /** Pine icon name from the optgroup's `data-icon`, or null. */
   icon: string | null;
@@ -27,6 +29,25 @@ export type PanelEntry = { kind: 'group'; group: PanelGroup } | ({ kind: 'option
  * options, and ungrouped options stay where they are. Indexes count options in list order, the
  * same as the inline listbox, so `data-option-index` means the same thing in every mode.
  */
+/** The optgroup an option sits in, or null for an ungrouped option. */
+export function parentOptgroupOf(option: HTMLOptionElement | null | undefined): HTMLOptGroupElement | null {
+  const parent = option?.parentElement;
+  return parent !== null && parent !== undefined && parent.tagName === 'OPTGROUP' ? (parent as HTMLOptGroupElement) : null;
+}
+
+/** A Pine icon name: letters, digits and hyphens, such as `hashtag`. Never a URL or file path. */
+const PINE_ICON_NAME = /^[a-z0-9-]+$/i;
+
+/**
+ * An optgroup's `data-icon` when it's a Pine icon name, or null. One definition of a usable group
+ * icon for every mode, checked here rather than trusting `pds-icon` to reject anything else; it is
+ * only ever passed to `pds-icon` as `name`.
+ */
+export function groupIconOf(optgroup: HTMLOptGroupElement): string | null {
+  const icon = optgroup.getAttribute('data-icon');
+  return icon !== null && PINE_ICON_NAME.test(icon) ? icon : null;
+}
+
 export function buildPanelEntries(items: Element[]): PanelEntry[] {
   const entries: PanelEntry[] = [];
   const groups = new Map<HTMLOptGroupElement, PanelGroup>();
@@ -35,14 +56,12 @@ export function buildPanelEntries(items: Element[]): PanelEntry[] {
   items.forEach(item => {
     if (item.tagName !== 'OPTION') return;
     const option = item as HTMLOptionElement;
-    const parent = option.parentElement;
+    const optgroup = parentOptgroupOf(option);
 
-    if (parent !== null && parent.tagName === 'OPTGROUP') {
-      const optgroup = parent as HTMLOptGroupElement;
+    if (optgroup !== null) {
       let group = groups.get(optgroup);
       if (!group) {
-        const icon = optgroup.getAttribute('data-icon');
-        group = { label: optgroup.label, icon: icon !== null && icon !== '' ? icon : null, options: [] };
+        group = { optgroup, label: optgroup.label, icon: groupIconOf(optgroup), options: [] };
         groups.set(optgroup, group);
         entries.push({ kind: 'group', group });
       }
@@ -57,37 +76,38 @@ export function buildPanelEntries(items: Element[]): PanelEntry[] {
 
 /** The label of the optgroup an option sits in, or null for an ungrouped option. */
 export function groupLabelOf(option: HTMLOptionElement | null | undefined): string | null {
-  const parent = option?.parentElement;
-  return parent !== null && parent !== undefined && parent.tagName === 'OPTGROUP'
-    ? (parent as HTMLOptGroupElement).label
-    : null;
+  return parentOptgroupOf(option)?.label ?? null;
 }
 
 /** Moving from one group row to another waits this long, so a diagonal trip into the flyout doesn't switch groups. */
 const SWITCH_DELAY_MS = 120;
 /** Leaving a group (into the gap beside its flyout, say) waits this long before closing it. */
 const CLOSE_DELAY_MS = 200;
-/** Space between the panel's edge and the flyout. */
+/** Space between the panel's edge and the flyout: --pine-dimension-050 (4px), per the Figma frames. */
 const FLYOUT_GAP_PX = 4;
+/** How close the flyout may come to the viewport edge: --pine-dimension-100 (8px). */
+const VIEWPORT_PADDING_PX = 8;
+/** A flyout never shrinks below roughly three rows, even when little space is left. */
+const MIN_FLYOUT_HEIGHT_PX = 120;
 
 /**
  * Opens and closes a group's flyout with hover intent, and keeps the open flyout positioned beside
  * its group row. The flyout renders inside the row, so moving the pointer into it never leaves
  * the row; the delays cover the gap between panel and flyout and diagonal moves across rows.
  */
-export class FlyoutController {
+export class FlyoutController<T> {
   private switchTimer?: ReturnType<typeof setTimeout>;
   private closeTimer?: ReturnType<typeof setTimeout>;
   private stopAutoUpdate?: () => void;
   private positionedFlyout?: HTMLElement;
 
   constructor(
-    private readonly getOpenGroup: () => string | null,
-    private readonly setOpenGroup: (label: string | null) => void,
+    private readonly getOpenGroup: () => T | null,
+    private readonly setOpenGroup: (group: T | null) => void,
   ) {}
 
   /** Pointer entered a group row (or its flyout, which sits inside it). */
-  enter(label: string) {
+  enter(label: T) {
     this.clearClose();
     const open = this.getOpenGroup();
     if (open === label) {
@@ -106,7 +126,7 @@ export class FlyoutController {
   }
 
   /** Pointer left a group row and its flyout. */
-  leave(label: string) {
+  leave(label: T) {
     this.clearSwitch();
     if (this.getOpenGroup() !== label) return;
     this.clearClose();
@@ -116,10 +136,14 @@ export class FlyoutController {
     }, CLOSE_DELAY_MS);
   }
 
-  /** A click or tap on a group row: open it, or close it if it's already open. */
-  toggle(label: string) {
+  /**
+   * A click or tap on a group row opens it. It never closes it: on desktop the hover that preceded
+   * the click has already opened it, and touch browsers fire an emulated mouseenter and then click
+   * in the same tap. Closing happens on leaving the row or closing the panel.
+   */
+  open(label: T) {
     this.clearTimers();
-    this.setOpenGroup(this.getOpenGroup() === label ? null : label);
+    this.setOpenGroup(label);
   }
 
   /**
@@ -159,10 +183,25 @@ export class FlyoutController {
         middleware: [
           offset({ mainAxis: FLYOUT_GAP_PX, crossAxis: -flyoutPaddingTop }),
           flip({ fallbackPlacements: ['left-start'] }),
-          shift({ padding: 8 }),
+          shift({ padding: VIEWPORT_PADDING_PX }),
+          // A long group scrolls inside the flyout instead of running off the viewport.
+          size({
+            padding: VIEWPORT_PADDING_PX,
+            apply({ availableHeight }) {
+              flyout.style.maxHeight = `${Math.max(availableHeight, MIN_FLYOUT_HEIGHT_PX)}px`;
+            },
+          }),
+          // Hidden with its row when the panel scrolls the row out of view.
+          hide({ strategy: 'referenceHidden' }),
         ],
-      }).then(({ x, y }) => {
-        Object.assign(flyout.style, { position: 'fixed', left: `${x}px`, top: `${y}px` });
+      }).then(({ x, y, middlewareData }) => {
+        // It starts hidden (see the stylesheet) so it never flashes in the row before it's placed.
+        Object.assign(flyout.style, {
+          position: 'fixed',
+          left: `${x}px`,
+          top: `${y}px`,
+          visibility: middlewareData.hide?.referenceHidden === true ? 'hidden' : 'visible',
+        });
       });
 
     this.stopAutoUpdate = autoUpdate(reference, flyout, () => {

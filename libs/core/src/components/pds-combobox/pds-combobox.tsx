@@ -5,7 +5,7 @@ import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import DOMPurify from 'dompurify';
-import { FlyoutController, buildPanelEntries, groupLabelOf } from './grouped-options-panel';
+import { FlyoutController, buildPanelEntries, groupIconOf, groupLabelOf, parentOptgroupOf } from './grouped-options-panel';
 import type { PanelGroup } from './grouped-options-panel';
 import type {
   ComboboxOption,
@@ -13,9 +13,6 @@ import type {
   ComboboxLoadOptionsEventDetail,
   AsyncResponse,
 } from './combobox-interface';
-
-/** A Pine icon name: letters, digits and hyphens, such as `hashtag`. Never a URL or file path. */
-const PINE_ICON_NAME = /^[a-z0-9-]+$/i;
 
 /**
  * @slot option - Option elements for the combobox dropdown
@@ -110,7 +107,8 @@ export class PdsCombobox implements BasePdsProps {
    * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown.
    * `inline` lists each group's label above its options. `flyout` lists the groups, and opens a
    * group's options in a panel beside it on hover or click; while searching, the matching options
-   * are listed under their group labels, and search also matches group labels.
+   * are listed under their group labels, and search also matches group labels. `flyout` groups
+   * by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped.
    * @default 'inline'
    */
   @Prop() groupDisplay: 'inline' | 'flyout' = 'inline';
@@ -283,7 +281,7 @@ export class PdsCombobox implements BasePdsProps {
   /**
    * Label of the group whose flyout is open, when `groupDisplay` is `flyout`.
    */
-  @State() openGroup: string | null = null;
+  @State() openGroup: HTMLOptGroupElement | null = null;
 
   /**
    * Internal state for the currently selected option
@@ -332,12 +330,14 @@ export class PdsCombobox implements BasePdsProps {
   private fetchTimeoutTimer?: number;
   private observer?: MutationObserver;
   private originalSearchEmitter?: EventEmitter<ComboboxSearchEventDetail>;
-  private flyout = new FlyoutController(
+  private flyout = new FlyoutController<HTMLOptGroupElement>(
     () => this.openGroup,
-    label => {
-      this.openGroup = label;
+    group => {
+      this.openGroup = group;
     },
   );
+  /** The groups in the flyout panel's last render, so a row's index finds its optgroup. */
+  private renderedGroups: PanelGroup[] = [];
   /** The highlighted option sits in a flyout that hasn't rendered yet; focus it after the next render. */
   private pendingOptionFocus = false;
 
@@ -1365,19 +1365,9 @@ export class PdsCombobox implements BasePdsProps {
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
     if (selectableOptions.length > 0) {
       this.setInitialHighlightedIndex();
-      if (this.listboxEl) {
-        const optionElements = this.listboxEl.querySelectorAll('[role="option"]');
-        const highlightedOption = optionElements[this.highlightedIndex] as HTMLElement;
-        if (highlightedOption) {
-          optionElements.forEach(option => {
-            (option as HTMLElement).setAttribute('tabindex', '-1');
-          });
-          highlightedOption.setAttribute('tabindex', '0');
-          highlightedOption.focus();
-          highlightedOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        }
-      }
-      this.updateAriaActiveDescendant();
+      // By index, through the same path as arrowing: it opens the option's flyout group first
+      // when it isn't rendered, and focuses it once it is.
+      this.updateOptionFocus();
     }
   }
 
@@ -1395,7 +1385,7 @@ export class PdsCombobox implements BasePdsProps {
     // option's group, and finish once it has rendered.
     if (this.showsGroupedPanel) {
       const selectable = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
-      const group = groupLabelOf(selectable[this.highlightedIndex]);
+      const group = parentOptgroupOf(selectable[this.highlightedIndex]);
       if (group !== this.openGroup) {
         this.openGroup = group;
         this.pendingOptionFocus = true;
@@ -1435,10 +1425,26 @@ export class PdsCombobox implements BasePdsProps {
   /**
    * Updates aria-activedescendant on the trigger element
    */
+  /**
+   * The id of the highlighted option, only while it's rendered. In the flyout panel an option in a
+   * closed group isn't in the DOM, and `aria-activedescendant` must not point at a missing element.
+   */
+  private get activeDescendantId(): string | undefined {
+    if (!this.isOpen || this.highlightedIndex < 0) return undefined;
+    if (this.showsGroupedPanel) {
+      const selectable = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
+      const group = parentOptgroupOf(selectable[this.highlightedIndex]);
+      if (group !== null && group !== this.openGroup) return undefined;
+    }
+    return this.optionDomId(this.highlightedIndex);
+  }
+
   private updateAriaActiveDescendant() {
-    if (this.triggerEl && this.highlightedIndex >= 0) {
-      this.triggerEl.setAttribute('aria-activedescendant', this.optionDomId(this.highlightedIndex));
-    } else if (this.triggerEl) {
+    if (!this.triggerEl) return;
+    const id = this.activeDescendantId;
+    if (id !== undefined) {
+      this.triggerEl.setAttribute('aria-activedescendant', id);
+    } else {
       this.triggerEl.removeAttribute('aria-activedescendant');
     }
   }
@@ -1496,21 +1502,25 @@ export class PdsCombobox implements BasePdsProps {
     this.highlightedIndex = idx;
   };
 
-  // Group rows in the flyout panel carry their group's label, as options carry their index.
-  private groupLabelFromEvent(event: Event): string {
-    return (event.currentTarget as HTMLElement).getAttribute('data-group-label') ?? '';
+  // Group rows in the flyout panel carry their group's index, as options carry theirs.
+  private groupFromEvent(event: Event): HTMLOptGroupElement | null {
+    const index = Number((event.currentTarget as HTMLElement).getAttribute('data-group-index'));
+    return this.renderedGroups[index]?.optgroup ?? null;
   }
 
   private onGroupRowMouseEnter = (event: Event) => {
-    this.flyout.enter(this.groupLabelFromEvent(event));
+    const group = this.groupFromEvent(event);
+    if (group !== null) this.flyout.enter(group);
   };
 
   private onGroupRowMouseLeave = (event: Event) => {
-    this.flyout.leave(this.groupLabelFromEvent(event));
+    const group = this.groupFromEvent(event);
+    if (group !== null) this.flyout.leave(group);
   };
 
   private onGroupRowClick = (event: Event) => {
-    this.flyout.toggle(this.groupLabelFromEvent(event));
+    const group = this.groupFromEvent(event);
+    if (group !== null) this.flyout.open(group);
   };
 
   // Prevent blur on mousedown
@@ -1773,7 +1783,7 @@ export class PdsCombobox implements BasePdsProps {
 
     return (
       <ul
-        class="pds-combobox__listbox"
+        class={{ 'pds-combobox__listbox': true, 'pds-combobox__listbox--grouped': this.groupDisplay === 'flyout' }}
         role="listbox"
         id={this.listboxId}
         aria-label={this.label || 'Options'}
@@ -1804,9 +1814,8 @@ export class PdsCombobox implements BasePdsProps {
         {this.showsGroupedPanel ? this.renderGroupedPanel(selectableOptions.length) : this.filteredItems.map((item, itemIdx) => {
           if (item.tagName === 'OPTGROUP') {
             const optgroup = item as HTMLOptGroupElement;
-            const groupIcon = optgroup.getAttribute('data-icon');
-            // Pine icon names only, checked here rather than trusting pds-icon to reject the rest.
-            const hasGroupIcon = groupIcon !== null && PINE_ICON_NAME.test(groupIcon);
+            const groupIcon = groupIconOf(optgroup);
+            const hasGroupIcon = groupIcon !== null;
             return (
               <li
                 key={`optgroup-${itemIdx}`}
@@ -1898,33 +1907,35 @@ export class PdsCombobox implements BasePdsProps {
 
   /** `group-display="flyout"`: one row per group, its options in a flyout beside it. */
   private renderGroupedPanel(setSize: number) {
-    return buildPanelEntries(this.filteredItems).map(entry =>
-      entry.kind === 'option'
-        ? this.renderOption(entry.option, entry.index, setSize)
-        : this.renderGroupRow(entry.group, setSize),
-    );
+    const entries = buildPanelEntries(this.filteredItems);
+    this.renderedGroups = [];
+    return entries.map(entry => {
+      if (entry.kind === 'option') return this.renderOption(entry.option, entry.index, setSize);
+      this.renderedGroups.push(entry.group);
+      return this.renderGroupRow(entry.group, this.renderedGroups.length - 1, setSize);
+    });
   }
 
-  private renderGroupRow(group: PanelGroup, setSize: number) {
-    const isOpen = this.openGroup === group.label;
+  private renderGroupRow(group: PanelGroup, groupIndex: number, setSize: number) {
+    const isOpen = this.openGroup === group.optgroup;
     const hasSelection = group.options.some(({ option }) => this.isOptionSelected(option));
 
     return (
       <li
-        key={`group-${group.label}`}
+        key={`group-${groupIndex}`}
         class={{
           'pds-combobox__group-row': true,
           'pds-combobox__group-row--open': isOpen,
           'pds-combobox__group-row--has-selection': hasSelection,
         }}
         role="presentation"
-        data-group-label={group.label}
+        data-group-index={groupIndex}
         onMouseEnter={this.onGroupRowMouseEnter}
         onMouseLeave={this.onGroupRowMouseLeave}
       >
         <div
           class="pds-combobox__group-row-trigger"
-          data-group-label={group.label}
+          data-group-index={groupIndex}
           onMouseDown={this.onOptionMouseDown}
           onClick={this.onGroupRowClick}
         >
@@ -2186,7 +2197,7 @@ export class PdsCombobox implements BasePdsProps {
                 aria-controls={this.listboxId}
                 aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
                 aria-invalid={this.isInvalid() ? 'true' : undefined}
-                aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
+                aria-activedescendant={this.activeDescendantId}
                 aria-expanded={this.isOpen ? 'true' : 'false'}
                 aria-disabled={this.disabled ? 'true' : 'false'}
                 aria-label={this.hideLabel ? this.label : undefined}
@@ -2211,7 +2222,7 @@ export class PdsCombobox implements BasePdsProps {
               aria-controls={this.listboxId}
               aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
               aria-invalid={this.isInvalid() ? 'true' : undefined}
-              aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
+              aria-activedescendant={this.activeDescendantId}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}
@@ -2236,7 +2247,7 @@ export class PdsCombobox implements BasePdsProps {
               aria-controls={this.listboxId}
               aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
               aria-invalid={this.isInvalid() ? 'true' : undefined}
-              aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
+              aria-activedescendant={this.activeDescendantId}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}
