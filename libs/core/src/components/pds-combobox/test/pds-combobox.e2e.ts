@@ -295,8 +295,6 @@ describe('pds-combobox', () => {
       expect(flyout.right).toBeLessThanOrEqual(panel.left);
     });
 
-    // Email, not Tag: the highlight starts on the first option (in Tag), so this catches an
-    // aria-activedescendant left pointing at an option that isn't rendered.
     const activeDescendant = (page: Awaited<ReturnType<typeof newE2EPage>>, selector: string) =>
       page.evaluate(sel => document.querySelector('pds-combobox')!.shadowRoot!.querySelector(sel)!.getAttribute('aria-activedescendant'), selector);
 
@@ -327,6 +325,10 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
 
+    // The input trigger: the button trigger has no accessible name today with or without groups
+    // (its <label for> points at a div), which is fixed separately from the flyout.
+    // Email, not Tag: the highlight starts on the Tag row, so this checks aria-activedescendant
+    // stays on a rendered row while another group's flyout is open.
     it('has no axe violations with a flyout open', async () => {
       const page = await setUp('padding: 40px;', 'input');
       await hoverGroup(page, 'Email');
