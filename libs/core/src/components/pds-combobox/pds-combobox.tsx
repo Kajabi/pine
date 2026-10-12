@@ -394,6 +394,30 @@ export class PdsCombobox implements BasePdsProps {
     return this.dropdownMount === 'body';
   }
 
+  private get labelId(): string {
+    return `${this.componentId}-label`;
+  }
+
+  /** One check for "the `<label>` is rendered", so the label and the reference to it can't disagree. */
+  private get hasVisibleLabel(): boolean {
+    return Boolean(this.label) && !this.hideLabel;
+  }
+
+  /**
+   * The button and chip triggers are `div`s, which `<label for>` can't name, so they point at the
+   * visible label instead. With `hide-label` there is no visible label and `aria-label` names them.
+   */
+  private get visibleLabelledBy(): string | undefined {
+    return this.hasVisibleLabel ? this.labelId : undefined;
+  }
+
+  /** `<label for>` only works on the input trigger; for a div trigger a click on the label focuses it. */
+  private onLabelClick = () => {
+    if (this.trigger !== 'input' && !this.disabled) {
+      this.triggerEl?.focus();
+    }
+  };
+
   private get listboxId(): string {
     return `${this.componentId}-listbox`;
   }
@@ -1930,8 +1954,13 @@ export class PdsCombobox implements BasePdsProps {
     return (
       <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut} part="combobox">
-          {this.label && !this.hideLabel && (
-            <label htmlFor={this.componentId} class="pds-combobox__label">
+          {this.hasVisibleLabel && (
+            <label
+              htmlFor={this.trigger === 'input' ? this.componentId : undefined}
+              id={this.labelId}
+              class="pds-combobox__label"
+              onClick={this.onLabelClick}
+            >
               {this.label}
             </label>
           )}
@@ -1981,6 +2010,7 @@ export class PdsCombobox implements BasePdsProps {
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}
+              aria-labelledby={this.visibleLabelledBy}
               id={this.componentId}
               tabIndex={this.disabled ? -1 : 0}
               onClick={this.onButtonTriggerClick}
@@ -2005,6 +2035,7 @@ export class PdsCombobox implements BasePdsProps {
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}
+              aria-labelledby={this.visibleLabelledBy}
               id={this.componentId}
               tabIndex={this.disabled ? -1 : 0}
               onClick={this.onButtonTriggerClick}
