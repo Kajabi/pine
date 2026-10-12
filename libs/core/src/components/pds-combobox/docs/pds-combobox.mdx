@@ -1147,12 +1147,13 @@ With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each grou
 | Key | Action |
 | --- | --- |
 | Up / Down | Move through the current level: the groups, or the open group's options. |
-| Home / End, PageUp / PageDown | Jump within the current level. In the panel's search field, Home and End move the cursor instead. |
-| Right, Enter, Space | On a group, open it and move to its first option. On an option, Enter or Space selects it. |
-| Left | Close the open group and return to its row. |
+| Home / End, PageUp / PageDown | Jump within the current level. In the panel's search field and the `input` trigger, Home and End move the cursor instead. |
+| Right, Enter | On a group, open it and move to its first option. On an option, Enter selects it. |
+| Space | With the `button` or `chip` trigger and no panel search, does what Enter does. In a search field, it types a space. |
+| Left | Close the open group and return to its row. With the `input` trigger, Left and Right move the cursor while there's text in it. |
 | Escape | Close the open group first, then the dropdown. |
 
-The dropdown opens on the group holding the selection, or on the first group. While searching, the results are a flat list of options, each set under its group's name.
+The dropdown opens on the selection, with its group open, or on the first group. While searching, the results are a flat list of options, each set under its group's name.
 
 ### Searching From the Panel
 
