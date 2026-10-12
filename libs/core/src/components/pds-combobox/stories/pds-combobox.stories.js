@@ -378,6 +378,65 @@ OptionGroupsOptgroup.args = {
   maxHeight: '280px',
 };
 
+export const OptionGroupsWithIcons = (args) => html`
+<pds-combobox
+  component-id="combobox-optgroup-icons"
+  label=${args.label}
+  placeholder=${args.placeholder}
+  trigger=${args.trigger}
+  mode=${args.mode}
+  trigger-width=${args.triggerWidth}
+  dropdown-width=${args.dropdownWidth}
+>
+  <optgroup label="Tag" data-icon="hashtag">
+    <option value="tag-add">Add a tag</option>
+    <option value="tag-remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-send">Send an email</option>
+  </optgroup>
+  <optgroup label="Coupon" data-icon="coupon">
+    <option value="coupon-send">Send a coupon</option>
+  </optgroup>
+</pds-combobox>`;
+
+OptionGroupsWithIcons.args = {
+  label: 'Action',
+  placeholder: 'Select an action',
+  trigger: 'button',
+  mode: 'select-only',
+  triggerWidth: '280px',
+  dropdownWidth: '280px',
+};
+
+export const OptionGroupsFromOptions = (args) => html`
+<pds-combobox
+  component-id="combobox-grouped-options"
+  label=${args.label}
+  placeholder=${args.placeholder}
+  trigger=${args.trigger}
+  mode=${args.mode}
+  trigger-width=${args.triggerWidth}
+  dropdown-width=${args.dropdownWidth}
+  .options=${args.options}
+></pds-combobox>`;
+
+OptionGroupsFromOptions.args = {
+  label: 'Action',
+  placeholder: 'Select an action',
+  trigger: 'button',
+  mode: 'select-only',
+  triggerWidth: '280px',
+  dropdownWidth: '280px',
+  // Tag's options are split by Email on purpose: each group still renders together.
+  options: [
+    { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+    { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    { id: 'coupon-send', text: 'Send a coupon', group: 'Coupon', groupIcon: 'coupon' },
+  ],
+};
+
 export const OptionGroupsPdsText = (args) => html`
 <pds-combobox
   component-id="combobox-pds-text-groups"

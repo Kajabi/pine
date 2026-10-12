@@ -1027,6 +1027,76 @@ Use standard HTML `<optgroup>` elements to create semantic groupings:
   </pds-combobox>
 </DocCanvas>
 
+### Group Icons
+
+Add `data-icon` to an `<optgroup>` to show a Pine icon beside its label. Use an icon name from Pine's icon set, such as `hashtag`; URLs and file paths are not accepted. The icon is decorative and hidden from assistive technology, so the label must still describe the group.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-optgroup-icons-example"
+  label="Action"
+  placeholder="Select an action"
+  trigger="button"
+  mode="select-only">
+  <optgroup label="Tag" data-icon="hashtag">
+    <option value="tag-add">Add a tag</option>
+    <option value="tag-remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-send">Send an email</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-optgroup-icons-example"
+  label="Action"
+  placeholder="Select an action"
+  trigger="button"
+  mode="select-only">
+  <optgroup label="Tag" data-icon="hashtag">
+    <option value="tag-add">Add a tag</option>
+    <option value="tag-remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-send">Send an email</option>
+  </optgroup>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-optgroup-icons-example"
+    label="Action"
+    placeholder="Select an action"
+    trigger="button"
+    mode="select-only">
+    <optgroup label="Tag" data-icon="hashtag">
+      <option value="tag-add">Add a tag</option>
+      <option value="tag-remove">Remove a tag</option>
+    </optgroup>
+    <optgroup label="Email" data-icon="mail">
+      <option value="email-send">Send an email</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
+
+### Grouping the `options` Prop
+
+When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. List options without a group first, because an ungrouped option that follows a group reads as part of it.
+
+```jsx
+<PdsCombobox
+  componentId="combobox-grouped-options-example"
+  label="Action"
+  trigger="button"
+  mode="select-only"
+  options={[
+    { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+  ]}
+/>
+```
+
 ### Using PDS Text Components
 
 Alternatively, use `<pds-text>` components as group labels for more styling control:
