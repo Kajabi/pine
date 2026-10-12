@@ -184,6 +184,11 @@
       color: var(--pine-color-text-muted);
       flex-shrink: 0;
     }
+
+    // The field takes focus on open; the divider shows where it is.
+    &:focus-within {
+      border-block-end-color: var(--pine-color-border-active);
+    }
   }
 
   .pds-combobox__panel-search-input {
@@ -207,17 +212,35 @@
   }
 
   .pds-combobox__group-back-trigger {
-    color: var(--pine-color-text-tertiary);
     justify-content: flex-start;
   }
 
-  .pds-combobox__visually-hidden {
-    block-size: 1px;
-    clip-path: inset(50%);
-    inline-size: 1px;
+  // A drilled-in group's options, named for assistive tech; spaced like the panel's rows.
+  .pds-combobox__drill-in-group {
+    list-style: none;
+  }
+
+  .pds-combobox__drill-in-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // In the mixin so it also applies inside the body portal.
+  .visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: polygon(0 0, 0 0, 0 0);
+    height: 1px;
+    margin: -1px;
     overflow: hidden;
+    padding: 0;
     position: absolute;
     white-space: nowrap;
+    width: 1px;
   }
 
   .pds-combobox__loading {
