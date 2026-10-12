@@ -2213,7 +2213,7 @@ describe('pds-combobox', () => {
   describe('grouped options', () => {
     const groupedOptions = [
       { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
-      { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'email' },
+      { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
       { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
     ];
 
@@ -2256,7 +2256,7 @@ describe('pds-combobox', () => {
     const groupLabels = (page: { root?: HTMLElement }) =>
       Array.from(page.root!.shadowRoot!.querySelectorAll('.pds-combobox__group-label'));
 
-    it('nests options that share a group under one optgroup, in the order groups first appear', async () => {
+    it('lists each group where it first appears, with all of its options', async () => {
       const { component } = await openWith(
         `<pds-combobox component-id="grouped" mode="select-only"></pds-combobox>`,
         groupedOptions,
@@ -2265,7 +2265,9 @@ describe('pds-combobox', () => {
       const items = component.allItems.map((item: HTMLElement) =>
         item.tagName === 'OPTGROUP' ? `group:${(item as HTMLOptGroupElement).label}` : (item as HTMLOptionElement).value,
       );
-      expect(items).toEqual(['group:Tag', 'tag-add', 'group:Email', 'email-send', 'tag-remove']);
+      // Tag's options stay together even though the data interleaves Email between them.
+      expect(items).toEqual(['group:Tag', 'tag-add', 'tag-remove', 'group:Email', 'email-send']);
+      expect(component.optionEls.map((o: HTMLOptionElement) => o.value)).toEqual(['tag-add', 'tag-remove', 'email-send']);
       const removeTag = component.optionEls.find((o: HTMLOptionElement) => o.value === 'tag-remove');
       expect((removeTag.parentElement as HTMLOptGroupElement).label).toBe('Tag');
     });
@@ -2291,16 +2293,61 @@ describe('pds-combobox', () => {
 
       const labels = groupLabels(page);
       expect(labels.map(label => label.textContent)).toEqual(['Tag', 'Email']);
-      expect(labels.map(label => label.querySelector('pds-icon')?.getAttribute('icon'))).toEqual(['hashtag', 'email']);
+      expect(labels.map(label => label.querySelector('pds-icon')?.getAttribute('name'))).toEqual(['hashtag', 'mail']);
       expect(labels[0].classList.contains('pds-combobox__group-label--with-icon')).toBe(true);
       expect(labels[0].querySelector('pds-icon')?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    // `icon` also loads URLs and data: SVGs into pds-icon unsanitized; `name` accepts icon names only.
+    it('passes the group icon as a name, never as an icon source', async () => {
+      const { page } = await openWith(
+        `<pds-combobox component-id="grouped-icon-name" mode="select-only"></pds-combobox>`,
+        [{ id: 'x', text: 'X', group: 'G', groupIcon: 'data:image/svg+xml;utf8,<svg></svg>' }],
+      );
+
+      const icon = groupLabels(page)[0].querySelector('pds-icon');
+      expect(icon?.hasAttribute('icon')).toBe(false);
+      expect(icon?.getAttribute('name')).toBe('data:image/svg+xml;utf8,<svg></svg>');
+    });
+
+    it('takes the group icon from a later option when the first sets none', async () => {
+      const { page } = await openWith(
+        `<pds-combobox component-id="grouped-late-icon" mode="select-only"></pds-combobox>`,
+        [
+          { id: 'tag-add', text: 'Add a tag', group: 'Tag' },
+          { id: 'tag-remove', text: 'Remove a tag', group: 'Tag', groupIcon: 'hashtag' },
+        ],
+      );
+
+      expect(groupLabels(page)[0].querySelector('pds-icon')?.getAttribute('name')).toBe('hashtag');
+    });
+
+    it('renders each group label followed by its own options', async () => {
+      const { page } = await openWith(
+        `<pds-combobox component-id="grouped-dom" mode="select-only"></pds-combobox>`,
+        groupedOptions,
+      );
+
+      const rows = Array.from(page.root!.shadowRoot!.querySelectorAll('.pds-combobox__group-label, [role="option"]'))
+        .map(row => (row.classList.contains('pds-combobox__group-label') ? `group:${row.textContent}` : row.textContent));
+      expect(rows).toEqual(['group:Tag', 'Add a tag', 'Remove a tag', 'group:Email', 'Send an email']);
+    });
+
+    // The label is presentational; an aria-label would override the role and announce it twice.
+    it('gives a group label no aria-label', async () => {
+      const { page } = await openWith(
+        `<pds-combobox component-id="grouped-aria" mode="select-only"></pds-combobox>`,
+        groupedOptions,
+      );
+
+      expect(groupLabels(page).every(label => !label.hasAttribute('aria-label'))).toBe(true);
     });
 
     it('renders the icon from data-icon on a slotted optgroup', async () => {
       const { page } = await openWithSlottedGroup('slotted-icons', 'Tag', 'hashtag');
 
       const [label] = groupLabels(page);
-      expect(label.querySelector('pds-icon')?.getAttribute('icon')).toBe('hashtag');
+      expect(label.querySelector('pds-icon')?.getAttribute('name')).toBe('hashtag');
     });
 
     it('renders a slotted optgroup without data-icon exactly as before', async () => {
@@ -2326,6 +2373,22 @@ describe('pds-combobox', () => {
         item.tagName === 'OPTGROUP' ? `group:${(item as HTMLOptGroupElement).label}` : (item as HTMLOptionElement).value,
       );
       expect(visible).toEqual(['group:Tag', 'tag-remove']);
+    });
+
+    it('keeps interleaved options under their own group when several match', async () => {
+      const { page, component } = await openWith(
+        `<pds-combobox component-id="grouped-filter-many"></pds-combobox>`,
+        groupedOptions,
+      );
+
+      component.displayText = 'a';
+      component.filterOptions();
+      await page.waitForChanges();
+
+      const visible = component.filteredItems.map((item: HTMLElement) =>
+        item.tagName === 'OPTGROUP' ? `group:${(item as HTMLOptGroupElement).label}` : (item as HTMLOptionElement).value,
+      );
+      expect(visible).toEqual(['group:Tag', 'tag-add', 'tag-remove', 'group:Email', 'email-send']);
     });
   });
 
