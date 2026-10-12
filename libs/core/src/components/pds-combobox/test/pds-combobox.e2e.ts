@@ -350,9 +350,6 @@ describe('pds-combobox', () => {
       { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
       { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
     ];
-    // The button trigger has no accessible name until its label is wired to it, which lands
-    // separately with its own axe test. Remove this override once that's on main.
-    const axeRules = { 'aria-input-field-name': { enabled: false } };
 
     const setUp = async (attrs: string, viewportWidth = 1200) => {
       const page = await newE2EPage();
@@ -504,7 +501,7 @@ describe('pds-combobox', () => {
       await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
       await page.waitForChanges();
 
-      const violations = await runAxe(page, { rules: axeRules });
+      const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
   });
