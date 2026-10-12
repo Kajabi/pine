@@ -394,6 +394,18 @@ export class PdsCombobox implements BasePdsProps {
     return this.dropdownMount === 'body';
   }
 
+  private get labelId(): string {
+    return `${this.componentId}-label`;
+  }
+
+  /**
+   * The button and chip triggers are `div`s, which `<label for>` can't name, so they point at the
+   * visible label instead. With `hide-label` there is no visible label and `aria-label` names them.
+   */
+  private get visibleLabelledBy(): string | undefined {
+    return this.label !== undefined && this.label !== '' && !this.hideLabel ? this.labelId : undefined;
+  }
+
   private get listboxId(): string {
     return `${this.componentId}-listbox`;
   }
@@ -1931,7 +1943,7 @@ export class PdsCombobox implements BasePdsProps {
       <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut} part="combobox">
           {this.label && !this.hideLabel && (
-            <label htmlFor={this.componentId} class="pds-combobox__label">
+            <label htmlFor={this.componentId} id={this.labelId} class="pds-combobox__label">
               {this.label}
             </label>
           )}
@@ -1981,6 +1993,7 @@ export class PdsCombobox implements BasePdsProps {
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}
+              aria-labelledby={this.visibleLabelledBy}
               id={this.componentId}
               tabIndex={this.disabled ? -1 : 0}
               onClick={this.onButtonTriggerClick}
@@ -2005,6 +2018,7 @@ export class PdsCombobox implements BasePdsProps {
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}
+              aria-labelledby={this.visibleLabelledBy}
               id={this.componentId}
               tabIndex={this.disabled ? -1 : 0}
               onClick={this.onButtonTriggerClick}
