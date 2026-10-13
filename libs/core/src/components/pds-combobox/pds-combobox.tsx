@@ -18,6 +18,9 @@ import type {
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
  */
+/** A Pine icon name: letters, digits and hyphens, such as `hashtag`. Never a URL or file path. */
+const PINE_ICON_NAME = /^[a-z0-9-]+$/i;
+
 @Component({
   tag: 'pds-combobox',
   styleUrl: 'pds-combobox.scss',
@@ -651,7 +654,8 @@ export class PdsCombobox implements BasePdsProps {
       optionEl.value = String(opt.id);
       optionEl.textContent = opt.text;
 
-      if (opt.group === undefined || opt.group === '') {
+      // Only strings group an option or name an icon; anything else from JS is ignored, not coerced.
+      if (typeof opt.group !== 'string' || opt.group === '') {
         entries.push(optionEl);
         return;
       }
@@ -663,7 +667,7 @@ export class PdsCombobox implements BasePdsProps {
         groups.set(opt.group, optgroup);
         entries.push(optgroup);
       }
-      if (!optgroup.hasAttribute('data-icon') && opt.groupIcon !== undefined && opt.groupIcon !== '') {
+      if (!optgroup.hasAttribute('data-icon') && typeof opt.groupIcon === 'string' && opt.groupIcon !== '') {
         optgroup.setAttribute('data-icon', opt.groupIcon);
       }
       optgroup.appendChild(optionEl);
@@ -1705,7 +1709,8 @@ export class PdsCombobox implements BasePdsProps {
           if (item.tagName === 'OPTGROUP') {
             const optgroup = item as HTMLOptGroupElement;
             const groupIcon = optgroup.getAttribute('data-icon');
-            const hasGroupIcon = groupIcon !== null && groupIcon !== '';
+            // Pine icon names only, checked here rather than trusting pds-icon to reject the rest.
+            const hasGroupIcon = groupIcon !== null && PINE_ICON_NAME.test(groupIcon);
             return (
               <li
                 key={`optgroup-${itemIdx}`}
