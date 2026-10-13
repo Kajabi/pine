@@ -2820,6 +2820,22 @@ describe('pds-combobox', () => {
       expect(root.querySelector('[role="status"]')?.textContent).toBe('Tag');
     });
 
+
+    it('stays in the drilled-in group when the options are rebuilt, as when another page loads', async () => {
+      const { page, component, root } = await openDrillIn();
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+
+      (page.root as HTMLPdsComboboxElement).options = [...actions, { id: 'email-resend', text: 'Resend an email', group: 'Email' }];
+      await page.waitForChanges();
+      expect(root.querySelector('.pds-combobox__group-back')?.textContent).toBe('Back: Email');
+      expect(Array.from(root.querySelectorAll('[role="option"]')).map(o => o.textContent)).toEqual(['Send an email', 'Resend an email']);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true }));
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
+      expect(root.querySelectorAll('.pds-combobox__group-row')).toHaveLength(2);
+    });
     it('clears the highlight on the way back to the groups', async () => {
       const { page, component, root } = await openDrillIn();
 
