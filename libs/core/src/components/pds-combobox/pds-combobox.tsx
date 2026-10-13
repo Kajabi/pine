@@ -455,7 +455,8 @@ export class PdsCombobox implements BasePdsProps {
 
     if (this.isOpen && this.usesPanelSearch && !this.panelSearchFocused && this.panelSearchEl) {
       this.panelSearchFocused = true;
-      this.panelSearchEl.focus();
+      // Before the dropdown is positioned it sits in the page's flow; don't scroll to it.
+      this.panelSearchEl.focus({ preventScroll: true });
     }
   }
 
@@ -634,6 +635,9 @@ export class PdsCombobox implements BasePdsProps {
     this.abortController = undefined;
   }
 
+  /** The query behind the options loaded from `async-url`. */
+  private lastFetchedQuery = '';
+
   private debouncedFetchAsyncOptions(query: string, page: number = 1) {
     if (!this.asyncUrl) return;
 
@@ -650,6 +654,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private async fetchOptions(query: string, page: number = 1) {
     if (!this.asyncUrl) return;
+    this.lastFetchedQuery = query;
 
     // Abort any pending request and clear existing timeout
     this.abortController?.abort();
@@ -1102,7 +1107,8 @@ export class PdsCombobox implements BasePdsProps {
     this.flyoutRoomChecked = true;
 
     const probe = document.createElement('div');
-    probe.style.cssText = 'position:absolute;visibility:hidden;width:0;';
+    // Fixed, like the flyout, so a percentage resolves against the viewport as the flyout's does.
+    probe.style.cssText = 'position:fixed;visibility:hidden;width:0;';
     probe.style.minWidth = this.flyoutMinWidth;
     this.listboxEl.appendChild(probe);
     const needed = parseFloat(getComputedStyle(probe).minWidth);
@@ -1648,7 +1654,15 @@ export class PdsCombobox implements BasePdsProps {
 
   private onGroupRowClick = (event: Event) => {
     const group = this.groupFromEvent(event);
-    if (group !== null) this.flyout.open(group);
+    if (group === null) return;
+    this.flyout.open(group);
+    // Highlight the group's first option, so the arrow keys carry on from the group just opened
+    // rather than from wherever the highlight was before.
+    const first = this.renderedGroups.find(entry => entry.optgroup === group)?.options[0];
+    if (first !== undefined) {
+      this.highlightedIndex = first.index;
+      this.updateAriaActiveDescendant();
+    }
   };
 
   // Prevent blur on mousedown
@@ -1791,8 +1805,11 @@ export class PdsCombobox implements BasePdsProps {
       this.prepareExpandFilterListOnOpen();
       this.filterOptions();
 
-      // Trigger initial fetch if async and no options loaded yet
-      if (this.asyncUrl && this.internalOptions.length === 0) {
+      // Trigger initial fetch if async and no options loaded yet. The panel's search field opens
+      // empty, so results left from the last search are refetched for an empty query.
+      if (this.asyncUrl && this.usesPanelSearch && (this.internalOptions.length === 0 || this.lastFetchedQuery !== '')) {
+        this.debouncedFetchAsyncOptions('', 1);
+      } else if (this.asyncUrl && this.internalOptions.length === 0) {
         this.debouncedFetchAsyncOptions(this.displayText, 1);
       }
 
@@ -2000,6 +2017,7 @@ export class PdsCombobox implements BasePdsProps {
       <div
         class="pds-combobox__listbox pds-combobox__listbox--with-search"
         ref={el => (this.listboxEl = el as HTMLElement)}
+        onMouseDown={this.onPanelMouseDown}
         // Portaled, the panel sits outside .pds-combobox, so its focusout wouldn't reach that handler.
         onFocusout={this.usesBodyPortal ? this.onComboboxFocusOut : undefined}
       >
@@ -2008,6 +2026,12 @@ export class PdsCombobox implements BasePdsProps {
       </div>
     );
   }
+
+  // A press on the panel's padding, captions or status rows keeps focus in the search field;
+  // otherwise it would blur the field, closing a portaled panel or stranding the keys.
+  private onPanelMouseDown = (event: MouseEvent) => {
+    if (event.target !== this.panelSearchEl) event.preventDefault();
+  };
 
   /** `panelSearch` applies to the triggers that can't be typed into. */
   private get usesPanelSearch(): boolean {
@@ -2543,10 +2567,11 @@ export class PdsCombobox implements BasePdsProps {
             <slot onSlotchange={() => this.updateOptions()}></slot>
           </div>
           {this.renderDropdown()}
-          {/* Announces moving into or out of a drilled-in group, which focus alone doesn't. */}
-          {this.effectiveGroupDisplay === 'drill-in' && (
+          {/* Announces the group drilled into, which focus alone doesn't. Rendered for any grouped
+              display, so it's in place before a flyout falls back to drilling in. */}
+          {this.groupDisplay !== 'inline' && (
             <span class="visually-hidden" role="status" aria-live="polite">
-              {this.isOpen && this.openGroup !== null ? this.openGroup.label : ''}
+              {this.isOpen && this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null ? this.openGroup.label : ''}
             </span>
           )}
         </div>
