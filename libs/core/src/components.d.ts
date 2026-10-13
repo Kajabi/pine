@@ -1267,7 +1267,7 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`. Defaults to the nearest `lang` attribute, then the browser's language.
+          * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`. Defaults to the nearest `lang` attribute, then the page's `<html lang>`, then `en`.
          */
         "locale"?: string;
         /**
@@ -4988,7 +4988,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`. Defaults to the nearest `lang` attribute, then the browser's language.
+          * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`. Defaults to the nearest `lang` attribute, then the page's `<html lang>`, then `en`.
          */
         "locale"?: string;
         /**

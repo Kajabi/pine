@@ -96,7 +96,7 @@ export class PdsDatepicker {
   private readonly fallbackId = `pds-datepicker-${++fallbackIds}`;
   /** Set by a click on the label, whose forwarded click on the input shouldn't open the calendar. */
   private skipForwardedClick = false;
-  /** The value when the calendar opened, or as last set from outside, which Cancel goes back to. */
+  /** The value when the calendar opened, or as last set from outside, which Cancel (without `clearable`) and Escape go back to. */
   private valueAtOpen = '';
   /** Set while the datepicker commits a value itself, as opposed to one set from outside. */
   private committing = false;
@@ -214,7 +214,7 @@ export class PdsDatepicker {
 
   /**
    * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`.
-   * Defaults to the nearest `lang` attribute, then the browser's language.
+   * Defaults to the nearest `lang` attribute, then the page's `<html lang>`, then `en`.
    */
   @Prop() locale?: string;
 
@@ -708,20 +708,35 @@ export class PdsDatepicker {
     this.closeCalendar(true);
   };
 
-  /**
-   * Leaves the dates as they were when the calendar opened. A date typed in the field is committed
-   * when the field loses focus, which moving to Cancel does, so it's undone here.
-   */
+  /** Cancel empties the field with `clearable`, and otherwise leaves the dates as they were. */
   private onCancel = () => {
     if (this.clearable) {
       this.commitValue('');
     } else {
-      const parts = this.parsedValue(this.valueAtOpen);
-      if (parts) this.commitParts(parts);
-      else this.commitValue(this.valueAtOpen);
+      this.restoreValueAtOpen();
     }
     this.closeCalendar(true);
   };
+
+  /**
+   * Goes back to the value from when the calendar opened, as Cancel and Escape do, and to its text
+   * in the field. A date typed in the field is committed when the field loses focus, as on the way
+   * to Cancel or into the calendar, so it's undone here.
+   */
+  private restoreValueAtOpen() {
+    if (this.valueAtOpen === (this.value ?? '')) {
+      // Nothing was committed, so nothing to emit; only typed text to drop. pds-input is set
+      // directly: when typing and Escape land in one frame, the rendered text never changed.
+      this.text = this.fieldText();
+      if (this.inputEl) this.inputEl.value = this.text;
+      this.textError = '';
+      this.updateFormValue();
+      return;
+    }
+    const parts = this.parsedValue(this.valueAtOpen);
+    if (parts) this.commitParts(parts);
+    else this.commitValue(this.valueAtOpen);
+  }
 
   private onPresetClick = (event: MouseEvent, preset: ResolvedPreset) => {
     this.draftStart = toIsoDate(preset.start);
@@ -794,8 +809,14 @@ export class PdsDatepicker {
   /** Closes the calendar and reports blur when focus leaves the datepicker, as when tabbing out. */
   private onHostFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
-    // No next target: focus fell to the page, as when a focused control is disabled; stay open.
-    if (!next) return;
+    // No next target: focus fell to the page, as on a click on a blank area or when a focused
+    // control is disabled. Stay open, but report blur unless focus comes straight back inside.
+    if (!next) {
+      window.setTimeout(() => {
+        if (!this.el.matches(':focus-within')) this.pdsBlur.emit(event);
+      });
+      return;
+    }
     if (this.isInside(next)) return;
     this.closeCalendar(false);
     this.pdsBlur.emit(event);
@@ -957,12 +978,8 @@ export class PdsDatepicker {
       // too. pdsKeyDown is emitted during that keydown, so it can still be stopped here.
       key.preventDefault();
       key.stopPropagation();
-      // Escape dismisses what was typed too, so the next blur doesn't commit it. pds-input is set
-      // directly: when typing and Escape land in one frame, the rendered text never changed.
-      this.text = this.fieldText();
-      if (this.inputEl) this.inputEl.value = this.text;
-      this.textError = '';
-      this.updateFormValue();
+      // Escape dismisses what was typed too, so the next blur doesn't commit it.
+      this.restoreValueAtOpen();
       this.closeCalendar(false);
     }
   };
@@ -1012,6 +1029,8 @@ export class PdsDatepicker {
     if (event.key === 'Escape') {
       event.preventDefault();
       event.stopPropagation();
+      // As Cancel: a range typed in the field, committed as focus moved in here, is undone.
+      this.restoreValueAtOpen();
       this.closeCalendar(true);
     } else if (event.key === 'Tab') {
       this.trapTab(event);
@@ -1145,6 +1164,13 @@ export class PdsDatepicker {
     this.textError = '';
     this.closeCalendar(false);
     this.updateFormValue();
+  }
+
+  /** Disabling the datepicker, or making it read-only, while the calendar is open closes it. */
+  @Watch('disabled')
+  @Watch('readonly')
+  protected interactivityChanged() {
+    if (!this.isInteractive) this.closeCalendar(false);
   }
 
   formDisabledCallback(disabled: boolean) {
