@@ -23,6 +23,7 @@ import {
   weekdayColumn,
   weekdayNames,
 } from './date-utils';
+import { CalendarPortal } from './calendar-portal';
 import { matchPreset, presetInRange, resolvePresets } from './presets';
 import type { ResolvedPreset } from './presets';
 import {
@@ -89,6 +90,8 @@ export class PdsDatepicker {
   private inputEl?: HTMLPdsInputElement;
   private triggerEl?: HTMLButtonElement;
   private dialogEl?: HTMLElement;
+  /** Where the open calendar lives, outside the datepicker so no ancestor clips or misplaces it. */
+  private portal?: CalendarPortal;
   private internals?: ElementInternals;
   private cleanupAutoUpdate?: () => void;
   /** Set when the active day should take focus on the next render. */
@@ -472,10 +475,18 @@ export class PdsDatepicker {
 
   disconnectedCallback() {
     this.closeCalendar(false);
+    this.portal?.remove();
   }
 
   componentDidRender() {
-    if (!this.isOpen || !this.dialogEl) return;
+    if (!this.isOpen || !this.dialogEl) {
+      this.portal?.remove();
+      return;
+    }
+
+    // Rendered here, then moved to the portal. Stencil keeps patching it by reference.
+    this.portal ??= new CalendarPortal(this.el);
+    this.portal.mount(this.dialogEl);
 
     if (!this.cleanupAutoUpdate) this.startPositioning();
     this.flushActiveDayFocus();
@@ -777,7 +788,7 @@ export class PdsDatepicker {
 
   private onDocumentPointerDown = (event: PointerEvent) => {
     const path = event.composedPath();
-    if (path.includes(this.el)) return;
+    if (path.includes(this.el) || (this.portal && path.includes(this.portal.host))) return;
 
     this.closeCalendar(false);
     // A press on a modal's backdrop lands on its <dialog>. That press dismisses the calendar, the
@@ -785,8 +796,12 @@ export class PdsDatepicker {
     if ((path[0] as Element | undefined)?.localName === 'dialog') swallowNextClick();
   };
 
+  /** Whether a node is the datepicker, inside it, or in its portaled calendar. */
   private isInside(node: Node | null): boolean {
-    return !!node && (node === this.el || this.el.contains(node) || !!this.el.shadowRoot?.contains(node));
+    if (!node) return false;
+    return (
+      node === this.el || this.el.contains(node) || !!this.el.shadowRoot?.contains(node) || !!this.portal?.contains(node)
+    );
   }
 
   /**
@@ -811,9 +826,18 @@ export class PdsDatepicker {
     }
   };
 
+  /**
+   * The portaled calendar is outside the datepicker, so the host never hears focus leave it: close
+   * and report blur from here when focus goes from the calendar to the rest of the page.
+   */
   private onCalendarFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
-    if (next && !this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
+    if (!next) return;
+    if (!this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
+    if (!this.isInside(next)) {
+      this.closeCalendar(false);
+      this.pdsBlur.emit(event);
+    }
   };
 
   /** Closes the calendar and reports blur when focus leaves the datepicker, as when tabbing out. */
@@ -1126,7 +1150,8 @@ export class PdsDatepicker {
     );
     if (focusable.length === 0) return;
 
-    const current = this.el.shadowRoot?.activeElement;
+    // The calendar may be in the portal's shadow root, so ask its own root what has focus.
+    const current = (this.dialogEl?.getRootNode() as Document | ShadowRoot | undefined)?.activeElement;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
     if (event.shiftKey && current === first) {
@@ -1710,7 +1735,6 @@ export class PdsDatepicker {
             aria-label={this.triggerAccessibleName(locale)}
             aria-haspopup="dialog"
             aria-expanded={this.isOpen ? 'true' : 'false'}
-            aria-controls={this.isOpen ? `${this.baseId}-calendar` : null}
             disabled={!this.isInteractive}
             onClick={this.onTriggerClick}
             onKeyDown={this.onTriggerKeyDown}
