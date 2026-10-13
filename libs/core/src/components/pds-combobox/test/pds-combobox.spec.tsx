@@ -3166,6 +3166,105 @@ describe('pds-combobox', () => {
       expect(root.querySelector('[role="status"]')?.textContent).toBe('Tag');
     });
 
+    const animationEnd = (animationName: string) => {
+      const event = new Event('animationend', { bubbles: true });
+      Object.defineProperty(event, 'animationName', { value: animationName });
+      return event;
+    };
+
+    it('slides a group in when drilling in, and the groups back in when leaving it, once each', async () => {
+      const { page, component, root } = await openDrillIn();
+      const list = () => root.querySelector('#drill-listbox')!;
+      expect(list().classList.contains('pds-combobox__listbox--drill-in')).toBe(false);
+      expect(list().classList.contains('pds-combobox__listbox--drill-out')).toBe(false);
+
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--drill-in')).toBe(true);
+
+      // Another animation ending inside the list, as slotted content might, leaves the slide alone.
+      list().dispatchEvent(animationEnd('consumer-spin'));
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--drill-in')).toBe(true);
+
+      list().dispatchEvent(animationEnd('pds-combobox-drill-from-end'));
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--drill-in')).toBe(false);
+
+      (root.querySelector('.pds-combobox__group-back-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--drill-out')).toBe(true);
+
+      component.isOpen = false;
+      await page.waitForChanges();
+      expect(component.drillDirection).toBeNull();
+    });
+
+    it('stops a slide when a search replaces the rows, and never slides search results', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+      expect(component.drillDirection).toBe('in');
+
+      const field = root.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement;
+      field.value = 'send';
+      field.dispatchEvent(new Event('input'));
+      await page.waitForChanges();
+      expect(component.drillDirection).toBeNull();
+
+      // While searching, a rebuild that drops the open group isn't a drill-out.
+      (page.root as HTMLPdsComboboxElement).options = actions.filter(action => action.group !== 'Email');
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
+      expect(component.drillDirection).toBeNull();
+    });
+
+    it('slides out when the keys leave a group too', async () => {
+      const { page, component } = await openDrillIn();
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+      await page.waitForChanges();
+      expect(component.drillDirection).toBe('in');
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true }));
+      await page.waitForChanges();
+      expect(component.drillDirection).toBe('out');
+    });
+
+    it('does not slide when it opens on the selection\'s group', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="drill" group-display="drill-in" mode="select-only" trigger="button" value="email-send"></pds-combobox>`,
+      });
+      (page.root as HTMLPdsComboboxElement).options = actions;
+      await page.waitForChanges();
+
+      (page.root!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(page.rootInstance.openGroup?.label).toBe('Email');
+      expect(page.rootInstance.drillDirection).toBeNull();
+    });
+
+    it('never slides in the flyout display', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="fly" group-display="flyout" mode="select-only" trigger="button"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      (page.root as HTMLPdsComboboxElement).options = actions;
+      await page.waitForChanges();
+      component.isOpen = true;
+      await page.waitForChanges();
+
+      component.openGroup = component.optionEls.map((o: HTMLOptionElement) => o.parentElement).find((g: HTMLElement | null) => (g as HTMLOptGroupElement | null)?.label === 'Tag');
+      await page.waitForChanges();
+      component.openGroup = null;
+      await page.waitForChanges();
+
+      expect(component.drillDirection).toBeNull();
+    });
+
     it('click-opens on the first row, so ArrowRight drills into the first group at its first option', async () => {
       const page = await newSpecPage({
         components: [PdsCombobox],
