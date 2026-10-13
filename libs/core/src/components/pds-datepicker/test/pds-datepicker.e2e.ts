@@ -439,6 +439,107 @@ describe('pds-datepicker', () => {
     expect(blur).toHaveReceivedEventTimes(1);
   });
 
+  describe('review fixes', () => {
+    it('reports a date before min or after max as out of range, typed or set in code', async () => {
+      const page = await setup(`<form>${FIELD.replace('component-id="due"', 'component-id="due" name="due"')}</form>`);
+      const validity = () =>
+        page.evaluate(() => {
+          const internals = document.querySelector('pds-datepicker') as unknown as { internals?: ElementInternals };
+          void internals;
+          const form = document.querySelector('form') as HTMLFormElement;
+          let reported = '';
+          form.addEventListener('invalid', (e) => (reported ||= (e.target as Element).tagName), { capture: true, once: true });
+          return { valid: form.checkValidity(), reported };
+        });
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+
+      await input.click({ clickCount: 3 });
+      await input.type('2026-09-01');
+      await input.press('Enter');
+      await page.waitForChanges();
+      expect(await validity()).toEqual({ valid: false, reported: 'PDS-DATEPICKER' });
+      expect(await input.getAttribute('aria-invalid')).toBe('true');
+
+      // Set in code: still out of range, so still invalid, and shown as invalid.
+      await page.$eval('pds-datepicker', (el: HTMLPdsDatepickerElement) => (el.value = '2026-12-31'));
+      await page.waitForChanges();
+      expect((await validity()).valid).toBe(false);
+      expect(await input.getAttribute('aria-invalid')).toBe('true');
+
+      await page.$eval('pds-datepicker', (el: HTMLPdsDatepickerElement) => (el.value = '2026-10-20'));
+      await page.waitForChanges();
+      expect((await validity()).valid).toBe(true);
+    });
+
+    it('doesn\'t open the calendar from a click on the label', async () => {
+      const page = await setup();
+
+      await (await page.find('pds-datepicker >>> pds-input >>> label')).click();
+      await page.waitForChanges();
+
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+    });
+
+    it('shows a typed date as selected, and closes on Enter', async () => {
+      const page = await setup();
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      await input.click({ clickCount: 3 });
+      await input.type('2026-10-20');
+      await page.waitForChanges();
+
+      expect(await page.find('pds-datepicker >>> [data-date="2026-10-20"]')).toHaveClass('pds-datepicker__day--selected');
+
+      await input.press('Enter');
+      await page.waitForChanges();
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+      expect(await (await page.find('pds-datepicker')).getProperty('value')).toBe('2026-10-20');
+    });
+
+    it('keeps a modal open when a press on its backdrop dismisses the calendar', async () => {
+      const page = await setup(`<pds-modal component-id="m"><div>${FIELD}</div></pds-modal>`);
+      await (await page.find('pds-modal')).callMethod('showModal');
+      await page.waitForChanges();
+      await openWithTrigger(page);
+
+      // The modal's backdrop is its <dialog>, around the panel; press a corner of the page.
+      await page.mouse.click(4, 4);
+      await page.waitForChanges();
+
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+      expect(await page.evaluate(() => (document.querySelector('pds-modal dialog') as HTMLDialogElement).open)).toBe(true);
+    });
+
+    it('moves between presets with the arrow keys, picking each', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="r" range locale="en-US" presets="today,yesterday" value="2026-09-13/2026-10-13"></pds-datepicker>`,
+      );
+      await page.setViewport({ width: 1280, height: 800 });
+      await openWithTrigger(page);
+
+      await (await page.find('pds-datepicker >>> .pds-datepicker__preset')).focus();
+      await press(page, 'ArrowDown');
+
+      const checked = await page.evaluate(() =>
+        Array.from(document.querySelector('pds-datepicker')?.shadowRoot?.querySelectorAll('[role="radio"]') ?? []).map((r) =>
+          r.getAttribute('aria-checked'),
+        ),
+      );
+      expect(checked).toEqual(['false', 'true', 'false']);
+      expect(await focused(page)).toContain('pds-datepicker__preset');
+    });
+
+    it('reloads an open calendar when the value is set in code', async () => {
+      const page = await setup();
+      await openWithTrigger(page);
+
+      await page.$eval('pds-datepicker', (el: HTMLPdsDatepickerElement) => (el.value = '2026-11-05'));
+      await page.waitForChanges();
+
+      expect(await page.find('pds-datepicker >>> .pds-datepicker__heading')).toEqualText('November 2026');
+      expect(await page.find('pds-datepicker >>> [data-date="2026-11-05"]')).toHaveClass('pds-datepicker__day--selected');
+    });
+  });
+
   describe('small and short windows', () => {
     async function openAt(width: number, height: number, attrs: string) {
       const page = await newE2EPage();
@@ -695,7 +796,7 @@ describe('pds-datepicker', () => {
       await preset.click();
       await page.waitForChanges();
 
-      expect(await preset.getAttribute('aria-pressed')).toBe('true');
+      expect(await preset.getAttribute('aria-checked')).toBe('true');
       const headings = await page.findAll('pds-datepicker >>> .pds-datepicker__heading');
       expect(headings.map((h) => h.textContent)).toEqual(['February 2026', 'March 2026']);
       expect(await focused(page)).toContain('pds-datepicker__preset');

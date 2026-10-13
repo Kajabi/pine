@@ -211,13 +211,14 @@ describe('pds-datepicker', () => {
       );
     });
 
-    it('leaves the field empty for a value that is not a range', async () => {
+    it('shows a value that is not a range as it is', async () => {
       const { root } = await newSpecPage({
         components: [PdsDatepicker, PdsInput],
         html: `<pds-datepicker component-id="period" range value="2026-10-13/2026-09-13"></pds-datepicker>`,
       });
 
-      expect(field(root as HTMLElement).value).toBe('');
+      // As in single mode: the field shows it, and the form reports it invalid.
+      expect(field(root as HTMLElement).value).toBe('2026-10-13/2026-09-13');
     });
 
     it('opens two months ending on the range end, with the range marked', async () => {
@@ -268,8 +269,11 @@ describe('pds-datepicker', () => {
 
       const buttons = Array.from(root.shadowRoot?.querySelectorAll('.pds-datepicker__preset') ?? []);
       expect(buttons.map((b) => b.textContent)).toEqual(['Launch week', 'Old', 'Custom range']);
-      // Presets toggle the range; Custom range only points to the calendar, so it isn't a toggle.
-      expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual(['true', 'false', null]);
+      // One choice of range: a radio group, with the matching preset checked and the only Tab stop.
+      expect(root.shadowRoot?.querySelector('.pds-datepicker__presets')?.getAttribute('role')).toBe('radiogroup');
+      expect(buttons.map((b) => b.getAttribute('role'))).toEqual(['radio', 'radio', 'radio']);
+      expect(buttons.map((b) => b.getAttribute('aria-checked'))).toEqual(['true', 'false', 'false']);
+      expect(buttons.map((b) => b.getAttribute('tabindex'))).toEqual(['0', '-1', '-1']);
       expect(buttons[1].hasAttribute('disabled')).toBe(true);
     });
 
@@ -418,6 +422,68 @@ describe('pds-datepicker', () => {
       // The grid stays labelled by the month, now visually hidden.
       expect(shadow.querySelector('[role="grid"]')?.getAttribute('aria-labelledby')).toBe('born-calendar-heading-0');
       expect(shadow.querySelector('#born-calendar-heading-0')?.textContent).toBe('June 1990');
+    });
+  });
+
+  describe('review fixes', () => {
+    it('names its parts from a generated id without component-id', async () => {
+      const page = await newSpecPage({
+        components: [PdsDatepicker, PdsInput],
+        html: `<pds-datepicker label="Due" value="2026-10-13"></pds-datepicker>`,
+      });
+
+      await (page.root as HTMLPdsDatepickerElement).open();
+      await page.waitForChanges();
+
+      const id = page.root?.shadowRoot?.querySelector('[role="dialog"]')?.id ?? '';
+      expect(id).toMatch(/^pds-datepicker-\d+-calendar$/);
+      expect(id).not.toContain('undefined');
+    });
+
+    it('announces only the first month as it changes', async () => {
+      const page = await newSpecPage({
+        components: [PdsDatepicker, PdsInput],
+        html: `<pds-datepicker component-id="r" range value="2026-09-13/2026-10-13"></pds-datepicker>`,
+      });
+
+      await (page.root as HTMLPdsDatepickerElement).open();
+      await page.waitForChanges();
+
+      const live = Array.from(page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__heading') ?? []).map((h) =>
+        h.getAttribute('aria-live'),
+      );
+      expect(live).toEqual(['polite', null]);
+    });
+
+    it('refreshes the field when the format or locale changes after load', async () => {
+      const page = await newSpecPage({
+        components: [PdsDatepicker, PdsInput],
+        html: `<pds-datepicker component-id="d" time-picker locale="en-US" value="2026-10-13T13:05"></pds-datepicker>`,
+      });
+      const root = page.root as HTMLPdsDatepickerElement;
+      const field = () => (root.shadowRoot?.querySelector('pds-input') as HTMLPdsInputElement).value;
+      expect(field()).toBe('2026-10-13 1:05 PM');
+
+      root.locale = 'fr';
+      await page.waitForChanges();
+      expect(field()).toBe('2026-10-13 13:05');
+
+      root.format = 'DD.MM.YYYY';
+      await page.waitForChanges();
+      expect(field()).toBe('13.10.2026 13:05');
+    });
+
+    it('writes the year dropdown in the locale digits', async () => {
+      const page = await newSpecPage({
+        components: [PdsDatepicker, PdsInput],
+        html: `<pds-datepicker component-id="d" show-dropdowns locale="ar-EG" min="2026-01-01" max="2026-12-31" value="2026-10-13"></pds-datepicker>`,
+      });
+
+      await (page.root as HTMLPdsDatepickerElement).open();
+      await page.waitForChanges();
+
+      const year = page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__dropdowns select')[1];
+      expect(year?.querySelector('option[selected]')?.textContent).toBe('٢٠٢٦');
     });
   });
 });
