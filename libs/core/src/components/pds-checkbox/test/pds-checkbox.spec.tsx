@@ -14,7 +14,7 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <label>
             <input type="checkbox">
-            <span></span>
+            <span><slot name="label"></slot></span>
           </label>
         </mock:shadow-root>
       </pds-checkbox>
@@ -32,7 +32,7 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <label for="default">
             <input type="checkbox" id="default">
-            <span>Label text</span>
+            <span><slot name="label">Label text</slot></span>
           </label>
         </mock:shadow-root>
       </pds-checkbox>
@@ -70,7 +70,7 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <label for="default">
             <input aria-invalid="true" type="checkbox" id="default">
-            <span>Label text</span>
+            <span><slot name="label">Label text</slot></span>
           </label>
         </mock:shadow-root>
       </pds-checkbox>
@@ -88,7 +88,7 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <label for="default">
             <input indeterminate="" type="checkbox" id="default">
-            <span>Label text</span>
+            <span><slot name="label">Label text</slot></span>
           </label>
         </mock:shadow-root>
       </pds-checkbox>
@@ -106,7 +106,7 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <label for="default">
             <input type="checkbox" id="default">
-            <span>This is label text</span>
+            <span><slot name="label">This is label text</slot></span>
           </label>
         </mock:shadow-root>
       </pds-checkbox>
@@ -124,7 +124,7 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <label for="default">
             <input type="checkbox" id="default">
-            <span class="visually-hidden">This is label text</span>
+            <span class="visually-hidden"><slot name="label">This is label text</slot></span>
           </label>
         </mock:shadow-root>
       </pds-checkbox>
@@ -142,7 +142,7 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <label for="default">
             <input aria-describedby="default__helper-message" type="checkbox" id="default">
-            <span>Label text</span>
+            <span><slot name="label">Label text</slot></span>
           </label>
           <div class="pds-checkbox__message" id="default__helper-message">This is short message text.</div>
         </mock:shadow-root>
@@ -161,7 +161,7 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <label for="default">
             <input aria-describedby="default__error-message" aria-invalid="true" id="default" type="checkbox">
-            <span>Label text</span>
+            <span><slot name="label">Label text</slot></span>
           </label>
           <div aria-live="assertive" class="pds-checkbox__message pds-checkbox__message--error" id="default__error-message">
             <pds-icon icon="${danger}" size="small"></pds-icon>
@@ -236,4 +236,28 @@ describe('pds-checkbox', () => {
     expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Pick one');
   });
 
+  it('renders a label slot with the label prop as its fallback content', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="default" label="Label text"><span slot="label">Slotted label</span></pds-checkbox>`,
+    });
+
+    const slot = page.root.shadowRoot.querySelector('label slot[name="label"]');
+    expect(slot.textContent).toBe('Label text');
+    expect(page.root.querySelector('[slot="label"]').textContent).toBe('Slotted label');
+  });
+
+  it('marks the host only when the label slot has content', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `
+        <pds-checkbox component-id="slotted"><span slot="label">Slotted label</span></pds-checkbox>
+        <pds-checkbox component-id="prop" label="Label text"></pds-checkbox>
+      `,
+    });
+
+    const [slotted, prop] = Array.from(page.body.querySelectorAll('pds-checkbox'));
+    expect(slotted).toHaveClass('has-label-slot');
+    expect(prop).not.toHaveClass('has-label-slot');
+  });
 });
