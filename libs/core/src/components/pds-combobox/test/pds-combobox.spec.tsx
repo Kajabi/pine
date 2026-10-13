@@ -3559,6 +3559,24 @@ describe('pds-combobox', () => {
         expect(component.isOpen).toBe(true);
       });
 
+      it('opens on the first group with something to choose when the value is a disabled option', async () => {
+        const page = await newSpecPage({
+          components: [PdsCombobox],
+          html: `<pds-combobox component-id="locked" mode="select-only" trigger="button" group-display="flyout" value="sms-send"></pds-combobox>`,
+        });
+        const component = page.rootInstance;
+        component.options = actions;
+        await page.waitForChanges();
+        component.isOpen = true;
+        component.filterOptions();
+        component.setInitialHighlightedIndex();
+        await page.waitForChanges();
+
+        expect(component.selectedOption?.value).toBe('sms-send');
+        expect(component.openGroup).toBeNull();
+        expect(component.highlightedGroup?.label).toBe('Contact');
+      });
+
       it('opens on the first group with something to choose', async () => {
         const { component } = await openList(
           [{ id: 'sms-send', text: 'Send a text message', group: 'Premium', disabled: true }, ...actions.slice(4)],
