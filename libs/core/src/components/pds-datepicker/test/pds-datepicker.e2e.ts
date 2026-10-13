@@ -917,6 +917,73 @@ describe('pds-datepicker', () => {
   });
 
   describe('portal', () => {
+    it('emits pdsFocus and pdsBlur once each when focus goes only into and out of the portaled calendar', async () => {
+      const page = await setup(`${FIELD}<button id="after">After</button><div id="blank" style="height:200px"></div>`);
+      const focus = await page.spyOnEvent('pdsFocus');
+      const blur = await page.spyOnEvent('pdsBlur');
+
+      // open() moves focus straight into the calendar, never through the field or the button.
+      await (await page.find('pds-datepicker')).callMethod('open');
+      await page.waitForFunction(() => {
+        const portal = document.querySelector('.pds-datepicker-calendar-portal');
+        return !!portal?.shadowRoot?.activeElement;
+      });
+      expect(focus).toHaveReceivedEventTimes(1);
+
+      // A press on a blank area: focus falls to the page, with no related target.
+      await page.click('#blank');
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      await page.waitForChanges();
+      expect(blur).toHaveReceivedEventTimes(1);
+    });
+
+    it('doesn\'t emit pdsFocus again when focus moves from the calendar back to the field inside pds-filter', async () => {
+      const page = await setup(`<pds-filter component-id="f" text="Due">${FIELD}</pds-filter>`);
+      await (await page.find('pds-filter')).callMethod('showFilter');
+      await page.waitForChanges();
+      const focus = await page.spyOnEvent('pdsFocus');
+      await openWithTrigger(page);
+
+      await page.evaluate(() =>
+        document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input')?.focus(),
+      );
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      await page.waitForChanges();
+      expect(focus).toHaveReceivedEventTimes(1);
+    });
+
+    it('picks a day inside pds-popover when the datepicker is in another component\'s shadow root', async () => {
+      const page = await setup(
+        `<pds-popover component-id="p" popover-target-action="toggle"><button slot="trigger">Open</button><x-wrapper></x-wrapper></pds-popover>`,
+      );
+      await page.evaluate((field) => {
+        customElements.define(
+          'x-wrapper',
+          class extends HTMLElement {
+            constructor() {
+              super();
+              this.attachShadow({ mode: 'open' }).innerHTML = field;
+            }
+          },
+        );
+      }, FIELD);
+      await page.waitForChanges();
+      const popoverClose = await page.spyOnEvent('pdsPopoverClose');
+      await (await page.find('pds-popover')).callMethod('show');
+      await page.waitForChanges();
+
+      await page.evaluate(() => {
+        const datepicker = document.querySelector('x-wrapper')?.shadowRoot?.querySelector('pds-datepicker');
+        datepicker?.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__trigger')?.focus();
+      });
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+      await ((await inCalendar(page, '[data-date="2026-10-20"]')) as unknown as { click(): Promise<void> }).click();
+      await page.waitForChanges();
+
+      expect(popoverClose).not.toHaveReceivedEvent();
+    });
+
     const pickInsideOverlay = async (page: E2EPage, whileOpen?: () => Promise<void>) => {
       const change = await page.spyOnEvent('pdsDatepickerChange');
       await openWithTrigger(page);
