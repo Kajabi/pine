@@ -96,8 +96,10 @@ export class PdsDatepicker {
   private readonly fallbackId = `pds-datepicker-${++fallbackIds}`;
   /** Set by a click on the label, whose forwarded click on the input shouldn't open the calendar. */
   private skipForwardedClick = false;
-  /** The value when the calendar opened, which Cancel goes back to. */
+  /** The value when the calendar opened, or as last set from outside, which Cancel goes back to. */
   private valueAtOpen = '';
+  /** Set while the datepicker commits a value itself, as opposed to one set from outside. */
+  private committing = false;
 
   @Element() el!: HTMLPdsDatepickerElement;
 
@@ -410,6 +412,8 @@ export class PdsDatepicker {
 
   @Watch('value')
   protected valueChanged() {
+    // A value set from outside while the calendar is open is what Cancel keeps.
+    if (!this.committing) this.valueAtOpen = this.value ?? '';
     this.refreshFromValue();
   }
 
@@ -656,7 +660,9 @@ export class PdsDatepicker {
   /** Sets the value from the user, emitting the change event when it differs. */
   private commitValue(next: string, detail: Omit<DatepickerChangeEventDetail, 'value'> = {}) {
     const changed = next !== (this.value ?? '');
+    this.committing = true;
     this.value = next;
+    this.committing = false;
     this.text = this.fieldText();
     this.textError = '';
     // Always, not only when the value changes: fixing a typo back to the same value has to clear
