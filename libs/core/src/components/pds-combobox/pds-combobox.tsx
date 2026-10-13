@@ -12,6 +12,9 @@ import type {
   AsyncResponse,
 } from './combobox-interface';
 
+/** A Pine icon name: letters, digits and hyphens, such as `hashtag`. Never a URL or file path. */
+const PINE_ICON_NAME = /^[a-z0-9-]+$/i;
+
 /**
  * @slot option - Option elements for the combobox dropdown
  * @slot trigger-content - Custom content for the button trigger when customTriggerContent is true
@@ -639,15 +642,50 @@ export class PdsCombobox implements BasePdsProps {
     this.optionEls = [];
     this.allItems = [];
 
-    // Create option elements from async data
+    // Create option elements from async data. Grouped options are nested in an optgroup, as
+    // slotted markup would be, so grouping, filtering and labels work the same either way. Each
+    // group is listed where it first appears with all of its options, even when the data
+    // interleaves groups, so an option never renders under another group's label. Ungrouped
+    // options come first, so none reads as part of the group above it.
     const asyncOptions = this.options || this.internalOptions;
+    const groups = new Map<string, HTMLOptGroupElement>();
+    const ungrouped: HTMLOptionElement[] = [];
+    const groupEntries: HTMLOptGroupElement[] = [];
     asyncOptions.forEach(opt => {
       const optionEl = document.createElement('option') as HTMLOptionElement;
       optionEl.value = String(opt.id);
       optionEl.textContent = opt.text;
 
-      this.optionEls.push(optionEl);
-      this.allItems.push(optionEl);
+      // Only strings group an option or name an icon; anything else from JS is ignored, not coerced.
+      if (typeof opt.group !== 'string' || opt.group === '') {
+        ungrouped.push(optionEl);
+        return;
+      }
+
+      let optgroup = groups.get(opt.group);
+      if (!optgroup) {
+        optgroup = document.createElement('optgroup');
+        optgroup.label = opt.group;
+        groups.set(opt.group, optgroup);
+        groupEntries.push(optgroup);
+      }
+      if (!optgroup.hasAttribute('data-icon') && typeof opt.groupIcon === 'string' && opt.groupIcon !== '') {
+        optgroup.setAttribute('data-icon', opt.groupIcon);
+      }
+      optgroup.appendChild(optionEl);
+    });
+
+    [...ungrouped, ...groupEntries].forEach(entry => {
+      if (entry.tagName === 'OPTGROUP') {
+        this.allItems.push(entry);
+        Array.from(entry.children).forEach(child => {
+          this.optionEls.push(child as HTMLOptionElement);
+          this.allItems.push(child as HTMLOptionElement);
+        });
+      } else {
+        this.optionEls.push(entry as HTMLOptionElement);
+        this.allItems.push(entry);
+      }
     });
 
     // Re-apply preselection if a value is set but no option has been selected yet.
@@ -1672,13 +1710,22 @@ export class PdsCombobox implements BasePdsProps {
         {this.filteredItems.map((item, itemIdx) => {
           if (item.tagName === 'OPTGROUP') {
             const optgroup = item as HTMLOptGroupElement;
+            const groupIcon = optgroup.getAttribute('data-icon');
+            // Pine icon names only, checked here rather than trusting pds-icon to reject the rest.
+            const hasGroupIcon = groupIcon !== null && PINE_ICON_NAME.test(groupIcon);
             return (
               <li
                 key={`optgroup-${itemIdx}`}
-                class="pds-combobox__group-label"
+                class={{
+                  'pds-combobox__group-label': true,
+                  'pds-combobox__group-label--with-icon': hasGroupIcon,
+                }}
                 role="presentation"
-                aria-label={optgroup.label}
               >
+                {hasGroupIcon && (
+                  // `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized.
+                  <pds-icon name={groupIcon} size="small" aria-hidden="true" class="pds-combobox__group-icon" />
+                )}
                 {optgroup.label}
               </li>
             );

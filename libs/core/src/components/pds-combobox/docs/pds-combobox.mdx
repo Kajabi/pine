@@ -1027,6 +1027,76 @@ Use standard HTML `<optgroup>` elements to create semantic groupings:
   </pds-combobox>
 </DocCanvas>
 
+### Group Icons
+
+Add `data-icon` to an `<optgroup>` to show a Pine icon beside its label. Use an icon name from Pine's icon set, such as `hashtag`; URLs and file paths are not accepted. The icon is decorative and hidden from assistive technology, so the label must still describe the group.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-optgroup-icons-example"
+  label="Action"
+  placeholder="Select an action"
+  trigger="button"
+  mode="select-only">
+  <optgroup label="Tag" data-icon="hashtag">
+    <option value="tag-add">Add a tag</option>
+    <option value="tag-remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-send">Send an email</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-optgroup-icons-example"
+  label="Action"
+  placeholder="Select an action"
+  trigger="button"
+  mode="select-only">
+  <optgroup label="Tag" data-icon="hashtag">
+    <option value="tag-add">Add a tag</option>
+    <option value="tag-remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-send">Send an email</option>
+  </optgroup>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-optgroup-icons-example"
+    label="Action"
+    placeholder="Select an action"
+    trigger="button"
+    mode="select-only">
+    <optgroup label="Tag" data-icon="hashtag">
+      <option value="tag-add">Add a tag</option>
+      <option value="tag-remove">Remove a tag</option>
+    </optgroup>
+    <optgroup label="Email" data-icon="mail">
+      <option value="email-send">Send an email</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
+
+### Grouping the `options` Prop
+
+When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. Options without a group are listed before every group, wherever they appear in the array. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
+
+```jsx
+<PdsCombobox
+  componentId="combobox-grouped-options-example"
+  label="Action"
+  trigger="button"
+  mode="select-only"
+  options={[
+    { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+  ]}
+/>
+```
+
 ### Using PDS Text Components
 
 Alternatively, use `<pds-text>` components as group labels for more styling control:
@@ -1113,10 +1183,10 @@ When using group labels:
 
 Both `<optgroup>` and `<pds-text>` group labels are rendered as presentational items in the dropdown:
 
-- **`<optgroup>` elements**: Provide semantic grouping that is meaningful to screen readers. The `label` attribute is announced by assistive technology, helping users understand the relationship between options and their categories.
-- **`<pds-text>` elements**: Serve as visual group headers but are purely presentational. They do not provide semantic grouping information to screen readers.
+- **`<optgroup>` elements**: The `label` renders as a visual caption above the group's options. Screen readers don't announce it with each option, so an option's own text has to make sense without its group.
+- **`<pds-text>` elements**: Serve as visual group headers and are likewise presentational.
 
-**Recommendation**: Use `<optgroup>` when semantic grouping is important for accessibility and screen reader users. Use `<pds-text>` when you only need visual organization without semantic meaning.
+**Recommendation**: Use `<optgroup>` for groups of options, since it groups them in the markup and works with `data-icon`. Use `<pds-text>` for a heading over options that don't belong to an optgroup.
 
 ## Async Data Loading
 
