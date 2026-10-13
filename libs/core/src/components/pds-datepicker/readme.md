@@ -105,10 +105,10 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part         | Description |
-| ------------ | ----------- |
-| `"calendar"` |             |
-| `"presets"`  |             |
+| Part         | Description                                                                                                                 |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `"calendar"` | The open calendar. It's portaled out of the datepicker, so style it with `.pds-datepicker-calendar-portal::part(calendar)`. |
+| `"presets"`  | The list of preset ranges in the calendar, styled with `.pds-datepicker-calendar-portal::part(presets)`.                    |
 
 
 ## Dependencies

@@ -81,10 +81,10 @@ export class CalendarPortal {
 }
 
 /**
- * The native `<dialog>` the datepicker sits in, so the calendar stays in the same top layer as
- * `showModal()`, or `document.body`. `closest('dialog')` stops at shadow boundaries and misses a
- * dialog that only wraps slotted content, so this walks assigned slots and shadow hosts, as
- * pds-combobox does, and falls back to `pds-modal`'s dialog.
+ * The native `<dialog>` or open `popover` (as pds-filter's) the datepicker sits in, so the
+ * calendar shares its top layer and a click in it isn't outside it; otherwise `document.body`.
+ * `closest()` stops at shadow boundaries and misses one that only wraps slotted content, so this
+ * walks assigned slots and shadow hosts, as pds-combobox does.
  */
 export function findPortalTarget(from: HTMLElement): HTMLElement {
   const seen = new Set<Node>();
@@ -93,7 +93,7 @@ export function findPortalTarget(from: HTMLElement): HTMLElement {
   while (current && !seen.has(current)) {
     seen.add(current);
 
-    if (current.nodeType === Node.ELEMENT_NODE && (current as Element).localName === 'dialog') {
+    if (current.nodeType === Node.ELEMENT_NODE && isTopLayerHost(current as Element)) {
       return current as HTMLElement;
     }
 
@@ -107,5 +107,16 @@ export function findPortalTarget(from: HTMLElement): HTMLElement {
     current = parent instanceof ShadowRoot ? parent.host : parent;
   }
 
-  return from.closest('pds-modal')?.querySelector('dialog') ?? document.body;
+  return document.body;
+}
+
+function isTopLayerHost(el: Element): boolean {
+  if (el.localName === 'dialog') return true;
+  if (!el.hasAttribute('popover')) return false;
+  try {
+    return el.matches(':popover-open');
+  } catch {
+    // A browser without the Popover API: no top layer to share.
+    return false;
+  }
 }

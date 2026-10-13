@@ -79,6 +79,9 @@ const dayNumberText = (formatter: Intl.DateTimeFormat, date: Date) =>
  * A field for one date, or in range mode a start and end date, with a calendar to pick from.
  * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
  * date carries a time, as `YYYY-MM-DDTHH:mm`.
+ *
+ * @part calendar - The open calendar. It's portaled out of the datepicker, so style it with `.pds-datepicker-calendar-portal::part(calendar)`.
+ * @part presets - The list of preset ranges in the calendar, styled with `.pds-datepicker-calendar-portal::part(presets)`.
  */
 @Component({
   tag: 'pds-datepicker',
@@ -849,17 +852,17 @@ export class PdsDatepicker {
   /** Closes the calendar and reports blur when focus leaves the datepicker, as when tabbing out. */
   private onHostFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
-    // No next target: focus fell to the page, as on a click on a blank area or when a focused
-    // control is disabled. Stay open, but report blur unless focus comes straight back inside.
-    if (!next) {
-      window.setTimeout(() => {
-        if (!this.el.matches(':focus-within')) this.pdsBlur.emit(event);
-      });
-      return;
-    }
-    if (this.isInside(next)) return;
-    this.closeCalendar(false);
-    this.pdsBlur.emit(event);
+    if (next && this.isInside(next)) return;
+    // Checked once focus settles: the related target is retargeted to the host when the calendar
+    // is portaled into another component's shadow root (pds-filter's popover), and is null when
+    // focus falls to the page.
+    window.setTimeout(() => {
+      if (this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within')) return;
+      // Focus that fell to the page, as on a click on a blank area or when a focused control is
+      // disabled, leaves the calendar open.
+      if (next) this.closeCalendar(false);
+      this.pdsBlur.emit(event);
+    });
   };
 
   private startPositioning() {
