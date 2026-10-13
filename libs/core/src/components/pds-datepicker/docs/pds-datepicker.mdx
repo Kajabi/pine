@@ -248,11 +248,20 @@ Emitted when focus moves into the datepicker from outside, and when it leaves. M
 
 The inner field's own `pdsInput`, `pdsChange`, `pdsFocus`, `pdsBlur` and `pdsKeyDown` events stay inside the datepicker.
 
+## Inside modals, popovers and other overlays
+
+The datepicker works inside `pds-modal`, `pds-popover`, `pds-filter` and `pds-drawer`. `Escape` closes only the calendar, never the overlay around it, and picking a day doesn't dismiss the overlay. The calendar sizes itself to the window, scrolling with its footer pinned when there isn't room, and hides when its field scrolls out of view. On narrow screens a range shows one month at a time.
+
+## Values, time zones and servers
+
+- Values are plain ISO strings with no time zone: `YYYY-MM-DD`, and with the time picker `YYYY-MM-DDTHH:mm`, a wall-clock time. Attach the zone on the server if the time needs one, as Rails' `Time.zone.parse` does with the account's zone.
+- A range submits as one field, `start/end`. Split it on the server, as `start, finish = params[:period].split('/')`; each half parses with `Date.parse` or `Time.zone.parse`.
+
 ## Form Integration
 
 - Set `name` and the date is submitted with its form as `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` in range mode.
 - Resetting the form clears the date.
-- With `required` and no date, or with typed text that isn't a date that can be picked, the form won't submit. Set `invalid-date-message` to translate the message the form reports for typed text.
+- With `required` and no date, typed text that isn't a date, or a date outside `min` and `max` (typed or set in code), the form won't submit and the field shows as invalid. The form reports `badInput` for text that isn't a date and `rangeUnderflow` or `rangeOverflow` for dates outside the range, with the messages set by `invalid-date-message`, `min-date-message` and `max-date-message`; `{date}` in the last two is replaced by the bound.
 
 ## Playground
 
