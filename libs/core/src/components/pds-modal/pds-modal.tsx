@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
+import { closest } from '@utils/closest';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 import type { ModalSizeType } from '@utils/types';
 
@@ -12,10 +13,10 @@ const isCustomLength = (value: string): boolean =>
 const TABBABLE = [
   'a[href]',
   'area[href]',
-  'button:not([disabled])',
-  'input:not([disabled]):not([type="hidden"])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
+  'button',
+  'input:not([type="hidden"])',
+  'select',
+  'textarea',
   'iframe',
   'summary',
   '[contenteditable]:not([contenteditable="false"])',
@@ -24,23 +25,53 @@ const TABBABLE = [
 
 /**
  * Collects the tabbable elements under `root` in focus order, walking into open shadow roots and
- * following slots, so a component's own controls (the field and button inside pds-datepicker, the
- * input inside pds-combobox) count without being registered here by tag name.
+ * following slots, so a component's own controls (the input inside pds-combobox or pds-textarea)
+ * count without being registered here by tag name. Positive tabindex values are not reordered,
+ * and a closed shadow root can't be seen into.
  */
 function collectTabbable(root: Element | ShadowRoot, found: HTMLElement[]) {
   for (const child of Array.from(root.children)) visitTabbable(child, found);
 }
 
 function visitTabbable(el: Element, found: HTMLElement[]) {
+  if (el.hasAttribute('inert')) return;
   if (el.localName === 'slot') {
-    const assigned = (el as HTMLSlotElement).assignedElements?.({ flatten: true }) ?? [];
-    if (assigned.length === 0) return collectTabbable(el, found);
-    for (const slotted of assigned) visitTabbable(slotted, found);
+    const slot = el as HTMLSlotElement;
+    // Fallback content renders only when nothing at all is assigned, text included.
+    if ((slot.assignedNodes?.({ flatten: true }) ?? []).length === 0) return collectTabbable(el, found);
+    for (const slotted of slot.assignedElements({ flatten: true })) visitTabbable(slotted, found);
     return;
   }
-  if (el instanceof HTMLElement && el.tabIndex >= 0 && el.matches(TABBABLE)) found.push(el);
+  // A delegatesFocus host passes focus to its first control, which the walk below finds.
+  const delegates = el.shadowRoot?.delegatesFocus === true;
+  if (el instanceof HTMLElement && !delegates && el.tabIndex >= 0 && el.matches(TABBABLE) && !el.matches(':disabled')) {
+    found.push(el);
+  }
   // A shadow host's light children render only through its slots, which the walk reaches.
   collectTabbable(el.shadowRoot ?? el, found);
+}
+
+/**
+ * Keeps one radio per named group, as the browser does: the checked one, or the first. The others
+ * are reached with the arrow keys, so they can't be the first or last stop of the trap.
+ */
+const groupedRadio = (el: HTMLElement): HTMLInputElement | null =>
+  el instanceof HTMLInputElement && el.type === 'radio' && el.name !== '' ? el : null;
+
+function oneRadioPerGroup(elements: HTMLElement[]): HTMLElement[] {
+  // Radios group by form and name.
+  const groups = new Map<HTMLFormElement | null, Map<string, HTMLInputElement[]>>();
+  for (const el of elements) {
+    const radio = groupedRadio(el);
+    if (radio === null) continue;
+    const byName = groups.get(radio.form) ?? new Map<string, HTMLInputElement[]>();
+    groups.set(radio.form, byName.set(radio.name, [...(byName.get(radio.name) ?? []), radio]));
+  }
+  const stops = new Set<HTMLElement>();
+  for (const byName of groups.values()) {
+    for (const radios of byName.values()) stops.add(radios.find((radio) => radio.checked) ?? radios[0]);
+  }
+  return elements.filter((el) => groupedRadio(el) === null || stops.has(el));
 }
 
 /** The focused element, followed down through shadow roots to the control that has focus. */
@@ -195,6 +226,7 @@ export class PdsModal {
       const style = window.getComputedStyle(el);
       return style.display !== 'none' && style.visibility !== 'hidden';
     });
+    this.focusableElements = oneRadioPerGroup(this.focusableElements);
   }
 
   /**
@@ -211,33 +243,11 @@ export class PdsModal {
   }
 
   /**
-   * Helper method to focus an element, with special handling for web components
+   * Focuses an element from the list. It holds the controls themselves, inside any shadow root,
+   * so they take focus directly.
    */
   private focusElement(element: HTMLElement) {
-    if (!element) return;
-
-    try {
-      // Try standard focus first
-      element.focus();
-
-      // Check if focus worked
-      setTimeout(() => {
-        if (document.activeElement !== element) {
-          // For web components, try to find a focusable element inside
-          if (element.shadowRoot) {
-            const focusableInShadow = element.shadowRoot.querySelector(
-              'button, [tabindex], input, a[href]'
-            ) as HTMLElement;
-
-            if (focusableInShadow) {
-              focusableInShadow.focus();
-            }
-          }
-        }
-      }, 0);
-    } catch (error) {
-      console.error('Error focusing element:', error);
-    }
+    element?.focus();
   }
 
   /**
@@ -498,8 +508,15 @@ export class PdsModal {
       // disableTopLayer), so do not trap Tab here.
       if (this.disableTopLayer) return;
 
-      // A component inside the modal that runs its own Tab trap (an open calendar) already moved focus.
+      // A control inside that handles Tab itself (a popup with its own trap) has already moved
+      // focus. This holds only when it listens on its own element, which runs before this
+      // document listener; one listening on document too would race it.
       if (e.defaultPrevented) return;
+
+      // Every open modal hears this keydown. Only the one holding focus traps it: a parent's list
+      // also holds the controls of a modal opened above it, so it would otherwise wrap first.
+      const activeElement = deepActiveElement();
+      if (!activeElement || closest('dialog[open]', activeElement) !== this.modalRef) return;
 
       // Content can change while the modal is open (rows fetched in, sections shown), so the
       // first and last elements are read now rather than from the list taken on opening.
@@ -512,9 +529,8 @@ export class PdsModal {
       const firstFocusableElement = this.focusableElements[0];
       const lastFocusableElement = this.focusableElements[this.focusableElements.length - 1];
 
-      // The list holds controls inside shadow roots, so compare against the one that has focus,
-      // not the host document.activeElement reports.
-      const activeElement = deepActiveElement();
+      // activeElement is the control inside any shadow root, as the list holds, not the host
+      // document.activeElement reports.
 
       // Check if we need to wrap focus
       const isFirstElement = activeElement === firstFocusableElement ||
