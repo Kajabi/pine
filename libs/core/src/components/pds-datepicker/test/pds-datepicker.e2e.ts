@@ -450,6 +450,34 @@ describe('pds-datepicker', () => {
 
       expect(blur).not.toHaveReceivedEvent();
       expect(await page.find('pds-datepicker >>> [role="dialog"]')).not.toBeNull();
+      // Focus goes on to the active day, so the keyboard keeps working in the calendar.
+      expect(await focused(page)).toBe('2026-10-13');
+      await press(page, 'ArrowRight');
+      expect(await focused(page)).toBe('2026-10-14');
+    });
+
+    it('keeps a typed date pending on Tab to the calendar button, and a picked time on a click outside', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="when" time-picker locale="fr" value="2026-10-13T09:00"></pds-datepicker><button id="after">After</button>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+      await page.waitForChanges();
+
+      await chooseTime(page, 0, '14');
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        input?.focus();
+        input?.select();
+      });
+      await page.keyboard.type('2026-10-14');
+      await press(page, 'Tab');
+      expect(change).not.toHaveReceivedEvent();
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).not.toBeNull();
+
+      await page.click('#after');
+      await page.waitForChanges();
+      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-14T14:00']);
     });
 
     it('keeps a time picked in the calendar when the date is then typed', async () => {
