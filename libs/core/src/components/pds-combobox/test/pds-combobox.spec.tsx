@@ -3091,7 +3091,7 @@ describe('pds-combobox', () => {
 
       (page.root as HTMLPdsComboboxElement).options = [...actions, { id: 'email-resend', text: 'Resend an email', group: 'Email' }];
       await page.waitForChanges();
-      expect(root.querySelector('.pds-combobox__group-back')?.textContent).toBe('Back: Email');
+      expect(root.querySelector('.pds-combobox__group-back-trigger')?.textContent).toBe('Back: Email');
       expect(Array.from(root.querySelectorAll('[data-option-index]')).map(o => o.textContent)).toEqual(['Send an email', 'Resend an email']);
 
       component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true }));

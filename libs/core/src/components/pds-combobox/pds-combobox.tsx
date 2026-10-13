@@ -319,6 +319,9 @@ export class PdsCombobox implements BasePdsProps {
    */
   @State() highlightedGroup: HTMLOptGroupElement | null = null;
 
+  /** The keys, not the pointer, moved the highlight last; the focus ring shows only then. */
+  @State() keyboardNavigating: boolean = false;
+
   /**
    * What's typed in the dropdown's own search field (`panelSearch`).
    */
@@ -481,6 +484,7 @@ export class PdsCombobox implements BasePdsProps {
     if (!isOpen) {
       this.openGroup = null;
       this.highlightedGroup = null;
+      this.keyboardNavigating = false;
       this.flyout.reset();
       if (this.panelQuery !== '') {
         // The field reopens empty, so tell consumers who filter `options` from this event.
@@ -545,9 +549,19 @@ export class PdsCombobox implements BasePdsProps {
   /**
    * The button and chip triggers are `div`s, which `<label for>` can't name, so they point at the
    * visible label instead. With `hide-label` there is no visible label and `aria-label` names them.
+   * With panel search the trigger is a button, which has no value, so its own text (the selection
+   * or placeholder) joins the label in its name.
    */
-  private get visibleLabelledBy(): string | undefined {
-    return this.hasVisibleLabel ? this.labelId : undefined;
+  private get triggerLabelledBy(): string | undefined {
+    if (!this.hasVisibleLabel) return undefined;
+    return this.usesPanelSearch ? `${this.labelId} ${this.componentId}` : this.labelId;
+  }
+
+  /** The div triggers' `aria-label` when the label is hidden; with panel search it names the selection too. */
+  private get triggerAriaLabel(): string | undefined {
+    if (!this.hideLabel) return undefined;
+    const shown = this.selectedLabel || this.placeholder;
+    return this.usesPanelSearch && shown ? `${this.label}, ${shown}` : this.label;
   }
 
   /** `<label for>` only works on the input trigger; for a div trigger a click on the label focuses it. */
@@ -840,7 +854,8 @@ export class PdsCombobox implements BasePdsProps {
 
     // A rebuild replaces every optgroup. Follow the open group to its new element by label, so the
     // flyout stays open across reloads and pagination, or close it if the group is gone. The hover
-    // timers still hold the old element, so they're cleared either way.
+    // timers still hold the old element, so they're cleared either way. filterOptions, below,
+    // resets the highlight.
     if (this.openGroup !== null && !groupEntries.includes(this.openGroup)) {
       this.flyout.reset();
       this.openGroup = groups.get(this.openGroup.label) ?? null;
@@ -1314,6 +1329,7 @@ export class PdsCombobox implements BasePdsProps {
   private handleKeyDown = (e: KeyboardEvent) => {
     if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || (e.altKey && e.key === 'ArrowDown'))) {
       e.preventDefault();
+      this.keyboardNavigating = true;
       this.isOpen = true;
       this.prepareExpandFilterListOnOpen();
       this.filterOptions();
@@ -1437,6 +1453,7 @@ export class PdsCombobox implements BasePdsProps {
    */
   private handleGroupedPanelKey(e: KeyboardEvent): boolean {
     if (!this.showsGroupedPanel) return false;
+    this.keyboardNavigating = true;
     // In the input trigger, Left and Right still move the caret through typed text, and Space,
     // Home and End edit it, as they do in the panel's search field.
     if (this.trigger === 'input') {
@@ -1640,7 +1657,8 @@ export class PdsCombobox implements BasePdsProps {
   private updateOptionFocus() {
     if (this.listboxEl === undefined || this.listboxEl === null) return;
 
-    const groupRow = this.highlightedGroupRow;
+    // A row highlighted outright; an option highlighted in a closed group opens it below instead.
+    const groupRow = this.showsGroupedPanel && this.highlightedIndex < 0 ? this.highlightedGroup : null;
     if (groupRow !== null) {
       // Arrowing onto another row closes a flyout that hover left open.
       if (this.effectiveGroupDisplay === 'flyout' && this.openGroup !== null && this.openGroup !== groupRow) {
@@ -1719,7 +1737,11 @@ export class PdsCombobox implements BasePdsProps {
 
   /** The highlighted group row in the grouped panel, or null while an option is highlighted. */
   private get highlightedGroupRow(): HTMLOptGroupElement | null {
-    return this.showsGroupedPanel && this.highlightedIndex < 0 ? this.highlightedGroup : null;
+    if (!this.showsGroupedPanel) return null;
+    if (this.highlightedIndex < 0) return this.highlightedGroup;
+    // An option left highlighted in a flyout that has since closed shows as its group's row.
+    const current = this.currentPanelItem();
+    return typeof current === 'number' ? null : current;
   }
 
   /**
@@ -1810,6 +1832,7 @@ export class PdsCombobox implements BasePdsProps {
   private onOptionMouseEnter = (event: Event) => {
     const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
     this.highlightedIndex = idx;
+    this.keyboardNavigating = false;
   };
 
   // Group rows in the flyout panel carry their group's index, as options carry theirs.
@@ -1841,6 +1864,7 @@ export class PdsCombobox implements BasePdsProps {
   private highlightGroupRowByPointer(group: HTMLOptGroupElement) {
     this.highlightedIndex = -1;
     this.highlightedGroup = group;
+    this.keyboardNavigating = false;
   }
 
   private onGroupRowClick = (event: Event) => {
@@ -2030,6 +2054,7 @@ export class PdsCombobox implements BasePdsProps {
     if ((e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') && !this.isOpen) {
       e.preventDefault();
       e.stopPropagation(); // Prevent the event from bubbling and triggering click
+      this.keyboardNavigating = true;
 
       this.isOpen = true;
       this.prepareExpandFilterListOnOpen();
@@ -2461,6 +2486,7 @@ export class PdsCombobox implements BasePdsProps {
         class={{
           'pds-combobox__group-back': true,
           'pds-combobox__group-back--highlighted': this.highlightedGroupRow === group.optgroup,
+          'pds-combobox__group-back--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
         }}
         role="treeitem"
         aria-expanded="true"
@@ -2503,6 +2529,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__group-row--open': isOpen,
           'pds-combobox__group-row--has-selection': hasSelection,
           'pds-combobox__group-row--highlighted': this.highlightedGroupRow === group.optgroup,
+          'pds-combobox__group-row--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
         }}
         role="treeitem"
         aria-expanded={isOpen ? 'true' : 'false'}
@@ -2809,8 +2836,8 @@ export class PdsCombobox implements BasePdsProps {
               aria-activedescendant={this.usesPanelSearch ? undefined : this.activeDescendantId}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
-              aria-label={this.hideLabel ? this.label : undefined}
-              aria-labelledby={this.visibleLabelledBy}
+              aria-label={this.triggerAriaLabel}
+              aria-labelledby={this.triggerLabelledBy}
               id={this.componentId}
               tabIndex={this.disabled ? -1 : 0}
               onClick={this.onButtonTriggerClick}
@@ -2834,8 +2861,8 @@ export class PdsCombobox implements BasePdsProps {
               aria-activedescendant={this.usesPanelSearch ? undefined : this.activeDescendantId}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
-              aria-label={this.hideLabel ? this.label : undefined}
-              aria-labelledby={this.visibleLabelledBy}
+              aria-label={this.triggerAriaLabel}
+              aria-labelledby={this.triggerLabelledBy}
               id={this.componentId}
               tabIndex={this.disabled ? -1 : 0}
               onClick={this.onButtonTriggerClick}
