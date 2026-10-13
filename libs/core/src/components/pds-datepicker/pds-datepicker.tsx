@@ -837,8 +837,10 @@ export class PdsDatepicker {
     if (!next) return;
     if (!this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
 
+    // Not gated on the calendar still being open: a press outside closes it on pointerdown, before
+    // this focusout, and focus has still left the datepicker.
     window.setTimeout(() => {
-      if (!this.isOpen || this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within')) return;
+      if (this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within')) return;
       this.closeCalendar(false);
       this.pdsBlur.emit(event);
     });
@@ -1080,7 +1082,9 @@ export class PdsDatepicker {
       this.closeCalendar(false);
       return;
     }
-    if (event.key !== 'Tab' || event.shiftKey) return;
+    // A calendar that isn't placed and shown, as when the field is scrolled out of view, can't take
+    // focus; let Tab move on from the trigger as usual.
+    if (event.key !== 'Tab' || event.shiftKey || this.dialogEl?.style.visibility !== 'visible') return;
     event.preventDefault();
     this.focusActiveDay = true;
     this.flushActiveDayFocus();

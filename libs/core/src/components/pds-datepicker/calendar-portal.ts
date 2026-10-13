@@ -11,6 +11,7 @@ export class CalendarPortal {
 
   readonly host: HTMLElement;
   private readonly root: ShadowRoot;
+  private locale?: string;
 
   constructor(private readonly datepicker: HTMLElement) {
     this.host = document.createElement('div');
@@ -22,12 +23,15 @@ export class CalendarPortal {
   }
 
   /**
-   * Moves the calendar into the portal, mounting the portal first. Context is copied only when the
-   * portal is attached, not on every render while it's open (in range mode, every hovered day).
+   * Moves the calendar into the portal, mounting the portal first. Context is copied when the portal
+   * is attached or the locale changes, not on every render while it's open (in range mode, every
+   * hovered day). A theme set on an ancestor while the calendar is open applies when it next opens.
    */
   mount(calendar: HTMLElement, locale: string) {
     if (!this.host.isConnected) {
       findPortalTarget(this.datepicker).appendChild(this.host);
+      this.copyContext(locale);
+    } else if (locale !== this.locale) {
       this.copyContext(locale);
     }
     if (calendar.parentNode !== this.root) this.root.appendChild(calendar);
@@ -47,6 +51,7 @@ export class CalendarPortal {
    * reading direction and language, a theme set on an ancestor, and size overrides.
    */
   private copyContext(locale: string) {
+    this.locale = locale;
     const source = this.datepicker.shadowRoot;
     if (source) {
       if (source.adoptedStyleSheets?.length) {
