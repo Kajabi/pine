@@ -10,6 +10,22 @@ async function setup(html = FIELD): Promise<E2EPage> {
   return page;
 }
 
+/**
+ * An element in the portaled calendar. The portal is in the body, or inside the dialog or open
+ * popover around the datepicker, which may be in a shadow root (pds-filter's), so it's searched for.
+ */
+function inCalendar(page: E2EPage, selector: string) {
+  return page.evaluateHandle((inner: string) => {
+    const findPortal = (root: Document | ShadowRoot): Element | null =>
+      root.querySelector('.pds-datepicker-calendar-portal') ??
+      Array.from(root.querySelectorAll('*'))
+        .map((el) => (el.shadowRoot ? findPortal(el.shadowRoot) : null))
+        .find(Boolean) ??
+      null;
+    return findPortal(document)?.shadowRoot?.querySelector(inner) ?? null;
+  }, selector);
+}
+
 async function openWithTrigger(page: E2EPage) {
   // Enter on the focused button rather than a mouse click: on a cold first page the layout can
   // still shift as the icon loads, and a click landing on the field opens with focus left there.
@@ -18,10 +34,14 @@ async function openWithTrigger(page: E2EPage) {
   );
   await page.keyboard.press('Enter');
   await page.waitForChanges();
-  await page.waitForFunction(() => {
-    const dialog = document.querySelector('.pds-datepicker-calendar-portal')?.shadowRoot?.querySelector<HTMLElement>('[role="dialog"]');
-    return dialog?.style.visibility === 'visible';
-  });
+  for (let tries = 0; tries < 50; tries++) {
+    const visible = await (await inCalendar(page, '[role="dialog"]')).evaluate(
+      (dialog) => (dialog as HTMLElement | null)?.style.visibility === 'visible',
+    );
+    if (visible) return;
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  throw new Error('The calendar did not open');
 }
 
 /** What has focus inside the datepicker: a day's date, or a class name. */
@@ -708,7 +728,7 @@ describe('pds-datepicker', () => {
       const change = await page.spyOnEvent('pdsDatepickerChange');
       await openWithTrigger(page);
 
-      await (await page.find('pds-datepicker >>> .pds-datepicker__action:nth-of-type(1)')).click();
+      await (await page.find('.pds-datepicker-calendar-portal >>> .pds-datepicker__action:nth-of-type(1)')).click();
       await page.waitForChanges();
       expect(change).not.toHaveReceivedEvent();
     });
@@ -855,9 +875,10 @@ describe('pds-datepicker', () => {
     async function clickFieldThenEscape(page: E2EPage) {
       await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
       await page.waitForChanges();
-      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).not.toBeNull();
+      const isOpen = async () => (await inCalendar(page, '[role="dialog"]')).evaluate((dialog) => dialog !== null);
+      expect(await isOpen()).toBe(true);
       await press(page, 'Escape');
-      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).toBeNull();
+      expect(await isOpen()).toBe(false);
     }
 
     it('closes only the calendar on Escape in the field, inside pds-modal', async () => {
@@ -896,6 +917,47 @@ describe('pds-datepicker', () => {
   });
 
   describe('portal', () => {
+    const pickInsideOverlay = async (page: E2EPage, whileOpen?: () => Promise<void>) => {
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+      await whileOpen?.();
+      await ((await inCalendar(page, '[data-date="2026-10-20"]')) as unknown as { click(): Promise<void> }).click();
+      await page.waitForChanges();
+      expect(change).toHaveReceivedEventDetail({ value: '2026-10-20' });
+    };
+
+    it('picks a day inside pds-filter without dismissing it', async () => {
+      const page = await setup(`<pds-filter component-id="f" text="Due">${FIELD}</pds-filter>`);
+      const filterClose = await page.spyOnEvent('pdsFilterClose');
+      await (await page.find('pds-filter')).callMethod('showFilter');
+      await page.waitForChanges();
+
+      await pickInsideOverlay(page, async () => {
+        // Mounted in the filter's open popover, so the calendar shares its top layer.
+        expect(
+          await page.evaluate(() => {
+            const portal = document.querySelector('pds-filter')?.shadowRoot?.querySelector('.pds-datepicker-calendar-portal');
+            return portal?.parentElement?.matches(':popover-open') ?? false;
+          }),
+        ).toBe(true);
+      });
+
+      expect(filterClose).not.toHaveReceivedEvent();
+    });
+
+    it('picks a day inside pds-popover without dismissing it', async () => {
+      const page = await setup(
+        `<pds-popover component-id="p" popover-target-action="toggle"><button slot="trigger">Open</button><div>${FIELD}</div></pds-popover>`,
+      );
+      const popoverClose = await page.spyOnEvent('pdsPopoverClose');
+      await (await page.find('pds-popover')).callMethod('show');
+      await page.waitForChanges();
+
+      await pickInsideOverlay(page);
+
+      expect(popoverClose).not.toHaveReceivedEvent();
+    });
+
     const PORTAL = '.pds-datepicker-calendar-portal';
     const portalParent = (page: E2EPage) =>
       page.evaluate((selector) => document.querySelector(selector)?.parentElement?.tagName ?? null, PORTAL);
