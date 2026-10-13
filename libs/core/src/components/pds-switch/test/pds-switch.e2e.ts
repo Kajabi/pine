@@ -95,6 +95,47 @@ describe('pds-switch', () => {
     expect(helperMessage.textContent).toEqual(`This is a helper message`);
     expect(errorMessage.textContent).toEqual(`This is an error message`);
   });
+
+  it('toggles when slotted label content is clicked', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch component-id="default"><pds-chip slot="label">Spring Launch</pds-chip></pds-switch>');
+
+    const input = await page.find('pds-switch >>> input');
+    const eventSpy = await page.spyOnEvent('pdsSwitchChange');
+    await (await page.find('pds-chip')).click();
+    await page.waitForChanges();
+
+    expect(await input.getProperty('checked')).toBe(true);
+    expect(eventSpy).toHaveReceivedEventTimes(1);
+  });
+
+  it('takes its accessible name from slotted label content, or the label prop without it', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-switch component-id="slotted" label="Fallback"><pds-chip slot="label">Spring Launch</pds-chip></pds-switch>
+      <pds-switch component-id="prop" label="Label text"></pds-switch>
+    `);
+
+    const tree = await page.accessibility.snapshot();
+    const findInputs = (node) => [node.role === 'checkbox' ? node.name : null, ...(node.children ?? []).flatMap(findInputs)].filter(Boolean);
+
+    expect(findInputs(tree)).toEqual(['Spring Launch', 'Label text']);
+  });
+
+  it('centers the control on slotted label content', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch component-id="default"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-switch>');
+
+    const offset = await page.evaluate(() => {
+      const middle = (rect: DOMRect) => rect.top + rect.height / 2;
+      const host = document.querySelector('pds-switch');
+      const input = host.shadowRoot.querySelector('input').getBoundingClientRect();
+      const chip = host.querySelector('pds-chip').getBoundingClientRect();
+      return Math.abs(middle(input) - middle(chip));
+    });
+
+    expect(offset).toBeLessThan(1);
+  });
 });
 
 describe('pds-switch reduced motion', () => {
@@ -118,6 +159,13 @@ describe('pds-switch accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-switch component-id="notify" label="Enable notifications"></pds-switch>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('has no axe violations with slotted label content', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch component-id="tag"><pds-chip slot="label" sentiment="neutral">Spring Launch</pds-chip></pds-switch>');
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
