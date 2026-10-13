@@ -526,6 +526,7 @@ export const GroupDisplayActionCatalog = (args) => html`
     panel-search
     search-placeholder=${args.searchPlaceholder}
     search-options-label=${args.searchOptionsLabel}
+    drill-in-back-label=${args.drillInBackLabel}
     trigger-width=${args.triggerWidth}
     dropdown-width=${args.dropdownWidth}
     .options=${args.options}
@@ -538,6 +539,7 @@ GroupDisplayActionCatalog.args = {
   groupDisplay: 'flyout',
   searchPlaceholder: 'Search actions',
   searchOptionsLabel: 'Search actions',
+  drillInBackLabel: 'Back',
   triggerWidth: '280px',
   dropdownWidth: '280px',
   options: [
