@@ -142,8 +142,8 @@
   }
 
   // The keyboard's place among the rows, which share a background with hover, open and selection.
-  .pds-combobox__group-row--highlighted > .pds-combobox__group-row-trigger,
-  .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger {
+  .pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger {
     outline: var(--pine-outline-focus);
     outline-offset: calc(var(--pine-border-width) * -2);
   }
