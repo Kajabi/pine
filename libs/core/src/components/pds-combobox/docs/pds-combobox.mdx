@@ -1133,14 +1133,17 @@ When options come from the `options` prop, set `group` on each option, and optio
   <optgroup label="Contact" data-icon="contact">
     <option value="contact_tag_add">Add a tag</option>
     <option value="contact_tag_remove">Remove a tag</option>
+    <option value="enroll_in_workflow">Enroll in an automation</option>
   </optgroup>
   <optgroup label="Communication" data-icon="mail">
     <option value="email_send">Send an email</option>
     <option value="email_sequence_subscribe">Subscribe to a sequence</option>
+    <option value="email_sequence_unsubscribe">Unsubscribe from a sequence</option>
   </optgroup>
   <optgroup label="Membership" data-icon="product">
     <option value="offer_grant">Grant an offer</option>
     <option value="offer_revoke">Revoke an offer</option>
+    <option value="offer_cancel_payment_and_access">Cancel payment and access</option>
   </optgroup>
 </pds-combobox>`,
     react: `<PdsCombobox
@@ -1157,16 +1160,19 @@ When options come from the `options` prop, set `group` on each option, and optio
   options={[
     { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
     { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
+    { id: 'enroll_in_workflow', text: 'Enroll in an automation', group: 'Contact' },
     { id: 'email_send', text: 'Send an email', group: 'Communication', groupIcon: 'mail' },
     { id: 'email_sequence_subscribe', text: 'Subscribe to a sequence', group: 'Communication' },
+    { id: 'email_sequence_unsubscribe', text: 'Unsubscribe from a sequence', group: 'Communication' },
     { id: 'offer_grant', text: 'Grant an offer', group: 'Membership', groupIcon: 'product' },
     { id: 'offer_revoke', text: 'Revoke an offer', group: 'Membership' },
+    { id: 'offer_cancel_payment_and_access', text: 'Cancel payment and access', group: 'Membership' },
   ]}
   onPdsComboboxChange={(event) => setAction(event.detail.value)}
 />`,
   }}
 >
-  <div style={{ minHeight: '360px' }}>
+  <div style={{ minHeight: '400px' }}>
     <pds-combobox
       component-id="combobox-catalog-example"
       label="Action"
@@ -1181,14 +1187,17 @@ When options come from the `options` prop, set `group` on each option, and optio
       <optgroup label="Contact" data-icon="contact">
         <option value="contact_tag_add">Add a tag</option>
         <option value="contact_tag_remove">Remove a tag</option>
+        <option value="enroll_in_workflow">Enroll in an automation</option>
       </optgroup>
       <optgroup label="Communication" data-icon="mail">
         <option value="email_send">Send an email</option>
         <option value="email_sequence_subscribe">Subscribe to a sequence</option>
+        <option value="email_sequence_unsubscribe">Unsubscribe from a sequence</option>
       </optgroup>
       <optgroup label="Membership" data-icon="product">
         <option value="offer_grant">Grant an offer</option>
         <option value="offer_revoke">Revoke an offer</option>
+        <option value="offer_cancel_payment_and_access">Cancel payment and access</option>
       </optgroup>
     </pds-combobox>
   </div>
