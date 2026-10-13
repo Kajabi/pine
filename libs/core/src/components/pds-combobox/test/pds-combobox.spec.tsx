@@ -2708,14 +2708,14 @@ describe('pds-combobox', () => {
     });
 
     // aria-activedescendant must not name an option that isn't in the DOM.
-    it('points aria-activedescendant only at an option that is rendered', async () => {
+    it('points aria-activedescendant only at a rendered option, or the closed group\'s row', async () => {
       const { page, component, root } = await openFlyoutPanel();
       const trigger = root.querySelector('[role="combobox"]')!;
 
       component.highlightedIndex = 2;
       component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
-      expect(trigger.hasAttribute('aria-activedescendant')).toBe(false);
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(root.querySelectorAll('.pds-combobox__group-row')[1].id);
 
       component.openGroup = groupNamed(component, 'Email');
       await page.waitForChanges();
@@ -3168,6 +3168,50 @@ describe('pds-combobox', () => {
 
       expect(component.openGroup).toBeNull();
       expect(component.highlightedGroup).toBe(tag);
+    });
+
+    it('names a panel-search button trigger by its label and its own text, the selection', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search label="Filter"');
+      const trigger = root.querySelector('.pds-combobox__button-trigger')!;
+
+      expect(trigger.getAttribute('aria-labelledby')).toBe('drill-label drill');
+      expect(trigger.id).toBe('drill');
+
+      component.hideLabel = true;
+      component.value = 'email-send';
+      await page.waitForChanges();
+      expect(trigger.hasAttribute('aria-labelledby')).toBe(false);
+      expect(trigger.getAttribute('aria-label')).toBe('Filter, Send an email');
+    });
+
+    it('rings a group row for the keys only, not under the pointer', async () => {
+      const { page, component, root } = await openDrillIn();
+      const rows = () => Array.from(root.querySelectorAll('.pds-combobox__group-row'));
+
+      rows()[1].querySelector('.pds-combobox__group-row-trigger')!.dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+      expect(rows()[1].classList.contains('pds-combobox__group-row--highlighted')).toBe(true);
+      expect(rows()[1].classList.contains('pds-combobox__group-row--keyboard')).toBe(false);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(rows()[0].classList.contains('pds-combobox__group-row--keyboard')).toBe(true);
+    });
+
+    it('follows the open group to the optgroup an options reload rebuilds, and resets the highlight', async () => {
+      const { page, component } = await openDrillIn();
+      component.openGroup = groupNamed(component, 'Tag');
+      component.highlightedGroup = groupNamed(component, 'Email');
+      await page.waitForChanges();
+
+      component.options = [...component.options];
+      await page.waitForChanges();
+      expect(component.openGroup === groupNamed(component, 'Tag')).toBe(true);
+      expect(component.highlightedGroup).toBeNull();
+
+      component.options = actions.filter(action => action.group !== 'Tag');
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
     });
 
     it('names the popup a tree from the search field, and a listbox of grouped results while searching', async () => {

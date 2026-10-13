@@ -298,6 +298,16 @@ describe('pds-combobox', () => {
     const activeDescendant = (page: Awaited<ReturnType<typeof newE2EPage>>, selector: string) =>
       page.evaluate(sel => document.querySelector('pds-combobox')!.shadowRoot!.querySelector(sel)!.getAttribute('aria-activedescendant'), selector);
 
+    it('has no axe violations as a tree with the button trigger and a group opened from the keyboard', async () => {
+      const page = await setUp('padding: 40px;');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowRight');
+      await page.waitForChanges();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
     it('opens a group from the keyboard and selects in its flyout, focus staying on the trigger', async () => {
       const page = await setUp('padding: 40px;');
       const trigger = '.pds-combobox__button-trigger';
