@@ -324,6 +324,12 @@ export class PdsCombobox implements BasePdsProps {
   @State() openGroup: HTMLOptGroupElement | null = null;
 
   /**
+   * Which way drill-in just moved, so the list slides that way: `in` to a group, `out` back to the
+   * groups. Cleared once the slide ends, so later renders don't animate.
+   */
+  @State() drillDirection: 'in' | 'out' | null = null;
+
+  /**
    * The group row highlighted in the grouped panel. It counts only while no option is
    * highlighted (`highlightedIndex` is -1); see `highlightedGroupRow`.
    */
@@ -488,11 +494,27 @@ export class PdsCombobox implements BasePdsProps {
   protected groupDisplayChanged() {
     this.flyout.reset();
     this.openGroup = null;
+    // The reset isn't a drill-out, so it doesn't slide either.
+    this.drillDirection = null;
   }
+
+  @Watch('openGroup')
+  protected openGroupChanged(next: HTMLOptGroupElement | null, previous: HTMLOptGroupElement | null) {
+    // Only moves between the drill-in panel's views slide; search results don't.
+    if (!this.isOpen || this.effectiveGroupDisplay !== 'drill-in' || !this.showsGroupedPanel) return;
+    if (next !== null && previous === null) this.drillDirection = 'in';
+    else if (next === null && previous !== null) this.drillDirection = 'out';
+  }
+
+  private onDrillAnimationEnd = (event: AnimationEvent) => {
+    // Only the slide's own end: slotted consumer content can animate inside the list too.
+    if (event.animationName?.startsWith('pds-combobox-drill')) this.drillDirection = null;
+  };
 
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
     if (!isOpen) {
+      this.drillDirection = null;
       this.openGroup = null;
       this.highlightedGroup = null;
       this.keyboardNavigating = false;
@@ -1044,6 +1066,8 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private filterOptions() {
+    // A new list replaces the rows a slide was animating, so its end event may never come.
+    this.drillDirection = null;
     // Ensure allItems includes optionEls if not already populated (for edge cases)
     if (this.allItems.length === 0 && this.optionEls.length > 0) {
       this.allItems = [...this.optionEls];
@@ -1585,6 +1609,8 @@ export class PdsCombobox implements BasePdsProps {
         // scroll the selection into view once its group has rendered.
         if (this.showsGroupedPanel) {
           this.openGroup = parentOptgroupOf(this.selectedOption);
+          // Opening on the selection isn't drilling in, so it doesn't slide.
+          this.drillDirection = null;
           this.pendingOptionFocus = true;
         }
         return;
@@ -2166,7 +2192,10 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__listbox': !withSearch,
           'pds-combobox__listbox-options': withSearch,
           'pds-combobox__listbox--grouped': this.groupDisplay !== 'inline',
+          'pds-combobox__listbox--drill-in': this.drillDirection === 'in',
+          'pds-combobox__listbox--drill-out': this.drillDirection === 'out',
         }}
+        onAnimationEnd={this.onDrillAnimationEnd}
         role={this.showsGroupedPanel ? 'tree' : 'listbox'}
         id={this.listboxId}
         aria-label={this.label || 'Options'}
