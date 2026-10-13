@@ -1499,8 +1499,8 @@ describe('pds-datepicker', () => {
       const change = await page.spyOnEvent('pdsDatepickerChange');
       await openWithTrigger(page);
 
-      expect(await page.findAll('pds-datepicker >>> .pds-datepicker__month')).toHaveLength(1);
-      expect(await page.findAll('pds-datepicker >>> .pds-datepicker__time')).toHaveLength(2);
+      expect(await page.findAll('.pds-datepicker-calendar-portal >>> .pds-datepicker__month')).toHaveLength(1);
+      expect(await page.findAll('.pds-datepicker-calendar-portal >>> .pds-datepicker__time')).toHaveLength(2);
 
       await chooseTime(page, 2, '18');
       await (await action(page, 2)).click();
@@ -1518,7 +1518,7 @@ describe('pds-datepicker', () => {
 
       await chooseTime(page, 2, '8');
       const endHour = await page.$eval(
-        'pds-datepicker',
+        '.pds-datepicker-calendar-portal',
         (el) => el.shadowRoot?.querySelectorAll<HTMLSelectElement>('.pds-datepicker__time select')[2]?.value,
       );
       expect(endHour).toBe('9');
@@ -1542,7 +1542,7 @@ describe('pds-datepicker', () => {
       await page.waitForChanges();
       await openWithTrigger(page);
 
-      const stops = await page.$eval('pds-datepicker', (el) =>
+      const stops = await page.$eval('.pds-datepicker-calendar-portal', (el) =>
         Array.from(el.shadowRoot?.querySelectorAll<HTMLButtonElement>('[role="radio"][tabindex="0"]') ?? []).map(
           (button) => ({ disabled: button.disabled, text: button.textContent }),
         ),
