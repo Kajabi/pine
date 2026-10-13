@@ -1469,6 +1469,23 @@ describe('pds-datepicker', () => {
   });
 
   describe('clear button', () => {
+    it('doesn\'t apply text typed in the field before a click on Clear', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" value="2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        input?.focus();
+        input?.select();
+      });
+      await page.keyboard.type('2026-10-20');
+      await (await page.find('pds-datepicker >>> .pds-datepicker__clear')).click();
+      await page.waitForChanges();
+
+      expect(change.events.map((event) => event.detail.value)).toEqual(['']);
+    });
+
     it('has no axe violations with clear, auto-apply and the calendar open', async () => {
       const page = await setup(
         `<pds-datepicker component-id="period" range auto-apply clearable presets="last-7-days" label="Period" locale="en-US" value="2026-09-13/2026-10-13"></pds-datepicker>`,
