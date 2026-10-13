@@ -310,6 +310,18 @@ describe('pds-datepicker', () => {
       expect(apply.hasAttribute('disabled')).toBe(true);
     });
 
+    it('has no footer with auto-apply', async () => {
+      const page = await newSpecPage({
+        components: [PdsDatepicker, PdsInput],
+        html: `<pds-datepicker component-id="period" range auto-apply value="2026-09-13/2026-10-13"></pds-datepicker>`,
+      });
+
+      await (page.root as HTMLPdsDatepickerElement).open();
+      await page.waitForChanges();
+
+      expect(cal(page)?.querySelector('.pds-datepicker__footer') ?? null).toBeNull();
+    });
+
     it('shows Clear in place of Cancel when clearable', async () => {
       const page = await newSpecPage({
         components: [PdsDatepicker, PdsInput],

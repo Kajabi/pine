@@ -1404,6 +1404,34 @@ describe('pds-datepicker', () => {
       expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).toBeNull();
     });
 
+    it('keeps the range when only a start is picked and the calendar is dismissed', async () => {
+      const page = await setup(AUTO);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-05"]`)).click();
+      await page.waitForChanges();
+      // With no footer, the start is still announced.
+      expect(await page.find(`${PORTAL} >>> .visually-hidden[aria-live="polite"]`)).toEqualText('2026-10-05 –');
+      await press(page, 'Escape');
+
+      expect(change).not.toHaveReceivedEvent();
+      expect(await (await page.find('pds-datepicker')).getProperty('value')).toBe('2026-09-13/2026-10-13');
+    });
+
+    it('applies a range picked from the keyboard', async () => {
+      const page = await setup(AUTO);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await press(page, 'Enter');
+      await press(page, 'ArrowDown');
+      await press(page, 'Enter');
+
+      expect(change).toHaveReceivedEventDetail({ value: '2026-10-13/2026-10-20', start: '2026-10-13', end: '2026-10-20' });
+      expect(await focused(page)).toContain('pds-datepicker__trigger');
+    });
+
     it('keeps Apply with the time picker', async () => {
       const page = await setup(AUTO.replace('auto-apply', 'auto-apply time-picker'));
       await page.setViewport({ width: 1280, height: 800 });
@@ -1433,6 +1461,8 @@ describe('pds-datepicker', () => {
       const input = await page.find('pds-datepicker >>> pds-input >>> input');
       expect(await input.getProperty('value')).toBe('');
       expect(await clearButton(page)).toBeNull();
+      // Clearing doesn't open the calendar, though the button sits in the field.
+      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).toBeNull();
       const activeTag = await page.evaluate(
         () => document.querySelector('pds-datepicker')?.shadowRoot?.activeElement?.tagName,
       );
@@ -1451,9 +1481,20 @@ describe('pds-datepicker', () => {
       expect(change).toHaveReceivedEventDetail({ value: '' });
     });
 
+    it('closes an open calendar when the field is cleared', async () => {
+      const page = await setup(FIELD.replace('component-id="due"', 'component-id="due" clearable'));
+      await openWithTrigger(page);
+
+      await (await clearButton(page)).click();
+      await page.waitForChanges();
+
+      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).toBeNull();
+    });
+
     it.each([
       ['there is no value', 'clearable value=""'],
       ['the datepicker is disabled', 'clearable disabled'],
+      ['the datepicker is readonly', 'clearable readonly'],
       ['clearable is off', ''],
     ])('is hidden when %s', async (_, attrs) => {
       const page = await setup(FIELD.replace('component-id="due"', `component-id="due" ${attrs}`).replace(' value="2026-10-13"', attrs.includes('value') ? '' : ' value="2026-10-13"'));
@@ -1464,7 +1505,8 @@ describe('pds-datepicker', () => {
     it('has an accessible name', async () => {
       const page = await setup(FIELD.replace('component-id="due"', 'component-id="due" clearable clear-label="Effacer"'));
 
-      expect(await (await clearButton(page)).getAttribute('aria-label')).toBe('Effacer');
+      // Names the field, so several datepickers don't all list as the same button.
+      expect(await (await clearButton(page)).getAttribute('aria-label')).toBe('Effacer Due date');
     });
   });
 
