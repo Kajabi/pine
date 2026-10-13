@@ -44,6 +44,7 @@
     "pds-radio-group": { "status": "stable" },
     "pds-row": { "status": "stable" },
     "pds-select": { "status": "stable" },
+    "pds-skeleton": { "status": "beta", "note": "New component; variant set and theme fill values still open." },
     "pds-sortable": { "status": "stable" },
     "pds-switch": { "status": "stable" },
     "pds-table": { "status": "stable" },
