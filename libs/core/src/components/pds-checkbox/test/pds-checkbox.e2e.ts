@@ -54,6 +54,47 @@ describe('pds-checkbox', () => {
     await checkbox.press('Space');
     expect(eventSpy).not.toHaveReceivedEvent();
   });
+
+  it('toggles when slotted label content is clicked', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="default"><pds-chip slot="label">Spring Launch</pds-chip></pds-checkbox>');
+
+    const input = await page.find('pds-checkbox >>> input');
+    const eventSpy = await page.spyOnEvent('pdsCheckboxChange');
+    await (await page.find('pds-chip')).click();
+    await page.waitForChanges();
+
+    expect(await input.getProperty('checked')).toBe(true);
+    expect(eventSpy).toHaveReceivedEventTimes(1);
+  });
+
+  it('takes its accessible name from slotted label content, or the label prop without it', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox component-id="slotted" label="Fallback"><pds-chip slot="label">Spring Launch</pds-chip></pds-checkbox>
+      <pds-checkbox component-id="prop" label="Label text"></pds-checkbox>
+    `);
+
+    const tree = await page.accessibility.snapshot();
+    const findInputs = (node) => [node.role === 'checkbox' ? node.name : null, ...(node.children ?? []).flatMap(findInputs)].filter(Boolean);
+
+    expect(findInputs(tree)).toEqual(['Spring Launch', 'Label text']);
+  });
+
+  it('centers the control on slotted label content', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="default"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-checkbox>');
+
+    const offset = await page.evaluate(() => {
+      const middle = (rect: DOMRect) => rect.top + rect.height / 2;
+      const host = document.querySelector('pds-checkbox');
+      const input = host.shadowRoot.querySelector('input').getBoundingClientRect();
+      const chip = host.querySelector('pds-chip').getBoundingClientRect();
+      return Math.abs(middle(input) - middle(chip));
+    });
+
+    expect(offset).toBeLessThan(1);
+  });
 });
 
 describe('pds-checkbox checkmark color', () => {
@@ -92,6 +133,13 @@ describe('pds-checkbox accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-checkbox component-id="terms" label="Accept the terms"></pds-checkbox>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('has no axe violations with slotted label content', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="tag"><pds-chip slot="label" sentiment="neutral">Spring Launch</pds-chip></pds-checkbox>');
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });

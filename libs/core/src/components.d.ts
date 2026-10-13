@@ -6241,7 +6241,7 @@ declare namespace LocalJSX {
         /**
           * Displays text to describe the input.
          */
-        "label": string;
+        "label"?: string;
         /**
           * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
          */
@@ -7418,7 +7418,7 @@ declare namespace LocalJSX {
         "pds-select": Omit<PdsSelect, keyof PdsSelectAttributes> & { [K in keyof PdsSelect & keyof PdsSelectAttributes]?: PdsSelect[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `attr:${K}`]?: PdsSelectAttributes[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `prop:${K}`]?: PdsSelect[K] } & OneOf<"componentId", PdsSelect["componentId"], PdsSelectAttributes["componentId"]> & OneOf<"name", PdsSelect["name"], PdsSelectAttributes["name"]>;
         "pds-sortable": Omit<PdsSortable, keyof PdsSortableAttributes> & { [K in keyof PdsSortable & keyof PdsSortableAttributes]?: PdsSortable[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `attr:${K}`]?: PdsSortableAttributes[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `prop:${K}`]?: PdsSortable[K] } & OneOf<"componentId", PdsSortable["componentId"], PdsSortableAttributes["componentId"]>;
         "pds-sortable-item": Omit<PdsSortableItem, keyof PdsSortableItemAttributes> & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes]?: PdsSortableItem[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `attr:${K}`]?: PdsSortableItemAttributes[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `prop:${K}`]?: PdsSortableItem[K] };
-        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]> & OneOf<"label", PdsSwitch["label"], PdsSwitchAttributes["label"]>;
+        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]>;
         "pds-tab": Omit<PdsTab, keyof PdsTabAttributes> & { [K in keyof PdsTab & keyof PdsTabAttributes]?: PdsTab[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `attr:${K}`]?: PdsTabAttributes[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `prop:${K}`]?: PdsTab[K] } & OneOf<"name", PdsTab["name"], PdsTabAttributes["name"]>;
         "pds-table": Omit<PdsTable, keyof PdsTableAttributes> & { [K in keyof PdsTable & keyof PdsTableAttributes]?: PdsTable[K] } & { [K in keyof PdsTable & keyof PdsTableAttributes as `attr:${K}`]?: PdsTableAttributes[K] } & { [K in keyof PdsTable & keyof PdsTableAttributes as `prop:${K}`]?: PdsTable[K] } & OneOf<"componentId", PdsTable["componentId"], PdsTableAttributes["componentId"]>;
         "pds-table-body": PdsTableBody;

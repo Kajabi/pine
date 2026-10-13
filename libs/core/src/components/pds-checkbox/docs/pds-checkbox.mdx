@@ -25,6 +25,7 @@ Checkboxes provide users with selectable options like toggling a single setting 
 ### Accessibility
 - Provide a clear, descriptive label for each checkbox to ensure that screen readers can identify the option effectively.
 - The `aria-describedby` attribute is used to associate the checkbox with an error message or helper message but may not be read out by all screen readers.
+- Put only non-interactive content in the `label` slot. Buttons and links inside a label are invalid HTML.
 
 ## Properties
 
@@ -104,6 +105,18 @@ An optional error message can be displayed for additional instructions, shown in
     webComponent: `<pds-checkbox component-id="invalid" label="Label" invalid error-message="This is a short error message"></pds-checkbox>`
 }}>
   <pds-checkbox component-id="invalid" label="Label" invalid error-message="This is a short error message"></pds-checkbox>
+</DocCanvas>
+
+### Label slot
+
+Use the `label` slot when the label needs more than text, such as a `pds-chip`. Clicking the slotted content toggles the checkbox, and its text becomes the checkbox's accessible name. Without slotted content, the `label` prop renders as usual.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsCheckbox componentId="label-slot"><PdsChip slot="label" dot>Spring Launch</PdsChip></PdsCheckbox>`,
+    webComponent: `<pds-checkbox component-id="label-slot"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-checkbox>`
+}}>
+  <pds-checkbox component-id="label-slot"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-checkbox>
 </DocCanvas>
 
 ## Events

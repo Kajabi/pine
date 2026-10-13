@@ -141,6 +141,17 @@ label {
   gap: var(--pine-dimension-xs);
 }
 
+// Slotted content such as a chip is taller than a line of text, so center the box on it.
+:host(.has-label-slot) {
+  label {
+    align-items: center;
+  }
+
+  input {
+    margin-block-start: 0;
+  }
+}
+
 .visually-hidden {
   border: 0;
   clip: rect(0 0 0 0);
