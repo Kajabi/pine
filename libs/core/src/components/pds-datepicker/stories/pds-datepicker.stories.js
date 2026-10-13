@@ -3,6 +3,7 @@ import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 export default {
   args: {
+    autoApply: false,
     clearable: false,
     disabled: false,
     errorMessage: null,
@@ -49,6 +50,7 @@ export default {
 };
 
 const BaseTemplate = (args) => html`<pds-datepicker
+  ?auto-apply=${args.autoApply}
   ?clearable=${args.clearable}
   component-id="${args.componentId}"
   ?disabled=${args.disabled}
@@ -171,6 +173,23 @@ export const Format = BaseTemplate.bind({});
 Format.args = {
   componentId: 'pds-datepicker-format-example',
   format: 'MM/DD/YYYY',
+  label: 'Due date',
+  value: '2026-10-13',
+};
+
+export const RangeAutoApply = BaseTemplate.bind({});
+RangeAutoApply.args = {
+  autoApply: true,
+  componentId: 'pds-datepicker-auto-apply-example',
+  label: 'Period',
+  presets: 'today,last-7-days,last-30-days',
+  range: true,
+};
+
+export const Clearable = BaseTemplate.bind({});
+Clearable.args = {
+  clearable: true,
+  componentId: 'pds-datepicker-clearable-single-example',
   label: 'Due date',
   value: '2026-10-13',
 };
