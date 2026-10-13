@@ -1,0 +1,242 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-datepicker.stories.js';
+
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+import { StatusBadge } from '../../../stories/_helpers';
+
+<Meta of={stories} />
+
+<StatusBadge component="pds-datepicker" />
+
+# Datepicker
+
+Datepicker captures a single date, or in range mode a start and an end date. For a single date, people can type it as `YYYY-MM-DD` or pick it from a calendar that opens from the button in the field. The value is always a `YYYY-MM-DD` string (`YYYY-MM-DD/YYYY-MM-DD` for a range), so it never shifts by a day with the viewer's time zone.
+
+## Guidelines
+
+### When to use
+
+- To capture one calendar date, such as a due date, a start date or a date in a filter.
+- When `min` and `max` bound the dates people can choose.
+
+### When not to use
+
+- For a time of day, or a date and time together.
+- For a date far in the past that people know by heart, such as a birth date. Typing is faster than paging back through the calendar.
+
+### Accessibility
+
+- Always set `label`. Use `hide-label` to hide it visually; it stays available to assistive technology.
+- The calendar is a modal dialog with a date grid, following the [WAI-ARIA date picker dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/).
+- The button that opens the calendar is named by `trigger-label`, followed by the selected date. Set `trigger-label`, `previous-month-label` and `next-month-label` when the page isn't in English.
+
+### Keyboard
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="datepicker-keyboard">
+    <pds-table-head>
+      <pds-table-head-cell>Key</pds-table-head-cell>
+      <pds-table-head-cell>Action</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>Alt</code> + <code>↓</code> in the field</pds-table-cell>
+        <pds-table-cell>Opens the calendar, or moves focus into it when a click has already opened it.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>←</code> <code>→</code></pds-table-cell>
+        <pds-table-cell>Moves one day. The arrows follow the reading direction on right-to-left pages.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>↑</code> <code>↓</code></pds-table-cell>
+        <pds-table-cell>Moves one week.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Home</code> <code>End</code></pds-table-cell>
+        <pds-table-cell>Moves to the first or last day of the week.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Page Up</code> <code>Page Down</code></pds-table-cell>
+        <pds-table-cell>Moves one month. With <code>Shift</code>, one year.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Enter</code> <code>Space</code></pds-table-cell>
+        <pds-table-cell>Picks the day and closes the calendar. In range mode, starts or ends the range.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Escape</code></pds-table-cell>
+        <pds-table-cell>Closes the calendar without changing the date.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Tab</code></pds-table-cell>
+        <pds-table-cell>Moves between the presets, the month buttons, the day and, in range mode, Cancel and Apply.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+
+## Properties
+
+<DocArgsTable componentName="pds-datepicker" docSource={components} />
+
+## Examples
+
+### Default
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsDatepicker componentId="pds-datepicker-default-example" label="Due date"></PdsDatepicker>',
+    webComponent: '<pds-datepicker component-id="pds-datepicker-default-example" label="Due date"></pds-datepicker>'
+}}>
+  <pds-datepicker component-id="pds-datepicker-default-example" label="Due date"></pds-datepicker>
+</DocCanvas>
+
+### Min and max
+
+Days outside `min` and `max` are shown but can't be picked, and the keyboard stops at the bounds. A typed date outside them marks the field invalid.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsDatepicker componentId="pds-datepicker-range-example" label="Delivery date" helperMessage="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></PdsDatepicker>',
+    webComponent: '<pds-datepicker component-id="pds-datepicker-range-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>'
+}}>
+  <pds-datepicker component-id="pds-datepicker-range-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>
+</DocCanvas>
+
+### Locale and first day of the week
+
+Month and weekday names come from the browser's `Intl` support for `locale`, which defaults to the nearest `lang` attribute. The week starts on the locale's first day where the browser reports it, otherwise Sunday; set `first-day-of-week` (`0` for Sunday to `6` for Saturday) to choose it.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsDatepicker componentId="pds-datepicker-locale-example" label="Date d'échéance" locale="fr" firstDayOfWeek={1} triggerLabel="Choisir une date" previousMonthLabel="Mois précédent" nextMonthLabel="Mois suivant" value="2026-10-13"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-locale-example" label="Date d'échéance" locale="fr" first-day-of-week="1" trigger-label="Choisir une date" previous-month-label="Mois précédent" next-month-label="Mois suivant" value="2026-10-13"></pds-datepicker>`
+}}>
+  <pds-datepicker component-id="pds-datepicker-locale-example" label="Date d'échéance" locale="fr" first-day-of-week="1" trigger-label="Choisir une date" previous-month-label="Mois précédent" next-month-label="Mois suivant" value="2026-10-13"></pds-datepicker>
+</DocCanvas>
+
+### Range
+
+Set `range` to pick a start and an end from two months side by side. The field looks and works like a single date's: type the range as `YYYY-MM-DD – YYYY-MM-DD` (a hyphen, `to` or `/` between the dates also works), or click the field to open the calendar beside it. While it's open, typing moves the calendar to the typed range.
+
+In the calendar, the first pick starts the range and the second ends it; until then, the range follows the pointer or the keyboard, and the footer shows what Apply will set. Nothing changes until Apply; Cancel or `Escape` keeps the range as it was. Picking only a start applies a one-day range.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsDatepicker componentId="pds-datepicker-range-mode-example" label="Period" range value="2026-09-13/2026-10-13"></PdsDatepicker>',
+    webComponent: '<pds-datepicker component-id="pds-datepicker-range-mode-example" label="Period" range value="2026-09-13/2026-10-13"></pds-datepicker>'
+}}>
+  <pds-datepicker component-id="pds-datepicker-range-mode-example" label="Period" range value="2026-09-13/2026-10-13"></pds-datepicker>
+</DocCanvas>
+
+### Range with presets
+
+`presets` lists ranges beside the calendar, followed by **Custom range**, which is marked when the range matches none of them and moves focus to the calendar. The change event carries the matching preset's `key`, so a filter can keep "Last 30 days" relative to today rather than store fixed dates. Set `custom-range-label` to translate it.
+
+Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date` and `last-12-months`. To translate the labels or add ranges of your own, set the property to an array of `{ key, label?, start?, end? }`. A preset that falls outside `min` and `max` is disabled.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsDatepicker componentId="pds-datepicker-range-presets-example" label="Period" hideLabel range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-range-presets-example" label="Period" hide-label range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></pds-datepicker>
+
+<script>
+  // Translated labels, and a range of your own.
+  document.querySelector('pds-datepicker').presets = [
+    { key: 'last-7-days', label: '7 derniers jours' },
+    { key: 'launch', label: 'Launch week', start: '2026-03-02', end: '2026-03-08' },
+  ];
+</script>`
+}}>
+  <pds-datepicker component-id="pds-datepicker-range-presets-example" label="Period" hide-label range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></pds-datepicker>
+</DocCanvas>
+
+### Range with times
+
+`time-picker` adds hour and minute pickers below each month, with AM and PM on a 12-hour clock where the locale uses one. `minute-increment` sets the minutes' step. The value carries the times, as `YYYY-MM-DDTHH:mm/YYYY-MM-DDTHH:mm`, and the field shows `YYYY-MM-DD HH:mm – YYYY-MM-DD HH:mm`. Without `range`, `time-picker` adds one time, and the date waits for Apply.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsDatepicker componentId="pds-datepicker-range-times-example" label="Event" range timePicker minuteIncrement={15} value="2026-10-13T14:00/2026-10-14T22:00"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-range-times-example" label="Event" range time-picker minute-increment="15" value="2026-10-13T14:00/2026-10-14T22:00"></pds-datepicker>`
+}}>
+  <pds-datepicker component-id="pds-datepicker-range-times-example" label="Event" range time-picker minute-increment="15" value="2026-10-13T14:00/2026-10-14T22:00"></pds-datepicker>
+</DocCanvas>
+
+### Month and year dropdowns
+
+`show-dropdowns` puts month and year dropdowns in place of the month heading, for jumping far, as to a birth year. The years run between `min` and `max`, or 100 years either side of today without them.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsDatepicker componentId="pds-datepicker-dropdowns-example" label="Birthday" showDropdowns min="1901-01-01" max="2026-10-13"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-dropdowns-example" label="Birthday" show-dropdowns min="1901-01-01" max="2026-10-13"></pds-datepicker>`
+}}>
+  <pds-datepicker component-id="pds-datepicker-dropdowns-example" label="Birthday" show-dropdowns min="1901-01-01" max="2026-10-13"></pds-datepicker>
+</DocCanvas>
+
+### Initially empty, with Clear
+
+The field starts empty when there's no `value`. `clearable` replaces Cancel with a Clear button that empties the field, as for a filter that's off until someone sets it.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsDatepicker componentId="pds-datepicker-clearable-example" label="Created" range clearable></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-clearable-example" label="Created" range clearable></pds-datepicker>`
+}}>
+  <pds-datepicker component-id="pds-datepicker-clearable-example" label="Created" range clearable></pds-datepicker>
+</DocCanvas>
+
+### Placement
+
+`placement` opens the calendar to a side of the field, as `bottom-end` to line it up with the field's end. It flips when there's no room.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsDatepicker componentId="pds-datepicker-placement-example" label="Period" range placement="bottom-end"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-placement-example" label="Period" range placement="bottom-end"></pds-datepicker>`
+}}>
+  <pds-datepicker component-id="pds-datepicker-placement-example" label="Period" range placement="bottom-end"></pds-datepicker>
+</DocCanvas>
+
+### Invalid
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsDatepicker componentId="pds-datepicker-invalid-example" label="Due date" invalid errorMessage="Choose a date after today." value="2026-10-13"></PdsDatepicker>',
+    webComponent: '<pds-datepicker component-id="pds-datepicker-invalid-example" label="Due date" invalid error-message="Choose a date after today." value="2026-10-13"></pds-datepicker>'
+}}>
+  <pds-datepicker component-id="pds-datepicker-invalid-example" label="Due date" invalid error-message="Choose a date after today." value="2026-10-13"></pds-datepicker>
+</DocCanvas>
+
+### Disabled
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsDatepicker componentId="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></PdsDatepicker>',
+    webComponent: '<pds-datepicker component-id="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></pds-datepicker>'
+}}>
+  <pds-datepicker component-id="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></pds-datepicker>
+</DocCanvas>
+
+## Events
+
+### pdsDatepickerChange
+
+Emitted with `{ value }` when someone picks a day, or types a date and leaves the field or presses `Enter`. `value` is `YYYY-MM-DD`, or an empty string when the field is cleared. It doesn't emit when the `value` property is set programmatically, or when the typed text isn't a date that can be picked.
+
+In range mode it emits on Apply, or on a typed range, with `{ value, start, end, preset }`: `value` is `YYYY-MM-DD/YYYY-MM-DD`, `start` and `end` are its two dates, and `preset` is the key of the preset the range matches, when it matches one. With the time picker, each date carries its time, as `YYYY-MM-DDTHH:mm`, and the change waits for Apply.
+
+The inner field's `pdsInput`, `pdsChange`, `pdsFocus`, `pdsBlur` and `pdsKeyDown` events stay inside the datepicker.
+
+## Form Integration
+
+- Set `name` and the date is submitted with its form as `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` in range mode.
+- Resetting the form clears the date.
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
