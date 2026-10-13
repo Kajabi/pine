@@ -296,15 +296,20 @@ describe('pds-datepicker', () => {
   });
 
   describe('time picker', () => {
-    it('shows the date and time in the field', async () => {
+    it('shows the date and time in the field on the locale clock', async () => {
       const { root } = await newSpecPage({
         components: [PdsDatepicker, PdsInput],
-        html: `<pds-datepicker component-id="when" time-picker value="2026-10-13T14:30"></pds-datepicker>`,
+        html: `<pds-datepicker component-id="when" time-picker locale="fr" value="2026-10-13T14:30"></pds-datepicker>
+               <pds-datepicker component-id="when-us" time-picker locale="en-US" value="2026-10-13T14:30"></pds-datepicker>`,
       });
 
-      const input = root?.shadowRoot?.querySelector('pds-input') as HTMLPdsInputElement;
-      expect(input.value).toBe('2026-10-13 14:30');
-      expect(input.placeholder).toBe('YYYY-MM-DD HH:mm');
+      const [fr, us] = Array.from(root?.ownerDocument.querySelectorAll('pds-datepicker') ?? []).map(
+        (el) => el.shadowRoot?.querySelector('pds-input') as HTMLPdsInputElement,
+      );
+      expect(fr.value).toBe('2026-10-13 14:30');
+      expect(fr.placeholder).toBe('YYYY-MM-DD HH:mm');
+      expect(us.value).toBe('2026-10-13 2:30 PM');
+      expect(us.placeholder).toBe('YYYY-MM-DD h:mm A');
     });
 
     it('drops a time from the field without the time picker', async () => {
@@ -327,7 +332,9 @@ describe('pds-datepicker', () => {
 
       const group = page.root?.shadowRoot?.querySelector('.pds-datepicker__time') as HTMLElement;
       expect(group.getAttribute('role')).toBe('group');
-      expect(group.getAttribute('aria-label')).toBe('Time');
+      // Labelled by its visible label.
+      const label = page.root?.shadowRoot?.getElementById(group.getAttribute('aria-labelledby') ?? '');
+      expect(label?.textContent).toBe('Time');
       const selects = Array.from(group.querySelectorAll('select'));
       expect(selects.map((select) => select.getAttribute('aria-label'))).toEqual(['Hour', 'Minute', 'AM or PM']);
 
@@ -361,8 +368,10 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const groups = Array.from(page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__time') ?? []);
-      expect(groups.map((g) => g.getAttribute('aria-label'))).toEqual(['Start time', 'End time']);
+      const labels = Array.from(page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__time') ?? []).map(
+        (g) => page.root?.shadowRoot?.getElementById(g.getAttribute('aria-labelledby') ?? '')?.textContent,
+      );
+      expect(labels).toEqual(['Start time', 'End time']);
     });
   });
 
@@ -380,7 +389,7 @@ describe('pds-datepicker', () => {
       const [month, year] = Array.from(shadow.querySelectorAll('.pds-datepicker__dropdowns select'));
       expect(month.getAttribute('aria-label')).toBe('Month');
       expect(year.getAttribute('aria-label')).toBe('Year');
-      expect(month.querySelector('option[selected]')?.textContent).toBe('Jun');
+      expect(month.querySelector('option[selected]')?.textContent).toBe('June');
       // January and February 1990 are before the minimum.
       expect(month.querySelector('option[value="1"]')?.hasAttribute('disabled')).toBe(true);
       expect(month.querySelector('option[value="2"]')?.hasAttribute('disabled')).toBe(false);

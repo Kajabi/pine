@@ -337,7 +337,8 @@ describe('pds-datepicker', () => {
 
     expect(change).toHaveReceivedEventDetail({ value: '2026-10-14T15:45' });
     const input = await page.find('pds-datepicker >>> pds-input >>> input');
-    expect(await input.getProperty('value')).toBe('2026-10-14 15:45');
+    // The field follows the time picker's 12-hour clock.
+    expect(await input.getProperty('value')).toBe('2026-10-14 3:45 PM');
   });
 
   it('is a modal dialog only while focus is in the calendar', async () => {
@@ -418,6 +419,56 @@ describe('pds-datepicker', () => {
     await page.focus('#after');
     await page.waitForChanges();
     expect(blur).toHaveReceivedEventTimes(1);
+  });
+
+  describe('format', () => {
+    const US = `<pds-datepicker component-id="due" label="Due" locale="en-US" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>`;
+
+    it('shows and reads the field in the format, keeping the value ISO', async () => {
+      const page = await setup(US);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      expect(await input.getProperty('value')).toBe('10/13/2026');
+      expect(await input.getProperty('placeholder')).toBe('MM/DD/YYYY');
+
+      await input.click({ clickCount: 3 });
+      await input.type('1/5/2027');
+      await input.press('Enter');
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '2027-01-05' });
+      expect(await input.getProperty('value')).toBe('01/05/2027');
+    });
+
+    it('still reads a typed ISO date', async () => {
+      const page = await setup(US);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+
+      await input.click({ clickCount: 3 });
+      await input.type('2027-02-03');
+      await input.press('Enter');
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '2027-02-03' });
+      expect(await input.getProperty('value')).toBe('02/03/2027');
+    });
+
+    it('reads a range typed in a slash format', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="period" range label="Period" locale="en-US" format="M/D/YYYY" value="2026-09-13/2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      expect(await input.getProperty('value')).toBe('9/13/2026 – 10/13/2026');
+
+      await input.click({ clickCount: 3 });
+      await input.type('11/2/2026 - 11/6/2026');
+      await input.press('Enter');
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '2026-11-02/2026-11-06', start: '2026-11-02', end: '2026-11-06' });
+    });
   });
 
   describe('range mode', () => {
