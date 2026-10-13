@@ -1469,6 +1469,28 @@ describe('pds-datepicker', () => {
   });
 
   describe('clear button', () => {
+    it('has no axe violations with clear, auto-apply and the calendar open', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="period" range auto-apply clearable presets="last-7-days" label="Period" locale="en-US" value="2026-09-13/2026-10-13"></pds-datepicker>`,
+      );
+      await page.setViewport({ width: 1280, height: 800 });
+      await openWithTrigger(page);
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('keeps focus on the calendar button, not Clear, when Clear appears after a pick', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" min="2026-10-05" max="2026-11-20"></pds-datepicker>`,
+      );
+      await openWithTrigger(page);
+      await press(page, 'Enter');
+
+      expect(await page.find('pds-datepicker >>> .pds-datepicker__clear')).not.toBeNull();
+      expect(await focused(page)).toContain('pds-datepicker__trigger');
+    });
+
     const clearButton = (page: E2EPage) => page.find('pds-datepicker >>> .pds-datepicker__clear');
 
     it('empties the field, emits the change and returns focus to the field', async () => {
