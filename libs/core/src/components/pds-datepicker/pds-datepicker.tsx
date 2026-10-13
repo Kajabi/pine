@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
-import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { autoUpdate, computePosition, flip, hide, offset, shift, size } from '@floating-ui/dom';
 import { calendarSimple, caretDown, caretLeft, caretRight, check } from '@pine-ds/icons/icons';
 import { isSpecTest } from '../../utils/form';
 import { resolveLocale } from '../../i18n';
@@ -43,6 +43,13 @@ import type { DateTimeValue } from './value';
 const FULL_DATE: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 const DEFAULT_START_TIME = '00:00';
 const DEFAULT_END_TIME = '23:59';
+/** Below this window width, range mode shows one month rather than two side by side. */
+const TWO_MONTHS_MIN_WIDTH = 640;
+/** The least height the calendar keeps when there's little room beside its field; it may cover the field then. */
+const CALENDAR_MIN_HEIGHT = 480;
+/** The calendar's gap to the window's edges. */
+const VIEWPORT_PADDING = 8;
+
 /** How many years either side of today the year dropdown offers without `min` or `max`. */
 const DROPDOWN_YEARS = 100;
 
@@ -432,7 +439,8 @@ export class PdsDatepicker {
 
   /** How many months the calendar shows side by side. */
   private get monthCount(): number {
-    return this.range ? 2 : 1;
+    const narrow = typeof window !== 'undefined' && window.innerWidth < TWO_MONTHS_MIN_WIDTH;
+    return this.range && !narrow ? 2 : 1;
   }
 
   /** Whether picks wait for Apply: always for a range, and for a date with a time. */
@@ -685,9 +693,29 @@ export class PdsDatepicker {
       computePosition(reference, floating, {
         placement: this.placement,
         strategy: 'fixed',
-        middleware: [offset(4), flip(), shift({ padding: 8 })],
-      }).then(({ x, y }) => {
-        Object.assign(floating.style, { left: `${x}px`, top: `${y}px`, visibility: 'visible' });
+        middleware: [
+          offset(4),
+          flip({ padding: VIEWPORT_PADDING }),
+          // Never larger than the window: the calendar scrolls instead, with its footer pinned. With
+          // little room on either side it keeps a usable height and may cover its own field.
+          size({
+            padding: VIEWPORT_PADDING,
+            apply({ availableWidth, availableHeight, elements }) {
+              const windowHeight = window.innerHeight - VIEWPORT_PADDING * 2;
+              const height = Math.max(availableHeight, Math.min(windowHeight, CALENDAR_MIN_HEIGHT));
+              Object.assign(elements.floating.style, {
+                maxHeight: `${Math.max(0, height)}px`,
+                maxWidth: `${Math.max(0, availableWidth)}px`,
+              });
+            },
+          }),
+          shift({ padding: VIEWPORT_PADDING, crossAxis: true }),
+          hide(),
+        ],
+      }).then(({ x, y, middlewareData }) => {
+        // Hidden once the field scrolls out of view, as behind a modal's header, rather than floating free.
+        const hidden = !!middlewareData.hide?.referenceHidden;
+        Object.assign(floating.style, { left: `${x}px`, top: `${y}px`, visibility: hidden ? 'hidden' : 'visible' });
         this.flushActiveDayFocus();
       });
     });
