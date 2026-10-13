@@ -1101,7 +1101,7 @@ When options come from the `options` prop, set `group` on each option, and optio
 
 `group-display` decides how groups are drawn. The options, value and events are the same in every mode, so switching modes doesn't change any other code.
 
-<pds-box border border-radius="sm">
+<pds-box border border-radius="sm" fit>
   <pds-table component-id="group-display-choice">
     <pds-table-head>
       <pds-table-head-cell>Display</pds-table-head-cell>
@@ -1302,7 +1302,7 @@ Set `group-display="drill-in"` where nothing can open beside the dropdown, such 
 
 With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each group is an item that expands to its options, one level down. Keyboard focus stays on the trigger, or on the panel's search field, and `aria-activedescendant` follows the highlighted row.
 
-<pds-box border border-radius="sm">
+<pds-box border border-radius="sm" fit>
   <pds-table component-id="grouped-display-keys">
     <pds-table-head>
       <pds-table-head-cell>Key</pds-table-head-cell>
