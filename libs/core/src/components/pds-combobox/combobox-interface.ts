@@ -14,8 +14,7 @@ export interface ComboboxOption {
    */
   groupIcon?: string;
   /**
-   * When `true`, the option is rendered as non-interactive and cannot be selected. It stays
-   * listed and reachable by keyboard, announced as unavailable, as `<option disabled>` is.
+   * When `true`, the option is rendered as non-interactive and cannot be selected.
    */
   disabled?: boolean;
   [key: string]: unknown;

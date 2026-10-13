@@ -937,11 +937,12 @@ export class PdsCombobox implements BasePdsProps {
       }
 
       // For chip triggers, ensure we always have a selected option
-      if (initialSelected === null && this.trigger === 'chip' && this.optionEls.some(opt => !isOptionDisabled(opt))) {
-        initialSelected = this.optionEls.find(opt => !isOptionDisabled(opt))!; // Select the first enabled option as default
+      const firstEnabled = this.optionEls.find(opt => !isOptionDisabled(opt));
+      if (initialSelected === null && this.trigger === 'chip' && firstEnabled !== undefined) {
+        initialSelected = firstEnabled;
         this.value = initialSelected.value;
         this.displayText = this.getOptionLabel(initialSelected);
-        console.warn('PDS Combobox: Chip triggers should always have a selected option. Automatically selected the first option.');
+        console.warn('PDS Combobox: Chip triggers should always have a selected option. Automatically selected the first enabled option.');
       }
 
       // Update selection if we found a different selected option or if we don't have one
