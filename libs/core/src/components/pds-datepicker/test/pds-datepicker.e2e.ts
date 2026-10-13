@@ -1469,6 +1469,29 @@ describe('pds-datepicker', () => {
   });
 
   describe('clear button', () => {
+    it('commits typed text when a press on Clear is canceled, as a touch turned into a scroll is', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" value="2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        input?.focus();
+        input?.select();
+      });
+      await page.keyboard.type('2026-10-20');
+      await page.evaluate(() => {
+        const clear = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__clear');
+        clear?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+        clear?.focus();
+        window.dispatchEvent(new PointerEvent('pointercancel'));
+      });
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      await page.waitForChanges();
+
+      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-20']);
+    });
+
     it('doesn\'t apply text typed in the field before a click on Clear', async () => {
       const page = await setup(
         `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" value="2026-10-13"></pds-datepicker>`,
