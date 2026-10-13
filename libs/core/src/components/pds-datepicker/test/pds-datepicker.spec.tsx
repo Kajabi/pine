@@ -109,6 +109,25 @@ describe('pds-datepicker', () => {
     expect(page.root?.shadowRoot?.querySelector('.pds-datepicker__heading')?.textContent).toBe('octobre 2026');
   });
 
+  it.each([
+    ['fa', '۱', /۲۰۲۶/],
+    ['th', '1', /2026/],
+    ['ja-JP-u-ca-japanese', '1', /2026/],
+  ])('lays out %s on the Gregorian calendar, in its own digits', async (locale, firstDay, year) => {
+    const page = await newSpecPage({
+      components: [PdsDatepicker, PdsInput],
+      html: `<pds-datepicker component-id="due" locale="${locale}" value="2026-10-13"></pds-datepicker>`,
+    });
+
+    await (page.root as HTMLPdsDatepickerElement).open();
+    await page.waitForChanges();
+
+    const shadow = page.root?.shadowRoot as ShadowRoot;
+    // Some of these locales default to another calendar (Persian, Buddhist, Japanese era).
+    expect(shadow.querySelector('[data-date="2026-10-01"]')?.textContent).toBe(firstDay);
+    expect(shadow.querySelector('.pds-datepicker__heading')?.textContent).toMatch(year);
+  });
+
   it('writes the day numbers in the locale digits', async () => {
     const page = await newSpecPage({
       components: [PdsDatepicker, PdsInput],

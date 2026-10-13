@@ -386,6 +386,24 @@ describe('pds-datepicker', () => {
     expect(invalidControl).toBe('PDS-DATEPICKER');
   });
 
+  it('lets the form submit again once a typo is fixed back to the same date', async () => {
+    const page = await setup(`<form>${FIELD.replace('component-id="due"', 'component-id="due" name="due"')}</form>`);
+    const valid = () => page.evaluate(() => (document.querySelector('form') as HTMLFormElement).checkValidity());
+    const input = await page.find('pds-datepicker >>> pds-input >>> input');
+
+    await input.click({ clickCount: 3 });
+    await input.type('garbage');
+    await input.press('Enter');
+    await page.waitForChanges();
+    expect(await valid()).toBe(false);
+
+    await input.click({ clickCount: 3 });
+    await input.type('2026-10-13');
+    await input.press('Enter');
+    await page.waitForChanges();
+    expect(await valid()).toBe(true);
+  });
+
   it('clears typed text and the error on form reset, even with no value', async () => {
     const page = await setup(`<form><pds-datepicker component-id="due" name="due" label="Due"></pds-datepicker></form>`);
     const input = await page.find('pds-datepicker >>> pds-input >>> input');
@@ -419,6 +437,50 @@ describe('pds-datepicker', () => {
     await page.focus('#after');
     await page.waitForChanges();
     expect(blur).toHaveReceivedEventTimes(1);
+  });
+
+  describe('inside other overlays', () => {
+    async function clickFieldThenEscape(page: E2EPage) {
+      await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+      await page.waitForChanges();
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).not.toBeNull();
+      await press(page, 'Escape');
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+    }
+
+    it('closes only the calendar on Escape in the field, inside pds-modal', async () => {
+      const page = await setup(`<pds-modal component-id="m"><div>${FIELD}</div></pds-modal>`);
+      await (await page.find('pds-modal')).callMethod('showModal');
+      await page.waitForChanges();
+
+      await clickFieldThenEscape(page);
+
+      expect(await page.evaluate(() => (document.querySelector('pds-modal dialog') as HTMLDialogElement).open)).toBe(true);
+    });
+
+    it('closes only the calendar on Escape in the field, inside pds-popover', async () => {
+      const page = await setup(
+        `<pds-popover component-id="p" popover-target-action="toggle"><button slot="trigger">Open</button><div>${FIELD}</div></pds-popover>`,
+      );
+      const popoverClose = await page.spyOnEvent('pdsPopoverClose');
+      await (await page.find('pds-popover')).callMethod('show');
+      await page.waitForChanges();
+
+      await clickFieldThenEscape(page);
+
+      expect(popoverClose).not.toHaveReceivedEvent();
+    });
+
+    it('closes only the calendar on Escape in the field, inside pds-filter', async () => {
+      const page = await setup(`<pds-filter component-id="f" text="Due">${FIELD}</pds-filter>`);
+      const filterClose = await page.spyOnEvent('pdsFilterClose');
+      await (await page.find('pds-filter')).callMethod('showFilter');
+      await page.waitForChanges();
+
+      await clickFieldThenEscape(page);
+
+      expect(filterClose).not.toHaveReceivedEvent();
+    });
   });
 
   describe('format', () => {
