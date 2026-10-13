@@ -160,6 +160,36 @@
     background: var(--pine-color-background-muted);
   }
 
+  // Drilling into a group slides it in from the right; going back slides the groups in from the
+  // left. Timed by the motion tokens, which drop to 0ms under prefers-reduced-motion.
+  // The slide's offset would otherwise widen the list's scroll area and flash a horizontal scrollbar.
+  .pds-combobox__listbox--drill-in,
+  .pds-combobox__listbox--drill-out {
+    overflow-x: hidden;
+  }
+
+  .pds-combobox__listbox--drill-in > .pds-combobox__group-back {
+    animation: pds-combobox-drill-from-end var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  }
+
+  .pds-combobox__listbox--drill-out > li {
+    animation: pds-combobox-drill-from-start var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  }
+
+  @keyframes pds-combobox-drill-from-end {
+    from {
+      opacity: 0;
+      transform: translateX(var(--pine-dimension-sm));
+    }
+  }
+
+  @keyframes pds-combobox-drill-from-start {
+    from {
+      opacity: 0;
+      transform: translateX(calc(var(--pine-dimension-sm) * -1));
+    }
+  }
+
   // The keyboard's place among the rows, which share a background with hover, open and selection.
   .pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger,
   .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger {
