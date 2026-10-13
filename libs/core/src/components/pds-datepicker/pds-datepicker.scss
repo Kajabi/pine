@@ -23,7 +23,8 @@ pds-input {
 }
 
 :host(.pds-datepicker--range.pds-datepicker--time) pds-input {
-  min-width: 380px;
+  // Never wider than its container, as a narrow popover or phone column.
+  min-width: min(380px, 100%);
 }
 
 .pds-datepicker__trigger {
@@ -95,6 +96,14 @@ pds-input {
   box-shadow: var(--pine-box-shadow-200);
   box-sizing: border-box;
   left: 0;
+  // Floating UI sets the exact limits from the room beside the field; these are the fallbacks.
+  // dvh, so mobile browser toolbars don't hide the bottom.
+  max-height: calc(100vh - var(--pine-dimension-sm));
+  /* stylelint-disable-next-line declaration-block-no-duplicate-properties -- vh fallback for browsers without dvh */
+  max-height: calc(100dvh - var(--pine-dimension-sm));
+  max-width: calc(100vw - var(--pine-dimension-sm));
+  overflow: auto;
+  overscroll-behavior: contain;
   padding: var(--pine-dimension-sm);
   position: fixed;
   top: 0;
@@ -249,10 +258,6 @@ pds-input {
 // Range mode: presets beside two months, with Cancel and Apply below, as the admin date picker.
 .pds-datepicker__dialog--range {
   display: flex;
-  // In a small window the months stack; the dialog scrolls rather than run off the screen.
-  max-height: calc(100vh - var(--pine-dimension-sm));
-  max-width: calc(100vw - var(--pine-dimension-sm));
-  overflow-y: auto;
   padding: 0;
 }
 
@@ -331,13 +336,18 @@ pds-input {
 
 .pds-datepicker__footer {
   align-items: center;
+  background: var(--pine-color-background-overlay);
   border-block-start: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
   display: flex;
   flex-wrap: wrap;
   gap: var(--pine-dimension-xs);
+  // Pinned to the bottom while the months scroll, so Apply stays in reach; it covers the panel's
+  // bottom padding, which it then restores.
+  inset-block-end: calc(var(--pine-dimension-sm) * -1);
   justify-content: flex-end;
-  margin-block-start: var(--pine-dimension-sm);
-  padding-block-start: var(--pine-dimension-sm);
+  margin-block: var(--pine-dimension-sm) calc(var(--pine-dimension-sm) * -1);
+  padding-block: var(--pine-dimension-sm);
+  position: sticky;
 }
 
 // The dates Apply will set, in the field's own format.
@@ -524,6 +534,11 @@ pds-input {
 
   .pds-datepicker__preset {
     white-space: nowrap;
+  }
+
+  // The selection gets its own line, so Cancel and Apply stay together.
+  .pds-datepicker__selection {
+    flex-basis: 100%;
   }
 }
 
