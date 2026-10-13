@@ -600,6 +600,52 @@ describe('pds-modal', () => {
       expect(await activeId(page)).toBe('outer-first');
     });
 
+    it('lets Shift+Tab move from a control inside a listed host back to that host', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <x-wrap id="wrap" tabindex="0" aria-label="Wrap"></x-wrap>
+          <button id="last">Last</button>
+        </pds-modal>
+      `);
+      await defineShadow(page, 'x-wrap', '<button id="inner">Inner</button>');
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => (document.getElementById('wrap').shadowRoot.getElementById('inner') as HTMLElement).focus());
+      await shiftTab(page);
+      expect(await deepActiveId(page)).toBe('wrap');
+    });
+
+    it('leaves Tab to a modal above it when focus is in a non-modal dialog inside that modal', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="outer">
+          <button id="outer-first">Outer first</button>
+        </pds-modal>
+      `);
+      // Added after the outer modal, so its document keydown listener runs first.
+      await page.evaluate(() => {
+        const middle = document.createElement('pds-modal');
+        middle.componentId = 'middle';
+        middle.innerHTML =
+          '<button id="middle-first">Middle first</button>' +
+          '<pds-modal component-id="inner" disable-top-layer="true"><button id="inner-last">Inner last</button></pds-modal>';
+        document.getElementById('outer-first').after(middle);
+      });
+      await page.waitForChanges();
+      const [outer, middle, inner] = await page.findAll('pds-modal');
+      for (const modal of [outer, middle, inner]) {
+        await modal.callMethod('showModal');
+        await settle();
+      }
+
+      await page.evaluate(() => (document.getElementById('inner-last') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('middle-first');
+    });
+
     it('leaves Tab to a control inside that already moved focus', async () => {
       const page = await newE2EPage();
       await page.setContent(`
