@@ -16,6 +16,8 @@ export class CalendarPortal {
   constructor(private readonly datepicker: HTMLElement) {
     this.host = document.createElement('div');
     this.host.className = CalendarPortal.className;
+    // So an overlay can tell whether a click in this calendar belongs to a datepicker inside it.
+    (this.host as HTMLElement & { pdsDatepicker?: HTMLElement }).pdsDatepicker = datepicker;
     // The shared stylesheet's `:host` rules match this div too; keep it out of layout, so it never
     // adds a line to the page, while it still passes `dir`, `lang` and the theme down.
     this.host.style.display = 'contents';
