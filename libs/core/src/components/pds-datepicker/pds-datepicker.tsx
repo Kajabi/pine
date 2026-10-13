@@ -1808,6 +1808,9 @@ export class PdsDatepicker {
         >
           {this.clearable && !!this.value && this.isInteractive && (
             <button
+              // Keyed, as is the calendar button: when Clear appears after a pick, the focused
+              // calendar button must stay that button rather than be reused as Clear.
+              key="clear"
               slot="suffix"
               type="button"
               class="pds-datepicker__clear"
@@ -1820,6 +1823,7 @@ export class PdsDatepicker {
             </button>
           )}
           <button
+            key="trigger"
             slot="suffix"
             type="button"
             class="pds-datepicker__trigger"
