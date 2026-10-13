@@ -440,6 +440,47 @@ describe('pds-datepicker', () => {
   });
 
   describe('review fixes', () => {
+    it('reports blur when a click on a blank part of the page takes focus from the field', async () => {
+      const page = await setup(`${FIELD}<div id="blank" style="height:200px"></div>`);
+      const focus = await page.spyOnEvent('pdsFocus');
+      const blur = await page.spyOnEvent('pdsBlur');
+
+      await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+      await page.keyboard.type('x');
+      await page.click('#blank');
+      await page.waitForChanges();
+      expect(blur).toHaveReceivedEventTimes(1);
+
+      await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+      await page.waitForChanges();
+      expect(focus).toHaveReceivedEventTimes(2);
+    });
+
+    it('closes the calendar when disabled or made read-only while open', async () => {
+      const page = await setup();
+      const datepicker = await page.find('pds-datepicker');
+      for (const prop of ['disabled', 'readonly']) {
+        await openWithTrigger(page);
+        datepicker.setProperty(prop, true);
+        await page.waitForChanges();
+        expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+        datepicker.setProperty(prop, false);
+        await page.waitForChanges();
+      }
+    });
+
+    it('emits nothing on Cancel when the value was set in another accepted form', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="when" time-picker locale="fr" value="2026-10-05 14:00"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await (await page.find('pds-datepicker >>> .pds-datepicker__action:nth-of-type(1)')).click();
+      await page.waitForChanges();
+      expect(change).not.toHaveReceivedEvent();
+    });
+
     it('reports a date before min or after max as out of range, typed or set in code', async () => {
       const page = await setup(`<form>${FIELD.replace('component-id="due"', 'component-id="due" name="due"')}</form>`);
       const validity = () =>
@@ -852,6 +893,25 @@ describe('pds-datepicker', () => {
 
       expect(await datepicker.getProperty('value')).toBe('2026-10-01/2026-10-03');
       expect(change).not.toHaveReceivedEvent();
+    });
+
+    it('undoes a range typed in the field on Escape from the calendar', async () => {
+      const page = await setup(RANGE);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      const before = await fieldValue(page);
+      await page.click('pds-datepicker >>> input');
+      await page.waitForChanges();
+
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        if (input) input.select();
+      });
+      await page.keyboard.type('2026-10-01 – 2026-10-03');
+      await press(page, 'ArrowDown', 'Alt');
+      await press(page, 'Escape');
+
+      expect(await fieldValue(page)).toBe(before);
+      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-01/2026-10-03', '2026-09-13/2026-10-13']);
     });
 
     it('undoes a range typed in the field on Cancel', async () => {
