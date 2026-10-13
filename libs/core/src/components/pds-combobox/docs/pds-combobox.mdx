@@ -1321,7 +1321,7 @@ Disable an option to keep it listed but stop it being chosen, such as an action 
 
 - Disabled options are muted, marked `aria-disabled`, and do nothing when clicked or when Enter or Space is pressed on them.
 - The keys and the pointer still reach them, as the WAI-ARIA listbox and tree patterns advise, so screen readers announce them as unavailable instead of hiding them. The dropdown never opens with one highlighted.
-- A group whose options are all disabled is marked disabled too. It still opens, on hover or Right in `flyout` and on click or Right in `drill-in`, so people can see what it holds.
+- A group whose options are all disabled (among those shown, while searching) is marked disabled too. It still opens, on hover or click, or with Right, Enter or Space, so people can see what it holds. Screen readers announce its row as unavailable even though it opens.
 - When the combobox is searchable (the `input` trigger, or `panel-search`), search still finds disabled options.
 - A `value` that matches a disabled option still shows as the selection, and, unlike a native `<select>`, is still submitted with the form. Validate the value on the server.
 - The combobox reads `disabled` whenever it renders but doesn't watch it, so toggling it on a slotted option while the dropdown is open shows on the next change. Updating the `options` prop re-renders at once.
