@@ -92,6 +92,7 @@ const dayNumberText = (formatter: Intl.DateTimeFormat, date: Date) =>
 export class PdsDatepicker {
   private inputEl?: HTMLPdsInputElement;
   private triggerEl?: HTMLButtonElement;
+  private clearEl?: HTMLButtonElement;
   private dialogEl?: HTMLElement;
   /** Where the open calendar lives, outside the datepicker so no ancestor clips or misplaces it. */
   private portal?: CalendarPortal;
@@ -130,8 +131,8 @@ export class PdsDatepicker {
   @Prop() cancelLabel = 'Cancel';
 
   /**
-   * Adds a button in the field that empties it, shown while there's a value. With the range mode
-   * and time picker buttons, Clear also takes the place of Cancel.
+   * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel
+   * buttons show, Clear also takes the place of Cancel.
    */
   @Prop() clearable = false;
 
@@ -954,8 +955,9 @@ export class PdsDatepicker {
 
   /** A click in the field opens the calendar beside it; the button inside toggles it on its own. */
   private onFieldClick = (event: MouseEvent) => {
+    // The calendar and clear buttons sit in the field but act on their own.
     const path = event.composedPath();
-    if (this.triggerEl && path.includes(this.triggerEl)) return;
+    if ((this.triggerEl && path.includes(this.triggerEl)) || (this.clearEl && path.includes(this.clearEl))) return;
 
     // A click on the label is forwarded to the input as a second click; skip that one too.
     const label = this.inputEl?.shadowRoot?.querySelector('label');
@@ -1695,13 +1697,19 @@ export class PdsDatepicker {
     );
   }
 
+  /** What Apply would set, in the field's format: shown in the footer, and announced as it changes. */
+  private selectionText(): string {
+    const parts = this.draftParts();
+    if (!parts) return '';
+    const format = this.resolvedFormat;
+    const locale = this.resolvedLocale;
+    if (this.range && !this.draftEnd) return `${toFieldText(parts[0], format, locale)}${RANGE_SEPARATOR}`;
+    return parts.map((part) => toFieldText(part, format, locale)).join(RANGE_SEPARATOR);
+  }
+
   private renderFooter() {
     const parts = this.draftParts();
-    const selection = parts
-      ? this.range && !this.draftEnd
-        ? `${toFieldText(parts[0], this.resolvedFormat, this.resolvedLocale)}${RANGE_SEPARATOR}`
-        : parts.map((part) => toFieldText(part, this.resolvedFormat, this.resolvedLocale)).join(RANGE_SEPARATOR)
-      : '';
+    const selection = this.selectionText();
 
     return (
       <div class="pds-datepicker__footer">
@@ -1747,6 +1755,12 @@ export class PdsDatepicker {
         <div class="pds-datepicker__panel">
           <div class="pds-datepicker__months">{months.map((month, index) => this.renderMonth(month, index, locale))}</div>
           {this.hasFooter && this.renderFooter()}
+          {this.appliesOnPick && (
+            // With no footer, still announce the start once it's picked, so it's clear an end comes next.
+            <span class="visually-hidden" aria-live="polite">
+              {this.selectionText()}
+            </span>
+          )}
         </div>
       </div>
     );
@@ -1788,8 +1802,10 @@ export class PdsDatepicker {
             <button
               slot="suffix"
               type="button"
-              class="pds-datepicker__trigger pds-datepicker__clear"
-              aria-label={this.clearLabel}
+              class="pds-datepicker__clear"
+              ref={(el) => (this.clearEl = el)}
+              // Names the field, so several datepickers don't all list as "Clear".
+              aria-label={this.label ? `${this.clearLabel} ${this.label}` : this.clearLabel}
               onClick={this.onClearClick}
             >
               <pds-icon icon={remove} aria-hidden="true" />

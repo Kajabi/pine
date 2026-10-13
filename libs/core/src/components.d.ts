@@ -1202,7 +1202,7 @@ export namespace Components {
          */
         "clearLabel": string;
         /**
-          * Adds a button in the field that empties it, shown while there's a value. With the range mode and time picker buttons, Clear also takes the place of Cancel.
+          * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel buttons show, Clear also takes the place of Cancel.
           * @default false
          */
         "clearable": boolean;
@@ -4928,7 +4928,7 @@ declare namespace LocalJSX {
          */
         "clearLabel"?: string;
         /**
-          * Adds a button in the field that empties it, shown while there's a value. With the range mode and time picker buttons, Clear also takes the place of Cancel.
+          * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel buttons show, Clear also takes the place of Cancel.
           * @default false
          */
         "clearable"?: boolean;
