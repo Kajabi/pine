@@ -2771,6 +2771,32 @@ describe('pds-combobox', () => {
         await page.waitForChanges();
       };
 
+      it('names the closed input\'s popup a tree while it holds the selection\'s label', async () => {
+        const page = await newSpecPage({
+          components: [PdsCombobox],
+          html: `<pds-combobox component-id="actions" group-display="flyout" value="tag-remove"></pds-combobox>`,
+        });
+        (page.root as HTMLPdsComboboxElement).options = actions;
+        await page.waitForChanges();
+        const input = page.root!.shadowRoot!.querySelector('[role="combobox"]')!;
+
+        expect(page.rootInstance.displayText).toBe('Remove a tag');
+        expect(input.getAttribute('aria-haspopup')).toBe('tree');
+      });
+
+      it('scrolls the selection into view when a click opens its group', async () => {
+        const { page, component } = await openFlyoutPanel('mode="select-only" trigger="button" value="tag-remove"');
+        component.isOpen = false;
+        await page.waitForChanges();
+        const focus = jest.spyOn(component, 'updateOptionFocus');
+
+        (page.root!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+        await page.waitForChanges();
+
+        expect(component.openGroup?.label).toBe('Tag');
+        expect(focus).toHaveBeenCalled();
+      });
+
       it('makes each group row a treeitem, with its options a level below', async () => {
         const { page, component, root } = await openFlyoutPanel();
 

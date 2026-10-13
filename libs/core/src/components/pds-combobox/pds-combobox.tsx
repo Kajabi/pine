@@ -1583,8 +1583,12 @@ export class PdsCombobox implements BasePdsProps {
       const selectedIndex = selectableOptions.findIndex(option => option === this.selectedOption);
       if (selectedIndex >= 0) {
         this.highlightedIndex = selectedIndex;
-        // In the grouped panel, open on the selection's group, however the dropdown was opened.
-        if (this.showsGroupedPanel) this.openGroup = parentOptgroupOf(this.selectedOption);
+        // In the grouped panel, open on the selection's group, however the dropdown was opened, and
+        // scroll the selection into view once its group has rendered.
+        if (this.showsGroupedPanel) {
+          this.openGroup = parentOptgroupOf(this.selectedOption);
+          this.pendingOptionFocus = true;
+        }
         return;
       }
     }
@@ -2302,6 +2306,16 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
+   * The input trigger's `aria-haspopup`. While closed it names what opening shows: the full list,
+   * so the grouped panel in a grouped display, even though the input still holds the selection's
+   * label.
+   */
+  private get inputPopupRole(): 'tree' | 'listbox' {
+    if (this.isOpen) return this.popupRole;
+    return this.effectiveGroupDisplay === 'inline' ? 'listbox' : 'tree';
+  }
+
+  /**
    * The button and chip triggers' `aria-haspopup`. With panel search the trigger opens the panel,
    * which starts as a tree in a grouped display, so typing in the panel doesn't change it.
    */
@@ -2804,7 +2818,7 @@ export class PdsCombobox implements BasePdsProps {
                 type="text"
                 role="combobox"
                 aria-autocomplete="list"
-                aria-haspopup={this.popupRole === 'tree' ? 'tree' : undefined}
+                aria-haspopup={this.inputPopupRole === 'tree' ? 'tree' : undefined}
                 aria-controls={this.listboxId}
                 aria-describedby={assignDescription(this.componentId, this.isInvalid(), this.helperMessage, this.errorMessage)}
                 aria-invalid={this.isInvalid() ? 'true' : undefined}
