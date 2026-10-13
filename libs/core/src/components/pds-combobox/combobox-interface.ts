@@ -14,7 +14,8 @@ export interface ComboboxOption {
    */
   groupIcon?: string;
   /**
-   * When `true`, the option is rendered as non-interactive and cannot be selected.
+   * When `true`, the option stays reachable by the arrow keys and the pointer, so assistive tech
+   * announces it as unavailable, but it cannot be selected.
    */
   disabled?: boolean;
   [key: string]: unknown;

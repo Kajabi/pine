@@ -1560,8 +1560,9 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Sets the initial highlighted index when dropdown opens.
-   * If there's a selected option, highlight it. Otherwise, highlight the first option.
+   * Sets the initial highlighted index when dropdown opens. Highlights the selected option unless
+   * it's disabled. Otherwise highlights the first enabled option, or, in the grouped panel, the
+   * first row with something to choose, or nothing when every option is disabled.
    */
   private setInitialHighlightedIndex() {
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
