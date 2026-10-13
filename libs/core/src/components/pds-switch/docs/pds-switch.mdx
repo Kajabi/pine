@@ -25,6 +25,7 @@ Switches toggle a single setting between on and off, rendered as a sliding thumb
 
 ### Accessibility
 - The `aria-describedby` attribute is used to associate the switch with an error message or helper message but may not be read out by all screen readers.
+- Put only non-interactive content in the `label` slot. Buttons and links inside a label are invalid HTML.
 
 ## Properties
 
@@ -104,6 +105,19 @@ Displays an error message with additional instructions, separate from the helper
     required="true"
   ></pds-switch>
 </DocCanvas>
+
+### Label slot
+
+Use the `label` slot when the label needs more than text, such as a `pds-chip`. Clicking the slotted content toggles the switch, and its text becomes the switch's accessible name. Without slotted content, the `label` prop renders as usual.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsSwitch componentId="label-slot"><PdsChip slot="label" dot>Spring Launch</PdsChip></PdsSwitch>`,
+    webComponent: `<pds-switch component-id="label-slot"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-switch>`
+}}>
+  <pds-switch component-id="label-slot"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-switch>
+</DocCanvas>
+
 ## Form Integration
 
 - Provide a `name` so the switch contributes a value to `FormData` when checked; unchecked switches are omitted like native checkboxes.

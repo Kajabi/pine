@@ -1,4 +1,4 @@
-import { Component, Element, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Element, h, Prop, Host, Event, EventEmitter, State, Watch } from '@stencil/core';
 import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
@@ -6,6 +6,9 @@ import { danger } from '@pine-ds/icons/icons';
 import { inheritAriaAttributes } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 
+/**
+ * @slot label - Content displayed as the checkbox label in place of the `label` text. Clicking it toggles the checkbox.
+ */
 @Component({
   tag: 'pds-checkbox',
   styleUrls: ['../../global/styles/utils/label.scss', 'pds-checkbox.scss'],
@@ -18,6 +21,8 @@ export class PdsCheckbox {
   private readonly _type = 'checkbox' as const;
 
   @Element() el: HTMLPdsCheckboxElement;
+
+  @State() private hasLabelSlot = false;
 
   /**
    * It determines whether or not the checkbox is checked.
@@ -122,6 +127,7 @@ export class PdsCheckbox {
     if (this.invalid) { classNames.push('is-invalid'); }
     if (this.indeterminate) { classNames.push('is-indeterminate'); }
     if (this.disabled) { classNames.push('is-disabled'); }
+    if (this.hasLabelSlot) { classNames.push('has-label-slot'); }
 
     return classNames.join('  ');
   }
@@ -174,7 +180,12 @@ export class PdsCheckbox {
     this.inheritedAttributes = {
       ...inheritAriaAttributes(this.el)
     }
+    this.updateHasLabelSlot();
   }
+
+  private updateHasLabelSlot = () => {
+    this.hasLabelSlot = Array.from(this.el.children).some((child) => child.getAttribute('slot') === 'label');
+  };
 
   render() {
     return (
@@ -196,7 +207,7 @@ export class PdsCheckbox {
             {...this.inheritedAttributes}
           />
           <span class={this.hideLabel ? 'visually-hidden' : ''}>
-            {this.label}
+            <slot name="label" onSlotchange={this.updateHasLabelSlot}>{this.label}</slot>
           </span>
         </label>
         {this.helperMessage &&

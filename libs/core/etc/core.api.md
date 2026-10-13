@@ -905,7 +905,7 @@ export namespace LocalJSX {
         // (undocumented)
         "pds-sortable-item": Omit<PdsSortableItem, keyof PdsSortableItemAttributes> & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes]?: PdsSortableItem[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `attr:${K}`]?: PdsSortableItemAttributes[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `prop:${K}`]?: PdsSortableItem[K] };
         // (undocumented)
-        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]> & OneOf<"label", PdsSwitch["label"], PdsSwitchAttributes["label"]>;
+        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]>;
         // (undocumented)
         "pds-tab": Omit<PdsTab, keyof PdsTabAttributes> & { [K in keyof PdsTab & keyof PdsTabAttributes]?: PdsTab[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `attr:${K}`]?: PdsTabAttributes[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `prop:${K}`]?: PdsTab[K] } & OneOf<"name", PdsTab["name"], PdsTabAttributes["name"]>;
         // (undocumented)
@@ -2581,7 +2581,7 @@ export namespace LocalJSX {
         "helperMessage"?: string;
         "hideLabel"?: boolean;
         "invalid"?: boolean;
-        "label": string;
+        "label"?: string;
         "name"?: string;
         "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         "required"?: boolean;
