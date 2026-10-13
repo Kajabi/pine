@@ -340,6 +340,7 @@ export namespace Components {
     }
     export interface PdsDatepicker {
         "applyLabel": string;
+        "autoApply": boolean;
         "cancelLabel": string;
         "clearable": boolean;
         "clearLabel": string;
@@ -1819,6 +1820,7 @@ export namespace LocalJSX {
 
     export interface PdsDatepicker {
         "applyLabel"?: string;
+        "autoApply"?: boolean;
         "cancelLabel"?: string;
         "clearable"?: boolean;
         "clearLabel"?: string;
@@ -1872,6 +1874,8 @@ export namespace LocalJSX {
     export interface PdsDatepickerAttributes {
         // (undocumented)
         "applyLabel": string;
+        // (undocumented)
+        "autoApply": boolean;
         // (undocumented)
         "cancelLabel": string;
         // (undocumented)

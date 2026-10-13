@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
 import { autoUpdate, computePosition, flip, hide, offset, shift, size } from '@floating-ui/dom';
-import { calendarSimple, caretDown, caretLeft, caretRight, check } from '@pine-ds/icons/icons';
+import { calendarSimple, caretDown, caretLeft, caretRight, check, remove } from '@pine-ds/icons/icons';
 import { isSpecTest } from '../../utils/form';
 import { formatMessage, resolveLocale } from '../../i18n';
 import type { PlacementType } from '@utils/types';
@@ -119,13 +119,19 @@ export class PdsDatepicker {
   @Prop() applyLabel = 'Apply';
 
   /**
+   * In range mode, applies the range as soon as its end or a preset is picked, without the Apply and
+   * Cancel buttons. Has no effect with the time picker, whose times still need Apply.
+   */
+  @Prop() autoApply = false;
+
+  /**
    * Accessible label for the button that closes the calendar without changing the dates.
    */
   @Prop() cancelLabel = 'Cancel';
 
   /**
-   * Replaces the Cancel button with a Clear button, which empties the field. Shown with the range
-   * mode and time picker buttons.
+   * Adds a button in the field that empties it, shown while there's a value. With the range mode
+   * and time picker buttons, Clear also takes the place of Cancel.
    */
   @Prop() clearable = false;
 
@@ -538,9 +544,14 @@ export class PdsDatepicker {
     return this.range && !narrow ? 2 : 1;
   }
 
-  /** Whether picks wait for Apply: always for a range, and for a date with a time. */
+  /** Whether picks apply at once, without the footer: `auto-apply` in range mode, without times. */
+  private get appliesOnPick(): boolean {
+    return this.range && this.autoApply && !this.timePicker;
+  }
+
+  /** Whether picks wait for Apply: for a range, unless it auto-applies, and for a date with a time. */
   private get hasFooter(): boolean {
-    return this.range || this.timePicker;
+    return (this.range || this.timePicker) && !this.appliesOnPick;
   }
 
   private get resolvedPresets(): ResolvedPreset[] {
@@ -678,6 +689,7 @@ export class PdsDatepicker {
     }
     this.previewDate = '';
     this.activeDate = iso;
+    if (this.draftEnd && this.appliesOnPick) this.onApply();
   }
 
   /** Sets the value from the user, emitting the change event when it differs. */
@@ -763,6 +775,10 @@ export class PdsDatepicker {
     this.draftStart = toIsoDate(preset.start);
     this.draftEnd = toIsoDate(preset.end);
     this.previewDate = '';
+    if (this.appliesOnPick) {
+      this.onApply();
+      return;
+    }
     this.showDate(preset.end, true);
     // Safari doesn't focus a clicked button; keep focus in the dialog for Escape and the Tab trap.
     (event.currentTarget as HTMLElement).focus();
@@ -784,6 +800,13 @@ export class PdsDatepicker {
     event.preventDefault();
     next.focus();
     if (next.classList.contains('pds-datepicker__preset') && next !== radios[radios.length - 1]) next.click();
+  };
+
+  /** The field's clear button: empties the field and returns focus to it. */
+  private onClearClick = () => {
+    this.commitValue('');
+    this.closeCalendar(false);
+    void this.inputEl?.setFocus();
   };
 
   /** "Custom range" points to the calendar, where a range of your own is picked. */
@@ -1761,6 +1784,17 @@ export class PdsDatepicker {
           onPdsFocus={this.stopInnerEvent}
           onPdsBlur={this.stopInnerEvent}
         >
+          {this.clearable && !!this.value && this.isInteractive && (
+            <button
+              slot="suffix"
+              type="button"
+              class="pds-datepicker__trigger pds-datepicker__clear"
+              aria-label={this.clearLabel}
+              onClick={this.onClearClick}
+            >
+              <pds-icon icon={remove} aria-hidden="true" />
+            </button>
+          )}
           <button
             slot="suffix"
             type="button"
