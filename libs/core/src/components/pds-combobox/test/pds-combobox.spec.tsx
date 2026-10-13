@@ -2299,15 +2299,36 @@ describe('pds-combobox', () => {
     });
 
     // `icon` also loads URLs and data: SVGs into pds-icon unsanitized; `name` accepts icon names only.
-    it('passes the group icon as a name, never as an icon source', async () => {
+    it('renders a group icon only for a Pine icon name, never a URL or data: SVG', async () => {
       const { page } = await openWith(
         `<pds-combobox component-id="grouped-icon-name" mode="select-only"></pds-combobox>`,
-        [{ id: 'x', text: 'X', group: 'G', groupIcon: 'data:image/svg+xml;utf8,<svg></svg>' }],
+        [
+          { id: 'x', text: 'X', group: 'Data', groupIcon: 'data:image/svg+xml;utf8,<svg></svg>' },
+          { id: 'y', text: 'Y', group: 'Path', groupIcon: '/icons/evil.svg' },
+          { id: 'z', text: 'Z', group: 'Named', groupIcon: 'hashtag' },
+        ],
       );
 
-      const icon = groupLabels(page)[0].querySelector('pds-icon');
-      expect(icon?.hasAttribute('icon')).toBe(false);
-      expect(icon?.getAttribute('name')).toBe('data:image/svg+xml;utf8,<svg></svg>');
+      const icons = groupLabels(page).map(label => label.querySelector('pds-icon'));
+      expect(icons[0]).toBeNull();
+      expect(icons[1]).toBeNull();
+      expect(icons[2]?.getAttribute('name')).toBe('hashtag');
+      expect(icons[2]?.hasAttribute('icon')).toBe(false);
+    });
+
+    it('ignores a group or group icon that is not a string', async () => {
+      const { component } = await openWith(
+        `<pds-combobox component-id="grouped-types" mode="select-only"></pds-combobox>`,
+        [
+          { id: 'a', text: 'A', group: { label: 'Tag' } },
+          { id: 'b', text: 'B', group: 'Tag', groupIcon: 42 },
+        ],
+      );
+
+      expect(component.optionEls[0].parentElement?.tagName).not.toBe('OPTGROUP');
+      const optgroup = component.optionEls[1].parentElement as HTMLOptGroupElement;
+      expect(optgroup.label).toBe('Tag');
+      expect(optgroup.hasAttribute('data-icon')).toBe(false);
     });
 
     it('takes the group icon from a later option when the first sets none', async () => {
