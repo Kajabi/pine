@@ -29,6 +29,13 @@
 | `pdsSwitchChange` | Emits an event on input change. | `CustomEvent<InputEvent>` |
 
 
+## Slots
+
+| Slot      | Description                                                                                         |
+| --------- | --------------------------------------------------------------------------------------------------- |
+| `"label"` | Content displayed as the switch label in place of the `label` text. Clicking it toggles the switch. |
+
+
 ## Dependencies
 
 ### Depends on

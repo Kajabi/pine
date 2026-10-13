@@ -71,6 +71,11 @@ label {
   display: flex;
   gap: var(--pine-dimension-150);
 
+  // Slotted content such as a chip is taller than a line of text, so center the switch on it.
+  :host(.pds-switch--label-slot) & {
+    align-items: center;
+  }
+
   .pds-switch--error & {
     color: inherit;
   }
