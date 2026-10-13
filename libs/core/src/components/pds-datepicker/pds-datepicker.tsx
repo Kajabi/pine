@@ -108,6 +108,8 @@ export class PdsDatepicker {
   private timesBeforeTyping?: [string, string];
   /** Set while the datepicker commits a value itself, as opposed to one set from outside. */
   private committing = false;
+  /** Whether focus is in the datepicker or its calendar, for pdsFocus and pdsBlur. */
+  private hasFocus = false;
 
   @Element() el!: HTMLPdsDatepickerElement;
 
@@ -812,8 +814,34 @@ export class PdsDatepicker {
    * once retargeted, its target and related target are both the host, so the browser skips it.
    */
   private onHostFocusIn = (event: FocusEvent) => {
-    if (!this.isInside(event.relatedTarget as Node | null)) this.pdsFocus.emit(event);
+    this.focusEntered(event);
   };
+
+  /**
+   * Focus arriving in the datepicker or its portaled calendar from outside emits pdsFocus, once.
+   * Tracked with a flag rather than `relatedTarget`, which is null or retargeted once the calendar
+   * is portaled out of the datepicker.
+   */
+  private focusEntered(event: FocusEvent) {
+    if (this.hasFocus) return;
+    this.hasFocus = true;
+    this.pdsFocus.emit(event);
+  }
+
+  /**
+   * Once focus settles, whether it left both the datepicker and its calendar: then pdsBlur, once,
+   * and the calendar closes if focus went to another control. Focus that fell to the page, as on a
+   * click on a blank area or when a focused control is disabled, leaves the calendar open.
+   */
+  private checkFocusLeft(event: FocusEvent, toControl: boolean) {
+    window.setTimeout(() => {
+      if (this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within')) return;
+      if (toControl) this.closeCalendar(false);
+      if (!this.hasFocus) return;
+      this.hasFocus = false;
+      this.pdsBlur.emit(event);
+    });
+  }
 
   /**
    * The calendar is a modal dialog while focus is in it. Opened by a click in the field, focus stays
@@ -821,6 +849,7 @@ export class PdsDatepicker {
    * state: focus often moves in from `componentDidRender`, where a state change doesn't re-render.
    */
   private onCalendarFocusIn = (event: FocusEvent) => {
+    this.focusEntered(event);
     this.dialogEl?.setAttribute('aria-modal', 'true');
     // The dialog itself takes focus only from a click on a part that can't, as the month heading.
     // Pass it to the active day, so Tab, Shift+Tab and the arrow keys keep working.
@@ -837,32 +866,17 @@ export class PdsDatepicker {
    */
   private onCalendarFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
-    if (!next) return;
-    if (!this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
-
+    if (!next || !this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
     // Not gated on the calendar still being open: a press outside closes it on pointerdown, before
     // this focusout, and focus has still left the datepicker.
-    window.setTimeout(() => {
-      if (this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within')) return;
-      this.closeCalendar(false);
-      this.pdsBlur.emit(event);
-    });
+    this.checkFocusLeft(event, next !== null);
   };
 
   /** Closes the calendar and reports blur when focus leaves the datepicker, as when tabbing out. */
   private onHostFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
     if (next && this.isInside(next)) return;
-    // Checked once focus settles: the related target is retargeted to the host when the calendar
-    // is portaled into another component's shadow root (pds-filter's popover), and is null when
-    // focus falls to the page.
-    window.setTimeout(() => {
-      if (this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within')) return;
-      // Focus that fell to the page, as on a click on a blank area or when a focused control is
-      // disabled, leaves the calendar open.
-      if (next) this.closeCalendar(false);
-      this.pdsBlur.emit(event);
-    });
+    this.checkFocusLeft(event, next !== null);
   };
 
   private startPositioning() {
