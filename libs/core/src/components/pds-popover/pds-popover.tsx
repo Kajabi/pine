@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State } from '@stencil/core';
+import { containsComposed } from '@utils/closest';
 import { PlacementType } from '@utils/types';
 import { PdsPopoverEventDetail } from './popover-interface';
 
@@ -529,7 +530,7 @@ export class PdsPopover {
     const calendar = (target as Element).closest?.('.pds-datepicker-calendar-portal') as
       | (Element & { pdsDatepicker?: Element })
       | null;
-    if (calendar?.pdsDatepicker && this.portalEl?.contains(calendar.pdsDatepicker)) return;
+    if (calendar?.pdsDatepicker && containsComposed(this.portalEl, calendar.pdsDatepicker)) return;
 
     // Check if click is outside both the popover portal and the trigger
     const clickedInsidePopover = this.portalEl?.contains(target);
