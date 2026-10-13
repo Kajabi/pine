@@ -297,6 +297,44 @@ describe('pds-combobox', () => {
 
     // Email, not Tag: the highlight starts on the first option (in Tag), so this catches an
     // aria-activedescendant left pointing at an option that isn't rendered.
+    it('arrows across groups with the button trigger, keeping the dropdown open and focus on the trigger', async () => {
+      const page = await setUp('padding: 40px;');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+
+      const state = await page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        return {
+          open: root.querySelector('.pds-combobox__listbox') !== null,
+          flyout: root.querySelector('.pds-combobox__group-row--open .pds-combobox__group-row-label')?.textContent,
+          activeDescendant: root.querySelector('.pds-combobox__button-trigger')!.getAttribute('aria-activedescendant'),
+          focused: (root.activeElement as HTMLElement | null)?.className ?? '',
+        };
+      });
+      expect(state).toEqual({
+        open: true,
+        flyout: 'Email',
+        activeDescendant: 'actions-option-2',
+        focused: expect.stringContaining('pds-combobox__button-trigger'),
+      });
+
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('email-send');
+    });
+
+    it('has no axe violations with the button trigger and a flyout opened by the keys', async () => {
+      const page = await setUp('padding: 40px;');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
     it('has no axe violations with a flyout open', async () => {
       const page = await setUp('padding: 40px;', 'input');
       await hoverGroup(page, 'Email');

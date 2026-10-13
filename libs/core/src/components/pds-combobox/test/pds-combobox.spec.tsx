@@ -2656,6 +2656,48 @@ describe('pds-combobox', () => {
       expect(trigger.getAttribute('aria-activedescendant')).toBe('actions-option-2');
     });
 
+    it('does not choose an option whose flyout the pointer has closed', async () => {
+      const { page, component } = await openFlyoutPanel();
+
+      component.highlightedIndex = 0;
+      component.openGroup = groupNamed(component, 'Email');
+      await page.waitForChanges();
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'Enter', cancelable: true }));
+      await page.waitForChanges();
+
+      expect(component.value).toBeFalsy();
+      expect(component.isOpen).toBe(true);
+    });
+
+    it('keeps a group the keys opened, though the pointer left a close timer running', async () => {
+      const { page, component } = await openFlyoutPanel();
+      const tag = groupNamed(component, 'Tag');
+      jest.useFakeTimers();
+      try {
+        // The pointer opened Tag, then left its row: Tag closes in 200ms unless something keeps it.
+        component.flyout.enter(tag);
+        component.flyout.leave(tag);
+        component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+        jest.advanceTimersByTime(500);
+      } finally {
+        jest.useRealTimers();
+      }
+      await page.waitForChanges();
+
+      expect(component.highlightedIndex).toBe(0);
+      expect(component.openGroup).toBe(tag);
+    });
+
+    it('resets the open group when the display mode changes', async () => {
+      const { page, component } = await openFlyoutPanel();
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      component.groupDisplay = 'inline';
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
+    });
+
     it('applies the flyout width props', async () => {
       const { page, component, root } = await openFlyoutPanel(
         'mode="select-only" flyout-min-width="200px" flyout-max-width="320px"',
