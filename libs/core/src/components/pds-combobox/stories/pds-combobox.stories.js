@@ -462,8 +462,13 @@ GroupDisplayFlyout.args = {
   placeholder: 'Select an action',
   trigger: 'input',
   mode: 'filter',
-  triggerWidth: '408px',
-  dropdownWidth: '408px',
+  // Narrower than the old 408px default (matches Action Catalog's trigger/dropdown width),
+  // leaving more room for the flyout on typical viewports. This alone doesn't guarantee a flyout
+  // on a cramped canvas (e.g. Storybook with the Controls panel docked): the room check compares
+  // available space against flyout-min-width (280px), not dropdown-width, so a narrow enough
+  // canvas still falls back to drill-in — correctly, there's genuinely no room for both.
+  triggerWidth: '280px',
+  dropdownWidth: '280px',
   flyoutMinWidth: '280px',
   flyoutMaxWidth: '380px',
   options: [
