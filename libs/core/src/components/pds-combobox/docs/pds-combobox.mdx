@@ -1122,7 +1122,7 @@ Set `group-display="flyout"` to list the groups instead of every option. Hoverin
 
 ### Drill-In Groups
 
-Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`). ArrowLeft, or Backspace on an empty panel search, also steps back to the groups.
+Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`). From the keyboard, the arrow keys move through every option across the groups, drilling into each option's group as they reach it; ArrowLeft, or Backspace on an empty panel search, steps back to the groups. With `panel-search`, typing a group's name is the quickest way to a group.
 
 ```jsx
 <PdsCombobox
