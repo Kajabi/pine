@@ -103,6 +103,8 @@ export class PdsDatepicker {
   private readonly fallbackId = `pds-datepicker-${++fallbackIds}`;
   /** Set by a click on the label, whose forwarded click on the input shouldn't open the calendar. */
   private skipForwardedClick = false;
+  /** Set while an arrow key selects a preset, which auto-apply doesn't apply. */
+  private presetByArrow = false;
   /** The value when the calendar opened, or as last set from outside, which Cancel (without `clearable`) and Escape go back to. */
   private valueAtOpen = '';
   /** The draft's start and end times from before text typed in the field changed them. */
@@ -776,7 +778,7 @@ export class PdsDatepicker {
     this.draftStart = toIsoDate(preset.start);
     this.draftEnd = toIsoDate(preset.end);
     this.previewDate = '';
-    if (this.appliesOnPick) {
+    if (this.appliesOnPick && !this.presetByArrow) {
       this.onApply();
       return;
     }
@@ -800,7 +802,13 @@ export class PdsDatepicker {
 
     event.preventDefault();
     next.focus();
-    if (next.classList.contains('pds-datepicker__preset') && next !== radios[radios.length - 1]) next.click();
+    if (next.classList.contains('pds-datepicker__preset') && next !== radios[radios.length - 1]) {
+      // Arrows select a preset without applying it, even with auto-apply, so every preset and
+      // Custom range stay reachable; Enter or Space applies it.
+      this.presetByArrow = true;
+      next.click();
+      this.presetByArrow = false;
+    }
   };
 
   /** The field's clear button: empties the field and returns focus to it. */
