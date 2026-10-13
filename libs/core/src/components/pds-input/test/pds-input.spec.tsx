@@ -1095,4 +1095,35 @@ describe('pds-input', () => {
       jest.useRealTimers();
     }
   });
+
+  it('queues an emit made while a debounce change flushes on the new emitter, so removal still cancels it', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field" debounce="300"></pds-input>`,
+    });
+    const field = page.root!.shadowRoot!.querySelector('input') as HTMLInputElement;
+    const type = (text: string) => {
+      field.value = text;
+      field.dispatchEvent(new Event('input'));
+    };
+    const emitted = jest.fn();
+    // The first emit types again, as a consumer reacting to it might.
+    page.root!.addEventListener('pdsInput', (event: Event) => {
+      emitted((event as CustomEvent).detail.value);
+      if (emitted.mock.calls.length === 1) type('ab');
+    });
+
+    jest.useFakeTimers();
+    try {
+      type('a');
+      (page.root as HTMLPdsInputElement).debounce = 100;
+      expect(emitted).toHaveBeenCalledTimes(1);
+
+      page.root!.remove();
+      jest.advanceTimersByTime(1000);
+      expect(emitted).toHaveBeenCalledTimes(1);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
 });

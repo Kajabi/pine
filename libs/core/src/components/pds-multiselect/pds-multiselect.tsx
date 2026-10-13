@@ -392,11 +392,12 @@ export class PdsMultiselect {
 
   @Watch('debounce')
   protected setupDebounce() {
-    flushDebouncedEvent(this.pdsMultiselectSearch);
     const { pdsMultiselectSearch, debounce, originalSearchEmitter } = this;
     this.pdsMultiselectSearch = debounce === undefined
       ? originalSearchEmitter ?? pdsMultiselectSearch
       : debounceEvent(pdsMultiselectSearch, debounce);
+    // After the swap, so an emit made while flushing goes to the new emitter, not the old one.
+    flushDebouncedEvent(pdsMultiselectSearch);
   }
 
   @Watch('value')

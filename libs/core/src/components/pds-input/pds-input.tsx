@@ -359,7 +359,6 @@ export class PdsInput {
 
   @Watch('debounce')
   protected debounceChanged() {
-    flushDebouncedEvent(this.pdsInput);
     const { pdsInput, debounce, originalPdsInput } = this;
 
     /**
@@ -367,6 +366,8 @@ export class PdsInput {
      * debounce used to be set to a number. Otherwise, the event would stay debounced.
      */
     this.pdsInput = debounce === undefined ? originalPdsInput ?? pdsInput : debounceEvent(pdsInput, debounce);
+    // After the swap, so an emit made while flushing goes to the new emitter, not the old one.
+    flushDebouncedEvent(pdsInput);
   }
 
   @Watch('value')

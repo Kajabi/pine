@@ -601,11 +601,12 @@ export class PdsCombobox implements BasePdsProps {
 
   @Watch('debounce')
   protected setupDebounce() {
-    flushDebouncedEvent(this.pdsComboboxSearch);
     const { pdsComboboxSearch, debounce, originalSearchEmitter } = this;
     this.pdsComboboxSearch = debounce === undefined
       ? originalSearchEmitter ?? pdsComboboxSearch
       : debounceEvent(pdsComboboxSearch, debounce);
+    // After the swap, so an emit made while flushing goes to the new emitter, not the old one.
+    flushDebouncedEvent(pdsComboboxSearch);
   }
 
   @Watch('options')

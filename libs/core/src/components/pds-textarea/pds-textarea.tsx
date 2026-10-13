@@ -183,10 +183,11 @@ export class PdsTextarea {
 
   @Watch('debounce')
   protected debounceChanged() {
-    flushDebouncedEvent(this.pdsInput);
     const { pdsInput, debounce, originalPdsInput } = this;
 
     this.pdsInput = debounce === undefined ? originalPdsInput ?? pdsInput : debounceEvent(pdsInput, debounce);
+    // After the swap, so an emit made while flushing goes to the new emitter, not the old one.
+    flushDebouncedEvent(pdsInput);
   }
 
   /**
