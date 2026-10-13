@@ -344,4 +344,166 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('drill-in and panel-search', () => {
+    const actions = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    ];
+
+    const setUp = async (attrs: string, viewportWidth = 1200) => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: viewportWidth, height: 800 });
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only"
+            dropdown-width="300px" ${attrs}></pds-combobox>
+          <button id="after">After</button>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        actions,
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    const activeClass = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => (document.querySelector('pds-combobox')!.shadowRoot!.activeElement as HTMLElement | null)?.className ?? '');
+
+    it('searches from the panel by keyboard and returns focus to the trigger', async () => {
+      const page = await setUp('panel-search search-placeholder="Search actions"');
+      expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+
+      await page.keyboard.type('tag');
+      await page.waitForChanges();
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('tag-remove');
+      expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
+    });
+
+    it('drills into a group and back', async () => {
+      const page = await setUp('group-display="drill-in"');
+      const rows = () =>
+        page.evaluate(() =>
+          Array.from(
+            document
+              .querySelector('pds-combobox')!
+              .shadowRoot!.querySelectorAll('.pds-combobox__group-row-trigger, .pds-combobox__group-back-trigger, [role="option"]'),
+          ).map(el => el.textContent),
+        );
+
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      expect(await rows()).toEqual(['Back: Tag', 'Add a tag', 'Remove a tag']);
+
+      await (await page.find('pds-combobox >>> .pds-combobox__group-back-trigger')).click();
+      await page.waitForChanges();
+      expect(await rows()).toEqual(['Tag', 'Email']);
+    });
+
+    it('drills in from flyout mode when the viewport has no room beside the dropdown', async () => {
+      const page = await setUp('group-display="flyout" dropdown-width="340px"', 420);
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+
+      const shape = await page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        return { flyout: !!root.querySelector('.pds-combobox__flyout'), back: !!root.querySelector('.pds-combobox__group-back') };
+      });
+      expect(shape).toEqual({ flyout: false, back: true });
+    });
+
+    const isOpen = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => !!document.querySelector('.pds-combobox__listbox, pds-combobox')?.shadowRoot?.querySelector('.pds-combobox__listbox') || !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__listbox'));
+
+    it('closes a portaled panel-search dropdown on a click outside', async () => {
+      const page = await setUp('panel-search dropdown-mount="body"');
+      expect(await isOpen(page)).toBe(true);
+
+      await page.mouse.click(1100, 700);
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+
+      expect(await isOpen(page)).toBe(false);
+    });
+
+    it('closes when the trigger is clicked while the search field has focus', async () => {
+      const page = await setUp('panel-search');
+      expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+
+      expect(await isOpen(page)).toBe(false);
+    });
+
+    it('lands on the trigger when Tab leaves the search field, then tabs on from there', async () => {
+      const page = await setUp('panel-search');
+
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+
+      expect(await isOpen(page)).toBe(false);
+      expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
+
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id ?? '')).toBe('after');
+    });
+
+    it('drills in when a portaled dropdown at the right edge has no room for a flyout', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 520, height: 800 });
+      await page.setContent(`
+        <div style="display: flex; justify-content: flex-end; padding: 40px 8px;">
+          <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only"
+            group-display="flyout" dropdown-mount="body" dropdown-width="300px"></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        actions,
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 50)));
+
+      const row = await page.$('.pds-combobox-dropdown-portal .pds-combobox__group-row-trigger');
+      await row!.click();
+      await page.waitForChanges();
+
+      const shape = await page.evaluate(() => ({
+        flyout: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__flyout'),
+        back: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__group-back'),
+      }));
+      expect(shape).toEqual({ flyout: false, back: true });
+    });
+
+    it('has no axe violations with panel search and a drilled-in group open', async () => {
+      const page = await setUp('group-display="drill-in" panel-search');
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
 });
+

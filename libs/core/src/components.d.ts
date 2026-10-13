@@ -993,6 +993,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Accessible prefix for the row that returns to the group list when `group-display` is `drill-in`, read before the open group's label. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Back'
+         */
+        "drillInBackLabel": string;
+        /**
           * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
           * @default 'host'
          */
@@ -1035,10 +1040,10 @@ export namespace Components {
          */
         "getSelectedValue": () => Promise<string | null>;
         /**
-          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped.
+          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped. `drill-in` lists the groups too, but a click replaces the list with that group's options and a row back to the groups; use it where nothing can open beside the dropdown, such as a side panel. `flyout` falls back to `drill-in` when there is no room for a flyout on either side.
           * @default 'inline'
          */
-        "groupDisplay": 'inline' | 'flyout';
+        "groupDisplay": 'inline' | 'flyout' | 'drill-in';
         /**
           * Helper message to display below the combobox.
          */
@@ -1079,9 +1084,24 @@ export namespace Components {
          */
         "options"?: ComboboxOption[];
         /**
+          * Shows a search field at the top of the dropdown for the `button` and `chip` triggers, which can't be typed into. Search filters the options the same way typing in the `input` trigger does; in a grouped display it also matches group labels.
+          * @default false
+         */
+        "panelSearch": boolean;
+        /**
           * Placeholder text for the input field.
          */
         "placeholder"?: string;
+        /**
+          * Accessible label for the search input inside the dropdown panel (`panel-search`). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Search options'
+         */
+        "searchOptionsLabel": string;
+        /**
+          * Placeholder text for the search input inside the dropdown panel (`panel-search`). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Find...'
+         */
+        "searchPlaceholder": string;
         /**
           * Sets focus on the native input element.
          */
@@ -4431,6 +4451,11 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Accessible prefix for the row that returns to the group list when `group-display` is `drill-in`, read before the open group's label. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Back'
+         */
+        "drillInBackLabel"?: string;
+        /**
           * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
           * @default 'host'
          */
@@ -4473,10 +4498,10 @@ declare namespace LocalJSX {
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
         /**
-          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped.
+          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped. `drill-in` lists the groups too, but a click replaces the list with that group's options and a row back to the groups; use it where nothing can open beside the dropdown, such as a side panel. `flyout` falls back to `drill-in` when there is no room for a flyout on either side.
           * @default 'inline'
          */
-        "groupDisplay"?: 'inline' | 'flyout';
+        "groupDisplay"?: 'inline' | 'flyout' | 'drill-in';
         /**
           * Helper message to display below the combobox.
          */
@@ -4529,9 +4554,24 @@ declare namespace LocalJSX {
          */
         "options"?: ComboboxOption[];
         /**
+          * Shows a search field at the top of the dropdown for the `button` and `chip` triggers, which can't be typed into. Search filters the options the same way typing in the `input` trigger does; in a grouped display it also matches group labels.
+          * @default false
+         */
+        "panelSearch"?: boolean;
+        /**
           * Placeholder text for the input field.
          */
         "placeholder"?: string;
+        /**
+          * Accessible label for the search input inside the dropdown panel (`panel-search`). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Search options'
+         */
+        "searchOptionsLabel"?: string;
+        /**
+          * Placeholder text for the search input inside the dropdown panel (`panel-search`). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Find...'
+         */
+        "searchPlaceholder"?: string;
         /**
           * Determines the combobox trigger: 'input' (editable input), 'button' (button-like, non-editable), or 'chip' (chip-like, non-editable).
           * @default 'input'
@@ -6390,16 +6430,20 @@ declare namespace LocalJSX {
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         "dropdownWidth": string;
         "dropdownMount": 'host' | 'body';
+        "drillInBackLabel": string;
         "flyoutMaxWidth": string;
         "flyoutMinWidth": string;
-        "groupDisplay": 'inline' | 'flyout';
+        "groupDisplay": 'inline' | 'flyout' | 'drill-in';
         "helperMessage": string;
         "hideLabel": boolean;
         "invalid": boolean;
         "label": string;
         "maxHeight": string;
         "mode": 'filter' | 'select-only';
+        "panelSearch": boolean;
         "placeholder": string;
+        "searchOptionsLabel": string;
+        "searchPlaceholder": string;
         "trigger": 'input' | 'button' | 'chip';
         "triggerWidth": string;
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
