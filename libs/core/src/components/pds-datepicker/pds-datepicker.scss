@@ -110,11 +110,15 @@ pds-input {
   overflow: auto;
   overscroll-behavior: contain;
   padding: var(--pine-dimension-sm);
+  // pds-drawer turns pointer events off on its dialog so the page stays usable, and the calendar
+  // is portaled into that dialog; take them back.
+  pointer-events: auto;
   position: fixed;
   top: 0;
   // Revealed once Floating UI has placed it, so it never flashes at the corner of the page.
   visibility: hidden;
-  z-index: var(--pine-z-index-overlay);
+  // Above a modal or drawer panel it's portaled beside, as pds-combobox's portaled listbox.
+  z-index: var(--pine-z-index-priority);
 
   // In dark mode the overlay matches the page and the shadow doesn't show, so draw its edge, as
   // pds-dropdown-menu does.
