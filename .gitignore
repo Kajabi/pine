@@ -36,6 +36,7 @@ libs/core/.storybook/static/
 /.sass-cache
 /connect.lock
 /coverage
+jest-results.json
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log

@@ -41,6 +41,23 @@ runs:
       run: npm ci
       shell: bash
 
-    - name: Lint
-      run : npx nx affected --target=test --parallel=3 --ci --coverage
+    - name: Test
+      # Jest also writes its full results to a file, since Nx can cut the end of long task output.
+      # The file sits in the project root: Jest doesn't create a missing folder for it.
+      run: npx nx affected --target=test --parallel=3 --ci --coverage --json --outputFile=jest-results.json
       shell: bash
+
+    - name: Show failing tests
+      if: failure()
+      run: node ${{ github.action_path }}/summarize-jest-results.mjs libs/core/jest-results.json
+      shell: bash
+
+    - name: Upload test results
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: jest-results-node-${{ inputs.node-version }}
+        path: libs/*/jest-results.json
+        if-no-files-found: ignore
+        overwrite: true
+        retention-days: 7
