@@ -1370,6 +1370,104 @@ describe('pds-datepicker', () => {
     });
   });
 
+  describe('auto-apply', () => {
+    const AUTO = `<pds-datepicker component-id="period" range auto-apply label="Period" locale="en-US" value="2026-09-13/2026-10-13"></pds-datepicker>`;
+    const PORTAL = '.pds-datepicker-calendar-portal';
+
+    it('applies the range when its end is picked, with no footer', async () => {
+      const page = await setup(AUTO);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+      expect(await page.find(`${PORTAL} >>> .pds-datepicker__footer`)).toBeNull();
+
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-05"]`)).click();
+      expect(change).not.toHaveReceivedEvent();
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-09"]`)).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '2026-10-05/2026-10-09', start: '2026-10-05', end: '2026-10-09' });
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).toBeNull();
+      expect(await focused(page)).toContain('pds-datepicker__trigger');
+    });
+
+    it('applies a preset as soon as it is picked', async () => {
+      const page = await setup(AUTO.replace('auto-apply', 'auto-apply presets="today"'));
+      await page.setViewport({ width: 1280, height: 800 });
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await (await page.find(`${PORTAL} >>> .pds-datepicker__preset`)).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventTimes(1);
+      expect(change.firstEvent.detail.preset).toBe('today');
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).toBeNull();
+    });
+
+    it('keeps Apply with the time picker', async () => {
+      const page = await setup(AUTO.replace('auto-apply', 'auto-apply time-picker'));
+      await page.setViewport({ width: 1280, height: 800 });
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-05"]`)).click();
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-09"]`)).click();
+      await page.waitForChanges();
+
+      expect(change).not.toHaveReceivedEvent();
+      expect(await page.find(`${PORTAL} >>> .pds-datepicker__action--primary`)).not.toBeNull();
+    });
+  });
+
+  describe('clear button', () => {
+    const clearButton = (page: E2EPage) => page.find('pds-datepicker >>> .pds-datepicker__clear');
+
+    it('empties the field, emits the change and returns focus to the field', async () => {
+      const page = await setup(FIELD.replace('component-id="due"', 'component-id="due" clearable'));
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+
+      await (await clearButton(page)).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '' });
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      expect(await input.getProperty('value')).toBe('');
+      expect(await clearButton(page)).toBeNull();
+      const activeTag = await page.evaluate(
+        () => document.querySelector('pds-datepicker')?.shadowRoot?.activeElement?.tagName,
+      );
+      expect(activeTag).toBe('PDS-INPUT');
+    });
+
+    it('clears a range', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="period" range clearable label="Period" value="2026-09-13/2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+
+      await (await clearButton(page)).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '' });
+    });
+
+    it.each([
+      ['there is no value', 'clearable value=""'],
+      ['the datepicker is disabled', 'clearable disabled'],
+      ['clearable is off', ''],
+    ])('is hidden when %s', async (_, attrs) => {
+      const page = await setup(FIELD.replace('component-id="due"', `component-id="due" ${attrs}`).replace(' value="2026-10-13"', attrs.includes('value') ? '' : ' value="2026-10-13"'));
+
+      expect(await clearButton(page)).toBeNull();
+    });
+
+    it('has an accessible name', async () => {
+      const page = await setup(FIELD.replace('component-id="due"', 'component-id="due" clearable clear-label="Effacer"'));
+
+      expect(await (await clearButton(page)).getAttribute('aria-label')).toBe('Effacer');
+    });
+  });
+
   describe('format', () => {
     const US = `<pds-datepicker component-id="due" label="Due" locale="en-US" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>`;
 
