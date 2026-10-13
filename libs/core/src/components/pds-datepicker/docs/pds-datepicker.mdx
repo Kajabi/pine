@@ -252,6 +252,8 @@ The inner field's own `pdsInput`, `pdsChange`, `pdsFocus`, `pdsBlur` and `pdsKey
 
 The datepicker works inside `pds-modal`, `pds-popover`, `pds-filter` and `pds-drawer`. `Escape` closes only the calendar, never the overlay around it, and picking a day doesn't dismiss the overlay. The calendar sizes itself to the window, scrolling with its footer pinned when there isn't room, and hides when its field scrolls out of view. On narrow screens a range shows one month at a time.
 
+The open calendar is portaled: into the `<dialog>` or open popover around the datepicker, or else to the end of the page. To style its `calendar` and `presets` parts, target the portal: `.pds-datepicker-calendar-portal::part(calendar)`.
+
 ## Values, time zones and servers
 
 - Values are plain ISO strings with no time zone: `YYYY-MM-DD`, and with the time picker `YYYY-MM-DDTHH:mm`, a wall-clock time. Attach the zone on the server if the time needs one, as Rails' `Time.zone.parse` does with the account's zone.
