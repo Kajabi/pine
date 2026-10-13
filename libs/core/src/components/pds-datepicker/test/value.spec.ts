@@ -124,4 +124,43 @@ describe('pds-datepicker values', () => {
       expect(parseRangeText('2026-01-02/2026-01-09')?.map(toValueString)).toEqual(['2026-01-02', '2026-01-09']);
     });
   });
+
+  describe('review: format edge cases', () => {
+    const value = parseDateTime('2026-01-05T15:07') as NonNullable<ReturnType<typeof parseDateTime>>;
+
+    it('writes and reads month names in the locale and in English', () => {
+      expect(formatWith(value, 'MMM D, YYYY')).toBe('Jan 5, 2026');
+      expect(formatWith(value, 'D MMMM YYYY', 'fr')).toBe('5 janvier 2026');
+      expect(toValueString(parseWith('jan 5, 2026', 'MMM D, YYYY') as typeof value)).toBe('2026-01-05');
+      expect(toValueString(parseWith('5 janvier 2026', 'D MMMM YYYY', 'fr') as typeof value)).toBe('2026-01-05');
+      expect(toValueString(parseWith('5 January 2026', 'D MMMM YYYY', 'fr') as typeof value)).toBe('2026-01-05');
+    });
+
+    it('keeps bracketed text literal', () => {
+      expect(formatWith(value, '[Date:] D/M/YYYY')).toBe('Date: 5/1/2026');
+      expect(toValueString(parseWith('Date: 5/1/2026', '[Date:] D/M/YYYY') as typeof value)).toBe('2026-01-05');
+    });
+
+    it('writes and reads AM/PM in the locale', () => {
+      const ko = formatWith(value, 'YYYY-MM-DD h:mm A', 'ko');
+      expect(ko).not.toContain('PM');
+      expect(toValueString(parseWith(ko, 'YYYY-MM-DD h:mm A', 'ko') as typeof value)).toBe('2026-01-05T15:07');
+      // English is still accepted.
+      expect(toValueString(parseWith('2026-01-05 3:07 PM', 'YYYY-MM-DD h:mm A', 'ko') as typeof value)).toBe(
+        '2026-01-05T15:07',
+      );
+    });
+
+    it('adds AM/PM to a 12-hour format without it', () => {
+      expect(fieldFormat('D/M/YYYY h:mm', false)).toBe('D/M/YYYY h:mm A');
+      expect(fieldFormat('[h] D/M/YYYY', false)).toBe('[h] D/M/YYYY');
+    });
+
+    it('reads a range in a format that has a spaced dash', () => {
+      const format = 'D - M - YYYY';
+      const range = parseRangeText('1 - 2 - 2026 – 3 - 4 - 2026', format);
+      expect(range?.map(toValueString)).toEqual(['2026-02-01', '2026-04-03']);
+      expect(parseRangeText('1 - 2 - 2026 to 3 - 4 - 2026', format)?.map(toValueString)).toEqual(['2026-02-01', '2026-04-03']);
+    });
+  });
 });
