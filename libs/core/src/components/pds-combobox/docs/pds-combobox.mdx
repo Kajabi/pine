@@ -1101,11 +1101,32 @@ When options come from the `options` prop, set `group` on each option, and optio
 
 `group-display` decides how groups are drawn. The options, value and events are the same in every mode, so switching modes doesn't change any other code.
 
-| Display | Use it when | Avoid it when |
-| --- | --- | --- |
-| `inline` (default) | A few groups, or a short list where seeing every option at once helps people compare across groups. Also server-searched lists (see below). | The full list runs much past the dropdown's height. |
-| `flyout` | Many groups, each a clear category, with room beside the dropdown, such as choosing an automation action. | The dropdown sits in a narrow side panel, groups have only one or two options, or people need to compare options across groups. |
-| `drill-in` | Many groups in a narrow space, such as a filter in a side panel. | People switch between groups often: each switch is two steps, back and then into the next group. |
+<pds-box border border-radius="sm">
+  <pds-table component-id="group-display-choice">
+    <pds-table-head>
+      <pds-table-head-cell>Display</pds-table-head-cell>
+      <pds-table-head-cell>Use it when</pds-table-head-cell>
+      <pds-table-head-cell>Avoid it when</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>inline</code> (default)</pds-table-cell>
+        <pds-table-cell>A few groups, or a short list where seeing every option at once helps people compare across groups. Also server-searched lists (see below).</pds-table-cell>
+        <pds-table-cell>The full list runs much past the dropdown's height.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>flyout</code></pds-table-cell>
+        <pds-table-cell>Many groups, each a clear category, with room beside the dropdown, such as choosing an automation action.</pds-table-cell>
+        <pds-table-cell>The dropdown sits in a narrow side panel, groups have only one or two options, or people need to compare options across groups.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>drill-in</code></pds-table-cell>
+        <pds-table-cell>Many groups in a narrow space, such as a filter in a side panel.</pds-table-cell>
+        <pds-table-cell>People switch between groups often: each switch is two steps, back and then into the next group.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 - **One level only.** Groups don't nest.
 - **Name groups as categories** ("Contact", "Membership"), and give options verb phrases ("Add a tag"). With `flyout` and `drill-in`, search matches both, so typing a group's name finds all of its options.
@@ -1281,15 +1302,44 @@ Set `group-display="drill-in"` where nothing can open beside the dropdown, such 
 
 With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each group is an item that expands to its options, one level down. Keyboard focus stays on the trigger, or on the panel's search field, and `aria-activedescendant` follows the highlighted row.
 
-| Key | Action |
-| --- | --- |
-| Up / Down | Move through the current level: the groups, or the open group's options. |
-| Home / End, PageUp / PageDown | Jump within the current level. In the panel's search field and the `input` trigger, Home and End move the cursor instead. |
-| Right, Enter | On a group, open it and move to its first option. On an option, Enter selects it. |
-| Space | With the `button` or `chip` trigger and no panel search, does what Enter does. In a search field, it types a space. |
-| Left | Close the open group and return to its row. With the `input` trigger, Left and Right move the cursor while there's text in it. |
-| Escape | Close the open group first, then the dropdown. |
-| Enter, Space (drill-in) | On the open group's row ("Back: Tag"), return to the groups; Right moves into its options instead. |
+<pds-box border border-radius="sm">
+  <pds-table component-id="grouped-display-keys">
+    <pds-table-head>
+      <pds-table-head-cell>Key</pds-table-head-cell>
+      <pds-table-head-cell>Action</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Up / Down</pds-table-cell>
+        <pds-table-cell>Move through the current level: the groups, or the open group's options.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Home / End, PageUp / PageDown</pds-table-cell>
+        <pds-table-cell>Jump within the current level. In the panel's search field and the <code>input</code> trigger, Home and End move the cursor instead.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Right, Enter</pds-table-cell>
+        <pds-table-cell>On a group, open it and move to its first option. On an option, Enter selects it.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Space</pds-table-cell>
+        <pds-table-cell>With the <code>button</code> or <code>chip</code> trigger and no panel search, does what Enter does. In a search field, it types a space.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Left</pds-table-cell>
+        <pds-table-cell>Close the open group and return to its row. With the <code>input</code> trigger, Left and Right move the cursor while there's text in it.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Escape</pds-table-cell>
+        <pds-table-cell>Close the open group first, then the dropdown.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Enter, Space (drill-in)</pds-table-cell>
+        <pds-table-cell>On the open group's row ("Back: Tag"), return to the groups; Right moves into its options instead.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 In a flyout, Up and Down stay within the open group's options; Left returns to its row. Drilled in, the group's row sits above its options, so Up from the first option reaches it.
 
