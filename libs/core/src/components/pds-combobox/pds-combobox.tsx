@@ -3,7 +3,7 @@ import type { BasePdsProps } from '@utils/interfaces';
 import { assignDescription, isSpecTest, messageId } from '../../utils/form';
 import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
-import { debounceEvent } from '@utils/utils';
+import { cancelDebouncedEvent, debounceEvent } from '@utils/utils';
 import DOMPurify from 'dompurify';
 import {
   FlyoutController,
@@ -452,6 +452,7 @@ export class PdsCombobox implements BasePdsProps {
       this.deferredPortalTeardownId = undefined;
     }
     this.observer?.disconnect();
+    cancelDebouncedEvent(this.pdsComboboxSearch);
     this.clearAsyncFetchState();
     this.removeBodyPortal();
     this.flyout.reset();
@@ -600,6 +601,7 @@ export class PdsCombobox implements BasePdsProps {
 
   @Watch('debounce')
   protected setupDebounce() {
+    cancelDebouncedEvent(this.pdsComboboxSearch);
     const { pdsComboboxSearch, debounce, originalSearchEmitter } = this;
     this.pdsComboboxSearch = debounce === undefined
       ? originalSearchEmitter ?? pdsComboboxSearch

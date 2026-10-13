@@ -854,6 +854,62 @@ describe('pds-combobox', () => {
     expect(component.isOpen).toBe(true);
   });
 
+  it('drops a pending search event when it is removed from the DOM', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+    const search = jest.fn();
+    page.root!.addEventListener('pdsComboboxSearch', search);
+    const input = page.root!.shadowRoot!.querySelector('input') as HTMLInputElement;
+    const type = (text: string) => {
+      input.value = text;
+      input.dispatchEvent(new Event('input'));
+    };
+
+    jest.useFakeTimers();
+    try {
+      type('tag');
+      jest.advanceTimersByTime(300);
+      expect(search).toHaveBeenCalledTimes(1);
+
+      type('email');
+      page.root!.remove();
+      jest.advanceTimersByTime(300);
+      expect(search).toHaveBeenCalledTimes(1);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('emits one search on the latest debounce when the debounce changes mid-search', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+    const search = jest.fn();
+    page.root!.addEventListener('pdsComboboxSearch', search);
+    const input = page.root!.shadowRoot!.querySelector('input') as HTMLInputElement;
+
+    jest.useFakeTimers();
+    try {
+      input.value = 'tag';
+      input.dispatchEvent(new Event('input'));
+      (page.root as HTMLPdsComboboxElement).debounce = 100;
+      (page.root as HTMLPdsComboboxElement).debounce = 50;
+      input.dispatchEvent(new Event('input'));
+      jest.advanceTimersByTime(50);
+      expect(search).toHaveBeenCalledTimes(1);
+
+      input.dispatchEvent(new Event('input'));
+      page.root!.remove();
+      jest.advanceTimersByTime(1000);
+      expect(search).toHaveBeenCalledTimes(1);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
   it('displays selected option label in button trigger', async () => {
         const page = await newSpecPage({
       components: [PdsCombobox],
