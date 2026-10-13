@@ -751,6 +751,14 @@ export class PdsCombobox implements BasePdsProps {
       }
     });
 
+    // A rebuild replaces every optgroup. Follow the open group to its new element by label, so the
+    // flyout stays open across reloads and pagination, or close it if the group is gone. The hover
+    // timers still hold the old element, so they're cleared either way.
+    if (this.openGroup !== null && !groupEntries.includes(this.openGroup)) {
+      this.flyout.reset();
+      this.openGroup = groups.get(this.openGroup.label) ?? null;
+    }
+
     // Re-apply preselection if a value is set but no option has been selected yet.
     // This handles the case where `value` is set before async options have loaded.
     if (this.value && !this.selectedOption) {
@@ -1376,7 +1384,7 @@ export class PdsCombobox implements BasePdsProps {
     if (selectableOptions.length > 0) {
       this.setInitialHighlightedIndex();
       // By index, through the same path as arrowing: it opens the option's flyout group first
-      // when it isn't rendered, and focuses it once it is.
+      // when it isn't rendered, and highlights it once it is.
       this.updateOptionFocus();
     }
   }

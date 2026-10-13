@@ -2491,6 +2491,21 @@ describe('pds-combobox', () => {
       expect(root.querySelector('.pds-combobox__group-row--open .pds-combobox__group-row-label')?.textContent).toBe('Email');
     });
 
+    it('keeps the open flyout open when the options are rebuilt, and closes it if its group is gone', async () => {
+      const { page, component, root } = await openFlyoutPanel();
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      (page.root as HTMLPdsComboboxElement).options = [...actions, { id: 'coupon-send', text: 'Send a coupon', group: 'Coupon' }];
+      await page.waitForChanges();
+      expect(component.openGroup === groupNamed(component, 'Tag')).toBe(true);
+      expect(root.querySelector('.pds-combobox__group-row--open .pds-combobox__group-row-label')?.textContent).toBe('Tag');
+
+      (page.root as HTMLPdsComboboxElement).options = actions.filter(action => action.group !== 'Tag');
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
+    });
+
     it('selects an option clicked in a flyout', async () => {
       const { page, component, root } = await openFlyoutPanel();
 
