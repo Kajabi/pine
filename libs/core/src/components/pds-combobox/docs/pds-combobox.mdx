@@ -1099,7 +1099,7 @@ When options come from the `options` prop, set `group` on each option, and optio
 
 ### Flyout Groups
 
-Set `group-display="flyout"` to list the groups instead of every option. Hovering or clicking a group opens its options in a flyout beside the dropdown, and the group holding the current selection is highlighted. While searching, matching options are listed under their group labels, and search also matches group labels, so typing a group's name finds all of its options.
+Set `group-display="flyout"` to list the groups instead of every option. Hovering or clicking a group opens its options in a flyout beside the dropdown, and the group holding the current selection is highlighted. The arrow keys move through every option across the groups, opening each option's group as they reach it, while focus stays on the trigger; the group rows themselves are for the pointer. While searching, matching options are listed under their group labels, and search also matches group labels, so typing a group's name finds all of its options.
 
 - Use it when there are many groups and the full list would be long, such as choosing an automation action.
 - Groups come from `<optgroup>` elements or the `group` field of `options`. Options under a `<pds-text>` heading are listed ungrouped.
