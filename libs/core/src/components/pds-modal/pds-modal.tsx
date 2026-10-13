@@ -9,6 +9,47 @@ const isCustomLength = (value: string): boolean =>
   /\d/.test(value) &&
   (typeof CSS === 'undefined' || CSS.supports('max-width', value));
 
+const TABBABLE = [
+  'a[href]',
+  'area[href]',
+  'button:not([disabled])',
+  'input:not([disabled]):not([type="hidden"])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  'iframe',
+  'summary',
+  '[contenteditable]:not([contenteditable="false"])',
+  '[tabindex]',
+].join(',');
+
+/**
+ * Collects the tabbable elements under `root` in focus order, walking into open shadow roots and
+ * following slots, so a component's own controls (the field and button inside pds-datepicker, the
+ * input inside pds-combobox) count without being registered here by tag name.
+ */
+function collectTabbable(root: Element | ShadowRoot, found: HTMLElement[]) {
+  for (const child of Array.from(root.children)) visitTabbable(child, found);
+}
+
+function visitTabbable(el: Element, found: HTMLElement[]) {
+  if (el.localName === 'slot') {
+    const assigned = (el as HTMLSlotElement).assignedElements?.({ flatten: true }) ?? [];
+    if (assigned.length === 0) return collectTabbable(el, found);
+    for (const slotted of assigned) visitTabbable(slotted, found);
+    return;
+  }
+  if (el instanceof HTMLElement && el.tabIndex >= 0 && el.matches(TABBABLE)) found.push(el);
+  // A shadow host's light children render only through its slots, which the walk reaches.
+  collectTabbable(el.shadowRoot ?? el, found);
+}
+
+/** The focused element, followed down through shadow roots to the control that has focus. */
+function deepActiveElement(): Element | null {
+  let active = document.activeElement;
+  while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+  return active;
+}
+
 @Component({
   tag: 'pds-modal',
   styleUrl: 'pds-modal.scss',
@@ -143,26 +184,8 @@ export class PdsModal {
   private updateFocusableElements() {
     if (!this.modalRef) return;
 
-    // Get all focusable elements within the modal
-    const selector = [
-      'a[href]',
-      'button:not([disabled])',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      'textarea:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])',
-      'pds-button:not([disabled])',
-      'pds-link:not([disabled])',
-      'pds-input:not([disabled])',
-      'pds-checkbox:not([disabled])',
-      'pds-radio:not([disabled])',
-      'pds-switch:not([disabled])',
-      'pds-select:not([disabled])',
-    ].join(',');
-
-    this.focusableElements = Array.from(
-      this.modalRef.querySelectorAll(selector)
-    ) as HTMLElement[];
+    this.focusableElements = [];
+    collectTabbable(this.modalRef, this.focusableElements);
 
     // checkVisibility() also drops an element inside a hidden ancestor, whose own computed
     // display isn't none; such an element can't take focus, so it can't anchor the trap.
@@ -475,6 +498,9 @@ export class PdsModal {
       // disableTopLayer), so do not trap Tab here.
       if (this.disableTopLayer) return;
 
+      // A component inside the modal that runs its own Tab trap (an open calendar) already moved focus.
+      if (e.defaultPrevented) return;
+
       // Content can change while the modal is open (rows fetched in, sections shown), so the
       // first and last elements are read now rather than from the list taken on opening.
       this.updateFocusableElements();
@@ -486,8 +512,9 @@ export class PdsModal {
       const firstFocusableElement = this.focusableElements[0];
       const lastFocusableElement = this.focusableElements[this.focusableElements.length - 1];
 
-      // Get the current active element
-      const activeElement = document.activeElement;
+      // The list holds controls inside shadow roots, so compare against the one that has focus,
+      // not the host document.activeElement reports.
+      const activeElement = deepActiveElement();
 
       // Check if we need to wrap focus
       const isFirstElement = activeElement === firstFocusableElement ||
