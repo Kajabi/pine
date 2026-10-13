@@ -90,6 +90,11 @@ pds-input {
   transform: scaleX(-1);
 }
 
+// Focused only by a click on a part that can't take focus; not a Tab stop, so no ring.
+.pds-datepicker__dialog:focus {
+  outline: none;
+}
+
 .pds-datepicker__dialog {
   background: var(--pine-color-background-overlay);
   border-radius: var(--pine-dimension-150);
