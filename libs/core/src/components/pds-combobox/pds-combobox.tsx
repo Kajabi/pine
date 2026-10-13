@@ -759,9 +759,9 @@ export class PdsCombobox implements BasePdsProps {
       this.openGroup = groups.get(this.openGroup.label) ?? null;
     }
 
-    // Re-apply preselection if a value is set but no option has been selected yet.
-    // This handles the case where `value` is set before async options have loaded.
-    if (this.value && !this.selectedOption) {
+    // Re-apply the selection to the rebuilt options: when `value` is set before async options have
+    // loaded, and after any rebuild, which detaches the previously selected option element.
+    if (this.value && (!this.selectedOption || !this.optionEls.includes(this.selectedOption))) {
       const matchingOption = this.optionEls.find(opt => opt.value === this.value);
       if (matchingOption) {
         this.setSelectedOption(matchingOption);

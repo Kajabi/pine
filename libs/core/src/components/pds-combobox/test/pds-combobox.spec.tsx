@@ -2506,6 +2506,18 @@ describe('pds-combobox', () => {
       expect(component.openGroup).toBeNull();
     });
 
+    it('keeps the selection checked, and its group marked, when the options are rebuilt', async () => {
+      const { page, component, root } = await openFlyoutPanel('mode="select-only" value="tag-remove"');
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      (page.root as HTMLPdsComboboxElement).options = [...actions];
+      await page.waitForChanges();
+      expect(component.selectedOption === component.optionEls.find((o: HTMLOptionElement) => o.value === 'tag-remove')).toBe(true);
+      expect(root.querySelector('.pds-combobox__group-row--has-selection .pds-combobox__group-row-label')?.textContent).toBe('Tag');
+      expect(root.querySelector('[aria-selected="true"]')?.textContent).toBe('Remove a tag');
+    });
+
     it('selects an option clicked in a flyout', async () => {
       const { page, component, root } = await openFlyoutPanel();
 
