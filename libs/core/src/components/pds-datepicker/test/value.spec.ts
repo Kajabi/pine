@@ -143,7 +143,8 @@ describe('pds-datepicker values', () => {
 
     it('writes and reads AM/PM in the locale', () => {
       const ko = formatWith(value, 'YYYY-MM-DD h:mm A', 'ko');
-      expect(ko).not.toContain('PM');
+      // The word comes from the runtime's Intl data, which varies: Node 20's ICU gives "PM" for ko.
+      expect(ko).toBe(`2026-01-05 3:07 ${clockFor('ko').pm}`);
       expect(toValueString(parseWith(ko, 'YYYY-MM-DD h:mm A', 'ko') as typeof value)).toBe('2026-01-05T15:07');
       // English is still accepted.
       expect(toValueString(parseWith('2026-01-05 3:07 PM', 'YYYY-MM-DD h:mm A', 'ko') as typeof value)).toBe(
