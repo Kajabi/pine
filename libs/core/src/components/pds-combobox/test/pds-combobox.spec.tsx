@@ -882,7 +882,7 @@ describe('pds-combobox', () => {
     }
   });
 
-  it('emits one search on the latest debounce when the debounce changes mid-search', async () => {
+  it('sends a pending search when the debounce changes, then debounces on the new wait', async () => {
     const page = await newSpecPage({
       components: [PdsCombobox],
       html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
@@ -896,15 +896,20 @@ describe('pds-combobox', () => {
       input.value = 'tag';
       input.dispatchEvent(new Event('input'));
       (page.root as HTMLPdsComboboxElement).debounce = 100;
+      expect(search).toHaveBeenCalledTimes(1);
+      expect(search.mock.calls[0][0].detail.query).toBe('tag');
+
       (page.root as HTMLPdsComboboxElement).debounce = 50;
+      input.value = 'tags';
       input.dispatchEvent(new Event('input'));
       jest.advanceTimersByTime(50);
-      expect(search).toHaveBeenCalledTimes(1);
+      expect(search).toHaveBeenCalledTimes(2);
+      expect(search.mock.calls[1][0].detail.query).toBe('tags');
 
       input.dispatchEvent(new Event('input'));
       page.root!.remove();
       jest.advanceTimersByTime(1000);
-      expect(search).toHaveBeenCalledTimes(1);
+      expect(search).toHaveBeenCalledTimes(2);
     } finally {
       jest.useRealTimers();
     }

@@ -11,6 +11,7 @@ export const debounceEvent = (event: EventEmitter, wait: number): EventEmitter =
     _original: original,
     emit,
     cancel: emit.cancel,
+    flush: emit.flush,
   } as EventEmitter;
 };
 
@@ -19,13 +20,31 @@ export const cancelDebouncedEvent = (event: EventEmitter | undefined) => {
   (event as any)?.cancel?.();
 };
 
+/** Sends an emit still waiting on a `debounceEvent` delay right away. A no-op on an undebounced emitter. */
+export const flushDebouncedEvent = (event: EventEmitter | undefined) => {
+  (event as any)?.flush?.();
+};
+
 export const debounce = (func: (...args: any[]) => void, wait = 0) => {
   let timer: any;
+  let pending: any[] | undefined;
   const debounced = (...args: any[]): any => {
     clearTimeout(timer);
-    timer = setTimeout(func, wait, ...args);
+    pending = args;
+    timer = setTimeout(() => {
+      pending = undefined;
+      func(...args);
+    }, wait);
   };
-  debounced.cancel = () => clearTimeout(timer);
+  debounced.cancel = () => {
+    clearTimeout(timer);
+    pending = undefined;
+  };
+  debounced.flush = () => {
+    const args = pending;
+    debounced.cancel();
+    if (args) func(...args);
+  };
   return debounced;
 };
 

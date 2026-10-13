@@ -3,7 +3,7 @@ import type { BasePdsProps } from '@utils/interfaces';
 import { assignDescription, isSpecTest, messageId } from '../../utils/form';
 import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
-import { cancelDebouncedEvent, debounceEvent } from '@utils/utils';
+import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
 import DOMPurify from 'dompurify';
 import {
   FlyoutController,
@@ -601,11 +601,12 @@ export class PdsCombobox implements BasePdsProps {
 
   @Watch('debounce')
   protected setupDebounce() {
-    cancelDebouncedEvent(this.pdsComboboxSearch);
     const { pdsComboboxSearch, debounce, originalSearchEmitter } = this;
     this.pdsComboboxSearch = debounce === undefined
       ? originalSearchEmitter ?? pdsComboboxSearch
       : debounceEvent(pdsComboboxSearch, debounce);
+    // After the swap, so an emit made while flushing goes to the new emitter, not the old one.
+    flushDebouncedEvent(pdsComboboxSearch);
   }
 
   @Watch('options')

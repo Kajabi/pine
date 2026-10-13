@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State, Watch } from '@stencil/core';
 import { computePosition, flip, offset, shift, size, autoUpdate } from '@floating-ui/dom';
-import { debounceEvent } from '@utils/utils';
+import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
 import { isSpecTest, messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 import { formatMessage, pluralize } from '../../i18n';
@@ -384,6 +384,7 @@ export class PdsMultiselect {
   }
 
   disconnectedCallback() {
+    cancelDebouncedEvent(this.pdsMultiselectSearch);
     this.observer?.disconnect();
     this.cleanupAutoUpdate?.();
     this.clearAsyncFetchState();
@@ -395,6 +396,8 @@ export class PdsMultiselect {
     this.pdsMultiselectSearch = debounce === undefined
       ? originalSearchEmitter ?? pdsMultiselectSearch
       : debounceEvent(pdsMultiselectSearch, debounce);
+    // After the swap, so an emit made while flushing goes to the new emitter, not the old one.
+    flushDebouncedEvent(pdsMultiselectSearch);
   }
 
   @Watch('value')
