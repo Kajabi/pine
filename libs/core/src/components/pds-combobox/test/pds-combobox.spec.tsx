@@ -3540,6 +3540,20 @@ describe('pds-combobox', () => {
       const groupNamed = (component: { optionEls: HTMLOptionElement[] }, label: string) =>
         component.optionEls.map(o => o.parentElement as HTMLOptGroupElement).find(g => g?.label === label)!;
 
+      it('keeps a group with nothing to choose marked once it is drilled into', async () => {
+        const { page, component, root } = await openList(actions, 'mode="select-only" trigger="button" group-display="drill-in"');
+        component.openGroup = groupNamed(component, 'Premium');
+        await page.waitForChanges();
+
+        const back = root.querySelector('.pds-combobox__group-back')!;
+        expect(back.getAttribute('aria-disabled')).toBe('true');
+        expect(back.classList.contains('pds-combobox__group-back--disabled')).toBe(true);
+
+        component.openGroup = groupNamed(component, 'Contact');
+        await page.waitForChanges();
+        expect(root.querySelector('.pds-combobox__group-back')!.hasAttribute('aria-disabled')).toBe(false);
+      });
+
       it('marks a group with nothing to choose, which the keys still reach and open', async () => {
         const { page, component, root } = await openList(actions, 'mode="select-only" trigger="button" group-display="flyout"');
         const rows = Array.from(root.querySelectorAll('.pds-combobox__group-row'));

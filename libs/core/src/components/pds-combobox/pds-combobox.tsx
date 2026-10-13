@@ -2503,17 +2503,20 @@ export class PdsCombobox implements BasePdsProps {
    */
   private renderGroupBackRow(group: PanelGroup, { posinset, setsize }: { posinset: number; setsize: number }) {
     const id = this.groupDomId(group.optgroup);
+    const disabled = isGroupDisabled(group);
     return (
       <li
         key="group-back"
         id={id}
         class={{
           'pds-combobox__group-back': true,
+          'pds-combobox__group-back--disabled': disabled,
           'pds-combobox__group-back--highlighted': this.highlightedGroupRow === group.optgroup,
           'pds-combobox__group-back--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
         }}
         role="treeitem"
         aria-expanded="true"
+        aria-disabled={disabled ? 'true' : undefined}
         aria-level={1}
         aria-posinset={posinset}
         aria-setsize={setsize}
