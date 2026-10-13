@@ -2820,7 +2820,7 @@ describe('pds-combobox', () => {
       expect(root.querySelector('[role="status"]')?.textContent).toBe('Tag');
     });
 
-    it('clears the highlight on the way back, so the next arrow does not drill straight back in', async () => {
+    it('clears the highlight on the way back to the groups', async () => {
       const { page, component, root } = await openDrillIn();
 
       component.openGroup = groupNamed(component, 'Tag');
@@ -2831,6 +2831,21 @@ describe('pds-combobox', () => {
 
       expect(component.openGroup).toBeNull();
       expect(component.highlightedIndex).toBe(-1);
+    });
+
+    it('highlights a clicked group\'s first option, so the arrows carry on inside it', async () => {
+      const { page, component, root } = await openDrillIn();
+      component.highlightedIndex = 0;
+      await page.waitForChanges();
+
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+      expect(component.openGroup).toBe(groupNamed(component, 'Email'));
+      expect(component.highlightedIndex).toBe(2);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(component.openGroup).toBe(groupNamed(component, 'Email'));
     });
 
     it('steps back to the groups with ArrowLeft', async () => {
@@ -3000,6 +3015,35 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
 
       expect(Array.from(root.querySelectorAll('[role="option"]')).map(o => o.getAttribute('tabindex'))).toEqual(['-1', '-1', '-1']);
+    });
+
+    it('refetches an empty query on reopen, rather than showing the last search\'s results', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="remote-reopen" trigger="button" mode="select-only" panel-search async-url="/api/actions"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const fetch = jest.spyOn(component, 'debouncedFetchAsyncOptions').mockImplementation(() => undefined);
+      component.internalOptions = [{ id: 'a', text: 'Add a tag' }];
+      component.lastFetchedQuery = 'tag';
+
+      (page.root!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(fetch).toHaveBeenCalledWith('', 1);
+    });
+
+    it('keeps focus in the search field when the panel\'s padding is pressed', async () => {
+      const { root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+      const panel = root.querySelector('.pds-combobox__listbox--with-search')!;
+
+      const onPanel = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+      panel.dispatchEvent(onPanel);
+      const onField = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+      search(root).dispatchEvent(onField);
+
+      expect(onPanel.defaultPrevented).toBe(true);
+      expect(onField.defaultPrevented).toBe(false);
     });
 
     it('fetches from async-url as you type in the panel, and loads more for that query', async () => {
