@@ -3067,6 +3067,27 @@ describe('pds-combobox', () => {
       expect(fetch).toHaveBeenCalledWith('', 1);
     });
 
+    it('keeps the last loaded query when a refetch fails, so the next reopen tries again', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="remote-fail" trigger="button" mode="select-only" panel-search async-url="/api/actions"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      component.internalOptions = [{ id: 'a', text: 'Add a tag' }];
+      component.lastFetchedQuery = 'tag';
+      const originalFetch = global.fetch;
+      global.fetch = jest.fn().mockRejectedValue(new Error('offline'));
+      const error = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+      try {
+        await component.fetchOptions('', 1);
+      } finally {
+        global.fetch = originalFetch;
+        error.mockRestore();
+      }
+
+      expect(component.lastFetchedQuery).toBe('tag');
+    });
+
     it('refetches an empty query on a keyboard reopen too', async () => {
       const page = await newSpecPage({
         components: [PdsCombobox],

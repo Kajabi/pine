@@ -662,7 +662,6 @@ export class PdsCombobox implements BasePdsProps {
 
   private async fetchOptions(query: string, page: number = 1) {
     if (!this.asyncUrl) return;
-    this.lastFetchedQuery = query;
 
     // Abort any pending request and clear existing timeout
     this.abortController?.abort();
@@ -740,6 +739,8 @@ export class PdsCombobox implements BasePdsProps {
 
       if (page === 1) {
         this.internalOptions = formattedResults;
+        // Only once its results have loaded: a failed or aborted fetch leaves the last query's.
+        this.lastFetchedQuery = query;
       } else {
         this.internalOptions = [...this.internalOptions, ...formattedResults];
       }
