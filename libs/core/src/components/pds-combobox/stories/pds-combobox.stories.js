@@ -11,6 +11,9 @@ export default {
     dropdownMount: 'host',
     dropdownWidth: '236px',
     errorMessage: null,
+    flyoutMaxWidth: '380px',
+    flyoutMinWidth: '280px',
+    groupDisplay: 'inline',
     helperMessage: null,
     hideLabel: false,
     invalid: false,
@@ -433,6 +436,42 @@ OptionGroupsFromOptions.args = {
     { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
     { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
     { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    { id: 'coupon-send', text: 'Send a coupon', group: 'Coupon', groupIcon: 'coupon' },
+  ],
+};
+
+export const GroupDisplayFlyout = (args) => html`
+<div style="min-height: 420px;">
+  <pds-combobox
+    component-id="combobox-group-flyout"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    trigger=${args.trigger}
+    mode=${args.mode}
+    group-display="flyout"
+    trigger-width=${args.triggerWidth}
+    dropdown-width=${args.dropdownWidth}
+    flyout-min-width=${args.flyoutMinWidth}
+    flyout-max-width=${args.flyoutMaxWidth}
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+GroupDisplayFlyout.args = {
+  label: 'Action',
+  placeholder: 'Select an action',
+  trigger: 'input',
+  mode: 'filter',
+  triggerWidth: '408px',
+  dropdownWidth: '408px',
+  flyoutMinWidth: '280px',
+  flyoutMaxWidth: '380px',
+  options: [
+    { id: 'offer-grant', text: 'Grant an offer', group: 'Offer', groupIcon: 'grant-offer' },
+    { id: 'offer-revoke', text: 'Revoke an offer', group: 'Offer' },
+    { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
     { id: 'coupon-send', text: 'Send a coupon', group: 'Coupon', groupIcon: 'coupon' },
   ],
 };

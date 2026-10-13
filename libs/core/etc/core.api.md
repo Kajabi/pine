@@ -297,8 +297,11 @@ export namespace Components {
         "dropdownWidth": string;
         "errorMessage"?: string;
         "fetchTimeout": number;
+        "flyoutMaxWidth": string;
+        "flyoutMinWidth": string;
         "formatResult"?: (item: unknown) => ComboboxOption;
         "getSelectedValue": () => Promise<string | null>;
+        "groupDisplay": 'inline' | 'flyout';
         "helperMessage"?: string;
         "hideLabel": boolean;
         "invalid"?: boolean;
@@ -1594,8 +1597,11 @@ export namespace LocalJSX {
         "dropdownWidth"?: string;
         "errorMessage"?: string;
         "fetchTimeout"?: number;
+        "flyoutMaxWidth"?: string;
+        "flyoutMinWidth"?: string;
         "form"?: string;
         "formatResult"?: (item: unknown) => ComboboxOption;
+        "groupDisplay"?: 'inline' | 'flyout';
         "helperMessage"?: string;
         "hideLabel"?: boolean;
         "invalid"?: boolean;
@@ -1650,6 +1656,12 @@ export namespace LocalJSX {
         "errorMessage": string;
         // (undocumented)
         "fetchTimeout": number;
+        // (undocumented)
+        "flyoutMaxWidth": string;
+        // (undocumented)
+        "flyoutMinWidth": string;
+        // (undocumented)
+        "groupDisplay": 'inline' | 'flyout';
         // (undocumented)
         "helperMessage": string;
         // (undocumented)

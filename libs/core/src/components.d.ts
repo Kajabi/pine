@@ -1017,6 +1017,16 @@ export namespace Components {
          */
         "fetchTimeout": number;
         /**
+          * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
+          * @default '380px'
+         */
+        "flyoutMaxWidth": string;
+        /**
+          * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value. The flyout is as wide as its options, between this and `flyout-max-width`.
+          * @default '280px'
+         */
+        "flyoutMinWidth": string;
+        /**
           * Function to format async results. Receives raw API response item.
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
@@ -1024,6 +1034,11 @@ export namespace Components {
           * Gets the value of the currently selected option.
          */
         "getSelectedValue": () => Promise<string | null>;
+        /**
+          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped.
+          * @default 'inline'
+         */
+        "groupDisplay": 'inline' | 'flyout';
         /**
           * Helper message to display below the combobox.
          */
@@ -4440,6 +4455,16 @@ declare namespace LocalJSX {
          */
         "fetchTimeout"?: number;
         /**
+          * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
+          * @default '380px'
+         */
+        "flyoutMaxWidth"?: string;
+        /**
+          * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value. The flyout is as wide as its options, between this and `flyout-max-width`.
+          * @default '280px'
+         */
+        "flyoutMinWidth"?: string;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -4447,6 +4472,11 @@ declare namespace LocalJSX {
           * Function to format async results. Receives raw API response item.
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
+        /**
+          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped.
+          * @default 'inline'
+         */
+        "groupDisplay"?: 'inline' | 'flyout';
         /**
           * Helper message to display below the combobox.
          */
@@ -6360,6 +6390,9 @@ declare namespace LocalJSX {
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         "dropdownWidth": string;
         "dropdownMount": 'host' | 'body';
+        "flyoutMaxWidth": string;
+        "flyoutMinWidth": string;
+        "groupDisplay": 'inline' | 'flyout';
         "helperMessage": string;
         "hideLabel": boolean;
         "invalid": boolean;

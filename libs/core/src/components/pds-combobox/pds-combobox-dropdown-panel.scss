@@ -90,6 +90,66 @@
     flex-shrink: 0;
   }
 
+  // group-display="flyout": a row per group, and its options in a flyout beside the panel.
+  .pds-combobox__group-row {
+    list-style: none;
+    position: relative;
+  }
+
+  .pds-combobox__group-row-trigger {
+    align-items: center;
+    border-radius: var(--pine-dimension-125);
+    color: var(--pine-color-text-secondary);
+    cursor: pointer;
+    display: flex;
+    font: var(--pine-typography-body-medium);
+    gap: var(--pine-dimension-xs);
+    justify-content: space-between;
+    padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+    /* stylelint-disable-next-line pine-design-system/no-hardcoded-motion -- matches .pds-combobox__option's 0.15s micro-transition */
+    transition: background 0.15s;
+  }
+
+  .pds-combobox__group-row--open > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-row--has-selection > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-row-trigger:hover {
+    background: var(--pine-color-background-muted);
+  }
+
+  .pds-combobox__group-row-label {
+    align-items: center;
+    display: flex;
+    gap: var(--pine-dimension-xs);
+    min-width: 0;
+  }
+
+  .pds-combobox__group-row-caret {
+    flex-shrink: 0;
+  }
+
+  // The Figma frames inset rows 4px and space them 4px apart in both the panel and the flyout.
+  .pds-combobox__listbox--grouped,
+  .pds-combobox__flyout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+    padding: var(--pine-dimension-2xs);
+  }
+
+  .pds-combobox__flyout {
+    background: var(--pine-color-background-overlay);
+    border-radius: var(--pine-dimension-125);
+    box-shadow: var(--pine-box-shadow);
+    list-style: none;
+    margin: 0;
+    overflow-y: auto;
+    position: fixed;
+    // Revealed once Floating UI has placed it, so it never flashes inside the row first.
+    visibility: hidden;
+    width: max-content;
+    z-index: 1;
+  }
+
   .pds-combobox__loading {
     align-items: center;
     display: flex;
