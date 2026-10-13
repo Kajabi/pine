@@ -439,6 +439,44 @@ describe('pds-datepicker', () => {
     expect(blur).toHaveReceivedEventTimes(1);
   });
 
+  describe('small and short windows', () => {
+    async function openAt(width: number, height: number, attrs: string) {
+      const page = await newE2EPage();
+      await page.setViewport({ width, height });
+      await page.setContent(
+        `<div style="padding:16px;margin-top:${Math.round(height / 2) - 40}px"><pds-datepicker component-id="d" label="When" locale="en-US" ${attrs}></pds-datepicker></div>`,
+      );
+      await page.waitForChanges();
+      await openWithTrigger(page);
+      return page;
+    }
+
+    const fit = (page: E2EPage) =>
+      page.evaluate(() => {
+        const dialog = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('[role="dialog"]') as HTMLElement;
+        const box = dialog.getBoundingClientRect();
+        const apply = dialog.querySelector('.pds-datepicker__action--primary') as HTMLElement | null;
+        const a = apply?.getBoundingClientRect();
+        return {
+          onScreen: box.top >= 0 && box.bottom <= innerHeight && box.left >= 0 && box.right <= innerWidth,
+          applyReachable: a
+            ? (dialog.getRootNode() as ShadowRoot).elementFromPoint(a.left + a.width / 2, a.top + a.height / 2) === apply
+            : null,
+          months: dialog.querySelectorAll('[role="grid"]').length,
+        };
+      });
+
+    it.each([
+      ['a phone, range with presets', 360, 640, 'range presets="today,last-7-days" value="2026-09-13/2026-10-13"', 1],
+      ['a phone, date and time with dropdowns', 360, 640, 'time-picker show-dropdowns value="2026-10-13T09:00"', 1],
+      ['a short window, range and times', 1280, 640, 'range time-picker value="2026-09-13T09:00/2026-10-13T17:00"', 2],
+    ])('keeps the calendar on screen with Apply in reach on %s', async (_, width, height, attrs, months) => {
+      const page = await openAt(width, height, attrs);
+
+      expect(await fit(page)).toEqual({ onScreen: true, applyReachable: true, months });
+    });
+  });
+
   describe('inside other overlays', () => {
     async function clickFieldThenEscape(page: E2EPage) {
       await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
