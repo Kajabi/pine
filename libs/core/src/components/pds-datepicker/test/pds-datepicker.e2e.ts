@@ -11,8 +11,12 @@ async function setup(html = FIELD): Promise<E2EPage> {
 }
 
 async function openWithTrigger(page: E2EPage) {
-  const trigger = await page.find('pds-datepicker >>> .pds-datepicker__trigger');
-  await trigger.click();
+  // Enter on the focused button rather than a mouse click: on a cold first page the layout can
+  // still shift as the icon loads, and a click landing on the field opens with focus left there.
+  await page.$eval('pds-datepicker', (el) =>
+    el.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__trigger')?.focus(),
+  );
+  await page.keyboard.press('Enter');
   await page.waitForChanges();
   await page.waitForFunction(() => {
     const dialog = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector<HTMLElement>('[role="dialog"]');
@@ -478,6 +482,24 @@ describe('pds-datepicker', () => {
       await page.click('#after');
       await page.waitForChanges();
       expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-14T14:00']);
+    });
+
+    it('applies a time picked in the calendar on Enter in the field, as Apply does', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="when" time-picker locale="fr" value="2026-10-13T09:00"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+      await page.waitForChanges();
+
+      await chooseTime(page, 0, '14');
+      await page.evaluate(() =>
+        document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input')?.focus(),
+      );
+      await press(page, 'Enter');
+
+      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-13T14:00']);
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
     });
 
     it('keeps a time picked in the calendar when the date is then typed', async () => {

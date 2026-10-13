@@ -1010,10 +1010,15 @@ export class PdsDatepicker {
         this.openCalendar(true);
       }
     } else if (key.key === 'Enter' && this.isOpen) {
-      // A typed date commits on Enter and the calendar closes; with Apply showing, as Apply does,
-      // keeping a time picked in the calendar. Text that isn't a date stays, marked invalid.
-      if (this.hasFooter) this.commitPendingText();
-      else this.commitText();
+      // Enter commits and closes. With Apply showing it does what Apply does, committing the
+      // pending selection, typed or picked in the calendar. Typed text that isn't a date stays,
+      // marked invalid.
+      if (!this.hasFooter || (this.text !== this.fieldText() && !this.parseText(this.text))) {
+        this.commitText();
+      } else {
+        const parts = this.draftParts();
+        if (parts) this.commitParts(parts);
+      }
       if (!this.textError) this.closeCalendar(false);
     } else if (key.key === 'Escape' && this.isOpen) {
       // Stop the field's own keydown, or a modal, popover or filter around the datepicker closes
