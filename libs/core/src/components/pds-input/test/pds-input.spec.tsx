@@ -1061,7 +1061,7 @@ describe('pds-input', () => {
     expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Required');
   });
 
-  it('drops a pending pdsInput event when the debounce changes or it is removed from the DOM', async () => {
+  it('sends a pending pdsInput event when the debounce changes, and drops it when removed from the DOM', async () => {
     const page = await newSpecPage({
       components: [PdsInput],
       html: `<pds-input component-id="field" debounce="300"></pds-input>`,
@@ -1078,15 +1078,19 @@ describe('pds-input', () => {
     try {
       type('a');
       (page.root as HTMLPdsInputElement).debounce = 100;
+      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted.mock.calls[0][0].detail.value).toBe('a');
+
       (page.root as HTMLPdsInputElement).debounce = 50;
       type('ab');
       jest.advanceTimersByTime(50);
-      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted).toHaveBeenCalledTimes(2);
+      expect(emitted.mock.calls[1][0].detail.value).toBe('ab');
 
       type('abc');
       page.root!.remove();
       jest.advanceTimersByTime(1000);
-      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted).toHaveBeenCalledTimes(2);
     } finally {
       jest.useRealTimers();
     }

@@ -2173,7 +2173,7 @@ describe('pds-multiselect', () => {
     expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Required');
   });
 
-  it('drops a pending pdsMultiselectSearch event when the debounce changes or it is removed from the DOM', async () => {
+  it('sends a pending pdsMultiselectSearch event when the debounce changes, and drops it when removed from the DOM', async () => {
     const page = await newSpecPage({
       components: [PdsMultiselect],
       html: `<pds-multiselect component-id="test"></pds-multiselect>`,
@@ -2193,15 +2193,19 @@ describe('pds-multiselect', () => {
     try {
       type('a');
       (page.root as HTMLPdsMultiselectElement).debounce = 100;
+      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted.mock.calls[0][0].detail.query).toBe('a');
+
       (page.root as HTMLPdsMultiselectElement).debounce = 50;
       type('ab');
       jest.advanceTimersByTime(50);
-      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted).toHaveBeenCalledTimes(2);
+      expect(emitted.mock.calls[1][0].detail.query).toBe('ab');
 
       type('abc');
       page.root!.remove();
       jest.advanceTimersByTime(1000);
-      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted).toHaveBeenCalledTimes(2);
     } finally {
       jest.useRealTimers();
     }

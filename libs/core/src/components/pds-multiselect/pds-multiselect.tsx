@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State, Watch } from '@stencil/core';
 import { computePosition, flip, offset, shift, size, autoUpdate } from '@floating-ui/dom';
-import { cancelDebouncedEvent, debounceEvent } from '@utils/utils';
+import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
 import { isSpecTest, messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 import { formatMessage, pluralize } from '../../i18n';
@@ -392,7 +392,7 @@ export class PdsMultiselect {
 
   @Watch('debounce')
   protected setupDebounce() {
-    cancelDebouncedEvent(this.pdsMultiselectSearch);
+    flushDebouncedEvent(this.pdsMultiselectSearch);
     const { pdsMultiselectSearch, debounce, originalSearchEmitter } = this;
     this.pdsMultiselectSearch = debounce === undefined
       ? originalSearchEmitter ?? pdsMultiselectSearch

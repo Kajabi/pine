@@ -1075,7 +1075,7 @@ it('should set focus on the input element when setFocus is called', async() => {
     });
   });
 
-  it('drops a pending pdsInput event when the debounce changes or it is removed from the DOM', async () => {
+  it('sends a pending pdsInput event when the debounce changes, and drops it when removed from the DOM', async () => {
     const page = await newSpecPage({
       components: [PdsTextarea],
       html: `<pds-textarea component-id="field" debounce="300"></pds-textarea>`,
@@ -1092,15 +1092,19 @@ it('should set focus on the input element when setFocus is called', async() => {
     try {
       type('a');
       (page.root as HTMLPdsTextareaElement).debounce = 100;
+      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted.mock.calls[0][0].detail.value).toBe('a');
+
       (page.root as HTMLPdsTextareaElement).debounce = 50;
       type('ab');
       jest.advanceTimersByTime(50);
-      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted).toHaveBeenCalledTimes(2);
+      expect(emitted.mock.calls[1][0].detail.value).toBe('ab');
 
       type('abc');
       page.root!.remove();
       jest.advanceTimersByTime(1000);
-      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted).toHaveBeenCalledTimes(2);
     } finally {
       jest.useRealTimers();
     }
