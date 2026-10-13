@@ -1097,6 +1097,293 @@ When options come from the `options` prop, set `group` on each option, and optio
 />
 ```
 
+### Choosing a Group Display
+
+`group-display` decides how groups are drawn. The options, value and events are the same in every mode, so switching modes doesn't change any other code.
+
+| Display | Use it when | Avoid it when |
+| --- | --- | --- |
+| `inline` (default) | A few groups, or a short list where seeing every option at once helps people compare across groups. Also server-searched lists (see below). | The full list runs much past the dropdown's height. |
+| `flyout` | Many groups, each a clear category, with room beside the dropdown, such as choosing an automation action. | The dropdown sits in a narrow side panel, groups have only one or two options, or people need to compare options across groups. |
+| `drill-in` | Many groups in a narrow space, such as a filter in a side panel. | People switch between groups often: each switch is two steps, back and then into the next group. |
+
+- **One level only.** Groups don't nest.
+- **Name groups as categories** ("Contact", "Membership"), and give options verb phrases ("Add a tag"). With `flyout` and `drill-in`, search matches both, so typing a group's name finds all of its options.
+- **Keep option labels unique across groups.** Once chosen, only the option's label shows in the trigger, so "Send a direct message" under two groups can't be told apart.
+- **Pass `drill-in-back-label` with `flyout` too.** A flyout drills in when there's no room beside the dropdown, and the back row's screen-reader prefix is English by default.
+- **Give every group an icon or none.** A mix reads as unfinished.
+- **For server-searched lists (`async-url`), prefer `inline`.** Results replace the groups as soon as you type, so a group list adds a step without helping.
+- **In slotted markup, list ungrouped options first.** One placed after a group reads as part of it; the `options` prop lists them first for you.
+- **Use `panel-search` with the `button` and `chip` triggers** once a grouped list is long enough to need searching. The `input` trigger already searches.
+- **Inside a `pds-modal` (or any `<dialog>`), set `dropdown-mount="body"`.** The flyout moves with the dropdown, and focus stays inside the dialog. For other focus traps, see [Searching From the Panel](#searching-from-the-panel).
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-catalog-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  group-display="flyout"
+  panel-search
+  search-placeholder="Search actions"
+  search-options-label="Search actions"
+  drill-in-back-label="Back">
+  <optgroup label="Contact" data-icon="contact">
+    <option value="contact_tag_add">Add a tag</option>
+    <option value="contact_tag_remove">Remove a tag</option>
+    <option value="enroll_in_workflow">Enroll in an automation</option>
+  </optgroup>
+  <optgroup label="Communication" data-icon="mail">
+    <option value="email_send">Send an email</option>
+    <option value="email_sequence_subscribe">Subscribe to a sequence</option>
+    <option value="email_sequence_unsubscribe">Unsubscribe from a sequence</option>
+  </optgroup>
+  <optgroup label="Membership" data-icon="product">
+    <option value="offer_grant">Grant an offer</option>
+    <option value="offer_revoke">Revoke an offer</option>
+    <option value="offer_cancel_payment_and_access">Cancel payment and access</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-catalog-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  groupDisplay="flyout"
+  panelSearch
+  searchPlaceholder="Search actions"
+  searchOptionsLabel="Search actions"
+  drillInBackLabel="Back"
+  options={[
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
+    { id: 'enroll_in_workflow', text: 'Enroll in an automation', group: 'Contact' },
+    { id: 'email_send', text: 'Send an email', group: 'Communication', groupIcon: 'mail' },
+    { id: 'email_sequence_subscribe', text: 'Subscribe to a sequence', group: 'Communication' },
+    { id: 'email_sequence_unsubscribe', text: 'Unsubscribe from a sequence', group: 'Communication' },
+    { id: 'offer_grant', text: 'Grant an offer', group: 'Membership', groupIcon: 'product' },
+    { id: 'offer_revoke', text: 'Revoke an offer', group: 'Membership' },
+    { id: 'offer_cancel_payment_and_access', text: 'Cancel payment and access', group: 'Membership' },
+  ]}
+  onPdsComboboxChange={(event) => setAction(event.detail.value)}
+/>`,
+  }}
+>
+  <div style={{ minHeight: '400px' }}>
+    <pds-combobox
+      component-id="combobox-catalog-example"
+      label="Action"
+      placeholder="Choose an action"
+      trigger="button"
+      mode="select-only"
+      group-display="flyout"
+      panel-search
+      search-placeholder="Search actions"
+      search-options-label="Search actions"
+      drill-in-back-label="Back">
+      <optgroup label="Contact" data-icon="contact">
+        <option value="contact_tag_add">Add a tag</option>
+        <option value="contact_tag_remove">Remove a tag</option>
+        <option value="enroll_in_workflow">Enroll in an automation</option>
+      </optgroup>
+      <optgroup label="Communication" data-icon="mail">
+        <option value="email_send">Send an email</option>
+        <option value="email_sequence_subscribe">Subscribe to a sequence</option>
+        <option value="email_sequence_unsubscribe">Unsubscribe from a sequence</option>
+      </optgroup>
+      <optgroup label="Membership" data-icon="product">
+        <option value="offer_grant">Grant an offer</option>
+        <option value="offer_revoke">Revoke an offer</option>
+        <option value="offer_cancel_payment_and_access">Cancel payment and access</option>
+      </optgroup>
+    </pds-combobox>
+  </div>
+</DocCanvas>
+
+#### In server-rendered templates
+
+The `options` prop is JavaScript-only. In ERB or other server-rendered markup, slot `<optgroup>` elements instead, with each group's icon in `data-icon`, and listen for `pdsComboboxChange` in a script. The `name` attribute submits the value with the form.
+
+- `data-icon` takes a Pine icon name only; URLs and other values that aren't a name are dropped.
+- Keep labels and values in escaped output (`<%= %>`). The template is page HTML, so unescaped text becomes markup, or breaks out of an attribute, before the combobox reads it. Never pass user-supplied text through `raw` or `html_safe`.
+
+```erb
+<pds-combobox
+  component-id="automation-action"
+  name="automation[action]"
+  label="<%= t(".action_label") %>"
+  placeholder="<%= t(".action_placeholder") %>"
+  trigger="button"
+  mode="select-only"
+  group-display="flyout"
+  panel-search
+  search-placeholder="<%= t(".search_actions") %>"
+  search-options-label="<%= t(".search_actions") %>"
+  drill-in-back-label="<%= t(".back") %>"
+  value="<%= @automation.action %>">
+  <% @action_groups.each do |group| %>
+    <optgroup label="<%= group.label %>" data-icon="<%= group.icon %>">
+      <% group.actions.each do |action| %>
+        <option value="<%= action.id %>"><%= action.label %></option>
+      <% end %>
+    </optgroup>
+  <% end %>
+</pds-combobox>
+```
+
+### Flyout Groups
+
+Set `group-display="flyout"` to list the groups instead of every option. Hovering or clicking a group opens its options in a flyout beside the dropdown, and the group holding the current selection is highlighted. The arrow keys move through every option across the groups, opening each option's group as they reach it, while focus stays on the trigger; the group rows themselves are for the pointer. While searching, matching options are listed under their group labels, and search also matches group labels, so typing a group's name finds all of its options.
+
+- Use it when there are many groups and the full list would be long, such as choosing an automation action.
+- Groups come from `<optgroup>` elements or the `group` field of `options`. Options under a `<pds-text>` heading are listed ungrouped.
+- The flyout is as wide as its options, between `flyout-min-width` (default `280px`) and `flyout-max-width` (default `380px`). It opens on the side with room, and scrolls when a group is taller than the space available.
+- Inside a modal, set `dropdown-mount="body"`; the flyout moves with the dropdown.
+
+```jsx
+<PdsCombobox
+  componentId="combobox-flyout-example"
+  label="Action"
+  groupDisplay="flyout"
+  dropdownMount="body"
+  options={[
+    { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+  ]}
+/>
+```
+
+### Drill-In Groups
+
+Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`). ArrowLeft, Escape, or Backspace on an empty panel search, also steps back to the groups.
+
+```jsx
+<PdsCombobox
+  componentId="combobox-drill-in-example"
+  label="Filter"
+  trigger="button"
+  mode="select-only"
+  groupDisplay="drill-in"
+  drillInBackLabel="Back"
+  options={[
+    { id: 'email-status', text: 'Marketing status', group: 'Email', groupIcon: 'mail' },
+    { id: 'email-activity', text: 'Email activity', group: 'Email' },
+    { id: 'contact-added', text: 'Was added', group: 'Contact' },
+  ]}
+/>
+```
+
+### Keyboard and Screen Readers in Grouped Displays
+
+With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each group is an item that expands to its options, one level down. Keyboard focus stays on the trigger, or on the panel's search field, and `aria-activedescendant` follows the highlighted row.
+
+| Key | Action |
+| --- | --- |
+| Up / Down | Move through the current level: the groups, or the open group's options. |
+| Home / End, PageUp / PageDown | Jump within the current level. In the panel's search field and the `input` trigger, Home and End move the cursor instead. |
+| Right, Enter | On a group, open it and move to its first option. On an option, Enter selects it. |
+| Space | With the `button` or `chip` trigger and no panel search, does what Enter does. In a search field, it types a space. |
+| Left | Close the open group and return to its row. With the `input` trigger, Left and Right move the cursor while there's text in it. |
+| Escape | Close the open group first, then the dropdown. |
+| Enter, Space (drill-in) | On the open group's row ("Back: Tag"), return to the groups; Right moves into its options instead. |
+
+In a flyout, Up and Down stay within the open group's options; Left returns to its row. Drilled in, the group's row sits above its options, so Up from the first option reaches it.
+
+The dropdown opens on the selection, with its group open, or on the first group. While searching, the results are a flat list of options, each set under its group's name.
+
+### Searching From the Panel
+
+The `button` and `chip` triggers can't be typed into. Add `panel-search` to put a search field at the top of the dropdown: it takes focus when the dropdown opens, filters the options as you type (matching group labels too in a grouped display), and arrow keys and Enter pick from the results. Pass translated `search-placeholder` and `search-options-label` strings; both default to English. `panel-search` has no effect on the `input` trigger, which already searches. The typed query is also emitted on `pdsComboboxSearch`, as it is for the `input` trigger; it's untrusted user text, so escape it before rendering it and treat it as untrusted when building a request from it.
+
+With `panel-search`, the trigger is a button that opens the dropdown, and the search field is the combobox. Unlike the other triggers, `panel-search` moves keyboard focus into the dropdown. With `dropdown-mount="body"` inside a `<dialog>` (including `pds-modal`) that's fine, because the dropdown mounts in the dialog. Inside a focus trap that isn't a `<dialog>`, such as a custom side panel, check that the trap allows focus into the portaled dropdown, or use `dropdown-mount="host"`.
+
+```jsx
+<PdsCombobox
+  componentId="combobox-panel-search-example"
+  label="Action"
+  trigger="button"
+  mode="select-only"
+  groupDisplay="flyout"
+  panelSearch
+  searchPlaceholder="Search actions"
+  searchOptionsLabel="Search actions"
+  options={actions}
+/>
+```
+
+### Disabled Options
+
+Disable an option to keep it listed but stop it being chosen, such as an action that needs a plan upgrade. Use `<option disabled>`, `<optgroup disabled>` for a whole group, or `disabled: true` on an `options` entry.
+
+- Disabled options are muted, marked `aria-disabled`, and do nothing when clicked or when Enter or Space is pressed on them.
+- The keys and the pointer still reach them, as the WAI-ARIA listbox and tree patterns advise, so screen readers announce them as unavailable instead of hiding them. The dropdown never opens with one highlighted.
+- A group whose options are all disabled (among those shown, while searching) is marked disabled too. It still opens, on hover or click, or with Right, Enter or Space, so people can see what it holds. Screen readers announce its row as unavailable even though it opens.
+- When the combobox is searchable (the `input` trigger, or `panel-search`), search still finds disabled options.
+- A `value` that matches a disabled option still shows as the selection, and, unlike a native `<select>`, is still submitted with the form. Validate the value on the server.
+- The combobox reads `disabled` whenever it renders but doesn't watch it, so toggling it on a slotted option while the dropdown is open shows on the next change. Updating the `options` prop re-renders at once.
+- **Say why an option is disabled**, for example in `helper-message`, which is read with the field. A disabled option can't explain itself.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-disabled-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  group-display="flyout"
+  helper-message="Text messages need the Pro plan.">
+  <optgroup label="Contact" data-icon="contact">
+    <option value="contact_tag_add">Add a tag</option>
+    <option value="contact_tag_remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Communication" data-icon="mail">
+    <option value="email_send">Send an email</option>
+    <option value="sms_send" disabled>Send a text message</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-disabled-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  groupDisplay="flyout"
+  helperMessage="Text messages need the Pro plan."
+  options={[
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
+    { id: 'email_send', text: 'Send an email', group: 'Communication', groupIcon: 'mail' },
+    { id: 'sms_send', text: 'Send a text message', group: 'Communication', disabled: true },
+  ]}
+/>`,
+  }}
+>
+  <div style={{ minHeight: '240px' }}>
+    <pds-combobox
+      component-id="combobox-disabled-example"
+      label="Action"
+      placeholder="Choose an action"
+      trigger="button"
+      mode="select-only"
+      group-display="flyout"
+      helper-message="Text messages need the Pro plan.">
+      <optgroup label="Contact" data-icon="contact">
+        <option value="contact_tag_add">Add a tag</option>
+        <option value="contact_tag_remove">Remove a tag</option>
+      </optgroup>
+      <optgroup label="Communication" data-icon="mail">
+        <option value="email_send">Send an email</option>
+        <option value="sms_send" disabled>Send a text message</option>
+      </optgroup>
+    </pds-combobox>
+  </div>
+</DocCanvas>
+
 ### Using PDS Text Components
 
 Alternatively, use `<pds-text>` components as group labels for more styling control:
@@ -1181,10 +1468,10 @@ When using group labels:
 
 ### ARIA and Accessibility Considerations
 
-Both `<optgroup>` and `<pds-text>` group labels are rendered as presentational items in the dropdown:
+`<optgroup>` and `<pds-text>` group labels are rendered differently in the dropdown:
 
-- **`<optgroup>` elements**: The `label` renders as a visual caption above the group's options. Screen readers don't announce it with each option, so an option's own text has to make sense without its group.
-- **`<pds-text>` elements**: Serve as visual group headers and are likewise presentational.
+- **`<optgroup>` elements**: Each optgroup's options sit in a `role="group"` named by its `label`, which assistive technology announces on entering the group, helping users understand the relationship between options and their categories.
+- **`<pds-text>` elements**: Serve as visual group headers but are purely presentational. They do not provide semantic grouping information to screen readers.
 
 **Recommendation**: Use `<optgroup>` for groups of options, since it groups them in the markup and works with `data-icon`. Use `<pds-text>` for a heading over options that don't belong to an optgroup.
 

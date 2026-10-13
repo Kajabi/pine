@@ -13,6 +13,11 @@ export interface ComboboxOption {
    * one wins, the same as `data-icon` on a slotted `<optgroup>`.
    */
   groupIcon?: string;
+  /**
+   * When `true`, the option stays reachable by the arrow keys and the pointer, so assistive tech
+   * announces it as unavailable, but it cannot be selected.
+   */
+  disabled?: boolean;
   [key: string]: unknown;
 }
 

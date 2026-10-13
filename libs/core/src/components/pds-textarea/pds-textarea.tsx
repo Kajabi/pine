@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
 import { assignDescription, isRequired, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
-import { debounceEvent } from '@utils/utils';
+import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
 import { inheritAttributes, inheritAriaAttributes } from '@utils/attributes';
 import { danger } from '@pine-ds/icons/icons';
@@ -186,6 +186,8 @@ export class PdsTextarea {
     const { pdsInput, debounce, originalPdsInput } = this;
 
     this.pdsInput = debounce === undefined ? originalPdsInput ?? pdsInput : debounceEvent(pdsInput, debounce);
+    // After the swap, so an emit made while flushing goes to the new emitter, not the old one.
+    flushDebouncedEvent(pdsInput);
   }
 
   /**
@@ -315,6 +317,8 @@ export class PdsTextarea {
   }
 
   connectedCallback() {
+    // Keep the raw emitter before the first wrap, so clearing debounce can restore it.
+    this.originalPdsInput ??= this.pdsInput;
     this.debounceChanged();
     // Initialize ElementInternals for form association (only once per element instance)
     if (this.el.attachInternals && !this.internals) {
@@ -323,6 +327,7 @@ export class PdsTextarea {
   }
 
   disconnectedCallback() {
+    cancelDebouncedEvent(this.pdsInput);
     // Clean up ResizeObserver
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
@@ -338,7 +343,6 @@ export class PdsTextarea {
   }
 
   componentDidLoad() {
-    this.originalPdsInput = this.pdsInput;
     // Set initial form value
     this.updateFormValue();
 

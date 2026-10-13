@@ -11,6 +11,9 @@ export default {
     dropdownMount: 'host',
     dropdownWidth: '236px',
     errorMessage: null,
+    flyoutMaxWidth: '380px',
+    flyoutMinWidth: '280px',
+    groupDisplay: 'inline',
     helperMessage: null,
     hideLabel: false,
     invalid: false,
@@ -435,6 +438,177 @@ OptionGroupsFromOptions.args = {
     { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
     { id: 'coupon-send', text: 'Send a coupon', group: 'Coupon', groupIcon: 'coupon' },
   ],
+};
+
+export const GroupDisplayFlyout = (args) => html`
+<div style="min-height: 420px;">
+  <pds-combobox
+    component-id="combobox-group-flyout"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    trigger=${args.trigger}
+    mode=${args.mode}
+    group-display="flyout"
+    trigger-width=${args.triggerWidth}
+    dropdown-width=${args.dropdownWidth}
+    flyout-min-width=${args.flyoutMinWidth}
+    flyout-max-width=${args.flyoutMaxWidth}
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+GroupDisplayFlyout.args = {
+  label: 'Action',
+  placeholder: 'Select an action',
+  trigger: 'input',
+  mode: 'filter',
+  triggerWidth: '408px',
+  dropdownWidth: '408px',
+  flyoutMinWidth: '280px',
+  flyoutMaxWidth: '380px',
+  options: [
+    { id: 'offer-grant', text: 'Grant an offer', group: 'Offer', groupIcon: 'grant-offer' },
+    { id: 'offer-revoke', text: 'Revoke an offer', group: 'Offer' },
+    { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    { id: 'coupon-send', text: 'Send a coupon', group: 'Coupon', groupIcon: 'coupon' },
+  ],
+};
+
+export const GroupDisplayDrillInWithPanelSearch = (args) => html`
+<div style="min-height: 360px;">
+  <pds-combobox
+    component-id="combobox-group-drill-in"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    trigger="button"
+    mode="select-only"
+    group-display="drill-in"
+    panel-search
+    search-placeholder=${args.searchPlaceholder}
+    search-options-label=${args.searchOptionsLabel}
+    drill-in-back-label=${args.drillInBackLabel}
+    trigger-width=${args.triggerWidth}
+    dropdown-width=${args.dropdownWidth}
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+GroupDisplayDrillInWithPanelSearch.args = {
+  label: 'Filter',
+  placeholder: 'Choose a filter',
+  searchPlaceholder: 'Search filters',
+  searchOptionsLabel: 'Search filters',
+  drillInBackLabel: 'Back',
+  triggerWidth: '320px',
+  dropdownWidth: '320px',
+  options: [
+    { id: 'email-status', text: 'Marketing status', group: 'Email', groupIcon: 'mail' },
+    { id: 'email-activity', text: 'Email activity', group: 'Email' },
+    { id: 'email-broadcasts', text: 'Broadcasts', group: 'Email' },
+    { id: 'contact-added', text: 'Was added', group: 'Contact', groupIcon: 'hashtag' },
+    { id: 'contact-hidden', text: 'Is hidden', group: 'Contact' },
+  ],
+};
+
+// A large action catalog: many groups, a button trigger and panel search. The narrower widths
+// leave room for the flyout beside the dropdown on a narrow canvas.
+export const GroupDisplayActionCatalog = (args) => html`
+<div style="min-height: 520px;">
+  <pds-combobox
+    component-id="combobox-action-catalog"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    trigger="button"
+    mode="select-only"
+    group-display=${args.groupDisplay}
+    panel-search
+    search-placeholder=${args.searchPlaceholder}
+    search-options-label=${args.searchOptionsLabel}
+    drill-in-back-label=${args.drillInBackLabel}
+    trigger-width=${args.triggerWidth}
+    dropdown-width=${args.dropdownWidth}
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+GroupDisplayActionCatalog.args = {
+  label: 'Action',
+  placeholder: 'Choose an action',
+  groupDisplay: 'flyout',
+  searchPlaceholder: 'Search actions',
+  searchOptionsLabel: 'Search actions',
+  drillInBackLabel: 'Back',
+  triggerWidth: '280px',
+  dropdownWidth: '280px',
+  options: [
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
+    { id: 'enroll_in_workflow', text: 'Enroll in an automation', group: 'Contact' },
+    { id: 'email_send', text: 'Send an email', group: 'Communication', groupIcon: 'mail' },
+    { id: 'email_sequence_subscribe', text: 'Subscribe to a sequence', group: 'Communication' },
+    { id: 'email_sequence_unsubscribe', text: 'Unsubscribe from a sequence', group: 'Communication' },
+    { id: 'sms_send', text: 'Send a text message', group: 'Communication' },
+    { id: 'offer_send', text: 'Send an offer', group: 'Communication' },
+    { id: 'event_register', text: 'Register for an event', group: 'Communication' },
+    { id: 'event_deregister', text: 'Deregister from an event', group: 'Communication' },
+    { id: 'offer_grant', text: 'Grant an offer', group: 'Membership', groupIcon: 'product' },
+    { id: 'offer_revoke', text: 'Revoke an offer', group: 'Membership' },
+    { id: 'offer_cancel_payment_and_access', text: 'Cancel payment and access', group: 'Membership' },
+    { id: 'coupon_send', text: 'Send a coupon', group: 'Membership' },
+    { id: 'certificate_send', text: 'Send a certificate', group: 'Membership' },
+    { id: 'community_channel_member_add', text: 'Add to a channel', group: 'Communities', groupIcon: 'users' },
+    { id: 'community_channel_member_remove', text: 'Remove from a channel', group: 'Communities' },
+    { id: 'community_post_to_channel', text: 'Post to a channel', group: 'Communities' },
+    { id: 'community_send_dm', text: 'Send a community message', group: 'Communities' },
+    { id: 'coaching_invoice_reminder', text: 'Send an invoice reminder', group: 'Coaching', groupIcon: 'one-off-session' },
+    { id: 'coaching_sessions_cancel', text: 'Cancel sessions', group: 'Coaching' },
+    { id: 'coaching_sessions_remove', text: 'Remove sessions', group: 'Coaching' },
+    { id: 'instagram_direct_message', text: 'Send an Instagram message', group: 'Instagram', groupIcon: 'logo-instagram' },
+    { id: 'instagram_reply', text: 'Reply to an Instagram comment', group: 'Instagram' },
+    { id: 'facebook_direct_message', text: 'Send a Facebook message', group: 'Facebook', groupIcon: 'logo-facebook' },
+    { id: 'facebook_reply', text: 'Reply to a Facebook comment', group: 'Facebook' },
+  ],
+};
+
+GroupDisplayActionCatalog.argTypes = {
+  groupDisplay: { control: 'inline-radio', options: ['inline', 'flyout', 'drill-in'] },
+};
+
+export const DisabledOptions = (args) => html`
+<div style="min-height: 320px;">
+  <pds-combobox
+    component-id="combobox-disabled-options"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    helper-message=${args.helperMessage}
+    trigger="button"
+    mode="select-only"
+    group-display=${args.groupDisplay}
+    trigger-width="280px"
+    dropdown-width="280px"
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+DisabledOptions.args = {
+  label: 'Action',
+  placeholder: 'Choose an action',
+  helperMessage: 'Text messages and coaching actions need the Pro plan.',
+  groupDisplay: 'flyout',
+  options: [
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
+    { id: 'email_send', text: 'Send an email', group: 'Communication', groupIcon: 'mail' },
+    { id: 'sms_send', text: 'Send a text message', group: 'Communication', disabled: true },
+    { id: 'coaching_invoice_reminder', text: 'Send an invoice reminder', group: 'Coaching', groupIcon: 'one-off-session', disabled: true },
+    { id: 'coaching_sessions_cancel', text: 'Cancel sessions', group: 'Coaching', disabled: true },
+  ],
+};
+
+DisabledOptions.argTypes = {
+  groupDisplay: { control: 'inline-radio', options: ['inline', 'flyout', 'drill-in'] },
 };
 
 export const OptionGroupsPdsText = (args) => html`

@@ -44,6 +44,7 @@ export interface ComboboxLoadOptionsEventDetail {
 export interface ComboboxOption {
     // (undocumented)
     [key: string]: unknown;
+    disabled?: boolean;
     group?: string;
     groupIcon?: string;
     // (undocumented)
@@ -292,13 +293,17 @@ export namespace Components {
         "customTriggerContent": boolean;
         "debounce": number;
         "disabled": boolean;
+        "drillInBackLabel": string;
         "dropdownMount": 'host' | 'body';
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         "dropdownWidth": string;
         "errorMessage"?: string;
         "fetchTimeout": number;
+        "flyoutMaxWidth": string;
+        "flyoutMinWidth": string;
         "formatResult"?: (item: unknown) => ComboboxOption;
         "getSelectedValue": () => Promise<string | null>;
+        "groupDisplay": 'inline' | 'flyout' | 'drill-in';
         "helperMessage"?: string;
         "hideLabel": boolean;
         "invalid"?: boolean;
@@ -308,7 +313,10 @@ export namespace Components {
         "mode": 'filter' | 'select-only';
         "name"?: string;
         "options"?: ComboboxOption[];
+        "panelSearch": boolean;
         "placeholder"?: string;
+        "searchOptionsLabel": string;
+        "searchPlaceholder": string;
         "setFocus": () => Promise<void>;
         "trigger": 'input' | 'button' | 'chip';
         "triggerShape": 'pill' | 'input';
@@ -1589,13 +1597,17 @@ export namespace LocalJSX {
         "customTriggerContent"?: boolean;
         "debounce"?: number;
         "disabled"?: boolean;
+        "drillInBackLabel"?: string;
         "dropdownMount"?: 'host' | 'body';
         "dropdownPlacement"?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         "dropdownWidth"?: string;
         "errorMessage"?: string;
         "fetchTimeout"?: number;
+        "flyoutMaxWidth"?: string;
+        "flyoutMinWidth"?: string;
         "form"?: string;
         "formatResult"?: (item: unknown) => ComboboxOption;
+        "groupDisplay"?: 'inline' | 'flyout' | 'drill-in';
         "helperMessage"?: string;
         "hideLabel"?: boolean;
         "invalid"?: boolean;
@@ -1608,7 +1620,10 @@ export namespace LocalJSX {
         "onPdsComboboxLoadOptions"?: (event: PdsComboboxCustomEvent<ComboboxLoadOptionsEventDetail>) => void;
         "onPdsComboboxSearch"?: (event: PdsComboboxCustomEvent<ComboboxSearchEventDetail>) => void;
         "options"?: ComboboxOption[];
+        "panelSearch"?: boolean;
         "placeholder"?: string;
+        "searchOptionsLabel"?: string;
+        "searchPlaceholder"?: string;
         "trigger"?: 'input' | 'button' | 'chip';
         "triggerShape"?: 'pill' | 'input';
         "triggerVariant"?: 'secondary' | 'primary' | 'accent' | 'destructive';
@@ -1641,6 +1656,8 @@ export namespace LocalJSX {
         // (undocumented)
         "disabled": boolean;
         // (undocumented)
+        "drillInBackLabel": string;
+        // (undocumented)
         "dropdownMount": 'host' | 'body';
         // (undocumented)
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
@@ -1650,6 +1667,12 @@ export namespace LocalJSX {
         "errorMessage": string;
         // (undocumented)
         "fetchTimeout": number;
+        // (undocumented)
+        "flyoutMaxWidth": string;
+        // (undocumented)
+        "flyoutMinWidth": string;
+        // (undocumented)
+        "groupDisplay": 'inline' | 'flyout' | 'drill-in';
         // (undocumented)
         "helperMessage": string;
         // (undocumented)
@@ -1667,7 +1690,13 @@ export namespace LocalJSX {
         // (undocumented)
         "name": string;
         // (undocumented)
+        "panelSearch": boolean;
+        // (undocumented)
         "placeholder": string;
+        // (undocumented)
+        "searchOptionsLabel": string;
+        // (undocumented)
+        "searchPlaceholder": string;
         // (undocumented)
         "trigger": 'input' | 'button' | 'chip';
         // (undocumented)
