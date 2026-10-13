@@ -1354,14 +1354,25 @@ export class PdsDatepicker {
           </tbody>
         </table>
 
-        {this.timePicker && this.renderTime(index === 0 ? 'start' : 'end', locale)}
+        {this.timePicker && this.timesUnderMonth(index).map((which) => this.renderTime(which, locale))}
       </div>
     );
   }
 
+  /**
+   * The time pickers under a month: the start time under the first and the end time under the
+   * second, or both under the one month a narrow range shows.
+   */
+  private timesUnderMonth(index: number): ('start' | 'end')[] {
+    if (!this.range) return ['start'];
+    if (this.monthCount === 1) return ['start', 'end'];
+    return [index === 0 ? 'start' : 'end'];
+  }
+
   /** Hour, minute and (on a 12-hour clock) AM/PM pickers for the start or end time. */
   private renderTime(which: 'start' | 'end', locale: string) {
-    const time = which === 'start' ? this.startTime : this.endTime;
+    // The end shows the time Apply saves: on one day, an end before the start ends at the start.
+    const time = which === 'start' ? this.startTime : this.draftParts()?.[1]?.time ?? this.endTime;
     const [hours, minutes] = splitTime(time);
     const clock = clockFor(locale);
     const step = Math.max(1, Math.min(60, Math.floor(this.minuteIncrement) || 1));
@@ -1444,7 +1455,9 @@ export class PdsDatepicker {
     const current = matchPreset(presets, parseIsoDate(this.draftStart), parseIsoDate(this.draftEnd));
     const isCustom = !current && !!this.draftStart;
     // One choice of range: a radio group, with one Tab stop on the checked choice and arrows between.
-    const tabStop = current ?? (isCustom ? 'custom' : presets.find((p) => presetInRange(p, this.minDate, this.maxDate)));
+    // A disabled preset can't take focus, so the stop moves to the first one that can, or Custom range.
+    const canPick = (preset: ResolvedPreset) => presetInRange(preset, this.minDate, this.maxDate);
+    const tabStop = current && canPick(current) ? current : isCustom ? 'custom' : presets.find(canPick) ?? 'custom';
     return (
       <div class="pds-datepicker__presets-column">
         <ul

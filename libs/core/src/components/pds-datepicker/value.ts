@@ -142,26 +142,36 @@ export function parseWith(text: string | null | undefined, format: string, local
   };
 
   const tokens: string[] = [];
-  let pattern = '';
-  let last = 0;
-  format.replace(FORMAT_PARTS, (token: string, literal: string | undefined, offset: number) => {
-    pattern += literalPattern(format.slice(last, offset));
-    if (literal !== undefined) {
-      pattern += literalPattern(literal);
-    } else {
-      pattern += patterns[token];
-      tokens.push(token);
-    }
-    last = offset + token.length;
-    return token;
-  });
-  pattern += literalPattern(format.slice(last));
+  const build = () => {
+    tokens.length = 0;
+    let pattern = '';
+    let last = 0;
+    format.replace(FORMAT_PARTS, (token: string, literal: string | undefined, offset: number) => {
+      pattern += literalPattern(format.slice(last, offset));
+      if (literal !== undefined) {
+        pattern += literalPattern(literal);
+      } else {
+        pattern += patterns[token];
+        tokens.push(token);
+      }
+      last = offset + token.length;
+      return token;
+    });
+    return new RegExp(`^\\s*${pattern}${literalPattern(format.slice(last))}\\s*$`, 'i');
+  };
 
-  const match = new RegExp(`^\\s*${pattern}\\s*$`, 'i').exec(text ?? '');
+  // Two-digit minutes first, so a format with no separator, as `HHmm`, still reads `930` as 9:30;
+  // then one digit, as leading zeros are optional.
+  let match = build().exec(text ?? '');
+  if (!match) {
+    patterns.mm = '(\\d{1,2})';
+    match = build().exec(text ?? '');
+  }
   if (!match) return null;
 
+  const found = match;
   const read: Record<string, string> = {};
-  tokens.forEach((token, i) => (read[token] = match[i + 1]));
+  tokens.forEach((token, i) => (read[token] = found[i + 1]));
 
   const monthIndex = (name: string | undefined, long: boolean) => {
     if (name === undefined) return undefined;
