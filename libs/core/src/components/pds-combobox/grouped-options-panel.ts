@@ -24,11 +24,6 @@ export interface PanelGroup {
 
 export type PanelEntry = { kind: 'group'; group: PanelGroup } | ({ kind: 'option' } & PanelOption);
 
-/**
- * Groups the combobox's filtered items for the panel: each optgroup becomes one entry holding its
- * options, and ungrouped options stay where they are. Indexes count options in list order, the
- * same as the inline listbox, so `data-option-index` means the same thing in every mode.
- */
 /** The optgroup an option sits in, or null for an ungrouped option. */
 export function parentOptgroupOf(option: HTMLOptionElement | null | undefined): HTMLOptGroupElement | null {
   const parent = option?.parentElement;
@@ -48,6 +43,11 @@ export function groupIconOf(optgroup: HTMLOptGroupElement): string | null {
   return icon !== null && PINE_ICON_NAME.test(icon) ? icon : null;
 }
 
+/**
+ * Groups the combobox's filtered items for the panel: each optgroup becomes one entry holding its
+ * options, and ungrouped options stay where they are. Indexes count options in list order, the
+ * same as the inline listbox, so `data-option-index` means the same thing in every mode.
+ */
 export function buildPanelEntries(items: Element[]): PanelEntry[] {
   const entries: PanelEntry[] = [];
   const groups = new Map<HTMLOptGroupElement, PanelGroup>();

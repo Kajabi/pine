@@ -279,7 +279,7 @@ export class PdsCombobox implements BasePdsProps {
   @State() isOpen: boolean = false;
 
   /**
-   * Label of the group whose flyout is open, when `groupDisplay` is `flyout`.
+   * The optgroup whose flyout is open, when `groupDisplay` is `flyout`.
    */
   @State() openGroup: HTMLOptGroupElement | null = null;
 
@@ -407,6 +407,13 @@ export class PdsCombobox implements BasePdsProps {
       this.pendingOptionFocus = false;
       this.updateOptionFocus();
     }
+  }
+
+  /** Switching display mode leaves no flyout or hover timer from the last one. */
+  @Watch('groupDisplay')
+  protected groupDisplayChanged() {
+    this.flyout.reset();
+    this.openGroup = null;
   }
 
   @Watch('isOpen')
@@ -1260,6 +1267,8 @@ export class PdsCombobox implements BasePdsProps {
         break;
       case 'Enter':
         e.preventDefault();
+        // An option in a flyout the pointer has since closed isn't on screen; don't choose it.
+        if (this.showsGroupedPanel && this.activeDescendantId === undefined) break;
         if (this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
           this.handleOptionClick(selectableOptions[this.highlightedIndex]);
           this.restoreFocusToTrigger();
@@ -1267,6 +1276,7 @@ export class PdsCombobox implements BasePdsProps {
         break;
       case ' ':
         e.preventDefault();
+        if (this.showsGroupedPanel && this.activeDescendantId === undefined) break;
         if (this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
           this.handleOptionClick(selectableOptions[this.highlightedIndex]);
           this.restoreFocusToTrigger();
@@ -1382,12 +1392,19 @@ export class PdsCombobox implements BasePdsProps {
     if (!this.listboxEl || this.highlightedIndex < 0) return;
 
     // In the flyout panel only the open group's options are rendered: open the highlighted
-    // option's group, and finish once it has rendered.
+    // option's group, and finish once it has rendered. Through the controller, so a hover timer
+    // left running by the pointer can't close or switch the group the keys just moved into.
     if (this.showsGroupedPanel) {
       const selectable = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
       const group = parentOptgroupOf(selectable[this.highlightedIndex]);
-      if (group !== this.openGroup) {
-        this.openGroup = group;
+      const changed = group !== this.openGroup;
+      if (group !== null) {
+        this.flyout.open(group);
+      } else {
+        this.flyout.reset();
+        this.openGroup = null;
+      }
+      if (changed) {
         this.pendingOptionFocus = true;
         return;
       }
@@ -1403,8 +1420,11 @@ export class PdsCombobox implements BasePdsProps {
       // Check if any option currently has focus OR if we're in arrow-key navigation mode
       const hasOptionFocus = Array.from(optionElements).some(el => el === document.activeElement);
 
+      // Over the flyout panel the trigger keeps focus and points at the option with
+      // aria-activedescendant: an option is still hidden while its flyout is placed, and moving
+      // between groups removes the focused one, which would drop focus and close the dropdown.
       const shouldFocusOption =
-        !this.usesBodyPortal && (hasOptionFocus || this.isArrowKeyNavigationMode);
+        !this.usesBodyPortal && !this.showsGroupedPanel && (hasOptionFocus || this.isArrowKeyNavigationMode);
 
       if (shouldFocusOption) {
         optionElements.forEach(option => {
@@ -1423,9 +1443,6 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Updates aria-activedescendant on the trigger element
-   */
-  /**
    * The id of the highlighted option, only while it's rendered. In the flyout panel an option in a
    * closed group isn't in the DOM, and `aria-activedescendant` must not point at a missing element.
    */
@@ -1439,6 +1456,7 @@ export class PdsCombobox implements BasePdsProps {
     return this.optionDomId(this.highlightedIndex);
   }
 
+  /** Points the focused element's aria-activedescendant at the highlighted option, or clears it. */
   private updateAriaActiveDescendant() {
     if (!this.triggerEl) return;
     const id = this.activeDescendantId;
@@ -1880,7 +1898,7 @@ export class PdsCombobox implements BasePdsProps {
         aria-setsize={setSize}
         aria-posinset={index + 1}
         aria-label={isLayout || isChip ? option.getAttribute('aria-label') || this.getOptionLabel(option) : undefined}
-        tabindex={this.usesBodyPortal ? '-1' : isHighlighted ? '0' : '-1'}
+        tabindex={this.usesBodyPortal || this.showsGroupedPanel ? '-1' : isHighlighted ? '0' : '-1'}
         class={{
           'pds-combobox__option': true,
           'pds-combobox__option--highlighted': isHighlighted,
@@ -1933,6 +1951,7 @@ export class PdsCombobox implements BasePdsProps {
         onMouseEnter={this.onGroupRowMouseEnter}
         onMouseLeave={this.onGroupRowMouseLeave}
       >
+        {/* A pointer shortcut: every option it reveals is reachable with the arrow keys. */}
         <div
           class="pds-combobox__group-row-trigger"
           data-group-index={groupIndex}
