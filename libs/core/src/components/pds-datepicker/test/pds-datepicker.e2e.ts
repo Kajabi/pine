@@ -839,6 +839,21 @@ describe('pds-datepicker', () => {
       expect(await focused(page)).toContain('pds-datepicker__trigger');
     });
 
+    it('keeps a value set from outside while open on Cancel', async () => {
+      const page = await setup(RANGE);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      const datepicker = await page.find('pds-datepicker');
+      datepicker.setProperty('value', '2026-10-01/2026-10-03');
+      await page.waitForChanges();
+      await (await action(page, 1)).click();
+      await page.waitForChanges();
+
+      expect(await datepicker.getProperty('value')).toBe('2026-10-01/2026-10-03');
+      expect(change).not.toHaveReceivedEvent();
+    });
+
     it('undoes a range typed in the field on Cancel', async () => {
       const page = await setup(RANGE);
       const change = await page.spyOnEvent('pdsDatepickerChange');
