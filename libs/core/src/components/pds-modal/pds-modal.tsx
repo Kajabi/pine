@@ -51,13 +51,14 @@ function visitTabbable(el: Element, found: HTMLElement[]) {
   collectTabbable(el.shadowRoot ?? el, found);
 }
 
+/** The element as a radio in a named group, or `null`. */
+const groupedRadio = (el: HTMLElement): HTMLInputElement | null =>
+  el instanceof HTMLInputElement && el.type === 'radio' && el.name !== '' ? el : null;
+
 /**
  * Keeps one radio per named group, as the browser does: the checked one, or the first. The others
  * are reached with the arrow keys, so they can't be the first or last stop of the trap.
  */
-const groupedRadio = (el: HTMLElement): HTMLInputElement | null =>
-  el instanceof HTMLInputElement && el.type === 'radio' && el.name !== '' ? el : null;
-
 function oneRadioPerGroup(elements: HTMLElement[]): HTMLElement[] {
   // Radios group by name and form within one tree, so each shadow root starts its own groups.
   const groups: HTMLInputElement[][] = [];
