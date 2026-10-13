@@ -1648,7 +1648,7 @@ describe('pds-combobox', () => {
       component.handleOptionClick(mockLayoutOption);
       await page.waitForChanges();
 
-             expect(component.selectedOption).toBe(mockLayoutOption);
+             expect(component.selectedOption?.value).toBe(mockLayoutOption.value);
        expect((component as any).selectedOptionLayoutContent).toContain('PayPal');
     });
   });
@@ -2091,7 +2091,7 @@ describe('pds-combobox', () => {
       const component = page.rootInstance;
 
       // Simulate async options arriving after mount
-      component.options = [
+      (page.root as HTMLPdsComboboxElement).options = [
         { id: '1', text: 'Option One' },
         { id: '2', text: 'Option Two' },
         { id: '3', text: 'Option Three' },
@@ -2111,7 +2111,7 @@ describe('pds-combobox', () => {
 
       const component = page.rootInstance;
 
-      component.options = [
+      (page.root as HTMLPdsComboboxElement).options = [
         { id: '1', text: 'Option One' },
         { id: '2', text: 'Option Two' },
       ];
@@ -2123,7 +2123,7 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
 
       // Updating options again should not reset to the original value
-      component.options = [
+      (page.root as HTMLPdsComboboxElement).options = [
         { id: '1', text: 'Option One' },
         { id: '2', text: 'Option Two' },
         { id: '3', text: 'Option Three' },
@@ -2221,7 +2221,7 @@ describe('pds-combobox', () => {
       const page = await newSpecPage({ components: [PdsCombobox], html });
       const component = page.rootInstance;
       if (options) {
-        component.options = options;
+        (page.root as HTMLPdsComboboxElement).options = options;
         await page.waitForChanges();
       }
       component.isOpen = true;
@@ -2469,7 +2469,7 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="actions" group-display="flyout" ${attrs}></pds-combobox>`,
       });
       const component = page.rootInstance;
-      component.options = actions;
+      (page.root as HTMLPdsComboboxElement).options = actions;
       await page.waitForChanges();
       component.isOpen = true;
       component.filterOptions();
@@ -2589,7 +2589,7 @@ describe('pds-combobox', () => {
       component.updateOptionFocus();
       await page.waitForChanges();
 
-      expect(component.openGroup).toBe(groupNamed(component, 'Email'));
+      expect(component.openGroup?.label).toBe('Email');
       expect(root.querySelector('.pds-combobox__flyout [data-option-index="2"]')).not.toBeNull();
     });
 
@@ -2620,7 +2620,7 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="inline-actions"></pds-combobox>`,
       });
       const component = page.rootInstance;
-      component.options = actions;
+      (page.root as HTMLPdsComboboxElement).options = actions;
       await page.waitForChanges();
 
       component.displayText = 'email';
@@ -2752,7 +2752,7 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
 
       expect(component.highlightedIndex).toBe(0);
-      expect(component.openGroup).toBe(tag);
+      expect(component.openGroup?.label).toBe('Tag');
     });
 
     it('resets the open group when the display mode changes', async () => {
@@ -2760,7 +2760,7 @@ describe('pds-combobox', () => {
       component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
 
-      component.groupDisplay = 'inline';
+      (page.root as HTMLPdsComboboxElement).groupDisplay = 'inline';
       await page.waitForChanges();
       expect(component.openGroup).toBeNull();
     });
@@ -2842,15 +2842,13 @@ describe('pds-combobox', () => {
 
       it('jumps within a level with Home, End, PageUp and PageDown', async () => {
         const { page, component } = await openFlyoutPanel('mode="select-only" trigger="button"');
-        const tag = groupNamed(component, 'Tag');
-        const email = groupNamed(component, 'Email');
 
         await press(page, component, 'PageUp');
-        expect(component.highlightedGroup).toBe(email);
+        expect(component.highlightedGroup?.label).toBe('Email');
         await press(page, component, 'PageUp');
-        expect(component.highlightedGroup).toBe(tag);
+        expect(component.highlightedGroup?.label).toBe('Tag');
         await press(page, component, 'PageDown');
-        expect(component.highlightedGroup).toBe(email);
+        expect(component.highlightedGroup?.label).toBe('Email');
 
         await press(page, component, 'Home');
         await press(page, component, 'ArrowRight');
@@ -2867,7 +2865,7 @@ describe('pds-combobox', () => {
 
         root.querySelector('[role="combobox"]')!.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', cancelable: true }));
         await page.waitForChanges();
-        expect(component.openGroup).toBe(groupNamed(component, 'Tag'));
+        expect(component.openGroup?.label).toBe('Tag');
         expect(component.highlightedIndex).toBe(0);
       });
 
@@ -2888,19 +2886,18 @@ describe('pds-combobox', () => {
 
       it('carries on from the row when the highlighted option\'s flyout has closed', async () => {
         const { page, component } = await openFlyoutPanel('mode="select-only" trigger="button"');
-        const tag = groupNamed(component, 'Tag');
         // The pointer was on "Remove a tag", then left, and the flyout closed behind it.
         component.highlightedIndex = 1;
         await page.waitForChanges();
 
         await press(page, component, 'ArrowDown');
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+        expect(component.highlightedGroup?.label).toBe('Email');
 
         component.highlightedIndex = 1;
         await page.waitForChanges();
         await press(page, component, 'Enter');
         expect(component.value).not.toBe('tag-remove');
-        expect(component.openGroup).toBe(tag);
+        expect(component.openGroup?.label).toBe('Tag');
         expect(component.highlightedIndex).toBe(0);
       });
 
@@ -2910,7 +2907,7 @@ describe('pds-combobox', () => {
           html: `<pds-combobox component-id="actions" group-display="flyout" mode="select-only" trigger="button"></pds-combobox>`,
         });
         const component = page.rootInstance;
-        component.options = actions;
+        (page.root as HTMLPdsComboboxElement).options = actions;
         component.value = 'email-send';
         await page.waitForChanges();
         component.selectedOption = component.optionEls.find((o: HTMLOptionElement) => o.value === 'email-send');
@@ -2918,11 +2915,11 @@ describe('pds-combobox', () => {
 
         (page.root!.shadowRoot!.querySelector('[role="combobox"]') as HTMLElement).click();
         await page.waitForChanges();
-        expect(component.openGroup).toBe(groupNamed(component, 'Email'));
+        expect(component.openGroup?.label).toBe('Email');
         expect(component.highlightedIndex).toBe(2);
 
         await press(page, component, 'ArrowLeft');
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+        expect(component.highlightedGroup?.label).toBe('Email');
       });
 
       it('closes a flyout that hover opened with Escape, before the panel', async () => {
@@ -2932,7 +2929,7 @@ describe('pds-combobox', () => {
 
         await press(page, component, 'Escape');
         expect(component.openGroup).toBeNull();
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+        expect(component.highlightedGroup?.label).toBe('Email');
         expect(component.isOpen).toBe(true);
       });
 
@@ -2963,12 +2960,11 @@ describe('pds-combobox', () => {
       it('opens a group at its first option with ArrowRight, stays in it, and closes back to its row with ArrowLeft', async () => {
         const { page, component, root } = await openFlyoutPanel();
         const trigger = root.querySelector('[role="combobox"]')!;
-        const tag = groupNamed(component, 'Tag');
         component.setInitialHighlightedIndex();
         await page.waitForChanges();
 
         await press(page, component, 'ArrowRight');
-        expect(component.openGroup).toBe(tag);
+        expect(component.openGroup?.label).toBe('Tag');
         expect(trigger.getAttribute('aria-activedescendant')).toBe('actions-option-0');
 
         // Down stops at the group's last option rather than running into the next group.
@@ -2984,17 +2980,16 @@ describe('pds-combobox', () => {
 
       it('opens a group with Enter, selects with Enter, and closes the group with Escape before the panel', async () => {
         const { page, component } = await openFlyoutPanel();
-        const tag = groupNamed(component, 'Tag');
         component.setInitialHighlightedIndex();
         await page.waitForChanges();
 
         await press(page, component, 'Enter');
-        expect(component.openGroup).toBe(tag);
+        expect(component.openGroup?.label).toBe('Tag');
         expect(component.isOpen).toBe(true);
 
         await press(page, component, 'Escape');
         expect(component.openGroup).toBeNull();
-        expect(component.highlightedGroup).toBe(tag);
+        expect(component.highlightedGroup?.label).toBe('Tag');
         expect(component.isOpen).toBe(true);
 
         await press(page, component, 'Enter');
@@ -3020,10 +3015,10 @@ describe('pds-combobox', () => {
 
         root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
         await page.waitForChanges();
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+        expect(component.highlightedGroup?.label).toBe('Email');
 
         await press(page, component, 'ArrowUp');
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Tag'));
+        expect(component.highlightedGroup?.label).toBe('Tag');
       });
 
       it('closes a flyout that hover opened when the keys move to another row', async () => {
@@ -3035,7 +3030,7 @@ describe('pds-combobox', () => {
 
         await press(page, component, 'ArrowUp');
         expect(component.openGroup).toBeNull();
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Tag'));
+        expect(component.highlightedGroup?.label).toBe('Tag');
       });
     });
 
@@ -3066,7 +3061,7 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="drill" ${attrs}></pds-combobox>`,
       });
       const component = page.rootInstance;
-      component.options = actions;
+      (page.root as HTMLPdsComboboxElement).options = actions;
       await page.waitForChanges();
       component.isOpen = true;
       component.filterOptions();
@@ -3084,7 +3079,7 @@ describe('pds-combobox', () => {
       (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
       await page.waitForChanges();
 
-      expect(component.openGroup).toBe(groupNamed(component, 'Email'));
+      expect(component.openGroup?.label).toBe('Email');
       expect(root.querySelector('.pds-combobox__group-row')).toBeNull();
       expect(root.querySelector('.pds-combobox__flyout')).toBeNull();
       expect(root.querySelector('.pds-combobox__group-back-trigger')?.textContent).toBe('Back: Email');
@@ -3156,7 +3151,7 @@ describe('pds-combobox', () => {
 
       expect(component.openGroup).toBeNull();
       expect(component.highlightedIndex).toBe(-1);
-      expect(component.highlightedGroup).toBe(groupNamed(component, 'Tag'));
+      expect(component.highlightedGroup?.label).toBe('Tag');
     });
 
     it("draws the open group as its own expanded treeitem, holding its options", async () => {
@@ -3175,7 +3170,6 @@ describe('pds-combobox', () => {
     it('drills in with ArrowRight, reaches the row back with ArrowUp, and returns to the same row', async () => {
       const { page, component, root } = await openDrillIn();
       const trigger = root.querySelector('[role="combobox"]')!;
-      const email = groupNamed(component, 'Email');
       const press = async (key: string) => {
         component.handleKeyDown(new KeyboardEvent('keydown', { key, cancelable: true }));
         await page.waitForChanges();
@@ -3185,7 +3179,7 @@ describe('pds-combobox', () => {
 
       await press('ArrowDown');
       await press('ArrowRight');
-      expect(component.openGroup).toBe(email);
+      expect(component.openGroup?.label).toBe('Email');
       expect(trigger.getAttribute('aria-activedescendant')).toBe('drill-option-2');
 
       await press('ArrowUp');
@@ -3196,7 +3190,7 @@ describe('pds-combobox', () => {
 
       await press('ArrowLeft');
       expect(component.openGroup).toBeNull();
-      expect(component.highlightedGroup).toBe(email);
+      expect(component.highlightedGroup?.label).toBe('Email');
       expect(trigger.getAttribute('aria-activedescendant')).toBe(root.querySelectorAll('.pds-combobox__group-row')[1].id);
     });
 
@@ -3212,7 +3206,7 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
 
       expect(component.openGroup).toBeNull();
-      expect(component.highlightedGroup).toBe(tag);
+      expect(component.highlightedGroup?.label).toBe('Tag');
     });
 
     it('names a panel-search button trigger by its label and its own text, the selection', async () => {
@@ -3222,7 +3216,7 @@ describe('pds-combobox', () => {
       expect(trigger.getAttribute('aria-labelledby')).toBe('drill-label drill');
       expect(trigger.id).toBe('drill');
 
-      component.hideLabel = true;
+      (page.root as HTMLPdsComboboxElement).hideLabel = true;
       component.value = 'email-send';
       await page.waitForChanges();
       expect(trigger.hasAttribute('aria-labelledby')).toBe(false);
@@ -3249,12 +3243,12 @@ describe('pds-combobox', () => {
       component.highlightedGroup = groupNamed(component, 'Email');
       await page.waitForChanges();
 
-      component.options = [...component.options];
+      (page.root as HTMLPdsComboboxElement).options = [...component.options];
       await page.waitForChanges();
       expect(component.openGroup === groupNamed(component, 'Tag')).toBe(true);
       expect(component.highlightedGroup).toBeNull();
 
-      component.options = actions.filter(action => action.group !== 'Tag');
+      (page.root as HTMLPdsComboboxElement).options = actions.filter(action => action.group !== 'Tag');
       await page.waitForChanges();
       expect(component.openGroup).toBeNull();
     });
@@ -3286,12 +3280,12 @@ describe('pds-combobox', () => {
 
       (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
       await page.waitForChanges();
-      expect(component.openGroup).toBe(groupNamed(component, 'Email'));
+      expect(component.openGroup?.label).toBe('Email');
       expect(component.highlightedIndex).toBe(2);
 
       component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
       await page.waitForChanges();
-      expect(component.openGroup).toBe(groupNamed(component, 'Email'));
+      expect(component.openGroup?.label).toBe('Email');
     });
 
     it('steps back to the groups with ArrowLeft', async () => {
@@ -3313,7 +3307,7 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       component.panelQuery = 'ta';
       input().dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
-      expect(component.openGroup).toBe(groupNamed(component, 'Tag'));
+      expect(component.openGroup?.label).toBe('Tag');
 
       component.panelQuery = '';
       input().dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
@@ -3364,7 +3358,7 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="locked" ${attrs}></pds-combobox>`,
       });
       const component = page.rootInstance;
-      component.options = options;
+      (page.root as HTMLPdsComboboxElement).options = options;
       await page.waitForChanges();
       component.isOpen = true;
       component.filterOptions();
@@ -3507,7 +3501,7 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="locked-value" mode="select-only" trigger="button" value="pro"></pds-combobox>`,
       });
       const component = page.rootInstance;
-      component.options = plans;
+      (page.root as HTMLPdsComboboxElement).options = plans;
       await page.waitForChanges();
 
       expect(component.selectedOption?.value).toBe('pro');
@@ -3537,19 +3531,18 @@ describe('pds-combobox', () => {
         { id: 'sms-send', text: 'Send a text message', group: 'Premium', groupIcon: 'mail', disabled: true },
         { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
       ];
-      const groupNamed = (component: { optionEls: HTMLOptionElement[] }, label: string) =>
-        component.optionEls.map(o => o.parentElement as HTMLOptGroupElement).find(g => g?.label === label)!;
 
       it('keeps a group with nothing to choose marked once it is drilled into', async () => {
         const { page, component, root } = await openList(actions, 'mode="select-only" trigger="button" group-display="drill-in"');
-        component.openGroup = groupNamed(component, 'Premium');
+        const group = (label: string) => component.optionEls.map((o: HTMLOptionElement) => o.parentElement).find((g: HTMLElement | null) => (g as HTMLOptGroupElement | null)?.label === label);
+        component.openGroup = group('Premium');
         await page.waitForChanges();
 
         const back = root.querySelector('.pds-combobox__group-back')!;
         expect(back.getAttribute('aria-disabled')).toBe('true');
         expect(back.classList.contains('pds-combobox__group-back--disabled')).toBe(true);
 
-        component.openGroup = groupNamed(component, 'Contact');
+        component.openGroup = group('Contact');
         await page.waitForChanges();
         expect(root.querySelector('.pds-combobox__group-back')!.hasAttribute('aria-disabled')).toBe(false);
       });
@@ -3559,14 +3552,14 @@ describe('pds-combobox', () => {
         const rows = Array.from(root.querySelectorAll('.pds-combobox__group-row'));
         expect(rows.map(row => row.getAttribute('aria-disabled'))).toEqual([null, 'true', null]);
 
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Contact'));
+        expect(component.highlightedGroup?.label).toBe('Contact');
         key(component, 'ArrowDown');
         await page.waitForChanges();
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Premium'));
+        expect(component.highlightedGroup?.label).toBe('Premium');
 
         key(component, 'ArrowRight');
         await page.waitForChanges();
-        expect(component.openGroup).toBe(groupNamed(component, 'Premium'));
+        expect(component.openGroup?.label).toBe('Premium');
         expect(component.highlightedIndex).toBe(3);
         key(component, 'Enter');
         expect(component.value).toBeFalsy();
@@ -3579,7 +3572,7 @@ describe('pds-combobox', () => {
           html: `<pds-combobox component-id="locked" mode="select-only" trigger="button" group-display="flyout" value="sms-send"></pds-combobox>`,
         });
         const component = page.rootInstance;
-        component.options = actions;
+        (page.root as HTMLPdsComboboxElement).options = actions;
         await page.waitForChanges();
         component.isOpen = true;
         component.filterOptions();
@@ -3596,7 +3589,7 @@ describe('pds-combobox', () => {
           [{ id: 'sms-send', text: 'Send a text message', group: 'Premium', disabled: true }, ...actions.slice(4)],
           'mode="select-only" trigger="button" group-display="flyout"',
         );
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+        expect(component.highlightedGroup?.label).toBe('Email');
       });
 
       it('opens a disabled group on hover and highlights its row', async () => {
@@ -3607,8 +3600,8 @@ describe('pds-combobox', () => {
         premium.querySelector('.pds-combobox__group-row-trigger')!.dispatchEvent(new Event('mouseenter'));
         await page.waitForChanges();
 
-        expect(component.openGroup).toBe(groupNamed(component, 'Premium'));
-        expect(component.highlightedGroup).toBe(groupNamed(component, 'Premium'));
+        expect(component.openGroup?.label).toBe('Premium');
+        expect(component.highlightedGroup?.label).toBe('Premium');
         expect(root.querySelector('.pds-combobox__flyout [role="treeitem"]')?.getAttribute('aria-disabled')).toBe('true');
       });
 
@@ -3618,7 +3611,7 @@ describe('pds-combobox', () => {
         key(component, 'ArrowRight');
         await page.waitForChanges();
 
-        expect(component.openGroup).toBe(groupNamed(component, 'Premium'));
+        expect(component.openGroup?.label).toBe('Premium');
         expect(component.highlightedIndex).toBe(3);
       });
     });
@@ -3637,7 +3630,7 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="searchy" label="Action" ${attrs}></pds-combobox>`,
       });
       const component = page.rootInstance;
-      component.options = actions;
+      (page.root as HTMLPdsComboboxElement).options = actions;
       await page.waitForChanges();
       component.isOpen = true;
       component.filterOptions();
@@ -3955,7 +3948,7 @@ describe('pds-combobox', () => {
 
       const portal = dialog?.querySelector('.pds-combobox-dropdown-portal');
       expect(portal).not.toBeNull();
-      expect(portal?.parentElement).toBe(dialog);
+      expect(portal?.parentElement === dialog).toBe(true);
     });
 
     it('appends the portal inside pds-modal native dialog (nested slots / shadow)', async () => {
@@ -3979,7 +3972,7 @@ describe('pds-combobox', () => {
 
       const portal = dialog?.querySelector('.pds-combobox-dropdown-portal');
       expect(portal).not.toBeNull();
-      expect(portal?.parentElement).toBe(dialog);
+      expect(portal?.parentElement === dialog).toBe(true);
     });
 
     it('does not leave duplicate listboxes in the portal on rapid reopen', async () => {
@@ -4081,9 +4074,7 @@ describe('pds-combobox', () => {
       component.displayText = 'a';
       await page.waitForChanges();
 
-      expect(document.querySelector('.pds-combobox-dropdown-portal ul[role="listbox"]')).toBe(
-        listbox,
-      );
+      expect(document.querySelector('.pds-combobox-dropdown-portal ul[role="listbox"]') === listbox).toBe(true);
     });
 
     it('removes the portal when the component disconnects while open', async () => {

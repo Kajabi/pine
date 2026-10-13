@@ -9,6 +9,7 @@ import {
   panelColumn,
   parentOptgroupOf,
   scrollIntoViewWithin,
+  type PanelItem,
 } from '../grouped-options-panel';
 
 const optgroup = (label: string, icon?: string, ...values: string[]) => {
@@ -24,6 +25,10 @@ const optgroup = (label: string, icon?: string, ...values: string[]) => {
   });
   return { group, options };
 };
+
+// Compare group rows by label: a failed match on mock-doc elements can crash the Jest worker while it serializes the failure.
+const rowsOf = (column: PanelItem[]) =>
+  column.map(row => (typeof row === 'number' ? row : `group:${row.label}`));
 
 const option = (value: string) => {
   const el = document.createElement('option');
@@ -46,7 +51,7 @@ describe('buildPanelEntries', () => {
     ]);
     const [, tagEntry, emailEntry] = entries;
     expect(tagEntry.kind === 'group' && tagEntry.group.icon).toBe('hashtag');
-    expect(tagEntry.kind === 'group' && tagEntry.group.optgroup).toBe(tag.group);
+    expect(tagEntry.kind === 'group' && tagEntry.group.optgroup.label).toBe('Tag');
     expect(tagEntry.kind === 'group' && tagEntry.group.options.map(o => o.index)).toEqual([1, 2]);
     expect(emailEntry.kind === 'group' && emailEntry.group.icon).toBeNull();
     expect(emailEntry.kind === 'group' && emailEntry.group.options.map(o => o.index)).toEqual([3]);
@@ -71,18 +76,18 @@ describe('panelColumn', () => {
   const entries = buildPanelEntries([loose, tag.group, ...tag.options, email.group, ...email.options]);
 
   it('is the top level, rows and ungrouped options, unless the keyboard is inside the open group', () => {
-    expect(panelColumn(entries, null, null, false)).toEqual([0, tag.group, email.group]);
-    expect(panelColumn(entries, tag.group, tag.group, false)).toEqual([0, tag.group, email.group]);
-    expect(panelColumn(entries, tag.group, 2, false)).toEqual([1, 2]);
+    expect(rowsOf(panelColumn(entries, null, null, false))).toEqual([0, 'group:Tag', 'group:Email']);
+    expect(rowsOf(panelColumn(entries, tag.group, tag.group, false))).toEqual([0, 'group:Tag', 'group:Email']);
+    expect(rowsOf(panelColumn(entries, tag.group, 2, false))).toEqual([1, 2]);
   });
 
   it('puts the drilled-in group above its options', () => {
-    expect(panelColumn(entries, email.group, null, true)).toEqual([email.group, 3]);
+    expect(rowsOf(panelColumn(entries, email.group, null, true))).toEqual(['group:Email', 3]);
   });
 
   it('falls back to the top level when the open group is not showing', () => {
     const other = optgroup('Other', undefined, 'other');
-    expect(panelColumn(entries, other.group, 0, true)).toEqual([0, tag.group, email.group]);
+    expect(rowsOf(panelColumn(entries, other.group, 0, true))).toEqual([0, 'group:Tag', 'group:Email']);
     expect(findGroup(entries, other.group)).toBeUndefined();
   });
 });
@@ -112,9 +117,9 @@ describe('disabled options', () => {
 
     expect(tagEntry.kind === 'group' && isGroupDisabled(tagEntry.group)).toBe(false);
     expect(couponEntry.kind === 'group' && isGroupDisabled(couponEntry.group)).toBe(true);
-    expect(panelColumn(entries, null, null, false)).toEqual([0, tag.group, coupon.group]);
-    expect(panelColumn(entries, tag.group, 2, false)).toEqual([1, 2]);
-    expect(panelColumn(entries, coupon.group, null, true)).toEqual([coupon.group, 3]);
+    expect(rowsOf(panelColumn(entries, null, null, false))).toEqual([0, 'group:Tag', 'group:Coupon']);
+    expect(rowsOf(panelColumn(entries, tag.group, 2, false))).toEqual([1, 2]);
+    expect(rowsOf(panelColumn(entries, coupon.group, null, true))).toEqual(['group:Coupon', 3]);
   });
 });
 
@@ -131,7 +136,7 @@ describe('parentOptgroupOf / groupIconOf', () => {
   it('finds the optgroup, and treats a missing or empty data-icon as no icon', () => {
     const withIcon = optgroup('Tag', 'hashtag', 'tag-add');
     const empty = optgroup('Email', '', 'email-send');
-    expect(parentOptgroupOf(withIcon.options[0])).toBe(withIcon.group);
+    expect(parentOptgroupOf(withIcon.options[0])?.label).toBe('Tag');
     expect(parentOptgroupOf(option('loose'))).toBeNull();
     expect(groupIconOf(withIcon.group)).toBe('hashtag');
     expect(groupIconOf(empty.group)).toBeNull();
