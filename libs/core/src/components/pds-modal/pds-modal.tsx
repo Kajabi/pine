@@ -59,19 +59,27 @@ const groupedRadio = (el: HTMLElement): HTMLInputElement | null =>
   el instanceof HTMLInputElement && el.type === 'radio' && el.name !== '' ? el : null;
 
 function oneRadioPerGroup(elements: HTMLElement[]): HTMLElement[] {
-  // Radios group by form and name.
-  const groups = new Map<HTMLFormElement | null, Map<string, HTMLInputElement[]>>();
+  // Radios group by name and form within one tree, so each shadow root starts its own groups.
+  const groups: HTMLInputElement[][] = [];
   for (const el of elements) {
     const radio = groupedRadio(el);
     if (radio === null) continue;
-    const byName = groups.get(radio.form) ?? new Map<string, HTMLInputElement[]>();
-    groups.set(radio.form, byName.set(radio.name, [...(byName.get(radio.name) ?? []), radio]));
+    const group = groups.find(
+      ([first]) => first.name === radio.name && first.form === radio.form && first.getRootNode() === radio.getRootNode(),
+    );
+    if (group) group.push(radio);
+    else groups.push([radio]);
   }
-  const stops = new Set<HTMLElement>();
-  for (const byName of groups.values()) {
-    for (const radios of byName.values()) stops.add(radios.find((radio) => radio.checked) ?? radios[0]);
-  }
+  const stops = new Set<HTMLElement>(groups.map((radios) => radios.find((radio) => radio.checked) ?? radios[0]));
   return elements.filter((el) => groupedRadio(el) === null || stops.has(el));
+}
+
+/** Whether `node` is `ancestor` or inside it, crossing shadow roots, which `Node.contains` doesn't. */
+function containsComposed(ancestor: Node, node: Node | null): boolean {
+  for (let current = node; current; current = current instanceof ShadowRoot ? current.host : current.parentNode) {
+    if (current === ancestor) return true;
+  }
+  return false;
 }
 
 /** The focused element, followed down through shadow roots to the control that has focus. */
@@ -513,10 +521,13 @@ export class PdsModal {
       // document listener; one listening on document too would race it.
       if (e.defaultPrevented) return;
 
-      // Every open modal hears this keydown. Only the one holding focus traps it: a parent's list
-      // also holds the controls of a modal opened above it, so it would otherwise wrap first.
+      // Every open modal hears this keydown. When focus is in a modal dialog opened above this one,
+      // that dialog traps Tab: this modal's list also holds its controls, so it would wrap first. A
+      // non-modal dialog inside (a disableTopLayer modal) doesn't trap, so this one still does.
       const activeElement = deepActiveElement();
-      if (!activeElement || closest('dialog[open]', activeElement) !== this.modalRef) return;
+      if (!activeElement) return;
+      const dialog = closest('dialog[open]', activeElement);
+      if (dialog instanceof HTMLElement && dialog !== this.modalRef && dialog.matches(':modal')) return;
 
       // Content can change while the modal is open (rows fetched in, sections shown), so the
       // first and last elements are read now rather than from the list taken on opening.
@@ -530,14 +541,9 @@ export class PdsModal {
       const lastFocusableElement = this.focusableElements[this.focusableElements.length - 1];
 
       // activeElement is the control inside any shadow root, as the list holds, not the host
-      // document.activeElement reports.
-
-      // Check if we need to wrap focus
-      const isFirstElement = activeElement === firstFocusableElement ||
-                            firstFocusableElement.contains(activeElement as Node);
-
-      const isLastElement = activeElement === lastFocusableElement ||
-                           lastFocusableElement.contains(activeElement as Node);
+      // document.activeElement reports; it can also sit inside a listed host.
+      const isFirstElement = containsComposed(firstFocusableElement, activeElement);
+      const isLastElement = containsComposed(lastFocusableElement, activeElement);
 
       // If shift + tab is pressed and focus is on the first element, move to the last element
       if (e.shiftKey && isFirstElement) {
