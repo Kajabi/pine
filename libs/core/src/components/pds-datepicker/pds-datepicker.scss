@@ -142,6 +142,8 @@ pds-input {
 }
 
 .pds-datepicker__day {
+  // Round, so hover and focus match a selected day; days inside a range band are square.
+  border-radius: var(--pine-border-radius-full);
   color: var(--pine-color-text-secondary);
   cursor: pointer;
   font: var(--pine-typography-body);
@@ -222,6 +224,7 @@ pds-input {
 .pds-datepicker__day--in-range,
 .pds-datepicker__day--in-range:hover {
   background: var(--pine-color-background-muted);
+  border-radius: 0;
   color: var(--pine-color-text-secondary);
 }
 
