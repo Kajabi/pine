@@ -14,9 +14,11 @@ export default {
     locale: null,
     max: null,
     min: null,
+    minuteIncrement: 1,
     name: null,
     presets: null,
     range: false,
+    placeholder: null,
     placement: 'bottom-start',
     readonly: false,
     required: false,
@@ -25,6 +27,13 @@ export default {
     value: null,
   },
   argTypes: {
+    placement: {
+      control: 'select',
+      options: ['bottom-start', 'bottom', 'bottom-end', 'top-start', 'top', 'top-end'],
+    },
+    presets: {
+      control: 'text',
+    },
     pdsDatepickerChange: {
       action: 'pdsDatepickerChange',
     },
@@ -54,6 +63,7 @@ const BaseTemplate = (args) => html`<pds-datepicker
   min=${ifDefined(args.min ?? undefined)}
   minute-increment=${ifDefined(args.minuteIncrement ?? undefined)}
   name=${ifDefined(args.name ?? undefined)}
+  placeholder=${ifDefined(args.placeholder ?? undefined)}
   placement=${ifDefined(args.placement ?? undefined)}
   presets=${ifDefined(args.presets ?? undefined)}
   ?range=${args.range}
