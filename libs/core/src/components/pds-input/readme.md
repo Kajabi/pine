@@ -83,6 +83,10 @@ Type: `Promise<void>`
 
 ## Dependencies
 
+### Used by
+
+ - [pds-datepicker](../pds-datepicker)
+
 ### Depends on
 
 - pds-icon
@@ -91,6 +95,7 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   pds-input --> pds-icon
+  pds-datepicker --> pds-input
   style pds-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
