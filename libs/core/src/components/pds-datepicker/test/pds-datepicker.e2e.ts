@@ -1081,6 +1081,54 @@ describe('pds-datepicker', () => {
       expect(blur).toHaveReceivedEventTimes(1);
     });
 
+    it('reports blur when a press outside closes the calendar and focuses another control', async () => {
+      const page = await setup(`${FIELD}<button id="after">After</button>`);
+      const blur = await page.spyOnEvent('pdsBlur');
+      await openWithTrigger(page);
+
+      await page.click('#after');
+      await page.waitForChanges();
+
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).toBeNull();
+      expect(blur).toHaveReceivedEventTimes(1);
+    });
+
+    it('lets Tab leave the button while the open calendar is hidden', async () => {
+      const page = await setup(`${FIELD}<button id="after">After</button><div style="height:3000px"></div>`);
+      await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+      const visibility = (value: string) =>
+        page.waitForFunction(
+          (selector, expected) =>
+            (document.querySelector(selector)?.shadowRoot?.querySelector('[role="dialog"]') as HTMLElement | null)?.style
+              .visibility === expected,
+          {},
+          PORTAL,
+          value,
+        );
+      await visibility('visible');
+
+      // The field scrolls out of view, which hides the calendar beside it.
+      await page.evaluate(() => {
+        document.querySelector('pds-datepicker')?.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__trigger')?.focus({ preventScroll: true });
+        window.scrollTo(0, 2000);
+      });
+      await visibility('hidden');
+
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('after');
+    });
+
+    it('updates the portal\'s language when the locale changes while open', async () => {
+      const page = await setup();
+      await openWithTrigger(page);
+
+      const datepicker = await page.find('pds-datepicker');
+      datepicker.setProperty('locale', 'fr');
+      await page.waitForChanges();
+
+      expect(await page.evaluate((selector) => (document.querySelector(selector) as HTMLElement).lang, PORTAL)).toBe('fr');
+    });
+
     it('removes the portal on close and when the datepicker is removed', async () => {
       const page = await setup();
       await openWithTrigger(page);
