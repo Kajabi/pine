@@ -839,6 +839,45 @@ describe('pds-datepicker', () => {
       expect(await focused(page)).toContain('pds-datepicker__trigger');
     });
 
+    it('undoes a range typed in the field on Cancel', async () => {
+      const page = await setup(RANGE);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      const before = await fieldValue(page);
+      await page.click('pds-datepicker >>> input');
+      await page.waitForChanges();
+
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        if (input) input.select();
+      });
+      await page.keyboard.type('2026-10-01 – 2026-10-03');
+      await (await action(page, 1)).click();
+      await page.waitForChanges();
+
+      expect(await fieldValue(page)).toBe(before);
+      expect(change).toHaveReceivedEventTimes(2);
+      // The typed range is committed on blur, as focus moves to Cancel, then undone.
+      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-01/2026-10-03', '2026-09-13/2026-10-13']);
+    });
+
+    it('discards typed text on Escape, so blur commits nothing', async () => {
+      const page = await setup(RANGE);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      const before = await fieldValue(page);
+      await page.click('pds-datepicker >>> input');
+      await page.waitForChanges();
+
+      await page.keyboard.type('x');
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await fieldValue(page)).toBe(before);
+
+      await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
+      await page.waitForChanges();
+      expect(change).not.toHaveReceivedEvent();
+      expect(await fieldValue(page)).toBe(before);
+    });
+
     it('empties the field with Clear', async () => {
       const page = await setup(RANGE.replace('range', 'range clearable'));
       const change = await page.spyOnEvent('pdsDatepickerChange');
