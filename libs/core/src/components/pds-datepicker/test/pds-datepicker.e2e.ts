@@ -1390,6 +1390,27 @@ describe('pds-datepicker', () => {
       expect(await focused(page)).toContain('pds-datepicker__trigger');
     });
 
+    it('lets arrow keys move through the presets without applying, and Enter apply', async () => {
+      const page = await setup(AUTO.replace('auto-apply', 'auto-apply presets="today,yesterday,last-7-days"'));
+      await page.setViewport({ width: 1280, height: 800 });
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await page.evaluate((selector) => {
+        const preset = document.querySelector(selector)?.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__preset');
+        preset?.focus();
+      }, PORTAL);
+      await press(page, 'ArrowDown');
+      await press(page, 'ArrowDown');
+      expect(change).not.toHaveReceivedEvent();
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).not.toBeNull();
+
+      await press(page, 'Enter');
+      expect(change).toHaveReceivedEventTimes(1);
+      expect(change.firstEvent.detail.preset).toBe('last-7-days');
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).toBeNull();
+    });
+
     it('applies a preset as soon as it is picked', async () => {
       const page = await setup(AUTO.replace('auto-apply', 'auto-apply presets="today"'));
       await page.setViewport({ width: 1280, height: 800 });
