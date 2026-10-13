@@ -507,6 +507,99 @@ describe('pds-modal', () => {
       expect(await activeId(page)).toBe('child-last');
     });
 
+    const deepActiveId = (page) =>
+      page.evaluate(() => {
+        let active = document.activeElement;
+        while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+        return active?.id;
+      });
+
+    const defineShadow = (page, tag: string, html: string) =>
+      page.evaluate(
+        (name, markup) => {
+          customElements.define(
+            name,
+            class extends HTMLElement {
+              constructor() {
+                super();
+                this.attachShadow({ mode: 'open' }).innerHTML = markup;
+              }
+            },
+          );
+        },
+        tag,
+        html,
+      );
+
+    it('wraps from a focused node inside a listed host', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <button id="first">First</button>
+          <x-box tabindex="0" aria-label="Box"></x-box>
+        </pds-modal>
+      `);
+      await defineShadow(page, 'x-box', '<div id="inner" tabindex="-1">Inner</div>');
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => (document.querySelector('x-box').shadowRoot.getElementById('inner') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await deepActiveId(page)).toBe('first');
+    });
+
+    it('keeps same-named radios in separate shadow roots as separate groups', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <button id="first">First</button>
+          <x-radios id="one"></x-radios>
+          <x-radios id="two"></x-radios>
+        </pds-modal>
+      `);
+      await defineShadow(
+        page,
+        'x-radios',
+        '<input type="radio" name="choice" aria-label="A" checked><input type="radio" name="choice" aria-label="B">',
+      );
+      await page.evaluate(() => {
+        document.getElementById('one').shadowRoot.querySelector('input').id = 'one-a';
+        document.getElementById('two').shadowRoot.querySelector('input').id = 'two-a';
+      });
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => (document.getElementById('two').shadowRoot.getElementById('two-a') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await deepActiveId(page)).toBe('first');
+
+      await shiftTab(page);
+      expect(await deepActiveId(page)).toBe('two-a');
+    });
+
+    it('still traps Tab when focus is in a non-modal dialog inside it', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="outer">
+          <button id="outer-first">Outer first</button>
+          <pds-modal component-id="inner" disable-top-layer="true">
+            <button id="inner-last">Inner last</button>
+          </pds-modal>
+        </pds-modal>
+      `);
+      const [outer, inner] = await page.findAll('pds-modal');
+      await outer.callMethod('showModal');
+      await settle();
+      await inner.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => (document.getElementById('inner-last') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('outer-first');
+    });
+
     it('leaves Tab to a control inside that already moved focus', async () => {
       const page = await newE2EPage();
       await page.setContent(`
