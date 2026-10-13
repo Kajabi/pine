@@ -134,10 +134,12 @@ export class PdsDatepicker {
   @Prop() firstDayOfWeek?: number;
 
   /**
-   * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MM` or `M` (month), `DD` or
-   * `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A`
-   * (AM/PM), as `MM/DD/YYYY` or `D.M.YYYY h:mm A`. The value and the change event stay ISO
-   * (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+   * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name,
+   * in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H`
+   * (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`,
+   * `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value
+   * and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always
+   * accepted too.
    */
   @Prop() format = 'YYYY-MM-DD';
 
@@ -475,7 +477,9 @@ export class PdsDatepicker {
   private fieldText(): string {
     const parsed = this.parsedValue();
     if (!parsed) return this.value && !this.range && !parseDateTime(this.value) ? this.value : '';
-    return parsed.map((part) => toFieldText(this.withTimePicker(part), this.resolvedFormat)).join(RANGE_SEPARATOR);
+    return parsed
+      .map((part) => toFieldText(this.withTimePicker(part), this.resolvedFormat, this.resolvedLocale))
+      .join(RANGE_SEPARATOR);
   }
 
   /** Drops a time the time picker doesn't show, or adds the default one it does. */
@@ -760,7 +764,8 @@ export class PdsDatepicker {
   /** The typed text as a date or range that can be picked, or `null`. */
   private parseText(text: string): DateTimeValue[] | null {
     const format = this.resolvedFormat;
-    const parts = this.range ? parseRangeText(text, format) : [parseFieldText(text, format)];
+    const locale = this.resolvedLocale;
+    const parts = this.range ? parseRangeText(text, format, locale) : [parseFieldText(text, format, locale)];
     if (!parts || parts.some((part) => !part)) return null;
     if (parts.some((part) => isOutOfRange(part.date, this.minDate, this.maxDate))) return null;
     return parts.map((part, i) => this.withTimePicker(part, i === 1 ? DEFAULT_END_TIME : DEFAULT_START_TIME));
@@ -1303,8 +1308,8 @@ export class PdsDatepicker {
     const parts = this.draftParts();
     const selection = parts
       ? this.range && !this.draftEnd
-        ? `${toFieldText(parts[0], this.resolvedFormat)}${RANGE_SEPARATOR}`
-        : parts.map((part) => toFieldText(part, this.resolvedFormat)).join(RANGE_SEPARATOR)
+        ? `${toFieldText(parts[0], this.resolvedFormat, this.resolvedLocale)}${RANGE_SEPARATOR}`
+        : parts.map((part) => toFieldText(part, this.resolvedFormat, this.resolvedLocale)).join(RANGE_SEPARATOR)
       : '';
 
     return (

@@ -1232,7 +1232,7 @@ export namespace Components {
          */
         "firstDayOfWeek"?: number;
         /**
-          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM), as `MM/DD/YYYY` or `D.M.YYYY h:mm A`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
           * @default 'YYYY-MM-DD'
          */
         "format": string;
@@ -4938,7 +4938,7 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM), as `MM/DD/YYYY` or `D.M.YYYY h:mm A`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
           * @default 'YYYY-MM-DD'
          */
         "format"?: string;
