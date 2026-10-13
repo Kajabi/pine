@@ -8,7 +8,7 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 // sense light dismiss cares about: it belongs to an overlay something inside
 // the drawer opened, even though it is not a DOM descendant of the drawer.
 const PORTALED_OVERLAY_SELECTOR =
-  '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal, .pds-datepicker-calendar-portal';
+  '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal';
 
 /**
  * A non-modal side panel composed from `pds-modal`.
@@ -155,6 +155,9 @@ export class PdsDrawer {
     if (!target) return;
     if (this.el.contains(target)) return;
     if (target.closest(PORTALED_OVERLAY_SELECTOR)) return;
+    // A datepicker's portaled calendar counts as inside only when its datepicker is in the drawer.
+    const calendar = target.closest('.pds-datepicker-calendar-portal') as (Element & { pdsDatepicker?: Element }) | null;
+    if (calendar?.pdsDatepicker && this.el.contains(calendar.pdsDatepicker)) return;
     // A sibling pds-modal — e.g. a confirm dialog opened from inside the
     // drawer but mounted at the document root rather than nested in our own
     // content — is neither a descendant of the drawer nor on the portaled
