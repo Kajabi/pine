@@ -253,6 +253,13 @@ pds-input {
   background: transparent;
   color: var(--pine-color-text-disabled);
   cursor: not-allowed;
+  // Not by color alone.
+  text-decoration: line-through;
+}
+
+// Hovering inside the band still shows which day the pointer is on.
+.pds-datepicker__day--in-range:hover {
+  background: var(--pine-color-background-inset);
 }
 
 // Range mode: presets beside two months, with Cancel and Apply below, as the admin date picker.
@@ -550,6 +557,35 @@ pds-input {
 .pds-datepicker__preset,
 .pds-datepicker__action {
   user-select: none;
+}
+
+// Windows High Contrast and other forced colors drop backgrounds, which carry the selection here:
+// draw it with system colors instead.
+@media (forced-colors: active) {
+  .pds-datepicker__day--selected,
+  .pds-datepicker__day--selected:hover {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  .pds-datepicker__day--in-range,
+  .pds-datepicker__day--in-range:hover {
+    border-block: var(--pine-border-width-thin) solid Highlight;
+  }
+
+  .pds-datepicker__day--today::after {
+    background: CanvasText;
+    forced-color-adjust: none;
+  }
+
+  .pds-datepicker__day--selected.pds-datepicker__day--today::after {
+    background: HighlightText;
+  }
+
+  .pds-datepicker__day--disabled {
+    color: GrayText;
+  }
 }
 
 .visually-hidden {
