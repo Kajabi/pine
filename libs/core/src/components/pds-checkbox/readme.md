@@ -31,6 +31,13 @@
 | `pdsCheckboxInput`  |                                                        | `CustomEvent<CheckboxChangeEventDetail<any>>` |
 
 
+## Slots
+
+| Slot      | Description                                                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------- |
+| `"label"` | Content displayed as the checkbox label in place of the `label` text. Clicking it toggles the checkbox. |
+
+
 ## Dependencies
 
 ### Used by
