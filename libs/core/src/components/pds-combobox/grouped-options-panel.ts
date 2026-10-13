@@ -146,6 +146,8 @@ export class FlyoutController<T> {
   private closeTimer?: ReturnType<typeof setTimeout>;
   private stopAutoUpdate?: () => void;
   private positionedFlyout?: HTMLElement;
+  /** An option to scroll into view once the flyout is placed and its height capped. */
+  private pendingReveal?: HTMLElement;
 
   constructor(
     private readonly getOpenGroup: () => T | null,
@@ -248,6 +250,9 @@ export class FlyoutController<T> {
           top: `${y}px`,
           visibility: middlewareData.hide?.referenceHidden === true ? 'hidden' : 'visible',
         });
+        const reveal = this.pendingReveal;
+        this.pendingReveal = undefined;
+        if (reveal !== undefined && flyout.contains(reveal)) scrollIntoViewWithin(flyout, reveal);
       });
 
     this.stopAutoUpdate = autoUpdate(reference, flyout, () => {
@@ -255,10 +260,20 @@ export class FlyoutController<T> {
     });
   }
 
+  /**
+   * Scrolls `option` into view inside its flyout. Before the flyout's first placement its height
+   * isn't capped yet, so the option looks visible; it's revealed again once the placement lands.
+   */
+  reveal(flyout: HTMLElement, option: HTMLElement) {
+    scrollIntoViewWithin(flyout, option);
+    if (flyout.style.maxHeight === '') this.pendingReveal = option;
+  }
+
   stopPositioning() {
     this.stopAutoUpdate?.();
     this.stopAutoUpdate = undefined;
     this.positionedFlyout = undefined;
+    this.pendingReveal = undefined;
   }
 
   /** The panel closed or the component left the page. */

@@ -118,6 +118,40 @@ describe('scrollIntoViewWithin', () => {
   });
 });
 
+describe('FlyoutController.reveal', () => {
+  const box = (top: number, bottom: number) => {
+    const el = document.createElement('div');
+    el.getBoundingClientRect = () => ({ top, bottom }) as DOMRect;
+    return el;
+  };
+
+  it('scrolls now, and again after the first placement caps the flyout\'s height', () => {
+    const controller = new FlyoutController<string>(() => null, () => undefined);
+    const flyout = box(100, 200);
+    flyout.scrollTop = 0;
+    const option = box(180, 230);
+    flyout.appendChild(option);
+
+    controller.reveal(flyout, option);
+    expect(flyout.scrollTop).toBe(30);
+    expect((controller as unknown as { pendingReveal?: HTMLElement }).pendingReveal === option).toBe(true);
+
+    controller.stopPositioning();
+    expect((controller as unknown as { pendingReveal?: HTMLElement }).pendingReveal).toBeUndefined();
+  });
+
+  it('does not wait for a placement once the flyout is already capped', () => {
+    const controller = new FlyoutController<string>(() => null, () => undefined);
+    const flyout = box(100, 200);
+    flyout.style.maxHeight = '100px';
+    const option = box(120, 160);
+    flyout.appendChild(option);
+
+    controller.reveal(flyout, option);
+    expect((controller as unknown as { pendingReveal?: HTMLElement }).pendingReveal).toBeUndefined();
+  });
+});
+
 describe('FlyoutController', () => {
   let open: string | null;
   let controller: FlyoutController<string>;

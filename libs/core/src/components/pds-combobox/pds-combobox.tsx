@@ -5,7 +5,7 @@ import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import DOMPurify from 'dompurify';
-import { FlyoutController, buildPanelEntries, findGroup, groupIconOf, groupLabelOf, panelColumn, parentOptgroupOf, scrollIntoViewWithin } from './grouped-options-panel';
+import { FlyoutController, buildPanelEntries, findGroup, groupIconOf, groupLabelOf, panelColumn, parentOptgroupOf } from './grouped-options-panel';
 import type { PanelGroup, PanelItem } from './grouped-options-panel';
 import type {
   ComboboxOption,
@@ -1729,7 +1729,7 @@ export class PdsCombobox implements BasePdsProps {
       // Always scroll the option into view; in a flyout, by scrolling the flyout alone.
       const flyout = currentOption.closest('.pds-combobox__flyout') as HTMLElement | null;
       if (flyout) {
-        scrollIntoViewWithin(flyout, currentOption);
+        this.flyout.reveal(flyout, currentOption);
       } else {
         currentOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
