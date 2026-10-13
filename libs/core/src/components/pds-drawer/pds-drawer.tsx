@@ -2,11 +2,13 @@ import { Component, Element, Event, EventEmitter, Host, Listen, Prop, h } from '
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 // Known selectors for content Pine components portal to document.body rather
-// than rendering in place — pds-popover, pds-tooltip, pds-combobox's dropdown.
+// than rendering in place — pds-popover, pds-tooltip, pds-combobox's dropdown,
+// pds-datepicker's calendar.
 // A pointerdown landing on one of these is not "outside" the drawer in the
 // sense light dismiss cares about: it belongs to an overlay something inside
 // the drawer opened, even though it is not a DOM descendant of the drawer.
-const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal';
+const PORTALED_OVERLAY_SELECTOR =
+  '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal, .pds-datepicker-calendar-portal';
 
 /**
  * A non-modal side panel composed from `pds-modal`.
