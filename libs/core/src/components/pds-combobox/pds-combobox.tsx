@@ -12,15 +12,15 @@ import type {
   AsyncResponse,
 } from './combobox-interface';
 
+/** A Pine icon name: letters, digits and hyphens, such as `hashtag`. Never a URL or file path. */
+const PINE_ICON_NAME = /^[a-z0-9-]+$/i;
+
 /**
  * @slot option - Option elements for the combobox dropdown
  * @slot trigger-content - Custom content for the button trigger when customTriggerContent is true
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
  */
-/** A Pine icon name: letters, digits and hyphens, such as `hashtag`. Never a URL or file path. */
-const PINE_ICON_NAME = /^[a-z0-9-]+$/i;
-
 @Component({
   tag: 'pds-combobox',
   styleUrl: 'pds-combobox.scss',
