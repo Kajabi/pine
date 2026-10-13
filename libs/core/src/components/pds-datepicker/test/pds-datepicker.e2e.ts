@@ -440,6 +440,40 @@ describe('pds-datepicker', () => {
   });
 
   describe('review fixes', () => {
+    it('doesn\'t report blur for a click on a part of the open calendar that can\'t take focus', async () => {
+      const page = await setup();
+      const blur = await page.spyOnEvent('pdsBlur');
+      await openWithTrigger(page);
+
+      await (await page.find('pds-datepicker >>> .pds-datepicker__heading')).click();
+      await page.waitForChanges();
+
+      expect(blur).not.toHaveReceivedEvent();
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).not.toBeNull();
+    });
+
+    it('keeps a time picked in the calendar when the date is then typed', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="when" time-picker locale="fr" value="2026-10-13T09:00"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+      await page.waitForChanges();
+
+      await chooseTime(page, 0, '14');
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        input?.focus();
+        input?.select();
+      });
+      await page.keyboard.type('2026-10-14 09:00');
+      await page.waitForChanges();
+      await (await page.find('pds-datepicker >>> .pds-datepicker__action:nth-of-type(2)')).click();
+      await page.waitForChanges();
+
+      expect(change.events[change.events.length - 1].detail.value).toBe('2026-10-14T14:00');
+    });
+
     it('reports blur when a click on a blank part of the page takes focus from the field', async () => {
       const page = await setup(`${FIELD}<div id="blank" style="height:200px"></div>`);
       const focus = await page.spyOnEvent('pdsFocus');
@@ -911,7 +945,33 @@ describe('pds-datepicker', () => {
       await press(page, 'Escape');
 
       expect(await fieldValue(page)).toBe(before);
-      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-01/2026-10-03', '2026-09-13/2026-10-13']);
+      expect(change).not.toHaveReceivedEvent();
+    });
+
+    it('applies a range typed in the field with Apply, and commits it when tabbing out instead', async () => {
+      const typeRange = async (page: E2EPage) => {
+        await page.click('pds-datepicker >>> input');
+        await page.waitForChanges();
+        await page.evaluate(() => {
+          const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+          if (input) input.select();
+        });
+        await page.keyboard.type('2026-10-01 – 2026-10-03');
+        await page.waitForChanges();
+      };
+
+      const applied = await setup(RANGE);
+      const appliedChange = await applied.spyOnEvent('pdsDatepickerChange');
+      await typeRange(applied);
+      await (await action(applied, 2)).click();
+      await applied.waitForChanges();
+      expect(appliedChange.events.map((event) => event.detail.value)).toEqual(['2026-10-01/2026-10-03']);
+
+      const tabbed = await setup(`<button id="before">Before</button>${RANGE}`);
+      const tabbedChange = await tabbed.spyOnEvent('pdsDatepickerChange');
+      await typeRange(tabbed);
+      await press(tabbed, 'Tab', 'Shift');
+      expect(tabbedChange.events.map((event) => event.detail.value)).toEqual(['2026-10-01/2026-10-03']);
     });
 
     it('undoes a range typed in the field on Cancel', async () => {
@@ -930,9 +990,8 @@ describe('pds-datepicker', () => {
       await page.waitForChanges();
 
       expect(await fieldValue(page)).toBe(before);
-      expect(change).toHaveReceivedEventTimes(2);
-      // The typed range is committed on blur, as focus moves to Cancel, then undone.
-      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-01/2026-10-03', '2026-09-13/2026-10-13']);
+      // Moving into the calendar left the typed range pending, so nothing is committed or emitted.
+      expect(change).not.toHaveReceivedEvent();
     });
 
     it('discards typed text on Escape, so blur commits nothing', async () => {
