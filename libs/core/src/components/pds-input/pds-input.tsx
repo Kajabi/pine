@@ -3,7 +3,7 @@ import { assignDescription, isSpecTest, messageId } from '../../utils/form';
 import { inheritAriaAttributes } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 import { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
-import { debounceEvent } from '@utils/utils';
+import { cancelDebouncedEvent, debounceEvent } from '@utils/utils';
 import { danger } from '@pine-ds/icons/icons';
 
 /**
@@ -343,6 +343,7 @@ export class PdsInput {
   }
 
   disconnectedCallback() {
+    cancelDebouncedEvent(this.pdsInput);
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
   }
@@ -358,6 +359,7 @@ export class PdsInput {
 
   @Watch('debounce')
   protected debounceChanged() {
+    cancelDebouncedEvent(this.pdsInput);
     const { pdsInput, debounce, originalPdsInput } = this;
 
     /**

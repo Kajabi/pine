@@ -2173,4 +2173,37 @@ describe('pds-multiselect', () => {
     expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Required');
   });
 
+  it('drops a pending pdsMultiselectSearch event when the debounce changes or it is removed from the DOM', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+    });
+    page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+    page.rootInstance.isOpen = true;
+    await page.waitForChanges();
+    const emitted = jest.fn();
+    page.root!.addEventListener('pdsMultiselectSearch', emitted);
+    const field = page.root!.shadowRoot!.querySelector('.pds-multiselect__search-input') as HTMLInputElement;
+    const type = (text: string) => {
+      field.value = text;
+      field.dispatchEvent(new Event('input'));
+    };
+
+    jest.useFakeTimers();
+    try {
+      type('a');
+      (page.root as HTMLPdsMultiselectElement).debounce = 100;
+      (page.root as HTMLPdsMultiselectElement).debounce = 50;
+      type('ab');
+      jest.advanceTimersByTime(50);
+      expect(emitted).toHaveBeenCalledTimes(1);
+
+      type('abc');
+      page.root!.remove();
+      jest.advanceTimersByTime(1000);
+      expect(emitted).toHaveBeenCalledTimes(1);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
 });

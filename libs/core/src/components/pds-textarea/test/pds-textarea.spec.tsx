@@ -1074,4 +1074,35 @@ it('should set focus on the input element when setFocus is called', async() => {
       expect(counterLabelOf(page)).toBe('0 de 150 caracteres');
     });
   });
+
+  it('drops a pending pdsInput event when the debounce changes or it is removed from the DOM', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea component-id="field" debounce="300"></pds-textarea>`,
+    });
+    const emitted = jest.fn();
+    page.root!.addEventListener('pdsInput', emitted);
+    const field = page.root!.shadowRoot!.querySelector('textarea') as HTMLTextAreaElement;
+    const type = (text: string) => {
+      field.value = text;
+      field.dispatchEvent(new Event('input'));
+    };
+
+    jest.useFakeTimers();
+    try {
+      type('a');
+      (page.root as HTMLPdsTextareaElement).debounce = 100;
+      (page.root as HTMLPdsTextareaElement).debounce = 50;
+      type('ab');
+      jest.advanceTimersByTime(50);
+      expect(emitted).toHaveBeenCalledTimes(1);
+
+      type('abc');
+      page.root!.remove();
+      jest.advanceTimersByTime(1000);
+      expect(emitted).toHaveBeenCalledTimes(1);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
 });

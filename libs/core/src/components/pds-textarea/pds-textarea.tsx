@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
 import { assignDescription, isRequired, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
-import { debounceEvent } from '@utils/utils';
+import { cancelDebouncedEvent, debounceEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
 import { inheritAttributes, inheritAriaAttributes } from '@utils/attributes';
 import { danger } from '@pine-ds/icons/icons';
@@ -183,6 +183,7 @@ export class PdsTextarea {
 
   @Watch('debounce')
   protected debounceChanged() {
+    cancelDebouncedEvent(this.pdsInput);
     const { pdsInput, debounce, originalPdsInput } = this;
 
     this.pdsInput = debounce === undefined ? originalPdsInput ?? pdsInput : debounceEvent(pdsInput, debounce);
@@ -323,6 +324,7 @@ export class PdsTextarea {
   }
 
   disconnectedCallback() {
+    cancelDebouncedEvent(this.pdsInput);
     // Clean up ResizeObserver
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
