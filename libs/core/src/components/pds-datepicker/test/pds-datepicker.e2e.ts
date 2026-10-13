@@ -927,6 +927,66 @@ describe('pds-datepicker', () => {
       expect(await fieldValue(page)).toBe('2026-10-13 08:00 – 2026-10-14 18:00');
     });
 
+    it('shows both times under the one month a narrow window shows', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="when" range time-picker locale="fr" value="2026-10-13T09:00/2026-10-14T17:00"></pds-datepicker>`,
+      );
+      await page.setViewport({ width: 420, height: 800 });
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      expect(await page.findAll('pds-datepicker >>> .pds-datepicker__month')).toHaveLength(1);
+      expect(await page.findAll('pds-datepicker >>> .pds-datepicker__time')).toHaveLength(2);
+
+      await chooseTime(page, 2, '18');
+      await (await action(page, 2)).click();
+      await page.waitForChanges();
+      expect(change.firstEvent.detail.end).toBe('2026-10-14T18:00');
+    });
+
+    it('shows the end time Apply saves when it would come before the start on one day', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="when" range time-picker locale="fr" value="2026-10-13T09:00/2026-10-13T17:00"></pds-datepicker>`,
+      );
+      await page.setViewport({ width: 1280, height: 800 });
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await chooseTime(page, 2, '8');
+      const endHour = await page.$eval(
+        'pds-datepicker',
+        (el) => el.shadowRoot?.querySelectorAll<HTMLSelectElement>('.pds-datepicker__time select')[2]?.value,
+      );
+      expect(endHour).toBe('9');
+
+      await (await action(page, 2)).click();
+      await page.waitForChanges();
+      expect(change.firstEvent.detail.end).toBe('2026-10-13T09:00');
+    });
+
+    it('keeps the presets reachable when the matching preset is disabled', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="period" range presets="today" label="Period" locale="en-US" max="2000-01-01"></pds-datepicker>`,
+      );
+      await page.setViewport({ width: 1280, height: 800 });
+      await page.$eval('pds-datepicker', (el: HTMLPdsDatepickerElement) => {
+        const pad = (n: number) => String(n).padStart(2, '0');
+        const now = new Date();
+        const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        el.value = `${today}/${today}`;
+      });
+      await page.waitForChanges();
+      await openWithTrigger(page);
+
+      const stops = await page.$eval('pds-datepicker', (el) =>
+        Array.from(el.shadowRoot?.querySelectorAll<HTMLButtonElement>('[role="radio"][tabindex="0"]') ?? []).map(
+          (button) => ({ disabled: button.disabled, text: button.textContent }),
+        ),
+      );
+      expect(stops).toHaveLength(1);
+      expect(stops[0].disabled).toBe(false);
+    });
+
     it('moves both months with the month buttons', async () => {
       const page = await setup(RANGE);
       await openWithTrigger(page);

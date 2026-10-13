@@ -152,6 +152,12 @@ describe('pds-datepicker values', () => {
       );
     });
 
+    it('reads a single-digit minute, and keeps two-digit minutes in a format with no separator', () => {
+      expect(toValueString(parseWith('2026-01-05 3:7 PM', 'YYYY-MM-DD h:mm A') as typeof value)).toBe('2026-01-05T15:07');
+      expect(toValueString(parseWith('2026-01-05 930', 'YYYY-MM-DD Hmm') as typeof value)).toBe('2026-01-05T09:30');
+      expect(toValueString(parseWith('2026-01-05 1230', 'YYYY-MM-DD HHmm') as typeof value)).toBe('2026-01-05T12:30');
+    });
+
     it('adds AM/PM to a 12-hour format without it', () => {
       expect(fieldFormat('D/M/YYYY h:mm', false)).toBe('D/M/YYYY h:mm A');
       expect(fieldFormat('[h] D/M/YYYY', false)).toBe('[h] D/M/YYYY');
