@@ -64,6 +64,7 @@
   // A disabled group's row keeps its hover background: hovering it still opens its options.
   .pds-combobox__option--disabled,
   .pds-combobox__group-row--disabled > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--disabled > .pds-combobox__group-back-trigger,
   .pds-combobox__group--disabled > .pds-combobox__group-label {
     color: var(--pine-color-text-disabled);
   }
