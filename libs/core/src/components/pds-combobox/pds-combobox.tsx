@@ -477,6 +477,10 @@ export class PdsCombobox implements BasePdsProps {
         this.panelQuery = '';
         this.pdsComboboxSearch.emit({ query: '' });
       }
+      // And with `async-url`, start loading the unsearched list now, so it's ready by the reopen.
+      if (this.usesPanelSearch && this.asyncUrl && this.lastFetchedQuery !== '') {
+        this.debouncedFetchAsyncOptions('', 1);
+      }
       this.panelSearchFocused = false;
       this.flyoutRoomChecked = false;
       this.flyoutFallback = false;

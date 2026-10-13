@@ -3049,6 +3049,24 @@ describe('pds-combobox', () => {
       expect(fetch).toHaveBeenCalledWith('', 1);
     });
 
+    it('starts refetching the empty query when it closes after a search', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="remote-close" trigger="button" mode="select-only" panel-search async-url="/api/actions"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const fetch = jest.spyOn(component, 'debouncedFetchAsyncOptions').mockImplementation(() => undefined);
+      component.internalOptions = [{ id: 'a', text: 'Add a tag' }];
+      component.isOpen = true;
+      await page.waitForChanges();
+      component.lastFetchedQuery = 'tag';
+
+      component.isOpen = false;
+      await page.waitForChanges();
+
+      expect(fetch).toHaveBeenCalledWith('', 1);
+    });
+
     it('refetches an empty query on a keyboard reopen too', async () => {
       const page = await newSpecPage({
         components: [PdsCombobox],
