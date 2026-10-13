@@ -774,6 +774,7 @@ export class PdsDatepicker {
     const path = event.composedPath();
     if (path.includes(this.el)) return;
 
+    this.commitPendingText();
     this.closeCalendar(false);
     // A press on a modal's backdrop lands on its <dialog>. That press dismisses the calendar, the
     // top layer; swallow the click it makes, so the modal under it stays open.
@@ -818,6 +819,7 @@ export class PdsDatepicker {
       return;
     }
     if (this.isInside(next)) return;
+    this.commitPendingText();
     this.closeCalendar(false);
     this.pdsBlur.emit(event);
   };
@@ -903,14 +905,41 @@ export class PdsDatepicker {
 
     const parts = this.parseText(this.text);
     if (!parts) return;
+    const [startTime, endTime] = [this.startTime, this.endTime];
     this.loadDraft(parts);
+    if (this.timePicker) {
+      // A time picked in the calendar survives typing that doesn't change the time: text with no
+      // time, as a date part-way typed, or with the time as committed.
+      const format = this.resolvedFormat;
+      const locale = this.resolvedLocale;
+      const typed = this.range ? parseRangeText(this.text, format, locale) : [parseFieldText(this.text, format, locale)];
+      const committed = this.parsedValue();
+      const keeps = (i: number) => !typed?.[i]?.time || typed[i]?.time === committed?.[i]?.time;
+      if (keeps(0)) this.startTime = startTime;
+      if (this.range && keeps(1)) this.endTime = endTime;
+    }
     this.showDate(parts[parts.length - 1].date);
   };
 
   private onTextChange = (event: Event) => {
     event.stopPropagation();
-    this.commitText();
+    if (!this.isOpen || !this.hasFooter) {
+      this.commitText();
+      return;
+    }
+    // With Apply showing, wait for focus to settle. Moving into the calendar, to Apply, Cancel or
+    // a day, leaves the typed text pending in the draft: Apply commits it, Cancel or Escape drops
+    // it. Moving anywhere else commits it.
+    window.setTimeout(() => {
+      if (this.isOpen && this.dialogEl?.matches(':focus-within')) return;
+      this.commitPendingText();
+    });
   };
+
+  /** Commits text typed while the calendar was open, when it closes without Apply or Cancel. */
+  private commitPendingText() {
+    if (this.text !== this.fieldText()) this.commitText();
+  }
 
   /** The typed text as a date or range, or `null` if it isn't one; it may be outside `min` and `max`. */
   private readText(text: string): DateTimeValue[] | null {
@@ -1567,6 +1596,9 @@ export class PdsDatepicker {
         class={{ 'pds-datepicker__dialog': true, 'pds-datepicker__dialog--range': this.range }}
         id={`${this.baseId}-calendar`}
         role="dialog"
+        // A click on a part that can't take focus, as the month heading, focuses the dialog
+        // rather than dropping focus to the page, which would report blur mid-selection.
+        tabindex="-1"
         aria-labelledby={this.range ? null : `${this.baseId}-calendar-heading-0`}
         aria-label={this.range ? this.label || this.triggerLabel : null}
         part="calendar"
