@@ -1152,6 +1152,9 @@ With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each grou
 | Space | With the `button` or `chip` trigger and no panel search, does what Enter does. In a search field, it types a space. |
 | Left | Close the open group and return to its row. With the `input` trigger, Left and Right move the cursor while there's text in it. |
 | Escape | Close the open group first, then the dropdown. |
+| Enter, Space (drill-in) | On the open group's row ("Back: Tag"), return to the groups; Right moves into its options instead. |
+
+In a flyout, Up and Down stay within the open group's options; Left returns to its row. Drilled in, the group's row sits above its options, so Up from the first option reaches it.
 
 The dropdown opens on the selection, with its group open, or on the first group. While searching, the results are a flat list of options, each set under its group's name.
 
