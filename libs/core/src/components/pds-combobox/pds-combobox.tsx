@@ -764,7 +764,11 @@ export class PdsCombobox implements BasePdsProps {
     if (this.value && (!this.selectedOption || !this.optionEls.includes(this.selectedOption))) {
       const matchingOption = this.optionEls.find(opt => opt.value === this.value);
       if (matchingOption) {
+        // Relinking a selection keeps the same value, so it keeps any text being typed too, which
+        // the selectedOption watcher would otherwise reset to the label.
+        const typed = this.selectedOption ? this.displayText : undefined;
         this.setSelectedOption(matchingOption);
+        if (typed !== undefined) this.displayText = typed;
       }
     }
 

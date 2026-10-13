@@ -2518,6 +2518,17 @@ describe('pds-combobox', () => {
       expect(root.querySelector('[aria-selected="true"]')?.textContent).toBe('Remove a tag');
     });
 
+    it('keeps text being typed when a rebuild relinks the selection', async () => {
+      const { page, component } = await openFlyoutPanel('value="tag-remove"');
+      component.displayText = 'em';
+      await page.waitForChanges();
+
+      (page.root as HTMLPdsComboboxElement).options = [...actions];
+      await page.waitForChanges();
+      expect(component.displayText).toBe('em');
+      expect(component.selectedOption === component.optionEls.find((o: HTMLOptionElement) => o.value === 'tag-remove')).toBe(true);
+    });
+
     it('selects an option clicked in a flyout', async () => {
       const { page, component, root } = await openFlyoutPanel();
 
