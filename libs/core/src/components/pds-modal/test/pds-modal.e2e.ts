@@ -366,6 +366,91 @@ describe('pds-modal', () => {
       await page.keyboard.press('Tab');
       expect(await activeId(page)).toBe('first');
     });
+
+    const shiftTab = async (page) => {
+      await page.keyboard.down('Shift');
+      await page.keyboard.press('Tab');
+      await page.keyboard.up('Shift');
+    };
+
+    it('wraps from and to controls inside shadow roots', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <pds-combobox id="tags" component-id="tags" label="Tags"><option value="a">A</option></pds-combobox>
+          <button id="middle">Middle</button>
+          <pds-textarea id="notes" component-id="notes" label="Notes"></pds-textarea>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+      expect(await activeId(page)).toBe('tags');
+
+      await page.evaluate(() => (document.getElementById('notes') as HTMLPdsTextareaElement).setFocus());
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('tags');
+
+      await shiftTab(page);
+      expect(await activeId(page)).toBe('notes');
+    });
+
+    it('finds controls in any open shadow root, in slot order', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <x-pair><button id="slotted">Slotted</button></x-pair>
+        </pds-modal>
+      `);
+      await page.evaluate(() => {
+        customElements.define('x-pair', class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' }).innerHTML = '<slot></slot><button id="inner">Inner</button>';
+          }
+        });
+      });
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+      const deepId = () =>
+        page.evaluate(() => {
+          let active = document.activeElement;
+          while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+          return active?.id;
+        });
+      expect(await deepId()).toBe('slotted');
+
+      await page.keyboard.press('Tab');
+      expect(await deepId()).toBe('inner');
+
+      await page.keyboard.press('Tab');
+      expect(await deepId()).toBe('slotted');
+
+      await shiftTab(page);
+      expect(await deepId()).toBe('inner');
+    });
+
+    it('leaves Tab to a control inside that already moved focus', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <button id="first">First</button>
+          <button id="last">Last</button>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => {
+        const last = document.getElementById('last');
+        last.addEventListener('keydown', (event) => event.key === 'Tab' && event.preventDefault());
+        last.focus();
+      });
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('last');
+    });
   });
 
   describe('disableInitialFocus', () => {

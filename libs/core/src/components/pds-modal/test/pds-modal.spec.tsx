@@ -206,7 +206,7 @@ describe('pds-modal', () => {
       const show = jest.fn();
       const showModal = jest.fn();
       /* eslint-disable @typescript-eslint/no-explicit-any */
-      (instance as any).modalRef = { show, showModal, close: jest.fn(), querySelectorAll: () => [] };
+      (instance as any).modalRef = { show, showModal, close: jest.fn(), children: [] };
       (instance as any).updateFocusableElements = jest.fn();
       (instance as any).setInitialFocus = jest.fn();
       /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -267,7 +267,7 @@ describe('pds-modal', () => {
         show: jest.fn(),
         showModal: jest.fn(),
         close: jest.fn(),
-        querySelectorAll: () => [],
+        children: [],
         contains: () => false,
       };
       /* eslint-enable @typescript-eslint/no-explicit-any */
