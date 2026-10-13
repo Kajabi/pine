@@ -393,6 +393,9 @@ describe('pds-modal', () => {
 
       await shiftTab(page);
       expect(await activeId(page)).toBe('notes');
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
     });
 
     it('finds controls in any open shadow root, in slot order', async () => {
@@ -429,6 +432,79 @@ describe('pds-modal', () => {
 
       await shiftTab(page);
       expect(await deepId()).toBe('inner');
+    });
+
+    it('treats a radio group as one stop, at its checked radio', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <button id="first">First</button>
+          <input type="radio" name="size" id="small" value="s" aria-label="Small" checked>
+          <input type="radio" name="size" id="medium" value="m" aria-label="Medium">
+          <input type="radio" name="size" id="large" value="l" aria-label="Large">
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => (document.getElementById('small') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('first');
+
+      await shiftTab(page);
+      expect(await activeId(page)).toBe('small');
+    });
+
+    it('skips controls inside inert content and disabled fieldsets', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <button id="first">First</button>
+          <button id="last">Last</button>
+          <div inert><button>Inert</button></div>
+          <fieldset disabled><button>Disabled</button></fieldset>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => (document.getElementById('last') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('first');
+
+      await shiftTab(page);
+      expect(await activeId(page)).toBe('last');
+    });
+
+    it('leaves Tab to a modal opened above it', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="parent">
+          <button id="parent-first">Parent first</button>
+        </pds-modal>
+      `);
+      // Added after the parent, so the parent's document keydown listener runs first.
+      await page.evaluate(() => {
+        const child = document.createElement('pds-modal');
+        child.componentId = 'child';
+        child.innerHTML = '<button id="child-first">Child first</button><button id="child-last">Child last</button>';
+        document.getElementById('parent-first').after(child);
+      });
+      await page.waitForChanges();
+      const [parent, child] = await page.findAll('pds-modal');
+      await parent.callMethod('showModal');
+      await settle();
+      await child.callMethod('showModal');
+      await settle();
+
+      await page.evaluate(() => (document.getElementById('child-last') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('child-first');
+
+      await shiftTab(page);
+      expect(await activeId(page)).toBe('child-last');
     });
 
     it('leaves Tab to a control inside that already moved focus', async () => {
