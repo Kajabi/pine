@@ -486,7 +486,7 @@ export class PdsDatepicker {
 
     // Rendered here, then moved to the portal. Stencil keeps patching it by reference.
     this.portal ??= new CalendarPortal(this.el);
-    this.portal.mount(this.dialogEl);
+    this.portal.mount(this.dialogEl, this.resolvedLocale);
 
     if (!this.cleanupAutoUpdate) this.startPositioning();
     this.flushActiveDayFocus();
@@ -828,16 +828,20 @@ export class PdsDatepicker {
 
   /**
    * The portaled calendar is outside the datepicker, so the host never hears focus leave it: close
-   * and report blur from here when focus goes from the calendar to the rest of the page.
+   * and report blur from here when focus goes from the calendar to the rest of the page. Checked
+   * once focus has settled, with `:focus-within`, rather than from `relatedTarget`, which is
+   * retargeted past the datepicker when it sits in another component's shadow root.
    */
   private onCalendarFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
     if (!next) return;
     if (!this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
-    if (!this.isInside(next)) {
+
+    window.setTimeout(() => {
+      if (!this.isOpen || this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within')) return;
       this.closeCalendar(false);
       this.pdsBlur.emit(event);
-    }
+    });
   };
 
   /** Closes the calendar and reports blur when focus leaves the datepicker, as when tabbing out. */
@@ -1063,14 +1067,23 @@ export class PdsDatepicker {
 
   /**
    * Escape on the calendar button closes an open calendar, as it does in the field and the
-   * calendar, and is stopped there, so a modal or popover around the datepicker stays open.
+   * calendar, and is stopped there, so a modal or popover around the datepicker stays open. Tab
+   * from the button goes into a calendar a click in the field opened: the calendar is portaled
+   * to the end of the page, so Tab would otherwise skip past it.
    */
   private onTriggerKeyDown = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape' || !this.isOpen) return;
+    if (!this.isOpen) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.restoreValueAtOpen();
+      this.closeCalendar(false);
+      return;
+    }
+    if (event.key !== 'Tab' || event.shiftKey) return;
     event.preventDefault();
-    event.stopPropagation();
-    this.restoreValueAtOpen();
-    this.closeCalendar(false);
+    this.focusActiveDay = true;
+    this.flushActiveDayFocus();
   };
 
   private onTriggerClick = () => {
@@ -1733,6 +1746,8 @@ export class PdsDatepicker {
             class="pds-datepicker__trigger"
             ref={(el) => (this.triggerEl = el)}
             aria-label={this.triggerAccessibleName(locale)}
+            // No aria-controls: the calendar is portaled to another root, where an id can't reach.
+            // A button with aria-haspopup="dialog" and aria-expanded is complete without it (APG).
             aria-haspopup="dialog"
             aria-expanded={this.isOpen ? 'true' : 'false'}
             disabled={!this.isInteractive}

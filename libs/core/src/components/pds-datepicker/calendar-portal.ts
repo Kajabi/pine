@@ -1,3 +1,5 @@
+import { closest } from '@utils/closest';
+
 /**
  * Where the open calendar lives: a `div` in `document.body`, or in the nearest `<dialog>` so it
  * shares a modal's top layer, outside any `overflow: hidden` or transformed ancestor that would
@@ -13,15 +15,21 @@ export class CalendarPortal {
   constructor(private readonly datepicker: HTMLElement) {
     this.host = document.createElement('div');
     this.host.className = CalendarPortal.className;
+    // The shared stylesheet's `:host` rules match this div too; keep it out of layout, so it never
+    // adds a line to the page, while it still passes `dir`, `lang` and the theme down.
+    this.host.style.display = 'contents';
     this.root = this.host.attachShadow({ mode: 'open' });
   }
 
-  /** Moves the calendar into the portal, mounting the portal first. */
-  mount(calendar: HTMLElement) {
-    const target = findPortalTarget(this.datepicker);
-    if (this.host.parentNode !== target) target.appendChild(this.host);
-
-    this.copyContext();
+  /**
+   * Moves the calendar into the portal, mounting the portal first. Context is copied only when the
+   * portal is attached, not on every render while it's open (in range mode, every hovered day).
+   */
+  mount(calendar: HTMLElement, locale: string) {
+    if (!this.host.isConnected) {
+      findPortalTarget(this.datepicker).appendChild(this.host);
+      this.copyContext(locale);
+    }
     if (calendar.parentNode !== this.root) this.root.appendChild(calendar);
   }
 
@@ -36,9 +44,9 @@ export class CalendarPortal {
 
   /**
    * Carries over what the calendar would otherwise inherit from the datepicker: its styles, the
-   * reading direction, a theme set on an ancestor, and size overrides.
+   * reading direction and language, a theme set on an ancestor, and size overrides.
    */
-  private copyContext() {
+  private copyContext(locale: string) {
     const source = this.datepicker.shadowRoot;
     if (source) {
       if (source.adoptedStyleSheets?.length) {
@@ -50,12 +58,15 @@ export class CalendarPortal {
 
     const computed = getComputedStyle(this.datepicker);
     this.host.dir = computed.direction || 'ltr';
+    // So assistive tech reads the month and day names in the calendar's own language.
+    this.host.lang = locale;
     for (const property of ['--pds-datepicker-day-size', '--pds-datepicker-presets-width']) {
       const value = computed.getPropertyValue(property).trim();
       if (value) this.host.style.setProperty(property, value);
     }
 
-    const theme = this.datepicker.closest('[data-theme]')?.getAttribute('data-theme');
+    // Across shadow boundaries: a theme set above an enclosing component still applies.
+    const theme = (closest('[data-theme]', this.datepicker) || null)?.getAttribute('data-theme');
     if (theme) {
       this.host.setAttribute('data-theme', theme);
     } else {
