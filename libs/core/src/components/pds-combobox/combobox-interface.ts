@@ -4,7 +4,7 @@ export interface ComboboxOption {
   /**
    * Label of the group this option belongs to. Options sharing a group are rendered together
    * under one group label, where the group first appears, the same as slotted `<optgroup>`
-   * markup. List options without a group first: one that follows a group reads as part of it.
+   * markup. Options without a group are listed before every group.
    */
   group?: string;
   /**

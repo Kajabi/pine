@@ -645,10 +645,12 @@ export class PdsCombobox implements BasePdsProps {
     // Create option elements from async data. Grouped options are nested in an optgroup, as
     // slotted markup would be, so grouping, filtering and labels work the same either way. Each
     // group is listed where it first appears with all of its options, even when the data
-    // interleaves groups, so an option never renders under another group's label.
+    // interleaves groups, so an option never renders under another group's label. Ungrouped
+    // options come first, so none reads as part of the group above it.
     const asyncOptions = this.options || this.internalOptions;
     const groups = new Map<string, HTMLOptGroupElement>();
-    const entries: (HTMLOptGroupElement | HTMLOptionElement)[] = [];
+    const ungrouped: HTMLOptionElement[] = [];
+    const groupEntries: HTMLOptGroupElement[] = [];
     asyncOptions.forEach(opt => {
       const optionEl = document.createElement('option') as HTMLOptionElement;
       optionEl.value = String(opt.id);
@@ -656,7 +658,7 @@ export class PdsCombobox implements BasePdsProps {
 
       // Only strings group an option or name an icon; anything else from JS is ignored, not coerced.
       if (typeof opt.group !== 'string' || opt.group === '') {
-        entries.push(optionEl);
+        ungrouped.push(optionEl);
         return;
       }
 
@@ -665,7 +667,7 @@ export class PdsCombobox implements BasePdsProps {
         optgroup = document.createElement('optgroup');
         optgroup.label = opt.group;
         groups.set(opt.group, optgroup);
-        entries.push(optgroup);
+        groupEntries.push(optgroup);
       }
       if (!optgroup.hasAttribute('data-icon') && typeof opt.groupIcon === 'string' && opt.groupIcon !== '') {
         optgroup.setAttribute('data-icon', opt.groupIcon);
@@ -673,7 +675,7 @@ export class PdsCombobox implements BasePdsProps {
       optgroup.appendChild(optionEl);
     });
 
-    entries.forEach(entry => {
+    [...ungrouped, ...groupEntries].forEach(entry => {
       if (entry.tagName === 'OPTGROUP') {
         this.allItems.push(entry);
         Array.from(entry.children).forEach(child => {
