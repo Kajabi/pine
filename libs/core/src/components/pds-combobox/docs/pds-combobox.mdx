@@ -1097,6 +1097,143 @@ When options come from the `options` prop, set `group` on each option, and optio
 />
 ```
 
+### Choosing a Group Display
+
+`group-display` decides how groups are drawn. The options, value and events are the same in every mode, so switching modes doesn't change any other code.
+
+| Display | Use it when | Avoid it when |
+| --- | --- | --- |
+| `inline` (default) | A few groups, or a short list where seeing every option at once helps people compare across groups. Also server-searched lists (see below). | The full list runs much past the dropdown's height. |
+| `flyout` | Many groups, each a clear category, with room beside the dropdown, such as choosing an automation action. | The dropdown sits in a narrow side panel, groups have only one or two options, or people need to compare options across groups. |
+| `drill-in` | Many groups in a narrow space, such as a filter in a side panel. | People switch between groups often: each switch is two steps, back and then into the next group. |
+
+- **One level only.** Groups don't nest.
+- **Name groups as categories** ("Contact", "Membership"), and give options verb phrases ("Add a tag"). With `flyout` and `drill-in`, search matches both, so typing a group's name finds all of its options.
+- **Keep option labels unique across groups.** Once chosen, only the option's label shows in the trigger, so "Send a direct message" under two groups can't be told apart.
+- **Pass `drill-in-back-label` with `flyout` too.** A flyout drills in when there's no room beside the dropdown, and the back row's screen-reader prefix is English by default.
+- **Give every group an icon or none.** A mix reads as unfinished.
+- **For server-searched lists (`async-url`), prefer `inline`.** Results replace the groups as soon as you type, so a group list adds a step without helping.
+- **In slotted markup, list ungrouped options first.** One placed after a group reads as part of it; the `options` prop lists them first for you.
+- **Use `panel-search` with the `button` and `chip` triggers** once a grouped list is long enough to need searching. The `input` trigger already searches.
+- **Inside a `pds-modal` (or any `<dialog>`), set `dropdown-mount="body"`.** The flyout moves with the dropdown, and focus stays inside the dialog. For other focus traps, see [Searching From the Panel](#searching-from-the-panel).
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-catalog-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  group-display="flyout"
+  panel-search
+  search-placeholder="Search actions"
+  search-options-label="Search actions"
+  drill-in-back-label="Back">
+  <optgroup label="Contact" data-icon="contact">
+    <option value="contact_tag_add">Add a tag</option>
+    <option value="contact_tag_remove">Remove a tag</option>
+    <option value="enroll_in_workflow">Enroll in an automation</option>
+  </optgroup>
+  <optgroup label="Communication" data-icon="mail">
+    <option value="email_send">Send an email</option>
+    <option value="email_sequence_subscribe">Subscribe to a sequence</option>
+    <option value="email_sequence_unsubscribe">Unsubscribe from a sequence</option>
+  </optgroup>
+  <optgroup label="Membership" data-icon="product">
+    <option value="offer_grant">Grant an offer</option>
+    <option value="offer_revoke">Revoke an offer</option>
+    <option value="offer_cancel_payment_and_access">Cancel payment and access</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-catalog-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  groupDisplay="flyout"
+  panelSearch
+  searchPlaceholder="Search actions"
+  searchOptionsLabel="Search actions"
+  drillInBackLabel="Back"
+  options={[
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    { id: 'contact_tag_remove', text: 'Remove a tag', group: 'Contact' },
+    { id: 'enroll_in_workflow', text: 'Enroll in an automation', group: 'Contact' },
+    { id: 'email_send', text: 'Send an email', group: 'Communication', groupIcon: 'mail' },
+    { id: 'email_sequence_subscribe', text: 'Subscribe to a sequence', group: 'Communication' },
+    { id: 'email_sequence_unsubscribe', text: 'Unsubscribe from a sequence', group: 'Communication' },
+    { id: 'offer_grant', text: 'Grant an offer', group: 'Membership', groupIcon: 'product' },
+    { id: 'offer_revoke', text: 'Revoke an offer', group: 'Membership' },
+    { id: 'offer_cancel_payment_and_access', text: 'Cancel payment and access', group: 'Membership' },
+  ]}
+  onPdsComboboxChange={(event) => setAction(event.detail.value)}
+/>`,
+  }}
+>
+  <div style={{ minHeight: '400px' }}>
+    <pds-combobox
+      component-id="combobox-catalog-example"
+      label="Action"
+      placeholder="Choose an action"
+      trigger="button"
+      mode="select-only"
+      group-display="flyout"
+      panel-search
+      search-placeholder="Search actions"
+      search-options-label="Search actions"
+      drill-in-back-label="Back">
+      <optgroup label="Contact" data-icon="contact">
+        <option value="contact_tag_add">Add a tag</option>
+        <option value="contact_tag_remove">Remove a tag</option>
+        <option value="enroll_in_workflow">Enroll in an automation</option>
+      </optgroup>
+      <optgroup label="Communication" data-icon="mail">
+        <option value="email_send">Send an email</option>
+        <option value="email_sequence_subscribe">Subscribe to a sequence</option>
+        <option value="email_sequence_unsubscribe">Unsubscribe from a sequence</option>
+      </optgroup>
+      <optgroup label="Membership" data-icon="product">
+        <option value="offer_grant">Grant an offer</option>
+        <option value="offer_revoke">Revoke an offer</option>
+        <option value="offer_cancel_payment_and_access">Cancel payment and access</option>
+      </optgroup>
+    </pds-combobox>
+  </div>
+</DocCanvas>
+
+#### In server-rendered templates
+
+The `options` prop is JavaScript-only. In ERB or other server-rendered markup, slot `<optgroup>` elements instead, with each group's icon in `data-icon`, and listen for `pdsComboboxChange` in a script. The `name` attribute submits the value with the form.
+
+- `data-icon` takes a Pine icon name only; URLs and other values that aren't a name are dropped.
+- Keep labels and values in escaped output (`<%= %>`). The template is page HTML, so unescaped text becomes markup, or breaks out of an attribute, before the combobox reads it. Never pass user-supplied text through `raw` or `html_safe`.
+
+```erb
+<pds-combobox
+  component-id="automation-action"
+  name="automation[action]"
+  label="<%= t(".action_label") %>"
+  placeholder="<%= t(".action_placeholder") %>"
+  trigger="button"
+  mode="select-only"
+  group-display="flyout"
+  panel-search
+  search-placeholder="<%= t(".search_actions") %>"
+  search-options-label="<%= t(".search_actions") %>"
+  drill-in-back-label="<%= t(".back") %>"
+  value="<%= @automation.action %>">
+  <% @action_groups.each do |group| %>
+    <optgroup label="<%= group.label %>" data-icon="<%= group.icon %>">
+      <% group.actions.each do |action| %>
+        <option value="<%= action.id %>"><%= action.label %></option>
+      <% end %>
+    </optgroup>
+  <% end %>
+</pds-combobox>
+```
+
 ### Flyout Groups
 
 Set `group-display="flyout"` to list the groups instead of every option. Hovering or clicking a group opens its options in a flyout beside the dropdown, and the group holding the current selection is highlighted. The arrow keys move through every option across the groups, opening each option's group as they reach it, while focus stays on the trigger; the group rows themselves are for the pointer. While searching, matching options are listed under their group labels, and search also matches group labels, so typing a group's name finds all of its options.
