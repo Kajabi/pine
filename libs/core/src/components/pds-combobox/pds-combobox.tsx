@@ -5,7 +5,7 @@ import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import DOMPurify from 'dompurify';
-import { FlyoutController, buildPanelEntries, groupIconOf, groupLabelOf, parentOptgroupOf } from './grouped-options-panel';
+import { FlyoutController, buildPanelEntries, groupIconOf, groupLabelOf, parentOptgroupOf, scrollIntoViewWithin } from './grouped-options-panel';
 import type { PanelGroup } from './grouped-options-panel';
 import type {
   ComboboxOption,
@@ -1446,8 +1446,13 @@ export class PdsCombobox implements BasePdsProps {
         currentOption.focus();
       }
 
-      // Always scroll the option into view
-      currentOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      // Always scroll the option into view; in a flyout, by scrolling the flyout alone.
+      const flyout = currentOption.closest('.pds-combobox__flyout') as HTMLElement | null;
+      if (flyout) {
+        scrollIntoViewWithin(flyout, currentOption);
+      } else {
+        currentOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
     }
 
     // Always update aria-activedescendant on the trigger element

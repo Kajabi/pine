@@ -95,6 +95,21 @@ const MIN_FLYOUT_HEIGHT_PX = 120;
  * its group row. The flyout renders inside the row, so moving the pointer into it never leaves
  * the row; the delays cover the gap between panel and flyout and diagonal moves across rows.
  */
+/**
+ * Scrolls `el` into view inside `container` only. A flyout option needs this: the flyout is `fixed`
+ * beside the panel but sits inside it in the DOM, so `scrollIntoView` would also scroll the panel
+ * and the page, moving the flyout's row out from under it.
+ */
+export function scrollIntoViewWithin(container: HTMLElement, el: HTMLElement) {
+  const bounds = container.getBoundingClientRect();
+  const rect = el.getBoundingClientRect();
+  if (rect.top < bounds.top) {
+    container.scrollTop -= bounds.top - rect.top;
+  } else if (rect.bottom > bounds.bottom) {
+    container.scrollTop += rect.bottom - bounds.bottom;
+  }
+}
+
 export class FlyoutController<T> {
   private switchTimer?: ReturnType<typeof setTimeout>;
   private closeTimer?: ReturnType<typeof setTimeout>;

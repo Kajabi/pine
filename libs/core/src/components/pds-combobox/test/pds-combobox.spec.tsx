@@ -2529,6 +2529,19 @@ describe('pds-combobox', () => {
       expect(component.selectedOption === component.optionEls.find((o: HTMLOptionElement) => o.value === 'tag-remove')).toBe(true);
     });
 
+    it('scrolls only the flyout, not the panel or page, to show a highlighted flyout option', async () => {
+      const { page, component, root } = await openFlyoutPanel();
+      component.openGroup = groupNamed(component, 'Tag');
+      component.highlightedIndex = 1;
+      await page.waitForChanges();
+      const option = root.querySelector('.pds-combobox__flyout [data-option-index="1"]') as HTMLElement;
+      const pageScroll = jest.spyOn(option, 'scrollIntoView');
+
+      component.updateOptionFocus();
+
+      expect(pageScroll).not.toHaveBeenCalled();
+    });
+
     it('selects an option clicked in a flyout', async () => {
       const { page, component, root } = await openFlyoutPanel();
 

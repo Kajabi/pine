@@ -1,4 +1,4 @@
-import { FlyoutController, buildPanelEntries, groupIconOf, groupLabelOf, parentOptgroupOf } from '../grouped-options-panel';
+import { FlyoutController, buildPanelEntries, groupIconOf, groupLabelOf, parentOptgroupOf, scrollIntoViewWithin } from '../grouped-options-panel';
 
 const optgroup = (label: string, icon?: string, ...values: string[]) => {
   const group = document.createElement('optgroup');
@@ -70,6 +70,28 @@ describe('parentOptgroupOf / groupIconOf', () => {
     expect(parentOptgroupOf(option('loose'))).toBeNull();
     expect(groupIconOf(withIcon.group)).toBe('hashtag');
     expect(groupIconOf(empty.group)).toBeNull();
+  });
+});
+
+describe('scrollIntoViewWithin', () => {
+  const box = (top: number, bottom: number) => {
+    const el = document.createElement('div');
+    el.getBoundingClientRect = () => ({ top, bottom }) as DOMRect;
+    return el;
+  };
+
+  it('scrolls the container just enough to show the element, and nothing else', () => {
+    const container = box(100, 200);
+    container.scrollTop = 50;
+
+    scrollIntoViewWithin(container, box(180, 230));
+    expect(container.scrollTop).toBe(80);
+
+    scrollIntoViewWithin(container, box(70, 90));
+    expect(container.scrollTop).toBe(50);
+
+    scrollIntoViewWithin(container, box(120, 160));
+    expect(container.scrollTop).toBe(50);
   });
 });
 
