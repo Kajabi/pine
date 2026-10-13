@@ -60,6 +60,25 @@
     background: var(--pine-color-background-muted);
   }
 
+  // Listed but not choosable: muted, and the pointer says so. Disabled text needn't meet contrast.
+  // A disabled group's row keeps its hover background: hovering it still opens its options.
+  .pds-combobox__option--disabled,
+  .pds-combobox__group-row--disabled > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--disabled > .pds-combobox__group-back-trigger,
+  .pds-combobox__group--disabled > .pds-combobox__group-label {
+    color: var(--pine-color-text-disabled);
+  }
+
+  .pds-combobox__option--disabled {
+    cursor: not-allowed;
+  }
+
+  // Chips and custom layouts set their own colors, so mute them as pds-multiselect does.
+  .pds-combobox__option--disabled .pds-combobox__option-chip,
+  .pds-combobox__option--disabled .pds-combobox__option-layout-wrapper {
+    opacity: 0.5;
+  }
+
   .pds-combobox__option-check {
     color: currentColor;
     font-size: var(--pine-dimension-150);

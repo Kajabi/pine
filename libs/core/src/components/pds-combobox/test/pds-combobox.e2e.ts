@@ -335,6 +335,46 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
 
+    it('lists disabled options in a flyout without choosing them, and passes axe', async () => {
+      const page = await setUp('padding: 40px;', 'input', [
+        { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+        { id: 'tag-score', text: 'Score a contact', group: 'Tag', disabled: true },
+        { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+      ]);
+      await hoverGroup(page, 'Tag');
+
+      const target = await page.evaluate(() => {
+        const option = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__flyout [data-option-index="1"]')!;
+        const rect = option.getBoundingClientRect();
+        return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2, disabled: option.getAttribute('aria-disabled') };
+      });
+      expect(target.disabled).toBe('true');
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+
+      await page.mouse.move(target.x, target.y, { steps: 8 });
+      await page.mouse.click(target.x, target.y);
+      await page.waitForChanges();
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBeFalsy();
+    });
+
+    it('reaches a disabled option from the keyboard without choosing it', async () => {
+      const page = await setUp('padding: 40px;', 'input', [
+        { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+        { id: 'tag-score', text: 'Score a contact', group: 'Tag', disabled: true },
+      ]);
+      await page.keyboard.press('ArrowRight');
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+      expect(await activeDescendant(page, 'input')).toBe('actions-option-1');
+
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBeFalsy();
+      expect(await page.evaluate(() => !!document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__flyout'))).toBe(true);
+    });
+
     // Email, not Tag: the highlight starts on the Tag row, so this checks aria-activedescendant
     // stays on a rendered row while another group's flyout is open.
     it('has no axe violations with a flyout open', async () => {

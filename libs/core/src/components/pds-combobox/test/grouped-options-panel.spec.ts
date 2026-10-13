@@ -1,4 +1,15 @@
-import { FlyoutController, buildPanelEntries, findGroup, groupIconOf, groupLabelOf, panelColumn, parentOptgroupOf, scrollIntoViewWithin } from '../grouped-options-panel';
+import {
+  FlyoutController,
+  buildPanelEntries,
+  findGroup,
+  groupIconOf,
+  groupLabelOf,
+  isGroupDisabled,
+  isOptionDisabled,
+  panelColumn,
+  parentOptgroupOf,
+  scrollIntoViewWithin,
+} from '../grouped-options-panel';
 
 const optgroup = (label: string, icon?: string, ...values: string[]) => {
   const group = document.createElement('optgroup');
@@ -73,6 +84,37 @@ describe('panelColumn', () => {
     const other = optgroup('Other', undefined, 'other');
     expect(panelColumn(entries, other.group, 0, true)).toEqual([0, tag.group, email.group]);
     expect(findGroup(entries, other.group)).toBeUndefined();
+  });
+});
+
+describe('disabled options', () => {
+  it("disables an option by its own attribute or its optgroup's", () => {
+    const open = optgroup('Tag', undefined, 'tag-add', 'tag-remove');
+    open.options[1].setAttribute('disabled', '');
+    const locked = optgroup('Coupon', undefined, 'coupon-send');
+    locked.group.setAttribute('disabled', '');
+
+    expect(open.options.map(isOptionDisabled)).toEqual([false, true]);
+    expect(isOptionDisabled(locked.options[0])).toBe(true);
+    expect(isOptionDisabled(option('loose'))).toBe(false);
+    expect(isOptionDisabled(undefined)).toBe(false);
+  });
+
+  it('keeps disabled options and groups in the column, so the keys can reach them', () => {
+    const tag = optgroup('Tag', undefined, 'tag-add', 'tag-remove');
+    tag.options[0].setAttribute('disabled', '');
+    const coupon = optgroup('Coupon', undefined, 'coupon-send');
+    coupon.group.setAttribute('disabled', '');
+    const loose = option('loose');
+    loose.setAttribute('disabled', '');
+    const entries = buildPanelEntries([loose, tag.group, ...tag.options, coupon.group, ...coupon.options]);
+    const [, tagEntry, couponEntry] = entries;
+
+    expect(tagEntry.kind === 'group' && isGroupDisabled(tagEntry.group)).toBe(false);
+    expect(couponEntry.kind === 'group' && isGroupDisabled(couponEntry.group)).toBe(true);
+    expect(panelColumn(entries, null, null, false)).toEqual([0, tag.group, coupon.group]);
+    expect(panelColumn(entries, tag.group, 2, false)).toEqual([1, 2]);
+    expect(panelColumn(entries, coupon.group, null, true)).toEqual([coupon.group, 3]);
   });
 });
 

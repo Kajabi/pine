@@ -44,6 +44,7 @@ export interface ComboboxLoadOptionsEventDetail {
 export interface ComboboxOption {
     // (undocumented)
     [key: string]: unknown;
+    disabled?: boolean;
     group?: string;
     groupIcon?: string;
     // (undocumented)

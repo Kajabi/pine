@@ -3351,6 +3351,279 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('disabled options', () => {
+    const key = (component: { handleKeyDown: (e: KeyboardEvent) => void }, k: string) => {
+      const event = new KeyboardEvent('keydown', { key: k, cancelable: true });
+      component.handleKeyDown(event);
+      return event;
+    };
+
+    const openList = async (options: unknown[], attrs = 'mode="select-only"') => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="locked" ${attrs}></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      component.options = options;
+      await page.waitForChanges();
+      component.isOpen = true;
+      component.filterOptions();
+      component.setInitialHighlightedIndex();
+      await page.waitForChanges();
+      return { page, component, root: page.root!.shadowRoot! };
+    };
+
+    const plans = [
+      { id: 'free', text: 'Free' },
+      { id: 'pro', text: 'Pro', disabled: true },
+      { id: 'growth', text: 'Growth' },
+      { id: 'premium', text: 'Premium', disabled: true },
+    ];
+
+    it('marks an option disabled from the options prop', async () => {
+      const { component, root } = await openList(plans);
+
+      expect(component.optionEls.map((o: HTMLOptionElement) => o.hasAttribute('disabled'))).toEqual([false, true, false, true]);
+      const rendered = Array.from(root.querySelectorAll('[role="option"]'));
+      expect(rendered.map(o => o.getAttribute('aria-disabled'))).toEqual([null, 'true', null, 'true']);
+      expect(rendered[1].classList.contains('pds-combobox__option--disabled')).toBe(true);
+    });
+
+    it('disables every option in a disabled optgroup, and marks the group', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="locked-group" mode="select-only"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const optgroup = page.doc.createElement('optgroup') as HTMLOptGroupElement;
+      optgroup.label = 'Premium';
+      optgroup.setAttribute('disabled', '');
+      const option = page.doc.createElement('option') as HTMLOptionElement;
+      option.value = 'sms';
+      option.textContent = 'Send a text message';
+      optgroup.appendChild(option);
+      component.optionEls = [option];
+      component.allItems = [optgroup, option];
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+
+      const root = page.root!.shadowRoot!;
+      expect(root.querySelector('[role="group"]')?.getAttribute('aria-disabled')).toBe('true');
+      expect(root.querySelector('[role="option"]')?.getAttribute('aria-disabled')).toBe('true');
+    });
+
+    // The APG listbox pattern keeps disabled options reachable, so they're announced as unavailable.
+    it('reaches disabled options with the keys and points aria-activedescendant at them', async () => {
+      const { page, component, root } = await openList(plans);
+      expect(component.highlightedIndex).toBe(0);
+
+      key(component, 'ArrowDown');
+      await page.waitForChanges();
+      expect(component.highlightedIndex).toBe(1);
+      expect(root.querySelector('[role="combobox"]')?.getAttribute('aria-activedescendant')).toBe('locked-option-1');
+      key(component, 'End');
+      expect(component.highlightedIndex).toBe(3);
+      key(component, 'Home');
+      expect(component.highlightedIndex).toBe(0);
+    });
+
+    it('opens with nothing highlighted, and chooses nothing, when every option is disabled', async () => {
+      const { page, component } = await openList(plans.map(plan => ({ ...plan, disabled: true })));
+      expect(component.highlightedIndex).toBe(-1);
+
+      key(component, 'ArrowDown');
+      key(component, 'Enter');
+      await page.waitForChanges();
+      expect(component.highlightedIndex).toBe(0);
+      expect(component.value).toBeFalsy();
+      expect(component.isOpen).toBe(true);
+    });
+
+    it('marks an inline group disabled when none of its options can be chosen', async () => {
+      const { root } = await openList([
+        { id: 'free', text: 'Free', group: 'Plans' },
+        { id: 'sms', text: 'Send a text message', group: 'Premium', disabled: true },
+      ]);
+      const groups = Array.from(root.querySelectorAll('[role="group"]'));
+      expect(groups.map(group => group.getAttribute('aria-disabled'))).toEqual([null, 'true']);
+      expect(groups[1].classList.contains('pds-combobox__group--disabled')).toBe(true);
+    });
+
+    it('defaults a chip trigger to its first enabled option', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="locked-chip" trigger="chip" mode="select-only"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const first = page.doc.createElement('option') as HTMLOptionElement;
+      first.value = 'pro';
+      first.setAttribute('disabled', '');
+      const second = page.doc.createElement('option') as HTMLOptionElement;
+      second.value = 'free';
+      page.root!.append(first, second);
+      component.updateOptions();
+      await page.waitForChanges();
+      warn.mockRestore();
+
+      expect(component.selectedOption?.value).toBe('free');
+    });
+
+    it('starts on the first enabled option', async () => {
+      const { component } = await openList([{ id: 'pro', text: 'Pro', disabled: true }, ...plans.slice(2)]);
+      expect(component.highlightedIndex).toBe(1);
+    });
+
+    it('does not choose a disabled option by click, Enter or Space', async () => {
+      const { page, component, root } = await openList(plans);
+
+      (root.querySelectorAll('[role="option"]')[1] as HTMLElement).click();
+      await page.waitForChanges();
+      expect(component.value).toBeFalsy();
+      expect(component.isOpen).toBe(true);
+
+      component.highlightedIndex = 1;
+      key(component, 'Enter');
+      key(component, ' ');
+      await page.waitForChanges();
+      expect(component.value).toBeFalsy();
+      expect(component.isOpen).toBe(true);
+    });
+
+    it('highlights a disabled option under the pointer, as the keys do, without choosing it', async () => {
+      const { page, component, root } = await openList(plans);
+
+      root.querySelectorAll('[role="option"]')[1].dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+      expect(component.highlightedIndex).toBe(1);
+      key(component, 'Enter');
+      expect(component.value).toBeFalsy();
+    });
+
+    it('shows a disabled option as the value, as a native select does, without highlighting it', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="locked-value" mode="select-only" trigger="button" value="pro"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      component.options = plans;
+      await page.waitForChanges();
+
+      expect(component.selectedOption?.value).toBe('pro');
+      component.isOpen = true;
+      component.filterOptions();
+      component.setInitialHighlightedIndex();
+      expect(component.highlightedIndex).toBe(0);
+    });
+
+    it('keeps disabled options in search results, still disabled', async () => {
+      const { page, component, root } = await openList(plans, 'mode="filter"');
+      component.displayText = 'pr';
+      component.filterOptions();
+      await page.waitForChanges();
+
+      expect(Array.from(root.querySelectorAll('[role="option"]')).map(o => [o.textContent, o.getAttribute('aria-disabled')])).toEqual([
+        ['Pro', 'true'],
+        ['Premium', 'true'],
+      ]);
+    });
+
+    describe('in a flyout', () => {
+      const actions = [
+        { id: 'tag-add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+        { id: 'tag-premium', text: 'Score a contact', group: 'Contact', disabled: true },
+        { id: 'tag-remove', text: 'Remove a tag', group: 'Contact' },
+        { id: 'sms-send', text: 'Send a text message', group: 'Premium', groupIcon: 'mail', disabled: true },
+        { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+      ];
+      const groupNamed = (component: { optionEls: HTMLOptionElement[] }, label: string) =>
+        component.optionEls.map(o => o.parentElement as HTMLOptGroupElement).find(g => g?.label === label)!;
+
+      it('keeps a group with nothing to choose marked once it is drilled into', async () => {
+        const { page, component, root } = await openList(actions, 'mode="select-only" trigger="button" group-display="drill-in"');
+        component.openGroup = groupNamed(component, 'Premium');
+        await page.waitForChanges();
+
+        const back = root.querySelector('.pds-combobox__group-back')!;
+        expect(back.getAttribute('aria-disabled')).toBe('true');
+        expect(back.classList.contains('pds-combobox__group-back--disabled')).toBe(true);
+
+        component.openGroup = groupNamed(component, 'Contact');
+        await page.waitForChanges();
+        expect(root.querySelector('.pds-combobox__group-back')!.hasAttribute('aria-disabled')).toBe(false);
+      });
+
+      it('marks a group with nothing to choose, which the keys still reach and open', async () => {
+        const { page, component, root } = await openList(actions, 'mode="select-only" trigger="button" group-display="flyout"');
+        const rows = Array.from(root.querySelectorAll('.pds-combobox__group-row'));
+        expect(rows.map(row => row.getAttribute('aria-disabled'))).toEqual([null, 'true', null]);
+
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Contact'));
+        key(component, 'ArrowDown');
+        await page.waitForChanges();
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Premium'));
+
+        key(component, 'ArrowRight');
+        await page.waitForChanges();
+        expect(component.openGroup).toBe(groupNamed(component, 'Premium'));
+        expect(component.highlightedIndex).toBe(3);
+        key(component, 'Enter');
+        expect(component.value).toBeFalsy();
+        expect(component.isOpen).toBe(true);
+      });
+
+      it('opens on the first group with something to choose when the value is a disabled option', async () => {
+        const page = await newSpecPage({
+          components: [PdsCombobox],
+          html: `<pds-combobox component-id="locked" mode="select-only" trigger="button" group-display="flyout" value="sms-send"></pds-combobox>`,
+        });
+        const component = page.rootInstance;
+        component.options = actions;
+        await page.waitForChanges();
+        component.isOpen = true;
+        component.filterOptions();
+        component.setInitialHighlightedIndex();
+        await page.waitForChanges();
+
+        expect(component.selectedOption?.value).toBe('sms-send');
+        expect(component.openGroup).toBeNull();
+        expect(component.highlightedGroup?.label).toBe('Contact');
+      });
+
+      it('opens on the first group with something to choose', async () => {
+        const { component } = await openList(
+          [{ id: 'sms-send', text: 'Send a text message', group: 'Premium', disabled: true }, ...actions.slice(4)],
+          'mode="select-only" trigger="button" group-display="flyout"',
+        );
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+      });
+
+      it('opens a disabled group on hover and highlights its row', async () => {
+        const { page, component, root } = await openList(actions, 'mode="select-only" trigger="button" group-display="flyout"');
+        const premium = root.querySelectorAll('.pds-combobox__group-row')[1];
+
+        premium.dispatchEvent(new Event('mouseenter'));
+        premium.querySelector('.pds-combobox__group-row-trigger')!.dispatchEvent(new Event('mouseenter'));
+        await page.waitForChanges();
+
+        expect(component.openGroup).toBe(groupNamed(component, 'Premium'));
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Premium'));
+        expect(root.querySelector('.pds-combobox__flyout [role="treeitem"]')?.getAttribute('aria-disabled')).toBe('true');
+      });
+
+      it('drills into a disabled group from the keyboard', async () => {
+        const { page, component } = await openList(actions, 'mode="select-only" trigger="button" group-display="drill-in"');
+        key(component, 'ArrowDown');
+        key(component, 'ArrowRight');
+        await page.waitForChanges();
+
+        expect(component.openGroup).toBe(groupNamed(component, 'Premium'));
+        expect(component.highlightedIndex).toBe(3);
+      });
+    });
+  });
+
   describe('panel-search', () => {
     const actions = [
       { id: 'tag-add', text: 'Add a tag', group: 'Tag' },
