@@ -7,6 +7,7 @@ export default {
     disabled: false,
     errorMessage: null,
     firstDayOfWeek: null,
+    format: 'YYYY-MM-DD',
     fullWidth: false,
     helperMessage: null,
     hideLabel: false,
@@ -53,6 +54,7 @@ const BaseTemplate = (args) => html`<pds-datepicker
   ?disabled=${args.disabled}
   error-message=${ifDefined(args.errorMessage ?? undefined)}
   first-day-of-week=${ifDefined(args.firstDayOfWeek ?? undefined)}
+  format=${ifDefined(args.format ?? undefined)}
   ?full-width=${args.fullWidth}
   helper-message=${ifDefined(args.helperMessage ?? undefined)}
   ?hide-label=${args.hideLabel}
@@ -163,4 +165,12 @@ InitiallyEmptyWithClear.args = {
   componentId: 'pds-datepicker-clearable-example',
   label: 'Created',
   range: true,
+};
+
+export const Format = BaseTemplate.bind({});
+Format.args = {
+  componentId: 'pds-datepicker-format-example',
+  format: 'MM/DD/YYYY',
+  label: 'Due date',
+  value: '2026-10-13',
 };

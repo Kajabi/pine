@@ -116,6 +116,20 @@ Month and weekday names come from the browser's `Intl` support for `locale`, whi
   <pds-datepicker component-id="pds-datepicker-locale-example" label="Date d'échéance" locale="fr" first-day-of-week="1" trigger-label="Choisir une date" previous-month-label="Mois précédent" next-month-label="Mois suivant" value="2026-10-13"></pds-datepicker>
 </DocCanvas>
 
+### Format
+
+`format` sets how the field shows dates and reads typed ones, with the tokens `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and for times `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM). Typed dates may drop leading zeros, and a typed ISO date is always accepted too.
+
+The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`) whatever the format, so what a form submits and what the change event carries never depends on how the field reads. Backends parse ISO 8601 directly, as Rails' `Date.parse` and `Time.zone.parse` do.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsDatepicker componentId="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></PdsDatepicker>',
+    webComponent: '<pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>'
+}}>
+  <pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>
+</DocCanvas>
+
 ### Range
 
 Set `range` to pick a start and an end from two months side by side. The field looks and works like a single date's: type the range as `YYYY-MM-DD – YYYY-MM-DD` (a hyphen, `to` or `/` between the dates also works), or click the field to open the calendar beside it. While it's open, typing moves the calendar to the typed range.
@@ -154,7 +168,7 @@ Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days
 
 ### Range with times
 
-`time-picker` adds hour and minute pickers below each month, with AM and PM on a 12-hour clock where the locale uses one. `minute-increment` sets the minutes' step. The value carries the times, as `YYYY-MM-DDTHH:mm/YYYY-MM-DDTHH:mm`, and the field shows `YYYY-MM-DD HH:mm – YYYY-MM-DD HH:mm`. Without `range`, `time-picker` adds one time, and the date waits for Apply.
+`time-picker` adds hour and minute pickers below each month, with AM and PM on a 12-hour clock where the locale uses one. `minute-increment` sets the minutes' step. The value carries the times, as `YYYY-MM-DDTHH:mm/YYYY-MM-DDTHH:mm`. Unless `format` includes a time, the field adds one on the same clock as the pickers, as `YYYY-MM-DD 2:00 PM – YYYY-MM-DD 10:00 PM` in `en-US`. Without `range`, `time-picker` adds one time, and the date waits for Apply.
 
 <DocCanvas
   mdxSource={{
