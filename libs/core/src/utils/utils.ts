@@ -6,18 +6,27 @@ export const hasShadowDom = (el: Element) => {
 
 export const debounceEvent = (event: EventEmitter, wait: number): EventEmitter => {
   const original = (event as any)._original || event;
+  const emit = debounce(original.emit.bind(original), wait);
   return {
-    _original: event,
-    emit: debounce(original.emit.bind(original), wait),
+    _original: original,
+    emit,
+    cancel: emit.cancel,
   } as EventEmitter;
+};
+
+/** Drops an emit still waiting on a `debounceEvent` delay. A no-op on an undebounced emitter. */
+export const cancelDebouncedEvent = (event: EventEmitter | undefined) => {
+  (event as any)?.cancel?.();
 };
 
 export const debounce = (func: (...args: any[]) => void, wait = 0) => {
   let timer: any;
-  return (...args: any[]): any => {
+  const debounced = (...args: any[]): any => {
     clearTimeout(timer);
     timer = setTimeout(func, wait, ...args);
   };
+  debounced.cancel = () => clearTimeout(timer);
+  return debounced;
 };
 
 /**
