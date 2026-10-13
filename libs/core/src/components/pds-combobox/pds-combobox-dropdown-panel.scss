@@ -80,6 +80,29 @@
     }
   }
 
+  // An optgroup's options, grouped for assistive tech under its caption.
+  .pds-combobox__group {
+    list-style: none;
+    margin-block-start: var(--pine-dimension-150);
+
+    &:first-child {
+      margin-block-start: 0;
+    }
+  }
+
+  .pds-combobox__group-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // A grouped display's search results keep the panel's 4px spacing between options.
+  .pds-combobox__listbox--grouped .pds-combobox__group-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+  }
+
   .pds-combobox__group-label--with-icon {
     align-items: center;
     display: flex;
@@ -112,8 +135,17 @@
 
   .pds-combobox__group-row--open > .pds-combobox__group-row-trigger,
   .pds-combobox__group-row--has-selection > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-row--highlighted > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger,
   .pds-combobox__group-row-trigger:hover {
     background: var(--pine-color-background-muted);
+  }
+
+  // The keyboard's place among the rows, which share a background with hover, open and selection.
+  .pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger {
+    outline: var(--pine-outline-focus);
+    outline-offset: calc(var(--pine-border-width) * -2);
   }
 
   .pds-combobox__group-row-label {
@@ -206,18 +238,17 @@
     }
   }
 
-  // group-display="drill-in": the row back to the groups, above the open group's options.
+  // group-display="drill-in": the open group's row, drawn as a row back, above its options and
+  // spaced like the panel's rows.
   .pds-combobox__group-back {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
     list-style: none;
   }
 
   .pds-combobox__group-back-trigger {
     justify-content: flex-start;
-  }
-
-  // A drilled-in group's options, named for assistive tech; spaced like the panel's rows.
-  .pds-combobox__drill-in-group {
-    list-style: none;
   }
 
   .pds-combobox__drill-in-options {

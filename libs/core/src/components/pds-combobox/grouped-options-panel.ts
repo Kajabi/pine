@@ -79,6 +79,37 @@ export function groupLabelOf(option: HTMLOptionElement | null | undefined): stri
   return parentOptgroupOf(option)?.label ?? null;
 }
 
+/** Where the keyboard is in the grouped panel: a group's row, or an option by its index. */
+export type PanelItem = HTMLOptGroupElement | number;
+
+/**
+ * The items Up and Down move through from `current`, one tree level at a time: the panel's rows
+ * (groups and ungrouped options), or the open group's options. Drilled into a group, its row
+ * (drawn as the row back) comes first, above its options, as a tree draws a parent above its children.
+ */
+export function panelColumn(
+  entries: PanelEntry[],
+  openGroup: HTMLOptGroupElement | null,
+  current: PanelItem | null,
+  drilledIn: boolean,
+): PanelItem[] {
+  const open = openGroup === null ? undefined : findGroup(entries, openGroup);
+  if (open !== undefined) {
+    const options = open.options.map(({ index }) => index);
+    if (drilledIn) return [open.optgroup, ...options];
+    if (typeof current === 'number' && options.includes(current)) return options;
+  }
+  return entries.map(entry => (entry.kind === 'group' ? entry.group.optgroup : entry.index));
+}
+
+/** The panel's group for an optgroup, if it's showing. */
+export function findGroup(entries: PanelEntry[], optgroup: HTMLOptGroupElement): PanelGroup | undefined {
+  for (const entry of entries) {
+    if (entry.kind === 'group' && entry.group.optgroup === optgroup) return entry.group;
+  }
+  return undefined;
+}
+
 /** Moving from one group row to another waits this long, so a diagonal trip into the flyout doesn't switch groups. */
 const SWITCH_DELAY_MS = 120;
 /** Leaving a group (into the gap beside its flyout, say) waits this long before closing it. */
@@ -115,6 +146,8 @@ export class FlyoutController<T> {
   private closeTimer?: ReturnType<typeof setTimeout>;
   private stopAutoUpdate?: () => void;
   private positionedFlyout?: HTMLElement;
+  /** An option to scroll into view once the flyout is placed and its height capped. */
+  private pendingReveal?: HTMLElement;
 
   constructor(
     private readonly getOpenGroup: () => T | null,
@@ -217,6 +250,9 @@ export class FlyoutController<T> {
           top: `${y}px`,
           visibility: middlewareData.hide?.referenceHidden === true ? 'hidden' : 'visible',
         });
+        const reveal = this.pendingReveal;
+        this.pendingReveal = undefined;
+        if (reveal !== undefined && flyout.contains(reveal)) scrollIntoViewWithin(flyout, reveal);
       });
 
     this.stopAutoUpdate = autoUpdate(reference, flyout, () => {
@@ -224,10 +260,20 @@ export class FlyoutController<T> {
     });
   }
 
+  /**
+   * Scrolls `option` into view inside its flyout. Before the flyout's first placement its height
+   * isn't capped yet, so the option looks visible; it's revealed again once the placement lands.
+   */
+  reveal(flyout: HTMLElement, option: HTMLElement) {
+    scrollIntoViewWithin(flyout, option);
+    if (flyout.style.maxHeight === '') this.pendingReveal = option;
+  }
+
   stopPositioning() {
     this.stopAutoUpdate?.();
     this.stopAutoUpdate = undefined;
     this.positionedFlyout = undefined;
+    this.pendingReveal = undefined;
   }
 
   /** The panel closed or the component left the page. */

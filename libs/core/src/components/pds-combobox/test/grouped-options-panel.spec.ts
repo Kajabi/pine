@@ -1,4 +1,4 @@
-import { FlyoutController, buildPanelEntries, groupIconOf, groupLabelOf, parentOptgroupOf, scrollIntoViewWithin } from '../grouped-options-panel';
+import { FlyoutController, buildPanelEntries, findGroup, groupIconOf, groupLabelOf, panelColumn, parentOptgroupOf, scrollIntoViewWithin } from '../grouped-options-panel';
 
 const optgroup = (label: string, icon?: string, ...values: string[]) => {
   const group = document.createElement('optgroup');
@@ -53,6 +53,29 @@ describe('buildPanelEntries', () => {
   });
 });
 
+describe('panelColumn', () => {
+  const tag = optgroup('Tag', undefined, 'tag-add', 'tag-remove');
+  const email = optgroup('Email', undefined, 'email-send');
+  const loose = option('loose');
+  const entries = buildPanelEntries([loose, tag.group, ...tag.options, email.group, ...email.options]);
+
+  it('is the top level, rows and ungrouped options, unless the keyboard is inside the open group', () => {
+    expect(panelColumn(entries, null, null, false)).toEqual([0, tag.group, email.group]);
+    expect(panelColumn(entries, tag.group, tag.group, false)).toEqual([0, tag.group, email.group]);
+    expect(panelColumn(entries, tag.group, 2, false)).toEqual([1, 2]);
+  });
+
+  it('puts the drilled-in group above its options', () => {
+    expect(panelColumn(entries, email.group, null, true)).toEqual([email.group, 3]);
+  });
+
+  it('falls back to the top level when the open group is not showing', () => {
+    const other = optgroup('Other', undefined, 'other');
+    expect(panelColumn(entries, other.group, 0, true)).toEqual([0, tag.group, email.group]);
+    expect(findGroup(entries, other.group)).toBeUndefined();
+  });
+});
+
 describe('groupLabelOf', () => {
   it("returns an option's optgroup label, or null when it has none", () => {
     const tag = optgroup('Tag', undefined, 'tag-add');
@@ -92,6 +115,40 @@ describe('scrollIntoViewWithin', () => {
 
     scrollIntoViewWithin(container, box(120, 160));
     expect(container.scrollTop).toBe(50);
+  });
+});
+
+describe('FlyoutController.reveal', () => {
+  const box = (top: number, bottom: number) => {
+    const el = document.createElement('div');
+    el.getBoundingClientRect = () => ({ top, bottom }) as DOMRect;
+    return el;
+  };
+
+  it('scrolls now, and again after the first placement caps the flyout\'s height', () => {
+    const controller = new FlyoutController<string>(() => null, () => undefined);
+    const flyout = box(100, 200);
+    flyout.scrollTop = 0;
+    const option = box(180, 230);
+    flyout.appendChild(option);
+
+    controller.reveal(flyout, option);
+    expect(flyout.scrollTop).toBe(30);
+    expect((controller as unknown as { pendingReveal?: HTMLElement }).pendingReveal === option).toBe(true);
+
+    controller.stopPositioning();
+    expect((controller as unknown as { pendingReveal?: HTMLElement }).pendingReveal).toBeUndefined();
+  });
+
+  it('does not wait for a placement once the flyout is already capped', () => {
+    const controller = new FlyoutController<string>(() => null, () => undefined);
+    const flyout = box(100, 200);
+    flyout.style.maxHeight = '100px';
+    const option = box(120, 160);
+    flyout.appendChild(option);
+
+    controller.reveal(flyout, option);
+    expect((controller as unknown as { pendingReveal?: HTMLElement }).pendingReveal).toBeUndefined();
   });
 });
 

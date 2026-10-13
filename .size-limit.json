@@ -32,7 +32,7 @@
   {
     "name": "pds-combobox entry (gzipped)",
     "path": "libs/core/dist/esm/pds-combobox.entry.js",
-    "limit": "44 KB",
+    "limit": "48 KB",
     "gzip": true
   },
   {

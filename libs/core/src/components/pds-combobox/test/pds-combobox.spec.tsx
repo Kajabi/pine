@@ -2382,6 +2382,21 @@ describe('pds-combobox', () => {
       expect(rows).toEqual(['group:Tag', 'Add a tag', 'Remove a tag', 'group:Email', 'Send an email']);
     });
 
+    it("puts each group's options in a group named for it", async () => {
+      const { page } = await openWith(
+        `<pds-combobox component-id="grouped-roles" mode="select-only"></pds-combobox>`,
+        groupedOptions,
+      );
+
+      const groups = Array.from(page.root!.shadowRoot!.querySelectorAll('[role="listbox"] > [role="group"]'));
+      expect(groups.map(group => [group.getAttribute('aria-label'), Array.from(group.querySelectorAll('[role="option"]')).map(o => o.textContent)])).toEqual([
+        ['Tag', ['Add a tag', 'Remove a tag']],
+        ['Email', ['Send an email']],
+      ]);
+      // The group's name already carries the caption, so the caption itself is hidden from assistive tech.
+      expect(groups[0].querySelector('.pds-combobox__group-label')?.getAttribute('aria-hidden')).toBe('true');
+    });
+
     // The label is presentational; an aria-label would override the role and announce it twice.
     it('gives a group label no aria-label', async () => {
       const { page } = await openWith(
@@ -2474,7 +2489,7 @@ describe('pds-combobox', () => {
       expect(rows[0].querySelector('.pds-combobox__group-icon')?.getAttribute('name')).toBe('hashtag');
       expect(rows[0].querySelector('.pds-combobox__group-row-caret')?.getAttribute('name')).toBe('caret-right');
       expect(root.querySelector('.pds-combobox__flyout')).toBeNull();
-      expect(root.querySelectorAll('[role="option"]')).toHaveLength(0);
+      expect(root.querySelectorAll('.pds-combobox__option')).toHaveLength(0);
     });
 
     it("opens a group's options in a flyout, keeping their indexes", async () => {
@@ -2485,7 +2500,7 @@ describe('pds-combobox', () => {
 
       const flyout = root.querySelector('.pds-combobox__flyout')!;
       expect(flyout.getAttribute('aria-label')).toBe('Email');
-      expect(Array.from(flyout.querySelectorAll('[role="option"]')).map(o => [o.textContent, o.getAttribute('data-option-index')])).toEqual([
+      expect(Array.from(flyout.querySelectorAll('[role="treeitem"]')).map(o => [o.textContent, o.getAttribute('data-option-index')])).toEqual([
         ['Send an email', '2'],
       ]);
       expect(root.querySelector('.pds-combobox__group-row--open .pds-combobox__group-row-label')?.textContent).toBe('Email');
@@ -2652,7 +2667,7 @@ describe('pds-combobox', () => {
 
       const portalFlyout = page.doc.querySelector('.pds-combobox-dropdown-portal .pds-combobox__flyout');
       expect(portalFlyout).not.toBeNull();
-      expect(Array.from(portalFlyout!.querySelectorAll('[role="option"]')).map(o => o.textContent)).toEqual([
+      expect(Array.from(portalFlyout!.querySelectorAll('[role="treeitem"]')).map(o => o.textContent)).toEqual([
         'Add a tag',
         'Remove a tag',
       ]);
@@ -2689,18 +2704,18 @@ describe('pds-combobox', () => {
       const root = page.root!.shadowRoot!;
       expect(root.querySelectorAll('.pds-combobox__group-row')).toHaveLength(2);
       expect(root.querySelectorAll('.pds-combobox__group-row--open')).toHaveLength(1);
-      expect(Array.from(root.querySelectorAll('.pds-combobox__flyout [role="option"]')).map(o => o.textContent)).toEqual(['b']);
+      expect(Array.from(root.querySelectorAll('.pds-combobox__flyout [role="treeitem"]')).map(o => o.textContent)).toEqual(['b']);
     });
 
     // aria-activedescendant must not name an option that isn't in the DOM.
-    it('points aria-activedescendant only at an option that is rendered', async () => {
+    it('points aria-activedescendant only at a rendered option, or the closed group\'s row', async () => {
       const { page, component, root } = await openFlyoutPanel();
       const trigger = root.querySelector('[role="combobox"]')!;
 
       component.highlightedIndex = 2;
       component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
-      expect(trigger.hasAttribute('aria-activedescendant')).toBe(false);
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(root.querySelectorAll('.pds-combobox__group-row')[1].id);
 
       component.openGroup = groupNamed(component, 'Email');
       await page.waitForChanges();
@@ -2728,7 +2743,8 @@ describe('pds-combobox', () => {
         // The pointer opened Tag, then left its row: Tag closes in 200ms unless something keeps it.
         component.flyout.enter(tag);
         component.flyout.leave(tag);
-        component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+        component.highlightedGroup = tag;
+        component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
         jest.advanceTimersByTime(500);
       } finally {
         jest.useRealTimers();
@@ -2747,6 +2763,280 @@ describe('pds-combobox', () => {
       component.groupDisplay = 'inline';
       await page.waitForChanges();
       expect(component.openGroup).toBeNull();
+    });
+
+    describe('as a tree', () => {
+      const press = async (page: { waitForChanges: () => Promise<void> }, component: { handleKeyDown: (e: KeyboardEvent) => void }, key: string) => {
+        component.handleKeyDown(new KeyboardEvent('keydown', { key, cancelable: true }));
+        await page.waitForChanges();
+      };
+
+      it('names the closed input\'s popup a tree while it holds the selection\'s label', async () => {
+        const page = await newSpecPage({
+          components: [PdsCombobox],
+          html: `<pds-combobox component-id="actions" group-display="flyout" value="tag-remove"></pds-combobox>`,
+        });
+        (page.root as HTMLPdsComboboxElement).options = actions;
+        await page.waitForChanges();
+        const input = page.root!.shadowRoot!.querySelector('[role="combobox"]')!;
+
+        expect(page.rootInstance.displayText).toBe('Remove a tag');
+        expect(input.getAttribute('aria-haspopup')).toBe('tree');
+      });
+
+      it('scrolls the selection into view when a click opens its group', async () => {
+        const { page, component } = await openFlyoutPanel('mode="select-only" trigger="button" value="tag-remove"');
+        component.isOpen = false;
+        await page.waitForChanges();
+        const focus = jest.spyOn(component, 'updateOptionFocus');
+
+        (page.root!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+        await page.waitForChanges();
+
+        expect(component.openGroup?.label).toBe('Tag');
+        expect(focus).toHaveBeenCalled();
+      });
+
+      it('makes each group row a treeitem, with its options a level below', async () => {
+        const { page, component, root } = await openFlyoutPanel();
+
+        expect(root.querySelector('.pds-combobox__listbox')?.getAttribute('role')).toBe('tree');
+        expect(root.querySelector('[role="combobox"]')?.getAttribute('aria-haspopup')).toBe('tree');
+        const rows = Array.from(root.querySelectorAll('.pds-combobox__group-row'));
+        expect(rows.map(row => ['role', 'aria-level', 'aria-posinset', 'aria-setsize', 'aria-expanded'].map(a => row.getAttribute(a)))).toEqual([
+          ['treeitem', '1', '1', '2', 'false'],
+          ['treeitem', '1', '2', '2', 'false'],
+        ]);
+        expect(root.querySelector(`[id="${rows[0].getAttribute('aria-labelledby')}"]`)?.textContent).toBe('Tag');
+
+        component.openGroup = groupNamed(component, 'Tag');
+        await page.waitForChanges();
+        const open = root.querySelector('.pds-combobox__group-row--open')!;
+        expect(open.getAttribute('aria-expanded')).toBe('true');
+        expect(Array.from(open.querySelectorAll('[role="group"] [role="treeitem"]')).map(o => ['aria-level', 'aria-posinset', 'aria-setsize'].map(a => o.getAttribute(a)))).toEqual([
+          ['2', '1', '2'],
+          ['2', '2', '2'],
+        ]);
+      });
+
+      it('marks only the selected treeitem, as a single-select tree does', async () => {
+        const { page, component, root } = await openFlyoutPanel();
+        component.value = 'tag-remove';
+        component.openGroup = groupNamed(component, 'Tag');
+        await page.waitForChanges();
+
+        expect(Array.from(root.querySelectorAll('.pds-combobox__flyout [role="treeitem"]')).map(o => o.getAttribute('aria-selected'))).toEqual([null, 'true']);
+      });
+
+      it('leaves Space, Home and End to the input trigger\'s text', async () => {
+        const { page, component } = await openFlyoutPanel();
+        component.setInitialHighlightedIndex();
+        await page.waitForChanges();
+
+        for (const key of [' ', 'Home', 'End']) {
+          const event = new KeyboardEvent('keydown', { key, cancelable: true });
+          expect(component.handleGroupedPanelKey(event)).toBe(false);
+          expect(event.defaultPrevented).toBe(false);
+        }
+      });
+
+      it('jumps within a level with Home, End, PageUp and PageDown', async () => {
+        const { page, component } = await openFlyoutPanel('mode="select-only" trigger="button"');
+        const tag = groupNamed(component, 'Tag');
+        const email = groupNamed(component, 'Email');
+
+        await press(page, component, 'PageUp');
+        expect(component.highlightedGroup).toBe(email);
+        await press(page, component, 'PageUp');
+        expect(component.highlightedGroup).toBe(tag);
+        await press(page, component, 'PageDown');
+        expect(component.highlightedGroup).toBe(email);
+
+        await press(page, component, 'Home');
+        await press(page, component, 'ArrowRight');
+        await press(page, component, 'End');
+        expect(component.highlightedIndex).toBe(1);
+        await press(page, component, 'Home');
+        expect(component.highlightedIndex).toBe(0);
+      });
+
+      it('opens a group with Space on the button trigger', async () => {
+        const { page, component, root } = await openFlyoutPanel('mode="select-only" trigger="button"');
+        component.setInitialHighlightedIndex();
+        await page.waitForChanges();
+
+        root.querySelector('[role="combobox"]')!.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', cancelable: true }));
+        await page.waitForChanges();
+        expect(component.openGroup).toBe(groupNamed(component, 'Tag'));
+        expect(component.highlightedIndex).toBe(0);
+      });
+
+      it('leaves Left and Right to the input trigger while it has text', async () => {
+        const { page, component } = await openFlyoutPanel();
+        component.expandFilterListWhileOpen = true;
+        component.displayText = 'Add a tag';
+        component.highlightedGroup = groupNamed(component, 'Tag');
+        await page.waitForChanges();
+
+        for (const key of ['ArrowLeft', 'ArrowRight']) {
+          const event = new KeyboardEvent('keydown', { key, cancelable: true });
+          component.handleKeyDown(event);
+          expect(event.defaultPrevented).toBe(false);
+        }
+        expect(component.openGroup).toBeNull();
+      });
+
+      it('carries on from the row when the highlighted option\'s flyout has closed', async () => {
+        const { page, component } = await openFlyoutPanel('mode="select-only" trigger="button"');
+        const tag = groupNamed(component, 'Tag');
+        // The pointer was on "Remove a tag", then left, and the flyout closed behind it.
+        component.highlightedIndex = 1;
+        await page.waitForChanges();
+
+        await press(page, component, 'ArrowDown');
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+
+        component.highlightedIndex = 1;
+        await page.waitForChanges();
+        await press(page, component, 'Enter');
+        expect(component.value).not.toBe('tag-remove');
+        expect(component.openGroup).toBe(tag);
+        expect(component.highlightedIndex).toBe(0);
+      });
+
+      it("opens on the selection's group however the dropdown opens", async () => {
+        const page = await newSpecPage({
+          components: [PdsCombobox],
+          html: `<pds-combobox component-id="actions" group-display="flyout" mode="select-only" trigger="button"></pds-combobox>`,
+        });
+        const component = page.rootInstance;
+        component.options = actions;
+        component.value = 'email-send';
+        await page.waitForChanges();
+        component.selectedOption = component.optionEls.find((o: HTMLOptionElement) => o.value === 'email-send');
+        await page.waitForChanges();
+
+        (page.root!.shadowRoot!.querySelector('[role="combobox"]') as HTMLElement).click();
+        await page.waitForChanges();
+        expect(component.openGroup).toBe(groupNamed(component, 'Email'));
+        expect(component.highlightedIndex).toBe(2);
+
+        await press(page, component, 'ArrowLeft');
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+      });
+
+      it('closes a flyout that hover opened with Escape, before the panel', async () => {
+        const { page, component } = await openFlyoutPanel();
+        component.openGroup = groupNamed(component, 'Email');
+        await page.waitForChanges();
+
+        await press(page, component, 'Escape');
+        expect(component.openGroup).toBeNull();
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+        expect(component.isOpen).toBe(true);
+      });
+
+      it('names the button trigger popup a tree', async () => {
+        const { root } = await openFlyoutPanel('mode="select-only" trigger="button"');
+        expect(root.querySelector('[role="combobox"]')?.getAttribute('aria-haspopup')).toBe('tree');
+      });
+
+      it('starts on the first row without opening it, and moves through the rows', async () => {
+        const { page, component, root } = await openFlyoutPanel();
+        const trigger = root.querySelector('[role="combobox"]')!;
+        const [tagRow, emailRow] = Array.from(root.querySelectorAll('.pds-combobox__group-row'));
+
+        component.setInitialHighlightedIndex();
+        await page.waitForChanges();
+        expect(component.openGroup).toBeNull();
+        expect(trigger.getAttribute('aria-activedescendant')).toBe(tagRow.id);
+        expect(tagRow.classList.contains('pds-combobox__group-row--highlighted')).toBe(true);
+
+        await press(page, component, 'ArrowDown');
+        expect(trigger.getAttribute('aria-activedescendant')).toBe(emailRow.id);
+        await press(page, component, 'ArrowDown');
+        expect(trigger.getAttribute('aria-activedescendant')).toBe(emailRow.id);
+        await press(page, component, 'ArrowUp');
+        expect(trigger.getAttribute('aria-activedescendant')).toBe(tagRow.id);
+      });
+
+      it('opens a group at its first option with ArrowRight, stays in it, and closes back to its row with ArrowLeft', async () => {
+        const { page, component, root } = await openFlyoutPanel();
+        const trigger = root.querySelector('[role="combobox"]')!;
+        const tag = groupNamed(component, 'Tag');
+        component.setInitialHighlightedIndex();
+        await page.waitForChanges();
+
+        await press(page, component, 'ArrowRight');
+        expect(component.openGroup).toBe(tag);
+        expect(trigger.getAttribute('aria-activedescendant')).toBe('actions-option-0');
+
+        // Down stops at the group's last option rather than running into the next group.
+        await press(page, component, 'ArrowDown');
+        await press(page, component, 'ArrowDown');
+        expect(component.highlightedIndex).toBe(1);
+
+        await press(page, component, 'ArrowLeft');
+        expect(component.openGroup).toBeNull();
+        expect(component.highlightedIndex).toBe(-1);
+        expect(trigger.getAttribute('aria-activedescendant')).toBe(root.querySelector('.pds-combobox__group-row')!.id);
+      });
+
+      it('opens a group with Enter, selects with Enter, and closes the group with Escape before the panel', async () => {
+        const { page, component } = await openFlyoutPanel();
+        const tag = groupNamed(component, 'Tag');
+        component.setInitialHighlightedIndex();
+        await page.waitForChanges();
+
+        await press(page, component, 'Enter');
+        expect(component.openGroup).toBe(tag);
+        expect(component.isOpen).toBe(true);
+
+        await press(page, component, 'Escape');
+        expect(component.openGroup).toBeNull();
+        expect(component.highlightedGroup).toBe(tag);
+        expect(component.isOpen).toBe(true);
+
+        await press(page, component, 'Enter');
+        await press(page, component, 'Enter');
+        expect(component.value).toBe('tag-add');
+        expect(component.isOpen).toBe(false);
+      });
+
+      it('closes the group before the panel on Escape from the button trigger', async () => {
+        const { page, component, root } = await openFlyoutPanel('mode="select-only" trigger="button"');
+        component.openGroup = groupNamed(component, 'Tag');
+        component.highlightedIndex = 0;
+        await page.waitForChanges();
+
+        root.querySelector('[role="combobox"]')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }));
+        await page.waitForChanges();
+        expect(component.openGroup).toBeNull();
+        expect(component.isOpen).toBe(true);
+      });
+
+      it('highlights a row under the pointer, so the keys carry on from it', async () => {
+        const { page, component, root } = await openFlyoutPanel();
+
+        root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
+        await page.waitForChanges();
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Email'));
+
+        await press(page, component, 'ArrowUp');
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Tag'));
+      });
+
+      it('closes a flyout that hover opened when the keys move to another row', async () => {
+        const { page, component } = await openFlyoutPanel();
+        const email = groupNamed(component, 'Email');
+        component.openGroup = email;
+        component.highlightedGroup = email;
+        await page.waitForChanges();
+
+        await press(page, component, 'ArrowUp');
+        expect(component.openGroup).toBeNull();
+        expect(component.highlightedGroup).toBe(groupNamed(component, 'Tag'));
+      });
     });
 
     it('applies the flyout width props', async () => {
@@ -2797,8 +3087,8 @@ describe('pds-combobox', () => {
       expect(component.openGroup).toBe(groupNamed(component, 'Email'));
       expect(root.querySelector('.pds-combobox__group-row')).toBeNull();
       expect(root.querySelector('.pds-combobox__flyout')).toBeNull();
-      expect(root.querySelector('.pds-combobox__group-back')?.textContent).toBe('Back: Email');
-      expect(Array.from(root.querySelectorAll('[role="option"]')).map(o => [o.textContent, o.getAttribute('data-option-index')])).toEqual([
+      expect(root.querySelector('.pds-combobox__group-back-trigger')?.textContent).toBe('Back: Email');
+      expect(Array.from(root.querySelectorAll('[role="group"] [role="treeitem"]')).map(o => [o.textContent, o.getAttribute('data-option-index')])).toEqual([
         ['Send an email', '2'],
       ]);
 
@@ -2816,11 +3106,29 @@ describe('pds-combobox', () => {
 
       const group = root.querySelector('ul[role="group"]')!;
       expect(group.getAttribute('aria-label')).toBe('Tag');
-      expect(group.querySelectorAll('[role="option"]')).toHaveLength(2);
+      expect(group.querySelectorAll('[role="treeitem"]')).toHaveLength(2);
       expect(root.querySelector('[role="status"]')?.textContent).toBe('Tag');
     });
 
+    it('click-opens on the first row, so ArrowRight drills into the first group at its first option', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="drill" group-display="drill-in" mode="select-only" trigger="button"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      (page.root as HTMLPdsComboboxElement).options = actions;
+      await page.waitForChanges();
 
+      (page.root!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(component.highlightedIndex).toBe(-1);
+      expect(component.highlightedGroup?.label).toBe('Tag');
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+      await page.waitForChanges();
+      expect(component.openGroup?.label).toBe('Tag');
+      expect(component.highlightedIndex).toBe(0);
+    });
     it('stays in the drilled-in group when the options are rebuilt, as when another page loads', async () => {
       const { page, component, root } = await openDrillIn();
       (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
@@ -2828,15 +3136,16 @@ describe('pds-combobox', () => {
 
       (page.root as HTMLPdsComboboxElement).options = [...actions, { id: 'email-resend', text: 'Resend an email', group: 'Email' }];
       await page.waitForChanges();
-      expect(root.querySelector('.pds-combobox__group-back')?.textContent).toBe('Back: Email');
-      expect(Array.from(root.querySelectorAll('[role="option"]')).map(o => o.textContent)).toEqual(['Send an email', 'Resend an email']);
+      expect(root.querySelector('.pds-combobox__group-back-trigger')?.textContent).toBe('Back: Email');
+      expect(Array.from(root.querySelectorAll('[data-option-index]')).map(o => o.textContent)).toEqual(['Send an email', 'Resend an email']);
 
       component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true }));
       await page.waitForChanges();
       expect(component.openGroup).toBeNull();
       expect(root.querySelectorAll('.pds-combobox__group-row')).toHaveLength(2);
     });
-    it('clears the highlight on the way back to the groups', async () => {
+
+    it("highlights the group's row on the way back, so the next arrow carries on from it", async () => {
       const { page, component, root } = await openDrillIn();
 
       component.openGroup = groupNamed(component, 'Tag');
@@ -2847,6 +3156,127 @@ describe('pds-combobox', () => {
 
       expect(component.openGroup).toBeNull();
       expect(component.highlightedIndex).toBe(-1);
+      expect(component.highlightedGroup).toBe(groupNamed(component, 'Tag'));
+    });
+
+    it("draws the open group as its own expanded treeitem, holding its options", async () => {
+      const { page, component, root } = await openDrillIn();
+
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      expect(root.querySelector('.pds-combobox__listbox')?.getAttribute('role')).toBe('tree');
+      const back = root.querySelector('.pds-combobox__group-back')!;
+      expect(['role', 'aria-expanded', 'aria-level', 'aria-posinset', 'aria-setsize'].map(a => back.getAttribute(a))).toEqual(['treeitem', 'true', '1', '1', '2']);
+      expect(root.querySelector(`[id="${back.getAttribute('aria-labelledby')}"]`)?.textContent).toBe('Back: Tag');
+      expect(back.querySelector('ul[role="group"]')!.querySelectorAll('[role="treeitem"]')).toHaveLength(2);
+    });
+
+    it('drills in with ArrowRight, reaches the row back with ArrowUp, and returns to the same row', async () => {
+      const { page, component, root } = await openDrillIn();
+      const trigger = root.querySelector('[role="combobox"]')!;
+      const email = groupNamed(component, 'Email');
+      const press = async (key: string) => {
+        component.handleKeyDown(new KeyboardEvent('keydown', { key, cancelable: true }));
+        await page.waitForChanges();
+      };
+      component.setInitialHighlightedIndex();
+      await page.waitForChanges();
+
+      await press('ArrowDown');
+      await press('ArrowRight');
+      expect(component.openGroup).toBe(email);
+      expect(trigger.getAttribute('aria-activedescendant')).toBe('drill-option-2');
+
+      await press('ArrowUp');
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(root.querySelector('.pds-combobox__group-back')!.id);
+
+      await press('ArrowRight');
+      expect(component.highlightedIndex).toBe(2);
+
+      await press('ArrowLeft');
+      expect(component.openGroup).toBeNull();
+      expect(component.highlightedGroup).toBe(email);
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(root.querySelectorAll('.pds-combobox__group-row')[1].id);
+    });
+
+    it('goes back with Enter on the row back', async () => {
+      const { page, component } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button"');
+      const tag = groupNamed(component, 'Tag');
+      component.openGroup = tag;
+      await page.waitForChanges();
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'Home', cancelable: true }));
+      await page.waitForChanges();
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'Enter', cancelable: true }));
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBeNull();
+      expect(component.highlightedGroup).toBe(tag);
+    });
+
+    it('names a panel-search button trigger by its label and its own text, the selection', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search label="Filter"');
+      const trigger = root.querySelector('.pds-combobox__button-trigger')!;
+
+      expect(trigger.getAttribute('aria-labelledby')).toBe('drill-label drill');
+      expect(trigger.id).toBe('drill');
+
+      component.hideLabel = true;
+      component.value = 'email-send';
+      await page.waitForChanges();
+      expect(trigger.hasAttribute('aria-labelledby')).toBe(false);
+      expect(trigger.getAttribute('aria-label')).toBe('Filter, Send an email');
+    });
+
+    it('rings a group row for the keys only, not under the pointer', async () => {
+      const { page, component, root } = await openDrillIn();
+      const rows = () => Array.from(root.querySelectorAll('.pds-combobox__group-row'));
+
+      rows()[1].querySelector('.pds-combobox__group-row-trigger')!.dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+      expect(rows()[1].classList.contains('pds-combobox__group-row--highlighted')).toBe(true);
+      expect(rows()[1].classList.contains('pds-combobox__group-row--keyboard')).toBe(false);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(rows()[0].classList.contains('pds-combobox__group-row--keyboard')).toBe(true);
+    });
+
+    it('follows the open group to the optgroup an options reload rebuilds, and resets the highlight', async () => {
+      const { page, component } = await openDrillIn();
+      component.openGroup = groupNamed(component, 'Tag');
+      component.highlightedGroup = groupNamed(component, 'Email');
+      await page.waitForChanges();
+
+      component.options = [...component.options];
+      await page.waitForChanges();
+      expect(component.openGroup === groupNamed(component, 'Tag')).toBe(true);
+      expect(component.highlightedGroup).toBeNull();
+
+      component.options = actions.filter(action => action.group !== 'Tag');
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
+    });
+
+    it('names the popup a tree from the search field, and a listbox of grouped results while searching', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
+      const input = root.querySelector('.pds-combobox__panel-search-input')!;
+      const popup = () => root.querySelector('#drill-listbox')!;
+
+      expect(root.querySelectorAll('[role="combobox"]')).toHaveLength(1);
+      expect(root.querySelector('.pds-combobox__button-trigger')?.getAttribute('role')).toBe('button');
+      expect(root.querySelector('.pds-combobox__button-trigger')?.getAttribute('aria-haspopup')).toBe('tree');
+      expect(input.getAttribute('aria-haspopup')).toBe('tree');
+      expect(popup().getAttribute('role')).toBe('tree');
+
+      component.panelQuery = 'tag';
+      component.filterOptions();
+      await page.waitForChanges();
+
+      expect(input.getAttribute('aria-haspopup')).toBe('listbox');
+      expect(popup().getAttribute('role')).toBe('listbox');
+      expect(popup().querySelector('[role="group"]')?.getAttribute('aria-label')).toBe('Tag');
     });
 
     it('highlights a clicked group\'s first option, so the arrows carry on inside it', async () => {
@@ -2906,7 +3336,7 @@ describe('pds-combobox', () => {
       component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
 
-      expect(root.querySelector('.pds-combobox__group-back')?.textContent).toBe('Volver: Tag');
+      expect(root.querySelector('.pds-combobox__group-back-trigger')?.textContent).toBe('Volver: Tag');
     });
 
     it('drills in from flyout mode when there is no room for a flyout', async () => {
