@@ -3049,6 +3049,43 @@ describe('pds-combobox', () => {
       expect(fetch).toHaveBeenCalledWith('', 1);
     });
 
+    it('refetches an empty query on a keyboard reopen too', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="remote-reopen" trigger="button" mode="select-only" panel-search async-url="/api/actions"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const fetch = jest.spyOn(component, 'debouncedFetchAsyncOptions').mockImplementation(() => undefined);
+      component.internalOptions = [{ id: 'a', text: 'Add a tag' }];
+      component.lastFetchedQuery = 'tag';
+
+      const trigger = page.root!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement;
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+      await page.waitForChanges();
+
+      expect(component.isOpen).toBe(true);
+      expect(fetch).toHaveBeenCalledWith('', 1);
+    });
+
+    it('emits an empty search when closing clears what was typed in the panel', async () => {
+      const { page, component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search debounce="0"');
+      const searched = jest.fn();
+      page.root!.addEventListener('pdsComboboxSearch', searched);
+
+      jest.useFakeTimers();
+      try {
+        search(root).value = 'tag';
+        search(root).dispatchEvent(new Event('input'));
+        component.isOpen = false;
+        jest.advanceTimersByTime(0);
+      } finally {
+        jest.useRealTimers();
+      }
+
+      expect(searched.mock.calls[searched.mock.calls.length - 1]?.[0].detail.query).toBe('');
+      expect(component.panelQuery).toBe('');
+    });
+
     it('keeps focus in the search field when the panel\'s padding is pressed', async () => {
       const { root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
       const panel = root.querySelector('.pds-combobox__listbox--with-search')!;

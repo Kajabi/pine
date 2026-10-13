@@ -472,7 +472,11 @@ export class PdsCombobox implements BasePdsProps {
     if (!isOpen) {
       this.openGroup = null;
       this.flyout.reset();
-      this.panelQuery = '';
+      if (this.panelQuery !== '') {
+        // The field reopens empty, so tell consumers who filter `options` from this event.
+        this.panelQuery = '';
+        this.pdsComboboxSearch.emit({ query: '' });
+      }
       this.panelSearchFocused = false;
       this.flyoutRoomChecked = false;
       this.flyoutFallback = false;
@@ -1804,14 +1808,7 @@ export class PdsCombobox implements BasePdsProps {
     if (this.isOpen) {
       this.prepareExpandFilterListOnOpen();
       this.filterOptions();
-
-      // Trigger initial fetch if async and no options loaded yet. The panel's search field opens
-      // empty, so results left from the last search are refetched for an empty query.
-      if (this.asyncUrl && this.usesPanelSearch && (this.internalOptions.length === 0 || this.lastFetchedQuery !== '')) {
-        this.debouncedFetchAsyncOptions('', 1);
-      } else if (this.asyncUrl && this.internalOptions.length === 0) {
-        this.debouncedFetchAsyncOptions(this.displayText, 1);
-      }
+      this.fetchAsyncOptionsOnOpen();
 
       // Set highlighted index and prepare for keyboard navigation
       this.setInitialHighlightedIndex();
@@ -1825,6 +1822,20 @@ export class PdsCombobox implements BasePdsProps {
     }
   };
 
+  /**
+   * With `async-url`, fetches when the button trigger opens: the first page if nothing has loaded.
+   * The panel's search field opens empty, so results left from the last search are refetched for
+   * an empty query.
+   */
+  private fetchAsyncOptionsOnOpen() {
+    if (!this.asyncUrl) return;
+    if (this.usesPanelSearch && (this.internalOptions.length === 0 || this.lastFetchedQuery !== '')) {
+      this.debouncedFetchAsyncOptions('', 1);
+    } else if (this.internalOptions.length === 0) {
+      this.debouncedFetchAsyncOptions(this.displayText, 1);
+    }
+  }
+
   // Handler for button trigger keyboard events
   private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
     if ((e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') && !this.isOpen) {
@@ -1834,6 +1845,7 @@ export class PdsCombobox implements BasePdsProps {
       this.isOpen = true;
       this.prepareExpandFilterListOnOpen();
       this.filterOptions();
+      this.fetchAsyncOptionsOnOpen();
       // Set highlighted index immediately
       this.setInitialHighlightedIndex();
       setTimeout(() => {
