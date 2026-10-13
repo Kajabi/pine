@@ -1109,4 +1109,39 @@ it('should set focus on the input element when setFocus is called', async() => {
       jest.useRealTimers();
     }
   });
+
+  it('stops debouncing pdsInput when debounce is cleared', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea component-id="field" debounce="300"></pds-textarea>`,
+    });
+    const emitted = jest.fn();
+    page.root!.addEventListener('pdsInput', emitted);
+    const textarea = page.root!.shadowRoot!.querySelector('textarea') as HTMLTextAreaElement;
+
+    (page.root as HTMLPdsTextareaElement).debounce = undefined;
+    textarea.value = 'a';
+    textarea.dispatchEvent(new Event('input'));
+    expect(emitted).toHaveBeenCalledTimes(1);
+  });
+
+  it('stops debouncing pdsInput when debounce is cleared after a reconnect', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<div><pds-textarea component-id="field" debounce="300"></pds-textarea></div>`,
+    });
+    const host = page.body.querySelector('pds-textarea') as HTMLPdsTextareaElement;
+    const parent = host.parentElement!;
+    host.remove();
+    parent.appendChild(host);
+    await page.waitForChanges();
+    const emitted = jest.fn();
+    host.addEventListener('pdsInput', emitted);
+
+    host.debounce = undefined;
+    const textarea = host.shadowRoot!.querySelector('textarea') as HTMLTextAreaElement;
+    textarea.value = 'a';
+    textarea.dispatchEvent(new Event('input'));
+    expect(emitted).toHaveBeenCalledTimes(1);
+  });
 });

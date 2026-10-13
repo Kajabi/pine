@@ -316,6 +316,8 @@ export class PdsTextarea {
   }
 
   connectedCallback() {
+    // Keep the raw emitter before the first wrap, so clearing debounce can restore it.
+    this.originalPdsInput ??= this.pdsInput;
     this.debounceChanged();
     // Initialize ElementInternals for form association (only once per element instance)
     if (this.el.attachInternals && !this.internals) {
@@ -340,7 +342,6 @@ export class PdsTextarea {
   }
 
   componentDidLoad() {
-    this.originalPdsInput = this.pdsInput;
     // Set initial form value
     this.updateFormValue();
 
