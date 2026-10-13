@@ -53,6 +53,11 @@ pds-input {
   }
 }
 
+// The field's clear button sits before the calendar button.
+.pds-datepicker__clear {
+  margin-inline-end: var(--pine-dimension-2xs);
+}
+
 // Round outlined month buttons, as pds-button's secondary icon-only buttons.
 .pds-datepicker__nav {
   align-items: center;
