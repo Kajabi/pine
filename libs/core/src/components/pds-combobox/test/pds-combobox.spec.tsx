@@ -2316,6 +2316,34 @@ describe('pds-combobox', () => {
       expect(icons[2]?.hasAttribute('icon')).toBe(false);
     });
 
+    it('leaves options with a null group from JSON ungrouped, with no icon', async () => {
+      const { component } = await openWith(
+        `<pds-combobox component-id="grouped-null" mode="select-only"></pds-combobox>`,
+        [{ id: 'a', text: 'A', group: null, groupIcon: null }],
+      );
+
+      expect(component.optionEls[0].parentElement?.tagName).not.toBe('OPTGROUP');
+      expect(component.allItems.some((item: Element) => item.tagName === 'OPTGROUP')).toBe(false);
+    });
+
+    it('lists ungrouped options before every group, wherever they appear', async () => {
+      const { component } = await openWith(
+        `<pds-combobox component-id="grouped-loose" mode="select-only"></pds-combobox>`,
+        [
+          { id: 'tag-add', text: 'Add a tag', group: 'Tag' },
+          { id: 'loose', text: 'Loose' },
+          { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+        ],
+      );
+
+      expect(component.allItems.map((item: HTMLElement) => (item.tagName === 'OPTGROUP' ? 'group:Tag' : (item as HTMLOptionElement).value))).toEqual([
+        'loose',
+        'group:Tag',
+        'tag-add',
+        'tag-remove',
+      ]);
+    });
+
     it('ignores a group or group icon that is not a string', async () => {
       const { component } = await openWith(
         `<pds-combobox component-id="grouped-types" mode="select-only"></pds-combobox>`,
