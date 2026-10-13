@@ -1275,9 +1275,19 @@ export namespace Components {
          */
         "max"?: string;
         /**
+          * The validation message the form reports for a date after `max`. `{date}` is replaced by the latest date, in the field's format.
+          * @default 'Choose {date} or earlier.'
+         */
+        "maxDateMessage": string;
+        /**
           * The earliest date that can be picked, as `YYYY-MM-DD`.
          */
         "min"?: string;
+        /**
+          * The validation message the form reports for a date before `min`. `{date}` is replaced by the earliest date, in the field's format.
+          * @default 'Choose {date} or later.'
+         */
+        "minDateMessage": string;
         /**
           * The minutes the time picker steps by, such as `15` or `30`.
           * @default 1
@@ -1324,6 +1334,11 @@ export namespace Components {
           * Ranges listed beside the calendar in range mode. A comma-separated list of built-in keys (`today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date`, `last-12-months`), or an array of `{ key, label?, start?, end? }` to relabel built-ins or add your own.
          */
         "presets"?: string | DatepickerPreset[];
+        /**
+          * Accessible label for the list of presets, in range mode.
+          * @default 'Presets'
+         */
+        "presetsLabel": string;
         /**
           * Accessible label for the button that shows the previous month.
           * @default 'Previous month'
@@ -4981,9 +4996,19 @@ declare namespace LocalJSX {
          */
         "max"?: string;
         /**
+          * The validation message the form reports for a date after `max`. `{date}` is replaced by the latest date, in the field's format.
+          * @default 'Choose {date} or earlier.'
+         */
+        "maxDateMessage"?: string;
+        /**
           * The earliest date that can be picked, as `YYYY-MM-DD`.
          */
         "min"?: string;
+        /**
+          * The validation message the form reports for a date before `min`. `{date}` is replaced by the earliest date, in the field's format.
+          * @default 'Choose {date} or later.'
+         */
+        "minDateMessage"?: string;
         /**
           * The minutes the time picker steps by, such as `15` or `30`.
           * @default 1
@@ -5038,6 +5063,11 @@ declare namespace LocalJSX {
           * Ranges listed beside the calendar in range mode. A comma-separated list of built-in keys (`today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date`, `last-12-months`), or an array of `{ key, label?, start?, end? }` to relabel built-ins or add your own.
          */
         "presets"?: string | DatepickerPreset[];
+        /**
+          * Accessible label for the list of presets, in range mode.
+          * @default 'Presets'
+         */
+        "presetsLabel"?: string;
         /**
           * Accessible label for the button that shows the previous month.
           * @default 'Previous month'
@@ -6938,6 +6968,8 @@ declare namespace LocalJSX {
         "hourLabel": string;
         "invalid": boolean;
         "invalidDateMessage": string;
+        "maxDateMessage": string;
+        "minDateMessage": string;
         "label": string;
         "locale": string;
         "max": string;
@@ -6951,6 +6983,7 @@ declare namespace LocalJSX {
         "placeholder": string;
         "placement": PlacementType;
         "presets": string | DatepickerPreset[];
+        "presetsLabel": string;
         "previousMonthLabel": string;
         "range": boolean;
         "readonly": boolean;

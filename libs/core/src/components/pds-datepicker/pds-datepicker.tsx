@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, 
 import { autoUpdate, computePosition, flip, hide, offset, shift, size } from '@floating-ui/dom';
 import { calendarSimple, caretDown, caretLeft, caretRight, check } from '@pine-ds/icons/icons';
 import { isSpecTest } from '../../utils/form';
-import { resolveLocale } from '../../i18n';
+import { formatMessage, resolveLocale } from '../../i18n';
 import type { PlacementType } from '@utils/types';
 import type { DatepickerChangeEventDetail, DatepickerPreset } from './datepicker-interface';
 import type { InputInputEventDetail } from '../pds-input/input-interface';
@@ -43,6 +43,9 @@ import type { DateTimeValue } from './value';
 const FULL_DATE: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 const DEFAULT_START_TIME = '00:00';
 const DEFAULT_END_TIME = '23:59';
+/** Ids for datepickers without a `component-id`, so their calendars' ids stay unique. */
+let fallbackIds = 0;
+
 /** Below this window width, range mode shows one month rather than two side by side. */
 const TWO_MONTHS_MIN_WIDTH = 640;
 /** The least height the calendar keeps when there's little room beside its field; it may cover the field then. */
@@ -52,6 +55,18 @@ const VIEWPORT_PADDING = 8;
 
 /** How many years either side of today the year dropdown offers without `min` or `max`. */
 const DROPDOWN_YEARS = 100;
+
+type DateError = '' | 'format' | 'min' | 'max';
+
+/** Swallows the next click anywhere, or none if it doesn't come soon, as after a drag. */
+function swallowNextClick() {
+  const swallow = (event: Event) => {
+    event.stopPropagation();
+    event.preventDefault();
+  };
+  document.addEventListener('click', swallow, { capture: true, once: true });
+  window.setTimeout(() => document.removeEventListener('click', swallow, { capture: true }), 500);
+}
 
 const firstOfMonth = (date: Date) => new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
 
@@ -78,6 +93,9 @@ export class PdsDatepicker {
   private cleanupAutoUpdate?: () => void;
   /** Set when the active day should take focus on the next render. */
   private focusActiveDay = false;
+  private readonly fallbackId = `pds-datepicker-${++fallbackIds}`;
+  /** Set by a click on the label, whose forwarded click on the input shouldn't open the calendar. */
+  private skipForwardedClick = false;
 
   @Element() el!: HTMLPdsDatepickerElement;
 
@@ -174,6 +192,18 @@ export class PdsDatepicker {
   @Prop() invalidDateMessage = 'Enter a date in the format shown.';
 
   /**
+   * The validation message the form reports for a date after `max`. `{date}` is replaced by the
+   * latest date, in the field's format.
+   */
+  @Prop() maxDateMessage = 'Choose {date} or earlier.';
+
+  /**
+   * The validation message the form reports for a date before `min`. `{date}` is replaced by the
+   * earliest date, in the field's format.
+   */
+  @Prop() minDateMessage = 'Choose {date} or later.';
+
+  /**
    * Text to be displayed as the datepicker label.
    */
   @Prop() label?: string;
@@ -243,6 +273,11 @@ export class PdsDatepicker {
    * your own.
    */
   @Prop() presets?: string | DatepickerPreset[];
+
+  /**
+   * Accessible label for the list of presets, in range mode.
+   */
+  @Prop() presetsLabel = 'Presets';
 
   /**
    * Accessible label for the button that shows the previous month.
@@ -321,12 +356,11 @@ export class PdsDatepicker {
 
   @State() isOpen = false;
 
-
   /** The text in the field, which may not be a valid date yet. */
   @State() text = '';
 
-  /** Whether the text in the field isn't a date that can be picked. */
-  @State() textInvalid = false;
+  /** Why the typed text wasn't committed: it isn't a date, or it's before `min` or after `max`. */
+  @State() textError: DateError = '';
 
   /** The day the keyboard is on in the calendar, as `YYYY-MM-DD`. */
   @State() activeDate = '';
@@ -374,9 +408,39 @@ export class PdsDatepicker {
 
   @Watch('value')
   protected valueChanged() {
+    this.refreshFromValue();
+  }
+
+  /**
+   * Props that change how the value reads or what can be picked: refresh the field, and an open
+   * calendar, as when a framework sets them after the datepicker loads.
+   */
+  @Watch('format')
+  @Watch('locale')
+  @Watch('timePicker')
+  @Watch('range')
+  @Watch('min')
+  @Watch('max')
+  protected contextChanged() {
+    this.refreshFromValue();
+  }
+
+  @Watch('placement')
+  protected placementChanged() {
+    // Restarted on the next render, from the new placement.
+    this.stopPositioning();
+  }
+
+  private refreshFromValue() {
     this.text = this.fieldText();
-    this.textInvalid = false;
+    this.textError = '';
     this.updateFormValue();
+    if (!this.isOpen) return;
+
+    const parts = this.parsedValue();
+    this.loadDraft(parts);
+    const day = (parts && parts[parts.length - 1].date) ?? today();
+    this.showDate(clampDate(day, this.minDate, this.maxDate), true);
   }
 
   @Watch('required')
@@ -415,6 +479,11 @@ export class PdsDatepicker {
 
     this.focusActiveDay = false;
     this.dialogEl.querySelector<HTMLElement>(`[data-date="${this.activeDate}"]`)?.focus();
+  }
+
+  /** The id the datepicker's parts are named from: `component-id`, or a generated one. */
+  private get baseId(): string {
+    return this.componentId || this.fallbackId;
   }
 
   private get resolvedLocale(): string {
@@ -476,7 +545,8 @@ export class PdsDatepicker {
   /** What the field shows for the committed value. */
   private fieldText(): string {
     const parsed = this.parsedValue();
-    if (!parsed) return this.value && !this.range && !parseDateTime(this.value) ? this.value : '';
+    // A value that isn't a date (or range) shows as it is, and the form reports it invalid.
+    if (!parsed) return this.value ?? '';
     return parsed
       .map((part) => toFieldText(this.withTimePicker(part), this.resolvedFormat, this.resolvedLocale))
       .join(RANGE_SEPARATOR);
@@ -585,7 +655,7 @@ export class PdsDatepicker {
     const changed = next !== (this.value ?? '');
     this.value = next;
     this.text = this.fieldText();
-    this.textInvalid = false;
+    this.textError = '';
     // Always, not only when the value changes: fixing a typo back to the same value has to clear
     // the invalid state the form holds, and the value watcher won't fire for an unchanged value.
     this.updateFormValue();
@@ -643,13 +713,37 @@ export class PdsDatepicker {
     (event.currentTarget as HTMLElement).focus();
   };
 
+  /** Arrow keys move between the presets, picking each, as in a radio group. Custom range only takes focus. */
+  private onPresetsKeyDown = (event: KeyboardEvent) => {
+    const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
+    const toEdge = { Home: 'first', End: 'last' }[event.key];
+    if (!step && !toEdge) return;
+
+    const radios = Array.from(
+      (event.currentTarget as HTMLElement).querySelectorAll<HTMLButtonElement>('[role="radio"]:not([disabled])'),
+    );
+    const at = radios.indexOf(event.target as HTMLButtonElement);
+    const next = toEdge === 'first' ? radios[0] : toEdge === 'last' ? radios[radios.length - 1] : radios[(at + step + radios.length) % radios.length];
+    if (!next) return;
+
+    event.preventDefault();
+    next.focus();
+    if (next.classList.contains('pds-datepicker__preset') && next !== radios[radios.length - 1]) next.click();
+  };
+
   /** "Custom range" points to the calendar, where a range of your own is picked. */
   private onCustomRangeClick = () => {
     this.dialogEl?.querySelector<HTMLElement>('[data-date][tabindex="0"]')?.focus();
   };
 
   private onDocumentPointerDown = (event: PointerEvent) => {
-    if (!event.composedPath().includes(this.el)) this.closeCalendar(false);
+    const path = event.composedPath();
+    if (path.includes(this.el)) return;
+
+    this.closeCalendar(false);
+    // A press on a modal's backdrop lands on its <dialog>. That press dismisses the calendar, the
+    // top layer; swallow the click it makes, so the modal under it stays open.
+    if ((path[0] as Element | undefined)?.localName === 'dialog') swallowNextClick();
   };
 
   private isInside(node: Node | null): boolean {
@@ -740,7 +834,24 @@ export class PdsDatepicker {
 
   /** A click in the field opens the calendar beside it; the button inside toggles it on its own. */
   private onFieldClick = (event: MouseEvent) => {
-    if (this.triggerEl && event.composedPath().includes(this.triggerEl)) return;
+    const path = event.composedPath();
+    if (this.triggerEl && path.includes(this.triggerEl)) return;
+
+    // A click on the label is forwarded to the input as a second click; skip that one too.
+    const label = this.inputEl?.shadowRoot?.querySelector('label');
+    if (label && path.includes(label)) {
+      this.skipForwardedClick = true;
+      window.setTimeout(() => (this.skipForwardedClick = false));
+      return;
+    }
+    if (this.skipForwardedClick) {
+      this.skipForwardedClick = false;
+      return;
+    }
+
+    // Only the field's box: not its helper or error message.
+    const field = this.fieldReference();
+    if (field && field !== this.inputEl && !path.includes(field)) return;
     this.openCalendar(false);
   };
 
@@ -761,14 +872,33 @@ export class PdsDatepicker {
     this.commitText();
   };
 
-  /** The typed text as a date or range that can be picked, or `null`. */
-  private parseText(text: string): DateTimeValue[] | null {
+  /** The typed text as a date or range, or `null` if it isn't one; it may be outside `min` and `max`. */
+  private readText(text: string): DateTimeValue[] | null {
     const format = this.resolvedFormat;
     const locale = this.resolvedLocale;
     const parts = this.range ? parseRangeText(text, format, locale) : [parseFieldText(text, format, locale)];
     if (!parts || parts.some((part) => !part)) return null;
-    if (parts.some((part) => isOutOfRange(part.date, this.minDate, this.maxDate))) return null;
     return parts.map((part, i) => this.withTimePicker(part, i === 1 ? DEFAULT_END_TIME : DEFAULT_START_TIME));
+  }
+
+  /** The typed text as a date or range that can be picked, or `null`. */
+  private parseText(text: string): DateTimeValue[] | null {
+    const parts = this.readText(text);
+    return parts && !this.rangeError(parts) ? parts : null;
+  }
+
+  /** Whether any of these dates is before `min` or after `max`. */
+  private rangeError(parts: DateTimeValue[]): DateError {
+    if (this.minDate && parts.some((part) => part.date < this.minDate)) return 'min';
+    if (this.maxDate && parts.some((part) => part.date > this.maxDate)) return 'max';
+    return '';
+  }
+
+  /** What's wrong with the committed value, as one set in code: not a date, or out of range. */
+  private valueError(): DateError {
+    if (!this.value) return '';
+    const parts = this.parsedValue();
+    return parts ? this.rangeError(parts) : 'format';
   }
 
   private commitText() {
@@ -778,11 +908,12 @@ export class PdsDatepicker {
       return;
     }
 
-    const parts = this.parseText(text);
-    if (parts) {
+    const parts = this.readText(text);
+    const error = parts ? this.rangeError(parts) : 'format';
+    if (parts && !error) {
       this.commitParts(parts);
     } else {
-      this.textInvalid = true;
+      this.textError = error;
       this.updateFormValue();
     }
   }
@@ -798,6 +929,10 @@ export class PdsDatepicker {
       } else {
         this.openCalendar(true);
       }
+    } else if (key.key === 'Enter' && this.isOpen && !this.hasFooter) {
+      // A typed date commits on Enter; with nothing left to confirm, the calendar closes too.
+      this.commitText();
+      if (!this.textError) this.closeCalendar(false);
     } else if (key.key === 'Escape' && this.isOpen) {
       // Stop the field's own keydown, or a modal, popover or filter around the datepicker closes
       // too. pdsKeyDown is emitted during that keydown, so it can still be stopped here.
@@ -862,7 +997,7 @@ export class PdsDatepicker {
   private trapTab(event: KeyboardEvent) {
     const focusable = Array.from(
       this.dialogEl?.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), select:not([disabled]), [data-date][tabindex="0"]',
+        'button:not([disabled]):not([tabindex="-1"]), select:not([disabled]), [data-date][tabindex="0"]',
       ) ?? [],
     );
     if (focusable.length === 0) return;
@@ -958,8 +1093,13 @@ export class PdsDatepicker {
     if (!this.internals.setValidity) return;
 
     const anchor = this.inputEl?.shadowRoot?.querySelector('input') ?? undefined;
-    if (this.textInvalid) {
+    const error = this.textError || this.valueError();
+    if (error === 'format') {
       this.internals.setValidity({ badInput: true }, this.invalidDateMessage, anchor);
+    } else if (error === 'min') {
+      this.internals.setValidity({ rangeUnderflow: true }, this.boundMessage(this.minDateMessage, this.minDate), anchor);
+    } else if (error === 'max') {
+      this.internals.setValidity({ rangeOverflow: true }, this.boundMessage(this.maxDateMessage, this.maxDate), anchor);
     } else if (this.required && !this.value) {
       this.internals.setValidity({ valueMissing: true }, anchor?.validationMessage || this.invalidDateMessage, anchor);
     } else {
@@ -967,11 +1107,17 @@ export class PdsDatepicker {
     }
   }
 
+  /** A min or max message with its date, in the field's format. */
+  private boundMessage(template: string, bound: Date | null): string {
+    const date = bound ? toFieldText({ date: bound, time: null }, this.format || undefined, this.resolvedLocale) : '';
+    return formatMessage(template, { date });
+  }
+
   formResetCallback() {
     this.value = '';
     // The value may already be empty, so its watcher wouldn't clear typed text.
     this.text = '';
-    this.textInvalid = false;
+    this.textError = '';
     this.closeCalendar(false);
     this.updateFormValue();
   }
@@ -1003,17 +1149,19 @@ export class PdsDatepicker {
     return [start, preview && preview > start ? preview : null];
   }
 
-  /** The day shown as selected: the committed one, or the time picker's draft. */
+  /** The day shown as selected: the draft, which opens as the committed day and follows typing. */
   private selectedDay(): Date | null {
     if (this.range) return null;
-    return this.timePicker ? parseIsoDate(this.draftStart) : (this.parsedValue()?.[0].date ?? null);
+    return parseIsoDate(this.draftStart);
   }
 
   private renderMonthHeading(view: Date, index: number, locale: string, headingId: string) {
     const heading = formatDate(view, locale, { month: 'long', year: 'numeric' });
+    // Only the first month announces itself as it changes; two months move together.
+    const live = index === 0 ? 'polite' : null;
     if (!this.showDropdowns) {
       return (
-        <div class="pds-datepicker__heading" id={headingId} aria-live="polite">
+        <div class="pds-datepicker__heading" id={headingId} aria-live={live}>
           {heading}
         </div>
       );
@@ -1027,10 +1175,11 @@ export class PdsDatepicker {
     const firstYear = min ? min.getUTCFullYear() : thisYear - DROPDOWN_YEARS;
     const lastYear = max ? max.getUTCFullYear() : thisYear + DROPDOWN_YEARS;
     const monthName = dateFormatter(locale, { month: 'long' });
+    const yearName = dateFormatter(locale, { year: 'numeric' });
 
     return (
       <div class="pds-datepicker__dropdowns">
-        <span class="visually-hidden" id={headingId} aria-live="polite">
+        <span class="visually-hidden" id={headingId} aria-live={live}>
           {heading}
         </span>
         <span class="pds-datepicker__select-wrap">
@@ -1061,7 +1210,7 @@ export class PdsDatepicker {
               const y = Math.min(firstYear, year) + i;
               return (
                 <option value={String(y)} selected={y === year}>
-                  {y}
+                  {yearName.format(new Date(Date.UTC(y, 0, 1)))}
                 </option>
               );
             })}
@@ -1082,7 +1231,7 @@ export class PdsDatepicker {
     const now = today();
     const fullDate = dateFormatter(locale, FULL_DATE);
     const dayNumber = dateFormatter(locale, { day: 'numeric' });
-    const headingId = `${this.componentId}-calendar-heading-${index}`;
+    const headingId = `${this.baseId}-calendar-heading-${index}`;
     const isFirst = index === 0;
     const isLast = index === this.monthCount - 1;
 
@@ -1205,7 +1354,7 @@ export class PdsDatepicker {
     if (!minuteOptions.includes(minutes)) minuteOptions.push(minutes);
     minuteOptions.sort((a, b) => a - b);
 
-    const labelId = `${this.componentId}-time-${which}`;
+    const labelId = `${this.baseId}-time-${which}`;
 
     return (
       <div class="pds-datepicker__time" role="group" aria-labelledby={labelId}>
@@ -1269,17 +1418,27 @@ export class PdsDatepicker {
 
     const current = matchPreset(presets, parseIsoDate(this.draftStart), parseIsoDate(this.draftEnd));
     const isCustom = !current && !!this.draftStart;
+    // One choice of range: a radio group, with one Tab stop on the checked choice and arrows between.
+    const tabStop = current ?? (isCustom ? 'custom' : presets.find((p) => presetInRange(p, this.minDate, this.maxDate)));
     return (
       <div class="pds-datepicker__presets-column">
-        <ul class="pds-datepicker__presets" part="presets">
+        <ul
+          class="pds-datepicker__presets"
+          part="presets"
+          role="radiogroup"
+          aria-label={this.presetsLabel}
+          onKeyDown={this.onPresetsKeyDown}
+        >
           {presets.map((preset) => {
             const isCurrent = preset === current;
             return (
-              <li>
+              <li role="none">
                 <button
                   type="button"
+                  role="radio"
                   class={{ 'pds-datepicker__preset': true, 'pds-datepicker__preset--selected': isCurrent }}
-                  aria-pressed={isCurrent ? 'true' : 'false'}
+                  aria-checked={isCurrent ? 'true' : 'false'}
+                  tabindex={preset === tabStop ? '0' : '-1'}
                   disabled={!presetInRange(preset, this.minDate, this.maxDate)}
                   onClick={(event) => this.onPresetClick(event, preset)}
                 >
@@ -1289,10 +1448,13 @@ export class PdsDatepicker {
               </li>
             );
           })}
-          <li>
+          <li role="none">
             <button
               type="button"
+              role="radio"
               class={{ 'pds-datepicker__preset': true, 'pds-datepicker__preset--selected': isCustom }}
+              aria-checked={isCustom ? 'true' : 'false'}
+              tabindex={tabStop === 'custom' ? '0' : '-1'}
               onClick={this.onCustomRangeClick}
             >
               <span>{this.customRangeLabel}</span>
@@ -1339,9 +1501,9 @@ export class PdsDatepicker {
     return (
       <div
         class={{ 'pds-datepicker__dialog': true, 'pds-datepicker__dialog--range': this.range }}
-        id={`${this.componentId}-calendar`}
+        id={`${this.baseId}-calendar`}
         role="dialog"
-        aria-labelledby={this.range ? null : `${this.componentId}-calendar-heading-0`}
+        aria-labelledby={this.range ? null : `${this.baseId}-calendar-heading-0`}
         aria-label={this.range ? this.label || this.triggerLabel : null}
         part="calendar"
         ref={(el) => (this.dialogEl = el)}
@@ -1370,12 +1532,12 @@ export class PdsDatepicker {
       >
         <pds-input
           ref={(el) => (this.inputEl = el)}
-          componentId={this.componentId}
+          componentId={this.baseId}
           label={this.label}
           hideLabel={this.hideLabel}
           helperMessage={this.helperMessage}
           errorMessage={this.errorMessage}
-          invalid={this.invalid || this.textInvalid}
+          invalid={this.invalid || !!this.textError || !!this.valueError()}
           disabled={this.disabled}
           readonly={this.readonly}
           required={this.required}
@@ -1398,7 +1560,7 @@ export class PdsDatepicker {
             aria-label={this.triggerAccessibleName(locale)}
             aria-haspopup="dialog"
             aria-expanded={this.isOpen ? 'true' : 'false'}
-            aria-controls={this.isOpen ? `${this.componentId}-calendar` : null}
+            aria-controls={this.isOpen ? `${this.baseId}-calendar` : null}
             disabled={!this.isInteractive}
             onClick={this.onTriggerClick}
           >

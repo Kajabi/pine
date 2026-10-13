@@ -360,7 +360,9 @@ export namespace Components {
         "label"?: string;
         "locale"?: string;
         "max"?: string;
+        "maxDateMessage": string;
         "min"?: string;
+        "minDateMessage": string;
         "minuteIncrement": number;
         "minuteLabel": string;
         "monthLabel": string;
@@ -371,6 +373,7 @@ export namespace Components {
         "placeholder"?: string;
         "placement": PlacementType;
         "presets"?: string | DatepickerPreset[];
+        "presetsLabel": string;
         "previousMonthLabel": string;
         "range": boolean;
         "readonly"?: boolean;
@@ -1836,7 +1839,9 @@ export namespace LocalJSX {
         "label"?: string;
         "locale"?: string;
         "max"?: string;
+        "maxDateMessage"?: string;
         "min"?: string;
+        "minDateMessage"?: string;
         "minuteIncrement"?: number;
         "minuteLabel"?: string;
         "monthLabel"?: string;
@@ -1849,6 +1854,7 @@ export namespace LocalJSX {
         "placeholder"?: string;
         "placement"?: PlacementType;
         "presets"?: string | DatepickerPreset[];
+        "presetsLabel"?: string;
         "previousMonthLabel"?: string;
         "range"?: boolean;
         "readonly"?: boolean;
@@ -1905,7 +1911,11 @@ export namespace LocalJSX {
         // (undocumented)
         "max": string;
         // (undocumented)
+        "maxDateMessage": string;
+        // (undocumented)
         "min": string;
+        // (undocumented)
+        "minDateMessage": string;
         // (undocumented)
         "minuteIncrement": number;
         // (undocumented)
@@ -1924,6 +1934,8 @@ export namespace LocalJSX {
         "placement": PlacementType;
         // (undocumented)
         "presets": string | DatepickerPreset[];
+        // (undocumented)
+        "presetsLabel": string;
         // (undocumented)
         "previousMonthLabel": string;
         // (undocumented)
