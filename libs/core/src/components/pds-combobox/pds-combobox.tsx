@@ -2077,6 +2077,8 @@ export class PdsCombobox implements BasePdsProps {
     if (this.asyncUrl !== undefined && this.asyncUrl !== '') {
       this.debouncedFetchAsyncOptions(this.panelQuery, 1);
     }
+    // The list changes size, so place the dropdown again, as typing in the input trigger does.
+    setTimeout(() => this.openDropdownPositioning(), 0);
   };
 
   /** What's being searched: the panel's field, or the input trigger's text. */

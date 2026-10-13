@@ -3088,6 +3088,22 @@ describe('pds-combobox', () => {
       expect(component.lastFetchedQuery).toBe('tag');
     });
 
+    it('places the dropdown again as the panel search filters the list', async () => {
+      const { component, root } = await openWithSearch('trigger="button" mode="select-only" panel-search');
+      const place = jest.spyOn(component, 'openDropdownPositioning').mockImplementation(() => undefined);
+
+      jest.useFakeTimers();
+      try {
+        search(root).value = 'tag';
+        search(root).dispatchEvent(new Event('input'));
+        jest.advanceTimersByTime(0);
+      } finally {
+        jest.useRealTimers();
+      }
+
+      expect(place).toHaveBeenCalled();
+    });
+
     it('refetches an empty query on a keyboard reopen too', async () => {
       const page = await newSpecPage({
         components: [PdsCombobox],
