@@ -454,6 +454,27 @@ export class PdsModal {
     return thisZIndex === maxZIndex;
   }
 
+  /** Whether a modal dialog other than this one sits between the focused element and this modal. */
+  private modalDialogAbove(active: Element): boolean {
+    for (let dialog = closest('dialog[open]', active); dialog instanceof HTMLElement; ) {
+      if (dialog === this.modalRef) return false;
+      if (dialog.matches(':modal')) return true;
+      // Up from this dialog, across a shadow root; past the document root, closest() gives nothing.
+      dialog = closest('dialog[open]', dialog.parentElement ?? (dialog.getRootNode() as ShadowRoot).host);
+    }
+    return false;
+  }
+
+  /** The focused element's place in the list: its own stop, or the innermost stop it sits in. */
+  private stopIndex(active: Element): number {
+    const own = this.focusableElements.indexOf(active as HTMLElement);
+    if (own >= 0) return own;
+    for (let i = this.focusableElements.length - 1; i >= 0; i--) {
+      if (containsComposed(this.focusableElements[i], active)) return i;
+    }
+    return -1;
+  }
+
   private handleKeyDown = (e: KeyboardEvent) => {
     // If the modal is not open, don't handle any keyboard events
     if (!this.open) return;
@@ -526,9 +547,7 @@ export class PdsModal {
       // that dialog traps Tab: this modal's list also holds its controls, so it would wrap first. A
       // non-modal dialog inside (a disableTopLayer modal) doesn't trap, so this one still does.
       const activeElement = deepActiveElement();
-      if (!activeElement) return;
-      const dialog = closest('dialog[open]', activeElement);
-      if (dialog instanceof HTMLElement && dialog !== this.modalRef && dialog.matches(':modal')) return;
+      if (!activeElement || this.modalDialogAbove(activeElement)) return;
 
       // Content can change while the modal is open (rows fetched in, sections shown), so the
       // first and last elements are read now rather than from the list taken on opening.
@@ -542,9 +561,12 @@ export class PdsModal {
       const lastFocusableElement = this.focusableElements[this.focusableElements.length - 1];
 
       // activeElement is the control inside any shadow root, as the list holds, not the host
-      // document.activeElement reports; it can also sit inside a listed host.
-      const isFirstElement = containsComposed(firstFocusableElement, activeElement);
-      const isLastElement = containsComposed(lastFocusableElement, activeElement);
+      // document.activeElement reports. It's matched to its own stop first, so a stop inside a
+      // listed host isn't taken for that host; a focused node that isn't a stop counts as the
+      // innermost stop it sits in.
+      const stop = this.stopIndex(activeElement);
+      const isFirstElement = stop === 0;
+      const isLastElement = stop === this.focusableElements.length - 1;
 
       // If shift + tab is pressed and focus is on the first element, move to the last element
       if (e.shiftKey && isFirstElement) {
