@@ -821,17 +821,19 @@ export class PdsDatepicker {
    */
   private onClearPointerDown = () => {
     this.clearing = true;
-    window.addEventListener(
-      'pointerup',
-      () =>
-        window.setTimeout(() => {
-          if (!this.clearing) return;
-          this.clearing = false;
-          // With Apply showing, the text stays pending in the draft, as on any move within the picker.
-          if (!(this.isOpen && this.hasFooter) && this.text !== this.fieldText()) this.commitText();
-        }),
-      { once: true },
-    );
+    // The press ends in pointerup, or in pointercancel when a touch turns into a scroll.
+    const end = () => {
+      window.removeEventListener('pointerup', end);
+      window.removeEventListener('pointercancel', end);
+      window.setTimeout(() => {
+        if (!this.clearing) return;
+        this.clearing = false;
+        // With Apply showing, the text stays pending in the draft, as on any move within the picker.
+        if (!(this.isOpen && this.hasFooter) && this.text !== this.fieldText()) this.commitText();
+      });
+    };
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
   };
 
   private onClearClick = () => {
