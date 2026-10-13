@@ -350,6 +350,7 @@ export namespace Components {
         "endTimeLabel": string;
         "errorMessage"?: string;
         "firstDayOfWeek"?: number;
+        "format": string;
         "fullWidth"?: boolean;
         "helperMessage"?: string;
         "hideLabel": boolean;
@@ -1825,6 +1826,7 @@ export namespace LocalJSX {
         "errorMessage"?: string;
         "firstDayOfWeek"?: number;
         "form"?: string;
+        "format"?: string;
         "fullWidth"?: boolean;
         "helperMessage"?: string;
         "hideLabel"?: boolean;
@@ -1882,6 +1884,8 @@ export namespace LocalJSX {
         "errorMessage": string;
         // (undocumented)
         "firstDayOfWeek": number;
+        // (undocumented)
+        "format": string;
         // (undocumented)
         "fullWidth": boolean;
         // (undocumented)

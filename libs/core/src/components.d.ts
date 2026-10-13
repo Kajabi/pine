@@ -1232,6 +1232,11 @@ export namespace Components {
          */
         "firstDayOfWeek"?: number;
         /**
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM), as `MM/DD/YYYY` or `D.M.YYYY h:mm A`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+          * @default 'YYYY-MM-DD'
+         */
+        "format": string;
+        /**
           * Determines whether or not the datepicker takes full width of its container.
          */
         "fullWidth"?: boolean;
@@ -4933,6 +4938,11 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM), as `MM/DD/YYYY` or `D.M.YYYY h:mm A`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+          * @default 'YYYY-MM-DD'
+         */
+        "format"?: string;
+        /**
           * Determines whether or not the datepicker takes full width of its container.
          */
         "fullWidth"?: boolean;
@@ -6921,6 +6931,7 @@ declare namespace LocalJSX {
         "endTimeLabel": string;
         "errorMessage": string;
         "firstDayOfWeek": number;
+        "format": string;
         "fullWidth": boolean;
         "helperMessage": string;
         "hideLabel": boolean;

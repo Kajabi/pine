@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
-import { calendarSimple, caretLeft, caretRight, check } from '@pine-ds/icons/icons';
+import { calendarSimple, caretDown, caretLeft, caretRight, check } from '@pine-ds/icons/icons';
 import { isSpecTest } from '../../utils/form';
 import { resolveLocale } from '../../i18n';
 import type { PlacementType } from '@utils/types';
@@ -29,8 +29,10 @@ import {
   RANGE_SEPARATOR,
   clockFor,
   compareDateTime,
+  fieldFormat,
   joinTime,
   parseDateTime,
+  parseFieldText,
   parseRangeText,
   splitTime,
   toFieldText,
@@ -119,6 +121,14 @@ export class PdsDatepicker {
    * locale's first day where the browser reports it, otherwise Sunday.
    */
   @Prop() firstDayOfWeek?: number;
+
+  /**
+   * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MM` or `M` (month), `DD` or
+   * `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A`
+   * (AM/PM), as `MM/DD/YYYY` or `D.M.YYYY h:mm A`. The value and the change event stay ISO
+   * (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+   */
+  @Prop() format = 'YYYY-MM-DD';
 
   /**
    * Determines whether or not the datepicker takes full width of its container.
@@ -444,11 +454,16 @@ export class PdsDatepicker {
     return single ? [single] : null;
   }
 
+  /** The format the field shows and reads, with a time when the time picker is on. */
+  private get resolvedFormat(): string {
+    return fieldFormat(this.format, this.timePicker, this.timePicker && clockFor(this.resolvedLocale).hour12);
+  }
+
   /** What the field shows for the committed value. */
   private fieldText(): string {
     const parsed = this.parsedValue();
     if (!parsed) return this.value && !this.range && !parseDateTime(this.value) ? this.value : '';
-    return parsed.map((part) => toFieldText(this.withTimePicker(part))).join(RANGE_SEPARATOR);
+    return parsed.map((part) => toFieldText(this.withTimePicker(part), this.resolvedFormat)).join(RANGE_SEPARATOR);
   }
 
   /** Drops a time the time picker doesn't show, or adds the default one it does. */
@@ -458,7 +473,7 @@ export class PdsDatepicker {
 
   private get fieldPlaceholder(): string {
     if (this.placeholder) return this.placeholder;
-    const one = this.timePicker ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD';
+    const one = this.resolvedFormat;
     return this.range ? `${one}${RANGE_SEPARATOR}${one}` : one;
   }
 
@@ -709,7 +724,8 @@ export class PdsDatepicker {
 
   /** The typed text as a date or range that can be picked, or `null`. */
   private parseText(text: string): DateTimeValue[] | null {
-    const parts = this.range ? parseRangeText(text) : [parseDateTime(text)];
+    const format = this.resolvedFormat;
+    const parts = this.range ? parseRangeText(text, format) : [parseFieldText(text, format)];
     if (!parts || parts.some((part) => !part)) return null;
     if (parts.some((part) => isOutOfRange(part.date, this.minDate, this.maxDate))) return null;
     return parts.map((part, i) => this.withTimePicker(part, i === 1 ? DEFAULT_END_TIME : DEFAULT_START_TIME));
@@ -966,42 +982,48 @@ export class PdsDatepicker {
     const thisYear = today().getUTCFullYear();
     const firstYear = min ? min.getUTCFullYear() : thisYear - DROPDOWN_YEARS;
     const lastYear = max ? max.getUTCFullYear() : thisYear + DROPDOWN_YEARS;
-    const monthName = dateFormatter(locale, { month: 'short' });
+    const monthName = dateFormatter(locale, { month: 'long' });
 
     return (
       <div class="pds-datepicker__dropdowns">
         <span class="visually-hidden" id={headingId} aria-live="polite">
           {heading}
         </span>
-        <select
-          class="pds-datepicker__select"
-          aria-label={this.monthLabel}
-          onChange={(event) => this.jumpTo(index, year, Number((event.target as HTMLSelectElement).value))}
-        >
-          {Array.from({ length: 12 }, (_, m) => {
-            const outside =
-              (!!min && new Date(Date.UTC(year, m + 1, 0)) < min) || (!!max && new Date(Date.UTC(year, m, 1)) > max);
-            return (
-              <option value={String(m)} selected={m === month} disabled={outside}>
-                {monthName.format(new Date(Date.UTC(year, m, 1)))}
-              </option>
-            );
-          })}
-        </select>
-        <select
-          class="pds-datepicker__select"
-          aria-label={this.yearLabel}
-          onChange={(event) => this.jumpTo(index, Number((event.target as HTMLSelectElement).value), month)}
-        >
-          {Array.from({ length: Math.max(lastYear, year) - Math.min(firstYear, year) + 1 }, (_, i) => {
-            const y = Math.min(firstYear, year) + i;
-            return (
-              <option value={String(y)} selected={y === year}>
-                {y}
-              </option>
-            );
-          })}
-        </select>
+        <span class="pds-datepicker__select-wrap">
+          <select
+            class="pds-datepicker__heading-select"
+            aria-label={this.monthLabel}
+            onChange={(event) => this.jumpTo(index, year, Number((event.target as HTMLSelectElement).value))}
+          >
+            {Array.from({ length: 12 }, (_, m) => {
+              const outside =
+                (!!min && new Date(Date.UTC(year, m + 1, 0)) < min) || (!!max && new Date(Date.UTC(year, m, 1)) > max);
+              return (
+                <option value={String(m)} selected={m === month} disabled={outside}>
+                  {monthName.format(new Date(Date.UTC(year, m, 1)))}
+                </option>
+              );
+            })}
+          </select>
+          <pds-icon class="pds-datepicker__select-caret" icon={caretDown} size="small" aria-hidden="true" />
+        </span>
+        <span class="pds-datepicker__select-wrap">
+          <select
+            class="pds-datepicker__heading-select"
+            aria-label={this.yearLabel}
+            onChange={(event) => this.jumpTo(index, Number((event.target as HTMLSelectElement).value), month)}
+          >
+            {Array.from({ length: Math.max(lastYear, year) - Math.min(firstYear, year) + 1 }, (_, i) => {
+              const y = Math.min(firstYear, year) + i;
+              return (
+                <option value={String(y)} selected={y === year}>
+                  {y}
+                </option>
+              );
+            })}
+          </select>
+          <pds-icon class="pds-datepicker__select-caret" icon={caretDown} size="small" aria-hidden="true" />
+        </span>
       </div>
     );
   }
@@ -1139,53 +1161,60 @@ export class PdsDatepicker {
     if (!minuteOptions.includes(minutes)) minuteOptions.push(minutes);
     minuteOptions.sort((a, b) => a - b);
 
+    const labelId = `${this.componentId}-time-${which}`;
+
     return (
-      <div class="pds-datepicker__time" role="group" aria-label={groupLabel}>
-        <select
-          class="pds-datepicker__select"
-          aria-label={this.hourLabel}
-          onChange={(event) => {
-            const picked = Number((event.target as HTMLSelectElement).value);
-            setTime(clock.hour12 ? (picked % 12) + (isPm ? 12 : 0) : picked, minutes);
-          }}
-        >
-          {hourOptions.map((hour) => (
-            <option value={String(hour)} selected={hour === shownHour}>
-              {clock.hour12 ? String(hour) : String(hour).padStart(2, '0')}
-            </option>
-          ))}
-        </select>
-        <span class="pds-datepicker__time-separator" aria-hidden="true">
-          :
+      <div class="pds-datepicker__time" role="group" aria-labelledby={labelId}>
+        <span class="pds-datepicker__time-label" id={labelId}>
+          {groupLabel}
         </span>
-        <select
-          class="pds-datepicker__select"
-          aria-label={this.minuteLabel}
-          onChange={(event) => setTime(hours, Number((event.target as HTMLSelectElement).value))}
-        >
-          {minuteOptions.map((m) => (
-            <option value={String(m)} selected={m === minutes}>
-              {String(m).padStart(2, '0')}
-            </option>
-          ))}
-        </select>
-        {clock.hour12 && (
+        <span class="pds-datepicker__time-field">
           <select
-            class="pds-datepicker__select"
-            aria-label={this.periodLabel}
+            class="pds-datepicker__time-select"
+            aria-label={this.hourLabel}
             onChange={(event) => {
-              const pm = (event.target as HTMLSelectElement).value === 'pm';
-              setTime((hours % 12) + (pm ? 12 : 0), minutes);
+              const picked = Number((event.target as HTMLSelectElement).value);
+              setTime(clock.hour12 ? (picked % 12) + (isPm ? 12 : 0) : picked, minutes);
             }}
           >
-            <option value="am" selected={!isPm}>
-              {clock.am}
-            </option>
-            <option value="pm" selected={isPm}>
-              {clock.pm}
-            </option>
+            {hourOptions.map((hour) => (
+              <option value={String(hour)} selected={hour === shownHour}>
+                {clock.hour12 ? String(hour) : String(hour).padStart(2, '0')}
+              </option>
+            ))}
           </select>
-        )}
+          <span class="pds-datepicker__time-separator" aria-hidden="true">
+            :
+          </span>
+          <select
+            class="pds-datepicker__time-select"
+            aria-label={this.minuteLabel}
+            onChange={(event) => setTime(hours, Number((event.target as HTMLSelectElement).value))}
+          >
+            {minuteOptions.map((m) => (
+              <option value={String(m)} selected={m === minutes}>
+                {String(m).padStart(2, '0')}
+              </option>
+            ))}
+          </select>
+          {clock.hour12 && (
+            <select
+              class="pds-datepicker__time-select pds-datepicker__time-select--period"
+              aria-label={this.periodLabel}
+              onChange={(event) => {
+                const pm = (event.target as HTMLSelectElement).value === 'pm';
+                setTime((hours % 12) + (pm ? 12 : 0), minutes);
+              }}
+            >
+              <option value="am" selected={!isPm}>
+                {clock.am}
+              </option>
+              <option value="pm" selected={isPm}>
+                {clock.pm}
+              </option>
+            </select>
+          )}
+        </span>
       </div>
     );
   }
@@ -1235,8 +1264,8 @@ export class PdsDatepicker {
     const parts = this.draftParts();
     const selection = parts
       ? this.range && !this.draftEnd
-        ? `${toFieldText(parts[0])}${RANGE_SEPARATOR}`
-        : parts.map(toFieldText).join(RANGE_SEPARATOR)
+        ? `${toFieldText(parts[0], this.resolvedFormat)}${RANGE_SEPARATOR}`
+        : parts.map((part) => toFieldText(part, this.resolvedFormat)).join(RANGE_SEPARATOR)
       : '';
 
     return (
