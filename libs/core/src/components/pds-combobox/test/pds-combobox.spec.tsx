@@ -3110,6 +3110,25 @@ describe('pds-combobox', () => {
       expect(root.querySelector('[role="status"]')?.textContent).toBe('Tag');
     });
 
+    it('click-opens on the first row, so ArrowRight drills into the first group at its first option', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="drill" group-display="drill-in" mode="select-only" trigger="button"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      (page.root as HTMLPdsComboboxElement).options = actions;
+      await page.waitForChanges();
+
+      (page.root!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(component.highlightedIndex).toBe(-1);
+      expect(component.highlightedGroup?.label).toBe('Tag');
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+      await page.waitForChanges();
+      expect(component.openGroup?.label).toBe('Tag');
+      expect(component.highlightedIndex).toBe(0);
+    });
     it('stays in the drilled-in group when the options are rebuilt, as when another page loads', async () => {
       const { page, component, root } = await openDrillIn();
       (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
