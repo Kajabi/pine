@@ -599,6 +599,7 @@ export class PdsDatepicker {
 
   private closeCalendar(returnFocus: boolean) {
     if (!this.isOpen) return;
+    this.commitPendingText();
 
     this.isOpen = false;
     this.stopPositioning();
@@ -774,7 +775,6 @@ export class PdsDatepicker {
     const path = event.composedPath();
     if (path.includes(this.el)) return;
 
-    this.commitPendingText();
     this.closeCalendar(false);
     // A press on a modal's backdrop lands on its <dialog>. That press dismisses the calendar, the
     // top layer; swallow the click it makes, so the modal under it stays open.
@@ -798,8 +798,13 @@ export class PdsDatepicker {
    * in the field and the calendar is a plain popup beside it. Set on the element rather than through
    * state: focus often moves in from `componentDidRender`, where a state change doesn't re-render.
    */
-  private onCalendarFocusIn = () => {
+  private onCalendarFocusIn = (event: FocusEvent) => {
     this.dialogEl?.setAttribute('aria-modal', 'true');
+    // The dialog itself takes focus only from a click on a part that can't, as the month heading.
+    // Pass it to the active day, so Tab, Shift+Tab and the arrow keys keep working.
+    if (event.target === this.dialogEl) {
+      this.dialogEl.querySelector<HTMLElement>(`[data-date="${this.activeDate}"]`)?.focus({ preventScroll: true });
+    }
   };
 
   private onCalendarFocusOut = (event: FocusEvent) => {
@@ -819,7 +824,6 @@ export class PdsDatepicker {
       return;
     }
     if (this.isInside(next)) return;
-    this.commitPendingText();
     this.closeCalendar(false);
     this.pdsBlur.emit(event);
   };
@@ -927,18 +931,25 @@ export class PdsDatepicker {
       this.commitText();
       return;
     }
-    // With Apply showing, wait for focus to settle. Moving into the calendar, to Apply, Cancel or
-    // a day, leaves the typed text pending in the draft: Apply commits it, Cancel or Escape drops
-    // it. Moving anywhere else commits it.
+    // With Apply showing, typed text is pending in the draft while focus stays in the datepicker
+    // (the calendar button, or the calendar): Apply commits it, Cancel or Escape drops it, and
+    // closing any other way commits it. Checked once focus settles.
     window.setTimeout(() => {
-      if (this.isOpen && this.dialogEl?.matches(':focus-within')) return;
+      if (this.isOpen && this.el.matches(':focus-within')) return;
       this.commitPendingText();
     });
   };
 
-  /** Commits text typed while the calendar was open, when it closes without Apply or Cancel. */
+  /**
+   * Commits text typed while the calendar was open, when it closes without Apply or Cancel. A
+   * valid date or range commits the draft, which also holds a time picked in the calendar; text
+   * that isn't one is read as typed, so the field shows its error.
+   */
   private commitPendingText() {
-    if (this.text !== this.fieldText()) this.commitText();
+    if (this.text === this.fieldText()) return;
+    const parts = this.parseText(this.text) ? this.draftParts() : null;
+    if (parts) this.commitParts(parts);
+    else this.commitText();
   }
 
   /** The typed text as a date or range, or `null` if it isn't one; it may be outside `min` and `max`. */
@@ -998,9 +1009,11 @@ export class PdsDatepicker {
       } else {
         this.openCalendar(true);
       }
-    } else if (key.key === 'Enter' && this.isOpen && !this.hasFooter) {
-      // A typed date commits on Enter; with nothing left to confirm, the calendar closes too.
-      this.commitText();
+    } else if (key.key === 'Enter' && this.isOpen) {
+      // A typed date commits on Enter and the calendar closes; with Apply showing, as Apply does,
+      // keeping a time picked in the calendar. Text that isn't a date stays, marked invalid.
+      if (this.hasFooter) this.commitPendingText();
+      else this.commitText();
       if (!this.textError) this.closeCalendar(false);
     } else if (key.key === 'Escape' && this.isOpen) {
       // Stop the field's own keydown, or a modal, popover or filter around the datepicker closes
