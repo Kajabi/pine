@@ -340,6 +340,86 @@ describe('pds-datepicker', () => {
     expect(await input.getProperty('value')).toBe('2026-10-14 15:45');
   });
 
+  it('is a modal dialog only while focus is in the calendar', async () => {
+    const page = await setup();
+    const dialogModal = () =>
+      page.evaluate(() =>
+        document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('[role="dialog"]')?.getAttribute('aria-modal'),
+      );
+
+    await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+    await page.waitForChanges();
+    expect(await dialogModal()).toBeNull();
+
+    await press(page, 'ArrowDown', 'Alt');
+    await page.waitForChanges();
+    expect(await focused(page)).toBe('2026-10-13');
+    expect(await dialogModal()).toBe('true');
+  });
+
+  it('blocks form submission when required and empty, or when the typed text is not a date', async () => {
+    const page = await setup(`<form><pds-datepicker component-id="due" name="due" label="Due" required></pds-datepicker></form>`);
+    const valid = () => page.evaluate(() => (document.querySelector('form') as HTMLFormElement).checkValidity());
+
+    expect(await valid()).toBe(false);
+
+    const input = await page.find('pds-datepicker >>> pds-input >>> input');
+    await input.click();
+    await input.type('2026-10-13');
+    await input.press('Enter');
+    await page.waitForChanges();
+    expect(await valid()).toBe(true);
+
+    await input.click({ clickCount: 3 });
+    await input.type('soon');
+    await input.press('Enter');
+    await page.waitForChanges();
+    expect(await valid()).toBe(false);
+    // The form reports the datepicker as the invalid control.
+    const invalidControl = await page.evaluate(() => {
+      let first = '';
+      document.querySelector('form')?.addEventListener('invalid', (e) => (first ||= (e.target as Element).tagName), true);
+      (document.querySelector('form') as HTMLFormElement).checkValidity();
+      return first;
+    });
+    expect(invalidControl).toBe('PDS-DATEPICKER');
+  });
+
+  it('clears typed text and the error on form reset, even with no value', async () => {
+    const page = await setup(`<form><pds-datepicker component-id="due" name="due" label="Due"></pds-datepicker></form>`);
+    const input = await page.find('pds-datepicker >>> pds-input >>> input');
+
+    await input.click();
+    await input.type('soon');
+    await input.press('Enter');
+    await page.waitForChanges();
+    expect(await input.getAttribute('aria-invalid')).toBe('true');
+
+    await page.evaluate(() => (document.querySelector('form') as HTMLFormElement).reset());
+    await page.waitForChanges();
+
+    expect(await input.getProperty('value')).toBe('');
+    expect(await input.getAttribute('aria-invalid')).toBeNull();
+    expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+  });
+
+  it('emits pdsFocus and pdsBlur only when focus enters and leaves the datepicker', async () => {
+    const page = await setup(`${FIELD}<button id="after">After</button>`);
+    const focus = await page.spyOnEvent('pdsFocus');
+    const blur = await page.spyOnEvent('pdsBlur');
+
+    await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+    await press(page, 'ArrowDown', 'Alt');
+    await press(page, 'ArrowRight');
+    expect(focus).toHaveReceivedEventTimes(1);
+    expect(blur).not.toHaveReceivedEvent();
+
+    await press(page, 'Escape');
+    await page.focus('#after');
+    await page.waitForChanges();
+    expect(blur).toHaveReceivedEventTimes(1);
+  });
+
   describe('range mode', () => {
     const RANGE = `<pds-datepicker component-id="period" range label="Period" locale="en-US" value="2026-09-13/2026-10-13"></pds-datepicker>`;
 

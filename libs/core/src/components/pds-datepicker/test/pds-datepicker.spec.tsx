@@ -60,8 +60,7 @@ describe('pds-datepicker', () => {
     await page.waitForChanges();
 
     const shadow = page.root?.shadowRoot as ShadowRoot;
-    const dialog = shadow.querySelector('[role="dialog"]');
-    expect(dialog?.getAttribute('aria-modal')).toBe('true');
+    expect(shadow.querySelector('[role="dialog"]')).not.toBeNull();
     expect(shadow.querySelector('.pds-datepicker__heading')?.textContent).toBe('October 2026');
     expect(trigger(page.root as HTMLElement).getAttribute('aria-expanded')).toBe('true');
     expect(trigger(page.root as HTMLElement).getAttribute('aria-controls')).toBe('due-calendar');
@@ -250,7 +249,8 @@ describe('pds-datepicker', () => {
 
       const buttons = Array.from(root.shadowRoot?.querySelectorAll('.pds-datepicker__preset') ?? []);
       expect(buttons.map((b) => b.textContent)).toEqual(['Launch week', 'Old', 'Custom range']);
-      expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual(['true', 'false', 'false']);
+      // Presets toggle the range; Custom range only points to the calendar, so it isn't a toggle.
+      expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual(['true', 'false', null]);
       expect(buttons[1].hasAttribute('disabled')).toBe(true);
     });
 
@@ -263,7 +263,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const custom = page.root?.shadowRoot?.querySelector('.pds-datepicker__preset:not([disabled])[aria-pressed="true"]');
+      const custom = page.root?.shadowRoot?.querySelector('.pds-datepicker__preset--selected');
       expect(custom?.textContent).toBe('Autre');
     });
 

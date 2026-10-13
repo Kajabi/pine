@@ -6,7 +6,7 @@ import {
   localeFirstDayOfWeek,
   monthWeeks,
   parseIsoDate,
-  resolveLocale,
+  supportedLocale,
   toIsoDate,
   weekdayColumn,
   weekdayNames,
@@ -96,8 +96,8 @@ describe('pds-datepicker date utils', () => {
   });
 
   it('falls back to en-US for a locale the browser does not support', () => {
-    expect(resolveLocale('fr')).toBe('fr');
-    expect(resolveLocale('not a locale!')).toBe('en-US');
-    expect(resolveLocale(undefined)).toBe('en-US');
+    expect(supportedLocale('fr')).toBe('fr');
+    expect(supportedLocale('not a locale!')).toBe('en-US');
+    expect(supportedLocale(undefined)).toBe('en-US');
   });
 });

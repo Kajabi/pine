@@ -1,7 +1,9 @@
 import { parseIsoDate, toIsoDate } from '../date-utils';
-import { builtInPresetRange, matchPreset, parseIsoRange, presetInRange, resolvePresets, toIsoRange } from '../presets';
+import { builtInPresetRange, matchPreset, presetInRange, resolvePresets } from '../presets';
+import type { DatepickerPreset } from '../datepicker-interface';
 
 const d = (iso: string) => parseIsoDate(iso) as Date;
+const toIsoRange = (start: Date, end: Date) => `${toIsoDate(start)}/${toIsoDate(end)}`;
 // A Tuesday in the second month of the fourth quarter.
 const NOW = d('2026-11-17');
 
@@ -14,12 +16,12 @@ describe('pds-datepicker presets', () => {
   it.each([
     ['today', '2026-11-17/2026-11-17'],
     ['yesterday', '2026-11-16/2026-11-16'],
-    ['last-7-days', '2026-11-10/2026-11-17'],
-    ['last-30-days', '2026-10-18/2026-11-17'],
-    ['last-90-days', '2026-08-19/2026-11-17'],
-    ['this-month', '2026-11-01/2026-11-17'],
+    ['last-7-days', '2026-11-11/2026-11-17'],
+    ['last-30-days', '2026-10-19/2026-11-17'],
+    ['last-90-days', '2026-08-20/2026-11-17'],
+    ['this-month', '2026-11-01/2026-11-30'],
     ['last-month', '2026-10-01/2026-10-31'],
-    ['this-quarter', '2026-10-01/2026-11-17'],
+    ['this-quarter', '2026-10-01/2026-12-31'],
     ['last-quarter', '2026-07-01/2026-09-30'],
     ['this-year', '2026-01-01/2026-12-31'],
     ['last-year', '2025-01-01/2025-12-31'],
@@ -67,7 +69,8 @@ describe('pds-datepicker presets', () => {
 
   it('matches a range to the first preset covering it exactly', () => {
     const presets = resolvePresets('today,this-month,year-to-date', NOW);
-    expect(matchPreset(presets, d('2026-11-01'), d('2026-11-17'))?.key).toBe('this-month');
+    expect(matchPreset(presets, d('2026-11-01'), d('2026-11-30'))?.key).toBe('this-month');
+    expect(matchPreset(presets, d('2026-01-01'), d('2026-11-17'))?.key).toBe('year-to-date');
     expect(matchPreset(presets, d('2026-11-02'), d('2026-11-17'))).toBeUndefined();
     expect(matchPreset(presets, d('2026-11-17'), null)).toBeUndefined();
   });
@@ -78,14 +81,18 @@ describe('pds-datepicker presets', () => {
     expect(presetInRange(lastYear, d('2025-06-01'), null)).toBe(false);
   });
 
-  describe('parseIsoRange', () => {
-    it('parses a start/end range', () => {
-      const [start, end] = parseIsoRange('2026-09-13/2026-10-13') as [Date, Date];
-      expect(toIsoRange(start, end)).toBe('2026-09-13/2026-10-13');
-    });
+  it('ignores entries with the wrong types, as from untrusted JSON', () => {
+    const presets = resolvePresets(
+      [
+        { key: 'today', label: { $tag$: 'img' } },
+        { key: 'mine', label: 'Mine', start: 20260302, end: '2026-03-08' },
+        { key: 42, label: 'Number key' },
+        null,
+      ] as unknown as DatepickerPreset[],
+      NOW,
+    );
 
-    it.each(['', '2026-09-13', '2026-10-13/2026-09-13', '2026-09-13/2026-02-30', 'a/b/c'])('rejects %p', (value) => {
-      expect(parseIsoRange(value)).toBeNull();
-    });
+    // A non-string label falls back to the built-in one; bad dates and keys are dropped.
+    expect(presets.map((p) => [p.key, p.label])).toEqual([['today', 'Today']]);
   });
 });
