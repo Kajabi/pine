@@ -1253,6 +1253,11 @@ export namespace Components {
          */
         "invalid"?: boolean;
         /**
+          * The validation message the form reports when the typed text isn't a date that can be picked.
+          * @default 'Enter a date in the format shown.'
+         */
+        "invalidDateMessage": string;
+        /**
           * Text to be displayed as the datepicker label.
          */
         "label"?: string;
@@ -3112,6 +3117,8 @@ declare global {
     };
     interface HTMLPdsDatepickerElementEventMap {
         "pdsDatepickerChange": DatepickerChangeEventDetail;
+        "pdsBlur": FocusEvent;
+        "pdsFocus": FocusEvent;
     }
     /**
      * A field for one date, or in range mode a start and end date, with a calendar to pick from.
@@ -4947,6 +4954,11 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
+          * The validation message the form reports when the typed text isn't a date that can be picked.
+          * @default 'Enter a date in the format shown.'
+         */
+        "invalidDateMessage"?: string;
+        /**
           * Text to be displayed as the datepicker label.
          */
         "label"?: string;
@@ -4987,9 +4999,17 @@ declare namespace LocalJSX {
          */
         "nextMonthLabel"?: string;
         /**
+          * Emitted when the datepicker loses focus: when focus leaves the field and the calendar.
+         */
+        "onPdsBlur"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        /**
           * Emitted when the value changes.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsDatepickerChange"?: (event: PdsDatepickerCustomEvent<DatepickerChangeEventDetail>) => void;
+        /**
+          * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside.
+         */
+        "onPdsFocus"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
         /**
           * Accessible label for the AM or PM choice in the time picker, in locales with a 12-hour clock.
           * @default 'AM or PM'
@@ -6906,6 +6926,7 @@ declare namespace LocalJSX {
         "hideLabel": boolean;
         "hourLabel": string;
         "invalid": boolean;
+        "invalidDateMessage": string;
         "label": string;
         "locale": string;
         "max": string;

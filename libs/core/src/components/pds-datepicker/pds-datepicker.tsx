@@ -2,6 +2,7 @@ import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, 
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { calendarSimple, caretLeft, caretRight, check } from '@pine-ds/icons/icons';
 import { isSpecTest } from '../../utils/form';
+import { resolveLocale } from '../../i18n';
 import type { PlacementType } from '@utils/types';
 import type { DatepickerChangeEventDetail, DatepickerPreset } from './datepicker-interface';
 import type { InputInputEventDetail } from '../pds-input/input-interface';
@@ -16,7 +17,7 @@ import {
   localeFirstDayOfWeek,
   monthWeeks,
   parseIsoDate,
-  resolveLocale,
+  supportedLocale,
   toIsoDate,
   today,
   weekdayColumn,
@@ -143,6 +144,11 @@ export class PdsDatepicker {
    * Determines whether or not the datepicker is invalid or throws an error.
    */
   @Prop() invalid?: boolean;
+
+  /**
+   * The validation message the form reports when the typed text isn't a date that can be picked.
+   */
+  @Prop() invalidDateMessage = 'Enter a date in the format shown.';
 
   /**
    * Text to be displayed as the datepicker label.
@@ -280,7 +286,18 @@ export class PdsDatepicker {
    */
   @Event() pdsDatepickerChange!: EventEmitter<DatepickerChangeEventDetail>;
 
+  /**
+   * Emitted when the datepicker loses focus: when focus leaves the field and the calendar.
+   */
+  @Event() pdsBlur!: EventEmitter<FocusEvent>;
+
+  /**
+   * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside.
+   */
+  @Event() pdsFocus!: EventEmitter<FocusEvent>;
+
   @State() isOpen = false;
+
 
   /** The text in the field, which may not be a valid date yet. */
   @State() text = '';
@@ -339,6 +356,11 @@ export class PdsDatepicker {
     this.updateFormValue();
   }
 
+  @Watch('required')
+  protected requiredChanged() {
+    this.updateFormValue();
+  }
+
   componentWillLoad() {
     this.text = this.fieldText();
   }
@@ -354,8 +376,7 @@ export class PdsDatepicker {
   }
 
   disconnectedCallback() {
-    this.stopPositioning();
-    document.removeEventListener('pointerdown', this.onDocumentPointerDown, true);
+    this.closeCalendar(false);
   }
 
   componentDidRender() {
@@ -374,8 +395,7 @@ export class PdsDatepicker {
   }
 
   private get resolvedLocale(): string {
-    const lang = this.el.closest('[lang]')?.getAttribute('lang');
-    return resolveLocale(this.locale || lang || (typeof navigator !== 'undefined' ? navigator.language : undefined));
+    return supportedLocale(this.locale || resolveLocale(this.el));
   }
 
   private get weekStart(): number {
@@ -598,11 +618,40 @@ export class PdsDatepicker {
     if (!event.composedPath().includes(this.el)) this.closeCalendar(false);
   };
 
-  /** Closes the calendar when focus leaves the datepicker, as when tabbing out of the field. */
+  private isInside(node: Node | null): boolean {
+    return !!node && (node === this.el || this.el.contains(node) || !!this.el.shadowRoot?.contains(node));
+  }
+
+  /**
+   * Reports focus arriving from outside. Focus moving within the datepicker never reaches the host:
+   * once retargeted, its target and related target are both the host, so the browser skips it.
+   */
+  private onHostFocusIn = (event: FocusEvent) => {
+    if (!this.isInside(event.relatedTarget as Node | null)) this.pdsFocus.emit(event);
+  };
+
+  /**
+   * The calendar is a modal dialog while focus is in it. Opened by a click in the field, focus stays
+   * in the field and the calendar is a plain popup beside it. Set on the element rather than through
+   * state: focus often moves in from `componentDidRender`, where a state change doesn't re-render.
+   */
+  private onCalendarFocusIn = () => {
+    this.dialogEl?.setAttribute('aria-modal', 'true');
+  };
+
+  private onCalendarFocusOut = (event: FocusEvent) => {
+    const next = event.relatedTarget as Node | null;
+    if (next && !this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
+  };
+
+  /** Closes the calendar and reports blur when focus leaves the datepicker, as when tabbing out. */
   private onHostFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
-    if (!next || next === this.el || this.el.contains(next) || this.el.shadowRoot?.contains(next)) return;
+    // No next target: focus fell to the page, as when a focused control is disabled; stay open.
+    if (!next) return;
+    if (this.isInside(next)) return;
     this.closeCalendar(false);
+    this.pdsBlur.emit(event);
   };
 
   private startPositioning() {
@@ -820,17 +869,51 @@ export class PdsDatepicker {
     this.focusActiveDay = true;
   };
 
-  private onDayHover = (date: Date) => {
-    if (this.range && this.draftStart && !this.draftEnd) this.previewDate = toIsoDate(date);
+  /** The day under an event in a grid, from its cell. */
+  private dayFromEvent(event: Event): Date | null {
+    const cell = (event.target as HTMLElement | null)?.closest?.('[data-date]') as HTMLElement | null;
+    return parseIsoDate(cell?.dataset.date);
+  }
+
+  // One handler per grid rather than per day, so hovering doesn't rebuild 84 closures each render.
+  private onGridClick = (event: MouseEvent) => {
+    const date = this.dayFromEvent(event);
+    if (date) this.pickDate(date);
   };
 
+  private onGridPointerOver = (event: PointerEvent) => {
+    if (!this.range || !this.draftStart || this.draftEnd) return;
+    const date = this.dayFromEvent(event);
+    const iso = date && toIsoDate(date);
+    if (iso && iso !== this.previewDate) this.previewDate = iso;
+  };
+
+  /**
+   * Submits the value and reports validity to the form, as pds-input does: `required` with no
+   * value, or typed text that isn't a date, blocks submission.
+   */
   private updateFormValue() {
     if (isSpecTest() || !this.internals?.setFormValue) return;
     this.internals.setFormValue(this.value || null);
+    if (!this.internals.setValidity) return;
+
+    const anchor = this.inputEl?.shadowRoot?.querySelector('input') ?? undefined;
+    if (this.textInvalid) {
+      this.internals.setValidity({ badInput: true }, this.invalidDateMessage, anchor);
+    } else if (this.required && !this.value) {
+      this.internals.setValidity({ valueMissing: true }, anchor?.validationMessage || this.invalidDateMessage, anchor);
+    } else {
+      this.internals.setValidity({});
+    }
   }
 
   formResetCallback() {
     this.value = '';
+    // The value may already be empty, so its watcher wouldn't clear typed text.
+    this.text = '';
+    this.textInvalid = false;
+    this.closeCalendar(false);
+    this.updateFormValue();
   }
 
   formDisabledCallback(disabled: boolean) {
@@ -975,6 +1058,8 @@ export class PdsDatepicker {
           aria-labelledby={headingId}
           aria-multiselectable={this.range ? 'true' : null}
           onKeyDown={this.onGridKeyDown}
+          onClick={this.onGridClick}
+          onPointerOver={this.onGridPointerOver}
         >
           <thead>
             <tr>
@@ -1019,8 +1104,6 @@ export class PdsDatepicker {
                       aria-selected={isSelected ? 'true' : null}
                       aria-current={isToday ? 'date' : null}
                       aria-disabled={unavailable ? 'true' : null}
-                      onClick={() => this.pickDate(date)}
-                      onMouseEnter={() => this.onDayHover(date)}
                     >
                       {dayNumber.format(date)}
                     </td>
@@ -1137,7 +1220,6 @@ export class PdsDatepicker {
             <button
               type="button"
               class={{ 'pds-datepicker__preset': true, 'pds-datepicker__preset--selected': isCustom }}
-              aria-pressed={isCustom ? 'true' : 'false'}
               onClick={this.onCustomRangeClick}
             >
               <span>{this.customRangeLabel}</span>
@@ -1186,12 +1268,13 @@ export class PdsDatepicker {
         class={{ 'pds-datepicker__dialog': true, 'pds-datepicker__dialog--range': this.range }}
         id={`${this.componentId}-calendar`}
         role="dialog"
-        aria-modal="true"
         aria-labelledby={this.range ? null : `${this.componentId}-calendar-heading-0`}
         aria-label={this.range ? this.label || this.triggerLabel : null}
         part="calendar"
         ref={(el) => (this.dialogEl = el)}
         onKeyDown={this.onDialogKeyDown}
+        onFocusin={this.onCalendarFocusIn}
+        onFocusout={this.onCalendarFocusOut}
       >
         {this.range && this.renderPresets()}
         <div class="pds-datepicker__panel">
@@ -1209,6 +1292,7 @@ export class PdsDatepicker {
       <Host
         class={{ 'pds-datepicker--range': this.range, 'pds-datepicker--time': this.timePicker }}
         full-width={this.fullWidth ? 'true' : null}
+        onFocusin={this.onHostFocusIn}
         onFocusout={this.onHostFocusOut}
       >
         <pds-input

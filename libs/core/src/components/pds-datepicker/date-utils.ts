@@ -122,7 +122,7 @@ export function weekdayNames(locale: string, firstDayOfWeek: number): { short: s
 }
 
 /** The locale if the browser supports it, otherwise `en-US`, so a bad tag never throws while rendering. */
-export function resolveLocale(locale: string | null | undefined): string {
+export function supportedLocale(locale: string | null | undefined): string {
   try {
     return Intl.DateTimeFormat.supportedLocalesOf(locale || [])[0] ?? 'en-US';
   } catch {

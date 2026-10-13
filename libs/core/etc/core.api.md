@@ -355,6 +355,7 @@ export namespace Components {
         "hideLabel": boolean;
         "hourLabel": string;
         "invalid"?: boolean;
+        "invalidDateMessage": string;
         "label"?: string;
         "locale"?: string;
         "max"?: string;
@@ -1829,6 +1830,7 @@ export namespace LocalJSX {
         "hideLabel"?: boolean;
         "hourLabel"?: string;
         "invalid"?: boolean;
+        "invalidDateMessage"?: string;
         "label"?: string;
         "locale"?: string;
         "max"?: string;
@@ -1838,7 +1840,9 @@ export namespace LocalJSX {
         "monthLabel"?: string;
         "name"?: string;
         "nextMonthLabel"?: string;
+        "onPdsBlur"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
         "onPdsDatepickerChange"?: (event: PdsDatepickerCustomEvent<DatepickerChangeEventDetail>) => void;
+        "onPdsFocus"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
         "periodLabel"?: string;
         "placeholder"?: string;
         "placement"?: PlacementType;
@@ -1888,6 +1892,8 @@ export namespace LocalJSX {
         "hourLabel": string;
         // (undocumented)
         "invalid": boolean;
+        // (undocumented)
+        "invalidDateMessage": string;
         // (undocumented)
         "label": string;
         // (undocumented)

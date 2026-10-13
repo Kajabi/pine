@@ -1,4 +1,4 @@
-import { addDays, addMonths, isOutOfRange, parseIsoDate, toIsoDate } from './date-utils';
+import { addDays, addMonths, isOutOfRange, parseIsoDate } from './date-utils';
 import type { DatepickerPreset } from './datepicker-interface';
 
 /** A preset resolved against today: what the panel lists and matches the range against. */
@@ -27,7 +27,10 @@ const DEFAULT_LABELS: Record<string, string> = {
 
 const utc = (year: number, month: number, day: number) => new Date(Date.UTC(year, month, day));
 
-/** The range a built-in preset covers on the given day, or `null` for an unknown key. */
+/**
+ * The range a built-in preset covers on the given day, or `null` for an unknown key. "Last N days"
+ * is N days ending today; "this" and "last" periods are whole periods; "to date" ends today.
+ */
 export function builtInPresetRange(key: string, now: Date): [Date, Date] | null {
   const year = now.getUTCFullYear();
   const month = now.getUTCMonth();
@@ -39,17 +42,17 @@ export function builtInPresetRange(key: string, now: Date): [Date, Date] | null 
     case 'yesterday':
       return [addDays(now, -1), addDays(now, -1)];
     case 'last-7-days':
-      return [addDays(now, -7), now];
+      return [addDays(now, -6), now];
     case 'last-30-days':
-      return [addDays(now, -30), now];
+      return [addDays(now, -29), now];
     case 'last-90-days':
-      return [addDays(now, -90), now];
+      return [addDays(now, -89), now];
     case 'this-month':
-      return [utc(year, month, 1), now];
+      return [utc(year, month, 1), utc(year, month + 1, 0)];
     case 'last-month':
       return [utc(year, month - 1, 1), utc(year, month, 0)];
     case 'this-quarter':
-      return [utc(year, quarterStart, 1), now];
+      return [utc(year, quarterStart, 1), utc(year, quarterStart + 3, 0)];
     case 'last-quarter':
       return [utc(year, quarterStart - 3, 1), utc(year, quarterStart, 0)];
     case 'this-year':
@@ -84,10 +87,13 @@ export function resolvePresets(presets: string | DatepickerPreset[] | undefined,
 
   const resolved: ResolvedPreset[] = [];
   for (const preset of entries) {
-    const start = parseIsoDate(preset.start);
-    const end = parseIsoDate(preset.end);
+    // Presets often come from parsed JSON, so check types at runtime: a non-string label would
+    // otherwise reach the render as an object, which Stencil can turn into nodes.
+    if (!preset || typeof preset.key !== 'string') continue;
+    const start = typeof preset.start === 'string' ? parseIsoDate(preset.start) : null;
+    const end = typeof preset.end === 'string' ? parseIsoDate(preset.end) : null;
     const range: [Date, Date] | null = start && end && start <= end ? [start, end] : builtInPresetRange(preset.key, now);
-    const label = preset.label ?? DEFAULT_LABELS[preset.key];
+    const label = typeof preset.label === 'string' ? preset.label : DEFAULT_LABELS[preset.key];
     if (range && label) resolved.push({ key: preset.key, label, start: range[0], end: range[1] });
   }
   return resolved;
@@ -102,18 +108,4 @@ export function matchPreset(presets: ResolvedPreset[], start: Date | null, end: 
 /** Whether a preset's whole range can be picked within `min` and `max`. */
 export function presetInRange(preset: ResolvedPreset, min: Date | null, max: Date | null): boolean {
   return !isOutOfRange(preset.start, min, max) && !isOutOfRange(preset.end, min, max);
-}
-
-/** Parses a `YYYY-MM-DD/YYYY-MM-DD` range, or `null` when it isn't one with the start first. */
-export function parseIsoRange(value: string | null | undefined): [Date, Date] | null {
-  const [start, end, extra] = (value ?? '').split('/');
-  if (extra !== undefined) return null;
-
-  const startDate = parseIsoDate(start);
-  const endDate = parseIsoDate(end);
-  return startDate && endDate && startDate <= endDate ? [startDate, endDate] : null;
-}
-
-export function toIsoRange(start: Date, end: Date): string {
-  return `${toIsoDate(start)}/${toIsoDate(end)}`;
 }
