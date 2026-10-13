@@ -48,6 +48,10 @@ const DROPDOWN_YEARS = 100;
 
 const firstOfMonth = (date: Date) => new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
 
+/** Just the day's number, in the locale's digits: Japanese and Chinese add 日 to a formatted day. */
+const dayNumberText = (formatter: Intl.DateTimeFormat, date: Date) =>
+  formatter.formatToParts(date).find((part) => part.type === 'day')?.value ?? formatter.format(date);
+
 /**
  * A field for one date, or in range mode a start and end date, with a calendar to pick from.
  * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
@@ -570,6 +574,9 @@ export class PdsDatepicker {
     this.value = next;
     this.text = this.fieldText();
     this.textInvalid = false;
+    // Always, not only when the value changes: fixing a typo back to the same value has to clear
+    // the invalid state the form holds, and the value watcher won't fire for an unchanged value.
+    this.updateFormValue();
     if (changed) this.pdsDatepickerChange.emit({ value: next, ...detail });
   }
 
@@ -759,6 +766,10 @@ export class PdsDatepicker {
         this.openCalendar(true);
       }
     } else if (key.key === 'Escape' && this.isOpen) {
+      // Stop the field's own keydown, or a modal, popover or filter around the datepicker closes
+      // too. pdsKeyDown is emitted during that keydown, so it can still be stopped here.
+      key.preventDefault();
+      key.stopPropagation();
       this.closeCalendar(false);
     }
   };
@@ -1127,7 +1138,7 @@ export class PdsDatepicker {
                       aria-current={isToday ? 'date' : null}
                       aria-disabled={unavailable ? 'true' : null}
                     >
-                      {dayNumber.format(date)}
+                      {dayNumberText(dayNumber, date)}
                     </td>
                   );
                 })}

@@ -105,8 +105,8 @@ export function localeFirstDayOfWeek(locale: string): number {
  * which is already compact.
  */
 export function weekdayNames(locale: string, firstDayOfWeek: number): { short: string; long: string }[] {
-  const shortFormat = new Intl.DateTimeFormat(locale, { weekday: 'short', timeZone: 'UTC' });
-  const longFormat = new Intl.DateTimeFormat(locale, { weekday: 'long', timeZone: 'UTC' });
+  const shortFormat = dateFormatter(locale, { weekday: 'short' });
+  const longFormat = dateFormatter(locale, { weekday: 'long' });
   // 2023-01-01 was a Sunday.
   const days = Array.from({ length: 7 }, (_, i) => new Date(Date.UTC(2023, 0, 1 + ((firstDayOfWeek + i) % 7))));
   const shorts = days.map((date) => shortFormat.format(date).replace(/\.$/, ''));
@@ -130,9 +130,14 @@ export function supportedLocale(locale: string | null | undefined): string {
   }
 }
 
-/** A formatter for the UTC dates these helpers return. Build it once per render, not per day. */
+/**
+ * A formatter for the UTC dates these helpers return. Build it once per render, not per day.
+ * Always on the Gregorian calendar the grid is laid out in, while keeping the locale's language and
+ * digits: some locales default to another calendar (Persian for `fa`, Buddhist for `th`).
+ */
 export function dateFormatter(locale: string, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
-  return new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' });
+  // `calendar` is newer than the library's ES2017 typings.
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC', calendar: 'gregory' } as Intl.DateTimeFormatOptions);
 }
 
 export function formatDate(date: Date, locale: string, options: Intl.DateTimeFormatOptions): string {
