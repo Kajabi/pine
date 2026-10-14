@@ -1,3 +1,13 @@
+## 4.4.1 (2026-10-14)
+
+### Bug Fixes 🐛
+
+- **pds-checkbox:** render the label prop as text beside the label slot ([#864](https://github.com/Kajabi/pine/pull/864))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 4.4.0 (2026-10-14)
 
 ### Features 🚀
