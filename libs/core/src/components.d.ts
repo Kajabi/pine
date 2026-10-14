@@ -2018,7 +2018,7 @@ export namespace Components {
         "optionActions": boolean;
         /**
           * Display mode for options in the dropdown panel. `'text'` shows each option's text (default). `'chip'` shows each option as a pds-chip, with a dot when the option has a `dotColor`.
-          * @default 'text'
+          * @defaultValue 'text'
          */
         "optionDisplay": 'text' | 'chip';
         /**
@@ -2050,7 +2050,7 @@ export namespace Components {
          */
         "placeholder": string;
         /**
-          * Refetches the options from `asyncUrl`, such as after an option is renamed or recolored elsewhere. Selected items pick up the new text and dot color without emitting a change. Does nothing without `asyncUrl`.
+          * Refetches the first page of options from `asyncUrl` for the current search, such as after an option is renamed or recolored elsewhere. Selected items in that page pick up the new text and dot color without emitting a change; other selected items keep the text and dot color they were last loaded with. Does nothing without `asyncUrl`.
          */
         "refreshOptions": () => Promise<void>;
         /**
@@ -5829,7 +5829,7 @@ declare namespace LocalJSX {
         "optionActions"?: boolean;
         /**
           * Display mode for options in the dropdown panel. `'text'` shows each option's text (default). `'chip'` shows each option as a pds-chip, with a dot when the option has a `dotColor`.
-          * @default 'text'
+          * @defaultValue 'text'
          */
         "optionDisplay"?: 'text' | 'chip';
         /**

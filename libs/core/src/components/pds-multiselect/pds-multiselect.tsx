@@ -26,7 +26,7 @@ const TABBABLE_SELECTOR =
  * @slot (default) - Static option elements for the multiselect
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
- * @slot trigger - Custom trigger element that replaces the built-in trigger. It opens the dropdown panel and receives `aria-expanded` and `aria-haspopup`; it supplies its own accessible name.
+ * @slot trigger - Custom trigger element that replaces the built-in trigger. It opens the dropdown panel and receives `aria-expanded` and `aria-haspopup`; it supplies its own accessible name. Slot the focusable control itself, not a wrapper around it.
  * @slot footer - Links or buttons displayed below the options inside the dropdown panel
  * @part trigger - The trigger surface that opens the dropdown panel
  * @part pill-toggle - The chevron button inside the inline pill trigger
@@ -51,6 +51,7 @@ export class PdsMultiselect {
   private observer?: MutationObserver;
   private cleanupAutoUpdate?: () => void;
   private hoverlessQuery?: MediaQueryList;
+  private hasDisabledSlottedTrigger = false;
 
   @Element() el!: HTMLPdsMultiselectElement;
 
@@ -245,7 +246,7 @@ export class PdsMultiselect {
    * Display mode for options in the dropdown panel.
    * `'text'` shows each option's text (default). `'chip'` shows each option as a
    * pds-chip, with a dot when the option has a `dotColor`.
-   * @default 'text'
+   * @defaultValue 'text'
    */
   @Prop() optionDisplay: 'text' | 'chip' = 'text';
 
@@ -528,8 +529,9 @@ export class PdsMultiselect {
   }
 
   /**
-   * Refetches the options from `asyncUrl`, such as after an option is renamed or recolored elsewhere.
-   * Selected items pick up the new text and dot color without emitting a change. Does nothing without `asyncUrl`.
+   * Refetches the first page of options from `asyncUrl` for the current search, such as after an option is renamed
+   * or recolored elsewhere. Selected items in that page pick up the new text and dot color without emitting a change;
+   * other selected items keep the text and dot color they were last loaded with. Does nothing without `asyncUrl`.
    */
   @Method()
   async refreshOptions() {
@@ -569,6 +571,7 @@ export class PdsMultiselect {
         previous.removeAttribute('aria-expanded');
         previous.removeAttribute('aria-haspopup');
         previous.removeAttribute('aria-disabled');
+        this.setSlottedTriggerDisabled(previous, false);
       }
       trigger?.addEventListener('click', this.handleTriggerClick);
       trigger?.addEventListener('keydown', this.handleTriggerKeyDown);
@@ -582,6 +585,20 @@ export class PdsMultiselect {
       trigger.setAttribute('aria-disabled', 'true');
     } else {
       trigger.removeAttribute('aria-disabled');
+    }
+    this.setSlottedTriggerDisabled(trigger, this.disabled);
+  }
+
+  private setSlottedTriggerDisabled(trigger: HTMLElement, disabled: boolean) {
+    if (!('disabled' in trigger)) return;
+    const control = trigger as HTMLElement & { disabled: boolean };
+    // Only re-enable a trigger the multiselect disabled, so one the consumer disabled stays disabled.
+    if (disabled && !control.disabled) {
+      control.disabled = true;
+      this.hasDisabledSlottedTrigger = true;
+    } else if (!disabled && this.hasDisabledSlottedTrigger) {
+      control.disabled = false;
+      this.hasDisabledSlottedTrigger = false;
     }
   }
 
@@ -1126,9 +1143,10 @@ export class PdsMultiselect {
       .filter(child => child.getAttribute('slot') === 'footer')
       .forEach(content => candidates.push(content, ...Array.from(content.querySelectorAll('*'))));
 
+    // Browsers without checkVisibility (Safari before 17.4) count every control as visible.
     return candidates
       .map(el => (el.matches(TABBABLE_SELECTOR) ? el : el.shadowRoot?.querySelector(TABBABLE_SELECTOR)))
-      .filter((el): el is HTMLElement => !!el);
+      .filter((el): el is HTMLElement => !!el && (el.checkVisibility?.() ?? true));
   }
 
   private isCaretAtEndOfSearch(): boolean {

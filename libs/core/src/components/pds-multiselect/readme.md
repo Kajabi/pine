@@ -94,8 +94,9 @@ Type: `Promise<void>`
 
 ### `refreshOptions() => Promise<void>`
 
-Refetches the options from `asyncUrl`, such as after an option is renamed or recolored elsewhere.
-Selected items pick up the new text and dot color without emitting a change. Does nothing without `asyncUrl`.
+Refetches the first page of options from `asyncUrl` for the current search, such as after an option is renamed
+or recolored elsewhere. Selected items in that page pick up the new text and dot color without emitting a change;
+other selected items keep the text and dot color they were last loaded with. Does nothing without `asyncUrl`.
 
 #### Returns
 
@@ -116,13 +117,13 @@ Type: `Promise<void>`
 
 ## Slots
 
-| Slot          | Description                                                                                                                                                                   |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"(default)"` | Static option elements for the multiselect                                                                                                                                    |
-| `"empty"`     | Custom empty state message when no options match                                                                                                                              |
-| `"footer"`    | Links or buttons displayed below the options inside the dropdown panel                                                                                                        |
-| `"loading"`   | Custom loading indicator                                                                                                                                                      |
-| `"trigger"`   | Custom trigger element that replaces the built-in trigger. It opens the dropdown panel and receives `aria-expanded` and `aria-haspopup`; it supplies its own accessible name. |
+| Slot          | Description                                                                                                                                                                                                                               |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"(default)"` | Static option elements for the multiselect                                                                                                                                                                                                |
+| `"empty"`     | Custom empty state message when no options match                                                                                                                                                                                          |
+| `"footer"`    | Links or buttons displayed below the options inside the dropdown panel                                                                                                                                                                    |
+| `"loading"`   | Custom loading indicator                                                                                                                                                                                                                  |
+| `"trigger"`   | Custom trigger element that replaces the built-in trigger. It opens the dropdown panel and receives `aria-expanded` and `aria-haspopup`; it supplies its own accessible name. Slot the focusable control itself, not a wrapper around it. |
 
 
 ## Shadow Parts
