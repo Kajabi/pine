@@ -1082,6 +1082,41 @@ describe('pds-datepicker', () => {
       expect(drawerClose).not.toHaveReceivedEvent();
     });
 
+    it('carries a token overridden on an ancestor over to the portaled calendar', async () => {
+      const page = await setup(`<div style="--pine-color-background-overlay: rgb(1, 2, 3)">${FIELD}</div>`);
+      await openWithTrigger(page);
+
+      const background = await page.evaluate(() => {
+        const dialog = document.querySelector('.pds-datepicker-calendar-portal')?.shadowRoot?.querySelector('[role="dialog"]');
+        return dialog ? getComputedStyle(dialog).backgroundColor : null;
+      });
+      expect(background).toBe('rgb(1, 2, 3)');
+    });
+
+    it('closes and reports blur when focus moves from the calendar to a control in another shadow root', async () => {
+      const page = await setup(`${FIELD}<x-other></x-other>`);
+      await page.evaluate(() => {
+        customElements.define(
+          'x-other',
+          class extends HTMLElement {
+            constructor() {
+              super();
+              this.attachShadow({ mode: 'open' }).innerHTML = '<button id="inner">Inner</button>';
+            }
+          },
+        );
+      });
+      const blur = await page.spyOnEvent('pdsBlur');
+      await openWithTrigger(page);
+
+      await page.evaluate(() => (document.querySelector('x-other')?.shadowRoot?.getElementById('inner') as HTMLElement).focus());
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      await page.waitForChanges();
+
+      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).toBeNull();
+      expect(blur).toHaveReceivedEventTimes(1);
+    });
+
     it('carries the direction, language and a scoped theme over to the portal', async () => {
       const page = await setup(`<div dir="rtl" lang="fr" data-theme="dark">${FIELD.replace(' locale="en-US"', '')}</div>`);
       await openWithTrigger(page);
