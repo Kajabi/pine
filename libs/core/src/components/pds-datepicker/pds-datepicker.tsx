@@ -626,6 +626,9 @@ export class PdsDatepicker {
 
   private pickDate(date: Date) {
     if (isOutOfRange(date, this.minDate, this.maxDate)) return;
+    // A pick in the calendar takes over from typed text, so dismissing afterwards commits nothing,
+    // as when nothing was typed.
+    this.dropTypedText();
 
     if (this.range) {
       this.pickRangeDay(date);
@@ -720,18 +723,15 @@ export class PdsDatepicker {
   };
 
   /**
-   * Goes back to the value from when the calendar opened, as Cancel and Escape do, and to its text
-   * in the field. A date typed in the field is committed when the field loses focus, as on the way
-   * to Cancel or into the calendar, so it's undone here.
+   * Goes back to the value from when the calendar opened, as Cancel and Escape do, and drops any
+   * typed text still pending. With Apply showing, typed text isn't committed while focus stays in
+   * the datepicker, so usually there's only text to drop; without a footer, text typed in the
+   * field is committed when it loses focus, so that commit is undone here.
    */
   private restoreValueAtOpen() {
     if (this.valueAtOpen === (this.value ?? '')) {
-      // Nothing was committed, so nothing to emit; only typed text to drop. pds-input is set
-      // directly: when typing and Escape land in one frame, the rendered text never changed.
-      this.text = this.fieldText();
-      if (this.inputEl) this.inputEl.value = this.text;
-      this.textError = '';
-      this.updateFormValue();
+      // Nothing was committed, so nothing to emit.
+      this.dropTypedText();
       return;
     }
     const parts = this.parsedValue(this.valueAtOpen);
@@ -1031,6 +1031,18 @@ export class PdsDatepicker {
     }
   };
 
+  /**
+   * Escape on the calendar button closes an open calendar, as it does in the field and the
+   * calendar, and is stopped there, so a modal or popover around the datepicker stays open.
+   */
+  private onTriggerKeyDown = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape' || !this.isOpen) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.restoreValueAtOpen();
+    this.closeCalendar(false);
+  };
+
   private onTriggerClick = () => {
     if (this.isOpen) {
       this.closeCalendar(true);
@@ -1072,11 +1084,23 @@ export class PdsDatepicker {
     this.activeDate = toIsoDate(clampDate(new Date(Date.UTC(year, month, day)), this.minDate, this.maxDate));
   }
 
+  /**
+   * Drops text typed in the field and not committed, showing the committed value again. pds-input
+   * is set directly: when typing and this land in one frame, the rendered text never changed.
+   */
+  private dropTypedText() {
+    if (this.text === this.fieldText() && !this.textError) return;
+    this.text = this.fieldText();
+    if (this.inputEl) this.inputEl.value = this.text;
+    this.textError = '';
+    this.updateFormValue();
+  }
+
   private onDialogKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       event.preventDefault();
       event.stopPropagation();
-      // As Cancel: a range typed in the field, committed as focus moved in here, is undone.
+      // As Cancel: the dates go back to how they were when the calendar opened.
       this.restoreValueAtOpen();
       this.closeCalendar(true);
     } else if (event.key === 'Tab') {
@@ -1677,6 +1701,7 @@ export class PdsDatepicker {
             aria-controls={this.isOpen ? `${this.baseId}-calendar` : null}
             disabled={!this.isInteractive}
             onClick={this.onTriggerClick}
+            onKeyDown={this.onTriggerKeyDown}
           >
             <pds-icon icon={calendarSimple} aria-hidden="true" />
           </button>
