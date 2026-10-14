@@ -3,6 +3,9 @@ import { PdsDatepicker } from '../pds-datepicker';
 import { PdsInput } from '../../pds-input/pds-input';
 
 const trigger = (root: HTMLElement) => root.shadowRoot?.querySelector('.pds-datepicker__trigger') as HTMLButtonElement;
+/** The open calendar's root: it's portaled out of the datepicker, into a shadow root of its own. */
+const cal = (page: { doc: Document }) =>
+  page.doc.querySelector('.pds-datepicker-calendar-portal')?.shadowRoot as ShadowRoot | undefined;
 
 describe('pds-datepicker', () => {
   it('passes its field props to the inner pds-input', async () => {
@@ -59,11 +62,13 @@ describe('pds-datepicker', () => {
     await (page.root as HTMLPdsDatepickerElement).open();
     await page.waitForChanges();
 
-    const shadow = page.root?.shadowRoot as ShadowRoot;
+    const shadow = cal(page) as ShadowRoot;
     expect(shadow.querySelector('[role="dialog"]')).not.toBeNull();
     expect(shadow.querySelector('.pds-datepicker__heading')?.textContent).toBe('October 2026');
     expect(trigger(page.root as HTMLElement).getAttribute('aria-expanded')).toBe('true');
-    expect(trigger(page.root as HTMLElement).getAttribute('aria-controls')).toBe('due-calendar');
+    // No aria-controls: the calendar is portaled to another root, where an id reference can't reach.
+    expect(trigger(page.root as HTMLElement).hasAttribute('aria-controls')).toBe(false);
+    expect(page.doc.querySelector('.pds-datepicker-calendar-portal')?.parentElement).toBe(page.doc.body);
 
     const selected = shadow.querySelector('[data-date="2026-10-13"]');
     expect(selected?.getAttribute('aria-selected')).toBe('true');
@@ -85,7 +90,7 @@ describe('pds-datepicker', () => {
     await (page.root as HTMLPdsDatepickerElement).open();
     await page.waitForChanges();
 
-    const weekdays = Array.from(page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__weekday .visually-hidden') ?? []);
+    const weekdays = Array.from(cal(page)?.querySelectorAll('.pds-datepicker__weekday .visually-hidden') ?? []);
     expect(weekdays.map((el) => el.textContent)).toEqual([
       'Monday',
       'Tuesday',
@@ -106,7 +111,7 @@ describe('pds-datepicker', () => {
     await (page.root as HTMLPdsDatepickerElement).open();
     await page.waitForChanges();
 
-    expect(page.root?.shadowRoot?.querySelector('.pds-datepicker__heading')?.textContent).toBe('octobre 2026');
+    expect(cal(page)?.querySelector('.pds-datepicker__heading')?.textContent).toBe('octobre 2026');
   });
 
   it.each([
@@ -122,7 +127,7 @@ describe('pds-datepicker', () => {
     await (page.root as HTMLPdsDatepickerElement).open();
     await page.waitForChanges();
 
-    const shadow = page.root?.shadowRoot as ShadowRoot;
+    const shadow = cal(page) as ShadowRoot;
     // Some of these locales default to another calendar (Persian, Buddhist, Japanese era).
     expect(shadow.querySelector('[data-date="2026-10-01"]')?.textContent).toBe(firstDay);
     expect(shadow.querySelector('.pds-datepicker__heading')?.textContent).toMatch(year);
@@ -137,7 +142,7 @@ describe('pds-datepicker', () => {
     await (page.root as HTMLPdsDatepickerElement).open();
     await page.waitForChanges();
 
-    expect(page.root?.shadowRoot?.querySelector('[data-date="2026-10-13"]')?.textContent).toBe('١٣');
+    expect(cal(page)?.querySelector('[data-date="2026-10-13"]')?.textContent).toBe('١٣');
   });
 
   it('opens on today, clamped into range, when there is no value', async () => {
@@ -149,7 +154,7 @@ describe('pds-datepicker', () => {
     await (page.root as HTMLPdsDatepickerElement).open();
     await page.waitForChanges();
 
-    expect(page.root?.shadowRoot?.querySelector('[tabindex="0"]')?.getAttribute('data-date')).toBe('2999-01-10');
+    expect(cal(page)?.querySelector('[tabindex="0"]')?.getAttribute('data-date')).toBe('2999-01-10');
   });
 
   it('does not open when disabled', async () => {
@@ -161,7 +166,7 @@ describe('pds-datepicker', () => {
     await (page.root as HTMLPdsDatepickerElement).open();
     await page.waitForChanges();
 
-    expect(page.root?.shadowRoot?.querySelector('[role="dialog"]')).toBeNull();
+    expect(cal(page)?.querySelector('[role="dialog"]') ?? null).toBeNull();
   });
 
   it('closes the calendar', async () => {
@@ -176,7 +181,7 @@ describe('pds-datepicker', () => {
     await root.close();
     await page.waitForChanges();
 
-    expect(root.shadowRoot?.querySelector('[role="dialog"]')).toBeNull();
+    expect(cal(page)?.querySelector('[role="dialog"]') ?? null).toBeNull();
   });
 
   it('shows a programmatic value in the field without emitting a change', async () => {
@@ -230,7 +235,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const shadow = page.root?.shadowRoot as ShadowRoot;
+      const shadow = cal(page) as ShadowRoot;
       expect(shadow.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe('Period');
       expect(Array.from(shadow.querySelectorAll('.pds-datepicker__heading')).map((h) => h.textContent)).toEqual([
         'September 2026',
@@ -267,10 +272,10 @@ describe('pds-datepicker', () => {
       await root.open();
       await page.waitForChanges();
 
-      const buttons = Array.from(root.shadowRoot?.querySelectorAll('.pds-datepicker__preset') ?? []);
+      const buttons = Array.from(cal(page)?.querySelectorAll('.pds-datepicker__preset') ?? []);
       expect(buttons.map((b) => b.textContent)).toEqual(['Launch week', 'Old', 'Custom range']);
       // One choice of range: a radio group, with the matching preset checked and the only Tab stop.
-      expect(root.shadowRoot?.querySelector('.pds-datepicker__presets')?.getAttribute('role')).toBe('radiogroup');
+      expect(cal(page)?.querySelector('.pds-datepicker__presets')?.getAttribute('role')).toBe('radiogroup');
       expect(buttons.map((b) => b.getAttribute('role'))).toEqual(['radio', 'radio', 'radio']);
       expect(buttons.map((b) => b.getAttribute('aria-checked'))).toEqual(['true', 'false', 'false']);
       expect(buttons.map((b) => b.getAttribute('tabindex'))).toEqual(['0', '-1', '-1']);
@@ -286,7 +291,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const custom = page.root?.shadowRoot?.querySelector('.pds-datepicker__preset--selected');
+      const custom = cal(page)?.querySelector('.pds-datepicker__preset--selected');
       expect(custom?.textContent).toBe('Autre');
     });
 
@@ -299,7 +304,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const [cancel, apply] = Array.from(page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__action') ?? []);
+      const [cancel, apply] = Array.from(cal(page)?.querySelectorAll('.pds-datepicker__action') ?? []);
       expect(cancel.textContent).toBe('Annuler');
       expect(apply.textContent).toBe('Appliquer');
       expect(apply.hasAttribute('disabled')).toBe(true);
@@ -314,7 +319,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      expect(page.root?.shadowRoot?.querySelector('.pds-datepicker__action')?.textContent).toBe('Clear');
+      expect(cal(page)?.querySelector('.pds-datepicker__action')?.textContent).toBe('Clear');
     });
   });
 
@@ -353,10 +358,10 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const group = page.root?.shadowRoot?.querySelector('.pds-datepicker__time') as HTMLElement;
+      const group = cal(page)?.querySelector('.pds-datepicker__time') as HTMLElement;
       expect(group.getAttribute('role')).toBe('group');
       // Labelled by its visible label.
-      const label = page.root?.shadowRoot?.getElementById(group.getAttribute('aria-labelledby') ?? '');
+      const label = cal(page)?.getElementById(group.getAttribute('aria-labelledby') ?? '');
       expect(label?.textContent).toBe('Time');
       const selects = Array.from(group.querySelectorAll('select'));
       expect(selects.map((select) => select.getAttribute('aria-label'))).toEqual(['Hour', 'Minute', 'AM or PM']);
@@ -365,7 +370,7 @@ describe('pds-datepicker', () => {
       expect(selects.map(selectedText)).toEqual(['2', '30', 'PM']);
       expect(Array.from(selects[1].querySelectorAll('option')).map((o) => o.textContent)).toEqual(['00', '15', '30', '45']);
       // A date with a time waits for Apply.
-      expect(page.root?.shadowRoot?.querySelector('.pds-datepicker__footer')).not.toBeNull();
+      expect(cal(page)?.querySelector('.pds-datepicker__footer')).not.toBeNull();
     });
 
     it('uses a 24-hour clock where the locale does', async () => {
@@ -377,7 +382,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const selects = page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__time select');
+      const selects = cal(page)?.querySelectorAll('.pds-datepicker__time select');
       expect(selects).toHaveLength(2);
       expect(selects?.[0].querySelector('option[selected]')?.textContent).toBe('14');
     });
@@ -391,8 +396,8 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const labels = Array.from(page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__time') ?? []).map(
-        (g) => page.root?.shadowRoot?.getElementById(g.getAttribute('aria-labelledby') ?? '')?.textContent,
+      const labels = Array.from(cal(page)?.querySelectorAll('.pds-datepicker__time') ?? []).map(
+        (g) => cal(page)?.getElementById(g.getAttribute('aria-labelledby') ?? '')?.textContent,
       );
       expect(labels).toEqual(['Start time', 'End time']);
     });
@@ -408,7 +413,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const shadow = page.root?.shadowRoot as ShadowRoot;
+      const shadow = cal(page) as ShadowRoot;
       const [month, year] = Array.from(shadow.querySelectorAll('.pds-datepicker__dropdowns select'));
       expect(month.getAttribute('aria-label')).toBe('Month');
       expect(year.getAttribute('aria-label')).toBe('Year');
@@ -435,7 +440,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const id = page.root?.shadowRoot?.querySelector('[role="dialog"]')?.id ?? '';
+      const id = cal(page)?.querySelector('[role="dialog"]')?.id ?? '';
       expect(id).toMatch(/^pds-datepicker-\d+-calendar$/);
       expect(id).not.toContain('undefined');
     });
@@ -449,7 +454,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const live = Array.from(page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__heading') ?? []).map((h) =>
+      const live = Array.from(cal(page)?.querySelectorAll('.pds-datepicker__heading') ?? []).map((h) =>
         h.getAttribute('aria-live'),
       );
       expect(live).toEqual(['polite', null]);
@@ -482,7 +487,7 @@ describe('pds-datepicker', () => {
       await (page.root as HTMLPdsDatepickerElement).open();
       await page.waitForChanges();
 
-      const year = page.root?.shadowRoot?.querySelectorAll('.pds-datepicker__dropdowns select')[1];
+      const year = cal(page)?.querySelectorAll('.pds-datepicker__dropdowns select')[1];
       expect(year?.querySelector('option[selected]')?.textContent).toBe('٢٠٢٦');
     });
   });

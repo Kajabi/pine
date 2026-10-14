@@ -23,6 +23,7 @@ import {
   weekdayColumn,
   weekdayNames,
 } from './date-utils';
+import { CalendarPortal } from './calendar-portal';
 import { matchPreset, presetInRange, resolvePresets } from './presets';
 import type { ResolvedPreset } from './presets';
 import {
@@ -78,6 +79,9 @@ const dayNumberText = (formatter: Intl.DateTimeFormat, date: Date) =>
  * A field for one date, or in range mode a start and end date, with a calendar to pick from.
  * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
  * date carries a time, as `YYYY-MM-DDTHH:mm`.
+ *
+ * @part calendar - The open calendar. It's portaled out of the datepicker, so style it with `.pds-datepicker-calendar-portal::part(calendar)`.
+ * @part presets - The list of preset ranges in the calendar, styled with `.pds-datepicker-calendar-portal::part(presets)`.
  */
 @Component({
   tag: 'pds-datepicker',
@@ -89,6 +93,8 @@ export class PdsDatepicker {
   private inputEl?: HTMLPdsInputElement;
   private triggerEl?: HTMLButtonElement;
   private dialogEl?: HTMLElement;
+  /** Where the open calendar lives, outside the datepicker so no ancestor clips or misplaces it. */
+  private portal?: CalendarPortal;
   private internals?: ElementInternals;
   private cleanupAutoUpdate?: () => void;
   /** Set when the active day should take focus on the next render. */
@@ -102,6 +108,8 @@ export class PdsDatepicker {
   private timesBeforeTyping?: [string, string];
   /** Set while the datepicker commits a value itself, as opposed to one set from outside. */
   private committing = false;
+  /** Whether focus is in the datepicker or its calendar, for pdsFocus and pdsBlur. */
+  private hasFocus = false;
 
   @Element() el!: HTMLPdsDatepickerElement;
 
@@ -472,10 +480,18 @@ export class PdsDatepicker {
 
   disconnectedCallback() {
     this.closeCalendar(false);
+    this.portal?.remove();
   }
 
   componentDidRender() {
-    if (!this.isOpen || !this.dialogEl) return;
+    if (!this.isOpen || !this.dialogEl) {
+      this.portal?.remove();
+      return;
+    }
+
+    // Rendered here, then moved to the portal. Stencil keeps patching it by reference.
+    this.portal ??= new CalendarPortal(this.el);
+    this.portal.mount(this.dialogEl, this.resolvedLocale);
 
     if (!this.cleanupAutoUpdate) this.startPositioning();
     this.flushActiveDayFocus();
@@ -777,7 +793,7 @@ export class PdsDatepicker {
 
   private onDocumentPointerDown = (event: PointerEvent) => {
     const path = event.composedPath();
-    if (path.includes(this.el)) return;
+    if (path.includes(this.el) || (this.portal && path.includes(this.portal.host))) return;
 
     this.closeCalendar(false);
     // A press on a modal's backdrop lands on its <dialog>. That press dismisses the calendar, the
@@ -785,8 +801,12 @@ export class PdsDatepicker {
     if ((path[0] as Element | undefined)?.localName === 'dialog') swallowNextClick();
   };
 
+  /** Whether a node is the datepicker, inside it, or in its portaled calendar. */
   private isInside(node: Node | null): boolean {
-    return !!node && (node === this.el || this.el.contains(node) || !!this.el.shadowRoot?.contains(node));
+    if (!node) return false;
+    return (
+      node === this.el || this.el.contains(node) || !!this.el.shadowRoot?.contains(node) || !!this.portal?.contains(node)
+    );
   }
 
   /**
@@ -794,8 +814,34 @@ export class PdsDatepicker {
    * once retargeted, its target and related target are both the host, so the browser skips it.
    */
   private onHostFocusIn = (event: FocusEvent) => {
-    if (!this.isInside(event.relatedTarget as Node | null)) this.pdsFocus.emit(event);
+    this.focusEntered(event);
   };
+
+  /**
+   * Focus arriving in the datepicker or its portaled calendar from outside emits pdsFocus, once.
+   * Tracked with a flag rather than `relatedTarget`, which is null or retargeted once the calendar
+   * is portaled out of the datepicker.
+   */
+  private focusEntered(event: FocusEvent) {
+    if (this.hasFocus) return;
+    this.hasFocus = true;
+    this.pdsFocus.emit(event);
+  }
+
+  /**
+   * Once focus settles, whether it left both the datepicker and its calendar: then pdsBlur, once,
+   * and the calendar closes if focus went to another control. Focus that fell to the page, as on a
+   * click on a blank area or when a focused control is disabled, leaves the calendar open.
+   */
+  private checkFocusLeft(event: FocusEvent, toControl: boolean) {
+    window.setTimeout(() => {
+      if (this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within')) return;
+      if (toControl) this.closeCalendar(false);
+      if (!this.hasFocus) return;
+      this.hasFocus = false;
+      this.pdsBlur.emit(event);
+    });
+  }
 
   /**
    * The calendar is a modal dialog while focus is in it. Opened by a click in the field, focus stays
@@ -803,6 +849,7 @@ export class PdsDatepicker {
    * state: focus often moves in from `componentDidRender`, where a state change doesn't re-render.
    */
   private onCalendarFocusIn = (event: FocusEvent) => {
+    this.focusEntered(event);
     this.dialogEl?.setAttribute('aria-modal', 'true');
     // The dialog itself takes focus only from a click on a part that can't, as the month heading.
     // Pass it to the active day, so Tab, Shift+Tab and the arrow keys keep working.
@@ -811,25 +858,25 @@ export class PdsDatepicker {
     }
   };
 
+  /**
+   * The portaled calendar is outside the datepicker, so the host never hears focus leave it: close
+   * and report blur from here when focus goes from the calendar to the rest of the page. Checked
+   * once focus has settled, with `:focus-within`, rather than from `relatedTarget`, which is
+   * retargeted past the datepicker when it sits in another component's shadow root.
+   */
   private onCalendarFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
-    if (next && !this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
+    if (!next || !this.dialogEl?.contains(next)) this.dialogEl?.removeAttribute('aria-modal');
+    // Not gated on the calendar still being open: a press outside closes it on pointerdown, before
+    // this focusout, and focus has still left the datepicker.
+    this.checkFocusLeft(event, next !== null);
   };
 
   /** Closes the calendar and reports blur when focus leaves the datepicker, as when tabbing out. */
   private onHostFocusOut = (event: FocusEvent) => {
     const next = event.relatedTarget as Node | null;
-    // No next target: focus fell to the page, as on a click on a blank area or when a focused
-    // control is disabled. Stay open, but report blur unless focus comes straight back inside.
-    if (!next) {
-      window.setTimeout(() => {
-        if (!this.el.matches(':focus-within')) this.pdsBlur.emit(event);
-      });
-      return;
-    }
-    if (this.isInside(next)) return;
-    this.closeCalendar(false);
-    this.pdsBlur.emit(event);
+    if (next && this.isInside(next)) return;
+    this.checkFocusLeft(event, next !== null);
   };
 
   private startPositioning() {
@@ -941,7 +988,7 @@ export class PdsDatepicker {
     // (the calendar button, or the calendar): Apply commits it, Cancel or Escape drops it, and
     // closing any other way commits it. Checked once focus settles.
     window.setTimeout(() => {
-      if (this.isOpen && this.el.matches(':focus-within')) return;
+      if (this.isOpen && (this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within'))) return;
       this.commitPendingText();
     });
   };
@@ -1038,15 +1085,26 @@ export class PdsDatepicker {
   };
 
   /**
-   * Escape on the calendar button closes an open calendar, as it does in the field and the
-   * calendar, and is stopped there, so a modal or popover around the datepicker stays open.
+   * The calendar button's keys. Escape closes an open calendar, as in the field and the calendar,
+   * and is stopped there, so a modal or popover around the datepicker stays open. Tab goes into a
+   * calendar a click in the field opened: it's portaled to the end of the page, so Tab would
+   * otherwise skip past it.
    */
   private onTriggerKeyDown = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape' || !this.isOpen) return;
+    if (!this.isOpen) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.restoreValueAtOpen();
+      this.closeCalendar(false);
+      return;
+    }
+    // A calendar that isn't placed and shown, as when the field is scrolled out of view, can't take
+    // focus; let Tab move on from the trigger as usual.
+    if (event.key !== 'Tab' || event.shiftKey || this.dialogEl?.style.visibility !== 'visible') return;
     event.preventDefault();
-    event.stopPropagation();
-    this.restoreValueAtOpen();
-    this.closeCalendar(false);
+    this.focusActiveDay = true;
+    this.flushActiveDayFocus();
   };
 
   private onTriggerClick = () => {
@@ -1126,7 +1184,8 @@ export class PdsDatepicker {
     );
     if (focusable.length === 0) return;
 
-    const current = this.el.shadowRoot?.activeElement;
+    // The calendar may be in the portal's shadow root, so ask its own root what has focus.
+    const current = (this.dialogEl?.getRootNode() as Document | ShadowRoot | undefined)?.activeElement;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
     if (event.shiftKey && current === first) {
@@ -1708,9 +1767,10 @@ export class PdsDatepicker {
             class="pds-datepicker__trigger"
             ref={(el) => (this.triggerEl = el)}
             aria-label={this.triggerAccessibleName(locale)}
+            // No aria-controls: the calendar is portaled to another root, where an id can't reach.
+            // A button with aria-haspopup="dialog" and aria-expanded is complete without it (APG).
             aria-haspopup="dialog"
             aria-expanded={this.isOpen ? 'true' : 'false'}
-            aria-controls={this.isOpen ? `${this.baseId}-calendar` : null}
             disabled={!this.isInteractive}
             onClick={this.onTriggerClick}
             onKeyDown={this.onTriggerKeyDown}

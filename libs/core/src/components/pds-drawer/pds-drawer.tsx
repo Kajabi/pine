@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, h } from '@stencil/core';
+import { closest, containsComposed } from '@utils/closest';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 // Known selectors for content Pine components portal to document.body rather
@@ -153,6 +154,11 @@ export class PdsDrawer {
     if (!target) return;
     if (this.el.contains(target)) return;
     if (target.closest(PORTALED_OVERLAY_SELECTOR)) return;
+    // A datepicker's portaled calendar counts as inside only when its datepicker is in the drawer,
+    // or in an overlay portaled from it (a pds-popover in the drawer puts its content on the body).
+    const calendar = target.closest('.pds-datepicker-calendar-portal') as (Element & { pdsDatepicker?: Element }) | null;
+    const owner = calendar?.pdsDatepicker;
+    if (owner && (containsComposed(this.el, owner) || closest(PORTALED_OVERLAY_SELECTOR, owner))) return;
     // A sibling pds-modal — e.g. a confirm dialog opened from inside the
     // drawer but mounted at the document root rather than nested in our own
     // content — is neither a descendant of the drawer nor on the portaled
