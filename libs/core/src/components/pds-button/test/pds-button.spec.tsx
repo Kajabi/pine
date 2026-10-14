@@ -236,6 +236,18 @@ describe('pds-button', () => {
     `);
   });
 
+  it('keeps an id set on the host when it re-renders', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button id="save-button">Save</pds-button>`,
+    });
+
+    page.root.disabled = true;
+    await page.waitForChanges();
+
+    expect(page.root?.getAttribute('id')).toBe('save-button');
+  });
+
   // Note: Snapshot still shows --empty on slot wrappers because newSpecPage does not
   // fire slotchange events. The "slot empty class" suite below covers that behavior.
   it('renders a leading icon', async () => {

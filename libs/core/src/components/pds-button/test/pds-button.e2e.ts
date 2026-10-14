@@ -674,6 +674,21 @@ describe('pds-button', () => {
 
       expect(anchor).toEqual(['false', 'dialog']);
     });
+
+    it('keeps an id set on the host while it is a trigger', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <pds-button id="actions-trigger" slot="trigger">Actions</pds-button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+
+      await page.click('pds-button');
+      await page.waitForChanges();
+
+      expect(await page.$eval('pds-button', (el) => el.getAttribute('id'))).toBe('actions-trigger');
+    });
   });
 
   describe('accessibility', () => {
