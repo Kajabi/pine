@@ -16,6 +16,7 @@ import { defineCustomElement as definePdsChip } from '@pine-ds/core/components/p
 import { defineCustomElement as definePdsCombobox } from '@pine-ds/core/components/pds-combobox.js';
 import { defineCustomElement as definePdsContainer } from '@pine-ds/core/components/pds-container.js';
 import { defineCustomElement as definePdsCopytext } from '@pine-ds/core/components/pds-copytext.js';
+import { defineCustomElement as definePdsDatepicker } from '@pine-ds/core/components/pds-datepicker.js';
 import { defineCustomElement as definePdsDivider } from '@pine-ds/core/components/pds-divider.js';
 import { defineCustomElement as definePdsDrawer } from '@pine-ds/core/components/pds-drawer.js';
 import { defineCustomElement as definePdsDrawerContent } from '@pine-ds/core/components/pds-drawer-content.js';
@@ -70,6 +71,7 @@ export const PdsChip = /*@__PURE__*/createReactComponent<JSX.PdsChip, HTMLPdsChi
 export const PdsCombobox = /*@__PURE__*/createReactComponent<JSX.PdsCombobox, HTMLPdsComboboxElement>('pds-combobox', undefined, undefined, definePdsCombobox);
 export const PdsContainer = /*@__PURE__*/createReactComponent<JSX.PdsContainer, HTMLPdsContainerElement>('pds-container', undefined, undefined, definePdsContainer);
 export const PdsCopytext = /*@__PURE__*/createReactComponent<JSX.PdsCopytext, HTMLPdsCopytextElement>('pds-copytext', undefined, undefined, definePdsCopytext);
+export const PdsDatepicker = /*@__PURE__*/createReactComponent<JSX.PdsDatepicker, HTMLPdsDatepickerElement>('pds-datepicker', undefined, undefined, definePdsDatepicker);
 export const PdsDivider = /*@__PURE__*/createReactComponent<JSX.PdsDivider, HTMLPdsDividerElement>('pds-divider', undefined, undefined, definePdsDivider);
 export const PdsDrawer = /*@__PURE__*/createReactComponent<JSX.PdsDrawer, HTMLPdsDrawerElement>('pds-drawer', undefined, undefined, definePdsDrawer);
 export const PdsDrawerContent = /*@__PURE__*/createReactComponent<JSX.PdsDrawerContent, HTMLPdsDrawerContentElement>('pds-drawer-content', undefined, undefined, definePdsDrawerContent);

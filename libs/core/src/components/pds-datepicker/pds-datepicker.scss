@@ -1,0 +1,618 @@
+:host {
+  --pds-datepicker-day-size: var(--pine-dimension-500);
+  --pds-datepicker-presets-width: 200px;
+
+  display: inline-block;
+}
+
+:host([full-width]) {
+  display: block;
+}
+
+pds-input {
+  display: block;
+}
+
+// Wide enough to show a whole range, or a date and time, without cutting it off.
+:host(.pds-datepicker--time) pds-input {
+  min-width: 220px;
+}
+
+:host(.pds-datepicker--range) pds-input {
+  min-width: 260px;
+}
+
+:host(.pds-datepicker--range.pds-datepicker--time) pds-input {
+  // Never wider than its container, as a narrow popover or phone column.
+  min-width: min(380px, 100%);
+}
+
+.pds-datepicker__trigger,
+.pds-datepicker__clear {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--pine-border-radius-sm);
+  color: var(--pine-color-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  padding: var(--pine-dimension-2xs);
+
+  &:hover:not(:disabled) {
+    background: var(--pine-color-background-muted);
+    color: var(--pine-color-text-strong);
+  }
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+  }
+
+  &:disabled {
+    color: var(--pine-color-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+// The field's clear button sits before the calendar button.
+.pds-datepicker__clear {
+  margin-inline-end: var(--pine-dimension-2xs);
+}
+
+// Round outlined month buttons, as pds-button's secondary icon-only buttons.
+.pds-datepicker__nav {
+  align-items: center;
+  background: var(--pine-color-secondary);
+  border: var(--pine-border);
+  border-radius: var(--pine-border-radius-full);
+  box-sizing: border-box;
+  color: var(--pine-color-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  height: var(--pine-dimension-400);
+  justify-content: center;
+  padding: 0;
+  width: var(--pine-dimension-400);
+
+  &:hover:not(:disabled) {
+    background: var(--pine-color-secondary-hover);
+    border-color: var(--pine-color-border-hover);
+  }
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+
+  &:disabled {
+    border-color: var(--pine-color-border-disabled);
+    color: var(--pine-color-text-secondary-disabled);
+    cursor: not-allowed;
+  }
+}
+
+// Previous and next follow the reading direction, so the arrows mirror on right-to-left pages.
+.pds-datepicker__nav:dir(rtl) pds-icon {
+  transform: scaleX(-1);
+}
+
+// Focused only by a click on a part that can't take focus; not a Tab stop, so no ring.
+.pds-datepicker__dialog:focus {
+  outline: none;
+}
+
+.pds-datepicker__dialog {
+  background: var(--pine-color-background-overlay);
+  border-radius: var(--pine-dimension-150);
+  box-shadow: var(--pine-box-shadow-200);
+  box-sizing: border-box;
+  left: 0;
+  // Floating UI sets the exact limits from the room beside the field; these are the fallbacks.
+  // dvh, so mobile browser toolbars don't hide the bottom.
+  max-height: calc(100vh - var(--pine-dimension-sm));
+  /* stylelint-disable-next-line declaration-block-no-duplicate-properties -- vh fallback for browsers without dvh */
+  max-height: calc(100dvh - var(--pine-dimension-sm));
+  max-width: calc(100vw - var(--pine-dimension-sm));
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--pine-dimension-sm);
+  // pds-drawer turns pointer events off on its dialog so the page stays usable, and the calendar
+  // is portaled into that dialog; take them back.
+  pointer-events: auto;
+  position: fixed;
+  top: 0;
+  // Revealed once Floating UI has placed it, so it never flashes at the corner of the page.
+  visibility: hidden;
+  // Above a modal or drawer panel it's portaled beside, as pds-combobox's portaled listbox.
+  z-index: var(--pine-z-index-priority);
+
+  // In dark mode the overlay matches the page and the shadow doesn't show, so draw its edge, as
+  // pds-dropdown-menu does.
+  :host-context([data-theme="dark"]) & {
+    border: var(--pine-border);
+  }
+}
+
+.pds-datepicker__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: var(--pine-dimension-sm);
+}
+
+.pds-datepicker__nav-spacer {
+  flex: none;
+  width: var(--pine-dimension-400);
+}
+
+.pds-datepicker__heading {
+  color: var(--pine-color-text);
+  font: var(--pine-typography-heading-5);
+  font-weight: var(--pine-font-weight-semi-bold);
+}
+
+.pds-datepicker__grid {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.pds-datepicker__weekday {
+  color: var(--pine-color-text-muted);
+  font: var(--pine-typography-body-sm);
+  height: var(--pds-datepicker-day-size);
+  padding: 0;
+  text-align: center;
+  width: var(--pds-datepicker-day-size);
+}
+
+.pds-datepicker__day {
+  // Round, so hover and focus match a selected day; days inside a range band are square.
+  border-radius: var(--pine-border-radius-full);
+  color: var(--pine-color-text-secondary);
+  cursor: pointer;
+  font: var(--pine-typography-body);
+  height: var(--pds-datepicker-day-size);
+  padding: 0;
+  position: relative;
+  text-align: center;
+  transition: background var(--pine-motion-duration-fast) var(--pine-motion-easing-in);
+  width: var(--pds-datepicker-day-size);
+
+  &:hover {
+    background: var(--pine-color-background-muted);
+  }
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+    outline-offset: calc(var(--pine-border-width-thick) * -1);
+  }
+}
+
+.pds-datepicker__day--empty {
+  cursor: default;
+  pointer-events: none;
+}
+
+// Today: a dot under the number.
+.pds-datepicker__day--today::after {
+  background: var(--pine-color-primary);
+  border-radius: var(--pine-border-radius-full);
+  content: '';
+  height: var(--pine-dimension-050);
+  inset-block-end: var(--pine-dimension-050);
+  inset-inline-start: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: var(--pine-dimension-050);
+}
+
+.pds-datepicker__day--selected,
+.pds-datepicker__day--selected:hover {
+  background: var(--pine-color-primary);
+  border-radius: var(--pine-border-radius-full);
+  color: var(--pine-color-text-primary);
+}
+
+// Keep the focus ring outside a selected day's fill, where it contrasts in both themes.
+.pds-datepicker__day--selected:focus-visible {
+  outline-offset: var(--pine-border-width);
+}
+
+// A range's first and last days are rounded on their outer side and square where they meet the band.
+.pds-datepicker__day--range-start {
+  border-end-end-radius: 0;
+  border-start-end-radius: 0;
+}
+
+.pds-datepicker__day--range-end {
+  border-end-start-radius: 0;
+  border-start-start-radius: 0;
+}
+
+// An end that's also the edge of a week is rounded on that side too.
+.pds-datepicker__day--range-start.pds-datepicker__day--row-end {
+  border-end-end-radius: var(--pine-border-radius-full);
+  border-start-end-radius: var(--pine-border-radius-full);
+}
+
+.pds-datepicker__day--range-end.pds-datepicker__day--row-start {
+  border-end-start-radius: var(--pine-border-radius-full);
+  border-start-start-radius: var(--pine-border-radius-full);
+}
+
+.pds-datepicker__day--selected.pds-datepicker__day--today::after {
+  background: var(--pine-color-text-primary);
+}
+
+// Range mode: the days between the ends share a band, rounded where it meets the edge of a week.
+.pds-datepicker__day--in-range,
+.pds-datepicker__day--in-range:hover {
+  background: var(--pine-color-background-muted);
+  border-radius: 0;
+  color: var(--pine-color-text-secondary);
+}
+
+.pds-datepicker__day--row-start {
+  border-end-start-radius: var(--pine-border-radius-full);
+  border-start-start-radius: var(--pine-border-radius-full);
+}
+
+.pds-datepicker__day--row-end {
+  border-end-end-radius: var(--pine-border-radius-full);
+  border-start-end-radius: var(--pine-border-radius-full);
+}
+
+// Listed but not pickable. Disabled text needn't meet contrast.
+.pds-datepicker__day--disabled,
+.pds-datepicker__day--disabled:hover {
+  background: transparent;
+  color: var(--pine-color-text-disabled);
+  cursor: not-allowed;
+  // Not by color alone.
+  text-decoration: line-through;
+}
+
+// Hovering inside the band still shows which day the pointer is on.
+.pds-datepicker__day--in-range:hover {
+  background: var(--pine-color-background-inset);
+}
+
+// Range mode: presets beside two months, with Cancel and Apply below, as the admin date picker.
+.pds-datepicker__dialog--range {
+  display: flex;
+  padding: 0;
+}
+
+.pds-datepicker__panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pds-datepicker__dialog--range .pds-datepicker__panel {
+  padding: var(--pine-dimension-sm);
+}
+
+.pds-datepicker__months {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pine-dimension-lg);
+}
+
+// The column takes the calendars' height and the list scrolls within it, so a long list of presets
+// never makes the dialog taller.
+.pds-datepicker__presets-column {
+  border-inline-end: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+  flex: none;
+  position: relative;
+  width: var(--pds-datepicker-presets-width);
+}
+
+.pds-datepicker__presets {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pine-dimension-2xs);
+  inset: 0;
+  list-style: none;
+  margin: 0;
+  overflow-y: auto;
+  padding: var(--pine-dimension-150);
+  position: absolute;
+}
+
+.pds-datepicker__preset {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--pine-border-radius-md);
+  color: var(--pine-color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  font: var(--pine-typography-body);
+  gap: var(--pine-dimension-xs);
+  justify-content: space-between;
+  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+  text-align: start;
+  transition: background var(--pine-motion-duration-fast) var(--pine-motion-easing-in);
+  width: 100%;
+
+  &:hover:not(:disabled) {
+    background: var(--pine-color-background-muted);
+  }
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+  }
+
+  &:disabled {
+    color: var(--pine-color-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+.pds-datepicker__preset--selected {
+  background: var(--pine-color-background-muted);
+  color: var(--pine-color-text-active);
+}
+
+.pds-datepicker__footer {
+  align-items: center;
+  background: var(--pine-color-background-overlay);
+  border-block-start: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pine-dimension-xs);
+  // Pinned to the bottom while the months scroll, so Apply stays in reach; it covers the panel's
+  // bottom padding, which it then restores.
+  inset-block-end: calc(var(--pine-dimension-sm) * -1);
+  justify-content: flex-end;
+  margin-block: var(--pine-dimension-sm) calc(var(--pine-dimension-sm) * -1);
+  padding-block: var(--pine-dimension-sm);
+  position: sticky;
+}
+
+// The dates Apply will set, in the field's own format.
+.pds-datepicker__selection {
+  color: var(--pine-color-text-muted);
+  font: var(--pine-typography-body-sm-medium);
+  margin-inline-end: auto;
+}
+
+// Month and year dropdowns, drawn as the month heading with a caret after each part.
+.pds-datepicker__dropdowns {
+  display: flex;
+  gap: var(--pine-dimension-2xs);
+}
+
+.pds-datepicker__select-wrap {
+  align-items: center;
+  display: inline-flex;
+  position: relative;
+}
+
+.pds-datepicker__heading-select {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: var(--pine-border-radius-md);
+  color: var(--pine-color-text);
+  cursor: pointer;
+  // As wide as the chosen month, not the longest one, where the browser supports it.
+  /* stylelint-disable-next-line property-no-unknown -- field-sizing is newer than the linter's property list */
+  field-sizing: content;
+  font: var(--pine-typography-heading-5);
+  font-weight: var(--pine-font-weight-semi-bold);
+  padding-block: var(--pine-dimension-2xs);
+  // Room for the caret drawn over the select's end.
+  padding-inline: var(--pine-dimension-xs) calc(var(--pine-dimension-xs) + var(--pine-dimension-sm));
+
+  &:hover {
+    background: var(--pine-color-background-muted);
+  }
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+  }
+}
+
+.pds-datepicker__select-caret {
+  color: var(--pine-color-text-secondary);
+  inset-inline-end: var(--pine-dimension-xs);
+  pointer-events: none;
+  position: absolute;
+}
+
+// The time picker: a label, and hour, minute and AM/PM in one field, as a time input.
+.pds-datepicker__time {
+  align-items: center;
+  display: flex;
+  gap: var(--pine-dimension-xs);
+  justify-content: space-between;
+  margin-block-start: var(--pine-dimension-sm);
+  padding-inline: var(--pine-dimension-xs);
+}
+
+.pds-datepicker__time-label {
+  color: var(--pine-color-text-label);
+  font: var(--pine-typography-body-medium);
+}
+
+.pds-datepicker__time-field {
+  align-items: center;
+  background: var(--pine-color-background-container);
+  border: var(--pine-border);
+  border-radius: var(--pine-border-radius-md);
+  display: inline-flex;
+  min-height: var(--pine-dimension-400);
+  padding-inline: var(--pine-dimension-2xs);
+
+  &:hover {
+    border-color: var(--pine-color-border-hover);
+  }
+
+  &:focus-within {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+}
+
+.pds-datepicker__time-select {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: var(--pine-border-radius-sm);
+  color: var(--pine-color-text-strong);
+  cursor: pointer;
+  font: var(--pine-typography-body);
+  font-variant-numeric: tabular-nums;
+  padding: var(--pine-dimension-2xs);
+  text-align: center;
+
+  // The field's ring shows focus; the focused part is tinted.
+  &:focus-visible {
+    background: var(--pine-color-background-muted);
+    outline: none;
+  }
+}
+
+.pds-datepicker__time-select--period {
+  margin-inline-start: var(--pine-dimension-2xs);
+}
+
+.pds-datepicker__time-separator {
+  color: var(--pine-color-text-secondary);
+}
+
+// The selects' option lists are the browser's; in dark mode, ask for its dark ones.
+:host-context([data-theme="dark"]) select {
+  color-scheme: dark;
+}
+
+// Cancel and Apply, as pds-button's secondary and primary buttons. The calendar's controls are
+// native elements, not pds-button or pds-select, so the Tab trap and focus handling can reach them:
+// both keep their focusable element inside their own shadow root.
+.pds-datepicker__action {
+  background: var(--pine-color-secondary);
+  border: var(--pine-border);
+  border-radius: var(--pine-border-radius-full);
+  color: var(--pine-color-text-secondary);
+  cursor: pointer;
+  font: var(--pine-typography-body-medium);
+  padding: calc(var(--pine-dimension-xs) - var(--pine-border-width)) var(--pine-dimension-sm);
+
+  &:hover:not(:disabled) {
+    background: var(--pine-color-secondary-hover);
+    border-color: var(--pine-color-border-hover);
+  }
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+
+  &:disabled {
+    background: var(--pine-color-secondary-disabled);
+    border-color: var(--pine-color-border-disabled);
+    color: var(--pine-color-text-secondary-disabled);
+    cursor: not-allowed;
+  }
+}
+
+.pds-datepicker__action--primary {
+  background: var(--pine-color-primary);
+  border-color: var(--pine-color-primary);
+  color: var(--pine-color-text-primary);
+
+  &:hover:not(:disabled) {
+    background: var(--pine-color-primary-hover);
+    border-color: var(--pine-color-primary-hover);
+  }
+
+  &:disabled {
+    background: var(--pine-color-primary-disabled);
+    border-color: var(--pine-color-primary-disabled);
+    color: var(--pine-color-text-primary-disabled);
+  }
+}
+
+// Narrow screens: presets above the calendars, in a row that scrolls.
+@media (max-width: 600px) {
+  .pds-datepicker__dialog--range {
+    flex-direction: column;
+  }
+
+  .pds-datepicker__presets-column {
+    border-block-end: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+    border-inline-end: 0;
+    width: auto;
+  }
+
+  .pds-datepicker__presets {
+    flex-direction: row;
+    overflow-x: auto;
+    position: static;
+  }
+
+  .pds-datepicker__preset {
+    white-space: nowrap;
+  }
+
+  // The selection gets its own line, so Cancel and Apply stay together.
+  .pds-datepicker__selection {
+    flex-basis: 100%;
+  }
+}
+
+// Fast clicks on the controls and days would otherwise select their text.
+.pds-datepicker__trigger,
+.pds-datepicker__clear,
+.pds-datepicker__nav,
+.pds-datepicker__weekday,
+.pds-datepicker__day,
+.pds-datepicker__preset,
+.pds-datepicker__action {
+  user-select: none;
+}
+
+// Windows High Contrast and other forced colors drop backgrounds, which carry the selection here:
+// draw it with system colors instead.
+@media (forced-colors: active) {
+  .pds-datepicker__day--selected,
+  .pds-datepicker__day--selected:hover {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  .pds-datepicker__day--in-range,
+  .pds-datepicker__day--in-range:hover {
+    border-block: var(--pine-border-width-thin) solid Highlight;
+  }
+
+  .pds-datepicker__day--today::after {
+    background: CanvasText;
+    forced-color-adjust: none;
+  }
+
+  .pds-datepicker__day--selected.pds-datepicker__day--today::after {
+    background: HighlightText;
+  }
+
+  .pds-datepicker__day--disabled {
+    color: GrayText;
+  }
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
