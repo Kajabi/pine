@@ -10,7 +10,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -32,7 +32,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button variant="accent">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--accent" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -54,7 +54,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button variant="tertiary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--tertiary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -76,7 +76,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button size="small" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary pds-button--small" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -98,7 +98,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button size="micro" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary pds-button--micro" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -120,7 +120,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button size="small" icon-only="true" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary pds-button--small pds-button--icon-only" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -142,7 +142,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button size="micro" icon-only="true" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary pds-button--micro pds-button--icon-only" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -164,7 +164,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button variant="unstyled">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--unstyled" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -186,7 +186,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button disabled aria-disabled="true" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button" disabled>
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -221,7 +221,7 @@ describe('pds-button', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-button component-id="test" id="test" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -245,7 +245,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -269,7 +269,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -293,7 +293,7 @@ describe('pds-button', () => {
 
     expect(root).toEqualHtml(`
       <pds-button icon="trash" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <pds-icon aria-hidden="true" name="trash" part="icon"></pds-icon>
@@ -317,7 +317,7 @@ describe('pds-button', () => {
 
     expect(root).toEqualHtml(`
       <pds-button loading="true" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button aria-busy="true" aria-live="polite" class="pds-button pds-button--primary pds-button--loading" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty pds-button__icon--hidden"><slot name="start"></slot></span>
@@ -436,7 +436,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button full-width="true" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -476,7 +476,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button icon-only="true" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary pds-button--icon-only" part="button" type="button">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -498,7 +498,7 @@ describe('pds-button', () => {
     });
     expect(root).toEqualHtml(`
       <pds-button href="https://example.com" target="_blank" variant="primary">
-        <mock:shadow-root>
+        <mock:shadow-root shadowrootdelegatesfocus>
           <a class="pds-button pds-button--primary" part="button" href="https://example.com" target="_blank">
             <div class="pds-button__content" part="button-content">
               <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
@@ -522,6 +522,18 @@ describe('pds-button', () => {
     const anchor = root?.shadowRoot?.querySelector('a');
     expect(anchor).not.toBeNull();
     expect(anchor?.getAttribute('download')).toBe('report.pdf');
+  });
+
+  it('renders host trigger attributes on the inner button', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button aria-expanded="false" aria-haspopup="menu">Actions</pds-button>`,
+    });
+
+    const button = root?.shadowRoot?.querySelector('button');
+    expect(button?.getAttribute('aria-expanded')).toBe('false');
+    expect(button?.getAttribute('aria-haspopup')).toBe('menu');
+    expect(root?.getAttribute('aria-expanded')).toBe('false');
   });
 
   describe('Enter key form submission', () => {
