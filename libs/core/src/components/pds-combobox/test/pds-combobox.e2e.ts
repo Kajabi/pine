@@ -673,6 +673,43 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__listbox-options');
     });
 
+    it('keeps the first option clear of the row back when drilling in from a scrolled list', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="groups" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" panel-search max-height="200px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, g) =>
+          Array.from({ length: g === 11 ? 10 : 3 }, (_, i) => ({ id: `g${g}-${i}`, text: `Option ${g}.${i}`, group: `Group ${g}` })),
+        ).flat();
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+
+      // Scroll the groups to the end and drill into the last, long group; the list keeps its offset.
+      await page.evaluate(() => {
+        const list = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox-options') as HTMLElement;
+        list.scrollTop = list.scrollHeight;
+      });
+      await page.evaluate(() => {
+        const rows = document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('.pds-combobox__group-row-trigger');
+        (rows[rows.length - 1] as HTMLElement).click();
+      });
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 600)));
+
+      const gap = await page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const header = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+        const option = root.querySelector('.pds-combobox__drill-in-options [role="treeitem"]')!.getBoundingClientRect();
+        return Math.round(option.top - header.bottom);
+      });
+      expect(gap).toBeGreaterThanOrEqual(0);
+    });
+
     it('lands on the trigger when Tab leaves a drilled-in group', async () => {
       const page = await setUp('group-display="drill-in" panel-search');
       await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();

@@ -3507,6 +3507,23 @@ describe('pds-combobox', () => {
       expect(component.openGroup).toBeNull();
     });
 
+    it('starts a search with AltGr and Option characters, but not with Ctrl or Meta shortcuts', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+      const list = root.querySelector('.pds-combobox__listbox-options')!;
+
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', ctrlKey: true }));
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', metaKey: true }));
+      expect(component.panelQuery).toBe('');
+      expect(component.openGroup?.label).toBe('Tag');
+
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: '@', ctrlKey: true, altKey: true }));
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: '€', altKey: true }));
+      expect(component.panelQuery).toBe('@€');
+      expect(component.openGroup).toBeNull();
+    });
+
     it('does not open a group on hover', async () => {
       const { page, component, root } = await openDrillIn();
 
