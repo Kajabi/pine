@@ -1469,7 +1469,7 @@ describe('pds-datepicker', () => {
   });
 
   describe('clear button', () => {
-    it('commits typed text when a press on Clear is canceled, as a touch turned into a scroll is', async () => {
+    it('doesn\'t apply text typed in the field before a tap on Clear', async () => {
       const page = await setup(
         `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" value="2026-10-13"></pds-datepicker>`,
       );
@@ -1480,16 +1480,42 @@ describe('pds-datepicker', () => {
         input?.select();
       });
       await page.keyboard.type('2026-10-20');
-      await page.evaluate(() => {
+      // A tap, step by step: pointer events, then a task later the compatibility mousedown, whose
+      // default (unless prevented) moves focus to the button and blurs the field, then click.
+      // Puppeteer's tap() sends them too close together to show the gap.
+      await page.evaluate(async () => {
         const clear = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__clear');
-        clear?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
-        clear?.focus();
-        window.dispatchEvent(new PointerEvent('pointercancel'));
+        if (!clear) throw new Error('No clear button');
+        const init = { bubbles: true, composed: true };
+        clear.dispatchEvent(new PointerEvent('pointerdown', init));
+        clear.dispatchEvent(new PointerEvent('pointerup', init));
+        await new Promise((resolve) => setTimeout(resolve, 20));
+        const mousedown = new MouseEvent('mousedown', { ...init, cancelable: true });
+        clear.dispatchEvent(mousedown);
+        if (!mousedown.defaultPrevented) clear.focus();
+        clear.dispatchEvent(new MouseEvent('click', init));
       });
-      await new Promise((resolve) => setTimeout(resolve, 50));
       await page.waitForChanges();
 
-      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-20']);
+      expect(change.events.map((event) => event.detail.value)).toEqual(['']);
+    });
+
+    it('keeps focus when the field is emptied by keyboard and Tab pressed', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" value="2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        input?.focus();
+        input?.select();
+      });
+      await press(page, 'Backspace');
+      await press(page, 'Tab');
+
+      expect(change.events.map((event) => event.detail.value)).toEqual(['']);
+      // Clear isn't a Tab stop, so focus moves on to the calendar button rather than to the page.
+      expect(await focused(page)).toContain('pds-datepicker__trigger');
     });
 
     it('doesn\'t apply text typed in the field before a click on Clear', async () => {
