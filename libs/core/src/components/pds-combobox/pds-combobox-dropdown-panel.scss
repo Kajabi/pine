@@ -300,6 +300,30 @@
     justify-content: flex-start;
   }
 
+  // panel-search, drilled in: the row back takes the search field's place, full width above the
+  // divider, and stays put while the group's options scroll. :where keeps hover and the keyboard's
+  // highlight on top.
+  // Both classes, to outrank the grouped list's padding.
+  .pds-combobox__listbox-options--drilled-in.pds-combobox__listbox--grouped {
+    padding-block-start: 0;
+  }
+
+  // The list takes focus inside a drilled-in group; the keyboard's row shows where.
+  .pds-combobox__listbox-options:focus {
+    outline: none;
+  }
+
+  :where(.pds-combobox__listbox-options--drilled-in) .pds-combobox__group-back-trigger {
+    background-color: var(--pine-color-background-overlay);
+    border-block-end: var(--pine-border);
+    border-block-end-color: var(--pine-color-border-subtle);
+    border-radius: 0;
+    inset-block-start: 0;
+    margin-inline: calc(var(--pine-dimension-2xs) * -1);
+    position: sticky;
+    z-index: 1;
+  }
+
   .pds-combobox__drill-in-options {
     display: flex;
     flex-direction: column;
