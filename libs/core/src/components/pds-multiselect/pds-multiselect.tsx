@@ -590,7 +590,13 @@ export class PdsMultiselect {
   }
 
   private setSlottedTriggerDisabled(trigger: HTMLElement, disabled: boolean) {
-    if (!('disabled' in trigger)) return;
+    if (!('disabled' in trigger)) {
+      // A custom element gets its `disabled` property once it's defined, which can be after the multiselect loads.
+      if (disabled && trigger.localName.includes('-') && customElements.get(trigger.localName) === undefined) {
+        customElements.whenDefined(trigger.localName).then(() => this.syncSlottedTrigger());
+      }
+      return;
+    }
     const control = trigger as HTMLElement & { disabled: boolean };
     // Only re-enable a trigger the multiselect disabled, so one the consumer disabled stays disabled.
     if (disabled && !control.disabled) {
