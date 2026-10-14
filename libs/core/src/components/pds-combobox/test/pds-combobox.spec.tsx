@@ -3206,13 +3206,12 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       expect(component.drillDirection).toBe('in');
 
-      const field = root.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement;
-      field.value = 'send';
-      field.dispatchEvent(new Event('input'));
+      // Inside the group the search field is hidden; typing in the list starts the search.
+      root.querySelector('.pds-combobox__listbox-options')!.dispatchEvent(new KeyboardEvent('keydown', { key: 's' }));
       await page.waitForChanges();
       expect(component.drillDirection).toBeNull();
 
-      // While searching, a rebuild that drops the open group isn't a drill-out.
+      // While searching, a rebuild that drops a group isn't a drill-out.
       (page.root as HTMLPdsComboboxElement).options = actions.filter(action => action.group !== 'Email');
       await page.waitForChanges();
       expect(component.openGroup).toBeNull();
@@ -3459,19 +3458,69 @@ describe('pds-combobox', () => {
       expect(component.openGroup).toBeNull();
     });
 
-    it('steps back with Backspace on an empty panel search, but not while there is text', async () => {
+    it('hides the panel search inside a drilled-in group, and the list takes the keys', async () => {
       const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
-      const input = () => root.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement;
+      expect(root.querySelector('.pds-combobox__panel-search-input')).not.toBeNull();
 
       component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
-      component.panelQuery = 'ta';
-      input().dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+
+      const list = root.querySelector('.pds-combobox__listbox-options') as HTMLElement;
+      expect(root.querySelector('.pds-combobox__panel-search')).toBeNull();
+      expect(list.classList.contains('pds-combobox__listbox-options--drilled-in')).toBe(true);
+      expect(list.getAttribute('tabindex')).toBe('-1');
+      expect(list.firstElementChild?.classList.contains('pds-combobox__group-back')).toBe(true);
+
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+      await page.waitForChanges();
+      expect(component.openGroup).toBeNull();
+      expect(root.querySelector('.pds-combobox__panel-search-input')).not.toBeNull();
+      expect(list.classList.contains('pds-combobox__listbox-options--drilled-in')).toBe(false);
+    });
+
+    it('searches the whole list when a character is typed in a drilled-in group', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+      root.querySelector('.pds-combobox__listbox-options')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'e' }));
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBeNull();
+      expect(component.panelQuery).toBe('e');
+      expect(component.drillDirection).toBeNull();
+      expect((root.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement).value).toBe('e');
+    });
+
+    it('adds keys typed before the search field takes focus to the query, and Backspace trims it', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+      const list = root.querySelector('.pds-combobox__listbox-options')!;
+
+      // No render between the keys: the list still has focus for the second one.
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 's' }));
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'e' }));
+      expect(component.panelQuery).toBe('se');
+
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+      expect(component.panelQuery).toBe('s');
+      expect(component.openGroup).toBeNull();
+    });
+
+    it('starts a search with AltGr and Option characters, but not with Ctrl or Meta shortcuts', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+      const list = root.querySelector('.pds-combobox__listbox-options')!;
+
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', ctrlKey: true }));
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', metaKey: true }));
+      expect(component.panelQuery).toBe('');
       expect(component.openGroup?.label).toBe('Tag');
 
-      component.panelQuery = '';
-      input().dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
-      await page.waitForChanges();
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: '@', ctrlKey: true, altKey: true }));
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: '€', altKey: true }));
+      expect(component.panelQuery).toBe('@€');
       expect(component.openGroup).toBeNull();
     });
 
