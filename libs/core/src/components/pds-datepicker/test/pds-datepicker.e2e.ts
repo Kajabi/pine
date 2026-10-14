@@ -522,6 +522,23 @@ describe('pds-datepicker', () => {
       expect(tag).toBe('INPUT');
     });
 
+    it('puts back the time typed text changed when a day is then picked', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="when" time-picker locale="fr" value="2026-10-13T09:00"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      await input.click({ clickCount: 3 });
+      await input.type('2026-10-14 16:30');
+      await page.waitForChanges();
+      await (await page.find('pds-datepicker >>> [data-date="2026-10-15"]')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-datepicker >>> .pds-datepicker__action:nth-of-type(2)')).click();
+      await page.waitForChanges();
+
+      expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-15T09:00']);
+    });
+
     it('commits nothing when a day is picked after typing and the calendar is then dismissed', async () => {
       const page = await setup(
         `<pds-datepicker component-id="period" range label="Period" locale="en-US" value="2026-09-13/2026-10-13"></pds-datepicker><button id="after">After</button>`,
