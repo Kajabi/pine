@@ -312,6 +312,115 @@ describe('pds-popover', () => {
       const portalEl = await page.find('#link-popover-portal');
       expect(await portalEl.isVisible()).toBe(true);
     });
+
+    it('links a component trigger to the portal with aria-controls', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="component-trigger">
+          <pds-button slot="trigger">Show popover</pds-button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+
+      const trigger = await page.find('pds-button[slot="trigger"]');
+      expect(trigger.getAttribute('aria-controls')).toBe('component-trigger-portal');
+      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    });
+  });
+
+  describe('Focus return', () => {
+    const openWithFocusInside = async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="focus-popover">
+          <button slot="trigger" id="trigger">Show popover</button>
+          <button id="inside">Inside</button>
+        </pds-popover>
+        <input id="outside" aria-label="Outside" style="display: block; margin-top: 300px;" />
+      `);
+      await page.click('#trigger');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.querySelector('#inside') as HTMLElement).focus());
+      return page;
+    };
+
+    const activeElementId = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => document.activeElement?.id);
+
+    it('returns focus to the trigger when Escape closes the popover', async () => {
+      const page = await openWithFocusInside();
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+
+      expect(await activeElementId(page)).toBe('trigger');
+    });
+
+    it('returns focus to the trigger when hide() is called with focus inside', async () => {
+      const page = await openWithFocusInside();
+
+      await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.hide());
+      await page.waitForChanges();
+
+      expect(await activeElementId(page)).toBe('trigger');
+    });
+
+    it('keeps focus on the trigger when the trigger closes the popover', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="focus-popover" popover-target-action="toggle">
+          <button slot="trigger" id="trigger">Show popover</button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+
+      await page.click('#trigger');
+      await page.waitForChanges();
+      await page.click('#trigger');
+      await page.waitForChanges();
+
+      expect(await page.find('#focus-popover-portal').then((el) => el.isVisible())).toBe(false);
+      expect(await activeElementId(page)).toBe('trigger');
+    });
+
+    it('leaves focus on an outside element clicked to dismiss the popover', async () => {
+      const page = await openWithFocusInside();
+      // Clicks at or before the open timestamp are ignored, so let the clock move past it.
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      await page.click('#outside');
+      await page.waitForChanges();
+
+      expect(await page.find('#focus-popover-portal').then((el) => el.isVisible())).toBe(false);
+      expect(await activeElementId(page)).toBe('outside');
+    });
+
+    it('leaves focus where it is when hide() is called with focus outside the popover', async () => {
+      const page = await openWithFocusInside();
+      await page.evaluate(() => (document.querySelector('#outside') as HTMLElement).focus());
+
+      await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.hide());
+      await page.waitForChanges();
+
+      expect(await activeElementId(page)).toBe('outside');
+    });
+
+    it('does not focus the trigger when a script opens and closes the popover with nothing focused', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="focus-popover">
+          <button slot="trigger" id="trigger">Show popover</button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+
+      await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.show());
+      await page.waitForChanges();
+      await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.hide());
+      await page.waitForChanges();
+
+      expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+    });
   });
 });
 
