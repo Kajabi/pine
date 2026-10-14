@@ -525,7 +525,7 @@ describe('pds-datepicker', () => {
       await page.setViewport({ width: 1024, height: 1000 });
       await openWithTrigger(page);
       const [calendar, field] = await page.$eval('pds-datepicker', (el) => {
-        const dialog = el.shadowRoot?.querySelector('[role="dialog"]')?.getBoundingClientRect();
+        const dialog = document.querySelector('.pds-datepicker-calendar-portal')?.shadowRoot?.querySelector('[role="dialog"]')?.getBoundingClientRect();
         // The calendar is placed against the field's box, below the label.
         const box = el.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('.pds-input__field-wrapper')?.getBoundingClientRect();
         return [dialog?.bottom ?? 0, box?.top ?? 0];
@@ -553,9 +553,9 @@ describe('pds-datepicker', () => {
       await input.click({ clickCount: 3 });
       await input.type('2026-10-14 16:30');
       await page.waitForChanges();
-      await (await page.find('pds-datepicker >>> [data-date="2026-10-15"]')).click();
+      await (await page.find('.pds-datepicker-calendar-portal >>> [data-date="2026-10-15"]')).click();
       await page.waitForChanges();
-      await (await page.find('pds-datepicker >>> .pds-datepicker__action:nth-of-type(2)')).click();
+      await (await page.find('.pds-datepicker-calendar-portal >>> .pds-datepicker__action:nth-of-type(2)')).click();
       await page.waitForChanges();
 
       expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-15T09:00']);
@@ -571,9 +571,9 @@ describe('pds-datepicker', () => {
       await input.type('2026-10-14 16:30');
       await page.waitForChanges();
       await chooseTime(page, 0, '11');
-      await (await page.find('pds-datepicker >>> [data-date="2026-10-15"]')).click();
+      await (await page.find('.pds-datepicker-calendar-portal >>> [data-date="2026-10-15"]')).click();
       await page.waitForChanges();
-      await (await page.find('pds-datepicker >>> .pds-datepicker__action:nth-of-type(2)')).click();
+      await (await page.find('.pds-datepicker-calendar-portal >>> .pds-datepicker__action:nth-of-type(2)')).click();
       await page.waitForChanges();
 
       expect(change.events.map((event) => event.detail.value)).toEqual(['2026-10-15T11:30']);
@@ -588,7 +588,7 @@ describe('pds-datepicker', () => {
       await input.click({ clickCount: 3 });
       await input.type('2026-10-01 – 2026-10-05');
       await page.waitForChanges();
-      await (await page.find('pds-datepicker >>> [data-date="2026-10-20"]')).click();
+      await (await page.find('.pds-datepicker-calendar-portal >>> [data-date="2026-10-20"]')).click();
       await page.waitForChanges();
       await page.click('#after');
       await page.waitForChanges();
@@ -608,7 +608,7 @@ describe('pds-datepicker', () => {
       );
       await press(page, 'Escape');
 
-      expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).toBeNull();
       expect(await page.evaluate(() => (document.querySelector('pds-modal dialog') as HTMLDialogElement).open)).toBe(true);
     });
 
@@ -617,11 +617,11 @@ describe('pds-datepicker', () => {
       const blur = await page.spyOnEvent('pdsBlur');
       await openWithTrigger(page);
 
-      await (await page.find('pds-datepicker >>> .pds-datepicker__heading')).click();
+      await (await page.find('.pds-datepicker-calendar-portal >>> .pds-datepicker__heading')).click();
       await page.waitForChanges();
 
       expect(blur).not.toHaveReceivedEvent();
-      expect(await page.find('pds-datepicker >>> [role="dialog"]')).not.toBeNull();
+      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).not.toBeNull();
       // Focus goes on to the active day, so the keyboard keeps working in the calendar.
       expect(await focused(page)).toBe('2026-10-13');
       await press(page, 'ArrowRight');
@@ -645,7 +645,7 @@ describe('pds-datepicker', () => {
       await page.keyboard.type('2026-10-14');
       await press(page, 'Tab');
       expect(change).not.toHaveReceivedEvent();
-      expect(await page.find('pds-datepicker >>> [role="dialog"]')).not.toBeNull();
+      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).not.toBeNull();
 
       await page.click('#after');
       await page.waitForChanges();
@@ -686,7 +686,7 @@ describe('pds-datepicker', () => {
       });
       await page.keyboard.type('2026-10-14 09:00');
       await page.waitForChanges();
-      await (await page.find('pds-datepicker >>> .pds-datepicker__action:nth-of-type(2)')).click();
+      await (await page.find('.pds-datepicker-calendar-portal >>> .pds-datepicker__action:nth-of-type(2)')).click();
       await page.waitForChanges();
 
       expect(change.events[change.events.length - 1].detail.value).toBe('2026-10-14T14:00');
@@ -715,7 +715,7 @@ describe('pds-datepicker', () => {
         await openWithTrigger(page);
         datepicker.setProperty(prop, true);
         await page.waitForChanges();
-        expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+        expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).toBeNull();
         datepicker.setProperty(prop, false);
         await page.waitForChanges();
       }
@@ -1097,6 +1097,40 @@ describe('pds-datepicker', () => {
       expect(await portalParent(page)).toBe('DIALOG');
       await press(page, 'ArrowRight');
       expect(await focused(page)).toBe('2026-10-14');
+    });
+
+    it('lets a click in a datepicker outside an open pds-popover or pds-drawer dismiss it', async () => {
+      const popoverPage = await setup(
+        `<pds-popover component-id="p" popover-target-action="toggle"><button slot="trigger">Open</button><div>Content</div></pds-popover>${FIELD}`,
+      );
+      const popoverClose = await popoverPage.spyOnEvent('pdsPopoverClose');
+      await (await popoverPage.find('pds-popover')).callMethod('show');
+      await popoverPage.waitForChanges();
+      await openWithTrigger(popoverPage);
+      await (await popoverPage.find('.pds-datepicker-calendar-portal >>> [data-date="2026-10-20"]')).click();
+      await popoverPage.waitForChanges();
+      expect(popoverClose).toHaveReceivedEvent();
+
+      const drawerPage = await setup(`<pds-drawer component-id="d" open><div>Panel</div></pds-drawer>${FIELD}`);
+      const drawer = await drawerPage.find('pds-drawer');
+      await openWithTrigger(drawerPage);
+      await (await drawerPage.find('.pds-datepicker-calendar-portal >>> [data-date="2026-10-20"]')).click();
+      await drawerPage.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(false);
+    });
+
+    it('doesn\'t light-dismiss a pds-drawer when a day is picked in a pds-popover inside it', async () => {
+      const page = await setup(
+        `<pds-drawer component-id="d" open><pds-popover component-id="p" popover-target-action="toggle"><button slot="trigger">Open</button><div>${FIELD}</div></pds-popover></pds-drawer>`,
+      );
+      const drawer = await page.find('pds-drawer');
+      await (await page.find('pds-popover')).callMethod('show');
+      await page.waitForChanges();
+      await openWithTrigger(page);
+      await ((await inCalendar(page, '[data-date="2026-10-20"]')) as unknown as { click(): Promise<void> }).click();
+      await page.waitForChanges();
+
+      expect(await drawer.getProperty('open')).toBe(true);
     });
 
     it('doesn\'t light-dismiss a pds-drawer when a day is picked', async () => {
