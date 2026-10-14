@@ -1,15 +1,13 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, h } from '@stencil/core';
-import { containsComposed } from '@utils/closest';
+import { closest, containsComposed } from '@utils/closest';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 // Known selectors for content Pine components portal to document.body rather
-// than rendering in place — pds-popover, pds-tooltip, pds-combobox's dropdown,
-// pds-datepicker's calendar.
+// than rendering in place — pds-popover, pds-tooltip, pds-combobox's dropdown.
 // A pointerdown landing on one of these is not "outside" the drawer in the
 // sense light dismiss cares about: it belongs to an overlay something inside
 // the drawer opened, even though it is not a DOM descendant of the drawer.
-const PORTALED_OVERLAY_SELECTOR =
-  '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal';
+const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal';
 
 /**
  * A non-modal side panel composed from `pds-modal`.
@@ -156,9 +154,11 @@ export class PdsDrawer {
     if (!target) return;
     if (this.el.contains(target)) return;
     if (target.closest(PORTALED_OVERLAY_SELECTOR)) return;
-    // A datepicker's portaled calendar counts as inside only when its datepicker is in the drawer.
+    // A datepicker's portaled calendar counts as inside only when its datepicker is in the drawer,
+    // or in an overlay portaled from it (a pds-popover in the drawer puts its content on the body).
     const calendar = target.closest('.pds-datepicker-calendar-portal') as (Element & { pdsDatepicker?: Element }) | null;
-    if (calendar?.pdsDatepicker && containsComposed(this.el, calendar.pdsDatepicker)) return;
+    const owner = calendar?.pdsDatepicker;
+    if (owner && (containsComposed(this.el, owner) || closest(PORTALED_OVERLAY_SELECTOR, owner))) return;
     // A sibling pds-modal — e.g. a confirm dialog opened from inside the
     // drawer but mounted at the document root rather than nested in our own
     // content — is neither a descendant of the drawer nor on the portaled
