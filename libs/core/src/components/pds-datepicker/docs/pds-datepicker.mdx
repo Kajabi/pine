@@ -22,8 +22,8 @@ Datepicker captures a single date, or in range mode a start and an end date. For
 
 ### When not to use
 
-- For a time of day, or a date and time together.
-- For a date far in the past that people know by heart, such as a birth date. Typing is faster than paging back through the calendar.
+- For a time of day on its own, with no date. For a date and time together, use `time-picker`.
+- For a date far in the past that people know by heart, without `show-dropdowns`. Paging back through months is slow; turn on `show-dropdowns` to jump to the year, or let people type it.
 
 ### Accessibility
 
@@ -62,7 +62,7 @@ Datepicker captures a single date, or in range mode a start and an end date. For
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>Enter</code> <code>Space</code></pds-table-cell>
-        <pds-table-cell>Picks the day and closes the calendar. In range mode, starts or ends the range.</pds-table-cell>
+        <pds-table-cell>Picks the day and closes the calendar. In range mode, starts or ends the range. With <code>time-picker</code>, the date waits for Apply.</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>Escape</code></pds-table-cell>
