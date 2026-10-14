@@ -338,6 +338,55 @@ export namespace Components {
         "truncate": boolean;
         "value": string;
     }
+    export interface PdsDatepicker {
+        "applyLabel": string;
+        "cancelLabel": string;
+        "clearable": boolean;
+        "clearLabel": string;
+        "close": () => Promise<void>;
+        "componentId": string;
+        "customRangeLabel": string;
+        "disabled"?: boolean;
+        "endTimeLabel": string;
+        "errorMessage"?: string;
+        "firstDayOfWeek"?: number;
+        "format": string;
+        "fullWidth"?: boolean;
+        "helperMessage"?: string;
+        "hideLabel": boolean;
+        "hourLabel": string;
+        "invalid"?: boolean;
+        "invalidDateMessage": string;
+        "label"?: string;
+        "locale"?: string;
+        "max"?: string;
+        "maxDateMessage": string;
+        "min"?: string;
+        "minDateMessage": string;
+        "minuteIncrement": number;
+        "minuteLabel": string;
+        "monthLabel": string;
+        "name"?: string;
+        "nextMonthLabel": string;
+        "open": () => Promise<void>;
+        "periodLabel": string;
+        "placeholder"?: string;
+        "placement": PlacementType;
+        "presets"?: string | DatepickerPreset[];
+        "presetsLabel": string;
+        "previousMonthLabel": string;
+        "range": boolean;
+        "readonly"?: boolean;
+        "required"?: boolean;
+        "setFocus": () => Promise<void>;
+        "showDropdowns": boolean;
+        "startTimeLabel": string;
+        "timeLabel": string;
+        "timePicker": boolean;
+        "triggerLabel": string;
+        "value"?: string;
+        "yearLabel": string;
+    }
     // (undocumented)
     export interface PdsDivider {
         "componentId": string;
@@ -800,6 +849,22 @@ export namespace Components {
     }
 }
 
+// @public (undocumented)
+export interface DatepickerChangeEventDetail {
+    end?: string;
+    preset?: string;
+    start?: string;
+    value: string;
+}
+
+// @public (undocumented)
+export interface DatepickerPreset {
+    end?: string;
+    key: string;
+    label?: string;
+    start?: string;
+}
+
 // Warning: (ae-forgotten-export) The symbol "EventDecorator" needs to be exported by the entry point index.d.ts
 //
 // @public
@@ -848,6 +913,8 @@ export namespace LocalJSX {
         "pds-container": Omit<PdsContainer, keyof PdsContainerAttributes> & { [K in keyof PdsContainer & keyof PdsContainerAttributes]?: PdsContainer[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `attr:${K}`]?: PdsContainerAttributes[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `prop:${K}`]?: PdsContainer[K] };
         // (undocumented)
         "pds-copytext": Omit<PdsCopytext, keyof PdsCopytextAttributes> & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes]?: PdsCopytext[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `attr:${K}`]?: PdsCopytextAttributes[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `prop:${K}`]?: PdsCopytext[K] } & OneOf<"value", PdsCopytext["value"], PdsCopytextAttributes["value"]>;
+        // (undocumented)
+        "pds-datepicker": Omit<PdsDatepicker, keyof PdsDatepickerAttributes> & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes]?: PdsDatepicker[K] } & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes as `attr:${K}`]?: PdsDatepickerAttributes[K] } & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes as `prop:${K}`]?: PdsDatepicker[K] } & OneOf<"componentId", PdsDatepicker["componentId"], PdsDatepickerAttributes["componentId"]>;
         // (undocumented)
         "pds-divider": Omit<PdsDivider, keyof PdsDividerAttributes> & { [K in keyof PdsDivider & keyof PdsDividerAttributes]?: PdsDivider[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `attr:${K}`]?: PdsDividerAttributes[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `prop:${K}`]?: PdsDivider[K] };
         // (undocumented)
@@ -1748,6 +1815,149 @@ export namespace LocalJSX {
         "truncate": boolean;
         // (undocumented)
         "value": string;
+    }
+
+    export interface PdsDatepicker {
+        "applyLabel"?: string;
+        "cancelLabel"?: string;
+        "clearable"?: boolean;
+        "clearLabel"?: string;
+        "componentId": string;
+        "customRangeLabel"?: string;
+        "disabled"?: boolean;
+        "endTimeLabel"?: string;
+        "errorMessage"?: string;
+        "firstDayOfWeek"?: number;
+        "form"?: string;
+        "format"?: string;
+        "fullWidth"?: boolean;
+        "helperMessage"?: string;
+        "hideLabel"?: boolean;
+        "hourLabel"?: string;
+        "invalid"?: boolean;
+        "invalidDateMessage"?: string;
+        "label"?: string;
+        "locale"?: string;
+        "max"?: string;
+        "maxDateMessage"?: string;
+        "min"?: string;
+        "minDateMessage"?: string;
+        "minuteIncrement"?: number;
+        "minuteLabel"?: string;
+        "monthLabel"?: string;
+        "name"?: string;
+        "nextMonthLabel"?: string;
+        "onPdsBlur"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        "onPdsDatepickerChange"?: (event: PdsDatepickerCustomEvent<DatepickerChangeEventDetail>) => void;
+        "onPdsFocus"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        "periodLabel"?: string;
+        "placeholder"?: string;
+        "placement"?: PlacementType;
+        "presets"?: string | DatepickerPreset[];
+        "presetsLabel"?: string;
+        "previousMonthLabel"?: string;
+        "range"?: boolean;
+        "readonly"?: boolean;
+        "required"?: boolean;
+        "showDropdowns"?: boolean;
+        "startTimeLabel"?: string;
+        "timeLabel"?: string;
+        "timePicker"?: boolean;
+        "triggerLabel"?: string;
+        "value"?: string;
+        "yearLabel"?: string;
+    }
+
+    // (undocumented)
+    export interface PdsDatepickerAttributes {
+        // (undocumented)
+        "applyLabel": string;
+        // (undocumented)
+        "cancelLabel": string;
+        // (undocumented)
+        "clearable": boolean;
+        // (undocumented)
+        "clearLabel": string;
+        // (undocumented)
+        "componentId": string;
+        // (undocumented)
+        "customRangeLabel": string;
+        // (undocumented)
+        "disabled": boolean;
+        // (undocumented)
+        "endTimeLabel": string;
+        // (undocumented)
+        "errorMessage": string;
+        // (undocumented)
+        "firstDayOfWeek": number;
+        // (undocumented)
+        "format": string;
+        // (undocumented)
+        "fullWidth": boolean;
+        // (undocumented)
+        "helperMessage": string;
+        // (undocumented)
+        "hideLabel": boolean;
+        // (undocumented)
+        "hourLabel": string;
+        // (undocumented)
+        "invalid": boolean;
+        // (undocumented)
+        "invalidDateMessage": string;
+        // (undocumented)
+        "label": string;
+        // (undocumented)
+        "locale": string;
+        // (undocumented)
+        "max": string;
+        // (undocumented)
+        "maxDateMessage": string;
+        // (undocumented)
+        "min": string;
+        // (undocumented)
+        "minDateMessage": string;
+        // (undocumented)
+        "minuteIncrement": number;
+        // (undocumented)
+        "minuteLabel": string;
+        // (undocumented)
+        "monthLabel": string;
+        // (undocumented)
+        "name": string;
+        // (undocumented)
+        "nextMonthLabel": string;
+        // (undocumented)
+        "periodLabel": string;
+        // (undocumented)
+        "placeholder": string;
+        // (undocumented)
+        "placement": PlacementType;
+        // (undocumented)
+        "presets": string | DatepickerPreset[];
+        // (undocumented)
+        "presetsLabel": string;
+        // (undocumented)
+        "previousMonthLabel": string;
+        // (undocumented)
+        "range": boolean;
+        // (undocumented)
+        "readonly": boolean;
+        // (undocumented)
+        "required": boolean;
+        // (undocumented)
+        "showDropdowns": boolean;
+        // (undocumented)
+        "startTimeLabel": string;
+        // (undocumented)
+        "timeLabel": string;
+        // (undocumented)
+        "timePicker": boolean;
+        // (undocumented)
+        "triggerLabel": string;
+        // (undocumented)
+        "value": string;
+        // (undocumented)
+        "yearLabel": string;
     }
 
     // (undocumented)
@@ -3089,6 +3299,14 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     // (undocumented)
     target: HTMLPdsCopytextElement;
+}
+
+// @public (undocumented)
+export interface PdsDatepickerCustomEvent<T> extends CustomEvent<T> {
+    // (undocumented)
+    detail: T;
+    // (undocumented)
+    target: HTMLPdsDatepickerElement;
 }
 
 // @public (undocumented)
