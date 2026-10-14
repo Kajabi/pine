@@ -617,6 +617,28 @@ describe('pds-button', () => {
       expect(await innerFocused(page)).toBe(true);
     });
 
+    it('forwards aria-controls to the pds-popover portal from inside another shadow root', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<div id="outer"></div>');
+      await page.$eval('#outer', (el) => {
+        el.attachShadow({ mode: 'open' }).innerHTML = `
+          <pds-popover component-id="nested-popover">
+            <pds-button slot="trigger">Open</pds-button>
+            <p>Popover content</p>
+          </pds-popover>
+        `;
+      });
+      await page.waitForChanges();
+
+      const controls = await page.$eval('#outer', (el) =>
+        Array.from(
+          el.shadowRoot?.querySelector('pds-button')?.shadowRoot?.querySelector('button')?.ariaControlsElements ?? [],
+          (controlled) => controlled.id,
+        ),
+      );
+      expect(controls).toEqual(['nested-popover-portal']);
+    });
+
     it('returns focus and forwards aria-expanded and aria-haspopup with pds-dropdown-menu', async () => {
       const page = await newE2EPage();
       await page.setContent(`
