@@ -1,4 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
+import { PdsButton } from '../../pds-button/pds-button';
 import { PdsMultiselect } from '../pds-multiselect';
 
 // Mock MutationObserver for testing environment
@@ -2362,6 +2363,57 @@ describe('pds-multiselect', () => {
       (page.root as HTMLPdsMultiselectElement).disabled = false;
       await page.waitForChanges();
       expect(trigger.hasAttribute('aria-disabled')).toBe(false);
+    });
+
+    describe('with a slotted pds-button', () => {
+      const setup = (buttonAttributes = '') =>
+        newSpecPage({
+          components: [PdsMultiselect, PdsButton],
+          html: `
+            <pds-multiselect component-id="test" disabled>
+              <option value="1">Bestsellers</option>
+              <pds-button slot="trigger" ${buttonAttributes}>Add tag</pds-button>
+            </pds-multiselect>`,
+        });
+
+      const innerButton = (trigger: HTMLPdsButtonElement) => trigger.shadowRoot.querySelector('button');
+
+      it('disables the button while disabled, and re-enables it', async () => {
+        const page = await setup();
+        const trigger = page.root.querySelector('pds-button');
+        await page.waitForChanges();
+        expect(trigger.disabled).toBe(true);
+        expect(innerButton(trigger).hasAttribute('disabled')).toBe(true);
+
+        (page.root as HTMLPdsMultiselectElement).disabled = false;
+        await page.waitForChanges();
+        expect(trigger.disabled).toBe(false);
+        expect(innerButton(trigger).hasAttribute('disabled')).toBe(false);
+      });
+
+      it('keeps a button the consumer disabled disabled after re-enabling', async () => {
+        const page = await setup('disabled');
+        const trigger = page.root.querySelector('pds-button');
+
+        (page.root as HTMLPdsMultiselectElement).disabled = false;
+        await page.waitForChanges();
+        expect(trigger.disabled).toBe(true);
+      });
+
+      it('re-enables a button it disabled when the button is swapped out', async () => {
+        const page = await setup();
+        const first = page.root.querySelector('pds-button');
+        const replacement = page.doc.createElement('pds-button');
+        replacement.setAttribute('slot', 'trigger');
+
+        first.remove();
+        page.root.appendChild(replacement);
+        page.rootInstance.syncSlottedTrigger();
+        await page.waitForChanges();
+
+        expect(first.disabled).toBe(false);
+        expect(replacement.disabled).toBe(true);
+      });
     });
 
     it('wires a trigger slotted after load, and restores the built-in trigger when it is removed', async () => {

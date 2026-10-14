@@ -41,8 +41,17 @@ const setOptions = async (page: Page, options: unknown) => {
   await page.waitForChanges();
 };
 
-const openWith = async (attributes: string, options: unknown) => {
+// Headless Chrome on Linux has no hover-capable pointer and can't emulate one, so pin `(hover: none)` before load.
+const pinHover = (page: Page, canHover: boolean) =>
+  page.evaluateOnNewDocument(canHover => {
+    const matchMedia = window.matchMedia.bind(window);
+    window.matchMedia = query =>
+      query === '(hover: none)' ? ({ matches: !canHover, media: query } as MediaQueryList) : matchMedia(query);
+  }, canHover);
+
+const openWith = async (attributes: string, options: unknown, { canHover = true } = {}) => {
   const page = await newE2EPage();
+  await pinHover(page, canHover);
   await page.setContent(`<pds-multiselect component-id="tags" label="Tags" ${attributes}></pds-multiselect>`);
   await setOptions(page, options);
   await openBuiltInTrigger(page);
@@ -262,6 +271,31 @@ describe('pds-multiselect', () => {
       expect(await isPanelOpen(page)).toBe(false);
       expect(dismiss).not.toHaveReceivedEvent();
     });
+
+    it('skips hidden footer controls when tabbing to and from the footer', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-multiselect component-id="tags" label="Tags">
+          <option value="1">Bestsellers</option>
+          <div slot="footer">
+            <button type="button" id="create" hidden>Create tag</button>
+            <button type="button" id="manage">Manage tags</button>
+          </div>
+        </pds-multiselect>
+      `);
+      await openBuiltInTrigger(page);
+
+      await page.keyboard.press('Tab');
+      await settle();
+      expect(await activeId(page)).toBe('manage');
+      expect(await isPanelOpen(page)).toBe(true);
+
+      await page.keyboard.down('Shift');
+      await page.keyboard.press('Tab');
+      await page.keyboard.up('Shift');
+      await waitForSearchFocus(page);
+      expect(await isPanelOpen(page)).toBe(true);
+    });
   });
 
   it('tabs into and back out of a pds-link footer, whose link lives in its own shadow root', async () => {
@@ -340,6 +374,12 @@ describe('pds-multiselect', () => {
       await options[1].hover();
       await page.waitForChanges();
       expect(await actionIcons(page)).toEqual([null, 'pen']);
+    });
+
+    it('shows every action icon on a device without hover', async () => {
+      const page = await openWith('option-actions', actionOptions, { canHover: false });
+
+      expect(await actionIcons(page)).toEqual(['pen', 'pen']);
     });
 
     it("keeps each option named by its text and describes the option's own action", async () => {
