@@ -1780,7 +1780,7 @@ export class PdsMultiselect {
                   aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
                   onKeyDown={this.handleTriggerKeyDown}
                 >
-                  <pds-icon class="pds-multiselect__icon" icon={enlarge} />
+                  <pds-icon aria-hidden="true" class="pds-multiselect__icon" icon={enlarge} />
                 </button>
               </div>
             ) : (
@@ -1816,7 +1816,7 @@ export class PdsMultiselect {
                 }}>
                   {this.getTriggerText()}
                 </span>
-                <pds-icon class="pds-multiselect__icon" icon={enlarge} />
+                <pds-icon aria-hidden="true" class="pds-multiselect__icon" icon={enlarge} />
               </button>
             )}
 
