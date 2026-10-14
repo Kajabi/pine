@@ -132,7 +132,8 @@ export function findPortalTarget(from: HTMLElement): HTMLElement {
 }
 
 function isTopLayerHost(el: Element): boolean {
-  if (el.localName === 'dialog') return true;
+  // Only an open dialog: inside a closed one, the calendar would be hidden with it.
+  if (el.localName === 'dialog') return (el as HTMLDialogElement).open;
   if (!el.hasAttribute('popover')) return false;
   try {
     return el.matches(':popover-open');
