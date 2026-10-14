@@ -1187,6 +1187,11 @@ export namespace Components {
          */
         "applyLabel": string;
         /**
+          * In range mode, applies the range as soon as its end or a preset is picked, without the Apply and Cancel buttons. Has no effect with the time picker, whose times still need Apply.
+          * @default false
+         */
+        "autoApply": boolean;
+        /**
           * Accessible label for the button that closes the calendar without changing the dates.
           * @default 'Cancel'
          */
@@ -1197,7 +1202,7 @@ export namespace Components {
          */
         "clearLabel": string;
         /**
-          * Replaces the Cancel button with a Clear button, which empties the field. Shown with the range mode and time picker buttons.
+          * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel buttons show, Clear also takes the place of Cancel.
           * @default false
          */
         "clearable": boolean;
@@ -4908,6 +4913,11 @@ declare namespace LocalJSX {
          */
         "applyLabel"?: string;
         /**
+          * In range mode, applies the range as soon as its end or a preset is picked, without the Apply and Cancel buttons. Has no effect with the time picker, whose times still need Apply.
+          * @default false
+         */
+        "autoApply"?: boolean;
+        /**
           * Accessible label for the button that closes the calendar without changing the dates.
           * @default 'Cancel'
          */
@@ -4918,7 +4928,7 @@ declare namespace LocalJSX {
          */
         "clearLabel"?: string;
         /**
-          * Replaces the Cancel button with a Clear button, which empties the field. Shown with the range mode and time picker buttons.
+          * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel buttons show, Clear also takes the place of Cancel.
           * @default false
          */
         "clearable"?: boolean;
@@ -6952,6 +6962,7 @@ declare namespace LocalJSX {
     }
     interface PdsDatepickerAttributes {
         "applyLabel": string;
+        "autoApply": boolean;
         "cancelLabel": string;
         "clearable": boolean;
         "clearLabel": string;

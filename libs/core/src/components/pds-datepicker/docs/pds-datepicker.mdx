@@ -166,6 +166,18 @@ Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days
   <pds-datepicker component-id="pds-datepicker-range-presets-example" label="Period" hide-label range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></pds-datepicker>
 </DocCanvas>
 
+### Range that applies on pick
+
+`auto-apply` applies a range as soon as its end, or a preset, is picked, with no Apply or Cancel buttons. `Escape` leaves the range as it was, and so does a click outside after picking only a start. A range typed in the field is applied when the field loses focus, as without `auto-apply`. With the time picker, the buttons stay, since the times still need setting. With `clearable`, the field's clear button is the way to empty it, since there's no footer.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsDatepicker componentId="pds-datepicker-auto-apply-example" label="Period" range autoApply presets="today,last-7-days,last-30-days"></PdsDatepicker>',
+    webComponent: '<pds-datepicker component-id="pds-datepicker-auto-apply-example" label="Period" range auto-apply presets="today,last-7-days,last-30-days"></pds-datepicker>'
+}}>
+  <pds-datepicker component-id="pds-datepicker-auto-apply-example" label="Period" range auto-apply presets="today,last-7-days,last-30-days"></pds-datepicker>
+</DocCanvas>
+
 ### Range with times
 
 `time-picker` adds hour and minute pickers below each month, with AM and PM on a 12-hour clock where the locale uses one. `minute-increment` sets the minutes' step. The value carries the times, as `YYYY-MM-DDTHH:mm/YYYY-MM-DDTHH:mm`. Unless `format` includes a time, the field adds one on the same clock as the pickers, as `YYYY-MM-DD 2:00 PM – YYYY-MM-DD 10:00 PM` in `en-US`. Without `range`, `time-picker` adds one time, and the date waits for Apply.
@@ -192,7 +204,7 @@ Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days
 
 ### Initially empty, with Clear
 
-The field starts empty when there's no `value`. `clearable` replaces Cancel with a Clear button that empties the field, as for a filter that's off until someone sets it.
+The field starts empty when there's no `value`. `clearable` adds a button in the field that empties it while there's a value, and in range mode or with the time picker, Clear takes the place of Cancel too, as for a filter that's off until someone sets it.
 
 <DocCanvas
   mdxSource={{

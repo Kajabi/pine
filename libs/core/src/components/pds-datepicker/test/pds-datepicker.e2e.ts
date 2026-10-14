@@ -1370,6 +1370,255 @@ describe('pds-datepicker', () => {
     });
   });
 
+  describe('auto-apply', () => {
+    const AUTO = `<pds-datepicker component-id="period" range auto-apply label="Period" locale="en-US" value="2026-09-13/2026-10-13"></pds-datepicker>`;
+    const PORTAL = '.pds-datepicker-calendar-portal';
+
+    it('applies the range when its end is picked, with no footer', async () => {
+      const page = await setup(AUTO);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+      expect(await page.find(`${PORTAL} >>> .pds-datepicker__footer`)).toBeNull();
+
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-05"]`)).click();
+      expect(change).not.toHaveReceivedEvent();
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-09"]`)).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '2026-10-05/2026-10-09', start: '2026-10-05', end: '2026-10-09' });
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).toBeNull();
+      expect(await focused(page)).toContain('pds-datepicker__trigger');
+    });
+
+    it('lets arrow keys move through the presets without applying, and Enter apply', async () => {
+      const page = await setup(AUTO.replace('auto-apply', 'auto-apply presets="today,yesterday,last-7-days"'));
+      await page.setViewport({ width: 1280, height: 800 });
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await page.evaluate((selector) => {
+        const preset = document.querySelector(selector)?.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__preset');
+        preset?.focus();
+      }, PORTAL);
+      await press(page, 'ArrowDown');
+      await press(page, 'ArrowDown');
+      expect(change).not.toHaveReceivedEvent();
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).not.toBeNull();
+
+      await press(page, 'Enter');
+      expect(change).toHaveReceivedEventTimes(1);
+      expect(change.firstEvent.detail.preset).toBe('last-7-days');
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).toBeNull();
+    });
+
+    it('applies a preset as soon as it is picked', async () => {
+      const page = await setup(AUTO.replace('auto-apply', 'auto-apply presets="today"'));
+      await page.setViewport({ width: 1280, height: 800 });
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await (await page.find(`${PORTAL} >>> .pds-datepicker__preset`)).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventTimes(1);
+      expect(change.firstEvent.detail.preset).toBe('today');
+      expect(await page.find(`${PORTAL} >>> [role="dialog"]`)).toBeNull();
+    });
+
+    it('keeps the range when only a start is picked and the calendar is dismissed', async () => {
+      const page = await setup(AUTO);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-05"]`)).click();
+      await page.waitForChanges();
+      // With no footer, the start is still announced.
+      expect(await page.find(`${PORTAL} >>> .visually-hidden[aria-live="polite"]`)).toEqualText('2026-10-05 –');
+      await press(page, 'Escape');
+
+      expect(change).not.toHaveReceivedEvent();
+      expect(await (await page.find('pds-datepicker')).getProperty('value')).toBe('2026-09-13/2026-10-13');
+    });
+
+    it('applies a range picked from the keyboard', async () => {
+      const page = await setup(AUTO);
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await press(page, 'Enter');
+      await press(page, 'ArrowDown');
+      await press(page, 'Enter');
+
+      expect(change).toHaveReceivedEventDetail({ value: '2026-10-13/2026-10-20', start: '2026-10-13', end: '2026-10-20' });
+      expect(await focused(page)).toContain('pds-datepicker__trigger');
+    });
+
+    it('keeps Apply with the time picker', async () => {
+      const page = await setup(AUTO.replace('auto-apply', 'auto-apply time-picker'));
+      await page.setViewport({ width: 1280, height: 800 });
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await openWithTrigger(page);
+
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-05"]`)).click();
+      await (await page.find(`${PORTAL} >>> [data-date="2026-10-09"]`)).click();
+      await page.waitForChanges();
+
+      expect(change).not.toHaveReceivedEvent();
+      expect(await page.find(`${PORTAL} >>> .pds-datepicker__action--primary`)).not.toBeNull();
+    });
+  });
+
+  describe('clear button', () => {
+    it('doesn\'t apply text typed in the field before a tap on Clear', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" value="2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        input?.focus();
+        input?.select();
+      });
+      await page.keyboard.type('2026-10-20');
+      // A tap, step by step: pointer events, then a task later the compatibility mousedown, whose
+      // default (unless prevented) moves focus to the button and blurs the field, then click.
+      // Puppeteer's tap() sends them too close together to show the gap.
+      await page.evaluate(async () => {
+        const clear = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__clear');
+        if (!clear) throw new Error('No clear button');
+        const init = { bubbles: true, composed: true };
+        clear.dispatchEvent(new PointerEvent('pointerdown', init));
+        clear.dispatchEvent(new PointerEvent('pointerup', init));
+        await new Promise((resolve) => setTimeout(resolve, 20));
+        const mousedown = new MouseEvent('mousedown', { ...init, cancelable: true });
+        clear.dispatchEvent(mousedown);
+        if (!mousedown.defaultPrevented) clear.focus();
+        clear.dispatchEvent(new MouseEvent('click', init));
+      });
+      await page.waitForChanges();
+
+      expect(change.events.map((event) => event.detail.value)).toEqual(['']);
+    });
+
+    it('keeps focus when the field is emptied by keyboard and Tab pressed', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" value="2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        input?.focus();
+        input?.select();
+      });
+      await press(page, 'Backspace');
+      await press(page, 'Tab');
+
+      expect(change.events.map((event) => event.detail.value)).toEqual(['']);
+      // Clear isn't a Tab stop, so focus moves on to the calendar button rather than to the page.
+      expect(await focused(page)).toContain('pds-datepicker__trigger');
+    });
+
+    it('doesn\'t apply text typed in the field before a click on Clear', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" value="2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await page.evaluate(() => {
+        const input = document.querySelector('pds-datepicker')?.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+        input?.focus();
+        input?.select();
+      });
+      await page.keyboard.type('2026-10-20');
+      await (await page.find('pds-datepicker >>> .pds-datepicker__clear')).click();
+      await page.waitForChanges();
+
+      expect(change.events.map((event) => event.detail.value)).toEqual(['']);
+    });
+
+    it('has no axe violations with clear, auto-apply and the calendar open', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="period" range auto-apply clearable presets="last-7-days" label="Period" locale="en-US" value="2026-09-13/2026-10-13"></pds-datepicker>`,
+      );
+      await page.setViewport({ width: 1280, height: 800 });
+      await openWithTrigger(page);
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('keeps focus on the calendar button, not Clear, when Clear appears after a pick', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="due" clearable label="Due date" locale="en-US" min="2026-10-05" max="2026-11-20"></pds-datepicker>`,
+      );
+      await openWithTrigger(page);
+      await press(page, 'Enter');
+
+      expect(await page.find('pds-datepicker >>> .pds-datepicker__clear')).not.toBeNull();
+      expect(await focused(page)).toContain('pds-datepicker__trigger');
+    });
+
+    const clearButton = (page: E2EPage) => page.find('pds-datepicker >>> .pds-datepicker__clear');
+
+    it('empties the field, emits the change and returns focus to the field', async () => {
+      const page = await setup(FIELD.replace('component-id="due"', 'component-id="due" clearable'));
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+
+      await (await clearButton(page)).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '' });
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      expect(await input.getProperty('value')).toBe('');
+      expect(await clearButton(page)).toBeNull();
+      // Clearing doesn't open the calendar, though the button sits in the field.
+      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).toBeNull();
+      const activeTag = await page.evaluate(
+        () => document.querySelector('pds-datepicker')?.shadowRoot?.activeElement?.tagName,
+      );
+      expect(activeTag).toBe('PDS-INPUT');
+    });
+
+    it('clears a range', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="period" range clearable label="Period" value="2026-09-13/2026-10-13"></pds-datepicker>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+
+      await (await clearButton(page)).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '' });
+    });
+
+    it('closes an open calendar when the field is cleared', async () => {
+      const page = await setup(FIELD.replace('component-id="due"', 'component-id="due" clearable'));
+      await openWithTrigger(page);
+
+      await (await clearButton(page)).click();
+      await page.waitForChanges();
+
+      expect(await page.find('.pds-datepicker-calendar-portal >>> [role="dialog"]')).toBeNull();
+    });
+
+    it.each([
+      ['there is no value', 'clearable value=""'],
+      ['the datepicker is disabled', 'clearable disabled'],
+      ['the datepicker is readonly', 'clearable readonly'],
+      ['clearable is off', ''],
+    ])('is hidden when %s', async (_, attrs) => {
+      const page = await setup(FIELD.replace('component-id="due"', `component-id="due" ${attrs}`).replace(' value="2026-10-13"', attrs.includes('value') ? '' : ' value="2026-10-13"'));
+
+      expect(await clearButton(page)).toBeNull();
+    });
+
+    it('has an accessible name', async () => {
+      const page = await setup(FIELD.replace('component-id="due"', 'component-id="due" clearable clear-label="Effacer"'));
+
+      // Names the field, so several datepickers don't all list as the same button.
+      expect(await (await clearButton(page)).getAttribute('aria-label')).toBe('Effacer Due date');
+    });
+  });
+
   describe('format', () => {
     const US = `<pds-datepicker component-id="due" label="Due" locale="en-US" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>`;
 

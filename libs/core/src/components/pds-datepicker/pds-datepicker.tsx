@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
 import { autoUpdate, computePosition, flip, hide, offset, shift, size } from '@floating-ui/dom';
-import { calendarSimple, caretDown, caretLeft, caretRight, check } from '@pine-ds/icons/icons';
+import { calendarSimple, caretDown, caretLeft, caretRight, check, remove } from '@pine-ds/icons/icons';
 import { isSpecTest } from '../../utils/form';
 import { formatMessage, resolveLocale } from '../../i18n';
 import type { PlacementType } from '@utils/types';
@@ -92,6 +92,7 @@ const dayNumberText = (formatter: Intl.DateTimeFormat, date: Date) =>
 export class PdsDatepicker {
   private inputEl?: HTMLPdsInputElement;
   private triggerEl?: HTMLButtonElement;
+  private clearEl?: HTMLButtonElement;
   private dialogEl?: HTMLElement;
   /** Where the open calendar lives, outside the datepicker so no ancestor clips or misplaces it. */
   private portal?: CalendarPortal;
@@ -102,6 +103,8 @@ export class PdsDatepicker {
   private readonly fallbackId = `pds-datepicker-${++fallbackIds}`;
   /** Set by a click on the label, whose forwarded click on the input shouldn't open the calendar. */
   private skipForwardedClick = false;
+  /** Set while an arrow key selects a preset, which auto-apply doesn't apply. */
+  private presetByArrow = false;
   /** The value when the calendar opened, or as last set from outside, which Cancel (without `clearable`) and Escape go back to. */
   private valueAtOpen = '';
   /** The draft's start and end times from before text typed in the field changed them. */
@@ -119,13 +122,19 @@ export class PdsDatepicker {
   @Prop() applyLabel = 'Apply';
 
   /**
+   * In range mode, applies the range as soon as its end or a preset is picked, without the Apply and
+   * Cancel buttons. Has no effect with the time picker, whose times still need Apply.
+   */
+  @Prop() autoApply = false;
+
+  /**
    * Accessible label for the button that closes the calendar without changing the dates.
    */
   @Prop() cancelLabel = 'Cancel';
 
   /**
-   * Replaces the Cancel button with a Clear button, which empties the field. Shown with the range
-   * mode and time picker buttons.
+   * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel
+   * buttons show, Clear also takes the place of Cancel.
    */
   @Prop() clearable = false;
 
@@ -538,9 +547,14 @@ export class PdsDatepicker {
     return this.range && !narrow ? 2 : 1;
   }
 
-  /** Whether picks wait for Apply: always for a range, and for a date with a time. */
+  /** Whether picks apply at once, without the footer: `auto-apply` in range mode, without times. */
+  private get appliesOnPick(): boolean {
+    return this.range && this.autoApply && !this.timePicker;
+  }
+
+  /** Whether picks wait for Apply: for a range, unless it auto-applies, and for a date with a time. */
   private get hasFooter(): boolean {
-    return this.range || this.timePicker;
+    return (this.range || this.timePicker) && !this.appliesOnPick;
   }
 
   private get resolvedPresets(): ResolvedPreset[] {
@@ -678,6 +692,7 @@ export class PdsDatepicker {
     }
     this.previewDate = '';
     this.activeDate = iso;
+    if (this.draftEnd && this.appliesOnPick) this.onApply();
   }
 
   /** Sets the value from the user, emitting the change event when it differs. */
@@ -763,6 +778,10 @@ export class PdsDatepicker {
     this.draftStart = toIsoDate(preset.start);
     this.draftEnd = toIsoDate(preset.end);
     this.previewDate = '';
+    if (this.appliesOnPick && !this.presetByArrow) {
+      this.onApply();
+      return;
+    }
     this.showDate(preset.end, true);
     // Safari doesn't focus a clicked button; keep focus in the dialog for Escape and the Tab trap.
     (event.currentTarget as HTMLElement).focus();
@@ -783,7 +802,28 @@ export class PdsDatepicker {
 
     event.preventDefault();
     next.focus();
-    if (next.classList.contains('pds-datepicker__preset') && next !== radios[radios.length - 1]) next.click();
+    if (next.classList.contains('pds-datepicker__preset') && next !== radios[radios.length - 1]) {
+      // Arrows select a preset without applying it, even with auto-apply, so every preset and
+      // Custom range stay reachable; Enter or Space applies it.
+      this.presetByArrow = true;
+      next.click();
+      this.presetByArrow = false;
+    }
+  };
+
+  /**
+   * Keeps a press on the clear button, by mouse or touch, from blurring the field, so the text
+   * typed in it isn't committed before the click empties it.
+   */
+  private onClearMouseDown = (event: MouseEvent) => {
+    event.preventDefault();
+  };
+
+  /** The field's clear button: empties the field and returns focus to it. */
+  private onClearClick = () => {
+    this.commitValue('');
+    this.closeCalendar(false);
+    void this.inputEl?.setFocus();
   };
 
   /** "Custom range" points to the calendar, where a range of your own is picked. */
@@ -931,8 +971,9 @@ export class PdsDatepicker {
 
   /** A click in the field opens the calendar beside it; the button inside toggles it on its own. */
   private onFieldClick = (event: MouseEvent) => {
+    // The calendar and clear buttons sit in the field but act on their own.
     const path = event.composedPath();
-    if (this.triggerEl && path.includes(this.triggerEl)) return;
+    if ((this.triggerEl && path.includes(this.triggerEl)) || (this.clearEl && path.includes(this.clearEl))) return;
 
     // A click on the label is forwarded to the input as a second click; skip that one too.
     const label = this.inputEl?.shadowRoot?.querySelector('label');
@@ -1672,13 +1713,19 @@ export class PdsDatepicker {
     );
   }
 
+  /** What Apply would set, in the field's format: shown in the footer, and announced as it changes. */
+  private selectionText(): string {
+    const parts = this.draftParts();
+    if (!parts) return '';
+    const format = this.resolvedFormat;
+    const locale = this.resolvedLocale;
+    if (this.range && !this.draftEnd) return `${toFieldText(parts[0], format, locale)}${RANGE_SEPARATOR}`;
+    return parts.map((part) => toFieldText(part, format, locale)).join(RANGE_SEPARATOR);
+  }
+
   private renderFooter() {
     const parts = this.draftParts();
-    const selection = parts
-      ? this.range && !this.draftEnd
-        ? `${toFieldText(parts[0], this.resolvedFormat, this.resolvedLocale)}${RANGE_SEPARATOR}`
-        : parts.map((part) => toFieldText(part, this.resolvedFormat, this.resolvedLocale)).join(RANGE_SEPARATOR)
-      : '';
+    const selection = this.selectionText();
 
     return (
       <div class="pds-datepicker__footer">
@@ -1724,6 +1771,12 @@ export class PdsDatepicker {
         <div class="pds-datepicker__panel">
           <div class="pds-datepicker__months">{months.map((month, index) => this.renderMonth(month, index, locale))}</div>
           {this.hasFooter && this.renderFooter()}
+          {this.appliesOnPick && (
+            // With no footer, still announce the start once it's picked, so it's clear an end comes next.
+            <span class="visually-hidden" aria-live="polite">
+              {this.selectionText()}
+            </span>
+          )}
         </div>
       </div>
     );
@@ -1761,7 +1814,28 @@ export class PdsDatepicker {
           onPdsFocus={this.stopInnerEvent}
           onPdsBlur={this.stopInnerEvent}
         >
+          {this.clearable && !!this.value && this.isInteractive && (
+            <button
+              // Keyed, as is the calendar button: when Clear appears after a pick, the focused
+              // calendar button must stay that button rather than be reused as Clear.
+              key="clear"
+              slot="suffix"
+              type="button"
+              class="pds-datepicker__clear"
+              ref={(el) => (this.clearEl = el)}
+              // Names the field, so several datepickers don't all list as "Clear".
+              aria-label={this.label ? `${this.clearLabel} ${this.label}` : this.clearLabel}
+              // Out of the tab order, as a native search field's clear button is: Tab from a field
+              // just emptied would land on it as the change removes it, dropping focus to the page.
+              tabindex="-1"
+              onMouseDown={this.onClearMouseDown}
+              onClick={this.onClearClick}
+            >
+              <pds-icon icon={remove} aria-hidden="true" />
+            </button>
+          )}
           <button
+            key="trigger"
             slot="suffix"
             type="button"
             class="pds-datepicker__trigger"

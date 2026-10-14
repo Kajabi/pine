@@ -27,7 +27,8 @@ pds-input {
   min-width: min(380px, 100%);
 }
 
-.pds-datepicker__trigger {
+.pds-datepicker__trigger,
+.pds-datepicker__clear {
   align-items: center;
   background: transparent;
   border: 0;
@@ -51,6 +52,11 @@ pds-input {
     color: var(--pine-color-text-disabled);
     cursor: not-allowed;
   }
+}
+
+// The field's clear button sits before the calendar button.
+.pds-datepicker__clear {
+  margin-inline-end: var(--pine-dimension-2xs);
 }
 
 // Round outlined month buttons, as pds-button's secondary icon-only buttons.
@@ -560,6 +566,7 @@ pds-input {
 
 // Fast clicks on the controls and days would otherwise select their text.
 .pds-datepicker__trigger,
+.pds-datepicker__clear,
 .pds-datepicker__nav,
 .pds-datepicker__weekday,
 .pds-datepicker__day,
