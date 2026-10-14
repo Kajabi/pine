@@ -340,6 +340,34 @@ describe('pds-modal', () => {
         expect(await footerReachable(page)).toEqual({ inView: true, hitsSave: true });
       });
 
+      it('keeps a nested modal in place while the outer one scrolls outside the top layer', async () => {
+        const page = await newE2EPage();
+        await page.setViewport({ width: 1280, height: 300 });
+        await page.setContent(`
+          <pds-modal component-id="outer" disable-top-layer="true" scrollable="false">
+            <pds-modal-content>
+              <div style="height: 900px">Tall content</div>
+              <pds-modal component-id="inner" disable-top-layer="true" size="sm">
+                <pds-modal-content><p id="inner-text">Nested</p></pds-modal-content>
+              </pds-modal>
+            </pds-modal-content>
+          </pds-modal>
+        `);
+        await (await page.find('pds-modal[component-id="outer"]')).callMethod('showModal');
+        await page.waitForChanges();
+        await (await page.find('pds-modal[component-id="inner"]')).callMethod('showModal');
+        await page.waitForChanges();
+
+        const innerTop = () =>
+          page.evaluate(() => Math.round(document.getElementById('inner-text')!.getBoundingClientRect().top));
+        const before = await innerTop();
+        await page.evaluate(() => {
+          (document.querySelector('pds-modal[component-id="outer"] > .pds-modal__backdrop, pds-modal[component-id="outer"] .pds-modal__backdrop') as HTMLElement).scrollTop = 400;
+        });
+
+        expect(await innerTop()).toBe(before);
+      });
+
       it('keeps a scrollable modal inside the viewport, so the backdrop adds no second scrollbar', async () => {
         const page = await openAtShortViewport('disable-top-layer="true"');
 
