@@ -1302,7 +1302,7 @@ With `panel-search`, the search field shows only over the groups. Inside a group
 
 ### Keyboard and Screen Readers in Grouped Displays
 
-With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each group is an item that expands to its options, one level down. Keyboard focus stays on the trigger, or on the panel's search field, and `aria-activedescendant` follows the highlighted row.
+With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each group is an item that expands to its options, one level down. Keyboard focus stays on the trigger, or on the panel's search field, and `aria-activedescendant` follows the highlighted row. Inside a drilled-in group with `panel-search`, the search field is hidden and the tree takes focus in its place.
 
 <pds-box border border-radius="sm" fit>
   <pds-table component-id="grouped-display-keys">
@@ -1325,7 +1325,7 @@ With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each grou
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Space</pds-table-cell>
-        <pds-table-cell>With the <code>button</code> or <code>chip</code> trigger and no panel search, does what Enter does. In a search field, it types a space.</pds-table-cell>
+        <pds-table-cell>With the <code>button</code> or <code>chip</code> trigger and no panel search, and inside a drilled-in group with panel search, does what Enter does. In a search field, it types a space.</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Left</pds-table-cell>
@@ -1338,6 +1338,14 @@ With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each grou
       <pds-table-row>
         <pds-table-cell>Enter, Space (drill-in)</pds-table-cell>
         <pds-table-cell>On the open group's row ("Back: Tag"), return to the groups; Right moves into its options instead.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Backspace (drill-in)</pds-table-cell>
+        <pds-table-cell>Return to the groups. With panel search, the search field comes back with focus.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>A character (drill-in, panel search)</pds-table-cell>
+        <pds-table-cell>Inside a group, start a search of the whole list: the search field comes back with that character in it.</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
