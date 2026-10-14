@@ -12,6 +12,8 @@ export class CalendarPortal {
   readonly host: HTMLElement;
   private readonly root: ShadowRoot;
   private locale?: string;
+  /** The custom properties copyContext set on the host, cleared before it copies again. */
+  private copiedProperties: string[] = [];
 
   constructor(private readonly datepicker: HTMLElement) {
     this.host = document.createElement('div');
@@ -67,10 +69,7 @@ export class CalendarPortal {
     this.host.dir = computed.direction || 'ltr';
     // So assistive tech reads the month and day names in the calendar's own language.
     this.host.lang = locale;
-    for (const property of ['--pds-datepicker-day-size', '--pds-datepicker-presets-width']) {
-      const value = computed.getPropertyValue(property).trim();
-      if (value) this.host.style.setProperty(property, value);
-    }
+    this.copyCustomProperties(computed);
 
     // Across shadow boundaries: a theme set above an enclosing component still applies.
     const theme = (closest('[data-theme]', this.datepicker) || null)?.getAttribute('data-theme');
@@ -78,6 +77,26 @@ export class CalendarPortal {
       this.host.setAttribute('data-theme', theme);
     } else {
       this.host.removeAttribute('data-theme');
+    }
+  }
+
+  /**
+   * Custom properties set on an ancestor of the datepicker that isn't an ancestor of the portal,
+   * as a token override on a card or panel, or the datepicker's own size properties: each one whose
+   * value at the datepicker differs from where the portal mounts is set on the portal host.
+   */
+  private copyCustomProperties(computed: CSSStyleDeclaration) {
+    for (const property of this.copiedProperties) this.host.style.removeProperty(property);
+    this.copiedProperties = [];
+    const parent = this.host.parentElement;
+    const outside = parent ? getComputedStyle(parent) : null;
+    for (let i = 0; i < computed.length; i++) {
+      const property = computed[i];
+      if (!property.startsWith('--')) continue;
+      const value = computed.getPropertyValue(property);
+      if (outside && value === outside.getPropertyValue(property)) continue;
+      this.host.style.setProperty(property, value.trim());
+      this.copiedProperties.push(property);
     }
   }
 }
