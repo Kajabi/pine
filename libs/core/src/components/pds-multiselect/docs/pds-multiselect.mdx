@@ -48,7 +48,7 @@ When open, the dropdown panel displays:
 
 ### Working with Labels
 
-Text that appears above the multiselect is the component's label, not a separate `pds-text` component. The `label` prop creates accessible text that associates properly with the trigger.
+Text that appears above the multiselect is the component's label, not a separate `pds-text` component. The `label` prop creates accessible text that associates properly with the trigger. With a custom trigger (see Custom Trigger), the label names the options list instead; use `hide-label` and give the trigger its own accessible name.
 
 ## Properties
 
@@ -311,6 +311,10 @@ Fetch options from a remote API endpoint. The component expects responses in the
 </DocCanvas>
 
 > **Note:** The live preview uses static options. In production, options are fetched from the API endpoint.
+
+### Refreshing Options
+
+Async options are fetched once and kept. After an option changes elsewhere, such as when it's renamed in an edit modal, call `refreshOptions()` to fetch the first page again. The panel and any selected items show the new text and color without emitting a change event. Without `async-url`, `refreshOptions()` does nothing.
 
 ### Consumer-Managed Async
 
@@ -683,6 +687,10 @@ The `pdsMultiselectDismiss` event fires when the dropdown is closed via the Esca
 </DocCanvas>
 
 > **Note:** Open the console, then press Escape or click outside while the dropdown is open to see the dismiss event logged.
+
+### Saving Changes
+
+`pdsMultiselectChange` reports what each change did: `added` and `removed` list the values selected and deselected, alongside the full `values` and `items`. To save each change as it happens, send `added` and `removed` to your server. If the save fails, set `value` back to the previous values; setting `value` doesn't emit another change event.
 
 ### Programmatic Clear
 
@@ -1103,6 +1111,195 @@ In the disabled state, pills render without close buttons and the trigger is non
     <option value="1">Marketing</option>
     <option value="2">Sales</option>
     <option value="3">Support</option>
+  </pds-multiselect>
+</DocCanvas>
+
+## Option Display
+
+`option-display` sets how each option appears in the panel. `text`, the default, shows each option's text. `chip` shows each option as a `pds-chip`.
+
+- To add a colored dot to an option's chip, set `dotColor` on an option object or `data-dot-color` on an `<option>`. It accepts the same values as `pds-chip`'s `dot-color`.
+- Each option is still named by its text, and the dot is decorative, so don't rely on color alone.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="option-display"
+  label="Labels"
+  option-display="chip"
+  value='["1"]'
+>
+  <option value="1" data-dot-color="--pine-color-purple-600">Featured</option>
+  <option value="2" data-dot-color="--pine-color-green-600">On sale</option>
+  <option value="3" data-dot-color="--pine-color-grey-600">Archived</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="option-display"
+  label="Labels"
+  optionDisplay="chip"
+  value={['1']}
+>
+  <option value="1" data-dot-color="--pine-color-purple-600">Featured</option>
+  <option value="2" data-dot-color="--pine-color-green-600">On sale</option>
+  <option value="3" data-dot-color="--pine-color-grey-600">Archived</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="option-display-example"
+    label="Labels"
+    option-display="chip"
+    value='["1"]'
+  >
+    <option value="1" data-dot-color="--pine-color-purple-600">Featured</option>
+    <option value="2" data-dot-color="--pine-color-green-600">On sale</option>
+    <option value="3" data-dot-color="--pine-color-grey-600">Archived</option>
+  </pds-multiselect>
+</DocCanvas>
+
+## Custom Trigger
+
+An element in the `trigger` slot replaces the built-in trigger, so the multiselect can open from other UI, such as a table cell.
+
+- The multiselect opens the panel from the element's click, Enter, Space, and arrow keys, sets `aria-expanded` and `aria-haspopup` on it (and `aria-disabled` while `disabled`), positions the panel against it, and returns focus to it on Escape.
+- Give the trigger an accessible name that says what it's for, like `aria-label="Labels: Featured"`, and keep it meaningful when nothing is selected.
+- The `label` prop names the options list, not the slotted trigger, so use `hide-label`. `invalid`, `required`, and the helper and error messages don't reach a slotted trigger; set the matching ARIA on it yourself.
+- The trigger doesn't update itself. Keep its content in sync from `pdsMultiselectChange`, such as with a `pds-chip` for each item in `event.detail.items`.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="custom-trigger"
+  label="Labels"
+  hide-label
+  value='["1"]'
+>
+  <option value="1">Featured</option>
+  <option value="2">On sale</option>
+  <option value="3">Archived</option>
+  <button slot="trigger" type="button" aria-label="Labels: Featured">
+    <pds-chip sentiment="subtle">Featured</pds-chip>
+  </button>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="custom-trigger"
+  label="Labels"
+  hideLabel
+  value={['1']}
+  onPdsMultiselectChange={(event) => setSelectedLabels(event.detail.items)}
+>
+  <option value="1">Featured</option>
+  <option value="2">On sale</option>
+  <option value="3">Archived</option>
+  <button slot="trigger" type="button" aria-label="Labels: Featured">
+    <PdsChip sentiment="subtle">Featured</PdsChip>
+  </button>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="custom-trigger-example"
+    label="Labels"
+    hide-label
+    value='["1"]'
+  >
+    <option value="1">Featured</option>
+    <option value="2">On sale</option>
+    <option value="3">Archived</option>
+    <button
+      slot="trigger"
+      type="button"
+      aria-label="Labels: Featured"
+      style={{ alignItems: 'center', background: 'none', border: 0, cursor: 'pointer', display: 'inline-flex', flexWrap: 'wrap', gap: 'var(--pine-dimension-2xs)', padding: 'var(--pine-dimension-2xs)' }}
+    >
+      <pds-chip sentiment="subtle">Featured</pds-chip>
+    </button>
+  </pds-multiselect>
+</DocCanvas>
+
+## Option Actions
+
+Set `option-actions` to show an action icon, such as an edit pencil, on options that have an `actionIcon`.
+
+- Set `actionIcon` on an option object, or `data-action-icon` on an `<option>`, to a Pine icon name such as `pen`. URLs aren't accepted, and options without an icon name have no action.
+- The icon shows on the hovered or highlighted option, and on every option on touch devices.
+- Clicking the icon, or pressing Right Arrow on the highlighted option, closes the panel, returns focus to the trigger, and emits `pdsMultiselectOptionAction` with the option. While the search text has characters after the caret, Right Arrow moves the caret instead.
+- Set `actionLabel`, or `data-action-label`, for an option's tooltip; `option-action-label` is the fallback. The screen-reader hint, `option-action-description`, fills in `{action}` with that tooltip.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="option-actions"
+  label="Labels"
+  option-actions
+  value='["1"]'
+>
+  <option value="1" data-action-icon="pen">Featured</option>
+  <option value="2" data-action-icon="pen">On sale</option>
+  <option value="3" data-action-icon="info-circle" data-action-label="View {text}">Archived</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="option-actions"
+  label="Labels"
+  optionActions
+  value={['1']}
+  onPdsMultiselectOptionAction={(event) => openLabelModal(event.detail.option)}
+>
+  <option value="1" data-action-icon="pen">Featured</option>
+  <option value="2" data-action-icon="pen">On sale</option>
+  <option value="3" data-action-icon="info-circle" data-action-label="View {text}">Archived</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="option-actions-example"
+    label="Labels"
+    option-actions
+    value='["1"]'
+  >
+    <option value="1" data-action-icon="pen">Featured</option>
+    <option value="2" data-action-icon="pen">On sale</option>
+    <option value="3" data-action-icon="info-circle" data-action-label="View {text}">Archived</option>
+  </pds-multiselect>
+</DocCanvas>
+
+## Footer
+
+Links or buttons in the `footer` slot sit below the options, such as a link to the page where options are managed. Tab moves from the search input to the footer, and Shift+Tab moves back.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="footer"
+  label="Labels"
+  value='["1"]'
+>
+  <option value="1">Featured</option>
+  <option value="2">On sale</option>
+  <option value="3">Archived</option>
+  <pds-link slot="footer" href="/labels" variant="plain" font-size="md">Manage labels</pds-link>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="footer"
+  label="Labels"
+  value={['1']}
+>
+  <option value="1">Featured</option>
+  <option value="2">On sale</option>
+  <option value="3">Archived</option>
+  <PdsLink slot="footer" href="/labels" variant="plain" fontSize="md">Manage labels</PdsLink>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="footer-example"
+    label="Labels"
+    value='["1"]'
+  >
+    <option value="1">Featured</option>
+    <option value="2">On sale</option>
+    <option value="3">Archived</option>
+    <pds-link slot="footer" href="#" variant="plain" font-size="md">Manage labels</pds-link>
   </pds-multiselect>
 </DocCanvas>
 
