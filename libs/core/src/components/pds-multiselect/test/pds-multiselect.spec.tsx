@@ -2210,4 +2210,773 @@ describe('pds-multiselect', () => {
       jest.useRealTimers();
     }
   });
+
+  // Mock-doc's focus() doesn't move document.activeElement, so focus-out tests set it directly.
+  const setActiveElement = (doc: Document, el: Element) => {
+    Object.defineProperty(doc, 'activeElement', { configurable: true, get: () => el });
+  };
+
+  const makeSlottedOption = (value: string, text: string, attributes: Record<string, string> = {}) => {
+    const opt = document.createElement('option') as HTMLOptionElement;
+    opt.value = value;
+    opt.textContent = text;
+    Object.entries(attributes).forEach(([name, attributeValue]) => opt.setAttribute(name, attributeValue));
+    return opt;
+  };
+
+  describe('trigger slot', () => {
+    const triggerHtml = `
+      <pds-multiselect component-id="test">
+        <option value="1">Bestsellers</option>
+        <button slot="trigger" type="button"><span>Add tag</span></button>
+      </pds-multiselect>`;
+
+    it('renders the built-in trigger when no trigger is slotted', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      expect(page.root.shadowRoot.querySelector('button.pds-multiselect__trigger')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('slot[name="trigger"]')).toBeNull();
+    });
+
+    it.each([
+      ['count', ''],
+      ['inline pill', 'selected-display="pill" pill-position="inline"'],
+    ])('hides the built-in %s trigger chevron from assistive technology', async (_, attributes) => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" ${attributes}></pds-multiselect>`,
+      });
+
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__icon').getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('renders the slotted trigger in place of the built-in trigger', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: triggerHtml });
+      const trigger = page.root.querySelector('[slot="trigger"]');
+
+      expect(page.root.shadowRoot.querySelector('slot[name="trigger"]')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__trigger')).toBeNull();
+      expect(trigger.getAttribute('aria-haspopup')).toBe('listbox');
+      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('toggles the panel and aria-expanded when the slotted trigger is clicked', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: triggerHtml });
+      const trigger = page.root.querySelector('[slot="trigger"]') as HTMLElement;
+
+      trigger.click();
+      await page.waitForChanges();
+      expect(page.rootInstance.isOpen).toBe(true);
+      expect(trigger.getAttribute('aria-expanded')).toBe('true');
+
+      trigger.click();
+      await page.waitForChanges();
+      expect(page.rootInstance.isOpen).toBe(false);
+      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('opens on Enter on the slotted trigger, but not on Enter bubbled from its content', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: triggerHtml });
+      const trigger = page.root.querySelector('[slot="trigger"]');
+
+      trigger.querySelector('span').dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      await page.waitForChanges();
+      expect(page.rootInstance.isOpen).toBe(false);
+
+      const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+      trigger.dispatchEvent(enter);
+      await page.waitForChanges();
+      expect(enter.defaultPrevented).toBe(true);
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
+    it('focuses the slotted trigger on Escape and from setFocus', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: triggerHtml });
+      const focusSpy = jest.spyOn(page.root.querySelector('[slot="trigger"]') as HTMLElement, 'focus');
+
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      page.rootInstance.handleWindowKeyDown(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await page.waitForChanges();
+      expect(page.rootInstance.isOpen).toBe(false);
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+
+      await (page.root as HTMLPdsMultiselectElement).setFocus();
+      expect(focusSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('stays open when focus moves to the slotted trigger', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: triggerHtml });
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      setActiveElement(page.doc, page.root.querySelector('[slot="trigger"]'));
+      page.rootInstance.handleContainerFocusOut();
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(page.rootInstance.isOpen).toBe(true);
+      expect(dismissSpy).not.toHaveBeenCalled();
+    });
+
+    it('positions the panel against the slotted trigger', async () => {
+      const computePositionSpy = jest
+        .spyOn(floatingUI, 'computePosition')
+        .mockResolvedValue({ x: 0, y: 0, placement: 'bottom-start' });
+      jest.spyOn(floatingUI, 'autoUpdate').mockReturnValue(jest.fn());
+      const page = await newSpecPage({ components: [PdsMultiselect], html: triggerHtml });
+
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      page.rootInstance.positionDropdown();
+
+      expect(computePositionSpy).toHaveBeenCalledWith(
+        page.root.querySelector('[slot="trigger"]'),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+
+    it('marks the slotted trigger aria-disabled and ignores its keys while disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `
+          <pds-multiselect component-id="test" disabled>
+            <option value="1">Bestsellers</option>
+            <button slot="trigger" type="button">Add tag</button>
+          </pds-multiselect>`,
+      });
+      const trigger = page.root.querySelector('[slot="trigger"]');
+      expect(trigger.getAttribute('aria-disabled')).toBe('true');
+
+      const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+      trigger.dispatchEvent(enter);
+      await page.waitForChanges();
+      expect(enter.defaultPrevented).toBe(false);
+      expect(page.rootInstance.isOpen).toBe(false);
+
+      (page.root as HTMLPdsMultiselectElement).disabled = false;
+      await page.waitForChanges();
+      expect(trigger.hasAttribute('aria-disabled')).toBe(false);
+    });
+
+    it('wires a trigger slotted after load, and restores the built-in trigger when it is removed', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+      const trigger = page.doc.createElement('button');
+      trigger.setAttribute('slot', 'trigger');
+
+      page.root.appendChild(trigger);
+      page.rootInstance.syncSlottedTrigger();
+      await page.waitForChanges();
+      expect(page.root.shadowRoot.querySelector('slot[name="trigger"]')).toBeTruthy();
+      expect(trigger.getAttribute('aria-haspopup')).toBe('listbox');
+
+      trigger.remove();
+      page.rootInstance.syncSlottedTrigger();
+      await page.waitForChanges();
+      expect(page.root.shadowRoot.querySelector('button.pds-multiselect__trigger')).toBeTruthy();
+      expect(trigger.hasAttribute('aria-expanded')).toBe(false);
+
+      trigger.click();
+      await page.waitForChanges();
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+  });
+
+  describe('footer slot', () => {
+    const footerHtml = `
+      <pds-multiselect component-id="test">
+        <option value="1">Bestsellers</option>
+        <a slot="footer" href="/tags">Manage tags</a>
+      </pds-multiselect>`;
+
+    it('does not render a footer without footer content', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"><option value="1">Bestsellers</option></pds-multiselect>`,
+      });
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__footer')).toBeNull();
+      expect(page.root.shadowRoot.querySelector('slot[name="footer"]')).toBeNull();
+    });
+
+    it('renders footer content below the listbox', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: footerHtml });
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const panel = page.root.shadowRoot.querySelector('.pds-multiselect__panel');
+      const footer = panel.querySelector('.pds-multiselect__footer');
+      expect(footer.querySelector('slot[name="footer"]')).toBeTruthy();
+      expect(panel.lastElementChild).toBe(footer);
+      expect(footer.previousElementSibling.classList.contains('pds-multiselect__listbox')).toBe(true);
+    });
+
+    it('keeps focus in the search input when the footer is pressed', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: footerHtml });
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const mousedown = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+      page.root.shadowRoot.querySelector('.pds-multiselect__footer').dispatchEvent(mousedown);
+
+      expect(mousedown.defaultPrevented).toBe(true);
+    });
+
+    it('stays open when focus moves into the footer content', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: footerHtml });
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      setActiveElement(page.doc, page.root.querySelector('[slot="footer"]'));
+      page.rootInstance.handleContainerFocusOut();
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(page.rootInstance.isOpen).toBe(true);
+      expect(dismissSpy).not.toHaveBeenCalled();
+    });
+
+    it('moves Tab from the search input to the first footer link, past the option checkboxes', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: footerHtml });
+      const link = page.root.querySelector('[slot="footer"]') as HTMLElement;
+      const focusSpy = jest.spyOn(link, 'focus');
+      const matches = link.matches.bind(link);
+      // Mock-doc's focus() doesn't move focus, so report :focus once focus() has been called.
+      jest.spyOn(link, 'matches').mockImplementation((selector: string) =>
+        selector === ':focus' ? focusSpy.mock.calls.length > 0 : matches(selector)
+      );
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const tab = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+      page.rootInstance.handleSearchInputKeyDown(tab);
+      await page.waitForChanges();
+
+      expect(tab.defaultPrevented).toBe(true);
+      expect(focusSpy).toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
+    it('closes on Tab when the first footer link cannot take focus', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: footerHtml });
+      jest.spyOn(page.root.querySelector('[slot="footer"]') as HTMLElement, 'focus');
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const tab = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+      page.rootInstance.handleSearchInputKeyDown(tab);
+      await page.waitForChanges();
+
+      expect(tab.defaultPrevented).toBe(false);
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('stays open when focus moves to focusable content in the empty slot', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"><a slot="empty" href="/tags/new">Create one</a></pds-multiselect>`,
+      });
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      setActiveElement(page.doc, page.root.querySelector('[slot="empty"]'));
+      page.rootInstance.handleContainerFocusOut();
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(page.rootInstance.isOpen).toBe(true);
+      expect(dismissSpy).not.toHaveBeenCalled();
+    });
+
+    it('closes on Shift+Tab from the search input', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: footerHtml });
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      page.rootInstance.handleSearchInputKeyDown(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }));
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('closes on Tab when the footer has nothing to focus', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `
+          <pds-multiselect component-id="test">
+            <option value="1">Bestsellers</option>
+            <p slot="footer">Tags are shared across your site.</p>
+          </pds-multiselect>`,
+      });
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      page.rootInstance.handleSearchInputKeyDown(new KeyboardEvent('keydown', { key: 'Tab' }));
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('returns Shift+Tab from the first footer link to the search input, and closes on Tab from the last', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `
+          <pds-multiselect component-id="test">
+            <option value="1">Bestsellers</option>
+            <div slot="footer"><a href="/tags">Manage tags</a> <a href="/help">Help</a></div>
+          </pds-multiselect>`,
+      });
+      const [manage, help] = Array.from(page.root.querySelectorAll('[slot="footer"] a')) as HTMLElement[];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      const searchFocusSpy = jest.spyOn(page.rootInstance.searchInputEl, 'focus');
+      const tabFrom = (el: HTMLElement, shiftKey: boolean) =>
+        ({ key: 'Tab', shiftKey, composedPath: () => [el], preventDefault: jest.fn() }) as unknown as KeyboardEvent;
+
+      const backFromHelp = tabFrom(help, true);
+      page.rootInstance.handleFooterKeyDown(backFromHelp);
+      expect(backFromHelp.preventDefault).not.toHaveBeenCalled();
+
+      const backFromManage = tabFrom(manage, true);
+      page.rootInstance.handleFooterKeyDown(backFromManage);
+      expect(backFromManage.preventDefault).toHaveBeenCalled();
+      expect(searchFocusSpy).toHaveBeenCalled();
+
+      page.rootInstance.handleFooterKeyDown(tabFrom(manage, false));
+      await page.waitForChanges();
+      expect(page.rootInstance.isOpen).toBe(true);
+
+      page.rootInstance.handleFooterKeyDown(tabFrom(help, false));
+      await page.waitForChanges();
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+  });
+
+  describe('optionDisplay prop', () => {
+    const openWithOptions = async (options: Array<Record<string, unknown>>, attributes = '') => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" ${attributes}></pds-multiselect>`,
+      });
+      page.rootInstance.internalOptions = options;
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      return page.root.shadowRoot.querySelector('.pds-multiselect__option pds-checkbox');
+    };
+
+    it('defaults to text, and ignores dotColor in text display', async () => {
+      const checkbox = await openWithOptions([{ id: '1', text: 'Bestsellers', dotColor: '--pine-color-purple-600' }]);
+
+      expect(checkbox.getAttribute('label')).toBe('Bestsellers');
+      expect(checkbox.children.length).toBe(0);
+    });
+
+    it('renders each option as a subtle pds-chip with its dot color in chip display', async () => {
+      const checkbox = await openWithOptions(
+        [{ id: '1', text: 'Bestsellers', dotColor: '--pine-color-purple-600' }],
+        'option-display="chip"'
+      );
+      const chip = checkbox.querySelector('pds-chip[slot="label"]');
+
+      expect(checkbox.getAttribute('label')).toBe('Bestsellers');
+      expect(chip.textContent).toBe('Bestsellers');
+      expect(chip.hasAttribute('dot')).toBe(true);
+      expect(chip.getAttribute('dot-color')).toBe('--pine-color-purple-600');
+      expect(chip.getAttribute('sentiment')).toBe('subtle');
+    });
+
+    it('renders a chip without a dot for an option with no dotColor in chip display', async () => {
+      const checkbox = await openWithOptions([{ id: '1', text: 'Bestsellers' }], 'option-display="chip"');
+      const chip = checkbox.querySelector('pds-chip[slot="label"]');
+
+      expect(chip.textContent).toBe('Bestsellers');
+      expect(chip.hasAttribute('dot')).toBe(false);
+      expect(chip.hasAttribute('dot-color')).toBe(false);
+    });
+
+    it('reads dotColor from data-dot-color on slotted options, inside and outside an optgroup', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+      const optgroup = document.createElement('optgroup') as HTMLOptGroupElement;
+      optgroup.label = 'Seasonal';
+      optgroup.appendChild(makeSlottedOption('3', 'Spring launch', { 'data-dot-color': 'success' }));
+      optgroup.querySelectorAll = (() => optgroup.children) as typeof optgroup.querySelectorAll;
+      const mockSlot = {
+        assignedElements: () => [
+          makeSlottedOption('1', 'Bestsellers', { 'data-dot-color': '--pine-color-purple-600' }),
+          makeSlottedOption('2', 'Webinar'),
+          optgroup,
+        ],
+      };
+
+      jest.spyOn(page.rootInstance.el.shadowRoot!, 'querySelector').mockReturnValue(mockSlot as any);
+      page.rootInstance.updateOptionsFromSlot();
+
+      const [bestsellers, webinar, springLaunch] = page.rootInstance.internalOptions;
+      expect(bestsellers.dotColor).toBe('--pine-color-purple-600');
+      expect('dotColor' in webinar).toBe(false);
+      expect(springLaunch).toEqual(expect.objectContaining({ dotColor: 'success', group: 'Seasonal' }));
+    });
+  });
+
+  describe('refreshOptions method', () => {
+    it('refetches the first page and updates selected items without emitting a change', async () => {
+      const mockFetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ results: [{ id: '1', text: 'Best sellers', dotColor: 'success' }] }),
+        })
+      );
+      global.fetch = mockFetch as unknown as typeof fetch;
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" async-url="/api/tags"></pds-multiselect>`,
+      });
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Bestsellers' }];
+      page.rootInstance.value = ['1'];
+      await page.waitForChanges();
+      mockFetch.mockClear();
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      await (page.root as HTMLPdsMultiselectElement).refreshOptions();
+      await page.waitForChanges();
+
+      const url = new URL((mockFetch.mock.calls[0] as unknown as [string])[0]);
+      expect(url.pathname).toBe('/api/tags');
+      expect(url.searchParams.get('page')).toBe('1');
+      expect(page.rootInstance.selectedItems).toEqual([{ id: '1', text: 'Best sellers', dotColor: 'success' }]);
+      expect(changeSpy).not.toHaveBeenCalled();
+    });
+
+    it('does nothing without asyncUrl', async () => {
+      const mockFetch = jest.fn();
+      global.fetch = mockFetch as unknown as typeof fetch;
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      await (page.root as HTMLPdsMultiselectElement).refreshOptions();
+
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('option action', () => {
+    const actionOptions = [
+      { id: '1', text: 'Bestsellers', actionIcon: 'pen' },
+      { id: '2', text: 'Archived', actionIcon: 'pen', disabled: true },
+    ];
+
+    const openWithAction = async (attributes = 'option-actions', options: Array<Record<string, unknown>> = actionOptions) => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" ${attributes}></pds-multiselect>`,
+      });
+      page.rootInstance.internalOptions = options;
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+      return page;
+    };
+
+    const hintFor = (page: Awaited<ReturnType<typeof newSpecPage>>, option: Element) =>
+      page.root.shadowRoot.querySelector(`#${option.getAttribute('aria-describedby')}`);
+
+    const pressArrowRight = (page: Awaited<ReturnType<typeof newSpecPage>>) => {
+      const arrowRight = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
+      page.rootInstance.handleSearchInputKeyDown(arrowRight);
+      return arrowRight;
+    };
+
+    it('renders no action or hint without optionActions, even when options have an actionIcon', async () => {
+      const page = await openWithAction('');
+      const shadow = page.root.shadowRoot;
+
+      expect(shadow.querySelector('.pds-multiselect__option-action')).toBeNull();
+      expect(shadow.querySelector('.pds-multiselect__option[aria-describedby]')).toBeNull();
+      expect(shadow.querySelector('[id$="-action-description"]')).toBeNull();
+    });
+
+    it('renders an aria-hidden action on enabled options with an actionIcon, and describes its key', async () => {
+      const page = await openWithAction();
+      const [enabled, disabled] = Array.from(page.root.shadowRoot.querySelectorAll('.pds-multiselect__option'));
+      const action = enabled.querySelector('.pds-multiselect__option-action');
+
+      expect(action.getAttribute('aria-hidden')).toBe('true');
+      expect(action.getAttribute('title')).toBe('Edit Bestsellers');
+      expect(disabled.querySelector('.pds-multiselect__option-action')).toBeNull();
+      expect(disabled.hasAttribute('aria-describedby')).toBe(false);
+
+      const hint = hintFor(page, enabled);
+      expect(hint.textContent).toBe('Press Right Arrow to Edit Bestsellers');
+      expect(hint.hasAttribute('hidden')).toBe(true);
+    });
+
+    it('mounts the action icon only on the highlighted option', async () => {
+      const page = await openWithAction('option-actions', [
+        { id: '1', text: 'Bestsellers', actionIcon: 'pen' },
+        { id: '2', text: 'Archived', actionIcon: 'info-circle', actionLabel: 'View {text}' },
+      ]);
+      const icons = () =>
+        Array.from(page.root.shadowRoot.querySelectorAll('.pds-multiselect__option-action')).map(
+          action => action.querySelector('pds-icon')?.getAttribute('name') ?? null
+        );
+
+      expect(icons()).toEqual([null, null]);
+
+      page.rootInstance.highlightedIndex = 1;
+      await page.waitForChanges();
+      expect(icons()).toEqual([null, 'info-circle']);
+    });
+
+    it('localizes the action tooltip and hint', async () => {
+      const page = await openWithAction(
+        'option-actions option-action-label="Modifier {text}" option-action-description="Flèche droite pour {action}"'
+      );
+      const option = page.root.shadowRoot.querySelector('.pds-multiselect__option');
+
+      expect(option.querySelector('.pds-multiselect__option-action').getAttribute('title')).toBe('Modifier Bestsellers');
+      expect(hintFor(page, option).textContent).toBe('Flèche droite pour Modifier Bestsellers');
+    });
+
+    it("uses each option's own tooltip, and gives options without an actionIcon no action", async () => {
+      const page = await openWithAction('option-actions', [
+        { id: '1', text: 'Bestsellers', actionIcon: 'pen' },
+        { id: '2', text: 'Archived', actionIcon: 'info-circle', actionLabel: 'View {text}' },
+        { id: '3', text: 'Free' },
+      ]);
+      const [bestsellers, archived, free] = Array.from(page.root.shadowRoot.querySelectorAll('.pds-multiselect__option'));
+
+      expect(bestsellers.querySelector('.pds-multiselect__option-action').getAttribute('title')).toBe('Edit Bestsellers');
+      expect(archived.querySelector('.pds-multiselect__option-action').getAttribute('title')).toBe('View Archived');
+      expect(hintFor(page, archived).textContent).toBe('Press Right Arrow to View Archived');
+      expect(free.querySelector('.pds-multiselect__option-action')).toBeNull();
+      expect(free.hasAttribute('aria-describedby')).toBe(false);
+
+      const actionSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectOptionAction', actionSpy);
+      page.rootInstance.highlightedIndex = 2;
+      expect(pressArrowRight(page).defaultPrevented).toBe(false);
+      expect(actionSpy).not.toHaveBeenCalled();
+    });
+
+    it('reads data-action-icon and data-action-label from slotted options', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" option-actions></pds-multiselect>`,
+      });
+      const mockSlot = {
+        assignedElements: () => [
+          makeSlottedOption('1', 'Bestsellers', { 'data-action-icon': 'pen' }),
+          makeSlottedOption('2', 'Archived', { 'data-action-icon': 'info-circle', 'data-action-label': 'View {text}' }),
+          makeSlottedOption('3', 'Free'),
+        ],
+      };
+
+      jest.spyOn(page.rootInstance.el.shadowRoot!, 'querySelector').mockReturnValue(mockSlot as any);
+      page.rootInstance.updateOptionsFromSlot();
+
+      const [bestsellers, archived, free] = page.rootInstance.internalOptions;
+      expect(bestsellers.actionIcon).toBe('pen');
+      expect(archived).toEqual(expect.objectContaining({ actionIcon: 'info-circle', actionLabel: 'View {text}' }));
+      expect('actionIcon' in free).toBe(false);
+    });
+
+    it('does not add an action to the create option', async () => {
+      const page = await openWithAction('option-actions create-url="/api/tags"');
+      page.rootInstance.searchQuery = 'Fall 2026';
+      await page.waitForChanges();
+
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__option--create')).toBeTruthy();
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__option-action')).toBeNull();
+    });
+
+    it('emits pdsMultiselectOptionAction on an icon click without toggling the option', async () => {
+      const page = await openWithAction();
+      const actionSpy = jest.fn();
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectOptionAction', actionSpy);
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+      const action = page.root.shadowRoot.querySelector('.pds-multiselect__option-action');
+
+      const mousedown = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+      action.dispatchEvent(mousedown);
+      action.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await page.waitForChanges();
+
+      expect(mousedown.defaultPrevented).toBe(true);
+      expect(changeSpy).not.toHaveBeenCalled();
+      expect(actionSpy).toHaveBeenCalledTimes(1);
+      expect(actionSpy.mock.calls[0][0].detail.option).toEqual({ id: '1', text: 'Bestsellers', actionIcon: 'pen' });
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('runs the action on Right Arrow and returns focus to the trigger', async () => {
+      const page = await openWithAction();
+      const actionSpy = jest.fn();
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectOptionAction', actionSpy);
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+      const focusSpy = jest.spyOn(page.root.shadowRoot.querySelector('.pds-multiselect__trigger') as HTMLElement, 'focus');
+
+      page.rootInstance.highlightedIndex = 0;
+      const arrowRight = pressArrowRight(page);
+      await page.waitForChanges();
+
+      expect(arrowRight.defaultPrevented).toBe(true);
+      expect(actionSpy.mock.calls[0][0].detail.option.id).toBe('1');
+      expect(page.rootInstance.isOpen).toBe(false);
+      expect(focusSpy).toHaveBeenCalled();
+      expect(dismissSpy).not.toHaveBeenCalled();
+    });
+
+    it('leaves Right Arrow to the caret when it is inside typed text', async () => {
+      const page = await openWithAction();
+      const actionSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectOptionAction', actionSpy);
+      const input = page.root.shadowRoot.querySelector('.pds-multiselect__search-input') as HTMLInputElement;
+      input.value = 'Best';
+      input.selectionStart = 2;
+      input.selectionEnd = 2;
+
+      page.rootInstance.highlightedIndex = 0;
+
+      expect(pressArrowRight(page).defaultPrevented).toBe(false);
+      expect(actionSpy).not.toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
+    it('ignores action icons that are not plain icon names', async () => {
+      const page = await openWithAction('option-actions', [
+        { id: '1', text: 'Remote', actionIcon: 'https://example.com/icon.svg' },
+        { id: '2', text: 'Inline', actionIcon: 'data:image/svg+xml;utf8,<svg onload="alert(1)"/>' },
+        { id: '3', text: 'Path', actionIcon: '../pen' },
+      ]);
+      const shadow = page.root.shadowRoot;
+
+      expect(shadow.querySelector('.pds-multiselect__option-action')).toBeNull();
+      expect(shadow.querySelector('.pds-multiselect__option[aria-describedby]')).toBeNull();
+    });
+
+    it('mounts every action icon on devices without hover', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" option-actions></pds-multiselect>`,
+      });
+      const matchMedia = jest.fn().mockReturnValue({ matches: true });
+      Object.defineProperty(page.win, 'matchMedia', { configurable: true, value: matchMedia });
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Bestsellers', actionIcon: 'pen' },
+        { id: '2', text: 'Archived', actionIcon: 'info-circle' },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const icons = Array.from(page.root.shadowRoot.querySelectorAll('.pds-multiselect__option-action pds-icon')).map(icon =>
+        icon.getAttribute('name')
+      );
+      expect(matchMedia).toHaveBeenCalledWith('(hover: none)');
+      expect(icons).toEqual(['pen', 'info-circle']);
+    });
+
+    it('leaves modified Right Arrow presses to the browser', async () => {
+      const page = await openWithAction();
+      const actionSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectOptionAction', actionSpy);
+      page.rootInstance.highlightedIndex = 0;
+
+      const altRight = new KeyboardEvent('keydown', { key: 'ArrowRight', altKey: true, cancelable: true });
+      page.rootInstance.handleSearchInputKeyDown(altRight);
+
+      expect(altRight.defaultPrevented).toBe(false);
+      expect(actionSpy).not.toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
+    it('ignores Right Arrow without optionActions', async () => {
+      const page = await openWithAction('');
+
+      page.rootInstance.highlightedIndex = 0;
+
+      expect(pressArrowRight(page).defaultPrevented).toBe(false);
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+  });
+
+  describe('change detail', () => {
+    const setup = async (attributes = '') => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" ${attributes}></pds-multiselect>`,
+      });
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+      return { page, changeSpy };
+    };
+
+    it('reports the value each toggle adds or removes', async () => {
+      const { page, changeSpy } = await setup();
+
+      page.rootInstance.toggleOption({ id: '1', text: 'Option 1' });
+      page.rootInstance.toggleOption({ id: '1', text: 'Option 1' });
+
+      expect(changeSpy.mock.calls[0][0].detail).toEqual(expect.objectContaining({ added: ['1'], removed: [] }));
+      expect(changeSpy.mock.calls[1][0].detail).toEqual(expect.objectContaining({ added: [], removed: ['1'] }));
+    });
+
+    it('reports a removed pill and every cleared value as removed', async () => {
+      const { page, changeSpy } = await setup();
+      page.rootInstance.value = ['1', '2'];
+      await page.waitForChanges();
+
+      page.rootInstance.handlePillRemove({ id: '1', text: 'Option 1' })();
+      await (page.root as HTMLPdsMultiselectElement).clear();
+
+      expect(changeSpy.mock.calls[0][0].detail).toEqual(expect.objectContaining({ added: [], removed: ['1'] }));
+      expect(changeSpy.mock.calls[1][0].detail).toEqual(expect.objectContaining({ added: [], removed: ['2'] }));
+    });
+
+    it('reports a created option as added', async () => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({ ok: true, json: () => Promise.resolve({ id: '3', text: 'NewTag' }) })
+      ) as unknown as typeof fetch;
+      const { page, changeSpy } = await setup('create-url="/api/tags"');
+
+      await page.rootInstance['createOption']('NewTag');
+
+      expect(changeSpy.mock.calls[0][0].detail).toEqual(expect.objectContaining({ added: ['3'], removed: [] }));
+    });
+
+    it('does not emit a change when a consumer sets value back after a failed write', async () => {
+      const { page, changeSpy } = await setup();
+      page.rootInstance.toggleOption({ id: '1', text: 'Option 1' });
+      expect(changeSpy).toHaveBeenCalledTimes(1);
+
+      (page.root as HTMLPdsMultiselectElement).value = [];
+      await page.waitForChanges();
+
+      expect(changeSpy).toHaveBeenCalledTimes(1);
+      expect(page.rootInstance.selectedItems).toEqual([]);
+    });
+  });
 });
