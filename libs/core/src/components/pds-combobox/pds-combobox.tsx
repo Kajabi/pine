@@ -479,15 +479,21 @@ export class PdsCombobox implements BasePdsProps {
       this.flyout.stopPositioning();
     }
 
+    // The row back is sticky over the group's options; scrolling an option into view stops below
+    // it. Set before any scroll below, and when it first applies, scroll the highlighted option
+    // again: the list keeps its offset on drilling in, and an earlier scroll had no padding.
+    if (this.panelTreeEl) {
+      const header = this.hidesPanelSearch ? (this.panelTreeEl.querySelector('.pds-combobox__group-back-trigger') as HTMLElement | null) : null;
+      const padding = header ? `${header.offsetHeight}px` : '';
+      if (this.panelTreeEl.style.scrollPaddingBlockStart !== padding) {
+        this.panelTreeEl.style.scrollPaddingBlockStart = padding;
+        if (padding !== '' && this.highlightedIndex >= 0) this.pendingOptionFocus = true;
+      }
+    }
+
     if (this.pendingOptionFocus) {
       this.pendingOptionFocus = false;
       this.updateOptionFocus();
-    }
-
-    // The row back is sticky over the group's options; scrolling an option into view stops below it.
-    if (this.panelTreeEl) {
-      const header = this.hidesPanelSearch ? (this.panelTreeEl.querySelector('.pds-combobox__group-back-trigger') as HTMLElement | null) : null;
-      this.panelTreeEl.style.scrollPaddingBlockStart = header ? `${header.offsetHeight}px` : '';
     }
 
     // Panel search keeps focus in the search field, or in the list while a group hides the field.
@@ -2468,7 +2474,9 @@ export class PdsCombobox implements BasePdsProps {
       if (!this.leaveDrilledInGroup() && this.panelQuery !== '') this.setPanelQuery(this.panelQuery.slice(0, -1));
       return;
     }
-    if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    // AltGr (Ctrl+Alt on Windows) and Option on macOS type characters too; Meta and Ctrl alone are
+    // shortcuts.
+    if (event.key.length === 1 && event.key !== ' ' && !event.metaKey && (!event.ctrlKey || event.altKey)) {
       event.preventDefault();
       this.flyout.reset();
       // The query first, so leaving the group reads as search results, not a slide back.
