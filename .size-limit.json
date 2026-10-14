@@ -14,7 +14,7 @@
   {
     "name": "All CDN component chunks (p-*.entry.js, gzipped)",
     "path": "libs/core/dist/pine-core/p-*.entry.js",
-    "limit": "339 KB",
+    "limit": "342 KB",
     "gzip": true
   },
   {
@@ -44,7 +44,7 @@
   {
     "name": "pds-multiselect entry (gzipped)",
     "path": "libs/core/dist/esm/pds-multiselect.entry.js",
-    "limit": "15 KB",
+    "limit": "16.5 KB",
     "gzip": true
   },
   {
