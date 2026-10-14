@@ -11,14 +11,23 @@ import type {
   MultiselectSearchEventDetail,
   MultiselectLoadOptionsEventDetail,
   MultiselectCreateEventDetail,
+  MultiselectOptionActionEventDetail,
   AsyncResponse,
   CreateResponse,
 } from './multiselect-interface';
+
+// Names only: pds-icon's `icon` prop also fetches URLs and data: SVGs, unsanitized.
+const PINE_ICON_NAME = /^[a-z0-9-]+$/i;
+
+const TABBABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
  * @slot (default) - Static option elements for the multiselect
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
+ * @slot trigger - Custom trigger element that replaces the built-in trigger. It opens the dropdown panel and receives `aria-expanded` and `aria-haspopup`; it supplies its own accessible name.
+ * @slot footer - Links or buttons displayed below the options inside the dropdown panel
  * @part trigger - The trigger surface that opens the dropdown panel
  * @part pill-toggle - The chevron button inside the inline pill trigger
  */
@@ -41,6 +50,7 @@ export class PdsMultiselect {
   private fetchTimeoutTimer?: number;
   private observer?: MutationObserver;
   private cleanupAutoUpdate?: () => void;
+  private hoverlessQuery?: MediaQueryList;
 
   @Element() el!: HTMLPdsMultiselectElement;
 
@@ -232,6 +242,14 @@ export class PdsMultiselect {
   @Prop() maxInlinePills: number = 3;
 
   /**
+   * Display mode for options in the dropdown panel.
+   * `'text'` shows each option's text (default). `'chip'` shows each option as a
+   * pds-chip, with a dot when the option has a `dotColor`.
+   * @default 'text'
+   */
+  @Prop() optionDisplay: 'text' | 'chip' = 'text';
+
+  /**
    * Error message to display.
    */
   @Prop() errorMessage?: string;
@@ -283,6 +301,24 @@ export class PdsMultiselect {
    */
   @Prop() csrfHeaderName?: string = 'X-CSRF-Token';
 
+  /**
+   * Shows an action icon on each option that has an `actionIcon`, such as an edit pencil.
+   * The icon shows on the hovered or highlighted option; clicking it, or pressing Right Arrow on the highlighted option, emits `pdsMultiselectOptionAction`.
+   */
+  @Prop() optionActions: boolean = false;
+
+  /**
+   * Tooltip for an option's action icon when the option has no `actionLabel`. Pass a translated string to localize it; `{text}` is interpolated.
+   * @defaultValue 'Edit {text}'
+   */
+  @Prop() optionActionLabel = 'Edit {text}';
+
+  /**
+   * Screen-reader hint on each option that has an action, naming the key that runs it. Pass a translated string to localize it; `{action}` is interpolated with the option's action label.
+   * @defaultValue 'Press Right Arrow to {action}'
+   */
+  @Prop() optionActionDescription = 'Press Right Arrow to {action}';
+
   // Internal state
   @State() isOpen: boolean = false;
   @State() searchQuery: string = '';
@@ -293,6 +329,7 @@ export class PdsMultiselect {
   @State() hasMore: boolean = false;
   @State() creating: boolean = false;
   @State() private removalAnnouncement: string = '';
+  @State() private slottedTriggerEl?: HTMLElement;
 
   // Flag to prevent focusout from closing during open transition
   private isOpening: boolean = false;
@@ -336,6 +373,12 @@ export class PdsMultiselect {
    */
   @Event() pdsMultiselectDismiss!: EventEmitter<void>;
 
+  /**
+   * Emitted when an option's action runs, from a click on its icon or Right Arrow on the highlighted option.
+   * The panel closes and focus returns to the trigger first, so a modal opened from the handler restores focus to the trigger.
+   */
+  @Event() pdsMultiselectOptionAction!: EventEmitter<MultiselectOptionActionEventDetail>;
+
   private originalSearchEmitter?: EventEmitter<MultiselectSearchEventDetail>;
 
   connectedCallback() {
@@ -348,6 +391,7 @@ export class PdsMultiselect {
   componentWillLoad() {
     this.originalSearchEmitter = this.pdsMultiselectSearch;
     this.syncSelectedItems();
+    this.syncSlottedTrigger();
   }
 
   componentDidLoad() {
@@ -449,12 +493,22 @@ export class PdsMultiselect {
     this.syncSelectedItems();
   }
 
+  @Watch('isOpen')
+  protected isOpenChanged() {
+    this.slottedTriggerEl?.setAttribute('aria-expanded', String(this.isOpen));
+  }
+
+  @Watch('disabled')
+  protected disabledChanged() {
+    this.syncSlottedTrigger();
+  }
+
   /**
    * Sets focus on the trigger button.
    */
   @Method()
   async setFocus() {
-    this.triggerEl?.focus();
+    this.activeTriggerEl?.focus();
   }
 
   /**
@@ -463,13 +517,23 @@ export class PdsMultiselect {
   @Method()
   async clear() {
     const hadValues = this.value.length > 0 || this.searchQuery !== '';
+    const removed = this.ensureValueArray();
     this.value = [];
     this.searchQuery = '';
     this.syncSelectedItems();
     this.updateFormValue();
     if (hadValues) {
-      this.pdsMultiselectChange.emit({ values: [], items: [] });
+      this.emitChange({ removed });
     }
+  }
+
+  /**
+   * Refetches the options from `asyncUrl`, such as after an option is renamed or recolored elsewhere.
+   * Selected items pick up the new text and dot color without emitting a change. Does nothing without `asyncUrl`.
+   */
+  @Method()
+  async refreshOptions() {
+    await this.fetchOptions(this.searchQuery, 1);
   }
 
   /**
@@ -484,13 +548,53 @@ export class PdsMultiselect {
       event.preventDefault();
       this.pdsMultiselectDismiss.emit();
       this.closeDropdown();
-      this.triggerEl?.focus();
+      this.activeTriggerEl?.focus();
+    }
+  }
+
+  private get activeTriggerEl(): HTMLElement | undefined {
+    return this.slottedTriggerEl ?? this.triggerEl;
+  }
+
+  private syncSlottedTrigger() {
+    const trigger = Array.from(this.el.children).find(
+      child => child.getAttribute('slot') === 'trigger'
+    ) as HTMLElement | undefined;
+
+    if (trigger !== this.slottedTriggerEl) {
+      const previous = this.slottedTriggerEl;
+      if (previous) {
+        previous.removeEventListener('click', this.handleTriggerClick);
+        previous.removeEventListener('keydown', this.handleTriggerKeyDown);
+        previous.removeAttribute('aria-expanded');
+        previous.removeAttribute('aria-haspopup');
+        previous.removeAttribute('aria-disabled');
+      }
+      trigger?.addEventListener('click', this.handleTriggerClick);
+      trigger?.addEventListener('keydown', this.handleTriggerKeyDown);
+      this.slottedTriggerEl = trigger;
+    }
+
+    if (!trigger) return;
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', String(this.isOpen));
+    if (this.disabled) {
+      trigger.setAttribute('aria-disabled', 'true');
+    } else {
+      trigger.removeAttribute('aria-disabled');
     }
   }
 
   private setupMutationObserver() {
-    this.observer = new MutationObserver(() => {
-      this.updateOptionsFromSlot();
+    this.observer = new MutationObserver(records => {
+      if (records.some(record => record.target === this.el)) {
+        this.syncSlottedTrigger();
+      }
+      // Changes inside the slotted trigger, like re-rendered chips, can't change the options.
+      const trigger = this.slottedTriggerEl;
+      if (!trigger || records.some(record => !trigger.contains(record.target))) {
+        this.updateOptionsFromSlot();
+      }
     });
 
     this.observer.observe(this.el, {
@@ -511,23 +615,14 @@ export class PdsMultiselect {
         const groupLabel = optgroup.label;
         const groupDisabled = optgroup.disabled;
         optgroup.querySelectorAll('option').forEach((opt: HTMLOptionElement) => {
-          const option: MultiselectOption = {
-            id: opt.value,
-            text: opt.textContent?.trim() || opt.value,
-            disabled: opt.disabled || groupDisabled || undefined,
-          };
+          const option = this.parseSlottedOption(opt, groupDisabled);
           if (groupLabel) {
             option.group = groupLabel;
           }
           options.push(option);
         });
       } else if (el.tagName === 'OPTION') {
-        const opt = el as HTMLOptionElement;
-        options.push({
-          id: opt.value,
-          text: opt.textContent?.trim() || opt.value,
-          disabled: opt.disabled || undefined,
-        });
+        options.push(this.parseSlottedOption(el as HTMLOptionElement, false));
       }
     });
 
@@ -536,6 +631,27 @@ export class PdsMultiselect {
     if (options.length > 0 && !this.asyncUrl && !this.options) {
       this.internalOptions = options;
     }
+  }
+
+  private parseSlottedOption(opt: HTMLOptionElement, groupDisabled: boolean): MultiselectOption {
+    const option: MultiselectOption = {
+      id: opt.value,
+      text: opt.textContent?.trim() || opt.value,
+      disabled: opt.disabled || groupDisabled || undefined,
+    };
+    const dotColor = opt.getAttribute('data-dot-color');
+    if (dotColor) {
+      option.dotColor = dotColor;
+    }
+    const actionIcon = opt.getAttribute('data-action-icon');
+    if (actionIcon) {
+      option.actionIcon = actionIcon;
+    }
+    const actionLabel = opt.getAttribute('data-action-label');
+    if (actionLabel) {
+      option.actionLabel = actionLabel;
+    }
+    return option;
   }
 
   private clearAsyncFetchState() {
@@ -662,7 +778,7 @@ export class PdsMultiselect {
         this.internals.setValidity(
           { valueMissing: true },
           'Please select at least one option.',
-          this.triggerEl
+          this.activeTriggerEl
         );
       } else {
         this.internals.setValidity({});
@@ -854,10 +970,7 @@ export class PdsMultiselect {
       });
 
       // Emit change event with synced items
-      this.pdsMultiselectChange.emit({
-        values: this.value,
-        items: this.selectedItems,
-      });
+      this.emitChange({ added: [String(newOption.id)] });
 
       // Clear search and keep dropdown open
       this.searchQuery = '';
@@ -879,7 +992,7 @@ export class PdsMultiselect {
     if (this.disabled) return;
     // In inline-pill mode, ignore clicks that originated inside a pds-chip.
     // Chip close-button clicks are handled by handlePillRemove; chip body clicks should not toggle the panel.
-    if (e && this.selectedDisplay === 'pill' && this.pillPosition === 'inline') {
+    if (e && !this.slottedTriggerEl && this.selectedDisplay === 'pill' && this.pillPosition === 'inline') {
       const fromChip = e.composedPath().some(
         el => (el as { tagName?: string }).tagName?.toLowerCase() === 'pds-chip'
       );
@@ -894,9 +1007,10 @@ export class PdsMultiselect {
   };
 
   private handleTriggerKeyDown = (e: KeyboardEvent) => {
+    if (this.disabled) return;
     // Ignore keydown events that bubbled from child elements (e.g. chip close buttons).
     // Only handle keys when the trigger itself is the event target.
-    if (e.target !== this.triggerEl) return;
+    if (e.target !== this.activeTriggerEl) return;
     switch (e.key) {
       case 'ArrowDown':
       case 'ArrowUp':
@@ -966,13 +1080,86 @@ export class PdsMultiselect {
         }
         break;
 
+      // Right Arrow still moves the caret through typed text; a plain Right Arrow at the end runs the action.
+      case 'ArrowRight': {
+        const option = filteredOptions[this.highlightedIndex];
+        const isPlainKey = !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.isComposing;
+        if (isPlainKey && option && this.hasOptionAction(option) && this.isCaretAtEndOfSearch()) {
+          e.preventDefault();
+          this.runOptionAction(option);
+        }
+        break;
+      }
+
       // Escape is handled by the global @Listen('keydown') handler
 
-      case 'Tab':
-        this.closeDropdown();
+      case 'Tab': {
+        const firstFooterTabbable = e.shiftKey ? undefined : this.getFooterTabbables()[0];
+        firstFooterTabbable?.focus();
+        if (firstFooterTabbable?.matches(':focus')) {
+          // Each option's checkbox is a tab stop, so jump past them to the footer.
+          e.preventDefault();
+        } else {
+          this.closeDropdown();
+        }
         break;
+      }
     }
   };
+
+  private handleFooterKeyDown = (e: KeyboardEvent) => {
+    if (e.key !== 'Tab') return;
+    const tabbables = this.getFooterTabbables();
+    const focused = e.composedPath()[0];
+
+    if (e.shiftKey && focused === tabbables[0]) {
+      e.preventDefault();
+      this.searchInputEl?.focus();
+    } else if (!e.shiftKey && focused === tabbables[tabbables.length - 1]) {
+      this.closeDropdown();
+    }
+  };
+
+  private getFooterTabbables(): HTMLElement[] {
+    const candidates: Element[] = [];
+    Array.from(this.el.children)
+      .filter(child => child.getAttribute('slot') === 'footer')
+      .forEach(content => candidates.push(content, ...Array.from(content.querySelectorAll('*'))));
+
+    return candidates
+      .map(el => (el.matches(TABBABLE_SELECTOR) ? el : el.shadowRoot?.querySelector(TABBABLE_SELECTOR)))
+      .filter((el): el is HTMLElement => !!el);
+  }
+
+  private isCaretAtEndOfSearch(): boolean {
+    const input = this.searchInputEl;
+    if (!input) return true;
+    const end = input.value.length;
+    return (input.selectionStart ?? end) === end && (input.selectionEnd ?? end) === end;
+  }
+
+  private hasOptionAction(option: MultiselectOption): boolean {
+    return (
+      this.optionActions &&
+      typeof option.actionIcon === 'string' &&
+      PINE_ICON_NAME.test(option.actionIcon) &&
+      !option.isCreateOption &&
+      !option.disabled
+    );
+  }
+
+  // Without hover, revealing the icon would take a tap that also toggles the option, so touch shows every icon.
+  private get isHoverless(): boolean {
+    this.hoverlessQuery ??= window.matchMedia?.('(hover: none)');
+    return !!this.hoverlessQuery?.matches;
+  }
+
+  private runOptionAction(option: MultiselectOption) {
+    this.isClosingViaSelection = true;
+    this.closeDropdown();
+    this.activeTriggerEl?.focus();
+    this.pdsMultiselectOptionAction.emit({ option });
+  }
 
   private handleContainerFocusOut = () => {
     // Use setTimeout to delay the check - this allows click events and focus transitions to complete
@@ -987,10 +1174,10 @@ export class PdsMultiselect {
       // Check if focus is within our component's shadow root
       const isInShadowRoot = this.el.shadowRoot?.contains(activeElement);
 
-      // Also check if focus is on the host element itself
-      const isOnHost = activeElement === this.el;
+      // Also check the host itself and its light DOM, where slotted trigger and footer content live
+      const isInHost = this.el.contains(activeElement);
 
-      if (!isInShadowRoot && !isOnHost) {
+      if (!isInShadowRoot && !isInHost) {
         this.pdsMultiselectDismiss.emit();
         this.closeDropdown();
       }
@@ -1045,7 +1232,7 @@ export class PdsMultiselect {
     if (!this.containerEl || !this.panelEl) return;
     // In inline pill mode, triggerEl is the small chevron button — use the full-width
     // wrapper div as the Floating UI reference so the panel aligns with the whole trigger.
-    const referenceEl = this.pillInlineTriggerEl || this.triggerEl || this.containerEl;
+    const referenceEl = this.slottedTriggerEl || this.pillInlineTriggerEl || this.triggerEl || this.containerEl;
 
     const { minWidth, panelWidth } = this;
 
@@ -1096,6 +1283,10 @@ export class PdsMultiselect {
     });
   }
 
+  private emitChange({ added = [], removed = [] }: Pick<MultiselectChangeEventDetail, 'added' | 'removed'>) {
+    this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems, added, removed });
+  }
+
   private toggleOption(option: MultiselectOption) {
     if (option.disabled) return;
 
@@ -1127,15 +1318,12 @@ export class PdsMultiselect {
     this.syncSelectedItems();
 
     // Emit change event with synced items
-    this.pdsMultiselectChange.emit({
-      values: this.value,
-      items: this.selectedItems,
-    });
+    this.emitChange(isSelected ? { removed: [optionId] } : { added: [optionId] });
 
     if (this.closePanelOnSelect) {
       this.isClosingViaSelection = true;
       this.closeDropdown();
-      this.triggerEl?.focus();
+      this.activeTriggerEl?.focus();
     } else {
       // Keep focus on search input, don't close dropdown
       this.searchInputEl?.focus();
@@ -1155,6 +1343,21 @@ export class PdsMultiselect {
   private handleOptionMouseEnter = (index: number, option: MultiselectOption) => () => {
     if (option.disabled) return;
     this.highlightedIndex = index;
+  };
+
+  private handleOptionActionMouseDown = (e: MouseEvent) => {
+    // Stops the row's mousedown from toggling the option, and keeps focus in the search input.
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  private handleOptionActionClick = (option: MultiselectOption) => () => {
+    this.runOptionAction(option);
+  };
+
+  // Keeps focus in the search input so the panel stays open until the footer's click lands.
+  private handleFooterMouseDown = (e: MouseEvent) => {
+    e.preventDefault();
   };
 
 
@@ -1208,6 +1411,7 @@ export class PdsMultiselect {
     const isHighlighted = index === this.highlightedIndex && !isCreateOption;
     const optionId = `${this.componentId}-option-${index}`;
     const isCreateDisabled = isCreateOption && this.creating;
+    const hasAction = this.hasOptionAction(option);
 
     return (
       <li
@@ -1224,6 +1428,7 @@ export class PdsMultiselect {
         aria-selected={isSelected ? 'true' : 'false'}
         aria-disabled={isDisabled || isCreateDisabled ? 'true' : undefined}
         aria-label={isCreateOption ? formatMessage(this.createOptionAriaLabel, { text: option.text }) : undefined}
+        aria-describedby={hasAction ? `${optionId}-action-description` : undefined}
         data-index={index}
         onMouseDown={this.handleOptionMouseDown(option)}
         onMouseEnter={this.handleOptionMouseEnter(index, option)}
@@ -1240,10 +1445,37 @@ export class PdsMultiselect {
             label={option.text}
             disabled={isDisabled}
             style={{ pointerEvents: 'none' }}
-          />
+          >
+            {this.optionDisplay === 'chip' && (
+              <pds-chip slot="label" sentiment="subtle" dot={!!option.dotColor} dot-color={option.dotColor}>
+                {option.text}
+              </pds-chip>
+            )}
+          </pds-checkbox>
         )}
+        {hasAction && this.renderOptionAction(option, optionId, isHighlighted)}
       </li>
     );
+  }
+
+  private renderOptionAction(option: MultiselectOption, optionId: string, isHighlighted: boolean) {
+    const label = formatMessage(option.actionLabel ?? this.optionActionLabel, { text: option.text });
+
+    return [
+      <span
+        class="pds-multiselect__option-action"
+        title={label}
+        aria-hidden="true"
+        onMouseDown={this.handleOptionActionMouseDown}
+        onClick={this.handleOptionActionClick(option)}
+      >
+        {/* With hover, the highlighted row is the only one showing its icon, so mount just that one. */}
+        {(isHighlighted || this.isHoverless) && <pds-icon name={option.actionIcon} />}
+      </span>,
+      <span id={`${optionId}-action-description`} hidden>
+        {formatMessage(this.optionActionDescription, { action: label })}
+      </span>,
+    ];
   }
 
   private renderSelectedItemsList() {
@@ -1269,6 +1501,7 @@ export class PdsMultiselect {
     const valueArray = this.ensureValueArray();
     const hasSlottedEmpty = !!this.el.querySelector('[slot="empty"]');
     const hasSlottedLoading = !!this.el.querySelector('[slot="loading"]');
+    const hasSlottedFooter = !!this.el.querySelector('[slot="footer"]');
 
     return (
       <div
@@ -1360,6 +1593,16 @@ export class PdsMultiselect {
             </li>
           )}
         </ul>
+
+        {hasSlottedFooter && (
+          <div
+            class="pds-multiselect__footer"
+            onMouseDown={this.handleFooterMouseDown}
+            onKeyDown={this.handleFooterKeyDown}
+          >
+            <slot name="footer" />
+          </div>
+        )}
       </div>
     );
   }
@@ -1369,7 +1612,7 @@ export class PdsMultiselect {
     const optionId = String(item.id);
     this.value = this.value.filter(v => v !== optionId);
     this.syncSelectedItems();
-    this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems });
+    this.emitChange({ removed: [optionId] });
     // Clear first so screen readers re-announce even when the same item is removed twice
     this.removalAnnouncement = '';
     queueMicrotask(() => { this.removalAnnouncement = formatMessage(this.itemRemovedLabel, { item: item.text }); });
@@ -1377,7 +1620,7 @@ export class PdsMultiselect {
     if (this.isOpen) {
       this.searchInputEl?.focus();
     } else {
-      this.triggerEl?.focus();
+      this.activeTriggerEl?.focus();
     }
     setTimeout(() => { this.isClosingViaSelection = false; }, 0);
   };
@@ -1500,7 +1743,9 @@ export class PdsMultiselect {
             ref={el => (this.containerEl = el)}
             style={{ width: this.triggerWidth }}
           >
-            {this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? (
+            {this.slottedTriggerEl ? (
+              <slot name="trigger" />
+            ) : this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? (
               <div
                 ref={el => (this.pillInlineTriggerEl = el || undefined)}
                 part="trigger"
