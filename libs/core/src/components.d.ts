@@ -14,7 +14,7 @@ import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PluralForms } from "./i18n";
-import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
+import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
@@ -28,7 +28,7 @@ export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PluralForms } from "./i18n";
-export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
+export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 export { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 export { SortableEvent } from "sortablejs";
@@ -2002,6 +2002,26 @@ export namespace Components {
          */
         "noOptionsFoundLabel": string;
         /**
+          * Screen-reader hint on each option that has an action, naming the key that runs it. Pass a translated string to localize it; `{action}` is interpolated with the option's action label.
+          * @defaultValue 'Press Right Arrow to {action}'
+         */
+        "optionActionDescription": string;
+        /**
+          * Tooltip for an option's action icon when the option has no `actionLabel`. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Edit {text}'
+         */
+        "optionActionLabel": string;
+        /**
+          * Shows an action icon on each option that has an `actionIcon`, such as an edit pencil. The icon shows on the hovered or highlighted option; clicking it, or pressing Right Arrow on the highlighted option, emits `pdsMultiselectOptionAction`.
+          * @default false
+         */
+        "optionActions": boolean;
+        /**
+          * Display mode for options in the dropdown panel. `'text'` shows each option's text (default). `'chip'` shows each option as a pds-chip, with a dot when the option has a `dotColor`.
+          * @defaultValue 'text'
+         */
+        "optionDisplay": 'text' | 'chip';
+        /**
           * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
         "options"?: MultiselectOption[];
@@ -2029,6 +2049,10 @@ export namespace Components {
           * @defaultValue 'Select...'
          */
         "placeholder": string;
+        /**
+          * Refetches the first page of options from `asyncUrl` for the current search, such as after an option is renamed or recolored elsewhere. Selected items in that page pick up the new text and dot color without emitting a change; other selected items keep the text and dot color they were last loaded with. Does nothing without `asyncUrl`.
+         */
+        "refreshOptions": () => Promise<void>;
         /**
           * If true, the multiselect is required.
           * @default false
@@ -3362,6 +3386,7 @@ declare global {
         "pdsMultiselectLoadOptions": MultiselectLoadOptionsEventDetail;
         "pdsMultiselectCreate": MultiselectCreateEventDetail;
         "pdsMultiselectDismiss": void;
+        "pdsMultiselectOptionAction": MultiselectOptionActionEventDetail;
     }
     interface HTMLPdsMultiselectElement extends Components.PdsMultiselect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsMultiselectElementEventMap>(type: K, listener: (this: HTMLPdsMultiselectElement, ev: PdsMultiselectCustomEvent<HTMLPdsMultiselectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5780,9 +5805,33 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
         /**
+          * Emitted when an option's action runs, from a click on its icon or Right Arrow on the highlighted option. The panel closes and focus returns to the trigger first, so a modal opened from the handler restores focus to the trigger.
+         */
+        "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
+        /**
           * Emitted on search input (for consumer-managed async).
          */
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
+        /**
+          * Screen-reader hint on each option that has an action, naming the key that runs it. Pass a translated string to localize it; `{action}` is interpolated with the option's action label.
+          * @defaultValue 'Press Right Arrow to {action}'
+         */
+        "optionActionDescription"?: string;
+        /**
+          * Tooltip for an option's action icon when the option has no `actionLabel`. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Edit {text}'
+         */
+        "optionActionLabel"?: string;
+        /**
+          * Shows an action icon on each option that has an `actionIcon`, such as an edit pencil. The icon shows on the hovered or highlighted option; clicking it, or pressing Right Arrow on the highlighted option, emits `pdsMultiselectOptionAction`.
+          * @default false
+         */
+        "optionActions"?: boolean;
+        /**
+          * Display mode for options in the dropdown panel. `'text'` shows each option's text (default). `'chip'` shows each option as a pds-chip, with a dot when the option has a `dotColor`.
+          * @defaultValue 'text'
+         */
+        "optionDisplay"?: 'text' | 'chip';
         /**
           * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
@@ -7158,6 +7207,7 @@ declare namespace LocalJSX {
         "selectedDisplay": 'count' | 'pill';
         "pillPosition": 'inline' | 'below';
         "maxInlinePills": number;
+        "optionDisplay": 'text' | 'chip';
         "errorMessage": string;
         "helperMessage": string;
         "invalid": boolean;
@@ -7166,6 +7216,9 @@ declare namespace LocalJSX {
         "createUrl": string;
         "csrfToken": string;
         "csrfHeaderName": string;
+        "optionActions": boolean;
+        "optionActionLabel": string;
+        "optionActionDescription": string;
     }
     interface PdsPopoverAttributes {
         "popoverTargetAction": 'show' | 'toggle' | 'hide';

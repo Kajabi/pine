@@ -568,12 +568,17 @@ export namespace Components {
         "minWidth": string;
         "name"?: string;
         "noOptionsFoundLabel": string;
+        "optionActionDescription": string;
+        "optionActionLabel": string;
+        "optionActions": boolean;
+        "optionDisplay": 'text' | 'chip';
         "options"?: MultiselectOption[];
         "optionsLabel": string;
         "panelWidth"?: string;
         "pillPosition": 'inline' | 'below';
         "pillRemoveLabel": string;
         "placeholder": string;
+        "refreshOptions": () => Promise<void>;
         "required": boolean;
         "searchOptionsLabel": string;
         "searchPlaceholder": string;
@@ -2405,7 +2410,12 @@ export namespace LocalJSX {
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
+        "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
+        "optionActionDescription"?: string;
+        "optionActionLabel"?: string;
+        "optionActions"?: boolean;
+        "optionDisplay"?: 'text' | 'chip';
         "options"?: MultiselectOption[];
         "optionsLabel"?: string;
         "panelWidth"?: string;
@@ -2478,6 +2488,14 @@ export namespace LocalJSX {
         "name": string;
         // (undocumented)
         "noOptionsFoundLabel": string;
+        // (undocumented)
+        "optionActionDescription": string;
+        // (undocumented)
+        "optionActionLabel": string;
+        // (undocumented)
+        "optionActions": boolean;
+        // (undocumented)
+        "optionDisplay": 'text' | 'chip';
         // (undocumented)
         "optionsLabel": string;
         // (undocumented)
@@ -3207,8 +3225,10 @@ export type ModalSizeType = 'sm' | 'md' | 'lg' | 'fullscreen';
 
 // @public (undocumented)
 export interface MultiselectChangeEventDetail {
+    added?: string[];
     // (undocumented)
     items: MultiselectOption[];
+    removed?: string[];
     // (undocumented)
     values: string[];
 }
@@ -3233,7 +3253,10 @@ export interface MultiselectLoadOptionsEventDetail {
 export interface MultiselectOption {
     // (undocumented)
     [key: string]: unknown;
+    actionIcon?: string;
+    actionLabel?: string;
     disabled?: boolean;
+    dotColor?: string;
     group?: string;
     // (undocumented)
     id: string | number;
@@ -3241,6 +3264,12 @@ export interface MultiselectOption {
     isCreateOption?: boolean;
     // (undocumented)
     text: string;
+}
+
+// @public (undocumented)
+export interface MultiselectOptionActionEventDetail {
+    // (undocumented)
+    option: MultiselectOption;
 }
 
 // @public (undocumented)

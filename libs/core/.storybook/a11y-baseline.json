@@ -1,9 +1,9 @@
 {
   "$schema": "Story ID -> axe rule IDs that already failed when the gate landed.",
   "$docs": "See CONTRIBUTING.md § Accessibility gate. Entries may be removed, never added by hand.",
-  "generatedAt": "2026-09-29",
-  "storyCount": 55,
-  "violationCount": 71,
+  "generatedAt": "2026-10-14",
+  "storyCount": 51,
+  "violationCount": 53,
   "stories": {
     "components-avatar--admin": [
       "role-img-alt"
@@ -81,68 +81,47 @@
       "role-img-alt"
     ],
     "components-multiselect--close-panel-on-select": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--consumer-managed-async": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--custom-empty-state": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--custom-search-placeholder": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--custom-widths": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--default": [
-      "color-contrast",
-      "role-img-alt"
-    ],
-    "components-multiselect--disabled": [
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--disabled-options": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--grouped-options": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--grouped-options-via-options": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--hidden-label": [
-      "color-contrast",
-      "role-img-alt"
-    ],
-    "components-multiselect--hidden-selected-items": [
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--invalid": [
       "color-contrast",
       "role-img-alt"
     ],
     "components-multiselect--long-list": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--max-selections": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--pill-below": [
       "color-contrast",
-      "role-img-alt"
-    ],
-    "components-multiselect--pill-disabled": [
       "role-img-alt"
     ],
     "components-multiselect--pill-inline": [
@@ -152,15 +131,10 @@
       "role-img-alt"
     ],
     "components-multiselect--with-create-option": [
-      "color-contrast",
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-multiselect--with-message": [
-      "color-contrast",
-      "role-img-alt"
-    ],
-    "components-multiselect--with-preselected-values": [
-      "role-img-alt"
+      "color-contrast"
     ],
     "components-radio-group--invalid": [
       "role-img-alt"
