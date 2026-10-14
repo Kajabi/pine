@@ -308,9 +308,14 @@
     padding-block-start: 0;
   }
 
-  // The list takes focus inside a drilled-in group; the keyboard's row shows where.
-  .pds-combobox__listbox-options:focus {
+  // The list takes focus inside a drilled-in group. Its divider turns active, as the search
+  // field's does, and the highlighted row shows the place.
+  .pds-combobox__listbox-options--drilled-in:focus {
     outline: none;
+
+    .pds-combobox__group-back-trigger {
+      border-block-end-color: var(--pine-color-border-active);
+    }
   }
 
   :where(.pds-combobox__listbox-options--drilled-in) .pds-combobox__group-back-trigger {
