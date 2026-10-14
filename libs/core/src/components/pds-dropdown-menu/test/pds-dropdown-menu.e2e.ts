@@ -142,6 +142,65 @@ describe('pds-dropdown-menu', () => {
     const ariaExpandedAfterEscape = await triggerButton.getAttribute('aria-expanded');
     expect(ariaExpandedAfterEscape).toBe('false');
   });
+
+  describe('focus return', () => {
+    const openMenu = async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger">Toggle Menu</button>
+          <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+        <input id="outside" aria-label="Outside" style="display: block; margin-top: 300px;" />
+      `);
+      await page.click('#trigger');
+      await page.waitForChanges();
+      return page;
+    };
+
+    const activeElementId = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => document.activeElement?.id);
+
+    it('returns focus to the trigger when Escape closes the menu from an item', async () => {
+      const page = await openMenu();
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+      expect(await activeElementId(page)).not.toBe('trigger');
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+
+      expect(await activeElementId(page)).toBe('trigger');
+    });
+
+    it('leaves focus on an outside element clicked to close the menu', async () => {
+      const page = await openMenu();
+
+      await page.click('#outside');
+      await page.waitForChanges();
+
+      expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
+      expect(await activeElementId(page)).toBe('outside');
+    });
+
+    it('does not focus the trigger when a script toggles the menu with nothing focused', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger">Toggle Menu</button>
+          <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+
+      await page.$eval('#trigger', (el: HTMLElement) => el.click());
+      await page.waitForChanges();
+      await page.$eval('#trigger', (el: HTMLElement) => el.click());
+      await page.waitForChanges();
+
+      expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
+      expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+    });
+  });
 });
 
 describe('pds-dropdown-menu accessibility', () => {

@@ -160,7 +160,15 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.currentFocusIndex = -1;
 
     // Return focus to trigger
-    this.triggerEl.focus();
+    if (this.isFocusInMenu()) {
+      this.triggerEl.focus();
+    }
+  }
+
+  // Outside clicks and scripted closes leave focus where it is; only focus in the menu or on its trigger returns.
+  private isFocusInMenu(): boolean {
+    const focused = (this.host.getRootNode() as Document | ShadowRoot).activeElement;
+    return focused != null && this.host.contains(focused);
   }
 
   // Handle click on the trigger element

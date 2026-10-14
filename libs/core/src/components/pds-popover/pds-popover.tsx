@@ -130,6 +130,9 @@ export class PdsPopover {
       const slotChangeEvent = new CustomEvent('slotchange');
       Object.defineProperty(slotChangeEvent, 'target', { value: triggerSlot, enumerable: true });
       this.handleTriggerSlotChange(slotChangeEvent);
+    } else {
+      // A component trigger delays componentDidLoad, so its slotchange ran before the portal existed.
+      this.linkTriggerToPortal();
     }
   }
 
@@ -149,12 +152,7 @@ export class PdsPopover {
       // Use the first assigned element as the trigger
       this.triggerEl = assignedElements[0] as HTMLElement;
 
-      // Set ARIA attributes to establish relationship between trigger and popover
-      // This mirrors the native Popover API's accessibility behavior
-      if (this.portalEl) {
-        this.triggerEl.setAttribute('aria-expanded', String(this.active));
-        this.triggerEl.setAttribute('aria-controls', this.portalEl.id);
-      }
+      this.linkTriggerToPortal();
 
       // Attach click listener to handle popover visibility
       this.triggerEl.addEventListener('click', this.handleTriggerClick);
@@ -162,6 +160,15 @@ export class PdsPopover {
       this.triggerEl = null;
     }
   };
+
+  // Set ARIA attributes to establish relationship between trigger and popover
+  // This mirrors the native Popover API's accessibility behavior
+  private linkTriggerToPortal() {
+    if (this.triggerEl == null || this.portalEl == null) return;
+
+    this.triggerEl.setAttribute('aria-expanded', String(this.active));
+    this.triggerEl.setAttribute('aria-controls', this.portalEl.id);
+  }
 
   /**
    * Handles changes to the default slot (popover content)
@@ -431,6 +438,9 @@ export class PdsPopover {
 
     this.active = false;
 
+    // Restoring the content drops its focus to the body, so check where focus is first.
+    const focusWasInside = this.portalEl.contains(document.activeElement);
+
     // Update ARIA expanded state on trigger
     if (this.triggerEl) {
       this.triggerEl.setAttribute('aria-expanded', 'false');
@@ -446,7 +456,9 @@ export class PdsPopover {
 
     // Return focus to trigger for keyboard accessibility
     // This mirrors native Popover API behavior on close
-    this.returnFocusToTrigger();
+    if (focusWasInside) {
+      this.returnFocusToTrigger();
+    }
 
     // Remove all listeners
     this.removeLightDismissListeners();
