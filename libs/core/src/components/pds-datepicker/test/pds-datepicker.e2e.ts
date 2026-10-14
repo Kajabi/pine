@@ -444,6 +444,117 @@ describe('pds-datepicker', () => {
   });
 
   describe('review fixes', () => {
+    /** Records each `ElementInternals.setValidity` call, as the internals aren't reachable from the page. */
+    async function setupWithValidity(html: string): Promise<E2EPage> {
+      const page = await newE2EPage();
+      await page.evaluateOnNewDocument(() => {
+        const calls: { flags: ValidityStateFlags; message?: string }[] = [];
+        (window as unknown as { validityCalls: typeof calls }).validityCalls = calls;
+        const original = ElementInternals.prototype.setValidity;
+        ElementInternals.prototype.setValidity = function (flags, message, anchor) {
+          calls.push({ flags: { ...flags }, message });
+          return original.call(this, flags, message, anchor);
+        };
+      });
+      await page.setContent(html);
+      await page.waitForChanges();
+      return page;
+    }
+    const lastValidity = (page: E2EPage) =>
+      page.evaluate(() => {
+        const calls = (window as unknown as { validityCalls: { flags: ValidityStateFlags; message?: string }[] }).validityCalls;
+        return calls[calls.length - 1];
+      });
+    const typeAndBlur = async (page: E2EPage, text: string) => {
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      await input.click({ clickCount: 3 });
+      await input.type(text);
+      await press(page, 'Escape');
+      await input.click({ clickCount: 3 });
+      await input.type(text);
+      await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
+      await page.waitForChanges();
+    };
+
+    it('reports each validity flag with its message prop, filling in {date}', async () => {
+      const html = (extra: string) =>
+        `<form><pds-datepicker component-id="due" name="due" label="Due date" locale="en-US" min="2026-10-05" max="2026-11-20" ${extra}></pds-datepicker></form>`;
+
+      const tooEarly = await setupWithValidity(html('min-date-message="Not before {date}."'));
+      await typeAndBlur(tooEarly, '2026-10-01');
+      expect(await lastValidity(tooEarly)).toEqual({ flags: { rangeUnderflow: true }, message: 'Not before 2026-10-05.' });
+
+      const tooLate = await setupWithValidity(html('max-date-message="Not after {date}."'));
+      await typeAndBlur(tooLate, '2026-12-01');
+      expect(await lastValidity(tooLate)).toEqual({ flags: { rangeOverflow: true }, message: 'Not after 2026-11-20.' });
+
+      const notADate = await setupWithValidity(html('invalid-date-message="That isn\'t a date."'));
+      await typeAndBlur(notADate, 'soon');
+      expect(await lastValidity(notADate)).toEqual({ flags: { badInput: true }, message: "That isn't a date." });
+
+      const missing = await setupWithValidity(html('required'));
+      expect((await lastValidity(missing)).flags).toEqual({ valueMissing: true });
+    });
+
+    it('opens the calendar at the placement asked for', async () => {
+      const page = await setup(
+        `<div style="margin-top:500px">${FIELD.replace('locale="en-US"', 'locale="en-US" placement="top-start"')}</div>`,
+      );
+      await page.setViewport({ width: 1024, height: 1000 });
+      await openWithTrigger(page);
+      const [calendar, field] = await page.$eval('pds-datepicker', (el) => {
+        const dialog = el.shadowRoot?.querySelector('[role="dialog"]')?.getBoundingClientRect();
+        // The calendar is placed against the field's box, below the label.
+        const box = el.shadowRoot?.querySelector('pds-input')?.shadowRoot?.querySelector('.pds-input__field-wrapper')?.getBoundingClientRect();
+        return [dialog?.bottom ?? 0, box?.top ?? 0];
+      });
+      expect(calendar).toBeLessThanOrEqual(field);
+    });
+
+    it('moves focus to the field with setFocus()', async () => {
+      const page = await setup();
+      await (await page.find('pds-datepicker')).callMethod('setFocus');
+      await page.waitForChanges();
+      const tag = await page.evaluate(() => {
+        const active = document.querySelector('pds-datepicker')?.shadowRoot?.activeElement;
+        return active?.shadowRoot?.activeElement?.tagName ?? active?.tagName;
+      });
+      expect(tag).toBe('INPUT');
+    });
+
+    it('commits nothing when a day is picked after typing and the calendar is then dismissed', async () => {
+      const page = await setup(
+        `<pds-datepicker component-id="period" range label="Period" locale="en-US" value="2026-09-13/2026-10-13"></pds-datepicker><button id="after">After</button>`,
+      );
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      await input.click({ clickCount: 3 });
+      await input.type('2026-10-01 – 2026-10-05');
+      await page.waitForChanges();
+      await (await page.find('pds-datepicker >>> [data-date="2026-10-20"]')).click();
+      await page.waitForChanges();
+      await page.click('#after');
+      await page.waitForChanges();
+
+      expect(change).not.toHaveReceivedEvent();
+      expect(await input.getProperty('value')).toBe('2026-09-13 – 2026-10-13');
+    });
+
+    it('closes only the calendar on Escape on the calendar button, inside pds-modal', async () => {
+      const page = await setup(`<pds-modal component-id="m"><div>${FIELD}</div></pds-modal>`);
+      await (await page.find('pds-modal')).callMethod('showModal');
+      await page.waitForChanges();
+      await (await page.find('pds-datepicker >>> pds-input >>> input')).click();
+      await page.waitForChanges();
+      await page.$eval('pds-datepicker', (el) =>
+        el.shadowRoot?.querySelector<HTMLElement>('.pds-datepicker__trigger')?.focus(),
+      );
+      await press(page, 'Escape');
+
+      expect(await page.find('pds-datepicker >>> [role="dialog"]')).toBeNull();
+      expect(await page.evaluate(() => (document.querySelector('pds-modal dialog') as HTMLDialogElement).open)).toBe(true);
+    });
+
     it('doesn\'t report blur for a click on a part of the open calendar that can\'t take focus', async () => {
       const page = await setup();
       const blur = await page.spyOnEvent('pdsBlur');
