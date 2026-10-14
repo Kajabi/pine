@@ -31,6 +31,14 @@
     background: transparent;
   }
 
+  // Out of the top layer (disableTopLayer, the only mode that renders aria-modal="false") the dialog
+  // loses the UA's `dialog:modal { overflow: auto }`, so a modal taller than the viewport couldn't
+  // scroll. The page behind isn't inert, so keep the scroll from chaining into it.
+  &[aria-modal='false'] {
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
   &.open {
     opacity: 1;
     transition-timing-function: var(--pine-motion-easing-out);
