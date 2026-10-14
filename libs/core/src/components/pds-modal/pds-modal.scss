@@ -37,6 +37,21 @@
   &[aria-modal='false'] {
     overflow: auto;
     overscroll-behavior: contain;
+
+    // A backdrop-filter would make this scrolling backdrop the containing block for a nested
+    // modal's fixed backdrop, which would then scroll away with it. Blur from a fixed layer
+    // behind the modal instead.
+    @supports (backdrop-filter: blur(3px)) {
+      backdrop-filter: none;
+
+      &::before {
+        backdrop-filter: blur(3px);
+        content: '';
+        inset: 0;
+        position: fixed;
+        z-index: -1;
+      }
+    }
   }
 
   &.open {
