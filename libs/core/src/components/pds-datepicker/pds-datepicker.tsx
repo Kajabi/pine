@@ -98,6 +98,8 @@ export class PdsDatepicker {
   private skipForwardedClick = false;
   /** The value when the calendar opened, or as last set from outside, which Cancel (without `clearable`) and Escape go back to. */
   private valueAtOpen = '';
+  /** The draft's start and end times from before text typed in the field changed them. */
+  private timesBeforeTyping?: [string, string];
   /** Set while the datepicker commits a value itself, as opposed to one set from outside. */
   private committing = false;
 
@@ -600,6 +602,7 @@ export class PdsDatepicker {
   private closeCalendar(returnFocus: boolean) {
     if (!this.isOpen) return;
     this.commitPendingText();
+    this.timesBeforeTyping = undefined;
 
     this.isOpen = false;
     this.stopPositioning();
@@ -664,6 +667,7 @@ export class PdsDatepicker {
   /** Sets the value from the user, emitting the change event when it differs. */
   private commitValue(next: string, detail: Omit<DatepickerChangeEventDetail, 'value'> = {}) {
     const changed = next !== (this.value ?? '');
+    this.timesBeforeTyping = undefined;
     this.committing = true;
     this.value = next;
     this.committing = false;
@@ -910,6 +914,8 @@ export class PdsDatepicker {
     const parts = this.parseText(this.text);
     if (!parts) return;
     const [startTime, endTime] = [this.startTime, this.endTime];
+    // The times before the typed text changed them, for a pick in the calendar to go back to.
+    this.timesBeforeTyping ??= [startTime, endTime];
     this.loadDraft(parts);
     if (this.timePicker) {
       // A time picked in the calendar survives typing that doesn't change the time: text with no
@@ -1089,6 +1095,9 @@ export class PdsDatepicker {
    * is set directly: when typing and this land in one frame, the rendered text never changed.
    */
   private dropTypedText() {
+    // Typed text may have set the times too; they go back with it.
+    if (this.timesBeforeTyping) [this.startTime, this.endTime] = this.timesBeforeTyping;
+    this.timesBeforeTyping = undefined;
     if (this.text === this.fieldText() && !this.textError) return;
     this.text = this.fieldText();
     if (this.inputEl) this.inputEl.value = this.text;
