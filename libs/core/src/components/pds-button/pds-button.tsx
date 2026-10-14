@@ -18,7 +18,7 @@ import { caretDown, addCircle } from '@pine-ds/icons/icons';
 @Component({
   tag: 'pds-button',
   styleUrls: ['pds-button.scss'],
-  shadow: true,
+  shadow: { delegatesFocus: true },
 })
 export class PdsButton {
   @Element() el: HTMLPdsButtonElement;
@@ -109,8 +109,34 @@ export class PdsButton {
 
   @State() hasStartContent = false;
   @State() hasEndContent = false;
+  @State() triggerExpanded: string | null = null;
+  @State() triggerHasPopup: string | null = null;
+
+  private contentEl?: HTMLButtonElement | HTMLAnchorElement;
+  private triggerAriaObserver?: MutationObserver;
 
   @Event() pdsClick: EventEmitter<Event>;
+
+  connectedCallback() {
+    this.syncTriggerAria();
+
+    if (typeof MutationObserver === 'undefined') return;
+
+    // Popovers and menus set these on the host after render, but only the inner element is announced.
+    this.triggerAriaObserver = new MutationObserver(this.syncTriggerAria);
+    this.triggerAriaObserver.observe(this.el, {
+      attributeFilter: ['aria-controls', 'aria-expanded', 'aria-haspopup'],
+    });
+  }
+
+  disconnectedCallback() {
+    this.triggerAriaObserver?.disconnect();
+    this.triggerAriaObserver = undefined;
+  }
+
+  componentDidRender() {
+    this.forwardAriaControls();
+  }
 
   /**
    * Listen for Enter key presses on form inputs to trigger submit
@@ -170,6 +196,22 @@ export class PdsButton {
     }
   }
 
+
+  private syncTriggerAria = () => {
+    this.triggerExpanded = this.el.getAttribute('aria-expanded');
+    this.triggerHasPopup = this.el.getAttribute('aria-haspopup');
+    this.forwardAriaControls();
+  };
+
+  // ID references can't cross the shadow boundary, so aria-controls is forwarded as element references.
+  private forwardAriaControls() {
+    if (!this.contentEl || !('ariaControlsElements' in this.contentEl)) return;
+
+    const root = this.el.getRootNode() as Document | ShadowRoot;
+    const ids = this.el.getAttribute('aria-controls')?.split(/\s+/).filter(Boolean) ?? [];
+    const controlled = ids.map((id) => root.getElementById(id)).filter((el): el is HTMLElement => el !== null);
+    this.contentEl.ariaControlsElements = controlled.length > 0 ? controlled : null;
+  }
 
   private handleStartSlotChange = (event: Event) => {
     this.hasStartContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
@@ -273,8 +315,11 @@ export class PdsButton {
   render() {
     // Common props for both button and anchor elements
     const commonProps = {
+      'aria-expanded': this.triggerExpanded,
+      'aria-haspopup': this.triggerHasPopup,
       class: this.classNames(),
       part: 'button',
+      ref: (el: HTMLButtonElement | HTMLAnchorElement) => (this.contentEl = el),
     };
 
     const attributes = () => {
