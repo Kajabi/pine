@@ -484,6 +484,12 @@ export class PdsCombobox implements BasePdsProps {
       this.updateOptionFocus();
     }
 
+    // The row back is sticky over the group's options; scrolling an option into view stops below it.
+    if (this.panelTreeEl) {
+      const header = this.hidesPanelSearch ? (this.panelTreeEl.querySelector('.pds-combobox__group-back-trigger') as HTMLElement | null) : null;
+      this.panelTreeEl.style.scrollPaddingBlockStart = header ? `${header.offsetHeight}px` : '';
+    }
+
     // Panel search keeps focus in the search field, or in the list while a group hides the field.
     const panelFocusEl = this.hidesPanelSearch ? this.panelTreeEl : this.panelSearchEl;
     if (this.isOpen && this.usesPanelSearch && panelFocusEl && panelFocusEl !== this.panelFocusEl) {
@@ -513,13 +519,25 @@ export class PdsCombobox implements BasePdsProps {
 
   @Watch('openGroup')
   protected openGroupChanged(next: HTMLOptGroupElement | null, previous: HTMLOptGroupElement | null) {
-    // Drilling in hides the search field, so move focus to the list before the field unmounts:
-    // focus lost with it would leave the combobox and close the dropdown.
-    if (this.isOpen && this.hidesPanelSearch && this.panelTreeEl) this.focusPanel(this.panelTreeEl);
+    this.handPanelFocusToList();
     // Only moves between the drill-in panel's views slide; search results don't.
     if (!this.isOpen || this.effectiveGroupDisplay !== 'drill-in' || !this.showsGroupedPanel) return;
     if (next !== null && previous === null) this.drillDirection = 'in';
     else if (next === null && previous !== null) this.drillDirection = 'out';
+  }
+
+  /** A flyout with no room beside the dropdown drills in, which can hide the focused search field too. */
+  @Watch('flyoutFallback')
+  protected flyoutFallbackChanged() {
+    this.handPanelFocusToList();
+  }
+
+  /**
+   * Drilling into a group hides the search field, so focus moves to the list before the field
+   * unmounts: focus lost with it would leave the combobox and close the dropdown.
+   */
+  private handPanelFocusToList() {
+    if (this.isOpen && this.hidesPanelSearch && this.panelTreeEl) this.focusPanel(this.panelTreeEl);
   }
 
   private onDrillAnimationEnd = (event: AnimationEvent) => {
