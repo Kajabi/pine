@@ -184,7 +184,9 @@ export class PdsSwitch {
             {...this.inheritedAttributes}
           />
           <span class={this.hideLabel ? 'visually-hidden' : ''}>
-            <slot name="label" onSlotchange={this.updateHasLabelSlot}>{this.label}</slot>
+            <slot name="label" onSlotchange={this.updateHasLabelSlot} />
+            {/* A text node, not slot fallback: older ChromeDriver text extraction skips fallback content. */}
+            {!this.hasLabelSlot && this.label}
           </span>
         </label>
         {this.helperMessage &&
