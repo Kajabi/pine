@@ -1012,6 +1012,36 @@ describe('pds-datepicker', () => {
       expect(filterClose).not.toHaveReceivedEvent();
     });
 
+    it('picks a day in a datepicker in a pds-popover\'s trigger without dismissing it', async () => {
+      const page = await setup(
+        `<pds-popover component-id="p" popover-target-action="toggle"><div slot="trigger">${FIELD}</div><div>Content</div></pds-popover>`,
+      );
+      const popoverClose = await page.spyOnEvent('pdsPopoverClose');
+      const change = await page.spyOnEvent('pdsDatepickerChange');
+      await (await page.find('pds-popover')).callMethod('show');
+      await page.waitForChanges();
+
+      // open() rather than the calendar button: any click inside the trigger toggles the popover.
+      await (await page.find('pds-datepicker')).callMethod('open');
+      await page.waitForChanges();
+      await page.waitForFunction(() => {
+        const dialog = document.querySelector('.pds-datepicker-calendar-portal')?.shadowRoot?.querySelector<HTMLElement>('[role="dialog"]');
+        return dialog?.style.visibility === 'visible';
+      });
+      await (await page.find('.pds-datepicker-calendar-portal >>> [data-date="2026-10-20"]')).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveReceivedEventDetail({ value: '2026-10-20' });
+      expect(popoverClose).not.toHaveReceivedEvent();
+    });
+
+    it('doesn\'t mount the calendar in a closed dialog around the datepicker', async () => {
+      const page = await setup(`<dialog id="closed" style="display:block;position:static">${FIELD}</dialog>`);
+      await openWithTrigger(page);
+
+      expect(await portalParent(page)).toBe('BODY');
+    });
+
     it('picks a day inside pds-popover without dismissing it', async () => {
       const page = await setup(
         `<pds-popover component-id="p" popover-target-action="toggle"><button slot="trigger">Open</button><div>${FIELD}</div></pds-popover>`,
