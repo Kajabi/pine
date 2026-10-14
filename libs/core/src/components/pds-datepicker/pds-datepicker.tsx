@@ -988,7 +988,7 @@ export class PdsDatepicker {
     // (the calendar button, or the calendar): Apply commits it, Cancel or Escape drops it, and
     // closing any other way commits it. Checked once focus settles.
     window.setTimeout(() => {
-      if (this.isOpen && this.el.matches(':focus-within')) return;
+      if (this.isOpen && (this.el.matches(':focus-within') || this.portal?.host.matches(':focus-within'))) return;
       this.commitPendingText();
     });
   };
@@ -1085,10 +1085,10 @@ export class PdsDatepicker {
   };
 
   /**
-   * Escape on the calendar button closes an open calendar, as it does in the field and the
-   * calendar, and is stopped there, so a modal or popover around the datepicker stays open. Tab
-   * from the button goes into a calendar a click in the field opened: the calendar is portaled
-   * to the end of the page, so Tab would otherwise skip past it.
+   * The calendar button's keys. Escape closes an open calendar, as in the field and the calendar,
+   * and is stopped there, so a modal or popover around the datepicker stays open. Tab goes into a
+   * calendar a click in the field opened: it's portaled to the end of the page, so Tab would
+   * otherwise skip past it.
    */
   private onTriggerKeyDown = (event: KeyboardEvent) => {
     if (!this.isOpen) return;
