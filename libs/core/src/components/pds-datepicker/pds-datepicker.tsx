@@ -103,8 +103,6 @@ export class PdsDatepicker {
   private readonly fallbackId = `pds-datepicker-${++fallbackIds}`;
   /** Set by a click on the label, whose forwarded click on the input shouldn't open the calendar. */
   private skipForwardedClick = false;
-  /** Set from a press on the clear button until its click, which empties the field. */
-  private clearing = false;
   /** Set while an arrow key selects a preset, which auto-apply doesn't apply. */
   private presetByArrow = false;
   /** The value when the calendar opened, or as last set from outside, which Cancel (without `clearable`) and Escape go back to. */
@@ -813,31 +811,16 @@ export class PdsDatepicker {
     }
   };
 
-  /** The field's clear button: empties the field and returns focus to it. */
   /**
-   * A press on the clear button blurs the field before the click empties it. Flagged here, the
-   * field's change leaves the typed text alone, so it isn't applied first; if the press doesn't
-   * end in a click, the text is committed once it ends.
+   * Keeps a press on the clear button, by mouse or touch, from blurring the field, so the text
+   * typed in it isn't committed before the click empties it.
    */
-  private onClearPointerDown = () => {
-    this.clearing = true;
-    // The press ends in pointerup, or in pointercancel when a touch turns into a scroll.
-    const end = () => {
-      window.removeEventListener('pointerup', end);
-      window.removeEventListener('pointercancel', end);
-      window.setTimeout(() => {
-        if (!this.clearing) return;
-        this.clearing = false;
-        // With Apply showing, the text stays pending in the draft, as on any move within the picker.
-        if (!(this.isOpen && this.hasFooter) && this.text !== this.fieldText()) this.commitText();
-      });
-    };
-    window.addEventListener('pointerup', end);
-    window.addEventListener('pointercancel', end);
+  private onClearMouseDown = (event: MouseEvent) => {
+    event.preventDefault();
   };
 
+  /** The field's clear button: empties the field and returns focus to it. */
   private onClearClick = () => {
-    this.clearing = false;
     this.commitValue('');
     this.closeCalendar(false);
     void this.inputEl?.setFocus();
@@ -1038,7 +1021,6 @@ export class PdsDatepicker {
 
   private onTextChange = (event: Event) => {
     event.stopPropagation();
-    if (this.clearing) return;
     if (!this.isOpen || !this.hasFooter) {
       this.commitText();
       return;
@@ -1843,7 +1825,10 @@ export class PdsDatepicker {
               ref={(el) => (this.clearEl = el)}
               // Names the field, so several datepickers don't all list as "Clear".
               aria-label={this.label ? `${this.clearLabel} ${this.label}` : this.clearLabel}
-              onPointerDown={this.onClearPointerDown}
+              // Out of the tab order, as a native search field's clear button is: Tab from a field
+              // just emptied would land on it as the change removes it, dropping focus to the page.
+              tabindex="-1"
+              onMouseDown={this.onClearMouseDown}
               onClick={this.onClearClick}
             >
               <pds-icon icon={remove} aria-hidden="true" />
