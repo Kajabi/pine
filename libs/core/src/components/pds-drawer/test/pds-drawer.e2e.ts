@@ -33,6 +33,22 @@ describe('pds-drawer', () => {
 
   // The modal's out-of-top-layer backdrop scrolls when the modal overflows; the drawer's panel
   // is sized to the viewport, so the backdrop has nothing to scroll even with tall content.
+  // The modal blurs the page from a ::before layer when it's outside the top layer; a drawer keeps
+  // the page unblurred, so that layer must go too, not just the backdrop's own filter.
+  it('does not blur the page behind it', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-drawer component-id="test" open><p>Panel</p></pds-drawer>`);
+    await page.waitForChanges();
+
+    const blur = await page.$eval('pds-drawer .pds-modal__backdrop', (backdrop: HTMLElement) => ({
+      own: getComputedStyle(backdrop).backdropFilter,
+      layer: getComputedStyle(backdrop, '::before').backdropFilter,
+      layerContent: getComputedStyle(backdrop, '::before').content,
+    }));
+    expect(blur.own).toBe('none');
+    expect(blur.layer === 'none' || blur.layerContent === 'none').toBe(true);
+  });
+
   it('does not scroll its backdrop when its content is taller than the viewport', async () => {
     const page = await newE2EPage();
     await page.setViewport({ width: 1280, height: 300 });
