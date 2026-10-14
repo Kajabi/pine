@@ -3491,6 +3491,22 @@ describe('pds-combobox', () => {
       expect((root.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement).value).toBe('e');
     });
 
+    it('adds keys typed before the search field takes focus to the query, and Backspace trims it', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" panel-search');
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+      const list = root.querySelector('.pds-combobox__listbox-options')!;
+
+      // No render between the keys: the list still has focus for the second one.
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 's' }));
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'e' }));
+      expect(component.panelQuery).toBe('se');
+
+      list.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+      expect(component.panelQuery).toBe('s');
+      expect(component.openGroup).toBeNull();
+    });
+
     it('does not open a group on hover', async () => {
       const { page, component, root } = await openDrillIn();
 
