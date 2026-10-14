@@ -31,6 +31,23 @@ describe('pds-drawer', () => {
     expect(await dialog.getProperty('open')).toBe(true);
   });
 
+  // The modal's out-of-top-layer backdrop scrolls when the modal overflows; the drawer's panel
+  // is sized to the viewport, so the backdrop has nothing to scroll even with tall content.
+  it('does not scroll its backdrop when its content is taller than the viewport', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1280, height: 300 });
+    await page.setContent(
+      `<pds-drawer component-id="test" open><div style="height: 900px">Tall content</div></pds-drawer>`,
+    );
+    await page.waitForChanges();
+
+    const backdropOverflows = await page.$eval(
+      'pds-drawer .pds-modal__backdrop',
+      (backdrop: HTMLElement) => backdrop.scrollHeight > backdrop.clientHeight,
+    );
+    expect(backdropOverflows).toBe(false);
+  });
+
   it('opens as non-modal — not in the top layer, aria-modal false', async () => {
     const page = await newE2EPage();
     await page.setContent(`<pds-drawer component-id="test"><div>Content</div></pds-drawer>`);
