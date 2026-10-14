@@ -1484,8 +1484,11 @@ export class PdsDatepicker {
     const step = Math.max(1, Math.min(60, Math.floor(this.minuteIncrement) || 1));
     // Not `h`: that's the JSX factory.
     const setTime = (hour: number, minute: number) => {
-      if (which === 'start') this.startTime = joinTime(hour, minute);
-      else this.endTime = joinTime(hour, minute);
+      const time = joinTime(hour, minute);
+      if (which === 'start') this.startTime = time;
+      else this.endTime = time;
+      // A time chosen here after typing stays when a pick later drops the typed text.
+      if (this.timesBeforeTyping) this.timesBeforeTyping[which === 'start' ? 0 : 1] = time;
     };
     const groupLabel = !this.range ? this.timeLabel : which === 'start' ? this.startTimeLabel : this.endTimeLabel;
     const isPm = hours >= 12;
