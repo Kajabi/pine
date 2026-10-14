@@ -207,10 +207,20 @@ export class PdsButton {
   private forwardAriaControls() {
     if (!this.contentEl || !('ariaControlsElements' in this.contentEl)) return;
 
-    const root = this.el.getRootNode() as Document | ShadowRoot;
     const ids = this.el.getAttribute('aria-controls')?.split(/\s+/).filter(Boolean) ?? [];
-    const controlled = ids.map((id) => root.getElementById(id)).filter((el): el is HTMLElement => el !== null);
+    const controlled = ids.map((id) => this.findInAncestorRoots(id)).filter((el): el is HTMLElement => el !== null);
     this.contentEl.ariaControlsElements = controlled.length > 0 ? controlled : null;
+  }
+
+  // A trigger inside another component's shadow root still controls a popover portal on document.body.
+  private findInAncestorRoots(id: string): HTMLElement | null {
+    let root = this.el.getRootNode();
+    while (root instanceof ShadowRoot) {
+      const found = root.getElementById(id);
+      if (found) return found;
+      root = root.host.getRootNode();
+    }
+    return root instanceof Document ? root.getElementById(id) : null;
   }
 
   private handleStartSlotChange = (event: Event) => {
