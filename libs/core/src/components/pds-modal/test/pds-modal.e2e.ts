@@ -291,6 +291,62 @@ describe('pds-modal', () => {
         expect(await outer.getProperty('open')).toBe(true);
       });
     }
+
+    describe('a modal taller than the viewport', () => {
+      const tallModal = (attributes: string) => `
+        <pds-modal component-id="tall" ${attributes}>
+          <pds-modal-content><div style="height: 900px">Tall content</div></pds-modal-content>
+          <pds-modal-footer><button id="save" type="button">Save</button></pds-modal-footer>
+        </pds-modal>
+      `;
+
+      const openAtShortViewport = async (attributes: string) => {
+        const page = await newE2EPage();
+        await page.setViewport({ width: 1280, height: 300 });
+        await page.setContent(tallModal(attributes));
+        await (await page.find('pds-modal')).callMethod('showModal');
+        await page.waitForChanges();
+        return page;
+      };
+
+      // Scrolls the backdrop to its end, then reports whether the footer button is on screen
+      // and is what a click at its centre would hit.
+      const footerReachable = (page) =>
+        page.evaluate(() => {
+          const backdrop = document.querySelector('pds-modal .pds-modal__backdrop') as HTMLElement;
+          backdrop.scrollTop = backdrop.scrollHeight;
+          const save = document.getElementById('save') as HTMLElement;
+          const rect = save.getBoundingClientRect();
+          const inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+          const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          return { inView, hitsSave: hit === save };
+        });
+
+      const backdropOverflows = (page) =>
+        page.evaluate(() => {
+          const backdrop = document.querySelector('pds-modal .pds-modal__backdrop') as HTMLElement;
+          return backdrop.scrollHeight > backdrop.clientHeight;
+        });
+
+      it('scrolls to its footer outside the top layer, as it does inside it', async () => {
+        const page = await openAtShortViewport('disable-top-layer="true" scrollable="false"');
+
+        expect(await footerReachable(page)).toEqual({ inView: true, hitsSave: true });
+      });
+
+      it('still scrolls to its footer in the top layer', async () => {
+        const page = await openAtShortViewport('scrollable="false"');
+
+        expect(await footerReachable(page)).toEqual({ inView: true, hitsSave: true });
+      });
+
+      it('keeps a scrollable modal inside the viewport, so the backdrop adds no second scrollbar', async () => {
+        const page = await openAtShortViewport('disable-top-layer="true"');
+
+        expect(await backdropOverflows(page)).toBe(false);
+        expect(await footerReachable(page)).toEqual({ inView: true, hitsSave: true });
+      });
+    });
   });
 
   describe('initial open state', () => {
