@@ -314,7 +314,7 @@ Fetch options from a remote API endpoint. The component expects responses in the
 
 ### Refreshing Options
 
-Async options are fetched once and kept. After an option changes elsewhere, such as when it's renamed in an edit modal, call `refreshOptions()` to fetch the first page again. The panel and any selected items show the new text and color without emitting a change event. Without `async-url`, `refreshOptions()` does nothing.
+Async options are fetched once and kept. After an option changes elsewhere, such as when it's renamed in an edit modal, call `refreshOptions()` to fetch the first page again for the current search. Options and selected items in that page show the new text and color without emitting a change event. Selected items outside it keep the text and color they were last loaded with, because the endpoint is only queried by search and page. Without `async-url`, `refreshOptions()` does nothing.
 
 ### Consumer-Managed Async
 
@@ -1161,7 +1161,9 @@ In the disabled state, pills render without close buttons and the trigger is non
 
 An element in the `trigger` slot replaces the built-in trigger, so the multiselect can open from other UI, such as a table cell.
 
-- The multiselect opens the panel from the element's click, Enter, Space, and arrow keys, sets `aria-expanded` and `aria-haspopup` on it (and `aria-disabled` while `disabled`), positions the panel against it, and returns focus to it on Escape.
+- The multiselect opens the panel from the element's click, Enter, Space, and arrow keys, sets `aria-expanded` and `aria-haspopup` on it, positions the panel against it, and returns focus to it on Escape.
+- Slot the focusable control itself, such as a `button` or `pds-button`, not a wrapper around it. The multiselect handles keys on the slotted element and returns focus to it, so a wrapper only opens on click.
+- While the multiselect is `disabled`, it sets `aria-disabled` on the trigger and disables a trigger that has a `disabled` property, like `button` and `pds-button`. It only re-enables a trigger it disabled.
 - Give the trigger an accessible name that says what it's for, like `aria-label="Labels: Featured"`, and keep it meaningful when nothing is selected.
 - The `label` prop names the options list, not the slotted trigger, so use `hide-label`. `invalid`, `required`, and the helper and error messages don't reach a slotted trigger; set the matching ARIA on it yourself.
 - The trigger doesn't update itself. Keep its content in sync from `pdsMultiselectChange`, such as with a `pds-chip` for each item in `event.detail.items`.
