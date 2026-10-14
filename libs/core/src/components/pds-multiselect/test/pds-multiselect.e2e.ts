@@ -217,6 +217,29 @@ describe('pds-multiselect', () => {
       expect(rects.panelLeft).toBeCloseTo(rects.triggerLeft, 0);
       expect(rects.panelTop).toBeGreaterThan(rects.triggerBottom);
     });
+
+    it('disables a custom element trigger that is defined after the multiselect loads', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-multiselect component-id="tags" label="Tags" hide-label disabled>
+          <option value="1">Bestsellers</option>
+          <late-trigger slot="trigger">Add tag</late-trigger>
+        </pds-multiselect>
+      `);
+      const isDisabled = () => page.$eval('late-trigger', (el: HTMLElement & { disabled?: boolean }) => el.disabled);
+      expect(await isDisabled()).toBeUndefined();
+
+      await page.evaluate(() => {
+        customElements.define(
+          'late-trigger',
+          class extends HTMLElement {
+            disabled = false;
+          }
+        );
+      });
+      await settle();
+      expect(await isDisabled()).toBe(true);
+    });
   });
 
   describe('footer slot', () => {
