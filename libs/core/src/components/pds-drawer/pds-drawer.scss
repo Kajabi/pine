@@ -19,6 +19,13 @@
   }
 }
 
+// Out of the top layer (always, for a drawer) the modal blurs from a ::before layer behind it
+// instead of the backdrop's own filter. [aria-modal] outranks the modal's rule, whichever
+// component's stylesheet loads last.
+.pds-drawer__modal > .pds-modal__backdrop[aria-modal]::before {
+  content: none;
+}
+
 .pds-drawer__modal > .pds-modal__backdrop > .pds-modal {
   border-radius: 0;
   height: 100%;
