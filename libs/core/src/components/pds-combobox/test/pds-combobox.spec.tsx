@@ -4224,6 +4224,24 @@ describe('pds-combobox', () => {
       expect(portal?.shadowRoot?.querySelector('ul[role="listbox"]')).not.toBeNull();
     });
 
+    // The mock DOM doesn't compute direction or inherited custom properties; e2e covers those.
+    it('carries the language over to the portal', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<div lang="ar">
+          <pds-combobox component-id="portal-context" dropdown-mount="body" label="Pick">
+            <option value="a">A</option>
+          </pds-combobox>
+        </div>`,
+      });
+      const combobox = page.body.querySelector('pds-combobox');
+      (combobox?.shadowRoot?.querySelector('input') as HTMLInputElement).click();
+      await page.waitForChanges();
+
+      const portal = document.querySelector('.pds-combobox-dropdown-portal') as HTMLElement;
+      expect(portal.lang).toBe('ar');
+    });
+
     it('removes the portal container when the dropdown closes', async () => {
       const page = await newSpecPage({
         components: [PdsCombobox],

@@ -478,12 +478,35 @@ describe('pds-combobox', () => {
         const root = document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!;
         const panel = getComputedStyle(root.querySelector('.pds-combobox__listbox')!);
         const list = getComputedStyle(root.querySelector('.pds-combobox__listbox-options')!);
-        return { position: panel.position, background: panel.backgroundColor, listStyle: list.listStyleType };
+        return { radius: panel.borderTopLeftRadius, background: panel.backgroundColor, listStyle: list.listStyleType };
       });
 
-      expect(styles.position).toBe('fixed');
+      // Values only the copied stylesheet supplies; Floating UI sets the position inline.
+      expect(styles.radius).not.toBe('0px');
       expect(styles.background).not.toBe('rgba(0, 0, 0, 0)');
       expect(styles.listStyle).toBe('none');
+    });
+
+    it('carries a custom property set around the combobox over to a dropdown in the body', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="--pine-color-background-overlay: rgb(1, 2, 3)">
+          <pds-combobox component-id="themed" label="Action" trigger="button" mode="select-only"
+            panel-search dropdown-mount="body"></pds-combobox>
+        </div>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = [{ id: 'a', text: 'A' }];
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+
+      const background = await page.evaluate(() => {
+        const root = document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!;
+        return getComputedStyle(root.querySelector('.pds-combobox__listbox')!).backgroundColor;
+      });
+      expect(background).toBe('rgb(1, 2, 3)');
     });
 
     it('closes a portaled panel-search dropdown on a click outside', async () => {
@@ -497,29 +520,41 @@ describe('pds-combobox', () => {
       expect(await isOpen(page)).toBe(false);
     });
 
-    it('closes when the trigger is clicked while the search field has focus', async () => {
-      const page = await setUp('panel-search');
-      expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+    // In body mode the search field sits in the portal's shadow root, so focus crosses a boundary
+    // both ways: into the portal from the trigger, and back out to it.
+    describe.each([
+      ['in the field', ''],
+      ['in the body', ' dropdown-mount="body"'],
+    ])('with the dropdown %s', (_where, mount) => {
+      it('closes when the trigger is clicked while the search field has focus', async () => {
+        const page = await setUp(`panel-search${mount}`);
+        expect(await isOpen(page)).toBe(true);
 
-      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
-      await page.waitForChanges();
+        await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+        await page.waitForChanges();
 
-      expect(await isOpen(page)).toBe(false);
+        expect(await isOpen(page)).toBe(false);
+      });
+
+      it('lands on the trigger when Tab leaves the search field, then tabs on from there', async () => {
+        const page = await setUp(`panel-search${mount}`);
+
+        await page.keyboard.press('ArrowDown');
+        await page.keyboard.press('Tab');
+        await page.waitForChanges();
+        await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+
+        expect(await isOpen(page)).toBe(false);
+        expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
+
+        await page.keyboard.press('Tab');
+        expect(await page.evaluate(() => document.activeElement?.id ?? '')).toBe('after');
+      });
     });
 
-    it('lands on the trigger when Tab leaves the search field, then tabs on from there', async () => {
+    it('focuses the search field in the field when the dropdown opens', async () => {
       const page = await setUp('panel-search');
-
-      await page.keyboard.press('ArrowDown');
-      await page.keyboard.press('Tab');
-      await page.waitForChanges();
-      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
-
-      expect(await isOpen(page)).toBe(false);
-      expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
-
-      await page.keyboard.press('Tab');
-      expect(await page.evaluate(() => document.activeElement?.id ?? '')).toBe('after');
+      expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
     });
 
     it('drills in from the search field by keyboard, and back to it, then closes with Escape', async () => {
