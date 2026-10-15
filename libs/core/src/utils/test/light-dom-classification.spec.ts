@@ -19,7 +19,12 @@ function findComponentFiles(dir: string, results: string[] = []): string[] {
 const usesShadowDom = (source: string) => /shadow:\s*true/.test(source) || /shadow:\s*\{/.test(source);
 const isClassified = (source: string) => /@lightDom\s+(renders-markup|host-only)/.test(source);
 
-describe('light DOM classification (DSS-350)', () => {
+// host-only: render() only sets classes/styles/attrs on <Host> — the author's
+// slotted content is the only child, nothing else is added around it.
+// renders-markup: render() wraps the slot(s) in real elements of its own
+// (a div, header, footer, label, dialog, etc.) that a Turbo morph strips
+// and Stencil never re-renders on its own.
+describe('light DOM classification', () => {
   it('tags every shadow:false/scoped component with @lightDom renders-markup or host-only', () => {
     const unclassified = findComponentFiles(COMPONENTS_DIR)
       .filter((file) => {
