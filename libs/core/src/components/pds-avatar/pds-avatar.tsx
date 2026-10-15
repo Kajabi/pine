@@ -1,5 +1,6 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Watch } from '@stencil/core';
 import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
+import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 
 /**
  * @part asset-wrapper
@@ -13,6 +14,7 @@ import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
   shadow: true,
 })
 export class PdsAvatar {
+  @Element() el: HTMLPdsAvatarElement;
 
   /**
    * The alt for a custom user image.
@@ -99,6 +101,16 @@ export class PdsAvatar {
    * @defaultValue 'Avatar dropdown trigger'
    */
   @Prop() triggerLabel = 'Avatar dropdown trigger';
+
+  @Watch('size')
+  restoreSizeDefault(newValue: typeof this.size) {
+    this.size = restoreReflectedDefault(this.el, 'size', newValue, 'lg');
+  }
+
+  @Watch('variant')
+  restoreVariantDefault(newValue: typeof this.variant) {
+    this.variant = restoreReflectedDefault(this.el, 'variant', newValue, 'customer');
+  }
 
   private avatarSize() {
     const sizes: { [key: string]: any } = {

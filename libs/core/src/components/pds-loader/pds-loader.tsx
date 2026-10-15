@@ -1,4 +1,5 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Watch } from '@stencil/core';
+import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 
 /**
  * @part loader-svg - Exposes the spinner SVG element for color customization.
@@ -11,6 +12,8 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsLoader {
+  @Element() el: HTMLPdsLoaderElement;
+
   /**
    * If false, the loader will be hidden.
    */
@@ -36,6 +39,11 @@ export class PdsLoader {
    * Determines the type of loader.
    */
   @Prop() variant: 'spinner' | 'typing' = 'spinner';
+
+  @Watch('size')
+  restoreSizeDefault(newValue: typeof this.size) {
+    this.size = restoreReflectedDefault(this.el, 'size', newValue, 'md');
+  }
 
   private loaderSize() {
     const sizes: { [key: string]: string } = {

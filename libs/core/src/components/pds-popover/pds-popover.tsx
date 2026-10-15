@@ -1,5 +1,6 @@
-import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
 import { containsComposed } from '@utils/closest';
+import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { PlacementType } from '@utils/types';
 import { PdsPopoverEventDetail } from './popover-interface';
 
@@ -111,6 +112,11 @@ export class PdsPopover {
    * @defaultValue "right"
    */
   @Prop({ reflect: true }) placement: PlacementType = 'right';
+
+  @Watch('placement')
+  restorePlacementDefault(newValue: typeof this.placement) {
+    this.placement = restoreReflectedDefault(this.el, 'placement', newValue, 'right');
+  }
 
   componentDidLoad() {
     // Bind event handlers for cleanup
