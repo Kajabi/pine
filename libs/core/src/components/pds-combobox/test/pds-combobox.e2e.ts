@@ -468,7 +468,23 @@ describe('pds-combobox', () => {
     });
 
     const isOpen = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
-      page.evaluate(() => !!document.querySelector('.pds-combobox__listbox, pds-combobox')?.shadowRoot?.querySelector('.pds-combobox__listbox') || !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__listbox'));
+      page.evaluate(() => !!document.querySelector('.pds-combobox__listbox, pds-combobox')?.shadowRoot?.querySelector('.pds-combobox__listbox') || !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'));
+
+    // The portal carries the combobox's styles in its own shadow root; no global CSS styles it.
+    it('styles a dropdown mounted in the body like one in the field', async () => {
+      const page = await setUp('panel-search dropdown-mount="body" group-display="drill-in"');
+
+      const styles = await page.evaluate(() => {
+        const root = document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!;
+        const panel = getComputedStyle(root.querySelector('.pds-combobox__listbox')!);
+        const list = getComputedStyle(root.querySelector('.pds-combobox__listbox-options')!);
+        return { position: panel.position, background: panel.backgroundColor, listStyle: list.listStyleType };
+      });
+
+      expect(styles.position).toBe('fixed');
+      expect(styles.background).not.toBe('rgba(0, 0, 0, 0)');
+      expect(styles.listStyle).toBe('none');
+    });
 
     it('closes a portaled panel-search dropdown on a click outside', async () => {
       const page = await setUp('panel-search dropdown-mount="body"');
@@ -726,13 +742,14 @@ describe('pds-combobox', () => {
       const page = await setUp('group-display="drill-in" panel-search dropdown-mount="body"');
       await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 50)));
 
-      await (await page.$('.pds-combobox-dropdown-portal .pds-combobox__group-row-trigger'))!.click();
+      await (await page.$('.pds-combobox-dropdown-portal >>> .pds-combobox__group-row-trigger'))!.click();
       await page.waitForChanges();
       await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
 
       const state = await page.evaluate(() => ({
-        back: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__group-back'),
-        focusInList: !!document.activeElement?.closest('.pds-combobox__listbox-options'),
+        back: !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__group-back'),
+        // The portal's shadow root holds the focus; the document sees its host.
+        focusInList: !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.activeElement?.closest('.pds-combobox__listbox-options'),
       }));
       expect(state).toEqual({ back: true, focusInList: true });
     });
@@ -758,13 +775,13 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 50)));
 
-      const row = await page.$('.pds-combobox-dropdown-portal .pds-combobox__group-row-trigger');
+      const row = await page.$('.pds-combobox-dropdown-portal >>> .pds-combobox__group-row-trigger');
       await row!.click();
       await page.waitForChanges();
 
       const shape = await page.evaluate(() => ({
-        flyout: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__flyout'),
-        back: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__group-back'),
+        flyout: !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__flyout'),
+        back: !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__group-back'),
       }));
       expect(shape).toEqual({ flyout: false, back: true });
     });
