@@ -66,6 +66,33 @@ describe('pds-combobox', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  // trigger-width sets the trigger's whole box, so 100% fills its container, padding and border included.
+  // The brand chip is the one chip trigger that keeps padding (1px) in its dropdown variant.
+  it.each([
+    ['input', 'trigger="input"', '.pds-combobox__input-wrapper'],
+    ['button', 'trigger="button"', '.pds-combobox__button-trigger'],
+    ['brand chip', 'trigger="chip" chip-sentiment="brand"', '.pds-combobox__chip-trigger'],
+  ])('keeps a %s trigger at trigger-width="100%" inside its container', async (_trigger, attributes, selector) => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 300px">
+        <pds-combobox component-id="sized" label="Action" ${attributes} trigger-width="100%">
+          <option value="a">A</option>
+        </pds-combobox>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    const widths = await page.evaluate(triggerSelector => {
+      const host = document.querySelector('pds-combobox')!;
+      const trigger = host.shadowRoot!.querySelector(triggerSelector)!;
+      return { host: host.getBoundingClientRect().width, trigger: trigger.getBoundingClientRect().width };
+    }, selector);
+
+    expect(widths.host).toBe(300);
+    expect(widths.trigger).toBe(300);
+  });
+
   describe('grouped options', () => {
     const groupedOptions = [
       { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
