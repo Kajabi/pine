@@ -94,9 +94,12 @@ export class PdsCombobox implements BasePdsProps {
    * `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present
    * (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot
    * boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`.
-   * Keyboard focus remains on the trigger via
-   * `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading`
-   * slots are not supported when `body` is used; the default empty and loading content is shown instead.
+   * Keyboard focus stays on the trigger, or moves to the panel's own search field, so modal focus
+   * traps keep working. The mounted dropdown renders in its own shadow root with the combobox's
+   * styles, so it needs no global CSS and page CSS can't reach it: customize it with custom
+   * properties on `pds-combobox`. Its reading direction, language, theme and custom properties are
+   * taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when
+   * `body` is used; the default empty and loading content is shown instead.
    * @default 'host'
    */
   @Prop() dropdownMount: 'host' | 'body' = 'host';
