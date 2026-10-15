@@ -1,3 +1,13 @@
+## 4.4.2 (2026-10-15)
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** carry the combobox's styles into its body portal's shadow root ([#865](https://github.com/Kajabi/pine/pull/865))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 4.4.1 (2026-10-14)
 
 ### Bug Fixes 🐛
