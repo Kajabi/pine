@@ -4,6 +4,7 @@ import { assignDescription, isSpecTest, messageId } from '../../utils/form';
 import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
+import { closest } from '@utils/closest';
 import DOMPurify from 'dompurify';
 import {
   FlyoutController,
@@ -93,9 +94,12 @@ export class PdsCombobox implements BasePdsProps {
    * `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present
    * (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot
    * boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`.
-   * Keyboard focus remains on the trigger via
-   * `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading`
-   * slots are not supported when `body` is used; the default empty and loading content is shown instead.
+   * Keyboard focus stays on the trigger, or moves to the panel's own search field, so modal focus
+   * traps keep working. The mounted dropdown renders in its own shadow root with the combobox's
+   * styles, so it needs no global CSS and page CSS can't reach it: customize it with custom
+   * properties on `pds-combobox`. Its reading direction, language, theme and custom properties are
+   * taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when
+   * `body` is used; the default empty and loading content is shown instead.
    * @default 'host'
    */
   @Prop() dropdownMount: 'host' | 'body' = 'host';
@@ -384,6 +388,8 @@ export class PdsCombobox implements BasePdsProps {
   private triggerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
   private portalEl: HTMLElement | null = null;
+  /** The portal's shadow root, which holds the dropdown and a copy of the combobox's styles. */
+  private portalRoot: ShadowRoot | null = null;
   private cleanupPositionAutoUpdate?: () => void;
   private bodyPortalAutoUpdateActive = false;
   /** Deferred so portal teardown runs after Stencil reconciles `isOpen === false`. */
@@ -1322,14 +1328,56 @@ export class PdsCombobox implements BasePdsProps {
       const target = this.getPortalMountRoot();
       if (this.portalEl.parentElement !== target) {
         target.appendChild(this.portalEl);
+        // What differs from the new parent may not be what differed from the old one.
+        this.copyPortalContext();
       }
       return this.portalEl;
     }
 
     this.portalEl = document.createElement('div');
     this.portalEl.className = 'pds-combobox-dropdown-portal';
+    // The copied stylesheet's `:host` rules match this div too; keep it out of layout. It still
+    // passes `dir` and the theme down.
+    this.portalEl.style.display = 'contents';
+    this.portalRoot = this.portalEl.attachShadow({ mode: 'open' });
     this.getPortalMountRoot().appendChild(this.portalEl);
+    this.copyPortalContext();
     return this.portalEl;
+  }
+
+  /**
+   * Gives the portal what the dropdown would otherwise get inside the combobox: its styles (so it
+   * needs no global CSS), the reading direction and language, a theme set on an ancestor, and
+   * custom properties set between the combobox and where the portal mounts. A snapshot: the portal
+   * is rebuilt on every open, so a theme switched while it's open applies from the next open.
+   */
+  private copyPortalContext() {
+    const portal = this.portalEl;
+    const root = this.portalRoot;
+    const source = this.el.shadowRoot;
+    if (!portal || !root) return;
+
+    if (source?.adoptedStyleSheets?.length) {
+      root.adoptedStyleSheets = source.adoptedStyleSheets;
+    } else if (source && !root.querySelector('style')) {
+      source.querySelectorAll('style').forEach(style => root.appendChild(style.cloneNode(true)));
+    }
+
+    const computed = getComputedStyle(this.el);
+    portal.dir = computed.direction || 'ltr';
+    const lang = closest('[lang]', this.el)?.getAttribute('lang');
+    if (lang) portal.lang = lang;
+    const theme = closest('[data-theme]', this.el)?.getAttribute('data-theme');
+    if (theme) portal.setAttribute('data-theme', theme);
+
+    const outside = portal.parentElement ? getComputedStyle(portal.parentElement) : null;
+    for (let i = 0; i < computed.length; i++) {
+      const property = computed[i];
+      if (!property.startsWith('--')) continue;
+      const value = computed.getPropertyValue(property);
+      if (outside && value === outside.getPropertyValue(property)) continue;
+      portal.style.setProperty(property, value.trim());
+    }
   }
 
   private syncBodyPortal() {
@@ -1337,15 +1385,16 @@ export class PdsCombobox implements BasePdsProps {
       return;
     }
 
-    const portal = this.ensureBodyPortal();
-    for (const stale of Array.from(portal.children)) {
-      if (stale !== this.listboxEl) {
+    this.ensureBodyPortal();
+    const root = this.portalRoot!;
+    for (const stale of Array.from(root.children)) {
+      if (stale !== this.listboxEl && stale.tagName !== 'STYLE') {
         stale.remove();
       }
     }
 
-    if (this.listboxEl.parentElement !== portal) {
-      portal.appendChild(this.listboxEl);
+    if (this.listboxEl.parentNode !== root) {
+      root.appendChild(this.listboxEl);
       void this.positionDropdown();
       this.startBodyPortalAutoUpdate();
     }
@@ -1359,6 +1408,7 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     this.portalEl = null;
+    this.portalRoot = null;
 
     if (this.listboxEl && !this.listboxEl.isConnected) {
       this.listboxEl = undefined;

@@ -468,7 +468,46 @@ describe('pds-combobox', () => {
     });
 
     const isOpen = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
-      page.evaluate(() => !!document.querySelector('.pds-combobox__listbox, pds-combobox')?.shadowRoot?.querySelector('.pds-combobox__listbox') || !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__listbox'));
+      page.evaluate(() => !!document.querySelector('.pds-combobox__listbox, pds-combobox')?.shadowRoot?.querySelector('.pds-combobox__listbox') || !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'));
+
+    // The portal carries the combobox's styles in its own shadow root; no global CSS styles it.
+    it('styles a dropdown mounted in the body like one in the field', async () => {
+      const page = await setUp('panel-search dropdown-mount="body" group-display="drill-in"');
+
+      const styles = await page.evaluate(() => {
+        const root = document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!;
+        const panel = getComputedStyle(root.querySelector('.pds-combobox__listbox')!);
+        const list = getComputedStyle(root.querySelector('.pds-combobox__listbox-options')!);
+        return { radius: panel.borderTopLeftRadius, background: panel.backgroundColor, listStyle: list.listStyleType };
+      });
+
+      // Values only the copied stylesheet supplies; Floating UI sets the position inline.
+      expect(styles.radius).not.toBe('0px');
+      expect(styles.background).not.toBe('rgba(0, 0, 0, 0)');
+      expect(styles.listStyle).toBe('none');
+    });
+
+    it('carries a custom property set around the combobox over to a dropdown in the body', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="--pine-color-background-overlay: rgb(1, 2, 3)">
+          <pds-combobox component-id="themed" label="Action" trigger="button" mode="select-only"
+            panel-search dropdown-mount="body"></pds-combobox>
+        </div>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = [{ id: 'a', text: 'A' }];
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+
+      const background = await page.evaluate(() => {
+        const root = document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!;
+        return getComputedStyle(root.querySelector('.pds-combobox__listbox')!).backgroundColor;
+      });
+      expect(background).toBe('rgb(1, 2, 3)');
+    });
 
     it('closes a portaled panel-search dropdown on a click outside', async () => {
       const page = await setUp('panel-search dropdown-mount="body"');
@@ -481,29 +520,41 @@ describe('pds-combobox', () => {
       expect(await isOpen(page)).toBe(false);
     });
 
-    it('closes when the trigger is clicked while the search field has focus', async () => {
-      const page = await setUp('panel-search');
-      expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+    // In body mode the search field sits in the portal's shadow root, so focus crosses a boundary
+    // both ways: into the portal from the trigger, and back out to it.
+    describe.each([
+      ['in the field', ''],
+      ['in the body', ' dropdown-mount="body"'],
+    ])('with the dropdown %s', (_where, mount) => {
+      it('closes when the trigger is clicked while the search field has focus', async () => {
+        const page = await setUp(`panel-search${mount}`);
+        expect(await isOpen(page)).toBe(true);
 
-      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
-      await page.waitForChanges();
+        await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+        await page.waitForChanges();
 
-      expect(await isOpen(page)).toBe(false);
+        expect(await isOpen(page)).toBe(false);
+      });
+
+      it('lands on the trigger when Tab leaves the search field, then tabs on from there', async () => {
+        const page = await setUp(`panel-search${mount}`);
+
+        await page.keyboard.press('ArrowDown');
+        await page.keyboard.press('Tab');
+        await page.waitForChanges();
+        await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
+
+        expect(await isOpen(page)).toBe(false);
+        expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
+
+        await page.keyboard.press('Tab');
+        expect(await page.evaluate(() => document.activeElement?.id ?? '')).toBe('after');
+      });
     });
 
-    it('lands on the trigger when Tab leaves the search field, then tabs on from there', async () => {
+    it('focuses the search field in the field when the dropdown opens', async () => {
       const page = await setUp('panel-search');
-
-      await page.keyboard.press('ArrowDown');
-      await page.keyboard.press('Tab');
-      await page.waitForChanges();
-      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
-
-      expect(await isOpen(page)).toBe(false);
-      expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
-
-      await page.keyboard.press('Tab');
-      expect(await page.evaluate(() => document.activeElement?.id ?? '')).toBe('after');
+      expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
     });
 
     it('drills in from the search field by keyboard, and back to it, then closes with Escape', async () => {
@@ -623,23 +674,40 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
       await page.waitForChanges();
+      // Off the panel: as the list scrolls, an option sliding under a resting pointer takes the
+      // highlight, which isn't what this test is about.
+      await page.mouse.move(0, 0);
 
       // Down to the last option, then Home (the row back, first in the group's column) and down to
       // the first option, which scrolls up to meet the header.
       await page.keyboard.press('End');
       await page.waitForChanges();
       await page.keyboard.press('Home');
+      await page.waitForChanges();
       await page.keyboard.press('ArrowDown');
       await page.waitForChanges();
-      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 600)));
 
-      const gap = await page.evaluate(() => {
-        const root = document.querySelector('pds-combobox')!.shadowRoot!;
-        const header = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
-        const option = root.querySelector('[data-option-index="0"]')!.getBoundingClientRect();
-        return Math.round(option.top - header.bottom);
-      });
-      expect(gap).toBeGreaterThanOrEqual(0);
+      // The scroll is smooth, so wait for it to settle rather than for a fixed time: on a slow
+      // runner it's still moving after 600ms. A regression still fails, on the timeout.
+      const gap = () =>
+        page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          const header = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+          const option = root.querySelector('[data-option-index="0"]')!.getBoundingClientRect();
+          return Math.round(option.top - header.bottom);
+        });
+      await page
+        .waitForFunction(
+          () => {
+            const root = document.querySelector('pds-combobox')!.shadowRoot!;
+            const header = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+            const option = root.querySelector('[data-option-index="0"]')!.getBoundingClientRect();
+            return option.top - header.bottom >= -0.5;
+          },
+          { timeout: 3000 },
+        )
+        .catch(() => undefined);
+      expect(await gap()).toBeGreaterThanOrEqual(0);
     });
 
     it('steps back to the search field with Escape from a drilled-in group, and stays open', async () => {
@@ -726,13 +794,14 @@ describe('pds-combobox', () => {
       const page = await setUp('group-display="drill-in" panel-search dropdown-mount="body"');
       await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 50)));
 
-      await (await page.$('.pds-combobox-dropdown-portal .pds-combobox__group-row-trigger'))!.click();
+      await (await page.$('.pds-combobox-dropdown-portal >>> .pds-combobox__group-row-trigger'))!.click();
       await page.waitForChanges();
       await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 20)));
 
       const state = await page.evaluate(() => ({
-        back: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__group-back'),
-        focusInList: !!document.activeElement?.closest('.pds-combobox__listbox-options'),
+        back: !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__group-back'),
+        // The portal's shadow root holds the focus; the document sees its host.
+        focusInList: !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.activeElement?.closest('.pds-combobox__listbox-options'),
       }));
       expect(state).toEqual({ back: true, focusInList: true });
     });
@@ -758,13 +827,13 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 50)));
 
-      const row = await page.$('.pds-combobox-dropdown-portal .pds-combobox__group-row-trigger');
+      const row = await page.$('.pds-combobox-dropdown-portal >>> .pds-combobox__group-row-trigger');
       await row!.click();
       await page.waitForChanges();
 
       const shape = await page.evaluate(() => ({
-        flyout: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__flyout'),
-        back: !!document.querySelector('.pds-combobox-dropdown-portal .pds-combobox__group-back'),
+        flyout: !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__flyout'),
+        back: !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__group-back'),
       }));
       expect(shape).toEqual({ flyout: false, back: true });
     });

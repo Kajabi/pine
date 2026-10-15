@@ -2726,7 +2726,7 @@ describe('pds-combobox', () => {
       component.openGroup = groupNamed(component, 'Tag');
       await page.waitForChanges();
 
-      const portalFlyout = page.doc.querySelector('.pds-combobox-dropdown-portal .pds-combobox__flyout');
+      const portalFlyout = page.doc.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__flyout');
       expect(portalFlyout).not.toBeNull();
       expect(Array.from(portalFlyout!.querySelectorAll('[role="treeitem"]')).map(o => o.textContent)).toEqual([
         'Add a tag',
@@ -4135,7 +4135,7 @@ describe('pds-combobox', () => {
 
       const portal = document.querySelector('.pds-combobox-dropdown-portal');
       expect(portal).not.toBeNull();
-      const listbox = portal?.querySelector('ul[role="listbox"]');
+      const listbox = portal?.shadowRoot?.querySelector('ul[role="listbox"]');
       expect(listbox?.id).toBe('portal-combobox-listbox');
       expect(page.root?.shadowRoot?.querySelector('ul[role="listbox"]')).toBeNull();
     });
@@ -4204,8 +4204,42 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
 
       const portal = document.querySelector('.pds-combobox-dropdown-portal');
-      const listboxes = portal?.querySelectorAll('ul[role="listbox"]');
+      const listboxes = portal?.shadowRoot?.querySelectorAll('ul[role="listbox"]');
       expect(listboxes?.length).toBe(1);
+    });
+
+    it('carries a theme set on an ancestor over to the portal', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<div data-theme="dark"><pds-combobox component-id="portal-theme" dropdown-mount="body" label="Pick">
+          <option value="a">A</option>
+        </pds-combobox></div>`,
+      });
+      const combobox = page.body.querySelector('pds-combobox');
+      (combobox?.shadowRoot?.querySelector('input') as HTMLInputElement).click();
+      await page.waitForChanges();
+
+      const portal = document.querySelector('.pds-combobox-dropdown-portal');
+      expect(portal?.getAttribute('data-theme')).toBe('dark');
+      expect(portal?.shadowRoot?.querySelector('ul[role="listbox"]')).not.toBeNull();
+    });
+
+    // The mock DOM doesn't compute direction or inherited custom properties; e2e covers those.
+    it('carries the language over to the portal', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<div lang="ar">
+          <pds-combobox component-id="portal-context" dropdown-mount="body" label="Pick">
+            <option value="a">A</option>
+          </pds-combobox>
+        </div>`,
+      });
+      const combobox = page.body.querySelector('pds-combobox');
+      (combobox?.shadowRoot?.querySelector('input') as HTMLInputElement).click();
+      await page.waitForChanges();
+
+      const portal = document.querySelector('.pds-combobox-dropdown-portal') as HTMLElement;
+      expect(portal.lang).toBe('ar');
     });
 
     it('removes the portal container when the dropdown closes', async () => {
@@ -4240,7 +4274,7 @@ describe('pds-combobox', () => {
       trigger?.click();
       await page.waitForChanges();
 
-      expect(document.querySelector('.pds-combobox-dropdown-portal ul[role="listbox"]')).not.toBeNull();
+      expect(document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('ul[role="listbox"]')).not.toBeNull();
     });
 
     it('starts body portal autoUpdate once per open', async () => {
@@ -4279,11 +4313,11 @@ describe('pds-combobox', () => {
       input?.click();
       await page.waitForChanges();
 
-      const listbox = document.querySelector('.pds-combobox-dropdown-portal ul[role="listbox"]');
+      const listbox = document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('ul[role="listbox"]');
       component.displayText = 'a';
       await page.waitForChanges();
 
-      expect(document.querySelector('.pds-combobox-dropdown-portal ul[role="listbox"]') === listbox).toBe(true);
+      expect(document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('ul[role="listbox"]') === listbox).toBe(true);
     });
 
     it('removes the portal when the component disconnects while open', async () => {
