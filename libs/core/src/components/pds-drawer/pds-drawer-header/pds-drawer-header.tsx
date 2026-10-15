@@ -1,6 +1,9 @@
 import { Component, Element, h } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
+/**
+ * @lightDom renders-markup
+ */
 @Component({
   tag: 'pds-drawer-header',
   styleUrl: 'pds-drawer-header.scss',

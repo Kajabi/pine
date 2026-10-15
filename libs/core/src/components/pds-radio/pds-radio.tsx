@@ -5,6 +5,7 @@ import { danger } from '@pine-ds/icons/icons';
 /**
  * @slot image - Custom image content to display instead of the default radio input
  * @part image-container - The container for the image
+ * @lightDom renders-markup
  */
 @Component({
   tag: 'pds-radio',

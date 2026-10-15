@@ -3,6 +3,9 @@ import { Component, h, Host, Prop } from '@stencil/core';
 import { BoxColumnType, BoxSpacingType, BoxShadowSizeType } from '../../utils/types';
 import { normalizeColorValue } from '../../utils/utils';
 
+/**
+ * @lightDom host-only
+ */
 @Component({
   tag: 'pds-box',
   styleUrl: 'pds-box.scss',

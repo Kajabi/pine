@@ -5,6 +5,7 @@ import { RadioGroupChangeEventDetail } from './radio-group-interface';
 
 /**
  * @slot (default) - Child pds-radio components
+ * @lightDom renders-markup
  */
 @Component({
   tag: 'pds-radio-group',
