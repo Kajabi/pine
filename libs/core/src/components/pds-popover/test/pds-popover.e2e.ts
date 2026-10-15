@@ -21,6 +21,24 @@ describe('pds-popover', () => {
     expect(element).toEqualAttribute('placement', 'right');
   });
 
+  it('takes a new placement after the default placement attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-popover></pds-popover>');
+    const element = await page.find('pds-popover');
+
+    // The attribute holds Pine's reflected default, the case a Turbo morph hits.
+    element.removeAttribute('placement');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('placement', 'right');
+
+    element.setProperty('placement', 'top');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('placement')).toBe('top');
+    expect(element).toEqualAttribute('placement', 'top');
+  });
+
   it('should toggle popover visibility when clicking trigger', async () => {
     const page = await newE2EPage();
     await page.setContent(`

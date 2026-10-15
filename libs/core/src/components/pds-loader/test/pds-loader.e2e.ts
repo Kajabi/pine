@@ -109,6 +109,24 @@ describe('pds-loader', () => {
 
     expect(element).toEqualAttribute('size', 'md');
   });
+
+  it('takes a new size after the default size attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader></pds-loader>');
+    const element = await page.find('pds-loader');
+
+    // The attribute holds Pine's reflected default, the case a Turbo morph hits.
+    element.removeAttribute('size');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('size', 'md');
+
+    element.setProperty('size', 'xs');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('xs');
+    expect(element).toEqualAttribute('size', 'xs');
+  });
 });
 
 describe('pds-loader accessibility', () => {

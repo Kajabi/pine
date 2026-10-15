@@ -13,8 +13,14 @@
  * instead of the watched value: present, trust the parsed value; absent,
  * fall back to the default.
  *
- * Wire up from a `@Watch` on the prop and reassign the prop to the result, so
- * the reflected attribute is written back along with the restored default.
+ * Falling back also writes the default back onto the host. Stencil won't: it
+ * diffs a reflected attribute against the previous render, not the live DOM,
+ * so when the removed attribute held the default (`'lg'` → `null` → `'lg'`)
+ * the values match and it skips the write. Left absent, the attribute would
+ * make every later property write (`avatar.size = 'xs'`, a React update, or
+ * `copytext.border = false`) fall back to the default too.
+ *
+ * Wire up from a `@Watch` on the prop and reassign the prop to the result.
  *
  * `attr` is the HTML attribute name, not the prop name — pass the kebab-case
  * form (e.g. `'is-loading'`) for a camelCase prop. They're the same string
@@ -23,5 +29,10 @@
  * if the prop name were passed instead.
  */
 export function restoreReflectedDefault<T>(el: Element, attr: string, value: T, defaultValue: T): T {
-  return el.hasAttribute(attr) ? value : defaultValue;
+  if (el.hasAttribute(attr)) return value;
+
+  if (defaultValue !== false && defaultValue != null) {
+    el.setAttribute(attr, defaultValue === true ? '' : String(defaultValue));
+  }
+  return defaultValue;
 }
