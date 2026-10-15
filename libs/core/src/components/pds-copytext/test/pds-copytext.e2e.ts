@@ -44,7 +44,7 @@ describe('pds-copytext', () => {
     // on the default, so the server's HTML never carried it) resolves the
     // prop back to `true` through two watcher firings in the same tick, which
     // settle the render with the bordered class even though Stencil doesn't
-    // re-write the now-redundant attribute. See DSS-356.
+    // re-write the now-redundant attribute.
     element.removeAttribute('border');
     await page.waitForChanges();
 

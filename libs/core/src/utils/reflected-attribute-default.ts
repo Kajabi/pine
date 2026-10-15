@@ -15,6 +15,12 @@
  *
  * Wire up from a `@Watch` on the prop and reassign the prop to the result, so
  * the reflected attribute is written back along with the restored default.
+ *
+ * `attr` is the HTML attribute name, not the prop name — pass the kebab-case
+ * form (e.g. `'is-loading'`) for a camelCase prop. They're the same string
+ * for every current caller (`size`, `variant`, `placement`, `border`), but
+ * `hasAttribute` would silently always return `false` for a multi-word prop
+ * if the prop name were passed instead.
  */
 export function restoreReflectedDefault<T>(el: Element, attr: string, value: T, defaultValue: T): T {
   return el.hasAttribute(attr) ? value : defaultValue;

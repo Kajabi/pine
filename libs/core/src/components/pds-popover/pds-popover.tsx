@@ -111,7 +111,7 @@ export class PdsPopover {
    * Determines the preferred position of the popover
    * @defaultValue "right"
    */
-  @Prop({ reflect: true }) placement: PlacementType = 'right';
+  @Prop({ reflect: true, mutable: true }) placement: PlacementType = 'right';
 
   @Watch('placement')
   restorePlacementDefault(newValue: typeof this.placement) {

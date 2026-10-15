@@ -55,7 +55,7 @@ export class PdsAvatar {
    * Size of the avatar. Value can be preset or custom.
    * @defaultValue lg
    */
-  @Prop({ reflect: true }) size?:
+  @Prop({ reflect: true, mutable: true }) size?:
   | 'xl' // 64px
   | 'lg' // 56px
   | 'md' // 40px
@@ -93,7 +93,7 @@ export class PdsAvatar {
    * Determines the variant of avatar. Changes appearance accordingly.
    * @defaultValue customer
    */
-  @Prop({ reflect: true }) variant?: 'customer' | 'admin' = 'customer';
+  @Prop({ reflect: true, mutable: true }) variant?: 'customer' | 'admin' = 'customer';
 
   /**
    * Accessible label for the dropdown trigger button. Pass a translated string
