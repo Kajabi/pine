@@ -10,6 +10,17 @@ describe('pds-popover', () => {
     expect(element).toHaveClass('hydrated');
   });
 
+  it('restores the default placement when the placement attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-popover placement="top"></pds-popover>');
+    const element = await page.find('pds-popover');
+
+    element.removeAttribute('placement');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('placement', 'right');
+  });
+
   it('should toggle popover visibility when clicking trigger', async () => {
     const page = await newE2EPage();
     await page.setContent(`

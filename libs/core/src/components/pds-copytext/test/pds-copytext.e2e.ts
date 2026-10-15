@@ -34,6 +34,23 @@ describe('pds-copytext', () => {
     expect(element).toHaveClass('hydrated');
   });
 
+  it('renders with its default border when the attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-copytext value="Copy me"></pds-copytext>');
+    await page.waitForChanges();
+    const element = await page.find('pds-copytext');
+
+    // Removing the attribute (what a Turbo morph does when the author relied
+    // on the default, so the server's HTML never carried it) resolves the
+    // prop back to `true` through two watcher firings in the same tick, which
+    // settle the render with the bordered class even though Stencil doesn't
+    // re-write the now-redundant attribute. See DSS-356.
+    element.removeAttribute('border');
+    await page.waitForChanges();
+
+    expect(element).toHaveClass('pds-copytext--bordered');
+  });
+
   it('emits pdsCopyTextClick event when clicked', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-copytext value="Copy me"></pds-copytext>');

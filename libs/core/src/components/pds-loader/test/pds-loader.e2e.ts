@@ -98,6 +98,17 @@ describe('pds-loader', () => {
     expect(colors[1]).toBe('rgb(0, 0, 255)'); // blue
     expect(colors[2]).toBe('rgb(0, 128, 0)'); // green
   });
+
+  it('restores the default size when the size attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader size="xs"></pds-loader>');
+    const element = await page.find('pds-loader');
+
+    element.removeAttribute('size');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('size', 'md');
+  });
 });
 
 describe('pds-loader accessibility', () => {

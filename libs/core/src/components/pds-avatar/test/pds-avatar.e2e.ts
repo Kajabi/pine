@@ -38,6 +38,19 @@ describe('pds-avatar', () => {
     const avatar = await page.find('pds-avatar');
     expect(avatar.shadowRoot.querySelector('pds-icon')).toBeNull();
   });
+
+  it('restores the default size and variant when those attributes are removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar size="xs" variant="admin"></pds-avatar>');
+    const element = await page.find('pds-avatar');
+
+    element.removeAttribute('size');
+    element.removeAttribute('variant');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('size', 'lg');
+    expect(element).toEqualAttribute('variant', 'customer');
+  });
 });
 
 describe('pds-avatar accessibility', () => {
