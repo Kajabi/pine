@@ -1,3 +1,13 @@
+## 4.4.3 (2026-10-15)
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** keep the button and chip triggers inside their trigger-width ([#866](https://github.com/Kajabi/pine/pull/866))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 4.4.2 (2026-10-15)
 
 ### Bug Fixes 🐛
