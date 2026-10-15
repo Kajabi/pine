@@ -1325,6 +1325,8 @@ export class PdsCombobox implements BasePdsProps {
       const target = this.getPortalMountRoot();
       if (this.portalEl.parentElement !== target) {
         target.appendChild(this.portalEl);
+        // What differs from the new parent may not be what differed from the old one.
+        this.copyPortalContext();
       }
       return this.portalEl;
     }
@@ -1342,8 +1344,9 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Gives the portal what the dropdown would otherwise get inside the combobox: its styles (so it
-   * needs no global CSS), the reading direction, a theme set on an ancestor, and custom properties
-   * set between the combobox and where the portal mounts.
+   * needs no global CSS), the reading direction and language, a theme set on an ancestor, and
+   * custom properties set between the combobox and where the portal mounts. A snapshot: the portal
+   * is rebuilt on every open, so a theme switched while it's open applies from the next open.
    */
   private copyPortalContext() {
     const portal = this.portalEl;
@@ -1359,6 +1362,8 @@ export class PdsCombobox implements BasePdsProps {
 
     const computed = getComputedStyle(this.el);
     portal.dir = computed.direction || 'ltr';
+    const lang = closest('[lang]', this.el)?.getAttribute('lang');
+    if (lang) portal.lang = lang;
     const theme = closest('[data-theme]', this.el)?.getAttribute('data-theme');
     if (theme) portal.setAttribute('data-theme', theme);
 
