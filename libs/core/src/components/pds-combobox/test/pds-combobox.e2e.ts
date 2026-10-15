@@ -674,23 +674,40 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
       await page.waitForChanges();
+      // Off the panel: as the list scrolls, an option sliding under a resting pointer takes the
+      // highlight, which isn't what this test is about.
+      await page.mouse.move(0, 0);
 
       // Down to the last option, then Home (the row back, first in the group's column) and down to
       // the first option, which scrolls up to meet the header.
       await page.keyboard.press('End');
       await page.waitForChanges();
       await page.keyboard.press('Home');
+      await page.waitForChanges();
       await page.keyboard.press('ArrowDown');
       await page.waitForChanges();
-      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 600)));
 
-      const gap = await page.evaluate(() => {
-        const root = document.querySelector('pds-combobox')!.shadowRoot!;
-        const header = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
-        const option = root.querySelector('[data-option-index="0"]')!.getBoundingClientRect();
-        return Math.round(option.top - header.bottom);
-      });
-      expect(gap).toBeGreaterThanOrEqual(0);
+      // The scroll is smooth, so wait for it to settle rather than for a fixed time: on a slow
+      // runner it's still moving after 600ms. A regression still fails, on the timeout.
+      const gap = () =>
+        page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          const header = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+          const option = root.querySelector('[data-option-index="0"]')!.getBoundingClientRect();
+          return Math.round(option.top - header.bottom);
+        });
+      await page
+        .waitForFunction(
+          () => {
+            const root = document.querySelector('pds-combobox')!.shadowRoot!;
+            const header = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+            const option = root.querySelector('[data-option-index="0"]')!.getBoundingClientRect();
+            return option.top - header.bottom >= -0.5;
+          },
+          { timeout: 3000 },
+        )
+        .catch(() => undefined);
+      expect(await gap()).toBeGreaterThanOrEqual(0);
     });
 
     it('steps back to the search field with Escape from a drilled-in group, and stays open', async () => {
