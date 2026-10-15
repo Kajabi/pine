@@ -128,6 +128,7 @@
   background: var(--color-background-default, var(--pine-color-secondary));
   border: var(--pine-border);
   border-radius: var(--pine-border-radius-full);
+  box-sizing: border-box;
   color: var(--color-text-default, var(--pine-color-text-inverse-emphasis));
   cursor: pointer;
   display: flex;
@@ -252,6 +253,7 @@
 .pds-combobox__chip-trigger {
   align-items: center;
   border-radius: var(--pine-dimension-sm);
+  box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
   font: var(--pine-typography-body-medium);
