@@ -34,7 +34,7 @@ const OBSERVER = Symbol.for('@pine-ds/core/keepPineHydrated');
  * appears never settles: don't strip Pine's classes from a `MutationObserver`.
  *
  * Pine's global script calls this, so the CDN and `dist` builds get it on load. The custom-elements
- * build (`@pine-ds/core/components`, `@pine-ds/react`) has no global script: call it once yourself.
+ * build (`@pine-ds/core/components/*`, `@pine-ds/react`) has no global script: call it once yourself.
  * Calling it again does nothing, and without `MutationObserver` (server rendering) neither does the
  * first call.
  */
