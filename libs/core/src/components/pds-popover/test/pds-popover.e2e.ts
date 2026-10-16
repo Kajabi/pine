@@ -372,6 +372,97 @@ describe('pds-popover', () => {
       expect(trigger.getAttribute('aria-controls')).toBe('component-trigger-portal');
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
     });
+
+    // Anything can rewrite the trigger's attributes; a Turbo morph matches it to server HTML that
+    // has none of Pine's ARIA.
+    it("puts the trigger's ARIA back when it's removed or changed", async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="aria-popover">
+          <button slot="trigger" id="trigger">Show popover</button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+      const aria = () =>
+        page.$eval('#trigger', (el) => [el.getAttribute('aria-controls'), el.getAttribute('aria-expanded')]);
+      const rewrite = async (change: (el: Element) => void) => {
+        await page.$eval('#trigger', change);
+        await page.waitForChanges();
+      };
+
+      await rewrite((el) => {
+        el.removeAttribute('aria-controls');
+        el.removeAttribute('aria-expanded');
+      });
+      expect(await aria()).toEqual(['aria-popover-portal', 'false']);
+
+      // aria-expanded follows the popover's real state, not the value written.
+      await rewrite((el) => el.setAttribute('aria-expanded', 'true'));
+      expect(await aria()).toEqual(['aria-popover-portal', 'false']);
+
+      await page.click('#trigger');
+      await page.waitForChanges();
+      await rewrite((el) => el.removeAttribute('aria-expanded'));
+      expect(await aria()).toEqual(['aria-popover-portal', 'true']);
+
+      const popover = await page.find('pds-popover');
+      await popover.callMethod('hide');
+      await page.waitForChanges();
+      expect(await aria()).toEqual(['aria-popover-portal', 'false']);
+    });
+
+    it('watches a swapped-in trigger', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="swap-popover">
+          <button slot="trigger" id="old-trigger">Old</button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+
+      await page.$eval('pds-popover', (popover) => {
+        const trigger = document.createElement('button');
+        trigger.slot = 'trigger';
+        trigger.id = 'new-trigger';
+        trigger.textContent = 'New';
+        popover.querySelector('#old-trigger').replaceWith(trigger);
+      });
+      await page.waitForChanges();
+      await page.$eval('#new-trigger', (el) => {
+        el.removeAttribute('aria-controls');
+        el.removeAttribute('aria-expanded');
+      });
+      await page.waitForChanges();
+
+      const trigger = await page.find('#new-trigger');
+      expect(trigger).toEqualAttribute('aria-controls', 'swap-popover-portal');
+      expect(trigger).toEqualAttribute('aria-expanded', 'false');
+    });
+
+    // The restored host attributes only reach a screen reader once pds-button forwards them.
+    it("puts a pds-button trigger's ARIA back on its inner button", async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="button-popover">
+          <pds-button slot="trigger">Show popover</pds-button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+
+      await page.$eval('pds-button', (el) => {
+        el.removeAttribute('aria-controls');
+        el.removeAttribute('aria-expanded');
+      });
+      await page.waitForChanges();
+
+      expect(await page.find('pds-button')).toEqualAttribute('aria-controls', 'button-popover-portal');
+      expect(await page.find('pds-button >>> button')).toEqualAttribute('aria-expanded', 'false');
+      const controlsPortal = await page.$eval('pds-button', (el) => {
+        const inner = el.shadowRoot.querySelector('button') as HTMLButtonElement & { ariaControlsElements?: Element[] };
+        return (inner.ariaControlsElements || []).map((target) => target.id);
+      });
+      expect(controlsPortal).toEqual(['button-popover-portal']);
+    });
   });
 
   describe('Focus return', () => {

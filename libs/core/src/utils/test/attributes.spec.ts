@@ -1,4 +1,4 @@
-import { inheritAttributes, inheritAriaAttributes } from '../attributes';
+import { inheritAttributes, inheritAriaAttributes, setAttributesIfChanged } from '../attributes';
 
 describe('inheritAttributes()', () => {
   it('should create an attribute inheritance object', () => {
@@ -79,4 +79,20 @@ describe('inheritAriaAttributes()', () => {
     });
   });
 
+});
+
+describe('setAttributesIfChanged()', () => {
+  it('sets missing and different values, and skips values already in place', () => {
+    const el = document.createElement('button');
+    el.setAttribute('aria-haspopup', 'menu');
+    el.setAttribute('aria-expanded', 'true');
+    const setAttribute = jest.spyOn(el, 'setAttribute');
+
+    setAttributesIfChanged(el, { 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': 'panel' });
+
+    expect(el.getAttribute('aria-expanded')).toBe('false');
+    expect(el.getAttribute('aria-controls')).toBe('panel');
+    expect(setAttribute).toHaveBeenCalledTimes(2);
+    expect(setAttribute).not.toHaveBeenCalledWith('aria-haspopup', 'menu');
+  });
 });

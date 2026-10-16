@@ -1,6 +1,7 @@
 import { Component, Element, Host, h, Prop, Listen, State } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 import { PlacementType } from '@utils/types';
+import { setAttributesIfChanged } from '@utils/attributes';
 import {  computePosition,
   flip,
   offset,
@@ -28,6 +29,7 @@ export class PdsDropdownMenu implements BasePdsProps {
   private isOpen: boolean = false;
   private menuItems: MenuItemElement[] = [];
   private cleanupAutoUpdate: (() => void) | null = null;
+  private triggerObserver: MutationObserver | null = null;
 
   @Element() host: HTMLPdsDropdownMenuElement;
 
@@ -47,12 +49,22 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.panelEl = this.host.shadowRoot?.querySelector('pds-box') as HTMLPdsBoxElement;
   }
 
+  connectedCallback() {
+    // Moved within the page, the trigger slot doesn't change, so watch the same trigger again, and
+    // fix anything changed while the menu was detached and unobserved.
+    this.observeTrigger();
+    this.syncTriggerAria();
+  }
+
   disconnectedCallback() {
     // Clean up auto-update when component is removed from DOM
     if (this.cleanupAutoUpdate) {
       this.cleanupAutoUpdate();
       this.cleanupAutoUpdate = null;
     }
+
+    this.triggerObserver?.disconnect();
+    this.triggerObserver = null;
   }
 
   private handleTriggerSlotChange = (event: Event) => {
@@ -62,11 +74,32 @@ export class PdsDropdownMenu implements BasePdsProps {
     const assignedElements = this.slotEl.assignedElements();
 
     this.triggerEl = assignedElements[0] as HTMLElement;
-    this.triggerEl.onclick = this.handleClick;
+    if (this.triggerEl) {
+      this.triggerEl.onclick = this.handleClick;
+      this.syncTriggerAria();
+    }
+    this.observeTrigger();
+  }
 
-    // Add accessibility attributes to trigger
-    this.triggerEl.setAttribute('aria-haspopup', 'menu');
-    this.triggerEl.setAttribute('aria-expanded', 'false');
+  // Writes the trigger's ARIA from the menu's state, so the observer's own callback doesn't loop.
+  private syncTriggerAria = () => {
+    if (!this.triggerEl) return;
+
+    setAttributesIfChanged(this.triggerEl, { 'aria-haspopup': 'menu', 'aria-expanded': String(this.isOpen) });
+  }
+
+  // The trigger is the consumer's element, so anything can rewrite its attributes (a Turbo morph
+  // matches it to server HTML that has no ARIA). Put Pine's values back when that happens.
+  private observeTrigger() {
+    this.triggerObserver?.disconnect();
+    this.triggerObserver = null;
+    if (!this.triggerEl || typeof MutationObserver === 'undefined') return;
+
+    this.triggerObserver = new MutationObserver(this.syncTriggerAria);
+    this.triggerObserver.observe(this.triggerEl, {
+      attributes: true,
+      attributeFilter: ['aria-haspopup', 'aria-expanded'],
+    });
   }
 
   private handleSlotChange = (event: Event) => {
@@ -137,9 +170,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     this.host.shadowRoot?.querySelector('pds-box').classList.remove('is-hidden');
     this.isOpen = true;
-
-    // Update ARIA attributes
-    this.triggerEl.setAttribute('aria-expanded', 'true');
+    this.syncTriggerAria();
   }
 
   // Close the dropdown
@@ -153,8 +184,7 @@ export class PdsDropdownMenu implements BasePdsProps {
       this.cleanupAutoUpdate = null;
     }
 
-    // Update ARIA attributes
-    this.triggerEl.setAttribute('aria-expanded', 'false');
+    this.syncTriggerAria();
 
     // Reset focus index
     this.currentFocusIndex = -1;
