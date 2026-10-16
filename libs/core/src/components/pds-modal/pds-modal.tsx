@@ -94,6 +94,9 @@ function deepActiveElement(): Element | null {
   return active;
 }
 
+/**
+ * @lightDom renders-markup
+ */
 @Component({
   tag: 'pds-modal',
   styleUrl: 'pds-modal.scss',

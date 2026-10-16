@@ -185,6 +185,9 @@ export namespace Components {
          */
         "variant"?: 'customer' | 'admin';
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsBox {
         /**
           * Defines how items within the box are aligned.
@@ -1429,6 +1432,7 @@ export namespace Components {
      * suppressed, and adds the edge, width and dismiss behavior a side panel
      * needs on top. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
+     * @lightDom renders-markup
      */
     interface PdsDrawer {
         /**
@@ -1471,11 +1475,18 @@ export namespace Components {
      * which caps itself against the viewport for a centered, possibly-shorter
      * modal, a drawer panel is already edge-to-edge, so its content can simply
      * flex to fill whatever space the header and footer leave.
+     * @lightDom renders-markup
      */
     interface PdsDrawerContent {
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsDrawerFooter {
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsDrawerHeader {
     }
     interface PdsDropdownMenu {
@@ -1817,6 +1828,9 @@ export namespace Components {
          */
         "variant": 'spinner' | 'typing';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModal {
         /**
           * Whether the modal can be dismissed by clicking the backdrop
@@ -1861,6 +1875,9 @@ export namespace Components {
          */
         "size": ModalSizeType | (string & Record<never, never>);
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalContent {
         /**
           * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
@@ -1868,8 +1885,14 @@ export namespace Components {
          */
         "border": 'none' | 'both' | 'top' | 'bottom';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalFooter {
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalHeader {
     }
     interface PdsMultiselect {
@@ -2187,6 +2210,9 @@ export namespace Components {
          */
         "icon": string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
@@ -2242,6 +2268,9 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsRadioGroup {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2289,6 +2318,9 @@ export namespace Components {
          */
         "required": boolean;
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
@@ -2388,6 +2420,9 @@ export namespace Components {
          */
         "value"?: string | string[];
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -2414,6 +2449,9 @@ export namespace Components {
          */
         "handleType": 'handle' | 'row';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsSortableItem {
         /**
           * A unique identifier used for the sortable item `id` attribute.
@@ -2480,6 +2518,9 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTab {
         /**
           * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`. Ignored in panel mode, where the active tab is derived from the parent's `activeTabName`.
@@ -2623,6 +2664,9 @@ export namespace Components {
          */
         "isSelected"?: boolean;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTabpanel {
         /**
           * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -2844,6 +2888,9 @@ export namespace Components {
          */
         "type": 'default' | 'danger' | 'loading';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTooltip {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -3064,6 +3111,9 @@ declare global {
         prototype: HTMLPdsAvatarElement;
         new (): HTMLPdsAvatarElement;
     };
+    /**
+     * @lightDom host-only
+     */
     interface HTMLPdsBoxElement extends Components.PdsBox, HTMLStencilElement {
     }
     var HTMLPdsBoxElement: {
@@ -3206,6 +3256,7 @@ declare global {
      * suppressed, and adds the edge, width and dismiss behavior a side panel
      * needs on top. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
+     * @lightDom renders-markup
      */
     interface HTMLPdsDrawerElement extends Components.PdsDrawer, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsDrawerElementEventMap>(type: K, listener: (this: HTMLPdsDrawerElement, ev: PdsDrawerCustomEvent<HTMLPdsDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3226,6 +3277,7 @@ declare global {
      * which caps itself against the viewport for a centered, possibly-shorter
      * modal, a drawer panel is already edge-to-edge, so its content can simply
      * flex to fill whatever space the header and footer leave.
+     * @lightDom renders-markup
      */
     interface HTMLPdsDrawerContentElement extends Components.PdsDrawerContent, HTMLStencilElement {
     }
@@ -3233,12 +3285,18 @@ declare global {
         prototype: HTMLPdsDrawerContentElement;
         new (): HTMLPdsDrawerContentElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsDrawerFooterElement extends Components.PdsDrawerFooter, HTMLStencilElement {
     }
     var HTMLPdsDrawerFooterElement: {
         prototype: HTMLPdsDrawerFooterElement;
         new (): HTMLPdsDrawerFooterElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsDrawerHeaderElement extends Components.PdsDrawerHeader, HTMLStencilElement {
     }
     var HTMLPdsDrawerHeaderElement: {
@@ -3348,6 +3406,9 @@ declare global {
         "pdsModalOpen": void;
         "pdsModalClose": void;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsModalElement extends Components.PdsModal, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsModalElementEventMap>(type: K, listener: (this: HTMLPdsModalElement, ev: PdsModalCustomEvent<HTMLPdsModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3362,18 +3423,27 @@ declare global {
         prototype: HTMLPdsModalElement;
         new (): HTMLPdsModalElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsModalContentElement extends Components.PdsModalContent, HTMLStencilElement {
     }
     var HTMLPdsModalContentElement: {
         prototype: HTMLPdsModalContentElement;
         new (): HTMLPdsModalContentElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsModalFooterElement extends Components.PdsModalFooter, HTMLStencilElement {
     }
     var HTMLPdsModalFooterElement: {
         prototype: HTMLPdsModalFooterElement;
         new (): HTMLPdsModalFooterElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsModalHeaderElement extends Components.PdsModalHeader, HTMLStencilElement {
     }
     var HTMLPdsModalHeaderElement: {
@@ -3435,6 +3505,9 @@ declare global {
     interface HTMLPdsRadioElementEventMap {
         "pdsRadioChange": boolean;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsRadioElement extends Components.PdsRadio, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsRadioElementEventMap>(type: K, listener: (this: HTMLPdsRadioElement, ev: PdsRadioCustomEvent<HTMLPdsRadioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3452,6 +3525,9 @@ declare global {
     interface HTMLPdsRadioGroupElementEventMap {
         "pdsRadioGroupChange": RadioGroupChangeEventDetail;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsRadioGroupElement extends Components.PdsRadioGroup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsRadioGroupElementEventMap>(type: K, listener: (this: HTMLPdsRadioGroupElement, ev: PdsRadioGroupCustomEvent<HTMLPdsRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3466,6 +3542,9 @@ declare global {
         prototype: HTMLPdsRadioGroupElement;
         new (): HTMLPdsRadioGroupElement;
     };
+    /**
+     * @lightDom host-only
+     */
     interface HTMLPdsRowElement extends Components.PdsRow, HTMLStencilElement {
     }
     var HTMLPdsRowElement: {
@@ -3495,6 +3574,9 @@ declare global {
     interface HTMLPdsSortableElementEventMap {
         "pdsSortableItemMoved": SortableEvent;
     }
+    /**
+     * @lightDom host-only
+     */
     interface HTMLPdsSortableElement extends Components.PdsSortable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsSortableElementEventMap>(type: K, listener: (this: HTMLPdsSortableElement, ev: PdsSortableCustomEvent<HTMLPdsSortableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3509,6 +3591,9 @@ declare global {
         prototype: HTMLPdsSortableElement;
         new (): HTMLPdsSortableElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsSortableItemElement extends Components.PdsSortableItem, HTMLStencilElement {
     }
     var HTMLPdsSortableItemElement: {
@@ -3535,6 +3620,9 @@ declare global {
     interface HTMLPdsTabElementEventMap {
         "pdsTabClick": object;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsTabElement extends Components.PdsTab, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsTabElementEventMap>(type: K, listener: (this: HTMLPdsTabElement, ev: PdsTabCustomEvent<HTMLPdsTabElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3629,6 +3717,9 @@ declare global {
         prototype: HTMLPdsTableRowElement;
         new (): HTMLPdsTableRowElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsTabpanelElement extends Components.PdsTabpanel, HTMLStencilElement {
     }
     var HTMLPdsTabpanelElement: {
@@ -3685,6 +3776,9 @@ declare global {
         prototype: HTMLPdsToastElement;
         new (): HTMLPdsToastElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsTooltipElement extends Components.PdsTooltip, HTMLStencilElement {
     }
     var HTMLPdsTooltipElement: {
@@ -3914,6 +4008,9 @@ declare namespace LocalJSX {
          */
         "variant"?: 'customer' | 'admin';
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsBox {
         /**
           * Defines how items within the box are aligned.
@@ -5184,6 +5281,7 @@ declare namespace LocalJSX {
      * suppressed, and adds the edge, width and dismiss behavior a side panel
      * needs on top. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
+     * @lightDom renders-markup
      */
     interface PdsDrawer {
         /**
@@ -5234,11 +5332,18 @@ declare namespace LocalJSX {
      * which caps itself against the viewport for a centered, possibly-shorter
      * modal, a drawer panel is already edge-to-edge, so its content can simply
      * flex to fill whatever space the header and footer leave.
+     * @lightDom renders-markup
      */
     interface PdsDrawerContent {
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsDrawerFooter {
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsDrawerHeader {
     }
     interface PdsDropdownMenu {
@@ -5604,6 +5709,9 @@ declare namespace LocalJSX {
          */
         "variant"?: 'spinner' | 'typing';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModal {
         /**
           * Whether the modal can be dismissed by clicking the backdrop
@@ -5648,6 +5756,9 @@ declare namespace LocalJSX {
          */
         "size"?: ModalSizeType | (string & Record<never, never>);
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalContent {
         /**
           * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
@@ -5655,8 +5766,14 @@ declare namespace LocalJSX {
          */
         "border"?: 'none' | 'both' | 'top' | 'bottom';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalFooter {
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalHeader {
     }
     interface PdsMultiselect {
@@ -5986,6 +6103,9 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
@@ -6045,6 +6165,9 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsRadioGroup {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -6096,6 +6219,9 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
@@ -6215,6 +6341,9 @@ declare namespace LocalJSX {
          */
         "value"?: string | string[];
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -6245,6 +6374,9 @@ declare namespace LocalJSX {
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsSortableItem {
         /**
           * A unique identifier used for the sortable item `id` attribute.
@@ -6319,6 +6451,9 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTab {
         /**
           * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`. Ignored in panel mode, where the active tab is derived from the parent's `activeTabName`.
@@ -6470,6 +6605,9 @@ declare namespace LocalJSX {
          */
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTabpanel {
         /**
           * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -6714,6 +6852,9 @@ declare namespace LocalJSX {
          */
         "type"?: 'default' | 'danger' | 'loading';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTooltip {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -7510,6 +7651,9 @@ declare module "@stencil/core" {
             "pds-accordion": LocalJSX.IntrinsicElements["pds-accordion"] & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
             "pds-alert": LocalJSX.IntrinsicElements["pds-alert"] & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
             "pds-avatar": LocalJSX.IntrinsicElements["pds-avatar"] & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
+            /**
+             * @lightDom host-only
+             */
             "pds-box": LocalJSX.IntrinsicElements["pds-box"] & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.IntrinsicElements["pds-button"] & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.IntrinsicElements["pds-checkbox"] & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
@@ -7532,6 +7676,7 @@ declare module "@stencil/core" {
              * suppressed, and adds the edge, width and dismiss behavior a side panel
              * needs on top. It does not reimplement focus, Escape or dialog semantics —
              * those come from `pds-modal` unchanged.
+             * @lightDom renders-markup
              */
             "pds-drawer": LocalJSX.IntrinsicElements["pds-drawer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerElement>;
             /**
@@ -7539,9 +7684,16 @@ declare module "@stencil/core" {
              * which caps itself against the viewport for a centered, possibly-shorter
              * modal, a drawer panel is already edge-to-edge, so its content can simply
              * flex to fill whatever space the header and footer leave.
+             * @lightDom renders-markup
              */
             "pds-drawer-content": LocalJSX.IntrinsicElements["pds-drawer-content"] & JSXBase.HTMLAttributes<HTMLPdsDrawerContentElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-drawer-footer": LocalJSX.IntrinsicElements["pds-drawer-footer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerFooterElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-drawer-header": LocalJSX.IntrinsicElements["pds-drawer-header"] & JSXBase.HTMLAttributes<HTMLPdsDrawerHeaderElement>;
             "pds-dropdown-menu": LocalJSX.IntrinsicElements["pds-dropdown-menu"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;
             "pds-dropdown-menu-item": LocalJSX.IntrinsicElements["pds-dropdown-menu-item"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
@@ -7558,21 +7710,51 @@ declare module "@stencil/core" {
             "pds-input": LocalJSX.IntrinsicElements["pds-input"] & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.IntrinsicElements["pds-link"] & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-loader": LocalJSX.IntrinsicElements["pds-loader"] & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-modal": LocalJSX.IntrinsicElements["pds-modal"] & JSXBase.HTMLAttributes<HTMLPdsModalElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-modal-content": LocalJSX.IntrinsicElements["pds-modal-content"] & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-modal-footer": LocalJSX.IntrinsicElements["pds-modal-footer"] & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-modal-header": LocalJSX.IntrinsicElements["pds-modal-header"] & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
             "pds-multiselect": LocalJSX.IntrinsicElements["pds-multiselect"] & JSXBase.HTMLAttributes<HTMLPdsMultiselectElement>;
             "pds-popover": LocalJSX.IntrinsicElements["pds-popover"] & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.IntrinsicElements["pds-progress"] & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-property": LocalJSX.IntrinsicElements["pds-property"] & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-radio": LocalJSX.IntrinsicElements["pds-radio"] & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-radio-group": LocalJSX.IntrinsicElements["pds-radio-group"] & JSXBase.HTMLAttributes<HTMLPdsRadioGroupElement>;
+            /**
+             * @lightDom host-only
+             */
             "pds-row": LocalJSX.IntrinsicElements["pds-row"] & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
             "pds-select": LocalJSX.IntrinsicElements["pds-select"] & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
+            /**
+             * @lightDom host-only
+             */
             "pds-sortable": LocalJSX.IntrinsicElements["pds-sortable"] & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-sortable-item": LocalJSX.IntrinsicElements["pds-sortable-item"] & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.IntrinsicElements["pds-switch"] & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-tab": LocalJSX.IntrinsicElements["pds-tab"] & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
             "pds-table": LocalJSX.IntrinsicElements["pds-table"] & JSXBase.HTMLAttributes<HTMLPdsTableElement>;
             "pds-table-body": LocalJSX.IntrinsicElements["pds-table-body"] & JSXBase.HTMLAttributes<HTMLPdsTableBodyElement>;
@@ -7580,11 +7762,17 @@ declare module "@stencil/core" {
             "pds-table-head": LocalJSX.IntrinsicElements["pds-table-head"] & JSXBase.HTMLAttributes<HTMLPdsTableHeadElement>;
             "pds-table-head-cell": LocalJSX.IntrinsicElements["pds-table-head-cell"] & JSXBase.HTMLAttributes<HTMLPdsTableHeadCellElement>;
             "pds-table-row": LocalJSX.IntrinsicElements["pds-table-row"] & JSXBase.HTMLAttributes<HTMLPdsTableRowElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-tabpanel": LocalJSX.IntrinsicElements["pds-tabpanel"] & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
             "pds-tabs": LocalJSX.IntrinsicElements["pds-tabs"] & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
             "pds-text": LocalJSX.IntrinsicElements["pds-text"] & JSXBase.HTMLAttributes<HTMLPdsTextElement>;
             "pds-textarea": LocalJSX.IntrinsicElements["pds-textarea"] & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
             "pds-toast": LocalJSX.IntrinsicElements["pds-toast"] & JSXBase.HTMLAttributes<HTMLPdsToastElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-tooltip": LocalJSX.IntrinsicElements["pds-tooltip"] & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
         }
     }

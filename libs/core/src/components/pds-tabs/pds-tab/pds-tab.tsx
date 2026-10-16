@@ -1,6 +1,9 @@
 import { Component, Element, Fragment, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
+/**
+ * @lightDom renders-markup
+ */
 @Component({
   tag: 'pds-tab',
   styleUrl: 'pds-tab.scss',

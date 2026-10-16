@@ -3,6 +3,7 @@ import { Component, Element, Host, h, Prop } from '@stencil/core';
 import { handle as handleIcon } from '@pine-ds/icons/icons';
 /**
  * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`.
+ * @lightDom renders-markup
  */
 @Component({
   tag: 'pds-sortable-item',
