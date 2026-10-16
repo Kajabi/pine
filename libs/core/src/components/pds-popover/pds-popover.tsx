@@ -253,12 +253,6 @@ export class PdsPopover {
   connectedCallback() {
     if (!this.hasLoaded) return;
 
-    // The trigger may have been swapped while the popover was out of the page.
-    if (this.triggerEl != null && !this.el.contains(this.triggerEl)) {
-      const triggerSlot = this.el.shadowRoot?.querySelector('slot[name="trigger"]');
-      if (triggerSlot) this.handleTriggerSlotChange({ target: triggerSlot } as unknown as Event);
-    }
-
     this.isComponentMounted = true;
     this.createPortal();
     this.triggerEl?.addEventListener('click', this.handleTriggerClick);
