@@ -32,6 +32,16 @@ export class PdsPopover {
   private isComponentMounted = true;
 
   /**
+   * Set once `componentDidLoad` has built the portal, so a later reconnect knows to rebuild it
+   */
+  private hasLoaded = false;
+
+  /**
+   * A popover without a componentId keeps one generated portal id, even when the portal is rebuilt
+   */
+  private generatedPortalId: string | null = null;
+
+  /**
    * Reference to the trigger element
    */
   private triggerEl: HTMLElement | null = null;
@@ -133,6 +143,7 @@ export class PdsPopover {
 
     // Create portal element
     this.createPortal();
+    this.hasLoaded = true;
 
     // Initialize trigger element by calling slot change handler
     // This is a fallback for environments where slot change might not fire reliably
@@ -237,8 +248,42 @@ export class PdsPopover {
     }
   };
 
+  // componentDidLoad doesn't run again when a popover comes back, so rebuild whatever
+  // disconnectedCallback tore down. Each step is a no-op when nothing was.
+  connectedCallback() {
+    if (!this.hasLoaded) return;
+
+    this.isComponentMounted = true;
+    this.createPortal();
+    this.triggerEl?.addEventListener('click', this.handleTriggerClick);
+    this.observeTrigger();
+    this.linkTriggerToPortal();
+
+    // Still open after a move: the trigger moved, so the portal follows it.
+    if (this.active) {
+      requestAnimationFrame(() => this.handlePopoverPositioning());
+    }
+  }
+
   disconnectedCallback() {
+    // Moved in one operation (a DOM morph, or a framework reparenting it), the popover is
+    // already back in the page. Its portal is in <body>, untouched, so it stays open, with focus
+    // where it was.
+    if (this.el.isConnected) return;
+
     this.isComponentMounted = false;
+
+    // Open, the content sits in the portal; put it back before the portal goes. Only listeners on
+    // the popover itself hear the close event now, but those are the ones mirroring its state.
+    if (this.active) {
+      this.restorePortalContent();
+      this.active = false;
+      this.linkTriggerToPortal();
+      this.pdsPopoverClose.emit({
+        componentId: this.componentId,
+        popoverType: this.popoverType,
+      });
+    }
 
     // Clean up trigger click event listener
     if (this.triggerEl != null) {
@@ -294,8 +339,8 @@ export class PdsPopover {
 
     // Generate unique ID
     if (!this.componentId) {
-      const suffix = PdsPopover.instanceCounter++;
-      this.portalEl.id = `pds-popover-portal-${suffix}`;
+      this.generatedPortalId ??= `pds-popover-portal-${PdsPopover.instanceCounter++}`;
+      this.portalEl.id = this.generatedPortalId;
     } else {
       this.portalEl.id = `${this.componentId}-portal`;
     }
