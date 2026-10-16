@@ -3720,6 +3720,168 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('option badges', () => {
+    const open = async (attrs: string, options: unknown[]) => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="badges" mode="select-only" ${attrs}></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      (page.root as HTMLPdsComboboxElement).options = options;
+      await page.waitForChanges();
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component, root: page.root!.shadowRoot! };
+    };
+
+    const badgeOf = (root: ShadowRoot, text: string) =>
+      Array.from(root.querySelectorAll('[role="option"], [role="treeitem"].pds-combobox__option'))
+        .find(row => row.textContent?.startsWith(text))
+        ?.querySelector('pds-chip.pds-combobox__option-badge') ?? null;
+
+    it("renders an option's badge after its text, as a small chip", async () => {
+      const { root } = await open('', [
+        { id: 'broadcast', text: 'Broadcast' },
+        { id: 'new-thing', text: 'New thing', badge: { label: 'New', sentiment: 'accent', icon: 'star' } },
+      ]);
+
+      const badge = badgeOf(root, 'New thing')!;
+      expect(badge.textContent).toBe('New');
+      expect(badge.getAttribute('size')).toBe('sm');
+      expect(badge.getAttribute('sentiment')).toBe('accent');
+      expect(badge.getAttribute('icon')).toBe('star');
+      // The text, then the badge, at the end of the row.
+      const row = badge.closest('[role="option"]')!;
+      // A hidden comma gives screen readers a pause: "New thing, New".
+      expect(row.textContent).toBe('New thing, New');
+      expect(row.querySelector('.visually-hidden')?.textContent).toBe(', ');
+      expect(row.classList.contains('pds-combobox__option--with-badge')).toBe(true);
+      expect(row.lastElementChild).toBe(badge);
+      expect(badgeOf(root, 'Broadcast')).toBeNull();
+    });
+
+    it("renders a slotted option's data-badge", async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="slotted-badge" mode="select-only"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      // The spec environment doesn't populate slot assignment, so the option is handed over directly.
+      const option = page.doc.createElement('option') as HTMLOptionElement;
+      option.value = 'new-thing';
+      option.textContent = 'New thing';
+      option.setAttribute('data-badge', 'New');
+      option.setAttribute('data-badge-sentiment', 'accent');
+      component.optionEls = [option];
+      component.allItems = [option];
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+
+      const badge = page.root!.shadowRoot!.querySelector('[role="option"] pds-chip')!;
+      expect(badge.textContent).toBe('New');
+      expect(badge.getAttribute('sentiment')).toBe('accent');
+    });
+
+    it('falls back to neutral for an unknown sentiment, and drops an icon that is not a Pine icon name', async () => {
+      const { root } = await open('', [
+        { id: 'a', text: 'A', badge: { label: 'New', sentiment: 'sparkly', icon: 'https://example.com/x.svg' } },
+        { id: 'b', text: 'B', badge: { label: 'New', icon: 'data:image/svg+xml;utf8,<svg></svg>' } },
+      ]);
+
+      for (const text of ['A', 'B']) {
+        const badge = badgeOf(root, text)!;
+        expect(badge.getAttribute('sentiment')).toBe('neutral');
+        expect(badge.hasAttribute('icon')).toBe(false);
+      }
+    });
+
+    it('shows no badge without a label, or from values that are not strings', async () => {
+      const { component, root } = await open('', [
+        { id: 'empty', text: 'Empty', badge: { label: '' } },
+        { id: 'number', text: 'Number', badge: { label: 42 } },
+        { id: 'string', text: 'String', badge: 'New' },
+        { id: 'blank', text: 'Blank', badge: { label: '   ' } },
+        { id: 'null', text: 'Null', badge: null },
+      ]);
+
+      expect(root.querySelectorAll('pds-chip')).toHaveLength(0);
+      expect(component.optionEls.some((option: HTMLOptionElement) => option.hasAttribute('data-badge'))).toBe(false);
+    });
+
+    it('keeps the badge out of the selection label', async () => {
+      const { page, root } = await open('trigger="button" value="new-thing"', [
+        { id: 'new-thing', text: 'New thing', badge: { label: 'New' } },
+      ]);
+      await page.waitForChanges();
+
+      expect(root.querySelector('.pds-combobox__button-trigger-label')?.textContent).toBe('New thing');
+    });
+
+    it("doesn't match a search on the badge's text", async () => {
+      const { component } = await open('trigger="button" panel-search', [
+        { id: 'tag', text: 'Tag', badge: { label: 'Fresh' } },
+        { id: 'fresh', text: 'Fresh fields' },
+      ]);
+
+      component.panelQuery = 'Fresh';
+      component.filterOptions();
+      expect(component.filteredItems.map((item: HTMLOptionElement) => item.value)).toEqual(['fresh']);
+    });
+
+    it("doesn't show a badge on a chip option", async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="chip-badge" mode="select-only"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const option = page.doc.createElement('option') as HTMLOptionElement;
+      option.value = 'chip';
+      option.textContent = 'Chip';
+      option.setAttribute('chip-sentiment', 'success');
+      option.setAttribute('data-badge', 'New');
+      component.optionEls = [option];
+      component.allItems = [option];
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+
+      const row = page.root!.shadowRoot!.querySelector('[role="option"]')!;
+      expect(row.querySelector('.pds-combobox__option-badge')).toBeNull();
+      expect(row.classList.contains('pds-combobox__option--with-badge')).toBe(false);
+    });
+
+    it('renders the badge in a flyout and in search results', async () => {
+      const { page, component, root } = await open('group-display="flyout" trigger="button" panel-search', [
+        { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+        { id: 'new-thing', text: 'New thing', group: 'Email', badge: { label: 'New' } },
+      ]);
+
+      component.openGroup = component.optionEls[0].parentElement;
+      await page.waitForChanges();
+      expect(badgeOf(root, 'New thing')?.textContent).toBe('New');
+
+      component.openGroup = null;
+      component.panelQuery = 'new';
+      component.filterOptions();
+      await page.waitForChanges();
+      expect(badgeOf(root, 'New thing')?.textContent).toBe('New');
+    });
+
+    it('renders the badge in a drill-in group', async () => {
+      const { page, component, root } = await open('group-display="drill-in"', [
+        { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+        { id: 'new-thing', text: 'New thing', group: 'Email', badge: { label: 'New', sentiment: 'accent' } },
+      ]);
+
+      component.openGroup = component.optionEls[0].parentElement;
+      await page.waitForChanges();
+
+      expect(badgeOf(root, 'New thing')?.textContent).toBe('New');
+    });
+  });
+
   describe('disabled options', () => {
     const key = (component: { handleKeyDown: (e: KeyboardEvent) => void }, k: string) => {
       const event = new KeyboardEvent('keydown', { key: k, cancelable: true });

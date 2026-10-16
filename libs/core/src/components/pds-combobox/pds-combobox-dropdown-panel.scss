@@ -75,7 +75,8 @@
 
   // Chips and custom layouts set their own colors, so mute them as pds-multiselect does.
   .pds-combobox__option--disabled .pds-combobox__option-chip,
-  .pds-combobox__option--disabled .pds-combobox__option-layout-wrapper {
+  .pds-combobox__option--disabled .pds-combobox__option-layout-wrapper,
+  .pds-combobox__option--disabled .pds-combobox__option-badge {
     opacity: 0.5;
   }
 
@@ -90,6 +91,24 @@
 
   .pds-combobox__option-icon {
     flex-shrink: 0;
+  }
+
+  // A badge sits at the end of the row, before the selected check, at least a gap from the text.
+  // Spacing goes on the row, not the chip: the chip's own padding draws its border.
+  .pds-combobox__option--with-badge {
+    column-gap: var(--pine-dimension-xs);
+  }
+
+  .pds-combobox__option-badge {
+    flex-shrink: 0;
+    // The sm chip is a couple of pixels taller than a line of option text; keep the row's height.
+    margin-block: calc(var(--pine-dimension-025) * -1);
+    margin-inline-start: auto;
+  }
+
+  // The gap plus this keeps the check's usual distance from what's before it.
+  .pds-combobox__option--with-badge .pds-combobox__option-check {
+    margin-inline-start: calc(var(--pine-dimension-150) - var(--pine-dimension-xs));
   }
 
   .pds-combobox__option-check {

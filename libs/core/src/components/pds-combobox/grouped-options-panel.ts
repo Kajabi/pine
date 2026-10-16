@@ -1,5 +1,6 @@
 import { autoUpdate, computePosition, flip, hide, offset, shift, size } from '@floating-ui/dom';
 import type { VirtualElement } from '@floating-ui/dom';
+import type { ChipSentimentType } from '@utils/types';
 
 /**
  * Internal to Pine: the grouped panel behind `pds-combobox`'s `group-display` modes. It owns the
@@ -45,6 +46,46 @@ export function groupIconOf(optgroup: HTMLOptGroupElement): string | null {
 /** An option's `data-icon` when it's a Pine icon name, or null; the same check as a group's. */
 export function optionIconOf(option: HTMLOptionElement): string | null {
   return iconOf(option);
+}
+
+/** Every `pds-chip` sentiment: a sentiment added to `ChipSentimentType` fails to compile until it's listed. */
+const BADGE_SENTIMENTS: Record<ChipSentimentType, true> = {
+  accent: true,
+  brand: true,
+  danger: true,
+  info: true,
+  neutral: true,
+  solid: true,
+  subtle: true,
+  success: true,
+  warning: true,
+};
+
+const isBadgeSentiment = (value: string | null): value is ChipSentimentType =>
+  value !== null && Object.prototype.hasOwnProperty.call(BADGE_SENTIMENTS, value);
+
+export interface OptionBadge {
+  label: string;
+  sentiment: ChipSentimentType;
+  /** A Pine icon name, or null. */
+  icon: string | null;
+}
+
+/**
+ * An option's badge from its `data-badge*` attributes, or null without a label. An unknown
+ * sentiment falls back to `neutral`, and an icon that isn't a Pine icon name is dropped: the
+ * badge is a `pds-chip`, whose `icon` also loads URLs.
+ */
+export function optionBadgeOf(option: HTMLOptionElement): OptionBadge | null {
+  const label = option.getAttribute('data-badge')?.trim();
+  if (label === undefined || label === '') return null;
+  const sentiment = option.getAttribute('data-badge-sentiment');
+  const icon = option.getAttribute('data-badge-icon');
+  return {
+    label,
+    sentiment: isBadgeSentiment(sentiment) ? sentiment : 'neutral',
+    icon: icon !== null && PINE_ICON_NAME.test(icon) ? icon : null,
+  };
 }
 
 function iconOf(element: Element): string | null {
