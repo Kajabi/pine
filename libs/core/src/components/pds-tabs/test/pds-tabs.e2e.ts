@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-tabs', () => {
@@ -276,5 +277,26 @@ describe('pds-tabs accessibility', () => {
     `);
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
+// pds-tabs wrote, including the ones its CSS selects on.
+describe('pds-tabs after its host classes and styles are stripped', () => {
+  it('keeps its styling', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-tabs class="consumer" component-id="tabs" active-tab-name="one" variant="filter" divider tablist-label="Tabs"><pds-tab name="one" slot="tabs">One</pds-tab><pds-tabpanel name="one">Panel</pds-tabpanel></pds-tabs>');
+
+    await expectStylingSurvivesStrip(page, 'pds-tabs');
+  });
+
+  it("doesn't put back an active-tab-name that was removed", async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-tabs component-id="tabs" active-tab-name="two" variant="filter" tablist-label="Tabs"><pds-tab name="one" slot="tabs">One</pds-tab><pds-tab name="two" slot="tabs">Two</pds-tab><pds-tabpanel name="one">One</pds-tabpanel><pds-tabpanel name="two">Two</pds-tabpanel></pds-tabs>');
+
+    await page.$eval('pds-tabs', (el) => el.removeAttribute('active-tab-name'));
+    await page.waitForChanges();
+
+    expect(await (await page.find('pds-tabs')).getProperty('activeTabName')).not.toBe('two');
   });
 });

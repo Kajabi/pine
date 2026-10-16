@@ -1,7 +1,7 @@
 import { Component, Element, Prop, h, Host } from '@stencil/core';
 
 import { BoxSpacingType } from '../../utils/types';
-import { classNamesOf, HostStyling, keepHostStyling } from '../../utils/attributes';
+import { HostStylingKeeper } from '../../utils/attributes';
 
 /**
  * @lightDom host-only
@@ -13,16 +13,14 @@ import { classNamesOf, HostStyling, keepHostStyling } from '../../utils/attribut
 export class PdsRow {
   @Element() el: HTMLPdsRowElement;
 
-  private hostStyling: HostStyling = { classes: [], styles: {} };
-  private hostObserver: MutationObserver | null = null;
+  private hostKeeper = new HostStylingKeeper();
 
   connectedCallback() {
-    this.hostObserver ??= keepHostStyling(this.el, () => this.hostStyling);
+    this.hostKeeper.connect(this.el);
   }
 
   disconnectedCallback() {
-    this.hostObserver?.disconnect();
-    this.hostObserver = null;
+    this.hostKeeper.disconnect();
   }
 
   /**
@@ -125,7 +123,7 @@ export class PdsRow {
       }),
     };
 
-    this.hostStyling = { classes: classNamesOf(`pds-row ${rowClasses}`), styles: rowInlineStyles };
+    this.hostKeeper.record(`pds-row ${rowClasses}`, rowInlineStyles);
 
     return <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}></Host>;
   }

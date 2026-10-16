@@ -1,23 +1,11 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-box per-side borders', () => {
   // A DOM morph makes the host match the server's HTML: its attributes stay, but the classes and
   // style properties pds-box wrote don't.
   describe('after its classes and styles are stripped', () => {
-    const layout = () => (el: HTMLElement) => {
-      const style = getComputedStyle(el);
-      return {
-        display: style.display,
-        flexDirection: style.flexDirection,
-        gap: style.gap,
-        padding: style.padding,
-        backgroundColor: style.backgroundColor,
-        minHeight: style.minHeight,
-        flex: style.flex,
-        visibility: style.visibility,
-      };
-    };
     const strip = (el: Element) => {
       el.setAttribute('class', 'consumer');
       el.removeAttribute('style');
@@ -29,14 +17,8 @@ describe('pds-box per-side borders', () => {
         <pds-box class="consumer" display="flex" direction="column" gap="md" padding="sm"
           background-color="#ff0000" min-height="100px" flex="2 1 0px"></pds-box>
       `);
-      const before = await page.$eval('pds-box', layout());
 
-      await page.$eval('pds-box', strip);
-      await page.waitForChanges();
-
-      expect(await page.$eval('pds-box', layout())).toEqual(before);
-      const box = await page.find('pds-box');
-      expect(box).toHaveClasses(['consumer', 'hydrated', 'pds-box-gap-md']);
+      await expectStylingSurvivesStrip(page, 'pds-box');
     });
 
     it('still takes a changed attribute afterwards', async () => {

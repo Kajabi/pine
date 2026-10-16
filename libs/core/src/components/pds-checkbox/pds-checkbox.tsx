@@ -3,7 +3,7 @@ import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '..
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
 
-import { inheritAriaAttributes } from '@utils/attributes';
+import { inheritAriaAttributes, HostStylingKeeper } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 
 /**
@@ -21,6 +21,7 @@ export class PdsCheckbox {
   private readonly _type = 'checkbox' as const;
 
   @Element() el: HTMLPdsCheckboxElement;
+  private hostKeeper = new HostStylingKeeper();
 
   @State() private hasLabelSlot = false;
 
@@ -133,6 +134,7 @@ export class PdsCheckbox {
   }
 
   connectedCallback() {
+    this.hostKeeper.connect(this.el);
     // Initialize ElementInternals for form association (only once per element instance)
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
@@ -140,6 +142,10 @@ export class PdsCheckbox {
 
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
   }
 
   componentDidLoad() {
@@ -188,8 +194,11 @@ export class PdsCheckbox {
   };
 
   render() {
+    const hostClass = this.classNames();
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host class={this.classNames()}>
+      <Host class={hostClass}>
         <label htmlFor={this.componentId}>
           <input
             type="checkbox"

@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 
 import { copy as copyIcon } from '@pine-ds/icons/icons';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
@@ -11,6 +12,12 @@ import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 })
 export class PdsCopytext {
   @Element() el: HTMLPdsCopytextElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
   private truncationCleanup: (() => void) | null = null;
   private valueSpanEl: HTMLSpanElement;
 
@@ -71,6 +78,7 @@ export class PdsCopytext {
   }
 
   disconnectedCallback() {
+    this.hostKeeper.disconnect();
     this.destroyTruncationTooltip();
   }
 
@@ -136,8 +144,11 @@ export class PdsCopytext {
   }
 
   render() {
+    const hostClass = this.classNames();
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host class={this.classNames()} id={this.componentId}>
+      <Host class={hostClass} id={this.componentId}>
         <pds-button type="button" variant="unstyled" onClick={this.handleClick}>
           <span ref={(el) => this.valueSpanEl = el}>{this.value}</span>
           <pds-icon aria-hidden="true" icon={copyIcon} size="16px"></pds-icon>
