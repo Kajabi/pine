@@ -3749,6 +3749,142 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('option icons', () => {
+    // A category list: ungrouped options with icons, with groups listed between them.
+    const categories = [
+      { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+      { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+      { id: 'sequence', text: 'Sequence', group: 'Email' },
+      { id: 'event', text: 'Event', icon: 'calendar-date' },
+      { id: 'custom', text: 'Custom fields', group: 'Fields', groupIcon: 'columns' },
+      { id: 'tag', text: 'Tag', icon: 'hashtag' },
+    ];
+
+    const open = async (attrs: string, options: unknown[] = categories) => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="categories" mode="select-only" ${attrs}></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      (page.root as HTMLPdsComboboxElement).options = options;
+      await page.waitForChanges();
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component, root: page.root!.shadowRoot! };
+    };
+
+    // A panel row's name: its text, or `group:` and its label for a group's row.
+    const panelRows = (root: ShadowRoot) =>
+      Array.from(root.querySelectorAll('.pds-combobox__group-row, [role="treeitem"].pds-combobox__option')).map(row =>
+        row.classList.contains('pds-combobox__group-row') ? `group:${row.querySelector('.pds-combobox__group-row-label')!.textContent}` : row.textContent,
+      );
+
+    it("renders an option's icon before its text, hidden from assistive technology", async () => {
+      const { root } = await open('');
+
+      const assessment = Array.from(root.querySelectorAll('[role="option"]')).find(o => o.textContent === 'Assessment')!;
+      const icon = assessment.querySelector('.pds-combobox__option-label > pds-icon.pds-combobox__option-icon')!;
+      expect(icon.getAttribute('name')).toBe('assessment');
+      expect(icon.getAttribute('aria-hidden')).toBe('true');
+      // An option without one renders its text alone.
+      const broadcast = Array.from(root.querySelectorAll('[role="option"]')).find(o => o.textContent === 'Broadcast')!;
+      expect(broadcast.querySelector('pds-icon')).toBeNull();
+    });
+
+    // `icon` also loads URLs and data: SVGs into pds-icon unsanitized; `name` accepts icon names only.
+    it('renders an option icon only for a Pine icon name, never a URL or data: SVG, and only from a string', async () => {
+      const { component, root } = await open('', [
+        { id: 'data', text: 'Data', icon: 'data:image/svg+xml;utf8,<svg></svg>' },
+        { id: 'path', text: 'Path', icon: '/icons/evil.svg' },
+        { id: 'number', text: 'Number', icon: 42 },
+        { id: 'named', text: 'Named', icon: 'hashtag' },
+      ]);
+
+      expect(component.optionEls[2].hasAttribute('data-icon')).toBe(false);
+      const icons = Array.from(root.querySelectorAll('[role="option"]')).map(o => o.querySelector('pds-icon'));
+      expect(icons.slice(0, 3)).toEqual([null, null, null]);
+      expect(icons[3]?.getAttribute('name')).toBe('hashtag');
+      expect(icons[3]?.hasAttribute('icon')).toBe(false);
+    });
+
+    it("renders a slotted option's data-icon", async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="slotted-icon" mode="select-only"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      // The spec environment doesn't populate slot assignment, so the option is handed over directly.
+      const option = page.doc.createElement('option') as HTMLOptionElement;
+      option.value = 'tag';
+      option.textContent = 'Tag';
+      option.setAttribute('data-icon', 'hashtag');
+      component.optionEls = [option];
+      component.allItems = [option];
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+
+      expect(page.root!.shadowRoot!.querySelector('[role="option"] pds-icon')?.getAttribute('name')).toBe('hashtag');
+    });
+
+    it.each(['flyout', 'drill-in'])('draws group-display="%s" rows in the order of the data', async display => {
+      const { root } = await open(`group-display="${display}"`);
+
+      expect(panelRows(root)).toEqual(['Assessment', 'group:Email', 'Event', 'group:Fields', 'Tag']);
+      const positions = Array.from(root.querySelectorAll('[aria-level="1"]')).map(row => row.getAttribute('aria-posinset'));
+      expect(positions).toEqual(['1', '2', '3', '4', '5']);
+    });
+
+    // A loose option after a group's options would read as part of that group under its heading.
+    it('still lists ungrouped options first in the inline list', async () => {
+      const { root } = await open('');
+
+      const rows = Array.from(root.querySelectorAll('.pds-combobox__group-label, [role="option"]')).map(row =>
+        row.classList.contains('pds-combobox__group-label') ? `group:${row.textContent}` : row.textContent,
+      );
+      expect(rows).toEqual(['Assessment', 'Event', 'Tag', 'group:Email', 'Broadcast', 'Sequence', 'group:Fields', 'Custom fields']);
+    });
+
+    it('keeps the order of the data when the options change', async () => {
+      const { page, root } = await open('group-display="drill-in"');
+
+      (page.root as HTMLPdsComboboxElement).options = [...categories].reverse();
+      await page.waitForChanges();
+
+      expect(panelRows(root)).toEqual(['Tag', 'group:Fields', 'Event', 'group:Email', 'Assessment']);
+    });
+
+    describe('in the button trigger', () => {
+      const triggerIcon = (root: ShadowRoot) => root.querySelector('.pds-combobox__button-trigger-label pds-icon');
+
+      it.each([
+        ['its own icon', 'event', 'calendar-date'],
+        ["its group's icon when it has none", 'sequence', 'mail'],
+      ])('shows a selected option with %s', async (_case, value, icon) => {
+        const { page, root } = await open(`trigger="button" group-display="drill-in" value="${value}"`);
+        await page.waitForChanges();
+
+        expect(triggerIcon(root)?.getAttribute('name')).toBe(icon);
+        expect(triggerIcon(root)?.getAttribute('aria-hidden')).toBe('true');
+      });
+
+      it('shows no icon for the placeholder, or for a selection with no icon of its own or its group', async () => {
+        const { page, root } = await open('trigger="button" placeholder="Select a category"', [
+          { id: 'plain', text: 'Plain' },
+          { id: 'grouped', text: 'Grouped', group: 'No icon' },
+        ]);
+        expect(triggerIcon(root)).toBeNull();
+
+        for (const value of ['plain', 'grouped']) {
+          page.root!.setAttribute('value', value);
+          await page.waitForChanges();
+          expect(triggerIcon(root)).toBeNull();
+        }
+      });
+    });
+  });
+
   describe('disabled options', () => {
     const key = (component: { handleKeyDown: (e: KeyboardEvent) => void }, k: string) => {
       const event = new KeyboardEvent('keydown', { key: k, cancelable: true });

@@ -875,6 +875,7 @@ describe('pds-combobox', () => {
     });
   });
 
+
   // Matches pds-select's field, and the Figma filter panel's search field and drilled-in header.
   describe('field and panel sizes', () => {
     const options = [
@@ -973,6 +974,80 @@ describe('pds-combobox', () => {
       // 16px above and below a line of body text: 52px where body text is 14px, as in the designs.
       expect(searchPadding).toBe('16px');
       expect(back).toBe(search);
+    });
+  });
+
+  describe('option icons', () => {
+    // A category list: ungrouped options with icons, with groups listed between them.
+    const categories = [
+      { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+      { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+      { id: 'sequence', text: 'Sequence', group: 'Email' },
+      { id: 'event', text: 'Event', icon: 'calendar-date' },
+    ];
+
+    const setUp = async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="categories" label="Category" trigger="button" mode="select-only"
+            group-display="drill-in" panel-search search-placeholder="Search categories" dropdown-width="300px"></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        categories,
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    const highlighted = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        const row = document
+          .querySelector('pds-combobox')!
+          .shadowRoot!.querySelector('.pds-combobox__option--highlighted, .pds-combobox__group-row--highlighted');
+        return row?.classList.contains('pds-combobox__group-row')
+          ? `group:${row.querySelector('.pds-combobox__group-row-label')!.textContent}`
+          : row?.textContent ?? null;
+      });
+
+    it('moves through the rows by keyboard in the order they are drawn', async () => {
+      const page = await setUp();
+
+      // Opening highlights the first row.
+      const visited = [await highlighted(page)];
+      for (let step = 0; step < 2; step++) {
+        await page.keyboard.press('ArrowDown');
+        await page.waitForChanges();
+        visited.push(await highlighted(page));
+      }
+
+      expect(visited).toEqual(['Assessment', 'group:Email', 'Event']);
+    });
+
+    it('shows the picked option with its icon in the trigger', async () => {
+      const page = await setUp();
+
+      // Assessment, the first row, is highlighted on opening.
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('assessment');
+      const icon = await page.find('pds-combobox >>> .pds-combobox__button-trigger-label pds-icon');
+      expect(icon.getAttribute('name')).toBe('assessment');
+    });
+
+    it('has no axe violations with option icons open', async () => {
+      const page = await setUp();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
     });
   });
 });
