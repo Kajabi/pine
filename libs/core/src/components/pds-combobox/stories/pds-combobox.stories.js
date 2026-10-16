@@ -111,6 +111,27 @@ ButtonTrigger.args = {
   value: 'dog',
 };
 
+// trigger-shape="input": the same field as pds-select, empty and with a value, beside one.
+export const ButtonTriggerInputShape = () => html`
+<div style="display: grid; gap: 16px; grid-template-columns: repeat(2, 240px);">
+  <pds-combobox component-id="combobox-input-shape-empty" label="Category" trigger="button" trigger-shape="input" trigger-width="100%" mode="select-only" placeholder="Select category">
+    <option value="tag">Tag</option>
+    <option value="offer">Offer</option>
+  </pds-combobox>
+  <pds-select component-id="select-input-shape-empty" label="Conditional">
+    <option value="">Select conditional...</option>
+    <option value="is">is</option>
+  </pds-select>
+  <pds-combobox component-id="combobox-input-shape-filled" label="Category" trigger="button" trigger-shape="input" trigger-width="100%" mode="select-only" value="tag">
+    <option value="tag">Tag</option>
+    <option value="offer">Offer</option>
+  </pds-combobox>
+  <pds-select component-id="select-input-shape-filled" label="Conditional" value="is">
+    <option value="">Select conditional...</option>
+    <option value="is">is</option>
+  </pds-select>
+</div>`;
+
 export const ProgrammaticClear = (args) => html`
 <pds-box direction="column" gap="sm" align-items="start">
   <pds-combobox
