@@ -168,7 +168,7 @@
   }
 
   // Drilling in and going back are one slide, mirrored: the rows coming in slide from the side
-  // they're coming from (a group's options from the right, the groups from the left) and fade in. The
+  // they're coming from (a group's options from the end, the groups from the start) and fade in. The
   // field on top, panel search or the row back that takes its place, swaps in place either way. Timed
   // by the motion tokens, which drop to 0ms under prefers-reduced-motion.
   // The slide's offset would otherwise widen the list's scroll area and flash a horizontal scrollbar.
@@ -177,11 +177,14 @@
     overflow-x: hidden;
   }
 
-  .pds-combobox__listbox--drill-in {
+  // Internal, set inside the shadow root: not a consumer hook. Positive slides from the right.
+  .pds-combobox__listbox--drill-in,
+  .pds-combobox__listbox--drill-out:dir(rtl) {
     --pds-combobox-drill-from: var(--pine-dimension-sm);
   }
 
-  .pds-combobox__listbox--drill-out {
+  .pds-combobox__listbox--drill-out,
+  .pds-combobox__listbox--drill-in:dir(rtl) {
     --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
   }
 
