@@ -884,12 +884,13 @@ describe('pds-combobox', () => {
       { id: 'event', text: 'Event', icon: 'calendar-date' },
     ];
 
-    const setUp = async () => {
+    const setUp = async (display = 'drill-in') => {
       const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
       await page.setContent(`
         <div style="padding: 40px;">
           <pds-combobox component-id="categories" label="Category" trigger="button" mode="select-only"
-            group-display="drill-in" panel-search search-placeholder="Search categories" dropdown-width="300px"></pds-combobox>
+            group-display="${display}" panel-search search-placeholder="Search categories" dropdown-width="300px"></pds-combobox>
         </div>
       `);
       await page.$eval(
@@ -915,8 +916,8 @@ describe('pds-combobox', () => {
           : row?.textContent ?? null;
       });
 
-    it('moves through the rows by keyboard in the order they are drawn', async () => {
-      const page = await setUp();
+    it.each(['flyout', 'drill-in'])('moves through group-display="%s" rows by keyboard in the order they are drawn', async display => {
+      const page = await setUp(display);
 
       // Opening highlights the first row.
       const visited = [await highlighted(page)];
