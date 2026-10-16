@@ -9,6 +9,7 @@ import vscodeCustomDataOutputTarget from './scripts/vscode-custom-data-generator
 
 export const config: Config = {
   namespace: 'pine-core',
+  globalScript: 'src/global/pine-global.ts',
   globalStyle: 'src/global/styles/app.scss',
   devServer: {
     openBrowser: false,
