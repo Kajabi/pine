@@ -911,7 +911,7 @@ describe('pds-combobox', () => {
         const label = trigger.querySelector('.pds-combobox__button-trigger-label')!;
         const select = document.querySelector('pds-select')!.shadowRoot!.querySelector('select')!;
         const probe = document.createElement('span');
-        probe.style.color = 'var(--pine-color-text-placeholder)';
+        probe.style.color = 'var(--pine-color-text-muted)';
         document.body.appendChild(probe);
         const placeholder = getComputedStyle(probe).color;
         probe.remove();
@@ -919,17 +919,33 @@ describe('pds-combobox', () => {
         return {
           height: trigger.getBoundingClientRect().height,
           selectHeight: select.getBoundingClientRect().height,
-          padding: [t.paddingInlineStart, s.paddingInlineStart],
-          weight: [t.fontWeight, s.fontWeight],
+          type: [t.paddingInlineStart, t.fontWeight, t.fontSize, t.letterSpacing],
+          selectType: [s.paddingInlineStart, s.fontWeight, s.fontSize, s.letterSpacing],
           labelColor: getComputedStyle(label).color,
           placeholder,
         };
       });
 
+      expect(field.height).toBe(36);
       expect(field.height).toBe(field.selectHeight);
-      expect(field.padding[0]).toBe(field.padding[1]);
-      expect(field.weight[0]).toBe(field.weight[1]);
+      expect(field.type).toEqual(field.selectType);
       expect(field.labelColor).toBe(field.placeholder);
+    });
+
+    // Other variants keep their fill's text colour; a disabled trigger keeps its disabled colour.
+    it.each([
+      ['an accent trigger', 'trigger-variant="accent"'],
+      ['a disabled trigger', 'disabled'],
+    ])('leaves the placeholder colour of %s alone', async (_case, attrs) => {
+      const page = await setUp(attrs);
+
+      const colors = await page.evaluate(() => {
+        const trigger = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!;
+        const label = trigger.querySelector('.pds-combobox__button-trigger-label--placeholder')!;
+        return [getComputedStyle(label).color, getComputedStyle(trigger).color];
+      });
+
+      expect(colors[0]).toBe(colors[1]);
     });
 
     const heights = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
