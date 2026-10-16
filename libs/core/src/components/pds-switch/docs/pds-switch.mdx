@@ -26,6 +26,7 @@ Switches toggle a single setting between on and off, rendered as a sliding thumb
 ### Accessibility
 - The `aria-describedby` attribute is used to associate the switch with an error message or helper message but may not be read out by all screen readers.
 - Put only non-interactive content in the `label` slot. Buttons and links inside a label are invalid HTML.
+- State classes on the host (such as `is-invalid` and `is-disabled`) follow the component's props, and come back if something removes them, such as a Turbo morph. Change them through props.
 
 ## Properties
 
