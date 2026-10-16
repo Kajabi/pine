@@ -84,9 +84,6 @@ describe('pds-toast', () => {
 
     // Wait for the dismiss itself, not a fixed delay: the animation runs before the event.
     await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
-    // The event fires before the `hidden` re-render commits, since Stencil's task queue
-    // defers it to the next frame — flush that before checking visibility.
-    await page.waitForChanges();
 
     expect(await element.isVisible()).toBe(false);
   });
@@ -128,8 +125,12 @@ describe('pds-toast', () => {
     expect(await element.isVisible()).toBe(true);
 
     // Wait for the auto-dismiss: the 500ms duration, then the animation. The spy has listened
-    // since before the timer could fire, and next() returns an event it already received.
-    await dismissEvent.next();
+    // since before the timer could fire, and next() returns an event it already received. next()
+    // has no timeout of its own, so race it: a broken auto-dismiss fails here, not at Jest's limit.
+    await Promise.race([
+      dismissEvent.next(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('pdsToastDismissed never fired')), 3000)),
+    ]);
     await page.waitForChanges();
 
     expect(dismissEvent).toHaveReceivedEventTimes(1);
@@ -278,9 +279,6 @@ describe('pds-toast', () => {
     // Trigger dismiss, and wait for it to finish rather than for a fixed delay
     const dismissButton = await page.find('pds-toast >>> .pds-toast__button');
     await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
-    // The event fires before the `hidden` re-render commits, since Stencil's task queue
-    // defers it to the next frame — flush that before checking visibility.
-    await page.waitForChanges();
 
     // Check final state - should not be visible
     expect(await element.isVisible()).toBe(false);
