@@ -555,6 +555,7 @@ OptionIconsWithGroups.args = {
     { id: 'email-activity', text: 'Email activity', group: 'Email' },
     { id: 'marketing-status', text: 'Email marketing status', group: 'Email' },
     { id: 'sequence', text: 'Sequence', group: 'Email' },
+    { id: 'responsive', text: 'Responsive marketing emails', group: 'Email', badge: { label: 'New', sentiment: 'accent', icon: 'star' } },
     { id: 'event', text: 'Event', icon: 'calendar-date' },
     { id: 'custom-fields', text: 'Custom fields', group: 'Fields', groupIcon: 'columns' },
     { id: 'default-fields', text: 'Default fields', group: 'Fields' },

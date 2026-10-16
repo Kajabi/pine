@@ -1159,6 +1159,51 @@ Option icons suit a list of categories, where the ungrouped options and the grou
 
 Search results, and the `inline` display, list a group's options under its label, after the ungrouped options. Options there with an icon and without one sit side by side, so give a group's own options icons only if every option in that list has one.
 
+### Option Badges
+
+Set `badge` on an option from the `options` prop to show a small `pds-chip` after its text, such as "New" on a newly added choice. `label` is the chip's text, `sentiment` a chip sentiment (`neutral` when unset or unknown), and `icon` a Pine icon name, with the same rules as option icons. On a slotted `<option>`, use `data-badge`, `data-badge-sentiment` and `data-badge-icon`. The badge sits at the end of the row, before the selected check. It isn't part of the option's label, so it doesn't show in the trigger and search doesn't match it. Chip and layout options don't show it.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsCombobox
+  componentId="combobox-option-badges-example"
+  label="Category"
+  trigger="button"
+  mode="select-only"
+  dropdownWidth="280px"
+  options={[
+    { id: 'broadcast', text: 'Broadcast' },
+    { id: 'sequence', text: 'Sequence' },
+    { id: 'responsive', text: 'Responsive emails', badge: { label: 'New', sentiment: 'accent', icon: 'star' } },
+  ]}
+/>`,
+    webComponent: `<pds-combobox
+  component-id="combobox-option-badges-example"
+  label="Category"
+  trigger="button"
+  mode="select-only"
+  dropdown-width="280px">
+  <option value="broadcast">Broadcast</option>
+  <option value="sequence">Sequence</option>
+  <option value="responsive" data-badge="New" data-badge-sentiment="accent" data-badge-icon="star">Responsive emails</option>
+</pds-combobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-option-badges-example"
+    label="Category"
+    trigger="button"
+    mode="select-only"
+    dropdown-width="280px">
+    <option value="broadcast">Broadcast</option>
+    <option value="sequence">Sequence</option>
+    <option value="responsive" data-badge="New" data-badge-sentiment="accent" data-badge-icon="star">Responsive emails</option>
+  </pds-combobox>
+</DocCanvas>
+
+- **Keep badges short and rare.** One word, on the few options that need calling out; a badge on most rows stops meaning anything.
+- **Translate the label.** It's text people read, like the option's own.
+
 ### Grouping the `options` Prop
 
 When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. With `group-display="inline"`, options without a group are listed before every group, wherever they appear in the array, so none reads as part of the group above it. With `flyout` and `drill-in`, groups are rows of their own, so options without a group and groups keep the array's order. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
