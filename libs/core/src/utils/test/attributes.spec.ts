@@ -89,7 +89,8 @@ describe('setAttributesIfChanged()', () => {
     el.setAttribute('aria-expanded', 'true');
     const setAttribute = jest.spyOn(el, 'setAttribute');
 
-    setAttributesIfChanged(el, { 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': 'panel' });
+    expect(setAttributesIfChanged(el, { 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': 'panel' })).toBe(true);
+    expect(setAttributesIfChanged(el, { 'aria-haspopup': 'menu' })).toBe(false);
 
     expect(el.getAttribute('aria-expanded')).toBe('false');
     expect(el.getAttribute('aria-controls')).toBe('panel');
@@ -109,7 +110,7 @@ describe('restoreHostStyling()', () => {
     const el = document.createElement('div');
     el.className = 'consumer';
 
-    restoreHostStyling(el, { classes: ['pds-box', 'pds-box-gap-md'], styles: { '--color-background-box': 'red' } });
+    expect(restoreHostStyling(el, { classes: ['pds-box', 'pds-box-gap-md'], styles: { '--color-background-box': 'red' } })).toBe(true);
 
     expect(el.className).toBe('consumer pds-box pds-box-gap-md');
     expect(el.style.getPropertyValue('--color-background-box')).toBe('red');
@@ -121,7 +122,7 @@ describe('restoreHostStyling()', () => {
     el.style.setProperty('min-height', '20px');
     const setProperty = jest.spyOn(el.style, 'setProperty');
 
-    restoreHostStyling(el, { classes: [], styles: { 'min-height': '40px', '--row-gap-x': '' } });
+    expect(restoreHostStyling(el, { classes: [], styles: { 'min-height': '40px', '--row-gap-x': '' } })).toBe(false);
 
     expect(setProperty).not.toHaveBeenCalled();
     expect(el.style.getPropertyValue('min-height')).toBe('20px');
