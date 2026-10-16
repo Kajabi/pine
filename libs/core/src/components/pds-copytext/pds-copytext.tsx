@@ -1,6 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 
 import { copy as copyIcon } from '@pine-ds/icons/icons';
+import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 
 @Component({
@@ -17,7 +18,12 @@ export class PdsCopytext {
    * Determines whether `copytext` should have a visible border.
    * @defaultValue true
    */
-  @Prop({ reflect: true }) border = true;
+  @Prop({ reflect: true, mutable: true }) border = true;
+
+  @Watch('border')
+  restoreBorderDefault(newValue: typeof this.border) {
+    this.border = restoreReflectedDefault(this.el, 'border', newValue, true);
+  }
 
   /**
    * A unique identifier used for the underlying component `id` attribute.

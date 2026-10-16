@@ -38,6 +38,65 @@ describe('pds-avatar', () => {
     const avatar = await page.find('pds-avatar');
     expect(avatar.shadowRoot.querySelector('pds-icon')).toBeNull();
   });
+
+  it('restores the default size and variant when those attributes are removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar size="xs" variant="admin"></pds-avatar>');
+    const element = await page.find('pds-avatar');
+
+    element.removeAttribute('size');
+    element.removeAttribute('variant');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('size', 'lg');
+    expect(element).toEqualAttribute('variant', 'customer');
+  });
+
+  it('takes a new size and variant after the default attributes are removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar></pds-avatar>');
+    const element = await page.find('pds-avatar');
+
+    // The attributes hold Pine's reflected defaults, the case a Turbo morph hits.
+    element.removeAttribute('size');
+    element.removeAttribute('variant');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('size', 'lg');
+    expect(element).toEqualAttribute('variant', 'customer');
+
+    element.setProperty('size', 'xs');
+    element.setProperty('variant', 'admin');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('xs');
+    expect(await element.getProperty('variant')).toBe('admin');
+    expect(element).toEqualAttribute('size', 'xs');
+    expect(element).toEqualAttribute('variant', 'admin');
+  });
+
+  // A null write strips the reflected attribute; it mustn't make the next write fall back too.
+  it('resets size and variant set to null, and takes the next value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar size="xs" variant="admin"></pds-avatar>');
+    const element = await page.find('pds-avatar');
+
+    element.setProperty('size', null);
+    element.setProperty('variant', null);
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('lg');
+    expect(await element.getProperty('variant')).toBe('customer');
+    expect(element).toEqualAttribute('size', 'lg');
+    expect(element).toEqualAttribute('variant', 'customer');
+
+    element.setProperty('size', 'sm');
+    element.setProperty('variant', 'admin');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('sm');
+    expect(await element.getProperty('variant')).toBe('admin');
+  });
 });
 
 describe('pds-avatar accessibility', () => {
