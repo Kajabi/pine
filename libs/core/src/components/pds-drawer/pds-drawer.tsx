@@ -18,6 +18,7 @@ const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dro
  * suppressed, and adds the edge, width and dismiss behavior a side panel
  * needs on top. It does not reimplement focus, Escape or dialog semantics —
  * those come from `pds-modal` unchanged.
+ * @lightDom renders-markup
  */
 @Component({
   tag: 'pds-drawer',
