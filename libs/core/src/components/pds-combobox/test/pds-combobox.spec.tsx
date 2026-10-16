@@ -3187,7 +3187,7 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       expect(list().classList.contains('pds-combobox__listbox--drill-in')).toBe(true);
 
-      list().dispatchEvent(animationEnd('pds-combobox-drill-from-end'));
+      list().dispatchEvent(animationEnd('pds-combobox-drill'));
       await page.waitForChanges();
       expect(list().classList.contains('pds-combobox__listbox--drill-in')).toBe(false);
 
