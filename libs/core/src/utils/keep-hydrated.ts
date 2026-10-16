@@ -24,27 +24,45 @@ export const classNamesOf = (classes: string | Record<string, boolean>) =>
 // or takes input. More writes than this before the next task means a fight.
 const MAX_RESTORES_PER_TASK = 5;
 
-// Runs `callback` on the next task. A MessageChannel message isn't slowed down like a timer is in a
-// background tab (or frozen by test fake timers); a timer is the fallback where it's missing.
+// Callbacks waiting for the next task, all run by one message. A MessageChannel message isn't slowed
+// down like a timer is in a background tab (or frozen by test fake timers); a timer is the fallback
+// where it's missing. One message for all of them, so a morph that strips many hosts doesn't open a
+// channel for each.
+const nextTaskCallbacks = new Set<() => void>();
+
+const runNextTaskCallbacks = () => {
+  const callbacks = Array.from(nextTaskCallbacks);
+  nextTaskCallbacks.clear();
+  callbacks.forEach((callback) => callback());
+};
+
 const onNextTask = (callback: () => void) => {
+  nextTaskCallbacks.add(callback);
+  if (nextTaskCallbacks.size > 1) return;
   if (typeof MessageChannel === 'undefined') {
-    setTimeout(callback);
+    setTimeout(runNextTaskCallbacks);
     return;
   }
   const channel = new MessageChannel();
   channel.port1.onmessage = () => {
     channel.port1.close();
-    callback();
+    runNextTaskCallbacks();
   };
   channel.port2.postMessage(null);
 };
 
+// Elements a restore has already warned about. A host with its own restore is also watched for its
+// Stencil classes, so one fight stops both: it only needs one warning.
+const warnedElements = new WeakSet<Element>();
+
 /**
  * Wraps a restore callback, which returns whether it wrote anything, so that it writes at most
- * `MAX_RESTORES_PER_TASK` times before the next task. Past that, another script is undoing every
- * restore, so it stops and lets that script win rather than hang the page, and warns the first time,
- * logging `el` so it can be found in devtools. The count resets on the next task, so a later strip is
- * still restored.
+ * `MAX_RESTORES_PER_TASK` times before the next task (until the message posted after its first write
+ * runs). Past that, another script is undoing every restore, so it stops and lets that script win
+ * rather than hang the page. What that script left stays until something changes it again: the count
+ * resets on the next task, so a later strip is still restored, but nothing is restored on its own.
+ * The first give-up warns, logging `el` so it can be found in devtools; later ones, and any other
+ * restore giving up on the same element, are silent.
  * @param restore - Puts back what something removed; returns `true` if it wrote anything
  * @param warning - What the console warning says was given up
  * @param el - The element being restored, logged with the warning
@@ -59,9 +77,12 @@ export const limitRestores = <A extends unknown[]>(
 
   return (...args: A) => {
     if (writes >= MAX_RESTORES_PER_TASK) {
-      if (!warned) {
+      if (!warned && !(el && warnedElements.has(el))) {
         warned = true;
-        console.warn(warning, el);
+        if (el) warnedElements.add(el);
+        // The warning as an argument, not the format string: it carries the tag name, which the HTML
+        // parser lets contain `%`.
+        console.warn('%s', warning, el);
       }
       return;
     }
@@ -84,7 +105,8 @@ const OBSERVER = Symbol.for('@pine-ds/core/keepPineHydrated');
  * Stencil. It can't see inside shadow roots, which a morph doesn't reach either.
  *
  * A script that removes `hydrated` on purpose sees it come back. One that removes it every time it
- * appears wins after a few rounds, and the component logs a console warning.
+ * appears wins after a few rounds, and the component logs a console warning. The component then stays
+ * hidden, as that script left it, until its class changes again.
  *
  * Pine's global script calls this, so the CDN and `dist` builds get it on load. The custom-elements
  * build (`@pine-ds/core/components/*`, `@pine-ds/react`) has no global script: call it once yourself.
@@ -107,7 +129,7 @@ export const keepPineHydrated = () => {
           if (missing.length > 0) el.classList.add(...missing);
           return missing.length > 0;
         },
-        `${el.localName}: stopped putting back its hydrated class, as another script keeps removing it.`,
+        `${el.localName}: stopped putting back its hydrated and scope classes, as another script keeps removing them.`,
         el,
       );
       restores.set(el, restore);
