@@ -17,8 +17,9 @@ export const setAttributesIfChanged = (el: Element, attributes: Record<string, s
  */
 export type HostStyling = { classes: string[]; styles: Record<string, string> };
 
-// Stencil's default `hydratedFlag` class, which Pine doesn't change.
-const HYDRATED_CLASS = 'hydrated';
+// Classes Stencil itself puts on a host: its default `hydratedFlag` (Pine doesn't change it), and a
+// scoped component's scope classes (`sc-pds-sortable-h`, `sc-pds-sortable-s`), which its CSS needs.
+const isStencilClass = (name: string) => name === 'hydrated' || /^sc-.+-[hs]$/.test(name);
 
 /**
  * Splits a rendered class string into its class names.
@@ -46,6 +47,9 @@ export const restoreHostStyling = (el: HTMLElement, { classes, styles }: HostSty
  * when something strips them. A Turbo morph does: it makes the host match the server's HTML, which
  * carries the component's attributes but not the classes and styles it wrote, and Stencil won't
  * write them again because it diffs against its previous render, not the live DOM.
+ *
+ * It also means a script that removes one of these classes or styles on purpose sees it come back:
+ * change them through the component's props instead.
  * @param el - Host element
  * @param expected - Reads what the component last rendered
  * @returns The observer, to disconnect when the component is removed; `null` without MutationObserver
@@ -55,10 +59,13 @@ export const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) =>
 
   const observer = new MutationObserver((records) => {
     const styling = expected();
-    // Stencil hides a component until it has its `hydrated` class, so a strip that took it would
-    // hide the host. Put it back only if it was there, so this never runs ahead of Stencil.
-    const wasHydrated = records.some((record) => record.oldValue != null && classNamesOf(record.oldValue).includes(HYDRATED_CLASS));
-    restoreHostStyling(el, wasHydrated ? { ...styling, classes: [...styling.classes, HYDRATED_CLASS] } : styling);
+    // A strip takes Stencil's own classes too: without `hydrated` Stencil hides the component, and
+    // without its scope classes a scoped component's CSS stops matching. Put back only the ones that
+    // were there, so this never runs ahead of Stencil.
+    const stencilClasses = records
+      .filter((record) => record.attributeName === 'class' && record.oldValue != null)
+      .flatMap((record) => classNamesOf(record.oldValue).filter(isStencilClass));
+    restoreHostStyling(el, { ...styling, classes: [...styling.classes, ...stencilClasses] });
   });
   observer.observe(el, { attributes: true, attributeFilter: ['class', 'style'], attributeOldValue: true });
   return observer;

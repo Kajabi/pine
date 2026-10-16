@@ -52,6 +52,26 @@ describe('pds-box per-side borders', () => {
       expect(box).toHaveClasses(['pds-box-gap-lg', 'pds-box--display-flex']);
       expect(box).not.toHaveClass('pds-box-gap-md');
     });
+
+    // A morph strips the classes and changes the attribute in one go, so the restore puts back the
+    // old gap class before Stencil re-renders with the new one.
+    it('takes an attribute changed in the same step as the strip', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-box display="flex" gap="md" min-height="40px"></pds-box>');
+
+      await page.$eval('pds-box', (el) => {
+        el.setAttribute('class', '');
+        el.removeAttribute('style');
+        el.setAttribute('gap', 'lg');
+        el.setAttribute('min-height', '80px');
+      });
+      await page.waitForChanges();
+
+      const box = await page.find('pds-box');
+      expect(box).toHaveClasses(['pds-box-gap-lg', 'pds-box--display-flex', 'hydrated']);
+      expect(box).not.toHaveClass('pds-box-gap-md');
+      expect(await page.$eval('pds-box', (el) => getComputedStyle(el).minHeight)).toBe('80px');
+    });
   });
 
   it('applies a border only to the side that is set', async () => {
