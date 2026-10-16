@@ -272,9 +272,9 @@ export class PdsPopover {
   }
 
   disconnectedCallback() {
-    // Moved in one operation (Idiomorph during a Turbo morph, or a framework reparenting it), the
-    // popover is already back in the page. Its portal is in <body>, untouched, so it stays open,
-    // with focus where it was.
+    // Moved in one operation (a DOM morph, or a framework reparenting it), the popover is
+    // already back in the page. Its portal is in <body>, untouched, so it stays open, with focus
+    // where it was.
     if (this.el.isConnected) return;
 
     this.isComponentMounted = false;

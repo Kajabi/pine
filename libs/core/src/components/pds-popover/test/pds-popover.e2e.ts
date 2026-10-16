@@ -465,8 +465,8 @@ describe('pds-popover', () => {
     });
   });
 
-  // Moving a popover disconnects and reconnects it (Idiomorph during a Turbo morph, or a framework
-  // reparenting it); it has to work the same afterwards.
+  // Moving a popover disconnects and reconnects it (a DOM morph, or a framework reparenting it);
+  // it has to work the same afterwards.
   describe('After a move', () => {
     const setUp = async ({
       trigger = '<button slot="trigger" id="trigger">Show popover</button>',
