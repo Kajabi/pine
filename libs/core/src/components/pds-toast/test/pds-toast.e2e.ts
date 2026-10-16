@@ -82,14 +82,9 @@ describe('pds-toast', () => {
     // Verify toast is initially visible
     expect(await element.isVisible()).toBe(true);
 
-    // Click dismiss button
-    await dismissButton.click();
-    await page.waitForChanges();
+    // Wait for the dismiss itself, not a fixed delay: the animation runs before the event.
+    await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
 
-    // Wait for animation to complete (component uses 300ms + some processing time)
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // Verify toast is hidden - check visibility
     expect(await element.isVisible()).toBe(false);
   });
 
@@ -107,14 +102,8 @@ describe('pds-toast', () => {
     // Listen for the dismiss event
     const dismissEvent = await element.spyOnEvent('pdsToastDismissed');
 
-    // Click dismiss button
-    await dismissButton.click();
-    await page.waitForChanges();
+    await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
 
-    // Wait for dismiss to complete
-    await new Promise((resolve) => setTimeout(resolve, 400));
-
-    // Verify event was emitted
     expect(dismissEvent).toHaveReceivedEventTimes(1);
     expect(dismissEvent).toHaveReceivedEventDetail({ componentId: 'test-toast' });
   });
@@ -135,11 +124,17 @@ describe('pds-toast', () => {
     // Verify toast is initially visible
     expect(await element.isVisible()).toBe(true);
 
-    // Wait for auto-dismiss (shorter duration for faster test)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Wait for the auto-dismiss: the 500ms duration, then the animation. The spy has listened
+    // since before the timer could fire, and next() returns an event it already received. next()
+    // has no timeout of its own, so race it: a broken auto-dismiss fails here, not at Jest's limit.
+    await Promise.race([
+      dismissEvent.next(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('pdsToastDismissed never fired')), 3000)),
+    ]);
+    await page.waitForChanges();
 
-    // Verify toast was dismissed by checking the event first
     expect(dismissEvent).toHaveReceivedEventTimes(1);
+    expect(await element.isVisible()).toBe(false);
   });
 
   it('should not auto-dismiss when duration is 0', async () => {
@@ -281,13 +276,9 @@ describe('pds-toast', () => {
     const hiddenAttribute = await element.getAttribute('hidden');
     expect(hiddenAttribute).toBeNull();
 
-    // Trigger dismiss
+    // Trigger dismiss, and wait for it to finish rather than for a fixed delay
     const dismissButton = await page.find('pds-toast >>> .pds-toast__button');
-    await dismissButton.click();
-    await page.waitForChanges();
-
-    // Wait for animation and state update (component uses 300ms + processing time)
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
 
     // Check final state - should not be visible
     expect(await element.isVisible()).toBe(false);
