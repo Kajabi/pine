@@ -259,7 +259,7 @@
     display: flex;
     flex-shrink: 0;
     gap: var(--pine-dimension-xs);
-    padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+    padding: var(--pine-dimension-sm);
 
     pds-icon {
       color: var(--pine-color-text-muted);
@@ -281,6 +281,8 @@
     letter-spacing: var(--pine-letter-spacing);
     min-width: 0;
     outline: none;
+    // No browser padding, so the field is one line of text tall, like the drilled-in header.
+    padding: 0;
 
     &::placeholder {
       color: var(--pine-color-text-placeholder);
@@ -318,13 +320,18 @@
     }
   }
 
+  // It's the same size and type as the search field it replaces.
   :where(.pds-combobox__listbox-options--drilled-in) .pds-combobox__group-back-trigger {
     background-color: var(--pine-color-background-overlay);
     border-block-end: var(--pine-border);
     border-block-end-color: var(--pine-color-border-subtle);
     border-radius: 0;
+    color: var(--pine-color-text-strong);
+    font: var(--pine-typography-body);
     inset-block-start: 0;
+    letter-spacing: var(--pine-letter-spacing);
     margin-inline: calc(var(--pine-dimension-2xs) * -1);
+    padding: var(--pine-dimension-sm);
     position: sticky;
     z-index: 1;
   }

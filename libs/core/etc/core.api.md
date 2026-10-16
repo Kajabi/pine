@@ -311,6 +311,7 @@ export namespace Components {
         "maxHeight"?: string;
         "mode": 'filter' | 'select-only';
         "name"?: string;
+        "noOptionsFoundLabel": string;
         "options"?: ComboboxOption[];
         "panelSearch": boolean;
         "placeholder"?: string;
@@ -1673,6 +1674,7 @@ export namespace LocalJSX {
         "maxHeight"?: string;
         "mode"?: 'filter' | 'select-only';
         "name"?: string;
+        "noOptionsFoundLabel"?: string;
         "onPdsComboboxChange"?: (event: PdsComboboxCustomEvent<{ value: string }>) => void;
         "onPdsComboboxLoadOptions"?: (event: PdsComboboxCustomEvent<ComboboxLoadOptionsEventDetail>) => void;
         "onPdsComboboxSearch"?: (event: PdsComboboxCustomEvent<ComboboxSearchEventDetail>) => void;
@@ -1746,6 +1748,8 @@ export namespace LocalJSX {
         "mode": 'filter' | 'select-only';
         // (undocumented)
         "name": string;
+        // (undocumented)
+        "noOptionsFoundLabel": string;
         // (undocumented)
         "panelSearch": boolean;
         // (undocumented)
