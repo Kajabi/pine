@@ -919,8 +919,8 @@ describe('pds-combobox', () => {
         return {
           height: trigger.getBoundingClientRect().height,
           selectHeight: select.getBoundingClientRect().height,
-          type: [t.paddingInlineStart, t.fontWeight, t.fontSize, t.letterSpacing],
-          selectType: [s.paddingInlineStart, s.fontWeight, s.fontSize, s.letterSpacing],
+          type: [t.paddingBlockStart, t.paddingInlineStart, t.fontWeight, t.fontSize, t.letterSpacing],
+          selectType: [s.paddingBlockStart, s.paddingInlineStart, s.fontWeight, s.fontSize, s.letterSpacing],
           labelColor: getComputedStyle(label).color,
           placeholder,
         };
