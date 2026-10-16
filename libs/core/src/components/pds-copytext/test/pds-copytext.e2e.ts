@@ -41,7 +41,7 @@ describe('pds-copytext', () => {
     await page.waitForChanges();
     const element = await page.find('pds-copytext');
 
-    // Removing the attribute is what a Turbo morph does when the author relied
+    // Removing the attribute is what a DOM morph does when the author relied
     // on the default, so the server's HTML never carried it.
     element.removeAttribute('border');
     await page.waitForChanges();
@@ -147,7 +147,7 @@ describe('pds-copytext accessibility', () => {
   });
 });
 
-// A Turbo morph makes the host match the server's HTML, which has none of the classes and styles
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
 // pds-copytext wrote, including the ones its CSS selects on.
 describe('pds-copytext after its host classes and styles are stripped', () => {
   it('keeps its styling', async () => {

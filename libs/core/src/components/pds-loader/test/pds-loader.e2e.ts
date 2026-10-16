@@ -116,7 +116,7 @@ describe('pds-loader', () => {
     await page.setContent('<pds-loader></pds-loader>');
     const element = await page.find('pds-loader');
 
-    // The attribute holds Pine's reflected default, the case a Turbo morph hits.
+    // The attribute holds Pine's reflected default, the case a DOM morph hits.
     element.removeAttribute('size');
     await page.waitForChanges();
 
@@ -156,7 +156,7 @@ describe('pds-loader accessibility', () => {
   });
 });
 
-// A Turbo morph makes the host match the server's HTML, which has none of the classes and styles
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
 // pds-loader wrote, including the ones its CSS selects on.
 describe('pds-loader after its host classes and styles are stripped', () => {
   it('keeps its styling', async () => {

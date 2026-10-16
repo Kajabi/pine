@@ -195,7 +195,7 @@ describe('pds-select accessibility', () => {
   });
 });
 
-// A Turbo morph makes the host match the server's HTML, which has none of the classes and styles
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
 // pds-select wrote, including the ones its CSS selects on.
 describe('pds-select after its host classes and styles are stripped', () => {
   it('keeps its styling', async () => {

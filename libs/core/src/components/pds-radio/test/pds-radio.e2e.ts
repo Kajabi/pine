@@ -182,7 +182,7 @@ describe('pds-radio reduced motion', () => {
   });
 });
 
-// A Turbo morph makes the host match the server's HTML, which has none of the classes and styles
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
 // pds-radio wrote, including the ones its CSS selects on.
 describe('pds-radio after its host classes and styles are stripped', () => {
   it('keeps its styling', async () => {

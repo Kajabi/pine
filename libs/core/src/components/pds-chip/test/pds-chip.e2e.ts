@@ -441,7 +441,7 @@ describe('pds-chip accessibility', () => {
   });
 });
 
-// A Turbo morph makes the host match the server's HTML, which has none of the classes and styles
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
 // pds-chip wrote, including the ones its CSS selects on.
 describe('pds-chip after its host classes and styles are stripped', () => {
   it('keeps its styling', async () => {

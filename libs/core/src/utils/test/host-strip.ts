@@ -21,7 +21,7 @@ const snapshotStyles = (page: E2EPage, selector: string) =>
 
 /**
  * Strips the host's `class` (keeping a `consumer` class the markup must carry), its `style`, and any
- * `removeAttributes`, as a Turbo morph does when the server's HTML lacks what the component wrote.
+ * `removeAttributes`, as a DOM morph does when the server's HTML lacks what the component wrote.
  * Expects every class and removed attribute to come back, and every computed style of the host and
  * what it renders to be unchanged.
  */
