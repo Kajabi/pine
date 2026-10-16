@@ -3,6 +3,9 @@ import type { SortableEvent } from 'sortablejs';
 import { SortableType } from './sortable-interface';
 import Sortable from 'sortablejs';
 
+/**
+ * @lightDom host-only
+ */
 @Component({
   tag: 'pds-sortable',
   styleUrls: ['pds-sortable.scss'],

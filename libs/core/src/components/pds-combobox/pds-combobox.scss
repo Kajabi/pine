@@ -183,7 +183,19 @@
 
 .pds-combobox__button-trigger--input-shape {
   border-radius: var(--pine-dimension-125);
-  min-height: var(--pine-dimension-500);
+  // The same field as pds-select: its height, padding and type.
+  font: var(--pine-typography-body);
+  letter-spacing: var(--pine-letter-spacing);
+  min-height: var(--pine-dimension-450);
+  padding: calc(var(--pine-dimension-xs) - var(--pine-border-width)) var(--pine-dimension-150);
+}
+
+// The placeholder of the default, field-like trigger, lighter than a chosen value. The other
+// variants keep their fill's text colour, and a disabled trigger keeps its disabled colour.
+// text-muted, not text-placeholder: on a button the placeholder is its only text, so it needs 4.5:1.
+.pds-combobox__button-trigger--secondary.pds-combobox__button-trigger--input-shape:not([aria-disabled='true'])
+  .pds-combobox__button-trigger-label--placeholder {
+  color: var(--pine-color-text-muted);
 }
 
 .pds-combobox__button-trigger-chevron {

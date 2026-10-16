@@ -11,6 +11,7 @@ import {
 /**
  * @slot (default) - The tooltip's target element
  * @slot content - HTML content for the tooltip
+ * @lightDom renders-markup
  */
 
 @Component({

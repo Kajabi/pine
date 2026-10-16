@@ -3554,6 +3554,44 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('field and empty-state copy', () => {
+    it('shows no-options-found-label when nothing matches, in English by default', async () => {
+      const render = async (attrs: string) => {
+        const page = await newSpecPage({
+          components: [PdsCombobox],
+          html: `<pds-combobox component-id="empty" ${attrs}><option value="a">Apple</option></pds-combobox>`,
+        });
+        const component = page.rootInstance;
+        component.isOpen = true;
+        component.displayText = 'zzz';
+        component.filterOptions();
+        await page.waitForChanges();
+        return page.root!.shadowRoot!.querySelector('.pds-combobox__empty')?.textContent;
+      };
+
+      expect(await render('')).toBe('No options found');
+      expect(await render('no-options-found-label="Sin resultados"')).toBe('Sin resultados');
+    });
+
+    it('marks the button trigger label as a placeholder until an option is chosen', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="field" trigger="button" trigger-shape="input" placeholder="Select category"></pds-combobox>`,
+      });
+      (page.root as HTMLPdsComboboxElement).options = [{ id: 'a', text: 'Apple' }];
+      await page.waitForChanges();
+      const label = () => page.root!.shadowRoot!.querySelector('.pds-combobox__button-trigger-label')!;
+
+      expect(label().textContent).toBe('Select category');
+      expect(label().classList.contains('pds-combobox__button-trigger-label--placeholder')).toBe(true);
+
+      page.root!.setAttribute('value', 'a');
+      await page.waitForChanges();
+      expect(label().textContent).toBe('Apple');
+      expect(label().classList.contains('pds-combobox__button-trigger-label--placeholder')).toBe(false);
+    });
+  });
+
   describe('disabled options', () => {
     const key = (component: { handleKeyDown: (e: KeyboardEvent) => void }, k: string) => {
       const event = new KeyboardEvent('keydown', { key: k, cancelable: true });

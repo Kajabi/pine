@@ -105,7 +105,6 @@ export namespace Components {
         "triggerLabel": string;
         "variant"?: 'customer' | 'admin';
     }
-    // (undocumented)
     export interface PdsBox {
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -312,6 +311,7 @@ export namespace Components {
         "maxHeight"?: string;
         "mode": 'filter' | 'select-only';
         "name"?: string;
+        "noOptionsFoundLabel": string;
         "options"?: ComboboxOption[];
         "panelSearch": boolean;
         "placeholder"?: string;
@@ -406,10 +406,8 @@ export namespace Components {
     }
     export interface PdsDrawerContent {
     }
-    // (undocumented)
     export interface PdsDrawerFooter {
     }
-    // (undocumented)
     export interface PdsDrawerHeader {
     }
     // (undocumented)
@@ -516,7 +514,6 @@ export namespace Components {
         | string;
         "variant": 'spinner' | 'typing';
     }
-    // (undocumented)
     export interface PdsModal {
         "backdropDismiss": boolean;
         "componentId": string;
@@ -528,14 +525,11 @@ export namespace Components {
         "showModal": () => Promise<void>;
         "size": ModalSizeType | (string & Record<never, never>);
     }
-    // (undocumented)
     export interface PdsModalContent {
         "border": 'none' | 'both' | 'top' | 'bottom';
     }
-    // (undocumented)
     export interface PdsModalFooter {
     }
-    // (undocumented)
     export interface PdsModalHeader {
     }
     // (undocumented)
@@ -616,7 +610,6 @@ export namespace Components {
         "componentId": string;
         "icon": string;
     }
-    // (undocumented)
     export interface PdsRadio {
         "checked": boolean;
         "componentId": string;
@@ -631,7 +624,6 @@ export namespace Components {
         "required": boolean;
         "value": string;
     }
-    // (undocumented)
     export interface PdsRadioGroup {
         "componentId": string;
         "direction": 'row' | 'column';
@@ -644,7 +636,6 @@ export namespace Components {
         "name": string;
         "required": boolean;
     }
-    // (undocumented)
     export interface PdsRow {
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         "border"?: boolean;
@@ -672,7 +663,6 @@ export namespace Components {
         "required": boolean;
         "value"?: string | string[];
     }
-    // (undocumented)
     export interface PdsSortable {
         "border": boolean;
         "componentId": string;
@@ -680,7 +670,6 @@ export namespace Components {
         "dividers": boolean;
         "handleType": 'handle' | 'row';
     }
-    // (undocumented)
     export interface PdsSortableItem {
         "componentId": string;
         "enableActions": boolean;
@@ -700,7 +689,6 @@ export namespace Components {
         "required"?: boolean;
         "value": string;
     }
-    // (undocumented)
     export interface PdsTab {
         "active"?: boolean;
         "disabled"?: boolean;
@@ -758,7 +746,6 @@ export namespace Components {
         "indeterminate"?: boolean;
         "isSelected"?: boolean;
     }
-    // (undocumented)
     export interface PdsTabpanel {
         "name": string;
         // (undocumented)
@@ -841,7 +828,6 @@ export namespace Components {
         "icon"?: string;
         "type": 'default' | 'danger' | 'loading';
     }
-    // (undocumented)
     export interface PdsTooltip {
         "componentId": string;
         "content": string;
@@ -1134,7 +1120,6 @@ export namespace LocalJSX {
         "variant": 'customer' | 'admin';
     }
 
-    // (undocumented)
     export interface PdsBox {
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -1689,6 +1674,7 @@ export namespace LocalJSX {
         "maxHeight"?: string;
         "mode"?: 'filter' | 'select-only';
         "name"?: string;
+        "noOptionsFoundLabel"?: string;
         "onPdsComboboxChange"?: (event: PdsComboboxCustomEvent<{ value: string }>) => void;
         "onPdsComboboxLoadOptions"?: (event: PdsComboboxCustomEvent<ComboboxLoadOptionsEventDetail>) => void;
         "onPdsComboboxSearch"?: (event: PdsComboboxCustomEvent<ComboboxSearchEventDetail>) => void;
@@ -1762,6 +1748,8 @@ export namespace LocalJSX {
         "mode": 'filter' | 'select-only';
         // (undocumented)
         "name": string;
+        // (undocumented)
+        "noOptionsFoundLabel": string;
         // (undocumented)
         "panelSearch": boolean;
         // (undocumented)
@@ -2022,11 +2010,9 @@ export namespace LocalJSX {
     export interface PdsDrawerContent {
     }
 
-    // (undocumented)
     export interface PdsDrawerFooter {
     }
 
-    // (undocumented)
     export interface PdsDrawerHeader {
     }
 
@@ -2326,7 +2312,6 @@ export namespace LocalJSX {
         "variant": 'spinner' | 'typing';
     }
 
-    // (undocumented)
     export interface PdsModal {
         "backdropDismiss"?: boolean;
         "componentId"?: string;
@@ -2357,7 +2342,6 @@ export namespace LocalJSX {
         "size": ModalSizeType | (string & Record<never, never>);
     }
 
-    // (undocumented)
     export interface PdsModalContent {
         "border"?: 'none' | 'both' | 'top' | 'bottom';
     }
@@ -2368,11 +2352,9 @@ export namespace LocalJSX {
         "border": 'none' | 'both' | 'top' | 'bottom';
     }
 
-    // (undocumented)
     export interface PdsModalFooter {
     }
 
-    // (undocumented)
     export interface PdsModalHeader {
     }
 
@@ -2591,7 +2573,6 @@ export namespace LocalJSX {
         "icon": string;
     }
 
-    // (undocumented)
     export interface PdsRadio {
         "checked"?: boolean;
         "componentId": string;
@@ -2636,7 +2617,6 @@ export namespace LocalJSX {
         "value": string;
     }
 
-    // (undocumented)
     export interface PdsRadioGroup {
         "componentId"?: string;
         "direction"?: 'row' | 'column';
@@ -2675,7 +2655,6 @@ export namespace LocalJSX {
         "required": boolean;
     }
 
-    // (undocumented)
     export interface PdsRow {
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         "border"?: boolean;
@@ -2762,7 +2741,6 @@ export namespace LocalJSX {
         "value": string | string[];
     }
 
-    // (undocumented)
     export interface PdsSortable {
         "border"?: boolean;
         "componentId": string;
@@ -2786,7 +2764,6 @@ export namespace LocalJSX {
         "handleType": 'handle' | 'row';
     }
 
-    // (undocumented)
     export interface PdsSortableItem {
         "componentId"?: string;
         "enableActions"?: boolean;
@@ -2846,7 +2823,6 @@ export namespace LocalJSX {
         "value": string;
     }
 
-    // (undocumented)
     export interface PdsTab {
         "active"?: boolean;
         "disabled"?: boolean;
@@ -2980,7 +2956,6 @@ export namespace LocalJSX {
         "isSelected": boolean;
     }
 
-    // (undocumented)
     export interface PdsTabpanel {
         "name": string;
     }
@@ -3182,7 +3157,6 @@ export namespace LocalJSX {
         "type": 'default' | 'danger' | 'loading';
     }
 
-    // (undocumented)
     export interface PdsTooltip {
         "componentId"?: string;
         "content"?: string;
