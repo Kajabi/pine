@@ -183,7 +183,15 @@
 
 .pds-combobox__button-trigger--input-shape {
   border-radius: var(--pine-dimension-125);
-  min-height: var(--pine-dimension-500);
+  // The same field as pds-select: its height, padding and type.
+  font: var(--pine-typography-body);
+  letter-spacing: var(--pine-letter-spacing);
+  min-height: var(--pine-dimension-450);
+  padding: calc(var(--pine-dimension-xs) - var(--pine-border-width)) var(--pine-dimension-150);
+
+  .pds-combobox__button-trigger-label--placeholder {
+    color: var(--pine-color-text-placeholder);
+  }
 }
 
 .pds-combobox__button-trigger-chevron {
