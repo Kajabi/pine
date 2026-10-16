@@ -3129,11 +3129,16 @@ export class PdsCombobox implements BasePdsProps {
           {this.renderDropdown()}
           {/* Announces the group drilled into, which focus alone doesn't. Rendered for any grouped
               display, so it's in place before a flyout falls back to drilling in. */}
-          {this.groupDisplay !== 'inline' && (
-            <span class="visually-hidden" role="status" aria-live="polite">
-              {!this.isOpen ? '' : this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null ? this.openGroup.label : this.revealedGroupLabel ?? ''}
-            </span>
-          )}
+          {this.groupDisplay !== 'inline' && [
+            <span key="drill-status" class="visually-hidden" role="status" aria-live="polite">
+              {this.isOpen && this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null ? this.openGroup.label : ''}
+            </span>,
+            // Its own region: sharing one, revealing a row then opening it would leave the text the
+            // same, and opening the group would go unannounced.
+            <span key="reveal-status" class="visually-hidden" role="status" aria-live="polite">
+              {this.isOpen ? this.revealedGroupLabel ?? '' : ''}
+            </span>,
+          ]}
         </div>
       </Host>
     );

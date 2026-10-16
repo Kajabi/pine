@@ -3279,7 +3279,8 @@ describe('pds-combobox', () => {
 
     it('says the row the first arrow shows, since the active descendant already pointed at it', async () => {
       const { page, component, root } = await openDrillIn();
-      const status = () => root.querySelector('[role="status"]')!.textContent;
+      const statuses = () => Array.from(root.querySelectorAll('[role="status"]')).map(el => el.textContent);
+      const status = () => statuses()[1];
       root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
       await page.waitForChanges();
       expect(status()).toBe('');
@@ -3288,7 +3289,20 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       expect(status()).toBe('Email');
 
-      // Moving on is announced through the active descendant, so the status clears.
+      // Opening the revealed row is announced in the other region, so the change is heard.
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+      await page.waitForChanges();
+      expect(statuses()).toEqual(['Email', '']);
+    });
+
+    it('clears the revealed row once the keys move on', async () => {
+      const { page, component, root } = await openDrillIn();
+      const status = () => root.querySelectorAll('[role="status"]')[1].textContent;
+      root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(status()).toBe('Email');
+
       component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
       await page.waitForChanges();
       expect(status()).toBe('');
