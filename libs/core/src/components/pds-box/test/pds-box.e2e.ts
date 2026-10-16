@@ -2,7 +2,7 @@ import { newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-box per-side borders', () => {
-  // A Turbo morph makes the host match the server's HTML: its attributes stay, but the classes and
+  // A DOM morph makes the host match the server's HTML: its attributes stay, but the classes and
   // style properties pds-box wrote don't.
   describe('after its classes and styles are stripped', () => {
     const layout = () => (el: HTMLElement) => {

@@ -44,7 +44,7 @@ export const restoreHostStyling = (el: HTMLElement, { classes, styles }: HostSty
 
 /**
  * Watches a host-only component's own `class` and `style` attributes and puts back what it rendered
- * when something strips them. A Turbo morph does: it makes the host match the server's HTML, which
+ * when something strips them. A DOM morph does: it makes the host match the server's HTML, which
  * carries the component's attributes but not the classes and styles it wrote, and Stencil won't
  * write them again because it diffs against its previous render, not the live DOM.
  *

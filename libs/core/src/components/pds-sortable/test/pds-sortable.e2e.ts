@@ -10,7 +10,7 @@ describe('pds-sortable', () => {
     expect(element).toHaveClass('hydrated');
   });
 
-  // A Turbo morph makes the host match the server's HTML: its attributes stay, but its classes don't,
+  // A DOM morph makes the host match the server's HTML: its attributes stay, but its classes don't,
   // including the scope class its CSS matches on.
   it('puts its layout back after its classes are stripped', async () => {
     const page = await newE2EPage();
