@@ -191,4 +191,18 @@ describe('pds-radio after its host classes and styles are stripped', () => {
 
     await expectStylingSurvivesStrip(page, 'pds-radio');
   });
+
+  // Only its own scope classes come back: another `sc-` class may be a consumer's, such as a
+  // styled-components id, and removing it on purpose has to stick.
+  it("leaves a consumer's sc- class removed", async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-radio class="sc-abc123" component-id="radio" label="Radio"></pds-radio>');
+
+    await page.$eval('pds-radio', (el) => el.setAttribute('class', ''));
+    await page.waitForChanges();
+
+    const classes = await page.$eval('pds-radio', (el) => Array.from(el.classList));
+    expect(classes).not.toContain('sc-abc123');
+    expect(classes).toEqual(expect.arrayContaining(['hydrated', 'sc-pds-radio-h']));
+  });
 });

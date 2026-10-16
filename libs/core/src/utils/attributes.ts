@@ -22,9 +22,12 @@ export type HostStyling = {
 };
 
 // Classes Stencil itself puts on a host: its default `hydratedFlag` (Pine doesn't change it), and a
-// scoped component's scope classes (`sc-pds-radio`, `sc-pds-radio-h`, `sc-pds-radio-s`), which its
-// CSS needs.
-const isStencilClass = (name: string) => name === 'hydrated' || name.startsWith('sc-');
+// scoped component's own scope classes (`sc-pds-radio`, `sc-pds-radio-h`, `sc-pds-radio-s`), which
+// its CSS needs. Only the host's own: another `sc-` class may be a consumer's (styled-components ids).
+const isStencilClass = (el: Element, name: string) => {
+  const scope = `sc-${el.localName}`;
+  return name === 'hydrated' || name === scope || name === `${scope}-h` || name === `${scope}-s`;
+};
 
 /**
  * The class names in a rendered `class` value: a string, or Stencil's `{ name: boolean }` form.
@@ -72,11 +75,11 @@ const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
     // were there, so this never runs ahead of Stencil.
     const stencilClasses = records
       .filter((record) => record.attributeName === 'class' && record.oldValue != null)
-      .flatMap((record) => classNamesOf(record.oldValue).filter(isStencilClass));
+      .flatMap((record) => classNamesOf(record.oldValue).filter((name) => isStencilClass(el, name)));
     restoreHostStyling(el, { ...styling, classes: [...styling.classes, ...stencilClasses] });
 
     // An attribute the component still renders comes back with the value it had, which is what
-    // Stencil wrote (`aria-hidden={true}` lands as `aria-hidden=""`). One it stopped rendering stays
+    // Stencil wrote (a boolean `true` lands as an empty value). One it stopped rendering stays
     // removed, since that was Stencil's own write.
     records.forEach(({ attributeName: name, oldValue }) => {
       const rendered = styling.attributes?.[name];
