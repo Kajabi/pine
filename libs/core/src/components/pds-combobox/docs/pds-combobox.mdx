@@ -1079,9 +1079,37 @@ Add `data-icon` to an `<optgroup>` to show a Pine icon beside its label. Use an 
   </pds-combobox>
 </DocCanvas>
 
+### Option Icons
+
+Set `icon` on an option from the `options` prop, or `data-icon` on a slotted `<option>`, to show a Pine icon before its text. The rules are the same as for group icons: an icon name only, decorative, and hidden from assistive technology. Once an option is chosen, the `button` trigger shows its icon too, or its group's icon when the option has none.
+
+Option icons suit a list of categories, where the ungrouped options and the groups between them all have icons, as in this filter:
+
+```jsx
+<PdsCombobox
+  componentId="combobox-option-icons-example"
+  label="Category"
+  hideLabel
+  placeholder="Select category"
+  trigger="button"
+  triggerShape="input"
+  mode="select-only"
+  groupDisplay="drill-in"
+  panelSearch
+  searchPlaceholder="Search categories"
+  options={[
+    { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+    { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+    { id: 'sequence', text: 'Sequence', group: 'Email' },
+    { id: 'event', text: 'Event', icon: 'calendar-date' },
+    { id: 'tag', text: 'Tag', icon: 'hashtag' },
+  ]}
+/>
+```
+
 ### Grouping the `options` Prop
 
-When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. Options without a group are listed before every group, wherever they appear in the array. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
+When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. With `group-display="inline"`, options without a group are listed before every group, wherever they appear in the array, so none reads as part of the group above it. With `flyout` and `drill-in`, groups are rows of their own, so options without a group and groups keep the array's order. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
 
 ```jsx
 <PdsCombobox
@@ -1134,7 +1162,8 @@ When options come from the `options` prop, set `group` on each option, and optio
 - **Pass `drill-in-back-label` with `flyout` too.** A flyout drills in when there's no room beside the dropdown, and the back row's screen-reader prefix is English by default.
 - **Give every group an icon or none.** A mix reads as unfinished.
 - **For server-searched lists (`async-url`), prefer `inline`.** Results replace the groups as soon as you type, so a group list adds a step without helping.
-- **In slotted markup, list ungrouped options first.** One placed after a group reads as part of it; the `options` prop lists them first for you.
+- **With `inline`, list ungrouped options first in slotted markup.** One placed after a group reads as part of it; the `options` prop lists them first for you. With `flyout` and `drill-in`, groups are rows, so ungrouped options can sit between them, in the order you list them.
+- **Give every top-level row an icon or none.** That's the ungrouped options' `icon` and the groups' `groupIcon` together.
 - **Use `panel-search` with the `button` and `chip` triggers** once a grouped list is long enough to need searching. The `input` trigger already searches.
 - **Inside a `pds-modal` (or any `<dialog>`), set `dropdown-mount="body"`.** The flyout moves with the dropdown, and focus stays inside the dialog. For other focus traps, see [Searching From the Panel](#searching-from-the-panel).
 
