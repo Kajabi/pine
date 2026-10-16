@@ -206,12 +206,8 @@ pds-input {
   width: var(--pine-dimension-050);
 }
 
-// The shape rules stay off `:hover`: with it, they'd outrank the range-end and week-edge rules below,
-// and a hovered end or edge day would lose its shape.
-.pds-datepicker__day--selected {
-  border-radius: var(--pine-border-radius-full);
-}
-
+// No `border-radius` on these `:hover` groups: it would outrank the range-end and week-edge rules
+// below, and a hovered end or edge day would lose its shape.
 .pds-datepicker__day--selected,
 .pds-datepicker__day--selected:hover {
   background: var(--pine-color-primary);
