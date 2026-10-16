@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../utils/test/axe';
 
 // Strings, not functions: see `host-strip.ts` for why page code is passed as a string.
 const classesOf = (selector: string) => `Array.from(document.querySelector('${selector}').classList).sort()`;
@@ -20,8 +21,8 @@ describe('keepPineHydrated', () => {
   it.each(components)('keeps %s visible after a DOM morph strips its classes', async (tag, markup) => {
     const page = await newE2EPage();
     await page.setContent(markup);
-    // Stencil's own classes. Classes a component renders onto its host (`pds-alert`) are its own
-    // restore's job, and none of these style anything.
+    // Only Stencil's own classes: the observer leaves classes a component renders onto its host
+    // (`pds-alert`) alone.
     const stencilClasses = async () =>
       ((await page.evaluate(classesOf(tag))) as string[]).filter((name) => name === 'hydrated' || name.startsWith('sc-'));
     const before = await stencilClasses();
@@ -32,6 +33,7 @@ describe('keepPineHydrated', () => {
 
     expect(await stencilClasses()).toEqual(before);
     expect(await page.evaluate(`getComputedStyle(document.querySelector('${tag}')).visibility`)).toBe('visible');
+    expect(formatViolations(await runAxe(page))).toBe('');
   });
 
   it("leaves a consumer's own classes removed", async () => {
