@@ -37,6 +37,8 @@ The pds-row component creates a 12-column grid system for responsive layouts. It
 - `align-items`: Vertical alignment of columns
 - `no-wrap`: Prevents column wrapping
 
+The component keeps the classes and inline styles it puts on its host. If something removes them, such as a Turbo morph, it puts them back, so change its layout through props. Classes and styles you add yourself are left alone.
+
 ### Working with PDS-Box
 
 > **CRITICAL:** `pds-row` transforms `pds-box` children into **grid columns**, not flexbox items. This changes how they behave.
