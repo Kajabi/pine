@@ -119,6 +119,16 @@ export namespace Components {
          */
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
     }
+    interface PdsApp {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Maximum width of the main content region. Accepts a named size token (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`, matching `pds-container`) or any valid CSS length. When omitted, no max-width is applied.
+         */
+        "mainSize"?: string;
+    }
     interface PdsAvatar {
         /**
           * The alt for a custom user image.
@@ -2939,6 +2949,44 @@ export namespace Components {
          */
         "showTooltip": () => Promise<void>;
     }
+    interface PdsTopbar {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Accessible alt text for the default logo image, and the accessible label for the logo link when `logoHref` is set.
+          * @defaultValue 'Home'
+         */
+        "logoAlt": string;
+        /**
+          * If provided, wraps the logo in a link to this URL.
+         */
+        "logoHref"?: string;
+        /**
+          * Image source for the default logo rendering. Ignored if the `logo` slot has content.
+         */
+        "logoSrc"?: string;
+        /**
+          * Shows a navigation-toggle button before the logo. Pair with `menuButtonControls`.
+          * @defaultValue false
+         */
+        "menuButton": boolean;
+        /**
+          * The `id` of the element the menu button controls (its `aria-controls` target) — typically a `pds-app` `nav` slot's container.
+         */
+        "menuButtonControls"?: string;
+        /**
+          * Accessible label for the menu-toggle button. Pass a translated string to localize it.
+          * @defaultValue 'Toggle navigation'
+         */
+        "menuButtonLabel": string;
+        /**
+          * Whether the controlled navigation is currently expanded. The consumer owns this state — `pds-topbar` only reflects it into `aria-expanded` and toggles it locally when uncontrolled updates aren't wired up by the caller.
+          * @defaultValue false
+         */
+        "menuExpanded": boolean;
+    }
 }
 export interface MockPdsModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3052,6 +3100,10 @@ export interface PdsToastCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsToastElement;
 }
+export interface PdsTopbarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsTopbarElement;
+}
 declare global {
     interface HTMLMockPdsModalElementEventMap {
         "pdsModalOpen": void;
@@ -3109,6 +3161,12 @@ declare global {
     var HTMLPdsAlertElement: {
         prototype: HTMLPdsAlertElement;
         new (): HTMLPdsAlertElement;
+    };
+    interface HTMLPdsAppElement extends Components.PdsApp, HTMLStencilElement {
+    }
+    var HTMLPdsAppElement: {
+        prototype: HTMLPdsAppElement;
+        new (): HTMLPdsAppElement;
     };
     interface HTMLPdsAvatarElement extends Components.PdsAvatar, HTMLStencilElement {
     }
@@ -3790,10 +3848,28 @@ declare global {
         prototype: HTMLPdsTooltipElement;
         new (): HTMLPdsTooltipElement;
     };
+    interface HTMLPdsTopbarElementEventMap {
+        "pdsMenuToggle": { expanded: boolean };
+    }
+    interface HTMLPdsTopbarElement extends Components.PdsTopbar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsTopbarElementEventMap>(type: K, listener: (this: HTMLPdsTopbarElement, ev: PdsTopbarCustomEvent<HTMLPdsTopbarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsTopbarElementEventMap>(type: K, listener: (this: HTMLPdsTopbarElement, ev: PdsTopbarCustomEvent<HTMLPdsTopbarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsTopbarElement: {
+        prototype: HTMLPdsTopbarElement;
+        new (): HTMLPdsTopbarElement;
+    };
     interface HTMLElementTagNameMap {
         "mock-pds-modal": HTMLMockPdsModalElement;
         "pds-accordion": HTMLPdsAccordionElement;
         "pds-alert": HTMLPdsAlertElement;
+        "pds-app": HTMLPdsAppElement;
         "pds-avatar": HTMLPdsAvatarElement;
         "pds-box": HTMLPdsBoxElement;
         "pds-button": HTMLPdsButtonElement;
@@ -3845,6 +3921,7 @@ declare global {
         "pds-textarea": HTMLPdsTextareaElement;
         "pds-toast": HTMLPdsToastElement;
         "pds-tooltip": HTMLPdsTooltipElement;
+        "pds-topbar": HTMLPdsTopbarElement;
     }
 }
 declare namespace LocalJSX {
@@ -3946,6 +4023,16 @@ declare namespace LocalJSX {
           * @defaultValue 'default'
          */
         "variant"?: 'default' | 'danger' | 'info' | 'success' | 'warning';
+    }
+    interface PdsApp {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Maximum width of the main content region. Accepts a named size token (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`, matching `pds-container`) or any valid CSS length. When omitted, no max-width is applied.
+         */
+        "mainSize"?: string;
     }
     interface PdsAvatar {
         /**
@@ -6900,6 +6987,48 @@ declare namespace LocalJSX {
          */
         "placement"?: PlacementType;
     }
+    interface PdsTopbar {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Accessible alt text for the default logo image, and the accessible label for the logo link when `logoHref` is set.
+          * @defaultValue 'Home'
+         */
+        "logoAlt"?: string;
+        /**
+          * If provided, wraps the logo in a link to this URL.
+         */
+        "logoHref"?: string;
+        /**
+          * Image source for the default logo rendering. Ignored if the `logo` slot has content.
+         */
+        "logoSrc"?: string;
+        /**
+          * Shows a navigation-toggle button before the logo. Pair with `menuButtonControls`.
+          * @defaultValue false
+         */
+        "menuButton"?: boolean;
+        /**
+          * The `id` of the element the menu button controls (its `aria-controls` target) — typically a `pds-app` `nav` slot's container.
+         */
+        "menuButtonControls"?: string;
+        /**
+          * Accessible label for the menu-toggle button. Pass a translated string to localize it.
+          * @defaultValue 'Toggle navigation'
+         */
+        "menuButtonLabel"?: string;
+        /**
+          * Whether the controlled navigation is currently expanded. The consumer owns this state — `pds-topbar` only reflects it into `aria-expanded` and toggles it locally when uncontrolled updates aren't wired up by the caller.
+          * @defaultValue false
+         */
+        "menuExpanded"?: boolean;
+        /**
+          * Emitted when the menu-toggle button is clicked.
+         */
+        "onPdsMenuToggle"?: (event: PdsTopbarCustomEvent<{ expanded: boolean }>) => void;
+    }
 
     interface MockPdsModalAttributes {
         "componentId": string;
@@ -6920,6 +7049,10 @@ declare namespace LocalJSX {
         "hideIcon": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
         "dismissLabel": string;
+    }
+    interface PdsAppAttributes {
+        "componentId": string;
+        "mainSize": string;
     }
     interface PdsAvatarAttributes {
         "alt": string | null;
@@ -7592,11 +7725,22 @@ declare namespace LocalJSX {
         "maxWidth": string;
         "opened": boolean;
     }
+    interface PdsTopbarAttributes {
+        "componentId": string;
+        "logoSrc": string;
+        "logoAlt": string;
+        "logoHref": string;
+        "menuButton": boolean;
+        "menuButtonControls": string;
+        "menuExpanded": boolean;
+        "menuButtonLabel": string;
+    }
 
     interface IntrinsicElements {
         "mock-pds-modal": Omit<MockPdsModal, keyof MockPdsModalAttributes> & { [K in keyof MockPdsModal & keyof MockPdsModalAttributes]?: MockPdsModal[K] } & { [K in keyof MockPdsModal & keyof MockPdsModalAttributes as `attr:${K}`]?: MockPdsModalAttributes[K] } & { [K in keyof MockPdsModal & keyof MockPdsModalAttributes as `prop:${K}`]?: MockPdsModal[K] };
         "pds-accordion": Omit<PdsAccordion, keyof PdsAccordionAttributes> & { [K in keyof PdsAccordion & keyof PdsAccordionAttributes]?: PdsAccordion[K] } & { [K in keyof PdsAccordion & keyof PdsAccordionAttributes as `attr:${K}`]?: PdsAccordionAttributes[K] } & { [K in keyof PdsAccordion & keyof PdsAccordionAttributes as `prop:${K}`]?: PdsAccordion[K] };
         "pds-alert": Omit<PdsAlert, keyof PdsAlertAttributes> & { [K in keyof PdsAlert & keyof PdsAlertAttributes]?: PdsAlert[K] } & { [K in keyof PdsAlert & keyof PdsAlertAttributes as `attr:${K}`]?: PdsAlertAttributes[K] } & { [K in keyof PdsAlert & keyof PdsAlertAttributes as `prop:${K}`]?: PdsAlert[K] };
+        "pds-app": Omit<PdsApp, keyof PdsAppAttributes> & { [K in keyof PdsApp & keyof PdsAppAttributes]?: PdsApp[K] } & { [K in keyof PdsApp & keyof PdsAppAttributes as `attr:${K}`]?: PdsAppAttributes[K] } & { [K in keyof PdsApp & keyof PdsAppAttributes as `prop:${K}`]?: PdsApp[K] };
         "pds-avatar": Omit<PdsAvatar, keyof PdsAvatarAttributes> & { [K in keyof PdsAvatar & keyof PdsAvatarAttributes]?: PdsAvatar[K] } & { [K in keyof PdsAvatar & keyof PdsAvatarAttributes as `attr:${K}`]?: PdsAvatarAttributes[K] } & { [K in keyof PdsAvatar & keyof PdsAvatarAttributes as `prop:${K}`]?: PdsAvatar[K] };
         "pds-box": Omit<PdsBox, keyof PdsBoxAttributes> & { [K in keyof PdsBox & keyof PdsBoxAttributes]?: PdsBox[K] } & { [K in keyof PdsBox & keyof PdsBoxAttributes as `attr:${K}`]?: PdsBoxAttributes[K] } & { [K in keyof PdsBox & keyof PdsBoxAttributes as `prop:${K}`]?: PdsBox[K] };
         "pds-button": Omit<PdsButton, keyof PdsButtonAttributes> & { [K in keyof PdsButton & keyof PdsButtonAttributes]?: PdsButton[K] } & { [K in keyof PdsButton & keyof PdsButtonAttributes as `attr:${K}`]?: PdsButtonAttributes[K] } & { [K in keyof PdsButton & keyof PdsButtonAttributes as `prop:${K}`]?: PdsButton[K] };
@@ -7648,6 +7792,7 @@ declare namespace LocalJSX {
         "pds-textarea": Omit<PdsTextarea, keyof PdsTextareaAttributes> & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes]?: PdsTextarea[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `attr:${K}`]?: PdsTextareaAttributes[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `prop:${K}`]?: PdsTextarea[K] } & OneOf<"componentId", PdsTextarea["componentId"], PdsTextareaAttributes["componentId"]>;
         "pds-toast": Omit<PdsToast, keyof PdsToastAttributes> & { [K in keyof PdsToast & keyof PdsToastAttributes]?: PdsToast[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `attr:${K}`]?: PdsToastAttributes[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `prop:${K}`]?: PdsToast[K] } & OneOf<"componentId", PdsToast["componentId"], PdsToastAttributes["componentId"]>;
         "pds-tooltip": Omit<PdsTooltip, keyof PdsTooltipAttributes> & { [K in keyof PdsTooltip & keyof PdsTooltipAttributes]?: PdsTooltip[K] } & { [K in keyof PdsTooltip & keyof PdsTooltipAttributes as `attr:${K}`]?: PdsTooltipAttributes[K] } & { [K in keyof PdsTooltip & keyof PdsTooltipAttributes as `prop:${K}`]?: PdsTooltip[K] };
+        "pds-topbar": Omit<PdsTopbar, keyof PdsTopbarAttributes> & { [K in keyof PdsTopbar & keyof PdsTopbarAttributes]?: PdsTopbar[K] } & { [K in keyof PdsTopbar & keyof PdsTopbarAttributes as `attr:${K}`]?: PdsTopbarAttributes[K] } & { [K in keyof PdsTopbar & keyof PdsTopbarAttributes as `prop:${K}`]?: PdsTopbar[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -7661,6 +7806,7 @@ declare module "@stencil/core" {
             "mock-pds-modal": LocalJSX.IntrinsicElements["mock-pds-modal"] & JSXBase.HTMLAttributes<HTMLMockPdsModalElement>;
             "pds-accordion": LocalJSX.IntrinsicElements["pds-accordion"] & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
             "pds-alert": LocalJSX.IntrinsicElements["pds-alert"] & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
+            "pds-app": LocalJSX.IntrinsicElements["pds-app"] & JSXBase.HTMLAttributes<HTMLPdsAppElement>;
             "pds-avatar": LocalJSX.IntrinsicElements["pds-avatar"] & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
             /**
              * @lightDom host-only
@@ -7785,6 +7931,7 @@ declare module "@stencil/core" {
              * @lightDom renders-markup
              */
             "pds-tooltip": LocalJSX.IntrinsicElements["pds-tooltip"] & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
+            "pds-topbar": LocalJSX.IntrinsicElements["pds-topbar"] & JSXBase.HTMLAttributes<HTMLPdsTopbarElement>;
         }
     }
 }
