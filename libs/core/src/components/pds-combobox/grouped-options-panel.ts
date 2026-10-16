@@ -39,7 +39,16 @@ const PINE_ICON_NAME = /^[a-z0-9-]+$/i;
  * only ever passed to `pds-icon` as `name`.
  */
 export function groupIconOf(optgroup: HTMLOptGroupElement): string | null {
-  const icon = optgroup.getAttribute('data-icon');
+  return iconOf(optgroup);
+}
+
+/** An option's `data-icon` when it's a Pine icon name, or null; the same check as a group's. */
+export function optionIconOf(option: HTMLOptionElement): string | null {
+  return iconOf(option);
+}
+
+function iconOf(element: Element): string | null {
+  const icon = element.getAttribute('data-icon');
   return icon !== null && PINE_ICON_NAME.test(icon) ? icon : null;
 }
 
@@ -58,8 +67,12 @@ export function isGroupDisabled(group: PanelGroup): boolean {
  * Groups the combobox's filtered items for the panel: each optgroup becomes one entry holding its
  * options, and ungrouped options stay where they are. Indexes count options in list order, the
  * same as the inline listbox, so `data-option-index` means the same thing in every mode.
+ *
+ * `position`, when given, orders the entries instead: an ungrouped option or an optgroup it knows
+ * goes where it reports, and the rest keep their place after those. Options from the `options` prop
+ * use it, so a row the data lists between two groups is drawn between them.
  */
-export function buildPanelEntries(items: Element[]): PanelEntry[] {
+export function buildPanelEntries(items: Element[], position?: (element: Element) => number | undefined): PanelEntry[] {
   const entries: PanelEntry[] = [];
   const groups = new Map<HTMLOptGroupElement, PanelGroup>();
   let index = 0;
@@ -82,7 +95,10 @@ export function buildPanelEntries(items: Element[]): PanelEntry[] {
     }
   });
 
-  return entries;
+  if (position === undefined) return entries;
+  const at = (entry: PanelEntry) => position(entry.kind === 'group' ? entry.group.optgroup : entry.option) ?? Infinity;
+  // Array.prototype.sort is stable, so entries with no position keep their order.
+  return entries.sort((a, b) => at(a) - at(b));
 }
 
 /** The label of the optgroup an option sits in, or null for an ungrouped option. */
