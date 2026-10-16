@@ -22,9 +22,12 @@ export type HostStyling = { classes: string[]; styles: Record<string, string> };
 const isStencilClass = (name: string) => name === 'hydrated' || /^sc-.+-[hs]$/.test(name);
 
 /**
- * Splits a rendered class string into its class names.
+ * The class names in a rendered `class` value: a string, or Stencil's `{ name: boolean }` form.
  */
-export const classNamesOf = (classes: string) => classes.split(/\s+/).filter(Boolean);
+export const classNamesOf = (classes: string | Record<string, boolean>) =>
+  typeof classes === 'string'
+    ? classes.split(/\s+/).filter(Boolean)
+    : Object.keys(classes).filter((name) => classes[name]);
 
 /**
  * Puts back any of `expected`'s classes or style properties that are missing from `el`. It only
@@ -161,3 +164,25 @@ const ariaAttributes = [
 
   return inheritAttributes(el, attributesToInherit);
  }
+
+/**
+ * One component's use of `keepHostStyling`: `record` what `render()` puts on the host, `connect` in
+ * `connectedCallback` and `disconnect` in `disconnectedCallback`.
+ */
+export class HostStylingKeeper {
+  private styling: HostStyling = { classes: [], styles: {} };
+  private observer: MutationObserver | null = null;
+
+  record(classes: string | Record<string, boolean>, styles: Record<string, string> = {}) {
+    this.styling = { classes: classNamesOf(classes), styles };
+  }
+
+  connect(el: HTMLElement) {
+    this.observer ??= keepHostStyling(el, () => this.styling);
+  }
+
+  disconnect() {
+    this.observer?.disconnect();
+    this.observer = null;
+  }
+}

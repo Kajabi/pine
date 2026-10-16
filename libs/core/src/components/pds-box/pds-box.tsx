@@ -2,7 +2,7 @@ import { Component, Element, h, Host, Prop } from '@stencil/core';
 
 import { BoxColumnType, BoxSpacingType, BoxShadowSizeType } from '../../utils/types';
 import { normalizeColorValue } from '../../utils/utils';
-import { classNamesOf, HostStyling, keepHostStyling } from '../../utils/attributes';
+import { HostStylingKeeper } from '../../utils/attributes';
 
 /**
  * @lightDom host-only
@@ -14,16 +14,14 @@ import { classNamesOf, HostStyling, keepHostStyling } from '../../utils/attribut
 export class PdsBox {
   @Element() el: HTMLPdsBoxElement;
 
-  private hostStyling: HostStyling = { classes: [], styles: {} };
-  private hostObserver: MutationObserver | null = null;
+  private hostKeeper = new HostStylingKeeper();
 
   connectedCallback() {
-    this.hostObserver ??= keepHostStyling(this.el, () => this.hostStyling);
+    this.hostKeeper.connect(this.el);
   }
 
   disconnectedCallback() {
-    this.hostObserver?.disconnect();
-    this.hostObserver = null;
+    this.hostKeeper.disconnect();
   }
 
   /**
@@ -876,7 +874,7 @@ export class PdsBox {
       ...(this.flex && !['none', 'grow', 'shrink'].includes(this.flex) && { 'flex': this.flex }),
     };
 
-    this.hostStyling = { classes: classNamesOf(boxClasses), styles: boxInlineStyles };
+    this.hostKeeper.record(boxClasses, boxInlineStyles);
 
     return (
       <Host class={boxClasses} style={boxInlineStyles}>
