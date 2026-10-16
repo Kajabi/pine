@@ -349,6 +349,19 @@ export class PdsCombobox implements BasePdsProps {
   @State() keyboardNavigating: boolean = false;
 
   /**
+   * A drill-in group row the first arrow showed rather than moved past. `aria-activedescendant`
+   * already pointed at it, so the status region says it instead.
+   */
+  @State() revealedGroupLabel: string | null = null;
+
+  /**
+   * The pointer in the panel can hover: a mouse or pen, not touch. Touch browsers keep a tapped row
+   * hovered, so group rows shade on `:hover` only for a pointer that can hover. Checked on the
+   * pointer itself rather than `(hover: hover)`, which a touch-first device with a trackpad fails.
+   */
+  @State() pointerCanHover: boolean = true;
+
+  /**
    * What's typed in the dropdown's own search field (`panelSearch`).
    */
   @State() panelQuery: string = '';
@@ -538,6 +551,7 @@ export class PdsCombobox implements BasePdsProps {
   @Watch('openGroup')
   protected openGroupChanged(next: HTMLOptGroupElement | null, previous: HTMLOptGroupElement | null) {
     this.handPanelFocusToList();
+    this.revealedGroupLabel = null;
     // Only moves between the drill-in panel's views slide; search results don't.
     if (!this.isOpen || this.effectiveGroupDisplay !== 'drill-in' || !this.showsGroupedPanel) return;
     if (next !== null && previous === null) this.drillDirection = 'in';
@@ -558,6 +572,11 @@ export class PdsCombobox implements BasePdsProps {
     if (this.isOpen && this.hidesPanelSearch && this.panelTreeEl) this.focusPanel(this.panelTreeEl);
   }
 
+  private onPanelPointer = (event: PointerEvent) => {
+    const canHover = event.pointerType !== 'touch';
+    if (this.pointerCanHover !== canHover) this.pointerCanHover = canHover;
+  };
+
   private onDrillAnimationEnd = (event: AnimationEvent) => {
     // Only the slide's own end: slotted consumer content can animate inside the list too.
     if (event.animationName?.startsWith('pds-combobox-drill')) this.drillDirection = null;
@@ -566,6 +585,7 @@ export class PdsCombobox implements BasePdsProps {
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
     if (!isOpen) {
+      this.revealedGroupLabel = null;
       this.drillDirection = null;
       this.openGroup = null;
       this.highlightedGroup = null;
@@ -1581,14 +1601,20 @@ export class PdsCombobox implements BasePdsProps {
     const moveTo = (to: number) => {
       e.preventDefault();
       this.highlightPanelItem(column[Math.max(0, Math.min(column.length - 1, to))]);
+      this.revealedGroupLabel = null;
+      return true;
+    };
+    const reveal = () => {
+      e.preventDefault();
+      this.revealedGroupLabel = (current as HTMLOptGroupElement).label;
       return true;
     };
 
     switch (e.key) {
       case 'ArrowDown':
-        return moveTo(unseenRow ? position : position < 0 ? 0 : position + 1);
+        return unseenRow ? reveal() : moveTo(position < 0 ? 0 : position + 1);
       case 'ArrowUp':
-        return moveTo(unseenRow ? position : position < 0 ? column.length - 1 : position - 1);
+        return unseenRow ? reveal() : moveTo(position < 0 ? column.length - 1 : position - 1);
       case 'Home':
         return moveTo(0);
       case 'End':
@@ -1996,6 +2022,8 @@ export class PdsCombobox implements BasePdsProps {
     this.highlightedIndex = -1;
     this.highlightedGroup = group;
     this.keyboardNavigating = false;
+    // So revealing this row again later is announced again.
+    this.revealedGroupLabel = null;
   }
 
   private onGroupRowClick = (event: Event) => {
@@ -2299,8 +2327,11 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__listbox--grouped': this.groupDisplay !== 'inline',
           'pds-combobox__listbox--drill-in': this.drillDirection === 'in',
           'pds-combobox__listbox--drill-out': this.drillDirection === 'out',
+          'pds-combobox__listbox--pointer-hover': this.pointerCanHover,
         }}
         onAnimationEnd={this.onDrillAnimationEnd}
+        onPointerMove={this.onPanelPointer}
+        onPointerDown={this.onPanelPointer}
         role={this.showsGroupedPanel ? 'tree' : 'listbox'}
         id={this.listboxId}
         aria-label={this.label || 'Options'}
@@ -3100,7 +3131,7 @@ export class PdsCombobox implements BasePdsProps {
               display, so it's in place before a flyout falls back to drilling in. */}
           {this.groupDisplay !== 'inline' && (
             <span class="visually-hidden" role="status" aria-live="polite">
-              {this.isOpen && this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null ? this.openGroup.label : ''}
+              {!this.isOpen ? '' : this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null ? this.openGroup.label : this.revealedGroupLabel ?? ''}
             </span>
           )}
         </div>
