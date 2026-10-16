@@ -2721,7 +2721,10 @@ export class PdsCombobox implements BasePdsProps {
   private renderGroupRow(group: PanelGroup, groupIndex: number, { posinset, setsize }: { posinset: number; setsize: number }) {
     const flyout = this.effectiveGroupDisplay === 'flyout';
     const isOpen = flyout && this.openGroup === group.optgroup;
-    const hasSelection = group.options.some(({ option }) => this.isOptionSelected(option));
+    // Drill-in rows don't mark the group holding the selection, or keep the highlight a pointer user
+    // left on the way back: shaded, they read as picked. The keyboard's place still shows.
+    const hasSelection = flyout && group.options.some(({ option }) => this.isOptionSelected(option));
+    const highlighted = this.highlightedGroupRow === group.optgroup && (flyout || this.keyboardNavigating);
     const disabled = isGroupDisabled(group);
     const id = this.groupDomId(group.optgroup);
 
@@ -2733,7 +2736,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__group-row': true,
           'pds-combobox__group-row--open': isOpen,
           'pds-combobox__group-row--has-selection': hasSelection,
-          'pds-combobox__group-row--highlighted': this.highlightedGroupRow === group.optgroup,
+          'pds-combobox__group-row--highlighted': highlighted,
           'pds-combobox__group-row--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
           'pds-combobox__group-row--disabled': disabled,
         }}
