@@ -98,7 +98,10 @@ export function buildPanelEntries(items: Element[], position?: (element: Element
   if (position === undefined) return entries;
   const at = (entry: PanelEntry) => position(entry.kind === 'group' ? entry.group.optgroup : entry.option) ?? Infinity;
   // Array.prototype.sort is stable, so entries with no position keep their order.
-  return entries.sort((a, b) => at(a) - at(b));
+  return entries.sort((a, b) => {
+    const [first, second] = [at(a), at(b)];
+    return first === second ? 0 : first < second ? -1 : 1;
+  });
 }
 
 /** The label of the optgroup an option sits in, or null for an ungrouped option. */
