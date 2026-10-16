@@ -518,6 +518,51 @@ GroupDisplayDrillInWithPanelSearch.args = {
   ],
 };
 
+// A category picker: ungrouped categories with icons, and groups listed between them in the
+// data's order. Once a category is chosen, the trigger shows its icon, or its group's.
+export const OptionIconsWithGroups = (args) => html`
+<div style="min-height: 480px;">
+  <pds-combobox
+    component-id="combobox-option-icons"
+    label=${args.label}
+    hide-label
+    placeholder=${args.placeholder}
+    trigger="button"
+    trigger-shape="input"
+    mode="select-only"
+    group-display=${args.groupDisplay}
+    panel-search
+    search-placeholder=${args.searchPlaceholder}
+    search-options-label=${args.searchPlaceholder}
+    drill-in-back-label="Back"
+    trigger-width=${args.triggerWidth}
+    dropdown-width=${args.triggerWidth}
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+OptionIconsWithGroups.args = {
+  label: 'Category',
+  placeholder: 'Select category',
+  searchPlaceholder: 'Search categories',
+  groupDisplay: 'drill-in',
+  triggerWidth: '360px',
+  options: [
+    { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+    { id: 'contact', text: 'Contact', icon: 'contact' },
+    { id: 'coupon', text: 'Coupon', icon: 'coupon' },
+    { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+    { id: 'email-activity', text: 'Email activity', group: 'Email' },
+    { id: 'marketing-status', text: 'Email marketing status', group: 'Email' },
+    { id: 'sequence', text: 'Sequence', group: 'Email' },
+    { id: 'event', text: 'Event', icon: 'calendar-date' },
+    { id: 'custom-fields', text: 'Custom fields', group: 'Fields', groupIcon: 'columns' },
+    { id: 'default-fields', text: 'Default fields', group: 'Fields' },
+    { id: 'form', text: 'Form', icon: 'form' },
+    { id: 'tag', text: 'Tag', icon: 'hashtag' },
+  ],
+};
+
 // A large action catalog: many groups, a button trigger and panel search. The narrower widths
 // leave room for the flyout beside the dropdown on a narrow canvas.
 export const GroupDisplayActionCatalog = (args) => html`

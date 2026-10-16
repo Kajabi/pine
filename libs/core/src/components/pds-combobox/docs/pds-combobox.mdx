@@ -1081,22 +1081,26 @@ Add `data-icon` to an `<optgroup>` to show a Pine icon beside its label. Use an 
 
 ### Option Icons
 
-Set `icon` on an option from the `options` prop, or `data-icon` on a slotted `<option>`, to show a Pine icon before its text. The rules are the same as for group icons: an icon name only, decorative, and hidden from assistive technology. Once an option is chosen, the `button` trigger shows its icon too, or its group's icon when the option has none.
+Set `icon` on an option from the `options` prop, or `data-icon` on a slotted `<option>`, to show a Pine icon before its text. The rules are the same as for group icons: an icon name only, decorative, and hidden from assistive technology. Once an option is chosen, the `button` trigger shows its icon too, or its group's icon when the option has none. The `input` and `chip` triggers don't show option icons.
 
-Option icons suit a list of categories, where the ungrouped options and the groups between them all have icons, as in this filter:
+Option icons suit a list of categories, where the ungrouped options and the groups between them all have icons. With `flyout` and `drill-in`, the groups sit between the options in the array's order. See the `OptionIconsWithGroups` story.
 
-```jsx
-<PdsCombobox
+<DocCanvas
+  mdxSource={{
+    react: `<PdsCombobox
   componentId="combobox-option-icons-example"
   label="Category"
   hideLabel
   placeholder="Select category"
   trigger="button"
   triggerShape="input"
+  triggerWidth="320px"
+  dropdownWidth="320px"
   mode="select-only"
   groupDisplay="drill-in"
   panelSearch
   searchPlaceholder="Search categories"
+  searchOptionsLabel="Search categories"
   options={[
     { id: 'assessment', text: 'Assessment', icon: 'assessment' },
     { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
@@ -1104,8 +1108,56 @@ Option icons suit a list of categories, where the ungrouped options and the grou
     { id: 'event', text: 'Event', icon: 'calendar-date' },
     { id: 'tag', text: 'Tag', icon: 'hashtag' },
   ]}
-/>
-```
+/>`,
+    webComponent: `<pds-combobox
+  component-id="combobox-option-icons-example"
+  label="Category"
+  hide-label
+  placeholder="Select category"
+  trigger="button"
+  trigger-shape="input"
+  trigger-width="320px"
+  dropdown-width="320px"
+  mode="select-only"
+  group-display="drill-in"
+  panel-search
+  search-placeholder="Search categories"
+  search-options-label="Search categories">
+  <option value="assessment" data-icon="assessment">Assessment</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+  <option value="event" data-icon="calendar-date">Event</option>
+  <option value="tag" data-icon="hashtag">Tag</option>
+</pds-combobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-option-icons-example"
+    label="Category"
+    hide-label
+    placeholder="Select category"
+    trigger="button"
+    trigger-shape="input"
+    trigger-width="320px"
+    dropdown-width="320px"
+    mode="select-only"
+    group-display="drill-in"
+    panel-search
+    search-placeholder="Search categories"
+    search-options-label="Search categories">
+    <option value="assessment" data-icon="assessment">Assessment</option>
+    <optgroup label="Email" data-icon="mail">
+      <option value="broadcast">Broadcast</option>
+      <option value="sequence">Sequence</option>
+    </optgroup>
+    <option value="event" data-icon="calendar-date">Event</option>
+    <option value="tag" data-icon="hashtag">Tag</option>
+  </pds-combobox>
+</DocCanvas>
+
+Search results, and the `inline` display, list a group's options under its label, after the ungrouped options. Options there with an icon and without one sit side by side, so give a group's own options icons only if every option in that list has one.
 
 ### Grouping the `options` Prop
 
@@ -1163,7 +1215,7 @@ When options come from the `options` prop, set `group` on each option, and optio
 - **Give every group an icon or none.** A mix reads as unfinished.
 - **For server-searched lists (`async-url`), prefer `inline`.** Results replace the groups as soon as you type, so a group list adds a step without helping.
 - **With `inline`, list ungrouped options first in slotted markup.** One placed after a group reads as part of it; the `options` prop lists them first for you. With `flyout` and `drill-in`, groups are rows, so ungrouped options can sit between them, in the order you list them.
-- **Give every top-level row an icon or none.** That's the ungrouped options' `icon` and the groups' `groupIcon` together.
+- **Give every top-level row an icon or none.** That's the ungrouped options' `icon` and the groups' `groupIcon` together. A group's own options usually have none: once one is chosen, the trigger shows its group's icon.
 - **Use `panel-search` with the `button` and `chip` triggers** once a grouped list is long enough to need searching. The `input` trigger already searches.
 - **Inside a `pds-modal` (or any `<dialog>`), set `dropdown-mount="body"`.** The flyout moves with the dropdown, and focus stays inside the dialog. For other focus traps, see [Searching From the Panel](#searching-from-the-panel).
 
