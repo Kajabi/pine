@@ -33,6 +33,10 @@ function collectTabbable(root: Element | ShadowRoot, found: HTMLElement[]) {
   for (const child of Array.from(root.children)) visitTabbable(child, found);
 }
 
+// An editing host reports tabIndex -1 but is still a Tab stop; editable content inside it is not.
+const isTabStop = (el: HTMLElement) =>
+  el.tabIndex >= 0 || (el.isContentEditable && !el.hasAttribute('tabindex') && !el.parentElement?.isContentEditable);
+
 function visitTabbable(el: Element, found: HTMLElement[]) {
   if (el.hasAttribute('inert')) return;
   if (el.localName === 'slot') {
@@ -44,7 +48,7 @@ function visitTabbable(el: Element, found: HTMLElement[]) {
   }
   // A delegatesFocus host passes focus to its first control, which the walk below finds.
   const delegates = el.shadowRoot?.delegatesFocus === true;
-  if (el instanceof HTMLElement && !delegates && el.tabIndex >= 0 && el.matches(TABBABLE) && !el.matches(':disabled')) {
+  if (el instanceof HTMLElement && !delegates && isTabStop(el) && el.matches(TABBABLE) && !el.matches(':disabled')) {
     found.push(el);
   }
   // A shadow host's light children render only through its slots, which the walk reaches.

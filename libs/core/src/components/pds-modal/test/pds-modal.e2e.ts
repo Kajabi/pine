@@ -482,6 +482,27 @@ describe('pds-modal', () => {
       expect(formatViolations(violations)).toBe('');
     });
 
+    it('wraps from and to a contenteditable region', async () => {
+      const page = await newE2EPage();
+      // An editing host reports tabIndex -1 but is still a Tab stop.
+      await page.setContent(`
+        <pds-modal component-id="test">
+          <button id="first">First</button>
+          <div id="notes" contenteditable aria-label="Notes"><p contenteditable="true">Draft</p></div>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await settle();
+      expect(await activeId(page)).toBe('first');
+
+      await shiftTab(page);
+      expect(await activeId(page)).toBe('notes');
+
+      await page.keyboard.press('Tab');
+      expect(await activeId(page)).toBe('first');
+    });
+
     it('finds controls in any open shadow root, in slot order', async () => {
       const page = await newE2EPage();
       await page.setContent(`
