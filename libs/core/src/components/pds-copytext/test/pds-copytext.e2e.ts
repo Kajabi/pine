@@ -34,6 +34,38 @@ describe('pds-copytext', () => {
     expect(element).toHaveClass('hydrated');
   });
 
+  it('renders with its default border when the attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-copytext value="Copy me"></pds-copytext>');
+    await page.waitForChanges();
+    const element = await page.find('pds-copytext');
+
+    // Removing the attribute is what a Turbo morph does when the author relied
+    // on the default, so the server's HTML never carried it.
+    element.removeAttribute('border');
+    await page.waitForChanges();
+
+    expect(element).toHaveClass('pds-copytext--bordered');
+    expect(element).toHaveAttribute('border');
+  });
+
+  it('turns the border off after the default border attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-copytext value="Copy me"></pds-copytext>');
+    await page.waitForChanges();
+    const element = await page.find('pds-copytext');
+
+    element.removeAttribute('border');
+    await page.waitForChanges();
+
+    element.setProperty('border', false);
+    await page.waitForChanges();
+
+    expect(await element.getProperty('border')).toBe(false);
+    expect(element).not.toHaveClass('pds-copytext--bordered');
+    expect(element).not.toHaveAttribute('border');
+  });
+
   it('emits pdsCopyTextClick event when clicked', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-copytext value="Copy me"></pds-copytext>');
