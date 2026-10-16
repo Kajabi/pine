@@ -105,6 +105,15 @@ Storybook will open at `http://localhost:6006`. See <pds-link href="../?path=/do
 **Components not rendering?**
 Ensure the Pine CSS and JS are loaded before any `<pds-*>` elements are used. In React, the npm package handles this; in HTML/CDN setups, place the `<link>` and `<script>` tags in `<head>`.
 
+**Components vanish after a DOM morph (Turbo morphing, Idiomorph)?**
+Pine components stay hidden until they have the `hydrated` class, and a morph that makes a host match the server's HTML removes it. The CDN build puts it back on its own. If you load components from `@pine-ds/react` or `@pine-ds/core/components`, which don't run Pine's global script, call `keepPineHydrated()` once at startup:
+
+```js
+import { keepPineHydrated } from '@pine-ds/core';
+
+keepPineHydrated();
+```
+
 **Storybook hot reload breaks rendering?**
 Re-run `npm run start`. Hot reload in Stencil dev mode can occasionally lose component registration.
 
