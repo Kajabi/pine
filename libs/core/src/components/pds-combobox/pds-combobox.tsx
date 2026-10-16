@@ -1559,6 +1559,7 @@ export class PdsCombobox implements BasePdsProps {
    */
   private handleGroupedPanelKey(e: KeyboardEvent): boolean {
     if (!this.showsGroupedPanel) return false;
+    const highlightShown = this.keyboardNavigating;
     this.keyboardNavigating = true;
     // In the input trigger, Left and Right still move the caret through typed text, and Space,
     // Home and End edit it, as they do in the panel's search field.
@@ -1573,6 +1574,9 @@ export class PdsCombobox implements BasePdsProps {
     const column = panelColumn(entries, this.openGroup, current, drilledIn);
     if (column.length === 0) return false;
     const position = current === null ? -1 : column.indexOf(current);
+    // Drill-in doesn't shade a group row the pointer or a click-open highlighted, so the first Up or
+    // Down shows that row rather than moving past one the user never saw.
+    const unseenRow = !highlightShown && this.effectiveGroupDisplay === 'drill-in' && current !== null && typeof current !== 'number' && current !== this.openGroup;
 
     const moveTo = (to: number) => {
       e.preventDefault();
@@ -1582,9 +1586,9 @@ export class PdsCombobox implements BasePdsProps {
 
     switch (e.key) {
       case 'ArrowDown':
-        return moveTo(position < 0 ? 0 : position + 1);
+        return moveTo(unseenRow ? position : position < 0 ? 0 : position + 1);
       case 'ArrowUp':
-        return moveTo(position < 0 ? column.length - 1 : position - 1);
+        return moveTo(unseenRow ? position : position < 0 ? column.length - 1 : position - 1);
       case 'Home':
         return moveTo(0);
       case 'End':
@@ -2688,7 +2692,8 @@ export class PdsCombobox implements BasePdsProps {
         class={{
           'pds-combobox__group-back': true,
           'pds-combobox__group-back--disabled': disabled,
-          'pds-combobox__group-back--highlighted': this.highlightedGroupRow === group.optgroup,
+          // As the group rows: shaded for the keys, and by `:hover` for the pointer.
+          'pds-combobox__group-back--highlighted': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
           'pds-combobox__group-back--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
         }}
         role="treeitem"
@@ -2721,10 +2726,10 @@ export class PdsCombobox implements BasePdsProps {
   private renderGroupRow(group: PanelGroup, groupIndex: number, { posinset, setsize }: { posinset: number; setsize: number }) {
     const flyout = this.effectiveGroupDisplay === 'flyout';
     const isOpen = flyout && this.openGroup === group.optgroup;
-    // Drill-in rows don't mark the group holding the selection, or keep the highlight a pointer user
-    // left on the way back: shaded, they read as picked. The keyboard's place still shows.
+    // Drill-in shades a group row only for the keys: not for the group holding the selection, or the
+    // row the pointer or a click-open left highlighted, which read as picked. `:hover` covers the pointer.
     const hasSelection = flyout && group.options.some(({ option }) => this.isOptionSelected(option));
-    const highlighted = this.highlightedGroupRow === group.optgroup && (flyout || this.keyboardNavigating);
+    const isCurrent = this.highlightedGroupRow === group.optgroup;
     const disabled = isGroupDisabled(group);
     const id = this.groupDomId(group.optgroup);
 
@@ -2736,8 +2741,8 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__group-row': true,
           'pds-combobox__group-row--open': isOpen,
           'pds-combobox__group-row--has-selection': hasSelection,
-          'pds-combobox__group-row--highlighted': highlighted,
-          'pds-combobox__group-row--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
+          'pds-combobox__group-row--highlighted': isCurrent && (flyout || this.keyboardNavigating),
+          'pds-combobox__group-row--keyboard': isCurrent && this.keyboardNavigating,
           'pds-combobox__group-row--disabled': disabled,
         }}
         role="treeitem"
