@@ -326,6 +326,44 @@ describe('pds-popover', () => {
       expect(trigger.getAttribute('aria-controls')).toBe('component-trigger-portal');
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
     });
+
+    // Anything can rewrite the trigger's attributes; a Turbo morph matches it to server HTML that
+    // has none of Pine's ARIA.
+    it("puts the trigger's ARIA back when it's removed or changed", async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="aria-popover">
+          <button slot="trigger" id="trigger">Show popover</button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+      const aria = () =>
+        page.$eval('#trigger', (el) => [el.getAttribute('aria-controls'), el.getAttribute('aria-expanded')]);
+      const rewrite = async (change: (el: Element) => void) => {
+        await page.$eval('#trigger', change);
+        await page.waitForChanges();
+      };
+
+      await rewrite((el) => {
+        el.removeAttribute('aria-controls');
+        el.removeAttribute('aria-expanded');
+      });
+      expect(await aria()).toEqual(['aria-popover-portal', 'false']);
+
+      // aria-expanded follows the popover's real state, not the value written.
+      await rewrite((el) => el.setAttribute('aria-expanded', 'true'));
+      expect(await aria()).toEqual(['aria-popover-portal', 'false']);
+
+      await page.click('#trigger');
+      await page.waitForChanges();
+      await rewrite((el) => el.removeAttribute('aria-expanded'));
+      expect(await aria()).toEqual(['aria-popover-portal', 'true']);
+
+      const popover = await page.find('pds-popover');
+      await popover.callMethod('hide');
+      await page.waitForChanges();
+      expect(await aria()).toEqual(['aria-popover-portal', 'false']);
+    });
   });
 
   describe('Focus return', () => {

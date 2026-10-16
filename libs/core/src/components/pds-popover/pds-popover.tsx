@@ -35,6 +35,11 @@ export class PdsPopover {
   private triggerEl: HTMLElement | null = null;
 
   /**
+   * Puts the trigger's ARIA back when something else removes or changes it
+   */
+  private triggerObserver: MutationObserver | null = null;
+
+  /**
    * Portal element rendered in document.body
    */
   private portalEl: HTMLElement | null = null;
@@ -159,15 +164,34 @@ export class PdsPopover {
     } else {
       this.triggerEl = null;
     }
+
+    this.observeTrigger();
   };
+
+  // The trigger is the consumer's element, so anything can rewrite its attributes (a Turbo morph
+  // matches it to server HTML that has no ARIA). Put Pine's values back when that happens.
+  private observeTrigger() {
+    this.triggerObserver?.disconnect();
+    this.triggerObserver = null;
+    if (this.triggerEl == null || typeof MutationObserver === 'undefined') return;
+
+    this.triggerObserver = new MutationObserver(() => this.linkTriggerToPortal());
+    this.triggerObserver.observe(this.triggerEl, {
+      attributes: true,
+      attributeFilter: ['aria-expanded', 'aria-controls'],
+    });
+  }
 
   // Set ARIA attributes to establish relationship between trigger and popover
   // This mirrors the native Popover API's accessibility behavior
   private linkTriggerToPortal() {
     if (this.triggerEl == null || this.portalEl == null) return;
 
-    this.triggerEl.setAttribute('aria-expanded', String(this.active));
-    this.triggerEl.setAttribute('aria-controls', this.portalEl.id);
+    // Skips values already in place, so the trigger observer's own callback doesn't loop.
+    const aria = { 'aria-expanded': String(this.active), 'aria-controls': this.portalEl.id };
+    Object.entries(aria).forEach(([name, value]) => {
+      if (this.triggerEl.getAttribute(name) !== value) this.triggerEl.setAttribute(name, value);
+    });
   }
 
   /**
@@ -209,6 +233,11 @@ export class PdsPopover {
     }
   };
 
+  connectedCallback() {
+    // Moved within the page, the trigger slot doesn't change, so watch the same trigger again.
+    this.observeTrigger();
+  }
+
   disconnectedCallback() {
     this.isComponentMounted = false;
 
@@ -216,6 +245,9 @@ export class PdsPopover {
     if (this.triggerEl != null) {
       this.triggerEl.removeEventListener('click', this.handleTriggerClick);
     }
+
+    this.triggerObserver?.disconnect();
+    this.triggerObserver = null;
 
     // Clean up all event listeners
     this.removeLightDismissListeners();
@@ -395,10 +427,7 @@ export class PdsPopover {
     // Record open timestamp to prevent immediate close from opening click
     this.openTimestamp = Date.now();
 
-    // Update ARIA expanded state on trigger
-    if (this.triggerEl) {
-      this.triggerEl.setAttribute('aria-expanded', 'true');
-    }
+    this.linkTriggerToPortal();
 
     // Update portal content with latest slot content
     this.updatePortalContent();
@@ -441,10 +470,7 @@ export class PdsPopover {
     // Restoring the content drops its focus to the body, so check where focus is first.
     const focusWasInside = this.portalEl.contains(document.activeElement);
 
-    // Update ARIA expanded state on trigger
-    if (this.triggerEl) {
-      this.triggerEl.setAttribute('aria-expanded', 'false');
-    }
+    this.linkTriggerToPortal();
 
     // Restore content back to original slot positions
     this.restorePortalContent();

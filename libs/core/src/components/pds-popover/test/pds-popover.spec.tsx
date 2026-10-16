@@ -151,6 +151,7 @@ describe('pds-popover', () => {
     // Mock trigger element for positioning
     (page.rootInstance as any).triggerEl = {
       getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 }),
+      getAttribute: jest.fn().mockReturnValue(null),
       setAttribute: jest.fn(),
       focus: jest.fn()
     };
@@ -220,6 +221,7 @@ describe('pds-popover', () => {
       const mockButton = {
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
+        getAttribute: jest.fn().mockReturnValue(null),
         setAttribute: jest.fn(),
         focus: jest.fn()
       };
@@ -665,6 +667,7 @@ describe('pds-popover', () => {
       // Set up mocks
       (page.rootInstance as any).triggerEl = {
         getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 }),
+        getAttribute: jest.fn().mockReturnValue(null),
         setAttribute: jest.fn(),
         focus: jest.fn()
       };
@@ -692,6 +695,7 @@ describe('pds-popover', () => {
       // Set up mocks
       (page.rootInstance as any).triggerEl = {
         getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 }),
+        getAttribute: jest.fn().mockReturnValue(null),
         setAttribute: jest.fn(),
         focus: jest.fn()
       };

@@ -62,6 +62,43 @@ describe('pds-dropdown-menu', () => {
     expect(ariaExpandedAfterClose).toBe('false');
   });
 
+  // Anything can rewrite the trigger's attributes; a Turbo morph matches it to server HTML that has
+  // none of Pine's ARIA.
+  it("puts the trigger's ARIA back when it's removed or changed", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-dropdown-menu>
+        <button slot="trigger" id="trigger">Toggle Menu</button>
+        <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+      </pds-dropdown-menu>
+    `);
+    const aria = () =>
+      page.$eval('#trigger', (el) => [el.getAttribute('aria-haspopup'), el.getAttribute('aria-expanded')]);
+    const rewrite = async (change: (el: Element) => void) => {
+      await page.$eval('#trigger', change);
+      await page.waitForChanges();
+    };
+
+    await rewrite((el) => {
+      el.removeAttribute('aria-haspopup');
+      el.removeAttribute('aria-expanded');
+    });
+    expect(await aria()).toEqual(['menu', 'false']);
+
+    // aria-expanded follows the menu's real state, not the value written.
+    await rewrite((el) => el.setAttribute('aria-expanded', 'true'));
+    expect(await aria()).toEqual(['menu', 'false']);
+
+    await page.click('#trigger');
+    await page.waitForChanges();
+    await rewrite((el) => el.removeAttribute('aria-expanded'));
+    expect(await aria()).toEqual(['menu', 'true']);
+
+    await page.click('#trigger');
+    await page.waitForChanges();
+    expect(await aria()).toEqual(['menu', 'false']);
+  });
+
   it('closes the dropdown when Escape key is pressed', async () => {
     const page = await newE2EPage();
     await page.setContent(`
