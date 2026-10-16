@@ -84,6 +84,9 @@ describe('pds-toast', () => {
 
     // Wait for the dismiss itself, not a fixed delay: the animation runs before the event.
     await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
+    // The event fires before the `hidden` re-render commits, since Stencil's task queue
+    // defers it to the next frame — flush that before checking visibility.
+    await page.waitForChanges();
 
     expect(await element.isVisible()).toBe(false);
   });
@@ -275,6 +278,9 @@ describe('pds-toast', () => {
     // Trigger dismiss, and wait for it to finish rather than for a fixed delay
     const dismissButton = await page.find('pds-toast >>> .pds-toast__button');
     await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
+    // The event fires before the `hidden` re-render commits, since Stencil's task queue
+    // defers it to the next frame — flush that before checking visibility.
+    await page.waitForChanges();
 
     // Check final state - should not be visible
     expect(await element.isVisible()).toBe(false);
