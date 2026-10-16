@@ -112,25 +112,38 @@ ButtonTrigger.args = {
 };
 
 // trigger-shape="input": the same field as pds-select, empty and with a value, beside one.
-export const ButtonTriggerInputShape = () => html`
+export const ButtonTriggerInputShape = (args) => html`
 <div style="display: grid; gap: 16px; grid-template-columns: repeat(2, 240px);">
-  <pds-combobox component-id="combobox-input-shape-empty" label="Category" trigger="button" trigger-shape="input" trigger-width="100%" mode="select-only" placeholder="Select category">
+  <pds-combobox component-id="combobox-input-shape-empty" label=${args.label} trigger="button" trigger-shape=${args.triggerShape} trigger-variant=${args.triggerVariant} trigger-width="100%" mode="select-only" placeholder=${args.placeholder} ?disabled=${args.disabled}>
     <option value="tag">Tag</option>
     <option value="offer">Offer</option>
   </pds-combobox>
-  <pds-select component-id="select-input-shape-empty" label="Conditional">
+  <pds-select component-id="select-input-shape-empty" label="Conditional" ?disabled=${args.disabled}>
     <option value="">Select conditional...</option>
     <option value="is">is</option>
   </pds-select>
-  <pds-combobox component-id="combobox-input-shape-filled" label="Category" trigger="button" trigger-shape="input" trigger-width="100%" mode="select-only" value="tag">
+  <pds-combobox component-id="combobox-input-shape-filled" label=${args.label} trigger="button" trigger-shape=${args.triggerShape} trigger-variant=${args.triggerVariant} trigger-width="100%" mode="select-only" value="tag" ?disabled=${args.disabled}>
     <option value="tag">Tag</option>
     <option value="offer">Offer</option>
   </pds-combobox>
-  <pds-select component-id="select-input-shape-filled" label="Conditional" value="is">
+  <pds-select component-id="select-input-shape-filled" label="Conditional" value="is" ?disabled=${args.disabled}>
     <option value="">Select conditional...</option>
     <option value="is">is</option>
   </pds-select>
 </div>`;
+
+ButtonTriggerInputShape.args = {
+  label: 'Category',
+  placeholder: 'Select category',
+  triggerShape: 'input',
+  triggerVariant: 'secondary',
+  disabled: false,
+};
+
+ButtonTriggerInputShape.argTypes = {
+  triggerShape: { control: 'inline-radio', options: ['pill', 'input'] },
+  triggerVariant: { control: 'inline-radio', options: ['secondary', 'primary', 'accent', 'destructive'] },
+};
 
 export const ProgrammaticClear = (args) => html`
 <pds-box direction="column" gap="sm" align-items="start">
@@ -515,14 +528,17 @@ export const GroupDisplayDrillInWithPanelSearch = (args) => html`
     search-placeholder=${args.searchPlaceholder}
     search-options-label=${args.searchOptionsLabel}
     drill-in-back-label=${args.drillInBackLabel}
+    no-options-found-label=${args.noOptionsFoundLabel}
     trigger-width=${args.triggerWidth}
     dropdown-width=${args.dropdownWidth}
     .options=${args.options}
   ></pds-combobox>
 </div>`;
 
+// Search for something that matches no filter to see noOptionsFoundLabel.
 GroupDisplayDrillInWithPanelSearch.args = {
   panelSearch: true,
+  noOptionsFoundLabel: 'No filters found',
   label: 'Filter',
   placeholder: 'Choose a filter',
   searchPlaceholder: 'Search filters',
@@ -537,6 +553,10 @@ GroupDisplayDrillInWithPanelSearch.args = {
     { id: 'contact-added', text: 'Was added', group: 'Contact', groupIcon: 'hashtag' },
     { id: 'contact-hidden', text: 'Is hidden', group: 'Contact' },
   ],
+};
+
+GroupDisplayDrillInWithPanelSearch.argTypes = {
+  noOptionsFoundLabel: { control: 'text' },
 };
 
 // A large action catalog: many groups, a button trigger and panel search. The narrower widths
