@@ -30,7 +30,7 @@ Radio components allow users to select one option from a group of two or more ch
 - Group radios logically using a `name` attribute to indicate relationships.
 - Use proper error messaging and states (e.g., `invalid`) for validation feedback.
 - Avoid disabling radios unless necessary; provide context for disabled options.
-- State classes on the host (such as `is-invalid` and `is-disabled`) follow the component's props, and come back if something removes them, such as a DOM morph. Change them through props.
+- State classes on the host (such as `is-invalid` and `has-border`) follow the component's props, and `has-image` follows the `image` slot's content. They come back if something removes them, such as a DOM morph, so change them through props or the slot.
 
 ## Properties
 

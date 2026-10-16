@@ -29,7 +29,7 @@ Selects present a single-choice dropdown, letting users pick one value from a pr
 - Use meaningful labels and associate them clearly with the select element.
 - Provide helper text or error messages for guidance and validation.
 - Avoid overloading dropdowns with excessive options to prevent overwhelm.
-- State classes on the host (such as `is-invalid` and `is-disabled`) follow the component's props, and come back if something removes them, such as a DOM morph. Change them through props.
+- State on the host follows the component's props and slots: the `is-invalid` and `is-disabled` classes, `aria-disabled`, and `has-action` when an `action` slot is shown. It comes back if something removes it, such as a DOM morph, so change it through props or the slot.
 
 ## Usage Notes
 
