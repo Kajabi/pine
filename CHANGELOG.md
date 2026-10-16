@@ -1,3 +1,23 @@
+## 4.4.4 (2026-10-16)
+
+### Bug Fixes 🐛
+
+- **core:** restore a prop's default when its reflected attribute is removed ([#868](https://github.com/Kajabi/pine/pull/868))
+- **core:** put the dropdown-menu and popover trigger aria back when it's removed or changed ([#873](https://github.com/Kajabi/pine/pull/873))
+- **core:** restore host-only components' classes and styles when something strips them ([#875](https://github.com/Kajabi/pine/pull/875))
+- **core:** restore the host classes and attributes ten more components depend on ([#876](https://github.com/Kajabi/pine/pull/876))
+- **pds-combobox:** align the input-shaped trigger and panel header with designs ([#871](https://github.com/Kajabi/pine/pull/871))
+- **pds-modal:** trap focus across shadow roots and slots ([#856](https://github.com/Kajabi/pine/pull/856))
+- **pds-popover:** keep working when the popover is moved or removed and put back ([#874](https://github.com/Kajabi/pine/pull/874))
+
+### Documentation 📄
+
+- **core:** publish which shadow:false/scoped components render their own light DOM ([#867](https://github.com/Kajabi/pine/pull/867))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 4.4.3 (2026-10-15)
 
 ### Bug Fixes 🐛
