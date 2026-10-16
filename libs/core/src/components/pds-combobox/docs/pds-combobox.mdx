@@ -404,7 +404,7 @@ Preselection also works with input triggers, showing the selected option's text 
 You can control the dropdown's placement, width, and height, as well as the trigger width using the following props:
 
 - `dropdownPlacement`: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' (default: 'bottom-start')
-- `dropdownMount`: 'host' | 'body' (default: 'host') — also known as an “append to body” pattern; use `body` inside scrollable modals or other `overflow: hidden` containers so the list is not clipped. When `body` is used, the portal mounts inside the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), resolving through slots and shadow roots so the list stays in the top layer; otherwise on `document.body`. Keyboard focus stays on the trigger (via `aria-activedescendant`) so modal focus traps keep working.
+- `dropdownMount`: 'host' | 'body' (default: 'host') — also known as an “append to body” pattern; use `body` inside scrollable modals or other `overflow: hidden` containers so the list is not clipped. When `body` is used, the portal mounts inside the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), resolving through slots and shadow roots so the list stays in the top layer; otherwise on `document.body`. Keyboard focus stays on the trigger, or moves to the panel's own search field, so modal focus traps keep working. The mounted dropdown renders in its own shadow root with the combobox's styles, so it needs no global CSS and page CSS can't reach it: customize it with custom properties on `pds-combobox`. Its reading direction, language, theme and custom properties are taken from the combobox when it opens.
 - Listbox `id` and `aria-controls` use `${componentId}-listbox` (for example `my-combobox-listbox`), not a shared `pds-combobox-listbox` id. Option row `id` values use `${componentId}-option-${index}` for unique `aria-activedescendant` when multiple comboboxes exist on the page.
 - `dropdownWidth`: Any valid CSS width value (default: '236px')
 - `triggerWidth`: Any valid CSS width value for both input and button triggers (default: 'fit-content')
@@ -1280,7 +1280,9 @@ Set `group-display="flyout"` to list the groups instead of every option. Hoverin
 
 ### Drill-In Groups
 
-Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`). ArrowLeft, Escape, or Backspace on an empty panel search, also steps back to the groups.
+Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`). ArrowLeft or Escape also steps back to the groups, and so does Backspace with `panel-search`.
+
+With `panel-search`, the search field shows only over the groups. Inside a group, the back row takes its place above the divider, since one group's options don't need searching, and typing a character starts a search of the whole list.
 
 ```jsx
 <PdsCombobox
@@ -1300,7 +1302,7 @@ Set `group-display="drill-in"` where nothing can open beside the dropdown, such 
 
 ### Keyboard and Screen Readers in Grouped Displays
 
-With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each group is an item that expands to its options, one level down. Keyboard focus stays on the trigger, or on the panel's search field, and `aria-activedescendant` follows the highlighted row.
+With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each group is an item that expands to its options, one level down. Keyboard focus stays on the trigger, or on the panel's search field, and `aria-activedescendant` follows the highlighted row. Inside a drilled-in group with `panel-search`, the search field is hidden and the tree takes focus in its place.
 
 <pds-box border border-radius="sm" fit>
   <pds-table component-id="grouped-display-keys">
@@ -1323,7 +1325,7 @@ With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each grou
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Space</pds-table-cell>
-        <pds-table-cell>With the <code>button</code> or <code>chip</code> trigger and no panel search, does what Enter does. In a search field, it types a space.</pds-table-cell>
+        <pds-table-cell>With the <code>button</code> or <code>chip</code> trigger and no panel search, and inside a drilled-in group with panel search, does what Enter does. In a search field, it types a space.</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Left</pds-table-cell>
@@ -1336,6 +1338,14 @@ With `group-display="flyout"` or `"drill-in"`, the dropdown is a tree: each grou
       <pds-table-row>
         <pds-table-cell>Enter, Space (drill-in)</pds-table-cell>
         <pds-table-cell>On the open group's row ("Back: Tag"), return to the groups; Right moves into its options instead.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Backspace (drill-in, panel search)</pds-table-cell>
+        <pds-table-cell>Return to the groups. With panel search, the search field comes back with focus.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>A character (drill-in, panel search)</pds-table-cell>
+        <pds-table-cell>Inside a group, start a search of the whole list: the search field comes back with that character in it.</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>

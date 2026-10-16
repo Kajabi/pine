@@ -10,10 +10,11 @@ import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
+import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PluralForms } from "./i18n";
-import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
+import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
@@ -23,10 +24,11 @@ export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
+export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PluralForms } from "./i18n";
-export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
+export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 export { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 export { SortableEvent } from "sortablejs";
@@ -998,7 +1000,7 @@ export namespace Components {
          */
         "drillInBackLabel": string;
         /**
-          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
+          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus stays on the trigger, or moves to the panel's own search field, so modal focus traps keep working. The mounted dropdown renders in its own shadow root with the combobox's styles, so it needs no global CSS and page CSS can't reach it: customize it with custom properties on `pds-combobox`. Its reading direction, language, theme and custom properties are taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
           * @default 'host'
          */
         "dropdownMount": 'host' | 'body';
@@ -1172,6 +1174,233 @@ export namespace Components {
           * The string displayed that is also copied to the clipboard upon interaction.
          */
         "value": string;
+    }
+    /**
+     * A field for one date, or in range mode a start and end date, with a calendar to pick from.
+     * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
+     * date carries a time, as `YYYY-MM-DDTHH:mm`.
+     */
+    interface PdsDatepicker {
+        /**
+          * Accessible label for the button that applies the chosen dates.
+          * @default 'Apply'
+         */
+        "applyLabel": string;
+        /**
+          * In range mode, applies the range as soon as its end or a preset is picked, without the Apply and Cancel buttons. Has no effect with the time picker, whose times still need Apply.
+          * @default false
+         */
+        "autoApply": boolean;
+        /**
+          * Accessible label for the button that closes the calendar without changing the dates.
+          * @default 'Cancel'
+         */
+        "cancelLabel": string;
+        /**
+          * Accessible label for the button that empties the field, when `clearable` is set.
+          * @default 'Clear'
+         */
+        "clearLabel": string;
+        /**
+          * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel buttons show, Clear also takes the place of Cancel.
+          * @default false
+         */
+        "clearable": boolean;
+        /**
+          * Closes the calendar.
+         */
+        "close": () => Promise<void>;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * The label of the presets entry that stands for a range of your own. Range mode with presets only.
+          * @default 'Custom range'
+         */
+        "customRangeLabel": string;
+        /**
+          * Determines whether or not the datepicker is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * Accessible label for the end time, in range mode with the time picker.
+          * @default 'End time'
+         */
+        "endTimeLabel": string;
+        /**
+          * Specifies the error message and provides an error-themed treatment to the field.
+         */
+        "errorMessage"?: string;
+        /**
+          * The first day of the week in the calendar, from `0` (Sunday) to `6` (Saturday). Defaults to the locale's first day where the browser reports it, otherwise Sunday.
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+          * @default 'YYYY-MM-DD'
+         */
+        "format": string;
+        /**
+          * Determines whether or not the datepicker takes full width of its container.
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Displays a message or hint below the field.
+         */
+        "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the field should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel": boolean;
+        /**
+          * Accessible label for the hour in the time picker.
+          * @default 'Hour'
+         */
+        "hourLabel": string;
+        /**
+          * Determines whether or not the datepicker is invalid or throws an error.
+         */
+        "invalid"?: boolean;
+        /**
+          * The validation message the form reports when the typed text isn't a date that can be picked.
+          * @default 'Enter a date in the format shown.'
+         */
+        "invalidDateMessage": string;
+        /**
+          * Text to be displayed as the datepicker label.
+         */
+        "label"?: string;
+        /**
+          * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`. Defaults to the nearest `lang` attribute, then the page's `<html lang>`, then `en`.
+         */
+        "locale"?: string;
+        /**
+          * The latest date that can be picked, as `YYYY-MM-DD`.
+         */
+        "max"?: string;
+        /**
+          * The validation message the form reports for a date after `max`. `{date}` is replaced by the latest date, in the field's format.
+          * @default 'Choose {date} or earlier.'
+         */
+        "maxDateMessage": string;
+        /**
+          * The earliest date that can be picked, as `YYYY-MM-DD`.
+         */
+        "min"?: string;
+        /**
+          * The validation message the form reports for a date before `min`. `{date}` is replaced by the earliest date, in the field's format.
+          * @default 'Choose {date} or later.'
+         */
+        "minDateMessage": string;
+        /**
+          * The minutes the time picker steps by, such as `15` or `30`.
+          * @default 1
+         */
+        "minuteIncrement": number;
+        /**
+          * Accessible label for the minute in the time picker.
+          * @default 'Minute'
+         */
+        "minuteLabel": string;
+        /**
+          * Accessible label for the month dropdown, when `show-dropdowns` is set.
+          * @default 'Month'
+         */
+        "monthLabel": string;
+        /**
+          * Specifies the name. Submitted with the form name/value pair.
+         */
+        "name"?: string;
+        /**
+          * Accessible label for the button that shows the next month.
+          * @default 'Next month'
+         */
+        "nextMonthLabel": string;
+        /**
+          * Opens the calendar and moves focus to the selected day, or today.
+         */
+        "open": () => Promise<void>;
+        /**
+          * Accessible label for the AM or PM choice in the time picker, in locales with a 12-hour clock.
+          * @default 'AM or PM'
+         */
+        "periodLabel": string;
+        /**
+          * Specifies a short hint that describes the expected value of the field. Defaults to the format the field takes, such as `YYYY-MM-DD`.
+         */
+        "placeholder"?: string;
+        /**
+          * The placement of the calendar relative to the field.
+          * @default 'bottom-start'
+         */
+        "placement": PlacementType;
+        /**
+          * Ranges listed beside the calendar in range mode. A comma-separated list of built-in keys (`today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date`, `last-12-months`), or an array of `{ key, label?, start?, end? }` to relabel built-ins or add your own.
+         */
+        "presets"?: string | DatepickerPreset[];
+        /**
+          * Accessible label for the list of presets, in range mode.
+          * @default 'Presets'
+         */
+        "presetsLabel": string;
+        /**
+          * Accessible label for the button that shows the previous month.
+          * @default 'Previous month'
+         */
+        "previousMonthLabel": string;
+        /**
+          * Picks a range: a start and an end date, from two months side by side, applied with the Apply button. The value is `YYYY-MM-DD/YYYY-MM-DD`.
+          * @default false
+         */
+        "range": boolean;
+        /**
+          * Determines whether or not the datepicker is readonly.
+         */
+        "readonly"?: boolean;
+        /**
+          * Determines whether or not the datepicker is required.
+         */
+        "required"?: boolean;
+        /**
+          * Sets focus on the datepicker's text field.
+         */
+        "setFocus": () => Promise<void>;
+        /**
+          * Shows month and year dropdowns in place of the month heading, for jumping far, as to a birth year.
+          * @default false
+         */
+        "showDropdowns": boolean;
+        /**
+          * Accessible label for the start time, in range mode with the time picker.
+          * @default 'Start time'
+         */
+        "startTimeLabel": string;
+        /**
+          * Accessible label for the time, with the time picker and a single date.
+          * @default 'Time'
+         */
+        "timeLabel": string;
+        /**
+          * Adds hour and minute pickers below the calendar, and the value carries the time as `YYYY-MM-DDTHH:mm`. The dates are applied with the Apply button.
+          * @default false
+         */
+        "timePicker": boolean;
+        /**
+          * Accessible label for the button that opens the calendar. The selected date is added to it.
+          * @default 'Choose date'
+         */
+        "triggerLabel": string;
+        /**
+          * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with the time picker, each date as `YYYY-MM-DDTHH:mm`. An empty string when nothing is selected.
+          * @default ''
+         */
+        "value"?: string;
+        /**
+          * Accessible label for the year dropdown, when `show-dropdowns` is set.
+          * @default 'Year'
+         */
+        "yearLabel": string;
     }
     interface PdsDivider {
         /**
@@ -1773,6 +2002,26 @@ export namespace Components {
          */
         "noOptionsFoundLabel": string;
         /**
+          * Screen-reader hint on each option that has an action, naming the key that runs it. Pass a translated string to localize it; `{action}` is interpolated with the option's action label.
+          * @defaultValue 'Press Right Arrow to {action}'
+         */
+        "optionActionDescription": string;
+        /**
+          * Tooltip for an option's action icon when the option has no `actionLabel`. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Edit {text}'
+         */
+        "optionActionLabel": string;
+        /**
+          * Shows an action icon on each option that has an `actionIcon`, such as an edit pencil. The icon shows on the hovered or highlighted option; clicking it, or pressing Right Arrow on the highlighted option, emits `pdsMultiselectOptionAction`.
+          * @default false
+         */
+        "optionActions": boolean;
+        /**
+          * Display mode for options in the dropdown panel. `'text'` shows each option's text (default). `'chip'` shows each option as a pds-chip, with a dot when the option has a `dotColor`.
+          * @defaultValue 'text'
+         */
+        "optionDisplay": 'text' | 'chip';
+        /**
           * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
         "options"?: MultiselectOption[];
@@ -1800,6 +2049,10 @@ export namespace Components {
           * @defaultValue 'Select...'
          */
         "placeholder": string;
+        /**
+          * Refetches the first page of options from `asyncUrl` for the current search, such as after an option is renamed or recolored elsewhere. Selected items in that page pick up the new text and dot color without emitting a change; other selected items keep the text and dot color they were last loaded with. Does nothing without `asyncUrl`.
+         */
+        "refreshOptions": () => Promise<void>;
         /**
           * If true, the multiselect is required.
           * @default false
@@ -2667,6 +2920,10 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsCopytextElement;
 }
+export interface PdsDatepickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsDatepickerElement;
+}
 export interface PdsDrawerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsDrawerElement;
@@ -2907,6 +3164,30 @@ declare global {
         prototype: HTMLPdsCopytextElement;
         new (): HTMLPdsCopytextElement;
     };
+    interface HTMLPdsDatepickerElementEventMap {
+        "pdsDatepickerChange": DatepickerChangeEventDetail;
+        "pdsBlur": FocusEvent;
+        "pdsFocus": FocusEvent;
+    }
+    /**
+     * A field for one date, or in range mode a start and end date, with a calendar to pick from.
+     * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
+     * date carries a time, as `YYYY-MM-DDTHH:mm`.
+     */
+    interface HTMLPdsDatepickerElement extends Components.PdsDatepicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsDatepickerElementEventMap>(type: K, listener: (this: HTMLPdsDatepickerElement, ev: PdsDatepickerCustomEvent<HTMLPdsDatepickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsDatepickerElementEventMap>(type: K, listener: (this: HTMLPdsDatepickerElement, ev: PdsDatepickerCustomEvent<HTMLPdsDatepickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsDatepickerElement: {
+        prototype: HTMLPdsDatepickerElement;
+        new (): HTMLPdsDatepickerElement;
+    };
     interface HTMLPdsDividerElement extends Components.PdsDivider, HTMLStencilElement {
     }
     var HTMLPdsDividerElement: {
@@ -3105,6 +3386,7 @@ declare global {
         "pdsMultiselectLoadOptions": MultiselectLoadOptionsEventDetail;
         "pdsMultiselectCreate": MultiselectCreateEventDetail;
         "pdsMultiselectDismiss": void;
+        "pdsMultiselectOptionAction": MultiselectOptionActionEventDetail;
     }
     interface HTMLPdsMultiselectElement extends Components.PdsMultiselect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsMultiselectElementEventMap>(type: K, listener: (this: HTMLPdsMultiselectElement, ev: PdsMultiselectCustomEvent<HTMLPdsMultiselectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3421,6 +3703,7 @@ declare global {
         "pds-combobox": HTMLPdsComboboxElement;
         "pds-container": HTMLPdsContainerElement;
         "pds-copytext": HTMLPdsCopytextElement;
+        "pds-datepicker": HTMLPdsDatepickerElement;
         "pds-divider": HTMLPdsDividerElement;
         "pds-drawer": HTMLPdsDrawerElement;
         "pds-drawer-content": HTMLPdsDrawerContentElement;
@@ -4456,7 +4739,7 @@ declare namespace LocalJSX {
          */
         "drillInBackLabel"?: string;
         /**
-          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
+          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus stays on the trigger, or moves to the panel's own search field, so modal focus traps keep working. The mounted dropdown renders in its own shadow root with the combobox's styles, so it needs no global CSS and page CSS can't reach it: customize it with custom properties on `pds-combobox`. Its reading direction, language, theme and custom properties are taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
           * @default 'host'
          */
         "dropdownMount"?: 'host' | 'body';
@@ -4642,6 +4925,237 @@ declare namespace LocalJSX {
           * The string displayed that is also copied to the clipboard upon interaction.
          */
         "value": string;
+    }
+    /**
+     * A field for one date, or in range mode a start and end date, with a calendar to pick from.
+     * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
+     * date carries a time, as `YYYY-MM-DDTHH:mm`.
+     */
+    interface PdsDatepicker {
+        /**
+          * Accessible label for the button that applies the chosen dates.
+          * @default 'Apply'
+         */
+        "applyLabel"?: string;
+        /**
+          * In range mode, applies the range as soon as its end or a preset is picked, without the Apply and Cancel buttons. Has no effect with the time picker, whose times still need Apply.
+          * @default false
+         */
+        "autoApply"?: boolean;
+        /**
+          * Accessible label for the button that closes the calendar without changing the dates.
+          * @default 'Cancel'
+         */
+        "cancelLabel"?: string;
+        /**
+          * Accessible label for the button that empties the field, when `clearable` is set.
+          * @default 'Clear'
+         */
+        "clearLabel"?: string;
+        /**
+          * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel buttons show, Clear also takes the place of Cancel.
+          * @default false
+         */
+        "clearable"?: boolean;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * The label of the presets entry that stands for a range of your own. Range mode with presets only.
+          * @default 'Custom range'
+         */
+        "customRangeLabel"?: string;
+        /**
+          * Determines whether or not the datepicker is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * Accessible label for the end time, in range mode with the time picker.
+          * @default 'End time'
+         */
+        "endTimeLabel"?: string;
+        /**
+          * Specifies the error message and provides an error-themed treatment to the field.
+         */
+        "errorMessage"?: string;
+        /**
+          * The first day of the week in the calendar, from `0` (Sunday) to `6` (Saturday). Defaults to the locale's first day where the browser reports it, otherwise Sunday.
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+          * @default 'YYYY-MM-DD'
+         */
+        "format"?: string;
+        /**
+          * Determines whether or not the datepicker takes full width of its container.
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Displays a message or hint below the field.
+         */
+        "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the field should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
+          * Accessible label for the hour in the time picker.
+          * @default 'Hour'
+         */
+        "hourLabel"?: string;
+        /**
+          * Determines whether or not the datepicker is invalid or throws an error.
+         */
+        "invalid"?: boolean;
+        /**
+          * The validation message the form reports when the typed text isn't a date that can be picked.
+          * @default 'Enter a date in the format shown.'
+         */
+        "invalidDateMessage"?: string;
+        /**
+          * Text to be displayed as the datepicker label.
+         */
+        "label"?: string;
+        /**
+          * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`. Defaults to the nearest `lang` attribute, then the page's `<html lang>`, then `en`.
+         */
+        "locale"?: string;
+        /**
+          * The latest date that can be picked, as `YYYY-MM-DD`.
+         */
+        "max"?: string;
+        /**
+          * The validation message the form reports for a date after `max`. `{date}` is replaced by the latest date, in the field's format.
+          * @default 'Choose {date} or earlier.'
+         */
+        "maxDateMessage"?: string;
+        /**
+          * The earliest date that can be picked, as `YYYY-MM-DD`.
+         */
+        "min"?: string;
+        /**
+          * The validation message the form reports for a date before `min`. `{date}` is replaced by the earliest date, in the field's format.
+          * @default 'Choose {date} or later.'
+         */
+        "minDateMessage"?: string;
+        /**
+          * The minutes the time picker steps by, such as `15` or `30`.
+          * @default 1
+         */
+        "minuteIncrement"?: number;
+        /**
+          * Accessible label for the minute in the time picker.
+          * @default 'Minute'
+         */
+        "minuteLabel"?: string;
+        /**
+          * Accessible label for the month dropdown, when `show-dropdowns` is set.
+          * @default 'Month'
+         */
+        "monthLabel"?: string;
+        /**
+          * Specifies the name. Submitted with the form name/value pair.
+         */
+        "name"?: string;
+        /**
+          * Accessible label for the button that shows the next month.
+          * @default 'Next month'
+         */
+        "nextMonthLabel"?: string;
+        /**
+          * Emitted when the datepicker loses focus: when focus leaves the field and the calendar.
+         */
+        "onPdsBlur"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when the value changes.  This event will not emit when programmatically setting the `value` property.
+         */
+        "onPdsDatepickerChange"?: (event: PdsDatepickerCustomEvent<DatepickerChangeEventDetail>) => void;
+        /**
+          * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside.
+         */
+        "onPdsFocus"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        /**
+          * Accessible label for the AM or PM choice in the time picker, in locales with a 12-hour clock.
+          * @default 'AM or PM'
+         */
+        "periodLabel"?: string;
+        /**
+          * Specifies a short hint that describes the expected value of the field. Defaults to the format the field takes, such as `YYYY-MM-DD`.
+         */
+        "placeholder"?: string;
+        /**
+          * The placement of the calendar relative to the field.
+          * @default 'bottom-start'
+         */
+        "placement"?: PlacementType;
+        /**
+          * Ranges listed beside the calendar in range mode. A comma-separated list of built-in keys (`today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date`, `last-12-months`), or an array of `{ key, label?, start?, end? }` to relabel built-ins or add your own.
+         */
+        "presets"?: string | DatepickerPreset[];
+        /**
+          * Accessible label for the list of presets, in range mode.
+          * @default 'Presets'
+         */
+        "presetsLabel"?: string;
+        /**
+          * Accessible label for the button that shows the previous month.
+          * @default 'Previous month'
+         */
+        "previousMonthLabel"?: string;
+        /**
+          * Picks a range: a start and an end date, from two months side by side, applied with the Apply button. The value is `YYYY-MM-DD/YYYY-MM-DD`.
+          * @default false
+         */
+        "range"?: boolean;
+        /**
+          * Determines whether or not the datepicker is readonly.
+         */
+        "readonly"?: boolean;
+        /**
+          * Determines whether or not the datepicker is required.
+         */
+        "required"?: boolean;
+        /**
+          * Shows month and year dropdowns in place of the month heading, for jumping far, as to a birth year.
+          * @default false
+         */
+        "showDropdowns"?: boolean;
+        /**
+          * Accessible label for the start time, in range mode with the time picker.
+          * @default 'Start time'
+         */
+        "startTimeLabel"?: string;
+        /**
+          * Accessible label for the time, with the time picker and a single date.
+          * @default 'Time'
+         */
+        "timeLabel"?: string;
+        /**
+          * Adds hour and minute pickers below the calendar, and the value carries the time as `YYYY-MM-DDTHH:mm`. The dates are applied with the Apply button.
+          * @default false
+         */
+        "timePicker"?: boolean;
+        /**
+          * Accessible label for the button that opens the calendar. The selected date is added to it.
+          * @default 'Choose date'
+         */
+        "triggerLabel"?: string;
+        /**
+          * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with the time picker, each date as `YYYY-MM-DDTHH:mm`. An empty string when nothing is selected.
+          * @default ''
+         */
+        "value"?: string;
+        /**
+          * Accessible label for the year dropdown, when `show-dropdowns` is set.
+          * @default 'Year'
+         */
+        "yearLabel"?: string;
     }
     interface PdsDivider {
         /**
@@ -5291,9 +5805,33 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
         /**
+          * Emitted when an option's action runs, from a click on its icon or Right Arrow on the highlighted option. The panel closes and focus returns to the trigger first, so a modal opened from the handler restores focus to the trigger.
+         */
+        "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
+        /**
           * Emitted on search input (for consumer-managed async).
          */
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
+        /**
+          * Screen-reader hint on each option that has an action, naming the key that runs it. Pass a translated string to localize it; `{action}` is interpolated with the option's action label.
+          * @defaultValue 'Press Right Arrow to {action}'
+         */
+        "optionActionDescription"?: string;
+        /**
+          * Tooltip for an option's action icon when the option has no `actionLabel`. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Edit {text}'
+         */
+        "optionActionLabel"?: string;
+        /**
+          * Shows an action icon on each option that has an `actionIcon`, such as an edit pencil. The icon shows on the hovered or highlighted option; clicking it, or pressing Right Arrow on the highlighted option, emits `pdsMultiselectOptionAction`.
+          * @default false
+         */
+        "optionActions"?: boolean;
+        /**
+          * Display mode for options in the dropdown panel. `'text'` shows each option's text (default). `'chip'` shows each option as a pds-chip, with a dot when the option has a `dotColor`.
+          * @defaultValue 'text'
+         */
+        "optionDisplay"?: 'text' | 'chip';
         /**
           * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
@@ -5762,7 +6300,7 @@ declare namespace LocalJSX {
         /**
           * Displays text to describe the input.
          */
-        "label": string;
+        "label"?: string;
         /**
           * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
          */
@@ -6471,6 +7009,53 @@ declare namespace LocalJSX {
         "truncate": boolean;
         "value": string;
     }
+    interface PdsDatepickerAttributes {
+        "applyLabel": string;
+        "autoApply": boolean;
+        "cancelLabel": string;
+        "clearable": boolean;
+        "clearLabel": string;
+        "componentId": string;
+        "customRangeLabel": string;
+        "disabled": boolean;
+        "endTimeLabel": string;
+        "errorMessage": string;
+        "firstDayOfWeek": number;
+        "format": string;
+        "fullWidth": boolean;
+        "helperMessage": string;
+        "hideLabel": boolean;
+        "hourLabel": string;
+        "invalid": boolean;
+        "invalidDateMessage": string;
+        "maxDateMessage": string;
+        "minDateMessage": string;
+        "label": string;
+        "locale": string;
+        "max": string;
+        "min": string;
+        "minuteIncrement": number;
+        "minuteLabel": string;
+        "monthLabel": string;
+        "name": string;
+        "nextMonthLabel": string;
+        "periodLabel": string;
+        "placeholder": string;
+        "placement": PlacementType;
+        "presets": string | DatepickerPreset[];
+        "presetsLabel": string;
+        "previousMonthLabel": string;
+        "range": boolean;
+        "readonly": boolean;
+        "required": boolean;
+        "showDropdowns": boolean;
+        "startTimeLabel": string;
+        "timePicker": boolean;
+        "timeLabel": string;
+        "triggerLabel": string;
+        "value": string;
+        "yearLabel": string;
+    }
     interface PdsDividerAttributes {
         "componentId": string;
         "label": string;
@@ -6622,6 +7207,7 @@ declare namespace LocalJSX {
         "selectedDisplay": 'count' | 'pill';
         "pillPosition": 'inline' | 'below';
         "maxInlinePills": number;
+        "optionDisplay": 'text' | 'chip';
         "errorMessage": string;
         "helperMessage": string;
         "invalid": boolean;
@@ -6630,6 +7216,9 @@ declare namespace LocalJSX {
         "createUrl": string;
         "csrfToken": string;
         "csrfHeaderName": string;
+        "optionActions": boolean;
+        "optionActionLabel": string;
+        "optionActionDescription": string;
     }
     interface PdsPopoverAttributes {
         "popoverTargetAction": 'show' | 'toggle' | 'hide';
@@ -6864,6 +7453,7 @@ declare namespace LocalJSX {
         "pds-combobox": Omit<PdsCombobox, keyof PdsComboboxAttributes> & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes]?: PdsCombobox[K] } & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes as `attr:${K}`]?: PdsComboboxAttributes[K] } & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes as `prop:${K}`]?: PdsCombobox[K] } & OneOf<"componentId", PdsCombobox["componentId"], PdsComboboxAttributes["componentId"]>;
         "pds-container": Omit<PdsContainer, keyof PdsContainerAttributes> & { [K in keyof PdsContainer & keyof PdsContainerAttributes]?: PdsContainer[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `attr:${K}`]?: PdsContainerAttributes[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `prop:${K}`]?: PdsContainer[K] };
         "pds-copytext": Omit<PdsCopytext, keyof PdsCopytextAttributes> & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes]?: PdsCopytext[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `attr:${K}`]?: PdsCopytextAttributes[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `prop:${K}`]?: PdsCopytext[K] } & OneOf<"value", PdsCopytext["value"], PdsCopytextAttributes["value"]>;
+        "pds-datepicker": Omit<PdsDatepicker, keyof PdsDatepickerAttributes> & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes]?: PdsDatepicker[K] } & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes as `attr:${K}`]?: PdsDatepickerAttributes[K] } & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes as `prop:${K}`]?: PdsDatepicker[K] } & OneOf<"componentId", PdsDatepicker["componentId"], PdsDatepickerAttributes["componentId"]>;
         "pds-divider": Omit<PdsDivider, keyof PdsDividerAttributes> & { [K in keyof PdsDivider & keyof PdsDividerAttributes]?: PdsDivider[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `attr:${K}`]?: PdsDividerAttributes[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `prop:${K}`]?: PdsDivider[K] };
         "pds-drawer": Omit<PdsDrawer, keyof PdsDrawerAttributes> & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes]?: PdsDrawer[K] } & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes as `attr:${K}`]?: PdsDrawerAttributes[K] } & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes as `prop:${K}`]?: PdsDrawer[K] };
         "pds-drawer-content": PdsDrawerContent;
@@ -6892,7 +7482,7 @@ declare namespace LocalJSX {
         "pds-select": Omit<PdsSelect, keyof PdsSelectAttributes> & { [K in keyof PdsSelect & keyof PdsSelectAttributes]?: PdsSelect[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `attr:${K}`]?: PdsSelectAttributes[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `prop:${K}`]?: PdsSelect[K] } & OneOf<"componentId", PdsSelect["componentId"], PdsSelectAttributes["componentId"]> & OneOf<"name", PdsSelect["name"], PdsSelectAttributes["name"]>;
         "pds-sortable": Omit<PdsSortable, keyof PdsSortableAttributes> & { [K in keyof PdsSortable & keyof PdsSortableAttributes]?: PdsSortable[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `attr:${K}`]?: PdsSortableAttributes[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `prop:${K}`]?: PdsSortable[K] } & OneOf<"componentId", PdsSortable["componentId"], PdsSortableAttributes["componentId"]>;
         "pds-sortable-item": Omit<PdsSortableItem, keyof PdsSortableItemAttributes> & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes]?: PdsSortableItem[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `attr:${K}`]?: PdsSortableItemAttributes[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `prop:${K}`]?: PdsSortableItem[K] };
-        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]> & OneOf<"label", PdsSwitch["label"], PdsSwitchAttributes["label"]>;
+        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]>;
         "pds-tab": Omit<PdsTab, keyof PdsTabAttributes> & { [K in keyof PdsTab & keyof PdsTabAttributes]?: PdsTab[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `attr:${K}`]?: PdsTabAttributes[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `prop:${K}`]?: PdsTab[K] } & OneOf<"name", PdsTab["name"], PdsTabAttributes["name"]>;
         "pds-table": Omit<PdsTable, keyof PdsTableAttributes> & { [K in keyof PdsTable & keyof PdsTableAttributes]?: PdsTable[K] } & { [K in keyof PdsTable & keyof PdsTableAttributes as `attr:${K}`]?: PdsTableAttributes[K] } & { [K in keyof PdsTable & keyof PdsTableAttributes as `prop:${K}`]?: PdsTable[K] } & OneOf<"componentId", PdsTable["componentId"], PdsTableAttributes["componentId"]>;
         "pds-table-body": PdsTableBody;
@@ -6927,6 +7517,12 @@ declare module "@stencil/core" {
             "pds-combobox": LocalJSX.IntrinsicElements["pds-combobox"] & JSXBase.HTMLAttributes<HTMLPdsComboboxElement>;
             "pds-container": LocalJSX.IntrinsicElements["pds-container"] & JSXBase.HTMLAttributes<HTMLPdsContainerElement>;
             "pds-copytext": LocalJSX.IntrinsicElements["pds-copytext"] & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
+            /**
+             * A field for one date, or in range mode a start and end date, with a calendar to pick from.
+             * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
+             * date carries a time, as `YYYY-MM-DDTHH:mm`.
+             */
+            "pds-datepicker": LocalJSX.IntrinsicElements["pds-datepicker"] & JSXBase.HTMLAttributes<HTMLPdsDatepickerElement>;
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             /**
              * A non-modal side panel composed from `pds-modal`.

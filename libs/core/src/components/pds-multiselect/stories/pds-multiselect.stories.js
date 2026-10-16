@@ -90,6 +90,23 @@ export default {
       control: 'number',
       description: 'Maximum chips shown inline before collapsing to a "+N more" badge.',
     },
+    optionDisplay: {
+      control: 'select',
+      options: ['text', 'chip'],
+      description: 'Controls how options are displayed in the dropdown panel.',
+    },
+    optionActions: {
+      control: 'boolean',
+      description: 'Shows an action icon on each option that has an actionIcon.',
+    },
+    optionActionLabel: {
+      control: 'text',
+      description: 'Tooltip for an option action icon when the option has no actionLabel; {text} is interpolated.',
+    },
+    optionActionDescription: {
+      control: 'text',
+      description: 'Screen-reader hint on each option that has an action; {action} is interpolated.',
+    },
   },
 };
 
@@ -110,12 +127,16 @@ export const Default = {
     label: 'Select Tags',
     placeholder: 'Select...',
     value: [],
+    optionDisplay: 'text',
+    optionActions: false,
   },
   render: (args, { updateArgs } = {}) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
+      option-display="${args.optionDisplay}"
+      ?option-actions=${args.optionActions}
       ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
@@ -727,5 +748,119 @@ export const PillDisabled = {
     <p style="margin-top: var(--pine-dimension-sm); color: var(--pine-color-text-secondary);">
       Disabled state: chips show as text variant without close buttons.
     </p>
+  `,
+};
+
+const labelOptions = `
+  <option value="1">Featured</option>
+  <option value="2">On sale</option>
+  <option value="3">Archived</option>
+`;
+
+export const OptionDisplay = {
+  args: {
+    componentId: 'multiselect-option-display',
+    label: 'Labels',
+    optionDisplay: 'chip',
+    value: ['1'],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      option-display="${args.optionDisplay}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      <option value="1" data-dot-color="--pine-color-purple-600">Featured</option>
+      <option value="2" data-dot-color="--pine-color-green-600">On sale</option>
+      <option value="3" data-dot-color="--pine-color-grey-600">Archived</option>
+    </pds-multiselect>
+  `,
+};
+
+const customTriggerLabels = [
+  { value: '1', text: 'Featured' },
+  { value: '2', text: 'On sale' },
+  { value: '3', text: 'Archived' },
+];
+
+export const CustomTrigger = {
+  args: {
+    componentId: 'multiselect-custom-trigger',
+    value: ['1'],
+  },
+  render: (args, { updateArgs } = {}) => {
+    const selected = customTriggerLabels.filter((label) => args.value.includes(label.value));
+    const triggerName = selected.length ? `Labels: ${selected.map((label) => label.text).join(', ')}` : 'Add label';
+
+    return html`
+      <pds-multiselect
+        component-id="${args.componentId}"
+        label="Labels"
+        hide-label
+        .value=${args.value}
+        @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+      >
+        ${unsafeHTML(labelOptions)}
+        <button
+          slot="trigger"
+          type="button"
+          aria-label=${triggerName}
+          style="align-items: center; background: none; border: 0; cursor: pointer; display: inline-flex; flex-wrap: wrap; gap: var(--pine-dimension-2xs); padding: var(--pine-dimension-2xs);"
+        >
+          ${selected.length
+            ? selected.map((label) => html`<pds-chip sentiment="subtle">${label.text}</pds-chip>`)
+            : html`<pds-icon name="add" size="small" aria-hidden="true"></pds-icon> Add label`}
+        </button>
+      </pds-multiselect>
+    `;
+  },
+};
+
+export const OptionActions = {
+  args: {
+    componentId: 'multiselect-option-actions',
+    label: 'Labels',
+    value: ['1'],
+    lastAction: '',
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      option-actions
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+      @pdsMultiselectOptionAction=${(e) => updateArgs?.({ lastAction: e.detail.option.text })}
+    >
+      <option value="1" data-action-icon="pen">Featured</option>
+      <option value="2" data-action-icon="pen">On sale</option>
+      <option value="3" data-action-icon="info-circle" data-action-label="View {text}">Archived</option>
+    </pds-multiselect>
+    <p style="margin-top: var(--pine-dimension-sm); color: var(--pine-color-text-secondary);">
+      ${args.lastAction
+        ? `Action ran for ${args.lastAction}.`
+        : 'Hover an option and click its icon, or highlight it and press Right Arrow.'}
+    </p>
+  `,
+};
+
+export const WithFooter = {
+  args: {
+    componentId: 'multiselect-with-footer',
+    label: 'Labels',
+    value: ['1'],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(labelOptions)}
+      <pds-link slot="footer" href="#manage-labels" variant="plain" font-size="md">Manage labels</pds-link>
+    </pds-multiselect>
   `,
 };

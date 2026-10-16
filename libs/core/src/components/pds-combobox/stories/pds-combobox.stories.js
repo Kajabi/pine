@@ -490,7 +490,7 @@ export const GroupDisplayDrillInWithPanelSearch = (args) => html`
     trigger="button"
     mode="select-only"
     group-display="drill-in"
-    panel-search
+    ?panel-search=${args.panelSearch}
     search-placeholder=${args.searchPlaceholder}
     search-options-label=${args.searchOptionsLabel}
     drill-in-back-label=${args.drillInBackLabel}
@@ -501,6 +501,7 @@ export const GroupDisplayDrillInWithPanelSearch = (args) => html`
 </div>`;
 
 GroupDisplayDrillInWithPanelSearch.args = {
+  panelSearch: true,
   label: 'Filter',
   placeholder: 'Choose a filter',
   searchPlaceholder: 'Search filters',
@@ -528,7 +529,7 @@ export const GroupDisplayActionCatalog = (args) => html`
     trigger="button"
     mode="select-only"
     group-display=${args.groupDisplay}
-    panel-search
+    ?panel-search=${args.panelSearch}
     search-placeholder=${args.searchPlaceholder}
     search-options-label=${args.searchOptionsLabel}
     drill-in-back-label=${args.drillInBackLabel}
@@ -539,6 +540,7 @@ export const GroupDisplayActionCatalog = (args) => html`
 </div>`;
 
 GroupDisplayActionCatalog.args = {
+  panelSearch: true,
   label: 'Action',
   placeholder: 'Choose an action',
   groupDisplay: 'flyout',

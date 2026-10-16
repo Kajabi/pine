@@ -26,6 +26,7 @@
     "pds-combobox": { "status": "stable" },
     "pds-container": { "status": "stable" },
     "pds-copytext": { "status": "stable" },
+    "pds-datepicker": { "status": "beta", "note": "A single date typed as YYYY-MM-DD or picked from the calendar, or a range with presets." },
     "pds-divider": { "status": "stable" },
     "pds-dropdown-menu": { "status": "stable" },
     "pds-filters": { "status": "stable" },

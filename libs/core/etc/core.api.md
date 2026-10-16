@@ -338,6 +338,56 @@ export namespace Components {
         "truncate": boolean;
         "value": string;
     }
+    export interface PdsDatepicker {
+        "applyLabel": string;
+        "autoApply": boolean;
+        "cancelLabel": string;
+        "clearable": boolean;
+        "clearLabel": string;
+        "close": () => Promise<void>;
+        "componentId": string;
+        "customRangeLabel": string;
+        "disabled"?: boolean;
+        "endTimeLabel": string;
+        "errorMessage"?: string;
+        "firstDayOfWeek"?: number;
+        "format": string;
+        "fullWidth"?: boolean;
+        "helperMessage"?: string;
+        "hideLabel": boolean;
+        "hourLabel": string;
+        "invalid"?: boolean;
+        "invalidDateMessage": string;
+        "label"?: string;
+        "locale"?: string;
+        "max"?: string;
+        "maxDateMessage": string;
+        "min"?: string;
+        "minDateMessage": string;
+        "minuteIncrement": number;
+        "minuteLabel": string;
+        "monthLabel": string;
+        "name"?: string;
+        "nextMonthLabel": string;
+        "open": () => Promise<void>;
+        "periodLabel": string;
+        "placeholder"?: string;
+        "placement": PlacementType;
+        "presets"?: string | DatepickerPreset[];
+        "presetsLabel": string;
+        "previousMonthLabel": string;
+        "range": boolean;
+        "readonly"?: boolean;
+        "required"?: boolean;
+        "setFocus": () => Promise<void>;
+        "showDropdowns": boolean;
+        "startTimeLabel": string;
+        "timeLabel": string;
+        "timePicker": boolean;
+        "triggerLabel": string;
+        "value"?: string;
+        "yearLabel": string;
+    }
     // (undocumented)
     export interface PdsDivider {
         "componentId": string;
@@ -518,12 +568,17 @@ export namespace Components {
         "minWidth": string;
         "name"?: string;
         "noOptionsFoundLabel": string;
+        "optionActionDescription": string;
+        "optionActionLabel": string;
+        "optionActions": boolean;
+        "optionDisplay": 'text' | 'chip';
         "options"?: MultiselectOption[];
         "optionsLabel": string;
         "panelWidth"?: string;
         "pillPosition": 'inline' | 'below';
         "pillRemoveLabel": string;
         "placeholder": string;
+        "refreshOptions": () => Promise<void>;
         "required": boolean;
         "searchOptionsLabel": string;
         "searchPlaceholder": string;
@@ -800,6 +855,22 @@ export namespace Components {
     }
 }
 
+// @public (undocumented)
+export interface DatepickerChangeEventDetail {
+    end?: string;
+    preset?: string;
+    start?: string;
+    value: string;
+}
+
+// @public (undocumented)
+export interface DatepickerPreset {
+    end?: string;
+    key: string;
+    label?: string;
+    start?: string;
+}
+
 // Warning: (ae-forgotten-export) The symbol "EventDecorator" needs to be exported by the entry point index.d.ts
 //
 // @public
@@ -848,6 +919,8 @@ export namespace LocalJSX {
         "pds-container": Omit<PdsContainer, keyof PdsContainerAttributes> & { [K in keyof PdsContainer & keyof PdsContainerAttributes]?: PdsContainer[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `attr:${K}`]?: PdsContainerAttributes[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `prop:${K}`]?: PdsContainer[K] };
         // (undocumented)
         "pds-copytext": Omit<PdsCopytext, keyof PdsCopytextAttributes> & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes]?: PdsCopytext[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `attr:${K}`]?: PdsCopytextAttributes[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `prop:${K}`]?: PdsCopytext[K] } & OneOf<"value", PdsCopytext["value"], PdsCopytextAttributes["value"]>;
+        // (undocumented)
+        "pds-datepicker": Omit<PdsDatepicker, keyof PdsDatepickerAttributes> & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes]?: PdsDatepicker[K] } & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes as `attr:${K}`]?: PdsDatepickerAttributes[K] } & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes as `prop:${K}`]?: PdsDatepicker[K] } & OneOf<"componentId", PdsDatepicker["componentId"], PdsDatepickerAttributes["componentId"]>;
         // (undocumented)
         "pds-divider": Omit<PdsDivider, keyof PdsDividerAttributes> & { [K in keyof PdsDivider & keyof PdsDividerAttributes]?: PdsDivider[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `attr:${K}`]?: PdsDividerAttributes[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `prop:${K}`]?: PdsDivider[K] };
         // (undocumented)
@@ -905,7 +978,7 @@ export namespace LocalJSX {
         // (undocumented)
         "pds-sortable-item": Omit<PdsSortableItem, keyof PdsSortableItemAttributes> & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes]?: PdsSortableItem[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `attr:${K}`]?: PdsSortableItemAttributes[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `prop:${K}`]?: PdsSortableItem[K] };
         // (undocumented)
-        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]> & OneOf<"label", PdsSwitch["label"], PdsSwitchAttributes["label"]>;
+        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]>;
         // (undocumented)
         "pds-tab": Omit<PdsTab, keyof PdsTabAttributes> & { [K in keyof PdsTab & keyof PdsTabAttributes]?: PdsTab[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `attr:${K}`]?: PdsTabAttributes[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `prop:${K}`]?: PdsTab[K] } & OneOf<"name", PdsTab["name"], PdsTabAttributes["name"]>;
         // (undocumented)
@@ -1750,6 +1823,152 @@ export namespace LocalJSX {
         "value": string;
     }
 
+    export interface PdsDatepicker {
+        "applyLabel"?: string;
+        "autoApply"?: boolean;
+        "cancelLabel"?: string;
+        "clearable"?: boolean;
+        "clearLabel"?: string;
+        "componentId": string;
+        "customRangeLabel"?: string;
+        "disabled"?: boolean;
+        "endTimeLabel"?: string;
+        "errorMessage"?: string;
+        "firstDayOfWeek"?: number;
+        "form"?: string;
+        "format"?: string;
+        "fullWidth"?: boolean;
+        "helperMessage"?: string;
+        "hideLabel"?: boolean;
+        "hourLabel"?: string;
+        "invalid"?: boolean;
+        "invalidDateMessage"?: string;
+        "label"?: string;
+        "locale"?: string;
+        "max"?: string;
+        "maxDateMessage"?: string;
+        "min"?: string;
+        "minDateMessage"?: string;
+        "minuteIncrement"?: number;
+        "minuteLabel"?: string;
+        "monthLabel"?: string;
+        "name"?: string;
+        "nextMonthLabel"?: string;
+        "onPdsBlur"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        "onPdsDatepickerChange"?: (event: PdsDatepickerCustomEvent<DatepickerChangeEventDetail>) => void;
+        "onPdsFocus"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        "periodLabel"?: string;
+        "placeholder"?: string;
+        "placement"?: PlacementType;
+        "presets"?: string | DatepickerPreset[];
+        "presetsLabel"?: string;
+        "previousMonthLabel"?: string;
+        "range"?: boolean;
+        "readonly"?: boolean;
+        "required"?: boolean;
+        "showDropdowns"?: boolean;
+        "startTimeLabel"?: string;
+        "timeLabel"?: string;
+        "timePicker"?: boolean;
+        "triggerLabel"?: string;
+        "value"?: string;
+        "yearLabel"?: string;
+    }
+
+    // (undocumented)
+    export interface PdsDatepickerAttributes {
+        // (undocumented)
+        "applyLabel": string;
+        // (undocumented)
+        "autoApply": boolean;
+        // (undocumented)
+        "cancelLabel": string;
+        // (undocumented)
+        "clearable": boolean;
+        // (undocumented)
+        "clearLabel": string;
+        // (undocumented)
+        "componentId": string;
+        // (undocumented)
+        "customRangeLabel": string;
+        // (undocumented)
+        "disabled": boolean;
+        // (undocumented)
+        "endTimeLabel": string;
+        // (undocumented)
+        "errorMessage": string;
+        // (undocumented)
+        "firstDayOfWeek": number;
+        // (undocumented)
+        "format": string;
+        // (undocumented)
+        "fullWidth": boolean;
+        // (undocumented)
+        "helperMessage": string;
+        // (undocumented)
+        "hideLabel": boolean;
+        // (undocumented)
+        "hourLabel": string;
+        // (undocumented)
+        "invalid": boolean;
+        // (undocumented)
+        "invalidDateMessage": string;
+        // (undocumented)
+        "label": string;
+        // (undocumented)
+        "locale": string;
+        // (undocumented)
+        "max": string;
+        // (undocumented)
+        "maxDateMessage": string;
+        // (undocumented)
+        "min": string;
+        // (undocumented)
+        "minDateMessage": string;
+        // (undocumented)
+        "minuteIncrement": number;
+        // (undocumented)
+        "minuteLabel": string;
+        // (undocumented)
+        "monthLabel": string;
+        // (undocumented)
+        "name": string;
+        // (undocumented)
+        "nextMonthLabel": string;
+        // (undocumented)
+        "periodLabel": string;
+        // (undocumented)
+        "placeholder": string;
+        // (undocumented)
+        "placement": PlacementType;
+        // (undocumented)
+        "presets": string | DatepickerPreset[];
+        // (undocumented)
+        "presetsLabel": string;
+        // (undocumented)
+        "previousMonthLabel": string;
+        // (undocumented)
+        "range": boolean;
+        // (undocumented)
+        "readonly": boolean;
+        // (undocumented)
+        "required": boolean;
+        // (undocumented)
+        "showDropdowns": boolean;
+        // (undocumented)
+        "startTimeLabel": string;
+        // (undocumented)
+        "timeLabel": string;
+        // (undocumented)
+        "timePicker": boolean;
+        // (undocumented)
+        "triggerLabel": string;
+        // (undocumented)
+        "value": string;
+        // (undocumented)
+        "yearLabel": string;
+    }
+
     // (undocumented)
     export interface PdsDivider {
         "componentId"?: string;
@@ -2191,7 +2410,12 @@ export namespace LocalJSX {
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
+        "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
+        "optionActionDescription"?: string;
+        "optionActionLabel"?: string;
+        "optionActions"?: boolean;
+        "optionDisplay"?: 'text' | 'chip';
         "options"?: MultiselectOption[];
         "optionsLabel"?: string;
         "panelWidth"?: string;
@@ -2264,6 +2488,14 @@ export namespace LocalJSX {
         "name": string;
         // (undocumented)
         "noOptionsFoundLabel": string;
+        // (undocumented)
+        "optionActionDescription": string;
+        // (undocumented)
+        "optionActionLabel": string;
+        // (undocumented)
+        "optionActions": boolean;
+        // (undocumented)
+        "optionDisplay": 'text' | 'chip';
         // (undocumented)
         "optionsLabel": string;
         // (undocumented)
@@ -2581,7 +2813,7 @@ export namespace LocalJSX {
         "helperMessage"?: string;
         "hideLabel"?: boolean;
         "invalid"?: boolean;
-        "label": string;
+        "label"?: string;
         "name"?: string;
         "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         "required"?: boolean;
@@ -2993,8 +3225,10 @@ export type ModalSizeType = 'sm' | 'md' | 'lg' | 'fullscreen';
 
 // @public (undocumented)
 export interface MultiselectChangeEventDetail {
+    added?: string[];
     // (undocumented)
     items: MultiselectOption[];
+    removed?: string[];
     // (undocumented)
     values: string[];
 }
@@ -3019,7 +3253,10 @@ export interface MultiselectLoadOptionsEventDetail {
 export interface MultiselectOption {
     // (undocumented)
     [key: string]: unknown;
+    actionIcon?: string;
+    actionLabel?: string;
     disabled?: boolean;
+    dotColor?: string;
     group?: string;
     // (undocumented)
     id: string | number;
@@ -3027,6 +3264,12 @@ export interface MultiselectOption {
     isCreateOption?: boolean;
     // (undocumented)
     text: string;
+}
+
+// @public (undocumented)
+export interface MultiselectOptionActionEventDetail {
+    // (undocumented)
+    option: MultiselectOption;
 }
 
 // @public (undocumented)
@@ -3089,6 +3332,14 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     // (undocumented)
     target: HTMLPdsCopytextElement;
+}
+
+// @public (undocumented)
+export interface PdsDatepickerCustomEvent<T> extends CustomEvent<T> {
+    // (undocumented)
+    detail: T;
+    // (undocumented)
+    target: HTMLPdsDatepickerElement;
 }
 
 // @public (undocumented)

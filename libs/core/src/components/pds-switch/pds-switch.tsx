@@ -1,10 +1,13 @@
-import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Watch } from '@stencil/core';
 import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
 import { inheritAriaAttributes } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 
+/**
+ * @slot label - Content displayed as the switch label in place of the `label` text. Clicking it toggles the switch.
+ */
 @Component({
   tag: 'pds-switch',
   styleUrls: ['../../global/styles/utils/label.scss', 'pds-switch.scss'],
@@ -17,6 +20,8 @@ export class PdsSwitch {
   private readonly _type = 'checkbox' as const;
 
   @Element() el: HTMLPdsSwitchElement;
+
+  @State() private hasLabelSlot = false;
 
   /**
    * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
@@ -56,7 +61,7 @@ export class PdsSwitch {
   /**
    * Displays text to describe the input.
    */
-  @Prop() label!: string;
+  @Prop() label: string;
 
   /**
    * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
@@ -98,6 +103,9 @@ export class PdsSwitch {
     }
     if (this.helperMessage !== undefined) {
       switchClasses += " pds-switch--message";
+    }
+    if (this.hasLabelSlot) {
+      switchClasses += " pds-switch--label-slot";
     }
     return switchClasses;
   };
@@ -150,7 +158,12 @@ export class PdsSwitch {
     this.inheritedAttributes = {
       ...inheritAriaAttributes(this.el)
     }
+    this.updateHasLabelSlot();
   }
+
+  private updateHasLabelSlot = () => {
+    this.hasLabelSlot = Array.from(this.el.children).some((child) => child.getAttribute('slot') === 'label');
+  };
 
   render() {
     return (
@@ -171,7 +184,9 @@ export class PdsSwitch {
             {...this.inheritedAttributes}
           />
           <span class={this.hideLabel ? 'visually-hidden' : ''}>
-            {this.label}
+            <slot name="label" onSlotchange={this.updateHasLabelSlot} />
+            {/* A text node, not slot fallback: older ChromeDriver text extraction skips fallback content. */}
+            {!this.hasLabelSlot && this.label}
           </span>
         </label>
         {this.helperMessage &&

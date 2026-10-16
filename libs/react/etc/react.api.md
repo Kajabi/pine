@@ -44,6 +44,9 @@ export const PdsContainer: ForwardRefExoticComponent<JSX_2.PdsContainer & Omit<H
 export const PdsCopytext: ForwardRefExoticComponent<JSX_2.PdsCopytext & Omit<HTMLAttributes<HTMLPdsCopytextElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsCopytextElement>>;
 
 // @public (undocumented)
+export const PdsDatepicker: ForwardRefExoticComponent<JSX_2.PdsDatepicker & Omit<HTMLAttributes<HTMLPdsDatepickerElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsDatepickerElement>>;
+
+// @public (undocumented)
 export const PdsDivider: ForwardRefExoticComponent<JSX_2.PdsDivider & Omit<HTMLAttributes<HTMLPdsDividerElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsDividerElement>>;
 
 // @public (undocumented)

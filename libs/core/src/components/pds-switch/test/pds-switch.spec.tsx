@@ -19,7 +19,7 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <label for="pds-switch-e1">
             <input id="pds-switch-e1" name="pds-switch-e1" class="pds-switch__input" type="checkbox">
-            <span>Switch label</span>
+            <span><slot name="label"></slot>Switch label</span>
           </label>
         </mock:shadow-root>
       </pds-switch>
@@ -40,7 +40,7 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <label for="pds-switch-e1">
             <input id="pds-switch-e1" name="pds-switch-e1" class="pds-switch__input" type="checkbox">
-            <span class="visually-hidden">Switch label</span>
+            <span class="visually-hidden"><slot name="label"></slot>Switch label</span>
           </label>
         </mock:shadow-root>
       </pds-switch>
@@ -64,7 +64,7 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <label for="pds-switch-disabled">
             <input id="pds-switch-disabled" name="pds-switch-disabled" class="pds-switch__input" type="checkbox" disabled>
-            <span>Switch disabled</span>
+            <span><slot name="label"></slot>Switch disabled</span>
           </label>
         </mock:shadow-root>
       </pds-switch>
@@ -88,7 +88,7 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <label for="pds-switch-required">
             <input id="pds-switch-required" name="pds-switch-required" class="pds-switch__input" type="checkbox" required>
-            <span>Switch required</span>
+            <span><slot name="label"></slot>Switch required</span>
           </label>
         </mock:shadow-root>
       </pds-switch>
@@ -112,7 +112,7 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <label for="pds-switch-msg">
             <input aria-describedby="pds-switch-msg__helper-message" id="pds-switch-msg" name="pds-switch-msg" class="pds-switch__input" type="checkbox">
-            <span>Switch helper message</span>
+            <span><slot name="label"></slot>Switch helper message</span>
           </label>
           <div id="pds-switch-msg__helper-message"  class="pds-switch__message">Direct trade next level slow-carb, hashtag distillery</div>
         </mock:shadow-root>
@@ -138,7 +138,7 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <label for="pds-switch-err">
             <input aria-describedby="pds-switch-err__error-message" aria-invalid="true" id="pds-switch-err" name="pds-switch-err" class="pds-switch__input" type="checkbox">
-            <span>Switch error message</span>
+            <span><slot name="label"></slot>Switch error message</span>
           </label>
           <div aria-live="assertive" id="pds-switch-err__error-message" class="pds-switch__message pds-switch__message--error">
             <pds-icon icon="${danger}" size="small"></pds-icon>
@@ -168,7 +168,7 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <label for="switch-with-description">
             <input aria-describedby="switch-with-description__error-message" aria-invalid="true" id="switch-with-description" name="switch-with-description" class="pds-switch__input" type="checkbox">
-            <span>Switch with description</span>
+            <span><slot name="label"></slot>Switch with description</span>
           </label>
           <div id="switch-with-description__helper-message"  class="pds-switch__message">This is a helper message</div>
           <div aria-live="assertive" id="switch-with-description__error-message" class="pds-switch__message pds-switch__message--error">
@@ -194,7 +194,7 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <label for="pds-switch-name">
             <input id="pds-switch-name" name="pds-switch-name" class="pds-switch__input" type="checkbox">
-            <span>Switch name</span>
+            <span><slot name="label"></slot>Switch name</span>
           </label>
         </mock:shadow-root>
       </pds-switch>
@@ -257,4 +257,38 @@ describe('pds-switch', () => {
     expect(shadow.querySelector(`#${describedBy}`).textContent).toContain('Pick one');
   });
 
+  it('renders the label prop as a text node outside the label slot', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `<pds-switch component-id="default" label="Label text"></pds-switch>`,
+    });
+
+    const span = page.root.shadowRoot.querySelector('label span');
+    expect(span.querySelector('slot[name="label"]').textContent).toBe('');
+    expect(span.textContent).toBe('Label text');
+  });
+
+  it('drops the label prop text when the label slot has content', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `<pds-switch component-id="default" label="Label text"><span slot="label">Slotted label</span></pds-switch>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('label span').textContent).toBe('');
+    expect(page.root.querySelector('[slot="label"]').textContent).toBe('Slotted label');
+  });
+
+  it('marks the host only when the label slot has content', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `
+        <pds-switch component-id="slotted"><span slot="label">Slotted label</span></pds-switch>
+        <pds-switch component-id="prop" label="Label text"></pds-switch>
+      `,
+    });
+
+    const [slotted, prop] = Array.from(page.body.querySelectorAll('pds-switch'));
+    expect(slotted).toHaveClass('pds-switch--label-slot');
+    expect(prop).not.toHaveClass('pds-switch--label-slot');
+  });
 });

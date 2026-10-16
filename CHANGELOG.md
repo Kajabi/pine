@@ -1,3 +1,72 @@
+## 4.4.3 (2026-10-15)
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** keep the button and chip triggers inside their trigger-width ([#866](https://github.com/Kajabi/pine/pull/866))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.4.2 (2026-10-15)
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** carry the combobox's styles into its body portal's shadow root ([#865](https://github.com/Kajabi/pine/pull/865))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.4.1 (2026-10-14)
+
+### Bug Fixes 🐛
+
+- **pds-checkbox:** render the label prop as text beside the label slot ([#864](https://github.com/Kajabi/pine/pull/864))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
+## 4.4.0 (2026-10-14)
+
+### Features 🚀
+
+- **pds-checkbox:** add a label slot to pds-checkbox and pds-switch ([#857](https://github.com/Kajabi/pine/pull/857))
+- **pds-combobox:** add option groups with icons to the options prop ([#839](https://github.com/Kajabi/pine/pull/839))
+- **pds-combobox:** add a flyout group display ([#840](https://github.com/Kajabi/pine/pull/840))
+- **pds-combobox:** add a drill-in group display and in-panel search ([#842](https://github.com/Kajabi/pine/pull/842))
+- **pds-combobox:** give grouped displays tree semantics and keyboard support ([#843](https://github.com/Kajabi/pine/pull/843))
+- **pds-combobox:** support disabled options and disabled option groups ([#845](https://github.com/Kajabi/pine/pull/845))
+- **pds-combobox:** slide drill-in groups in and out ([#850](https://github.com/Kajabi/pine/pull/850))
+- **pds-combobox:** put the row back in place of the panel search inside a drilled-in group ([#861](https://github.com/Kajabi/pine/pull/861))
+- **pds-datepicker:** add a datepicker for a single date or a date range ([#852](https://github.com/Kajabi/pine/pull/852))
+- **pds-datepicker:** add auto-apply for ranges and a clear button in the field ([#854](https://github.com/Kajabi/pine/pull/854))
+- **pds-multiselect:** add trigger and footer slots, option display and option actions ([#860](https://github.com/Kajabi/pine/pull/860))
+
+### Bug Fixes 🐛
+
+- drop pending debounced events when input, textarea or multiselect is removed ([#848](https://github.com/Kajabi/pine/pull/848))
+- **pds-button:** work as a pds-popover and pds-dropdown-menu trigger ([#858](https://github.com/Kajabi/pine/pull/858))
+- **pds-combobox:** name the button and chip triggers by their visible label ([#841](https://github.com/Kajabi/pine/pull/841))
+- **pds-combobox:** readable spec failures and drop a pending search on removal ([#847](https://github.com/Kajabi/pine/pull/847))
+- **pds-datepicker:** portal the calendar so modals, drawers and clipping ancestors don't trap it ([#853](https://github.com/Kajabi/pine/pull/853))
+- **pds-modal:** trap focus against visible elements, re-read on each Tab ([#837](https://github.com/Kajabi/pine/pull/837))
+- **pds-modal:** scroll a modal taller than the viewport when it opens outside the top layer ([#862](https://github.com/Kajabi/pine/pull/862))
+- **pds-multiselect:** use fixed positioning so scroll containers do not clip the panel ([#838](https://github.com/Kajabi/pine/pull/838))
+
+### Documentation 📄
+
+- **pds-combobox:** add a group display guide, ERB usage and an action catalog story ([#844](https://github.com/Kajabi/pine/pull/844))
+- **pds-combobox:** render the group display and keyboard tables with pds-table ([#851](https://github.com/Kajabi/pine/pull/851))
+- **pds-combobox:** narrow the flyout story's trigger and dropdown width ([#855](https://github.com/Kajabi/pine/pull/855))
+- **pds-combobox:** note Backspace steps back from a drilled-in group only with panel search ([#863](https://github.com/Kajabi/pine/pull/863))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.3.0 (2026-10-08)
 
 ### Features 🚀

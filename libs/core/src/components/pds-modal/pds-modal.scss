@@ -31,6 +31,29 @@
     background: transparent;
   }
 
+  // Out of the top layer (disableTopLayer, the only mode that renders aria-modal="false") the dialog
+  // loses the UA's `dialog:modal { overflow: auto }`, so a modal taller than the viewport couldn't
+  // scroll. The page behind isn't inert, so keep the scroll from chaining into it.
+  &[aria-modal='false'] {
+    overflow: auto;
+    overscroll-behavior: contain;
+
+    // A backdrop-filter would make this scrolling backdrop the containing block for a nested
+    // modal's fixed backdrop, which would then scroll away with it. Blur from a fixed layer
+    // behind the modal instead.
+    @supports (backdrop-filter: blur(3px)) {
+      backdrop-filter: none;
+
+      &::before {
+        backdrop-filter: blur(3px);
+        content: '';
+        inset: 0;
+        position: fixed;
+        z-index: -1;
+      }
+    }
+  }
+
   &.open {
     opacity: 1;
     transition-timing-function: var(--pine-motion-easing-out);

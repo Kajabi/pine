@@ -564,7 +564,171 @@ describe('pds-button', () => {
     });
   });
 
+  describe('as a trigger', () => {
+    const innerFocused = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        const host = document.querySelector('pds-button');
+        return document.activeElement === host && host?.shadowRoot?.activeElement?.tagName === 'BUTTON';
+      });
+
+    const innerAttribute = (page: Awaited<ReturnType<typeof newE2EPage>>, name: string) =>
+      page.$eval('pds-button', (el, attr) => el.shadowRoot?.querySelector('button')?.getAttribute(attr), name);
+
+    it('focuses the inner button when the host is focused', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button>Open</pds-button>');
+
+      await page.$eval('pds-button', (el: HTMLElement) => el.focus());
+
+      expect(await innerFocused(page)).toBe(true);
+    });
+
+    it('does not add trigger attributes to a button that is not a trigger', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button>Save</pds-button>');
+
+      expect(await innerAttribute(page, 'aria-expanded')).toBeNull();
+      expect(await innerAttribute(page, 'aria-haspopup')).toBeNull();
+    });
+
+    it('returns focus and forwards aria-expanded and aria-controls with pds-popover', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="trigger-popover">
+          <pds-button slot="trigger" variant="unstyled">Open</pds-button>
+          <button id="inside">Inside</button>
+        </pds-popover>
+      `);
+
+      await page.click('pds-button');
+      await page.waitForChanges();
+
+      expect(await innerAttribute(page, 'aria-expanded')).toBe('true');
+      const controls = await page.$eval('pds-button', (el) =>
+        Array.from(el.shadowRoot?.querySelector('button')?.ariaControlsElements ?? [], (controlled) => controlled.id),
+      );
+      expect(controls).toEqual(['trigger-popover-portal']);
+
+      await page.evaluate(() => (document.querySelector('#inside') as HTMLElement).focus());
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+
+      expect(await innerAttribute(page, 'aria-expanded')).toBe('false');
+      expect(await innerFocused(page)).toBe(true);
+    });
+
+    it('forwards aria-controls to the pds-popover portal from inside another shadow root', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<div id="outer"></div>');
+      await page.$eval('#outer', (el) => {
+        el.attachShadow({ mode: 'open' }).innerHTML = `
+          <pds-popover component-id="nested-popover">
+            <pds-button slot="trigger">Open</pds-button>
+            <p>Popover content</p>
+          </pds-popover>
+        `;
+      });
+      await page.waitForChanges();
+
+      const controls = await page.$eval('#outer', (el) =>
+        Array.from(
+          el.shadowRoot?.querySelector('pds-button')?.shadowRoot?.querySelector('button')?.ariaControlsElements ?? [],
+          (controlled) => controlled.id,
+        ),
+      );
+      expect(controls).toEqual(['nested-popover-portal']);
+    });
+
+    it('returns focus and forwards aria-expanded and aria-haspopup with pds-dropdown-menu', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <pds-button slot="trigger">Actions</pds-button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+
+      expect(await innerAttribute(page, 'aria-haspopup')).toBe('menu');
+      expect(await innerAttribute(page, 'aria-expanded')).toBe('false');
+
+      await page.click('pds-button');
+      await page.waitForChanges();
+      expect(await innerAttribute(page, 'aria-expanded')).toBe('true');
+
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+
+      expect(await innerAttribute(page, 'aria-expanded')).toBe('false');
+      expect(await innerFocused(page)).toBe(true);
+    });
+
+    it('forwards trigger attributes to the anchor when href is set', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button href="#details" aria-expanded="false" aria-haspopup="dialog">Details</pds-button>');
+
+      const anchor = await page.$eval('pds-button', (el) => {
+        const a = el.shadowRoot?.querySelector('a');
+        return [a?.getAttribute('aria-expanded'), a?.getAttribute('aria-haspopup')];
+      });
+
+      expect(anchor).toEqual(['false', 'dialog']);
+    });
+
+    it('keeps an id set on the host while it is a trigger', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <pds-button id="actions-trigger" slot="trigger">Actions</pds-button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+
+      await page.click('pds-button');
+      await page.waitForChanges();
+
+      expect(await page.$eval('pds-button', (el) => el.getAttribute('id'))).toBe('actions-trigger');
+    });
+  });
+
   describe('accessibility', () => {
+    it('has no axe violations as an open pds-popover trigger', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="axe-popover">
+          <pds-button slot="trigger">Open</pds-button>
+          <p>Popover content</p>
+        </pds-popover>
+      `);
+      await page.click('pds-button');
+      await page.waitForChanges();
+      // `aria-allowed-attr` is disabled here: the body portal sets `aria-modal="false"`
+      // on a non-dialog element — remove once popover portal ARIA is corrected.
+      const violations = await runAxe(page, {
+        rules: { 'aria-allowed-attr': { enabled: false } },
+      });
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('has no axe violations as an open pds-dropdown-menu trigger', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <pds-button slot="trigger">Actions</pds-button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+      await page.click('pds-button');
+      await page.waitForChanges();
+      // `aria-required-children` is disabled here: the menu panel uses `role="menu"` but
+      // slotted `pds-dropdown-menu-item` elements render `role="none"` — remove once
+      // menu items expose `role="menuitem"`.
+      const violations = await runAxe(page, {
+        rules: { 'aria-required-children': { enabled: false } },
+      });
+      expect(formatViolations(violations)).toBe('');
+    });
+
     it('has no axe violations with default text content', async () => {
       const page = await newE2EPage();
       await page.setContent('<pds-button>Save changes</pds-button>');
