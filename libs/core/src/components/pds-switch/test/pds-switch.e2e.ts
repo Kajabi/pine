@@ -177,8 +177,8 @@ describe('pds-switch accessibility', () => {
 describe('pds-switch after its host classes and styles are stripped', () => {
   it('keeps its styling', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-switch class="consumer" component-id="switch" label="Switch" invalid helper-message="Help"></pds-switch>');
+    await page.setContent('<pds-switch class="consumer" component-id="switch" label="Switch" invalid disabled helper-message="Help"></pds-switch>');
 
-    await expectStylingSurvivesStrip(page, 'pds-switch');
+    await expectStylingSurvivesStrip(page, 'pds-switch', { removeAttributes: ['aria-disabled'] });
   });
 });

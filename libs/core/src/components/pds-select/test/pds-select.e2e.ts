@@ -200,8 +200,8 @@ describe('pds-select accessibility', () => {
 describe('pds-select after its host classes and styles are stripped', () => {
   it('keeps its styling', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-select class="consumer" component-id="select" label="Select" disabled><option value="a">A</option></pds-select>');
+    await page.setContent('<pds-select class="consumer" component-id="select" label="Select" disabled invalid highlight><option value="a">A</option></pds-select>');
 
-    await expectStylingSurvivesStrip(page, 'pds-select');
+    await expectStylingSurvivesStrip(page, 'pds-select', { removeAttributes: ['aria-disabled'] });
   });
 });

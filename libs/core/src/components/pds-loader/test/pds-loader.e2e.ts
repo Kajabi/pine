@@ -163,6 +163,6 @@ describe('pds-loader after its host classes and styles are stripped', () => {
     const page = await newE2EPage();
     await page.setContent('<pds-loader class="consumer" is-loading="false"></pds-loader>');
 
-    await expectStylingSurvivesStrip(page, 'pds-loader');
+    await expectStylingSurvivesStrip(page, 'pds-loader', { removeAttributes: ['aria-hidden', 'aria-busy', 'aria-live'] });
   });
 });
