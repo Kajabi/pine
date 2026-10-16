@@ -206,10 +206,15 @@ pds-input {
   width: var(--pine-dimension-050);
 }
 
+// The shape rules stay off `:hover`: with it, they'd outrank the range-end and week-edge rules below,
+// and a hovered end or edge day would lose its shape.
+.pds-datepicker__day--selected {
+  border-radius: var(--pine-border-radius-full);
+}
+
 .pds-datepicker__day--selected,
 .pds-datepicker__day--selected:hover {
   background: var(--pine-color-primary);
-  border-radius: var(--pine-border-radius-full);
   color: var(--pine-color-text-primary);
 }
 
@@ -245,10 +250,13 @@ pds-input {
 }
 
 // Range mode: the days between the ends share a band, rounded where it meets the edge of a week.
+.pds-datepicker__day--in-range {
+  border-radius: 0;
+}
+
 .pds-datepicker__day--in-range,
 .pds-datepicker__day--in-range:hover {
   background: var(--pine-color-background-muted);
-  border-radius: 0;
   color: var(--pine-color-text-secondary);
 }
 
