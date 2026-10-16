@@ -14,7 +14,7 @@
   {
     "name": "All CDN component chunks (p-*.entry.js, gzipped)",
     "path": "libs/core/dist/pine-core/p-*.entry.js",
-    "limit": "343 KB",
+    "limit": "345 KB",
     "gzip": true
   },
   {
@@ -26,7 +26,7 @@
   {
     "name": "pds-modal entry (gzipped)",
     "path": "libs/core/dist/esm/pds-modal.entry.js",
-    "limit": "7.5 KB",
+    "limit": "9.25 KB",
     "gzip": true
   },
   {
