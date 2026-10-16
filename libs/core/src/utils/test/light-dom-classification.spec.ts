@@ -16,26 +16,39 @@ function findComponentFiles(dir: string, results: string[] = []): string[] {
   return results;
 }
 
-const usesShadowDom = (source: string) => /shadow:\s*true/.test(source) || /shadow:\s*\{/.test(source);
-const isClassified = (source: string) => /@lightDom\s+(renders-markup|host-only)/.test(source);
+// The `@Component({...})` config, so a `shadow: true` in a comment or example elsewhere doesn't count.
+function componentConfig(source: string): string | undefined {
+  const start = source.indexOf('@Component(');
+  if (start === -1) return undefined;
+  const open = source.indexOf('{', start);
+  let depth = 0;
+  for (let i = open; i < source.length; i++) {
+    if (source[i] === '{') depth++;
+    else if (source[i] === '}' && --depth === 0) return source.slice(open, i + 1);
+  }
+  return undefined;
+}
 
-// host-only: render() only sets classes/styles/attrs on <Host> — the author's
-// slotted content is the only child, nothing else is added around it.
-// renders-markup: render() wraps the slot(s) in real elements of its own
-// (a div, header, footer, label, dialog, etc.) that a Turbo morph strips
-// and Stencil never re-renders on its own.
+// The JSDoc directly above `@Component`, so a stray `@lightDom` elsewhere in the file doesn't count.
+const classJsDoc = (source: string) => /\/\*\*((?:(?!\*\/)[\s\S])*)\*\/\s*@Component\(/.exec(source)?.[1] ?? '';
+
+const usesShadowDom = (config: string) => /shadow:\s*(true|\{)/.test(config);
+const isClassified = (source: string) => /@lightDom\s+(renders-markup|host-only)\b/.test(classJsDoc(source));
+
+// Published in docs.json so consumers can tell which light-DOM components add elements of their own.
+// host-only: render() only sets classes, styles or attributes on <Host>; it adds no elements.
+// renders-markup: render() wraps the slotted content in its own elements, which Stencil won't
+// restore if code outside the component rewrites the light DOM.
 describe('light DOM classification', () => {
   it('tags every shadow:false/scoped component with @lightDom renders-markup or host-only', () => {
     const unclassified = findComponentFiles(COMPONENTS_DIR)
       .filter((file) => {
         const source = readFileSync(file, 'utf8');
-        return /@Component\(/.test(source) && !usesShadowDom(source) && !isClassified(source);
+        const config = componentConfig(source);
+        return config !== undefined && !usesShadowDom(config) && !isClassified(source);
       })
       .map((file) => file.replace(`${COMPONENTS_DIR}/`, ''));
 
-    // A Pine upgrade that adds a shadow:false/scoped component without classifying
-    // it here is exactly the drift kajabi-products' hand-maintained light-DOM list
-    // (common/utils/hotwired/pine_light_dom.js) is guarding against on their side.
     expect(unclassified).toEqual([]);
   });
 });
