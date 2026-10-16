@@ -874,5 +874,105 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
   });
-});
 
+  // Matches pds-select's field, and the Figma filter panel's search field and drilled-in header.
+  describe('field and panel sizes', () => {
+    const options = [
+      { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+      { id: 'sequence', text: 'Sequence', group: 'Email' },
+    ];
+
+    const setUp = async (attrs = '') => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="sizes" label="Category" hide-label trigger="button" trigger-shape="input"
+            mode="select-only" placeholder="Select category" group-display="drill-in" panel-search
+            dropdown-width="300px" ${attrs}></pds-combobox>
+          <pds-select component-id="select" label="Select" hide-label><option value="a">A</option></pds-select>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, data) => {
+          el.options = data;
+        },
+        options,
+      );
+      await page.waitForChanges();
+      return page;
+    };
+
+    it('draws the input-shaped trigger as a pds-select field', async () => {
+      const page = await setUp();
+
+      const field = await page.evaluate(() => {
+        const trigger = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!;
+        const label = trigger.querySelector('.pds-combobox__button-trigger-label')!;
+        const select = document.querySelector('pds-select')!.shadowRoot!.querySelector('select')!;
+        const probe = document.createElement('span');
+        probe.style.color = 'var(--pine-color-text-muted)';
+        document.body.appendChild(probe);
+        const placeholder = getComputedStyle(probe).color;
+        probe.remove();
+        const [t, s] = [getComputedStyle(trigger), getComputedStyle(select)];
+        return {
+          height: trigger.getBoundingClientRect().height,
+          selectHeight: select.getBoundingClientRect().height,
+          type: [t.paddingBlockStart, t.paddingInlineStart, t.fontWeight, t.fontSize, t.letterSpacing],
+          selectType: [s.paddingBlockStart, s.paddingInlineStart, s.fontWeight, s.fontSize, s.letterSpacing],
+          labelColor: getComputedStyle(label).color,
+          placeholder,
+        };
+      });
+
+      expect(field.height).toBe(36);
+      expect(field.height).toBe(field.selectHeight);
+      expect(field.type).toEqual(field.selectType);
+      expect(field.labelColor).toBe(field.placeholder);
+    });
+
+    // Other variants keep their fill's text colour; a disabled trigger keeps its disabled colour.
+    it.each([
+      ['an accent trigger', 'trigger-variant="accent"'],
+      ['a disabled trigger', 'disabled'],
+    ])('leaves the placeholder colour of %s alone', async (_case, attrs) => {
+      const page = await setUp(attrs);
+
+      const colors = await page.evaluate(() => {
+        const trigger = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!;
+        const label = trigger.querySelector('.pds-combobox__button-trigger-label--placeholder')!;
+        return [getComputedStyle(label).color, getComputedStyle(trigger).color];
+      });
+
+      expect(colors[0]).toBe(colors[1]);
+    });
+
+    const heights = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const box = (selector: string) => root.querySelector(selector)?.getBoundingClientRect().height ?? null;
+        const search = root.querySelector('.pds-combobox__panel-search');
+        return {
+          search: box('.pds-combobox__panel-search'),
+          searchPadding: search ? getComputedStyle(search).paddingBlockStart : null,
+          back: box('.pds-combobox__group-back-trigger'),
+        };
+      });
+
+    it('makes the drilled-in header the same size as the search field it replaces', async () => {
+      const page = await setUp();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      const { search, searchPadding } = await heights(page);
+
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      const { back } = await heights(page);
+
+      // 16px above and below a line of body text: 52px where body text is 14px, as in the designs.
+      expect(searchPadding).toBe('16px');
+      expect(back).toBe(search);
+    });
+  });
+});
