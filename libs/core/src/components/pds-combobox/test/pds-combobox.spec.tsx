@@ -3846,6 +3846,36 @@ describe('pds-combobox', () => {
       expect(rows).toEqual(['Assessment', 'Event', 'Tag', 'group:Email', 'Broadcast', 'Sequence', 'group:Fields', 'Custom fields']);
     });
 
+    it('opens the group a flyout row names, wherever the data puts it', async () => {
+      const { page, component, root } = await open('group-display="flyout"');
+
+      // Fields is the second group row, drawn after the ungrouped Assessment and Event.
+      const fields = Array.from(root.querySelectorAll('.pds-combobox__group-row-trigger')).find(row => row.textContent === 'Fields')!;
+      (fields as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(component.openGroup?.label).toBe('Fields');
+      expect(Array.from(root.querySelectorAll('.pds-combobox__flyout [role="treeitem"]')).map(o => o.textContent)).toEqual(['Custom fields']);
+    });
+
+    // Async results: each page is merged into the options already loaded.
+    it("adds a later page's options to their groups, and its ungrouped options after the rows above", async () => {
+      const { page, root } = await open('group-display="drill-in"', [
+        { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+        { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+      ]);
+
+      (page.root as HTMLPdsComboboxElement).options = [
+        { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+        { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+        { id: 'sequence', text: 'Sequence', group: 'Email' },
+        { id: 'tag', text: 'Tag', icon: 'hashtag' },
+      ];
+      await page.waitForChanges();
+
+      expect(panelRows(root)).toEqual(['Assessment', 'group:Email', 'Tag']);
+    });
+
     it('keeps the order of the data when the options change', async () => {
       const { page, root } = await open('group-display="drill-in"');
 
