@@ -2705,6 +2705,8 @@ export class PdsCombobox implements BasePdsProps {
 
   /** The grouped panel's rows, in the order the panel draws them and the keyboard moves through. */
   private panelEntries(): PanelEntry[] {
+    // Slotted markup is already in order; only options from data record positions.
+    if (this.options === undefined && !this.asyncUrl) return buildPanelEntries(this.filteredItems);
     return buildPanelEntries(this.filteredItems, element => this.panelPositions.get(element));
   }
 
