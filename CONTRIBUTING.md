@@ -39,6 +39,11 @@ To add new components, run the following command:
 
 When prompted, choose `*.scss Format`, then confirm. The initial component files will be generated. Once they are, you will need them to match other components. It may be best to copy any missing folders such as `stories/` and `docs/` from other components and update any imports or text to match.
 
+A component without a shadow root (`shadow: false`, or `scoped: true`) must declare which kind of light-DOM component it is with a `@lightDom` tag in the JSDoc above `@Component`. The tag is published in `docs.json` and the `components.d.ts` hover text, and a spec fails if it's missing.
+
+- `@lightDom host-only`: `render()` only sets classes, styles or attributes on `<Host>`; it adds no elements.
+- `@lightDom renders-markup`: `render()` wraps the slotted content in its own elements, which Stencil won't restore if code outside the component rewrites the light DOM.
+
 ### Starting the Dev Server
 
 To spin up a local dev server and test your changes, run:
