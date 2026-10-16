@@ -295,6 +295,18 @@
   }
 }
 
+.pds-multiselect__option-action {
+  align-items: center;
+  block-size: var(--pine-dimension-md);
+  color: var(--pine-color-icon);
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  inline-size: var(--pine-dimension-md);
+  justify-content: center;
+  margin-inline-start: var(--pine-dimension-xs);
+}
+
 .pds-multiselect__create-option {
   color: var(--pine-color-text-strong);
   width: 100%;
@@ -320,6 +332,12 @@
   display: flex;
   justify-content: center;
   padding: var(--pine-dimension-xs);
+}
+
+.pds-multiselect__footer {
+  border-block-start: var(--pine-border);
+  border-block-start-color: var(--pine-color-border-subtle);
+  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 }
 
 .pds-multiselect__helper {

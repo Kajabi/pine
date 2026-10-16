@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
+import { closest } from '@utils/closest';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 import type { ModalSizeType } from '@utils/types';
 
@@ -8,6 +9,90 @@ const isCustomLength = (value: string): boolean =>
   /^[a-z0-9.%+\-*/(), ]+$/i.test(value) &&
   /\d/.test(value) &&
   (typeof CSS === 'undefined' || CSS.supports('max-width', value));
+
+const TABBABLE = [
+  'a[href]',
+  'area[href]',
+  'button',
+  'input:not([type="hidden"])',
+  'select',
+  'textarea',
+  'iframe',
+  'summary',
+  '[contenteditable]:not([contenteditable="false"])',
+  '[tabindex]',
+].join(',');
+
+/**
+ * Collects the tabbable elements under `root` in focus order, walking into open shadow roots and
+ * following slots, so a component's own controls (the input inside pds-combobox or pds-textarea)
+ * count without being registered here by tag name. Positive tabindex values are not reordered,
+ * and a closed shadow root can't be seen into.
+ */
+function collectTabbable(root: Element | ShadowRoot, found: HTMLElement[]) {
+  for (const child of Array.from(root.children)) visitTabbable(child, found);
+}
+
+// An editing host reports tabIndex -1 but is still a Tab stop; editable content inside it is not.
+const isTabStop = (el: HTMLElement) =>
+  el.tabIndex >= 0 || (el.isContentEditable && !el.hasAttribute('tabindex') && !el.parentElement?.isContentEditable);
+
+function visitTabbable(el: Element, found: HTMLElement[]) {
+  if (el.hasAttribute('inert')) return;
+  if (el.localName === 'slot') {
+    const slot = el as HTMLSlotElement;
+    // Fallback content renders only when nothing at all is assigned, text included.
+    if ((slot.assignedNodes?.({ flatten: true }) ?? []).length === 0) return collectTabbable(el, found);
+    for (const slotted of slot.assignedElements({ flatten: true })) visitTabbable(slotted, found);
+    return;
+  }
+  // A delegatesFocus host passes focus to its first control, which the walk below finds.
+  const delegates = el.shadowRoot?.delegatesFocus === true;
+  if (el instanceof HTMLElement && !delegates && isTabStop(el) && el.matches(TABBABLE) && !el.matches(':disabled')) {
+    found.push(el);
+  }
+  // A shadow host's light children render only through its slots, which the walk reaches.
+  collectTabbable(el.shadowRoot ?? el, found);
+}
+
+/** The element as a radio in a named group, or `null`. */
+const groupedRadio = (el: HTMLElement): HTMLInputElement | null =>
+  el instanceof HTMLInputElement && el.type === 'radio' && el.name !== '' ? el : null;
+
+/**
+ * Keeps one radio per named group, as the browser does: the checked one, or the first. The others
+ * are reached with the arrow keys, so they can't be the first or last stop of the trap.
+ */
+function oneRadioPerGroup(elements: HTMLElement[]): HTMLElement[] {
+  // Radios group by name and form within one tree, so each shadow root starts its own groups.
+  const groups: HTMLInputElement[][] = [];
+  for (const el of elements) {
+    const radio = groupedRadio(el);
+    if (radio === null) continue;
+    const group = groups.find(
+      ([first]) => first.name === radio.name && first.form === radio.form && first.getRootNode() === radio.getRootNode(),
+    );
+    if (group) group.push(radio);
+    else groups.push([radio]);
+  }
+  const stops = new Set<HTMLElement>(groups.map((radios) => radios.find((radio) => radio.checked) ?? radios[0]));
+  return elements.filter((el) => groupedRadio(el) === null || stops.has(el));
+}
+
+/** Whether `node` is `ancestor` or inside it, crossing shadow roots, which `Node.contains` doesn't. */
+function containsComposed(ancestor: Node, node: Node | null): boolean {
+  for (let current = node; current; current = current instanceof ShadowRoot ? current.host : current.parentNode) {
+    if (current === ancestor) return true;
+  }
+  return false;
+}
+
+/** The focused element, followed down through shadow roots to the control that has focus. */
+function deepActiveElement(): Element | null {
+  let active = document.activeElement;
+  while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+  return active;
+}
 
 @Component({
   tag: 'pds-modal',
@@ -143,26 +228,8 @@ export class PdsModal {
   private updateFocusableElements() {
     if (!this.modalRef) return;
 
-    // Get all focusable elements within the modal
-    const selector = [
-      'a[href]',
-      'button:not([disabled])',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      'textarea:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])',
-      'pds-button:not([disabled])',
-      'pds-link:not([disabled])',
-      'pds-input:not([disabled])',
-      'pds-checkbox:not([disabled])',
-      'pds-radio:not([disabled])',
-      'pds-switch:not([disabled])',
-      'pds-select:not([disabled])',
-    ].join(',');
-
-    this.focusableElements = Array.from(
-      this.modalRef.querySelectorAll(selector)
-    ) as HTMLElement[];
+    this.focusableElements = [];
+    collectTabbable(this.modalRef, this.focusableElements);
 
     // checkVisibility() also drops an element inside a hidden ancestor, whose own computed
     // display isn't none; such an element can't take focus, so it can't anchor the trap.
@@ -172,6 +239,7 @@ export class PdsModal {
       const style = window.getComputedStyle(el);
       return style.display !== 'none' && style.visibility !== 'hidden';
     });
+    this.focusableElements = oneRadioPerGroup(this.focusableElements);
   }
 
   /**
@@ -188,33 +256,11 @@ export class PdsModal {
   }
 
   /**
-   * Helper method to focus an element, with special handling for web components
+   * Focuses an element from the list. It holds the controls themselves, inside any shadow root,
+   * so they take focus directly.
    */
   private focusElement(element: HTMLElement) {
-    if (!element) return;
-
-    try {
-      // Try standard focus first
-      element.focus();
-
-      // Check if focus worked
-      setTimeout(() => {
-        if (document.activeElement !== element) {
-          // For web components, try to find a focusable element inside
-          if (element.shadowRoot) {
-            const focusableInShadow = element.shadowRoot.querySelector(
-              'button, [tabindex], input, a[href]'
-            ) as HTMLElement;
-
-            if (focusableInShadow) {
-              focusableInShadow.focus();
-            }
-          }
-        }
-      }, 0);
-    } catch (error) {
-      console.error('Error focusing element:', error);
-    }
+    element?.focus();
   }
 
   /**
@@ -412,6 +458,27 @@ export class PdsModal {
     return thisZIndex === maxZIndex;
   }
 
+  /** Whether a modal dialog other than this one sits between the focused element and this modal. */
+  private modalDialogAbove(active: Element): boolean {
+    for (let dialog = closest('dialog[open]', active); dialog instanceof HTMLElement; ) {
+      if (dialog === this.modalRef) return false;
+      if (dialog.matches(':modal')) return true;
+      // Up from this dialog, across a shadow root; past the document root, closest() gives nothing.
+      dialog = closest('dialog[open]', dialog.parentElement ?? (dialog.getRootNode() as ShadowRoot).host);
+    }
+    return false;
+  }
+
+  /** The focused element's place in the list: its own stop, or the innermost stop it sits in. */
+  private stopIndex(active: Element): number {
+    const own = this.focusableElements.indexOf(active as HTMLElement);
+    if (own >= 0) return own;
+    for (let i = this.focusableElements.length - 1; i >= 0; i--) {
+      if (containsComposed(this.focusableElements[i], active)) return i;
+    }
+    return -1;
+  }
+
   private handleKeyDown = (e: KeyboardEvent) => {
     // If the modal is not open, don't handle any keyboard events
     if (!this.open) return;
@@ -475,6 +542,17 @@ export class PdsModal {
       // disableTopLayer), so do not trap Tab here.
       if (this.disableTopLayer) return;
 
+      // A control inside that handles Tab itself (a popup with its own trap) has already moved
+      // focus. This holds only when it listens on its own element, which runs before this
+      // document listener; one listening on document too would race it.
+      if (e.defaultPrevented) return;
+
+      // Every open modal hears this keydown. When focus is in a modal dialog opened above this one,
+      // that dialog traps Tab: this modal's list also holds its controls, so it would wrap first. A
+      // non-modal dialog inside (a disableTopLayer modal) doesn't trap, so this one still does.
+      const activeElement = deepActiveElement();
+      if (!activeElement || this.modalDialogAbove(activeElement)) return;
+
       // Content can change while the modal is open (rows fetched in, sections shown), so the
       // first and last elements are read now rather than from the list taken on opening.
       this.updateFocusableElements();
@@ -486,15 +564,13 @@ export class PdsModal {
       const firstFocusableElement = this.focusableElements[0];
       const lastFocusableElement = this.focusableElements[this.focusableElements.length - 1];
 
-      // Get the current active element
-      const activeElement = document.activeElement;
-
-      // Check if we need to wrap focus
-      const isFirstElement = activeElement === firstFocusableElement ||
-                            firstFocusableElement.contains(activeElement as Node);
-
-      const isLastElement = activeElement === lastFocusableElement ||
-                           lastFocusableElement.contains(activeElement as Node);
+      // activeElement is the control inside any shadow root, as the list holds, not the host
+      // document.activeElement reports. It's matched to its own stop first, so a stop inside a
+      // listed host isn't taken for that host; a focused node that isn't a stop counts as the
+      // innermost stop it sits in.
+      const stop = this.stopIndex(activeElement);
+      const isFirstElement = stop === 0;
+      const isLastElement = stop === this.focusableElements.length - 1;
 
       // If shift + tab is pressed and focus is on the first element, move to the last element
       if (e.shiftKey && isFirstElement) {

@@ -4,6 +4,7 @@ import { assignDescription, isSpecTest, messageId } from '../../utils/form';
 import type { ChipSentimentType } from '@utils/types';
 import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
+import { closest } from '@utils/closest';
 import DOMPurify from 'dompurify';
 import {
   FlyoutController,
@@ -93,9 +94,12 @@ export class PdsCombobox implements BasePdsProps {
    * `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present
    * (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot
    * boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`.
-   * Keyboard focus remains on the trigger via
-   * `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading`
-   * slots are not supported when `body` is used; the default empty and loading content is shown instead.
+   * Keyboard focus stays on the trigger, or moves to the panel's own search field, so modal focus
+   * traps keep working. The mounted dropdown renders in its own shadow root with the combobox's
+   * styles, so it needs no global CSS and page CSS can't reach it: customize it with custom
+   * properties on `pds-combobox`. Its reading direction, language, theme and custom properties are
+   * taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when
+   * `body` is used; the default empty and loading content is shown instead.
    * @default 'host'
    */
   @Prop() dropdownMount: 'host' | 'body' = 'host';
@@ -384,6 +388,8 @@ export class PdsCombobox implements BasePdsProps {
   private triggerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
   private portalEl: HTMLElement | null = null;
+  /** The portal's shadow root, which holds the dropdown and a copy of the combobox's styles. */
+  private portalRoot: ShadowRoot | null = null;
   private cleanupPositionAutoUpdate?: () => void;
   private bodyPortalAutoUpdateActive = false;
   /** Deferred so portal teardown runs after Stencil reconciles `isOpen === false`. */
@@ -404,8 +410,10 @@ export class PdsCombobox implements BasePdsProps {
   /** The groups in the flyout panel's last render, so a row's index finds its optgroup. */
   private renderedGroups: PanelGroup[] = [];
   private panelSearchEl?: HTMLInputElement;
-  /** The panel's search field took focus for this open. */
-  private panelSearchFocused = false;
+  /** With panel search, the options' list, which takes focus while a group is drilled into. */
+  private panelTreeEl?: HTMLElement;
+  /** What panel search last focused this open: the search field, or the list while drilled in. */
+  private panelFocusEl?: HTMLElement;
   /** Room for a flyout was checked for this open. */
   private flyoutRoomChecked = false;
   /** The highlighted option sits in a flyout that hasn't rendered yet; focus it after the next render. */
@@ -477,16 +485,39 @@ export class PdsCombobox implements BasePdsProps {
       this.flyout.stopPositioning();
     }
 
+    // The row back is sticky over the group's options; scrolling an option into view stops below
+    // it. Set before any scroll below, and when it first applies, scroll the highlighted option
+    // again: the list keeps its offset on drilling in, and an earlier scroll had no padding.
+    if (this.panelTreeEl) {
+      const header = this.hidesPanelSearch ? (this.panelTreeEl.querySelector('.pds-combobox__group-back-trigger') as HTMLElement | null) : null;
+      const padding = header ? `${header.offsetHeight}px` : '';
+      if (this.panelTreeEl.style.scrollPaddingBlockStart !== padding) {
+        this.panelTreeEl.style.scrollPaddingBlockStart = padding;
+        if (padding !== '' && this.highlightedIndex >= 0) this.pendingOptionFocus = true;
+      }
+    }
+
     if (this.pendingOptionFocus) {
       this.pendingOptionFocus = false;
       this.updateOptionFocus();
     }
 
-    if (this.isOpen && this.usesPanelSearch && !this.panelSearchFocused && this.panelSearchEl) {
-      this.panelSearchFocused = true;
-      // Before the dropdown is positioned it sits in the page's flow; don't scroll to it.
-      this.panelSearchEl.focus({ preventScroll: true });
+    // Panel search keeps focus in the search field, or in the list while a group hides the field.
+    const panelFocusEl = this.hidesPanelSearch ? this.panelTreeEl : this.panelSearchEl;
+    if (this.isOpen && this.usesPanelSearch && panelFocusEl && panelFocusEl !== this.panelFocusEl) {
+      this.focusPanel(panelFocusEl);
     }
+  }
+
+  private focusPanel(el: HTMLElement) {
+    this.panelFocusEl = el;
+    // Before the dropdown is positioned it sits in the page's flow; don't scroll to it.
+    el.focus({ preventScroll: true });
+    // A search started by typing in the list carries its first character; type on after it.
+    if (el === this.panelSearchEl && this.panelQuery !== '') {
+      this.panelSearchEl.setSelectionRange?.(this.panelQuery.length, this.panelQuery.length);
+    }
+    this.updateAriaActiveDescendant();
   }
 
   /** Switching display mode leaves no flyout or hover timer from the last one. */
@@ -500,10 +531,25 @@ export class PdsCombobox implements BasePdsProps {
 
   @Watch('openGroup')
   protected openGroupChanged(next: HTMLOptGroupElement | null, previous: HTMLOptGroupElement | null) {
+    this.handPanelFocusToList();
     // Only moves between the drill-in panel's views slide; search results don't.
     if (!this.isOpen || this.effectiveGroupDisplay !== 'drill-in' || !this.showsGroupedPanel) return;
     if (next !== null && previous === null) this.drillDirection = 'in';
     else if (next === null && previous !== null) this.drillDirection = 'out';
+  }
+
+  /** A flyout with no room beside the dropdown drills in, which can hide the focused search field too. */
+  @Watch('flyoutFallback')
+  protected flyoutFallbackChanged() {
+    this.handPanelFocusToList();
+  }
+
+  /**
+   * Drilling into a group hides the search field, so focus moves to the list before the field
+   * unmounts: focus lost with it would leave the combobox and close the dropdown.
+   */
+  private handPanelFocusToList() {
+    if (this.isOpen && this.hidesPanelSearch && this.panelTreeEl) this.focusPanel(this.panelTreeEl);
   }
 
   private onDrillAnimationEnd = (event: AnimationEvent) => {
@@ -528,7 +574,7 @@ export class PdsCombobox implements BasePdsProps {
       if (this.usesPanelSearch && this.asyncUrl && this.lastFetchedQuery !== '') {
         this.debouncedFetchAsyncOptions('', 1);
       }
-      this.panelSearchFocused = false;
+      this.panelFocusEl = undefined;
       this.flyoutRoomChecked = false;
       this.flyoutFallback = false;
     }
@@ -1282,14 +1328,56 @@ export class PdsCombobox implements BasePdsProps {
       const target = this.getPortalMountRoot();
       if (this.portalEl.parentElement !== target) {
         target.appendChild(this.portalEl);
+        // What differs from the new parent may not be what differed from the old one.
+        this.copyPortalContext();
       }
       return this.portalEl;
     }
 
     this.portalEl = document.createElement('div');
     this.portalEl.className = 'pds-combobox-dropdown-portal';
+    // The copied stylesheet's `:host` rules match this div too; keep it out of layout. It still
+    // passes `dir` and the theme down.
+    this.portalEl.style.display = 'contents';
+    this.portalRoot = this.portalEl.attachShadow({ mode: 'open' });
     this.getPortalMountRoot().appendChild(this.portalEl);
+    this.copyPortalContext();
     return this.portalEl;
+  }
+
+  /**
+   * Gives the portal what the dropdown would otherwise get inside the combobox: its styles (so it
+   * needs no global CSS), the reading direction and language, a theme set on an ancestor, and
+   * custom properties set between the combobox and where the portal mounts. A snapshot: the portal
+   * is rebuilt on every open, so a theme switched while it's open applies from the next open.
+   */
+  private copyPortalContext() {
+    const portal = this.portalEl;
+    const root = this.portalRoot;
+    const source = this.el.shadowRoot;
+    if (!portal || !root) return;
+
+    if (source?.adoptedStyleSheets?.length) {
+      root.adoptedStyleSheets = source.adoptedStyleSheets;
+    } else if (source && !root.querySelector('style')) {
+      source.querySelectorAll('style').forEach(style => root.appendChild(style.cloneNode(true)));
+    }
+
+    const computed = getComputedStyle(this.el);
+    portal.dir = computed.direction || 'ltr';
+    const lang = closest('[lang]', this.el)?.getAttribute('lang');
+    if (lang) portal.lang = lang;
+    const theme = closest('[data-theme]', this.el)?.getAttribute('data-theme');
+    if (theme) portal.setAttribute('data-theme', theme);
+
+    const outside = portal.parentElement ? getComputedStyle(portal.parentElement) : null;
+    for (let i = 0; i < computed.length; i++) {
+      const property = computed[i];
+      if (!property.startsWith('--')) continue;
+      const value = computed.getPropertyValue(property);
+      if (outside && value === outside.getPropertyValue(property)) continue;
+      portal.style.setProperty(property, value.trim());
+    }
   }
 
   private syncBodyPortal() {
@@ -1297,15 +1385,16 @@ export class PdsCombobox implements BasePdsProps {
       return;
     }
 
-    const portal = this.ensureBodyPortal();
-    for (const stale of Array.from(portal.children)) {
-      if (stale !== this.listboxEl) {
+    this.ensureBodyPortal();
+    const root = this.portalRoot!;
+    for (const stale of Array.from(root.children)) {
+      if (stale !== this.listboxEl && stale.tagName !== 'STYLE') {
         stale.remove();
       }
     }
 
-    if (this.listboxEl.parentElement !== portal) {
-      portal.appendChild(this.listboxEl);
+    if (this.listboxEl.parentNode !== root) {
+      root.appendChild(this.listboxEl);
       void this.positionDropdown();
       this.startBodyPortalAutoUpdate();
     }
@@ -1319,6 +1408,7 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     this.portalEl = null;
+    this.portalRoot = null;
 
     if (this.listboxEl && !this.listboxEl.isConnected) {
       this.listboxEl = undefined;
@@ -1796,8 +1886,9 @@ export class PdsCombobox implements BasePdsProps {
 
   /** Points the focused element's aria-activedescendant at the highlighted option, or clears it. */
   private updateAriaActiveDescendant() {
-    // With panel search, the search field (the element with focus) owns it, not the trigger.
-    const target = this.usesPanelSearch ? this.panelSearchEl : this.triggerEl;
+    // With panel search, the element with focus owns it, not the trigger: the search field, or
+    // the list while a drilled-in group hides the field.
+    const target = this.usesPanelSearch ? (this.hidesPanelSearch ? this.panelTreeEl : this.panelSearchEl) : this.triggerEl;
     if (!target) return;
     const id = this.activeDescendantId;
     if (id !== undefined) {
@@ -2186,11 +2277,15 @@ export class PdsCombobox implements BasePdsProps {
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
 
     const withSearch = this.usesPanelSearch;
+    // While a drilled-in group hides the search field, the list takes focus in its place.
+    const listTakesFocus = this.hidesPanelSearch;
     const list = (
       <ul
+        key="panel-list"
         class={{
           'pds-combobox__listbox': !withSearch,
           'pds-combobox__listbox-options': withSearch,
+          'pds-combobox__listbox-options--drilled-in': listTakesFocus,
           'pds-combobox__listbox--grouped': this.groupDisplay !== 'inline',
           'pds-combobox__listbox--drill-in': this.drillDirection === 'in',
           'pds-combobox__listbox--drill-out': this.drillDirection === 'out',
@@ -2200,7 +2295,15 @@ export class PdsCombobox implements BasePdsProps {
         id={this.listboxId}
         aria-label={this.label || 'Options'}
         aria-multiselectable="false"
-        ref={withSearch ? undefined : el => (this.listboxEl = el as HTMLElement)}
+        // Focusable but out of the tab order with panel search, so it can take focus when a
+        // drilled-in group hides the field. Dropping it while focused would blur the list and close.
+        tabIndex={withSearch ? -1 : undefined}
+        aria-activedescendant={listTakesFocus ? this.activeDescendantId : undefined}
+        onKeyDown={withSearch ? this.onPanelTreeKeyDown : undefined}
+        ref={el => {
+          if (withSearch) this.panelTreeEl = el as HTMLElement;
+          else this.listboxEl = el as HTMLElement;
+        }}
         onScroll={this.handleScroll}
       >
         {this.loading && (
@@ -2244,7 +2347,7 @@ export class PdsCombobox implements BasePdsProps {
         // Portaled, the panel sits outside .pds-combobox, so its focusout wouldn't reach that handler.
         onFocusout={this.usesBodyPortal ? this.onComboboxFocusOut : undefined}
       >
-        {this.renderPanelSearch()}
+        {!listTakesFocus && this.renderPanelSearch()}
         {list}
       </div>
     );
@@ -2363,6 +2466,14 @@ export class PdsCombobox implements BasePdsProps {
     return this.groupDisplay === 'inline' ? 'listbox' : 'tree';
   }
 
+  /**
+   * Drilled into a group with panel search: the group's row back takes the search field's place,
+   * since one group's options don't need searching. Typing searches the whole list again.
+   */
+  private get hidesPanelSearch(): boolean {
+    return this.usesPanelSearch && this.showsGroupedPanel && this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null;
+  }
+
   /** The grouped panel is showing groups rather than search results. */
   private get showsGroupedPanel(): boolean {
     if (this.effectiveGroupDisplay === 'inline') return false;
@@ -2373,7 +2484,11 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private onPanelSearchInput = (event: Event) => {
-    this.panelQuery = (event.target as HTMLInputElement).value;
+    this.setPanelQuery((event.target as HTMLInputElement).value);
+  };
+
+  private setPanelQuery(query: string) {
+    this.panelQuery = query;
     this.clearExpandFilterList();
     this.filterOptions();
     this.pdsComboboxSearch.emit({ query: this.panelQuery });
@@ -2382,7 +2497,7 @@ export class PdsCombobox implements BasePdsProps {
     }
     // The list changes size, so place the dropdown again, as typing in the input trigger does.
     setTimeout(() => this.openDropdownPositioning(), 0);
-  };
+  }
 
   /** What's being searched: the panel's field, or the input trigger's text. */
   private get activeQuery(): string {
@@ -2392,21 +2507,45 @@ export class PdsCombobox implements BasePdsProps {
   // Space, Home and End edit the search text rather than moving through the options.
   private onPanelSearchKeyDown = (event: KeyboardEvent) => {
     if (event.key === ' ' || event.key === 'Home' || event.key === 'End') return;
-    // Tab closes the dropdown and lands on the trigger, as Escape does: the search field is about
-    // to unmount, so the browser can't tab on from it. The next Tab continues from the trigger.
-    if (event.key === 'Tab') {
+    if (this.handlePanelTab(event)) return;
+    this.handleKeyDown(event);
+  };
+
+  /**
+   * Keys in the list while a drilled-in group hides the search field. Backspace, like ArrowLeft,
+   * steps back to the groups; a character starts a search of the whole list. Characters typed
+   * before the search field renders and takes focus still land on the list, so they add to the
+   * query rather than starting it again.
+   */
+  private onPanelTreeKeyDown = (event: KeyboardEvent) => {
+    if (this.handlePanelTab(event)) return;
+    if (event.key === 'Backspace') {
       event.preventDefault();
-      this.handleKeyDown(event);
-      this.restoreFocusToTrigger();
+      if (!this.leaveDrilledInGroup() && this.panelQuery !== '') this.setPanelQuery(this.panelQuery.slice(0, -1));
       return;
     }
-    // Backspace on an empty search, like ArrowLeft, steps back out of a drilled-in group.
-    if (event.key === 'Backspace' && this.panelQuery === '' && this.leaveDrilledInGroup()) {
+    // AltGr (Ctrl+Alt on Windows) and Option on macOS type characters too; Meta and Ctrl alone are
+    // shortcuts.
+    if (event.key.length === 1 && event.key !== ' ' && !event.metaKey && (!event.ctrlKey || event.altKey)) {
       event.preventDefault();
+      this.flyout.reset();
+      // The query first, so leaving the group reads as search results, not a slide back.
+      this.setPanelQuery(this.panelQuery + event.key);
+      this.openGroup = null;
       return;
     }
     this.handleKeyDown(event);
   };
+
+  // Tab closes the dropdown and lands on the trigger, as Escape does: the focused field or list is
+  // about to unmount, so the browser can't tab on from it. The next Tab continues from the trigger.
+  private handlePanelTab(event: KeyboardEvent): boolean {
+    if (event.key !== 'Tab') return false;
+    event.preventDefault();
+    this.handleKeyDown(event);
+    this.restoreFocusToTrigger();
+    return true;
+  }
 
   /** Returns from a drilled-in group to the group list; false when not drilled in. */
   private leaveDrilledInGroup(): boolean {
@@ -2421,7 +2560,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private renderPanelSearch() {
     return (
-      <div class="pds-combobox__panel-search">
+      <div key="panel-search" class="pds-combobox__panel-search">
         <pds-icon name="search" size="small" aria-hidden="true" />
         <input
           ref={el => (this.panelSearchEl = el as HTMLInputElement)}
