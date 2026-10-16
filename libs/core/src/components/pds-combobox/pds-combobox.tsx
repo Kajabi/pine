@@ -14,6 +14,7 @@ import {
   groupLabelOf,
   isGroupDisabled,
   isOptionDisabled,
+  optionBadgeOf,
   optionIconOf,
   panelColumn,
   parentOptgroupOf,
@@ -912,6 +913,7 @@ export class PdsCombobox implements BasePdsProps {
       if (opt.disabled === true) optionEl.setAttribute('disabled', '');
       // Only strings group an option or name an icon; anything else from JS is ignored, not coerced.
       if (typeof opt.icon === 'string' && opt.icon !== '') optionEl.setAttribute('data-icon', opt.icon);
+      this.setBadgeAttributes(optionEl, opt.badge);
 
       if (typeof opt.group !== 'string' || opt.group === '') {
         ungrouped.push(optionEl);
@@ -2642,10 +2644,37 @@ export class PdsCombobox implements BasePdsProps {
         ) : isChip ? (
           this.renderOptionChip(option)
         ) : (
-          this.renderOptionLabel(option)
+          [this.renderOptionLabel(option), this.renderOptionBadge(option)]
         )}
         {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
       </li>
+    );
+  }
+
+  /** Copies an `options` badge to the option's `data-badge*` attributes; only strings count. */
+  private setBadgeAttributes(optionEl: HTMLOptionElement, badge: unknown) {
+    if (typeof badge !== 'object' || badge === null) return;
+    const { label, sentiment, icon } = badge as Record<string, unknown>;
+    if (typeof label !== 'string' || label === '') return;
+    optionEl.setAttribute('data-badge', label);
+    if (typeof sentiment === 'string') optionEl.setAttribute('data-badge-sentiment', sentiment);
+    if (typeof icon === 'string') optionEl.setAttribute('data-badge-icon', icon);
+  }
+
+  /** An option's badge, after its text. */
+  private renderOptionBadge(option: HTMLOptionElement) {
+    const badge = optionBadgeOf(option);
+    if (badge === null) return null;
+    return (
+      <pds-chip
+        size="sm"
+        sentiment={badge.sentiment as ChipSentimentType}
+        // A Pine icon name only, checked by optionBadgeOf; pds-chip's `icon` also loads URLs.
+        icon={badge.icon ?? undefined}
+        class="pds-combobox__option-badge"
+      >
+        {badge.label}
+      </pds-chip>
     );
   }
 

@@ -92,6 +92,17 @@
     flex-shrink: 0;
   }
 
+  // A badge sits at the end of the row, before the selected check.
+  .pds-combobox__option-badge {
+    flex-shrink: 0;
+    margin-inline-start: auto;
+    padding-inline-start: var(--pine-dimension-xs);
+  }
+
+  .pds-combobox__option-badge + .pds-combobox__option-check {
+    margin-inline-start: var(--pine-dimension-xs);
+  }
+
   .pds-combobox__option-check {
     color: currentColor;
     font-size: var(--pine-dimension-150);

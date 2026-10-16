@@ -21,6 +21,13 @@ export interface ComboboxOption {
    */
   icon?: string;
   /**
+   * A small chip after the option's text, such as "New". `label` is its text; `sentiment` is a
+   * `pds-chip` sentiment (`neutral` when unset or unknown); `icon` is a Pine icon name, with the
+   * same rules as `icon`. The same as `data-badge`, `data-badge-sentiment` and `data-badge-icon` on
+   * a slotted `<option>`. Only plain options show it, not chip or layout options.
+   */
+  badge?: { label: string; sentiment?: string; icon?: string };
+  /**
    * When `true`, the option stays reachable by the arrow keys and the pointer, so assistive tech
    * announces it as unavailable, but it cannot be selected.
    */
