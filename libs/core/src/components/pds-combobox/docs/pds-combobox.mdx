@@ -1161,7 +1161,7 @@ Search results, and the `inline` display, list a group's options under its label
 
 ### Option Badges
 
-Set `badge` on an option from the `options` prop to show a small `pds-chip` after its text, such as "New" on a newly added choice. `label` is the chip's text, `sentiment` a chip sentiment (`neutral` when unset or unknown), and `icon` a Pine icon name, with the same rules as option icons. On a slotted `<option>`, use `data-badge`, `data-badge-sentiment` and `data-badge-icon`. The badge sits at the end of the row, before the selected check. It isn't part of the option's label, so it doesn't show in the trigger and search doesn't match it. Chip and layout options don't show it.
+Set `badge` on an option from the `options` prop to show a small `pds-chip` after its text, such as "New" on a newly added choice. `label` is the chip's text, `sentiment` a chip sentiment (`neutral` when unset or unknown), and `icon` a Pine icon name, with the same rules as option icons. On a slotted `<option>`, use `data-badge`, `data-badge-sentiment` and `data-badge-icon`. The badge sits at the end of the row, before the selected check. It isn't part of the option's label, so it doesn't show in the trigger and search doesn't match it, but screen readers read it as part of the option's name ("Responsive emails, New"). Chip and layout options don't show it, and a disabled option's badge is muted with the row.
 
 <DocCanvas
   mdxSource={{
