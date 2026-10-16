@@ -82,6 +82,26 @@ describe('keepPineHydrated()', () => {
     expect(div.classList.contains('hydrated')).toBe(false);
     expect(button.classList.contains('hydrated')).toBe(false);
   });
+
+  it('gives up on a component another script keeps stripping, warns once, and still restores the rest', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    keepPineHydrated();
+    const fought = document.createElement('pds-button');
+    const other = document.createElement('pds-input');
+
+    // The other script strips it again after every restore, all before the next task.
+    for (let round = 0; round < 8; round += 1) {
+      fought.className = '';
+      restore(fought, 'hydrated');
+    }
+    restore(other, 'hydrated');
+
+    expect(fought.classList.contains('hydrated')).toBe(false);
+    expect(other.classList.contains('hydrated')).toBe(true);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith('pds-button: stopped putting back its hydrated class, as another script keeps removing it.', fought);
+    warn.mockRestore();
+  });
 });
 
 describe('isStencilClass()', () => {

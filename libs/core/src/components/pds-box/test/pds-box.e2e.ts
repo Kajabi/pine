@@ -21,6 +21,37 @@ describe('pds-box per-side borders', () => {
       await expectStylingSurvivesStrip(page, 'pds-box');
     });
 
+    // Another script that removes a class every time the box puts it back would keep both running
+    // forever in microtasks; the box gives up after a few rounds instead of hanging the page.
+    it('gives up, and keeps the page responsive, when a script keeps removing its classes', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-box display="flex" gap="md"></pds-box>');
+      await page.evaluate(() => {
+        const w = window as unknown as { pineWarnings: string[] };
+        w.pineWarnings = [];
+        const warn = console.warn;
+        console.warn = (...args: unknown[]) => {
+          w.pineWarnings.push(String(args[0]));
+          warn(...args);
+        };
+      });
+
+      await page.$eval('pds-box', (el) => {
+        // Only when it's there: `classList.remove` of a missing class still counts as a class change,
+        // so an unconditional remove would loop on its own.
+        new MutationObserver(() => {
+          if (el.classList.contains('pds-box-gap-md')) el.classList.remove('pds-box-gap-md');
+        }).observe(el, { attributes: true, attributeFilter: ['class'] });
+        el.classList.remove('pds-box-gap-md');
+      });
+      await page.waitForChanges();
+
+      expect(await page.evaluate(() => 'responsive')).toBe('responsive');
+      expect((await page.evaluate(() => (window as unknown as { pineWarnings: string[] }).pineWarnings)).filter((text) => text.startsWith('pds-box: stopped restoring'))).toHaveLength(1);
+      // The other script wins.
+      expect(await page.$eval('pds-box', (el) => el.classList.contains('pds-box-gap-md'))).toBe(false);
+    });
+
     it('still takes a changed attribute afterwards', async () => {
       const page = await newE2EPage();
       await page.setContent('<pds-box display="flex" gap="md"></pds-box>');

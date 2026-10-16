@@ -336,3 +336,63 @@ describe('pds-dropdown-menu accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+// A script that keeps changing what the menu puts back would keep both running forever in
+// microtasks; the menu gives up after a few rounds instead of hanging the page.
+describe('pds-dropdown-menu with a script fighting its trigger ARIA', () => {
+  it('gives up, and keeps the page responsive', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-dropdown-menu>
+        <button slot="trigger" id="trigger">Toggle Menu</button>
+        <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+      </pds-dropdown-menu>
+    `);
+    await page.evaluate(() => {
+      const w = window as unknown as { pineWarnings: string[] };
+      w.pineWarnings = [];
+      const warn = console.warn;
+      console.warn = (...args: unknown[]) => {
+        w.pineWarnings.push(String(args[0]));
+        warn(...args);
+      };
+    });
+
+    await page.$eval('#trigger', (el) => {
+      new MutationObserver(() => {
+        if (el.getAttribute('aria-expanded') !== 'true') el.setAttribute('aria-expanded', 'true');
+      }).observe(el, { attributes: true, attributeFilter: ['aria-expanded'] });
+      el.setAttribute('aria-expanded', 'true');
+    });
+    await page.waitForChanges();
+
+    expect(await page.evaluate(() => 'responsive')).toBe('responsive');
+    expect((await page.evaluate(() => (window as unknown as { pineWarnings: string[] }).pineWarnings)).filter((text) => text.startsWith('pds-dropdown-menu: stopped restoring'))).toHaveLength(1);
+    // The other script wins.
+    expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('true');
+  });
+});
+
+describe('pds-dropdown-menu in ordinary use', () => {
+  it("doesn't warn about restoring its trigger ARIA", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-dropdown-menu>
+        <button slot="trigger" id="trigger">Toggle Menu</button>
+        <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+      </pds-dropdown-menu>
+    `);
+    const warnings: string[] = [];
+    page.on('console', (message) => warnings.push(message.text()));
+
+    for (let i = 0; i < 4; i += 1) {
+      await page.click('#trigger');
+      await page.waitForChanges();
+    }
+    await page.$eval('#trigger', (el) => el.removeAttribute('aria-expanded'));
+    await page.waitForChanges();
+
+    expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
+    expect(warnings.filter((text) => text.includes('stopped restoring'))).toEqual([]);
+  });
+});
