@@ -951,7 +951,7 @@ describe('pds-combobox', () => {
   });
 
   describe('option badges', () => {
-    const setUp = async (value = '') => {
+    const setUp = async (value = '', badge: Record<string, string> = { label: 'New', sentiment: 'accent', icon: 'star' }) => {
       const page = await newE2EPage();
       await page.setContent(`
         <div style="padding: 40px;">
@@ -966,7 +966,9 @@ describe('pds-combobox', () => {
         },
         [
           { id: 'broadcast', text: 'Broadcast' },
-          { id: 'new-thing', text: 'Example new thing', badge: { label: 'New', sentiment: 'accent', icon: 'star' } },
+          { id: 'new-thing', text: 'Example new thing', badge },
+          { id: 'long', text: 'Averyveryverylongcategorynamewithoutanyspaces', badge: { label: 'New' } },
+          { id: 'off', text: 'Unavailable', badge: { label: 'New' }, disabled: true },
         ],
       );
       await page.waitForChanges();
@@ -975,28 +977,63 @@ describe('pds-combobox', () => {
       return page;
     };
 
-    // Edges of the row's text, badge and check, from the row's own end.
-    const layout = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
-      page.evaluate(() => {
-        const row = Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('[role="option"]'))[1] as HTMLElement;
+    // A row's box, and its text, badge and check edges, by the row's position.
+    const layout = (page: Awaited<ReturnType<typeof newE2EPage>>, position: number) =>
+      page.evaluate(index => {
+        const rows = Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('[role="option"]')) as HTMLElement[];
+        const row = rows[index];
         const rowBox = row.getBoundingClientRect();
-        const padding = parseFloat(getComputedStyle(row).paddingInlineEnd);
-        const badge = row.querySelector('.pds-combobox__option-badge')!.getBoundingClientRect();
+        const chip = row.querySelector('.pds-combobox__option-badge') as HTMLElement;
+        const badge = chip.getBoundingClientRect();
+        const text = row.querySelector('.pds-combobox__option-label')!.getBoundingClientRect();
         const check = row.querySelector('.pds-combobox__option-check')?.getBoundingClientRect() ?? null;
-        return { contentEnd: rowBox.right - padding, badgeEnd: badge.right, checkStart: check?.left ?? null, checkEnd: check?.right ?? null };
-      });
+        return {
+          rowHeight: rowBox.height,
+          plainRowHeight: rows[0].getBoundingClientRect().height,
+          rowEnd: rowBox.right,
+          contentEnd: rowBox.right - parseFloat(getComputedStyle(row).paddingInlineEnd),
+          textEnd: text.right,
+          badgeStart: badge.left,
+          badgeEnd: badge.right,
+          badgePaddingStart: getComputedStyle(chip).paddingInlineStart,
+          badgeOpacity: getComputedStyle(chip).opacity,
+          checkStart: check?.left ?? null,
+          checkEnd: check?.right ?? null,
+        };
+      }, position);
 
-    it('puts the badge at the end of the row', async () => {
-      const box = await layout(await setUp());
+    it('puts the badge at the end of the row, without growing it', async () => {
+      const box = await layout(await setUp(), 1);
 
       expect(Math.abs(box.badgeEnd - box.contentEnd)).toBeLessThan(1);
+      expect(box.rowHeight).toBe(box.plainRowHeight);
     });
 
-    it('keeps the selected check after the badge', async () => {
-      const box = await layout(await setUp('new-thing'));
+    it('keeps the selected check after the badge, at its usual distance', async () => {
+      const box = await layout(await setUp('new-thing'), 1);
 
-      expect(box.checkStart).toBeGreaterThan(box.badgeEnd);
+      expect(Math.round(box.checkStart! - box.badgeEnd)).toBe(12);
       expect(Math.abs(box.checkEnd! - box.contentEnd)).toBeLessThan(1);
+    });
+
+    it('keeps a gap between long text and the badge, inside the row', async () => {
+      const box = await layout(await setUp(), 2);
+
+      expect(box.badgeStart - box.textEnd).toBeGreaterThanOrEqual(8);
+      expect(box.badgeEnd).toBeLessThanOrEqual(box.rowEnd);
+    });
+
+    // The chip's own padding draws its border; a brand chip's is the 1px gradient ring.
+    it("leaves the chip's own padding alone", async () => {
+      const box = await layout(await setUp('', { label: 'New', sentiment: 'brand' }), 1);
+
+      expect(box.badgePaddingStart).toBe('1px');
+    });
+
+    it("mutes a disabled option's badge", async () => {
+      const box = await layout(await setUp(), 3);
+
+      expect(box.badgeOpacity).toBe('0.5');
     });
 
     it('has no axe violations with a badge open', async () => {
