@@ -595,6 +595,60 @@ describe('pds-popover', () => {
       expect(await portalContent(page)).toEqual({ shown: true, text: 'Popover content' });
     });
 
+    it('keeps its generated portal id when removed and put back', async () => {
+      const page = await setUp({ attrs: '' });
+      const portalId = await page.$eval('#trigger', (el) => el.getAttribute('aria-controls'));
+
+      // Two operations: the popover is out of the page in between, so it tears down and rebuilds.
+      await page.$eval('pds-popover', (popover) => {
+        (window as unknown as { detached: Element }).detached = popover;
+        popover.remove();
+      });
+      await page.waitForChanges();
+      await page.evaluate(() =>
+        document.querySelector('#second-parent').appendChild((window as unknown as { detached: Element }).detached),
+      );
+      await page.waitForChanges();
+
+      expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-controls'))).toBe(portalId);
+
+      await page.click('#trigger');
+      await page.waitForChanges();
+
+      expect(await portalContent(page, portalId)).toEqual({ shown: true, text: 'Popover content' });
+      expect(await page.evaluate(() => document.querySelectorAll('.pds-popover').length)).toBe(1);
+    });
+
+    // The trigger slot's slotchange still fires while the popover is detached, so the new trigger
+    // is wired before the popover reconnects.
+    it('takes a trigger swapped in while it was out of the page', async () => {
+      const page = await setUp();
+
+      await page.$eval('pds-popover', (popover) => {
+        (window as unknown as { detached: Element }).detached = popover;
+        popover.remove();
+        const newTrigger = document.createElement('button');
+        newTrigger.slot = 'trigger';
+        newTrigger.id = 'new-trigger';
+        newTrigger.textContent = 'New trigger';
+        popover.querySelector('#trigger').replaceWith(newTrigger);
+      });
+      await page.waitForChanges();
+      await page.evaluate(() =>
+        document.querySelector('#second-parent').appendChild((window as unknown as { detached: Element }).detached),
+      );
+      await page.waitForChanges();
+
+      const newTrigger = await page.find('#new-trigger');
+      expect(newTrigger).toEqualAttribute('aria-controls', 'moved-popover-portal');
+
+      await page.click('#new-trigger');
+      await page.waitForChanges();
+
+      expect(await portalContent(page)).toEqual({ shown: true, text: 'Popover content' });
+      expect(await page.find('#new-trigger')).toEqualAttribute('aria-expanded', 'true');
+    });
+
     it('leaves one portal and one focus style, with a stable id, after repeated moves', async () => {
       const page = await setUp({ attrs: '' });
       const portalId = await page.$eval('#trigger', (el) => el.getAttribute('aria-controls'));
