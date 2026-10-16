@@ -1082,6 +1082,11 @@ export namespace Components {
          */
         "name"?: string;
         /**
+          * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'No options found'
+         */
+        "noOptionsFoundLabel": string;
+        /**
           * Options provided externally (for consumer-managed async).
          */
         "options"?: ComboboxOption[];
@@ -4821,6 +4826,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
+          * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'No options found'
+         */
+        "noOptionsFoundLabel"?: string;
+        /**
           * Emitted when the value changes.
          */
         "onPdsComboboxChange"?: (event: PdsComboboxCustomEvent<{ value: string }>) => void;
@@ -6969,6 +6979,7 @@ declare namespace LocalJSX {
         "dropdownWidth": string;
         "dropdownMount": 'host' | 'body';
         "drillInBackLabel": string;
+        "noOptionsFoundLabel": string;
         "flyoutMaxWidth": string;
         "flyoutMinWidth": string;
         "groupDisplay": 'inline' | 'flyout' | 'drill-in';

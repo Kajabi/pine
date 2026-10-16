@@ -112,6 +112,12 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() drillInBackLabel = 'Back';
 
   /**
+   * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'No options found'
+   */
+  @Prop() noOptionsFoundLabel = 'No options found';
+
+  /**
    * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
    * @default '380px'
    */
@@ -2321,7 +2327,7 @@ export class PdsCombobox implements BasePdsProps {
             {hasSlottedEmpty ? (
               <slot name="empty" />
             ) : (
-              <span>No options found</span>
+              <span>{this.noOptionsFoundLabel}</span>
             )}
           </li>
         )}
@@ -2561,7 +2567,7 @@ export class PdsCombobox implements BasePdsProps {
   private renderPanelSearch() {
     return (
       <div key="panel-search" class="pds-combobox__panel-search">
-        <pds-icon name="search" size="small" aria-hidden="true" />
+        <pds-icon name="search" size="regular" aria-hidden="true" />
         <input
           ref={el => (this.panelSearchEl = el as HTMLInputElement)}
           type="text"
@@ -2788,7 +2794,7 @@ export class PdsCombobox implements BasePdsProps {
   // Helper method to render default text content
   private renderDefaultContent() {
     return (
-      <span class="pds-combobox__button-trigger-label">
+      <span class={{ 'pds-combobox__button-trigger-label': true, 'pds-combobox__button-trigger-label--placeholder': !this.selectedLabel }}>
         {this.selectedLabel || this.placeholder}
       </span>
     );
