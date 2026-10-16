@@ -1,5 +1,6 @@
 import { autoUpdate, computePosition, flip, hide, offset, shift, size } from '@floating-ui/dom';
 import type { VirtualElement } from '@floating-ui/dom';
+import type { ChipSentimentType } from '@utils/types';
 
 /**
  * Internal to Pine: the grouped panel behind `pds-combobox`'s `group-display` modes. It owns the
@@ -47,12 +48,25 @@ export function optionIconOf(option: HTMLOptionElement): string | null {
   return iconOf(option);
 }
 
-/** The `pds-chip` sentiments a badge can use. */
-const BADGE_SENTIMENTS = new Set(['accent', 'brand', 'danger', 'info', 'neutral', 'solid', 'subtle', 'success', 'warning']);
+/** Every `pds-chip` sentiment: a sentiment added to `ChipSentimentType` fails to compile until it's listed. */
+const BADGE_SENTIMENTS: Record<ChipSentimentType, true> = {
+  accent: true,
+  brand: true,
+  danger: true,
+  info: true,
+  neutral: true,
+  solid: true,
+  subtle: true,
+  success: true,
+  warning: true,
+};
+
+const isBadgeSentiment = (value: string | null): value is ChipSentimentType =>
+  value !== null && Object.prototype.hasOwnProperty.call(BADGE_SENTIMENTS, value);
 
 export interface OptionBadge {
   label: string;
-  sentiment: string;
+  sentiment: ChipSentimentType;
   /** A Pine icon name, or null. */
   icon: string | null;
 }
@@ -69,7 +83,7 @@ export function optionBadgeOf(option: HTMLOptionElement): OptionBadge | null {
   const icon = option.getAttribute('data-badge-icon');
   return {
     label,
-    sentiment: sentiment !== null && BADGE_SENTIMENTS.has(sentiment) ? sentiment : 'neutral',
+    sentiment: isBadgeSentiment(sentiment) ? sentiment : 'neutral',
     icon: icon !== null && PINE_ICON_NAME.test(icon) ? icon : null,
   };
 }

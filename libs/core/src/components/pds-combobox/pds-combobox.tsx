@@ -2764,6 +2764,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__option--layout': isLayout,
           'pds-combobox__option--chip': isChip,
           'pds-combobox__option--disabled': isDisabled,
+          'pds-combobox__option--with-badge': !isLayout && !isChip && optionBadgeOf(option) !== null,
         }}
         data-option-index={index}
         onMouseDown={this.onOptionMouseDown}
@@ -2787,7 +2788,7 @@ export class PdsCombobox implements BasePdsProps {
   private setBadgeAttributes(optionEl: HTMLOptionElement, badge: unknown) {
     if (typeof badge !== 'object' || badge === null) return;
     const { label, sentiment, icon } = badge as Record<string, unknown>;
-    if (typeof label !== 'string' || label === '') return;
+    if (typeof label !== 'string' || label.trim() === '') return;
     optionEl.setAttribute('data-badge', label);
     if (typeof sentiment === 'string') optionEl.setAttribute('data-badge-sentiment', sentiment);
     if (typeof icon === 'string') optionEl.setAttribute('data-badge-icon', icon);
@@ -2797,20 +2798,25 @@ export class PdsCombobox implements BasePdsProps {
   private renderOptionBadge(option: HTMLOptionElement) {
     const badge = optionBadgeOf(option);
     if (badge === null) return null;
-    return (
+    return [
+      // A pause between the option's text and the badge for screen readers: "Example, New".
+      <span class="visually-hidden">, </span>,
       <pds-chip
         size="sm"
-        sentiment={badge.sentiment as ChipSentimentType}
+        sentiment={badge.sentiment}
         // A Pine icon name only, checked by optionBadgeOf; pds-chip's `icon` also loads URLs.
         icon={badge.icon ?? undefined}
         class="pds-combobox__option-badge"
       >
         {badge.label}
-      </pds-chip>
-    );
+      </pds-chip>,
+    ];
   }
 
-  /** An option's text, after its `data-icon` when it has one. */
+  /**
+   * An option's text, after its `data-icon` when it has one. Beside a badge the text is always
+   * wrapped, so it can shrink and wrap rather than push the badge out of the row.
+   */
   private renderOptionLabel(option: HTMLOptionElement) {
     const icon = optionIconOf(option);
     const label = this.truncate ? (
@@ -2818,7 +2824,9 @@ export class PdsCombobox implements BasePdsProps {
         {this.getOptionLabel(option)}
       </span>
     ) : this.getOptionLabel(option);
-    if (icon === null) return label;
+    if (icon === null) {
+      return optionBadgeOf(option) === null ? label : <span class="pds-combobox__option-label">{label}</span>;
+    }
     return (
       <span class="pds-combobox__option-label">
         {/* `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized. */}
