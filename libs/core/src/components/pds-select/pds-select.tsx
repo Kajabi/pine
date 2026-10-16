@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
@@ -19,6 +20,11 @@ export class PdsSelect {
   private _type: 'select-one' | 'select-multiple' = 'select-one';
 
   @Element() el: HTMLPdsSelectElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
 
   /**
    * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -135,6 +141,7 @@ export class PdsSelect {
   }
 
   connectedCallback() {
+    this.hostKeeper.connect(this.el);
     // Initialize ElementInternals for form association (only once per element instance)
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
@@ -364,8 +371,11 @@ export class PdsSelect {
   render() {
     const hasAction = this.el.querySelector('[slot="action"]') !== null;
 
+    const hostClass = this.classNames();
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host aria-disabled={this.disabled ? 'true' : null} class={this.classNames()} has-action={hasAction && !this.hideLabel ? 'true' : null}>
+      <Host aria-disabled={this.disabled ? 'true' : null} class={hostClass} has-action={hasAction && !this.hideLabel ? 'true' : null}>
         <div class="pds-select">
           {!this.hideLabel && (
             <div class="pds-select__label-wrapper">

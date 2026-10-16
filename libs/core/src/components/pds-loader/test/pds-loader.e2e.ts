@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-loader', () => {
@@ -152,5 +153,16 @@ describe('pds-loader accessibility', () => {
     await page.setContent('<pds-loader is-loading="true"></pds-loader>');
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+// A Turbo morph makes the host match the server's HTML, which has none of the classes and styles
+// pds-loader wrote, including the ones its CSS selects on.
+describe('pds-loader after its host classes and styles are stripped', () => {
+  it('keeps its styling', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader class="consumer" is-loading="false"></pds-loader>');
+
+    await expectStylingSurvivesStrip(page, 'pds-loader');
   });
 });

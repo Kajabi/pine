@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Watch } 
 import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
-import { inheritAriaAttributes } from '@utils/attributes';
+import { inheritAriaAttributes, HostStylingKeeper } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 
 /**
@@ -20,6 +20,11 @@ export class PdsSwitch {
   private readonly _type = 'checkbox' as const;
 
   @Element() el: HTMLPdsSwitchElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
 
   @State() private hasLabelSlot = false;
 
@@ -111,6 +116,7 @@ export class PdsSwitch {
   };
 
   connectedCallback() {
+    this.hostKeeper.connect(this.el);
     // Initialize ElementInternals for form association (only once per element instance)
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
@@ -166,8 +172,11 @@ export class PdsSwitch {
   };
 
   render() {
+    const hostClass = this.switchClassNames();
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
+      <Host class={hostClass} aria-disabled={this.disabled ? 'true' : null}>
         <label htmlFor={this.componentId}>
           <input
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage, this.errorMessage)}

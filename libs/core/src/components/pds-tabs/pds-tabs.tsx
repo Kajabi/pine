@@ -1,4 +1,5 @@
 import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 
   /**
  * @slot tabs - Content is placed within the `div[role="tablist"]` element as children
@@ -15,6 +16,15 @@ export class PdsTabs {
   private tabPanels;
 
   @Element() el: HTMLPdsTabsElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
 
   /**
    * Sets the aria-label attached to the tablist element
@@ -230,8 +240,11 @@ export class PdsTabs {
       </div>
     );
 
+    const hostClass = this.classNames();
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host active-tab-name={this.activeTabName} class={this.classNames()} id={this.componentId}>
+      <Host active-tab-name={this.activeTabName} class={hostClass} id={this.componentId}>
         {tabList}
         <slot name="tabpanels" />
       </Host>

@@ -1,4 +1,5 @@
 import { Component, Element, Host, h, Prop, Watch } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 
 /**
@@ -13,6 +14,15 @@ import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 })
 export class PdsLoader {
   @Element() el: HTMLPdsLoaderElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
 
   /**
    * If false, the loader will be hidden.
@@ -71,8 +81,11 @@ export class PdsLoader {
   };
 
   render() {
+    const hostClass = `pds-loader ${this.isLoading ? '' : 'pds-loader--hidden'}`;
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host class={`pds-loader ${this.isLoading ? '' : 'pds-loader--hidden'}`} aria-hidden={!this.isLoading} aria-busy={this.isLoading} aria-live="polite">
+      <Host class={hostClass} aria-hidden={!this.isLoading} aria-busy={this.isLoading} aria-live="polite">
         {this.variant === 'spinner' && (
           <div class="pds-loader--spinner">
             <svg style={this.getSvgStyle()} viewBox="0 0 200 200" fill="none" part="loader-svg">

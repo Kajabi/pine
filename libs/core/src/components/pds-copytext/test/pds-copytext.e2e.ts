@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 const mockClipboardPermission = async () => {
@@ -143,5 +144,16 @@ describe('pds-copytext accessibility', () => {
     });
 
     expect(tooltipText).toContain('This is a very long value that will definitely overflow the container');
+  });
+});
+
+// A Turbo morph makes the host match the server's HTML, which has none of the classes and styles
+// pds-copytext wrote, including the ones its CSS selects on.
+describe('pds-copytext after its host classes and styles are stripped', () => {
+  it('keeps its styling', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-copytext class="consumer" value="copy me" border full-width></pds-copytext>');
+
+    await expectStylingSurvivesStrip(page, 'pds-copytext');
   });
 });

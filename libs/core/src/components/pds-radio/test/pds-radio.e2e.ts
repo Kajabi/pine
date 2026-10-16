@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 import { expectRespectsReducedMotion } from '../../../utils/test/reduced-motion';
 
@@ -178,5 +179,16 @@ describe('pds-radio reduced motion', () => {
       '<pds-radio component-id="opt-1" label="Option one"><span slot="image"></span></pds-radio>',
     );
     await expectRespectsReducedMotion(page, 'pds-radio', '.pds-radio__image-container');
+  });
+});
+
+// A Turbo morph makes the host match the server's HTML, which has none of the classes and styles
+// pds-radio wrote, including the ones its CSS selects on.
+describe('pds-radio after its host classes and styles are stripped', () => {
+  it('keeps its styling', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-radio class="consumer" component-id="radio" label="Radio" invalid has-border></pds-radio>');
+
+    await expectStylingSurvivesStrip(page, 'pds-radio');
   });
 });
