@@ -37,6 +37,11 @@ export class PdsPopover {
   private hasLoaded = false;
 
   /**
+   * A popover without a componentId keeps one generated portal id, even when the portal is rebuilt
+   */
+  private generatedPortalId: string | null = null;
+
+  /**
    * Reference to the trigger element
    */
   private triggerEl: HTMLElement | null = null;
@@ -243,25 +248,47 @@ export class PdsPopover {
     }
   };
 
-  // Moving a popover (Idiomorph during a Turbo morph, or a framework reparenting it) disconnects and
-  // reconnects it, and componentDidLoad doesn't run again. Rebuild what disconnectedCallback tore down.
+  // componentDidLoad doesn't run again when a popover comes back, so rebuild whatever
+  // disconnectedCallback tore down. Each step is a no-op when nothing was.
   connectedCallback() {
     if (!this.hasLoaded) return;
+
+    // The trigger may have been swapped while the popover was out of the page.
+    if (this.triggerEl != null && !this.el.contains(this.triggerEl)) {
+      const triggerSlot = this.el.shadowRoot?.querySelector('slot[name="trigger"]');
+      if (triggerSlot) this.handleTriggerSlotChange({ target: triggerSlot } as unknown as Event);
+    }
 
     this.isComponentMounted = true;
     this.createPortal();
     this.triggerEl?.addEventListener('click', this.handleTriggerClick);
     this.observeTrigger();
     this.linkTriggerToPortal();
+
+    // Still open after a move: the trigger moved, so the portal follows it.
+    if (this.active) {
+      requestAnimationFrame(() => this.handlePopoverPositioning());
+    }
   }
 
   disconnectedCallback() {
+    // Moved in one operation (Idiomorph during a Turbo morph, or a framework reparenting it), the
+    // popover is already back in the page. Its portal is in <body>, untouched, so it stays open,
+    // with focus where it was.
+    if (this.el.isConnected) return;
+
     this.isComponentMounted = false;
 
-    // Open, the content sits in the portal; put it back before the portal goes.
+    // Open, the content sits in the portal; put it back before the portal goes. Only listeners on
+    // the popover itself hear the close event now, but those are the ones mirroring its state.
     if (this.active) {
       this.restorePortalContent();
       this.active = false;
+      this.linkTriggerToPortal();
+      this.pdsPopoverClose.emit({
+        componentId: this.componentId,
+        popoverType: this.popoverType,
+      });
     }
 
     // Clean up trigger click event listener
@@ -318,8 +345,8 @@ export class PdsPopover {
 
     // Generate unique ID
     if (!this.componentId) {
-      const suffix = PdsPopover.instanceCounter++;
-      this.portalEl.id = `pds-popover-portal-${suffix}`;
+      this.generatedPortalId ??= `pds-popover-portal-${PdsPopover.instanceCounter++}`;
+      this.portalEl.id = this.generatedPortalId;
     } else {
       this.portalEl.id = `${this.componentId}-portal`;
     }
