@@ -1,6 +1,7 @@
-import { Component, Prop, h, Host } from '@stencil/core';
+import { Component, Element, Prop, h, Host } from '@stencil/core';
 
 import { BoxSpacingType } from '../../utils/types';
+import { classNamesOf, HostStyling, keepHostStyling } from '../../utils/attributes';
 
 /**
  * @lightDom host-only
@@ -10,6 +11,20 @@ import { BoxSpacingType } from '../../utils/types';
   styleUrl: 'pds-row.scss',
 })
 export class PdsRow {
+  @Element() el: HTMLPdsRowElement;
+
+  private hostStyling: HostStyling = { classes: [], styles: {} };
+  private hostObserver: MutationObserver | null = null;
+
+  connectedCallback() {
+    this.hostObserver ??= keepHostStyling(this.el, () => this.hostStyling);
+  }
+
+  disconnectedCallback() {
+    this.hostObserver?.disconnect();
+    this.hostObserver = null;
+  }
+
   /**
    * Defines the vertical alignment of the row items.
    * @defaultValue start
@@ -109,6 +124,8 @@ export class PdsRow {
         'min-height': this.minHeight,
       }),
     };
+
+    this.hostStyling = { classes: classNamesOf(`pds-row ${rowClasses}`), styles: rowInlineStyles };
 
     return <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}></Host>;
   }

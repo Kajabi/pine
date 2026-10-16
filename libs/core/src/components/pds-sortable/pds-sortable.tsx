@@ -1,6 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import type { SortableEvent } from 'sortablejs';
 import { SortableType } from './sortable-interface';
+import { classNamesOf, keepHostStyling } from '../../utils/attributes';
 import Sortable from 'sortablejs';
 
 /**
@@ -73,6 +74,17 @@ export class PdsSortable {
     }
 
     return classNames.join('  ');
+  }
+
+  private hostObserver: MutationObserver | null = null;
+
+  connectedCallback() {
+    this.hostObserver ??= keepHostStyling(this.el, () => ({ classes: classNamesOf(this.classNames()), styles: {} }));
+  }
+
+  disconnectedCallback() {
+    this.hostObserver?.disconnect();
+    this.hostObserver = null;
   }
 
   componentDidLoad() {

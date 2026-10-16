@@ -13,6 +13,58 @@ export const setAttributesIfChanged = (el: Element, attributes: Record<string, s
 };
 
 /**
+ * The classes and style properties a component renders onto its own host.
+ */
+export type HostStyling = { classes: string[]; styles: Record<string, string> };
+
+// Stencil's default `hydratedFlag` class, which Pine doesn't change.
+const HYDRATED_CLASS = 'hydrated';
+
+/**
+ * Splits a rendered class string into its class names.
+ */
+export const classNamesOf = (classes: string) => classes.split(/\s+/).filter(Boolean);
+
+/**
+ * Puts back any of `expected`'s classes or style properties that are missing from `el`. It only
+ * adds what's missing, never rewrites a value that's there, because browsers normalize some style
+ * values (`flex: 1` reads back as `1 1 0%`): comparing values would rewrite them forever.
+ * @param el - Host element
+ * @param expected - Classes and style properties the component rendered
+ */
+export const restoreHostStyling = (el: HTMLElement, { classes, styles }: HostStyling) => {
+  const missing = classes.filter((name) => !el.classList.contains(name));
+  if (missing.length > 0) el.classList.add(...missing);
+
+  Object.entries(styles).forEach(([name, value]) => {
+    if (value && el.style.getPropertyValue(name) === '') el.style.setProperty(name, value);
+  });
+};
+
+/**
+ * Watches a host-only component's own `class` and `style` attributes and puts back what it rendered
+ * when something strips them. A Turbo morph does: it makes the host match the server's HTML, which
+ * carries the component's attributes but not the classes and styles it wrote, and Stencil won't
+ * write them again because it diffs against its previous render, not the live DOM.
+ * @param el - Host element
+ * @param expected - Reads what the component last rendered
+ * @returns The observer, to disconnect when the component is removed; `null` without MutationObserver
+ */
+export const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
+  if (typeof MutationObserver === 'undefined') return null;
+
+  const observer = new MutationObserver((records) => {
+    const styling = expected();
+    // Stencil hides a component until it has its `hydrated` class, so a strip that took it would
+    // hide the host. Put it back only if it was there, so this never runs ahead of Stencil.
+    const wasHydrated = records.some((record) => record.oldValue != null && classNamesOf(record.oldValue).includes(HYDRATED_CLASS));
+    restoreHostStyling(el, wasHydrated ? { ...styling, classes: [...styling.classes, HYDRATED_CLASS] } : styling);
+  });
+  observer.observe(el, { attributes: true, attributeFilter: ['class', 'style'], attributeOldValue: true });
+  return observer;
+};
+
+/**
  * Inherit attributes from the host element
  * @param el - Host element
  * @param attributes - Array of attributes to inherit

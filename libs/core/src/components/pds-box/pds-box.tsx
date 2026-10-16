@@ -1,7 +1,8 @@
-import { Component, h, Host, Prop } from '@stencil/core';
+import { Component, Element, h, Host, Prop } from '@stencil/core';
 
 import { BoxColumnType, BoxSpacingType, BoxShadowSizeType } from '../../utils/types';
 import { normalizeColorValue } from '../../utils/utils';
+import { classNamesOf, HostStyling, keepHostStyling } from '../../utils/attributes';
 
 /**
  * @lightDom host-only
@@ -11,6 +12,20 @@ import { normalizeColorValue } from '../../utils/utils';
   styleUrl: 'pds-box.scss',
 })
 export class PdsBox {
+  @Element() el: HTMLPdsBoxElement;
+
+  private hostStyling: HostStyling = { classes: [], styles: {} };
+  private hostObserver: MutationObserver | null = null;
+
+  connectedCallback() {
+    this.hostObserver ??= keepHostStyling(this.el, () => this.hostStyling);
+  }
+
+  disconnectedCallback() {
+    this.hostObserver?.disconnect();
+    this.hostObserver = null;
+  }
+
   /**
    * Defines how items within the box are aligned.
    * @defaultValue stretch
@@ -860,6 +875,8 @@ export class PdsBox {
       ...(this.minWidth && { '--sizing-min-width-box': this.minWidth }),
       ...(this.flex && !['none', 'grow', 'shrink'].includes(this.flex) && { 'flex': this.flex }),
     };
+
+    this.hostStyling = { classes: classNamesOf(boxClasses), styles: boxInlineStyles };
 
     return (
       <Host class={boxClasses} style={boxInlineStyles}>

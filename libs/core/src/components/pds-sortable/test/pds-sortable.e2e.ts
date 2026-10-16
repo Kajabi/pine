@@ -10,6 +10,23 @@ describe('pds-sortable', () => {
     expect(element).toHaveClass('hydrated');
   });
 
+  // A Turbo morph makes the host match the server's HTML: its attributes stay, but its classes don't.
+  it('puts its classes back after they are stripped', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-sortable class="consumer" border dividers></pds-sortable>');
+
+    await page.$eval('pds-sortable', (el) => el.setAttribute('class', 'consumer'));
+    await page.waitForChanges();
+
+    expect(await page.find('pds-sortable')).toHaveClasses([
+      'consumer',
+      'hydrated',
+      'pds-sortable',
+      'pds-sortable--bordered',
+      'pds-sortable--divided',
+    ]);
+  });
+
   it('sets sortable item show-handle prop to true when handleType is set to "handle"', async () => {
     const page = await newE2EPage();
 
