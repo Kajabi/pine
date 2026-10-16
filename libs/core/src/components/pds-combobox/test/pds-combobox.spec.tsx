@@ -3277,6 +3277,42 @@ describe('pds-combobox', () => {
       expect(shadedRows(root)).toEqual(['Email']);
     });
 
+    it('says the row the first arrow shows, since the active descendant already pointed at it', async () => {
+      const { page, component, root } = await openDrillIn();
+      const status = () => root.querySelector('[role="status"]')!.textContent;
+      root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+      expect(status()).toBe('');
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(status()).toBe('Email');
+
+      // Moving on is announced through the active descendant, so the status clears.
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(status()).toBe('');
+    });
+
+    it('shades group rows on hover for a mouse or pen, not after a touch', async () => {
+      const { page, root } = await openDrillIn();
+      const list = () => root.querySelector('[role="tree"]')!;
+      const pointer = (pointerType: string) => {
+        const event = new Event('pointerdown', { bubbles: true });
+        Object.defineProperty(event, 'pointerType', { value: pointerType });
+        list().dispatchEvent(event);
+      };
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(true);
+
+      pointer('touch');
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(false);
+
+      pointer('mouse');
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(true);
+    });
+
     it('shows the row the pointer came back to on the first arrow, so the keys carry on from it', async () => {
       const { page, component, root } = await openDrillIn();
       component.openGroup = groupNamed(component, 'Email');
