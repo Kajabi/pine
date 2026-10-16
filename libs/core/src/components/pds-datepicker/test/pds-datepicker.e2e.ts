@@ -1703,24 +1703,38 @@ describe('pds-datepicker', () => {
     });
 
     // Hover changes a day's fill, never its shape: a range end stays square where it meets the band,
-    // and a day at the edge of a week stays rounded on that edge.
+    // and a day at the edge of a week stays rounded on that edge. Corners: start-start, start-end,
+    // end-end, end-start (logical, so this reads the same in RTL).
+    const corners = async (page: E2EPage, iso: string) => {
+      const style = await (await day(page, iso)).getComputedStyle();
+      const round = (value: string) => (parseFloat(value) > 0 ? 'round' : 'square');
+      return [style.borderStartStartRadius, style.borderStartEndRadius, style.borderEndEndRadius, style.borderEndStartRadius].map(round);
+    };
+
     it.each([
-      ['the range end', '2026-10-13'],
-      ['a band day at the end of a week', '2026-09-19'],
-      ['a band day at the start of a week', '2026-09-20'],
-    ])('keeps the shape of %s on hover', async (_, iso) => {
+      ['the range end', '2026-10-13', ['square', 'round', 'round', 'square']],
+      ['a band day at the end of a week', '2026-09-19', ['square', 'round', 'round', 'square']],
+      ['a band day at the start of a week', '2026-09-20', ['round', 'square', 'square', 'round']],
+    ])('keeps the shape of %s on hover', async (_, iso, shape) => {
       const page = await setup(RANGE);
       await openWithTrigger(page);
-      const corners = async () => {
-        const style = await (await day(page, iso)).getComputedStyle();
-        return [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius];
-      };
-      const before = await corners();
+      expect(await corners(page, iso)).toEqual(shape);
 
       await (await day(page, iso)).hover();
       await page.waitForChanges();
 
-      expect(await corners()).toEqual(before);
+      expect(await corners(page, iso)).toEqual(shape);
+    });
+
+    it('keeps the hovered end of a range being picked square where it meets the band', async () => {
+      const page = await setup(RANGE);
+      await openWithTrigger(page);
+
+      await (await day(page, '2026-10-05')).click();
+      await (await day(page, '2026-10-07')).hover();
+      await page.waitForChanges();
+
+      expect(await corners(page, '2026-10-07')).toEqual(['square', 'round', 'round', 'square']);
     });
 
     it('moves the start when a day before it is picked', async () => {
