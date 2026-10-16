@@ -1,6 +1,9 @@
 import { Component, h, Host, Prop, Element, State } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
+/**
+ * @lightDom renders-markup
+ */
 @Component({
   tag: 'pds-modal-content',
   styleUrl: 'pds-modal-content.scss',

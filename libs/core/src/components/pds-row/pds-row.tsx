@@ -2,6 +2,9 @@ import { Component, Prop, h, Host } from '@stencil/core';
 
 import { BoxSpacingType } from '../../utils/types';
 
+/**
+ * @lightDom host-only
+ */
 @Component({
   tag: 'pds-row',
   styleUrl: 'pds-row.scss',
