@@ -1,5 +1,6 @@
 import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
 import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 import { normalizeColorValue } from '../../utils/utils';
@@ -29,6 +30,11 @@ const SENTIMENT_DOT_COLORS: Record<string, string> = {
 })
 export class PdsChip {
   @Element() el: HTMLPdsChipElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
 
   /** The label span that clips; the overflow anchor for the truncation tooltip. */
   private labelTextEl?: HTMLElement;
@@ -136,6 +142,7 @@ export class PdsChip {
   }
 
   disconnectedCallback() {
+    this.hostKeeper.disconnect();
     this.destroyTruncationTooltip();
   }
 
@@ -336,8 +343,12 @@ export class PdsChip {
   }
 
   render() {
+    const hostClass = this.classNames();
+    const hostStyles = this.hostStyles;
+    this.hostKeeper.record(hostClass, hostStyles);
+
     return (
-      <Host class={this.classNames()} id={this.componentId} style={this.hostStyles}>
+      <Host class={hostClass} id={this.componentId} style={hostStyles}>
         {this.setChipContent()}
         {this.effectiveVariant === 'tag' && this.renderCloseButton()}
       </Host>

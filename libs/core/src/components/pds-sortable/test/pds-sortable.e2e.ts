@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-sortable', () => {
@@ -125,5 +126,16 @@ describe('pds-sortable accessibility', () => {
     `);
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
+// pds-sortable-item wrote, including the ones its CSS selects on.
+describe('pds-sortable-item after its host classes and styles are stripped', () => {
+  it('keeps its styling', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-sortable><pds-sortable-item class="consumer">Item</pds-sortable-item></pds-sortable>');
+
+    await expectStylingSurvivesStrip(page, 'pds-sortable-item');
   });
 });

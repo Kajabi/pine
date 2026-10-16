@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import { assignDescription, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -16,6 +17,7 @@ export class PdsRadio {
   private readonly _type = 'radio' as const;
 
   @Element() el: HTMLPdsRadioElement;
+  private hostKeeper = new HostStylingKeeper();
 
   @State() private _hasImage = false;
 
@@ -140,8 +142,13 @@ export class PdsRadio {
   }
 
   connectedCallback() {
+    this.hostKeeper.connect(this.el);
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
   }
 
   // Discards stale hidden label/message/wrapper copies left by a page-cache (Turbo, bfcache) reconnect, rescuing real [slot="image"] content stranded inside a stale image-container first.
@@ -201,8 +208,11 @@ export class PdsRadio {
       )
     ];
 
+    const hostClass = this.classNames();
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host class={this.classNames()}>
+      <Host class={hostClass}>
         {this.hasImage() && (
           <div class="pds-radio__image-container" part="image-container">
             <slot name="image" onSlotchange={() => (this._hasImage = this.hasImageSlot())} />
