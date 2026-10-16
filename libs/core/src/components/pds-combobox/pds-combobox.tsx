@@ -560,7 +560,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private onDrillAnimationEnd = (event: AnimationEvent) => {
     // Only the slide's own end: slotted consumer content can animate inside the list too.
-    if (event.animationName?.startsWith('pds-combobox-drill')) this.drillDirection = null;
+    if (event.animationName === 'pds-combobox-drill') this.drillDirection = null;
   };
 
   @Watch('isOpen')
