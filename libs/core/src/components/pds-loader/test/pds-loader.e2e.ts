@@ -165,4 +165,12 @@ describe('pds-loader after its host classes and styles are stripped', () => {
 
     await expectStylingSurvivesStrip(page, 'pds-loader', { removeAttributes: ['aria-hidden', 'aria-busy', 'aria-live'] });
   });
+
+  it('keeps aria-busy while loading', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader class="consumer" is-loading="true"></pds-loader>');
+    expect(await page.find('pds-loader')).toEqualAttribute('aria-busy', 'true');
+
+    await expectStylingSurvivesStrip(page, 'pds-loader', { removeAttributes: ['aria-hidden', 'aria-busy', 'aria-live'] });
+  });
 });

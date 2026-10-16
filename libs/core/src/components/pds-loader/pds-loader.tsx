@@ -82,7 +82,12 @@ export class PdsLoader {
 
   render() {
     const hostClass = `pds-loader ${this.isLoading ? '' : 'pds-loader--hidden'}`;
-    const hostAttributes = { 'aria-hidden': !this.isLoading, 'aria-busy': this.isLoading, 'aria-live': 'polite' };
+    // Explicit 'true': a boolean `true` lands as an empty value, which ARIA reads as unset.
+    const hostAttributes = {
+      'aria-hidden': this.isLoading ? null : 'true',
+      'aria-busy': this.isLoading ? 'true' : null,
+      'aria-live': 'polite',
+    };
     this.hostKeeper.record(hostClass, {}, hostAttributes);
 
     return (
