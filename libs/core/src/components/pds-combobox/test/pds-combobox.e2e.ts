@@ -949,4 +949,61 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
   });
+
+  describe('option badges', () => {
+    const setUp = async (value = '') => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="badges" label="Category" trigger="button" mode="select-only"
+            dropdown-width="300px" value="${value}"></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        [
+          { id: 'broadcast', text: 'Broadcast' },
+          { id: 'new-thing', text: 'Example new thing', badge: { label: 'New', sentiment: 'accent', icon: 'star' } },
+        ],
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    // Edges of the row's text, badge and check, from the row's own end.
+    const layout = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        const row = Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('[role="option"]'))[1] as HTMLElement;
+        const rowBox = row.getBoundingClientRect();
+        const padding = parseFloat(getComputedStyle(row).paddingInlineEnd);
+        const badge = row.querySelector('.pds-combobox__option-badge')!.getBoundingClientRect();
+        const check = row.querySelector('.pds-combobox__option-check')?.getBoundingClientRect() ?? null;
+        return { contentEnd: rowBox.right - padding, badgeEnd: badge.right, checkStart: check?.left ?? null, checkEnd: check?.right ?? null };
+      });
+
+    it('puts the badge at the end of the row', async () => {
+      const box = await layout(await setUp());
+
+      expect(Math.abs(box.badgeEnd - box.contentEnd)).toBeLessThan(1);
+    });
+
+    it('keeps the selected check after the badge', async () => {
+      const box = await layout(await setUp('new-thing'));
+
+      expect(box.checkStart).toBeGreaterThan(box.badgeEnd);
+      expect(Math.abs(box.checkEnd! - box.contentEnd)).toBeLessThan(1);
+    });
+
+    it('has no axe violations with a badge open', async () => {
+      const page = await setUp();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
 });
