@@ -1,4 +1,4 @@
-import { inheritAttributes, inheritAriaAttributes, setAttributesIfChanged } from '../attributes';
+import { classNamesOf, inheritAttributes, inheritAriaAttributes, restoreHostStyling, setAttributesIfChanged } from '../attributes';
 
 describe('inheritAttributes()', () => {
   it('should create an attribute inheritance object', () => {
@@ -94,5 +94,35 @@ describe('setAttributesIfChanged()', () => {
     expect(el.getAttribute('aria-controls')).toBe('panel');
     expect(setAttribute).toHaveBeenCalledTimes(2);
     expect(setAttribute).not.toHaveBeenCalledWith('aria-haspopup', 'menu');
+  });
+});
+
+describe('classNamesOf()', () => {
+  it('splits a rendered class string, dropping blanks', () => {
+    expect(classNamesOf('\n  pds-box  pds-box-gap-md\n ')).toEqual(['pds-box', 'pds-box-gap-md']);
+  });
+});
+
+describe('restoreHostStyling()', () => {
+  it('adds missing classes and style properties, and keeps the consumer\'s own', () => {
+    const el = document.createElement('div');
+    el.className = 'consumer';
+
+    restoreHostStyling(el, { classes: ['pds-box', 'pds-box-gap-md'], styles: { '--color-background-box': 'red' } });
+
+    expect(el.className).toBe('consumer pds-box pds-box-gap-md');
+    expect(el.style.getPropertyValue('--color-background-box')).toBe('red');
+  });
+
+  // Browsers normalize some values, so rewriting ones that differ would never settle.
+  it('leaves a style property that is present alone, and skips empty values', () => {
+    const el = document.createElement('div');
+    el.style.setProperty('min-height', '20px');
+    const setProperty = jest.spyOn(el.style, 'setProperty');
+
+    restoreHostStyling(el, { classes: [], styles: { 'min-height': '40px', '--row-gap-x': '' } });
+
+    expect(setProperty).not.toHaveBeenCalled();
+    expect(el.style.getPropertyValue('min-height')).toBe('20px');
   });
 });
