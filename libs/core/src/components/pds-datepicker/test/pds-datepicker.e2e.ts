@@ -1702,6 +1702,27 @@ describe('pds-datepicker', () => {
       expect(await fieldValue(page)).toBe('2026-10-05 – 2026-10-09');
     });
 
+    // Hover changes a day's fill, never its shape: a range end stays square where it meets the band,
+    // and a day at the edge of a week stays rounded on that edge.
+    it.each([
+      ['the range end', '2026-10-13'],
+      ['a band day at the end of a week', '2026-09-19'],
+      ['a band day at the start of a week', '2026-09-20'],
+    ])('keeps the shape of %s on hover', async (_, iso) => {
+      const page = await setup(RANGE);
+      await openWithTrigger(page);
+      const corners = async () => {
+        const style = await (await day(page, iso)).getComputedStyle();
+        return [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius];
+      };
+      const before = await corners();
+
+      await (await day(page, iso)).hover();
+      await page.waitForChanges();
+
+      expect(await corners()).toEqual(before);
+    });
+
     it('moves the start when a day before it is picked', async () => {
       const page = await setup(RANGE);
       const change = await page.spyOnEvent('pdsDatepickerChange');
