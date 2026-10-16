@@ -155,8 +155,13 @@
   .pds-combobox__group-row--open > .pds-combobox__group-row-trigger,
   .pds-combobox__group-row--has-selection > .pds-combobox__group-row-trigger,
   .pds-combobox__group-row--highlighted > .pds-combobox__group-row-trigger,
-  .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger,
-  .pds-combobox__group-row-trigger:hover {
+  .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger {
+    background: var(--pine-color-background-muted);
+  }
+
+  // Only for a pointer that can hover (`pointerCanHover`): a touch browser keeps a tapped row hovered,
+  // so tapping the row back would leave the row that takes its place shaded.
+  .pds-combobox__listbox--pointer-hover .pds-combobox__group-row-trigger:hover {
     background: var(--pine-color-background-muted);
   }
 

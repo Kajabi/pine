@@ -3218,6 +3218,138 @@ describe('pds-combobox', () => {
       expect(component.drillDirection).toBeNull();
     });
 
+    // A shaded row reads as picked, so drill-in shades none: not the group holding the selection, and
+    // not the row a pointer user comes back to. The keyboard's place still shows.
+    const shadedRows = (root: ShadowRoot) =>
+      Array.from(root.querySelectorAll('.pds-combobox__group-row'))
+        .filter(row => row.classList.contains('pds-combobox__group-row--has-selection') || row.classList.contains('pds-combobox__group-row--highlighted'))
+        .map(row => row.querySelector('.pds-combobox__group-row-label')!.textContent);
+
+    it('shades no group row after the pointer goes back, even the one holding the selection', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" value="email-send"');
+      component.openGroup = null;
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual([]);
+
+      const emailRow = root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement;
+      emailRow.dispatchEvent(new Event('mouseenter'));
+      emailRow.click();
+      await page.waitForChanges();
+      (root.querySelector('.pds-combobox__group-back-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBeNull();
+      expect(shadedRows(root)).toEqual([]);
+      expect(root.querySelector('.pds-combobox__group-row--keyboard')).toBeNull();
+    });
+
+    it('still shows the group the keys come back to', async () => {
+      const { page, component, root } = await openDrillIn();
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+      await page.waitForChanges();
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true }));
+      await page.waitForChanges();
+
+      expect(shadedRows(root)).toEqual(['Tag']);
+      expect(root.querySelector('.pds-combobox__group-row--keyboard .pds-combobox__group-row-label')?.textContent).toBe('Tag');
+    });
+
+    it('shows the first row on the first arrow after a click opens the panel, rather than skipping it', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="drill" group-display="drill-in" mode="select-only" trigger="button"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const root = page.root!.shadowRoot!;
+      (page.root as HTMLPdsComboboxElement).options = actions;
+      await page.waitForChanges();
+      (root.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual([]);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual(['Tag']);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual(['Email']);
+    });
+
+    it('says the row the first arrow shows, since the active descendant already pointed at it', async () => {
+      const { page, component, root } = await openDrillIn();
+      const status = () => root.querySelector('[role="status"]')!.textContent;
+      root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+      expect(status()).toBe('');
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(status()).toBe('Email');
+
+      // Moving on is announced through the active descendant, so the status clears.
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(status()).toBe('');
+    });
+
+    it('shades group rows on hover for a mouse or pen, not after a touch', async () => {
+      const { page, root } = await openDrillIn();
+      const list = () => root.querySelector('[role="tree"]')!;
+      const pointer = (pointerType: string) => {
+        const event = new Event('pointerdown', { bubbles: true });
+        Object.defineProperty(event, 'pointerType', { value: pointerType });
+        list().dispatchEvent(event);
+      };
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(true);
+
+      pointer('touch');
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(false);
+
+      pointer('mouse');
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(true);
+    });
+
+    it('shows the row the pointer came back to on the first arrow, so the keys carry on from it', async () => {
+      const { page, component, root } = await openDrillIn();
+      component.openGroup = groupNamed(component, 'Email');
+      await page.waitForChanges();
+      (root.querySelector('.pds-combobox__group-back-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual([]);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual(['Email']);
+    });
+
+    it("doesn't keep the row back shaded for the pointer", async () => {
+      const { page, component, root } = await openDrillIn();
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      root.querySelector('.pds-combobox__group-back-trigger')!.dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+      expect(root.querySelector('.pds-combobox__group-back')!.classList.contains('pds-combobox__group-back--highlighted')).toBe(false);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(root.querySelector('.pds-combobox__group-back')!.classList.contains('pds-combobox__group-back--highlighted')).toBe(true);
+    });
+
+    it('shades no row for the selection when a flyout drills in for lack of room', async () => {
+      const { page, component, root } = await openDrillIn('group-display="flyout" mode="select-only" value="email-send"');
+      component.flyoutFallback = true;
+      component.openGroup = null;
+      await page.waitForChanges();
+
+      expect(shadedRows(root)).toEqual([]);
+    });
+
     it('slides out when the keys leave a group too', async () => {
       const { page, component } = await openDrillIn();
       component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
@@ -3334,6 +3466,8 @@ describe('pds-combobox', () => {
         await page.waitForChanges();
       };
       component.setInitialHighlightedIndex();
+      // Opened from the keyboard, as ArrowDown on the trigger does, so the first row already shows.
+      component.keyboardNavigating = true;
       await page.waitForChanges();
 
       await press('ArrowDown');
@@ -3388,12 +3522,21 @@ describe('pds-combobox', () => {
 
       rows()[1].querySelector('.pds-combobox__group-row-trigger')!.dispatchEvent(new Event('mouseenter'));
       await page.waitForChanges();
-      expect(rows()[1].classList.contains('pds-combobox__group-row--highlighted')).toBe(true);
+      // The keys carry on from the row under the pointer, which only `:hover` shades: a class would
+      // keep it shaded once the pointer moves on.
+      expect(component.highlightedGroup === groupNamed(component, 'Email')).toBe(true);
+      expect(rows()[1].classList.contains('pds-combobox__group-row--highlighted')).toBe(false);
       expect(rows()[1].classList.contains('pds-combobox__group-row--keyboard')).toBe(false);
+
+      // The first arrow shows the row under the pointer; the next moves on from it.
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(rows()[1].classList.contains('pds-combobox__group-row--keyboard')).toBe(true);
 
       component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
       await page.waitForChanges();
       expect(rows()[0].classList.contains('pds-combobox__group-row--keyboard')).toBe(true);
+      expect(rows()[0].classList.contains('pds-combobox__group-row--highlighted')).toBe(true);
     });
 
     it('follows the open group to the optgroup an options reload rebuilds, and resets the highlight', async () => {
@@ -3854,6 +3997,8 @@ describe('pds-combobox', () => {
 
       it('drills into a disabled group from the keyboard', async () => {
         const { page, component } = await openList(actions, 'mode="select-only" trigger="button" group-display="drill-in"');
+        // Opened from the keyboard, so the first row already shows.
+        component.keyboardNavigating = true;
         key(component, 'ArrowDown');
         key(component, 'ArrowRight');
         await page.waitForChanges();
