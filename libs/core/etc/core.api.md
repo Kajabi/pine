@@ -44,6 +44,11 @@ export interface ComboboxLoadOptionsEventDetail {
 export interface ComboboxOption {
     // (undocumented)
     [key: string]: unknown;
+    badge?: {
+        label: string;
+        sentiment?: string;
+        icon?: string;
+    };
     disabled?: boolean;
     group?: string;
     groupIcon?: string;

@@ -47,6 +47,33 @@ export function optionIconOf(option: HTMLOptionElement): string | null {
   return iconOf(option);
 }
 
+/** The `pds-chip` sentiments a badge can use. */
+const BADGE_SENTIMENTS = new Set(['accent', 'brand', 'danger', 'info', 'neutral', 'solid', 'subtle', 'success', 'warning']);
+
+export interface OptionBadge {
+  label: string;
+  sentiment: string;
+  /** A Pine icon name, or null. */
+  icon: string | null;
+}
+
+/**
+ * An option's badge from its `data-badge*` attributes, or null without a label. An unknown
+ * sentiment falls back to `neutral`, and an icon that isn't a Pine icon name is dropped: the
+ * badge is a `pds-chip`, whose `icon` also loads URLs.
+ */
+export function optionBadgeOf(option: HTMLOptionElement): OptionBadge | null {
+  const label = option.getAttribute('data-badge')?.trim();
+  if (label === undefined || label === '') return null;
+  const sentiment = option.getAttribute('data-badge-sentiment');
+  const icon = option.getAttribute('data-badge-icon');
+  return {
+    label,
+    sentiment: sentiment !== null && BADGE_SENTIMENTS.has(sentiment) ? sentiment : 'neutral',
+    icon: icon !== null && PINE_ICON_NAME.test(icon) ? icon : null,
+  };
+}
+
 function iconOf(element: Element): string | null {
   const icon = element.getAttribute('data-icon');
   return icon !== null && PINE_ICON_NAME.test(icon) ? icon : null;
