@@ -1,6 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State } from '@stencil/core';
 import { containsComposed } from '@utils/closest';
 import { PlacementType } from '@utils/types';
+import { setAttributesIfChanged } from '@utils/attributes';
 import { PdsPopoverEventDetail } from './popover-interface';
 
 /**
@@ -188,10 +189,7 @@ export class PdsPopover {
     if (this.triggerEl == null || this.portalEl == null) return;
 
     // Skips values already in place, so the trigger observer's own callback doesn't loop.
-    const aria = { 'aria-expanded': String(this.active), 'aria-controls': this.portalEl.id };
-    Object.entries(aria).forEach(([name, value]) => {
-      if (this.triggerEl.getAttribute(name) !== value) this.triggerEl.setAttribute(name, value);
-    });
+    setAttributesIfChanged(this.triggerEl, { 'aria-expanded': String(this.active), 'aria-controls': this.portalEl.id });
   }
 
   /**
@@ -232,11 +230,6 @@ export class PdsPopover {
         break;
     }
   };
-
-  connectedCallback() {
-    // Moved within the page, the trigger slot doesn't change, so watch the same trigger again.
-    this.observeTrigger();
-  }
 
   disconnectedCallback() {
     this.isComponentMounted = false;

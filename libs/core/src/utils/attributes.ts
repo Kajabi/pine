@@ -1,6 +1,18 @@
 export type Attributes = { [key: string]: any };
 
 /**
+ * Sets each attribute whose current value differs, and leaves the rest alone. A `MutationObserver`
+ * that calls this to restore attributes sees its own writes once and then settles, so it can't loop.
+ * @param el - Element to write to
+ * @param attributes - Attribute names and the values they should have
+ */
+export const setAttributesIfChanged = (el: Element, attributes: Record<string, string>) => {
+  Object.entries(attributes).forEach(([name, value]) => {
+    if (el.getAttribute(name) !== value) el.setAttribute(name, value);
+  });
+};
+
+/**
  * Inherit attributes from the host element
  * @param el - Host element
  * @param attributes - Array of attributes to inherit

@@ -1,6 +1,7 @@
 import { Component, Element, Host, h, Prop, Listen, State } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 import { PlacementType } from '@utils/types';
+import { setAttributesIfChanged } from '@utils/attributes';
 import {  computePosition,
   flip,
   offset,
@@ -49,8 +50,10 @@ export class PdsDropdownMenu implements BasePdsProps {
   }
 
   connectedCallback() {
-    // Moved within the page, the trigger slot doesn't change, so watch the same trigger again.
+    // Moved within the page, the trigger slot doesn't change, so watch the same trigger again, and
+    // fix anything changed while the menu was detached and unobserved.
     this.observeTrigger();
+    this.syncTriggerAria();
   }
 
   disconnectedCallback() {
@@ -71,21 +74,18 @@ export class PdsDropdownMenu implements BasePdsProps {
     const assignedElements = this.slotEl.assignedElements();
 
     this.triggerEl = assignedElements[0] as HTMLElement;
-    this.triggerEl.onclick = this.handleClick;
-
-    this.syncTriggerAria();
+    if (this.triggerEl) {
+      this.triggerEl.onclick = this.handleClick;
+      this.syncTriggerAria();
+    }
     this.observeTrigger();
   }
 
-  // Writes the trigger's ARIA from the menu's state, skipping values already in place so the
-  // observer's own callback doesn't loop.
+  // Writes the trigger's ARIA from the menu's state, so the observer's own callback doesn't loop.
   private syncTriggerAria = () => {
     if (!this.triggerEl) return;
 
-    const aria = { 'aria-haspopup': 'menu', 'aria-expanded': String(this.isOpen) };
-    Object.entries(aria).forEach(([name, value]) => {
-      if (this.triggerEl.getAttribute(name) !== value) this.triggerEl.setAttribute(name, value);
-    });
+    setAttributesIfChanged(this.triggerEl, { 'aria-haspopup': 'menu', 'aria-expanded': String(this.isOpen) });
   }
 
   // The trigger is the consumer's element, so anything can rewrite its attributes (a Turbo morph

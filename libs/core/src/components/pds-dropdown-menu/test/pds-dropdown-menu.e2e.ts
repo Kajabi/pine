@@ -99,6 +99,72 @@ describe('pds-dropdown-menu', () => {
     expect(await aria()).toEqual(['menu', 'false']);
   });
 
+  it('watches a swapped-in trigger, and keeps watching after the menu is moved', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="first-parent">
+        <pds-dropdown-menu>
+          <button slot="trigger" id="old-trigger">Old</button>
+          <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </div>
+      <div id="second-parent"></div>
+    `);
+    const strip = async (selector: string) => {
+      await page.$eval(selector, (el) => {
+        el.removeAttribute('aria-haspopup');
+        el.removeAttribute('aria-expanded');
+      });
+      await page.waitForChanges();
+    };
+    const aria = (selector: string) =>
+      page.$eval(selector, (el) => [el.getAttribute('aria-haspopup'), el.getAttribute('aria-expanded')]);
+
+    await page.$eval('pds-dropdown-menu', (menu) => {
+      const trigger = document.createElement('button');
+      trigger.slot = 'trigger';
+      trigger.id = 'new-trigger';
+      trigger.textContent = 'New';
+      menu.querySelector('#old-trigger').replaceWith(trigger);
+    });
+    await page.waitForChanges();
+    await strip('#new-trigger');
+    expect(await aria('#new-trigger')).toEqual(['menu', 'false']);
+
+    // Changed while detached, so only the reconnect can put it back.
+    await page.$eval('pds-dropdown-menu', (menu) => {
+      menu.remove();
+      menu.querySelector('#new-trigger').removeAttribute('aria-haspopup');
+      document.querySelector('#second-parent').appendChild(menu);
+    });
+    await page.waitForChanges();
+    expect(await aria('#new-trigger')).toEqual(['menu', 'false']);
+
+    await strip('#new-trigger');
+    expect(await aria('#new-trigger')).toEqual(['menu', 'false']);
+  });
+
+  // The restored host attributes only reach a screen reader once pds-button forwards them.
+  it("puts a pds-button trigger's ARIA back on its inner button", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-dropdown-menu>
+        <pds-button slot="trigger">Toggle Menu</pds-button>
+        <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+      </pds-dropdown-menu>
+    `);
+
+    await page.$eval('pds-button', (el) => {
+      el.removeAttribute('aria-haspopup');
+      el.removeAttribute('aria-expanded');
+    });
+    await page.waitForChanges();
+
+    const inner = await page.find('pds-button >>> button');
+    expect(inner).toEqualAttribute('aria-haspopup', 'menu');
+    expect(inner).toEqualAttribute('aria-expanded', 'false');
+  });
+
   it('closes the dropdown when Escape key is pressed', async () => {
     const page = await newE2EPage();
     await page.setContent(`

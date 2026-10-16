@@ -364,6 +364,59 @@ describe('pds-popover', () => {
       await page.waitForChanges();
       expect(await aria()).toEqual(['aria-popover-portal', 'false']);
     });
+
+    it('watches a swapped-in trigger', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="swap-popover">
+          <button slot="trigger" id="old-trigger">Old</button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+
+      await page.$eval('pds-popover', (popover) => {
+        const trigger = document.createElement('button');
+        trigger.slot = 'trigger';
+        trigger.id = 'new-trigger';
+        trigger.textContent = 'New';
+        popover.querySelector('#old-trigger').replaceWith(trigger);
+      });
+      await page.waitForChanges();
+      await page.$eval('#new-trigger', (el) => {
+        el.removeAttribute('aria-controls');
+        el.removeAttribute('aria-expanded');
+      });
+      await page.waitForChanges();
+
+      const trigger = await page.find('#new-trigger');
+      expect(trigger).toEqualAttribute('aria-controls', 'swap-popover-portal');
+      expect(trigger).toEqualAttribute('aria-expanded', 'false');
+    });
+
+    // The restored host attributes only reach a screen reader once pds-button forwards them.
+    it("puts a pds-button trigger's ARIA back on its inner button", async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="button-popover">
+          <pds-button slot="trigger">Show popover</pds-button>
+          <p>Content</p>
+        </pds-popover>
+      `);
+
+      await page.$eval('pds-button', (el) => {
+        el.removeAttribute('aria-controls');
+        el.removeAttribute('aria-expanded');
+      });
+      await page.waitForChanges();
+
+      expect(await page.find('pds-button')).toEqualAttribute('aria-controls', 'button-popover-portal');
+      expect(await page.find('pds-button >>> button')).toEqualAttribute('aria-expanded', 'false');
+      const controlsPortal = await page.$eval('pds-button', (el) => {
+        const inner = el.shadowRoot.querySelector('button') as HTMLButtonElement & { ariaControlsElements?: Element[] };
+        return (inner.ariaControlsElements || []).map((target) => target.id);
+      });
+      expect(controlsPortal).toEqual(['button-popover-portal']);
+    });
   });
 
   describe('Focus return', () => {
