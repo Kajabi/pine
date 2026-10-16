@@ -79,6 +79,18 @@
     opacity: 0.5;
   }
 
+  // An option with a `data-icon`: the icon, then the text, kept together on the start side.
+  .pds-combobox__option-label {
+    align-items: center;
+    display: flex;
+    gap: var(--pine-dimension-xs);
+    min-width: 0;
+  }
+
+  .pds-combobox__option-icon {
+    flex-shrink: 0;
+  }
+
   .pds-combobox__option-check {
     color: currentColor;
     font-size: var(--pine-dimension-150);

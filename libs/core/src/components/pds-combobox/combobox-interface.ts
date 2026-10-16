@@ -14,6 +14,11 @@ export interface ComboboxOption {
    */
   groupIcon?: string;
   /**
+   * Pine icon name shown before the option's text (letters, digits and hyphens, for example
+   * `hashtag`); URLs and file paths are not accepted. The same as `data-icon` on a slotted `<option>`.
+   */
+  icon?: string;
+  /**
    * When `true`, the option stays reachable by the arrow keys and the pointer, so assistive tech
    * announces it as unavailable, but it cannot be selected.
    */
