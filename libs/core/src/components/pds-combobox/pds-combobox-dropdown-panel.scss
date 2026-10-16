@@ -160,33 +160,35 @@
     background: var(--pine-color-background-muted);
   }
 
-  // Drilling into a group slides it in from the right; going back slides the groups in from the
-  // left. Timed by the motion tokens, which drop to 0ms under prefers-reduced-motion.
+  // Drilling in and going back are one slide, mirrored: the rows coming in slide from the side
+  // they're coming from (a group's options from the right, the groups from the left) and fade in. The
+  // field on top, panel search or the row back that takes its place, swaps in place either way. Timed
+  // by the motion tokens, which drop to 0ms under prefers-reduced-motion.
   // The slide's offset would otherwise widen the list's scroll area and flash a horizontal scrollbar.
   .pds-combobox__listbox--drill-in,
   .pds-combobox__listbox--drill-out {
     overflow-x: hidden;
   }
 
-  .pds-combobox__listbox--drill-in > .pds-combobox__group-back {
-    animation: pds-combobox-drill-from-end var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  .pds-combobox__listbox--drill-in {
+    --pds-combobox-drill-from: var(--pine-dimension-sm);
   }
 
+  .pds-combobox__listbox--drill-out {
+    --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
+  }
+
+  // Without panel search, the row back is the first of the group's rows, so it slides with them.
+  .pds-combobox__listbox--drill-in .pds-combobox__drill-in-options > li,
+  .pds-combobox__listbox--drill-in:not(.pds-combobox__listbox-options--drilled-in) .pds-combobox__group-back-trigger,
   .pds-combobox__listbox--drill-out > li {
-    animation: pds-combobox-drill-from-start var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+    animation: pds-combobox-drill var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   }
 
-  @keyframes pds-combobox-drill-from-end {
+  @keyframes pds-combobox-drill {
     from {
       opacity: 0;
-      transform: translateX(var(--pine-dimension-sm));
-    }
-  }
-
-  @keyframes pds-combobox-drill-from-start {
-    from {
-      opacity: 0;
-      transform: translateX(calc(var(--pine-dimension-sm) * -1));
+      transform: translateX(var(--pds-combobox-drill-from));
     }
   }
 
