@@ -879,6 +879,9 @@ export interface InputInputEventDetail {
     value?: string | number | null;
 }
 
+// @public
+export const keepPineHydrated: () => void;
+
 // @public (undocumented)
 export namespace LocalJSX {
     // (undocumented)

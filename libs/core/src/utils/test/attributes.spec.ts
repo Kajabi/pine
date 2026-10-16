@@ -1,4 +1,5 @@
-import { classNamesOf, inheritAttributes, inheritAriaAttributes, restoreHostStyling, setAttributesIfChanged } from '../attributes';
+import { inheritAttributes, inheritAriaAttributes, restoreHostStyling, setAttributesIfChanged } from '../attributes';
+import { classNamesOf } from '../keep-hydrated';
 
 describe('inheritAttributes()', () => {
   it('should create an attribute inheritance object', () => {
