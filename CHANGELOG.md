@@ -1,3 +1,17 @@
+## 4.5.0 (2026-10-16)
+
+### Features 🚀
+
+- **core:** keep stencil's hydrated class on every pine component through a dom morph ([#877](https://github.com/Kajabi/pine/pull/877))
+
+### Bug Fixes 🐛
+
+- **pds-datepicker:** keep range ends and week edges in shape on hover ([#878](https://github.com/Kajabi/pine/pull/878))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 4.4.4 (2026-10-16)
 
 ### Bug Fixes 🐛
