@@ -85,6 +85,7 @@
     display: flex;
     gap: var(--pine-dimension-xs);
     min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .pds-combobox__option-icon {
