@@ -127,6 +127,23 @@ describe('pds-loader', () => {
     expect(await element.getProperty('size')).toBe('xs');
     expect(element).toEqualAttribute('size', 'xs');
   });
+
+  it('resets a size set to null, and takes the next value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader size="xs"></pds-loader>');
+    const element = await page.find('pds-loader');
+
+    element.setProperty('size', null);
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('md');
+    expect(element).toEqualAttribute('size', 'md');
+
+    element.setProperty('size', 'lg');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('lg');
+  });
 });
 
 describe('pds-loader accessibility', () => {

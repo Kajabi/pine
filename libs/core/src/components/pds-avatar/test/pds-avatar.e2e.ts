@@ -74,6 +74,29 @@ describe('pds-avatar', () => {
     expect(element).toEqualAttribute('size', 'xs');
     expect(element).toEqualAttribute('variant', 'admin');
   });
+
+  // A null write strips the reflected attribute; it mustn't make the next write fall back too.
+  it('resets size and variant set to null, and takes the next value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar size="xs" variant="admin"></pds-avatar>');
+    const element = await page.find('pds-avatar');
+
+    element.setProperty('size', null);
+    element.setProperty('variant', null);
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('lg');
+    expect(await element.getProperty('variant')).toBe('customer');
+    expect(element).toEqualAttribute('size', 'lg');
+    expect(element).toEqualAttribute('variant', 'customer');
+
+    element.setProperty('size', 'sm');
+    element.setProperty('variant', 'admin');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('sm');
+    expect(await element.getProperty('variant')).toBe('admin');
+  });
 });
 
 describe('pds-avatar accessibility', () => {

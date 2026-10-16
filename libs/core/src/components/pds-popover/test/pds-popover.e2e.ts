@@ -39,6 +39,23 @@ describe('pds-popover', () => {
     expect(element).toEqualAttribute('placement', 'top');
   });
 
+  it('resets a placement set to null, and takes the next value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-popover placement="top"></pds-popover>');
+    const element = await page.find('pds-popover');
+
+    element.setProperty('placement', null);
+    await page.waitForChanges();
+
+    expect(await element.getProperty('placement')).toBe('right');
+    expect(element).toEqualAttribute('placement', 'right');
+
+    element.setProperty('placement', 'bottom');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('placement')).toBe('bottom');
+  });
+
   it('should toggle popover visibility when clicking trigger', async () => {
     const page = await newE2EPage();
     await page.setContent(`
