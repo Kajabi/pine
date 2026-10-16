@@ -32,6 +32,11 @@ export class PdsPopover {
   private isComponentMounted = true;
 
   /**
+   * Set once `componentDidLoad` has built the portal, so a later reconnect knows to rebuild it
+   */
+  private hasLoaded = false;
+
+  /**
    * Reference to the trigger element
    */
   private triggerEl: HTMLElement | null = null;
@@ -133,6 +138,7 @@ export class PdsPopover {
 
     // Create portal element
     this.createPortal();
+    this.hasLoaded = true;
 
     // Initialize trigger element by calling slot change handler
     // This is a fallback for environments where slot change might not fire reliably
@@ -237,8 +243,26 @@ export class PdsPopover {
     }
   };
 
+  // Moving a popover (Idiomorph during a Turbo morph, or a framework reparenting it) disconnects and
+  // reconnects it, and componentDidLoad doesn't run again. Rebuild what disconnectedCallback tore down.
+  connectedCallback() {
+    if (!this.hasLoaded) return;
+
+    this.isComponentMounted = true;
+    this.createPortal();
+    this.triggerEl?.addEventListener('click', this.handleTriggerClick);
+    this.observeTrigger();
+    this.linkTriggerToPortal();
+  }
+
   disconnectedCallback() {
     this.isComponentMounted = false;
+
+    // Open, the content sits in the portal; put it back before the portal goes.
+    if (this.active) {
+      this.restorePortalContent();
+      this.active = false;
+    }
 
     // Clean up trigger click event listener
     if (this.triggerEl != null) {

@@ -465,6 +465,85 @@ describe('pds-popover', () => {
     });
   });
 
+  // Moving a popover disconnects and reconnects it (Idiomorph during a Turbo morph, or a framework
+  // reparenting it); it has to work the same afterwards.
+  describe('After a move', () => {
+    const setUp = async (trigger = '<button slot="trigger" id="trigger">Show popover</button>') => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div id="first-parent">
+          <pds-popover component-id="moved-popover">
+            ${trigger}
+            <p id="content">Popover content</p>
+          </pds-popover>
+        </div>
+        <div id="second-parent"></div>
+      `);
+      return page;
+    };
+    const move = async (page) => {
+      await page.$eval('pds-popover', (popover) => document.querySelector('#second-parent').appendChild(popover));
+      await page.waitForChanges();
+    };
+    const portalContent = (page) =>
+      page.evaluate(() => {
+        const portal = document.querySelector('#moved-popover-portal') as HTMLElement | null;
+        return portal ? { shown: getComputedStyle(portal).display !== 'none', text: portal.textContent.trim() } : null;
+      });
+
+    it('opens from its trigger', async () => {
+      const page = await setUp();
+      await move(page);
+
+      await page.click('#trigger');
+      await page.waitForChanges();
+
+      expect(await portalContent(page)).toEqual({ shown: true, text: 'Popover content' });
+      expect(await page.find('#trigger')).toEqualAttribute('aria-expanded', 'true');
+    });
+
+    it("puts the trigger's ARIA back, pointing at the new portal", async () => {
+      const page = await setUp();
+      await move(page);
+
+      await page.$eval('#trigger', (el) => {
+        el.removeAttribute('aria-controls');
+        el.removeAttribute('aria-expanded');
+      });
+      await page.waitForChanges();
+
+      const trigger = await page.find('#trigger');
+      expect(trigger).toEqualAttribute('aria-controls', 'moved-popover-portal');
+      expect(trigger).toEqualAttribute('aria-expanded', 'false');
+      expect(await portalContent(page)).not.toBeNull();
+    });
+
+    it('opens from a pds-button trigger', async () => {
+      const page = await setUp('<pds-button slot="trigger" id="trigger">Show popover</pds-button>');
+      await move(page);
+
+      await page.click('#trigger');
+      await page.waitForChanges();
+
+      expect(await portalContent(page)).toEqual({ shown: true, text: 'Popover content' });
+    });
+
+    // Open, the content sits in the portal, so tearing the portal down mustn't take it along.
+    it('keeps its content when moved while open', async () => {
+      const page = await setUp();
+      await page.click('#trigger');
+      await page.waitForChanges();
+
+      await move(page);
+      expect(await page.find('pds-popover #content')).not.toBeNull();
+      expect(await page.find('#trigger')).toEqualAttribute('aria-expanded', 'false');
+
+      await page.click('#trigger');
+      await page.waitForChanges();
+      expect(await portalContent(page)).toEqual({ shown: true, text: 'Popover content' });
+    });
+  });
+
   describe('Focus return', () => {
     const openWithFocusInside = async () => {
       const page = await newE2EPage();
