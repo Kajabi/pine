@@ -241,7 +241,9 @@ export class PdsTabs {
     );
 
     const hostClass = this.classNames();
-    this.hostKeeper.record(hostClass, {}, { 'active-tab-name': this.activeTabName });
+    // Only the classes: `active-tab-name` backs the mutable activeTabName prop, so a morph that drops
+    // it is a prop change, not a strip.
+    this.hostKeeper.record(hostClass);
 
     return (
       <Host active-tab-name={this.activeTabName} class={hostClass} id={this.componentId}>
