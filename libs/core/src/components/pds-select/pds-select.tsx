@@ -22,10 +22,6 @@ export class PdsSelect {
   @Element() el: HTMLPdsSelectElement;
   private hostKeeper = new HostStylingKeeper();
 
-  disconnectedCallback() {
-    this.hostKeeper.disconnect();
-  }
-
   /**
    * Specifies if and how the browser provides `autocomplete` assistance for the field.
    */
@@ -149,6 +145,10 @@ export class PdsSelect {
 
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
   }
 
   componentWillLoad() {
@@ -372,10 +372,14 @@ export class PdsSelect {
     const hasAction = this.el.querySelector('[slot="action"]') !== null;
 
     const hostClass = this.classNames();
-    this.hostKeeper.record(hostClass);
+    const hostAttributes = {
+      'aria-disabled': this.disabled ? 'true' : null,
+      'has-action': hasAction && !this.hideLabel ? 'true' : null,
+    };
+    this.hostKeeper.record(hostClass, {}, hostAttributes);
 
     return (
-      <Host aria-disabled={this.disabled ? 'true' : null} class={hostClass} has-action={hasAction && !this.hideLabel ? 'true' : null}>
+      <Host class={hostClass} {...hostAttributes}>
         <div class="pds-select">
           {!this.hideLabel && (
             <div class="pds-select__label-wrapper">

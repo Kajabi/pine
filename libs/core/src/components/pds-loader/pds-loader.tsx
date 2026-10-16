@@ -82,10 +82,11 @@ export class PdsLoader {
 
   render() {
     const hostClass = `pds-loader ${this.isLoading ? '' : 'pds-loader--hidden'}`;
-    this.hostKeeper.record(hostClass);
+    const hostAttributes = { 'aria-hidden': !this.isLoading, 'aria-busy': this.isLoading, 'aria-live': 'polite' };
+    this.hostKeeper.record(hostClass, {}, hostAttributes);
 
     return (
-      <Host class={hostClass} aria-hidden={!this.isLoading} aria-busy={this.isLoading} aria-live="polite">
+      <Host class={hostClass} {...hostAttributes}>
         {this.variant === 'spinner' && (
           <div class="pds-loader--spinner">
             <svg style={this.getSvgStyle()} viewBox="0 0 200 200" fill="none" part="loader-svg">

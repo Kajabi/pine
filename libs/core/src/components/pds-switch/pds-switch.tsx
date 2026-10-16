@@ -22,10 +22,6 @@ export class PdsSwitch {
   @Element() el: HTMLPdsSwitchElement;
   private hostKeeper = new HostStylingKeeper();
 
-  disconnectedCallback() {
-    this.hostKeeper.disconnect();
-  }
-
   @State() private hasLabelSlot = false;
 
   /**
@@ -126,6 +122,10 @@ export class PdsSwitch {
     exposeTypeProperty(this.el, () => this._type);
   }
 
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
+
   componentDidLoad() {
     this.updateFormValue();
   }
@@ -173,10 +173,11 @@ export class PdsSwitch {
 
   render() {
     const hostClass = this.switchClassNames();
-    this.hostKeeper.record(hostClass);
+    const ariaDisabled = this.disabled ? 'true' : null;
+    this.hostKeeper.record(hostClass, {}, { 'aria-disabled': ariaDisabled });
 
     return (
-      <Host class={hostClass} aria-disabled={this.disabled ? 'true' : null}>
+      <Host class={hostClass} aria-disabled={ariaDisabled}>
         <label htmlFor={this.componentId}>
           <input
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage, this.errorMessage)}

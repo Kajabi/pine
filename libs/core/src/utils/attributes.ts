@@ -13,13 +13,18 @@ export const setAttributesIfChanged = (el: Element, attributes: Record<string, s
 };
 
 /**
- * The classes and style properties a component renders onto its own host.
+ * The classes, style properties and other attributes a component renders onto its own host.
  */
-export type HostStyling = { classes: string[]; styles: Record<string, string> };
+export type HostStyling = {
+  classes: string[];
+  styles: Record<string, string>;
+  attributes?: Record<string, unknown>;
+};
 
 // Classes Stencil itself puts on a host: its default `hydratedFlag` (Pine doesn't change it), and a
-// scoped component's scope classes (`sc-pds-sortable-h`, `sc-pds-sortable-s`), which its CSS needs.
-const isStencilClass = (name: string) => name === 'hydrated' || /^sc-.+-[hs]$/.test(name);
+// scoped component's scope classes (`sc-pds-radio`, `sc-pds-radio-h`, `sc-pds-radio-s`), which its
+// CSS needs.
+const isStencilClass = (name: string) => name === 'hydrated' || name.startsWith('sc-');
 
 /**
  * The class names in a rendered `class` value: a string, or Stencil's `{ name: boolean }` form.
@@ -46,18 +51,18 @@ export const restoreHostStyling = (el: HTMLElement, { classes, styles }: HostSty
 };
 
 /**
- * Watches a host-only component's own `class` and `style` attributes and puts back what it rendered
- * when something strips them. A DOM morph does: it makes the host match the server's HTML, which
- * carries the component's attributes but not the classes and styles it wrote, and Stencil won't
- * write them again because it diffs against its previous render, not the live DOM.
+ * Watches a component's own host and puts back what it rendered when something strips it. A DOM
+ * morph does: it makes the host match the server's HTML, which carries the component's props but not
+ * the classes, styles and attributes it wrote, and Stencil won't write them again because it diffs
+ * against its previous render, not the live DOM.
  *
- * It also means a script that removes one of these classes or styles on purpose sees it come back:
- * change them through the component's props instead.
+ * It also means a script that removes one of these on purpose sees it come back: change them through
+ * the component's props instead.
  * @param el - Host element
  * @param expected - Reads what the component last rendered
  * @returns The observer, to disconnect when the component is removed; `null` without MutationObserver
  */
-export const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
+const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
   if (typeof MutationObserver === 'undefined') return null;
 
   const observer = new MutationObserver((records) => {
@@ -69,8 +74,17 @@ export const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) =>
       .filter((record) => record.attributeName === 'class' && record.oldValue != null)
       .flatMap((record) => classNamesOf(record.oldValue).filter(isStencilClass));
     restoreHostStyling(el, { ...styling, classes: [...styling.classes, ...stencilClasses] });
+
+    // An attribute the component still renders comes back with the value it had, which is what
+    // Stencil wrote (`aria-hidden={true}` lands as `aria-hidden=""`). One it stopped rendering stays
+    // removed, since that was Stencil's own write.
+    records.forEach(({ attributeName: name, oldValue }) => {
+      const rendered = styling.attributes?.[name];
+      if (oldValue == null || rendered == null || rendered === false || el.hasAttribute(name)) return;
+      el.setAttribute(name, oldValue);
+    });
   });
-  observer.observe(el, { attributes: true, attributeFilter: ['class', 'style'], attributeOldValue: true });
+  observer.observe(el, { attributes: true, attributeOldValue: true });
   return observer;
 };
 
@@ -173,8 +187,12 @@ export class HostStylingKeeper {
   private styling: HostStyling = { classes: [], styles: {} };
   private observer: MutationObserver | null = null;
 
-  record(classes: string | Record<string, boolean>, styles: Record<string, string> = {}) {
-    this.styling = { classes: classNamesOf(classes), styles };
+  record(
+    classes: string | Record<string, boolean>,
+    styles: Record<string, string> = {},
+    attributes: Record<string, unknown> = {},
+  ) {
+    this.styling = { classes: classNamesOf(classes), styles, attributes };
   }
 
   connect(el: HTMLElement) {

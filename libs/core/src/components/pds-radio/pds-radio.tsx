@@ -19,10 +19,6 @@ export class PdsRadio {
   @Element() el: HTMLPdsRadioElement;
   private hostKeeper = new HostStylingKeeper();
 
-  disconnectedCallback() {
-    this.hostKeeper.disconnect();
-  }
-
   @State() private _hasImage = false;
 
   /**
@@ -149,6 +145,10 @@ export class PdsRadio {
     this.hostKeeper.connect(this.el);
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
   }
 
   // Discards stale hidden label/message/wrapper copies left by a page-cache (Turbo, bfcache) reconnect, rescuing real [slot="image"] content stranded inside a stale image-container first.

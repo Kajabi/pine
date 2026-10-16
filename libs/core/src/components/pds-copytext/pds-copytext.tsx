@@ -17,6 +17,7 @@ export class PdsCopytext {
   connectedCallback() {
     this.hostKeeper.connect(this.el);
   }
+
   private truncationCleanup: (() => void) | null = null;
   private valueSpanEl: HTMLSpanElement;
 

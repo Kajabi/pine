@@ -22,6 +22,7 @@ export class PdsSortableItem {
   disconnectedCallback() {
     this.hostKeeper.disconnect();
   }
+
   sortableRef: HTMLPdsSortableElement;
   /**
    * Determines whether `sortable-item-actions` slot should be enabled.

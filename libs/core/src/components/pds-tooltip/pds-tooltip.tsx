@@ -1,5 +1,4 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
-import { HostStylingKeeper } from '@utils/attributes';
 import { PlacementType } from '@utils/types';
 import {
   autoUpdate,
@@ -43,7 +42,6 @@ export class PdsTooltip {
    * Reference to the Host element
    */
   @Element() el: HTMLPdsTooltipElement;
-  private hostKeeper = new HostStylingKeeper();
 
   /**
    * Content for the tooltip. If HTML is required, use the content slot
@@ -123,12 +121,10 @@ export class PdsTooltip {
   private hasCheckedReconnect = false;
 
   connectedCallback() {
-    this.hostKeeper.connect(this.el);
     this.hasCheckedReconnect = false;
   }
 
   disconnectedCallback() {
-    this.hostKeeper.disconnect();
     window.removeEventListener('pageshow', this.handlePageShow);
     if (this.slotMutationObserver !== null) {
       this.slotMutationObserver.disconnect();
@@ -450,11 +446,8 @@ export class PdsTooltip {
   render() {
     const hostId = this.componentId || undefined;
 
-    const hostClass = { 'pds-tooltip--is-open': this.opened };
-    this.hostKeeper.record(hostClass);
-
     return (
-      <Host id={hostId} class={hostClass}>
+      <Host id={hostId} class={{ 'pds-tooltip--is-open': this.opened }}>
         <span
           class="pds-tooltip__trigger"
           onMouseEnter={this.handleShow}

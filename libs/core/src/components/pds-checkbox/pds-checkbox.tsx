@@ -23,10 +23,6 @@ export class PdsCheckbox {
   @Element() el: HTMLPdsCheckboxElement;
   private hostKeeper = new HostStylingKeeper();
 
-  disconnectedCallback() {
-    this.hostKeeper.disconnect();
-  }
-
   @State() private hasLabelSlot = false;
 
   /**
@@ -146,6 +142,10 @@ export class PdsCheckbox {
 
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
   }
 
   componentDidLoad() {

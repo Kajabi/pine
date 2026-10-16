@@ -241,7 +241,7 @@ export class PdsTabs {
     );
 
     const hostClass = this.classNames();
-    this.hostKeeper.record(hostClass);
+    this.hostKeeper.record(hostClass, {}, { 'active-tab-name': this.activeTabName });
 
     return (
       <Host active-tab-name={this.activeTabName} class={hostClass} id={this.componentId}>
