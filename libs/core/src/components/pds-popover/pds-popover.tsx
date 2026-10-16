@@ -2,6 +2,7 @@ import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, 
 import { containsComposed } from '@utils/closest';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { PlacementType } from '@utils/types';
+import { setAttributesIfChanged } from '@utils/attributes';
 import { PdsPopoverEventDetail } from './popover-interface';
 
 /**
@@ -31,9 +32,24 @@ export class PdsPopover {
   private isComponentMounted = true;
 
   /**
+   * Set once `componentDidLoad` has built the portal, so a later reconnect knows to rebuild it
+   */
+  private hasLoaded = false;
+
+  /**
+   * A popover without a componentId keeps one generated portal id, even when the portal is rebuilt
+   */
+  private generatedPortalId: string | null = null;
+
+  /**
    * Reference to the trigger element
    */
   private triggerEl: HTMLElement | null = null;
+
+  /**
+   * Puts the trigger's ARIA back when something else removes or changes it
+   */
+  private triggerObserver: MutationObserver | null = null;
 
   /**
    * Portal element rendered in document.body
@@ -127,6 +143,7 @@ export class PdsPopover {
 
     // Create portal element
     this.createPortal();
+    this.hasLoaded = true;
 
     // Initialize trigger element by calling slot change handler
     // This is a fallback for environments where slot change might not fire reliably
@@ -165,15 +182,31 @@ export class PdsPopover {
     } else {
       this.triggerEl = null;
     }
+
+    this.observeTrigger();
   };
+
+  // The trigger is the consumer's element, so anything can rewrite its attributes (a Turbo morph
+  // matches it to server HTML that has no ARIA). Put Pine's values back when that happens.
+  private observeTrigger() {
+    this.triggerObserver?.disconnect();
+    this.triggerObserver = null;
+    if (this.triggerEl == null || typeof MutationObserver === 'undefined') return;
+
+    this.triggerObserver = new MutationObserver(() => this.linkTriggerToPortal());
+    this.triggerObserver.observe(this.triggerEl, {
+      attributes: true,
+      attributeFilter: ['aria-expanded', 'aria-controls'],
+    });
+  }
 
   // Set ARIA attributes to establish relationship between trigger and popover
   // This mirrors the native Popover API's accessibility behavior
   private linkTriggerToPortal() {
     if (this.triggerEl == null || this.portalEl == null) return;
 
-    this.triggerEl.setAttribute('aria-expanded', String(this.active));
-    this.triggerEl.setAttribute('aria-controls', this.portalEl.id);
+    // Skips values already in place, so the trigger observer's own callback doesn't loop.
+    setAttributesIfChanged(this.triggerEl, { 'aria-expanded': String(this.active), 'aria-controls': this.portalEl.id });
   }
 
   /**
@@ -215,13 +248,50 @@ export class PdsPopover {
     }
   };
 
+  // componentDidLoad doesn't run again when a popover comes back, so rebuild whatever
+  // disconnectedCallback tore down. Each step is a no-op when nothing was.
+  connectedCallback() {
+    if (!this.hasLoaded) return;
+
+    this.isComponentMounted = true;
+    this.createPortal();
+    this.triggerEl?.addEventListener('click', this.handleTriggerClick);
+    this.observeTrigger();
+    this.linkTriggerToPortal();
+
+    // Still open after a move: the trigger moved, so the portal follows it.
+    if (this.active) {
+      requestAnimationFrame(() => this.handlePopoverPositioning());
+    }
+  }
+
   disconnectedCallback() {
+    // Moved in one operation (a DOM morph, or a framework reparenting it), the popover is
+    // already back in the page. Its portal is in <body>, untouched, so it stays open, with focus
+    // where it was.
+    if (this.el.isConnected) return;
+
     this.isComponentMounted = false;
+
+    // Open, the content sits in the portal; put it back before the portal goes. Only listeners on
+    // the popover itself hear the close event now, but those are the ones mirroring its state.
+    if (this.active) {
+      this.restorePortalContent();
+      this.active = false;
+      this.linkTriggerToPortal();
+      this.pdsPopoverClose.emit({
+        componentId: this.componentId,
+        popoverType: this.popoverType,
+      });
+    }
 
     // Clean up trigger click event listener
     if (this.triggerEl != null) {
       this.triggerEl.removeEventListener('click', this.handleTriggerClick);
     }
+
+    this.triggerObserver?.disconnect();
+    this.triggerObserver = null;
 
     // Clean up all event listeners
     this.removeLightDismissListeners();
@@ -269,8 +339,8 @@ export class PdsPopover {
 
     // Generate unique ID
     if (!this.componentId) {
-      const suffix = PdsPopover.instanceCounter++;
-      this.portalEl.id = `pds-popover-portal-${suffix}`;
+      this.generatedPortalId ??= `pds-popover-portal-${PdsPopover.instanceCounter++}`;
+      this.portalEl.id = this.generatedPortalId;
     } else {
       this.portalEl.id = `${this.componentId}-portal`;
     }
@@ -401,10 +471,7 @@ export class PdsPopover {
     // Record open timestamp to prevent immediate close from opening click
     this.openTimestamp = Date.now();
 
-    // Update ARIA expanded state on trigger
-    if (this.triggerEl) {
-      this.triggerEl.setAttribute('aria-expanded', 'true');
-    }
+    this.linkTriggerToPortal();
 
     // Update portal content with latest slot content
     this.updatePortalContent();
@@ -447,10 +514,7 @@ export class PdsPopover {
     // Restoring the content drops its focus to the body, so check where focus is first.
     const focusWasInside = this.portalEl.contains(document.activeElement);
 
-    // Update ARIA expanded state on trigger
-    if (this.triggerEl) {
-      this.triggerEl.setAttribute('aria-expanded', 'false');
-    }
+    this.linkTriggerToPortal();
 
     // Restore content back to original slot positions
     this.restorePortalContent();
