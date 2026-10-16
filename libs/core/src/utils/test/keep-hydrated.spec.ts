@@ -1,4 +1,4 @@
-import { isStencilClass, keepPineHydrated } from '../keep-hydrated';
+import { isStencilClass, keepPineHydrated, limitRestores } from '../keep-hydrated';
 
 const OBSERVER = Symbol.for('@pine-ds/core/keepPineHydrated');
 
@@ -83,7 +83,7 @@ describe('keepPineHydrated()', () => {
     expect(button.classList.contains('hydrated')).toBe(false);
   });
 
-  it('gives up on a component another script keeps stripping, warns once, and still restores the rest', () => {
+  it('gives up on a component another script keeps stripping, warns once, and still restores the rest', async () => {
     const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     keepPineHydrated();
     const fought = document.createElement('pds-button');
@@ -99,7 +99,14 @@ describe('keepPineHydrated()', () => {
     expect(fought.classList.contains('hydrated')).toBe(false);
     expect(other.classList.contains('hydrated')).toBe(true);
     expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn).toHaveBeenCalledWith('pds-button: stopped putting back its hydrated class, as another script keeps removing it.', fought);
+    expect(warn).toHaveBeenCalledWith('%s', 'pds-button: stopped putting back its hydrated and scope classes, as another script keeps removing them.', fought);
+
+    // The next task, a new strip is restored again, and giving up again stays quiet.
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    fought.className = '';
+    restore(fought, 'hydrated');
+    expect(fought.classList.contains('hydrated')).toBe(true);
+    expect(warn).toHaveBeenCalledTimes(1);
     warn.mockRestore();
   });
 });
@@ -110,5 +117,62 @@ describe('isStencilClass()', () => {
 
     expect(['hydrated', 'sc-pds-radio', 'sc-pds-radio-h', 'sc-pds-radio-s'].every((name) => isStencilClass(el, name))).toBe(true);
     expect(['sc-pds-box', 'sc-bdVaJa', 'pds-radio'].some((name) => isStencilClass(el, name))).toBe(false);
+  });
+});
+
+describe('limitRestores()', () => {
+  // The count resets on a MessageChannel message, which runs after a zero timer is queued behind it.
+  const nextTask = () => new Promise((resolve) => setTimeout(resolve, 10));
+
+  it('stops after five writes before the next task, warns once with the element, and writes again after it', async () => {
+    const restore = jest.fn(() => true);
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const el = document.createElement('pds-box');
+    const limited = limitRestores(restore, 'pds-box: stopped restoring', el);
+
+    for (let i = 0; i < 20; i += 1) limited();
+    expect(restore).toHaveBeenCalledTimes(5);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith('%s', 'pds-box: stopped restoring', el);
+
+    await nextTask();
+    limited();
+    expect(restore).toHaveBeenCalledTimes(6);
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    warn.mockRestore();
+  });
+
+  // Callbacks that find nothing to put back (the observer seeing its own write, Stencil's renders,
+  // unrelated attribute changes) mustn't use up the budget a real strip needs.
+  it("doesn't count calls that wrote nothing", () => {
+    const restore = jest.fn(() => false);
+    const limited = limitRestores(restore, 'pds-box: stopped restoring');
+
+    for (let i = 0; i < 20; i += 1) limited();
+
+    expect(restore).toHaveBeenCalledTimes(20);
+  });
+
+  it('warns once per element, however many of its restores give up', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const el = document.createElement('pds-box');
+    const host = limitRestores(() => true, 'pds-box: stopped restoring its host', el);
+    const classes = limitRestores(() => true, 'pds-box: stopped putting back its classes', el);
+
+    for (let round = 0; round < 7; round += 1) {
+      host();
+      classes();
+    }
+
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith('%s', 'pds-box: stopped restoring its host', el);
+    warn.mockRestore();
+  });
+
+  it('passes its arguments through', () => {
+    const restore = jest.fn(() => false);
+    limitRestores(restore, 'pds-row: stopped restoring')('a', 1);
+    expect(restore).toHaveBeenCalledWith('a', 1);
   });
 });

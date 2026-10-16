@@ -31,7 +31,7 @@ describe('pds-box per-side borders', () => {
         w.pineWarnings = [];
         const warn = console.warn;
         console.warn = (...args: unknown[]) => {
-          w.pineWarnings.push(String(args[0]));
+          w.pineWarnings.push(String(args[0] === '%s' ? args[1] : args[0]));
           warn(...args);
         };
       });
@@ -50,6 +50,34 @@ describe('pds-box per-side borders', () => {
       expect((await page.evaluate(() => (window as unknown as { pineWarnings: string[] }).pineWarnings)).filter((text) => text.startsWith('pds-box: stopped restoring'))).toHaveLength(1);
       // The other script wins.
       expect(await page.$eval('pds-box', (el) => el.classList.contains('pds-box-gap-md'))).toBe(false);
+    });
+
+    // Stripping every class fights the box's own restore and the page-wide one for Stencil's classes
+    // at once. Both give up, with one warning between them.
+    it('warns once when a script keeps stripping every class, Stencil\'s included', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-box display="flex" gap="md"></pds-box>');
+      await page.evaluate(() => {
+        const w = window as unknown as { pineWarnings: string[] };
+        w.pineWarnings = [];
+        const warn = console.warn;
+        console.warn = (...args: unknown[]) => {
+          w.pineWarnings.push(String(args[0] === '%s' ? args[1] : args[0]));
+          warn(...args);
+        };
+      });
+
+      await page.$eval('pds-box', (el) => {
+        new MutationObserver(() => {
+          if (el.className !== '') el.className = '';
+        }).observe(el, { attributes: true, attributeFilter: ['class'] });
+        el.className = '';
+      });
+      await page.waitForChanges();
+
+      expect(await page.evaluate(() => 'responsive')).toBe('responsive');
+      expect((await page.evaluate(() => (window as unknown as { pineWarnings: string[] }).pineWarnings)).filter((text) => text.startsWith('pds-box: stopped'))).toHaveLength(1);
+      expect(await page.$eval('pds-box', (el) => el.className)).toBe('');
     });
 
     it('still takes a changed attribute afterwards', async () => {

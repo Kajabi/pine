@@ -1,5 +1,5 @@
 import { inheritAttributes, inheritAriaAttributes, restoreHostStyling, setAttributesIfChanged } from '../attributes';
-import { classNamesOf, limitRestores } from '../keep-hydrated';
+import { classNamesOf } from '../keep-hydrated';
 
 describe('inheritAttributes()', () => {
   it('should create an attribute inheritance object', () => {
@@ -126,46 +126,5 @@ describe('restoreHostStyling()', () => {
 
     expect(setProperty).not.toHaveBeenCalled();
     expect(el.style.getPropertyValue('min-height')).toBe('20px');
-  });
-});
-
-describe('limitRestores()', () => {
-  // The count resets on a MessageChannel message, which runs after a zero timer is queued behind it.
-  const nextTask = () => new Promise((resolve) => setTimeout(resolve, 10));
-
-  it('stops after five writes before the next task, warns once with the element, and writes again after it', async () => {
-    const restore = jest.fn(() => true);
-    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const el = document.createElement('pds-box');
-    const limited = limitRestores(restore, 'pds-box: stopped restoring', el);
-
-    for (let i = 0; i < 20; i += 1) limited();
-    expect(restore).toHaveBeenCalledTimes(5);
-    expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn).toHaveBeenCalledWith('pds-box: stopped restoring', el);
-
-    await nextTask();
-    limited();
-    expect(restore).toHaveBeenCalledTimes(6);
-    expect(warn).toHaveBeenCalledTimes(1);
-
-    warn.mockRestore();
-  });
-
-  // Callbacks that find nothing to put back (the observer seeing its own write, Stencil's renders,
-  // unrelated attribute changes) mustn't use up the budget a real strip needs.
-  it("doesn't count calls that wrote nothing", () => {
-    const restore = jest.fn(() => false);
-    const limited = limitRestores(restore, 'pds-box: stopped restoring');
-
-    for (let i = 0; i < 20; i += 1) limited();
-
-    expect(restore).toHaveBeenCalledTimes(20);
-  });
-
-  it('passes its arguments through', () => {
-    const restore = jest.fn(() => false);
-    limitRestores(restore, 'pds-row: stopped restoring')('a', 1);
-    expect(restore).toHaveBeenCalledWith('a', 1);
   });
 });

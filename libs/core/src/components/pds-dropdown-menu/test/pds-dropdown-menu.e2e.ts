@@ -353,7 +353,7 @@ describe('pds-dropdown-menu with a script fighting its trigger ARIA', () => {
       w.pineWarnings = [];
       const warn = console.warn;
       console.warn = (...args: unknown[]) => {
-        w.pineWarnings.push(String(args[0]));
+        w.pineWarnings.push(String(args[0] === '%s' ? args[1] : args[0]));
         warn(...args);
       };
     });
