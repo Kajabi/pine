@@ -584,6 +584,94 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
     });
 
+    describe('the slide between the groups and a group', () => {
+      type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+      // Animations held at their first frame, so the test reads where each row starts from.
+      const holdAnimations = async (page: Page) => {
+        const client = await page.target().createCDPSession();
+        await client.send('Animation.enable');
+        await client.send('Animation.setPlaybackRate', { playbackRate: 0 });
+      };
+
+      // Each matching row's start: which way it's offset, or `still` when it doesn't move. Adds up the
+      // offsets of the row and every element above it, so a sliding parent counts too.
+      const starts = (page: Page, selector: string) =>
+        page.evaluate(sel => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          return Array.from(root.querySelectorAll(sel)).map(el => {
+            let x = 0;
+            for (let node: Element | null = el; node; node = node.parentElement) {
+              const { transform } = getComputedStyle(node);
+              if (transform !== 'none') x += new DOMMatrixReadOnly(transform).m41;
+            }
+            return x > 0 ? 'from-right' : x < 0 ? 'from-left' : 'still';
+          });
+        }, selector);
+
+      const click = async (page: Page, selector: string) => {
+        await (await page.find(`pds-combobox >>> ${selector}`)).click();
+        await page.waitForChanges();
+      };
+
+      it("slides a group's options in from the right and the groups back from the left, the field on top staying put", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['still']);
+        expect(await starts(page, '.pds-combobox__group-back')).toEqual(['still']);
+
+        await click(page, '.pds-combobox__group-back-trigger');
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['from-left', 'from-left']);
+        expect(await starts(page, '.pds-combobox__panel-search')).toEqual(['still']);
+      });
+
+      it('slides the row back in with the options when there is no panel search', async () => {
+        const page = await setUp('group-display="drill-in"');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(1) .pds-combobox__group-row-trigger');
+
+        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right', 'from-right']);
+      });
+
+      it('mirrors the slide right to left', async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-left']);
+
+        await click(page, '.pds-combobox__group-back-trigger');
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['from-right', 'from-right']);
+      });
+
+      it("doesn't slide with reduced motion", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+        // The same page slides before reduced motion is on, so stillness below is down to it.
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        await click(page, '.pds-combobox__group-back-trigger');
+
+        await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+        const duration = await page.evaluate(() =>
+          getComputedStyle(document.querySelector('pds-combobox')!.shadowRoot!.querySelector('[role="tree"]')!).getPropertyValue('--pine-motion-duration-base').trim(),
+        );
+        expect(duration).toBe('0ms');
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['still']);
+
+        await click(page, '.pds-combobox__group-back-trigger');
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['still', 'still']);
+      });
+    });
+
     it('drills in from the search field by keyboard, and back to it, then closes with Escape', async () => {
       const page = await setUp('group-display="drill-in" panel-search');
       const listAD = () =>
