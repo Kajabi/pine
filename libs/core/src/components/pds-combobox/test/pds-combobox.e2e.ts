@@ -614,13 +614,14 @@ describe('pds-combobox', () => {
         await page.waitForChanges();
       };
 
-      it("slides a group's options in from the right and the groups back from the left, the field on top staying put", async () => {
+      it("slides a group's options and its row back in from the right, and the groups back from the left", async () => {
         const page = await setUp('group-display="drill-in" panel-search');
         await holdAnimations(page);
 
         await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
         expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
-        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['still']);
+        // The row back moves with the options; its list item, which keeps it sticky, doesn't.
+        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
         expect(await starts(page, '.pds-combobox__group-back')).toEqual(['still']);
 
         await click(page, '.pds-combobox__group-back-trigger');
