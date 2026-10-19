@@ -327,9 +327,71 @@ describe('pds-dropdown-menu accessibility', () => {
       },
       { timeout: 2000 },
     );
-    // `aria-required-children` is disabled here: the menu panel uses `role="menu"` but
+    // `aria-required-children` is disabled here: the menu uses `role="menu"` but
     // slotted `pds-dropdown-menu-item` elements render `role="none"` — remove once
     // menu items expose `role="menuitem"`.
+    const violations = await runAxe(page, {
+      rules: { 'aria-required-children': { enabled: false } },
+    });
+    expect(formatViolations(violations)).toBe('');
+  });
+});
+
+describe('pds-dropdown-menu header slot', () => {
+  type AXNode = { role: string; name?: string; children?: AXNode[] };
+
+  const findRole = (node: AXNode, role: string): AXNode | undefined =>
+    node.role === role ? node : node.children?.map((child) => findRole(child, role)).find(Boolean);
+
+  const textIn = (node: AXNode): string[] => [
+    ...(node.role === 'StaticText' && node.name ? [node.name] : []),
+    ...(node.children ?? []).flatMap(textIn),
+  ];
+
+  const openMenuWithHeader = async () => {
+    const page = await newE2EPage();
+    const warnings: string[] = [];
+    page.on('console', (message) => warnings.push(message.text()));
+    await page.setContent(`
+      <pds-dropdown-menu>
+        <button slot="trigger" id="trigger">Account</button>
+        <div slot="header">
+          <span>Jane Doe</span>
+          <span>jane@example.com</span>
+        </div>
+        <pds-dropdown-menu-item>Account settings</pds-dropdown-menu-item>
+        <pds-dropdown-menu-item>Log out</pds-dropdown-menu-item>
+      </pds-dropdown-menu>
+    `);
+    await page.click('#trigger');
+    await page.waitForChanges();
+    return { page, warnings };
+  };
+
+  it('exposes header content outside the menu, without warning', async () => {
+    const { page, warnings } = await openMenuWithHeader();
+
+    const tree = (await page.accessibility.snapshot({ interestingOnly: false })) as AXNode;
+    const menu = findRole(tree, 'menu');
+
+    expect(textIn(tree)).toContain('jane@example.com');
+    expect(textIn(menu)).toEqual(['Account settings', 'Log out']);
+    expect(warnings.filter((text) => text.includes('Unexpected element'))).toEqual([]);
+  });
+
+  it('moves focus from the trigger past the header to the first item', async () => {
+    const { page } = await openMenuWithHeader();
+
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    expect(await page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Account settings');
+  });
+
+  it('has no axe violations', async () => {
+    const { page } = await openMenuWithHeader();
+
+    // Same exclusion as above: `aria-required-children` fails on the items, not the header.
     const violations = await runAxe(page, {
       rules: { 'aria-required-children': { enabled: false } },
     });
