@@ -52,15 +52,14 @@ export class PdsTabs {
     }
   };
 
-  // Focus that leaves the tabs forgets the tab, so replacing it later doesn't pull focus
-  // back. Removing a focused tab also fires focusout (with no relatedTarget), while the tab
-  // is still connected, so that case is checked a microtask later: a tab that's gone by then
-  // was removed, and is kept so its focus can be restored.
+  // Focus that leaves a tab forgets it, so replacing the tab later doesn't pull focus back,
+  // including focus that moves into a panel. Focus moving to another tab is tracked again
+  // by focusin, which follows focusout. Removing a focused tab also fires focusout (with no
+  // relatedTarget), while the tab is still connected, so that case is checked a microtask
+  // later: a tab that's gone by then was removed, and is kept so its focus can be restored.
   private handleFocusOut = (event: FocusEvent) => {
-    const next = event.relatedTarget as Node | null;
-    if (next && this.el.contains(next)) return;
     const tab = this.lastFocusedTab;
-    if (next) {
+    if (event.relatedTarget) {
       this.lastFocusedTab = null;
       return;
     }
