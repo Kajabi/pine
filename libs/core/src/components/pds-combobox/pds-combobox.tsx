@@ -349,6 +349,19 @@ export class PdsCombobox implements BasePdsProps {
   @State() keyboardNavigating: boolean = false;
 
   /**
+   * A drill-in group row the first arrow showed rather than moved past. `aria-activedescendant`
+   * already pointed at it, so the status region says it instead.
+   */
+  @State() revealedGroupLabel: string | null = null;
+
+  /**
+   * The pointer in the panel can hover: a mouse or pen, not touch. Touch browsers keep a tapped row
+   * hovered, so group rows shade on `:hover` only for a pointer that can hover. Checked on the
+   * pointer itself rather than `(hover: hover)`, which a touch-first device with a trackpad fails.
+   */
+  @State() pointerCanHover: boolean = true;
+
+  /**
    * What's typed in the dropdown's own search field (`panelSearch`).
    */
   @State() panelQuery: string = '';
@@ -538,6 +551,7 @@ export class PdsCombobox implements BasePdsProps {
   @Watch('openGroup')
   protected openGroupChanged(next: HTMLOptGroupElement | null, previous: HTMLOptGroupElement | null) {
     this.handPanelFocusToList();
+    this.revealedGroupLabel = null;
     // Only moves between the drill-in panel's views slide; search results don't.
     if (!this.isOpen || this.effectiveGroupDisplay !== 'drill-in' || !this.showsGroupedPanel) return;
     if (next !== null && previous === null) this.drillDirection = 'in';
@@ -558,6 +572,11 @@ export class PdsCombobox implements BasePdsProps {
     if (this.isOpen && this.hidesPanelSearch && this.panelTreeEl) this.focusPanel(this.panelTreeEl);
   }
 
+  private onPanelPointer = (event: PointerEvent) => {
+    const canHover = event.pointerType !== 'touch';
+    if (this.pointerCanHover !== canHover) this.pointerCanHover = canHover;
+  };
+
   private onDrillAnimationEnd = (event: AnimationEvent) => {
     // Only the slide's own end: slotted consumer content can animate inside the list too.
     if (event.animationName?.startsWith('pds-combobox-drill')) this.drillDirection = null;
@@ -566,6 +585,7 @@ export class PdsCombobox implements BasePdsProps {
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
     if (!isOpen) {
+      this.revealedGroupLabel = null;
       this.drillDirection = null;
       this.openGroup = null;
       this.highlightedGroup = null;
@@ -1559,6 +1579,7 @@ export class PdsCombobox implements BasePdsProps {
    */
   private handleGroupedPanelKey(e: KeyboardEvent): boolean {
     if (!this.showsGroupedPanel) return false;
+    const highlightShown = this.keyboardNavigating;
     this.keyboardNavigating = true;
     // In the input trigger, Left and Right still move the caret through typed text, and Space,
     // Home and End edit it, as they do in the panel's search field.
@@ -1573,18 +1594,27 @@ export class PdsCombobox implements BasePdsProps {
     const column = panelColumn(entries, this.openGroup, current, drilledIn);
     if (column.length === 0) return false;
     const position = current === null ? -1 : column.indexOf(current);
+    // Drill-in doesn't shade a group row the pointer or a click-open highlighted, so the first Up or
+    // Down shows that row rather than moving past one the user never saw.
+    const unseenRow = !highlightShown && this.effectiveGroupDisplay === 'drill-in' && current !== null && typeof current !== 'number' && current !== this.openGroup;
 
     const moveTo = (to: number) => {
       e.preventDefault();
       this.highlightPanelItem(column[Math.max(0, Math.min(column.length - 1, to))]);
+      this.revealedGroupLabel = null;
+      return true;
+    };
+    const reveal = () => {
+      e.preventDefault();
+      this.revealedGroupLabel = (current as HTMLOptGroupElement).label;
       return true;
     };
 
     switch (e.key) {
       case 'ArrowDown':
-        return moveTo(position < 0 ? 0 : position + 1);
+        return unseenRow ? reveal() : moveTo(position < 0 ? 0 : position + 1);
       case 'ArrowUp':
-        return moveTo(position < 0 ? column.length - 1 : position - 1);
+        return unseenRow ? reveal() : moveTo(position < 0 ? column.length - 1 : position - 1);
       case 'Home':
         return moveTo(0);
       case 'End':
@@ -1992,6 +2022,8 @@ export class PdsCombobox implements BasePdsProps {
     this.highlightedIndex = -1;
     this.highlightedGroup = group;
     this.keyboardNavigating = false;
+    // So revealing this row again later is announced again.
+    this.revealedGroupLabel = null;
   }
 
   private onGroupRowClick = (event: Event) => {
@@ -2295,8 +2327,11 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__listbox--grouped': this.groupDisplay !== 'inline',
           'pds-combobox__listbox--drill-in': this.drillDirection === 'in',
           'pds-combobox__listbox--drill-out': this.drillDirection === 'out',
+          'pds-combobox__listbox--pointer-hover': this.pointerCanHover,
         }}
         onAnimationEnd={this.onDrillAnimationEnd}
+        onPointerMove={this.onPanelPointer}
+        onPointerDown={this.onPanelPointer}
         role={this.showsGroupedPanel ? 'tree' : 'listbox'}
         id={this.listboxId}
         aria-label={this.label || 'Options'}
@@ -2688,7 +2723,8 @@ export class PdsCombobox implements BasePdsProps {
         class={{
           'pds-combobox__group-back': true,
           'pds-combobox__group-back--disabled': disabled,
-          'pds-combobox__group-back--highlighted': this.highlightedGroupRow === group.optgroup,
+          // As the group rows: shaded for the keys, and by `:hover` for the pointer.
+          'pds-combobox__group-back--highlighted': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
           'pds-combobox__group-back--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
         }}
         role="treeitem"
@@ -2721,7 +2757,10 @@ export class PdsCombobox implements BasePdsProps {
   private renderGroupRow(group: PanelGroup, groupIndex: number, { posinset, setsize }: { posinset: number; setsize: number }) {
     const flyout = this.effectiveGroupDisplay === 'flyout';
     const isOpen = flyout && this.openGroup === group.optgroup;
-    const hasSelection = group.options.some(({ option }) => this.isOptionSelected(option));
+    // Drill-in shades a group row only for the keys: not for the group holding the selection, or the
+    // row the pointer or a click-open left highlighted, which read as picked. `:hover` covers the pointer.
+    const hasSelection = flyout && group.options.some(({ option }) => this.isOptionSelected(option));
+    const isCurrent = this.highlightedGroupRow === group.optgroup;
     const disabled = isGroupDisabled(group);
     const id = this.groupDomId(group.optgroup);
 
@@ -2733,8 +2772,8 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__group-row': true,
           'pds-combobox__group-row--open': isOpen,
           'pds-combobox__group-row--has-selection': hasSelection,
-          'pds-combobox__group-row--highlighted': this.highlightedGroupRow === group.optgroup,
-          'pds-combobox__group-row--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
+          'pds-combobox__group-row--highlighted': isCurrent && (flyout || this.keyboardNavigating),
+          'pds-combobox__group-row--keyboard': isCurrent && this.keyboardNavigating,
           'pds-combobox__group-row--disabled': disabled,
         }}
         role="treeitem"
@@ -3090,11 +3129,16 @@ export class PdsCombobox implements BasePdsProps {
           {this.renderDropdown()}
           {/* Announces the group drilled into, which focus alone doesn't. Rendered for any grouped
               display, so it's in place before a flyout falls back to drilling in. */}
-          {this.groupDisplay !== 'inline' && (
-            <span class="visually-hidden" role="status" aria-live="polite">
+          {this.groupDisplay !== 'inline' && [
+            <span key="drill-status" class="visually-hidden" role="status" aria-live="polite">
               {this.isOpen && this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null ? this.openGroup.label : ''}
-            </span>
-          )}
+            </span>,
+            // Its own region: sharing one, revealing a row then opening it would leave the text the
+            // same, and opening the group would go unannounced.
+            <span key="reveal-status" class="visually-hidden" role="status" aria-live="polite">
+              {this.isOpen ? this.revealedGroupLabel ?? '' : ''}
+            </span>,
+          ]}
         </div>
       </Host>
     );
