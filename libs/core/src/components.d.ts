@@ -2718,7 +2718,7 @@ export namespace Components {
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation. Panel mode only — nav mode has no variant-specific styling, so it can be omitted there.
+          * Sets tabs variant styles as outlined in Figma documentation. Applies in both panel and nav mode; omitting it renders the primary style.
          */
         "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
@@ -6664,7 +6664,7 @@ declare namespace LocalJSX {
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation. Panel mode only — nav mode has no variant-specific styling, so it can be omitted there.
+          * Sets tabs variant styles as outlined in Figma documentation. Applies in both panel and nav mode; omitting it renders the primary style.
          */
         "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }

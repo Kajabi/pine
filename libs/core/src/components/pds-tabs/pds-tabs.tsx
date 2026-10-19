@@ -34,7 +34,11 @@ export class PdsTabs {
     // componentDidLoad only runs once, so a reconnect (the element moved in the DOM) re-attaches
     // the slotchange listeners disconnectedCallback removed. Before the first render the slots
     // don't exist yet, so this is a no-op and componentDidLoad attaches them.
+    const isReconnect = this.tabsSlot != null;
     this.setupSlotChangeListeners();
+    // Content can change while detached, with no listener to see it — re-collect now
+    // instead of waiting on a slotchange that may never come if nothing changes again.
+    if (isReconnect) this.handleSlotChange();
   }
 
   disconnectedCallback() {
@@ -84,7 +88,7 @@ export class PdsTabs {
 
   /**
    * Sets tabs variant styles as outlined in Figma documentation.
-   * Panel mode only — nav mode has no variant-specific styling, so it can be omitted there.
+   * Applies in both panel and nav mode; omitting it renders the primary style.
    */
   @Prop() variant?: 'primary' | 'availability' | 'filter' | 'pill';
 
@@ -220,7 +224,7 @@ export class PdsTabs {
   }
 
   // The initial collection (componentWillLoad) only sees tabs/panels present at load.
-  // A tab or panel added, removed or replaced afterwards — including by a Turbo morph
+  // A tab or panel added, removed or replaced afterwards — including by a DOM morph
   // swapping in a fresh copy — needs to be re-collected the same way pds-dropdown-menu,
   // pds-select and pds-multiselect already do for their own slotted content.
   private setupSlotChangeListeners() {
