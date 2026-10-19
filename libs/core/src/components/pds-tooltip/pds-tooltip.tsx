@@ -49,7 +49,8 @@ export class PdsTooltip {
   @Prop() content: string;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance, used to build its portal element's `id`.
+   * Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -444,10 +445,8 @@ export class PdsTooltip {
   }
 
   render() {
-    const hostId = this.componentId || undefined;
-
     return (
-      <Host id={hostId} class={{ 'pds-tooltip--is-open': this.opened }}>
+      <Host class={{ 'pds-tooltip--is-open': this.opened }}>
         <span
           class="pds-tooltip__trigger"
           onMouseEnter={this.handleShow}
