@@ -554,6 +554,42 @@ describe('pds-tabs restoring focus after the focused tab is replaced', () => {
   });
 
   // Focus that leaves for nowhere (a click on the page) mustn't be pulled back either.
+  // Focus in a panel has left the tablist too, though it's still inside pds-tabs: a morph that
+  // replaces the tab and the panel's focused content mustn't move focus to the tab.
+  it('does not move focus to the tab once it has moved into a panel', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test15" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tab name="two">Test 2</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+        <pds-tabpanel name="two"><button id="in-panel">In panel</button></pds-tabpanel>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    await (await page.find('pds-tab[name="two"] > button')).focus();
+    await (await page.find('#in-panel')).focus();
+
+    await page.$eval('pds-tabs', (el) => {
+      const oldTab = el.querySelector('pds-tab[name="two"]');
+      const newTab = document.createElement('pds-tab');
+      newTab.setAttribute('name', 'two');
+      newTab.textContent = 'Test 2';
+      oldTab.replaceWith(newTab);
+
+      const oldPanel = el.querySelector('pds-tabpanel[name="two"]');
+      const newPanel = document.createElement('pds-tabpanel');
+      newPanel.setAttribute('name', 'two');
+      newPanel.innerHTML = '<button id="in-panel">In panel</button>';
+      oldPanel.replaceWith(newPanel);
+    });
+    await page.waitForChanges();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+  });
+
   it('does not take focus back after a click elsewhere on the page', async () => {
     const page = await newE2EPage();
     await page.setContent(`
