@@ -178,6 +178,9 @@
 .pds-combobox__button-trigger-label {
   color: inherit;
   flex: 1 1 auto;
+  // Shrink to the trigger width and break a long word, with or without an icon.
+  min-width: 0;
+  overflow-wrap: anywhere;
   text-align: start;
 }
 
