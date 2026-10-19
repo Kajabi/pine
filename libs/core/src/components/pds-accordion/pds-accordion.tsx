@@ -17,7 +17,7 @@ export class PdsAccordion {
   private detailsEl: HTMLDetailsElement;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    * @defaultValue null
    */
   @Prop() componentId: string;
