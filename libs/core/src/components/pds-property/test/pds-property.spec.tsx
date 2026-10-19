@@ -76,13 +76,13 @@ describe('pds-property', () => {
     `);
   });
 
-  it('renders with componentId', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsProperty],
       html: `<pds-property component-id="test-property">Property text</pds-property>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-property component-id="test-property" id="test-property">
+      <pds-property component-id="test-property">
         <mock:shadow-root>
           <pds-box align-items="center" gap="xs">
             <pds-icon icon="star" size="var(--pine-dimension-sm)" aria-hidden="true"></pds-icon>

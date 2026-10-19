@@ -19,7 +19,7 @@ describe('pds-popover', () => {
       html: `<pds-popover component-id="popover-1"></pds-popover>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-popover component-id="popover-1" id="popover-1" placement="right">
+      <pds-popover component-id="popover-1" placement="right">
         <mock:shadow-root>
           <span class="pds-popover__trigger-wrapper">
             <slot name="trigger"></slot>

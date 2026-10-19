@@ -15,7 +15,7 @@ describe('pds-sortable-item', () => {
     `);
   });
 
-  it('renders with id when prop is set', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsSortableItem],
       html: `
@@ -24,7 +24,7 @@ describe('pds-sortable-item', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-sortable-item class="pds-sortable-item" component-id="default" id="default">Content</pds-sortable-item>
+      <pds-sortable-item class="pds-sortable-item" component-id="default">Content</pds-sortable-item>
     `);
   });
 

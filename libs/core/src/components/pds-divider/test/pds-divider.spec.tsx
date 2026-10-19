@@ -16,14 +16,14 @@ describe('pds-divider', () => {
     `);
   });
 
-  it('renders with id when prop is set', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsDivider],
       html: `<pds-divider component-id="test" />`,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-divider component-id="test" id="test">
+      <pds-divider component-id="test">
         <mock:shadow-root>
           <hr class="pds-divider">
         </mock:shadow-root>

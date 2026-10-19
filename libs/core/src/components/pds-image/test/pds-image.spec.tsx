@@ -16,19 +16,28 @@ describe('pds-image', () => {
     `);
   });
 
-  it('renders with id when prop is set', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsImage],
       html: `<pds-image class="pds-image" component-id="test" src="//source.unsplash.com/100x100"></pds-image>`,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" component-id="test" id="test" src="//source.unsplash.com/100x100">
+      <pds-image class="pds-image" component-id="test" src="//source.unsplash.com/100x100">
         <mock:shadow-root>
           <img alt="" loading="eager" src="//source.unsplash.com/100x100" />
         </mock:shadow-root>
       </pds-image>
     `);
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsImage],
+      html: `<pds-image id="author-id" component-id="test" src="//source.unsplash.com/100x100"></pds-image>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
   });
 
   it('renders with lazy loading when prop is set', async () => {

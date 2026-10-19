@@ -20,14 +20,14 @@ describe('pds-avatar', () => {
     `);
   });
 
-  it('renders with id when prop is set', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsAvatar],
       html: `<pds-avatar component-id="test"></pds-avatar>`,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-avatar component-id="test" id="test" class="pds-avatar" size="lg" variant="customer">
+      <pds-avatar component-id="test" class="pds-avatar" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
             <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>

@@ -161,17 +161,32 @@ describe('pds-dropdown-menu-item', () => {
     expect(page.root.classList.contains('is-active')).toBe(false);
   });
 
-  it('handles component-id attribute', async () => {
+  // component-id is a Pine identifier, not the host's id — writing it there would overwrite an
+  // author-set id and invent one a Turbo morph's server HTML never carries.
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuItem],
       html: `<pds-dropdown-menu-item component-id="custom-id">Custom ID Item</pds-dropdown-menu-item>`,
     });
-    
+
     if (!page.root) {
       fail('Root element not found');
     }
-    
-    expect(page.root.id).toBe('custom-id');
+
+    expect(page.root.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuItem],
+      html: `<pds-dropdown-menu-item id="author-id" component-id="custom-id">Custom ID Item</pds-dropdown-menu-item>`,
+    });
+
+    if (!page.root) {
+      fail('Root element not found');
+    }
+
+    expect(page.root.id).toBe('author-id');
   });
   
   it('does not generate id when not provided', async () => {

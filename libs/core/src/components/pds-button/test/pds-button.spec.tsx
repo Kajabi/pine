@@ -213,14 +213,14 @@ describe('pds-button', () => {
     expect(button?.hasAttribute('disabled')).toBe(false);
   });
 
-  it('renders with id when prop is set', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsButton],
       html: `<pds-button component-id="test"></pds-button>`,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-button component-id="test" id="test" variant="primary">
+      <pds-button component-id="test" variant="primary">
         <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
@@ -246,6 +246,15 @@ describe('pds-button', () => {
     await page.waitForChanges();
 
     expect(page.root?.getAttribute('id')).toBe('save-button');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button id="author-id" component-id="test"></pds-button>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
   });
 
   // Note: Snapshot still shows --empty on slot wrappers because newSpecPage does not

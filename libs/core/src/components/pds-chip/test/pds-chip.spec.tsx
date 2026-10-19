@@ -18,14 +18,14 @@ describe('pds-chip', () => {
     `);
   });
 
-  it('renders with id when prop is set', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
       html: `<pds-chip component-id="test" />`,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" component-id="test" id="test">
+      <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" component-id="test">
         <mock:shadow-root>
           <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         </mock:shadow-root>
