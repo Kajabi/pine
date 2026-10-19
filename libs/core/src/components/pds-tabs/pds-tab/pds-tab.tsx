@@ -1,4 +1,5 @@
 import { Component, Element, Fragment, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
@@ -11,6 +12,15 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 })
 export class PdsTab {
   @Element() el: HTMLPdsTabElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
 
   // Unwraps a nested <a>/<button> left by a page-cache (Turbo, bfcache) reconnect.
   componentDidRender() {
@@ -140,6 +150,10 @@ export class PdsTab {
   }
 
   render() {
+    // The docs show consumers omitting `slot`, so server HTML doesn't carry it — a Turbo morph
+    // that strips it leaves this tab unslotted, with no tablist to render into. Put it back.
+    this.hostKeeper.record('', {}, { slot: 'tabs' });
+
     const availabilityTabEdgeInlineStart = (
       <span class="pds-tab-edge" role="presentation"></span>
     )
