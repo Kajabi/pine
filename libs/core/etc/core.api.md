@@ -47,6 +47,7 @@ export interface ComboboxOption {
     disabled?: boolean;
     group?: string;
     groupIcon?: string;
+    icon?: string;
     // (undocumented)
     id: string | number;
     // (undocumented)
