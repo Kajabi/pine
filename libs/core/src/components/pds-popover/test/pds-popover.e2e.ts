@@ -666,6 +666,53 @@ describe('pds-popover', () => {
     });
   });
 
+  describe('Focus style escaping', () => {
+    it('escapes a componentId with CSS-special characters so the focus style still applies and nothing extra leaks onto the page', async () => {
+      const page = await newE2EPage();
+      const trickyId = 'weird.id:part"quoted}end';
+      await page.setContent(`
+        <pds-popover component-id='${trickyId}'>
+          <button slot="trigger" id="trigger">Show popover</button>
+          <p>Popover content</p>
+        </pds-popover>
+      `);
+
+      await page.click('#trigger');
+      await page.waitForChanges();
+
+      const portalId = `${trickyId}-portal`;
+
+      expect(await page.evaluate(() => document.querySelectorAll('style[data-pds-popover-focus]').length)).toBe(1);
+      expect(await page.evaluate((id) => document.getElementById(id) !== null, portalId)).toBe(true);
+
+      // Unescaped, the id's `}` would close the rule early and scatter the rest of the id as new,
+      // unrelated global rules. Exactly three well-formed rules means nothing leaked onto the page.
+      expect(
+        await page.evaluate(
+          () => (document.querySelector('style[data-pds-popover-focus]') as HTMLStyleElement).sheet?.cssRules.length,
+        ),
+      ).toBe(3);
+
+      // The rule matches the real portal element and applies its outline on focus.
+      expect(
+        await page.evaluate((id) => {
+          const portal = document.getElementById(id) as HTMLElement;
+          portal.tabIndex = -1;
+          portal.focus();
+          return getComputedStyle(portal).outlineStyle;
+        }, portalId),
+      ).not.toBe('none');
+
+      // Cleanup on hide, then disconnect, removes the style without throwing.
+      await page.$eval('pds-popover', (popover: any) => popover.hide());
+      await page.waitForChanges();
+      await page.$eval('pds-popover', (popover) => popover.remove());
+      await page.waitForChanges();
+
+      expect(await page.evaluate(() => document.querySelectorAll('style[data-pds-popover-focus]').length)).toBe(0);
+    });
+  });
+
   describe('Focus return', () => {
     const openWithFocusInside = async () => {
       const page = await newE2EPage();
