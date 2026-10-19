@@ -484,7 +484,6 @@ export class PdsSortable {
     return (
       <Host
         class={classNames}
-        id={this.componentId}
         onFocusin={this.handleFocusIn}
         onFocusout={this.handleFocusOut}
         onKeyDown={this.handleKeyDown}

@@ -246,7 +246,6 @@ export class PdsAvatar {
 
     return (
       <Host
-        id={this.componentId}
         class={{...this.classNames()}}
       >
         {this.renderAvatar()}

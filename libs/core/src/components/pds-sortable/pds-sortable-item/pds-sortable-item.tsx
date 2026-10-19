@@ -100,7 +100,7 @@ export class PdsSortableItem {
     const wasPressed = existingHandle?.getAttribute('aria-pressed') === 'true';
 
     return (
-      <Host class={hostClasses} id={this.componentId}>
+      <Host class={hostClasses}>
         {(this.showHandle || reorderable) && (
           <div
             class={{

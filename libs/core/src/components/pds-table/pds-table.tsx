@@ -615,7 +615,6 @@ export class PdsTable {
       return (
         <Host
           class={`${this.classNames()} pds-table-responsive-host`}
-          id={this.componentId}
           role="grid"
           selectable={this.selectable}
           tabindex="0"
@@ -637,7 +636,6 @@ export class PdsTable {
     return (
       <Host
         class={this.classNames()}
-        id={this.componentId}
         role="grid"
         selectable={this.selectable}
         tabindex="0"

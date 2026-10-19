@@ -21,7 +21,7 @@ export class PdsDropdownMenuSeparator implements BasePdsProps {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         <hr/>
       </Host>
     );

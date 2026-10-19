@@ -237,7 +237,6 @@ export class PdsImage {
           'pds-image': true,
           'pds-image--has-ratio': hasRatio,
         }}
-        id={this.componentId}
       >
         <img
           alt={this.alt}

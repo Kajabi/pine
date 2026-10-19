@@ -300,7 +300,6 @@ export class PdsRadioGroup {
     return (
       <Host
         class={hostClass}
-        id={this._groupId}
         role="radiogroup"
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}

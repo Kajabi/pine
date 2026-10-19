@@ -18,7 +18,7 @@ export class PdsFilters implements BasePdsProps {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         <div class="pds-filters">
           <slot></slot>
         </div>
