@@ -544,7 +544,9 @@ export class PdsCombobox implements BasePdsProps {
     const list = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
     if (!list) return;
     const offset = el.getBoundingClientRect().top - list.getBoundingClientRect().top - list.clientTop;
-    const top = list.scrollTop + offset - (parseFloat(list.style.scrollPaddingBlockStart) || 0);
+    // The padding keeps rows clear of the sticky row back; the row back itself doesn't need it.
+    const padding = el.classList.contains('pds-combobox__group-back-trigger') ? 0 : parseFloat(list.style.scrollPaddingBlockStart) || 0;
+    const top = list.scrollTop + offset - padding;
     const bottom = list.scrollTop + offset + el.offsetHeight - list.clientHeight;
     const target = top < list.scrollTop ? top : bottom > list.scrollTop ? bottom : null;
     if (target !== null) list.scrollTo({ top: target, behavior });
