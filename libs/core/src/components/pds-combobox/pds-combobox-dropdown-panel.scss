@@ -178,33 +178,36 @@
     background: var(--pine-color-background-muted);
   }
 
-  // Drilling into a group slides it in from the right; going back slides the groups in from the
-  // left. Timed by the motion tokens, which drop to 0ms under prefers-reduced-motion.
+  // One slide, mirrored: entering slides in from the end, going back from the start. Motion tokens
+  // drop it to 0ms under reduced motion.
   // The slide's offset would otherwise widen the list's scroll area and flash a horizontal scrollbar.
   .pds-combobox__listbox--drill-in,
   .pds-combobox__listbox--drill-out {
     overflow-x: hidden;
   }
 
-  .pds-combobox__listbox--drill-in > .pds-combobox__group-back {
-    animation: pds-combobox-drill-from-end var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  // Internal, not a consumer hook.
+  .pds-combobox__listbox--drill-in,
+  .pds-combobox__listbox--drill-out:dir(rtl) {
+    --pds-combobox-drill-from: var(--pine-dimension-sm);
   }
 
+  .pds-combobox__listbox--drill-out,
+  .pds-combobox__listbox--drill-in:dir(rtl) {
+    --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
+  }
+
+  // The row back slides with the options; only its trigger moves, so it stays sticky.
+  .pds-combobox__listbox--drill-in .pds-combobox__drill-in-options > li,
+  .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger,
   .pds-combobox__listbox--drill-out > li {
-    animation: pds-combobox-drill-from-start var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+    animation: pds-combobox-drill var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   }
 
-  @keyframes pds-combobox-drill-from-end {
+  @keyframes pds-combobox-drill {
     from {
       opacity: 0;
-      transform: translateX(var(--pine-dimension-sm));
-    }
-  }
-
-  @keyframes pds-combobox-drill-from-start {
-    from {
-      opacity: 0;
-      transform: translateX(calc(var(--pine-dimension-sm) * -1));
+      transform: translateX(var(--pds-combobox-drill-from));
     }
   }
 

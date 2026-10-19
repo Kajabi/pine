@@ -93,6 +93,42 @@ describe('pds-combobox', () => {
     expect(widths.trigger).toBe(300);
   });
 
+  // Outside drill-in, showing the highlighted row scrolls whatever holds it, as `scrollIntoView`
+  // does: here a container the dropdown runs past. Flyout group rows take the highlight without
+  // focus, so nothing else scrolls the container to them.
+  it('scrolls a container the dropdown runs past to show the highlighted group row', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setContent(`
+      <div id="scroller" style="height: 200px; overflow: auto;">
+        <pds-combobox component-id="many" label="Option" trigger="button" mode="select-only" group-display="flyout" dropdown-width="300px">
+          ${Array.from({ length: 20 }, (_, i) => `<optgroup label="Group ${i}"><option value="o${i}">Option ${i}</option></optgroup>`).join('')}
+        </pds-combobox>
+      </div>
+    `);
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await page.mouse.move(0, 0);
+
+    await page.keyboard.press('End');
+    await page.waitForChanges();
+
+    // Wait for the scroll to bring the row in. A regression fails on the timeout.
+    const shown = await page
+      .waitForFunction(
+        () => {
+          const scroller = document.getElementById('scroller')!.getBoundingClientRect();
+          const row = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-row:last-of-type')!.getBoundingClientRect();
+          return row.bottom <= scroller.bottom + 0.5;
+        },
+        { timeout: 3000 },
+      )
+      .then(() => true)
+      .catch(() => false);
+    expect(shown).toBe(true);
+  });
+
   describe('grouped options', () => {
     const groupedOptions = [
       { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
@@ -584,6 +620,107 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
     });
 
+    describe('the slide between the groups and a group', () => {
+      type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+      // Animations held at their first frame, so the test reads where each row starts from.
+      const holdAnimations = async (page: Page) => {
+        const client = await page.target().createCDPSession();
+        await client.send('Animation.enable');
+        await client.send('Animation.setPlaybackRate', { playbackRate: 0 });
+      };
+
+      // Each matching row's start: which way it's offset, or `still` when it doesn't move. Adds up the
+      // offsets of the row and every element above it, so a sliding parent counts too.
+      const starts = (page: Page, selector: string) =>
+        page.evaluate(sel => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          return Array.from(root.querySelectorAll(sel)).map(el => {
+            let x = 0;
+            for (let node: Element | null = el; node; node = node.parentElement) {
+              const { transform } = getComputedStyle(node);
+              if (transform !== 'none') x += new DOMMatrixReadOnly(transform).m41;
+            }
+            return x > 0 ? 'from-right' : x < 0 ? 'from-left' : 'still';
+          });
+        }, selector);
+
+      const click = async (page: Page, selector: string) => {
+        await (await page.find(`pds-combobox >>> ${selector}`)).click();
+        await page.waitForChanges();
+      };
+
+      it("slides a group's options and its row back in from the right, and the groups back from the left", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        // The row back moves with the options; its list item, which keeps it sticky, doesn't.
+        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
+        expect(await starts(page, '.pds-combobox__group-back')).toEqual(['still']);
+
+        await click(page, '.pds-combobox__group-back-trigger');
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['from-left', 'from-left']);
+        expect(await starts(page, '.pds-combobox__panel-search')).toEqual(['still']);
+      });
+
+      // Showing the highlighted option mustn't scroll the list sideways to reach a row the slide
+      // still offsets past its edge: that scroll eats the slide, so entering looks faster than leaving.
+      it("doesn't scroll the list sideways while a group slides in", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        expect(await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('[role="tree"]')!.scrollLeft)).toBe(0);
+      });
+
+      it('slides the row back in with the options when there is no panel search', async () => {
+        const page = await setUp('group-display="drill-in"');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(1) .pds-combobox__group-row-trigger');
+
+        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right', 'from-right']);
+      });
+
+      it('mirrors the slide right to left', async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-left']);
+
+        await click(page, '.pds-combobox__group-back-trigger');
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['from-right', 'from-right']);
+      });
+
+      it("doesn't slide with reduced motion", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+        // The same page slides before reduced motion is on, so stillness below is down to it.
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        await click(page, '.pds-combobox__group-back-trigger');
+
+        await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+        const duration = await page.evaluate(() =>
+          getComputedStyle(document.querySelector('pds-combobox')!.shadowRoot!.querySelector('[role="tree"]')!).getPropertyValue('--pine-motion-duration-base').trim(),
+        );
+        expect(duration).toBe('0ms');
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['still']);
+
+        await click(page, '.pds-combobox__group-back-trigger');
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['still', 'still']);
+      });
+    });
+
     it('drills in from the search field by keyboard, and back to it, then closes with Escape', async () => {
       const page = await setUp('group-display="drill-in" panel-search');
       const listAD = () =>
@@ -686,6 +823,49 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__listbox-options');
     });
 
+    // The scroll padding keeps options clear of the sticky row back; the row back itself is always
+    // in view, so highlighting it mustn't scroll the list by that padding.
+    it("doesn't scroll the list when the keys reach the sticky row back in a group that scrolls", async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" panel-search max-height="160px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.mouse.move(0, 0);
+
+      const scrollTop = () =>
+        page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox-options')!.scrollTop);
+
+      // Down to the last option, then let the smooth scroll settle.
+      await page.keyboard.press('End');
+      await page.waitForChanges();
+      let settled = await scrollTop();
+      for (let i = 0; i < 30; i++) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const now = await scrollTop();
+        if (now === settled && now > 0) break;
+        settled = now;
+      }
+      expect(settled).toBeGreaterThan(0);
+
+      // Home highlights the row back, which sticks in view however far the list has scrolled.
+      await page.keyboard.press('Home');
+      await page.waitForChanges();
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      expect(await page.find('pds-combobox >>> .pds-combobox__group-back--highlighted')).not.toBeNull();
+      expect(await scrollTop()).toBe(settled);
+    });
+
     it("keeps the highlighted option clear of the sticky row back in a group that scrolls", async () => {
       const page = await newE2EPage();
       await page.setViewport({ width: 1200, height: 800 });
@@ -758,6 +938,38 @@ describe('pds-combobox', () => {
       expect(state.back).toBe(false);
       expect(state.ad).toBe(state.tagRow);
       expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+    });
+
+    // The row back's list item wraps the group's options, so it's taller than a list that scrolls;
+    // showing the item's bottom edge would scroll the highlighted row back out of view.
+    it('shows the highlighted row back, not the end of its group, in a group taller than the list', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" max-height="160px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.mouse.move(0, 0);
+
+      await page.keyboard.press('Home');
+      await page.waitForChanges();
+
+      const shown = await page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const list = root.querySelector('.pds-combobox__listbox')!.getBoundingClientRect();
+        const back = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+        return back.top >= list.top - 0.5 && back.bottom <= list.bottom + 0.5;
+      });
+      expect(await page.find('pds-combobox >>> .pds-combobox__group-back--highlighted')).not.toBeNull();
+      expect(shown).toBe(true);
     });
 
     it('stays open when a flyout with panel search drills in for lack of room, on a selection', async () => {
