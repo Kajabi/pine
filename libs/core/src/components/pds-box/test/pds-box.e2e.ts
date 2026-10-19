@@ -68,9 +68,11 @@ describe('pds-box per-side borders', () => {
       });
 
       await page.$eval('pds-box', (el) => {
-        new MutationObserver(() => {
+        const fighter = new MutationObserver(() => {
           if (el.className !== '') el.className = '';
-        }).observe(el, { attributes: true, attributeFilter: ['class'] });
+        });
+        fighter.observe(el, { attributes: true, attributeFilter: ['class'] });
+        (window as unknown as { fighter: MutationObserver }).fighter = fighter;
         el.className = '';
       });
       await page.waitForChanges();
@@ -78,6 +80,15 @@ describe('pds-box per-side borders', () => {
       expect(await page.evaluate(() => 'responsive')).toBe('responsive');
       expect((await page.evaluate(() => (window as unknown as { pineWarnings: string[] }).pineWarnings)).filter((text) => text.startsWith('pds-box: stopped'))).toHaveLength(1);
       expect(await page.$eval('pds-box', (el) => el.className)).toBe('');
+
+      // Once the script stops, the next class change brings the box back, Stencil's classes included.
+      await page.$eval('pds-box', (el) => {
+        (window as unknown as { fighter: MutationObserver }).fighter.disconnect();
+        el.className = 'consumer';
+      });
+      await page.waitForChanges();
+      const classes = await page.$eval('pds-box', (el) => Array.from(el.classList));
+      expect(classes).toEqual(expect.arrayContaining(['consumer', 'hydrated', 'pds-box-gap-md']));
     });
 
     it('still takes a changed attribute afterwards', async () => {

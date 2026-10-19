@@ -101,10 +101,11 @@ describe('keepPineHydrated()', () => {
     expect(warn).toHaveBeenCalledTimes(1);
     expect(warn).toHaveBeenCalledWith('%s', 'pds-button: stopped putting back its hydrated and scope classes, as another script keeps removing them.', fought);
 
-    // The next task, a new strip is restored again, and giving up again stays quiet.
+    // The next task, a later class change brings it back, though its old value no longer has
+    // `hydrated` (the script's last strip took it), and giving up again stays quiet.
     await new Promise((resolve) => setTimeout(resolve, 10));
-    fought.className = '';
-    restore(fought, 'hydrated');
+    fought.className = 'consumer';
+    restore(fought, '');
     expect(fought.classList.contains('hydrated')).toBe(true);
     expect(warn).toHaveBeenCalledTimes(1);
     warn.mockRestore();
@@ -154,19 +155,23 @@ describe('limitRestores()', () => {
     expect(restore).toHaveBeenCalledTimes(20);
   });
 
-  it('warns once per element, however many of its restores give up', () => {
+  it('warns once per element for each kind of restore that gives up', () => {
     const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const el = document.createElement('pds-box');
-    const host = limitRestores(() => true, 'pds-box: stopped restoring its host', el);
-    const classes = limitRestores(() => true, 'pds-box: stopped putting back its classes', el);
+    const el = document.createElement('pds-button');
+    const host = limitRestores(() => true, 'pds-button: stopped restoring its host', el, 'host');
+    const classes = limitRestores(() => true, 'pds-button: stopped putting back its classes', el, 'host');
+    const aria = limitRestores(() => true, 'pds-popover: stopped restoring its trigger ARIA', el);
 
     for (let round = 0; round < 7; round += 1) {
       host();
       classes();
+      aria();
     }
 
-    expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn).toHaveBeenCalledWith('%s', 'pds-box: stopped restoring its host', el);
+    expect(warn.mock.calls.map(([, text]) => text)).toEqual([
+      'pds-button: stopped restoring its host',
+      'pds-popover: stopped restoring its trigger ARIA',
+    ]);
     warn.mockRestore();
   });
 
