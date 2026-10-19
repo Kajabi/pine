@@ -446,6 +446,41 @@ describe('pds-tabs re-collecting children after a slot change', () => {
     expect(newAnchor).not.toBeNull();
     expect(newAnchor.getAttribute('href')).toBe('/b');
   });
+
+  // Moving the same element (disconnect, then reconnect) mustn't lose the slotchange
+  // listeners: componentDidLoad, which first attaches them, doesn't run again.
+  it('still re-collects after the element is moved to another container', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="first">
+        <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test12" variant="primary">
+          <pds-tab name="one">Test 1</pds-tab>
+          <pds-tab name="two">Test 2</pds-tab>
+          <pds-tabpanel name="one">Content 1</pds-tabpanel>
+          <pds-tabpanel name="two">Content 2</pds-tabpanel>
+        </pds-tabs>
+      </div>
+      <div id="second"></div>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-tabs', (el) => {
+      document.getElementById('second').appendChild(el);
+    });
+    await page.waitForChanges();
+
+    await page.$eval('pds-tabs', (el) => {
+      const oldPanel = el.querySelector('pds-tabpanel[name="two"]');
+      const newPanel = document.createElement('pds-tabpanel');
+      newPanel.setAttribute('name', 'two');
+      newPanel.textContent = 'Content 2';
+      oldPanel.replaceWith(newPanel);
+    });
+    await page.waitForChanges();
+
+    const panel = await page.find('#second pds-tabpanel[name="two"] > div');
+    expect(panel).toHaveClass('is-active');
+  });
 });
 
 // A focused tab's button can be removed out from under the user — a Turbo morph
@@ -484,6 +519,69 @@ describe('pds-tabs restoring focus after the focused tab is replaced', () => {
 
     const isFocused = await page.$eval('pds-tab[name="two"] > button', (button) => button === document.activeElement);
     expect(isFocused).toBe(true);
+  });
+
+  it('does not take focus back once it has left the tabs', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test13" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tab name="two">Test 2</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+        <pds-tabpanel name="two">Content 2</pds-tabpanel>
+      </pds-tabs>
+      <button id="outside">Outside</button>
+    `);
+    await page.waitForChanges();
+
+    await (await page.find('pds-tab[name="two"] > button')).focus();
+    await (await page.find('#outside')).focus();
+
+    await page.$eval('pds-tabs', (el) => {
+      const oldTab = el.querySelector('pds-tab[name="two"]');
+      const newTab = document.createElement('pds-tab');
+      newTab.setAttribute('name', 'two');
+      newTab.textContent = 'Test 2';
+      oldTab.replaceWith(newTab);
+    });
+    await page.waitForChanges();
+
+    // Give a wrongly-scheduled focus restoration a chance to run before asserting it didn't.
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    const outsideFocused = await page.$eval('#outside', (button) => button === document.activeElement);
+    expect(outsideFocused).toBe(true);
+  });
+
+  // Focus that leaves for nowhere (a click on the page) mustn't be pulled back either.
+  it('does not take focus back after a click elsewhere on the page', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test14" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tab name="two">Test 2</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+        <pds-tabpanel name="two">Content 2</pds-tabpanel>
+      </pds-tabs>
+      <p id="text" style="margin-top: 200px;">Some text</p>
+    `);
+    await page.waitForChanges();
+
+    await (await page.find('pds-tab[name="two"] > button')).focus();
+    await (await page.find('#text')).click();
+    expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+
+    await page.$eval('pds-tabs', (el) => {
+      const oldTab = el.querySelector('pds-tab[name="two"]');
+      const newTab = document.createElement('pds-tab');
+      newTab.setAttribute('name', 'two');
+      newTab.textContent = 'Test 2';
+      oldTab.replaceWith(newTab);
+    });
+    await page.waitForChanges();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
   });
 
   it('does not move focus when the change is unrelated to the focused tab', async () => {
