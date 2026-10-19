@@ -16,7 +16,7 @@ import {  computePosition,
 type MenuItemElement = HTMLPdsDropdownMenuItemElement | HTMLAnchorElement | HTMLButtonElement;
 
 /**
- * @slot header - Non-interactive content displayed above the menu items inside the dropdown panel, such as a user profile block. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item.
+ * @slot header - Non-interactive content displayed above the menu items inside the dropdown panel. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item.
  * @part menu-panel - Exposes the dropdown menu container for styling.
  */
 @Component({
