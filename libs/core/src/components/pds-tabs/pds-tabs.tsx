@@ -30,11 +30,17 @@ export class PdsTabs {
   connectedCallback() {
     this.hostKeeper.connect(this.el);
     this.el.addEventListener('focusin', this.handleFocusIn);
+    this.el.addEventListener('focusout', this.handleFocusOut);
+    // componentDidLoad only runs once, so a reconnect (the element moved in the DOM) re-attaches
+    // the slotchange listeners disconnectedCallback removed. Before the first render the slots
+    // don't exist yet, so this is a no-op and componentDidLoad attaches them.
+    this.setupSlotChangeListeners();
   }
 
   disconnectedCallback() {
     this.hostKeeper.disconnect();
     this.el.removeEventListener('focusin', this.handleFocusIn);
+    this.el.removeEventListener('focusout', this.handleFocusOut);
     this.tabsSlot?.removeEventListener('slotchange', this.handleSlotChange);
     this.tabPanelsSlot?.removeEventListener('slotchange', this.handleSlotChange);
   }
@@ -44,6 +50,23 @@ export class PdsTabs {
     if (tab && tab.closest('pds-tabs') === this.el) {
       this.lastFocusedTab = tab;
     }
+  };
+
+  // Focus that leaves the tabs forgets the tab, so replacing it later doesn't pull focus
+  // back. Removing a focused tab also fires focusout (with no relatedTarget), while the tab
+  // is still connected, so that case is checked a microtask later: a tab that's gone by then
+  // was removed, and is kept so its focus can be restored.
+  private handleFocusOut = (event: FocusEvent) => {
+    const next = event.relatedTarget as Node | null;
+    if (next && this.el.contains(next)) return;
+    const tab = this.lastFocusedTab;
+    if (next) {
+      this.lastFocusedTab = null;
+      return;
+    }
+    queueMicrotask(() => {
+      if (this.lastFocusedTab === tab && tab?.isConnected) this.lastFocusedTab = null;
+    });
   };
 
   componentDidLoad() {
@@ -245,11 +268,13 @@ export class PdsTabs {
     // the browser already silently dropped focus to <body> — restore it to the new
     // active tab's button so keyboard/screen-reader users don't lose their place.
     // Deferred a frame since a freshly-created pds-tab's button doesn't exist until
-    // its own render completes; re-checked then in case focus moved on its own.
+    // its own render completes; re-checked then in case focus moved on its own, to
+    // the tabs or anywhere else — only focus the removal dropped to <body> is restored.
     if (focusedTabWasRemoved) {
       this.lastFocusedTab = null;
       requestAnimationFrame(() => {
-        if (this.el.contains(document.activeElement)) return;
+        const active = document.activeElement;
+        if (active && active !== document.body) return;
         const newActiveTab = this.tabs.find((tab) => tab.name === this.activeTabName);
         (newActiveTab?.querySelector('button') as HTMLButtonElement)?.focus();
       });
