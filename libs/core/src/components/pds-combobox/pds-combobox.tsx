@@ -535,6 +535,30 @@ export class PdsCombobox implements BasePdsProps {
     }
   }
 
+  /**
+   * Scrolls just enough to show `el`, as `scrollIntoView({ block: 'nearest' })` does. In the drill-in
+   * panel it scrolls the list alone, and never sideways: while a drill-in slide offsets a row past
+   * the list's edge, `scrollIntoView` also scrolls the list horizontally to reach it, which eats most
+   * of the slide. There it keeps clear of the sticky row back, through the scroll padding set for it,
+   * but doesn't scroll the page or a scrolling ancestor.
+   */
+  private scrollIntoViewNearest(el: HTMLElement, smooth: boolean) {
+    const behavior = smooth ? 'smooth' : 'auto';
+    if (!this.showsGroupedPanel || this.effectiveGroupDisplay !== 'drill-in') {
+      el.scrollIntoView({ block: 'nearest', behavior });
+      return;
+    }
+    const list = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
+    if (!list) return;
+    const offset = el.getBoundingClientRect().top - list.getBoundingClientRect().top - list.clientTop;
+    // The padding keeps rows clear of the sticky row back; the row back itself doesn't need it.
+    const padding = el.classList.contains('pds-combobox__group-back-trigger') ? 0 : parseFloat(list.style.scrollPaddingBlockStart) || 0;
+    const top = list.scrollTop + offset - padding;
+    const bottom = list.scrollTop + offset + el.offsetHeight - list.clientHeight;
+    const target = top < list.scrollTop ? top : bottom > list.scrollTop ? bottom : null;
+    if (target !== null) list.scrollTo({ top: target, behavior });
+  }
+
   private focusPanel(el: HTMLElement) {
     this.panelFocusEl = el;
     // Before the dropdown is positioned it sits in the page's flow; don't scroll to it.
@@ -586,7 +610,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private onDrillAnimationEnd = (event: AnimationEvent) => {
     // Only the slide's own end: slotted consumer content can animate inside the list too.
-    if (event.animationName?.startsWith('pds-combobox-drill')) this.drillDirection = null;
+    if (event.animationName === 'pds-combobox-drill') this.drillDirection = null;
   };
 
   @Watch('isOpen')
@@ -1834,9 +1858,12 @@ export class PdsCombobox implements BasePdsProps {
       }
       // Matched by id, not a selector: componentId is consumer text and may not be selector-safe.
       const id = this.groupDomId(groupRow);
-      Array.from(this.listboxEl.querySelectorAll('[role="treeitem"]'))
-        .find(row => row.id === id)
-        ?.scrollIntoView({ block: 'nearest' });
+      const row = Array.from(this.listboxEl.querySelectorAll('[role="treeitem"]'))
+        .find(item => item.id === id);
+      // The row's trigger, not its item: the row back's item wraps the group's options, and showing
+      // all of a group taller than the list would scroll the row back itself out of view.
+      const trigger = Array.from(row?.children ?? []).find(child => child.classList.contains('pds-combobox__group-row-trigger'));
+      if (trigger) this.scrollIntoViewNearest(trigger as HTMLElement, false);
       this.updateAriaActiveDescendant();
       return;
     }
@@ -1894,7 +1921,7 @@ export class PdsCombobox implements BasePdsProps {
       if (flyout) {
         this.flyout.reveal(flyout, currentOption);
       } else {
-        currentOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        this.scrollIntoViewNearest(currentOption, true);
       }
     }
 
