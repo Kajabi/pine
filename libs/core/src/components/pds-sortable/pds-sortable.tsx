@@ -113,7 +113,7 @@ export class PdsSortable {
     this.hostKeeper.record(classNames);
 
     return (
-      <Host class={classNames} id={this.componentId}>
+      <Host class={classNames}>
         <slot></slot>
       </Host>
     );

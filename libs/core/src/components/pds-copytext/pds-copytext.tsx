@@ -148,7 +148,7 @@ export class PdsCopytext {
     this.hostKeeper.record(hostClass);
 
     return (
-      <Host class={hostClass} id={this.componentId}>
+      <Host class={hostClass}>
         <pds-button type="button" variant="unstyled" onClick={this.handleClick}>
           <span ref={(el) => this.valueSpanEl = el}>{this.value}</span>
           <pds-icon aria-hidden="true" icon={copyIcon} size="16px"></pds-icon>

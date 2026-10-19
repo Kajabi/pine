@@ -598,7 +598,7 @@ export class PdsFilter implements BasePdsProps {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         <button
           class={this.getTriggerClasses()}
           type="button"

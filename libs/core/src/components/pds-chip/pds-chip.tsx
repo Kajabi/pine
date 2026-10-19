@@ -348,7 +348,7 @@ export class PdsChip {
     this.hostKeeper.record(hostClass, hostStyles);
 
     return (
-      <Host class={hostClass} id={this.componentId} style={hostStyles}>
+      <Host class={hostClass} style={hostStyles}>
         {this.setChipContent()}
         {this.effectiveVariant === 'tag' && this.renderCloseButton()}
       </Host>

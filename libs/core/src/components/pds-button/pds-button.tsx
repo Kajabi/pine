@@ -383,8 +383,6 @@ export class PdsButton {
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
-        // Binding id to an unset componentId would strip an id the consumer set whenever the button re-renders.
-        {...(this.componentId != null ? { id: this.componentId } : {})}
         onClick={this.handleClick}
         variant={this.variant}
       >

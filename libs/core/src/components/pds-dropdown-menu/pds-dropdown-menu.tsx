@@ -431,7 +431,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         <slot
           name="trigger"
           onSlotchange={this.handleTriggerSlotChange}

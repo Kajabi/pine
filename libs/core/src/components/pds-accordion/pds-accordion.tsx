@@ -59,7 +59,7 @@ export class PdsAccordion {
 
   render() {
     return (
-      <Host class="pds-accordion" id={this.componentId}>
+      <Host class="pds-accordion">
         <details {...this.getOpenAttribute()} ref={(el) => (this.detailsEl = el as HTMLDetailsElement)}>
           <summary part="accordion-button">
             <slot name="label">Details</slot>

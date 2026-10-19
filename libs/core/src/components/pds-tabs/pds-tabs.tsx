@@ -358,7 +358,7 @@ export class PdsTabs {
     this.hostKeeper.record(hostClass);
 
     return (
-      <Host active-tab-name={this.activeTabName} class={hostClass} id={this.componentId}>
+      <Host active-tab-name={this.activeTabName} class={hostClass}>
         {tabList}
         <slot name="tabpanels" />
       </Host>

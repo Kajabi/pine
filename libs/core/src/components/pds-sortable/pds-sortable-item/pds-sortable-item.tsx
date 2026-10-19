@@ -72,7 +72,7 @@ export class PdsSortableItem {
     this.hostKeeper.record('pds-sortable-item');
 
     return (
-      <Host class="pds-sortable-item" id={this.componentId}>
+      <Host class="pds-sortable-item">
         {this.showHandle && (
           <div class="pds-sortable-item__handle">
             <pds-icon aria-hidden="true" icon={handleIcon}></pds-icon>

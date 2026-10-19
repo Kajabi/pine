@@ -157,7 +157,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
   render() {
     return (
-      <Host id={this.componentId}
+      <Host
         class={{ 'is-disabled': this.disabled, 'destructive': !this.disabled && this.destructive }}
         onClick={() => !this.disabled && this.handleClick()}
         role="none"

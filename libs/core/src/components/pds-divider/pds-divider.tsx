@@ -56,7 +56,7 @@ export class PdsDivider {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         {this.hasLabel ? (
           <div class={this.classNames()} role="separator" aria-label={this.label}>
             <span class="pds-divider__label" part="label" aria-hidden="true">{this.label}</span>

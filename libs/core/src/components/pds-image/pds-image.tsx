@@ -63,7 +63,6 @@ export class PdsImage {
         class={{
           'pds-image': true,
         }}
-        id={this.componentId}
       >
         <img
           alt={this.alt}

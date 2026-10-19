@@ -783,7 +783,7 @@ export class PdsPopover {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         <span class="pds-popover__trigger-wrapper">
           <slot name="trigger" onSlotchange={this.handleTriggerSlotChange}></slot>
         </span>
