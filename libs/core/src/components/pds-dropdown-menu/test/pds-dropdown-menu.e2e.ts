@@ -403,6 +403,22 @@ describe('pds-dropdown-menu header slot', () => {
     expect(await page.$eval('#header', (el) => getComputedStyle(el).textAlign)).toBe('start');
   });
 
+  it('keeps raw item styles off header elements', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-dropdown-menu>
+        <button slot="trigger" id="trigger">Account</button>
+        <a slot="header" id="header" href="#profile">Jane Doe</a>
+        <a href="#settings" id="item">Account settings</a>
+      </pds-dropdown-menu>
+    `);
+    const display = (selector: string) => page.$eval(selector, (el) => getComputedStyle(el).display);
+
+    expect(await display('#header')).toBe('inline');
+    expect(await display('#item')).toBe('flex');
+    expect(await display('#trigger')).toBe('flex');
+  });
+
   it('has no axe violations', async () => {
     const { page } = await openMenuWithHeader();
 
