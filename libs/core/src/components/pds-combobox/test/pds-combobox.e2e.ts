@@ -93,6 +93,42 @@ describe('pds-combobox', () => {
     expect(widths.trigger).toBe(300);
   });
 
+  // Outside drill-in, showing the highlighted row scrolls whatever holds it, as `scrollIntoView`
+  // does: here a container the dropdown runs past. Flyout group rows take the highlight without
+  // focus, so nothing else scrolls the container to them.
+  it('scrolls a container the dropdown runs past to show the highlighted group row', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setContent(`
+      <div id="scroller" style="height: 200px; overflow: auto;">
+        <pds-combobox component-id="many" label="Option" trigger="button" mode="select-only" group-display="flyout" dropdown-width="300px">
+          ${Array.from({ length: 20 }, (_, i) => `<optgroup label="Group ${i}"><option value="o${i}">Option ${i}</option></optgroup>`).join('')}
+        </pds-combobox>
+      </div>
+    `);
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await page.mouse.move(0, 0);
+
+    await page.keyboard.press('End');
+    await page.waitForChanges();
+
+    // Wait for the scroll to bring the row in. A regression fails on the timeout.
+    const shown = await page
+      .waitForFunction(
+        () => {
+          const scroller = document.getElementById('scroller')!.getBoundingClientRect();
+          const row = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-row:last-of-type')!.getBoundingClientRect();
+          return row.bottom <= scroller.bottom + 0.5;
+        },
+        { timeout: 3000 },
+      )
+      .then(() => true)
+      .catch(() => false);
+    expect(shown).toBe(true);
+  });
+
   describe('grouped options', () => {
     const groupedOptions = [
       { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
@@ -859,6 +895,38 @@ describe('pds-combobox', () => {
       expect(state.back).toBe(false);
       expect(state.ad).toBe(state.tagRow);
       expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+    });
+
+    // The row back's list item wraps the group's options, so it's taller than a list that scrolls;
+    // showing the item's bottom edge would scroll the highlighted row back out of view.
+    it('shows the highlighted row back, not the end of its group, in a group taller than the list', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" max-height="160px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.mouse.move(0, 0);
+
+      await page.keyboard.press('Home');
+      await page.waitForChanges();
+
+      const shown = await page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const list = root.querySelector('.pds-combobox__listbox')!.getBoundingClientRect();
+        const back = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+        return back.top >= list.top - 0.5 && back.bottom <= list.bottom + 0.5;
+      });
+      expect(await page.find('pds-combobox >>> .pds-combobox__group-back--highlighted')).not.toBeNull();
+      expect(shown).toBe(true);
     });
 
     it('stays open when a flyout with panel search drills in for lack of room, on a selection', async () => {
