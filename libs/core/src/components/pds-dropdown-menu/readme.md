@@ -13,6 +13,13 @@
 | `placement`   | `placement`    | The placement of the dropdown panel relative to the trigger.          | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'bottom-start'` |
 
 
+## Slots
+
+| Slot       | Description                                                                                                                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"header"` | Non-interactive content displayed above the menu items inside the dropdown panel. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item. |
+
+
 ## Shadow Parts
 
 | Part           | Description                                      |
