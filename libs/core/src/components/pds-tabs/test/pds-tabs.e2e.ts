@@ -415,4 +415,103 @@ describe('pds-tabs re-collecting children after a slot change', () => {
     const remainingButton = await page.find('pds-tab[name="one"] > button');
     expect(remainingButton.getAttribute('aria-selected')).toMatch('true');
   });
+
+  // Nav-mode consumers can omit `variant` (it's panel-mode-only styling). Exercising
+  // this path directly guards the fix for a latent bug: propGeneration previously
+  // called `this.variant.toString()` unconditionally, which threw when variant was
+  // unset — silently swallowed by Stencil's own render-cycle error boundary on a
+  // normal render, but surfaced as an uncaught exception from this slotchange path.
+  it('re-collects without erroring when nav mode has no variant set', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs nav component-id="test9" tablist-label="test label">
+        <pds-tab href="/a" name="a">A</pds-tab>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-tabs', (el) => {
+      const newTab = document.createElement('pds-tab');
+      newTab.setAttribute('href', '/b');
+      newTab.setAttribute('name', 'b');
+      newTab.textContent = 'B';
+      el.appendChild(newTab);
+    });
+    await page.waitForChanges();
+
+    // If propGeneration had thrown, the forEach loop would stop before setting
+    // parentComponentId/variant on the remaining tabs, and this id (built from
+    // parentComponentId) wouldn't be present.
+    const newAnchor = await page.find('pds-tab[name="b"] #test9__b');
+    expect(newAnchor).not.toBeNull();
+    expect(newAnchor.getAttribute('href')).toBe('/b');
+  });
+});
+
+// A focused tab's button can be removed out from under the user — a Turbo morph
+// replacing it with a fresh copy is one way, but it's the same scenario for any
+// DOM mutation. The browser silently drops focus to <body> when that happens;
+// pds-tabs should restore it to the new active tab instead.
+describe('pds-tabs restoring focus after the focused tab is replaced', () => {
+  it('moves focus to the new active tab when the focused tab is replaced', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test10" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tab name="two">Test 2</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+        <pds-tabpanel name="two">Content 2</pds-tabpanel>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    const activeButton = await page.find('pds-tab[name="two"] > button');
+    await activeButton.focus();
+
+    await page.$eval('pds-tabs', (el) => {
+      const oldTab = el.querySelector('pds-tab[name="two"]');
+      const newTab = document.createElement('pds-tab');
+      newTab.setAttribute('name', 'two');
+      newTab.textContent = 'Test 2';
+      oldTab.replaceWith(newTab);
+    });
+    await page.waitForChanges();
+
+    await page.waitForFunction(() => {
+      const button = document.querySelector('pds-tab[name="two"] > button');
+      return !!button && document.activeElement === button;
+    });
+
+    const isFocused = await page.$eval('pds-tab[name="two"] > button', (button) => button === document.activeElement);
+    expect(isFocused).toBe(true);
+  });
+
+  it('does not move focus when the change is unrelated to the focused tab', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="one" tablist-label="test label" component-id="test11" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    const activeButton = await page.find('pds-tab[name="one"] > button');
+    await activeButton.focus();
+
+    await page.$eval('pds-tabs', (el) => {
+      const newTab = document.createElement('pds-tab');
+      newTab.setAttribute('name', 'two');
+      newTab.textContent = 'Test 2';
+      el.appendChild(newTab);
+    });
+    await page.waitForChanges();
+
+    // Give a wrongly-scheduled focus restoration a chance to run before asserting
+    // it didn't — the guard should see focus is still within and no-op.
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    const stillFocused = await page.$eval('pds-tab[name="one"] > button', (button) => button === document.activeElement);
+    expect(stillFocused).toBe(true);
+  });
 });
