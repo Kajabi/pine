@@ -71,6 +71,20 @@ describe('keepPineHydrated()', () => {
     expect(el.classList.contains('hydrated')).toBe(false);
   });
 
+  it('puts the classes back when a removed class attribute is added again', () => {
+    keepPineHydrated();
+    const el = document.createElement('pds-button');
+    el.className = 'hydrated';
+    restore(el, 'hydrated');
+
+    // Something removed the whole attribute, then set it again: that change has no old value.
+    el.removeAttribute('class');
+    el.className = 'consumer';
+    restore(el, null);
+
+    expect(el.className.split(' ').sort()).toEqual(['consumer', 'hydrated']);
+  });
+
   it('leaves elements other than Pine components alone, and records with no old value', () => {
     keepPineHydrated();
     const div = document.createElement('div');
