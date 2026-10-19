@@ -20,7 +20,7 @@ Box is our primitive layout component. It is intended to be used as a building b
 - **For vertical stacking**: Use `direction="column"`
 - **Inside pds-row**: Box becomes a grid column (use `size` props)
 - **Standalone**: Box is a flexbox container (use alignment props)
-- **Host classes and styles**: The component keeps the classes and inline styles it puts on its host. If something removes them, such as a DOM morph, it puts them back, so change its layout through props. Classes and styles you add yourself are left alone. A script that keeps undoing them wins after a few rounds, and the component logs a console warning.
+- **Host classes and styles**: The component keeps the classes and inline styles it puts on its host. If something removes them, such as a DOM morph, it puts them back, so change its layout through props. Classes and styles you add yourself are left alone. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ### Most Common Props
 - `direction`: `"row"` (default, horizontal) or `"column"` (vertical stacking)

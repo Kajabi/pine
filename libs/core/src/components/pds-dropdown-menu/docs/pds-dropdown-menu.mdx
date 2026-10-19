@@ -29,7 +29,7 @@ Dropdown Menus reveal a list of actions from a button trigger, implementing the 
 ### Accessibility
 
 - Implements the WAI-ARIA Menu Button Pattern for screen reader compatibility
-- Sets `aria-haspopup="menu"` and `aria-expanded` on the trigger and keeps them in step with the menu. If anything removes or changes them, such as a Turbo morph, the menu puts its values back, so don't set your own. A script that keeps undoing them wins after a few rounds, and the component logs a console warning
+- Sets `aria-haspopup="menu"` and `aria-expanded` on the trigger and keeps them in step with the menu. If anything removes or changes them, such as a DOM morph, the menu puts its values back, so don't set your own. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning
 - Supports full keyboard navigation with arrow keys, Enter, Space, Home, and End
 - Traps focus within the dropdown when open
 - Provides high-contrast focus indicators for all interactive elements
