@@ -43,8 +43,10 @@
 // Note: ::slotted() cannot be combined with pseudo-classes like :hover or :focus.
 // Raw elements will receive base styling here; hover/focus states must be handled
 // by the consuming application's CSS if needed.
-::slotted(a),
-::slotted(button) {
+//
+// Header content is excluded. Raw triggers aren't: consumers size their triggers around these styles.
+::slotted(a:not([slot="header"])),
+::slotted(button:not([slot="header"])) {
   align-items: center;
   appearance: none;
   background: transparent;
@@ -65,7 +67,7 @@
 }
 
 // Destructive variant for raw elements
-::slotted(.destructive) {
+::slotted(.destructive:not([slot="header"])) {
   color: var(--pine-color-danger) !important;
 }
 
@@ -73,8 +75,8 @@
 // ::slotted([disabled]) is an attribute-presence selector — it matches even when
 // disabled="false" is set as a string (e.g. by React on custom elements). The
 // :not([disabled="false"]) guard ensures only a truly-disabled attribute applies.
-::slotted([aria-disabled="true"]),
-::slotted([disabled]:not([disabled="false"])) {
+::slotted([aria-disabled="true"]:not([slot="header"])),
+::slotted([disabled]:not([disabled="false"]):not([slot="header"])) {
   cursor: not-allowed;
   opacity: 0.5;
   pointer-events: none;
