@@ -14,10 +14,11 @@ import {
   groupLabelOf,
   isGroupDisabled,
   isOptionDisabled,
+  optionIconOf,
   panelColumn,
   parentOptgroupOf,
 } from './grouped-options-panel';
-import type { PanelGroup, PanelItem } from './grouped-options-panel';
+import type { PanelEntry, PanelGroup, PanelItem } from './grouped-options-panel';
 import type {
   ComboboxOption,
   ComboboxSearchEventDetail,
@@ -428,6 +429,12 @@ export class PdsCombobox implements BasePdsProps {
   );
   /** The groups in the flyout panel's last render, so a row's index finds its optgroup. */
   private renderedGroups: PanelGroup[] = [];
+
+  /**
+   * Where each ungrouped option and optgroup built from the `options` prop came in the data, so
+   * the flyout and drill-in panels draw them in that order. Slotted markup is already in order.
+   */
+  private panelPositions = new WeakMap<Element, number>();
   private panelSearchEl?: HTMLInputElement;
   /** With panel search, the options' list, which takes focus while a group is drilled into. */
   private panelTreeEl?: HTMLElement;
@@ -917,20 +924,24 @@ export class PdsCombobox implements BasePdsProps {
     // slotted markup would be, so grouping, filtering and labels work the same either way. Each
     // group is listed where it first appears with all of its options, even when the data
     // interleaves groups, so an option never renders under another group's label. Ungrouped
-    // options come first, so none reads as part of the group above it.
+    // options come first, so none reads as part of the group above it. The flyout and drill-in
+    // panels draw groups as rows, where that can't happen, so they keep the data's order instead.
     const asyncOptions = this.options || this.internalOptions;
     const groups = new Map<string, HTMLOptGroupElement>();
     const ungrouped: HTMLOptionElement[] = [];
     const groupEntries: HTMLOptGroupElement[] = [];
-    asyncOptions.forEach(opt => {
+    this.panelPositions = new WeakMap();
+    asyncOptions.forEach((opt, position) => {
       const optionEl = document.createElement('option') as HTMLOptionElement;
       optionEl.value = String(opt.id);
       optionEl.textContent = opt.text;
       if (opt.disabled === true) optionEl.setAttribute('disabled', '');
-
       // Only strings group an option or name an icon; anything else from JS is ignored, not coerced.
+      if (typeof opt.icon === 'string' && opt.icon !== '') optionEl.setAttribute('data-icon', opt.icon);
+
       if (typeof opt.group !== 'string' || opt.group === '') {
         ungrouped.push(optionEl);
+        this.panelPositions.set(optionEl, position);
         return;
       }
 
@@ -940,6 +951,7 @@ export class PdsCombobox implements BasePdsProps {
         optgroup.label = opt.group;
         groups.set(opt.group, optgroup);
         groupEntries.push(optgroup);
+        this.panelPositions.set(optgroup, position);
       }
       if (!optgroup.hasAttribute('data-icon') && typeof opt.groupIcon === 'string' && opt.groupIcon !== '') {
         optgroup.setAttribute('data-icon', opt.groupIcon);
@@ -1588,7 +1600,7 @@ export class PdsCombobox implements BasePdsProps {
       if (e.key === ' ' || e.key === 'Home' || e.key === 'End') return false;
     }
 
-    const entries = buildPanelEntries(this.filteredItems);
+    const entries = this.panelEntries();
     const drilledIn = this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null;
     const current = this.currentPanelItem();
     const column = panelColumn(entries, this.openGroup, current, drilledIn);
@@ -1746,7 +1758,7 @@ export class PdsCombobox implements BasePdsProps {
     // In the grouped panel, the first row with something to choose: a group stays closed until
     // it's opened.
     if (this.showsGroupedPanel) {
-      const first = buildPanelEntries(this.filteredItems).find(entry =>
+      const first = this.panelEntries().find(entry =>
         entry.kind === 'group' ? !isGroupDisabled(entry.group) : !isOptionDisabled(entry.option),
       );
       this.highlightedIndex = first?.kind === 'option' ? first.index : -1;
@@ -2671,11 +2683,31 @@ export class PdsCombobox implements BasePdsProps {
         ) : isChip ? (
           this.renderOptionChip(option)
         ) : (
-          this.getOptionLabel(option)
+          this.renderOptionLabel(option)
         )}
         {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
       </li>
     );
+  }
+
+  /** An option's text, after its `data-icon` when it has one. */
+  private renderOptionLabel(option: HTMLOptionElement) {
+    const icon = optionIconOf(option);
+    if (icon === null) return this.getOptionLabel(option);
+    return (
+      <span class="pds-combobox__option-label">
+        {/* `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized. */}
+        <pds-icon name={icon} size="regular" aria-hidden="true" class="pds-combobox__option-icon" />
+        {this.getOptionLabel(option)}
+      </span>
+    );
+  }
+
+  /** The grouped panel's rows, in the order the panel draws them and the keyboard moves through. */
+  private panelEntries(): PanelEntry[] {
+    // Slotted markup is already in order; only options from data record positions.
+    if (this.options === undefined && !this.asyncUrl) return buildPanelEntries(this.filteredItems);
+    return buildPanelEntries(this.filteredItems, element => this.panelPositions.get(element));
   }
 
   /**
@@ -2684,7 +2716,7 @@ export class PdsCombobox implements BasePdsProps {
    * it's a tree: the rows and ungrouped options are level 1, a group's options level 2.
    */
   private renderGroupedPanel() {
-    const entries = buildPanelEntries(this.filteredItems);
+    const entries = this.panelEntries();
     const setsize = entries.length;
 
     if (this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null) {
@@ -2832,11 +2864,30 @@ export class PdsCombobox implements BasePdsProps {
 
   // Helper method to render default text content
   private renderDefaultContent() {
+    const icon = this.selectedIcon;
     return (
-      <span class={{ 'pds-combobox__button-trigger-label': true, 'pds-combobox__button-trigger-label--placeholder': !this.selectedLabel }}>
+      <span
+        class={{
+          'pds-combobox__button-trigger-label': true,
+          'pds-combobox__button-trigger-label--placeholder': !this.selectedLabel,
+          'pds-combobox__button-trigger-label--with-icon': icon !== null,
+        }}
+      >
+        {icon !== null && (
+          // `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized.
+          <pds-icon name={icon} size="regular" aria-hidden="true" class="pds-combobox__button-trigger-icon" />
+        )}
         {this.selectedLabel || this.placeholder}
       </span>
     );
+  }
+
+  /** The selection's icon for the button trigger: the option's own, or else its group's. */
+  private get selectedIcon(): string | null {
+    const option = this.selectedOption;
+    if (!option) return null;
+    const optgroup = parentOptgroupOf(option);
+    return optionIconOf(option) ?? (optgroup !== null ? groupIconOf(optgroup) : null);
   }
 
   // Helper method to check if we should show layout content
