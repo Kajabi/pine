@@ -1,4 +1,4 @@
-import { classNamesOf, isStencilClass } from './keep-hydrated';
+import { classNamesOf, HOST_RESTORE, limitRestores, stencilClassesOf } from './keep-hydrated';
 
 export type Attributes = { [key: string]: any };
 
@@ -9,9 +9,14 @@ export type Attributes = { [key: string]: any };
  * @param attributes - Attribute names and the values they should have
  */
 export const setAttributesIfChanged = (el: Element, attributes: Record<string, string>) => {
+  let wrote = false;
   Object.entries(attributes).forEach(([name, value]) => {
-    if (el.getAttribute(name) !== value) el.setAttribute(name, value);
+    if (el.getAttribute(name) !== value) {
+      el.setAttribute(name, value);
+      wrote = true;
+    }
   });
+  return wrote;
 };
 
 /**
@@ -34,9 +39,10 @@ export const restoreHostStyling = (el: HTMLElement, { classes, styles }: HostSty
   const missing = classes.filter((name) => !el.classList.contains(name));
   if (missing.length > 0) el.classList.add(...missing);
 
-  Object.entries(styles).forEach(([name, value]) => {
-    if (value && el.style.getPropertyValue(name) === '') el.style.setProperty(name, value);
-  });
+  const missingStyles = Object.entries(styles).filter(([name, value]) => value && el.style.getPropertyValue(name) === '');
+  missingStyles.forEach(([name, value]) => el.style.setProperty(name, value));
+
+  return missing.length > 0 || missingStyles.length > 0;
 };
 
 /**
@@ -54,16 +60,18 @@ export const restoreHostStyling = (el: HTMLElement, { classes, styles }: HostSty
 const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
   if (typeof MutationObserver === 'undefined') return null;
 
-  const observer = new MutationObserver((records) => {
+  const tag = el.tagName.toLowerCase();
+  const seenStencilClasses = new Set<string>();
+  const observer = new MutationObserver(limitRestores((records: MutationRecord[]) => {
     const styling = expected();
     // A strip takes Stencil's own classes too: without `hydrated` Stencil hides the component, and
     // without its scope classes a scoped component's CSS stops matching. Put back only the ones that
     // were there, so this never runs ahead of Stencil. `keepPineHydrated` does the same for every
     // component, but the custom-elements build only runs it if the consumer calls it, so keep this.
     const stencilClasses = records
-      .filter((record) => record.attributeName === 'class' && record.oldValue != null)
-      .flatMap((record) => classNamesOf(record.oldValue).filter((name) => isStencilClass(el, name)));
-    restoreHostStyling(el, { ...styling, classes: [...styling.classes, ...stencilClasses] });
+      .filter((record) => record.attributeName === 'class')
+      .flatMap((record) => stencilClassesOf(seenStencilClasses, el, record.oldValue));
+    let wrote = restoreHostStyling(el, { ...styling, classes: [...styling.classes, ...stencilClasses] });
 
     // An attribute the component still renders comes back with the value it had, which is what
     // Stencil wrote (a boolean `true` lands as an empty value). One it stopped rendering stays
@@ -72,8 +80,10 @@ const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
       const rendered = styling.attributes?.[name];
       if (oldValue == null || rendered == null || rendered === false || el.hasAttribute(name)) return;
       el.setAttribute(name, oldValue);
+      wrote = true;
     });
-  });
+    return wrote;
+  }, `${tag}: stopped restoring its host, as another script keeps changing it. Use props instead.`, el, HOST_RESTORE));
   observer.observe(el, { attributes: true, attributeOldValue: true });
   return observer;
 };
