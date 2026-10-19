@@ -2,6 +2,7 @@ import { Component, Element, Host, h, Prop, Listen, State } from '@stencil/core'
 import type { BasePdsProps } from '@utils/interfaces';
 import { PlacementType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
+import { limitRestores } from '@utils/keep-hydrated';
 import {  computePosition,
   flip,
   offset,
@@ -83,9 +84,9 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   // Writes the trigger's ARIA from the menu's state, so the observer's own callback doesn't loop.
   private syncTriggerAria = () => {
-    if (!this.triggerEl) return;
+    if (!this.triggerEl) return false;
 
-    setAttributesIfChanged(this.triggerEl, { 'aria-haspopup': 'menu', 'aria-expanded': String(this.isOpen) });
+    return setAttributesIfChanged(this.triggerEl, { 'aria-haspopup': 'menu', 'aria-expanded': String(this.isOpen) });
   }
 
   // The trigger is the consumer's element, so anything can rewrite its attributes (a Turbo morph
@@ -95,7 +96,14 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.triggerObserver = null;
     if (!this.triggerEl || typeof MutationObserver === 'undefined') return;
 
-    this.triggerObserver = new MutationObserver(this.syncTriggerAria);
+    // Capped against a script that keeps undoing it; opening and closing still write it directly.
+    this.triggerObserver = new MutationObserver(
+      limitRestores(
+        this.syncTriggerAria,
+        'pds-dropdown-menu: stopped restoring its trigger ARIA, as another script keeps changing it. It may be wrong until the menu opens or closes.',
+        this.triggerEl,
+      ),
+    );
     this.triggerObserver.observe(this.triggerEl, {
       attributes: true,
       attributeFilter: ['aria-haspopup', 'aria-expanded'],
