@@ -32,6 +32,15 @@ describe('pds-popover', () => {
     `);
   });
 
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: `<pds-popover id="author-id" component-id="popover-1"></pds-popover>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('should create portal on componentDidLoad', async () => {
     const page = await newSpecPage({
       components: [PdsPopover],

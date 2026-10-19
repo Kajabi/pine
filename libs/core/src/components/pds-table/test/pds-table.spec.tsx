@@ -62,6 +62,33 @@ describe('pds-table', () => {
     `);
   });
 
+  it('does not write component-id onto the host id (non-responsive branch)', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table component-id="test-table"></pds-table>`,
+    });
+
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table id="author-id" component-id="test-table"></pds-table>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
+  it('keeps an author-set id even when component-id is also set (responsive branch)', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table id="author-id" responsive="true" component-id="test-table"></pds-table>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders with rowDividers prop set', async () => {
     const page = await newSpecPage({
       components: [PdsTable],

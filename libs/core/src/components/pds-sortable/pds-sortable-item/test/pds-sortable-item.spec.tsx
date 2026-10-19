@@ -28,6 +28,17 @@ describe('pds-sortable-item', () => {
     `);
   });
 
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsSortableItem],
+      html: `
+        <pds-sortable-item id="author-id" component-id="default">Content</pds-sortable-item>
+      `,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders with handle icon when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsSortableItem],

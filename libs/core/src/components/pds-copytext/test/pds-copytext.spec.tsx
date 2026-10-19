@@ -27,6 +27,24 @@ describe('pds-copytext', () => {
     `);
   });
 
+  it('does not write component-id onto the host id', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext component-id="test"></pds-copytext>`,
+    });
+
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext id="author-id" component-id="test"></pds-copytext>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders without border when border prop is false', async () => {
     const page = await newSpecPage({
       components: [PdsCopytext],

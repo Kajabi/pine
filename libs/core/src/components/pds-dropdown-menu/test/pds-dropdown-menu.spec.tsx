@@ -23,6 +23,24 @@ describe('pds-dropdown-menu', () => {
     expect(menuBox?.getAttribute('aria-orientation')).toBe('vertical');
   });
 
+  it('does not write component-id onto the host id', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsBox],
+      html: `<pds-dropdown-menu component-id="test"></pds-dropdown-menu>`,
+    });
+
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsBox],
+      html: `<pds-dropdown-menu id="author-id" component-id="test"></pds-dropdown-menu>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders with trigger and menu items', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsDropdownMenuSeparator, PdsBox],

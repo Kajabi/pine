@@ -14,6 +14,24 @@ describe('pds-sortable', () => {
     `);
   });
 
+  it('does not write component-id onto the host id', async () => {
+    const page = await newSpecPage({
+      components: [PdsSortable],
+      html: `<pds-sortable component-id="test">Content</pds-sortable>`,
+    });
+
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsSortable],
+      html: `<pds-sortable id="author-id" component-id="test">Content</pds-sortable>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders with border when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsSortable],

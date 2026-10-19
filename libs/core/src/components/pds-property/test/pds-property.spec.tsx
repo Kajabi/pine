@@ -93,4 +93,13 @@ describe('pds-property', () => {
       </pds-property>
     `);
   });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsProperty],
+      html: `<pds-property id="author-id" component-id="test-property">Property text</pds-property>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
 });

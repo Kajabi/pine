@@ -70,6 +70,15 @@ describe('pds-accordion', () => {
     `);
   });
 
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAccordion],
+      html: `<pds-accordion id="author-id" component-id="test"></pds-accordion>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders summary slot content when set', async () => {
     const page = await newSpecPage({
       components: [PdsAccordion],
