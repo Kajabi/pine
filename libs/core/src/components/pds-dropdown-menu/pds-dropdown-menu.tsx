@@ -16,6 +16,7 @@ import {  computePosition,
 type MenuItemElement = HTMLPdsDropdownMenuItemElement | HTMLAnchorElement | HTMLButtonElement;
 
 /**
+ * @slot header - Non-interactive content displayed above the menu items inside the dropdown panel, such as a user profile block. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item.
  * @part menu-panel - Exposes the dropdown menu container for styling.
  */
 @Component({
@@ -36,6 +37,8 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   @State() currentFocusIndex: number = -1;
 
+  @State() hasHeader: boolean = false;
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -45,6 +48,10 @@ export class PdsDropdownMenu implements BasePdsProps {
    * The placement of the dropdown panel relative to the trigger.
    */
   @Prop() placement: PlacementType = 'bottom-start';
+
+  componentWillLoad() {
+    this.hasHeader = Array.from(this.host.children).some(el => el.getAttribute('slot') === 'header');
+  }
 
   componentDidRender() {
     this.panelEl = this.host.shadowRoot?.querySelector('pds-box') as HTMLPdsBoxElement;
@@ -108,6 +115,10 @@ export class PdsDropdownMenu implements BasePdsProps {
       attributes: true,
       attributeFilter: ['aria-haspopup', 'aria-expanded'],
     });
+  }
+
+  private handleHeaderSlotChange = (event: Event) => {
+    this.hasHeader = (event.target as HTMLSlotElement).assignedElements().length > 0;
   }
 
   private handleSlotChange = (event: Event) => {
@@ -442,11 +453,14 @@ export class PdsDropdownMenu implements BasePdsProps {
           direction="column"
           class="pds-dropdown-menu--panel is-hidden"
           shadow="100"
-          role="menu"
-          aria-orientation="vertical"
           part="menu-panel"
         >
-          <slot onSlotchange={this.handleSlotChange}></slot>
+          <div class={{ 'pds-dropdown-menu__header': true, 'is-hidden': !this.hasHeader }}>
+            <slot name="header" onSlotchange={this.handleHeaderSlotChange}></slot>
+          </div>
+          <div class="pds-dropdown-menu__items" role="menu" aria-orientation="vertical">
+            <slot onSlotchange={this.handleSlotChange}></slot>
+          </div>
         </pds-box>
       </Host>
     );
