@@ -300,3 +300,119 @@ describe('pds-tabs after its host classes and styles are stripped', () => {
     expect(await (await page.find('pds-tabs')).getProperty('activeTabName')).not.toBe('two');
   });
 });
+
+// The initial child collection only sees what's present at load (componentWillLoad). A tab or
+// panel added, removed or replaced afterwards — including by a Turbo morph swapping in a fresh
+// copy of the server's HTML — needs to be re-collected the same way, or it's never reached.
+describe('pds-tabs re-collecting children after a slot change', () => {
+  it('shows a tabpanel that was replaced with a fresh copy after load', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test5" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tab name="two">Test 2</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+        <pds-tabpanel name="two">Content 2</pds-tabpanel>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    // Replace the active panel with a fresh, identical element — what Idiomorph
+    // does when the server re-sends the same markup.
+    await page.$eval('pds-tabs', (el) => {
+      const oldPanel = el.querySelector('pds-tabpanel[name="two"]');
+      const newPanel = document.createElement('pds-tabpanel');
+      newPanel.setAttribute('name', 'two');
+      newPanel.textContent = 'Content 2';
+      oldPanel.replaceWith(newPanel);
+    });
+    await page.waitForChanges();
+
+    const panel = await page.find('pds-tabpanel[name="two"] > div');
+    expect(panel).toHaveClass('is-active');
+  });
+
+  it('makes a tab added after load clickable', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="one" tablist-label="test label" component-id="test6" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-tabs', (el) => {
+      const newTab = document.createElement('pds-tab');
+      newTab.setAttribute('name', 'two');
+      newTab.textContent = 'Test 2';
+      el.appendChild(newTab);
+
+      const newPanel = document.createElement('pds-tabpanel');
+      newPanel.setAttribute('name', 'two');
+      newPanel.textContent = 'Content 2';
+      el.appendChild(newPanel);
+    });
+    await page.waitForChanges();
+
+    const event = await page.spyOnEvent('pdsTabClick');
+    const newTabButton = await page.find('pds-tab[name="two"] > button');
+    await newTabButton.click();
+    await event.next();
+    await page.waitForChanges();
+
+    expect(newTabButton.getAttribute('aria-selected')).toMatch('true');
+    const panel = await page.find('pds-tabpanel[name="two"] > div');
+    expect(panel).toHaveClass('is-active');
+  });
+
+  it('keeps the active tab selected when an unrelated tab is added', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test7" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tab name="two">Test 2</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+        <pds-tabpanel name="two">Content 2</pds-tabpanel>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-tabs', (el) => {
+      const newTab = document.createElement('pds-tab');
+      newTab.setAttribute('name', 'three');
+      newTab.textContent = 'Test 3';
+      el.appendChild(newTab);
+    });
+    await page.waitForChanges();
+
+    const activeButton = await page.find('pds-tab[name="two"] > button');
+    expect(activeButton.getAttribute('aria-selected')).toMatch('true');
+    const activePanel = await page.find('pds-tabpanel[name="two"] > div');
+    expect(activePanel).toHaveClass('is-active');
+  });
+
+  it('falls back to another tab when the active one is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test8" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tab name="two">Test 2</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+        <pds-tabpanel name="two">Content 2</pds-tabpanel>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-tabs', (el) => {
+      el.querySelector('pds-tab[name="two"]').remove();
+      el.querySelector('pds-tabpanel[name="two"]').remove();
+    });
+    await page.waitForChanges();
+
+    const tabsElement = await page.find('pds-tabs');
+    expect(await tabsElement.getProperty('activeTabName')).toBe('one');
+    const remainingButton = await page.find('pds-tab[name="one"] > button');
+    expect(remainingButton.getAttribute('aria-selected')).toMatch('true');
+  });
+});
