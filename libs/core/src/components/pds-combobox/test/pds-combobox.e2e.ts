@@ -629,6 +629,18 @@ describe('pds-combobox', () => {
         expect(await starts(page, '.pds-combobox__panel-search')).toEqual(['still']);
       });
 
+      // Showing the highlighted option mustn't scroll the list sideways to reach a row the slide
+      // still offsets past its edge: that scroll eats the slide, so entering looks faster than leaving.
+      it("doesn't scroll the list sideways while a group slides in", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        expect(await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('[role="tree"]')!.scrollLeft)).toBe(0);
+      });
+
       it('slides the row back in with the options when there is no panel search', async () => {
         const page = await setUp('group-display="drill-in"');
         await holdAnimations(page);
