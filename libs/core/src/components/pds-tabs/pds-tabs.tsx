@@ -26,6 +26,10 @@ export class PdsTabs {
     this.hostKeeper.disconnect();
   }
 
+  componentDidLoad() {
+    this.setupSlotChangeListeners();
+  }
+
   /**
    * Sets the aria-label attached to the tablist element
    */
@@ -172,9 +176,39 @@ export class PdsTabs {
     this.tabPanels = allTabPanels.filter(panel => panel.closest('pds-tabs') === this.el);
   }
 
+  // The initial collection (componentWillLoad) only sees tabs/panels present at load.
+  // A tab or panel added, removed or replaced afterwards — including by a Turbo morph
+  // swapping in a fresh copy — needs to be re-collected the same way pds-dropdown-menu,
+  // pds-select and pds-multiselect already do for their own slotted content.
+  private setupSlotChangeListeners() {
+    const tabsSlot = this.el.shadowRoot?.querySelector('slot[name="tabs"]') as HTMLSlotElement;
+    const tabPanelsSlot = this.el.shadowRoot?.querySelector('slot[name="tabpanels"]') as HTMLSlotElement;
+
+    tabsSlot?.addEventListener('slotchange', this.handleSlotChange);
+    tabPanelsSlot?.addEventListener('slotchange', this.handleSlotChange);
+  }
+
+  private handleSlotChange = () => {
+    const previousActiveTabName = this.activeTabName;
+    this.findAllChildren();
+
+    // Keep the current selection if it still exists. Otherwise clear it so
+    // passPropsToChildren() falls back to the first enabled tab, the same way
+    // it does when a consumer never set activeTabName in the first place.
+    if (previousActiveTabName != null && !this.tabs.some((tab) => tab.name === previousActiveTabName)) {
+      this.activeTabName = undefined;
+    }
+
+    this.passPropsToChildren();
+  };
+
   private propGeneration(child, index = 0) {
     child.parentComponentId = this.componentId.toString();
-    child.variant = this.variant.toString();
+    // `variant` has no runtime default, and nav-mode consumers can omit it (it only
+    // matters in panel mode); calling this from handleSlotChange, outside Stencil's
+    // own render-cycle error boundary, turned that into an uncaught exception instead
+    // of the pre-existing silently-swallowed one.
+    child.variant = this.variant?.toString();
     child.selected = (this.activeTabName === child.name) ? true : false;
     child['index'] = index;
   }
