@@ -875,7 +875,6 @@ describe('pds-combobox', () => {
     });
   });
 
-
   // Matches pds-select's field, and the Figma filter panel's search field and drilled-in header.
   describe('field and panel sizes', () => {
     const options = [
