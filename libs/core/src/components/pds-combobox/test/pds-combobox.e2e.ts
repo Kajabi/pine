@@ -823,6 +823,49 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__listbox-options');
     });
 
+    // The scroll padding keeps options clear of the sticky row back; the row back itself is always
+    // in view, so highlighting it mustn't scroll the list by that padding.
+    it("doesn't scroll the list when the keys reach the sticky row back in a group that scrolls", async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" panel-search max-height="160px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.mouse.move(0, 0);
+
+      const scrollTop = () =>
+        page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox-options')!.scrollTop);
+
+      // Down to the last option, then let the smooth scroll settle.
+      await page.keyboard.press('End');
+      await page.waitForChanges();
+      let settled = await scrollTop();
+      for (let i = 0; i < 30; i++) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const now = await scrollTop();
+        if (now === settled && now > 0) break;
+        settled = now;
+      }
+      expect(settled).toBeGreaterThan(0);
+
+      // Home highlights the row back, which sticks in view however far the list has scrolled.
+      await page.keyboard.press('Home');
+      await page.waitForChanges();
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      expect(await page.find('pds-combobox >>> .pds-combobox__group-back--highlighted')).not.toBeNull();
+      expect(await scrollTop()).toBe(settled);
+    });
+
     it("keeps the highlighted option clear of the sticky row back in a group that scrolls", async () => {
       const page = await newE2EPage();
       await page.setViewport({ width: 1200, height: 800 });
