@@ -3,6 +3,7 @@ import { containsComposed } from '@utils/closest';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { PlacementType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
+import { limitRestores } from '@utils/keep-hydrated';
 import { PdsPopoverEventDetail } from './popover-interface';
 
 /**
@@ -193,7 +194,14 @@ export class PdsPopover {
     this.triggerObserver = null;
     if (this.triggerEl == null || typeof MutationObserver === 'undefined') return;
 
-    this.triggerObserver = new MutationObserver(() => this.linkTriggerToPortal());
+    // Capped against a script that keeps undoing it; opening and closing still write it directly.
+    this.triggerObserver = new MutationObserver(
+      limitRestores(
+        () => this.linkTriggerToPortal(),
+        'pds-popover: stopped restoring its trigger ARIA, as another script keeps changing it. It may be wrong until the popover opens or closes.',
+        this.triggerEl,
+      ),
+    );
     this.triggerObserver.observe(this.triggerEl, {
       attributes: true,
       attributeFilter: ['aria-expanded', 'aria-controls'],
@@ -203,10 +211,10 @@ export class PdsPopover {
   // Set ARIA attributes to establish relationship between trigger and popover
   // This mirrors the native Popover API's accessibility behavior
   private linkTriggerToPortal() {
-    if (this.triggerEl == null || this.portalEl == null) return;
+    if (this.triggerEl == null || this.portalEl == null) return false;
 
     // Skips values already in place, so the trigger observer's own callback doesn't loop.
-    setAttributesIfChanged(this.triggerEl, { 'aria-expanded': String(this.active), 'aria-controls': this.portalEl.id });
+    return setAttributesIfChanged(this.triggerEl, { 'aria-expanded': String(this.active), 'aria-controls': this.portalEl.id });
   }
 
   /**

@@ -784,3 +784,39 @@ describe('pds-popover accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+// A script that keeps removing what the popover puts back would keep both running forever in
+// microtasks; the popover gives up after a few rounds instead of hanging the page.
+describe('pds-popover with a script fighting its trigger ARIA', () => {
+  it('gives up, and keeps the page responsive', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-popover component-id="fought">
+        <button slot="trigger" id="trigger">Show popover</button>
+        <p>Content</p>
+      </pds-popover>
+    `);
+    await page.evaluate(() => {
+      const w = window as unknown as { pineWarnings: string[] };
+      w.pineWarnings = [];
+      const warn = console.warn;
+      console.warn = (...args: unknown[]) => {
+        w.pineWarnings.push(String(args[0] === '%s' ? args[1] : args[0]));
+        warn(...args);
+      };
+    });
+
+    await page.$eval('#trigger', (el) => {
+      new MutationObserver(() => {
+        if (el.hasAttribute('aria-controls')) el.removeAttribute('aria-controls');
+      }).observe(el, { attributes: true, attributeFilter: ['aria-controls'] });
+      el.removeAttribute('aria-controls');
+    });
+    await page.waitForChanges();
+
+    expect(await page.evaluate(() => 'responsive')).toBe('responsive');
+    expect((await page.evaluate(() => (window as unknown as { pineWarnings: string[] }).pineWarnings)).filter((text) => text.startsWith('pds-popover: stopped restoring'))).toHaveLength(1);
+    // The other script wins.
+    expect(await page.$eval('#trigger', (el) => el.hasAttribute('aria-controls'))).toBe(false);
+  });
+});
