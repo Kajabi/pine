@@ -58,7 +58,7 @@ export class PdsTabpanel {
 
   render() {
     const hostClass = this.stretch && this.selected ? "pds-tabpanel--stretch-active" : "";
-    // The docs show consumers omitting `slot`, so server HTML doesn't carry it — a Turbo morph
+    // The docs show consumers omitting `slot`, so server HTML doesn't carry it — a DOM morph
     // that strips it (and the stretch-active class) leaves this panel unslotted. Put both back.
     this.hostKeeper.record(hostClass, {}, { slot: 'tabpanels' });
 

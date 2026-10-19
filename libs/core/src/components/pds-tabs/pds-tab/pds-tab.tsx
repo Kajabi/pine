@@ -150,8 +150,8 @@ export class PdsTab {
   }
 
   render() {
-    // The docs show consumers omitting `slot`, so server HTML doesn't carry it — a Turbo morph
-    // that strips it leaves this tab unslotted, with no tablist to render into. Put it back.
+    // The docs show consumers omitting `slot`, so server HTML doesn't carry it — a DOM morph
+    // that strips it leaves this tab unslotted, and pds-tabs has no default slot. Put it back.
     this.hostKeeper.record('', {}, { slot: 'tabs' });
 
     const availabilityTabEdgeInlineStart = (
