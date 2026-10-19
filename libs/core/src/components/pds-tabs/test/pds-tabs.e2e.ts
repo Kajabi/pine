@@ -302,7 +302,7 @@ describe('pds-tabs after its host classes and styles are stripped', () => {
 });
 
 // The initial child collection only sees what's present at load (componentWillLoad). A tab or
-// panel added, removed or replaced afterwards — including by a Turbo morph swapping in a fresh
+// panel added, removed or replaced afterwards — including by a DOM morph swapping in a fresh
 // copy of the server's HTML — needs to be re-collected the same way, or it's never reached.
 describe('pds-tabs re-collecting children after a slot change', () => {
   it('shows a tabpanel that was replaced with a fresh copy after load', async () => {
@@ -317,7 +317,7 @@ describe('pds-tabs re-collecting children after a slot change', () => {
     `);
     await page.waitForChanges();
 
-    // Replace the active panel with a fresh, identical element — what Idiomorph
+    // Replace the active panel with a fresh, identical element — what a DOM morph
     // does when the server re-sends the same markup.
     await page.$eval('pds-tabs', (el) => {
       const oldPanel = el.querySelector('pds-tabpanel[name="two"]');
@@ -416,8 +416,8 @@ describe('pds-tabs re-collecting children after a slot change', () => {
     expect(remainingButton.getAttribute('aria-selected')).toMatch('true');
   });
 
-  // Nav-mode consumers can omit `variant` (it's panel-mode-only styling). Exercising
-  // this path directly guards the fix for a latent bug: propGeneration previously
+  // `variant` is optional and renders the primary style when omitted. Exercising
+  // that path directly guards the fix for a latent bug: propGeneration previously
   // called `this.variant.toString()` unconditionally, which threw when variant was
   // unset — silently swallowed by Stencil's own render-cycle error boundary on a
   // normal render, but surfaced as an uncaught exception from this slotchange path.
@@ -481,9 +481,39 @@ describe('pds-tabs re-collecting children after a slot change', () => {
     const panel = await page.find('#second pds-tabpanel[name="two"] > div');
     expect(panel).toHaveClass('is-active');
   });
+
+  // The move test above reattaches before mutating, so the listeners are already back.
+  // Mutating while still detached — no listener to see it — is the gap a reconnect that
+  // only re-attaches listeners, without also re-collecting, would miss.
+  it('re-collects content that changed while the element was detached', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="two" tablist-label="test label" component-id="test13" variant="primary">
+        <pds-tab name="one">Test 1</pds-tab>
+        <pds-tab name="two">Test 2</pds-tab>
+        <pds-tabpanel name="one">Content 1</pds-tabpanel>
+        <pds-tabpanel name="two">Content 2</pds-tabpanel>
+      </pds-tabs>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-tabs', (el) => {
+      const detached = el.parentElement.removeChild(el);
+      const oldPanel = detached.querySelector('pds-tabpanel[name="two"]');
+      const newPanel = document.createElement('pds-tabpanel');
+      newPanel.setAttribute('name', 'two');
+      newPanel.textContent = 'Content 2';
+      oldPanel.replaceWith(newPanel);
+      document.body.appendChild(detached);
+    });
+    await page.waitForChanges();
+
+    const panel = await page.find('pds-tabpanel[name="two"] > div');
+    expect(panel).toHaveClass('is-active');
+  });
 });
 
-// A focused tab's button can be removed out from under the user — a Turbo morph
+// A focused tab's button can be removed out from under the user — a DOM morph
 // replacing it with a fresh copy is one way, but it's the same scenario for any
 // DOM mutation. The browser silently drops focus to <body> when that happens;
 // pds-tabs should restore it to the new active tab instead.
