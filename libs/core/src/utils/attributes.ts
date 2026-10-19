@@ -1,4 +1,4 @@
-import { classNamesOf, isStencilClass, limitRestores } from './keep-hydrated';
+import { classNamesOf, HOST_RESTORE, limitRestores, stencilClassesOf } from './keep-hydrated';
 
 export type Attributes = { [key: string]: any };
 
@@ -61,6 +61,7 @@ const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
   if (typeof MutationObserver === 'undefined') return null;
 
   const tag = el.tagName.toLowerCase();
+  const seenStencilClasses = new Set<string>();
   const observer = new MutationObserver(limitRestores((records: MutationRecord[]) => {
     const styling = expected();
     // A strip takes Stencil's own classes too: without `hydrated` Stencil hides the component, and
@@ -68,8 +69,8 @@ const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
     // were there, so this never runs ahead of Stencil. `keepPineHydrated` does the same for every
     // component, but the custom-elements build only runs it if the consumer calls it, so keep this.
     const stencilClasses = records
-      .filter((record) => record.attributeName === 'class' && record.oldValue != null)
-      .flatMap((record) => classNamesOf(record.oldValue).filter((name) => isStencilClass(el, name)));
+      .filter((record) => record.attributeName === 'class')
+      .flatMap((record) => stencilClassesOf(seenStencilClasses, el, record.oldValue));
     let wrote = restoreHostStyling(el, { ...styling, classes: [...styling.classes, ...stencilClasses] });
 
     // An attribute the component still renders comes back with the value it had, which is what
@@ -82,7 +83,7 @@ const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
       wrote = true;
     });
     return wrote;
-  }, `${tag}: stopped restoring its host, as another script keeps changing it. Use props instead.`, el));
+  }, `${tag}: stopped restoring its host, as another script keeps changing it. Use props instead.`, el, HOST_RESTORE));
   observer.observe(el, { attributes: true, attributeOldValue: true });
   return observer;
 };
