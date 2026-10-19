@@ -4,7 +4,8 @@ export interface ComboboxOption {
   /**
    * Label of the group this option belongs to. Options sharing a group are rendered together
    * under one group label, where the group first appears, the same as slotted `<optgroup>`
-   * markup. Options without a group are listed before every group.
+   * markup. With `group-display="inline"`, options without a group are listed before every group;
+   * with `flyout` and `drill-in`, options without a group and groups keep the array's order.
    */
   group?: string;
   /**
@@ -13,6 +14,12 @@ export interface ComboboxOption {
    * one wins, the same as `data-icon` on a slotted `<optgroup>`.
    */
   groupIcon?: string;
+  /**
+   * Pine icon name shown before the option's text (letters, digits and hyphens, for example
+   * `hashtag`); URLs and file paths are not accepted. The same as `data-icon` on a slotted `<option>`.
+   * Once the option is chosen, the `button` trigger shows it too.
+   */
+  icon?: string;
   /**
    * When `true`, the option stays reachable by the arrow keys and the pointer, so assistive tech
    * announces it as unavailable, but it cannot be selected.
