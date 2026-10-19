@@ -28,6 +28,7 @@
   margin-inline: calc(var(--pine-dimension-xs) * -1);
   padding-block-end: var(--pine-dimension-xs);
   padding-inline: calc(var(--pine-dimension-xs) * 2 + var(--pine-border-width) + 2px);
+  text-align: start;
 }
 
 .pds-dropdown-menu__items {
