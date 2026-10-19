@@ -1043,6 +1043,35 @@ describe('pds-combobox', () => {
       expect(icon.getAttribute('name')).toBe('assessment');
     });
 
+    it('wraps a long picked label beside its icon within the trigger width', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Category" trigger="button" mode="select-only" trigger-width="160px" value="long">
+          <option value="long" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+          <option value="word" data-icon="assessment">Supercalifragilisticexpialidocious</option>
+        </pds-combobox>
+      `);
+      await page.waitForChanges();
+
+      const overflow = () =>
+        page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          const trigger = root.querySelector('.pds-combobox__button-trigger')!.getBoundingClientRect();
+          const label = root.querySelector('.pds-combobox__button-trigger-label')!;
+          const range = document.createRange();
+          range.selectNodeContents(label);
+          return Math.max(0, Math.ceil(range.getBoundingClientRect().right - trigger.right));
+        });
+
+      expect(await overflow()).toBe(0);
+
+      const combobox = await page.find('pds-combobox');
+      combobox.setProperty('value', 'word');
+      await page.waitForChanges();
+
+      expect(await overflow()).toBe(0);
+    });
+
     it('has no axe violations with option icons open', async () => {
       const page = await setUp();
 
