@@ -160,17 +160,15 @@
     background: var(--pine-color-background-muted);
   }
 
-  // Drilling in and going back are one slide, mirrored: the rows coming in slide from the side
-  // they're coming from (a group's options and its row back from the end, the groups from the start)
-  // and fade in. The panel search field, outside the list, stays put. Timed by the motion tokens,
-  // which drop to 0ms under prefers-reduced-motion.
+  // One slide, mirrored: entering slides in from the end, going back from the start. Motion tokens
+  // drop it to 0ms under reduced motion.
   // The slide's offset would otherwise widen the list's scroll area and flash a horizontal scrollbar.
   .pds-combobox__listbox--drill-in,
   .pds-combobox__listbox--drill-out {
     overflow-x: hidden;
   }
 
-  // Internal, set inside the shadow root: not a consumer hook. Positive slides from the right.
+  // Internal, not a consumer hook.
   .pds-combobox__listbox--drill-in,
   .pds-combobox__listbox--drill-out:dir(rtl) {
     --pds-combobox-drill-from: var(--pine-dimension-sm);
@@ -181,8 +179,7 @@
     --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
   }
 
-  // The row back slides with the group's options: it reads as one of them, so holding it still while
-  // they move looks like two speeds. Only its trigger moves, so with panel search it stays sticky.
+  // The row back slides with the options; only its trigger moves, so it stays sticky.
   .pds-combobox__listbox--drill-in .pds-combobox__drill-in-options > li,
   .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger,
   .pds-combobox__listbox--drill-out > li {
