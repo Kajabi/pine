@@ -37,6 +37,15 @@ describe('pds-avatar', () => {
     `);
   });
 
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar id="author-id" component-id="test"></pds-avatar>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders the admin variant of avatar when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsAvatar],

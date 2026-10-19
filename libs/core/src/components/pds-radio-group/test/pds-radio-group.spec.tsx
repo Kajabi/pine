@@ -13,6 +13,35 @@ describe('pds-radio-group', () => {
     expect(page.root).toBeTruthy();
   });
 
+  it('does not write component-id onto the host id', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="plan"></pds-radio-group>`,
+    });
+
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group id="author-id" component-id="plan"></pds-radio-group>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
+  it('still derives its helper message id from component-id, even though the host id no longer does', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="plan" helper-message="Choose one"></pds-radio-group>`,
+    });
+
+    const helper = page.root?.querySelector('[id="plan__helper-message"]');
+    expect(helper).toBeTruthy();
+    expect(page.root?.getAttribute('aria-describedby')).toBe('plan__helper-message');
+  });
+
   it('renders with child radios', async () => {
     const page = await newSpecPage({
       components: [PdsRadioGroup, PdsRadio],

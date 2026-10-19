@@ -33,6 +33,15 @@ describe('pds-chip', () => {
     `);
   });
 
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip id="author-id" component-id="test" />`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders label text when label prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsChip],

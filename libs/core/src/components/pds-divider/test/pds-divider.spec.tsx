@@ -31,6 +31,15 @@ describe('pds-divider', () => {
     `);
   });
 
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsDivider],
+      html: `<pds-divider id="author-id" component-id="test" />`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders vertically when vertical prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsDivider],
