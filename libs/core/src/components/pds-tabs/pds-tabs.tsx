@@ -17,14 +17,34 @@ export class PdsTabs {
 
   @Element() el: HTMLPdsTabsElement;
   private hostKeeper = new HostStylingKeeper();
+  private tabsSlot: HTMLSlotElement;
+  private tabPanelsSlot: HTMLSlotElement;
+  private slotChangeScheduled = false;
+  private activeTabNameBeforeSlotChange: string | undefined;
+  // The tab that most recently had focus, tracked continuously via `focusin` rather
+  // than sampled inside handleSlotChange: removing a focused element blurs it to
+  // <body> synchronously, but slotchange only fires later (a microtask checkpoint),
+  // by which point the sample would already read <body>.
+  private lastFocusedTab: Element | null = null;
 
   connectedCallback() {
     this.hostKeeper.connect(this.el);
+    this.el.addEventListener('focusin', this.handleFocusIn);
   }
 
   disconnectedCallback() {
     this.hostKeeper.disconnect();
+    this.el.removeEventListener('focusin', this.handleFocusIn);
+    this.tabsSlot?.removeEventListener('slotchange', this.handleSlotChange);
+    this.tabPanelsSlot?.removeEventListener('slotchange', this.handleSlotChange);
   }
+
+  private handleFocusIn = (event: FocusEvent) => {
+    const tab = (event.target as HTMLElement)?.closest('pds-tab');
+    if (tab && tab.closest('pds-tabs') === this.el) {
+      this.lastFocusedTab = tab;
+    }
+  };
 
   componentDidLoad() {
     this.setupSlotChangeListeners();
@@ -41,9 +61,10 @@ export class PdsTabs {
   @Prop() componentId!: string;
 
   /**
-   * Sets tabs variant styles as outlined in Figma documentation
+   * Sets tabs variant styles as outlined in Figma documentation.
+   * Panel mode only — nav mode has no variant-specific styling, so it can be omitted there.
    */
-  @Prop() variant!: 'primary' | 'availability' | 'filter' | 'pill';
+  @Prop() variant?: 'primary' | 'availability' | 'filter' | 'pill';
 
   /**
    * Adds a divider rule beneath the tab list.
@@ -115,8 +136,8 @@ export class PdsTabs {
   // Navigation mode is an explicit, single source of truth: `nav` drives both the
   // container (<nav> of links vs role=tablist of buttons) and every child tab (via
   // `navMode`), so the tabs present when the strip initializes can't mix the two.
-  // (Child discovery is load-time only, like `variant`/`id`; tabs added after load
-  // aren't managed.)
+  // Unlike child discovery (re-run on slotchange), `nav` itself isn't watched — it's
+  // a load-time mode switch, not something a consumer is expected to toggle live.
   private get isNav() {
     return !!this.nav;
   }
@@ -181,16 +202,35 @@ export class PdsTabs {
   // swapping in a fresh copy — needs to be re-collected the same way pds-dropdown-menu,
   // pds-select and pds-multiselect already do for their own slotted content.
   private setupSlotChangeListeners() {
-    const tabsSlot = this.el.shadowRoot?.querySelector('slot[name="tabs"]') as HTMLSlotElement;
-    const tabPanelsSlot = this.el.shadowRoot?.querySelector('slot[name="tabpanels"]') as HTMLSlotElement;
+    this.tabsSlot = this.el.shadowRoot?.querySelector('slot[name="tabs"]');
+    this.tabPanelsSlot = this.el.shadowRoot?.querySelector('slot[name="tabpanels"]');
 
-    tabsSlot?.addEventListener('slotchange', this.handleSlotChange);
-    tabPanelsSlot?.addEventListener('slotchange', this.handleSlotChange);
+    this.tabsSlot?.addEventListener('slotchange', this.handleSlotChange);
+    this.tabPanelsSlot?.addEventListener('slotchange', this.handleSlotChange);
   }
 
+  // The tabs and tabpanels slots fire slotchange separately, even for the same morph
+  // (both swapped together). Coalesce same-tick firings into one re-collection pass
+  // with a microtask, the way a single DOM mutation already only triggers one event.
   private handleSlotChange = () => {
-    const previousActiveTabName = this.activeTabName;
+    if (this.slotChangeScheduled) return;
+    this.slotChangeScheduled = true;
+    this.activeTabNameBeforeSlotChange = this.activeTabName;
+
+    queueMicrotask(() => {
+      this.slotChangeScheduled = false;
+      this.recollectAfterSlotChange();
+    });
+  };
+
+  private recollectAfterSlotChange() {
+    const previousActiveTabName = this.activeTabNameBeforeSlotChange;
+    // A removed node stays referenced but disconnected — checked before
+    // findAllChildren() re-collects, since that doesn't affect this either way.
+    const focusedTabWasRemoved = !this.isNav && this.lastFocusedTab != null && !this.lastFocusedTab.isConnected;
+
     this.findAllChildren();
+    this.warnOnNavConfig();
 
     // Keep the current selection if it still exists. Otherwise clear it so
     // passPropsToChildren() falls back to the first enabled tab, the same way
@@ -200,15 +240,25 @@ export class PdsTabs {
     }
 
     this.passPropsToChildren();
-  };
+
+    // If the tab that last had focus was removed (e.g. replaced by a fresh copy),
+    // the browser already silently dropped focus to <body> — restore it to the new
+    // active tab's button so keyboard/screen-reader users don't lose their place.
+    // Deferred a frame since a freshly-created pds-tab's button doesn't exist until
+    // its own render completes; re-checked then in case focus moved on its own.
+    if (focusedTabWasRemoved) {
+      this.lastFocusedTab = null;
+      requestAnimationFrame(() => {
+        if (this.el.contains(document.activeElement)) return;
+        const newActiveTab = this.tabs.find((tab) => tab.name === this.activeTabName);
+        (newActiveTab?.querySelector('button') as HTMLButtonElement)?.focus();
+      });
+    }
+  }
 
   private propGeneration(child, index = 0) {
     child.parentComponentId = this.componentId.toString();
-    // `variant` has no runtime default, and nav-mode consumers can omit it (it only
-    // matters in panel mode); calling this from handleSlotChange, outside Stencil's
-    // own render-cycle error boundary, turned that into an uncaught exception instead
-    // of the pre-existing silently-swallowed one.
-    child.variant = this.variant?.toString();
+    child.variant = this.variant;
     child.selected = (this.activeTabName === child.name) ? true : false;
     child['index'] = index;
   }

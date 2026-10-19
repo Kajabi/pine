@@ -2718,9 +2718,9 @@ export namespace Components {
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation
+          * Sets tabs variant styles as outlined in Figma documentation. Panel mode only — nav mode has no variant-specific styling, so it can be omitted there.
          */
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
     interface PdsText {
         /**
@@ -6664,9 +6664,9 @@ declare namespace LocalJSX {
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation
+          * Sets tabs variant styles as outlined in Figma documentation. Panel mode only — nav mode has no variant-specific styling, so it can be omitted there.
          */
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
     interface PdsText {
         /**
@@ -7643,7 +7643,7 @@ declare namespace LocalJSX {
         "pds-table-head-cell": Omit<PdsTableHeadCell, keyof PdsTableHeadCellAttributes> & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes]?: PdsTableHeadCell[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `attr:${K}`]?: PdsTableHeadCellAttributes[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `prop:${K}`]?: PdsTableHeadCell[K] };
         "pds-table-row": Omit<PdsTableRow, keyof PdsTableRowAttributes> & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes]?: PdsTableRow[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `attr:${K}`]?: PdsTableRowAttributes[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `prop:${K}`]?: PdsTableRow[K] };
         "pds-tabpanel": Omit<PdsTabpanel, keyof PdsTabpanelAttributes> & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes]?: PdsTabpanel[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `attr:${K}`]?: PdsTabpanelAttributes[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `prop:${K}`]?: PdsTabpanel[K] } & OneOf<"name", PdsTabpanel["name"], PdsTabpanelAttributes["name"]>;
-        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]> & OneOf<"variant", PdsTabs["variant"], PdsTabsAttributes["variant"]>;
+        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]>;
         "pds-text": Omit<PdsText, keyof PdsTextAttributes> & { [K in keyof PdsText & keyof PdsTextAttributes]?: PdsText[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `attr:${K}`]?: PdsTextAttributes[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `prop:${K}`]?: PdsText[K] };
         "pds-textarea": Omit<PdsTextarea, keyof PdsTextareaAttributes> & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes]?: PdsTextarea[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `attr:${K}`]?: PdsTextareaAttributes[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `prop:${K}`]?: PdsTextarea[K] } & OneOf<"componentId", PdsTextarea["componentId"], PdsTextareaAttributes["componentId"]>;
         "pds-toast": Omit<PdsToast, keyof PdsToastAttributes> & { [K in keyof PdsToast & keyof PdsToastAttributes]?: PdsToast[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `attr:${K}`]?: PdsToastAttributes[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `prop:${K}`]?: PdsToast[K] } & OneOf<"componentId", PdsToast["componentId"], PdsToastAttributes["componentId"]>;

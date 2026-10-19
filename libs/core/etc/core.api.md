@@ -765,7 +765,7 @@ export namespace Components {
         "nav"?: boolean;
         "stretch"?: boolean;
         "tablistLabel": string;
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
     // (undocumented)
     export interface PdsText {
@@ -985,7 +985,7 @@ export namespace LocalJSX {
         // (undocumented)
         "pds-tabpanel": Omit<PdsTabpanel, keyof PdsTabpanelAttributes> & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes]?: PdsTabpanel[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `attr:${K}`]?: PdsTabpanelAttributes[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `prop:${K}`]?: PdsTabpanel[K] } & OneOf<"name", PdsTabpanel["name"], PdsTabpanelAttributes["name"]>;
         // (undocumented)
-        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]> & OneOf<"variant", PdsTabs["variant"], PdsTabsAttributes["variant"]>;
+        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]>;
         // (undocumented)
         "pds-text": Omit<PdsText, keyof PdsTextAttributes> & { [K in keyof PdsText & keyof PdsTextAttributes]?: PdsText[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `attr:${K}`]?: PdsTextAttributes[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `prop:${K}`]?: PdsText[K] };
         // (undocumented)
@@ -2977,7 +2977,7 @@ export namespace LocalJSX {
         "nav"?: boolean;
         "stretch"?: boolean;
         "tablistLabel": string;
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
 
     // (undocumented)
