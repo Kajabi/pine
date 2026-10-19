@@ -16,7 +16,8 @@ export class PdsRadioGroup {
   @Element() el: HTMLPdsRadioGroupElement;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance, used to build its helper and error message `id`s.
+   * Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 

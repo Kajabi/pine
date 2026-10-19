@@ -15,12 +15,12 @@ Uses a hybrid approach for optimal cross-browser compatibility:
 
 ## Properties
 
-| Property                   | Attribute      | Description                                                                                                                | Type                                           | Default     |
-| -------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ----------- |
-| `componentId` _(required)_ | `component-id` | A unique identifier used for the underlying component `id` attribute.                                                      | `string`                                       | `undefined` |
-| `icon`                     | `icon`         | The name of the icon to display in the trigger button. For 'clear' variant, this is ignored as it always shows trash icon. | `string`                                       | `undefined` |
-| `text`                     | `text`         | The text content displayed in the trigger button.                                                                          | `string`                                       | `undefined` |
-| `variant`                  | `variant`      | The variant style of the filter trigger.                                                                                   | `"clear" \| "default" \| "more" \| "selected"` | `'default'` |
+| Property                   | Attribute      | Description                                                                                                                                                                     | Type                                           | Default     |
+| -------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ----------- |
+| `componentId` _(required)_ | `component-id` | A unique identifier for this component instance, used to build its internal popover's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one. | `string`                                       | `undefined` |
+| `icon`                     | `icon`         | The name of the icon to display in the trigger button. For 'clear' variant, this is ignored as it always shows trash icon.                                                      | `string`                                       | `undefined` |
+| `text`                     | `text`         | The text content displayed in the trigger button.                                                                                                                               | `string`                                       | `undefined` |
+| `variant`                  | `variant`      | The variant style of the filter trigger.                                                                                                                                        | `"clear" \| "default" \| "more" \| "selected"` | `'default'` |
 
 
 ## Events

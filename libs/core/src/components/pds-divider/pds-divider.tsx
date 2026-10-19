@@ -11,7 +11,7 @@ import { Component, Prop, Host, h } from '@stencil/core';
 })
 export class PdsDivider {
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
