@@ -704,7 +704,7 @@ describe('pds-popover', () => {
       ).not.toBe('none');
 
       // Cleanup on hide, then disconnect, removes the style without throwing.
-      await page.$eval('pds-popover', (popover: any) => popover.hide());
+      await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.hide());
       await page.waitForChanges();
       await page.$eval('pds-popover', (popover) => popover.remove());
       await page.waitForChanges();
