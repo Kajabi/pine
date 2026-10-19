@@ -529,19 +529,25 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Scrolls the list up or down just enough to show `el`, as `scrollIntoView({ block: 'nearest' })`
-   * does, but never sideways: while a drill-in slide offsets a row past the list's edge,
-   * `scrollIntoView` also scrolls the list horizontally to reach it, which eats most of the slide.
-   * Keeps clear of the sticky row back, through the scroll padding set for it.
+   * Scrolls just enough to show `el`, as `scrollIntoView({ block: 'nearest' })` does. In the drill-in
+   * panel it scrolls the list alone, and never sideways: while a drill-in slide offsets a row past
+   * the list's edge, `scrollIntoView` also scrolls the list horizontally to reach it, which eats most
+   * of the slide. There it keeps clear of the sticky row back, through the scroll padding set for it,
+   * but doesn't scroll the page or a scrolling ancestor.
    */
-  private scrollIntoViewVertically(el: HTMLElement, smooth: boolean) {
+  private scrollIntoViewNearest(el: HTMLElement, smooth: boolean) {
+    const behavior = smooth ? 'smooth' : 'auto';
+    if (!this.showsGroupedPanel || this.effectiveGroupDisplay !== 'drill-in') {
+      el.scrollIntoView({ block: 'nearest', behavior });
+      return;
+    }
     const list = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
     if (!list) return;
     const offset = el.getBoundingClientRect().top - list.getBoundingClientRect().top - list.clientTop;
     const top = list.scrollTop + offset - (parseFloat(list.style.scrollPaddingBlockStart) || 0);
     const bottom = list.scrollTop + offset + el.offsetHeight - list.clientHeight;
     const target = top < list.scrollTop ? top : bottom > list.scrollTop ? bottom : null;
-    if (target !== null) list.scrollTo({ top: target, behavior: smooth ? 'smooth' : 'auto' });
+    if (target !== null) list.scrollTo({ top: target, behavior });
   }
 
   private focusPanel(el: HTMLElement) {
@@ -1840,7 +1846,10 @@ export class PdsCombobox implements BasePdsProps {
       const id = this.groupDomId(groupRow);
       const row = Array.from(this.listboxEl.querySelectorAll('[role="treeitem"]'))
         .find(item => item.id === id);
-      if (row) this.scrollIntoViewVertically(row as HTMLElement, false);
+      // The row's trigger, not its item: the row back's item wraps the group's options, and showing
+      // all of a group taller than the list would scroll the row back itself out of view.
+      const trigger = Array.from(row?.children ?? []).find(child => child.classList.contains('pds-combobox__group-row-trigger'));
+      if (trigger) this.scrollIntoViewNearest(trigger as HTMLElement, false);
       this.updateAriaActiveDescendant();
       return;
     }
@@ -1898,7 +1907,7 @@ export class PdsCombobox implements BasePdsProps {
       if (flyout) {
         this.flyout.reveal(flyout, currentOption);
       } else {
-        this.scrollIntoViewVertically(currentOption, true);
+        this.scrollIntoViewNearest(currentOption, true);
       }
     }
 
