@@ -388,6 +388,21 @@ describe('pds-dropdown-menu header slot', () => {
     expect(await page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Account settings');
   });
 
+  it('start-aligns header content inside a centered container', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="text-align: center">
+        <pds-dropdown-menu>
+          <button slot="trigger">Account</button>
+          <div slot="header" id="header">Jane Doe</div>
+          <pds-dropdown-menu-item>Account settings</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </div>
+    `);
+
+    expect(await page.$eval('#header', (el) => getComputedStyle(el).textAlign)).toBe('start');
+  });
+
   it('has no axe violations', async () => {
     const { page } = await openMenuWithHeader();
 
