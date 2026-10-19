@@ -181,7 +181,10 @@ export const keepPineHydrated = () => {
   const observer = new MutationObserver((records) => {
     records.forEach(({ target, oldValue }) => {
       const el = target as Element;
-      if (oldValue == null || !el.localName.startsWith('pds-')) return;
+      if (!el.localName.startsWith('pds-')) return;
+      // No old value is a `class` being added. Stencil's first `hydrated` arrives that way, which
+      // needs nothing; for an element already seen, it's the class coming back after a removal.
+      if (oldValue == null && !seen.has(el)) return;
       if (!seen.has(el)) seen.set(el, new Set());
       const names = stencilClassesOf(seen.get(el)!, el, oldValue);
       if (names.length > 0) restoreFor(el)(names);
