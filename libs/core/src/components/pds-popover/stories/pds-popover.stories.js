@@ -62,7 +62,7 @@ export const WithContent = (args) => html`
 					<pds-button
 						variant="unstyled"
 						icon-only
-						onclick="document.getElementById('${args.componentId || 'popover-rich'}').hide()"
+						onclick="this.closest('pds-popover').hide()"
 						aria-label="Close"
 					>
 						<pds-icon slot="start" name="remove"></pds-icon>
