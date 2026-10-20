@@ -513,8 +513,9 @@ export class PdsModal {
         const topLayerDialog = activeAtDispatch?.closest('dialog') ?? null;
         eventSnapshot.__pdsTopLayerDialogAtEscape = topLayerDialog;
         eventSnapshot.__pdsTopLayerDialogWasModalAtEscape = !!(topLayerDialog && topLayerDialog.matches(':modal'));
-        // A control inside that closes on Escape (a dropdown, a datepicker) has already handled it, on
-        // its own element, before this document listener. Read before any modal prevents it below.
+        // A control that closed on this Escape (a combobox on its own element, a dropdown menu or
+        // multiselect in document's capture phase) has prevented it before this bubble listener.
+        // Read before any modal prevents it below.
         eventSnapshot.__pdsEscapeHandledInside = e.defaultPrevented;
       }
       if (eventSnapshot.__pdsEscapeHandledInside) return;
