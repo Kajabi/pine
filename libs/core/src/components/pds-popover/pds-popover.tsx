@@ -276,11 +276,12 @@ export class PdsPopover {
 
   disconnectedCallback() {
     // Moved in one operation (a DOM morph, or a framework reparenting it), the popover is
-    // already back in the page. Its portal is in <body>, untouched, so it stays open, with focus
-    // where it was.
+    // already back in the page. Its portal is outside the popover (in <body>, or beside it in a
+    // dialog), untouched, so it stays open, with focus where it was.
     if (this.el.isConnected) return;
 
     this.isComponentMounted = false;
+    this.unwatchDialogClose();
 
     // Open, the content sits in the portal; put it back before the portal goes. Only listeners on
     // the popover itself hear the close event now, but those are the ones mirroring its state.
@@ -485,10 +486,16 @@ export class PdsPopover {
 
     this.linkTriggerToPortal();
 
-    // In an open dialog, the panel goes inside it: a modal dialog sits in the top layer above the
-    // body and makes the rest of the page inert, and a non-modal one sits above it by z-index.
-    const mountRoot = (closest('dialog[open]', this.el) as HTMLElement | null) ?? document.body;
-    if (this.portalEl.parentElement !== mountRoot) mountRoot.appendChild(this.portalEl);
+    // In an open dialog, the panel goes inside it, right after the popover so it's next in the Tab
+    // order: a modal dialog sits in the top layer above the body and makes the rest of the page
+    // inert, and a non-modal one sits above it by z-index.
+    const dialog = closest('dialog[open]', this.el) as HTMLDialogElement | null;
+    if (dialog) {
+      if (this.el.nextElementSibling !== this.portalEl) this.el.after(this.portalEl);
+      this.watchDialogClose(dialog);
+    } else if (this.portalEl.parentElement !== document.body) {
+      document.body.appendChild(this.portalEl);
+    }
 
     // Update portal content with latest slot content
     this.updatePortalContent();
@@ -529,6 +536,7 @@ export class PdsPopover {
     if (!this.active || !this.portalEl) return;
 
     this.active = false;
+    this.unwatchDialogClose();
 
     // Restoring the content drops its focus to the body, so check where focus is first.
     const focusWasInside = this.portalEl.contains(document.activeElement);
@@ -583,6 +591,26 @@ export class PdsPopover {
     // Add listeners immediately - handleClickOutside will check timestamp
     document.addEventListener('click', this.boundClickOutsideHandler, true);
     document.addEventListener('keydown', this.boundEscapeKeyHandler);
+  }
+
+  /** The dialog the panel was opened in, closed along with it. */
+  private watchedDialog: HTMLDialogElement | null = null;
+
+  private onDialogClose = () => {
+    this.hide();
+  };
+
+  /** Closes the popover when the dialog it opened in closes, so it isn't left open inside. */
+  private watchDialogClose(dialog: HTMLDialogElement) {
+    if (this.watchedDialog === dialog) return;
+    this.unwatchDialogClose();
+    this.watchedDialog = dialog;
+    dialog.addEventListener('close', this.onDialogClose);
+  }
+
+  private unwatchDialogClose() {
+    this.watchedDialog?.removeEventListener('close', this.onDialogClose);
+    this.watchedDialog = null;
   }
 
   /**
@@ -790,6 +818,14 @@ export class PdsPopover {
 
     this.portalEl.style.top = `${top}px`;
     this.portalEl.style.left = `${left}px`;
+
+    // `position: fixed` measures from the viewport unless an ancestor becomes its containing block,
+    // as a modal dialog does with its backdrop filter. Shift by however far it landed from the spot.
+    const placed = this.portalEl.getBoundingClientRect();
+    if (Math.abs(placed.top - top) > 0.5 || Math.abs(placed.left - left) > 0.5) {
+      this.portalEl.style.top = `${2 * top - placed.top}px`;
+      this.portalEl.style.left = `${2 * left - placed.left}px`;
+    }
 
     // Reset the repositioning guard after a short delay
     setTimeout(() => {
