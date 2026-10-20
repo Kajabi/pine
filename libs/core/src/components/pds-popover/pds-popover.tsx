@@ -319,6 +319,7 @@ export class PdsPopover {
     // Clean up all event listeners
     this.removeLightDismissListeners();
     this.removeScrollAndResizeListeners();
+    document.removeEventListener('submit', this.handleSubmitFromPanel, true);
 
     // Clear any pending debounce timers
     this.clearDebounceTimers();
@@ -519,6 +520,7 @@ export class PdsPopover {
 
     // Add scroll and resize listeners for repositioning (always)
     this.addScrollAndResizeListeners();
+    document.addEventListener('submit', this.handleSubmitFromPanel, true);
 
     // Add document listeners for light dismiss and escape key (auto type only)
     if (this.popoverType === 'auto') {
@@ -568,6 +570,7 @@ export class PdsPopover {
     this.forgetOpen();
     this.removeLightDismissListeners();
     this.removeScrollAndResizeListeners();
+    document.removeEventListener('submit', this.handleSubmitFromPanel, true);
 
     // Clear any pending timers
     this.clearDebounceTimers();
@@ -669,6 +672,19 @@ export class PdsPopover {
     document.removeEventListener('click', this.boundClickOutsideHandler, true);
     document.removeEventListener('keydown', this.boundEscapeKeyHandler);
   }
+
+  /**
+   * Inside a dialog, the panel can sit in a form that wraps the dialog, which a body portal never
+   * did. A submit from the panel (a button in it, or Enter in a field in it) is stopped, so the
+   * panel behaves as it does in the body.
+   */
+  private handleSubmitFromPanel = (event: SubmitEvent) => {
+    if (!this.portalEl || !containsComposed(event.target as Node, this.portalEl)) return;
+    if (containsComposed(this.portalEl, event.submitter) || containsComposed(this.portalEl, deepActiveElement())) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
 
   /**
    * Adds scroll and resize listeners for repositioning
