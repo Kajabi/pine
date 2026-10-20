@@ -328,17 +328,21 @@ export class PdsDropdownMenu implements BasePdsProps {
     }
   }
 
+  // Escape is taken in document's capture phase, before a modal around the menu hears it on
+  // document and closes too.
+  @Listen('keydown', { target: 'document', capture: true })
+  handleEscapeKeyDown(event: KeyboardEvent) {
+    if (!this.isOpen || event.key !== 'Escape' || event.defaultPrevented) return;
+    event.preventDefault();
+    this.closeDropdown();
+  }
+
   // Handle keyboard events for the dropdown
   @Listen('keydown', { target: 'window' })
   handleKeyDown(event: KeyboardEvent) {
     if (!this.isOpen) return;
 
     switch (event.key) {
-      case 'Escape':
-        event.preventDefault();
-        this.closeDropdown();
-        break;
-
       case 'ArrowDown':
         event.preventDefault();
         this.focusNextItem();
