@@ -332,7 +332,7 @@ export class PdsDropdownMenu implements BasePdsProps {
   // document and closes too.
   @Listen('keydown', { target: 'document', capture: true })
   handleEscapeKeyDown(event: KeyboardEvent) {
-    if (!this.isOpen || event.key !== 'Escape') return;
+    if (!this.isOpen || event.key !== 'Escape' || event.defaultPrevented) return;
     event.preventDefault();
     this.closeDropdown();
   }
