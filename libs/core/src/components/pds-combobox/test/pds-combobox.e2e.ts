@@ -127,14 +127,14 @@ describe('pds-combobox', () => {
       expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
     });
 
-    it('stays closed on the opening keys once focused', async () => {
+    it('stays closed on the opening keys once focused through setFocus()', async () => {
       const page = await setUp(true);
-      await page.evaluate(triggerSelector => {
-        (document.querySelector('pds-combobox')!.shadowRoot!.querySelector(triggerSelector) as HTMLElement).focus();
-      }, selector);
+      await (await page.find('pds-combobox')).callMethod('setFocus');
+      await page.waitForChanges();
 
-      for (const key of ['Enter', ' ', 'ArrowDown']) {
-        await page.keyboard.press(key as 'Enter');
+      const keys: Array<'Enter' | 'Space' | 'ArrowDown' | 'ArrowUp'> = ['Enter', 'Space', 'ArrowDown', 'ArrowUp'];
+      for (const key of keys) {
+        await page.keyboard.press(key);
         await page.waitForChanges();
         expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
       }
@@ -149,6 +149,26 @@ describe('pds-combobox', () => {
       await (await page.find('pds-combobox')).setProperty('disabled', true);
       await page.waitForChanges();
       expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+    });
+
+    it('moves focus from the panel search to the trigger when disabled while open', async () => {
+      const page = await setUp(false);
+      await page.$eval('pds-combobox', (el: HTMLElement) => el.setAttribute('panel-search', ''));
+      await page.waitForChanges();
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+      const active = () =>
+        page.evaluate(() => (document.querySelector('pds-combobox')!.shadowRoot!.activeElement as HTMLElement | null)?.className ?? '');
+      expect(await active()).toContain('pds-combobox__panel-search-input');
+
+      await (await page.find('pds-combobox')).setProperty('disabled', true);
+      await page.waitForChanges();
+      await page.waitForFunction(
+        triggerSelector => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.matches(triggerSelector),
+        {},
+        selector,
+      );
+      expect(await active()).toContain(selector.slice(1));
     });
   });
 
