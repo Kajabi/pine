@@ -432,6 +432,101 @@ describe('pds-modal', () => {
     });
   });
 
+  describe('a popover inside', () => {
+    const popoverModal = (modalAttrs: string, popoverAttrs = '') => `
+      <pds-modal component-id="with-popover" ${modalAttrs}>
+        <pds-modal-content>
+          <pds-popover component-id="pop" ${popoverAttrs}>
+            <button slot="trigger" id="pop-trigger">Open</button>
+            <div><button id="pop-inside">Inside</button></div>
+          </pds-popover>
+        </pds-modal-content>
+      </pds-modal>
+    `;
+
+    const openPopoverInModal = async (modalAttrs: string, popoverAttrs = '') => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1000, height: 800 });
+      await page.setContent(popoverModal(modalAttrs, popoverAttrs));
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await (await page.find('#pop-trigger')).click();
+      await page.waitForChanges();
+      await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+      return { page, modal };
+    };
+
+    const popoverOpen = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => document.getElementById('pop-portal')?.style.display === 'block');
+
+    for (const [name, modalAttrs] of [
+      ['in the top layer', ''],
+      ['with disableTopLayer', 'disable-top-layer="true"'],
+    ]) {
+      it(`shows the popover above the modal, where it can be clicked (${name})`, async () => {
+        const { page } = await openPopoverInModal(modalAttrs);
+        const hitsInside = await page.evaluate(() => {
+          const rect = document.getElementById('pop-inside')!.getBoundingClientRect();
+          return document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)?.id === 'pop-inside';
+        });
+        expect(hitsInside).toBe(true);
+      });
+
+      it(`closes only the popover on the first Escape, and the modal on the next (${name})`, async () => {
+        const { page, modal } = await openPopoverInModal(modalAttrs);
+        await page.evaluate(() => (document.getElementById('pop-inside') as HTMLElement).focus());
+
+        await page.keyboard.press('Escape');
+        await page.waitForChanges();
+        expect(await popoverOpen(page)).toBe(false);
+        expect(await modal.getProperty('open')).toBe(true);
+        expect(await page.evaluate(() => document.activeElement?.id)).toBe('pop-trigger');
+
+        await page.keyboard.press('Escape');
+        await page.waitForChanges();
+        expect(await modal.getProperty('open')).toBe(false);
+      });
+    }
+
+    it('still closes on Escape with a manual popover open inside', async () => {
+      const { page, modal } = await openPopoverInModal('', 'popover-type="manual"');
+      await page.evaluate(() => (document.getElementById('pop-trigger') as HTMLElement).focus());
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+
+    // A modal mounted after the popover opened, so the popover's Escape listener was added first.
+    it('takes the first Escape over a popover left open behind it', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-popover component-id="pop">
+          <button slot="trigger" id="pop-trigger">Open</button>
+          <div>Behind</div>
+        </pds-popover>
+      `);
+      await (await page.find('#pop-trigger')).click();
+      await page.waitForChanges();
+      await page.evaluate(() => {
+        const modal = document.createElement('pds-modal');
+        modal.setAttribute('component-id', 'above');
+        modal.innerHTML = '<pds-modal-content><button id="in-modal">In modal</button></pds-modal-content>';
+        document.body.appendChild(modal);
+      });
+      await page.waitForChanges();
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.getElementById('in-modal') as HTMLElement).focus());
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+  });
+
   it('closes a disableTopLayer inner modal on Escape from a control in its top-layer outer modal', async () => {
     const page = await newE2EPage();
     await page.setContent(`
