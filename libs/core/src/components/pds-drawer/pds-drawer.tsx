@@ -10,13 +10,14 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dropdown-portal';
 
 /**
- * A non-modal side panel composed from `pds-modal`.
+ * A side panel composed from `pds-modal`, non-modal by default.
  *
  * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
  * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
- * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+ * `pds-modal` internally with `disableTopLayer` on and its backdrop
  * suppressed, and adds the edge, width and dismiss behavior a side panel
- * needs on top. It does not reimplement focus, Escape or dialog semantics —
+ * needs on top. With `modal`, it opens that `pds-modal` in the top layer
+ * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
  * those come from `pds-modal` unchanged.
  * @lightDom renders-markup
  */
@@ -87,8 +88,18 @@ export class PdsDrawer {
   @Prop() scrollable = true;
 
   /**
-   * Whether the drawer can be dismissed with a pointerdown outside it.
-   * Replaces `pds-modal`'s `backdropDismiss` — there is no backdrop to click.
+   * Whether the drawer is modal. A modal drawer dims the page behind it with a
+   * backdrop, makes the page inert, and keeps focus inside the drawer, like
+   * `pds-modal`. Use it for a task the page should wait on. Leave it off for a
+   * panel people work alongside the page.
+   * @default false
+   */
+  @Prop() modal = false;
+
+  /**
+   * Whether the drawer can be dismissed with a pointerdown outside it (in a
+   * `modal` drawer, a click on its backdrop).
+   * Replaces `pds-modal`'s `backdropDismiss`.
    * This also gates Escape, matching how `backdropDismiss` gates Escape on
    * `pds-modal` today: setting this to `false` means the close button is the
    * only way out.
@@ -150,7 +161,8 @@ export class PdsDrawer {
   // never reaches pds-modal's backdrop element at all.
   @Listen('pointerdown', { target: 'document' })
   handleOutsidePointerDown(e: PointerEvent) {
-    if (!this.lightDismiss || !this.open) return;
+    // A modal drawer's backdrop takes the click instead, through pds-modal.
+    if (this.modal || !this.lightDismiss || !this.open) return;
     const target = e.target as Element | null;
     if (!target) return;
     if (this.el.contains(target)) return;
@@ -180,12 +192,12 @@ export class PdsDrawer {
         }}
       >
         <pds-modal
-          class="pds-drawer__modal"
+          class={{ 'pds-drawer__modal': true, 'pds-drawer__modal--modal': this.modal }}
           ref={(el) => (this.modalEl = el as HTMLPdsModalElement)}
           componentId={this.componentId}
           open={this.open}
           scrollable={this.scrollable}
-          disableTopLayer={true}
+          disableTopLayer={!this.modal}
           backdropDismiss={this.lightDismiss}
           disableInitialFocus={this.initialFocus === 'none'}
         >

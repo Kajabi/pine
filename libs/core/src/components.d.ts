@@ -1430,12 +1430,13 @@ export namespace Components {
         "vertical": boolean;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`.
+     * A side panel composed from `pds-modal`, non-modal by default.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+     * `pds-modal` internally with `disableTopLayer` on and its backdrop
      * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * needs on top. With `modal`, it opens that `pds-modal` in the top layer
+     * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -1450,10 +1451,15 @@ export namespace Components {
          */
         "initialFocus": 'auto' | 'none';
         /**
-          * Whether the drawer can be dismissed with a pointerdown outside it. Replaces `pds-modal`'s `backdropDismiss` — there is no backdrop to click. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
           * @default true
          */
         "lightDismiss": boolean;
+        /**
+          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page.
+          * @default false
+         */
+        "modal": boolean;
         /**
           * Whether the drawer is open
           * @default false
@@ -3254,12 +3260,13 @@ declare global {
         "pdsDrawerClose": void;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`.
+     * A side panel composed from `pds-modal`, non-modal by default.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+     * `pds-modal` internally with `disableTopLayer` on and its backdrop
      * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * needs on top. With `modal`, it opens that `pds-modal` in the top layer
+     * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -5284,12 +5291,13 @@ declare namespace LocalJSX {
         "vertical"?: boolean;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`.
+     * A side panel composed from `pds-modal`, non-modal by default.
      * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
      * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+     * `pds-modal` internally with `disableTopLayer` on and its backdrop
      * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * needs on top. With `modal`, it opens that `pds-modal` in the top layer
+     * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -5304,10 +5312,15 @@ declare namespace LocalJSX {
          */
         "initialFocus"?: 'auto' | 'none';
         /**
-          * Whether the drawer can be dismissed with a pointerdown outside it. Replaces `pds-modal`'s `backdropDismiss` — there is no backdrop to click. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
           * @default true
          */
         "lightDismiss"?: boolean;
+        /**
+          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page.
+          * @default false
+         */
+        "modal"?: boolean;
         /**
           * Emitted when the drawer is closed
          */
@@ -7220,6 +7233,7 @@ declare namespace LocalJSX {
         "side": 'start' | 'end';
         "size": 'sm' | 'md';
         "scrollable": boolean;
+        "modal": boolean;
         "lightDismiss": boolean;
         "initialFocus": 'auto' | 'none';
     }
@@ -7680,12 +7694,13 @@ declare module "@stencil/core" {
             "pds-datepicker": LocalJSX.IntrinsicElements["pds-datepicker"] & JSXBase.HTMLAttributes<HTMLPdsDatepickerElement>;
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             /**
-             * A non-modal side panel composed from `pds-modal`.
+             * A side panel composed from `pds-modal`, non-modal by default.
              * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
              * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-             * `pds-modal` internally with `disableTopLayer` always on and its backdrop
+             * `pds-modal` internally with `disableTopLayer` on and its backdrop
              * suppressed, and adds the edge, width and dismiss behavior a side panel
-             * needs on top. It does not reimplement focus, Escape or dialog semantics —
+             * needs on top. With `modal`, it opens that `pds-modal` in the top layer
+             * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
              * those come from `pds-modal` unchanged.
              * @lightDom renders-markup
              */
