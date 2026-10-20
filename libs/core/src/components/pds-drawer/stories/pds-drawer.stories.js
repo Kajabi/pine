@@ -9,6 +9,7 @@ export default {
     size: 'md',
     scrollable: true,
     lightDismiss: true,
+    modal: false,
     initialFocus: 'auto',
     open: false,
   },
@@ -28,6 +29,7 @@ const BaseTemplate = (args) => html`
       size="${args.size}"
       scrollable="${args.scrollable}"
       light-dismiss="${args.lightDismiss}"
+      ?modal=${args.modal}
       initial-focus="${args.initialFocus}"
       ?open=${args.open}
     >
@@ -70,3 +72,6 @@ StartSide.args = { side: 'start' };
 
 export const Small = BaseTemplate.bind({});
 Small.args = { size: 'sm' };
+
+export const Modal = BaseTemplate.bind({});
+Modal.args = { modal: true, componentId: 'drawer-modal-demo' };

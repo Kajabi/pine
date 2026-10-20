@@ -30,9 +30,28 @@ behavior a side panel needs.
   height patch needed per consumer.
 - `side` is logical (`start` / `end`), so RTL is free.
 - `light-dismiss` (default `true`) replaces `backdrop-dismiss` — there is no
-  backdrop to click, so a pointerdown anywhere outside the drawer closes it.
-  Setting it to `false` also disables Escape, matching how `backdropDismiss`
-  gates Escape on `pds-modal` today.
+  backdrop to click, so a pointerdown anywhere outside the drawer closes it
+  (in a `modal` drawer, a click on its backdrop). Setting it to `false` also
+  disables Escape, matching how `backdropDismiss` gates Escape on `pds-modal`
+  today.
 - `initial-focus="none"` opts out of moving focus into the drawer on open —
   use it for a drawer that can open from a background event while the user
   is mid-task elsewhere on the page.
+
+## Modal
+
+A drawer is non-modal by default: people keep working on the page beside it.
+For a task the page should wait on, such as building filters before applying
+them, add `modal`. A modal drawer dims the page with a backdrop, makes the page
+inert, and keeps focus inside the drawer, like `pds-modal`. It still docks to
+its `side` at its `size`.
+
+```html
+<pds-drawer open modal component-id="contact-filters" side="end" size="md">
+  <pds-drawer-header>…</pds-drawer-header>
+  <pds-drawer-content>…</pds-drawer-content>
+  <pds-drawer-footer>…</pds-drawer-footer>
+</pds-drawer>
+```
+
+<Canvas of={PdsDrawerStories.Modal} />
