@@ -982,6 +982,50 @@ describe('pds-popover inside a dialog', () => {
     expect(await page.evaluate(() => (window as unknown as { submitted: boolean }).submitted)).toBe(false);
   });
 
+  it("doesn't submit a form that wraps the dialog, from a button or Enter in the panel", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form id="form">
+        <dialog id="dialog">
+          <pds-popover component-id="pop">
+            <button slot="trigger" type="button" id="pop-trigger">Open</button>
+            <div><input id="pop-field" /><button id="pop-inside">Inside</button></div>
+          </pds-popover>
+          <button id="real-submit">Submit</button>
+        </dialog>
+      </form>
+    `);
+    await page.evaluate(() => {
+      (document.getElementById('dialog') as HTMLDialogElement).showModal();
+      (window as unknown as { submits: number }).submits = 0;
+      document.getElementById('form')!.addEventListener('submit', e => {
+        e.preventDefault();
+        (window as unknown as { submits: number }).submits++;
+      });
+    });
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    const submits = () => page.evaluate(() => (window as unknown as { submits: number }).submits);
+
+    await (await page.find('#pop-inside')).click();
+    await page.waitForChanges();
+    expect(await submits()).toBe(0);
+
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    await page.focus('#pop-field');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    expect(await submits()).toBe(0);
+
+    // The form's own submit button still works.
+    await page.evaluate(() => (document.getElementById('real-submit') as HTMLElement).click());
+    await page.waitForChanges();
+    expect(await submits()).toBe(1);
+  });
+
   it('takes its panel along when moved while open into another dialog, and closes with that one', async () => {
     const page = await setUp();
     await page.evaluate(() => {
