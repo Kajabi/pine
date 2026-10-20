@@ -525,6 +525,32 @@ describe('pds-modal', () => {
       expect(await shadowModalOpen(page)).toBe(false);
     });
 
+    it('closes a disableTopLayer modal in a shadow root inside a top-layer modal', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-modal component-id="outer"><pds-modal-content><div id="slot-here"></div></pds-modal-content></pds-modal>');
+      await defineHost(page);
+      await page.evaluate(() => {
+        const host = document.createElement('shadow-modal-host');
+        document.getElementById('slot-here')!.appendChild(host);
+        host.shadowRoot!.querySelector('pds-modal')!.setAttribute('disable-top-layer', 'true');
+      });
+      await page.waitForChanges();
+      const outer = await page.find('pds-modal[component-id="outer"]');
+      await outer.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(async () => {
+        const root = document.querySelector('shadow-modal-host')!.shadowRoot!;
+        await (root.querySelector('pds-modal') as HTMLElement & { showModal(): Promise<void> }).showModal();
+        (root.getElementById('in-shadow-button') as HTMLElement).focus();
+      });
+      await page.waitForChanges();
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await shadowModalOpen(page)).toBe(false);
+      expect(await outer.getProperty('open')).toBe(true);
+    });
+
     it('closes before the light-DOM modal it sits in', async () => {
       const page = await newE2EPage();
       await page.setContent('<pds-modal component-id="outer"><pds-modal-content><div id="slot-here"></div></pds-modal-content></pds-modal>');
