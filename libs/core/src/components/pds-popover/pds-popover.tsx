@@ -3,6 +3,7 @@ import { containsComposed } from '@utils/closest';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { PlacementType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
+import { cssEscape } from '@utils/css';
 import { limitRestores } from '@utils/keep-hydrated';
 import { PdsPopoverEventDetail } from './popover-interface';
 
@@ -373,23 +374,26 @@ export class PdsPopover {
     if (!this.portalEl) return;
 
     const portalId = this.portalEl.id;
+    // componentId comes from the consumer, so it can carry characters cssEscape needs to
+    // neutralize before the id is used as a selector or interpolated into stylesheet text.
+    const escapedPortalId = cssEscape(portalId);
 
     // Check if style element already exists
-    const existingStyle = document.querySelector(`style[data-pds-popover-focus="${portalId}"]`);
+    const existingStyle = document.querySelector(`style[data-pds-popover-focus="${escapedPortalId}"]`);
     if (existingStyle) return;
 
     // Create style element with Pine's focus ring styles and dark mode border
     const styleEl = document.createElement('style');
     styleEl.setAttribute('data-pds-popover-focus', portalId);
     styleEl.textContent = `
-      #${portalId}:focus {
+      #${escapedPortalId}:focus {
         outline: var(--pine-outline-focus, 2px solid var(--pine-color-focus-ring, #6366f1)) !important;
         outline-offset: var(--pine-border-width, 1px);
       }
-      #${portalId}:focus:not(:focus-visible) {
+      #${escapedPortalId}:focus:not(:focus-visible) {
         outline: none;
       }
-      [data-theme="dark"] #${portalId} {
+      [data-theme="dark"] #${escapedPortalId} {
         border: var(--pine-border);
       }
     `;
@@ -459,7 +463,7 @@ export class PdsPopover {
 
       // Remove the associated focus style element
       const portalId = this.portalEl.id;
-      const styleEl = document.querySelector(`style[data-pds-popover-focus="${portalId}"]`);
+      const styleEl = document.querySelector(`style[data-pds-popover-focus="${cssEscape(portalId)}"]`);
       if (styleEl && styleEl.parentNode) {
         styleEl.parentNode.removeChild(styleEl);
       }
