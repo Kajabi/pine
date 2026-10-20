@@ -706,8 +706,9 @@ export class PdsPopover {
     const target = (event.composedPath?.()[0] ?? event.target) as Node;
 
     // A datepicker's calendar is portaled to the body: a click in the calendar of a datepicker
-    // inside this popover, in its content or its trigger, isn't outside it.
-    const calendar = (target as Element).closest?.('.pds-datepicker-calendar-portal') as
+    // inside this popover, in its content or its trigger, isn't outside it. The target can be
+    // inside the calendar's shadow root, so look up across it.
+    const calendar = closest('.pds-datepicker-calendar-portal', target as Element) as
       | (Element & { pdsDatepicker?: Element })
       | null;
     const owner = calendar?.pdsDatepicker;
