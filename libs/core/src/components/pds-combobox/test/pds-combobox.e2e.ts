@@ -93,6 +93,101 @@ describe('pds-combobox', () => {
     expect(widths.trigger).toBe(300);
   });
 
+  // The button and chip triggers are divs, which take clicks and focus whether or not they're disabled.
+  describe.each([
+    ['button', 'trigger="button"', '.pds-combobox__button-trigger'],
+    ['chip', 'trigger="chip"', '.pds-combobox__chip-trigger'],
+  ])('a disabled %s trigger', (_trigger, attributes, selector) => {
+    const setUp = async (disabled: boolean) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="locked" label="Trigger" ${attributes} mode="select-only" ${disabled ? 'disabled' : ''}>
+          <option value="a">A</option>
+          <option value="b">B</option>
+        </pds-combobox>
+      `);
+      await page.waitForChanges();
+      return page;
+    };
+
+    const openState = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(triggerSelector => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        return {
+          expanded: root.querySelector(triggerSelector)!.getAttribute('aria-expanded'),
+          listbox: !!root.querySelector('.pds-combobox__listbox'),
+        };
+      }, selector);
+
+    it('stays closed when clicked', async () => {
+      const page = await setUp(true);
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+
+      expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+    });
+
+    it('stays closed on the opening keys once focused through setFocus()', async () => {
+      const page = await setUp(true);
+      await (await page.find('pds-combobox')).callMethod('setFocus');
+      await page.waitForChanges();
+
+      const keys: Array<'Enter' | 'Space' | 'ArrowDown' | 'ArrowUp'> = ['Enter', 'Space', 'ArrowDown', 'ArrowUp'];
+      for (const key of keys) {
+        await page.keyboard.press(key);
+        await page.waitForChanges();
+        expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+      }
+    });
+
+    it('closes when disabled while open', async () => {
+      const page = await setUp(false);
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+      expect(await openState(page)).toEqual({ expanded: 'true', listbox: true });
+
+      await (await page.find('pds-combobox')).setProperty('disabled', true);
+      await page.waitForChanges();
+      expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+    });
+
+    // A dropdown mounted in the body keeps its search field in the portal's own shadow root.
+    it.each([
+      ['in the field', ''],
+      ['in the body', 'body'],
+    ])('moves focus from the panel search to the trigger when disabled while open (dropdown %s)', async (_mount, dropdownMount) => {
+      const page = await setUp(false);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement, mount) => {
+          el.setAttribute('panel-search', '');
+          if (mount) el.setAttribute('dropdown-mount', mount);
+        },
+        dropdownMount,
+      );
+      await page.waitForChanges();
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+      const searchFocused = () =>
+        page.evaluate(() => {
+          const roots = [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot];
+          return roots.some(root => (root?.activeElement as HTMLElement | null)?.classList.contains('pds-combobox__panel-search-input'));
+        });
+      const active = () =>
+        page.evaluate(() => (document.querySelector('pds-combobox')!.shadowRoot!.activeElement as HTMLElement | null)?.className ?? '');
+      expect(await searchFocused()).toBe(true);
+
+      await (await page.find('pds-combobox')).setProperty('disabled', true);
+      await page.waitForChanges();
+      await page.waitForFunction(
+        triggerSelector => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.matches(triggerSelector),
+        {},
+        selector,
+      );
+      expect(await active()).toContain(selector.slice(1));
+    });
+  });
+
   // Outside drill-in, showing the highlighted row scrolls whatever holds it, as `scrollIntoView`
   // does: here a container the dropdown runs past. Flyout group rows take the highlight without
   // focus, so nothing else scrolls the container to them.

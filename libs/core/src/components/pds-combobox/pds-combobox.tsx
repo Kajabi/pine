@@ -613,6 +613,22 @@ export class PdsCombobox implements BasePdsProps {
     if (event.animationName === 'pds-combobox-drill') this.drillDirection = null;
   };
 
+  @Watch('disabled')
+  protected disabledChanged(disabled: boolean) {
+    if (!disabled || !this.isOpen) return;
+    const shadowActive = this.el.shadowRoot?.activeElement ?? null;
+    const focusInDropdown =
+      !!this.portalEl?.shadowRoot?.activeElement || (!!shadowActive && !!this.listboxEl?.contains(shadowActive));
+    this.isOpen = false;
+    this.highlightedIndex = -1;
+    this.isArrowKeyNavigationMode = false;
+    this.clearExpandFilterList();
+    this.updateAriaActiveDescendant();
+    // Closing removes the search field or option that held focus. A button or chip trigger can still
+    // take it (aria-disabled), so focus doesn't fall to the page; a disabled input can't, as natively.
+    if (focusInDropdown && this.trigger !== 'input') this.restoreFocusToTrigger();
+  }
+
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
     if (!isOpen) {
@@ -2213,6 +2229,8 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger click
   private onButtonTriggerClick = () => {
+    // The button and chip triggers are divs, so a click reaches them even while disabled.
+    if (this.disabled) return;
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
       this.prepareExpandFilterListOnOpen();
@@ -2247,6 +2265,12 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger keyboard events
   private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
+    // Disabled takes it out of the tab order, but setFocus() or a click can still focus it.
+    if (this.disabled) {
+      // Keep Space from scrolling the page, as on a native disabled button.
+      if (e.key === ' ') e.preventDefault();
+      return;
+    }
     // Escape closes an open group before the dropdown. Other keys reach the tree through handleKeyDown.
     if (this.isOpen && e.key === 'Escape' && this.handleGroupedPanelKey(e)) return;
     if ((e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') && !this.isOpen) {
