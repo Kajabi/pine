@@ -35,7 +35,7 @@ const BaseTemplate = (args) => html`
     >
       <pds-drawer-header>
         <pds-box align-items="center" justify-content="space-between" fit>
-          <pds-text tag="h2" size="h4">Drawer Title</pds-text>
+          <pds-text tag="h2" size="h4" id="${args.componentId}-heading">Drawer Title</pds-text>
           <pds-button
             class="pds-drawer__close"
             variant="unstyled"

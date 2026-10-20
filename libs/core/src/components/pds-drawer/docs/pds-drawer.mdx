@@ -46,9 +46,20 @@ them, add `modal`. A modal drawer dims the page with a backdrop, makes the page
 inert, and keeps focus inside the drawer, like `pds-modal`. It still docks to
 its `side` at its `size`.
 
+- Name it: the dialog is labelled by the element with the id
+  `{component-id}-heading`, so give the drawer's heading that id.
+- Always include a close control. With `light-dismiss="false"`, Escape and the
+  backdrop don't close it, so the close control is the only way out.
+- `modal` is read when the drawer opens. Set it before opening, not while open.
+- `initial-focus="none"` doesn't apply: focus starts in a modal drawer.
+- Tooltips open in `document.body`, behind a modal drawer, so they don't show
+  inside one.
+
 ```html
 <pds-drawer open modal component-id="contact-filters" side="end" size="md">
-  <pds-drawer-header>…</pds-drawer-header>
+  <pds-drawer-header>
+    <pds-text tag="h2" size="h4" id="contact-filters-heading">Filters</pds-text>
+  </pds-drawer-header>
   <pds-drawer-content>…</pds-drawer-content>
   <pds-drawer-footer>…</pds-drawer-footer>
 </pds-drawer>
