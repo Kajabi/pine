@@ -377,6 +377,59 @@ describe('pds-modal', () => {
     });
   });
 
+  describe('nested modals', () => {
+    const nested = (outerAttrs = '', innerAttrs = '') => `
+      <pds-modal component-id="outer" ${outerAttrs}>
+        <pds-modal-content>
+          <button id="outer-button">Outer</button>
+          <pds-modal component-id="inner" ${innerAttrs}>
+            <pds-modal-content><button id="inner-button">Inner</button></pds-modal-content>
+          </pds-modal>
+        </pds-modal-content>
+      </pds-modal>
+    `;
+
+    const openBoth = async (markup: string) => {
+      const page = await newE2EPage();
+      await page.setContent(markup);
+      const outer = await page.find('pds-modal[component-id="outer"]');
+      const inner = await page.find('pds-modal[component-id="inner"]');
+      await outer.callMethod('showModal');
+      await page.waitForChanges();
+      await inner.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.getElementById('inner-button') as HTMLElement).focus());
+      return { page, outer, inner };
+    };
+
+    for (const [name, outerAttrs, innerAttrs] of [
+      ['both in the top layer', '', ''],
+      ['both with disableTopLayer', 'disable-top-layer="true"', 'disable-top-layer="true"'],
+    ]) {
+      it(`closes the inner modal on the first Escape and the outer one on the next (${name})`, async () => {
+        const { page, outer, inner } = await openBoth(nested(outerAttrs, innerAttrs));
+
+        await page.keyboard.press('Escape');
+        await page.waitForChanges();
+        expect(await inner.getProperty('open')).toBe(false);
+        expect(await outer.getProperty('open')).toBe(true);
+
+        await page.keyboard.press('Escape');
+        await page.waitForChanges();
+        expect(await outer.getProperty('open')).toBe(false);
+      });
+    }
+
+    it('closes only the inner modal on a click on its backdrop', async () => {
+      const { page, outer, inner } = await openBoth(nested());
+      // The backdrop fills the viewport; its corner is outside the inner panel.
+      await page.mouse.click(5, 5);
+      await page.waitForChanges();
+      expect(await inner.getProperty('open')).toBe(false);
+      expect(await outer.getProperty('open')).toBe(true);
+    });
+  });
+
   describe('Escape handled by a control inside', () => {
     const actions = [
       { id: 'tag-add', text: 'Add a tag', group: 'Tag' },
@@ -547,6 +600,10 @@ describe('pds-modal', () => {
 
       await pressEscape(page);
       expect(await inner.getProperty('open')).toBe(true);
+      expect(await outer.getProperty('open')).toBe(true);
+
+      await pressEscape(page);
+      expect(await inner.getProperty('open')).toBe(false);
       expect(await outer.getProperty('open')).toBe(true);
     });
 
