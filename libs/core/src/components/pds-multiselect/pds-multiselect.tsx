@@ -389,6 +389,13 @@ export class PdsMultiselect {
     }
   }
 
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
   componentWillLoad() {
     this.originalSearchEmitter = this.pdsMultiselectSearch;
     this.syncSelectedItems();
