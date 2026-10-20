@@ -87,8 +87,12 @@ function containsComposed(ancestor: Node, node: Node | null): boolean {
   return false;
 }
 
-/** When each modal last opened, to tell apart open modals that stack at the same z-index. */
-const openedAt = new WeakMap<Element, number>();
+/**
+ * Every open modal, with the order it opened in, to tell apart modals that stack at the same
+ * z-index. Kept here rather than queried from the document, which can't see a modal inside
+ * another component's shadow root.
+ */
+const openModals = new Map<Element, number>();
 let openSequence = 0;
 
 /** The focused element, followed down through shadow roots to the control that has focus. */
@@ -218,6 +222,7 @@ export class PdsModal {
   disconnectedCallback() {
     // Clean up event listener
     document.removeEventListener('keydown', this.handleKeyDown);
+    openModals.delete(this.el);
   }
 
   @Watch('open')
@@ -290,7 +295,8 @@ export class PdsModal {
           this.modalRef.showModal();
         }
         this.open = true;
-        openedAt.set(this.el, ++openSequence);
+        // Showing an open modal again doesn't move it above one opened after it.
+        if (!openModals.has(this.el)) openModals.set(this.el, ++openSequence);
 
         // Update focusable elements and set initial focus
         // Using a longer timeout to ensure all components are fully rendered
@@ -356,6 +362,7 @@ export class PdsModal {
 
         this.modalRef.close();
         this.open = false;
+        openModals.delete(this.el);
 
         // Restore focus to the element that was focused before the modal was opened
         if (
@@ -376,7 +383,8 @@ export class PdsModal {
   private handleBackdropClick = (e: MouseEvent) => {
     if (!this.backdropDismiss || !this.open) return;
 
-    if ((e.target as HTMLElement).classList.contains('pds-modal__backdrop')) {
+    // This modal's own backdrop; a nested modal's backdrop handles its own clicks.
+    if (e.target === this.modalRef) {
       e.stopPropagation();
 
       // Only close if this is the innermost modal
@@ -391,7 +399,9 @@ export class PdsModal {
    */
   private getBackdropZIndex(modal: Element): number {
     const backdrop = modal.querySelector('.pds-modal__backdrop');
-    return backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
+    // `auto` (no z-index token loaded) parses to NaN, which no comparison can rank.
+    const zIndex = backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
+    return Number.isNaN(zIndex) ? 0 : zIndex;
   }
 
   /**
@@ -447,11 +457,11 @@ export class PdsModal {
    * it, the highest backdrop is, then the last opened.
    */
   private innermostOpenModal(): Element | null {
-    const openModals = Array.from(document.querySelectorAll('pds-modal')).filter(modal => modal.open);
-    const innermost = openModals.filter(modal => !openModals.some(other => other !== modal && containsComposed(modal, other)));
+    const open = Array.from(openModals.keys()).filter(modal => modal.isConnected);
+    const innermost = open.filter(modal => !open.some(other => other !== modal && containsComposed(modal, other)));
     const rank = (modal: Element): [number, number, number] => {
       const inTopLayer = !!modal.querySelector('.pds-modal__backdrop')?.matches(':modal');
-      return [inTopLayer ? 1 : 0, inTopLayer ? 0 : this.getBackdropZIndex(modal), openedAt.get(modal) ?? 0];
+      return [inTopLayer ? 1 : 0, inTopLayer ? 0 : this.getBackdropZIndex(modal), openModals.get(modal) ?? 0];
     };
     let top: Element | null = null;
     let topRank: [number, number, number] = [-1, -1, -1];
