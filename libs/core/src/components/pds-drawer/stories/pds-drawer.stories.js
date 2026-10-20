@@ -9,6 +9,7 @@ export default {
     size: 'md',
     scrollable: true,
     lightDismiss: true,
+    modal: false,
     initialFocus: 'auto',
     open: false,
   },
@@ -28,12 +29,13 @@ const BaseTemplate = (args) => html`
       size="${args.size}"
       scrollable="${args.scrollable}"
       light-dismiss="${args.lightDismiss}"
+      ?modal=${args.modal}
       initial-focus="${args.initialFocus}"
       ?open=${args.open}
     >
       <pds-drawer-header>
         <pds-box align-items="center" justify-content="space-between" fit>
-          <pds-text tag="h2" size="h4">Drawer Title</pds-text>
+          <pds-text tag="h2" size="h4" id="${args.componentId}-heading">Drawer Title</pds-text>
           <pds-button
             class="pds-drawer__close"
             variant="unstyled"
@@ -70,3 +72,6 @@ StartSide.args = { side: 'start' };
 
 export const Small = BaseTemplate.bind({});
 Small.args = { size: 'sm' };
+
+export const Modal = BaseTemplate.bind({});
+Modal.args = { modal: true, componentId: 'drawer-modal-demo' };

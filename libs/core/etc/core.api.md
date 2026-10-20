@@ -400,6 +400,7 @@ export namespace Components {
         "componentId": string;
         "initialFocus": 'auto' | 'none';
         "lightDismiss": boolean;
+        "modal": boolean;
         "open": boolean;
         "scrollable": boolean;
         "side": 'start' | 'end';
@@ -1985,6 +1986,7 @@ export namespace LocalJSX {
         "componentId"?: string;
         "initialFocus"?: 'auto' | 'none';
         "lightDismiss"?: boolean;
+        "modal"?: boolean;
         "onPdsDrawerClose"?: (event: PdsDrawerCustomEvent<void>) => void;
         "onPdsDrawerOpen"?: (event: PdsDrawerCustomEvent<void>) => void;
         "open"?: boolean;
@@ -2001,6 +2003,8 @@ export namespace LocalJSX {
         "initialFocus": 'auto' | 'none';
         // (undocumented)
         "lightDismiss": boolean;
+        // (undocumented)
+        "modal": boolean;
         // (undocumented)
         "open": boolean;
         // (undocumented)
