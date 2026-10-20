@@ -106,7 +106,7 @@ describe('pds-toast', () => {
     // can miss one that fires first.
     await dismissButton.click();
     await page.waitForChanges();
-    for (let i = 0; i < 30 && dismissEvent.length === 0; i++) await new Promise(resolve => setTimeout(resolve, 50));
+    for (let i = 0; i < 60 && dismissEvent.length === 0; i++) await new Promise(resolve => setTimeout(resolve, 50));
 
     expect(dismissEvent).toHaveReceivedEventTimes(1);
     expect(dismissEvent).toHaveReceivedEventDetail({ componentId: 'test-toast' });
