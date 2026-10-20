@@ -867,3 +867,113 @@ describe('pds-popover with a script fighting its trigger ARIA', () => {
     expect(await page.$eval('#trigger', (el) => el.hasAttribute('aria-controls'))).toBe(false);
   });
 });
+
+describe('pds-popover inside a dialog', () => {
+  const setUp = async (popoverAttrs = '') => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 800 });
+    await page.setContent(`
+      <dialog id="dialog">
+        <pds-popover component-id="pop" ${popoverAttrs}>
+          <button slot="trigger" id="pop-trigger">Open</button>
+          <div><button id="pop-inside">Inside</button></div>
+        </pds-popover>
+        <button id="after">After</button>
+      </dialog>
+    `);
+    await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).showModal());
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    return page;
+  };
+
+  const portalState = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.evaluate(() => {
+      const portal = document.getElementById('pop-portal')!;
+      return {
+        afterPopover: document.querySelector('pds-popover')!.nextElementSibling === portal,
+        inBody: portal.parentElement === document.body,
+        marked: portal.hasAttribute('data-pds-popover-open'),
+        shown: portal.style.display === 'block',
+      };
+    });
+
+  it('opens its panel right after the popover, marked open, and unmarks it on close', async () => {
+    const page = await setUp();
+    expect(await portalState(page)).toEqual({ afterPopover: true, inBody: false, marked: true, shown: true });
+
+    await (await page.find('pds-popover')).callMethod('hide');
+    await page.waitForChanges();
+    expect((await portalState(page)).marked).toBe(false);
+  });
+
+  it("doesn't mark a manual popover, which leaves Escape to the dialog", async () => {
+    const page = await setUp('popover-type="manual"');
+    expect((await portalState(page)).marked).toBe(false);
+  });
+
+  it('opens in the body again once it is outside the dialog', async () => {
+    const page = await setUp();
+    await (await page.find('pds-popover')).callMethod('hide');
+    await page.evaluate(() => {
+      (document.getElementById('dialog') as HTMLDialogElement).close();
+      document.body.appendChild(document.querySelector('pds-popover')!);
+    });
+    await page.waitForChanges();
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    expect((await portalState(page)).inBody).toBe(true);
+  });
+
+  it('stays open on a click inside its panel', async () => {
+    const page = await setUp();
+    await (await page.find('#pop-inside')).click();
+    await page.waitForChanges();
+    expect((await portalState(page)).shown).toBe(true);
+  });
+
+  it('goes from the trigger to the panel on Tab', async () => {
+    const page = await setUp();
+    await page.evaluate(() => (document.getElementById('pop-trigger') as HTMLElement).focus());
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('pop-inside');
+  });
+
+  it('closes when the dialog closes', async () => {
+    const page = await setUp();
+    await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).close());
+    await page.waitForChanges();
+    expect((await portalState(page)).shown).toBe(false);
+  });
+
+  it('sits beside its trigger in a scrolled dialog with a backdrop filter', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 600 });
+    await page.setContent(`
+      <dialog id="dialog" style="backdrop-filter: blur(3px); max-height: none; height: 100vh; overflow: auto; margin: 0; width: 100vw; max-width: none; padding: 0;">
+        <div style="height: 1200px"></div>
+        <pds-popover component-id="pop" placement="bottom-start">
+          <button slot="trigger" id="pop-trigger">Open</button>
+          <div>Body</div>
+        </pds-popover>
+        <div style="height: 1200px"></div>
+      </dialog>
+    `);
+    await page.evaluate(() => {
+      const dialog = document.getElementById('dialog') as HTMLDialogElement;
+      dialog.showModal();
+      dialog.scrollTop = 1000;
+    });
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const gap = await page.evaluate(() => {
+      const trigger = document.getElementById('pop-trigger')!.getBoundingClientRect();
+      const panel = document.getElementById('pop-portal')!.getBoundingClientRect();
+      return { top: Math.round(panel.top - trigger.bottom), left: Math.round(panel.left - trigger.left) };
+    });
+    expect(gap).toEqual({ top: 8, left: 0 });
+  });
+});
