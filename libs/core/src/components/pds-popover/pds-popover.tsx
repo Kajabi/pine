@@ -369,9 +369,6 @@ export class PdsPopover {
       this.portalEl.id = `${this.componentId}-portal`;
     }
 
-    // Add accessibility attributes for screen readers
-    // Note: Native Popover API doesn't add a specific role, keeping semantic HTML
-
     // Append to body
     document.body.appendChild(this.portalEl);
 
@@ -619,6 +616,7 @@ export class PdsPopover {
     const dialog = closest('dialog[open]', this.el) as HTMLDialogElement | null;
     if (!dialog) {
       this.unwatchDialogClose();
+      this.portalEl.style.border = '';
       if (this.portalEl.parentElement !== document.body) document.body.appendChild(this.portalEl);
       return;
     }
@@ -630,7 +628,10 @@ export class PdsPopover {
       dialog.appendChild(this.portalEl);
     }
     this.watchDialogClose(dialog);
-    this.copyFocusStylesInto(this.portalEl.getRootNode());
+    const root = this.portalEl.getRootNode();
+    this.copyFocusStylesInto(root);
+    // In a shadow root, the copied dark-mode rule can't see a [data-theme="dark"] on the page.
+    this.portalEl.style.border = root instanceof ShadowRoot && closest('[data-theme="dark"]', this.el) ? 'var(--pine-border)' : '';
   }
 
   private forgetOpen() {
