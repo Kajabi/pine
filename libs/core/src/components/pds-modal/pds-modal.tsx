@@ -95,6 +95,12 @@ function containsComposed(ancestor: Node, node: Node | null): boolean {
 const openModals = new Map<Element, number>();
 let openSequence = 0;
 
+/** Whether an open auto popover's panel sits in `root`, including inside shadow roots under it. */
+function hasOpenPopover(root: Element | ShadowRoot): boolean {
+  if (root.querySelector('[data-pds-popover-open]')) return true;
+  return Array.from(root.querySelectorAll('*')).some(el => !!el.shadowRoot && hasOpenPopover(el.shadowRoot));
+}
+
 /**
  * Whether `a` comes before `b` in the page. `compareDocumentPosition` is arbitrary across a shadow
  * boundary, so each side climbs to its host until both are in the same tree.
@@ -596,7 +602,7 @@ export class PdsModal {
       }
       // An open popover inside takes Escape from its own document listener, which runs after this
       // one, so leave the key for it. Its preventDefault() keeps the native dialog open.
-      if (this.modalRef?.querySelector('[data-pds-popover-open]')) return;
+      if (this.modalRef && hasOpenPopover(this.modalRef)) return;
       // Always prevent native dialog close behavior
       e.preventDefault();
       // Only close if backdropDismiss is enabled and this is the innermost modal
