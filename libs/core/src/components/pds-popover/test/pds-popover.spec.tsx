@@ -573,6 +573,7 @@ describe('pds-popover', () => {
 
       const mockEvent = {
         key: 'Escape',
+        composedPath: () => [page.doc.body],
         preventDefault: jest.fn(),
         stopPropagation: jest.fn()
       } as any;
