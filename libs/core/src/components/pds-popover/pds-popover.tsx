@@ -564,7 +564,8 @@ export class PdsPopover {
     // Restore content back to original slot positions
     this.restorePortalContent();
 
-    // Hide portal
+    // Hide portal. The dark-mode border set in a shadow root is worked out again on the next open.
+    this.portalEl.style.border = '';
     this.portalEl.removeAttribute('data-pds-popover-open');
     this.portalEl.style.display = 'none';
     this.portalEl.style.opacity = '0';
