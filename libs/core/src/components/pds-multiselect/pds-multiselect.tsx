@@ -540,11 +540,12 @@ export class PdsMultiselect {
 
   /**
    * Handle global keyboard events for accessibility.
-   * Closes dropdown on Escape key press regardless of focus location.
+   * Closes dropdown on Escape key press regardless of focus location. Taken in document's capture
+   * phase, before a modal around the multiselect hears it on document and closes too.
    */
-  @Listen('keydown', { target: 'window' })
+  @Listen('keydown', { target: 'document', capture: true })
   handleWindowKeyDown(event: KeyboardEvent) {
-    if (!this.isOpen) return;
+    if (!this.isOpen || event.defaultPrevented) return;
 
     if (event.key === 'Escape') {
       event.preventDefault();
