@@ -462,6 +462,13 @@ export class PdsCombobox implements BasePdsProps {
     }
   }
 
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
   componentWillLoad() {
     this.originalSearchEmitter = this.pdsComboboxSearch;
     this.updateOptions();
@@ -2011,7 +2018,8 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Clears the selected value and resets the component.
+   * Clears the selected value and resets the component. Works while disabled too, as setting a
+   * native control's value from script does.
    */
   @Method()
   async clear() {
