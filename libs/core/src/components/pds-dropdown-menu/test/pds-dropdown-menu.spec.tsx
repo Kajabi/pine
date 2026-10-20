@@ -19,8 +19,57 @@ describe('pds-dropdown-menu', () => {
     expect(menuBox).not.toBeNull();
     expect(menuBox?.classList.contains('is-hidden')).toBe(true);
     expect(menuBox).toHaveClass('is-hidden');
-    expect(menuBox?.getAttribute('role')).toBe('menu');
-    expect(menuBox?.getAttribute('aria-orientation')).toBe('vertical');
+
+    const menu = menuBox?.querySelector('[role="menu"]');
+    expect(menu).not.toBeNull();
+    expect(menu?.getAttribute('aria-orientation')).toBe('vertical');
+  });
+
+  it('renders the header slot outside the menu role and hides it when empty', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsBox],
+      html: `<pds-dropdown-menu></pds-dropdown-menu>`,
+    });
+
+    const panel = page.root?.shadowRoot?.querySelector('pds-box');
+    const headerSlot = panel?.querySelector('slot[name="header"]');
+
+    expect(headerSlot).not.toBeNull();
+    expect(headerSlot?.closest('[role="menu"]')).toBeNull();
+    expect(headerSlot?.parentElement).toHaveClass('is-hidden');
+  });
+
+  it('shows the header when content is slotted into it', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsBox],
+      html: `
+        <pds-dropdown-menu>
+          <button slot="trigger">Toggle Menu</button>
+          <div slot="header">John Doe</div>
+        </pds-dropdown-menu>
+      `,
+    });
+
+    const header = page.root?.shadowRoot?.querySelector('slot[name="header"]')?.parentElement;
+    expect(header).not.toHaveClass('is-hidden');
+  });
+
+  it('hides the header again when its content is removed', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsBox],
+      html: `
+        <pds-dropdown-menu>
+          <div slot="header">John Doe</div>
+        </pds-dropdown-menu>
+      `,
+    });
+
+    const headerSlot = page.root?.shadowRoot?.querySelector('slot[name="header"]') as HTMLSlotElement;
+    Object.defineProperty(headerSlot, 'assignedElements', { value: () => [] });
+    headerSlot.dispatchEvent(new Event('slotchange'));
+    await page.waitForChanges();
+
+    expect(headerSlot.parentElement).toHaveClass('is-hidden');
   });
 
   it('does not write component-id onto the host id', async () => {
@@ -56,7 +105,7 @@ describe('pds-dropdown-menu', () => {
 
     const shadowRoot = page.root?.shadowRoot;
     const triggerSlot = shadowRoot?.querySelector('slot[name="trigger"]');
-    const contentSlot = shadowRoot?.querySelector('pds-box > slot');
+    const contentSlot = shadowRoot?.querySelector('[role="menu"] > slot');
 
     expect(triggerSlot).not.toBeNull();
     expect(contentSlot).not.toBeNull();
@@ -105,7 +154,7 @@ describe('pds-dropdown-menu', () => {
     });
 
     const component = page.rootInstance;
-    const contentSlot = page.root.shadowRoot?.querySelector('pds-box > slot');
+    const contentSlot = page.root.shadowRoot?.querySelector('[role="menu"] > slot');
 
     // Create a mock event with assigned elements
     const mockEvent = {
@@ -136,7 +185,7 @@ describe('pds-dropdown-menu', () => {
     });
 
     const component = page.rootInstance;
-    const contentSlot = page.root.shadowRoot?.querySelector('pds-box > slot');
+    const contentSlot = page.root.shadowRoot?.querySelector('[role="menu"] > slot');
 
     // Create a mock event with invalid assigned elements
     const mockEvent = {
@@ -171,7 +220,7 @@ describe('pds-dropdown-menu', () => {
     });
 
     const component = page.rootInstance;
-    const contentSlot = page.root.shadowRoot?.querySelector('pds-box > slot');
+    const contentSlot = page.root.shadowRoot?.querySelector('[role="menu"] > slot');
 
     // Create a mock event with menu item and raw anchor
     const mockEvent = {
@@ -210,7 +259,7 @@ describe('pds-dropdown-menu', () => {
     });
 
     const component = page.rootInstance;
-    const contentSlot = page.root.shadowRoot?.querySelector('pds-box > slot');
+    const contentSlot = page.root.shadowRoot?.querySelector('[role="menu"] > slot');
 
     // Get the raw button (not the trigger)
     const rawButton = page.body.querySelectorAll('button')[1];
@@ -256,7 +305,7 @@ describe('pds-dropdown-menu', () => {
     component.isOpen = true;
 
     // Setup slot change to populate menuItems
-    const contentSlot = page.root?.shadowRoot?.querySelector('pds-box > slot');
+    const contentSlot = page.root?.shadowRoot?.querySelector('[role="menu"] > slot');
     const mockEvent = {
       target: contentSlot,
       assignedElements: () => Array.from(page.body.querySelectorAll('pds-dropdown-menu-item'))
@@ -421,7 +470,7 @@ describe('pds-dropdown-menu', () => {
     component.isOpen = true;
 
     // Mock menuItems and setup slot change
-    const contentSlot = page.root?.shadowRoot?.querySelector('pds-box > slot');
+    const contentSlot = page.root?.shadowRoot?.querySelector('[role="menu"] > slot');
     const mockEvent = {
       target: contentSlot,
       assignedElements: () => [
@@ -463,7 +512,7 @@ describe('pds-dropdown-menu', () => {
     component.isOpen = true;
 
     // Mock menuItems and setup slot change
-    const contentSlot = page.root?.shadowRoot?.querySelector('pds-box > slot');
+    const contentSlot = page.root?.shadowRoot?.querySelector('[role="menu"] > slot');
     const mockEvent = {
       target: contentSlot,
       assignedElements: () => [

@@ -1,4 +1,5 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
@@ -11,6 +12,15 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 })
 export class PdsTabpanel {
   @Element() el: HTMLPdsTabpanelElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
 
   // Unwraps a nested .pds-tabpanel left by a page-cache (Turbo, bfcache) reconnect.
   componentDidRender() {
@@ -47,10 +57,15 @@ export class PdsTabpanel {
   @Prop() stretch = false;
 
   render() {
+    const hostClass = this.stretch && this.selected ? "pds-tabpanel--stretch-active" : "";
+    // The docs show consumers omitting `slot`, so server HTML doesn't carry it — a DOM morph
+    // that strips it (and the stretch-active class) leaves this panel unslotted. Put both back.
+    this.hostKeeper.record(hostClass, {}, { slot: 'tabpanels' });
+
     return (
       <Host
         slot="tabpanels"
-        class={this.stretch && this.selected ? "pds-tabpanel--stretch-active" : undefined}
+        class={hostClass || undefined}
       >
         <div
           role="tabpanel"

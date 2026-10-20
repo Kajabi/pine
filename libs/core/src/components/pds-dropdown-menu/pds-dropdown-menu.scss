@@ -20,6 +20,22 @@
   }
 }
 
+// Bleeds to the panel edge like pds-dropdown-menu-separator; the inline padding lines the
+// content up with menu item text (item margin + item padding).
+.pds-dropdown-menu__header {
+  border-block-end: var(--pine-border-width-thin) solid var(--pine-color-border);
+  margin-block-end: var(--pine-dimension-xs);
+  margin-inline: calc(var(--pine-dimension-xs) * -1);
+  padding-block-end: var(--pine-dimension-xs);
+  padding-inline: calc(var(--pine-dimension-xs) * 2 + var(--pine-border-width) + 2px);
+  text-align: start;
+}
+
+.pds-dropdown-menu__items {
+  display: flex;
+  flex-direction: column;
+}
+
 // Styles for raw <a> and <button> elements slotted into the menu
 // These are allowed for edge cases requiring native browser/framework behavior
 // (e.g., Rails UJS, Turbo) that cannot work through Shadow DOM.
@@ -27,8 +43,10 @@
 // Note: ::slotted() cannot be combined with pseudo-classes like :hover or :focus.
 // Raw elements will receive base styling here; hover/focus states must be handled
 // by the consuming application's CSS if needed.
-::slotted(a),
-::slotted(button) {
+//
+// Header content is excluded. Raw triggers aren't: consumers size their triggers around these styles.
+::slotted(a:not([slot="header"])),
+::slotted(button:not([slot="header"])) {
   align-items: center;
   appearance: none;
   background: transparent;
@@ -49,7 +67,7 @@
 }
 
 // Destructive variant for raw elements
-::slotted(.destructive) {
+::slotted(.destructive:not([slot="header"])) {
   color: var(--pine-color-danger) !important;
 }
 
@@ -57,8 +75,8 @@
 // ::slotted([disabled]) is an attribute-presence selector — it matches even when
 // disabled="false" is set as a string (e.g. by React on custom elements). The
 // :not([disabled="false"]) guard ensures only a truly-disabled attribute applies.
-::slotted([aria-disabled="true"]),
-::slotted([disabled]:not([disabled="false"])) {
+::slotted([aria-disabled="true"]:not([slot="header"])),
+::slotted([disabled]:not([disabled="false"]):not([slot="header"])) {
   cursor: not-allowed;
   opacity: 0.5;
   pointer-events: none;

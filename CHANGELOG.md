@@ -1,3 +1,24 @@
+## 4.6.0 (2026-10-20)
+
+### Features 🚀
+
+- **pds-combobox:** show option icons and keep the data's order in grouped panels ([#869](https://github.com/Kajabi/pine/pull/869))
+- **pds-dropdown-menu:** add a header slot for non-item content ([#886](https://github.com/Kajabi/pine/pull/886))
+
+### Bug Fixes 🐛
+
+- **core:** stop restoring after a few rounds when another script keeps undoing it ([#880](https://github.com/Kajabi/pine/pull/880))
+- **pds-combobox:** shade drill-in group rows only for the keys ([#879](https://github.com/Kajabi/pine/pull/879))
+- **pds-combobox:** slide into and out of a drill-in group the same way ([#881](https://github.com/Kajabi/pine/pull/881))
+- **pds-popover:** escape componentId in the portal's focus stylesheet and selectors ([#884](https://github.com/Kajabi/pine/pull/884))
+- **pds-tab:** keep their slot attribute and classes through a Turbo morph ([#885](https://github.com/Kajabi/pine/pull/885))
+- **pds-tabs:** re-collect tabs and panels on slotchange ([#883](https://github.com/Kajabi/pine/pull/883))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.5.0 (2026-10-16)
 
 ### Features 🚀
