@@ -1911,7 +1911,7 @@ export namespace Components {
          */
         "asyncUrl"?: string;
         /**
-          * Clears all selected values and resets the component.
+          * Clears all selected values and resets the component. Works while disabled too, as setting a native control's value from script does.
          */
         "clear": () => Promise<void>;
         /**

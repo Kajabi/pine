@@ -507,8 +507,10 @@ export class PdsMultiselect {
   }
 
   @Watch('disabled')
-  protected disabledChanged() {
+  protected disabledChanged(disabled: boolean) {
     this.syncSlottedTrigger();
+    // A disabled control can't stay open, or its options could still be toggled.
+    if (disabled && this.isOpen) this.closeDropdown();
   }
 
   /**
@@ -520,7 +522,8 @@ export class PdsMultiselect {
   }
 
   /**
-   * Clears all selected values and resets the component.
+   * Clears all selected values and resets the component. Works while disabled too, as setting a
+   * native control's value from script does.
    */
   @Method()
   async clear() {
