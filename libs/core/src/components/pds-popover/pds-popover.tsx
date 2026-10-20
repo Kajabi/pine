@@ -491,7 +491,7 @@ export class PdsPopover {
     // inert, and a non-modal one sits above it by z-index.
     const dialog = closest('dialog[open]', this.el) as HTMLDialogElement | null;
     if (dialog) {
-      if (this.el.nextElementSibling !== this.portalEl) this.el.after(this.portalEl);
+      if (this.el.nextElementSibling !== this.portalEl) this.el.parentNode?.insertBefore(this.portalEl, this.el.nextSibling);
       this.watchDialogClose(dialog);
     } else if (this.portalEl.parentElement !== document.body) {
       document.body.appendChild(this.portalEl);
@@ -502,7 +502,7 @@ export class PdsPopover {
 
     // Show portal. The attribute tells a modal around it that this popover takes Escape first; only
     // an auto popover listens for Escape.
-    this.portalEl.toggleAttribute('data-pds-popover-open', this.popoverType === 'auto');
+    if (this.popoverType === 'auto') this.portalEl.setAttribute('data-pds-popover-open', '');
     this.portalEl.style.display = 'block';
     this.portalEl.style.opacity = '1';
     this.portalEl.style.visibility = 'visible';
