@@ -460,8 +460,8 @@ export class PdsModal {
   /**
    * The open modal that takes Escape or a backdrop click, among those with no other open modal
    * inside them (a nested modal's backdrop can share its outer modal's z-index). A top-layer dialog
-   * paints above anything outside it, and within the top layer the last opened is on top; outside
-   * it, the highest backdrop is, then the one later in the document.
+   * (or a modal inside one) paints above anything outside it, and within the top layer the last
+   * opened is on top; outside it, the highest backdrop is, then the one later in the document.
    */
   private innermostOpenModal(): Element | null {
     const open = Array.from(openModals.keys()).filter(modal => modal.isConnected);
@@ -470,14 +470,19 @@ export class PdsModal {
     const byDocumentOrder = [...innermost].sort((a, b) =>
       a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
     );
-    const rank = (modal: Element): [number, number, number] => {
-      const inTopLayer = !!modal.querySelector('.pds-modal__backdrop')?.matches(':modal');
-      return inTopLayer
-        ? [1, 0, openModals.get(modal) ?? 0]
-        : [0, this.getBackdropZIndex(modal), byDocumentOrder.indexOf(modal)];
+    // A modal inside a top-layer dialog paints in that dialog's place in the top layer, even when it
+    // isn't in the top layer itself (disableTopLayer); that dialog's open order ranks it.
+    const rank = (modal: Element): [number, number, number, number] => {
+      const backdrop = modal.querySelector('.pds-modal__backdrop');
+      const topLayerDialog = backdrop ? (closest('dialog:modal', backdrop) as Element | null) : null;
+      if (topLayerDialog) {
+        const topLayerModal = topLayerDialog.closest('pds-modal');
+        return [1, 0, (topLayerModal && openModals.get(topLayerModal)) ?? 0, openModals.get(modal) ?? 0];
+      }
+      return [0, this.getBackdropZIndex(modal), byDocumentOrder.indexOf(modal), 0];
     };
     let top: Element | null = null;
-    let topRank: [number, number, number] = [-1, -1, -1];
+    let topRank: [number, number, number, number] = [-1, -1, -1, -1];
     for (const modal of innermost) {
       const modalRank = rank(modal);
       const above = modalRank.findIndex((value, i) => value !== topRank[i]);
