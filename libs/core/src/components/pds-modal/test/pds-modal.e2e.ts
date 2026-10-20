@@ -524,6 +524,14 @@ describe('pds-modal', () => {
       await page.keyboard.press('Escape');
       await page.waitForChanges();
       expect(await modal.getProperty('open')).toBe(false);
+      expect(await popoverOpen(page)).toBe(true);
+    });
+
+    it('closes the popover when the modal closes', async () => {
+      const { page, modal } = await openPopoverInModal('');
+      await modal.callMethod('hideModal');
+      await page.waitForChanges();
+      expect(await popoverOpen(page)).toBe(false);
     });
   });
 
