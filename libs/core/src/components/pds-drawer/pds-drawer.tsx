@@ -2,8 +2,9 @@ import { Component, Element, Event, EventEmitter, Host, Listen, Prop, h } from '
 import { closest, containsComposed } from '@utils/closest';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
-// Known selectors for content Pine components portal to document.body rather
-// than rendering in place — pds-popover, pds-tooltip, pds-combobox's dropdown.
+// Known selectors for content Pine components portal out of place rather than
+// rendering where they are — pds-tooltip and pds-combobox's dropdown in
+// document.body, pds-popover in the body or the open dialog it's in.
 // A pointerdown landing on one of these is not "outside" the drawer in the
 // sense light dismiss cares about: it belongs to an overlay something inside
 // the drawer opened, even though it is not a DOM descendant of the drawer.
@@ -156,7 +157,7 @@ export class PdsDrawer {
     if (this.el.contains(target)) return;
     if (target.closest(PORTALED_OVERLAY_SELECTOR)) return;
     // A datepicker's portaled calendar counts as inside only when its datepicker is in the drawer,
-    // or in an overlay portaled from it (a pds-popover in the drawer puts its content on the body).
+    // or in an overlay portaled from it (a pds-popover in the drawer puts its content beside it).
     const calendar = target.closest('.pds-datepicker-calendar-portal') as (Element & { pdsDatepicker?: Element }) | null;
     const owner = calendar?.pdsDatepicker;
     if (owner && (containsComposed(this.el, owner) || closest(PORTALED_OVERLAY_SELECTOR, owner))) return;
