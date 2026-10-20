@@ -402,6 +402,13 @@ export class PdsModal {
     }
   }
 
+  // The browser's own close request (an Escape nothing prevented, a back gesture) would close the
+  // dialog without updating `open`, so close it through hideModal() instead, or not at all.
+  private handleCancel = (e: Event) => {
+    e.preventDefault();
+    if (this.backdropDismiss && this.open) this.hideModal();
+  };
+
   private handleBackdropClick = (e: MouseEvent) => {
     if (!this.backdropDismiss || !this.open) return;
 
@@ -672,6 +679,7 @@ export class PdsModal {
         aria-modal={this.disableTopLayer ? 'false' : 'true'}
         aria-labelledby={`${this.componentId}-heading`}
         onClick={this.handleBackdropClick}
+        onCancel={this.handleCancel}
       >
         <div
           class={{
