@@ -225,7 +225,7 @@ The `pds-modal-footer` component provides a consistent footer area for the modal
 The standard modal with a header, content area, and footer. By default, it can be closed by:
 - Clicking the close button
 - Clicking outside the modal (backdrop)
-- Pressing Escape. When a control inside the modal is open (a combobox, dropdown menu, multiselect, datepicker or popover), the first Escape closes only that control; the next Escape closes the modal.
+- Pressing Escape. When a control inside the modal is open (a combobox, dropdown menu, multiselect, datepicker or auto popover), the first Escape closes only that control; the next Escape closes the modal.
 
 Your own controls can take Escape the same way: call `preventDefault()` on an Escape `keydown` from a listener on the control itself (or on `document` with `capture: true`), and the modal stays open. A listener on `window`, or a plain one on `document`, runs after the modal's and is too late. Only take Escape when your control actually closes something, or Escape will seem to do nothing.
 
