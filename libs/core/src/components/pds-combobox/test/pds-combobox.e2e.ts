@@ -93,6 +93,65 @@ describe('pds-combobox', () => {
     expect(widths.trigger).toBe(300);
   });
 
+  // The button and chip triggers are divs, which take clicks and focus whether or not they're disabled.
+  describe.each([
+    ['button', 'trigger="button"', '.pds-combobox__button-trigger'],
+    ['chip', 'trigger="chip"', '.pds-combobox__chip-trigger'],
+  ])('a disabled %s trigger', (_trigger, attributes, selector) => {
+    const setUp = async (disabled: boolean) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="locked" label="Trigger" ${attributes} mode="select-only" ${disabled ? 'disabled' : ''}>
+          <option value="a">A</option>
+          <option value="b">B</option>
+        </pds-combobox>
+      `);
+      await page.waitForChanges();
+      return page;
+    };
+
+    const openState = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(triggerSelector => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        return {
+          expanded: root.querySelector(triggerSelector)!.getAttribute('aria-expanded'),
+          listbox: !!root.querySelector('.pds-combobox__listbox'),
+        };
+      }, selector);
+
+    it('stays closed when clicked', async () => {
+      const page = await setUp(true);
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+
+      expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+    });
+
+    it('stays closed on the opening keys once focused', async () => {
+      const page = await setUp(true);
+      await page.evaluate(triggerSelector => {
+        (document.querySelector('pds-combobox')!.shadowRoot!.querySelector(triggerSelector) as HTMLElement).focus();
+      }, selector);
+
+      for (const key of ['Enter', ' ', 'ArrowDown']) {
+        await page.keyboard.press(key as 'Enter');
+        await page.waitForChanges();
+        expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+      }
+    });
+
+    it('closes when disabled while open', async () => {
+      const page = await setUp(false);
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+      expect(await openState(page)).toEqual({ expanded: 'true', listbox: true });
+
+      await (await page.find('pds-combobox')).setProperty('disabled', true);
+      await page.waitForChanges();
+      expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+    });
+  });
+
   // Outside drill-in, showing the highlighted row scrolls whatever holds it, as `scrollIntoView`
   // does: here a container the dropdown runs past. Flyout group rows take the highlight without
   // focus, so nothing else scrolls the container to them.
