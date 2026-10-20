@@ -1431,12 +1431,12 @@ export namespace Components {
     }
     /**
      * A side panel composed from `pds-modal`, non-modal by default.
-     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
-     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. With `modal`, it opens that `pds-modal` in the top layer
-     * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -1446,7 +1446,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance.
+          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance. A `modal` drawer ignores `none`: the page behind it is inert, so focus starts in the drawer.
           * @default 'auto'
          */
         "initialFocus": 'auto' | 'none';
@@ -1456,7 +1456,7 @@ export namespace Components {
          */
         "lightDismiss": boolean;
         /**
-          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page.
+          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page. Read when the drawer opens; changing it while the drawer is open is not supported.
           * @default false
          */
         "modal": boolean;
@@ -3261,12 +3261,12 @@ declare global {
     }
     /**
      * A side panel composed from `pds-modal`, non-modal by default.
-     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
-     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. With `modal`, it opens that `pds-modal` in the top layer
-     * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -5292,12 +5292,12 @@ declare namespace LocalJSX {
     }
     /**
      * A side panel composed from `pds-modal`, non-modal by default.
-     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
-     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. With `modal`, it opens that `pds-modal` in the top layer
-     * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -5307,7 +5307,7 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance.
+          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance. A `modal` drawer ignores `none`: the page behind it is inert, so focus starts in the drawer.
           * @default 'auto'
          */
         "initialFocus"?: 'auto' | 'none';
@@ -5317,7 +5317,7 @@ declare namespace LocalJSX {
          */
         "lightDismiss"?: boolean;
         /**
-          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page.
+          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page. Read when the drawer opens; changing it while the drawer is open is not supported.
           * @default false
          */
         "modal"?: boolean;
@@ -7695,12 +7695,12 @@ declare module "@stencil/core" {
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             /**
              * A side panel composed from `pds-modal`, non-modal by default.
-             * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
-             * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-             * `pds-modal` internally with `disableTopLayer` on and its backdrop
-             * suppressed, and adds the edge, width and dismiss behavior a side panel
-             * needs on top. With `modal`, it opens that `pds-modal` in the top layer
-             * instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
+             * By default, unlike `pds-modal`, the page stays interactive while a drawer
+             * is open: no dimming, no blur, no scroll lock, no click blocking.
+             * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+             * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+             * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+             * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
              * those come from `pds-modal` unchanged.
              * @lightDom renders-markup
              */
