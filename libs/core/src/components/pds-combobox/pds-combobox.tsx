@@ -613,6 +613,15 @@ export class PdsCombobox implements BasePdsProps {
     if (event.animationName === 'pds-combobox-drill') this.drillDirection = null;
   };
 
+  @Watch('disabled')
+  protected disabledChanged(disabled: boolean) {
+    if (!disabled || !this.isOpen) return;
+    this.isOpen = false;
+    this.highlightedIndex = -1;
+    this.clearExpandFilterList();
+    this.updateAriaActiveDescendant();
+  }
+
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
     if (!isOpen) {
@@ -2213,6 +2222,8 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger click
   private onButtonTriggerClick = () => {
+    // The button and chip triggers are divs, so a click reaches them even while disabled.
+    if (this.disabled) return;
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
       this.prepareExpandFilterListOnOpen();
@@ -2247,6 +2258,8 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger keyboard events
   private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
+    // Disabled takes it out of the tab order, but setFocus() or a click can still focus it.
+    if (this.disabled) return;
     // Escape closes an open group before the dropdown. Other keys reach the tree through handleKeyDown.
     if (this.isOpen && e.key === 'Escape' && this.handleGroupedPanelKey(e)) return;
     if ((e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') && !this.isOpen) {
