@@ -299,6 +299,27 @@ describe('pds-tabs after its host classes and styles are stripped', () => {
 
     expect(await (await page.find('pds-tabs')).getProperty('activeTabName')).not.toBe('two');
   });
+
+  // The docs show consumers omitting `slot` on pds-tab/pds-tabpanel, so server HTML doesn't carry
+  // it; a morph that strips it the way it strips any other rendered attribute leaves pds-tabs with
+  // no default slot to fall back to, so the tab or panel stops rendering entirely.
+  it("keeps pds-tab's slot after it's stripped, even when the markup never set it", async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-tabs component-id="tabs" active-tab-name="one" tablist-label="Tabs"><pds-tab class="consumer" name="one">One</pds-tab><pds-tabpanel name="one">Panel</pds-tabpanel></pds-tabs>',
+    );
+
+    await expectStylingSurvivesStrip(page, 'pds-tab', { removeAttributes: ['slot'] });
+  });
+
+  it("keeps pds-tabpanel's slot and stretch-active class after they're stripped, even when the markup never set slot", async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-tabs component-id="tabs" active-tab-name="one" tablist-label="Tabs" stretch><pds-tab name="one">One</pds-tab><pds-tabpanel class="consumer" name="one">Panel</pds-tabpanel></pds-tabs>',
+    );
+
+    await expectStylingSurvivesStrip(page, 'pds-tabpanel', { removeAttributes: ['slot'] });
+  });
 });
 
 // The initial child collection only sees what's present at load (componentWillLoad). A tab or
