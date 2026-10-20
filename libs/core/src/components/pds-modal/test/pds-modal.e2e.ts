@@ -405,6 +405,7 @@ describe('pds-modal', () => {
     for (const [name, outerAttrs, innerAttrs] of [
       ['both in the top layer', '', ''],
       ['both with disableTopLayer', 'disable-top-layer="true"', 'disable-top-layer="true"'],
+      ['a top-layer outer and a disableTopLayer inner', '', 'disable-top-layer="true"'],
     ]) {
       it(`closes the inner modal on the first Escape and the outer one on the next (${name})`, async () => {
         const { page, outer, inner } = await openBoth(nested(outerAttrs, innerAttrs));
@@ -420,12 +421,128 @@ describe('pds-modal', () => {
       });
     }
 
+    // Passes before the ranking change too: the inner backdrop stops its click. Kept as a guard.
     it('closes only the inner modal on a click on its backdrop', async () => {
       const { page, outer, inner } = await openBoth(nested());
       // The backdrop fills the viewport; its corner is outside the inner panel.
       await page.mouse.click(5, 5);
       await page.waitForChanges();
       expect(await inner.getProperty('open')).toBe(false);
+      expect(await outer.getProperty('open')).toBe(true);
+    });
+  });
+
+  // The "Nested Modals" docs demo opens a second modal that's a sibling in the DOM, not a child.
+  describe('sibling modals', () => {
+    const openSiblings = async (firstAttrs: string, secondAttrs: string) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="first" ${firstAttrs}><pds-modal-content><button id="first-button">First</button></pds-modal-content></pds-modal>
+        <pds-modal component-id="second" ${secondAttrs}><pds-modal-content><button id="second-button">Second</button></pds-modal-content></pds-modal>
+      `);
+      const first = await page.find('pds-modal[component-id="first"]');
+      const second = await page.find('pds-modal[component-id="second"]');
+      await first.callMethod('showModal');
+      await page.waitForChanges();
+      await second.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.getElementById('second-button') as HTMLElement).focus());
+      return { page, first, second };
+    };
+
+    for (const [name, firstAttrs, secondAttrs] of [
+      ['both in the top layer', '', ''],
+      ['a top-layer modal opened over a disableTopLayer one', 'disable-top-layer="true"', ''],
+    ]) {
+      it(`closes the one opened last on the first Escape and the other on the next (${name})`, async () => {
+        const { page, first, second } = await openSiblings(firstAttrs, secondAttrs);
+
+        await page.keyboard.press('Escape');
+        await page.waitForChanges();
+        expect(await second.getProperty('open')).toBe(false);
+        expect(await first.getProperty('open')).toBe(true);
+
+        await page.evaluate(() => (document.getElementById('first-button') as HTMLElement).focus());
+        await page.keyboard.press('Escape');
+        await page.waitForChanges();
+        expect(await first.getProperty('open')).toBe(false);
+      });
+    }
+
+    it('closes only the one opened last on a click on its backdrop', async () => {
+      const { page, first, second } = await openSiblings('', '');
+      await page.mouse.click(5, 5);
+      await page.waitForChanges();
+      expect(await second.getProperty('open')).toBe(false);
+      expect(await first.getProperty('open')).toBe(true);
+    });
+
+    it('keeps its place when an open modal is shown again', async () => {
+      const { page, first, second } = await openSiblings('', '');
+      await first.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.getElementById('second-button') as HTMLElement).focus());
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await second.getProperty('open')).toBe(false);
+      expect(await first.getProperty('open')).toBe(true);
+    });
+  });
+
+  describe('a modal inside a shadow root', () => {
+    const defineHost = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        customElements.define(
+          'shadow-modal-host',
+          class extends HTMLElement {
+            constructor() {
+              super();
+              this.attachShadow({ mode: 'open' }).innerHTML =
+                '<pds-modal component-id="in-shadow"><pds-modal-content><button id="in-shadow-button">In shadow</button></pds-modal-content></pds-modal>';
+            }
+          },
+        );
+      });
+
+    const shadowModalOpen = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => (document.querySelector('shadow-modal-host')!.shadowRoot!.querySelector('pds-modal') as HTMLElement & { open: boolean }).open);
+
+    it('closes on Escape', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<div id="root"></div>');
+      await defineHost(page);
+      await page.evaluate(() => document.getElementById('root')!.appendChild(document.createElement('shadow-modal-host')));
+      await page.waitForChanges();
+      await page.evaluate(async () => {
+        const modal = document.querySelector('shadow-modal-host')!.shadowRoot!.querySelector('pds-modal') as HTMLElement & { showModal(): Promise<void> };
+        await modal.showModal();
+      });
+      await page.waitForChanges();
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await shadowModalOpen(page)).toBe(false);
+    });
+
+    it('closes before the light-DOM modal it sits in', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-modal component-id="outer"><pds-modal-content><div id="slot-here"></div></pds-modal-content></pds-modal>');
+      await defineHost(page);
+      await page.evaluate(() => document.getElementById('slot-here')!.appendChild(document.createElement('shadow-modal-host')));
+      await page.waitForChanges();
+      const outer = await page.find('pds-modal[component-id="outer"]');
+      await outer.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(async () => {
+        const modal = document.querySelector('shadow-modal-host')!.shadowRoot!.querySelector('pds-modal') as HTMLElement & { showModal(): Promise<void> };
+        await modal.showModal();
+      });
+      await page.waitForChanges();
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await shadowModalOpen(page)).toBe(false);
       expect(await outer.getProperty('open')).toBe(true);
     });
   });
