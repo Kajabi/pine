@@ -479,6 +479,7 @@ describe('pds-modal', () => {
       await pressEscape(page);
       expect(await menuOpen()).toBe(false);
       expect(await modal.getProperty('open')).toBe(true);
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('menu-trigger');
 
       await pressEscape(page);
       expect(await modal.getProperty('open')).toBe(false);
@@ -508,9 +509,45 @@ describe('pds-modal', () => {
       await pressEscape(page);
       expect(await panelOpen()).toBe(false);
       expect(await modal.getProperty('open')).toBe(true);
+      expect(
+        await page.evaluate(() =>
+          document.querySelector('pds-multiselect')!.shadowRoot!.activeElement?.classList.contains('pds-multiselect__trigger'),
+        ),
+      ).toBe(true);
 
       await pressEscape(page);
       expect(await modal.getProperty('open')).toBe(false);
+    });
+
+    it('keeps both nested modals open while a combobox in the inner one closes', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="outer">
+          <pds-modal-content>
+            <pds-modal component-id="inner">
+              <pds-modal-content>
+                <pds-combobox component-id="nested-actions" label="Action" trigger="button" mode="select-only"
+                  panel-search dropdown-mount="body"></pds-combobox>
+              </pds-modal-content>
+            </pds-modal>
+          </pds-modal-content>
+        </pds-modal>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }, options) => {
+        el.options = options;
+      }, actions);
+      const outer = await page.find('pds-modal[component-id="outer"]');
+      const inner = await page.find('pds-modal[component-id="inner"]');
+      await outer.callMethod('showModal');
+      await page.waitForChanges();
+      await inner.callMethod('showModal');
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+
+      await pressEscape(page);
+      expect(await inner.getProperty('open')).toBe(true);
+      expect(await outer.getProperty('open')).toBe(true);
     });
 
     it('still closes on Escape from a focused control that leaves it alone', async () => {
