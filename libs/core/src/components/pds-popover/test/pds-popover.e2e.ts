@@ -924,8 +924,7 @@ describe('pds-popover inside a dialog', () => {
 
   it('has no axe violations open inside the dialog', async () => {
     const page = await setUp();
-    // Same exception as the body portal's axe test: the panel still sets `aria-modal="false"`.
-    const violations = await runAxe(page, { rules: { 'aria-allowed-attr': { enabled: false } } });
+    const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
 
