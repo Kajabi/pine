@@ -140,7 +140,8 @@ export class PdsModal {
   @Element() el: HTMLPdsModalElement;
 
   /**
-   * Whether the modal can be dismissed by clicking the backdrop
+   * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's
+   * own close request (such as a back gesture)
    * @default true
    */
   @Prop() backdropDismiss = true;
@@ -412,7 +413,12 @@ export class PdsModal {
   // dialog without updating `open`, so close it through hideModal() instead, or not at all.
   private handleCancel = (e: Event) => {
     e.preventDefault();
-    if (this.backdropDismiss && this.open) this.hideModal();
+    if (!this.open) return;
+    // The request reaches the top-layer dialog even when a disableTopLayer modal inside it is on
+    // top; that one closes first, as it would on Escape.
+    const top = this.innermostOpenModal();
+    const target = (top && containsComposed(this.el, top) ? top : this.el) as HTMLPdsModalElement;
+    if (target.backdropDismiss) target.hideModal();
   };
 
   private handleBackdropClick = (e: MouseEvent) => {
