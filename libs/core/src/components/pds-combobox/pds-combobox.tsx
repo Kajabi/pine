@@ -2290,8 +2290,9 @@ export class PdsCombobox implements BasePdsProps {
         this.focusFirstOptionForArrowKeys();
       }, 0);
     } else if (e.key === 'Escape') {
-      e.preventDefault();
+      // Only an open dropdown claims Escape; a closed one leaves it to a modal or popover around it.
       if (this.isOpen) {
+        e.preventDefault();
         this.isOpen = false;
         this.highlightedIndex = -1;
         this.clearExpandFilterList();
