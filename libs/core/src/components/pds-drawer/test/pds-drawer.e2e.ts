@@ -130,6 +130,11 @@ describe('pds-drawer', () => {
       await page.evaluate(() => (document.getElementById('last') as HTMLElement).focus());
       await page.keyboard.press('Tab');
       expect(await page.evaluate(() => document.activeElement?.id)).toBe('first');
+
+      await page.keyboard.down('Shift');
+      await page.keyboard.press('Tab');
+      await page.keyboard.up('Shift');
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('last');
     });
 
     it('still docks to its side at its size', async () => {
@@ -163,6 +168,14 @@ describe('pds-drawer', () => {
       await page.keyboard.press('Escape');
       await page.waitForChanges();
       expect(await drawer.getProperty('open')).toBe(false);
+    });
+
+    it('stays open on Escape when lightDismiss is false', async () => {
+      const { page, drawer } = await openModal('light-dismiss="false"');
+      await page.evaluate(() => (document.getElementById('first') as HTMLElement).focus());
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(true);
     });
 
     it('has no axe violations when open', async () => {
