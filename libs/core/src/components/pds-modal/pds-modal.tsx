@@ -587,6 +587,9 @@ export class PdsModal {
       ) {
         return;
       }
+      // An open popover inside takes Escape from its own document listener, which runs after this
+      // one, so leave the key for it. Its preventDefault() keeps the native dialog open.
+      if (this.modalRef?.querySelector('[data-pds-popover-open]')) return;
       // Always prevent native dialog close behavior
       e.preventDefault();
       // Only close if backdropDismiss is enabled and this is the innermost modal
