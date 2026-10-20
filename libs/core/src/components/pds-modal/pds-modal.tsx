@@ -199,8 +199,6 @@ export class PdsModal {
 
   componentDidLoad() {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
-    // Add keyboard event listener
-    document.addEventListener('keydown', this.handleKeyDown);
 
     // @Watch('open') only fires on a later change, not the prop's initial
     // value — a modal mounted with `open` already true (static markup, or a
@@ -217,6 +215,14 @@ export class PdsModal {
   // Unwraps a nested dialog.pds-modal__backdrop left by a page-cache (Turbo, bfcache) reconnect.
   componentDidRender() {
     unwrapReconnectedContent(this.el.querySelector('.pds-modal'), 'dialog.pds-modal__backdrop', '.pds-modal');
+  }
+
+  // Here rather than in componentDidLoad, which runs once: a modal taken out of the page and put
+  // back (a morph or a framework moving it) gets its keyboard handling, and its place among the
+  // open modals, back too. Adding the same listener twice is a no-op.
+  connectedCallback() {
+    document.addEventListener('keydown', this.handleKeyDown);
+    if (this.open && !openModals.has(this.el)) openModals.set(this.el, ++openSequence);
   }
 
   disconnectedCallback() {
@@ -429,7 +435,8 @@ export class PdsModal {
    * lose that evidence depending on listener order.
    */
   private isStackedAboveOverlay(active: Element, topLayerDialog: Element | null, topLayerDialogWasModal: boolean): boolean {
-    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialogWasModal) {
+    // A top-layer dialog this modal sits inside is underneath it, not an overlay above.
+    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialogWasModal && !containsComposed(topLayerDialog, this.el)) {
       return true;
     }
 
@@ -454,14 +461,20 @@ export class PdsModal {
    * The open modal that takes Escape or a backdrop click, among those with no other open modal
    * inside them (a nested modal's backdrop can share its outer modal's z-index). A top-layer dialog
    * paints above anything outside it, and within the top layer the last opened is on top; outside
-   * it, the highest backdrop is, then the last opened.
+   * it, the highest backdrop is, then the one later in the document.
    */
   private innermostOpenModal(): Element | null {
     const open = Array.from(openModals.keys()).filter(modal => modal.isConnected);
     const innermost = open.filter(modal => !open.some(other => other !== modal && containsComposed(modal, other)));
+    // Outside the top layer, backdrops at the same z-index paint in document order.
+    const byDocumentOrder = [...innermost].sort((a, b) =>
+      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
+    );
     const rank = (modal: Element): [number, number, number] => {
       const inTopLayer = !!modal.querySelector('.pds-modal__backdrop')?.matches(':modal');
-      return [inTopLayer ? 1 : 0, inTopLayer ? 0 : this.getBackdropZIndex(modal), openModals.get(modal) ?? 0];
+      return inTopLayer
+        ? [1, 0, openModals.get(modal) ?? 0]
+        : [0, this.getBackdropZIndex(modal), byDocumentOrder.indexOf(modal)];
     };
     let top: Element | null = null;
     let topRank: [number, number, number] = [-1, -1, -1];
