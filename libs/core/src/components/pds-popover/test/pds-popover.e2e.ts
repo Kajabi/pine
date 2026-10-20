@@ -1117,10 +1117,48 @@ describe('pds-popover in a dialog inside a shadow root', () => {
     const styleInShadow = () =>
       page.evaluate(() => !!document.querySelector('dialog-host')!.shadowRoot!.querySelector('style[data-pds-popover-focus="shadow-pop-portal"]'));
     expect(await styleInShadow()).toBe(true);
+    // The copied rule matches the portal and applies its outline on focus.
+    expect(
+      await page.evaluate(() => {
+        const portal = document.querySelector('dialog-host')!.shadowRoot!.getElementById('shadow-pop-portal') as HTMLElement;
+        portal.tabIndex = -1;
+        portal.focus();
+        return getComputedStyle(portal).outlineStyle;
+      }),
+    ).not.toBe('none');
 
     await page.evaluate(() => document.querySelector('dialog-host')!.shadowRoot!.querySelector('pds-popover')!.remove());
     await page.waitForChanges();
     expect(await styleInShadow()).toBe(false);
+  });
+
+  it('keeps its dark-mode border when the page is dark', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<div id="host-here"></div>');
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      customElements.define(
+        'dialog-host',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' }).innerHTML =
+              '<dialog id="dialog"><pds-popover component-id="shadow-pop"><button slot="trigger" id="trigger">Open</button><div>Inside</div></pds-popover></dialog>';
+          }
+        },
+      );
+      const host = document.createElement('dialog-host');
+      document.getElementById('host-here')!.appendChild(host);
+      (host.shadowRoot!.getElementById('dialog') as HTMLDialogElement).showModal();
+    });
+    await page.waitForChanges();
+    await page.evaluate(() => (document.querySelector('dialog-host')!.shadowRoot!.getElementById('trigger') as HTMLElement).click());
+    await page.waitForChanges();
+
+    const borderStyle = await page.evaluate(
+      () => getComputedStyle(document.querySelector('dialog-host')!.shadowRoot!.getElementById('shadow-pop-portal')!).borderTopStyle,
+    );
+    expect(borderStyle).not.toBe('none');
   });
 });
 
