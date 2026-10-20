@@ -125,6 +125,17 @@ describe('pds-drawer', () => {
       expect(state.pageButtonFocused).toBe(false);
     });
 
+    for (const [name, attrs] of [
+      ['', ''],
+      [', even with initial-focus="none"', 'initial-focus="none"'],
+    ]) {
+      it(`moves focus into the drawer on open${name}`, async () => {
+        const { page } = await openModal(attrs);
+        await new Promise(resolve => setTimeout(resolve, 150));
+        expect(await page.evaluate(() => document.activeElement?.id)).toBe('first');
+      });
+    }
+
     it('keeps Tab inside the drawer', async () => {
       const { page } = await openModal();
       await page.evaluate(() => (document.getElementById('last') as HTMLElement).focus());
