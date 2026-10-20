@@ -421,7 +421,7 @@ describe('pds-modal', () => {
       });
     }
 
-    // Passes before the ranking change too: the inner backdrop stops its click. Kept as a guard.
+    // The inner backdrop stops its own click, so the outer modal never sees it.
     it('closes only the inner modal on a click on its backdrop', async () => {
       const { page, outer, inner } = await openBoth(nested());
       // The backdrop fills the viewport; its corner is outside the inner panel.
@@ -522,6 +522,32 @@ describe('pds-modal', () => {
       await page.keyboard.press('Escape');
       await page.waitForChanges();
       expect(await openIds(page)).toEqual(['first']);
+    });
+
+    it('closes the one with the higher backdrop first inside a top-layer modal, whatever opened last', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="outer">
+          <pds-modal-content>
+            <button id="outer-button">Outer</button>
+            <pds-modal component-id="first" disable-top-layer="true"><pds-modal-content><button>First</button></pds-modal-content></pds-modal>
+            <pds-modal component-id="second" disable-top-layer="true"><pds-modal-content><button>Second</button></pds-modal-content></pds-modal>
+          </pds-modal-content>
+        </pds-modal>
+      `);
+      await page.waitForChanges();
+      await page.evaluate(() => {
+        (document.querySelector('pds-modal[component-id="first"] .pds-modal__backdrop') as HTMLElement).style.zIndex = '9000';
+      });
+      for (const id of ['outer', 'first', 'second']) {
+        await (await page.find(`pds-modal[component-id="${id}"]`)).callMethod('showModal');
+        await page.waitForChanges();
+      }
+      await page.evaluate(() => (document.getElementById('outer-button') as HTMLElement).focus());
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await openIds(page)).toEqual(['outer', 'second']);
     });
   });
 
@@ -677,6 +703,36 @@ describe('pds-modal', () => {
       await page.waitForChanges();
       expect(await shadowModalOpen(page)).toBe(false);
       expect(await outer.getProperty('open')).toBe(true);
+    });
+
+    it('ranks by where its host sits in the page against a light-DOM modal at the same z-index', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div id="root"></div>
+        <pds-modal component-id="light" disable-top-layer="true"><pds-modal-content><button>Light</button></pds-modal-content></pds-modal>
+      `);
+      await defineHost(page);
+      await page.evaluate(() => {
+        const host = document.createElement('shadow-modal-host');
+        document.getElementById('root')!.appendChild(host);
+        host.shadowRoot!.querySelector('pds-modal')!.setAttribute('disable-top-layer', 'true');
+      });
+      await page.waitForChanges();
+      const light = await page.find('pds-modal[component-id="light"]');
+      await light.callMethod('showModal');
+      await page.waitForChanges();
+      // Opened last, but its host comes before the light-DOM modal in the page.
+      await page.evaluate(async () => {
+        const root = document.querySelector('shadow-modal-host')!.shadowRoot!;
+        await (root.querySelector('pds-modal') as HTMLElement & { showModal(): Promise<void> }).showModal();
+        (document.activeElement as HTMLElement | null)?.blur();
+      });
+      await page.waitForChanges();
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await light.getProperty('open')).toBe(false);
+      expect(await shadowModalOpen(page)).toBe(true);
     });
 
     it('closes before the light-DOM modal it sits in', async () => {
