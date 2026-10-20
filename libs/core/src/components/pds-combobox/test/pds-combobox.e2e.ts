@@ -151,15 +151,31 @@ describe('pds-combobox', () => {
       expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
     });
 
-    it('moves focus from the panel search to the trigger when disabled while open', async () => {
+    // A dropdown mounted in the body keeps its search field in the portal's own shadow root.
+    it.each([
+      ['in the field', ''],
+      ['in the body', 'body'],
+    ])('moves focus from the panel search to the trigger when disabled while open (dropdown %s)', async (_mount, dropdownMount) => {
       const page = await setUp(false);
-      await page.$eval('pds-combobox', (el: HTMLElement) => el.setAttribute('panel-search', ''));
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement, mount) => {
+          el.setAttribute('panel-search', '');
+          if (mount) el.setAttribute('dropdown-mount', mount);
+        },
+        dropdownMount,
+      );
       await page.waitForChanges();
       await (await page.find(`pds-combobox >>> ${selector}`)).click();
       await page.waitForChanges();
+      const searchFocused = () =>
+        page.evaluate(() => {
+          const roots = [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot];
+          return roots.some(root => (root?.activeElement as HTMLElement | null)?.classList.contains('pds-combobox__panel-search-input'));
+        });
       const active = () =>
         page.evaluate(() => (document.querySelector('pds-combobox')!.shadowRoot!.activeElement as HTMLElement | null)?.className ?? '');
-      expect(await active()).toContain('pds-combobox__panel-search-input');
+      expect(await searchFocused()).toBe(true);
 
       await (await page.find('pds-combobox')).setProperty('disabled', true);
       await page.waitForChanges();
