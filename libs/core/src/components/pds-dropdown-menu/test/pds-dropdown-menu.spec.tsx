@@ -447,7 +447,7 @@ describe('pds-dropdown-menu', () => {
     const keyEvent = new KeyboardEvent('keydown', { key: 'Escape' });
 
     // Trigger the key event
-    component.handleKeyDown(keyEvent);
+    component.handleEscapeKeyDown(keyEvent);
 
     // Verify closeDropdown was called
     expect(closeSpy).toHaveBeenCalled();
