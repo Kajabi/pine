@@ -225,9 +225,10 @@ The `pds-modal-footer` component provides a consistent footer area for the modal
 The standard modal with a header, content area, and footer. By default, it can be closed by:
 - Clicking the close button
 - Clicking outside the modal (backdrop)
-- Pressing Escape. When a control inside the modal is open (a combobox, dropdown menu, multiselect, datepicker or auto popover), the first Escape closes only that control; the next Escape closes the modal.
+- Pressing Escape. When a control inside the modal is open (a combobox, dropdown menu, multiselect, datepicker or `pds-popover` with `popover-type="auto"`), the first Escape closes only that control; the next Escape closes the modal.
+- The browser's own close request, such as a back gesture on Android.
 
-Your own controls can take Escape the same way: call `preventDefault()` on an Escape `keydown` from a listener on the control itself (or on `document` with `capture: true`), and the modal stays open. A listener on `window`, or a plain one on `document`, runs after the modal's and is too late. Only take Escape when your control actually closes something, or Escape will seem to do nothing.
+Your own controls can take Escape the same way: call `preventDefault()` on an Escape `keydown` from a listener on the control itself (or on `document` with `capture: true`), and the modal stays open. A listener on `window`, or a plain one on `document`, runs after the modal's and is too late. `pds-popover` is a special case: it listens on `document`, and works only because the modal checks for an open auto popover inside it and leaves Escape alone. Don't copy its pattern. A manual popover leaves Escape to the modal. Only take Escape when your control actually closes something, or Escape will seem to do nothing.
 
 <DocCanvas
   mdxSource={{
@@ -1656,10 +1657,10 @@ modal.addEventListener('pds-modal-close', () => {
 
 Modals can be configured to close automatically in response to user actions:
 
-- `backdropDismiss` (default: `true`) - Controls whether the modal can be dismissed by clicking outside the modal OR pressing the Escape key
+- `backdropDismiss` (default: `true`) - Controls whether the modal can be dismissed by clicking outside the modal, pressing the Escape key, or the browser's own close request (such as a back gesture)
 
 ```html
-<!-- Non-dismissible modal: backdrop clicks and Escape key are both disabled -->
+<!-- Non-dismissible modal: backdrop clicks, Escape and the browser's close request are all ignored -->
 <pds-modal backdrop-dismiss="false">
   <!-- Modal content that can only be closed via explicit button clicks -->
 </pds-modal>
