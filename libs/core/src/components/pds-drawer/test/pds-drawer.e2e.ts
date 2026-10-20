@@ -80,6 +80,98 @@ describe('pds-drawer', () => {
     expect(state.ariaModal).toBe('false');
   });
 
+  describe('modal', () => {
+    const openModal = async (attrs = '') => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <button id="page-button" style="position:fixed;top:0;left:0;width:50px;height:50px;">Page button</button>
+        <pds-drawer component-id="test" modal ${attrs}>
+          <pds-modal-content>
+            <button id="first">First</button>
+            <button id="last">Last</button>
+          </pds-modal-content>
+        </pds-drawer>
+      `);
+      const drawer = await page.find('pds-drawer');
+      drawer.setProperty('open', true);
+      await page.waitForChanges();
+      return { page, drawer };
+    };
+
+    it('opens in the top layer, with aria-modal true', async () => {
+      const { page } = await openModal();
+      const state = await page.evaluate(() => {
+        const dialog = document.querySelector('pds-drawer pds-modal dialog') as HTMLDialogElement;
+        return { isModal: dialog.matches(':modal'), ariaModal: dialog.getAttribute('aria-modal') };
+      });
+      expect(state).toEqual({ isModal: true, ariaModal: 'true' });
+    });
+
+    it('dims the page and blocks it, like a modal', async () => {
+      const { page } = await openModal();
+      const state = await page.evaluate(() => {
+        const backdrop = document.querySelector('pds-drawer pds-modal .pds-modal__backdrop') as HTMLElement;
+        const button = document.getElementById('page-button')!;
+        button.focus();
+        return {
+          background: getComputedStyle(backdrop).backgroundColor,
+          hitsPageButton: document.elementFromPoint(10, 10) === button,
+          pageButtonFocused: document.activeElement === button,
+        };
+      });
+      expect(state.background).not.toBe('rgba(0, 0, 0, 0)');
+      expect(state.hitsPageButton).toBe(false);
+      expect(state.pageButtonFocused).toBe(false);
+    });
+
+    it('keeps Tab inside the drawer', async () => {
+      const { page } = await openModal();
+      await page.evaluate(() => (document.getElementById('last') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('first');
+    });
+
+    it('still docks to its side at its size', async () => {
+      const { page } = await openModal('side="start" size="sm"');
+      const rect = await page.evaluate(() => {
+        const panel = (document.querySelector('pds-drawer pds-modal .pds-modal') as HTMLElement).getBoundingClientRect();
+        return { left: Math.round(panel.left), width: Math.round(panel.width), height: Math.round(panel.height) };
+      });
+      expect(rect).toEqual({ left: 0, width: 360, height: 800 });
+    });
+
+    it('closes on a click on its backdrop', async () => {
+      const { page, drawer } = await openModal();
+      const closeSpy = await page.spyOnEvent('pdsDrawerClose');
+      await page.mouse.click(10, 10);
+      await page.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(false);
+      expect(closeSpy).toHaveReceivedEvent();
+    });
+
+    it('stays open on a backdrop click when lightDismiss is false', async () => {
+      const { page, drawer } = await openModal('light-dismiss="false"');
+      await page.mouse.click(10, 10);
+      await page.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(true);
+    });
+
+    it('closes on Escape', async () => {
+      const { page, drawer } = await openModal();
+      await page.evaluate(() => (document.getElementById('first') as HTMLElement).focus());
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(false);
+    });
+
+    it('has no axe violations when open', async () => {
+      const { page } = await openModal();
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
+
   describe('side', () => {
     it('docks to the inline-end edge by default', async () => {
       const page = await newE2EPage();
