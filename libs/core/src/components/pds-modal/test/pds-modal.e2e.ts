@@ -456,6 +456,32 @@ describe('pds-modal', () => {
     expect(await outer.getProperty('open')).toBe(true);
   });
 
+  it('ranks a disableTopLayer modal inside a top-layer modal above a top-layer sibling opened before them', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="sibling"><pds-modal-content><button>Sibling</button></pds-modal-content></pds-modal>
+      <pds-modal component-id="outer">
+        <pds-modal-content>
+          <pds-modal component-id="inner" disable-top-layer="true"><pds-modal-content><button id="inner-button">Inner</button></pds-modal-content></pds-modal>
+        </pds-modal-content>
+      </pds-modal>
+    `);
+    for (const id of ['sibling', 'outer', 'inner']) {
+      await (await page.find(`pds-modal[component-id="${id}"]`)).callMethod('showModal');
+      await page.waitForChanges();
+    }
+    await page.evaluate(() => (document.getElementById('inner-button') as HTMLElement).focus());
+
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    const open = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('pds-modal'))
+        .filter(modal => (modal as HTMLElement & { open: boolean }).open)
+        .map(modal => modal.getAttribute('component-id')),
+    );
+    expect(open).toEqual(['sibling', 'outer']);
+  });
+
   describe('disableTopLayer siblings', () => {
     const openPair = async (firstStyle: string, openOrder: Array<'first' | 'second'>) => {
       const page = await newE2EPage();
