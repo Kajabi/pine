@@ -88,12 +88,28 @@ function containsComposed(ancestor: Node, node: Node | null): boolean {
 }
 
 /**
- * Every open modal, with the order it opened in, to tell apart modals that stack at the same
- * z-index. Kept here rather than queried from the document, which can't see a modal inside
+ * Every open modal, with the order it opened in, which ranks top-layer modals and the modals
+ * inside them. Kept here rather than queried from the document, which can't see a modal inside
  * another component's shadow root.
  */
 const openModals = new Map<Element, number>();
 let openSequence = 0;
+
+/**
+ * Whether `a` comes before `b` in the page. `compareDocumentPosition` is arbitrary across a shadow
+ * boundary, so each side climbs to its host until both are in the same tree.
+ */
+function precedesComposed(a: Element, b: Element): boolean {
+  // A document has no host, which ends each climb.
+  for (let x: Element | undefined = a; x; x = (x.getRootNode() as ShadowRoot).host) {
+    for (let y: Element | undefined = b; y; y = (y.getRootNode() as ShadowRoot).host) {
+      if (x.getRootNode() === y.getRootNode()) {
+        return !!(x.compareDocumentPosition(y) & Node.DOCUMENT_POSITION_FOLLOWING);
+      }
+    }
+  }
+  return false;
+}
 
 /** The focused element, followed down through shadow roots to the control that has focus. */
 function deepActiveElement(): Element | null {
@@ -461,25 +477,21 @@ export class PdsModal {
    * The open modal that takes Escape or a backdrop click, among those with no other open modal
    * inside them (a nested modal's backdrop can share its outer modal's z-index). A top-layer dialog
    * (or a modal inside one) paints above anything outside it, and within the top layer the last
-   * opened is on top; outside it, the highest backdrop is, then the one later in the document.
+   * opened is on top. Modals in the same layer (the page, or one top-layer dialog) then rank by
+   * the highest backdrop, then the one later in the page.
    */
   private innermostOpenModal(): Element | null {
     const open = Array.from(openModals.keys()).filter(modal => modal.isConnected);
     const innermost = open.filter(modal => !open.some(other => other !== modal && containsComposed(modal, other)));
-    // Outside the top layer, backdrops at the same z-index paint in document order.
-    const byDocumentOrder = [...innermost].sort((a, b) =>
-      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
-    );
+    const byDocumentOrder = [...innermost].sort((a, b) => (precedesComposed(a, b) ? -1 : 1));
     // A modal inside a top-layer dialog paints in that dialog's place in the top layer, even when it
-    // isn't in the top layer itself (disableTopLayer); that dialog's open order ranks it.
+    // isn't in the top layer itself (disableTopLayer), so that dialog's open order ranks it first.
     const rank = (modal: Element): [number, number, number, number] => {
       const backdrop = modal.querySelector('.pds-modal__backdrop');
       const topLayerDialog = backdrop ? (closest('dialog:modal', backdrop) as Element | null) : null;
-      if (topLayerDialog) {
-        const topLayerModal = topLayerDialog.closest('pds-modal');
-        return [1, 0, (topLayerModal && openModals.get(topLayerModal)) ?? 0, openModals.get(modal) ?? 0];
-      }
-      return [0, this.getBackdropZIndex(modal), byDocumentOrder.indexOf(modal), 0];
+      const topLayerModal = topLayerDialog?.closest('pds-modal');
+      const layer = topLayerDialog ? ((topLayerModal && openModals.get(topLayerModal)) ?? 0) : 0;
+      return [topLayerDialog ? 1 : 0, layer, this.getBackdropZIndex(modal), byDocumentOrder.indexOf(modal)];
     };
     let top: Element | null = null;
     let topRank: [number, number, number, number] = [-1, -1, -1, -1];
