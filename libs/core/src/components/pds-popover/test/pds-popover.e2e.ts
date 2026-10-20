@@ -823,11 +823,7 @@ describe('pds-popover accessibility', () => {
     await page.waitForChanges();
     const portalEl = await page.find('#my-popover-portal');
     expect(await portalEl.isVisible()).toBe(true);
-    // `aria-allowed-attr` is disabled here: the body portal sets `aria-modal="false"`
-    // on a non-dialog element — remove once popover portal ARIA is corrected.
-    const violations = await runAxe(page, {
-      rules: { 'aria-allowed-attr': { enabled: false } },
-    });
+    const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
 });
@@ -1092,6 +1088,39 @@ describe('pds-popover inside a dialog', () => {
       return { top: Math.round(panel.top - trigger.bottom), left: Math.round(panel.left - trigger.left) };
     });
     expect(gap).toEqual({ top: 8, left: 0 });
+  });
+});
+
+describe('pds-popover in a dialog inside a shadow root', () => {
+  it('carries its focus style into the shadow root, and takes it away with the popover', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<div id="host-here"></div>');
+    await page.evaluate(() => {
+      customElements.define(
+        'dialog-host',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' }).innerHTML =
+              '<dialog id="dialog"><pds-popover component-id="shadow-pop"><button slot="trigger" id="trigger">Open</button><div><button>Inside</button></div></pds-popover></dialog>';
+          }
+        },
+      );
+      const host = document.createElement('dialog-host');
+      document.getElementById('host-here')!.appendChild(host);
+      (host.shadowRoot!.getElementById('dialog') as HTMLDialogElement).showModal();
+    });
+    await page.waitForChanges();
+    await page.evaluate(() => (document.querySelector('dialog-host')!.shadowRoot!.getElementById('trigger') as HTMLElement).click());
+    await page.waitForChanges();
+
+    const styleInShadow = () =>
+      page.evaluate(() => !!document.querySelector('dialog-host')!.shadowRoot!.querySelector('style[data-pds-popover-focus="shadow-pop-portal"]'));
+    expect(await styleInShadow()).toBe(true);
+
+    await page.evaluate(() => document.querySelector('dialog-host')!.shadowRoot!.querySelector('pds-popover')!.remove());
+    await page.waitForChanges();
+    expect(await styleInShadow()).toBe(false);
   });
 });
 
