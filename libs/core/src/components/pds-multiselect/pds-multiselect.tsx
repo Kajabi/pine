@@ -545,7 +545,7 @@ export class PdsMultiselect {
    */
   @Listen('keydown', { target: 'document', capture: true })
   handleWindowKeyDown(event: KeyboardEvent) {
-    if (!this.isOpen) return;
+    if (!this.isOpen || event.defaultPrevented) return;
 
     if (event.key === 'Escape') {
       event.preventDefault();
