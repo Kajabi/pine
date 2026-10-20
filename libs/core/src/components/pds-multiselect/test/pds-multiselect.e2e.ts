@@ -72,6 +72,24 @@ const axeViolations = async (page: Page) =>
   formatViolations(await runAxe(page, { rules: { 'nested-interactive': { enabled: false } } }));
 
 describe('pds-multiselect', () => {
+  for (const [name, disable] of [
+    ['a fieldset around it is disabled', "document.querySelector('fieldset').disabled = true"],
+    ['its disabled property is set', "document.querySelector('pds-multiselect').disabled = true"],
+  ]) {
+    it(`closes when ${name} while open`, async () => {
+      const page = await newE2EPage();
+      await page.setContent('<fieldset><pds-multiselect component-id="tags" label="Tags"></pds-multiselect></fieldset>');
+      await setOptions(page, tagOptions);
+      await page.waitForChanges();
+      await openBuiltInTrigger(page);
+      expect(await isPanelOpen(page)).toBe(true);
+
+      await page.evaluate(disable);
+      await page.waitForChanges();
+      expect(await isPanelOpen(page)).toBe(false);
+    });
+  }
+
   it('renders the built-in trigger and text-only options, ignoring dot colors and action icons, and closes on Tab by default', async () => {
     const page = await newE2EPage();
     await page.setContent(`
