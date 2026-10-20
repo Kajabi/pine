@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
-import { containsComposed } from '@utils/closest';
+import { closest, containsComposed } from '@utils/closest';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { PlacementType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
@@ -485,10 +485,17 @@ export class PdsPopover {
 
     this.linkTriggerToPortal();
 
+    // In an open dialog, the panel goes inside it: a modal dialog sits in the top layer above the
+    // body and makes the rest of the page inert, and a non-modal one sits above it by z-index.
+    const mountRoot = (closest('dialog[open]', this.el) as HTMLElement | null) ?? document.body;
+    if (this.portalEl.parentElement !== mountRoot) mountRoot.appendChild(this.portalEl);
+
     // Update portal content with latest slot content
     this.updatePortalContent();
 
-    // Show portal
+    // Show portal. The attribute tells a modal around it that this popover takes Escape first; only
+    // an auto popover listens for Escape.
+    this.portalEl.toggleAttribute('data-pds-popover-open', this.popoverType === 'auto');
     this.portalEl.style.display = 'block';
     this.portalEl.style.opacity = '1';
     this.portalEl.style.visibility = 'visible';
@@ -532,6 +539,7 @@ export class PdsPopover {
     this.restorePortalContent();
 
     // Hide portal
+    this.portalEl.removeAttribute('data-pds-popover-open');
     this.portalEl.style.display = 'none';
     this.portalEl.style.opacity = '0';
     this.portalEl.style.visibility = 'hidden';
@@ -653,15 +661,19 @@ export class PdsPopover {
    * Mirrors native Popover API: Escape closes and returns focus to trigger
    */
   private handleEscapeKey(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      // Prevent default Escape behavior and stop propagation
-      // This mirrors native Popover API which handles Escape exclusively
-      event.preventDefault();
-      event.stopPropagation();
+    // A control inside that closes on Escape (a datepicker, a combobox) has handled it already.
+    if (event.key !== 'Escape' || event.defaultPrevented) return;
+    // Escape from a dialog this popover isn't in belongs to that dialog, which is above it.
+    const dialog = closest('dialog[open]', event.composedPath()[0] as Element) as HTMLElement | null;
+    if (dialog && !dialog.contains(this.portalEl)) return;
 
-      // Close popover and return focus to trigger
-      this.hide();
-    }
+    // Prevent default Escape behavior and stop propagation
+    // This mirrors native Popover API which handles Escape exclusively
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Close popover and return focus to trigger
+    this.hide();
   }
 
   /**
