@@ -7,6 +7,16 @@ import { cssEscape } from '@utils/css';
 import { limitRestores } from '@utils/keep-hydrated';
 import { PdsPopoverEventDetail } from './popover-interface';
 
+/** Open auto popovers, in the order they opened: Escape goes to the last one it applies to. */
+const openAutoPopovers: PdsPopover[] = [];
+
+/** The focused element, followed down through shadow roots to the control that has focus. */
+function deepActiveElement(): Element | null {
+  let active = document.activeElement;
+  while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+  return active;
+}
+
 /**
  * @slot trigger - The trigger element for the popover
  * @slot (default) - The content to display inside the popover
@@ -54,7 +64,7 @@ export class PdsPopover {
   private triggerObserver: MutationObserver | null = null;
 
   /**
-   * Portal element rendered in document.body
+   * Portal element: in document.body, or in the open dialog the popover is in
    */
   private portalEl: HTMLElement | null = null;
 
@@ -268,20 +278,23 @@ export class PdsPopover {
     this.observeTrigger();
     this.linkTriggerToPortal();
 
-    // Still open after a move: the trigger moved, so the portal follows it.
+    // Still open after a move: the trigger moved, so the portal follows it, into the dialog it
+    // is in now, if any.
     if (this.active) {
+      this.placePortal();
       requestAnimationFrame(() => this.handlePopoverPositioning());
     }
   }
 
   disconnectedCallback() {
     // Moved in one operation (a DOM morph, or a framework reparenting it), the popover is
-    // already back in the page. Its portal is outside the popover (in <body>, or beside it in a
-    // dialog), untouched, so it stays open, with focus where it was.
+    // already back in the page. Its portal is outside the popover, so it stays open, with focus
+    // where it was; connectedCallback moves it to follow the popover.
     if (this.el.isConnected) return;
 
     this.isComponentMounted = false;
     this.unwatchDialogClose();
+    this.forgetOpen();
 
     // Open, the content sits in the portal; put it back before the portal goes. Only listeners on
     // the popover itself hear the close event now, but those are the ones mirroring its state.
@@ -486,16 +499,7 @@ export class PdsPopover {
 
     this.linkTriggerToPortal();
 
-    // In an open dialog, the panel goes inside it, right after the popover so it's next in the Tab
-    // order: a modal dialog sits in the top layer above the body and makes the rest of the page
-    // inert, and a non-modal one sits above it by z-index.
-    const dialog = closest('dialog[open]', this.el) as HTMLDialogElement | null;
-    if (dialog) {
-      if (this.el.nextElementSibling !== this.portalEl) this.el.parentNode?.insertBefore(this.portalEl, this.el.nextSibling);
-      this.watchDialogClose(dialog);
-    } else if (this.portalEl.parentElement !== document.body) {
-      document.body.appendChild(this.portalEl);
-    }
+    this.placePortal();
 
     // Update portal content with latest slot content
     this.updatePortalContent();
@@ -518,6 +522,7 @@ export class PdsPopover {
 
     // Add document listeners for light dismiss and escape key (auto type only)
     if (this.popoverType === 'auto') {
+      openAutoPopovers.push(this);
       this.addLightDismissListeners();
     }
 
@@ -538,8 +543,9 @@ export class PdsPopover {
     this.active = false;
     this.unwatchDialogClose();
 
-    // Restoring the content drops its focus to the body, so check where focus is first.
-    const focusWasInside = this.portalEl.contains(document.activeElement);
+    // Restoring the content drops its focus to the body, so check where focus is first. In a
+    // shadow root, document.activeElement is only its host.
+    const focusWasInside = containsComposed(this.portalEl, deepActiveElement());
 
     this.linkTriggerToPortal();
 
@@ -559,6 +565,7 @@ export class PdsPopover {
     }
 
     // Remove all listeners
+    this.forgetOpen();
     this.removeLightDismissListeners();
     this.removeScrollAndResizeListeners();
 
@@ -582,6 +589,48 @@ export class PdsPopover {
     } else {
       this.show();
     }
+  }
+
+  /**
+   * Puts the panel where it shows above everything around the popover. In an open dialog, it goes
+   * inside it: a modal dialog sits in the top layer above the body and makes the rest of the page
+   * inert, and a non-modal one sits above it by z-index. Right after the popover, it's next in the
+   * Tab order. In another component's slot, though, it would have no slot to render in, and in a
+   * form its buttons would submit it, so there it goes at the end of the dialog.
+   */
+  private placePortal() {
+    if (!this.portalEl) return;
+    const dialog = closest('dialog[open]', this.el) as HTMLDialogElement | null;
+    if (!dialog) {
+      this.unwatchDialogClose();
+      if (this.portalEl.parentElement !== document.body) document.body.appendChild(this.portalEl);
+      return;
+    }
+    const form = closest('form', this.el) as Element | null;
+    const besidePopover = !this.el.parentElement?.shadowRoot && !(form && containsComposed(dialog, form));
+    if (besidePopover) {
+      if (this.el.nextElementSibling !== this.portalEl) this.el.parentNode?.insertBefore(this.portalEl, this.el.nextSibling);
+    } else if (this.portalEl.parentNode !== dialog) {
+      dialog.appendChild(this.portalEl);
+    }
+    this.watchDialogClose(dialog);
+  }
+
+  private forgetOpen() {
+    const index = openAutoPopovers.indexOf(this);
+    if (index >= 0) openAutoPopovers.splice(index, 1);
+  }
+
+  /**
+   * Whether an Escape is this popover's. One from a dialog the popover isn't in belongs to that
+   * dialog when it's above it: a top-layer dialog or a pds-modal. A plain non-modal dialog inside
+   * the popover's modal doesn't close on Escape, so the popover takes it.
+   */
+  private takesEscapeFrom(event: KeyboardEvent) {
+    const origin = (event.composedPath?.()[0] ?? event.target) as Element;
+    const dialog = closest('dialog[open]', origin) as HTMLDialogElement | null;
+    if (!dialog || containsComposed(dialog, this.portalEl)) return true;
+    return !(dialog.classList.contains('pds-modal__backdrop') || dialog.matches(':modal'));
   }
 
   /**
@@ -653,7 +702,8 @@ export class PdsPopover {
       return;
     }
 
-    const target = event.target as Node;
+    // In a shadow root, event.target is only its host.
+    const target = (event.composedPath?.()[0] ?? event.target) as Node;
 
     // A datepicker's calendar is portaled to the body: a click in the calendar of a datepicker
     // inside this popover, in its content or its trigger, isn't outside it.
@@ -664,8 +714,8 @@ export class PdsPopover {
     if (owner && (containsComposed(this.portalEl, owner) || containsComposed(this.triggerEl, owner))) return;
 
     // Check if click is outside both the popover portal and the trigger
-    const clickedInsidePopover = this.portalEl?.contains(target);
-    const clickedInsideTrigger = this.triggerEl?.contains(target);
+    const clickedInsidePopover = containsComposed(this.portalEl, target);
+    const clickedInsideTrigger = containsComposed(this.triggerEl, target);
 
     if (!clickedInsidePopover && !clickedInsideTrigger) {
       this.hide();
@@ -691,12 +741,12 @@ export class PdsPopover {
   private handleEscapeKey(event: KeyboardEvent) {
     // A control inside that closes on Escape (a datepicker, a combobox) has handled it already.
     if (event.key !== 'Escape' || event.defaultPrevented) return;
-    // Escape from a dialog this popover isn't in belongs to that dialog, which is above it.
-    const dialog = closest('dialog[open]', event.composedPath()[0] as Element) as HTMLElement | null;
-    if (dialog && !containsComposed(dialog, this.portalEl)) return;
+    // Like the native Popover API, Escape closes only the top popover: the last one opened that
+    // it applies to. Every open popover hears it, so each checks whether it's that one.
+    const top = [...openAutoPopovers].reverse().find(popover => popover.takesEscapeFrom(event));
+    if (top !== this) return;
 
-    // Prevent default Escape behavior and stop propagation
-    // This mirrors native Popover API which handles Escape exclusively
+    // Take the key, so the dialog or modal around it doesn't close too.
     event.preventDefault();
     event.stopPropagation();
 
