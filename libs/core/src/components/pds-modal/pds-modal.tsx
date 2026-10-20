@@ -505,6 +505,7 @@ export class PdsModal {
         __pdsActiveElementAtEscape?: Element | null;
         __pdsTopLayerDialogAtEscape?: Element | null;
         __pdsTopLayerDialogWasModalAtEscape?: boolean;
+        __pdsEscapeHandledInside?: boolean;
       };
       if (!('__pdsActiveElementAtEscape' in eventSnapshot)) {
         const activeAtDispatch = document.activeElement;
@@ -512,7 +513,11 @@ export class PdsModal {
         const topLayerDialog = activeAtDispatch?.closest('dialog') ?? null;
         eventSnapshot.__pdsTopLayerDialogAtEscape = topLayerDialog;
         eventSnapshot.__pdsTopLayerDialogWasModalAtEscape = !!(topLayerDialog && topLayerDialog.matches(':modal'));
+        // A control inside that closes on Escape (a dropdown, a datepicker) has already handled it, on
+        // its own element, before this document listener. Read before any modal prevents it below.
+        eventSnapshot.__pdsEscapeHandledInside = e.defaultPrevented;
       }
+      if (eventSnapshot.__pdsEscapeHandledInside) return;
       // Leave Escape to a genuinely stacked-above overlay (disableTopLayer's
       // reason for existing) — not just to anything outside this modal.
       const active = eventSnapshot.__pdsActiveElementAtEscape;
