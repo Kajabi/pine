@@ -1001,9 +1001,11 @@ describe('pds-modal', () => {
       expect(await page.evaluate(() => (document.querySelector('pds-modal') as HTMLElement & { open: boolean }).open)).toBe(false);
     });
 
-    it('closes on Escape when removed while closed and put back later', async () => {
+    it('keeps Tab inside when removed while closed and put back later', async () => {
       const page = await newE2EPage();
-      await page.setContent('<pds-modal component-id="back"><pds-modal-content><button id="inside">Inside</button></pds-modal-content></pds-modal>');
+      await page.setContent(
+        '<pds-modal component-id="back"><pds-modal-content><button id="first">First</button><button id="last">Last</button></pds-modal-content></pds-modal>',
+      );
       await page.waitForChanges();
       await page.evaluate(() => {
         const modal = document.querySelector('pds-modal')!;
@@ -1015,9 +1017,9 @@ describe('pds-modal', () => {
       await modal.callMethod('showModal');
       await page.waitForChanges();
 
-      await page.keyboard.press('Escape');
-      await page.waitForChanges();
-      expect(await modal.getProperty('open')).toBe(false);
+      await page.evaluate(() => (document.getElementById('last') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('first');
     });
   });
 
@@ -1051,15 +1053,64 @@ describe('pds-modal', () => {
       expect(await page.evaluate(() => document.activeElement?.id)).toBe('outer-first');
     });
 
-    it('keeps focus in an inner modal opened right after the outer one', async () => {
+    it("returns focus into the outer modal when the inner one's trigger is disabled", async () => {
       const page = await newE2EPage();
       await page.setContent(nestedMarkup);
+      const outer = await page.find('pds-modal[component-id="outer"]');
+      const inner = await page.find('pds-modal[component-id="inner"]');
+      await outer.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.getElementById('open-inner') as HTMLElement).focus());
+      await inner.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => ((document.getElementById('open-inner') as HTMLButtonElement).disabled = true));
+
+      await inner.callMethod('hideModal');
+      await page.waitForChanges();
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('outer-first');
+    });
+
+    it('returns focus into a sibling modal underneath, skipping a hidden control', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="below">
+          <pds-modal-content>
+            <button id="hidden" style="display: none">Hidden</button>
+            <button id="below-first">Below first</button>
+            <button id="open-above">Open above</button>
+          </pds-modal-content>
+        </pds-modal>
+        <pds-modal component-id="above"><pds-modal-content><button id="above-button">Above</button></pds-modal-content></pds-modal>
+      `);
+      const below = await page.find('pds-modal[component-id="below"]');
+      const above = await page.find('pds-modal[component-id="above"]');
+      await below.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.getElementById('open-above') as HTMLElement).focus());
+      await above.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => document.getElementById('open-above')!.remove());
+
+      await above.callMethod('hideModal');
+      await page.waitForChanges();
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('below-first');
+    });
+
+    // Outside the top layer nothing is inert, so the outer modal could take focus back.
+    it('never moves focus to the outer modal when an inner one opens during its focus delay', async () => {
+      const page = await newE2EPage();
+      await page.setContent(nestedMarkup.replace(/<pds-modal /g, '<pds-modal disable-top-layer="true" '));
+      await page.evaluate(() => {
+        (window as unknown as { focused: string[] }).focused = [];
+        document.addEventListener('focusin', e => (window as unknown as { focused: string[] }).focused.push((e.target as HTMLElement).id));
+      });
       const outer = await page.find('pds-modal[component-id="outer"]');
       const inner = await page.find('pds-modal[component-id="inner"]');
       await outer.callMethod('showModal');
       await inner.callMethod('showModal');
       await page.waitForChanges();
       await new Promise(resolve => setTimeout(resolve, 200));
+      expect(await page.evaluate(() => (window as unknown as { focused: string[] }).focused)).not.toContain('outer-first');
       expect(await page.evaluate(() => document.activeElement?.id)).toBe('inner-button');
     });
   });
