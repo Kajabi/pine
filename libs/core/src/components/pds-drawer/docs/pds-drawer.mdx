@@ -5,9 +5,10 @@ import * as PdsDrawerStories from '../stories/pds-drawer.stories.js';
 
 # Drawer
 
-A non-modal side panel. Unlike `pds-modal`, the page stays
+A side panel. By default it's non-modal: unlike `pds-modal`, the page stays
 interactive while a drawer is open — no dimming, no blur, no scroll lock, no
-click blocking.
+click blocking. Add `modal` for a drawer the page should wait on (see
+[Modal](#modal)).
 
 `pds-drawer` composes `pds-modal` internally and inherits its focus-return,
 Escape and dialog semantics unchanged. It adds the edge, width and dismiss
@@ -29,11 +30,11 @@ behavior a side panel needs.
 - `pds-drawer-content` fills the panel's height by default — no copy-pasted
   height patch needed per consumer.
 - `side` is logical (`start` / `end`), so RTL is free.
-- `light-dismiss` (default `true`) replaces `backdrop-dismiss` — there is no
-  backdrop to click, so a pointerdown anywhere outside the drawer closes it
-  (in a `modal` drawer, a click on its backdrop). Setting it to `false` also
-  disables Escape, matching how `backdropDismiss` gates Escape on `pds-modal`
-  today.
+- `light-dismiss` (default `true`) replaces `backdrop-dismiss`. A default
+  drawer has no backdrop to click, so a pointerdown anywhere outside it closes
+  it; a `modal` drawer closes on a click on its backdrop instead. Setting it to
+  `false` also disables Escape, matching how `backdropDismiss` gates Escape on
+  `pds-modal` today.
 - `initial-focus="none"` opts out of moving focus into the drawer on open —
   use it for a drawer that can open from a background event while the user
   is mid-task elsewhere on the page.
@@ -52,8 +53,8 @@ its `side` at its `size`.
   backdrop don't close it, so the close control is the only way out.
 - `modal` is read when the drawer opens. Set it before opening, not while open.
 - `initial-focus="none"` doesn't apply: focus starts in a modal drawer.
-- Tooltips open in `document.body`, behind a modal drawer, so they don't show
-  inside one.
+- Tooltips and popovers open in `document.body`, behind a modal drawer, so
+  they don't show inside one.
 
 ```html
 <pds-drawer open modal component-id="contact-filters" side="end" size="md">
