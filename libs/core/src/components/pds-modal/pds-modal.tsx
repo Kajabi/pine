@@ -87,6 +87,10 @@ function containsComposed(ancestor: Node, node: Node | null): boolean {
   return false;
 }
 
+/** When each modal last opened, to tell apart open modals that stack at the same z-index. */
+const openedAt = new WeakMap<Element, number>();
+let openSequence = 0;
+
 /** The focused element, followed down through shadow roots to the control that has focus. */
 function deepActiveElement(): Element | null {
   let active = document.activeElement;
@@ -286,6 +290,7 @@ export class PdsModal {
           this.modalRef.showModal();
         }
         this.open = true;
+        openedAt.set(this.el, ++openSequence);
 
         // Update focusable elements and set initial focus
         // Using a longer timeout to ensure all components are fully rendered
@@ -375,7 +380,7 @@ export class PdsModal {
       e.stopPropagation();
 
       // Only close if this is the innermost modal
-      if (this.isInnermostModal()) {
+      if (this.innermostOpenModal() === this.el) {
         this.hideModal();
       }
     }
@@ -436,29 +441,29 @@ export class PdsModal {
   }
 
   /**
-   * Checks if this modal is the innermost (highest z-index) modal
+   * The open modal that takes Escape or a backdrop click, among those with no other open modal
+   * inside them (a nested modal's backdrop can share its outer modal's z-index). A top-layer dialog
+   * paints above anything outside it, and within the top layer the last opened is on top; outside
+   * it, the highest backdrop is, then the last opened.
    */
-  private isInnermostModal(): boolean {
-    // Find all open modals
-    const openModals = Array.from(document.querySelectorAll('pds-modal')).filter(
-      modal => modal.open
-    );
-
-    if (openModals.length === 0) return false;
-
-    // Get this modal's backdrop element
-    const thisBackdrop = this.el.querySelector('.pds-modal__backdrop');
-    if (!thisBackdrop) return false;
-
-    // Get computed z-index of all open modal backdrops
-    const modalZIndexes = openModals.map(modal => this.getBackdropZIndex(modal));
-
-    // Get the highest z-index
-    const maxZIndex = Math.max(...modalZIndexes);
-
-    // Check if this modal's backdrop has the highest z-index
-    const thisZIndex = this.getBackdropZIndex(this.el);
-    return thisZIndex === maxZIndex;
+  private innermostOpenModal(): Element | null {
+    const openModals = Array.from(document.querySelectorAll('pds-modal')).filter(modal => modal.open);
+    const innermost = openModals.filter(modal => !openModals.some(other => other !== modal && containsComposed(modal, other)));
+    const rank = (modal: Element): [number, number, number] => {
+      const inTopLayer = !!modal.querySelector('.pds-modal__backdrop')?.matches(':modal');
+      return [inTopLayer ? 1 : 0, inTopLayer ? 0 : this.getBackdropZIndex(modal), openedAt.get(modal) ?? 0];
+    };
+    let top: Element | null = null;
+    let topRank: [number, number, number] = [-1, -1, -1];
+    for (const modal of innermost) {
+      const modalRank = rank(modal);
+      const above = modalRank.findIndex((value, i) => value !== topRank[i]);
+      if (above >= 0 && modalRank[above] > topRank[above]) {
+        top = modal;
+        topRank = modalRank;
+      }
+    }
+    return top;
   }
 
   /** Whether a modal dialog other than this one sits between the focused element and this modal. */
@@ -506,6 +511,7 @@ export class PdsModal {
         __pdsTopLayerDialogAtEscape?: Element | null;
         __pdsTopLayerDialogWasModalAtEscape?: boolean;
         __pdsEscapeHandledInside?: boolean;
+        __pdsInnermostModalAtEscape?: Element | null;
       };
       if (!('__pdsActiveElementAtEscape' in eventSnapshot)) {
         const activeAtDispatch = document.activeElement;
@@ -517,6 +523,9 @@ export class PdsModal {
         // multiselect in document's capture phase) has prevented it before this bubble listener.
         // Read before any modal prevents it below.
         eventSnapshot.__pdsEscapeHandledInside = e.defaultPrevented;
+        // Which modal is innermost is read once too: the inner one closing first would make its
+        // outer modal the innermost by the time that modal's listener runs.
+        eventSnapshot.__pdsInnermostModalAtEscape = this.innermostOpenModal();
       }
       if (eventSnapshot.__pdsEscapeHandledInside) return;
       // Leave Escape to a genuinely stacked-above overlay (disableTopLayer's
@@ -538,7 +547,7 @@ export class PdsModal {
       // Always prevent native dialog close behavior
       e.preventDefault();
       // Only close if backdropDismiss is enabled and this is the innermost modal
-      if (this.backdropDismiss && this.isInnermostModal()) {
+      if (this.backdropDismiss && eventSnapshot.__pdsInnermostModalAtEscape === this.el) {
         this.hideModal();
       }
       return;
