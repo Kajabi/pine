@@ -980,6 +980,90 @@ describe('pds-modal', () => {
     });
   });
 
+  describe('after being moved or put back', () => {
+    it('still closes on Escape when moved while open', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div id="from"><pds-modal component-id="moved"><pds-modal-content><button id="inside">Inside</button></pds-modal-content></pds-modal></div>
+        <div id="to"></div>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => {
+        document.getElementById('to')!.appendChild(document.querySelector('pds-modal')!);
+        (document.getElementById('inside') as HTMLElement).focus();
+      });
+      await page.waitForChanges();
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await page.evaluate(() => (document.querySelector('pds-modal') as HTMLElement & { open: boolean }).open)).toBe(false);
+    });
+
+    it('closes on Escape when removed while closed and put back later', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-modal component-id="back"><pds-modal-content><button id="inside">Inside</button></pds-modal-content></pds-modal>');
+      await page.waitForChanges();
+      await page.evaluate(() => {
+        const modal = document.querySelector('pds-modal')!;
+        modal.remove();
+        document.body.appendChild(modal);
+      });
+      await page.waitForChanges();
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+  });
+
+  describe('focus between nested modals', () => {
+    const nestedMarkup = `
+      <pds-modal component-id="outer">
+        <pds-modal-content>
+          <button id="outer-first">Outer first</button>
+          <button id="open-inner">Open inner</button>
+          <pds-modal component-id="inner">
+            <pds-modal-content><button id="inner-button">Inner</button></pds-modal-content>
+          </pds-modal>
+        </pds-modal-content>
+      </pds-modal>
+    `;
+
+    it("returns focus into the outer modal when the inner one's trigger is gone", async () => {
+      const page = await newE2EPage();
+      await page.setContent(nestedMarkup);
+      const outer = await page.find('pds-modal[component-id="outer"]');
+      const inner = await page.find('pds-modal[component-id="inner"]');
+      await outer.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.getElementById('open-inner') as HTMLElement).focus());
+      await inner.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => document.getElementById('open-inner')!.remove());
+
+      await inner.callMethod('hideModal');
+      await page.waitForChanges();
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('outer-first');
+    });
+
+    it('keeps focus in an inner modal opened right after the outer one', async () => {
+      const page = await newE2EPage();
+      await page.setContent(nestedMarkup);
+      const outer = await page.find('pds-modal[component-id="outer"]');
+      const inner = await page.find('pds-modal[component-id="inner"]');
+      await outer.callMethod('showModal');
+      await inner.callMethod('showModal');
+      await page.waitForChanges();
+      await new Promise(resolve => setTimeout(resolve, 200));
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('inner-button');
+    });
+  });
+
   describe('Escape handled by a control inside', () => {
     const actions = [
       { id: 'tag-add', text: 'Add a tag', group: 'Tag' },
