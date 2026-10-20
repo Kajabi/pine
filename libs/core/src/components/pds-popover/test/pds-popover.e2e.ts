@@ -1116,7 +1116,9 @@ describe('pds-popover in a dialog inside a shadow root', () => {
     const styleInShadow = () =>
       page.evaluate(() => !!document.querySelector('dialog-host')!.shadowRoot!.querySelector('style[data-pds-popover-focus="shadow-pop-portal"]'));
     expect(await styleInShadow()).toBe(true);
-    // The copied rule matches the portal and applies its outline on focus.
+    expect(formatViolations(await runAxe(page))).toBe('');
+    // The copied rule matches the portal and applies its outline on focus. A script focus also
+    // matches :focus-visible, whose browser outline is `auto`, so `solid` shows the copied rule.
     expect(
       await page.evaluate(() => {
         const portal = document.querySelector('dialog-host')!.shadowRoot!.getElementById('shadow-pop-portal') as HTMLElement;
@@ -1124,7 +1126,7 @@ describe('pds-popover in a dialog inside a shadow root', () => {
         portal.focus();
         return getComputedStyle(portal).outlineStyle;
       }),
-    ).not.toBe('none');
+    ).toBe('solid');
 
     await page.evaluate(() => document.querySelector('dialog-host')!.shadowRoot!.querySelector('pds-popover')!.remove());
     await page.waitForChanges();
@@ -1158,6 +1160,11 @@ describe('pds-popover in a dialog inside a shadow root', () => {
       () => getComputedStyle(document.querySelector('dialog-host')!.shadowRoot!.getElementById('shadow-pop-portal')!).borderTopStyle,
     );
     expect(borderStyle).not.toBe('none');
+
+    // Closing clears it, so a panel that next opens in the body doesn't keep it.
+    await page.evaluate(() => (document.querySelector('dialog-host')!.shadowRoot!.querySelector('pds-popover') as HTMLElement & { hide(): Promise<void> }).hide());
+    await page.waitForChanges();
+    expect(await page.evaluate(() => document.querySelector('dialog-host')!.shadowRoot!.getElementById('shadow-pop-portal')!.style.border)).toBe('');
   });
 });
 
