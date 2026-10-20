@@ -53,8 +53,8 @@ its `side` at its `size`.
   backdrop don't close it, so the close control is the only way out.
 - `modal` is read when the drawer opens. Set it before opening, not while open.
 - `initial-focus="none"` doesn't apply: focus starts in a modal drawer.
-- Tooltips and popovers open in `document.body`, behind a modal drawer, so
-  they don't show inside one.
+- Tooltips open in `document.body`, behind a modal drawer, so they don't show
+  inside one. Popovers open inside the drawer and show above it.
 
 ```html
 <pds-drawer open modal component-id="contact-filters" side="end" size="md">
