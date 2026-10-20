@@ -329,8 +329,14 @@ export class PdsModal {
 
         // Update focusable elements and set initial focus
         // Using a longer timeout to ensure all components are fully rendered
+        const openedAs = openModals.get(this.el) ?? 0;
         setTimeout(() => {
           this.updateFocusableElements();
+          // A modal opened above this one in the meantime has focus; don't take it back.
+          if (Array.from(openModals.values()).some(sequence => sequence > openedAs)) {
+            this.pdsModalOpen.emit();
+            return;
+          }
           if (this.disableInitialFocus) {
             // show()/showModal() also move focus into the dialog natively (the
             // HTML spec's "dialog focusing steps") — that native step isn't
@@ -393,13 +399,16 @@ export class PdsModal {
         this.open = false;
         openModals.delete(this.el);
 
-        // Restore focus to the element that was focused before the modal was opened
-        if (
-          !focusAlreadyMovedElsewhere &&
-          this.previousActiveElement &&
-          typeof this.previousActiveElement.focus === 'function'
-        ) {
-          this.previousActiveElement.focus();
+        // Restore focus to the element that was focused before the modal was opened. If that's
+        // gone (or was nothing), fall back to the open modal around this one, so focus doesn't
+        // land on an inert page behind it.
+        if (!focusAlreadyMovedElsewhere) {
+          const previous = this.previousActiveElement;
+          if (previous && previous !== document.body && previous.isConnected && typeof previous.focus === 'function') {
+            previous.focus();
+          } else {
+            this.focusEnclosingModal();
+          }
         }
 
         this.pdsModalClose.emit();
@@ -407,6 +416,19 @@ export class PdsModal {
         console.error('Failed to hide modal:', error);
       }
     }
+  }
+
+  /** Focuses the first control of the innermost open modal this one sits in, or its dialog. */
+  private focusEnclosingModal() {
+    const enclosing = Array.from(openModals.keys())
+      .filter(modal => modal !== this.el && containsComposed(modal, this.el))
+      .sort((a, b) => (containsComposed(a, b) ? 1 : -1))[0];
+    const dialog = enclosing?.querySelector('.pds-modal__backdrop') as HTMLElement | null;
+    if (!dialog) return;
+    const focusables: HTMLElement[] = [];
+    collectTabbable(dialog, focusables);
+    const target = focusables.find(el => el !== this.el && !containsComposed(this.el, el));
+    (target ?? dialog).focus();
   }
 
   // The browser's own close request (an Escape nothing prevented, a back gesture) would close the
