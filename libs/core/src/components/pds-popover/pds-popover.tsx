@@ -371,7 +371,6 @@ export class PdsPopover {
 
     // Add accessibility attributes for screen readers
     // Note: Native Popover API doesn't add a specific role, keeping semantic HTML
-    this.portalEl.setAttribute('aria-modal', 'false'); // Not a modal, can interact with rest of page
 
     // Append to body
     document.body.appendChild(this.portalEl);
@@ -469,7 +468,21 @@ export class PdsPopover {
     this.movedNodes = [];
   }
 
+  /** The focus style copied into a shadow root the panel opened in, which `document.head` can't reach. */
+  private shadowFocusStyle: HTMLStyleElement | null = null;
+
+  private copyFocusStylesInto(root: Node) {
+    if (!(root instanceof ShadowRoot) || this.shadowFocusStyle?.parentNode === root || !this.portalEl) return;
+    const source = document.querySelector(`style[data-pds-popover-focus="${cssEscape(this.portalEl.id)}"]`);
+    if (!source) return;
+    this.shadowFocusStyle?.remove();
+    this.shadowFocusStyle = source.cloneNode(true) as HTMLStyleElement;
+    root.appendChild(this.shadowFocusStyle);
+  }
+
   private removePortal() {
+    this.shadowFocusStyle?.remove();
+    this.shadowFocusStyle = null;
     if (this.portalEl) {
       // Remove the portal element from DOM
       if (this.portalEl.parentNode) {
@@ -617,6 +630,7 @@ export class PdsPopover {
       dialog.appendChild(this.portalEl);
     }
     this.watchDialogClose(dialog);
+    this.copyFocusStylesInto(this.portalEl.getRootNode());
   }
 
   private forgetOpen() {
