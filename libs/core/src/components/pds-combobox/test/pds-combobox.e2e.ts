@@ -740,9 +740,28 @@ describe('pds-combobox', () => {
           });
         }, selector);
 
-      const click = async (page: Page, selector: string) => {
+      // Waits for the click's own slide to start before reading where rows start from: under load,
+      // a read can land before the drill class and its animation are applied, and every row reads
+      // `still`. Animations from an earlier click are held too, so only a new one counts.
+      const click = async (page: Page, selector: string, { slides = true } = {}) => {
+        await page.evaluate(() => {
+          (window as unknown as { heldAnimations: Set<Animation> }).heldAnimations = new Set(
+            document.querySelector('pds-combobox')!.shadowRoot!.getAnimations(),
+          );
+        });
         await (await page.find(`pds-combobox >>> ${selector}`)).click();
         await page.waitForChanges();
+        if (!slides) return;
+        await page.waitForFunction(
+          () => {
+            const held = (window as unknown as { heldAnimations: Set<Animation> }).heldAnimations;
+            return document
+              .querySelector('pds-combobox')!
+              .shadowRoot!.getAnimations()
+              .some(a => !held.has(a) && (a as CSSAnimation).animationName === 'pds-combobox-drill');
+          },
+          { timeout: 3000 },
+        );
       };
 
       it("slides a group's options and its row back in from the right, and the groups back from the left", async () => {
@@ -808,10 +827,10 @@ describe('pds-combobox', () => {
         );
         expect(duration).toBe('0ms');
 
-        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger', { slides: false });
         expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['still']);
 
-        await click(page, '.pds-combobox__group-back-trigger');
+        await click(page, '.pds-combobox__group-back-trigger', { slides: false });
         expect(await starts(page, '.pds-combobox__group-row')).toEqual(['still', 'still']);
       });
     });
