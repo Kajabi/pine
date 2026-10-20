@@ -926,6 +926,79 @@ describe('pds-popover inside a dialog', () => {
     expect((await portalState(page)).inBody).toBe(true);
   });
 
+  it('has no axe violations open inside the dialog', async () => {
+    const page = await setUp();
+    // Same exception as the body portal's axe test: the panel still sets `aria-modal="false"`.
+    const violations = await runAxe(page, { rules: { 'aria-allowed-attr': { enabled: false } } });
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  // Beside the popover, the panel would be an unslotted child of pds-input, which renders nothing.
+  it("opens at the end of the dialog when the popover sits in another component's slot, and shows", async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 800 });
+    await page.setContent(`
+      <dialog id="dialog">
+        <pds-input component-id="field" label="Field">
+          <pds-popover component-id="pop" slot="action"><button slot="trigger" id="pop-trigger">Open</button><div>Panel</div></pds-popover>
+        </pds-input>
+      </dialog>
+    `);
+    await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).showModal());
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    const state = await page.evaluate(() => {
+      const portal = document.getElementById('pop-portal')!;
+      return { inDialog: portal.parentElement?.id, height: portal.getBoundingClientRect().height > 0 };
+    });
+    expect(state).toEqual({ inDialog: 'dialog', height: true });
+  });
+
+  it("opens outside a form in the dialog, so its buttons don't submit it", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <dialog id="dialog">
+        <form id="form">
+          <pds-popover component-id="pop"><button slot="trigger" type="button" id="pop-trigger">Open</button><div><button id="pop-inside">Inside</button></div></pds-popover>
+        </form>
+      </dialog>
+    `);
+    await page.evaluate(() => {
+      (document.getElementById('dialog') as HTMLDialogElement).showModal();
+      (window as unknown as { submitted: boolean }).submitted = false;
+      document.getElementById('form')!.addEventListener('submit', e => {
+        e.preventDefault();
+        (window as unknown as { submitted: boolean }).submitted = true;
+      });
+    });
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    expect(await page.evaluate(() => document.getElementById('form')!.contains(document.getElementById('pop-portal')))).toBe(false);
+
+    await (await page.find('#pop-inside')).click();
+    await page.waitForChanges();
+    expect(await page.evaluate(() => (window as unknown as { submitted: boolean }).submitted)).toBe(false);
+  });
+
+  it('takes its panel along when moved while open into another dialog, and closes with that one', async () => {
+    const page = await setUp();
+    await page.evaluate(() => {
+      const other = document.createElement('dialog');
+      other.id = 'other';
+      document.body.appendChild(other);
+      other.show();
+      other.appendChild(document.querySelector('pds-popover')!);
+    });
+    await page.waitForChanges();
+    expect(await page.evaluate(() => document.getElementById('pop-portal')!.parentElement?.id)).toBe('other');
+
+    await page.evaluate(() => (document.getElementById('other') as HTMLDialogElement).close());
+    await page.waitForChanges();
+    expect((await portalState(page)).shown).toBe(false);
+  });
+
   it('stays open on a click inside its panel', async () => {
     const page = await setUp();
     await (await page.find('#pop-inside')).click();
@@ -975,5 +1048,39 @@ describe('pds-popover inside a dialog', () => {
       return { top: Math.round(panel.top - trigger.bottom), left: Math.round(panel.left - trigger.left) };
     });
     expect(gap).toEqual({ top: 8, left: 0 });
+  });
+});
+
+describe('nested pds-popovers', () => {
+  it('closes only the inner one on Escape, then the outer one', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-popover component-id="outer">
+        <button slot="trigger" id="outer-trigger">Outer</button>
+        <div>
+          <pds-popover component-id="inner">
+            <button slot="trigger" id="inner-trigger">Inner</button>
+            <div><button id="inner-inside">Inside</button></div>
+          </pds-popover>
+        </div>
+      </pds-popover>
+    `);
+    await (await page.find('#outer-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('outer-portal')?.style.display === 'block');
+    await page.evaluate(() => (document.getElementById('inner-trigger') as HTMLElement).click());
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('inner-portal')?.style.display === 'block');
+    const shown = () =>
+      page.evaluate(() => ['outer', 'inner'].map(id => document.getElementById(`${id}-portal`)?.style.display === 'block'));
+    await page.evaluate(() => (document.getElementById('inner-inside') as HTMLElement).focus());
+
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    expect(await shown()).toEqual([true, false]);
+
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    expect(await shown()).toEqual([false, false]);
   });
 });
