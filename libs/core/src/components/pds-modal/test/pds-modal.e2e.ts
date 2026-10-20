@@ -489,6 +489,39 @@ describe('pds-modal', () => {
       });
     }
 
+    it('closes only a popover inside a shadow root in the modal on the first Escape', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-modal component-id="shadow-popover-modal"><pds-modal-content><div id="slot-here"></div></pds-modal-content></pds-modal>');
+      await page.evaluate(() => {
+        customElements.define(
+          'popover-host',
+          class extends HTMLElement {
+            constructor() {
+              super();
+              this.attachShadow({ mode: 'open' }).innerHTML =
+                '<pds-popover component-id="shadow-pop"><button slot="trigger" id="shadow-trigger">Open</button><div><button id="shadow-inside">Inside</button></div></pds-popover>';
+            }
+          },
+        );
+        document.getElementById('slot-here')!.appendChild(document.createElement('popover-host'));
+      });
+      await page.waitForChanges();
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.querySelector('popover-host')!.shadowRoot!.getElementById('shadow-trigger') as HTMLElement).click());
+      await page.waitForChanges();
+      const shadowPopoverOpen = () =>
+        page.evaluate(() => document.querySelector('popover-host')!.shadowRoot!.getElementById('shadow-pop-portal')?.style.display === 'block');
+      expect(await shadowPopoverOpen()).toBe(true);
+      await page.evaluate(() => (document.querySelector('popover-host')!.shadowRoot!.getElementById('shadow-inside') as HTMLElement).focus());
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await shadowPopoverOpen()).toBe(false);
+      expect(await modal.getProperty('open')).toBe(true);
+    });
+
     it('still closes on Escape with a manual popover open inside', async () => {
       const { page, modal } = await openPopoverInModal('', 'popover-type="manual"');
       await page.evaluate(() => (document.getElementById('pop-trigger') as HTMLElement).focus());
