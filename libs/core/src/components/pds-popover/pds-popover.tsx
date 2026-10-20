@@ -693,7 +693,7 @@ export class PdsPopover {
     if (event.key !== 'Escape' || event.defaultPrevented) return;
     // Escape from a dialog this popover isn't in belongs to that dialog, which is above it.
     const dialog = closest('dialog[open]', event.composedPath()[0] as Element) as HTMLElement | null;
-    if (dialog && !dialog.contains(this.portalEl)) return;
+    if (dialog && !containsComposed(dialog, this.portalEl)) return;
 
     // Prevent default Escape behavior and stop propagation
     // This mirrors native Popover API which handles Escape exclusively
