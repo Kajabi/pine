@@ -448,6 +448,17 @@ describe('pds-combobox', () => {
     it('flips the flyout to the left when there is no room on the right', async () => {
       const page = await setUp('display: flex; justify-content: flex-end; padding: 40px 8px;');
       await hoverGroup(page, 'Tag');
+      // The flyout is placed a frame after it opens; under load, a single read can land first.
+      await page
+        .waitForFunction(
+          () => {
+            const root = document.querySelector('pds-combobox')!.shadowRoot!;
+            const flyout = root.querySelector('.pds-combobox__flyout');
+            return !!flyout && flyout.getBoundingClientRect().right <= root.querySelector('.pds-combobox__listbox')!.getBoundingClientRect().left;
+          },
+          { timeout: 3000 },
+        )
+        .catch(() => undefined);
 
       const { panel, flyout } = await geometry(page);
       expect(flyout.right).toBeLessThanOrEqual(panel.left);
