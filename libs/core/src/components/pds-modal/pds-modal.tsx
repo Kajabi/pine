@@ -518,6 +518,7 @@ export class PdsModal {
       // instance has had a chance to act on this keypress.
       const eventSnapshot = e as KeyboardEvent & {
         __pdsActiveElementAtEscape?: Element | null;
+        __pdsDeepActiveElementAtEscape?: Element | null;
         __pdsTopLayerDialogAtEscape?: Element | null;
         __pdsTopLayerDialogWasModalAtEscape?: boolean;
         __pdsEscapeHandledInside?: boolean;
@@ -526,6 +527,8 @@ export class PdsModal {
       if (!('__pdsActiveElementAtEscape' in eventSnapshot)) {
         const activeAtDispatch = document.activeElement;
         eventSnapshot.__pdsActiveElementAtEscape = activeAtDispatch;
+        // Followed into shadow roots: for a modal inside one, document.activeElement is only the host.
+        eventSnapshot.__pdsDeepActiveElementAtEscape = deepActiveElement();
         const topLayerDialog = activeAtDispatch?.closest('dialog') ?? null;
         eventSnapshot.__pdsTopLayerDialogAtEscape = topLayerDialog;
         eventSnapshot.__pdsTopLayerDialogWasModalAtEscape = !!(topLayerDialog && topLayerDialog.matches(':modal'));
@@ -545,7 +548,7 @@ export class PdsModal {
         this.disableTopLayer &&
         active &&
         active !== document.body &&
-        !this.el.contains(active) &&
+        !containsComposed(this.el, eventSnapshot.__pdsDeepActiveElementAtEscape ?? active) &&
         this.isStackedAboveOverlay(
           active,
           eventSnapshot.__pdsTopLayerDialogAtEscape ?? null,
