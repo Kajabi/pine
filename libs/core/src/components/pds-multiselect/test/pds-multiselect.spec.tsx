@@ -3031,4 +3031,19 @@ describe('pds-multiselect', () => {
       expect(page.rootInstance.selectedItems).toEqual([]);
     });
   });
+
+  it('takes its disabled state from a disabled fieldset', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="in-fieldset" label="Label"></pds-multiselect>`,
+    });
+
+    page.rootInstance.formDisabledCallback(true);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(true);
+
+    page.rootInstance.formDisabledCallback(false);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(false);
+  });
 });

@@ -270,4 +270,19 @@ describe('pds-checkbox', () => {
     expect(slotted).toHaveClass('has-label-slot');
     expect(prop).not.toHaveClass('has-label-slot');
   });
+
+  it('takes its disabled state from a disabled fieldset', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="in-fieldset" label="Label"></pds-checkbox>`,
+    });
+
+    page.rootInstance.formDisabledCallback(true);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(true);
+
+    page.rootInstance.formDisabledCallback(false);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(false);
+  });
 });
