@@ -377,6 +377,159 @@ describe('pds-modal', () => {
     });
   });
 
+  describe('Escape handled by a control inside', () => {
+    const actions = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email' },
+    ];
+
+    const openWithCombobox = async (modalAttrs: string, comboboxAttrs = '') => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="wizard" ${modalAttrs}>
+          <pds-modal-content>
+            <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only"
+              panel-search dropdown-mount="body" ${comboboxAttrs}></pds-combobox>
+          </pds-modal-content>
+        </pds-modal>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }, options) => {
+        el.options = options;
+      }, actions);
+      await (await page.find('pds-modal')).callMethod('showModal');
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    const state = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        const portal = document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot;
+        return {
+          modalOpen: (document.querySelector('pds-modal') as HTMLElement & { open: boolean }).open,
+          dropdownOpen: !!portal?.querySelector('.pds-combobox__listbox'),
+          drilledIn: !!portal?.querySelector('.pds-combobox__group-back'),
+        };
+      });
+
+    const pressEscape = async (page: Awaited<ReturnType<typeof newE2EPage>>) => {
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+    };
+
+    for (const [name, modalAttrs] of [
+      ['in the top layer', ''],
+      ['with disableTopLayer', 'disable-top-layer="true"'],
+    ]) {
+      it(`closes only an open combobox on the first Escape, and the modal on the next (${name})`, async () => {
+        const page = await openWithCombobox(modalAttrs);
+        expect(await state(page)).toEqual({ modalOpen: true, dropdownOpen: true, drilledIn: false });
+
+        await pressEscape(page);
+        expect(await state(page)).toEqual({ modalOpen: true, dropdownOpen: false, drilledIn: false });
+
+        // Focus is back on the closed trigger, which leaves Escape to the modal.
+        await pressEscape(page);
+        expect((await state(page)).modalOpen).toBe(false);
+      });
+    }
+
+    it('goes back out of a drill-in group, then closes the dropdown, then the modal', async () => {
+      const page = await openWithCombobox('', 'group-display="drill-in"');
+      await (await page.find('.pds-combobox-dropdown-portal >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      expect(await state(page)).toEqual({ modalOpen: true, dropdownOpen: true, drilledIn: true });
+
+      await pressEscape(page);
+      expect(await state(page)).toEqual({ modalOpen: true, dropdownOpen: true, drilledIn: false });
+
+      await pressEscape(page);
+      expect(await state(page)).toEqual({ modalOpen: true, dropdownOpen: false, drilledIn: false });
+
+      await pressEscape(page);
+      expect((await state(page)).modalOpen).toBe(false);
+    });
+
+    it('closes only an open dropdown menu on the first Escape', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="menu-modal">
+          <pds-modal-content>
+            <pds-dropdown-menu>
+              <button slot="trigger" id="menu-trigger">Options</button>
+              <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+            </pds-dropdown-menu>
+          </pds-modal-content>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await (await page.find('#menu-trigger')).click();
+      await page.waitForChanges();
+
+      const menuOpen = () =>
+        page.evaluate(
+          () => !document.querySelector('pds-dropdown-menu')!.shadowRoot!.querySelector('pds-box')!.classList.contains('is-hidden'),
+        );
+      expect(await menuOpen()).toBe(true);
+
+      await pressEscape(page);
+      expect(await menuOpen()).toBe(false);
+      expect(await modal.getProperty('open')).toBe(true);
+
+      await pressEscape(page);
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+
+    it('closes only an open multiselect on the first Escape', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="tags-modal">
+          <pds-modal-content><pds-multiselect component-id="tags" label="Tags"></pds-multiselect></pds-modal-content>
+        </pds-modal>
+      `);
+      await page.$eval('pds-multiselect', (el: HTMLElement & { options?: unknown }) => {
+        el.options = [{ id: 'a', text: 'A' }, { id: 'b', text: 'B' }];
+      });
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await (await page.find('pds-multiselect >>> .pds-multiselect__trigger')).click();
+      await page.waitForFunction(() =>
+        document.querySelector('pds-multiselect')?.shadowRoot?.activeElement?.classList.contains('pds-multiselect__search-input'),
+      );
+
+      const panelOpen = () =>
+        page.evaluate(() => !!document.querySelector('pds-multiselect')!.shadowRoot!.querySelector('.pds-multiselect__panel'));
+
+      await pressEscape(page);
+      expect(await panelOpen()).toBe(false);
+      expect(await modal.getProperty('open')).toBe(true);
+
+      await pressEscape(page);
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+
+    it('still closes on Escape from a focused control that leaves it alone', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="plain">
+          <pds-modal-content><button id="inside">Inside</button></pds-modal-content>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => (document.getElementById('inside') as HTMLElement).focus());
+
+      await pressEscape(page);
+      expect(await modal.getProperty('open')).toBe(false);
+    });
+  });
+
   describe('initial open state', () => {
     it('opens the native dialog automatically when open is set from the start', async () => {
       // Regression: @Watch('open') only fires on a later change, not the
