@@ -301,9 +301,9 @@ describe('pds-tabs after its host classes and styles are stripped', () => {
   });
 });
 
-// Idiomorph pairs a live element with the server's new HTML by id; inventing one that Pine's own
-// JS writes, but the server's HTML never carries, makes every Turbo morph throw the live element
-// away and rebuild it from scratch, losing its state (selected tab, open accordion, focus, etc).
+// A DOM morph pairs a live element with the incoming HTML by id. An id that Pine's own JS writes,
+// but the incoming HTML never carries, makes the morph throw the live element away and rebuild it
+// from scratch, losing its state (selected tab, open accordion, focus, etc).
 describe('pds-tabs and the host id', () => {
   it('never writes component-id onto the host id', async () => {
     const page = await newE2EPage();

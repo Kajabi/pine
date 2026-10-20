@@ -57,7 +57,7 @@ describe('pds-tooltip', () => {
   });
 
   // component-id is a Pine identifier, not the host's id — writing it there would overwrite an
-  // author-set id and invent one a Turbo morph's server HTML never carries.
+  // author-set id and invent one a DOM morph's incoming HTML never carries.
   it('does not write component-id onto the host id', async () => {
     const { root } = await newSpecPage({
       components: [PdsTooltip],
