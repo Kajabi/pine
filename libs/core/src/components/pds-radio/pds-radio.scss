@@ -216,6 +216,9 @@ label:has(input:disabled) {
   column-gap: var(--pine-dimension-xs);
   display: flex;
   flex: 1;
+  // A row whatever has-border says: the image card is already bordered, and has-border's
+  // column would stack the image over the text.
+  flex-direction: row;
   padding: var(--pine-dimension-md);
 
   // On small screens, ensure full width when in a row layout
@@ -275,6 +278,13 @@ label:has(input:disabled) {
       object-fit: cover;
       width: 100%;
     }
+  }
+
+  // Takes the room beside the image and wraps there; at its natural width a long message
+  // would push it onto its own line under the image.
+  .pds-radio__content-wrapper {
+    flex: 1;
+    min-width: 0;
   }
 
   .pds-radio__message {
