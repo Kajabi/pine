@@ -21,7 +21,7 @@ export class PdsTableCell {
   }
 
   // Fires again each time the cell is moved (a sort re-appends every row), unlike componentDidLoad,
-  // so it re-binds what disconnectedCallback tore down.
+  // so it re-binds what disconnectedCallback tore down. The tooltip binds to the host, which exists before load.
   connectedCallback() {
     if (!this.hasLoaded) return;
 
@@ -29,6 +29,10 @@ export class PdsTableCell {
     this.cleanupScrollListener();
     if (this.needsScrollShadow) {
       this.setupScrollListener();
+    }
+
+    if (this.truncate) {
+      this.initTruncationTooltip();
     }
   }
 

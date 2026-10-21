@@ -438,6 +438,32 @@ The `max-width` property caps the chip and ellipsizes the label once it no longe
   <pds-chip variant="tag" max-width="200px">A very long label that would otherwise overflow the chip</pds-chip>
 </DocCanvas>
 
+Hovering a clipped label shows the full text in a tooltip. For keyboard users, the clipped label gets its own tab stop that shows the same tooltip on focus.
+
+Inside a control that already takes focus, such as a `pds-button` or a link, the chip adds no tab stop of its own. Focusing the control shows the full label instead.
+
+Use the default `text` variant inside a control. The `tag` and `dropdown` variants render buttons of their own, and one control can't sit inside another.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsButton variant="unstyled">
+      <PdsChip maxWidth="200px">
+        A very long label that would otherwise overflow the chip
+      </PdsChip>
+    </PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="unstyled">
+      <pds-chip max-width="200px">
+        A very long label that would otherwise overflow the chip
+      </pds-chip>
+    </pds-button>
+    `
+}}>
+  <pds-button variant="unstyled"><pds-chip max-width="200px">A very long label that would otherwise overflow the chip</pds-chip></pds-button>
+</DocCanvas>
+
 ## Playground
 
 <Canvas of={stories.Default} />

@@ -145,6 +145,27 @@ describe('pds-copytext accessibility', () => {
 
     expect(tooltipText).toContain('This is a very long value that will definitely overflow the container');
   });
+
+  // Moving an element disconnects and reconnects it without a re-render, so the
+  // tooltip torn down on disconnect has to come back on reconnect.
+  it('keeps the tooltip after it moves in the DOM', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="from" style="max-width: 100px;">
+        <pds-copytext value="This is a very long value that will definitely overflow the container" truncate="true"></pds-copytext>
+      </div>
+      <div id="to" style="max-width: 100px;"></div>
+    `);
+
+    await page.$eval('#to', (to) => to.append(document.querySelector('pds-copytext')));
+    await page.waitForChanges();
+
+    await page.hover('pds-copytext');
+    await page.waitForChanges();
+
+    const tooltips = await page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
+    expect(tooltips).toEqual(['This is a very long value that will definitely overflow the container']);
+  });
 });
 
 // A DOM morph makes the host match the server's HTML, which has none of the classes and styles

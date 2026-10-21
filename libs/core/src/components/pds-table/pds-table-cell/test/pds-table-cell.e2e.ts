@@ -84,6 +84,50 @@ describe('pds-table-cell', () => {
 
   // Sorting re-appends every row, which disconnects and reconnects each cell in
   // it without a re-render.
+  it('keeps the tooltip and tab stop on a clipped cell after the table sorts', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 240px;">
+        <pds-table>
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            <pds-table-head-cell>Notes</pds-table-head-cell>
+            <pds-table-head-cell>Details</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Aardvark</pds-table-cell>
+              <pds-table-cell>Short</pds-table-cell>
+              <pds-table-cell>Short</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Zebra</pds-table-cell>
+              <pds-table-cell truncate>Very long content that cannot possibly fit in this narrow column</pds-table-cell>
+              <pds-table-cell>Very long content that cannot possibly fit in this narrow column</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+
+    // The first click sorts descending.
+    const nameHeader = await page.find('pds-table-head-cell');
+    await nameHeader.click();
+    await page.waitForChanges();
+
+    const firstName = await page.$eval('pds-table-row pds-table-cell', (el) => el.textContent.trim());
+    expect(firstName).toBe('Zebra');
+
+    const tabindex = await page.$eval('pds-table-cell[truncate]', (el) => el.getAttribute('tabindex'));
+    expect(tabindex).toBe('0');
+
+    await page.hover('pds-table-cell[truncate]');
+    await page.waitForChanges();
+
+    const tooltips = await page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
+    expect(tooltips).toEqual(['Very long content that cannot possibly fit in this narrow column']);
+  });
+
   it('shows the fixed column shadow on scroll after the table sorts', async () => {
     const page = await newE2EPage();
     await page.setContent(`
