@@ -76,6 +76,30 @@ describe('pds-text', () => {
     expect(fits).toBeNull();
     expect(plain).toBeNull();
   });
+
+  // Moving an element disconnects and reconnects it without a re-render, so the
+  // tooltip torn down on disconnect has to come back on reconnect.
+  it('keeps the tooltip and tab stop after it moves in the DOM', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="from"><pds-text truncate style="width: 60px;">A very long sentence that cannot possibly fit</pds-text></div>
+      <div id="to"></div>
+    `);
+
+    await page.$eval('#to', (to) => to.append(document.querySelector('pds-text')));
+    await page.waitForChanges();
+
+    const tabindex = await page.$eval('pds-text', (el) =>
+      el.shadowRoot.querySelector('[part="content"]').getAttribute('tabindex'),
+    );
+    expect(tabindex).toBe('0');
+
+    await page.hover('pds-text');
+    await page.waitForChanges();
+
+    const tooltips = await page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
+    expect(tooltips).toEqual(['A very long sentence that cannot possibly fit']);
+  });
 });
 
 describe('pds-text accessibility', () => {
