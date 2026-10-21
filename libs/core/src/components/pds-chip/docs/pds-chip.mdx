@@ -440,7 +440,7 @@ The `max-width` property caps the chip and ellipsizes the label once it no longe
 
 Hovering a clipped label shows the full text in a tooltip. For keyboard users, the clipped label gets its own tab stop that shows the same tooltip on focus.
 
-Inside a control that already takes focus, such as a `pds-button` or a link, the chip adds no tab stop of its own. Focusing the control shows the full label instead.
+Inside a control that already takes focus, such as a `pds-button`, a link or a listbox option, the chip adds no tab stop of its own. Focusing the control shows the full label instead. In a listbox option, the tooltip sits beside the listbox, level with the option, so it doesn't cover the other options.
 
 Use the default `text` variant inside a control. The `tag` and `dropdown` variants render buttons of their own, and one control can't sit inside another.
 
