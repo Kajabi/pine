@@ -1096,6 +1096,42 @@ describe('pds-modal', () => {
       expect(await page.evaluate(() => document.activeElement?.id)).toBe('below-first');
     });
 
+    it('still moves initial focus when a disableTopLayer modal opens below it during the delay', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="top"><pds-modal-content><button id="top-first">Top first</button><button id="top-second">Top second</button></pds-modal-content></pds-modal>
+        <pds-modal component-id="background" disable-top-layer="true"><pds-modal-content><button id="background-button">Background</button></pds-modal-content></pds-modal>
+      `);
+      await page.waitForChanges();
+      // Opened together, then focus moved off the first control, all before the 100ms delay ends,
+      // so only initial focus can bring it back.
+      await page.evaluate(async () => {
+        type Modal = HTMLElement & { showModal(): Promise<void> };
+        await (document.querySelector('pds-modal[component-id="top"]') as Modal).showModal();
+        await (document.querySelector('pds-modal[component-id="background"]') as Modal).showModal();
+        (document.getElementById('top-second') as HTMLElement).focus();
+      });
+      await new Promise(resolve => setTimeout(resolve, 200));
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('top-first');
+    });
+
+    it('still moves initial focus when moved during the delay', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div id="from"><pds-modal component-id="moved" disable-top-layer="true"><pds-modal-content><button id="moved-first">First</button></pds-modal-content></pds-modal></div>
+        <div id="to"></div>
+        <button id="outside">Outside</button>
+      `);
+      await page.evaluate(() => (document.getElementById('outside') as HTMLElement).focus());
+      await (await page.find('pds-modal')).callMethod('showModal');
+      await page.evaluate(() => {
+        document.getElementById('to')!.appendChild(document.querySelector('pds-modal')!);
+        (document.getElementById('outside') as HTMLElement).focus();
+      });
+      await new Promise(resolve => setTimeout(resolve, 200));
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('moved-first');
+    });
+
     // Outside the top layer nothing is inert, so the outer modal could take focus back.
     it('never moves focus to the outer modal when an inner one opens during its focus delay', async () => {
       const page = await newE2EPage();
