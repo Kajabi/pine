@@ -16,6 +16,11 @@ export class PdsCopytext {
 
   connectedCallback() {
     this.hostKeeper.connect(this.el);
+    // componentDidLoad runs once, so a moved element re-binds here what disconnectedCallback tore
+    // down. Before the first render there's no valueSpanEl yet, and componentDidLoad binds it.
+    if (this.truncate && this.valueSpanEl) {
+      this.initTruncationTooltip();
+    }
   }
 
   private truncationCleanup: (() => void) | null = null;
