@@ -568,11 +568,13 @@ describe('pds-popover', () => {
         html: '<pds-popover component-id="test-popover" popover-type="auto"></pds-popover>'
       });
 
-      page.rootInstance.active = true;
+      // Opened through show(), so it's among the open popovers Escape looks at.
+      await page.rootInstance.show();
       const hideSpy = jest.spyOn(page.rootInstance, 'hide');
 
       const mockEvent = {
         key: 'Escape',
+        composedPath: () => [page.doc.body],
         preventDefault: jest.fn(),
         stopPropagation: jest.fn()
       } as any;
