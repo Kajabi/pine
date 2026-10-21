@@ -435,6 +435,7 @@ export class PdsModal {
     tabbableIn(dialog).find(el => !containsComposed(this.el, el))?.focus();
   }
 
+
   // The browser's own close request (an Escape nothing prevented, a back gesture) would close the
   // dialog without updating `open`, so close it through hideModal() instead, or not at all.
   private handleCancel = (e: Event) => {

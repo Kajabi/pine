@@ -1,3 +1,21 @@
+## 4.7.0 (2026-10-21)
+
+### Features 🚀
+
+- **pds-drawer:** add a modal option that makes the page inert behind the drawer ([#892](https://github.com/Kajabi/pine/pull/892))
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** keep a disabled button or chip trigger from opening ([#889](https://github.com/Kajabi/pine/pull/889))
+- **pds-modal:** stay open when a control inside has already handled escape ([#888](https://github.com/Kajabi/pine/pull/888))
+- **pds-modal:** close only the innermost modal on escape when modals are nested ([#890](https://github.com/Kajabi/pine/pull/890))
+- **pds-popover:** open inside a modal and close before it on escape ([#891](https://github.com/Kajabi/pine/pull/891))
+- **pds-popover:** carry the focus ring and dark border into a shadow-root dialog ([#896](https://github.com/Kajabi/pine/pull/896))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 4.6.0 (2026-10-20)
 
 ### Features 🚀
