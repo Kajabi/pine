@@ -450,4 +450,67 @@ describe('truncation-tooltip', () => {
       cleanup();
     });
   });
+
+  // A wrapping control outside hostEl (a consumer's pds-button around a chip)
+  // never bubbles its focus into hostEl, so it needs the focus listeners itself.
+  describe('focusEl', () => {
+    let focusEl: HTMLElement;
+
+    beforeEach(() => {
+      focusEl = document.createElement('button');
+      document.body.appendChild(focusEl);
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+      Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+    });
+
+    it('shows the tooltip while focusEl has focus', () => {
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+        manageTabIndex: false,
+        focusEl,
+      });
+
+      focusEl.dispatchEvent(new FocusEvent('focusin'));
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+      focusEl.dispatchEvent(new FocusEvent('focusout'));
+      advanceHideDelay();
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      cleanup();
+    });
+
+    it('moves only the focus listeners, leaving hover on hostEl', () => {
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+        focusEl,
+      });
+
+      hostEl.dispatchEvent(new FocusEvent('focusin'));
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      hostEl.dispatchEvent(new MouseEvent('mouseenter'));
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+      cleanup();
+    });
+
+    it('stops listening on focusEl after cleanup', () => {
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+        focusEl,
+      });
+
+      cleanup();
+      focusEl.dispatchEvent(new FocusEvent('focusin'));
+
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+    });
+  });
 });
