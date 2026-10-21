@@ -80,4 +80,52 @@ describe('pds-table-cell', () => {
     expect(fits).toBeNull();
     expect(plain).toBeNull();
   });
+
+  // Sorting re-appends every row, which disconnects and reconnects each cell in
+  // it without a re-render.
+  it('shows the fixed column shadow on scroll after the table sorts', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 240px;">
+        <pds-table responsive fixed-column>
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            <pds-table-head-cell>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Aardvark</pds-table-cell>
+              <pds-table-cell>aardvark.with.a.long.address@example.com</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Zebra</pds-table-cell>
+              <pds-table-cell>zebra.with.a.long.address@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+
+    // The first click sorts descending.
+    const nameHeader = await page.find('pds-table-head-cell');
+    await nameHeader.click();
+    await page.waitForChanges();
+
+    const names = await page.$$eval('pds-table-row', (rows) =>
+      rows.map((row) => row.querySelector('pds-table-cell').textContent.trim()),
+    );
+    expect(names).toEqual(['Zebra', 'Aardvark']);
+
+    await page.$eval('pds-table', (table) => new Promise<void>((resolve) => {
+      const container = table.shadowRoot.querySelector('.pds-table-responsive-container') as HTMLElement;
+      container.addEventListener('scroll', () => resolve(), { once: true });
+      container.scrollLeft = 80;
+    }));
+    await page.waitForChanges();
+
+    const shadowed = await page.$$eval('pds-table-row', (rows) =>
+      rows.map((row) => row.querySelector('pds-table-cell').classList.contains('has-scrolled')),
+    );
+    expect(shadowed).toEqual([true, true]);
+  });
 });
