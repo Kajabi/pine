@@ -375,6 +375,76 @@ describe('pds-multiselect', () => {
 
       expect((await axOptions(page)).map(([name]) => name)).toEqual(['Bestsellers', 'Webinar']);
     });
+
+    describe('with a name too long for the panel', () => {
+      const longText = `Tag_${'x'.repeat(96)}`;
+
+      const openNarrow = (attributes = '') =>
+        openWith(`option-display="chip" style="width: 250px" ${attributes}`, [{ id: '1', text: longText, actionIcon: 'pen' }]);
+
+      it('truncates the chip and keeps the option action inside the panel', async () => {
+        const page = await openNarrow('option-actions');
+        await page.keyboard.press('ArrowDown');
+        await page.waitForChanges();
+
+        const layout = await page.evaluate(() => {
+          const root = document.querySelector('pds-multiselect')!.shadowRoot!;
+          const listbox = root.querySelector('.pds-multiselect__listbox')!;
+          const label = root.querySelector('pds-chip')!.shadowRoot!.querySelector('.pds-chip__label-text')!;
+          return {
+            clipped: label.scrollWidth > label.clientWidth,
+            listboxOverflow: listbox.scrollWidth - listbox.clientWidth,
+            actionOverflow:
+              root.querySelector('.pds-multiselect__option-action pds-icon')!.getBoundingClientRect().right -
+              listbox.getBoundingClientRect().right,
+          };
+        });
+
+        expect(layout.clipped).toBe(true);
+        expect(layout.listboxOverflow).toBe(0);
+        expect(layout.actionOverflow).toBeLessThan(0);
+      });
+
+      it('shows the full name beside the panel on hover, without adding a tab stop', async () => {
+        const page = await openNarrow();
+        await (await page.find('pds-multiselect >>> pds-chip')).hover();
+        await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+        const result = await page.evaluate(() => {
+          const root = document.querySelector('pds-multiselect')!.shadowRoot!;
+          const chip = root.querySelector('pds-chip')!;
+          const tooltip = document.querySelector('.pds-truncation-tooltip')!;
+          const tip = tooltip.getBoundingClientRect();
+          const row = chip.closest('li')!.getBoundingClientRect();
+          return {
+            tabindex: chip.shadowRoot!.querySelector('.pds-chip__label-text')!.getAttribute('tabindex'),
+            text: tooltip.textContent?.trim(),
+            besidePanel: tip.left >= root.querySelector('.pds-multiselect__panel')!.getBoundingClientRect().right,
+            rowOffset: Math.abs(tip.top + tip.height / 2 - (row.top + row.height / 2)),
+          };
+        });
+
+        expect(result).toEqual(expect.objectContaining({ tabindex: null, text: longText, besidePanel: true }));
+        expect(result.rowOffset).toBeLessThan(1);
+      });
+
+      it('toggles once on a chip click, keeping the checkbox in step', async () => {
+        const page = await openNarrow();
+        const state = () =>
+          page.$eval('pds-multiselect', (el: HTMLElement & { value?: string[] }) => ({
+            value: el.value,
+            checked: el.shadowRoot!.querySelector('pds-checkbox')!.shadowRoot!.querySelector('input')!.checked,
+          }));
+
+        await (await page.find('pds-multiselect >>> pds-chip')).click();
+        await page.waitForChanges();
+        expect(await state()).toEqual({ value: ['1'], checked: true });
+
+        await (await page.find('pds-multiselect >>> pds-chip')).click();
+        await page.waitForChanges();
+        expect(await state()).toEqual({ value: [], checked: false });
+      });
+    });
   });
 
   describe('option actions', () => {
