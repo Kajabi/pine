@@ -469,7 +469,13 @@ export class PdsPopover {
   private shadowFocusStyle: HTMLStyleElement | null = null;
 
   private copyFocusStylesInto(root: Node) {
-    if (!(root instanceof ShadowRoot) || this.shadowFocusStyle?.parentNode === root || !this.portalEl) return;
+    // Outside a shadow root the document's own style applies, so drop a copy left in one.
+    if (!(root instanceof ShadowRoot)) {
+      this.shadowFocusStyle?.remove();
+      this.shadowFocusStyle = null;
+      return;
+    }
+    if (this.shadowFocusStyle?.parentNode === root || !this.portalEl) return;
     const source = document.querySelector(`style[data-pds-popover-focus="${cssEscape(this.portalEl.id)}"]`);
     if (!source) return;
     this.shadowFocusStyle?.remove();
@@ -619,6 +625,7 @@ export class PdsPopover {
       this.unwatchDialogClose();
       this.portalEl.style.border = '';
       if (this.portalEl.parentElement !== document.body) document.body.appendChild(this.portalEl);
+      this.copyFocusStylesInto(document);
       return;
     }
     const form = closest('form', this.el) as Element | null;
