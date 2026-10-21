@@ -1070,6 +1070,24 @@ describe('pds-modal', () => {
       expect(await page.evaluate(() => document.activeElement?.id)).toBe('outer-first');
     });
 
+    it('returns focus into the outer modal when nothing was focused before the inner one opened', async () => {
+      const page = await newE2EPage();
+      await page.setContent(nestedMarkup);
+      const outer = await page.find('pds-modal[component-id="outer"]');
+      const inner = await page.find('pds-modal[component-id="inner"]');
+      await outer.callMethod('showModal');
+      await page.waitForChanges();
+      // Nothing focused when the inner modal opens: its previousActiveElement becomes document.body,
+      // which isn't a real restore target and shouldn't be mistaken for a successful one on close.
+      await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+      await inner.callMethod('showModal');
+      await page.waitForChanges();
+
+      await inner.callMethod('hideModal');
+      await page.waitForChanges();
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('outer-first');
+    });
+
     it('returns focus into a sibling modal underneath, skipping a hidden control', async () => {
       const page = await newE2EPage();
       await page.setContent(`
