@@ -136,6 +136,30 @@ describe('pds-drawer', () => {
       });
     }
 
+    it('shows a popover inside the drawer above it, where it can be clicked', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-drawer component-id="test" modal>
+          <pds-modal-content>
+            <pds-popover component-id="pop"><button slot="trigger" id="pop-trigger">Open</button><div><button id="pop-inside">Inside</button></div></pds-popover>
+          </pds-modal-content>
+        </pds-drawer>
+      `);
+      const drawer = await page.find('pds-drawer');
+      drawer.setProperty('open', true);
+      await page.waitForChanges();
+      await (await page.find('#pop-trigger')).click();
+      await page.waitForChanges();
+      await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+
+      const hitsInside = await page.evaluate(() => {
+        const rect = document.getElementById('pop-inside')!.getBoundingClientRect();
+        return document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)?.id === 'pop-inside';
+      });
+      expect(hitsInside).toBe(true);
+    });
+
     it('keeps Tab inside the drawer', async () => {
       const { page } = await openModal();
       await page.evaluate(() => (document.getElementById('last') as HTMLElement).focus());

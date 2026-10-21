@@ -95,6 +95,12 @@ function containsComposed(ancestor: Node, node: Node | null): boolean {
 const openModals = new Map<Element, number>();
 let openSequence = 0;
 
+/** Whether an open auto popover's panel sits in `root`, including inside shadow roots under it. */
+function hasOpenPopover(root: Element | ShadowRoot): boolean {
+  if (root.querySelector('[data-pds-popover-open]')) return true;
+  return Array.from(root.querySelectorAll('*')).some(el => !!el.shadowRoot && hasOpenPopover(el.shadowRoot));
+}
+
 /**
  * Whether `a` comes before `b` in the page. `compareDocumentPosition` is arbitrary across a shadow
  * boundary, so each side climbs to its host until both are in the same tree.
@@ -134,7 +140,8 @@ export class PdsModal {
   @Element() el: HTMLPdsModalElement;
 
   /**
-   * Whether the modal can be dismissed by clicking the backdrop
+   * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's
+   * own close request (such as a back gesture)
    * @default true
    */
   @Prop() backdropDismiss = true;
@@ -402,6 +409,18 @@ export class PdsModal {
     }
   }
 
+  // The browser's own close request (an Escape nothing prevented, a back gesture) would close the
+  // dialog without updating `open`, so close it through hideModal() instead, or not at all.
+  private handleCancel = (e: Event) => {
+    e.preventDefault();
+    if (!this.open) return;
+    // The request reaches the top-layer dialog even when a disableTopLayer modal inside it is on
+    // top; that one closes first, as it would on Escape.
+    const top = this.innermostOpenModal();
+    const target = (top && containsComposed(this.el, top) ? top : this.el) as HTMLPdsModalElement;
+    if (target.backdropDismiss) target.hideModal();
+  };
+
   private handleBackdropClick = (e: MouseEvent) => {
     if (!this.backdropDismiss || !this.open) return;
 
@@ -587,6 +606,9 @@ export class PdsModal {
       ) {
         return;
       }
+      // An open popover inside takes Escape from its own document listener, which runs after this
+      // one, so leave the key for it. Its preventDefault() keeps the native dialog open.
+      if (this.modalRef && hasOpenPopover(this.modalRef)) return;
       // Always prevent native dialog close behavior
       e.preventDefault();
       // Only close if backdropDismiss is enabled and this is the innermost modal
@@ -669,6 +691,7 @@ export class PdsModal {
         aria-modal={this.disableTopLayer ? 'false' : 'true'}
         aria-labelledby={`${this.componentId}-heading`}
         onClick={this.handleBackdropClick}
+        onCancel={this.handleCancel}
       >
         <div
           class={{

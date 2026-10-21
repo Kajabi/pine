@@ -1844,7 +1844,7 @@ export namespace Components {
      */
     interface PdsModal {
         /**
-          * Whether the modal can be dismissed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's own close request (such as a back gesture)
           * @default true
          */
         "backdropDismiss": boolean;
@@ -5737,7 +5737,7 @@ declare namespace LocalJSX {
      */
     interface PdsModal {
         /**
-          * Whether the modal can be dismissed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's own close request (such as a back gesture)
           * @default true
          */
         "backdropDismiss"?: boolean;
