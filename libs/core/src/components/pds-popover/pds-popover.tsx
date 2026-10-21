@@ -369,10 +369,6 @@ export class PdsPopover {
       this.portalEl.id = `${this.componentId}-portal`;
     }
 
-    // Add accessibility attributes for screen readers
-    // Note: Native Popover API doesn't add a specific role, keeping semantic HTML
-    this.portalEl.setAttribute('aria-modal', 'false'); // Not a modal, can interact with rest of page
-
     // Append to body
     document.body.appendChild(this.portalEl);
 
@@ -469,7 +465,27 @@ export class PdsPopover {
     this.movedNodes = [];
   }
 
+  /** The focus style copied into a shadow root the panel opened in, which `document.head` can't reach. */
+  private shadowFocusStyle: HTMLStyleElement | null = null;
+
+  private copyFocusStylesInto(root: Node) {
+    // Outside a shadow root the document's own style applies, so drop a copy left in one.
+    if (!(root instanceof ShadowRoot)) {
+      this.shadowFocusStyle?.remove();
+      this.shadowFocusStyle = null;
+      return;
+    }
+    if (this.shadowFocusStyle?.parentNode === root || !this.portalEl) return;
+    const source = document.querySelector(`style[data-pds-popover-focus="${cssEscape(this.portalEl.id)}"]`);
+    if (!source) return;
+    this.shadowFocusStyle?.remove();
+    this.shadowFocusStyle = source.cloneNode(true) as HTMLStyleElement;
+    root.appendChild(this.shadowFocusStyle);
+  }
+
   private removePortal() {
+    this.shadowFocusStyle?.remove();
+    this.shadowFocusStyle = null;
     if (this.portalEl) {
       // Remove the portal element from DOM
       if (this.portalEl.parentNode) {
@@ -554,7 +570,8 @@ export class PdsPopover {
     // Restore content back to original slot positions
     this.restorePortalContent();
 
-    // Hide portal
+    // Hide portal. The dark-mode border set in a shadow root is worked out again on the next open.
+    this.portalEl.style.border = '';
     this.portalEl.removeAttribute('data-pds-popover-open');
     this.portalEl.style.display = 'none';
     this.portalEl.style.opacity = '0';
@@ -606,7 +623,9 @@ export class PdsPopover {
     const dialog = closest('dialog[open]', this.el) as HTMLDialogElement | null;
     if (!dialog) {
       this.unwatchDialogClose();
+      this.portalEl.style.border = '';
       if (this.portalEl.parentElement !== document.body) document.body.appendChild(this.portalEl);
+      this.copyFocusStylesInto(document);
       return;
     }
     const form = closest('form', this.el) as Element | null;
@@ -617,6 +636,10 @@ export class PdsPopover {
       dialog.appendChild(this.portalEl);
     }
     this.watchDialogClose(dialog);
+    const root = this.portalEl.getRootNode();
+    this.copyFocusStylesInto(root);
+    // In a shadow root, the copied dark-mode rule can't see a [data-theme="dark"] on the page.
+    this.portalEl.style.border = root instanceof ShadowRoot && closest('[data-theme="dark"]', this.el) ? 'var(--pine-border)' : '';
   }
 
   private forgetOpen() {
