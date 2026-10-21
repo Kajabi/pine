@@ -93,9 +93,10 @@ export class PdsText {
   @Watch('size')
   validateSize(newValue?: string) {
     // Skip when the prop is omitted or explicitly cleared (an empty string is a
-    // common "unset" sentinel). Any other unsupported value — including a
+    // common "unset" sentinel), or its attribute was removed (Stencil sets the
+    // prop to `null`). Any other unsupported value — including a
     // whitespace-only string — is a developer mistake worth warning about.
-    if (newValue === undefined || newValue === '') {
+    if (newValue == null || newValue === '') {
       return;
     }
 
@@ -149,27 +150,27 @@ export class PdsText {
     const typeClasses = `
       pds-text
       ${
-        this.align !== undefined && this.align.trim() !== ''
+        this.align != null && this.align.trim() !== ''
           ? `pds-text--align-${this.align}`
           : ''
       }
       ${
-        this.gutter !== undefined && this.gutter.trim() !== ''
+        this.gutter != null && this.gutter.trim() !== ''
           ? `pds-text--gutter-${this.gutter}`
           : ''
       }
       ${
-        this.size !== undefined && this.size.trim() !== ''
+        this.size != null && this.size.trim() !== ''
           ? `pds-text--size-${this.size}`
           : ''
       }
       ${
-        this.weight !== undefined && this.weight.trim() !== ''
+        this.weight != null && this.weight.trim() !== ''
           ? `pds-text--weight-${this.weight}`
           : ''
       }
       ${
-        this.decoration !== undefined && this.decoration.trim() !== ''
+        this.decoration != null && this.decoration.trim() !== ''
           ? `pds-text--decoration-${this.decoration}`
           : ''
       }
