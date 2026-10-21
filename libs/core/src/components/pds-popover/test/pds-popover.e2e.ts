@@ -1133,6 +1133,42 @@ describe('pds-popover in a dialog inside a shadow root', () => {
     expect(await styleInShadow()).toBe(false);
   });
 
+  it('takes its copied focus style out of the shadow root when moved out while open', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<div id="host-here"></div><dialog id="light-dialog"></dialog>');
+    await page.evaluate(() => {
+      customElements.define(
+        'dialog-host-moved',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' }).innerHTML =
+              '<dialog id="dialog"><pds-popover component-id="shadow-pop"><button slot="trigger" id="trigger">Open</button><div><button>Inside</button></div></pds-popover></dialog>';
+          }
+        },
+      );
+      const host = document.createElement('dialog-host-moved');
+      document.getElementById('host-here')!.appendChild(host);
+      (host.shadowRoot!.getElementById('dialog') as HTMLDialogElement).show();
+    });
+    await page.waitForChanges();
+    await page.evaluate(() => (document.querySelector('dialog-host-moved')!.shadowRoot!.getElementById('trigger') as HTMLElement).click());
+    await page.waitForChanges();
+    const styleInShadow = () =>
+      page.evaluate(() => !!document.querySelector('dialog-host-moved')!.shadowRoot!.querySelector('style[data-pds-popover-focus]'));
+    expect(await styleInShadow()).toBe(true);
+
+    // Moved, still open, into a light-DOM dialog: the panel follows, and the copy is dropped.
+    await page.evaluate(() => {
+      const light = document.getElementById('light-dialog') as HTMLDialogElement;
+      light.show();
+      light.appendChild(document.querySelector('dialog-host-moved')!.shadowRoot!.querySelector('pds-popover')!);
+    });
+    await page.waitForChanges();
+    expect(await page.evaluate(() => document.getElementById('shadow-pop-portal')?.parentElement?.id)).toBe('light-dialog');
+    expect(await styleInShadow()).toBe(false);
+  });
+
   it('keeps its dark-mode border when the page is dark', async () => {
     const page = await newE2EPage();
     await page.setContent('<div id="host-here"></div>');
