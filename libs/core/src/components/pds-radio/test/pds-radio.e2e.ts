@@ -217,7 +217,7 @@ describe('pds-radio image card focus', () => {
     expect(card.outline).not.toBe('none');
     expect(card.shadow).not.toBe('none');
     // The checked ring is a 2px box-shadow outside the border; the outline starts past it.
-    expect(card.offset).toBeGreaterThanOrEqual(2);
+    expect(card.offset).toBeGreaterThan(2);
   });
 
   it('has no axe violations with an image card focused', async () => {
