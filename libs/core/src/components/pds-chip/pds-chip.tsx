@@ -34,6 +34,11 @@ export class PdsChip {
 
   connectedCallback() {
     this.hostKeeper.connect(this.el);
+    // A moved chip reconnects without re-rendering, so componentDidRender won't re-bind what
+    // disconnectedCallback tore down. Before the first render there's no label, and it binds there.
+    if (this.maxWidth && this.labelTextEl) {
+      this.initTruncationTooltip();
+    }
   }
 
   /** The label span that clips; the overflow anchor for the truncation tooltip. */
