@@ -114,6 +114,14 @@ export class PdsText {
     this.validateSize(this.size);
   }
 
+  // componentDidLoad runs once, so a moved element re-binds here what disconnectedCallback tore
+  // down. Before the first render there's no contentEl yet, and componentDidLoad binds it.
+  connectedCallback() {
+    if (this.truncate && this.contentEl) {
+      this.initTruncationTooltip();
+    }
+  }
+
   componentDidLoad() {
     if (this.truncate) {
       this.initTruncationTooltip();
