@@ -234,6 +234,13 @@ label:has(input:disabled) {
     box-shadow: 0 0 0 2px var(--pine-color-primary-hover);
   }
 
+  // The input is visually hidden here, so its own focus ring can't show; the card carries it,
+  // offset past the 2px checked ring so the two stay apart.
+  &:has(input:focus-visible) {
+    outline: var(--pine-outline-focus);
+    outline-offset: calc(2px + var(--pine-border-width));
+  }
+
   label {
     color: var(--pine-color-text);
     display: flex;
