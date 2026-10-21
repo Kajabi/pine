@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../../utils/test/axe';
 
 describe('pds-table-cell', () => {
   it('renders', async () => {
@@ -125,5 +126,102 @@ describe('pds-table-cell', () => {
 
     const tooltips = await page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
     expect(tooltips).toEqual(['Very long content that cannot possibly fit in this narrow column']);
+  });
+
+  it('shows the fixed column shadow on scroll after the table sorts', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 240px;">
+        <pds-table responsive fixed-column>
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            <pds-table-head-cell>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Aardvark</pds-table-cell>
+              <pds-table-cell>aardvark.with.a.long.address@example.com</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Zebra</pds-table-cell>
+              <pds-table-cell>zebra.with.a.long.address@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+
+    // The first click sorts descending.
+    const nameHeader = await page.find('pds-table-head-cell');
+    await nameHeader.click();
+    await page.waitForChanges();
+
+    const names = await page.$$eval('pds-table-row', (rows) =>
+      rows.map((row) => row.querySelector('pds-table-cell').textContent.trim()),
+    );
+    expect(names).toEqual(['Zebra', 'Aardvark']);
+
+    await page.$eval('pds-table', (table) => new Promise<void>((resolve) => {
+      const container = table.shadowRoot.querySelector('.pds-table-responsive-container') as HTMLElement;
+      container.addEventListener('scroll', () => resolve(), { once: true });
+      container.scrollLeft = 80;
+    }));
+    await page.waitForChanges();
+
+    const shadowed = await page.$$eval('pds-table-row', (rows) =>
+      rows.map((row) => row.querySelector('pds-table-cell').classList.contains('has-scrolled')),
+    );
+    expect(shadowed).toEqual([true, true]);
+
+    // The sort icon's missing text alternative and the unfocusable scroll container belong to the
+    // head cell and pds-table, not the cell, so those two rules are off here.
+    const violations = await runAxe(page, {
+      rules: {
+        'role-img-alt': { enabled: false },
+        'scrollable-region-focusable': { enabled: false },
+      },
+    });
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('shows the fixed column shadow on scroll after a default sort on load', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 240px;">
+        <pds-table responsive fixed-column default-sort-column="Name">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            <pds-table-head-cell>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Zebra</pds-table-cell>
+              <pds-table-cell>zebra.with.a.long.address@example.com</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Aardvark</pds-table-cell>
+              <pds-table-cell>aardvark.with.a.long.address@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+
+    // The default sort runs in a frame after the table loads.
+    await page.waitForFunction(
+      () => document.querySelector('pds-table-row pds-table-cell')?.textContent.trim() === 'Aardvark',
+    );
+
+    await page.$eval('pds-table', (table) => new Promise<void>((resolve) => {
+      const container = table.shadowRoot.querySelector('.pds-table-responsive-container') as HTMLElement;
+      container.addEventListener('scroll', () => resolve(), { once: true });
+      container.scrollLeft = 80;
+    }));
+    await page.waitForChanges();
+
+    const shadowed = await page.$$eval('pds-table-row', (rows) =>
+      rows.map((row) => row.querySelector('pds-table-cell').classList.contains('has-scrolled')),
+    );
+    expect(shadowed).toEqual([true, true]);
   });
 });

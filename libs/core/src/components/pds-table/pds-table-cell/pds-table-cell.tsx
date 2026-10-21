@@ -20,10 +20,18 @@ export class PdsTableCell {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
   }
 
-  // componentDidLoad runs once, so a moved cell (a sorted row moves every cell in it) re-binds here
-  // what disconnectedCallback tore down. The tooltip binds to the host, which exists before load.
+  // Fires again each time the cell is moved (a sort re-appends every row), unlike componentDidLoad,
+  // so it re-binds what disconnectedCallback tore down. The tooltip binds to the host, which exists before load.
   connectedCallback() {
-    if (this.hasLoaded && this.truncate) {
+    if (!this.hasLoaded) return;
+
+    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    this.cleanupScrollListener();
+    if (this.needsScrollShadow) {
+      this.setupScrollListener();
+    }
+
+    if (this.truncate) {
       this.initTruncationTooltip();
     }
   }
@@ -31,7 +39,7 @@ export class PdsTableCell {
   componentDidLoad() {
     this.hasLoaded = true;
 
-    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+    if (this.needsScrollShadow) {
       // For responsive tables with fixed columns, set up scroll detection
       // This enables the first column to show a shadow when the table is scrolled horizontally
       this.setupScrollListener();
@@ -45,6 +53,10 @@ export class PdsTableCell {
   disconnectedCallback() {
     this.cleanupScrollListener();
     this.destroyTruncationTooltip();
+  }
+
+  private get needsScrollShadow(): boolean {
+    return Boolean(this.tableRef?.responsive && this.tableRef.fixedColumn);
   }
 
   private setupScrollListener() {
