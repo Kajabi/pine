@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../../utils/test/axe';
 
 describe('pds-table-cell', () => {
   it('renders', async () => {
@@ -127,5 +128,15 @@ describe('pds-table-cell', () => {
       rows.map((row) => row.querySelector('pds-table-cell').classList.contains('has-scrolled')),
     );
     expect(shadowed).toEqual([true, true]);
+
+    // The sort icon's missing text alternative and the unfocusable scroll container belong to the
+    // head cell and pds-table, not the cell, so those two rules are off here.
+    const violations = await runAxe(page, {
+      rules: {
+        'role-img-alt': { enabled: false },
+        'scrollable-region-focusable': { enabled: false },
+      },
+    });
+    expect(formatViolations(violations)).toBe('');
   });
 });
