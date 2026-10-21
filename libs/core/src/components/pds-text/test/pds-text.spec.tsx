@@ -1,4 +1,4 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { newSpecPage, SpecPage } from '@stencil/core/testing';
 import { PdsText } from '../pds-text';
 
 // Mock ResizeObserver for truncation tooltip tests
@@ -298,6 +298,61 @@ describe('pds-text', () => {
       const message = warnSpy.mock.calls[0][0] as string;
       expect(message).toContain('…');
       expect(message).not.toContain('x'.repeat(81));
+    });
+
+    it('does not warn or throw when the size attribute is removed', async () => {
+      const errorSpy = jest.spyOn(console, 'error').mockImplementation();
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text size="lg">Hi</pds-text>`,
+      });
+
+      page.root!.removeAttribute('size');
+      await page.waitForChanges();
+
+      expect(warnSpy).not.toHaveBeenCalled();
+      expect(errorSpy).not.toHaveBeenCalled();
+      errorSpy.mockRestore();
+    });
+  });
+
+  // Removing an attribute from a live element (as a DOM morph does) sets its
+  // string prop to `null`, not `undefined`.
+  describe('when an attribute is removed', () => {
+    let errorSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      errorSpy = jest.spyOn(console, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+      errorSpy.mockRestore();
+    });
+
+    const contentClasses = (page: SpecPage) =>
+      page.root!.shadowRoot!.querySelector('[part="content"]')!.className.split(/\s+/).filter(Boolean).sort();
+
+    it.each([
+      ['align', 'center'],
+      ['decoration', 'underline-dotted'],
+      ['gutter', 'md'],
+      ['size', 'lg'],
+      ['weight', 'bold'],
+    ])('drops its %s class without an error', async (attribute, value) => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text ${attribute}="${value}">Hi</pds-text>`,
+      });
+
+      page.root!.removeAttribute(attribute);
+      await page.waitForChanges();
+
+      const fresh = await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text>Hi</pds-text>`,
+      });
+      expect(contentClasses(page)).toEqual(contentClasses(fresh));
+      expect(errorSpy).not.toHaveBeenCalled();
     });
   });
 });
