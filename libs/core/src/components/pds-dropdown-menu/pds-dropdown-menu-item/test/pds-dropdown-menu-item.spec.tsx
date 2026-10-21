@@ -43,6 +43,22 @@ describe('pds-dropdown-menu-item', () => {
     expect(linkElement?.href).toBe('https://example.com');
   });
 
+  // Removing an attribute from a live element (as a DOM morph does) sets its
+  // string prop to `null`, not `undefined`.
+  it('renders as a button again when the href attribute is removed', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuItem, PdsLink],
+      html: `<pds-dropdown-menu-item href="https://example.com">Link Item</pds-dropdown-menu-item>`,
+    });
+
+    page.root!.removeAttribute('href');
+    await page.waitForChanges();
+
+    const shadowRoot = page.root!.shadowRoot!;
+    expect(shadowRoot.querySelector('pds-link')).toBeNull();
+    expect(shadowRoot.querySelector('button')).not.toBeNull();
+  });
+
   it('renders as a link with external prop when both href and external are provided', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuItem, PdsLink],

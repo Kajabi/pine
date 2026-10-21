@@ -1040,4 +1040,66 @@ describe('pds-box', () => {
       expect(element).not.toHaveClass(`pds-box--wrap-${breakpoint}`);
     });
   });
+
+  // Removing an attribute from a live element (as a DOM morph does) sets its
+  // string prop to `null`, not `undefined`.
+  describe('when an attribute is removed', () => {
+    let errorSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      errorSpy = jest.spyOn(console, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+      errorSpy.mockRestore();
+    });
+
+    const breakpoints = ['', '-xs', '-sm', '-md', '-lg', '-xl'];
+    const responsiveAttributes: [string, string][] = [
+      ['align-items', 'center'],
+      ['align-self', 'center'],
+      ['gap', 'md'],
+      ['justify-content', 'center'],
+      ['margin-block-start', 'md'],
+      ['margin-block-end', 'md'],
+      ['margin-inline-start', 'md'],
+      ['margin-inline-end', 'md'],
+      ['offset', '2'],
+      ['padding', 'md'],
+      ['padding-block-start', 'md'],
+      ['padding-block-end', 'md'],
+      ['padding-inline-start', 'md'],
+      ['padding-inline-end', 'md'],
+      ['size', '6'],
+    ];
+    const attributes: [string, string][] = [
+      ['border-radius', 'md'],
+      ['direction', 'column'],
+      ['display', 'flex'],
+      ['flex', 'grow'],
+      ['shadow', '100'],
+      ...responsiveAttributes.flatMap(([name, value]) =>
+        breakpoints.map((breakpoint): [string, string] => [`${name}${breakpoint}`, value]),
+      ),
+    ];
+
+    const classesOf = (el: Element) => Array.from(el.classList).sort();
+
+    it.each(attributes)('drops its %s class without an error', async (attribute, value) => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box ${attribute}="${value}"></pds-box>`,
+      });
+
+      page.root!.removeAttribute(attribute);
+      await page.waitForChanges();
+
+      const fresh = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box></pds-box>`,
+      });
+      expect(classesOf(page.root!)).toEqual(classesOf(fresh.root!));
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
+  });
 });
