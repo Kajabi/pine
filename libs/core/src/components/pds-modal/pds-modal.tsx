@@ -336,8 +336,16 @@ export class PdsModal {
         const openedAs = openModals.get(this.el) ?? 0;
         setTimeout(() => {
           this.updateFocusableElements();
-          // A modal opened above this one in the meantime has focus; don't take it back.
-          if (Array.from(openModals.values()).some(sequence => sequence > openedAs)) {
+          // A modal opened above this one in the meantime has focus; don't take it back. Not this
+          // modal itself (moving it gives it a new place), and not a disableTopLayer modal outside
+          // it while this one is in the top layer, which sits below it.
+          const openedAbove = Array.from(openModals).some(
+            ([modal, sequence]) =>
+              sequence > openedAs &&
+              modal !== this.el &&
+              (containsComposed(this.el, modal) || !(modal as HTMLPdsModalElement).disableTopLayer || this.disableTopLayer),
+          );
+          if (openedAbove) {
             this.pdsModalOpen.emit();
             return;
           }
