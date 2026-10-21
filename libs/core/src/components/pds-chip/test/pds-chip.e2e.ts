@@ -216,6 +216,14 @@ describe('pds-chip', () => {
     ['pds-button', '<pds-button variant="unstyled">', '</pds-button>'],
     ['button', '<button type="button">', '</button>'],
     ['link', '<a href="#">', '</a>'],
+    ['pds-link', '<pds-link href="#">', '</pds-link>'],
+    ['pds-dropdown-menu-item', '<pds-dropdown-menu-item>', '</pds-dropdown-menu-item>'],
+    // Its own <a> drops the href while disabled, so only the pds-tab entry catches it.
+    [
+      'disabled navigation pds-tab',
+      '<pds-tabs component-id="tabs" nav><pds-tab name="one" href="#one" disabled slot="tabs">',
+      '</pds-tab></pds-tabs>',
+    ],
   ])('gives a clipped label no tab stop of its own inside a %s', async (_name, open, close) => {
     const page = await newE2EPage();
     await page.setContent(
