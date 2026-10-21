@@ -418,7 +418,10 @@ export class PdsModal {
           const previous = this.previousActiveElement;
           if (previous && previous !== document.body && previous.isConnected) previous.focus?.();
           const active = deepActiveElement();
-          if (!previous || !containsComposed(previous, active) || containsComposed(this.el, active)) this.focusTopModal();
+          // document.body isn't a real restore target — it's just where focus lands when nothing
+          // was focused before opening, so landing back there never counts as a successful restore.
+          if (!previous || previous === document.body || !containsComposed(previous, active) || containsComposed(this.el, active))
+            this.focusTopModal();
         }
 
         this.pdsModalClose.emit();
