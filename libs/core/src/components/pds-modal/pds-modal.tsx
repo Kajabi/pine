@@ -87,6 +87,36 @@ function containsComposed(ancestor: Node, node: Node | null): boolean {
   return false;
 }
 
+/**
+ * Every open modal, with the order it opened in, which ranks top-layer modals and the modals
+ * inside them. Kept here rather than queried from the document, which can't see a modal inside
+ * another component's shadow root.
+ */
+const openModals = new Map<Element, number>();
+let openSequence = 0;
+
+/** Whether an open auto popover's panel sits in `root`, including inside shadow roots under it. */
+function hasOpenPopover(root: Element | ShadowRoot): boolean {
+  if (root.querySelector('[data-pds-popover-open]')) return true;
+  return Array.from(root.querySelectorAll('*')).some(el => !!el.shadowRoot && hasOpenPopover(el.shadowRoot));
+}
+
+/**
+ * Whether `a` comes before `b` in the page. `compareDocumentPosition` is arbitrary across a shadow
+ * boundary, so each side climbs to its host until both are in the same tree.
+ */
+function precedesComposed(a: Element, b: Element): boolean {
+  // A document has no host, which ends each climb.
+  for (let x: Element | undefined = a; x; x = (x.getRootNode() as ShadowRoot).host) {
+    for (let y: Element | undefined = b; y; y = (y.getRootNode() as ShadowRoot).host) {
+      if (x.getRootNode() === y.getRootNode()) {
+        return !!(x.compareDocumentPosition(y) & Node.DOCUMENT_POSITION_FOLLOWING);
+      }
+    }
+  }
+  return false;
+}
+
 /** The focused element, followed down through shadow roots to the control that has focus. */
 function deepActiveElement(): Element | null {
   let active = document.activeElement;
@@ -110,7 +140,8 @@ export class PdsModal {
   @Element() el: HTMLPdsModalElement;
 
   /**
-   * Whether the modal can be dismissed by clicking the backdrop
+   * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's
+   * own close request (such as a back gesture)
    * @default true
    */
   @Prop() backdropDismiss = true;
@@ -191,8 +222,6 @@ export class PdsModal {
 
   componentDidLoad() {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
-    // Add keyboard event listener
-    document.addEventListener('keydown', this.handleKeyDown);
 
     // @Watch('open') only fires on a later change, not the prop's initial
     // value — a modal mounted with `open` already true (static markup, or a
@@ -211,9 +240,18 @@ export class PdsModal {
     unwrapReconnectedContent(this.el.querySelector('.pds-modal'), 'dialog.pds-modal__backdrop', '.pds-modal');
   }
 
+  // Here rather than in componentDidLoad, which runs once: a modal taken out of the page and put
+  // back (a morph or a framework moving it) gets its keyboard handling, and its place among the
+  // open modals, back too. Adding the same listener twice is a no-op.
+  connectedCallback() {
+    document.addEventListener('keydown', this.handleKeyDown);
+    if (this.open && !openModals.has(this.el)) openModals.set(this.el, ++openSequence);
+  }
+
   disconnectedCallback() {
     // Clean up event listener
     document.removeEventListener('keydown', this.handleKeyDown);
+    openModals.delete(this.el);
   }
 
   @Watch('open')
@@ -286,6 +324,8 @@ export class PdsModal {
           this.modalRef.showModal();
         }
         this.open = true;
+        // Showing an open modal again doesn't move it above one opened after it.
+        if (!openModals.has(this.el)) openModals.set(this.el, ++openSequence);
 
         // Update focusable elements and set initial focus
         // Using a longer timeout to ensure all components are fully rendered
@@ -351,6 +391,7 @@ export class PdsModal {
 
         this.modalRef.close();
         this.open = false;
+        openModals.delete(this.el);
 
         // Restore focus to the element that was focused before the modal was opened
         if (
@@ -368,14 +409,27 @@ export class PdsModal {
     }
   }
 
+  // The browser's own close request (an Escape nothing prevented, a back gesture) would close the
+  // dialog without updating `open`, so close it through hideModal() instead, or not at all.
+  private handleCancel = (e: Event) => {
+    e.preventDefault();
+    if (!this.open) return;
+    // The request reaches the top-layer dialog even when a disableTopLayer modal inside it is on
+    // top; that one closes first, as it would on Escape.
+    const top = this.innermostOpenModal();
+    const target = (top && containsComposed(this.el, top) ? top : this.el) as HTMLPdsModalElement;
+    if (target.backdropDismiss) target.hideModal();
+  };
+
   private handleBackdropClick = (e: MouseEvent) => {
     if (!this.backdropDismiss || !this.open) return;
 
-    if ((e.target as HTMLElement).classList.contains('pds-modal__backdrop')) {
+    // This modal's own backdrop; a nested modal's backdrop handles its own clicks.
+    if (e.target === this.modalRef) {
       e.stopPropagation();
 
       // Only close if this is the innermost modal
-      if (this.isInnermostModal()) {
+      if (this.innermostOpenModal() === this.el) {
         this.hideModal();
       }
     }
@@ -386,7 +440,9 @@ export class PdsModal {
    */
   private getBackdropZIndex(modal: Element): number {
     const backdrop = modal.querySelector('.pds-modal__backdrop');
-    return backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
+    // `auto` (no z-index token loaded) parses to NaN, which no comparison can rank.
+    const zIndex = backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
+    return Number.isNaN(zIndex) ? 0 : zIndex;
   }
 
   /**
@@ -414,7 +470,8 @@ export class PdsModal {
    * lose that evidence depending on listener order.
    */
   private isStackedAboveOverlay(active: Element, topLayerDialog: Element | null, topLayerDialogWasModal: boolean): boolean {
-    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialogWasModal) {
+    // A top-layer dialog this modal sits inside is underneath it, not an overlay above.
+    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialogWasModal && !containsComposed(topLayerDialog, this.el)) {
       return true;
     }
 
@@ -436,29 +493,36 @@ export class PdsModal {
   }
 
   /**
-   * Checks if this modal is the innermost (highest z-index) modal
+   * The open modal that takes Escape or a backdrop click, among those with no other open modal
+   * inside them (a nested modal's backdrop can share its outer modal's z-index). A top-layer dialog
+   * (or a modal inside one) paints above anything outside it, and within the top layer the last
+   * opened is on top. Modals in the same layer (the page, or one top-layer dialog) then rank by
+   * the highest backdrop, then the one later in the page.
    */
-  private isInnermostModal(): boolean {
-    // Find all open modals
-    const openModals = Array.from(document.querySelectorAll('pds-modal')).filter(
-      modal => modal.open
-    );
-
-    if (openModals.length === 0) return false;
-
-    // Get this modal's backdrop element
-    const thisBackdrop = this.el.querySelector('.pds-modal__backdrop');
-    if (!thisBackdrop) return false;
-
-    // Get computed z-index of all open modal backdrops
-    const modalZIndexes = openModals.map(modal => this.getBackdropZIndex(modal));
-
-    // Get the highest z-index
-    const maxZIndex = Math.max(...modalZIndexes);
-
-    // Check if this modal's backdrop has the highest z-index
-    const thisZIndex = this.getBackdropZIndex(this.el);
-    return thisZIndex === maxZIndex;
+  private innermostOpenModal(): Element | null {
+    const open = Array.from(openModals.keys()).filter(modal => modal.isConnected);
+    const innermost = open.filter(modal => !open.some(other => other !== modal && containsComposed(modal, other)));
+    const byDocumentOrder = [...innermost].sort((a, b) => (precedesComposed(a, b) ? -1 : 1));
+    // A modal inside a top-layer dialog paints in that dialog's place in the top layer, even when it
+    // isn't in the top layer itself (disableTopLayer), so that dialog's open order ranks it first.
+    const rank = (modal: Element): [number, number, number, number] => {
+      const backdrop = modal.querySelector('.pds-modal__backdrop');
+      const topLayerDialog = backdrop ? (closest('dialog:modal', backdrop) as Element | null) : null;
+      const topLayerModal = topLayerDialog?.closest('pds-modal');
+      const layer = topLayerDialog ? ((topLayerModal && openModals.get(topLayerModal)) ?? 0) : 0;
+      return [topLayerDialog ? 1 : 0, layer, this.getBackdropZIndex(modal), byDocumentOrder.indexOf(modal)];
+    };
+    let top: Element | null = null;
+    let topRank: [number, number, number, number] = [-1, -1, -1, -1];
+    for (const modal of innermost) {
+      const modalRank = rank(modal);
+      const above = modalRank.findIndex((value, i) => value !== topRank[i]);
+      if (above >= 0 && modalRank[above] > topRank[above]) {
+        top = modal;
+        topRank = modalRank;
+      }
+    }
+    return top;
   }
 
   /** Whether a modal dialog other than this one sits between the focused element and this modal. */
@@ -503,13 +567,17 @@ export class PdsModal {
       // instance has had a chance to act on this keypress.
       const eventSnapshot = e as KeyboardEvent & {
         __pdsActiveElementAtEscape?: Element | null;
+        __pdsDeepActiveElementAtEscape?: Element | null;
         __pdsTopLayerDialogAtEscape?: Element | null;
         __pdsTopLayerDialogWasModalAtEscape?: boolean;
         __pdsEscapeHandledInside?: boolean;
+        __pdsInnermostModalAtEscape?: Element | null;
       };
       if (!('__pdsActiveElementAtEscape' in eventSnapshot)) {
         const activeAtDispatch = document.activeElement;
         eventSnapshot.__pdsActiveElementAtEscape = activeAtDispatch;
+        // Followed into shadow roots: for a modal inside one, document.activeElement is only the host.
+        eventSnapshot.__pdsDeepActiveElementAtEscape = deepActiveElement();
         const topLayerDialog = activeAtDispatch?.closest('dialog') ?? null;
         eventSnapshot.__pdsTopLayerDialogAtEscape = topLayerDialog;
         eventSnapshot.__pdsTopLayerDialogWasModalAtEscape = !!(topLayerDialog && topLayerDialog.matches(':modal'));
@@ -517,6 +585,9 @@ export class PdsModal {
         // multiselect in document's capture phase) has prevented it before this bubble listener.
         // Read before any modal prevents it below.
         eventSnapshot.__pdsEscapeHandledInside = e.defaultPrevented;
+        // Which modal is innermost is read once too: the inner one closing first would make its
+        // outer modal the innermost by the time that modal's listener runs.
+        eventSnapshot.__pdsInnermostModalAtEscape = this.innermostOpenModal();
       }
       if (eventSnapshot.__pdsEscapeHandledInside) return;
       // Leave Escape to a genuinely stacked-above overlay (disableTopLayer's
@@ -526,7 +597,7 @@ export class PdsModal {
         this.disableTopLayer &&
         active &&
         active !== document.body &&
-        !this.el.contains(active) &&
+        !containsComposed(this.el, eventSnapshot.__pdsDeepActiveElementAtEscape ?? active) &&
         this.isStackedAboveOverlay(
           active,
           eventSnapshot.__pdsTopLayerDialogAtEscape ?? null,
@@ -535,10 +606,13 @@ export class PdsModal {
       ) {
         return;
       }
+      // An open popover inside takes Escape from its own document listener, which runs after this
+      // one, so leave the key for it. Its preventDefault() keeps the native dialog open.
+      if (this.modalRef && hasOpenPopover(this.modalRef)) return;
       // Always prevent native dialog close behavior
       e.preventDefault();
       // Only close if backdropDismiss is enabled and this is the innermost modal
-      if (this.backdropDismiss && this.isInnermostModal()) {
+      if (this.backdropDismiss && eventSnapshot.__pdsInnermostModalAtEscape === this.el) {
         this.hideModal();
       }
       return;
@@ -617,6 +691,7 @@ export class PdsModal {
         aria-modal={this.disableTopLayer ? 'false' : 'true'}
         aria-labelledby={`${this.componentId}-heading`}
         onClick={this.handleBackdropClick}
+        onCancel={this.handleCancel}
       >
         <div
           class={{

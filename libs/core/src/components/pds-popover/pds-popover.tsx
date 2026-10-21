@@ -1,11 +1,21 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
-import { containsComposed } from '@utils/closest';
+import { closest, containsComposed } from '@utils/closest';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { PlacementType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
 import { cssEscape } from '@utils/css';
 import { limitRestores } from '@utils/keep-hydrated';
 import { PdsPopoverEventDetail } from './popover-interface';
+
+/** Open auto popovers, in the order they opened: Escape goes to the last one it applies to. */
+const openAutoPopovers: PdsPopover[] = [];
+
+/** The focused element, followed down through shadow roots to the control that has focus. */
+function deepActiveElement(): Element | null {
+  let active = document.activeElement;
+  while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+  return active;
+}
 
 /**
  * @slot trigger - The trigger element for the popover
@@ -54,7 +64,7 @@ export class PdsPopover {
   private triggerObserver: MutationObserver | null = null;
 
   /**
-   * Portal element rendered in document.body
+   * Portal element: in document.body, or in the open dialog the popover is in
    */
   private portalEl: HTMLElement | null = null;
 
@@ -268,19 +278,23 @@ export class PdsPopover {
     this.observeTrigger();
     this.linkTriggerToPortal();
 
-    // Still open after a move: the trigger moved, so the portal follows it.
+    // Still open after a move: the trigger moved, so the portal follows it, into the dialog it
+    // is in now, if any.
     if (this.active) {
+      this.placePortal();
       requestAnimationFrame(() => this.handlePopoverPositioning());
     }
   }
 
   disconnectedCallback() {
     // Moved in one operation (a DOM morph, or a framework reparenting it), the popover is
-    // already back in the page. Its portal is in <body>, untouched, so it stays open, with focus
-    // where it was.
+    // already back in the page. Its portal is outside the popover, so it stays open, with focus
+    // where it was; connectedCallback moves it to follow the popover.
     if (this.el.isConnected) return;
 
     this.isComponentMounted = false;
+    this.unwatchDialogClose();
+    this.forgetOpen();
 
     // Open, the content sits in the portal; put it back before the portal goes. Only listeners on
     // the popover itself hear the close event now, but those are the ones mirroring its state.
@@ -305,6 +319,7 @@ export class PdsPopover {
     // Clean up all event listeners
     this.removeLightDismissListeners();
     this.removeScrollAndResizeListeners();
+    document.removeEventListener('submit', this.handleSubmitFromPanel, true);
 
     // Clear any pending debounce timers
     this.clearDebounceTimers();
@@ -353,10 +368,6 @@ export class PdsPopover {
     } else {
       this.portalEl.id = `${this.componentId}-portal`;
     }
-
-    // Add accessibility attributes for screen readers
-    // Note: Native Popover API doesn't add a specific role, keeping semantic HTML
-    this.portalEl.setAttribute('aria-modal', 'false'); // Not a modal, can interact with rest of page
 
     // Append to body
     document.body.appendChild(this.portalEl);
@@ -454,7 +465,27 @@ export class PdsPopover {
     this.movedNodes = [];
   }
 
+  /** The focus style copied into a shadow root the panel opened in, which `document.head` can't reach. */
+  private shadowFocusStyle: HTMLStyleElement | null = null;
+
+  private copyFocusStylesInto(root: Node) {
+    // Outside a shadow root the document's own style applies, so drop a copy left in one.
+    if (!(root instanceof ShadowRoot)) {
+      this.shadowFocusStyle?.remove();
+      this.shadowFocusStyle = null;
+      return;
+    }
+    if (this.shadowFocusStyle?.parentNode === root || !this.portalEl) return;
+    const source = document.querySelector(`style[data-pds-popover-focus="${cssEscape(this.portalEl.id)}"]`);
+    if (!source) return;
+    this.shadowFocusStyle?.remove();
+    this.shadowFocusStyle = source.cloneNode(true) as HTMLStyleElement;
+    root.appendChild(this.shadowFocusStyle);
+  }
+
   private removePortal() {
+    this.shadowFocusStyle?.remove();
+    this.shadowFocusStyle = null;
     if (this.portalEl) {
       // Remove the portal element from DOM
       if (this.portalEl.parentNode) {
@@ -485,10 +516,14 @@ export class PdsPopover {
 
     this.linkTriggerToPortal();
 
+    this.placePortal();
+
     // Update portal content with latest slot content
     this.updatePortalContent();
 
-    // Show portal
+    // Show portal. The attribute tells a modal around it that this popover takes Escape first; only
+    // an auto popover listens for Escape.
+    if (this.popoverType === 'auto') this.portalEl.setAttribute('data-pds-popover-open', '');
     this.portalEl.style.display = 'block';
     this.portalEl.style.opacity = '1';
     this.portalEl.style.visibility = 'visible';
@@ -501,9 +536,11 @@ export class PdsPopover {
 
     // Add scroll and resize listeners for repositioning (always)
     this.addScrollAndResizeListeners();
+    document.addEventListener('submit', this.handleSubmitFromPanel, true);
 
     // Add document listeners for light dismiss and escape key (auto type only)
     if (this.popoverType === 'auto') {
+      openAutoPopovers.push(this);
       this.addLightDismissListeners();
     }
 
@@ -522,16 +559,20 @@ export class PdsPopover {
     if (!this.active || !this.portalEl) return;
 
     this.active = false;
+    this.unwatchDialogClose();
 
-    // Restoring the content drops its focus to the body, so check where focus is first.
-    const focusWasInside = this.portalEl.contains(document.activeElement);
+    // Restoring the content drops its focus to the body, so check where focus is first. In a
+    // shadow root, document.activeElement is only its host.
+    const focusWasInside = containsComposed(this.portalEl, deepActiveElement());
 
     this.linkTriggerToPortal();
 
     // Restore content back to original slot positions
     this.restorePortalContent();
 
-    // Hide portal
+    // Hide portal. The dark-mode border set in a shadow root is worked out again on the next open.
+    this.portalEl.style.border = '';
+    this.portalEl.removeAttribute('data-pds-popover-open');
     this.portalEl.style.display = 'none';
     this.portalEl.style.opacity = '0';
     this.portalEl.style.visibility = 'hidden';
@@ -543,8 +584,10 @@ export class PdsPopover {
     }
 
     // Remove all listeners
+    this.forgetOpen();
     this.removeLightDismissListeners();
     this.removeScrollAndResizeListeners();
+    document.removeEventListener('submit', this.handleSubmitFromPanel, true);
 
     // Clear any pending timers
     this.clearDebounceTimers();
@@ -569,12 +612,80 @@ export class PdsPopover {
   }
 
   /**
+   * Puts the panel where it shows above everything around the popover. In an open dialog, it goes
+   * inside it: a modal dialog sits in the top layer above the body and makes the rest of the page
+   * inert, and a non-modal one sits above it by z-index. Right after the popover, it's next in the
+   * Tab order. In another component's slot, though, it would have no slot to render in, and in a
+   * form its buttons would submit it, so there it goes at the end of the dialog.
+   */
+  private placePortal() {
+    if (!this.portalEl) return;
+    const dialog = closest('dialog[open]', this.el) as HTMLDialogElement | null;
+    if (!dialog) {
+      this.unwatchDialogClose();
+      this.portalEl.style.border = '';
+      if (this.portalEl.parentElement !== document.body) document.body.appendChild(this.portalEl);
+      this.copyFocusStylesInto(document);
+      return;
+    }
+    const form = closest('form', this.el) as Element | null;
+    const besidePopover = !this.el.parentElement?.shadowRoot && !(form && containsComposed(dialog, form));
+    if (besidePopover) {
+      if (this.el.nextElementSibling !== this.portalEl) this.el.parentNode?.insertBefore(this.portalEl, this.el.nextSibling);
+    } else if (this.portalEl.parentNode !== dialog) {
+      dialog.appendChild(this.portalEl);
+    }
+    this.watchDialogClose(dialog);
+    const root = this.portalEl.getRootNode();
+    this.copyFocusStylesInto(root);
+    // In a shadow root, the copied dark-mode rule can't see a [data-theme="dark"] on the page.
+    this.portalEl.style.border = root instanceof ShadowRoot && closest('[data-theme="dark"]', this.el) ? 'var(--pine-border)' : '';
+  }
+
+  private forgetOpen() {
+    const index = openAutoPopovers.indexOf(this);
+    if (index >= 0) openAutoPopovers.splice(index, 1);
+  }
+
+  /**
+   * Whether an Escape is this popover's. One from a dialog the popover isn't in belongs to that
+   * dialog when it's above it: a top-layer dialog or a pds-modal. A plain non-modal dialog inside
+   * the popover's modal doesn't close on Escape, so the popover takes it.
+   */
+  private takesEscapeFrom(event: KeyboardEvent) {
+    const origin = (event.composedPath?.()[0] ?? event.target) as Element;
+    const dialog = closest('dialog[open]', origin) as HTMLDialogElement | null;
+    if (!dialog || containsComposed(dialog, this.portalEl)) return true;
+    return !(dialog.classList.contains('pds-modal__backdrop') || dialog.matches(':modal'));
+  }
+
+  /**
    * Adds light dismiss listeners (click outside and escape key)
    */
   private addLightDismissListeners() {
     // Add listeners immediately - handleClickOutside will check timestamp
     document.addEventListener('click', this.boundClickOutsideHandler, true);
     document.addEventListener('keydown', this.boundEscapeKeyHandler);
+  }
+
+  /** The dialog the panel was opened in, closed along with it. */
+  private watchedDialog: HTMLDialogElement | null = null;
+
+  private onDialogClose = () => {
+    this.hide();
+  };
+
+  /** Closes the popover when the dialog it opened in closes, so it isn't left open inside. */
+  private watchDialogClose(dialog: HTMLDialogElement) {
+    if (this.watchedDialog === dialog) return;
+    this.unwatchDialogClose();
+    this.watchedDialog = dialog;
+    dialog.addEventListener('close', this.onDialogClose);
+  }
+
+  private unwatchDialogClose() {
+    this.watchedDialog?.removeEventListener('close', this.onDialogClose);
+    this.watchedDialog = null;
   }
 
   /**
@@ -584,6 +695,19 @@ export class PdsPopover {
     document.removeEventListener('click', this.boundClickOutsideHandler, true);
     document.removeEventListener('keydown', this.boundEscapeKeyHandler);
   }
+
+  /**
+   * Inside a dialog, the panel can sit in a form that wraps the dialog, which a body portal never
+   * did. A submit from the panel (a button in it, or Enter in a field in it) is stopped, so the
+   * panel behaves as it does in the body.
+   */
+  private handleSubmitFromPanel = (event: SubmitEvent) => {
+    if (!this.portalEl || !containsComposed(event.target as Node, this.portalEl)) return;
+    if (containsComposed(this.portalEl, event.submitter) || containsComposed(this.portalEl, deepActiveElement())) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
 
   /**
    * Adds scroll and resize listeners for repositioning
@@ -617,19 +741,21 @@ export class PdsPopover {
       return;
     }
 
-    const target = event.target as Node;
+    // In a shadow root, event.target is only its host.
+    const target = (event.composedPath?.()[0] ?? event.target) as Node;
 
     // A datepicker's calendar is portaled to the body: a click in the calendar of a datepicker
-    // inside this popover, in its content or its trigger, isn't outside it.
-    const calendar = (target as Element).closest?.('.pds-datepicker-calendar-portal') as
+    // inside this popover, in its content or its trigger, isn't outside it. The target can be
+    // inside the calendar's shadow root, so look up across it.
+    const calendar = closest('.pds-datepicker-calendar-portal', target as Element) as
       | (Element & { pdsDatepicker?: Element })
       | null;
     const owner = calendar?.pdsDatepicker;
     if (owner && (containsComposed(this.portalEl, owner) || containsComposed(this.triggerEl, owner))) return;
 
     // Check if click is outside both the popover portal and the trigger
-    const clickedInsidePopover = this.portalEl?.contains(target);
-    const clickedInsideTrigger = this.triggerEl?.contains(target);
+    const clickedInsidePopover = containsComposed(this.portalEl, target);
+    const clickedInsideTrigger = containsComposed(this.triggerEl, target);
 
     if (!clickedInsidePopover && !clickedInsideTrigger) {
       this.hide();
@@ -653,15 +779,19 @@ export class PdsPopover {
    * Mirrors native Popover API: Escape closes and returns focus to trigger
    */
   private handleEscapeKey(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      // Prevent default Escape behavior and stop propagation
-      // This mirrors native Popover API which handles Escape exclusively
-      event.preventDefault();
-      event.stopPropagation();
+    // A control inside that closes on Escape (a datepicker, a combobox) has handled it already.
+    if (event.key !== 'Escape' || event.defaultPrevented) return;
+    // Like the native Popover API, Escape closes only the top popover: the last one opened that
+    // it applies to. Every open popover hears it, so each checks whether it's that one.
+    const top = [...openAutoPopovers].reverse().find(popover => popover.takesEscapeFrom(event));
+    if (top !== this) return;
 
-      // Close popover and return focus to trigger
-      this.hide();
-    }
+    // Take the key, so the dialog or modal around it doesn't close too.
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Close popover and return focus to trigger
+    this.hide();
   }
 
   /**
@@ -778,6 +908,14 @@ export class PdsPopover {
 
     this.portalEl.style.top = `${top}px`;
     this.portalEl.style.left = `${left}px`;
+
+    // `position: fixed` measures from the viewport unless an ancestor becomes its containing block,
+    // as a modal dialog does with its backdrop filter. Shift by however far it landed from the spot.
+    const placed = this.portalEl.getBoundingClientRect();
+    if (Math.abs(placed.top - top) > 0.5 || Math.abs(placed.left - left) > 0.5) {
+      this.portalEl.style.top = `${2 * top - placed.top}px`;
+      this.portalEl.style.left = `${2 * left - placed.left}px`;
+    }
 
     // Reset the repositioning guard after a short delay
     setTimeout(() => {

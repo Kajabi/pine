@@ -823,11 +823,7 @@ describe('pds-popover accessibility', () => {
     await page.waitForChanges();
     const portalEl = await page.find('#my-popover-portal');
     expect(await portalEl.isVisible()).toBe(true);
-    // `aria-allowed-attr` is disabled here: the body portal sets `aria-modal="false"`
-    // on a non-dialog element — remove once popover portal ARIA is corrected.
-    const violations = await runAxe(page, {
-      rules: { 'aria-allowed-attr': { enabled: false } },
-    });
+    const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
 });
@@ -865,5 +861,379 @@ describe('pds-popover with a script fighting its trigger ARIA', () => {
     expect((await page.evaluate(() => (window as unknown as { pineWarnings: string[] }).pineWarnings)).filter((text) => text.startsWith('pds-popover: stopped restoring'))).toHaveLength(1);
     // The other script wins.
     expect(await page.$eval('#trigger', (el) => el.hasAttribute('aria-controls'))).toBe(false);
+  });
+});
+
+describe('pds-popover inside a dialog', () => {
+  const setUp = async (popoverAttrs = '') => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 800 });
+    await page.setContent(`
+      <dialog id="dialog">
+        <pds-popover component-id="pop" ${popoverAttrs}>
+          <button slot="trigger" id="pop-trigger">Open</button>
+          <div><button id="pop-inside">Inside</button></div>
+        </pds-popover>
+        <button id="after">After</button>
+      </dialog>
+    `);
+    await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).showModal());
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    return page;
+  };
+
+  const portalState = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.evaluate(() => {
+      const portal = document.getElementById('pop-portal')!;
+      return {
+        afterPopover: document.querySelector('pds-popover')!.nextElementSibling === portal,
+        inBody: portal.parentElement === document.body,
+        marked: portal.hasAttribute('data-pds-popover-open'),
+        shown: portal.style.display === 'block',
+      };
+    });
+
+  it('opens its panel right after the popover, marked open, and unmarks it on close', async () => {
+    const page = await setUp();
+    expect(await portalState(page)).toEqual({ afterPopover: true, inBody: false, marked: true, shown: true });
+
+    await (await page.find('pds-popover')).callMethod('hide');
+    await page.waitForChanges();
+    expect((await portalState(page)).marked).toBe(false);
+  });
+
+  it("doesn't mark a manual popover, which leaves Escape to the dialog", async () => {
+    const page = await setUp('popover-type="manual"');
+    expect((await portalState(page)).marked).toBe(false);
+  });
+
+  it('opens in the body again once it is outside the dialog', async () => {
+    const page = await setUp();
+    await (await page.find('pds-popover')).callMethod('hide');
+    await page.evaluate(() => {
+      (document.getElementById('dialog') as HTMLDialogElement).close();
+      document.body.appendChild(document.querySelector('pds-popover')!);
+    });
+    await page.waitForChanges();
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    expect((await portalState(page)).inBody).toBe(true);
+  });
+
+  it('has no axe violations open inside the dialog', async () => {
+    const page = await setUp();
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  // Beside the popover, the panel would be an unslotted child of pds-input, which renders nothing.
+  it("opens at the end of the dialog when the popover sits in another component's slot, and shows", async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 800 });
+    await page.setContent(`
+      <dialog id="dialog">
+        <pds-input component-id="field" label="Field">
+          <pds-popover component-id="pop" slot="action"><button slot="trigger" id="pop-trigger">Open</button><div>Panel</div></pds-popover>
+        </pds-input>
+      </dialog>
+    `);
+    await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).showModal());
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    const state = await page.evaluate(() => {
+      const portal = document.getElementById('pop-portal')!;
+      return { inDialog: portal.parentElement?.id, height: portal.getBoundingClientRect().height > 0 };
+    });
+    expect(state).toEqual({ inDialog: 'dialog', height: true });
+  });
+
+  it("opens outside a form in the dialog, so its buttons don't submit it", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <dialog id="dialog">
+        <form id="form">
+          <pds-popover component-id="pop"><button slot="trigger" type="button" id="pop-trigger">Open</button><div><button id="pop-inside">Inside</button></div></pds-popover>
+        </form>
+      </dialog>
+    `);
+    await page.evaluate(() => {
+      (document.getElementById('dialog') as HTMLDialogElement).showModal();
+      (window as unknown as { submitted: boolean }).submitted = false;
+      document.getElementById('form')!.addEventListener('submit', e => {
+        e.preventDefault();
+        (window as unknown as { submitted: boolean }).submitted = true;
+      });
+    });
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    expect(await page.evaluate(() => document.getElementById('form')!.contains(document.getElementById('pop-portal')))).toBe(false);
+
+    await (await page.find('#pop-inside')).click();
+    await page.waitForChanges();
+    expect(await page.evaluate(() => (window as unknown as { submitted: boolean }).submitted)).toBe(false);
+  });
+
+  it("doesn't submit a form that wraps the dialog, from a button or Enter in the panel", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form id="form">
+        <dialog id="dialog">
+          <pds-popover component-id="pop">
+            <button slot="trigger" type="button" id="pop-trigger">Open</button>
+            <div><input id="pop-field" /><button id="pop-inside">Inside</button></div>
+          </pds-popover>
+          <button id="real-submit">Submit</button>
+        </dialog>
+      </form>
+    `);
+    await page.evaluate(() => {
+      (document.getElementById('dialog') as HTMLDialogElement).showModal();
+      (window as unknown as { submits: number }).submits = 0;
+      document.getElementById('form')!.addEventListener('submit', e => {
+        e.preventDefault();
+        (window as unknown as { submits: number }).submits++;
+      });
+    });
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    const submits = () => page.evaluate(() => (window as unknown as { submits: number }).submits);
+
+    await (await page.find('#pop-inside')).click();
+    await page.waitForChanges();
+    expect(await submits()).toBe(0);
+
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    await page.focus('#pop-field');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    expect(await submits()).toBe(0);
+
+    // The form's own submit button still works.
+    await page.evaluate(() => (document.getElementById('real-submit') as HTMLElement).click());
+    await page.waitForChanges();
+    expect(await submits()).toBe(1);
+  });
+
+  it('takes its panel along when moved while open into another dialog, and closes with that one', async () => {
+    const page = await setUp();
+    await page.evaluate(() => {
+      const other = document.createElement('dialog');
+      other.id = 'other';
+      document.body.appendChild(other);
+      other.show();
+      other.appendChild(document.querySelector('pds-popover')!);
+    });
+    await page.waitForChanges();
+    expect(await page.evaluate(() => document.getElementById('pop-portal')!.parentElement?.id)).toBe('other');
+
+    await page.evaluate(() => (document.getElementById('other') as HTMLDialogElement).close());
+    await page.waitForChanges();
+    expect((await portalState(page)).shown).toBe(false);
+  });
+
+  it('stays open on a click inside its panel', async () => {
+    const page = await setUp();
+    await (await page.find('#pop-inside')).click();
+    await page.waitForChanges();
+    expect((await portalState(page)).shown).toBe(true);
+  });
+
+  it('goes from the trigger to the panel on Tab', async () => {
+    const page = await setUp();
+    await page.evaluate(() => (document.getElementById('pop-trigger') as HTMLElement).focus());
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('pop-inside');
+  });
+
+  it('closes when the dialog closes', async () => {
+    const page = await setUp();
+    await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).close());
+    await page.waitForChanges();
+    expect((await portalState(page)).shown).toBe(false);
+  });
+
+  it('sits beside its trigger in a scrolled dialog with a backdrop filter', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 600 });
+    await page.setContent(`
+      <dialog id="dialog" style="backdrop-filter: blur(3px); max-height: none; height: 100vh; overflow: auto; margin: 0; width: 100vw; max-width: none; padding: 0;">
+        <div style="height: 1200px"></div>
+        <pds-popover component-id="pop" placement="bottom-start">
+          <button slot="trigger" id="pop-trigger">Open</button>
+          <div>Body</div>
+        </pds-popover>
+        <div style="height: 1200px"></div>
+      </dialog>
+    `);
+    await page.evaluate(() => {
+      const dialog = document.getElementById('dialog') as HTMLDialogElement;
+      dialog.showModal();
+      dialog.scrollTop = 1000;
+    });
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const gap = await page.evaluate(() => {
+      const trigger = document.getElementById('pop-trigger')!.getBoundingClientRect();
+      const panel = document.getElementById('pop-portal')!.getBoundingClientRect();
+      return { top: Math.round(panel.top - trigger.bottom), left: Math.round(panel.left - trigger.left) };
+    });
+    expect(gap).toEqual({ top: 8, left: 0 });
+  });
+});
+
+describe('pds-popover in a dialog inside a shadow root', () => {
+  it('carries its focus style into the shadow root, and takes it away with the popover', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<div id="host-here"></div>');
+    await page.evaluate(() => {
+      customElements.define(
+        'dialog-host',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' }).innerHTML =
+              '<dialog id="dialog"><pds-popover component-id="shadow-pop"><button slot="trigger" id="trigger">Open</button><div><button>Inside</button></div></pds-popover></dialog>';
+          }
+        },
+      );
+      const host = document.createElement('dialog-host');
+      document.getElementById('host-here')!.appendChild(host);
+      (host.shadowRoot!.getElementById('dialog') as HTMLDialogElement).showModal();
+    });
+    await page.waitForChanges();
+    await page.evaluate(() => (document.querySelector('dialog-host')!.shadowRoot!.getElementById('trigger') as HTMLElement).click());
+    await page.waitForChanges();
+
+    const styleInShadow = () =>
+      page.evaluate(() => !!document.querySelector('dialog-host')!.shadowRoot!.querySelector('style[data-pds-popover-focus="shadow-pop-portal"]'));
+    expect(await styleInShadow()).toBe(true);
+    expect(formatViolations(await runAxe(page))).toBe('');
+    // The copied rule matches the portal and applies its outline on focus. A script focus also
+    // matches :focus-visible, whose browser outline is `auto`, so `solid` shows the copied rule.
+    expect(
+      await page.evaluate(() => {
+        const portal = document.querySelector('dialog-host')!.shadowRoot!.getElementById('shadow-pop-portal') as HTMLElement;
+        portal.tabIndex = -1;
+        portal.focus();
+        return getComputedStyle(portal).outlineStyle;
+      }),
+    ).toBe('solid');
+
+    await page.evaluate(() => document.querySelector('dialog-host')!.shadowRoot!.querySelector('pds-popover')!.remove());
+    await page.waitForChanges();
+    expect(await styleInShadow()).toBe(false);
+  });
+
+  it('takes its copied focus style out of the shadow root when moved out while open', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<div id="host-here"></div><dialog id="light-dialog"></dialog>');
+    await page.evaluate(() => {
+      customElements.define(
+        'dialog-host-moved',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' }).innerHTML =
+              '<dialog id="dialog"><pds-popover component-id="shadow-pop"><button slot="trigger" id="trigger">Open</button><div><button>Inside</button></div></pds-popover></dialog>';
+          }
+        },
+      );
+      const host = document.createElement('dialog-host-moved');
+      document.getElementById('host-here')!.appendChild(host);
+      (host.shadowRoot!.getElementById('dialog') as HTMLDialogElement).show();
+    });
+    await page.waitForChanges();
+    await page.evaluate(() => (document.querySelector('dialog-host-moved')!.shadowRoot!.getElementById('trigger') as HTMLElement).click());
+    await page.waitForChanges();
+    const styleInShadow = () =>
+      page.evaluate(() => !!document.querySelector('dialog-host-moved')!.shadowRoot!.querySelector('style[data-pds-popover-focus]'));
+    expect(await styleInShadow()).toBe(true);
+
+    // Moved, still open, into a light-DOM dialog: the panel follows, and the copy is dropped.
+    await page.evaluate(() => {
+      const light = document.getElementById('light-dialog') as HTMLDialogElement;
+      light.show();
+      light.appendChild(document.querySelector('dialog-host-moved')!.shadowRoot!.querySelector('pds-popover')!);
+    });
+    await page.waitForChanges();
+    expect(await page.evaluate(() => document.getElementById('shadow-pop-portal')?.parentElement?.id)).toBe('light-dialog');
+    expect(await styleInShadow()).toBe(false);
+  });
+
+  it('keeps its dark-mode border when the page is dark', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<div id="host-here"></div>');
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      customElements.define(
+        'dialog-host',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' }).innerHTML =
+              '<dialog id="dialog"><pds-popover component-id="shadow-pop"><button slot="trigger" id="trigger">Open</button><div>Inside</div></pds-popover></dialog>';
+          }
+        },
+      );
+      const host = document.createElement('dialog-host');
+      document.getElementById('host-here')!.appendChild(host);
+      (host.shadowRoot!.getElementById('dialog') as HTMLDialogElement).showModal();
+    });
+    await page.waitForChanges();
+    await page.evaluate(() => (document.querySelector('dialog-host')!.shadowRoot!.getElementById('trigger') as HTMLElement).click());
+    await page.waitForChanges();
+
+    const borderStyle = await page.evaluate(
+      () => getComputedStyle(document.querySelector('dialog-host')!.shadowRoot!.getElementById('shadow-pop-portal')!).borderTopStyle,
+    );
+    expect(borderStyle).not.toBe('none');
+
+    // Closing clears it, so a panel that next opens in the body doesn't keep it.
+    await page.evaluate(() => (document.querySelector('dialog-host')!.shadowRoot!.querySelector('pds-popover') as HTMLElement & { hide(): Promise<void> }).hide());
+    await page.waitForChanges();
+    expect(await page.evaluate(() => document.querySelector('dialog-host')!.shadowRoot!.getElementById('shadow-pop-portal')!.style.border)).toBe('');
+  });
+});
+
+describe('nested pds-popovers', () => {
+  it('closes only the inner one on Escape, then the outer one', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-popover component-id="outer">
+        <button slot="trigger" id="outer-trigger">Outer</button>
+        <div>
+          <pds-popover component-id="inner">
+            <button slot="trigger" id="inner-trigger">Inner</button>
+            <div><button id="inner-inside">Inside</button></div>
+          </pds-popover>
+        </div>
+      </pds-popover>
+    `);
+    await (await page.find('#outer-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('outer-portal')?.style.display === 'block');
+    await page.evaluate(() => (document.getElementById('inner-trigger') as HTMLElement).click());
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('inner-portal')?.style.display === 'block');
+    const shown = () =>
+      page.evaluate(() => ['outer', 'inner'].map(id => document.getElementById(`${id}-portal`)?.style.display === 'block'));
+    await page.evaluate(() => (document.getElementById('inner-inside') as HTMLElement).focus());
+
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    expect(await shown()).toEqual([true, false]);
+
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    expect(await shown()).toEqual([false, false]);
   });
 });
