@@ -14,12 +14,26 @@ export class PdsTableCell {
   private setupTimer: number | undefined;
   private setupRetries: number = 0;
   private truncationCleanup: (() => void) | null = null;
+  private hasLoaded = false;
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
   }
 
+  // componentDidLoad runs once, so a moved cell (a sorted row moves every cell in it) re-binds here
+  // what disconnectedCallback tore down.
+  connectedCallback() {
+    if (!this.hasLoaded) return;
+
+    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+      this.setupScrollListener();
+    }
+  }
+
   componentDidLoad() {
+    this.hasLoaded = true;
+
     if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
       // For responsive tables with fixed columns, set up scroll detection
       // This enables the first column to show a shadow when the table is scrolled horizontally
