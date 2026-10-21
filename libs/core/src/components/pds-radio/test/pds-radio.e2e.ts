@@ -162,6 +162,76 @@ describe('pds-radio', () => {
   });
 });
 
+// The image card hides its input, so the input's own focus ring can't show: the card carries it.
+describe('pds-radio image card focus', () => {
+  const imageGroup = `
+    <button id="before">Before</button>
+    <pds-radio-group component-id="plans" name="plans" label="Plan">
+      <pds-radio component-id="plan-a" name="plans" value="a" label="Plan A"><span slot="image">A</span></pds-radio>
+      <pds-radio component-id="plan-b" name="plans" value="b" label="Plan B"><span slot="image">B</span></pds-radio>
+    </pds-radio-group>
+  `;
+
+  const cardOutline = (page: Awaited<ReturnType<typeof newE2EPage>>, id: string) =>
+    page.evaluate((componentId) => {
+      const host = document.querySelector(`pds-radio[component-id="${componentId}"]`);
+      return host ? getComputedStyle(host).outlineStyle : '';
+    }, id);
+
+  it('rings the image card when the keyboard focuses its radio', async () => {
+    const page = await newE2EPage();
+    await page.setContent(imageGroup);
+
+    expect(await cardOutline(page, 'plan-a')).toBe('none');
+
+    await page.focus('#before');
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('plan-a');
+    expect(await cardOutline(page, 'plan-a')).not.toBe('none');
+    expect(await cardOutline(page, 'plan-b')).toBe('none');
+
+    // Tabbing back out of the group takes the ring away.
+    await page.keyboard.down('Shift');
+    await page.keyboard.press('Tab');
+    await page.keyboard.up('Shift');
+    await page.waitForChanges();
+
+    expect(await cardOutline(page, 'plan-a')).toBe('none');
+  });
+
+  it('keeps the focus ring clear of the checked ring', async () => {
+    const page = await newE2EPage();
+    await page.setContent(imageGroup);
+
+    await page.focus('#before');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+
+    const card = await page.evaluate(() => {
+      const style = getComputedStyle(document.querySelector('pds-radio[component-id="plan-a"]')!);
+      return { outline: style.outlineStyle, offset: parseFloat(style.outlineOffset), shadow: style.boxShadow };
+    });
+    expect(card.outline).not.toBe('none');
+    expect(card.shadow).not.toBe('none');
+    // The checked ring is a 2px box-shadow outside the border; the outline starts past it.
+    expect(card.offset).toBeGreaterThanOrEqual(2);
+  });
+
+  it('has no axe violations with an image card focused', async () => {
+    const page = await newE2EPage();
+    await page.setContent(imageGroup);
+    await page.focus('#before');
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});
+
 describe('pds-radio accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
