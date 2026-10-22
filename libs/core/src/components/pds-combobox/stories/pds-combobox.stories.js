@@ -40,7 +40,7 @@ const BaseTemplate = (args) => html`
   name=${args.name}
   custom-option-layouts=${args.customOptionLayouts}
   custom-trigger-content=${args.customTriggerContent}
-  disabled=${args.disabled}
+  ?disabled=${args.disabled}
   dropdown-placement=${args.dropdownPlacement}
   dropdown-mount=${args.dropdownMount}
   dropdown-width=${args.dropdownWidth}
