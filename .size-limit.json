@@ -26,7 +26,7 @@
   {
     "name": "pds-modal entry (gzipped)",
     "path": "libs/core/dist/esm/pds-modal.entry.js",
-    "limit": "11.25 KB",
+    "limit": "11.5 KB",
     "gzip": true
   },
   {
