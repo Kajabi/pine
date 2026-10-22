@@ -393,6 +393,11 @@ export class PdsMultiselect {
    * Form Associated Custom Elements API: Called when the form is disabled
    */
   formDisabledCallback(disabled: boolean) {
+    // Also fires when this element's own `disabled` attribute is merely present, even as the
+    // literal string "false" (a consumer's or React's attribute serialization can write that) —
+    // the platform treats any value as disabled, independent of fieldset state. A real disabled
+    // fieldset ancestor confirms this is genuinely that, not this element's own attribute.
+    if (disabled && !this.el.closest('fieldset[disabled]')) return;
     this.disabled = disabled;
   }
 
@@ -510,7 +515,15 @@ export class PdsMultiselect {
   protected disabledChanged(disabled: boolean) {
     this.syncSlottedTrigger();
     // A disabled control can't stay open, or its options could still be toggled.
-    if (disabled && this.isOpen) this.closeDropdown();
+    if (!disabled || !this.isOpen) return;
+
+    const activeElement = document.activeElement;
+    const focusInside = !!(this.el.shadowRoot?.contains(activeElement) || this.el.contains(activeElement));
+    this.closeDropdown();
+    // A disabled built-in trigger can't take focus back (falls to <body>, as natively); a slotted
+    // trigger without its own disabled property only gets aria-disabled and stays focusable, so
+    // focus would otherwise stay stranded on the closed panel's former content.
+    if (focusInside) this.activeTriggerEl?.focus();
   }
 
   /**
