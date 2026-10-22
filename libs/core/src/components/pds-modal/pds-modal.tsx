@@ -431,10 +431,16 @@ export class PdsModal {
     }
   }
 
-  /** Focuses the first control of the open modal now on top, whether it wraps this one or not. */
+  /**
+   * Focuses the first control of the open modal now on top, when the page behind it is inert: that
+   * modal is in the top layer (or paints there inside a top-layer one), or it wraps this one. A
+   * non-modal one over an interactive page, like a drawer, is left alone.
+   */
   private focusTopModal() {
-    const dialog = this.innermostOpenModal()?.querySelector('.pds-modal__backdrop');
+    const top = this.innermostOpenModal();
+    const dialog = top?.querySelector('.pds-modal__backdrop');
     if (!dialog) return;
+    if (!closest('dialog:modal', dialog) && !containsComposed(top, this.el)) return;
     tabbableIn(dialog).find(el => !containsComposed(this.el, el))?.focus();
   }
 
