@@ -1443,6 +1443,9 @@ describe('pds-combobox in a disabled fieldset', () => {
     await page.waitForChanges();
     expect(await state()).toEqual({ disabled: true, expanded: 'false' });
 
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+
     await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
     await page.waitForChanges();
     await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
