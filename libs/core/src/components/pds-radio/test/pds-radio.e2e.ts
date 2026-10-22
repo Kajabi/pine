@@ -162,6 +162,89 @@ describe('pds-radio', () => {
   });
 });
 
+// The image card is a row: the label and message sit beside the image, however long they are,
+// and has-border doesn't change that.
+describe('pds-radio image card layout', () => {
+  const longMessage = 'Several actions that run in order, with waits and different paths.';
+
+  const imageCard = (attrs = '') => `
+    <div style="width: 320px;">
+      <pds-radio component-id="card" label="A multi-step workflow" helper-message="${longMessage}" ${attrs}>
+        <span slot="image" style="display: block; width: 32px; height: 32px;"></span>
+      </pds-radio>
+    </div>
+  `;
+
+  const layout = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.evaluate(() => {
+      const host = document.querySelector('pds-radio')!;
+      const image = host.querySelector('.pds-radio__image-container')!.getBoundingClientRect();
+      const text = host.querySelector('.pds-radio__content-wrapper')!.getBoundingClientRect();
+      return {
+        direction: getComputedStyle(host).flexDirection,
+        textBesideImage: text.left >= image.right && text.top < image.bottom,
+        imageLeft: Math.round(image.left),
+        textLeft: Math.round(text.left),
+      };
+    });
+
+  it('keeps a long message beside the image, wrapping there', async () => {
+    const page = await newE2EPage();
+    await page.setContent(imageCard());
+
+    const result = await layout(page);
+    expect(result.direction).toBe('row');
+    expect(result.textBesideImage).toBe(true);
+  });
+
+  it('lays an image card out the same with has-border', async () => {
+    const plainPage = await newE2EPage();
+    await plainPage.setContent(imageCard());
+    const plain = await layout(plainPage);
+
+    const borderedPage = await newE2EPage();
+    await borderedPage.setContent(imageCard('has-border'));
+    expect(await borderedPage.find('pds-radio')).toHaveClass('has-border');
+    const bordered = await layout(borderedPage);
+
+    expect(bordered).toEqual(plain);
+    expect(bordered.textBesideImage).toBe(true);
+  });
+
+  it('has no axe violations with a long message', async () => {
+    const page = await newE2EPage();
+    await page.setContent(imageCard('has-border'));
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  // min-width: 0 lets the column shrink below an unbroken string's width; overflow-wrap keeps
+  // that string from then running past the card's edge.
+  it('breaks a message with no spaces instead of overflowing the card', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 320px;">
+        <pds-radio
+          component-id="card"
+          label="A multi-step workflow"
+          helper-message="https://example.com/workflows/onboarding-sequence"
+        >
+          <span slot="image" style="display: block; width: 32px; height: 32px;"></span>
+        </pds-radio>
+      </div>
+    `);
+
+    // getBoundingClientRect on the message element reflects its own box, not an unbroken word
+    // overflowing it with the default visible overflow — scrollWidth catches that overflow instead.
+    const overflows = await page.evaluate(() => {
+      const message = document.querySelector('pds-radio .pds-radio__message')!;
+      return message.scrollWidth > message.clientWidth;
+    });
+
+    expect(overflows).toBe(false);
+  });
+});
+
 describe('pds-radio accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();

@@ -200,3 +200,20 @@ TruncatedLabel.args = {
   variant: "tag",
   maxWidth: "200px",
 }
+
+const InButtonTemplate = (args) => html`
+<pds-button variant="unstyled">
+  <pds-chip
+    sentiment="${args.sentiment}"
+    variant="${args.variant}"
+    max-width="${args.maxWidth}"
+  >${args.slot}</pds-chip>
+</pds-button>`;
+
+export const TruncatedLabelInButton = InButtonTemplate.bind();
+TruncatedLabelInButton.args = {
+  sentiment: "neutral",
+  slot: "A very long label that would otherwise overflow the chip",
+  variant: "text",
+  maxWidth: "200px",
+}

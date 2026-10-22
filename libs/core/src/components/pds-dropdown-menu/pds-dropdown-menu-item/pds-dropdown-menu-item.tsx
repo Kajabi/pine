@@ -101,7 +101,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   }
 
   private renderElement() {
-    if (this.href !== undefined) {
+    if (this.href != null) {
       return (
         <pds-link
           download={this.download}

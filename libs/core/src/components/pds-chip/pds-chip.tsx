@@ -16,6 +16,10 @@ const SENTIMENT_DOT_COLORS: Record<string, string> = {
   warning: 'var(--pine-chip-color-warning-dot)',
 };
 
+// Controls a chip can sit inside that already take focus, so a clipped label adds no tab stop of its own.
+// Not any `[tabindex]`: a focusable scroll region full of chips would show every chip's tooltip at once.
+const FOCUSABLE_WRAPPER = 'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item';
+
 /**
  * @slot (default) - The chip's label text.
  * @part button
@@ -34,6 +38,11 @@ export class PdsChip {
 
   connectedCallback() {
     this.hostKeeper.connect(this.el);
+    // A moved chip reconnects without re-rendering, so componentDidRender won't re-bind what
+    // disconnectedCallback tore down. Before the first render there's no label, and it binds there.
+    if (this.maxWidth && this.labelTextEl) {
+      this.initTruncationTooltip();
+    }
   }
 
   /** The label span that clips; the overflow anchor for the truncation tooltip. */
@@ -152,6 +161,7 @@ export class PdsChip {
     this.destroyTruncationTooltip();
 
     if (this.labelTextEl) {
+      const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.labelTextEl,
@@ -160,7 +170,9 @@ export class PdsChip {
         // `<button class="pds-chip__button">`, which is already focusable and
         // bubbles focusin to the host — a tabindex on the span too would nest
         // a second tab stop inside the button.
-        manageTabIndex: this.effectiveVariant !== 'dropdown',
+        manageTabIndex: this.effectiveVariant !== 'dropdown' && !wrapper,
+        // A wrapping control sits outside the host, so its focus never reaches the host's listener.
+        focusEl: wrapper ?? this.el,
       });
       this.tooltipBoundEl = this.labelTextEl;
     }
@@ -233,7 +245,8 @@ export class PdsChip {
     // label span already sits inside `<button class="pds-chip__button">`,
     // which is already focusable and bubbles focusin to the host, so
     // initTruncationTooltip passes `manageTabIndex: false` there to avoid
-    // nesting a second tab stop inside the button.
+    // nesting a second tab stop inside the button. The same goes for a chip
+    // inside a consumer's own focusable control (FOCUSABLE_WRAPPER).
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button" part="button">
         {this.icon && <pds-icon class="pds-chip__icon" part="icon" icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
