@@ -96,6 +96,22 @@ describe('pds-checkbox', () => {
 
     expect(offset).toBeLessThan(1);
   });
+
+  it('shrinks slotted label content to fit a narrow container', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 200px">
+        <pds-checkbox component-id="default"><pds-chip slot="label" max-width="100%">A very long label that would otherwise overflow the checkbox</pds-chip></pds-checkbox>
+      </div>
+    `);
+
+    const overflow = await page.evaluate(() => {
+      const host = document.querySelector('pds-checkbox');
+      return host.querySelector('pds-chip').getBoundingClientRect().right - host.getBoundingClientRect().right;
+    });
+
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
 });
 
 describe('pds-checkbox checkmark color', () => {

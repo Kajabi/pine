@@ -276,8 +276,14 @@
 
   // Prevent checkbox label from triggering double events
   pds-checkbox {
+    min-width: var(--pine-dimension-none);
     pointer-events: none;
     width: 100%;
+  }
+
+  // Hovering a clipped chip shows its truncation tooltip
+  pds-chip {
+    pointer-events: auto;
   }
 
   &:hover:not(.pds-multiselect__option--disabled),

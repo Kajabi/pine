@@ -147,6 +147,12 @@ label {
     align-items: center;
   }
 
+  // Flex items default to min-width: auto, which keeps a long slotted label from shrinking to fit.
+  label,
+  label > span {
+    min-width: 0;
+  }
+
   input {
     margin-block-start: 0;
   }
