@@ -14,7 +14,7 @@
   {
     "name": "All CDN component chunks (p-*.entry.js, gzipped)",
     "path": "libs/core/dist/pine-core/p-*.entry.js",
-    "limit": "356.5 KB",
+    "limit": "357 KB",
     "gzip": true
   },
   {

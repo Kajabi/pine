@@ -102,7 +102,11 @@ describe('pds-toast', () => {
     // Listen for the dismiss event
     const dismissEvent = await element.spyOnEvent('pdsToastDismissed');
 
-    await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
+    // The spy records the event however soon it fires; a waitForEvent set up beside the click
+    // can miss one that fires first.
+    await dismissButton.click();
+    await page.waitForChanges();
+    for (let i = 0; i < 60 && dismissEvent.length === 0; i++) await new Promise(resolve => setTimeout(resolve, 50));
 
     expect(dismissEvent).toHaveReceivedEventTimes(1);
     expect(dismissEvent).toHaveReceivedEventDetail({ componentId: 'test-toast' });
