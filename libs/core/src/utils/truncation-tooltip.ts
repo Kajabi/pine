@@ -229,7 +229,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     } catch {
       // Fallback: position above the element with bounds checking
       if (portalEl) {
-        const rect = hostEl.getBoundingClientRect();
+        const rect = reference.getBoundingClientRect();
         const portalRect = portalEl.getBoundingClientRect();
         const padding = 5;
 
