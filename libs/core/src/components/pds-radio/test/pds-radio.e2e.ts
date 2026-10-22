@@ -217,6 +217,32 @@ describe('pds-radio image card layout', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  // min-width: 0 lets the column shrink below an unbroken string's width; overflow-wrap keeps
+  // that string from then running past the card's edge.
+  it('breaks a message with no spaces instead of overflowing the card', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 320px;">
+        <pds-radio
+          component-id="card"
+          label="A multi-step workflow"
+          helper-message="https://example.com/workflows/onboarding-sequence"
+        >
+          <span slot="image" style="display: block; width: 32px; height: 32px;"></span>
+        </pds-radio>
+      </div>
+    `);
+
+    // getBoundingClientRect on the message element reflects its own box, not an unbroken word
+    // overflowing it with the default visible overflow — scrollWidth catches that overflow instead.
+    const overflows = await page.evaluate(() => {
+      const message = document.querySelector('pds-radio .pds-radio__message')!;
+      return message.scrollWidth > message.clientWidth;
+    });
+
+    expect(overflows).toBe(false);
+  });
 });
 
 describe('pds-radio accessibility', () => {

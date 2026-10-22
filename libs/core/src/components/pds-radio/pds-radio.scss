@@ -281,10 +281,13 @@ label:has(input:disabled) {
   }
 
   // Takes the room beside the image and wraps there; at its natural width a long message
-  // would push it onto its own line under the image.
+  // would push it onto its own line under the image. overflow-wrap breaks an unbroken string
+  // (e.g. a URL) wider than that room instead of running past the card's edge, as
+  // pds-combobox.scss's trigger label does.
   .pds-radio__content-wrapper {
     flex: 1;
     min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .pds-radio__message {
