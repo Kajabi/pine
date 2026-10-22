@@ -1127,7 +1127,7 @@ You can override the automatic border detection by explicitly setting the `borde
 
 ### Nested Modals
 
-Modals can be nested, with only the topmost modal responding to escape key and backdrop clicks.
+Modals can be nested, with only the topmost modal responding to escape key and backdrop clicks. When an inner modal closes and the control that opened it is gone or can't take focus, focus moves to the first control of the modal still open around it.
 <DocCanvas
   mdxSource={{
     react: `
@@ -1496,7 +1496,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
 ## Technical Notes
 
 - The component renders a native `<dialog>` and automatically sets `aria-labelledby` based on the slotted heading content (`${componentId}-heading`). Ensure your modal header contains a semantic heading (`<pds-text tag="h2">`) so assistive technologies announce it. `aria-modal` is `true` by default and `false` when `disable-top-layer` is set (a non-modal dialog).
-- Focus trapping is managed internally. When `open` becomes `true`, the component stores the previously focused element, queries for focusable nodes inside the modal, and moves focus to the first match. When `hideModal()` is called (directly or indirectly), focus is restored to the element that opened the modal. In `disable-top-layer` mode focus is still placed on open but **not** trapped, so it can move to overlays stacked above the modal.
+- Focus trapping is managed internally. When `open` becomes `true`, the component stores the previously focused element, queries for focusable nodes inside the modal, and moves focus to the first match. When `hideModal()` is called (directly or indirectly), focus is restored to the element that opened the modal. If that element is gone or can't take focus (disabled or hidden), focus goes to the first control of the open modal now on top, as long as that modal is in the top layer or wraps the one that closed; otherwise the page isn't inert, so focus is left where the browser puts it. In `disable-top-layer` mode focus is still placed on open but **not** trapped, so it can move to overlays stacked above the modal.
 - Backdrop clicks and Escape close only the top-most open modal: a modal inside another before the one around it, then a top-layer modal before one outside it. In the top layer, the one opened last wins (a modal inside a top-layer modal ranks with it). Among modals in the same layer, the higher backdrop `z-index` wins, then the one later in the page. Use this when stacking wizard dialogs or confirm prompts.
 
 
