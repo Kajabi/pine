@@ -1375,6 +1375,12 @@ export class PdsMultiselect {
     this.toggleOption(option);
   };
 
+  // mousedown already toggled the option. Without this, a click on the chip reaches the
+  // checkbox through its label and toggles it a second time.
+  private handleOptionClick = (e: MouseEvent) => {
+    e.preventDefault();
+  };
+
   private handleOptionMouseEnter = (index: number, option: MultiselectOption) => () => {
     if (option.disabled) return;
     this.highlightedIndex = index;
@@ -1466,6 +1472,7 @@ export class PdsMultiselect {
         aria-describedby={hasAction ? `${optionId}-action-description` : undefined}
         data-index={index}
         onMouseDown={this.handleOptionMouseDown(option)}
+        onClick={this.handleOptionClick}
         onMouseEnter={this.handleOptionMouseEnter(index, option)}
       >
         {isCreateOption ? (
@@ -1482,7 +1489,7 @@ export class PdsMultiselect {
             style={{ pointerEvents: 'none' }}
           >
             {this.optionDisplay === 'chip' && (
-              <pds-chip slot="label" sentiment="subtle" dot={!!option.dotColor} dot-color={option.dotColor}>
+              <pds-chip slot="label" sentiment="subtle" dot={!!option.dotColor} dot-color={option.dotColor} max-width="100%">
                 {option.text}
               </pds-chip>
             )}

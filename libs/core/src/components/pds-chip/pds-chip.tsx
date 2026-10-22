@@ -2,7 +2,7 @@ import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
 import { HostStylingKeeper } from '@utils/attributes';
 import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
-import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { setupTruncationTooltip, type TruncationTooltipOptions } from '../../utils/truncation-tooltip';
 import { normalizeColorValue } from '../../utils/utils';
 
 const SENTIMENT_DOT_COLORS: Record<string, string> = {
@@ -18,7 +18,25 @@ const SENTIMENT_DOT_COLORS: Record<string, string> = {
 
 // Controls a chip can sit inside that already take focus, so a clipped label adds no tab stop of its own.
 // Not any `[tabindex]`: a focusable scroll region full of chips would show every chip's tooltip at once.
-const FOCUSABLE_WRAPPER = 'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item';
+const FOCUSABLE_WRAPPER = 'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item, [role="option"]';
+
+// Beside the listbox and level with the option, so the tooltip never covers the other options.
+function besideListbox(wrapper: HTMLElement | null): Pick<TruncationTooltipOptions, 'placement' | 'reference'> {
+  const option = wrapper?.matches('[role="option"]') ? wrapper : null;
+  const listbox = option?.closest('[role="listbox"]');
+  if (!option || !listbox) return {};
+
+  return {
+    placement: 'right',
+    reference: {
+      getBoundingClientRect: () => {
+        const { top, bottom, height } = option.getBoundingClientRect();
+        const { left, right, width } = listbox.getBoundingClientRect();
+        return { x: left, y: top, top, left, bottom, right, width, height };
+      },
+    },
+  };
+}
 
 /**
  * @slot (default) - The chip's label text.
@@ -173,6 +191,7 @@ export class PdsChip {
         manageTabIndex: this.effectiveVariant !== 'dropdown' && !wrapper,
         // A wrapping control sits outside the host, so its focus never reaches the host's listener.
         focusEl: wrapper ?? this.el,
+        ...besideListbox(wrapper),
       });
       this.tooltipBoundEl = this.labelTextEl;
     }

@@ -5,6 +5,7 @@ import {
   offset,
   shift,
 } from '@floating-ui/dom';
+import type { ReferenceElement } from '@floating-ui/dom';
 
 export interface TruncationTooltipOptions {
   /** The host element (for hover listeners and positioning anchor; focus listeners too, unless `focusEl` is set) */
@@ -15,6 +16,11 @@ export interface TruncationTooltipOptions {
   getTooltipText: () => string;
   /** Tooltip placement preference (default: 'top') */
   placement?: PlacementType;
+  /**
+   * What the tooltip is positioned against (default: `hostEl`). A virtual
+   * element lets it sit beside a larger region than the host.
+   */
+  reference?: ReferenceElement;
   /**
    * Whether to give `contentEl` a tab stop while its text is clipped (default: true).
    *
@@ -107,7 +113,7 @@ function isOverflowing(el: HTMLElement): boolean {
  * @returns A cleanup function that removes all listeners, observers, and DOM elements.
  */
 export function setupTruncationTooltip(options: TruncationTooltipOptions): () => void {
-  const { hostEl, contentEl, getTooltipText, placement = 'top', manageTabIndex = true, focusEl = hostEl } = options;
+  const { hostEl, contentEl, getTooltipText, placement = 'top', reference = hostEl, manageTabIndex = true, focusEl = hostEl } = options;
 
   injectStyles();
 
@@ -210,7 +216,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     if (!portalEl) return;
 
     try {
-      const { x, y } = await computePosition(hostEl, portalEl, {
+      const { x, y } = await computePosition(reference, portalEl, {
         placement,
         strategy: 'fixed',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
@@ -223,7 +229,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     } catch {
       // Fallback: position above the element with bounds checking
       if (portalEl) {
-        const rect = hostEl.getBoundingClientRect();
+        const rect = reference.getBoundingClientRect();
         const portalRect = portalEl.getBoundingClientRect();
         const padding = 5;
 
