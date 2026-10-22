@@ -274,7 +274,7 @@ describe('pds-checkbox', () => {
   it('takes its disabled state from a disabled fieldset', async () => {
     const page = await newSpecPage({
       components: [PdsCheckbox],
-      html: `<pds-checkbox component-id="in-fieldset" label="Label"></pds-checkbox>`,
+      html: `<fieldset disabled><pds-checkbox component-id="in-fieldset" label="Label"></pds-checkbox></fieldset>`,
     });
 
     page.rootInstance.formDisabledCallback(true);
@@ -282,6 +282,21 @@ describe('pds-checkbox', () => {
     expect(page.root.disabled).toBe(true);
 
     page.rootInstance.formDisabledCallback(false);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(false);
+  });
+
+  // formDisabledCallback also fires when this element's own `disabled` attribute is merely
+  // present (even as the literal string "false", which a consumer's or React's attribute
+  // serialization can write) — the platform treats any value as disabled, independent of a real
+  // fieldset. Without a disabled fieldset ancestor, that call must not disable the checkbox.
+  it("ignores formDisabledCallback(true) with no disabled fieldset ancestor", async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="no-fieldset" label="Label" disabled="false"></pds-checkbox>`,
+    });
+
+    page.rootInstance.formDisabledCallback(true);
     await page.waitForChanges();
     expect(page.root.disabled).toBe(false);
   });

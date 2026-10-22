@@ -156,3 +156,28 @@ describe('pds-checkbox after its host classes and styles are stripped', () => {
     await expectStylingSurvivesStrip(page, 'pds-checkbox');
   });
 });
+
+describe('pds-checkbox in a disabled fieldset', () => {
+  it('is disabled while the fieldset is, and comes back when it is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-checkbox component-id="in-fieldset" name="agree" label="Agree"></pds-checkbox>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+    const disabled = () =>
+      page.evaluate(() => (document.querySelector('pds-checkbox') as HTMLElement & { disabled: boolean }).disabled);
+
+    expect(await disabled()).toBe(true);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+
+    await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
+    await page.waitForChanges();
+    expect(await disabled()).toBe(false);
+  });
+});
