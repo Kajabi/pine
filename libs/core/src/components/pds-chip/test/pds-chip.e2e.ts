@@ -241,30 +241,44 @@ describe('pds-chip', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
-  it('shows the tooltip beside the listbox, level with the option, so it covers no other option', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`
-      <ul role="listbox" aria-label="Tags" style="list-style: none; margin: 100px 0 0; padding: 8px; width: 200px;">
-        <li role="option" aria-selected="false">Short</li>
-        <li role="option" aria-selected="false"><pds-chip max-width="100%">A very long label that would otherwise overflow the chip</pds-chip></li>
-      </ul>
-    `);
+  describe('inside a listbox option', () => {
+    const hoverClippedOption = async (listboxMargin: string) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <ul role="listbox" aria-label="Tags" style="list-style: none; margin: ${listboxMargin}; padding: 8px; width: 200px;">
+          <li role="option" aria-selected="false">Short</li>
+          <li role="option" aria-selected="false"><pds-chip max-width="100%">A very long label that would otherwise overflow the chip</pds-chip></li>
+        </ul>
+      `);
 
-    await (await page.find('pds-chip')).hover();
-    await page.waitForSelector('.pds-truncation-tooltip--visible');
+      await (await page.find('pds-chip')).hover();
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
 
-    const position = await page.evaluate(() => {
-      const tip = document.querySelector('.pds-truncation-tooltip').getBoundingClientRect();
-      const listbox = document.querySelector('[role="listbox"]').getBoundingClientRect();
-      const option = document.querySelector('pds-chip').closest('[role="option"]').getBoundingClientRect();
-      return {
-        besideListbox: tip.left >= listbox.right,
-        rowOffset: Math.abs(tip.top + tip.height / 2 - (option.top + option.height / 2)),
-      };
+      return page.evaluate(() => {
+        const tip = document.querySelector('.pds-truncation-tooltip').getBoundingClientRect();
+        const listbox = document.querySelector('[role="listbox"]').getBoundingClientRect();
+        const option = document.querySelector('pds-chip').closest('[role="option"]').getBoundingClientRect();
+        return {
+          rightOfListbox: tip.left >= listbox.right,
+          leftOfListbox: tip.right <= listbox.left,
+          rowOffset: Math.abs(tip.top + tip.height / 2 - (option.top + option.height / 2)),
+        };
+      });
+    };
+
+    it('shows the tooltip beside the listbox, level with the option, so it covers no other option', async () => {
+      const position = await hoverClippedOption('100px 0 0');
+
+      expect(position.rightOfListbox).toBe(true);
+      expect(position.rowOffset).toBeLessThan(1);
     });
 
-    expect(position.besideListbox).toBe(true);
-    expect(position.rowOffset).toBeLessThan(1);
+    it('flips the tooltip to the left of the listbox at the right edge of the window', async () => {
+      const position = await hoverClippedOption('100px 0 0 auto');
+
+      expect(position.leftOfListbox).toBe(true);
+      expect(position.rowOffset).toBeLessThan(1);
+    });
   });
 
   it('shows the tooltip while the wrapping control has focus, and Tab leaves without stopping on the label', async () => {
