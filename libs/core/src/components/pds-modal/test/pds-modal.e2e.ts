@@ -1114,6 +1114,30 @@ describe('pds-modal', () => {
       expect(await page.evaluate(() => document.activeElement?.id)).toBe('below-first');
     });
 
+    it('leaves focus out of a non-modal drawer underneath when the trigger is gone', async () => {
+      // The page isn't inert with only a non-modal drawer open, so there's nothing to rescue focus
+      // from, and initial-focus="none" exists so the drawer doesn't take it.
+      const page = await newE2EPage();
+      await page.setContent(`
+        <button id="open-confirm">Delete</button>
+        <pds-drawer component-id="drawer" initial-focus="none"><button id="drawer-first">Drawer first</button></pds-drawer>
+        <pds-modal component-id="confirm"><pds-modal-content><button id="confirm-button">Confirm</button></pds-modal-content></pds-modal>
+      `);
+      const drawer = await page.find('pds-drawer');
+      drawer.setProperty('open', true);
+      await page.waitForChanges();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      const confirm = await page.find('pds-modal[component-id="confirm"]');
+      await page.evaluate(() => (document.getElementById('open-confirm') as HTMLElement).focus());
+      await confirm.callMethod('showModal');
+      await page.waitForChanges();
+      await page.evaluate(() => document.getElementById('open-confirm')!.remove());
+
+      await confirm.callMethod('hideModal');
+      await page.waitForChanges();
+      expect(await page.evaluate(() => document.activeElement?.id)).not.toBe('drawer-first');
+    });
+
     it('still moves initial focus when a disableTopLayer modal opens below it during the delay', async () => {
       const page = await newE2EPage();
       await page.setContent(`
