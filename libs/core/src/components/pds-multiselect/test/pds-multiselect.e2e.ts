@@ -87,8 +87,34 @@ describe('pds-multiselect', () => {
       await page.evaluate(disable);
       await page.waitForChanges();
       expect(await isPanelOpen(page)).toBe(false);
+
+      expect(await axeViolations(page)).toBe('');
     });
   }
+
+  // The built-in trigger goes natively disabled and can't take focus back (falls to <body>, as a
+  // disabled <select> would). A slotted trigger without its own `disabled` property only gets
+  // aria-disabled and stays focusable, so it should get focus back rather than leave it stranded.
+  it('returns focus to a slotted trigger when it is disabled while open', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-multiselect component-id="tags" label="Tags">
+        <div slot="trigger" id="custom-trigger" tabindex="0" role="button">Pick tags</div>
+      </pds-multiselect>
+    `);
+    await setOptions(page, tagOptions);
+    await page.waitForChanges();
+
+    await page.click('#custom-trigger');
+    await waitForSearchFocus(page);
+    expect(await isPanelOpen(page)).toBe(true);
+
+    await page.evaluate(() => ((document.querySelector('pds-multiselect') as HTMLElement & { disabled: boolean }).disabled = true));
+    await page.waitForChanges();
+
+    expect(await isPanelOpen(page)).toBe(false);
+    expect(await activeId(page)).toBe('custom-trigger');
+  });
 
   it('renders the built-in trigger and text-only options, ignoring dot colors and action icons, and closes on Tab by default', async () => {
     const page = await newE2EPage();
