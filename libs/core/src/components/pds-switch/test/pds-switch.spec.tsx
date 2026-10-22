@@ -291,4 +291,34 @@ describe('pds-switch', () => {
     expect(slotted).toHaveClass('pds-switch--label-slot');
     expect(prop).not.toHaveClass('pds-switch--label-slot');
   });
+
+  it('takes its disabled state from a disabled fieldset', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `<fieldset disabled><pds-switch component-id="in-fieldset" label="Label"></pds-switch></fieldset>`,
+    });
+
+    page.rootInstance.formDisabledCallback(true);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(true);
+
+    page.rootInstance.formDisabledCallback(false);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(false);
+  });
+
+  // formDisabledCallback also fires when this element's own `disabled` attribute is merely
+  // present (even as the literal string "false", which a consumer's or React's attribute
+  // serialization can write) — the platform treats any value as disabled, independent of a real
+  // fieldset. Without a disabled fieldset ancestor, that call must not disable the switch.
+  it('ignores formDisabledCallback(true) with no disabled fieldset ancestor', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `<pds-switch component-id="no-fieldset" label="Label" disabled="false"></pds-switch>`,
+    });
+
+    page.rootInstance.formDisabledCallback(true);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(false);
+  });
 });

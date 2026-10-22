@@ -84,7 +84,8 @@ A multiselect component that allows users to select multiple options from a sear
 
 ### `clear() => Promise<void>`
 
-Clears all selected values and resets the component.
+Clears all selected values and resets the component. Works while disabled too, as setting a
+native control's value from script does.
 
 #### Returns
 

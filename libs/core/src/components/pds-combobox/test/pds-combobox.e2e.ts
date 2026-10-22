@@ -1417,3 +1417,39 @@ describe('pds-combobox', () => {
     });
   });
 });
+
+describe('pds-combobox in a disabled fieldset', () => {
+  it('is disabled while the fieldset is, and comes back when it is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-combobox component-id="in-fieldset" name="choice" label="Choice" trigger="button" mode="select-only">
+            <option value="a">A</option>
+          </pds-combobox>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+    const state = () =>
+      page.evaluate(() => {
+        const host = document.querySelector('pds-combobox') as HTMLElement & { disabled: boolean };
+        const trigger = host.shadowRoot!.querySelector('.pds-combobox__button-trigger')!;
+        return { disabled: host.disabled, expanded: trigger.getAttribute('aria-expanded') };
+      });
+
+    expect((await state()).disabled).toBe(true);
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    expect(await state()).toEqual({ disabled: true, expanded: 'false' });
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+
+    await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    expect(await state()).toEqual({ disabled: false, expanded: 'true' });
+  });
+});
