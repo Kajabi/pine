@@ -136,12 +136,6 @@ input {
   }
 }
 
-// Flex items default to min-width: auto, which keeps a long slotted label from shrinking to fit.
-label,
-label > span {
-  min-width: 0;
-}
-
 label {
   display: flex;
   gap: var(--pine-dimension-xs);
@@ -151,6 +145,12 @@ label {
 :host(.has-label-slot) {
   label {
     align-items: center;
+  }
+
+  // Flex items default to min-width: auto, which keeps a long slotted label from shrinking to fit.
+  label,
+  label > span {
+    min-width: 0;
   }
 
   input {
