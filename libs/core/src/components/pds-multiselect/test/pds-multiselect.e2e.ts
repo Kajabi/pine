@@ -382,7 +382,7 @@ describe('pds-multiselect', () => {
       const openNarrow = (attributes = '') =>
         openWith(`option-display="chip" style="width: 250px" ${attributes}`, [{ id: '1', text: longText, actionIcon: 'pen' }]);
 
-      it('truncates the chip and keeps the option action inside the panel', async () => {
+      it('truncates the chip and keeps the option action inside the panel, with no axe violations', async () => {
         const page = await openNarrow('option-actions');
         await page.keyboard.press('ArrowDown');
         await page.waitForChanges();
@@ -403,6 +403,7 @@ describe('pds-multiselect', () => {
         expect(layout.clipped).toBe(true);
         expect(layout.listboxOverflow).toBe(0);
         expect(layout.actionOverflow).toBeLessThan(0);
+        expect(await axeViolations(page)).toBe('');
       });
 
       it('shows the full name beside the panel on hover, without adding a tab stop', async () => {
