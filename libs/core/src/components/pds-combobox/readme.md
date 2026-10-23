@@ -64,7 +64,8 @@
 
 ### `clear() => Promise<void>`
 
-Clears the selected value and resets the component.
+Clears the selected value and resets the component. Works while disabled too, as setting a
+native control's value from script does.
 
 #### Returns
 

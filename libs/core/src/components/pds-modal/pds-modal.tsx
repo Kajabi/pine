@@ -79,6 +79,21 @@ function oneRadioPerGroup(elements: HTMLElement[]): HTMLElement[] {
   return elements.filter((el) => groupedRadio(el) === null || stops.has(el));
 }
 
+/** The controls Tab reaches in `root`, in order: visible ones, and one radio per group. */
+function tabbableIn(root: Element): HTMLElement[] {
+  const found: HTMLElement[] = [];
+  collectTabbable(root, found);
+  // checkVisibility() also drops an element inside a hidden ancestor, whose own computed
+  // display isn't none; such an element can't take focus.
+  const visible = found.filter(el => {
+    if (typeof el.checkVisibility === 'function') return el.checkVisibility({ checkVisibilityCSS: true });
+
+    const style = window.getComputedStyle(el);
+    return style.display !== 'none' && style.visibility !== 'hidden';
+  });
+  return oneRadioPerGroup(visible);
+}
+
 /** Whether `node` is `ancestor` or inside it, crossing shadow roots, which `Node.contains` doesn't. */
 function containsComposed(ancestor: Node, node: Node | null): boolean {
   for (let current = node; current; current = current instanceof ShadowRoot ? current.host : current.parentNode) {
@@ -268,19 +283,7 @@ export class PdsModal {
    */
   private updateFocusableElements() {
     if (!this.modalRef) return;
-
-    this.focusableElements = [];
-    collectTabbable(this.modalRef, this.focusableElements);
-
-    // checkVisibility() also drops an element inside a hidden ancestor, whose own computed
-    // display isn't none; such an element can't take focus, so it can't anchor the trap.
-    this.focusableElements = this.focusableElements.filter(el => {
-      if (typeof el.checkVisibility === 'function') return el.checkVisibility({ checkVisibilityCSS: true });
-
-      const style = window.getComputedStyle(el);
-      return style.display !== 'none' && style.visibility !== 'hidden';
-    });
-    this.focusableElements = oneRadioPerGroup(this.focusableElements);
+    this.focusableElements = tabbableIn(this.modalRef);
   }
 
   /**
@@ -311,8 +314,9 @@ export class PdsModal {
   async showModal() {
     if (this.modalRef) {
       try {
-        // Store the currently focused element to restore focus when modal closes
-        this.previousActiveElement = document.activeElement as HTMLElement;
+        // Store the currently focused element to restore focus when modal closes. Showing an open
+        // modal again (the open watcher does) would record a control inside it instead.
+        if (!this.modalRef.open) this.previousActiveElement = document.activeElement as HTMLElement;
 
         // showModal() promotes the dialog to the browser top layer (and makes the
         // rest of the page inert), which prevents any overlay outside the dialog
@@ -329,8 +333,22 @@ export class PdsModal {
 
         // Update focusable elements and set initial focus
         // Using a longer timeout to ensure all components are fully rendered
+        const openedAs = openModals.get(this.el) ?? 0;
         setTimeout(() => {
           this.updateFocusableElements();
+          // A modal opened above this one in the meantime has focus; don't take it back. Not this
+          // modal itself (moving it gives it a new place), and not a disableTopLayer modal outside
+          // it while this one is in the top layer, which sits below it.
+          const openedAbove = Array.from(openModals).some(
+            ([modal, sequence]) =>
+              sequence > openedAs &&
+              modal !== this.el &&
+              (containsComposed(this.el, modal) || !(modal as HTMLPdsModalElement).disableTopLayer || this.disableTopLayer),
+          );
+          if (openedAbove) {
+            this.pdsModalOpen.emit();
+            return;
+          }
           if (this.disableInitialFocus) {
             // show()/showModal() also move focus into the dialog natively (the
             // HTML spec's "dialog focusing steps") — that native step isn't
@@ -393,13 +411,17 @@ export class PdsModal {
         this.open = false;
         openModals.delete(this.el);
 
-        // Restore focus to the element that was focused before the modal was opened
-        if (
-          !focusAlreadyMovedElsewhere &&
-          this.previousActiveElement &&
-          typeof this.previousActiveElement.focus === 'function'
-        ) {
-          this.previousActiveElement.focus();
+        // Restore focus to the element that was focused before the modal was opened. If that's
+        // gone or can't take focus (disabled, hidden, or nothing), fall back to the open modal now
+        // on top, so focus doesn't land on an inert page behind it.
+        if (!focusAlreadyMovedElsewhere) {
+          const previous = this.previousActiveElement;
+          if (previous && previous !== document.body && previous.isConnected) previous.focus?.();
+          const active = deepActiveElement();
+          // document.body isn't a real restore target — it's just where focus lands when nothing
+          // was focused before opening, so landing back there never counts as a successful restore.
+          if (!previous || previous === document.body || !containsComposed(previous, active) || containsComposed(this.el, active))
+            this.focusTopModal();
         }
 
         this.pdsModalClose.emit();
@@ -408,6 +430,20 @@ export class PdsModal {
       }
     }
   }
+
+  /**
+   * Focuses the first control of the open modal now on top, when the page behind it is inert: that
+   * modal is in the top layer (or paints there inside a top-layer one), or it wraps this one. A
+   * non-modal one over an interactive page, like a drawer, is left alone.
+   */
+  private focusTopModal() {
+    const top = this.innermostOpenModal();
+    const dialog = top?.querySelector('.pds-modal__backdrop');
+    if (!dialog) return;
+    if (!closest('dialog:modal', dialog) && !containsComposed(top, this.el)) return;
+    tabbableIn(dialog).find(el => !containsComposed(this.el, el))?.focus();
+  }
+
 
   // The browser's own close request (an Escape nothing prevented, a back gesture) would close the
   // dialog without updating `open`, so close it through hideModal() instead, or not at all.

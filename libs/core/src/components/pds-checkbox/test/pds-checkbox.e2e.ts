@@ -96,6 +96,22 @@ describe('pds-checkbox', () => {
 
     expect(offset).toBeLessThan(1);
   });
+
+  it('shrinks slotted label content to fit a narrow container', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 200px">
+        <pds-checkbox component-id="default"><pds-chip slot="label" max-width="100%">A very long label that would otherwise overflow the checkbox</pds-chip></pds-checkbox>
+      </div>
+    `);
+
+    const overflow = await page.evaluate(() => {
+      const host = document.querySelector('pds-checkbox');
+      return host.querySelector('pds-chip').getBoundingClientRect().right - host.getBoundingClientRect().right;
+    });
+
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
 });
 
 describe('pds-checkbox checkmark color', () => {
@@ -154,5 +170,30 @@ describe('pds-checkbox after its host classes and styles are stripped', () => {
     await page.setContent('<pds-checkbox class="consumer" component-id="check" label="Check" invalid indeterminate></pds-checkbox>');
 
     await expectStylingSurvivesStrip(page, 'pds-checkbox');
+  });
+});
+
+describe('pds-checkbox in a disabled fieldset', () => {
+  it('is disabled while the fieldset is, and comes back when it is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-checkbox component-id="in-fieldset" name="agree" label="Agree"></pds-checkbox>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+    const disabled = () =>
+      page.evaluate(() => (document.querySelector('pds-checkbox') as HTMLElement & { disabled: boolean }).disabled);
+
+    expect(await disabled()).toBe(true);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+
+    await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
+    await page.waitForChanges();
+    expect(await disabled()).toBe(false);
   });
 });

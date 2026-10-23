@@ -23,6 +23,12 @@
   }
 }
 
+// Only the backdrop lets clicks through. Besides the panel, the dialog holds what's portaled into it
+// as the nearest one, such as a combobox's dropdown or a popover in a form.
+.pds-drawer__modal:not(.pds-drawer__modal--modal) > .pds-modal__backdrop > * {
+  pointer-events: auto;
+}
+
 // Out of the top layer (a non-modal drawer) the modal blurs from a ::before layer behind it
 // instead of the backdrop's own filter. [aria-modal] outranks the modal's rule, whichever
 // component's stylesheet loads last.

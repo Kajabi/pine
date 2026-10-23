@@ -733,18 +733,18 @@ export class PdsBox {
 
   render() {
     const boxClasses = `
-    ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
-    ${this.alignItemsXs !== undefined && this.alignItemsXs.trim() !== '' ? `pds-align-items-xs-${this.alignItemsXs}` : ''}
-    ${this.alignItemsSm !== undefined && this.alignItemsSm.trim() !== '' ? `pds-align-items-sm-${this.alignItemsSm}` : ''}
-    ${this.alignItemsMd !== undefined && this.alignItemsMd.trim() !== '' ? `pds-align-items-md-${this.alignItemsMd}` : ''}
-    ${this.alignItemsLg !== undefined && this.alignItemsLg.trim() !== '' ? `pds-align-items-lg-${this.alignItemsLg}` : ''}
-    ${this.alignItemsXl !== undefined && this.alignItemsXl.trim() !== '' ? `pds-align-items-xl-${this.alignItemsXl}` : ''}
-    ${this.alignSelf !== undefined && this.alignSelf.trim() !== '' ? `pds-align-self-${this.alignSelf}` : ''}
-    ${this.alignSelfXs !== undefined && this.alignSelfXs.trim() !== '' ? `pds-align-self-xs-${this.alignSelfXs}` : ''}
-    ${this.alignSelfSm !== undefined && this.alignSelfSm.trim() !== '' ? `pds-align-self-sm-${this.alignSelfSm}` : ''}
-    ${this.alignSelfMd !== undefined && this.alignSelfMd.trim() !== '' ? `pds-align-self-md-${this.alignSelfMd}` : ''}
-    ${this.alignSelfLg !== undefined && this.alignSelfLg.trim() !== '' ? `pds-align-self-lg-${this.alignSelfLg}` : ''}
-    ${this.alignSelfXl !== undefined && this.alignSelfXl.trim() !== '' ? `pds-align-self-xl-${this.alignSelfXl}` : ''}
+    ${this.alignItems != null && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
+    ${this.alignItemsXs != null && this.alignItemsXs.trim() !== '' ? `pds-align-items-xs-${this.alignItemsXs}` : ''}
+    ${this.alignItemsSm != null && this.alignItemsSm.trim() !== '' ? `pds-align-items-sm-${this.alignItemsSm}` : ''}
+    ${this.alignItemsMd != null && this.alignItemsMd.trim() !== '' ? `pds-align-items-md-${this.alignItemsMd}` : ''}
+    ${this.alignItemsLg != null && this.alignItemsLg.trim() !== '' ? `pds-align-items-lg-${this.alignItemsLg}` : ''}
+    ${this.alignItemsXl != null && this.alignItemsXl.trim() !== '' ? `pds-align-items-xl-${this.alignItemsXl}` : ''}
+    ${this.alignSelf != null && this.alignSelf.trim() !== '' ? `pds-align-self-${this.alignSelf}` : ''}
+    ${this.alignSelfXs != null && this.alignSelfXs.trim() !== '' ? `pds-align-self-xs-${this.alignSelfXs}` : ''}
+    ${this.alignSelfSm != null && this.alignSelfSm.trim() !== '' ? `pds-align-self-sm-${this.alignSelfSm}` : ''}
+    ${this.alignSelfMd != null && this.alignSelfMd.trim() !== '' ? `pds-align-self-md-${this.alignSelfMd}` : ''}
+    ${this.alignSelfLg != null && this.alignSelfLg.trim() !== '' ? `pds-align-self-lg-${this.alignSelfLg}` : ''}
+    ${this.alignSelfXl != null && this.alignSelfXl.trim() !== '' ? `pds-align-self-xl-${this.alignSelfXl}` : ''}
     ${this.auto ? 'pds-box--auto' : ''}
     ${this.autoXs ? 'pds-box--auto-xs' : ''}
     ${this.autoSm ? 'pds-box--auto-sm' : ''}
@@ -760,101 +760,101 @@ export class PdsBox {
     ${this.borderInlineStart === false ? 'pds-box--border-inline-start-none' : ''}
     ${this.borderInlineEnd === true ? 'pds-box--border-inline-end' : ''}
     ${this.borderInlineEnd === false ? 'pds-box--border-inline-end-none' : ''}
-    ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
-    ${this.direction !== undefined && this.direction.trim() !== '' ? `pds-box-direction-${this.direction}` : ''}
-    ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
+    ${this.borderRadius != null && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
+    ${this.direction != null && this.direction.trim() !== '' ? `pds-box-direction-${this.direction}` : ''}
+    ${this.display != null && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
     ${this.fit ? 'pds-box--fit' : ''}
     ${this.fitXs ? 'pds-box--fit-xs' : ''}
     ${this.fitSm ? 'pds-box--fit-sm' : ''}
     ${this.fitMd ? 'pds-box--fit-md' : ''}
     ${this.fitLg ? 'pds-box--fit-lg' : ''}
     ${this.fitXl ? 'pds-box--fit-xl' : ''}
-    ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
-    ${this.gapXs !== undefined && this.gapXs.trim() !== '' ? `pds-box-gap-xs-${this.gapXs}` : ''}
-    ${this.gapSm !== undefined && this.gapSm.trim() !== '' ? `pds-box-gap-sm-${this.gapSm}` : ''}
-    ${this.gapMd !== undefined && this.gapMd.trim() !== '' ? `pds-box-gap-md-${this.gapMd}` : ''}
-    ${this.gapLg !== undefined && this.gapLg.trim() !== '' ? `pds-box-gap-lg-${this.gapLg}` : ''}
-    ${this.gapXl !== undefined && this.gapXl.trim() !== '' ? `pds-box-gap-xl-${this.gapXl}` : ''}
+    ${this.gap != null && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
+    ${this.gapXs != null && this.gapXs.trim() !== '' ? `pds-box-gap-xs-${this.gapXs}` : ''}
+    ${this.gapSm != null && this.gapSm.trim() !== '' ? `pds-box-gap-sm-${this.gapSm}` : ''}
+    ${this.gapMd != null && this.gapMd.trim() !== '' ? `pds-box-gap-md-${this.gapMd}` : ''}
+    ${this.gapLg != null && this.gapLg.trim() !== '' ? `pds-box-gap-lg-${this.gapLg}` : ''}
+    ${this.gapXl != null && this.gapXl.trim() !== '' ? `pds-box-gap-xl-${this.gapXl}` : ''}
     ${this.wrap ? 'pds-box--wrap' : ''}
     ${this.wrapXs ? 'pds-box--wrap-xs' : ''}
     ${this.wrapSm ? 'pds-box--wrap-sm' : ''}
     ${this.wrapMd ? 'pds-box--wrap-md' : ''}
     ${this.wrapLg ? 'pds-box--wrap-lg' : ''}
     ${this.wrapXl ? 'pds-box--wrap-xl' : ''}
-    ${this.flex !== undefined && this.flex.trim() !== '' && ['none', 'grow', 'shrink'].includes(this.flex) ? `pds-box--flex-${this.flex}` : ''}
-    ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
-    ${this.justifyContentXs !== undefined && this.justifyContentXs.trim() !== '' ? `pds-justify-content-xs-${this.justifyContentXs}` : ''}
-    ${this.justifyContentSm !== undefined && this.justifyContentSm.trim() !== '' ? `pds-justify-content-sm-${this.justifyContentSm}` : ''}
-    ${this.justifyContentMd !== undefined && this.justifyContentMd.trim() !== '' ? `pds-justify-content-md-${this.justifyContentMd}` : ''}
-    ${this.justifyContentLg !== undefined && this.justifyContentLg.trim() !== '' ? `pds-justify-content-lg-${this.justifyContentLg}` : ''}
-    ${this.justifyContentXl !== undefined && this.justifyContentXl.trim() !== '' ? `pds-justify-content-xl-${this.justifyContentXl}` : ''}
-    ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
-    ${this.marginBlockStartXs !== undefined && this.marginBlockStartXs.trim() !== '' ? `pds-margin-block-start-xs-${this.marginBlockStartXs}` : ''}
-    ${this.marginBlockStartSm !== undefined && this.marginBlockStartSm.trim() !== '' ? `pds-margin-block-start-sm-${this.marginBlockStartSm}` : ''}
-    ${this.marginBlockStartMd !== undefined && this.marginBlockStartMd.trim() !== '' ? `pds-margin-block-start-md-${this.marginBlockStartMd}` : ''}
-    ${this.marginBlockStartLg !== undefined && this.marginBlockStartLg.trim() !== '' ? `pds-margin-block-start-lg-${this.marginBlockStartLg}` : ''}
-    ${this.marginBlockStartXl !== undefined && this.marginBlockStartXl.trim() !== '' ? `pds-margin-block-start-xl-${this.marginBlockStartXl}` : ''}
-    ${this.marginInlineStart !== undefined && this.marginInlineStart.trim() !== '' ? `pds-margin-inline-start-${this.marginInlineStart}` : ''}
-    ${this.marginInlineStartXs !== undefined && this.marginInlineStartXs.trim() !== '' ? `pds-margin-inline-start-xs-${this.marginInlineStartXs}` : ''}
-    ${this.marginInlineStartSm !== undefined && this.marginInlineStartSm.trim() !== '' ? `pds-margin-inline-start-sm-${this.marginInlineStartSm}` : ''}
-    ${this.marginInlineStartMd !== undefined && this.marginInlineStartMd.trim() !== '' ? `pds-margin-inline-start-md-${this.marginInlineStartMd}` : ''}
-    ${this.marginInlineStartLg !== undefined && this.marginInlineStartLg.trim() !== '' ? `pds-margin-inline-start-lg-${this.marginInlineStartLg}` : ''}
-    ${this.marginInlineStartXl !== undefined && this.marginInlineStartXl.trim() !== '' ? `pds-margin-inline-start-xl-${this.marginInlineStartXl}` : ''}
-    ${this.marginInlineEnd !== undefined && this.marginInlineEnd.trim() !== '' ? `pds-margin-inline-end-${this.marginInlineEnd}` : ''}
-    ${this.marginInlineEndXs !== undefined && this.marginInlineEndXs.trim() !== '' ? `pds-margin-inline-end-xs-${this.marginInlineEndXs}` : ''}
-    ${this.marginInlineEndSm !== undefined && this.marginInlineEndSm.trim() !== '' ? `pds-margin-inline-end-sm-${this.marginInlineEndSm}` : ''}
-    ${this.marginInlineEndMd !== undefined && this.marginInlineEndMd.trim() !== '' ? `pds-margin-inline-end-md-${this.marginInlineEndMd}` : ''}
-    ${this.marginInlineEndLg !== undefined && this.marginInlineEndLg.trim() !== '' ? `pds-margin-inline-end-lg-${this.marginInlineEndLg}` : ''}
-    ${this.marginInlineEndXl !== undefined && this.marginInlineEndXl.trim() !== '' ? `pds-margin-inline-end-xl-${this.marginInlineEndXl}` : ''}
-    ${this.marginBlockEnd !== undefined && this.marginBlockEnd.trim() !== '' ? `pds-margin-block-end-${this.marginBlockEnd}` : ''}
-    ${this.marginBlockEndXs !== undefined && this.marginBlockEndXs.trim() !== '' ? `pds-margin-block-end-xs-${this.marginBlockEndXs}` : ''}
-    ${this.marginBlockEndSm !== undefined && this.marginBlockEndSm.trim() !== '' ? `pds-margin-block-end-sm-${this.marginBlockEndSm}` : ''}
-    ${this.marginBlockEndMd !== undefined && this.marginBlockEndMd.trim() !== '' ? `pds-margin-block-end-md-${this.marginBlockEndMd}` : ''}
-    ${this.marginBlockEndLg !== undefined && this.marginBlockEndLg.trim() !== '' ? `pds-margin-block-end-lg-${this.marginBlockEndLg}` : ''}
-    ${this.marginBlockEndXl !== undefined && this.marginBlockEndXl.trim() !== '' ? `pds-margin-block-end-xl-${this.marginBlockEndXl}` : ''}
-    ${this.offset !== undefined && this.offset.trim() !== '' ? `pds-box-offset-${this.offset}` : ''}
-    ${this.offsetXs !== undefined && this.offsetXs.trim() !== '' ? `pds-box-offset-xs-${this.offsetXs}` : ''}
-    ${this.offsetSm !== undefined && this.offsetSm.trim() !== '' ? `pds-box-offset-sm-${this.offsetSm}` : ''}
-    ${this.offsetMd !== undefined && this.offsetMd.trim() !== '' ? `pds-box-offset-md-${this.offsetMd}` : ''}
-    ${this.offsetLg !== undefined && this.offsetLg.trim() !== '' ? `pds-box-offset-lg-${this.offsetLg}` : ''}
-    ${this.offsetXl !== undefined && this.offsetXl.trim() !== '' ? `pds-box-offset-xl-${this.offsetXl}` : ''}
-    ${this.padding !== undefined && this.padding.trim() !== '' ? `pds-padding-${this.padding}` : ''}
-    ${this.paddingXs !== undefined && this.paddingXs.trim() !== '' ? `pds-padding-xs-${this.paddingXs}` : ''}
-    ${this.paddingSm !== undefined && this.paddingSm.trim() !== '' ? `pds-padding-sm-${this.paddingSm}` : ''}
-    ${this.paddingMd !== undefined && this.paddingMd.trim() !== '' ? `pds-padding-md-${this.paddingMd}` : ''}
-    ${this.paddingLg !== undefined && this.paddingLg.trim() !== '' ? `pds-padding-lg-${this.paddingLg}` : ''}
-    ${this.paddingXl !== undefined && this.paddingXl.trim() !== '' ? `pds-padding-xl-${this.paddingXl}` : ''}
-    ${this.paddingBlockStart !== undefined && this.paddingBlockStart.trim() !== '' ? `pds-padding-block-start-${this.paddingBlockStart}` : ''}
-    ${this.paddingBlockStartXs !== undefined && this.paddingBlockStartXs.trim() !== '' ? `pds-padding-block-start-xs-${this.paddingBlockStartXs}` : ''}
-    ${this.paddingBlockStartSm !== undefined && this.paddingBlockStartSm.trim() !== '' ? `pds-padding-block-start-sm-${this.paddingBlockStartSm}` : ''}
-    ${this.paddingBlockStartMd !== undefined && this.paddingBlockStartMd.trim() !== '' ? `pds-padding-block-start-md-${this.paddingBlockStartMd}` : ''}
-    ${this.paddingBlockStartLg !== undefined && this.paddingBlockStartLg.trim() !== '' ? `pds-padding-block-start-lg-${this.paddingBlockStartLg}` : ''}
-    ${this.paddingBlockStartXl !== undefined && this.paddingBlockStartXl.trim() !== '' ? `pds-padding-block-start-xl-${this.paddingBlockStartXl}` : ''}
-    ${this.paddingBlockEnd !== undefined && this.paddingBlockEnd.trim() !== '' ? `pds-padding-block-end-${this.paddingBlockEnd}` : ''}
-    ${this.paddingBlockEndXs !== undefined && this.paddingBlockEndXs.trim() !== '' ? `pds-padding-block-end-xs-${this.paddingBlockEndXs}` : ''}
-    ${this.paddingBlockEndSm !== undefined && this.paddingBlockEndSm.trim() !== '' ? `pds-padding-block-end-sm-${this.paddingBlockEndSm}` : ''}
-    ${this.paddingBlockEndMd !== undefined && this.paddingBlockEndMd.trim() !== '' ? `pds-padding-block-end-md-${this.paddingBlockEndMd}` : ''}
-    ${this.paddingBlockEndLg !== undefined && this.paddingBlockEndLg.trim() !== '' ? `pds-padding-block-end-lg-${this.paddingBlockEndLg}` : ''}
-    ${this.paddingBlockEndXl !== undefined && this.paddingBlockEndXl.trim() !== '' ? `pds-padding-block-end-xl-${this.paddingBlockEndXl}` : ''}
-    ${this.paddingInlineStart !== undefined && this.paddingInlineStart.trim() !== '' ? `pds-padding-inline-start-${this.paddingInlineStart}` : ''}
-    ${this.paddingInlineStartXs !== undefined && this.paddingInlineStartXs.trim() !== '' ? `pds-padding-inline-start-xs-${this.paddingInlineStartXs}` : ''}
-    ${this.paddingInlineStartSm !== undefined && this.paddingInlineStartSm.trim() !== '' ? `pds-padding-inline-start-sm-${this.paddingInlineStartSm}` : ''}
-    ${this.paddingInlineStartMd !== undefined && this.paddingInlineStartMd.trim() !== '' ? `pds-padding-inline-start-md-${this.paddingInlineStartMd}` : ''}
-    ${this.paddingInlineStartLg !== undefined && this.paddingInlineStartLg.trim() !== '' ? `pds-padding-inline-start-lg-${this.paddingInlineStartLg}` : ''}
-    ${this.paddingInlineStartXl !== undefined && this.paddingInlineStartXl.trim() !== '' ? `pds-padding-inline-start-xl-${this.paddingInlineStartXl}` : ''}
-    ${this.paddingInlineEnd !== undefined && this.paddingInlineEnd.trim() !== '' ? `pds-padding-inline-end-${this.paddingInlineEnd}` : ''}
-    ${this.paddingInlineEndXs !== undefined && this.paddingInlineEndXs.trim() !== '' ? `pds-padding-inline-end-xs-${this.paddingInlineEndXs}` : ''}
-    ${this.paddingInlineEndSm !== undefined && this.paddingInlineEndSm.trim() !== '' ? `pds-padding-inline-end-sm-${this.paddingInlineEndSm}` : ''}
-    ${this.paddingInlineEndMd !== undefined && this.paddingInlineEndMd.trim() !== '' ? `pds-padding-inline-end-md-${this.paddingInlineEndMd}` : ''}
-    ${this.paddingInlineEndLg !== undefined && this.paddingInlineEndLg.trim() !== '' ? `pds-padding-inline-end-lg-${this.paddingInlineEndLg}` : ''}
-    ${this.paddingInlineEndXl !== undefined && this.paddingInlineEndXl.trim() !== '' ? `pds-padding-inline-end-xl-${this.paddingInlineEndXl}` : ''}
-    ${this.shadow !== undefined && this.shadow.trim() !== '' ? `pds-shadow-${this.shadow}` : ''}
-    ${this.size !== undefined && this.size.trim() !== '' ? `pds-box pds-box-${this.size}` : ''}
-    ${this.sizeXs !== undefined && this.sizeXs.trim() !== '' ? `pds-box-xs-${this.sizeXs}` : ''}
-    ${this.sizeSm !== undefined && this.sizeSm.trim() !== '' ? `pds-box-sm-${this.sizeSm}` : ''}
-    ${this.sizeMd !== undefined && this.sizeMd.trim() !== '' ? `pds-box-md-${this.sizeMd}` : ''}
-    ${this.sizeLg !== undefined && this.sizeLg.trim() !== '' ? `pds-box-lg-${this.sizeLg}` : ''}
-    ${this.sizeXl !== undefined && this.sizeXl.trim() !== '' ? `pds-box-xl-${this.sizeXl}` : ''}
+    ${this.flex != null && this.flex.trim() !== '' && ['none', 'grow', 'shrink'].includes(this.flex) ? `pds-box--flex-${this.flex}` : ''}
+    ${this.justifyContent != null && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
+    ${this.justifyContentXs != null && this.justifyContentXs.trim() !== '' ? `pds-justify-content-xs-${this.justifyContentXs}` : ''}
+    ${this.justifyContentSm != null && this.justifyContentSm.trim() !== '' ? `pds-justify-content-sm-${this.justifyContentSm}` : ''}
+    ${this.justifyContentMd != null && this.justifyContentMd.trim() !== '' ? `pds-justify-content-md-${this.justifyContentMd}` : ''}
+    ${this.justifyContentLg != null && this.justifyContentLg.trim() !== '' ? `pds-justify-content-lg-${this.justifyContentLg}` : ''}
+    ${this.justifyContentXl != null && this.justifyContentXl.trim() !== '' ? `pds-justify-content-xl-${this.justifyContentXl}` : ''}
+    ${this.marginBlockStart != null && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
+    ${this.marginBlockStartXs != null && this.marginBlockStartXs.trim() !== '' ? `pds-margin-block-start-xs-${this.marginBlockStartXs}` : ''}
+    ${this.marginBlockStartSm != null && this.marginBlockStartSm.trim() !== '' ? `pds-margin-block-start-sm-${this.marginBlockStartSm}` : ''}
+    ${this.marginBlockStartMd != null && this.marginBlockStartMd.trim() !== '' ? `pds-margin-block-start-md-${this.marginBlockStartMd}` : ''}
+    ${this.marginBlockStartLg != null && this.marginBlockStartLg.trim() !== '' ? `pds-margin-block-start-lg-${this.marginBlockStartLg}` : ''}
+    ${this.marginBlockStartXl != null && this.marginBlockStartXl.trim() !== '' ? `pds-margin-block-start-xl-${this.marginBlockStartXl}` : ''}
+    ${this.marginInlineStart != null && this.marginInlineStart.trim() !== '' ? `pds-margin-inline-start-${this.marginInlineStart}` : ''}
+    ${this.marginInlineStartXs != null && this.marginInlineStartXs.trim() !== '' ? `pds-margin-inline-start-xs-${this.marginInlineStartXs}` : ''}
+    ${this.marginInlineStartSm != null && this.marginInlineStartSm.trim() !== '' ? `pds-margin-inline-start-sm-${this.marginInlineStartSm}` : ''}
+    ${this.marginInlineStartMd != null && this.marginInlineStartMd.trim() !== '' ? `pds-margin-inline-start-md-${this.marginInlineStartMd}` : ''}
+    ${this.marginInlineStartLg != null && this.marginInlineStartLg.trim() !== '' ? `pds-margin-inline-start-lg-${this.marginInlineStartLg}` : ''}
+    ${this.marginInlineStartXl != null && this.marginInlineStartXl.trim() !== '' ? `pds-margin-inline-start-xl-${this.marginInlineStartXl}` : ''}
+    ${this.marginInlineEnd != null && this.marginInlineEnd.trim() !== '' ? `pds-margin-inline-end-${this.marginInlineEnd}` : ''}
+    ${this.marginInlineEndXs != null && this.marginInlineEndXs.trim() !== '' ? `pds-margin-inline-end-xs-${this.marginInlineEndXs}` : ''}
+    ${this.marginInlineEndSm != null && this.marginInlineEndSm.trim() !== '' ? `pds-margin-inline-end-sm-${this.marginInlineEndSm}` : ''}
+    ${this.marginInlineEndMd != null && this.marginInlineEndMd.trim() !== '' ? `pds-margin-inline-end-md-${this.marginInlineEndMd}` : ''}
+    ${this.marginInlineEndLg != null && this.marginInlineEndLg.trim() !== '' ? `pds-margin-inline-end-lg-${this.marginInlineEndLg}` : ''}
+    ${this.marginInlineEndXl != null && this.marginInlineEndXl.trim() !== '' ? `pds-margin-inline-end-xl-${this.marginInlineEndXl}` : ''}
+    ${this.marginBlockEnd != null && this.marginBlockEnd.trim() !== '' ? `pds-margin-block-end-${this.marginBlockEnd}` : ''}
+    ${this.marginBlockEndXs != null && this.marginBlockEndXs.trim() !== '' ? `pds-margin-block-end-xs-${this.marginBlockEndXs}` : ''}
+    ${this.marginBlockEndSm != null && this.marginBlockEndSm.trim() !== '' ? `pds-margin-block-end-sm-${this.marginBlockEndSm}` : ''}
+    ${this.marginBlockEndMd != null && this.marginBlockEndMd.trim() !== '' ? `pds-margin-block-end-md-${this.marginBlockEndMd}` : ''}
+    ${this.marginBlockEndLg != null && this.marginBlockEndLg.trim() !== '' ? `pds-margin-block-end-lg-${this.marginBlockEndLg}` : ''}
+    ${this.marginBlockEndXl != null && this.marginBlockEndXl.trim() !== '' ? `pds-margin-block-end-xl-${this.marginBlockEndXl}` : ''}
+    ${this.offset != null && this.offset.trim() !== '' ? `pds-box-offset-${this.offset}` : ''}
+    ${this.offsetXs != null && this.offsetXs.trim() !== '' ? `pds-box-offset-xs-${this.offsetXs}` : ''}
+    ${this.offsetSm != null && this.offsetSm.trim() !== '' ? `pds-box-offset-sm-${this.offsetSm}` : ''}
+    ${this.offsetMd != null && this.offsetMd.trim() !== '' ? `pds-box-offset-md-${this.offsetMd}` : ''}
+    ${this.offsetLg != null && this.offsetLg.trim() !== '' ? `pds-box-offset-lg-${this.offsetLg}` : ''}
+    ${this.offsetXl != null && this.offsetXl.trim() !== '' ? `pds-box-offset-xl-${this.offsetXl}` : ''}
+    ${this.padding != null && this.padding.trim() !== '' ? `pds-padding-${this.padding}` : ''}
+    ${this.paddingXs != null && this.paddingXs.trim() !== '' ? `pds-padding-xs-${this.paddingXs}` : ''}
+    ${this.paddingSm != null && this.paddingSm.trim() !== '' ? `pds-padding-sm-${this.paddingSm}` : ''}
+    ${this.paddingMd != null && this.paddingMd.trim() !== '' ? `pds-padding-md-${this.paddingMd}` : ''}
+    ${this.paddingLg != null && this.paddingLg.trim() !== '' ? `pds-padding-lg-${this.paddingLg}` : ''}
+    ${this.paddingXl != null && this.paddingXl.trim() !== '' ? `pds-padding-xl-${this.paddingXl}` : ''}
+    ${this.paddingBlockStart != null && this.paddingBlockStart.trim() !== '' ? `pds-padding-block-start-${this.paddingBlockStart}` : ''}
+    ${this.paddingBlockStartXs != null && this.paddingBlockStartXs.trim() !== '' ? `pds-padding-block-start-xs-${this.paddingBlockStartXs}` : ''}
+    ${this.paddingBlockStartSm != null && this.paddingBlockStartSm.trim() !== '' ? `pds-padding-block-start-sm-${this.paddingBlockStartSm}` : ''}
+    ${this.paddingBlockStartMd != null && this.paddingBlockStartMd.trim() !== '' ? `pds-padding-block-start-md-${this.paddingBlockStartMd}` : ''}
+    ${this.paddingBlockStartLg != null && this.paddingBlockStartLg.trim() !== '' ? `pds-padding-block-start-lg-${this.paddingBlockStartLg}` : ''}
+    ${this.paddingBlockStartXl != null && this.paddingBlockStartXl.trim() !== '' ? `pds-padding-block-start-xl-${this.paddingBlockStartXl}` : ''}
+    ${this.paddingBlockEnd != null && this.paddingBlockEnd.trim() !== '' ? `pds-padding-block-end-${this.paddingBlockEnd}` : ''}
+    ${this.paddingBlockEndXs != null && this.paddingBlockEndXs.trim() !== '' ? `pds-padding-block-end-xs-${this.paddingBlockEndXs}` : ''}
+    ${this.paddingBlockEndSm != null && this.paddingBlockEndSm.trim() !== '' ? `pds-padding-block-end-sm-${this.paddingBlockEndSm}` : ''}
+    ${this.paddingBlockEndMd != null && this.paddingBlockEndMd.trim() !== '' ? `pds-padding-block-end-md-${this.paddingBlockEndMd}` : ''}
+    ${this.paddingBlockEndLg != null && this.paddingBlockEndLg.trim() !== '' ? `pds-padding-block-end-lg-${this.paddingBlockEndLg}` : ''}
+    ${this.paddingBlockEndXl != null && this.paddingBlockEndXl.trim() !== '' ? `pds-padding-block-end-xl-${this.paddingBlockEndXl}` : ''}
+    ${this.paddingInlineStart != null && this.paddingInlineStart.trim() !== '' ? `pds-padding-inline-start-${this.paddingInlineStart}` : ''}
+    ${this.paddingInlineStartXs != null && this.paddingInlineStartXs.trim() !== '' ? `pds-padding-inline-start-xs-${this.paddingInlineStartXs}` : ''}
+    ${this.paddingInlineStartSm != null && this.paddingInlineStartSm.trim() !== '' ? `pds-padding-inline-start-sm-${this.paddingInlineStartSm}` : ''}
+    ${this.paddingInlineStartMd != null && this.paddingInlineStartMd.trim() !== '' ? `pds-padding-inline-start-md-${this.paddingInlineStartMd}` : ''}
+    ${this.paddingInlineStartLg != null && this.paddingInlineStartLg.trim() !== '' ? `pds-padding-inline-start-lg-${this.paddingInlineStartLg}` : ''}
+    ${this.paddingInlineStartXl != null && this.paddingInlineStartXl.trim() !== '' ? `pds-padding-inline-start-xl-${this.paddingInlineStartXl}` : ''}
+    ${this.paddingInlineEnd != null && this.paddingInlineEnd.trim() !== '' ? `pds-padding-inline-end-${this.paddingInlineEnd}` : ''}
+    ${this.paddingInlineEndXs != null && this.paddingInlineEndXs.trim() !== '' ? `pds-padding-inline-end-xs-${this.paddingInlineEndXs}` : ''}
+    ${this.paddingInlineEndSm != null && this.paddingInlineEndSm.trim() !== '' ? `pds-padding-inline-end-sm-${this.paddingInlineEndSm}` : ''}
+    ${this.paddingInlineEndMd != null && this.paddingInlineEndMd.trim() !== '' ? `pds-padding-inline-end-md-${this.paddingInlineEndMd}` : ''}
+    ${this.paddingInlineEndLg != null && this.paddingInlineEndLg.trim() !== '' ? `pds-padding-inline-end-lg-${this.paddingInlineEndLg}` : ''}
+    ${this.paddingInlineEndXl != null && this.paddingInlineEndXl.trim() !== '' ? `pds-padding-inline-end-xl-${this.paddingInlineEndXl}` : ''}
+    ${this.shadow != null && this.shadow.trim() !== '' ? `pds-shadow-${this.shadow}` : ''}
+    ${this.size != null && this.size.trim() !== '' ? `pds-box pds-box-${this.size}` : ''}
+    ${this.sizeXs != null && this.sizeXs.trim() !== '' ? `pds-box-xs-${this.sizeXs}` : ''}
+    ${this.sizeSm != null && this.sizeSm.trim() !== '' ? `pds-box-sm-${this.sizeSm}` : ''}
+    ${this.sizeMd != null && this.sizeMd.trim() !== '' ? `pds-box-md-${this.sizeMd}` : ''}
+    ${this.sizeLg != null && this.sizeLg.trim() !== '' ? `pds-box-lg-${this.sizeLg}` : ''}
+    ${this.sizeXl != null && this.sizeXl.trim() !== '' ? `pds-box-xl-${this.sizeXl}` : ''}
     ${this.size == undefined &&
       this.sizeSm == undefined &&
       this.sizeMd == undefined &&

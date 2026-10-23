@@ -448,6 +448,17 @@ describe('pds-combobox', () => {
     it('flips the flyout to the left when there is no room on the right', async () => {
       const page = await setUp('display: flex; justify-content: flex-end; padding: 40px 8px;');
       await hoverGroup(page, 'Tag');
+      // The flyout is placed a frame after it opens; under load, a single read can land first.
+      await page
+        .waitForFunction(
+          () => {
+            const root = document.querySelector('pds-combobox')!.shadowRoot!;
+            const flyout = root.querySelector('.pds-combobox__flyout');
+            return !!flyout && flyout.getBoundingClientRect().right <= root.querySelector('.pds-combobox__listbox')!.getBoundingClientRect().left;
+          },
+          { timeout: 3000 },
+        )
+        .catch(() => undefined);
 
       const { panel, flyout } = await geometry(page);
       expect(flyout.right).toBeLessThanOrEqual(panel.left);
@@ -740,9 +751,28 @@ describe('pds-combobox', () => {
           });
         }, selector);
 
-      const click = async (page: Page, selector: string) => {
+      // Waits for the click's own slide to start before reading where rows start from: under load,
+      // a read can land before the drill class and its animation are applied, and every row reads
+      // `still`. Animations from an earlier click are held too, so only a new one counts.
+      const click = async (page: Page, selector: string, { slides = true } = {}) => {
+        await page.evaluate(() => {
+          (window as unknown as { heldAnimations: Set<Animation> }).heldAnimations = new Set(
+            document.querySelector('pds-combobox')!.shadowRoot!.getAnimations(),
+          );
+        });
         await (await page.find(`pds-combobox >>> ${selector}`)).click();
         await page.waitForChanges();
+        if (!slides) return;
+        await page.waitForFunction(
+          () => {
+            const held = (window as unknown as { heldAnimations: Set<Animation> }).heldAnimations;
+            return document
+              .querySelector('pds-combobox')!
+              .shadowRoot!.getAnimations()
+              .some(a => !held.has(a) && (a as CSSAnimation).animationName === 'pds-combobox-drill');
+          },
+          { timeout: 3000 },
+        );
       };
 
       it("slides a group's options and its row back in from the right, and the groups back from the left", async () => {
@@ -808,10 +838,10 @@ describe('pds-combobox', () => {
         );
         expect(duration).toBe('0ms');
 
-        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger', { slides: false });
         expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['still']);
 
-        await click(page, '.pds-combobox__group-back-trigger');
+        await click(page, '.pds-combobox__group-back-trigger', { slides: false });
         expect(await starts(page, '.pds-combobox__group-row')).toEqual(['still', 'still']);
       });
     });
@@ -1385,5 +1415,41 @@ describe('pds-combobox', () => {
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
+  });
+});
+
+describe('pds-combobox in a disabled fieldset', () => {
+  it('is disabled while the fieldset is, and comes back when it is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-combobox component-id="in-fieldset" name="choice" label="Choice" trigger="button" mode="select-only">
+            <option value="a">A</option>
+          </pds-combobox>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+    const state = () =>
+      page.evaluate(() => {
+        const host = document.querySelector('pds-combobox') as HTMLElement & { disabled: boolean };
+        const trigger = host.shadowRoot!.querySelector('.pds-combobox__button-trigger')!;
+        return { disabled: host.disabled, expanded: trigger.getAttribute('aria-expanded') };
+      });
+
+    expect((await state()).disabled).toBe(true);
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    expect(await state()).toEqual({ disabled: true, expanded: 'false' });
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+
+    await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    expect(await state()).toEqual({ disabled: false, expanded: 'true' });
   });
 });

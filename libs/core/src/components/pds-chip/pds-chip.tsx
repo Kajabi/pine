@@ -2,7 +2,7 @@ import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
 import { HostStylingKeeper } from '@utils/attributes';
 import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
-import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { setupTruncationTooltip, type TruncationTooltipOptions } from '../../utils/truncation-tooltip';
 import { normalizeColorValue } from '../../utils/utils';
 
 const SENTIMENT_DOT_COLORS: Record<string, string> = {
@@ -15,6 +15,28 @@ const SENTIMENT_DOT_COLORS: Record<string, string> = {
   success: 'var(--pine-chip-color-success-dot)',
   warning: 'var(--pine-chip-color-warning-dot)',
 };
+
+// Controls a chip can sit inside that already take focus, so a clipped label adds no tab stop of its own.
+// Not any `[tabindex]`: a focusable scroll region full of chips would show every chip's tooltip at once.
+const FOCUSABLE_WRAPPER = 'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item, [role="option"]';
+
+// Beside the listbox and level with the option, so the tooltip never covers the other options.
+function besideListbox(wrapper: HTMLElement | null): Pick<TruncationTooltipOptions, 'placement' | 'reference'> {
+  const option = wrapper?.matches('[role="option"]') ? wrapper : null;
+  const listbox = option?.closest('[role="listbox"]');
+  if (!option || !listbox) return {};
+
+  return {
+    placement: 'right',
+    reference: {
+      getBoundingClientRect: () => {
+        const { top, bottom, height } = option.getBoundingClientRect();
+        const { left, right, width } = listbox.getBoundingClientRect();
+        return { x: left, y: top, top, left, bottom, right, width, height };
+      },
+    },
+  };
+}
 
 /**
  * @slot (default) - The chip's label text.
@@ -34,6 +56,11 @@ export class PdsChip {
 
   connectedCallback() {
     this.hostKeeper.connect(this.el);
+    // A moved chip reconnects without re-rendering, so componentDidRender won't re-bind what
+    // disconnectedCallback tore down. Before the first render there's no label, and it binds there.
+    if (this.maxWidth && this.labelTextEl) {
+      this.initTruncationTooltip();
+    }
   }
 
   /** The label span that clips; the overflow anchor for the truncation tooltip. */
@@ -152,6 +179,7 @@ export class PdsChip {
     this.destroyTruncationTooltip();
 
     if (this.labelTextEl) {
+      const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.labelTextEl,
@@ -160,7 +188,10 @@ export class PdsChip {
         // `<button class="pds-chip__button">`, which is already focusable and
         // bubbles focusin to the host — a tabindex on the span too would nest
         // a second tab stop inside the button.
-        manageTabIndex: this.effectiveVariant !== 'dropdown',
+        manageTabIndex: this.effectiveVariant !== 'dropdown' && !wrapper,
+        // A wrapping control sits outside the host, so its focus never reaches the host's listener.
+        focusEl: wrapper ?? this.el,
+        ...besideListbox(wrapper),
       });
       this.tooltipBoundEl = this.labelTextEl;
     }
@@ -233,7 +264,8 @@ export class PdsChip {
     // label span already sits inside `<button class="pds-chip__button">`,
     // which is already focusable and bubbles focusin to the host, so
     // initTruncationTooltip passes `manageTabIndex: false` there to avoid
-    // nesting a second tab stop inside the button.
+    // nesting a second tab stop inside the button. The same goes for a chip
+    // inside a consumer's own focusable control (FOCUSABLE_WRAPPER).
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button" part="button">
         {this.icon && <pds-icon class="pds-chip__icon" part="icon" icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}

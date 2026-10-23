@@ -5,9 +5,10 @@ import {
   offset,
   shift,
 } from '@floating-ui/dom';
+import type { ReferenceElement } from '@floating-ui/dom';
 
 export interface TruncationTooltipOptions {
-  /** The host element (for hover/focus listeners and positioning anchor) */
+  /** The host element (for hover listeners and positioning anchor; focus listeners too, unless `focusEl` is set) */
   hostEl: HTMLElement;
   /** The inner element where overflow actually occurs (inside shadow root) */
   contentEl: HTMLElement;
@@ -16,15 +17,27 @@ export interface TruncationTooltipOptions {
   /** Tooltip placement preference (default: 'top') */
   placement?: PlacementType;
   /**
+   * What the tooltip is positioned against (default: `hostEl`). A virtual
+   * element lets it sit beside a larger region than the host.
+   */
+  reference?: ReferenceElement;
+  /**
    * Whether to give `contentEl` a tab stop while its text is clipped (default: true).
    *
    * Set to `false` when `contentEl` already sits inside its own focusable
    * control (e.g. a wrapping `<button>` or `<pds-button>`) that already
-   * receives focus and triggers this tooltip via `hostEl`'s `focusin`
+   * receives focus and triggers this tooltip via `focusEl`'s `focusin`
    * listener. Managing the tabindex there too would nest a second, nameless
    * tab stop inside an already-interactive element.
    */
   manageTabIndex?: boolean;
+  /**
+   * The element whose focus shows the tooltip (default: `hostEl`).
+   *
+   * Pass the wrapping control when it sits outside `hostEl`, so focusing it
+   * still reveals the text once `manageTabIndex` is `false`.
+   */
+  focusEl?: HTMLElement;
 }
 
 /** CSS class prefix used for truncation tooltip portal elements */
@@ -100,7 +113,7 @@ function isOverflowing(el: HTMLElement): boolean {
  * @returns A cleanup function that removes all listeners, observers, and DOM elements.
  */
 export function setupTruncationTooltip(options: TruncationTooltipOptions): () => void {
-  const { hostEl, contentEl, getTooltipText, placement = 'top', manageTabIndex = true } = options;
+  const { hostEl, contentEl, getTooltipText, placement = 'top', reference = hostEl, manageTabIndex = true, focusEl = hostEl } = options;
 
   injectStyles();
 
@@ -203,7 +216,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     if (!portalEl) return;
 
     try {
-      const { x, y } = await computePosition(hostEl, portalEl, {
+      const { x, y } = await computePosition(reference, portalEl, {
         placement,
         strategy: 'fixed',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
@@ -216,7 +229,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     } catch {
       // Fallback: position above the element with bounds checking
       if (portalEl) {
-        const rect = hostEl.getBoundingClientRect();
+        const rect = reference.getBoundingClientRect();
         const portalRect = portalEl.getBoundingClientRect();
         const padding = 5;
 
@@ -313,8 +326,8 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   hostEl.addEventListener('mouseenter', handleMouseEnter);
   hostEl.addEventListener('mouseleave', handleMouseLeave);
-  hostEl.addEventListener('focusin', handleFocusIn);
-  hostEl.addEventListener('focusout', handleFocusOut);
+  focusEl.addEventListener('focusin', handleFocusIn);
+  focusEl.addEventListener('focusout', handleFocusOut);
 
   // Return cleanup function
   return () => {
@@ -335,8 +348,8 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     }
     hostEl.removeEventListener('mouseenter', handleMouseEnter);
     hostEl.removeEventListener('mouseleave', handleMouseLeave);
-    hostEl.removeEventListener('focusin', handleFocusIn);
-    hostEl.removeEventListener('focusout', handleFocusOut);
+    focusEl.removeEventListener('focusin', handleFocusIn);
+    focusEl.removeEventListener('focusout', handleFocusOut);
     removePortal();
   };
 }

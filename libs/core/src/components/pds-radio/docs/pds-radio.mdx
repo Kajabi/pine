@@ -110,9 +110,9 @@ For grouping multiple radios together, use <pds-link href="../?path=/docs/compon
 
 ### With Image
 
-Radio buttons can display custom images instead of the default radio input in a bordered card layout. The image replaces the visual radio button while maintaining all functionality and accessibility features.
+Radio buttons can display custom images instead of the default radio input in a bordered card layout. The image replaces the visual radio button while maintaining all functionality and accessibility features. The label and helper message sit beside the image and wrap there when they're long.
 
-**Note:** Images must be provided via the `image` slot.
+**Note:** Images must be provided via the `image` slot. The card is already bordered, so `hasBorder` isn't needed with an image, and it doesn't change the layout.
 
 <DocCanvas mdxSource={{
   react: `<PdsRadio

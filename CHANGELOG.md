@@ -1,3 +1,34 @@
+## 4.7.2 (2026-10-23)
+
+### Bug Fixes 🐛
+
+- **pds-drawer:** let overlays portaled into a non-modal drawer take clicks ([#903](https://github.com/Kajabi/pine/pull/903))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.7.1 (2026-10-22)
+
+### Bug Fixes 🐛
+
+- **core:** keep truncation tooltips after a DOM move and skip a chip's nested tab stop ([#900](https://github.com/Kajabi/pine/pull/900))
+- **pds-box:** treat a prop as unset when its attribute is removed ([8ed4239d](https://github.com/Kajabi/pine/commit/8ed4239d))
+- **pds-combobox:** take the disabled state of a disabled fieldset ([#894](https://github.com/Kajabi/pine/pull/894))
+- **pds-dropdown-menu-item:** render a button again when the href attribute is removed ([8122521c](https://github.com/Kajabi/pine/commit/8122521c))
+- **pds-modal:** return focus to the top open modal when the trigger can't take it ([#893](https://github.com/Kajabi/pine/pull/893))
+- **pds-multiselect:** truncate long option chips and keep the option action in view ([#902](https://github.com/Kajabi/pine/pull/902))
+- **pds-radio:** keep the image card a row and its text beside the image ([#899](https://github.com/Kajabi/pine/pull/899))
+- **pds-row:** treat a prop as unset when its attribute is removed ([4d32fdfc](https://github.com/Kajabi/pine/commit/4d32fdfc))
+- **pds-table-cell:** restore the fixed column scroll shadow after the table sorts ([#901](https://github.com/Kajabi/pine/pull/901))
+- **pds-text:** treat a prop as unset when its attribute is removed, without a size warning ([f66ce93f](https://github.com/Kajabi/pine/commit/f66ce93f))
+
+### ❤️ Thank You
+
+- Kelly Redding
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.7.0 (2026-10-21)
 
 ### Features 🚀
