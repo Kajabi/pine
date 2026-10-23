@@ -145,11 +145,12 @@ export class PdsPopover {
   @Watch('openOn')
   protected openOnChanged() {
     this.pin();
-    for (const el of [this.triggerEl, this.portalEl]) {
-      this.stopListeningForHover(el);
-      // Out of the page, connectedCallback binds them when it comes back.
-      if (this.isComponentMounted) this.listenForHover(el);
-    }
+    this.stopListeningForHover(this.triggerEl);
+    this.stopListeningForHover(this.portalEl);
+    // Out of the page, connectedCallback binds them when it comes back.
+    if (!this.isComponentMounted) return;
+    this.listenForHover(this.triggerEl);
+    this.listenForHover(this.portalEl);
   }
 
   /**
@@ -342,9 +343,10 @@ export class PdsPopover {
   }
 
   private stopListeningForHover(el: HTMLElement | null) {
-    el?.removeEventListener('pointerenter', this.handleHoverEnter);
-    el?.removeEventListener('pointerleave', this.handleHoverLeave);
-    el?.removeEventListener('focusout', this.handleHoverFocusOut);
+    if (el == null) return;
+    el.removeEventListener('pointerenter', this.handleHoverEnter);
+    el.removeEventListener('pointerleave', this.handleHoverLeave);
+    el.removeEventListener('focusout', this.handleHoverFocusOut);
   }
 
   // A tap sends touch pointer events and then a click, so touch takes the click path alone.
