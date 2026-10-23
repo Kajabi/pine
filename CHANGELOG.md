@@ -1,3 +1,13 @@
+## 4.7.2 (2026-10-23)
+
+### Bug Fixes 🐛
+
+- **pds-drawer:** let overlays portaled into a non-modal drawer take clicks ([#903](https://github.com/Kajabi/pine/pull/903))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 4.7.1 (2026-10-22)
 
 ### Bug Fixes 🐛
