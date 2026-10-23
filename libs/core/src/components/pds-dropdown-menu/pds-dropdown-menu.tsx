@@ -272,11 +272,14 @@ export class PdsDropdownMenu implements BasePdsProps {
         const innerButton = menuItem.shadowRoot?.querySelector('button');
         const innerLink = menuItem.shadowRoot?.querySelector('pds-link')?.shadowRoot?.querySelector('a')
           || menuItem.shadowRoot?.querySelector('a');
+        const innerInformational = menuItem.shadowRoot?.querySelector<HTMLElement>('[role="menuitem"]');
 
         if (innerButton) {
           innerButton.focus();
         } else if (innerLink) {
           innerLink.focus();
+        } else if (innerInformational) {
+          innerInformational.focus();
         } else {
           // Fallback to focusing the host
           menuItem.focus();

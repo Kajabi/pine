@@ -1544,6 +1544,11 @@ export namespace Components {
          */
         "href": string | undefined;
         /**
+          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`.
+          * @defaultValue false
+         */
+        "informational": boolean;
+        /**
           * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.
           * @defaultValue undefined
          */
@@ -5409,6 +5414,11 @@ declare namespace LocalJSX {
          */
         "href"?: string | undefined;
         /**
+          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`.
+          * @defaultValue false
+         */
+        "informational"?: boolean;
+        /**
           * Emitted when the dropdown-item is clicked.
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
@@ -7247,6 +7257,7 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "download": string;
         "href": string | undefined;
+        "informational": boolean;
         "external": boolean;
         "target": '_blank' | '_self' | '_parent' | '_top';
     }

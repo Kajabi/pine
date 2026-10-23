@@ -426,6 +426,7 @@ export namespace Components {
         "download"?: string;
         "external": boolean;
         "href": string | undefined;
+        "informational": boolean;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
     }
     // (undocumented)
@@ -2046,6 +2047,7 @@ export namespace LocalJSX {
         "download"?: string;
         "external"?: boolean;
         "href"?: string | undefined;
+        "informational"?: boolean;
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
     }
@@ -2064,6 +2066,8 @@ export namespace LocalJSX {
         "external": boolean;
         // (undocumented)
         "href": string | undefined;
+        // (undocumented)
+        "informational": boolean;
         // (undocumented)
         "target": '_blank' | '_self' | '_parent' | '_top';
     }

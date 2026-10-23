@@ -44,6 +44,13 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop() href: string | undefined;
 
   /**
+   * It determines whether or not the dropdown-item is informational: text that the arrow keys
+   * reach but that can't be activated. Takes precedence over `href` and `destructive`.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) informational: boolean = false;
+
+  /**
    * Determines whether the link should open in a new tab and display an external icon.
    * This is a simpler alternative to using `target="_blank"` for the common case.
    * @defaultValue false
@@ -100,7 +107,33 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     this.hasFocus = false;
   }
 
+  // Space would otherwise scroll the page, since nothing in the item takes the key.
+  private handleInformationalKeyDown = (event: KeyboardEvent) => {
+    if (event.key === ' ') {
+      event.preventDefault();
+    }
+  }
+
   private renderElement() {
+    if (this.informational) {
+      return (
+        <div
+          class={{
+            'pds-dropdown-menu-item__content': true,
+            'has-focus': this.hasFocus
+          }}
+          role="menuitem"
+          aria-disabled="true"
+          tabIndex={this.disabled ? -1 : 0}
+          onKeyDown={this.handleInformationalKeyDown}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
+        >
+          <slot></slot>
+        </div>
+      );
+    }
+
     if (this.href != null) {
       return (
         <pds-link
@@ -158,10 +191,16 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   render() {
     return (
       <Host id={this.componentId}
-        class={{ 'is-disabled': this.disabled, 'destructive': !this.disabled && this.destructive }}
-        onClick={() => !this.disabled && this.handleClick()}
+        class={{
+          'is-disabled': this.disabled,
+          'is-informational': this.informational,
+          'destructive': !this.disabled && !this.informational && this.destructive
+        }}
+        onClick={() => !this.disabled && !this.informational && this.handleClick()}
         role="none"
-        tabIndex={-1}
+        // ARIA ignores role="none" on focusable elements, so a focusable host would sit between
+        // the menu and the informational menuitem as an unexpected child.
+        tabIndex={this.informational ? null : -1}
         aria-disabled={this.disabled ? 'true' : null}
       >
           {this.renderElement()}
