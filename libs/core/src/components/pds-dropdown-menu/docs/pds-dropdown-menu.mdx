@@ -351,9 +351,9 @@ Menu items can open links in a new tab using the `external` boolean prop. This d
 
 ### With Informational Items
 
-Use `informational` for a row people should read but can't act on, such as a count with nowhere to link. The arrow keys still reach it, even when every row in the menu is informational, but clicking it or pressing Enter or Space does nothing. It keeps the normal text color and has no hover style. Screen readers announce it as a menu item that is dimmed or unavailable, the same way they announce a disabled one.
+Use `informational` for a row people should read but can't act on, such as a count with nowhere to link. The arrow keys still reach it, even when every row in the menu is informational, but clicking it or pressing Enter or Space does nothing. It keeps the normal text color and has no hover style. Screen readers announce it as a menu item that is dimmed or unavailable, the same way they announce a disabled one, because `aria-disabled` is the only way ARIA marks a menu item that can't be activated.
 
-`informational` takes precedence over `href` and `destructive`. To show a row as a link only when it has somewhere to go, keep the `href` and toggle `informational`: the row renders as plain text while it's set.
+`informational` takes precedence over `href` and `destructive`. To show a row as a link only when it has somewhere to go, keep the `href` and toggle `informational`: the row renders as plain text while it's set. `disabled` still applies on top: a disabled informational item is dimmed and skipped like any other disabled item.
 
 Use `disabled` instead for an action that's unavailable right now, and the `header` slot for a single block of content above the items.
 
