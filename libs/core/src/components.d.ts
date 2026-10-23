@@ -2162,6 +2162,11 @@ export namespace Components {
          */
         "maxWidth"?: number;
         /**
+          * Determines how the popover opens. With `hover`, it also opens when the pointer rests on the trigger and closes when the pointer leaves, until a click on the trigger keeps it open. Enter or Space on the trigger opens it either way.
+          * @defaultValue "click"
+         */
+        "openOn"?: 'click' | 'hover';
+        /**
           * Sets the padding of the popover content
           * @defaultValue "md"
          */
@@ -6085,6 +6090,11 @@ declare namespace LocalJSX {
          */
         "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         /**
+          * Determines how the popover opens. With `hover`, it also opens when the pointer rests on the trigger and closes when the pointer leaves, until a click on the trigger keeps it open. Enter or Space on the trigger opens it either way.
+          * @defaultValue "click"
+         */
+        "openOn"?: 'click' | 'hover';
+        /**
           * Sets the padding of the popover content
           * @defaultValue "md"
          */
@@ -7409,6 +7419,7 @@ declare namespace LocalJSX {
     }
     interface PdsPopoverAttributes {
         "popoverTargetAction": 'show' | 'toggle' | 'hide';
+        "openOn": 'click' | 'hover';
         "popoverType": 'auto' | 'manual';
         "componentId": string;
         "maxWidth": number;
