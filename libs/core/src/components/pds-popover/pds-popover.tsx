@@ -147,7 +147,8 @@ export class PdsPopover {
     this.pin();
     for (const el of [this.triggerEl, this.portalEl]) {
       this.stopListeningForHover(el);
-      this.listenForHover(el);
+      // Out of the page, connectedCallback binds them when it comes back.
+      if (this.isComponentMounted) this.listenForHover(el);
     }
   }
 
@@ -311,7 +312,7 @@ export class PdsPopover {
       event.preventDefault();
     }
 
-    if (this.openOn === 'hover') {
+    if (this.openOn === 'hover' && this.popoverTargetAction !== 'hide') {
       const heldByHover = this.hoverOpened;
       this.pin();
       // Pinning, not toggling: the hover before a click has already opened it.
