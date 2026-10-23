@@ -24,7 +24,7 @@
 }
 
 // Only the backdrop lets clicks through. Besides the panel, the dialog holds what's portaled into it
-// as the nearest one: a combobox's dropdown, a datepicker's calendar, a popover opened from the drawer.
+// as the nearest one, such as a combobox's dropdown or a popover in a form.
 .pds-drawer__modal:not(.pds-drawer__modal--modal) > .pds-modal__backdrop > * {
   pointer-events: auto;
 }
