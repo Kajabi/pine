@@ -1415,12 +1415,12 @@ document.addEventListener('pdsTableSort', (event) => {
 
 ### Default Sort
 
-To display the table with a pre-sorted column on initial load, use the `defaultSortColumn` and `defaultSortDirection` properties. The `defaultSortColumn` value must match the text content of a sortable column header exactly.
+To display the table with a pre-sorted column on initial load, use the `defaultSortColumn` and `defaultSortDirection` properties. The `defaultSortColumn` value must match the text content of a sortable column header exactly. The default sort doesn't emit `pdsTableSort`, so set the matching initial `aria-sort` on that head cell yourself.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="default-sort" defaultSortColumn="Name" defaultSortDirection="desc">
   <PdsTableHead>
-    <PdsTableHeadCell sortable={true}>Name</PdsTableHeadCell>
+    <PdsTableHeadCell sortable={true} aria-sort="descending">Name</PdsTableHeadCell>
     <PdsTableHeadCell sortable={true}>Email</PdsTableHeadCell>
     <PdsTableHeadCell sortable={true}>Account</PdsTableHeadCell>
   </PdsTableHead>
@@ -1454,7 +1454,7 @@ To display the table with a pre-sorted column on initial load, use the `defaultS
 </PdsTable>`,
   webComponent: `<pds-table component-id="default-sort" default-sort-column="Name" default-sort-direction="desc">
   <pds-table-head>
-    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable aria-sort="descending">Name</pds-table-head-cell>
     <pds-table-head-cell sortable>Email</pds-table-head-cell>
     <pds-table-head-cell sortable>Account</pds-table-head-cell>
   </pds-table-head>
@@ -1489,7 +1489,7 @@ To display the table with a pre-sorted column on initial load, use the `defaultS
 `}}>
 <pds-table component-id="default-sort" default-sort-column="Name" default-sort-direction="desc">
   <pds-table-head>
-    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable aria-sort="descending">Name</pds-table-head-cell>
     <pds-table-head-cell sortable>Email</pds-table-head-cell>
     <pds-table-head-cell sortable>Account</pds-table-head-cell>
   </pds-table-head>
