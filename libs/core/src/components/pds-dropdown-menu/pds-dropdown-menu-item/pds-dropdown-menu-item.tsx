@@ -201,7 +201,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
         // ARIA ignores role="none" on focusable elements, so a focusable host would sit between
         // the menu and the informational menuitem as an unexpected child.
         tabIndex={this.informational ? null : -1}
-        aria-disabled={this.disabled ? 'true' : null}
+        aria-disabled={this.disabled && !this.informational ? 'true' : null}
       >
           {this.renderElement()}
       </Host>
