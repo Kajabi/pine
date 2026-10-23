@@ -7,7 +7,14 @@ export default {
 		popoverTargetAction: 'toggle',
 		popoverType: 'auto',
 		placement: 'bottom-start',
+		padding: 'md',
 		componentId: 'popover-playground',
+	},
+	argTypes: {
+		padding: {
+			control: { type: 'select' },
+			options: ['none', 'xs', 'sm', 'md'],
+		},
 	},
 	component: 'pds-popover',
 	parameters: {},
@@ -21,6 +28,7 @@ const BaseTemplate = (args) => html`
 		popover-type=${args.popoverType}
 		placement=${args.placement}
 		.maxWidth=${args.maxWidth}
+		padding=${args.padding}
 	>
 		<pds-button slot="trigger">Show popover</pds-button>
 		<p>This is popover content that can be configured using the controls below.</p>

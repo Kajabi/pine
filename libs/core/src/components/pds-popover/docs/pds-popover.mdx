@@ -252,6 +252,82 @@ The `max-width` prop allows adjusting the maximum width of the popover content. 
   </pds-popover>
 </DocCanvas>
 
+### Padding
+
+The `padding` prop sets the space around the popover content. It takes `none`, `xs`, `sm` or `md` from the same spacing scale as `pds-box`. Default is `md` (24px). Use `xs` (8px) to match the dropdown menu and other option lists, `sm` (16px) to match the datepicker, and `none` when the content brings its own spacing.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+      <PdsBox display="flex" gap="md" align-items="center" flex-wrap="wrap">
+        <PdsPopover componentId="padding-none" placement="bottom-start" popoverTargetAction="toggle" padding="none">
+          <PdsButton slot="trigger" variant="secondary">None</PdsButton>
+          <p>This popover has no padding.</p>
+        </PdsPopover>
+
+        <PdsPopover componentId="padding-xs" placement="bottom-start" popoverTargetAction="toggle" padding="xs">
+          <PdsButton slot="trigger" variant="secondary">Extra small</PdsButton>
+          <p>This popover has extra small padding.</p>
+        </PdsPopover>
+
+        <PdsPopover componentId="padding-sm" placement="bottom-start" popoverTargetAction="toggle" padding="sm">
+          <PdsButton slot="trigger" variant="secondary">Small</PdsButton>
+          <p>This popover has small padding.</p>
+        </PdsPopover>
+
+        <PdsPopover componentId="padding-md" placement="bottom-start" popoverTargetAction="toggle">
+          <PdsButton slot="trigger" variant="secondary">Medium (default)</PdsButton>
+          <p>This popover has the default medium padding.</p>
+        </PdsPopover>
+      </PdsBox>
+    `,
+    webComponent: `
+      <pds-box display="flex" gap="md" align-items="center" flex-wrap="wrap">
+        <pds-popover component-id="padding-none" placement="bottom-start" popover-target-action="toggle" padding="none">
+          <pds-button slot="trigger" variant="secondary">None</pds-button>
+          <p>This popover has no padding.</p>
+        </pds-popover>
+
+        <pds-popover component-id="padding-xs" placement="bottom-start" popover-target-action="toggle" padding="xs">
+          <pds-button slot="trigger" variant="secondary">Extra small</pds-button>
+          <p>This popover has extra small padding.</p>
+        </pds-popover>
+
+        <pds-popover component-id="padding-sm" placement="bottom-start" popover-target-action="toggle" padding="sm">
+          <pds-button slot="trigger" variant="secondary">Small</pds-button>
+          <p>This popover has small padding.</p>
+        </pds-popover>
+
+        <pds-popover component-id="padding-md" placement="bottom-start" popover-target-action="toggle">
+          <pds-button slot="trigger" variant="secondary">Medium (default)</pds-button>
+          <p>This popover has the default medium padding.</p>
+        </pds-popover>
+      </pds-box>
+    `
+  }}>
+  <pds-box display="flex" gap="md" align-items="center" flex-wrap="wrap">
+    <pds-popover component-id="padding-none" placement="bottom-start" popover-target-action="toggle" padding="none">
+      <pds-button slot="trigger" variant="secondary">None</pds-button>
+      <p>This popover has no padding.</p>
+    </pds-popover>
+
+    <pds-popover component-id="padding-xs" placement="bottom-start" popover-target-action="toggle" padding="xs">
+      <pds-button slot="trigger" variant="secondary">Extra small</pds-button>
+      <p>This popover has extra small padding.</p>
+    </pds-popover>
+
+    <pds-popover component-id="padding-sm" placement="bottom-start" popover-target-action="toggle" padding="sm">
+      <pds-button slot="trigger" variant="secondary">Small</pds-button>
+      <p>This popover has small padding.</p>
+    </pds-popover>
+
+    <pds-popover component-id="padding-md" placement="bottom-start" popover-target-action="toggle">
+      <pds-button slot="trigger" variant="secondary">Medium (default)</pds-button>
+      <p>This popover has the default medium padding.</p>
+    </pds-popover>
+  </pds-box>
+</DocCanvas>
+
 ## Technical Notes
 
 - The trigger slot automatically receives `aria-expanded` and `aria-controls` attributes when the component is hydrated. The popover owns them: if anything removes or changes them, such as a DOM morph, it puts its values back. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning. Use focusable elements (buttons, chips, avatar with `dropdown="true"`, etc.) so that keyboard users can open the popover with Enter or Space.
