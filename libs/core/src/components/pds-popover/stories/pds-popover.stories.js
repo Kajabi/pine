@@ -16,13 +16,11 @@ export default {
 			control: { type: 'select' },
 			options: ['none', 'xs', 'sm', 'md'],
 		},
+		openOn: { control: 'inline-radio', options: ['click', 'hover'] },
 	},
 	component: 'pds-popover',
 	parameters: {},
-	title: 'components/Popover',
-	argTypes: {
-		openOn: { control: 'inline-radio', options: ['click', 'hover'] },
-	},
+	title: 'components/Popover'
 }
 
 const BaseTemplate = (args) => html`
@@ -96,4 +94,24 @@ export const WithContent = (args) => html`
 `;
 WithContent.args = {
 	componentId: 'popover-rich'
+};
+
+export const OpenOnHover = (args) => html`
+	<pds-popover
+		component-id=${args.componentId || 'popover-hover'}
+		open-on="hover"
+		popover-target-action=${args.popoverTargetAction}
+		popover-type=${args.popoverType}
+		placement=${args.placement}
+		.maxWidth=${args.maxWidth}
+	>
+		<pds-button slot="trigger" variant="secondary">Hover for details</pds-button>
+		<pds-box direction="column" gap="xs" fit="true">
+			<pds-text tag="h3" size="md" weight="semibold">Project summary</pds-text>
+			<pds-text tag="p" size="sm" color="secondary">Rest the pointer on the trigger to preview supporting details. Click the trigger to keep this open while you read.</pds-text>
+		</pds-box>
+	</pds-popover>
+`;
+OpenOnHover.args = {
+	componentId: 'popover-hover'
 };
