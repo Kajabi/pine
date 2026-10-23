@@ -427,6 +427,19 @@ describe('pds-dropdown-menu-item', () => {
       expect(clickSpy).not.toHaveBeenCalled();
     });
 
+    it('does not emit pdsClick from clickItem()', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      await page.root!.clickItem();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
     it('does nothing on Enter, and keeps Space from scrolling the page', async () => {
       const page = await newSpecPage({
         components: [PdsDropdownMenuItem],
