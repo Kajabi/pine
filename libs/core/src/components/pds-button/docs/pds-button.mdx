@@ -31,6 +31,10 @@ While accessible out of the box, there are some best practices to keep in mind w
 - Use helpful text to describe the button's action even if this text is expected to be visually hidden (e.g. "submit form" or "delete account"). Visually hidden text will still be read by screen readers.
 - Buttons should not disable tabbing or keyboard navigation.
 - Disabled buttons will not be read by screen readers.
+- Name an icon-only button with `aria-label` on `pds-button` (see [Icon Only](#icon-only)). The component passes it to the focusable `<button>` inside it (or `<a>` when `href` is set). Text in the default slot works too, since `icon-only` hides it visually but not from screen readers.
+- An `aria-label` replaces the slot text as the button's name, so start it with the visible text (e.g. "Edit profile" on a button that shows "Edit"). People using voice control say the words they see.
+- Use `aria-pressed` for a button that toggles on and off, and `aria-current` for a link to the current page or step. Both pass to the inner element, except that a link never gets `aria-pressed`, which ARIA allows only on buttons. `aria-expanded`, `aria-haspopup` and `aria-controls` pass through too, so the button can open a popover or menu.
+- `aria-labelledby` and `aria-describedby` take IDs, which can't reach the inner element through the shadow DOM, so they don't name or describe the button. Use `aria-label` for the name.
 
 ### Buttons vs Links
 
@@ -213,6 +217,25 @@ Filter button variant, intended to be used for filter options in menus and inter
 }}>
   <pds-button variant="filter">Filter option</pds-button>
   <pds-button variant="filter" disabled="true">Disabled</pds-button>
+</DocCanvas>
+
+### Icon Only
+
+Icon-only buttons show just an icon, so give each one an `aria-label` that names its action. Mark the icon `aria-hidden="true"` so it doesn't add its own name.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsButton variant="tertiary" iconOnly aria-label="More actions"><PdsIcon slot="start" aria-hidden="true" name="dot-menu-horizontal"></PdsIcon></PdsButton>
+    <PdsButton variant="secondary" iconOnly aria-label="Delete"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon></PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" aria-hidden="true" name="dot-menu-horizontal"></pds-icon></pds-button>
+    <pds-button variant="secondary" icon-only aria-label="Delete"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon></pds-button>
+    `
+}}>
+  <pds-button variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" aria-hidden="true" name="dot-menu-horizontal"></pds-icon></pds-button>
+  <pds-button variant="secondary" icon-only aria-label="Delete"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon></pds-button>
 </DocCanvas>
 
 ### Full Width
