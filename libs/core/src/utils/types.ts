@@ -88,6 +88,8 @@ export type ChipVariantType =
   | 'tag'
   | 'dropdown';
 
+export type PopoverPaddingType = Extract<BoxSpacingType, 'none' | 'xs' | 'sm' | 'md'>;
+
 // Single source of truth for `pds-text` `size` values. The `as const` tuple is
 // readable at runtime (for validation) and `TextSizeType` is derived from it,
 // so the supported list and the prop type cannot drift apart.

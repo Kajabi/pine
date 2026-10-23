@@ -1,9 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
 import { closest, containsComposed } from '@utils/closest';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
-import { PlacementType } from '@utils/types';
-// The path pds-box uses: from '@utils/types', Stencil exports it again as BoxSpacingType1 in components.d.ts.
-import { BoxSpacingType } from '../../utils/types';
+import { PlacementType, PopoverPaddingType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
 import { cssEscape } from '@utils/css';
 import { limitRestores } from '@utils/keep-hydrated';
@@ -141,7 +139,7 @@ export class PdsPopover {
    * Sets the padding of the popover content
    * @defaultValue "md"
    */
-  @Prop() padding?: Extract<BoxSpacingType, 'none' | 'xs' | 'sm' | 'md'> = 'md';
+  @Prop() padding?: PopoverPaddingType = 'md';
 
   @Watch('padding')
   applyPadding() {
