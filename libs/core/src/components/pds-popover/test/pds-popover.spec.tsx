@@ -1177,11 +1177,21 @@ describe('pds-popover', () => {
 
         trigger.dispatchEvent(pointer('pointerenter'));
         instance.handleTriggerClick(new Event('click'));
+        expect(instance.hoverOpenTimer).toBeUndefined();
         trigger.dispatchEvent(pointer('pointerleave'));
         await wait(250);
 
         expect(instance.active).toBe(true);
         expect(instance.hoverOpened).toBe(false);
+      });
+
+      it('closes on a click, without pinning, when the trigger action is hide', async () => {
+        const { instance, trigger } = await setUp('open-on="hover" popover-target-action="hide"');
+        await hoverOpen(trigger);
+
+        instance.handleTriggerClick(new Event('click'));
+
+        expect(instance.active).toBe(false);
       });
 
       it('takes Escape for a manual popover while hover holds it open', async () => {
@@ -1210,6 +1220,52 @@ describe('pds-popover', () => {
         expect(portal.hasAttribute('data-pds-popover-open')).toBe(false);
       });
 
+      it('listens for Escape on the document only while hover holds a manual popover open', async () => {
+        const { instance, trigger } = await setUp('open-on="hover" popover-type="manual"');
+        const addSpy = jest.spyOn(document, 'addEventListener');
+        const removeSpy = jest.spyOn(document, 'removeEventListener');
+        const escapeListenerCalls = (spy: jest.SpyInstance) =>
+          spy.mock.calls.filter(([type, handler]) => type === 'keydown' && handler === instance.boundEscapeKeyHandler).length;
+
+        await hoverOpen(trigger);
+        expect(escapeListenerCalls(addSpy)).toBe(1);
+        instance.handleTriggerClick(new Event('click'));
+        expect(escapeListenerCalls(removeSpy)).toBe(1);
+
+        await instance.hide();
+        await hoverOpen(trigger);
+        expect(escapeListenerCalls(addSpy)).toBe(2);
+        await instance.hide();
+        expect(escapeListenerCalls(removeSpy)).toBe(3);
+
+        addSpy.mockRestore();
+        removeSpy.mockRestore();
+      });
+
+      it('sends Escape to a hover-opened manual popover above an auto one, then to the auto one', async () => {
+        const page = await newSpecPage({
+          components: [PdsPopover],
+          html: `
+            <pds-popover component-id="auto-popover"><button slot="trigger">Auto</button><p>Auto</p></pds-popover>
+            <pds-popover component-id="hover-popover" open-on="hover" popover-type="manual">
+              <button slot="trigger" id="hover-trigger">Hover</button><p>Hover</p>
+            </pds-popover>
+          `,
+        });
+        const shown = () =>
+          ['auto-popover', 'hover-popover'].map(id => document.getElementById(`${id}-portal`)!.style.display === 'block');
+        const pressEscape = () => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+        await (page.body.querySelector('pds-popover') as HTMLPdsPopoverElement).show();
+        await hoverOpen(page.body.querySelector('#hover-trigger') as HTMLElement);
+        expect(shown()).toEqual([true, true]);
+
+        pressEscape();
+        expect(shown()).toEqual([true, false]);
+        pressEscape();
+        expect(shown()).toEqual([false, false]);
+      });
+
       it('cancels a pending open when hide() is called', async () => {
         const { instance, trigger } = await setUp('open-on="hover"');
 
@@ -1228,6 +1284,39 @@ describe('pds-popover', () => {
         page.root!.remove();
 
         expect(instance.hoverOpenTimer).toBeUndefined();
+      });
+
+      it('hovers into its rebuilt panel after being removed and put back', async () => {
+        const { page, instance, trigger, portal: firstPortal } = await setUp('open-on="hover"');
+        const root = page.root!;
+        root.remove();
+        page.body.appendChild(root);
+        await page.waitForChanges();
+        const portal = instance.portalEl as HTMLElement;
+        expect(portal).not.toBe(firstPortal);
+
+        await hoverOpen(trigger);
+        expect(instance.active).toBe(true);
+        trigger.dispatchEvent(pointer('pointerleave'));
+        portal.dispatchEvent(pointer('pointerenter'));
+        await wait(250);
+
+        expect(instance.active).toBe(true);
+      });
+
+      it('binds no hover listeners when openOn changes out of the page, and binds them when it comes back', async () => {
+        const { page, trigger } = await setUp();
+        const root = page.root!;
+        root.remove();
+        const spy = jest.spyOn(trigger, 'addEventListener');
+
+        (root as any).openOn = 'hover';
+        await page.waitForChanges();
+        expect(spy.mock.calls.map(([type]) => type)).toEqual([]);
+
+        page.body.appendChild(root);
+        await page.waitForChanges();
+        expect(spy.mock.calls.map(([type]) => type)).toEqual(['click', 'pointerenter', 'pointerleave', 'focusout']);
       });
 
       it('keeps a hover-opened popover open, as if clicked, when openOn changes to click', async () => {
