@@ -1266,6 +1266,30 @@ describe('pds-popover', () => {
         expect(shown()).toEqual([false, false]);
       });
 
+      it('follows pointer moves toward the panel only from leaving the trigger until it closes', async () => {
+        const { instance, trigger, portal } = await setUp('open-on="hover"');
+        await hoverOpen(trigger);
+        const addSpy = jest.spyOn(document, 'addEventListener');
+        const removeSpy = jest.spyOn(document, 'removeEventListener');
+        const moveListenerCalls = (spy: jest.SpyInstance) =>
+          spy.mock.calls.filter(([type, handler]) => type === 'pointermove' && handler === instance.handleMoveTowardPanel).length;
+
+        portal.dispatchEvent(pointer('pointerleave'));
+        expect(moveListenerCalls(addSpy)).toBe(0);
+        portal.dispatchEvent(pointer('pointerenter'));
+
+        trigger.dispatchEvent(pointer('pointerleave'));
+        expect(moveListenerCalls(addSpy)).toBe(1);
+        removeSpy.mockClear();
+        await wait(250);
+
+        expect(instance.active).toBe(false);
+        expect(moveListenerCalls(removeSpy)).toBeGreaterThan(0);
+
+        addSpy.mockRestore();
+        removeSpy.mockRestore();
+      });
+
       it('cancels a pending open when hide() is called', async () => {
         const { instance, trigger } = await setUp('open-on="hover"');
 
