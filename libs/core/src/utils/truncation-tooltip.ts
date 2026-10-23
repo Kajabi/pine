@@ -32,7 +32,7 @@ export interface TruncationTooltipOptions {
    */
   manageTabIndex?: boolean;
   /**
-   * The element whose focus shows the tooltip (default: `hostEl`).
+   * The element whose keyboard focus shows the tooltip (default: `hostEl`).
    *
    * Pass the wrapping control when it sits outside `hostEl`, so focusing it
    * still reveals the text once `manageTabIndex` is `false`.
@@ -102,11 +102,23 @@ function isOverflowing(el: HTMLElement): boolean {
 }
 
 /**
+ * Engines without `:focus-visible` throw on the selector, so there every
+ * focus counts as visible rather than none.
+ */
+function isFocusVisible(el: Element): boolean {
+  try {
+    return el.matches(':focus-visible');
+  } catch {
+    return true;
+  }
+}
+
+/**
  * Sets up automatic tooltip behavior for a truncated element.
  *
- * When the element's text overflows, hovering or focusing the host element
- * will display a tooltip showing the full text content. The tooltip is
- * rendered as a portal on document.body and positioned with Floating UI.
+ * When the element's text overflows, hovering the host element or giving it
+ * keyboard focus will display a tooltip showing the full text content. The
+ * tooltip is rendered as a portal on document.body and positioned with Floating UI.
  *
  * Also owns the element's `tabindex` while it is clipped — see syncTabIndex.
  *
@@ -314,7 +326,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     scheduleHide();
   }
 
-  function handleFocusIn(): void {
+  // Keyboard focus only: focus from a click would pin the tooltip open after the pointer leaves.
+  // Focus inside a shadow root arrives retargeted to its host, so test the innermost target.
+  function handleFocusIn(event: FocusEvent): void {
+    if (!isFocusVisible(event.composedPath()[0] as Element)) return;
     isFocused = true;
     showTooltip();
   }
