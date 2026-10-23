@@ -430,6 +430,163 @@ describe('pds-dropdown-menu header slot', () => {
   });
 });
 
+describe('pds-dropdown-menu informational items', () => {
+  type AXNode = { role: string; name?: string; disabled?: boolean; children?: AXNode[] };
+
+  const findAll = (node: AXNode, role: string): AXNode[] => [
+    ...(node.role === role ? [node] : []),
+    ...(node.children ?? []).flatMap((child) => findAll(child, role)),
+  ];
+
+  const openMenu = async (items: string) => {
+    const page = await newE2EPage();
+    const warnings: string[] = [];
+    page.on('console', (message) => warnings.push(message.text()));
+    await page.setContent(`
+      <pds-dropdown-menu>
+        <button slot="trigger" id="trigger">Used on</button>
+        ${items}
+      </pds-dropdown-menu>
+      <div style="height: 3000px"></div>
+    `);
+    await page.click('#trigger');
+    await page.waitForChanges();
+    return { page, warnings };
+  };
+
+  const usedOnItems = `
+    <pds-dropdown-menu-item href="#offers">3 offers</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item disabled>1 coupon</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational href="#products">4 products</pds-dropdown-menu-item>
+  `;
+
+  const focusedItem = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.evaluate(() => {
+      const host = document.activeElement;
+      let inner = host;
+      while (inner?.shadowRoot?.activeElement) inner = inner.shadowRoot.activeElement;
+      return { text: host?.textContent?.trim(), role: inner?.getAttribute('role') ?? inner?.tagName.toLowerCase() };
+    });
+
+  it('reaches informational items with the arrow keys and skips disabled ones, without warning', async () => {
+    const { page, warnings } = await openMenu(usedOnItems);
+
+    const visited = [];
+    for (let i = 0; i < 4; i += 1) {
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+      visited.push(await focusedItem(page));
+    }
+
+    expect(visited).toEqual([
+      { text: '3 offers', role: 'a' },
+      { text: '2 forms', role: 'menuitem' },
+      { text: '4 products', role: 'menuitem' },
+      { text: '3 offers', role: 'a' },
+    ]);
+    expect(warnings.filter((text) => text.includes('Unexpected element'))).toEqual([]);
+  });
+
+  it('does nothing on Enter or Space', async () => {
+    const { page } = await openMenu(usedOnItems);
+    const clickSpy = await page.spyOnEvent('pdsClick');
+    const url = page.url();
+    for (let i = 0; i < 3; i += 1) await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+    expect(await focusedItem(page)).toEqual({ text: '4 products', role: 'menuitem' });
+
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+
+    expect(clickSpy).not.toHaveReceivedEvent();
+    expect(page.url()).toBe(url);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('true');
+    expect(await focusedItem(page)).toEqual({ text: '4 products', role: 'menuitem' });
+  });
+
+  it('closes on Escape and returns focus to the trigger', async () => {
+    const { page } = await openMenu(usedOnItems);
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+    expect(await focusedItem(page)).toEqual({ text: '2 forms', role: 'menuitem' });
+
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+
+    expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('trigger');
+  });
+
+  describe('in a menu of only informational items', () => {
+    const onlyInformational = `
+      <pds-dropdown-menu-item informational>3 offers</pds-dropdown-menu-item>
+      <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+      <pds-dropdown-menu-item informational disabled>1 coupon</pds-dropdown-menu-item>
+    `;
+
+    it.each(['Tab', 'ArrowDown'] as const)('moves focus from the trigger into the menu with %s', async (key) => {
+      const { page } = await openMenu(onlyInformational);
+
+      await page.keyboard.press(key);
+      await page.waitForChanges();
+
+      expect(await focusedItem(page)).toEqual({ text: '3 offers', role: 'menuitem' });
+    });
+
+    it('has no axe violations', async () => {
+      const { page } = await openMenu(onlyInformational);
+
+      expect(formatViolations(await runAxe(page))).toBe('');
+    });
+  });
+
+  it('renders undimmed, with no hover background', async () => {
+    const { page } = await openMenu(`
+      <pds-dropdown-menu-item id="action">Remove tag</pds-dropdown-menu-item>
+      <pds-dropdown-menu-item id="info" informational>2 forms</pds-dropdown-menu-item>
+    `);
+    const hoveredBackground = async (selector: string) => {
+      await page.hover(selector);
+      return page.$eval(selector, (el) =>
+        getComputedStyle(el.shadowRoot!.querySelector('.pds-dropdown-menu-item__content')!).backgroundColor,
+      );
+    };
+
+    expect(await page.$eval('#info', (el) => getComputedStyle(el).opacity)).toBe('1');
+    expect(await page.$eval('#info', (el) => getComputedStyle(el).cursor)).toBe('default');
+    expect(await hoveredBackground('#action')).not.toBe('rgba(0, 0, 0, 0)');
+    expect(await hoveredBackground('#info')).toBe('rgba(0, 0, 0, 0)');
+  });
+
+  it('exposes informational items to assistive tech as disabled menu items', async () => {
+    const { page } = await openMenu(usedOnItems);
+
+    const tree = (await page.accessibility.snapshot({ interestingOnly: false })) as AXNode;
+    const [menu] = findAll(tree, 'menu');
+    const menuItems = findAll(menu, 'menuitem').map(({ name, disabled }) => ({ name, disabled }));
+
+    expect(menuItems).toEqual([
+      { name: '2 forms', disabled: true },
+      { name: '4 products', disabled: true },
+    ]);
+  });
+
+  it('has no axe violations in a mixed menu', async () => {
+    const { page } = await openMenu(usedOnItems);
+
+    // `aria-required-children` is disabled here for the linked and button items, which still render
+    // `role="none"` hosts around a link or button. The informational-only menu above runs it.
+    const violations = await runAxe(page, {
+      rules: { 'aria-required-children': { enabled: false } },
+    });
+    expect(formatViolations(violations)).toBe('');
+  });
+});
+
 // A script that keeps changing what the menu puts back would keep both running forever in
 // microtasks; the menu gives up after a few rounds instead of hanging the page.
 describe('pds-dropdown-menu with a script fighting its trigger ARIA', () => {
