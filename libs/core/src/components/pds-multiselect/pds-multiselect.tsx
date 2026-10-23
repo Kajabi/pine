@@ -1490,7 +1490,7 @@ export class PdsMultiselect {
       >
         {isCreateOption ? (
           <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
-            <pds-icon name="add" size="small" />
+            <pds-icon name="add" size="small" aria-hidden="true" />
             <pds-text>{formatMessage(this.createOptionLabel, { text: option.text })}</pds-text>
           </pds-box>
         ) : (
