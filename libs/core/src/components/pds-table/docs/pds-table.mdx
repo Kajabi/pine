@@ -28,6 +28,8 @@ Tables display tabular data using semantic subcomponents for head, head-cell, bo
 
 Be sure to make proper use of the subcomponents to ensure that the table is accessible to screen reader users.
 
+The sort icon is hidden from assistive technology. To announce the sort direction, set `aria-sort` (`ascending` or `descending`) on the sorted `pds-table-head-cell`, updating it from the `pdsTableSort` event.
+
 ## Properties
 
 <DocArgsTable componentName="pds-table" docSource={components} />
