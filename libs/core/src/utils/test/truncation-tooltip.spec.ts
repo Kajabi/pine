@@ -25,6 +25,12 @@ function advanceHideDelay() {
   jest.advanceTimersByTime(150);
 }
 
+// The spec DOM can't evaluate :focus-visible, so each focus states whether it came from the keyboard.
+function focusIn(target: HTMLElement, { visible = true } = {}) {
+  jest.spyOn(target, 'matches').mockImplementation((selector) => visible && selector === ':focus-visible');
+  target.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+}
+
 describe('truncation-tooltip', () => {
   let hostEl: HTMLElement;
   let contentEl: HTMLElement;
@@ -161,7 +167,7 @@ describe('truncation-tooltip', () => {
     cleanup();
   });
 
-  it('creates tooltip on focusin when overflowing', () => {
+  it('creates tooltip on keyboard focus when overflowing', () => {
     Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
     Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
 
@@ -171,10 +177,97 @@ describe('truncation-tooltip', () => {
       getTooltipText: () => 'Full text',
     });
 
-    hostEl.dispatchEvent(new FocusEvent('focusin'));
+    focusIn(contentEl);
 
     const portal = document.querySelector('.pds-truncation-tooltip');
     expect(portal).not.toBeNull();
+
+    cleanup();
+  });
+
+  it('does not create tooltip on focus that is not :focus-visible, such as from a click', () => {
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+    const cleanup = setupTruncationTooltip({
+      hostEl,
+      contentEl,
+      getTooltipText: () => 'Full text',
+    });
+
+    focusIn(contentEl, { visible: false });
+
+    expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+    cleanup();
+  });
+
+  it('treats focus as visible in an engine without :focus-visible', () => {
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+    const cleanup = setupTruncationTooltip({
+      hostEl,
+      contentEl,
+      getTooltipText: () => 'Full text',
+    });
+
+    jest.spyOn(contentEl, 'matches').mockImplementation(() => {
+      throw new SyntaxError("':focus-visible' is not a valid selector");
+    });
+    contentEl.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+
+    expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+    cleanup();
+  });
+
+  it('hides after the pointer leaves when focus came from a click', () => {
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+    const cleanup = setupTruncationTooltip({
+      hostEl,
+      contentEl,
+      getTooltipText: () => 'Full text',
+    });
+
+    hostEl.dispatchEvent(new MouseEvent('mouseenter'));
+    focusIn(contentEl, { visible: false });
+    expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+    hostEl.dispatchEvent(new MouseEvent('mouseleave'));
+    advanceHideDelay();
+    expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+    cleanup();
+  });
+
+  // Focus inside a shadow root reaches a host listener with the host as its
+  // target; only composedPath() still leads to the element that has focus.
+  it('tests :focus-visible on the innermost focused element, not the retargeted host', () => {
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+    const cleanup = setupTruncationTooltip({
+      hostEl,
+      contentEl,
+      getTooltipText: () => 'Full text',
+    });
+
+    const dispatchRetargeted = (innerVisible: boolean) => {
+      jest.spyOn(contentEl, 'matches').mockImplementation((selector) => innerVisible && selector === ':focus-visible');
+      jest.spyOn(hostEl, 'matches').mockImplementation((selector) => !innerVisible && selector === ':focus-visible');
+      const event = new FocusEvent('focusin', { bubbles: true });
+      Object.defineProperty(event, 'composedPath', { value: () => [contentEl, hostEl] });
+      hostEl.dispatchEvent(event);
+    };
+
+    dispatchRetargeted(false);
+    expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+    dispatchRetargeted(true);
+    expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
 
     cleanup();
   });
@@ -189,7 +282,7 @@ describe('truncation-tooltip', () => {
       getTooltipText: () => 'Full text',
     });
 
-    hostEl.dispatchEvent(new FocusEvent('focusin'));
+    focusIn(contentEl);
     expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
 
     hostEl.dispatchEvent(new FocusEvent('focusout'));
@@ -209,9 +302,9 @@ describe('truncation-tooltip', () => {
       getTooltipText: () => 'Full text',
     });
 
-    // Hover in + focus in
+    // Hover in + keyboard focus in
     hostEl.dispatchEvent(new MouseEvent('mouseenter'));
-    hostEl.dispatchEvent(new FocusEvent('focusin'));
+    focusIn(contentEl);
 
     // Mouse leaves but focus remains
     hostEl.dispatchEvent(new MouseEvent('mouseleave'));
@@ -442,7 +535,7 @@ describe('truncation-tooltip', () => {
         manageTabIndex: false,
       });
 
-      hostEl.dispatchEvent(new FocusEvent('focusin'));
+      focusIn(contentEl);
 
       expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
       expect(contentEl.hasAttribute('tabindex')).toBe(false);
@@ -472,7 +565,7 @@ describe('truncation-tooltip', () => {
         focusEl,
       });
 
-      focusEl.dispatchEvent(new FocusEvent('focusin'));
+      focusIn(focusEl);
       expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
 
       focusEl.dispatchEvent(new FocusEvent('focusout'));
@@ -490,7 +583,7 @@ describe('truncation-tooltip', () => {
         focusEl,
       });
 
-      hostEl.dispatchEvent(new FocusEvent('focusin'));
+      focusIn(contentEl);
       expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
 
       hostEl.dispatchEvent(new MouseEvent('mouseenter'));
@@ -508,9 +601,24 @@ describe('truncation-tooltip', () => {
       });
 
       cleanup();
-      focusEl.dispatchEvent(new FocusEvent('focusin'));
+      focusIn(focusEl);
 
       expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+    });
+
+    it('ignores focusEl focus that is not :focus-visible', () => {
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+        manageTabIndex: false,
+        focusEl,
+      });
+
+      focusIn(focusEl, { visible: false });
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      cleanup();
     });
   });
 });
