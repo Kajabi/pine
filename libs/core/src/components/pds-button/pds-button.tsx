@@ -3,6 +3,8 @@ import { hasShadowDom } from '../../utils/utils';
 
 import { caretDown, addCircle } from '@pine-ds/icons/icons';
 
+const FORWARDED_ARIA_ATTRIBUTES = ['aria-current', 'aria-expanded', 'aria-haspopup', 'aria-label', 'aria-pressed'];
+
 /**
  * @part button - Exposes the underlying button (or anchor) element for styling, including custom size, shape, or surface on icon-only placements (e.g. a compact square or inverse icon button).
  * @part button-content - Exposes the button content for styling.
@@ -109,29 +111,28 @@ export class PdsButton {
 
   @State() hasStartContent = false;
   @State() hasEndContent = false;
-  @State() triggerExpanded: string | null = null;
-  @State() triggerHasPopup: string | null = null;
+  @State() forwardedAria: Record<string, string | null> = {};
 
   private contentEl?: HTMLButtonElement | HTMLAnchorElement;
-  private triggerAriaObserver?: MutationObserver;
+  private hostAriaObserver?: MutationObserver;
 
   @Event() pdsClick: EventEmitter<Event>;
 
   connectedCallback() {
-    this.syncTriggerAria();
+    this.syncHostAria();
 
     if (typeof MutationObserver === 'undefined') return;
 
-    // Popovers and menus set these on the host after render, but only the inner element is announced.
-    this.triggerAriaObserver = new MutationObserver(this.syncTriggerAria);
-    this.triggerAriaObserver.observe(this.el, {
-      attributeFilter: ['aria-controls', 'aria-expanded', 'aria-haspopup'],
+    // Consumers, popovers and menus set these on the host, often after render, but only the inner element is announced.
+    this.hostAriaObserver = new MutationObserver(this.syncHostAria);
+    this.hostAriaObserver.observe(this.el, {
+      attributeFilter: FORWARDED_ARIA_ATTRIBUTES.concat('aria-controls'),
     });
   }
 
   disconnectedCallback() {
-    this.triggerAriaObserver?.disconnect();
-    this.triggerAriaObserver = undefined;
+    this.hostAriaObserver?.disconnect();
+    this.hostAriaObserver = undefined;
   }
 
   componentDidRender() {
@@ -197,9 +198,15 @@ export class PdsButton {
   }
 
 
-  private syncTriggerAria = () => {
-    this.triggerExpanded = this.el.getAttribute('aria-expanded');
-    this.triggerHasPopup = this.el.getAttribute('aria-haspopup');
+  // Copied rather than moved: frameworks and DOM morphs put host attributes back on every update,
+  // so taking them off the host would fight each one.
+  private syncHostAria = () => {
+    const forwarded: Record<string, string | null> = {};
+    FORWARDED_ARIA_ATTRIBUTES.forEach((name) => (forwarded[name] = this.el.getAttribute(name)));
+    // A new object always re-renders, and frameworks re-set unchanged attributes on every render of their own.
+    if (FORWARDED_ARIA_ATTRIBUTES.some((name) => forwarded[name] !== this.forwardedAria[name])) {
+      this.forwardedAria = forwarded;
+    }
     this.forwardAriaControls();
   };
 
@@ -325,8 +332,7 @@ export class PdsButton {
   render() {
     // Common props for both button and anchor elements
     const commonProps = {
-      'aria-expanded': this.triggerExpanded,
-      'aria-haspopup': this.triggerHasPopup,
+      ...this.forwardedAria,
       class: this.classNames(),
       part: 'button',
       ref: (el: HTMLButtonElement | HTMLAnchorElement) => (this.contentEl = el),
@@ -337,6 +343,8 @@ export class PdsButton {
         return {
           // Anchor element props
           ...commonProps,
+          // ARIA allows aria-pressed only on buttons, so a link never gets it.
+          'aria-pressed': null,
           download: this.download,
           href: this.disabled ? null : this.href,
           target: this.target,
