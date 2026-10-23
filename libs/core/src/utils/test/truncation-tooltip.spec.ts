@@ -213,7 +213,7 @@ describe('truncation-tooltip', () => {
     });
 
     jest.spyOn(contentEl, 'matches').mockImplementation(() => {
-      throw new SyntaxError("':focus-visible' is not a valid selector");
+      throw new DOMException("':focus-visible' is not a valid selector", 'SyntaxError');
     });
     contentEl.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
 
