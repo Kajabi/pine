@@ -107,6 +107,11 @@ export class PdsPopover {
   private closeWhenFocusLeaves = false;
 
   /**
+   * How far the pointer was from the panel at its last move after leaving the trigger
+   */
+  private panelDistance = Infinity;
+
+  /**
    * Instance counter for unique IDs
    */
   private static instanceCounter = 0;
@@ -365,8 +370,28 @@ export class PdsPopover {
   private handleHoverLeave = (event: PointerEvent) => {
     if (event.pointerType === 'touch') return;
     this.clearHoverTimers();
-    if (this.hoverOpened) this.hoverCloseTimer = setTimeout(this.closeFromHover, HOVER_CLOSE_DELAY_MS);
+    if (!this.hoverOpened) return;
+    this.hoverCloseTimer = setTimeout(this.closeFromHover, HOVER_CLOSE_DELAY_MS);
+    if (event.currentTarget !== this.triggerEl) return;
+    this.panelDistance = this.distanceToPanel(event);
+    document.addEventListener('pointermove', this.handleMoveTowardPanel);
   };
+
+  // A slow diagonal from the trigger to a panel shorter than it runs beside the panel for longer
+  // than the close delay, so each move that brings the pointer closer starts the delay again.
+  private handleMoveTowardPanel = (event: PointerEvent) => {
+    const distance = this.distanceToPanel(event);
+    if (distance < this.panelDistance) {
+      clearTimeout(this.hoverCloseTimer);
+      this.hoverCloseTimer = setTimeout(this.closeFromHover, HOVER_CLOSE_DELAY_MS);
+    }
+    this.panelDistance = distance;
+  };
+
+  private distanceToPanel({ clientX, clientY }: PointerEvent) {
+    const panel = this.portalEl!.getBoundingClientRect();
+    return Math.hypot(Math.max(panel.left - clientX, 0, clientX - panel.right), Math.max(panel.top - clientY, 0, clientY - panel.bottom));
+  }
 
   private handleHoverFocusOut = (event: FocusEvent) => {
     if (!this.closeWhenFocusLeaves || containsComposed(this.portalEl, event.relatedTarget as Node | null)) return;
@@ -375,7 +400,7 @@ export class PdsPopover {
   };
 
   private closeFromHover = () => {
-    this.hoverCloseTimer = undefined;
+    this.clearHoverTimers();
     if (!this.hoverOpened) return;
     // Content shown on hover stays while focus is in it (WCAG 1.4.13).
     if (containsComposed(this.portalEl, deepActiveElement())) {
@@ -405,6 +430,7 @@ export class PdsPopover {
     this.hoverOpenTimer = undefined;
     this.hoverCloseTimer = undefined;
     this.closeWhenFocusLeaves = false;
+    document.removeEventListener('pointermove', this.handleMoveTowardPanel);
   }
 
   // componentDidLoad doesn't run again when a popover comes back, so rebuild whatever
