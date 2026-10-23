@@ -6,6 +6,7 @@ export default {
 	args: {
 		popoverTargetAction: 'toggle',
 		popoverType: 'auto',
+		openOn: 'click',
 		placement: 'bottom-start',
 		padding: 'md',
 		componentId: 'popover-playground',
@@ -18,7 +19,10 @@ export default {
 	},
 	component: 'pds-popover',
 	parameters: {},
-	title: 'components/Popover'
+	title: 'components/Popover',
+	argTypes: {
+		openOn: { control: 'inline-radio', options: ['click', 'hover'] },
+	},
 }
 
 const BaseTemplate = (args) => html`
@@ -26,6 +30,7 @@ const BaseTemplate = (args) => html`
 		component-id=${args.componentId}
 		popover-target-action=${args.popoverTargetAction}
 		popover-type=${args.popoverType}
+		open-on=${args.openOn}
 		placement=${args.placement}
 		.maxWidth=${args.maxWidth}
 		padding=${args.padding}

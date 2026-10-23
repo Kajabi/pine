@@ -10,7 +10,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 <StatusBadge component="pds-popover" />
 
 # Popover
-Popovers display contextual information when users click or initiates a keyboard event on an element. They typically contain more information than tooltips and can include interactive elements.
+Popovers display contextual information when users click an element or activate it with the keyboard, and can also open when users hover over it. They typically contain more information than tooltips and can include interactive elements.
 
 ## Guidelines
 
@@ -29,6 +29,8 @@ Popovers display contextual information when users click or initiates a keyboard
 ## Usage Notes
 
 Keep popover content concise and ensure every trigger element is focusable so keyboard users can open and dismiss the overlay reliably.
+
+Use `open-on="hover"` for previews, where the popover adds detail about its trigger but nothing depends on it. Keep essential actions reachable by click: touch and keyboard users never hover, and a hover-opened popover closes as soon as the pointer moves away.
 
 ## Properties
 
@@ -224,6 +226,37 @@ Toggles the popover visibility state when triggered. Clicking the popover trigge
   <pds-popover component-id="toggle" placement="bottom-start" popover-target-action="toggle">
     <pds-button slot="trigger">Toggle Action</pds-button>
     <p>This popover uses the toggle action</p>
+  </pds-popover>
+</DocCanvas>
+
+### Open on hover
+
+Set `open-on="hover"` to also open the popover when the pointer rests on the trigger. It opens after a short delay, so a pointer passing over the trigger doesn't open it, and closes shortly after the pointer leaves both the trigger and the popover, so the pointer can move into the popover to read or select its content.
+
+- A click on the trigger keeps a hover-opened popover open. From then on it closes the way a clicked-open popover does, so with `popover-target-action="toggle"` the next click closes it.
+- Enter or Space on the trigger opens it, as in the default mode. Focus alone doesn't open it.
+- While focus is inside the popover, it stays open after the pointer leaves, and closes once focus leaves too.
+- Escape closes a hover-opened popover, `manual` ones included. Once a click keeps a `manual` popover open, it ignores Escape again, like one a click opened.
+- On touch screens a tap opens it, as in the default mode.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="hover" placement="bottom-start" openOn="hover" popoverTargetAction="toggle">
+        <PdsButton slot="trigger" variant="secondary">Hover Preview</PdsButton>
+        <p>This popover opens when the pointer rests on the trigger</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="hover" placement="bottom-start" open-on="hover" popover-target-action="toggle">
+        <pds-button slot="trigger" variant="secondary">Hover Preview</pds-button>
+        <p>This popover opens when the pointer rests on the trigger</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="hover" placement="bottom-start" open-on="hover" popover-target-action="toggle">
+    <pds-button slot="trigger" variant="secondary">Hover Preview</pds-button>
+    <p>This popover opens when the pointer rests on the trigger</p>
   </pds-popover>
 </DocCanvas>
 
