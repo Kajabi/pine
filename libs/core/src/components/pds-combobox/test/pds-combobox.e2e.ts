@@ -66,6 +66,24 @@ describe('pds-combobox', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  it('names a selected option by its label alone', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-combobox component-id="fruit" label="Fruit" trigger="button" mode="select-only" value="apple">
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+      </pds-combobox>
+    `);
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+
+    const tree = await page.accessibility.snapshot();
+    const findOptions = (node) => [node.role === 'option' ? [node.name, !!node.selected] : null, ...(node.children ?? []).flatMap(findOptions)].filter(Boolean);
+
+    expect(findOptions(tree)).toEqual([['Apple', true], ['Banana', false]]);
+  });
+
   // trigger-width sets the trigger's whole box, so 100% fills its container, padding and border included.
   // The brand chip is the one chip trigger that keeps padding (1px) in its dropdown variant.
   it.each([
