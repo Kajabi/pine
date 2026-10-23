@@ -753,5 +753,52 @@ describe('pds-button', () => {
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
+
+    it('has no axe violations as an icon-only button named only by aria-label', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-button variant="tertiary" icon-only aria-label="More actions">
+          <pds-icon slot="start" aria-hidden="true" icon="${favorite}"></pds-icon>
+        </pds-button>
+      `);
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('has no axe violations as a toggle button with aria-pressed', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="secondary" aria-pressed="true">Bold</pds-button>');
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('has no axe violations as a link to the current page', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button href="/settings" aria-current="page">Settings</pds-button>');
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('renames the inner button when the host aria-label changes or is removed', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-button icon-only aria-label="Collapse chat">
+          <pds-icon slot="start" aria-hidden="true" icon="${favorite}"></pds-icon>
+        </pds-button>
+      `);
+
+      expect(await page.$('aria/Collapse chat[role="button"]')).not.toBeNull();
+
+      await page.$eval('pds-button', (el) => el.setAttribute('aria-label', 'Expand chat'));
+      await page.waitForChanges();
+
+      expect(await page.$('aria/Expand chat[role="button"]')).not.toBeNull();
+      expect(await page.$('aria/Collapse chat[role="button"]')).toBeNull();
+
+      await page.$eval('pds-button', (el) => el.removeAttribute('aria-label'));
+      await page.waitForChanges();
+
+      expect(await page.$('aria/Expand chat[role="button"]')).toBeNull();
+    });
   });
 });
