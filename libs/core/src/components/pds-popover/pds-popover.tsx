@@ -7,8 +7,13 @@ import { cssEscape } from '@utils/css';
 import { limitRestores } from '@utils/keep-hydrated';
 import { PdsPopoverEventDetail } from './popover-interface';
 
-/** Open auto popovers, in the order they opened: Escape goes to the last one it applies to. */
-const openAutoPopovers: PdsPopover[] = [];
+/** Open popovers that close on Escape, in the order they opened: Escape goes to the last one it applies to. */
+const popoversTakingEscape: PdsPopover[] = [];
+
+/** Hovering the trigger waits this long before opening, so a pointer passing over it doesn't open it. */
+const HOVER_OPEN_DELAY_MS = 120;
+/** Leaving the trigger and panel waits this long before closing, which covers the gap between them. */
+const HOVER_CLOSE_DELAY_MS = 200;
 
 /** The focused element, followed down through shadow roots to the control that has focus. */
 function deepActiveElement(): Element | null {
@@ -90,6 +95,23 @@ export class PdsPopover {
   private openTimestamp = 0;
 
   /**
+   * Set while hover holds the popover open, until a click pins it or it closes
+   */
+  private hoverOpened = false;
+  private hoverOpenTimer?: ReturnType<typeof setTimeout>;
+  private hoverCloseTimer?: ReturnType<typeof setTimeout>;
+
+  /**
+   * Set when the pointer left while focus was in the panel, so focus leaving it closes it instead
+   */
+  private closeWhenFocusLeaves = false;
+
+  /**
+   * How far the pointer was from the panel at its last move after leaving the trigger
+   */
+  private panelDistance = Infinity;
+
+  /**
    * Instance counter for unique IDs
    */
   private static instanceCounter = 0;
@@ -117,6 +139,24 @@ export class PdsPopover {
    * @defaultValue "show"
    */
   @Prop() popoverTargetAction: 'show' | 'toggle' | 'hide' = 'show';
+
+  /**
+   * Determines how the popover opens. With `hover`, it also opens when the pointer rests on the trigger and closes
+   * when the pointer leaves, until a click on the trigger keeps it open. Enter or Space on the trigger opens it either way.
+   * @defaultValue "click"
+   */
+  @Prop() openOn?: 'click' | 'hover' = 'click';
+
+  @Watch('openOn')
+  protected openOnChanged() {
+    this.pin();
+    this.stopListeningForHover(this.triggerEl);
+    this.stopListeningForHover(this.portalEl);
+    // Out of the page, connectedCallback binds them when it comes back.
+    if (!this.isComponentMounted) return;
+    this.listenForHover(this.triggerEl);
+    this.listenForHover(this.portalEl);
+  }
 
   /**
    * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover.
@@ -205,6 +245,7 @@ export class PdsPopover {
     // Clean up previous trigger's event listener if it exists
     if (this.triggerEl != null) {
       this.triggerEl.removeEventListener('click', this.handleTriggerClick);
+      this.stopListeningForHover(this.triggerEl);
     }
 
     if (assignedElements.length > 0) {
@@ -215,6 +256,7 @@ export class PdsPopover {
 
       // Attach click listener to handle popover visibility
       this.triggerEl.addEventListener('click', this.handleTriggerClick);
+      this.listenForHover(this.triggerEl);
     } else {
       this.triggerEl = null;
     }
@@ -276,6 +318,13 @@ export class PdsPopover {
       event.preventDefault();
     }
 
+    if (this.openOn === 'hover' && this.popoverTargetAction !== 'hide') {
+      const heldByHover = this.hoverOpened;
+      this.pin();
+      // Pinning, not toggling: the hover before a click has already opened it.
+      if (heldByHover) return;
+    }
+
     // Execute the appropriate action based on popoverTargetAction prop
     switch (this.popoverTargetAction) {
       case 'show':
@@ -291,6 +340,99 @@ export class PdsPopover {
     }
   };
 
+  private listenForHover(el: HTMLElement | null) {
+    if (this.openOn !== 'hover' || el == null) return;
+    el.addEventListener('pointerenter', this.handleHoverEnter);
+    el.addEventListener('pointerleave', this.handleHoverLeave);
+    el.addEventListener('focusout', this.handleHoverFocusOut);
+  }
+
+  private stopListeningForHover(el: HTMLElement | null) {
+    if (el == null) return;
+    el.removeEventListener('pointerenter', this.handleHoverEnter);
+    el.removeEventListener('pointerleave', this.handleHoverLeave);
+    el.removeEventListener('focusout', this.handleHoverFocusOut);
+  }
+
+  // A tap sends touch pointer events and then a click, so touch takes the click path alone.
+  private handleHoverEnter = (event: PointerEvent) => {
+    if (event.pointerType === 'touch') return;
+    this.clearHoverTimers();
+    if (this.active) return;
+    this.hoverOpenTimer = setTimeout(() => {
+      this.hoverOpenTimer = undefined;
+      if (this.active || this.portalEl == null) return;
+      this.hoverOpened = true;
+      this.show();
+    }, HOVER_OPEN_DELAY_MS);
+  };
+
+  private handleHoverLeave = (event: PointerEvent) => {
+    if (event.pointerType === 'touch') return;
+    this.clearHoverTimers();
+    if (!this.hoverOpened) return;
+    this.hoverCloseTimer = setTimeout(this.closeFromHover, HOVER_CLOSE_DELAY_MS);
+    if (event.currentTarget !== this.triggerEl) return;
+    this.panelDistance = this.distanceToPanel(event);
+    document.addEventListener('pointermove', this.handleMoveTowardPanel);
+  };
+
+  // A slow diagonal from the trigger to a panel shorter than it runs beside the panel for longer
+  // than the close delay, so each move that brings the pointer closer starts the delay again.
+  private handleMoveTowardPanel = (event: PointerEvent) => {
+    const distance = this.distanceToPanel(event);
+    if (distance < this.panelDistance) {
+      clearTimeout(this.hoverCloseTimer);
+      this.hoverCloseTimer = setTimeout(this.closeFromHover, HOVER_CLOSE_DELAY_MS);
+    }
+    this.panelDistance = distance;
+  };
+
+  private distanceToPanel({ clientX, clientY }: PointerEvent) {
+    const panel = this.portalEl!.getBoundingClientRect();
+    return Math.hypot(Math.max(panel.left - clientX, 0, clientX - panel.right), Math.max(panel.top - clientY, 0, clientY - panel.bottom));
+  }
+
+  private handleHoverFocusOut = (event: FocusEvent) => {
+    if (!this.closeWhenFocusLeaves || containsComposed(this.portalEl, event.relatedTarget as Node | null)) return;
+    this.closeWhenFocusLeaves = false;
+    this.hoverCloseTimer = setTimeout(this.closeFromHover, HOVER_CLOSE_DELAY_MS);
+  };
+
+  private closeFromHover = () => {
+    this.clearHoverTimers();
+    if (!this.hoverOpened) return;
+    // Content shown on hover stays while focus is in it (WCAG 1.4.13).
+    if (containsComposed(this.portalEl, deepActiveElement())) {
+      this.closeWhenFocusLeaves = true;
+      return;
+    }
+    this.hide();
+  };
+
+  /**
+   * Keeps a popover that hover opened open, closing from then on as one opened by a click does. A
+   * manual one gives up Escape again, which it took only while hover held it.
+   */
+  private pin() {
+    this.clearHoverTimers();
+    if (!this.hoverOpened) return;
+    this.hoverOpened = false;
+    if (this.popoverType === 'auto') return;
+    this.forgetOpen();
+    this.portalEl?.removeAttribute('data-pds-popover-open');
+    document.removeEventListener('keydown', this.boundEscapeKeyHandler);
+  }
+
+  private clearHoverTimers() {
+    clearTimeout(this.hoverOpenTimer);
+    clearTimeout(this.hoverCloseTimer);
+    this.hoverOpenTimer = undefined;
+    this.hoverCloseTimer = undefined;
+    this.closeWhenFocusLeaves = false;
+    document.removeEventListener('pointermove', this.handleMoveTowardPanel);
+  }
+
   // componentDidLoad doesn't run again when a popover comes back, so rebuild whatever
   // disconnectedCallback tore down. Each step is a no-op when nothing was.
   connectedCallback() {
@@ -299,6 +441,7 @@ export class PdsPopover {
     this.isComponentMounted = true;
     this.createPortal();
     this.triggerEl?.addEventListener('click', this.handleTriggerClick);
+    this.listenForHover(this.triggerEl);
     this.observeTrigger();
     this.linkTriggerToPortal();
 
@@ -336,6 +479,7 @@ export class PdsPopover {
     if (this.triggerEl != null) {
       this.triggerEl.removeEventListener('click', this.handleTriggerClick);
     }
+    this.stopListeningForHover(this.triggerEl);
 
     this.triggerObserver?.disconnect();
     this.triggerObserver = null;
@@ -347,6 +491,8 @@ export class PdsPopover {
 
     // Clear any pending debounce timers
     this.clearDebounceTimers();
+    this.clearHoverTimers();
+    this.hoverOpened = false;
 
     // Remove portal from DOM
     this.removePortal();
@@ -399,6 +545,7 @@ export class PdsPopover {
     // Add global focus styles to match Pine design system
     // This is done after appending to ensure it's part of the document and can access CSS variables
     this.addPortalFocusStyles();
+    this.listenForHover(this.portalEl);
   }
 
   /**
@@ -546,8 +693,8 @@ export class PdsPopover {
     this.updatePortalContent();
 
     // Show portal. The attribute tells a modal around it that this popover takes Escape first; only
-    // an auto popover listens for Escape.
-    if (this.popoverType === 'auto') this.portalEl.setAttribute('data-pds-popover-open', '');
+    // an auto popover, or one hover opened, listens for Escape.
+    if (this.popoverType === 'auto' || this.hoverOpened) this.portalEl.setAttribute('data-pds-popover-open', '');
     this.portalEl.style.display = 'block';
     this.portalEl.style.opacity = '1';
     this.portalEl.style.visibility = 'visible';
@@ -562,10 +709,14 @@ export class PdsPopover {
     this.addScrollAndResizeListeners();
     document.addEventListener('submit', this.handleSubmitFromPanel, true);
 
-    // Add document listeners for light dismiss and escape key (auto type only)
+    // Add document listeners for light dismiss and escape key (auto type only), or for the escape
+    // key alone while hover holds a manual popover open
     if (this.popoverType === 'auto') {
-      openAutoPopovers.push(this);
+      popoversTakingEscape.push(this);
       this.addLightDismissListeners();
+    } else if (this.hoverOpened) {
+      popoversTakingEscape.push(this);
+      document.addEventListener('keydown', this.boundEscapeKeyHandler);
     }
 
     // Emit open event
@@ -580,9 +731,11 @@ export class PdsPopover {
    */
   @Method()
   async hide() {
+    this.clearHoverTimers();
     if (!this.active || !this.portalEl) return;
 
     this.active = false;
+    this.hoverOpened = false;
     this.unwatchDialogClose();
 
     // Restoring the content drops its focus to the body, so check where focus is first. In a
@@ -667,8 +820,8 @@ export class PdsPopover {
   }
 
   private forgetOpen() {
-    const index = openAutoPopovers.indexOf(this);
-    if (index >= 0) openAutoPopovers.splice(index, 1);
+    const index = popoversTakingEscape.indexOf(this);
+    if (index >= 0) popoversTakingEscape.splice(index, 1);
   }
 
   /**
@@ -807,7 +960,7 @@ export class PdsPopover {
     if (event.key !== 'Escape' || event.defaultPrevented) return;
     // Like the native Popover API, Escape closes only the top popover: the last one opened that
     // it applies to. Every open popover hears it, so each checks whether it's that one.
-    const top = [...openAutoPopovers].reverse().find(popover => popover.takesEscapeFrom(event));
+    const top = [...popoversTakingEscape].reverse().find(popover => popover.takesEscapeFrom(event));
     if (top !== this) return;
 
     // Take the key, so the dialog or modal around it doesn't close too.

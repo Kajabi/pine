@@ -593,6 +593,7 @@ export namespace Components {
         "componentId": string;
         "hide": () => Promise<void>;
         "maxWidth"?: number;
+        "openOn"?: 'click' | 'hover';
         "padding"?: PopoverPaddingType;
         "placement": PlacementType;
         "popoverTargetAction": 'show' | 'toggle' | 'hide';
@@ -2527,6 +2528,7 @@ export namespace LocalJSX {
         "maxWidth"?: number;
         "onPdsPopoverClose"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
+        "openOn"?: 'click' | 'hover';
         "padding"?: PopoverPaddingType;
         "placement"?: PlacementType;
         "popoverTargetAction"?: 'show' | 'toggle' | 'hide';
@@ -2539,6 +2541,8 @@ export namespace LocalJSX {
         "componentId": string;
         // (undocumented)
         "maxWidth": number;
+        // (undocumented)
+        "openOn": 'click' | 'hover';
         // (undocumented)
         "padding": PopoverPaddingType;
         // (undocumented)

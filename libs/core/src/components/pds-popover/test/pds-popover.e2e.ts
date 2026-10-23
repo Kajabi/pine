@@ -1315,3 +1315,331 @@ describe('nested pds-popovers', () => {
     expect(await shown()).toEqual([false, false]);
   });
 });
+
+// Puppeteer's mouse sends mouse pointer events even where the browser reports (hover: none), as
+// CI's headless Chrome does, so these drive the real hover path.
+describe('pds-popover open-on hover', () => {
+  type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+  const setUp = async (popoverAttrs = '') => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 800 });
+    await page.setContent(`
+      <pds-popover component-id="hover-pop" open-on="hover" placement="bottom-start" ${popoverAttrs}>
+        <button slot="trigger" id="hover-trigger">Preview</button>
+        <div><button id="hover-inside">Inside</button></div>
+      </pds-popover>
+      <button id="elsewhere" style="position: absolute; top: 600px; left: 600px;">Elsewhere</button>
+    `);
+    return page;
+  };
+
+  const pause = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const isShown = (page: Page) =>
+    page.evaluate(() => document.getElementById('hover-pop-portal')?.style.display === 'block');
+
+  const waitUntilShown = (page: Page, shown: boolean) =>
+    page.waitForFunction((want: boolean) => (document.getElementById('hover-pop-portal')?.style.display === 'block') === want, {}, shown);
+
+  const centerOf = (page: Page, id: string) =>
+    page.$eval(`#${id}`, (el) => {
+      const rect = el.getBoundingClientRect();
+      return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+    });
+
+  const moveTo = async (page: Page, id: string) => {
+    const { x, y } = await centerOf(page, id);
+    await page.mouse.move(x, y, { steps: 4 });
+  };
+
+  const hoverOpen = async (page: Page) => {
+    await moveTo(page, 'hover-trigger');
+    await waitUntilShown(page, true);
+  };
+
+  const recordTimes = (page: Page) =>
+    page.evaluate(() => {
+      const times = ((window as unknown as { times: Record<string, number> }).times = {});
+      document.getElementById('hover-trigger')!.addEventListener('pointerenter', () => (times.entered = performance.now()));
+      document.querySelector('pds-popover')!.addEventListener('pdsPopoverOpen', () => (times.opened = performance.now()));
+      document.querySelector('pds-popover')!.addEventListener('pdsPopoverClose', () => (times.closed = performance.now()));
+      document.getElementById('hover-pop-portal')!.addEventListener('pointerleave', () => (times.left = performance.now()));
+    });
+
+  const times = (page: Page) => page.evaluate(() => (window as unknown as { times: Record<string, number> }).times);
+
+  it('stays closed on hover in the default click mode', async () => {
+    const page = await setUp();
+    await page.$eval('pds-popover', (el) => el.removeAttribute('open-on'));
+    await page.waitForChanges();
+
+    await moveTo(page, 'hover-trigger');
+    await pause(300);
+
+    expect(await isShown(page)).toBe(false);
+  });
+
+  it('opens once the pointer has rested on the trigger for the delay', async () => {
+    const page = await setUp();
+    const openSpy = await page.spyOnEvent('pdsPopoverOpen');
+    await recordTimes(page);
+
+    await hoverOpen(page);
+
+    const { entered, opened } = await times(page);
+    expect(opened - entered).toBeGreaterThanOrEqual(110);
+    expect(openSpy).toHaveReceivedEventTimes(1);
+    expect(openSpy.firstEvent.detail).toEqual({ componentId: 'hover-pop', popoverType: 'auto' });
+  });
+
+  it('stays open as the pointer moves from the trigger into the panel, and closes after it leaves both', async () => {
+    const page = await setUp();
+    await hoverOpen(page);
+    await recordTimes(page);
+
+    await moveTo(page, 'hover-inside');
+    await pause(300);
+    expect(await isShown(page)).toBe(true);
+
+    await moveTo(page, 'elsewhere');
+    await waitUntilShown(page, false);
+
+    const { left, closed } = await times(page);
+    expect(closed - left).toBeGreaterThanOrEqual(190);
+  });
+
+  it('stays open after a click on the trigger, and closes on the next click when it toggles', async () => {
+    const page = await setUp('popover-target-action="toggle"');
+    const openSpy = await page.spyOnEvent('pdsPopoverOpen');
+    await hoverOpen(page);
+
+    await page.click('#hover-trigger');
+    await moveTo(page, 'elsewhere');
+    await pause(400);
+    expect(await isShown(page)).toBe(true);
+
+    await page.click('#hover-trigger');
+    await waitUntilShown(page, false);
+    await pause(300);
+    expect(await isShown(page)).toBe(false);
+    expect(openSpy).toHaveReceivedEventTimes(1);
+  });
+
+  it('opens once on a touch tap, not while the finger rests on the trigger', async () => {
+    const page = await setUp('popover-target-action="toggle"');
+    await page.setViewport({ width: 1000, height: 800, hasTouch: true });
+    const openSpy = await page.spyOnEvent('pdsPopoverOpen');
+    const { x, y } = await centerOf(page, 'hover-trigger');
+
+    await page.touchscreen.touchStart(x, y);
+    await pause(250);
+    expect(await isShown(page)).toBe(false);
+
+    await page.touchscreen.touchEnd();
+    await waitUntilShown(page, true);
+    await pause(400);
+
+    expect(await isShown(page)).toBe(true);
+    expect(openSpy).toHaveReceivedEventTimes(1);
+  });
+
+  for (const popoverType of ['auto', 'manual']) {
+    it(`closes on Escape once hover opened it (${popoverType})`, async () => {
+      const page = await setUp(`popover-type="${popoverType}"`);
+      await hoverOpen(page);
+      expect(await page.$eval('#hover-pop-portal', (el) => el.hasAttribute('data-pds-popover-open'))).toBe(true);
+
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+
+      expect(await isShown(page)).toBe(false);
+    });
+  }
+
+  it('ignores Escape, like a clicked-open manual popover, once a click keeps a manual one open', async () => {
+    const page = await setUp('popover-type="manual"');
+    await hoverOpen(page);
+    await page.click('#hover-trigger');
+
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+
+    expect(await isShown(page)).toBe(true);
+    expect(await page.$eval('#hover-pop-portal', (el) => el.hasAttribute('data-pds-popover-open'))).toBe(false);
+  });
+
+  it('stays open after the pointer leaves while focus is inside the panel, and closes once focus leaves', async () => {
+    const page = await setUp('popover-type="manual"');
+    await hoverOpen(page);
+    await moveTo(page, 'hover-inside');
+    await page.focus('#hover-inside');
+
+    await moveTo(page, 'elsewhere');
+    await pause(400);
+    expect(await isShown(page)).toBe(true);
+
+    await page.focus('#elsewhere');
+    await waitUntilShown(page, false);
+  });
+
+  it("doesn't open on focus, and opens to stay on Enter", async () => {
+    const page = await setUp();
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('hover-trigger');
+    await pause(300);
+    expect(await isShown(page)).toBe(false);
+
+    await page.keyboard.press('Enter');
+    await waitUntilShown(page, true);
+    await moveTo(page, 'elsewhere');
+    await pause(400);
+
+    expect(await isShown(page)).toBe(true);
+  });
+
+  it('closes only a hover-opened manual popover on the first Escape in a modal', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 800 });
+    await page.setContent(`
+      <pds-modal component-id="modal">
+        <pds-modal-content>
+          <pds-popover component-id="hover-pop" open-on="hover" popover-type="manual">
+            <button slot="trigger" id="hover-trigger">Preview</button>
+            <div>Panel</div>
+          </pds-popover>
+        </pds-modal-content>
+      </pds-modal>
+    `);
+    const modal = await page.find('pds-modal');
+    await modal.callMethod('showModal');
+    await page.waitForChanges();
+    await hoverOpen(page);
+
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+
+    expect(await isShown(page)).toBe(false);
+    expect(await modal.getProperty('open')).toBe(true);
+  });
+
+  it('has no axe violations when hover opened it', async () => {
+    const page = await setUp();
+    await hoverOpen(page);
+
+    expect(formatViolations(await runAxe(page))).toBe('');
+  });
+
+  describe('beside a tall trigger', () => {
+    type Point = { x: number; y: number };
+
+    const setUpBeside = async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1000, height: 800 });
+      await page.setContent(`
+        <div style="position: absolute; left: 200px; top: 200px;">
+          <pds-popover component-id="hover-pop" open-on="hover" placement="right-start">
+            <button slot="trigger" id="hover-trigger" style="display: block; width: 140px; height: 120px;">Preview</button>
+            <div style="width: 272px; height: 16px;"></div>
+          </pds-popover>
+        </div>
+      `);
+      await page.evaluate(() => {
+        const times = ((window as unknown as { times: Record<string, number> }).times = {});
+        document.getElementById('hover-trigger')!.addEventListener('pointerleave', () => (times.left ??= performance.now()));
+        document.querySelector('pds-popover')!.addEventListener('pdsPopoverClose', () => (times.closed ??= performance.now()));
+      });
+      return page;
+    };
+
+    const rectOf = (page: Page, id: string) => page.$eval(`#${id}`, (el) => el.getBoundingClientRect().toJSON() as DOMRect);
+
+    // About 0.2px/ms, a slow hand on the mouse.
+    const slowMove = async (page: Page, from: Point, to: Point) => {
+      const steps = Math.ceil(Math.hypot(to.x - from.x, to.y - from.y) / 3);
+      for (let i = 1; i <= steps; i++) {
+        await page.mouse.move(from.x + ((to.x - from.x) * i) / steps, from.y + ((to.y - from.y) * i) / steps);
+        await pause(10);
+      }
+    };
+
+    const hoverOpenFrom = async (page: Page, corner: 'bottom-left' | 'middle-left') => {
+      const trigger = await rectOf(page, 'hover-trigger');
+      const from = { x: trigger.left + 3, y: corner === 'bottom-left' ? trigger.bottom - 3 : trigger.top + trigger.height / 2 };
+      await page.mouse.move(from.x, from.y);
+      await waitUntilShown(page, true);
+      return from;
+    };
+
+    it('stays open on a slow diagonal from the trigger to a panel shorter than it', async () => {
+      const page = await setUpBeside();
+      const from = await hoverOpenFrom(page, 'bottom-left');
+      const panel = await rectOf(page, 'hover-pop-portal');
+
+      await slowMove(page, from, { x: panel.right - 3, y: panel.top + 3 });
+      await pause(300);
+
+      expect(await isShown(page)).toBe(true);
+    });
+
+    it('still closes after the delay when the pointer leaves the trigger heading away from the panel', async () => {
+      const page = await setUpBeside();
+      const from = await hoverOpenFrom(page, 'middle-left');
+
+      await slowMove(page, from, { x: from.x - 150, y: from.y });
+
+      expect(await isShown(page)).toBe(false);
+      const { left, closed } = await times(page);
+      expect(closed - left).toBeGreaterThanOrEqual(190);
+      expect(closed - left).toBeLessThan(400);
+    });
+  });
+
+  // Like a clicked-open panel, a hover-opened one sits at the end of the body outside a dialog,
+  // and right after the popover inside one.
+  describe('Tab from the trigger', () => {
+    const tabOrder = async (page: Page, open: () => Promise<void>) => {
+      await page.focus('#hover-trigger');
+      await open();
+      const order: string[] = [];
+      for (let i = 0; i < 2; i++) {
+        await page.keyboard.press('Tab');
+        order.push(await page.evaluate(() => document.activeElement?.id ?? ''));
+      }
+      return { order, shown: await isShown(page) };
+    };
+
+    it('reaches a hover-opened panel at the same point as a clicked-open one', async () => {
+      const hoverPage = await setUp();
+      const hovered = await tabOrder(hoverPage, () => hoverOpen(hoverPage));
+
+      const clickPage = await setUp();
+      await clickPage.$eval('pds-popover', (el) => el.removeAttribute('open-on'));
+      await clickPage.waitForChanges();
+      const clicked = await tabOrder(clickPage, async () => {
+        await clickPage.keyboard.press('Enter');
+        await waitUntilShown(clickPage, true);
+      });
+
+      expect(hovered).toEqual({ order: ['elsewhere', 'hover-inside'], shown: true });
+      expect(clicked).toEqual(hovered);
+    });
+
+    it('goes into a hover-opened panel inside a dialog', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1000, height: 800 });
+      await page.setContent(`
+        <dialog id="dialog">
+          <pds-popover component-id="hover-pop" open-on="hover" placement="bottom-start">
+            <button slot="trigger" id="hover-trigger">Preview</button>
+            <div><button id="hover-inside">Inside</button></div>
+          </pds-popover>
+          <button id="elsewhere">Elsewhere</button>
+        </dialog>
+      `);
+      await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).showModal());
+
+      expect(await tabOrder(page, () => hoverOpen(page))).toEqual({ order: ['hover-inside', 'elsewhere'], shown: true });
+    });
+  });
+});
