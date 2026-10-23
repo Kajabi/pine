@@ -305,6 +305,35 @@ describe('pds-dropdown-menu', () => {
     expect(component.currentFocusIndex).toBe(2); // Should skip index 1 (disabled)
   });
 
+  it('keeps informational items in keyboard navigation, without warning', async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
+      html: `
+        <pds-dropdown-menu>
+          <button slot="trigger">Used on</button>
+          <pds-dropdown-menu-item href="/offers">3 offers</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `,
+    });
+
+    const component = page.rootInstance;
+    const contentSlot = page.root?.shadowRoot?.querySelector('[role="menu"] > slot');
+    component.handleSlotChange({ target: contentSlot } as any);
+    component.currentFocusIndex = 0;
+    const informational = page.body.querySelectorAll('pds-dropdown-menu-item')[1];
+    const focusSpy = jest.spyOn(informational.shadowRoot!.querySelector('[role="menuitem"]') as HTMLElement, 'focus');
+
+    component.focusNextItem();
+
+    expect(component.menuItems).toHaveLength(2);
+    expect(component.currentFocusIndex).toBe(1);
+    expect(focusSpy).toHaveBeenCalled();
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
   it('applies specified placement', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenu, PdsBox],

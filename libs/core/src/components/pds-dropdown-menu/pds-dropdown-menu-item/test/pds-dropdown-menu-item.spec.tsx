@@ -340,7 +340,121 @@ describe('pds-dropdown-menu-item', () => {
     // Simulate Enter key press on disabled item
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
     page.root.dispatchEvent(enterEvent);
-    
+
     expect(clickSpy).not.toHaveBeenCalled();
+  });
+
+  describe('informational', () => {
+    it('renders a focusable menuitem with aria-disabled, without dimming', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>`,
+      });
+
+      const host = page.root!;
+      const content = host.shadowRoot!.querySelector('.pds-dropdown-menu-item__content');
+
+      expect(host.getAttribute('role')).toBe('none');
+      expect(host.hasAttribute('tabindex')).toBe(false);
+      expect(host).toHaveClass('is-informational');
+      expect(host).not.toHaveClass('is-disabled');
+      expect(host.hasAttribute('aria-disabled')).toBe(false);
+      expect(content?.tagName).toBe('DIV');
+      expect(content).toEqualAttribute('role', 'menuitem');
+      expect(content).toEqualAttribute('aria-disabled', 'true');
+      expect(content).toEqualAttribute('tabindex', '0');
+      expect(host.shadowRoot!.querySelector('button')).toBeNull();
+    });
+
+    it('reflects the informational attribute', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item>2 forms</pds-dropdown-menu-item>`,
+      });
+
+      page.root!.informational = true;
+      await page.waitForChanges();
+
+      expect(page.root!.hasAttribute('informational')).toBe(true);
+    });
+
+    it('ignores href, so the item never navigates', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item informational href="/offers" external>3 offers</pds-dropdown-menu-item>`,
+      });
+
+      const shadowRoot = page.root!.shadowRoot!;
+      expect(shadowRoot.querySelector('pds-link')).toBeNull();
+      expect(shadowRoot.querySelector('a')).toBeNull();
+      expect(shadowRoot.querySelector('[role="menuitem"]')).not.toBeNull();
+    });
+
+    it('becomes a link when informational is turned off on an item with href', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item informational href="/offers">3 offers</pds-dropdown-menu-item>`,
+      });
+
+      page.root!.removeAttribute('informational');
+      await page.waitForChanges();
+
+      const shadowRoot = page.root!.shadowRoot!;
+      expect(shadowRoot.querySelector('pds-link')?.href).toBe('/offers');
+      expect(shadowRoot.querySelector('[role="menuitem"]')).toBeNull();
+    });
+
+    it('ignores destructive', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational destructive>2 forms</pds-dropdown-menu-item>`,
+      });
+
+      expect(page.root).not.toHaveClass('destructive');
+    });
+
+    it('does not emit pdsClick when clicked', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      page.root!.click();
+      await page.waitForChanges();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('does nothing on Enter, and keeps Space from scrolling the page', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+      const content = page.root!.shadowRoot!.querySelector('[role="menuitem"]')!;
+
+      const enter = new KeyboardEvent('keydown', { key: 'Enter', cancelable: true });
+      const space = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
+      content.dispatchEvent(enter);
+      content.dispatchEvent(space);
+
+      expect(clickSpy).not.toHaveBeenCalled();
+      expect(enter.defaultPrevented).toBe(false);
+      expect(space.defaultPrevented).toBe(true);
+    });
+
+    it('takes it out of the tab order when also disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational disabled>2 forms</pds-dropdown-menu-item>`,
+      });
+
+      const content = page.root!.shadowRoot!.querySelector('[role="menuitem"]');
+      expect(page.root).toHaveClass('is-disabled');
+      expect(content).toEqualAttribute('tabindex', '-1');
+    });
   });
 });
