@@ -363,6 +363,7 @@ describe('pds-dropdown-menu-item', () => {
       expect(content).toEqualAttribute('role', 'menuitem');
       expect(content).toEqualAttribute('aria-disabled', 'true');
       expect(content).toEqualAttribute('tabindex', '0');
+      expect(content).toEqualAttribute('part', 'button');
       expect(host.shadowRoot!.querySelector('button')).toBeNull();
     });
 
