@@ -779,6 +779,125 @@ describe('pds-popover', () => {
     });
   });
 
+  describe('Padding', () => {
+    const portalOf = (page: { doc: Document }) => page.doc.getElementById('padding-popover-portal');
+
+    it('uses the md token when padding is not set', async () => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: '<pds-popover component-id="padding-popover"></pds-popover>',
+      });
+
+      expect(portalOf(page).style.padding).toBe('var(--pine-dimension-md)');
+    });
+
+    it('adds no class or wrapper when padding is not set', async () => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: `
+          <pds-popover component-id="padding-popover">
+            <button slot="trigger">Trigger</button>
+            <p>Content</p>
+          </pds-popover>
+        `,
+      });
+      const portal = portalOf(page);
+
+      await page.root.show();
+      await page.waitForChanges();
+
+      expect(page.root.hasAttribute('padding')).toBe(false);
+      expect(portal.className).toBe('pds-popover');
+      expect(portal.querySelector('p').parentElement).toBe(portal);
+      expect(portal.style.cssText.match(/padding: [^;]*;/g)).toEqual(['padding: var(--pine-dimension-md);']);
+    });
+
+    it.each([
+      ['none', 'var(--pine-dimension-none)'],
+      ['xs', 'var(--pine-dimension-xs)'],
+      ['sm', 'var(--pine-dimension-sm)'],
+      ['md', 'var(--pine-dimension-md)'],
+    ])('maps padding="%s" to %s', async (padding, token) => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: `<pds-popover component-id="padding-popover" padding="${padding}"></pds-popover>`,
+      });
+
+      expect(portalOf(page).style.padding).toBe(token);
+    });
+
+    it.each([undefined, null, '', 'lg', 'huge'])('uses the md token when padding is %p', async (padding) => {
+      const page = await newSpecPage({ components: [PdsPopover], html: '<div></div>' });
+      const popover = page.doc.createElement('pds-popover');
+      popover.componentId = 'padding-popover';
+      popover.padding = padding as any;
+      page.body.appendChild(popover);
+      await page.waitForChanges();
+
+      expect(portalOf(page).style.padding).toBe('var(--pine-dimension-md)');
+    });
+
+    it.each(['', 'huge'])('uses the md token when the padding attribute is %p', async (padding) => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: `<pds-popover component-id="padding-popover" padding="${padding}"></pds-popover>`,
+      });
+
+      expect(portalOf(page).style.padding).toBe('var(--pine-dimension-md)');
+    });
+
+    it('updates an open panel when padding changes', async () => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: `
+          <pds-popover component-id="padding-popover">
+            <button slot="trigger">Trigger</button>
+            <p>Content</p>
+          </pds-popover>
+        `,
+      });
+      await page.root.show();
+      await page.waitForChanges();
+
+      page.root.padding = 'xs';
+      await page.waitForChanges();
+      expect(portalOf(page).style.padding).toBe('var(--pine-dimension-xs)');
+
+      page.root.padding = 'none';
+      await page.waitForChanges();
+      expect(portalOf(page).style.padding).toBe('var(--pine-dimension-none)');
+    });
+
+    it.each([undefined, null, '', 'huge'])('goes back to the md token when padding changes to %p', async (padding) => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: '<pds-popover component-id="padding-popover" padding="sm"></pds-popover>',
+      });
+
+      page.root.padding = padding as any;
+      await page.waitForChanges();
+
+      expect(portalOf(page).style.padding).toBe('var(--pine-dimension-md)');
+    });
+
+    it('builds a new portal with the current padding after a reconnect', async () => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: '<div id="container"><pds-popover component-id="padding-popover"></pds-popover></div>',
+      });
+      const popover = page.body.querySelector('pds-popover');
+      const container = page.body.querySelector('#container');
+
+      popover.remove();
+      popover.padding = 'sm';
+      await page.waitForChanges();
+      container.appendChild(popover);
+      await page.waitForChanges();
+
+      expect(portalOf(page).style.padding).toBe('var(--pine-dimension-sm)');
+    });
+  });
+
   describe('Show Method Edge Cases', () => {
     it('should not show if already active', async () => {
       const page = await newSpecPage({

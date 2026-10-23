@@ -809,6 +809,84 @@ describe('pds-popover', () => {
   });
 });
 
+describe('pds-popover padding', () => {
+  const openPopover = async (attributes = '', css = '') => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <style>${css}</style>
+      <pds-popover component-id="padding-popover" ${attributes}>
+        <button slot="trigger">Show popover</button>
+        <p>Popover content</p>
+      </pds-popover>
+    `);
+    await page.click('button[slot="trigger"]');
+    await page.waitForChanges();
+    return page;
+  };
+
+  const computedPadding = (page: E2EPage) =>
+    page.$eval('#padding-popover-portal', (portal: HTMLElement) => {
+      const style = getComputedStyle(portal);
+      return [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft];
+    });
+
+  it('has 24px padding on all sides when padding is not set', async () => {
+    const page = await openPopover();
+
+    expect(await computedPadding(page)).toEqual(['24px', '24px', '24px', '24px']);
+  });
+
+  it('sets the default padding inline, with no !important', async () => {
+    const page = await openPopover();
+
+    const portal = await page.$eval('#padding-popover-portal', (portal: HTMLElement) => ({
+      padding: portal.style.padding,
+      priority: portal.style.getPropertyPriority('padding'),
+    }));
+
+    expect(portal).toEqual({ padding: 'var(--pine-dimension-md)', priority: '' });
+  });
+
+  it('adds no attribute to the panel for any padding value', async () => {
+    const attributesWith = async (attributes: string) =>
+      (await openPopover(attributes)).$eval('#padding-popover-portal', (portal: HTMLElement) => portal.getAttributeNames().sort());
+    const unset = await attributesWith('');
+
+    expect(unset.filter(name => name.includes('padding'))).toEqual([]);
+    for (const padding of ['none', 'xs', 'sm', 'md']) {
+      expect(await attributesWith(`padding="${padding}"`)).toEqual(unset);
+    }
+  });
+
+  it.each([
+    ['none', '0px'],
+    ['xs', '8px'],
+    ['sm', '16px'],
+    ['md', '24px'],
+  ])('has %s padding of %s on all sides', async (padding, expected) => {
+    const page = await openPopover(`padding="${padding}"`);
+
+    expect(await computedPadding(page)).toEqual([expected, expected, expected, expected]);
+  });
+
+  it('updates the padding of an open popover', async () => {
+    const page = await openPopover();
+
+    await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => {
+      el.padding = 'xs';
+    });
+    await page.waitForChanges();
+
+    expect(await computedPadding(page)).toEqual(['8px', '8px', '8px', '8px']);
+  });
+
+  it('lets a stylesheet !important rule win, since the inline padding is not !important', async () => {
+    const page = await openPopover('padding="sm"', '.pds-popover { padding: 0 !important; }');
+
+    expect(await computedPadding(page)).toEqual(['0px', '0px', '0px', '0px']);
+  });
+});
+
 describe('pds-popover accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
