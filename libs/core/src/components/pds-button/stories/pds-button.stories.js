@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 
 import { customArgsWithIconControl } from '../../../stories/_helpers';
@@ -31,6 +32,7 @@ export default {
 
 const BaseTemplate = (args) => html`
   <pds-button
+    aria-label=${ifDefined(args.ariaLabel)}
     component-id=${args.componentId}
     ?disabled=${args.disabled}
     ?full-width=${args.fullWidth}
@@ -135,14 +137,12 @@ Disclosure.parameters = {
 
 export const IconOnly = BaseTemplate.bind();
 IconOnly.args = {
+  ariaLabel: 'Favorite',
   disabled: false,
   fullWidth: false,
   icon: 'favorite',
   iconOnly: true,
   loading: false,
-  slot: {
-    default: 'Icon Only',
-  },
   type: 'button',
   variant: 'secondary',
 };
