@@ -488,7 +488,7 @@ const TruncateTemplate = (args) => html`
     </pds-table-row>
   </pds-table-body>
 </pds-table>
-<pds-text tag="p" size="xs" color="secondary" gutter="sm">Hover over truncated cells to see the full content in a tooltip.</pds-text>`;
+<pds-text tag="p" size="xs" color="secondary" gutter="sm">Hover over or tab to a truncated cell to see the full content in a tooltip.</pds-text>`;
 
 export const Truncate = TruncateTemplate.bind();
 Truncate.args = {
