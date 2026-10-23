@@ -355,6 +355,8 @@ Use `informational` for a row people should read but can't act on, such as a cou
 
 `informational` takes precedence over `href` and `destructive`. To show a row as a link only when it has somewhere to go, keep the `href` and toggle `informational`: the row renders as plain text while it's set. `disabled` still applies on top: a disabled informational item is dimmed and skipped like any other disabled item.
 
+Informational items expose the same `button` part as button items, so `::part(button)` rules reach them too. To keep a hover or cursor style off them, scope it with `pds-dropdown-menu-item:not([informational])::part(button)`.
+
 Use `disabled` instead for an action that's unavailable right now, and the `header` slot for a single block of content above the items.
 
 <DocCanvas
