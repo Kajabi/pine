@@ -219,25 +219,6 @@ Filter button variant, intended to be used for filter options in menus and inter
   <pds-button variant="filter" disabled="true">Disabled</pds-button>
 </DocCanvas>
 
-### Icon Only
-
-Icon-only buttons show just an icon, so give each one an `aria-label` that names its action. Mark the icon `aria-hidden="true"` so it doesn't add its own name.
-
-<DocCanvas
-  mdxSource={{
-    react: `
-    <PdsButton variant="tertiary" iconOnly aria-label="More actions"><PdsIcon slot="start" aria-hidden="true" name="dot-menu-horizontal"></PdsIcon></PdsButton>
-    <PdsButton variant="secondary" iconOnly aria-label="Delete"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon></PdsButton>
-    `,
-    webComponent: `
-    <pds-button variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" aria-hidden="true" name="dot-menu-horizontal"></pds-icon></pds-button>
-    <pds-button variant="secondary" icon-only aria-label="Delete"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon></pds-button>
-    `
-}}>
-  <pds-button variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" aria-hidden="true" name="dot-menu-horizontal"></pds-icon></pds-button>
-  <pds-button variant="secondary" icon-only aria-label="Delete"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon></pds-button>
-</DocCanvas>
-
 ### Full Width
 
 Full width buttons are intended to be used when the button needs to take up the full width of its container.
@@ -349,6 +330,23 @@ While the text is visually hidden, it is still remains accessible.
   <pds-button variant="accent" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
   <pds-button variant="destructive" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
   <pds-button variant="tertiary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+</DocCanvas>
+
+To name an icon-only button without slot text, set `aria-label` on `pds-button`. Mark the icon `aria-hidden="true"` so it doesn't add its own name.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsButton variant="tertiary" iconOnly="true" aria-label="More actions"><PdsIcon slot="start" aria-hidden="true" name="dot-menu-horizontal"></PdsIcon></PdsButton>
+    <PdsButton variant="secondary" iconOnly="true" aria-label="Delete"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon></PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="tertiary" icon-only="true" aria-label="More actions"><pds-icon slot="start" aria-hidden="true" name="dot-menu-horizontal"></pds-icon></pds-button>
+    <pds-button variant="secondary" icon-only="true" aria-label="Delete"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon></pds-button>
+    `
+}}>
+  <pds-button variant="tertiary" icon-only="true" aria-label="More actions"><pds-icon slot="start" aria-hidden="true" name="dot-menu-horizontal"></pds-icon></pds-button>
+  <pds-button variant="secondary" icon-only="true" aria-label="Delete"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon></pds-button>
 </DocCanvas>
 
 ### Sizes
