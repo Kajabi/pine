@@ -2157,6 +2157,11 @@ export namespace Components {
          */
         "maxWidth"?: number;
         /**
+          * Sets the padding of the popover content
+          * @defaultValue "md"
+         */
+        "padding"?: Extract<BoxSpacingType, 'none' | 'xs' | 'sm' | 'md'>;
+        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -6070,6 +6075,11 @@ declare namespace LocalJSX {
          */
         "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         /**
+          * Sets the padding of the popover content
+          * @defaultValue "md"
+         */
+        "padding"?: Extract<BoxSpacingType, 'none' | 'xs' | 'sm' | 'md'>;
+        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -7391,6 +7401,7 @@ declare namespace LocalJSX {
         "popoverType": 'auto' | 'manual';
         "componentId": string;
         "maxWidth": number;
+        "padding": Extract<BoxSpacingType, 'none' | 'xs' | 'sm' | 'md'>;
         "placement": PlacementType;
     }
     interface PdsProgressAttributes {
