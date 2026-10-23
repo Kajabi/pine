@@ -2750,7 +2750,7 @@ export class PdsCombobox implements BasePdsProps {
         ) : (
           this.renderOptionLabel(option)
         )}
-        {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
+        {isSelected && <pds-icon icon="check" size="regular" aria-hidden="true" class="pds-combobox__option-check" />}
       </li>
     );
   }
@@ -3081,7 +3081,7 @@ export class PdsCombobox implements BasePdsProps {
   private renderChipTriggerDefaultContent() {
     return (
       <span class="pds-combobox__chip-trigger-label">
-        {this.selectedChipIcon && <pds-icon icon={this.selectedChipIcon} class="pds-combobox__chip-trigger-icon" />}
+        {this.selectedChipIcon && <pds-icon icon={this.selectedChipIcon} aria-hidden="true" class="pds-combobox__chip-trigger-icon" />}
         {this.selectedLabel || this.placeholder}
       </span>
     );
