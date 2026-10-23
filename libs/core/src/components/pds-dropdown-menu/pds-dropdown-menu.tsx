@@ -269,17 +269,14 @@ export class PdsDropdownMenu implements BasePdsProps {
       if (tagName === 'pds-dropdown-menu-item') {
         // For pds-dropdown-menu-item, focus the inner element
         const menuItem = item as HTMLPdsDropdownMenuItemElement;
-        const innerButton = menuItem.shadowRoot?.querySelector('button');
+        const innerControl = menuItem.shadowRoot?.querySelector<HTMLElement>('button, [role="menuitem"]');
         const innerLink = menuItem.shadowRoot?.querySelector('pds-link')?.shadowRoot?.querySelector('a')
           || menuItem.shadowRoot?.querySelector('a');
-        const innerInformational = menuItem.shadowRoot?.querySelector<HTMLElement>('[role="menuitem"]');
 
-        if (innerButton) {
-          innerButton.focus();
+        if (innerControl) {
+          innerControl.focus();
         } else if (innerLink) {
           innerLink.focus();
-        } else if (innerInformational) {
-          innerInformational.focus();
         } else {
           // Fallback to focusing the host
           menuItem.focus();
