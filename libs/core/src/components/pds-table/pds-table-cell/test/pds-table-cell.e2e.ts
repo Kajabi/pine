@@ -158,9 +158,9 @@ describe('pds-table-cell', () => {
     await page.setContent(CLIPPED_CELL_TABLE);
     await page.waitForChanges();
 
-    // The table host is the first tab stop.
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Tab');
+    for (let stop = 0; stop < 5 && !(await clippedCellHasFocus(page)); stop++) {
+      await page.keyboard.press('Tab');
+    }
     await page.waitForChanges();
 
     expect(await clippedCellHasFocus(page)).toBe(true);

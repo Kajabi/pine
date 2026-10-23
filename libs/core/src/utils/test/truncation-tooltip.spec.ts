@@ -31,6 +31,11 @@ function focusIn(target: HTMLElement, { visible = true } = {}) {
   target.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
 }
 
+function keyUp(target: HTMLElement, key: string, { visible = true } = {}) {
+  jest.spyOn(target, 'matches').mockImplementation((selector) => visible && selector === ':focus-visible');
+  target.dispatchEvent(new KeyboardEvent('keyup', { key, bubbles: true }));
+}
+
 describe('truncation-tooltip', () => {
   let hostEl: HTMLElement;
   let contentEl: HTMLElement;
@@ -245,6 +250,60 @@ describe('truncation-tooltip', () => {
 
   // Focus inside a shadow root reaches a host listener with the host as its
   // target; only composedPath() still leads to the element that has focus.
+  // Chromium and WebKit turn click focus visible in place on most key presses, with no new focusin.
+  describe('a key press after a click', () => {
+    beforeEach(() => {
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+      Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+    });
+
+    it('shows the tooltip once the key makes focus visible', () => {
+      const cleanup = setupTruncationTooltip({ hostEl, contentEl, getTooltipText: () => 'Full text' });
+
+      focusIn(contentEl, { visible: false });
+      keyUp(contentEl, 'ArrowRight');
+
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+      cleanup();
+    });
+
+    it('keeps it hidden while focus stays not visible', () => {
+      const cleanup = setupTruncationTooltip({ hostEl, contentEl, getTooltipText: () => 'Full text' });
+
+      focusIn(contentEl, { visible: false });
+      keyUp(contentEl, 'c', { visible: false });
+
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      cleanup();
+    });
+
+    it('never reveals it on Escape', () => {
+      const cleanup = setupTruncationTooltip({ hostEl, contentEl, getTooltipText: () => 'Full text' });
+
+      focusIn(contentEl, { visible: false });
+      keyUp(contentEl, 'Escape');
+
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      cleanup();
+    });
+
+    it('hides it again on focusout', () => {
+      const cleanup = setupTruncationTooltip({ hostEl, contentEl, getTooltipText: () => 'Full text' });
+
+      focusIn(contentEl, { visible: false });
+      keyUp(contentEl, 'ArrowRight');
+      hostEl.dispatchEvent(new FocusEvent('focusout'));
+      advanceHideDelay();
+
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      cleanup();
+    });
+  });
+
   it('tests :focus-visible on the innermost focused element, not the retargeted host', () => {
     Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
     Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
@@ -409,6 +468,7 @@ describe('truncation-tooltip', () => {
     expect(removeListenerSpy).toHaveBeenCalledWith('mouseleave', expect.any(Function));
     expect(removeListenerSpy).toHaveBeenCalledWith('focusin', expect.any(Function));
     expect(removeListenerSpy).toHaveBeenCalledWith('focusout', expect.any(Function));
+    expect(removeListenerSpy).toHaveBeenCalledWith('keyup', expect.any(Function));
   });
 
   it('removes portal on cleanup even if tooltip is visible', () => {
@@ -604,6 +664,23 @@ describe('truncation-tooltip', () => {
       focusIn(focusEl);
 
       expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+    });
+
+    it('shows the tooltip when a key press makes focusEl focus visible', () => {
+      const cleanup = setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+        manageTabIndex: false,
+        focusEl,
+      });
+
+      focusIn(focusEl, { visible: false });
+      keyUp(focusEl, 'Enter');
+
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+      cleanup();
     });
 
     it('ignores focusEl focus that is not :focus-visible', () => {

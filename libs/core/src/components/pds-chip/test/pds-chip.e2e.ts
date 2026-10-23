@@ -343,6 +343,9 @@ describe('pds-chip', () => {
     const focusedClass = await page.$eval('pds-chip', (el) => el.shadowRoot.activeElement?.className);
     expect(focusedClass).toContain('pds-chip__label-text');
     expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 
   // Clicking focuses the label too, but only keyboard focus holds the tooltip open.
@@ -360,6 +363,22 @@ describe('pds-chip', () => {
     const focusedClass = await page.$eval('pds-chip', (el) => el.shadowRoot.activeElement?.className);
     expect(focusedClass).toContain('pds-chip__label-text');
     expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  // A key press turns the label's click focus visible in place, with no new focusin.
+  it('shows the tooltip when a key press after a click makes the focus visible', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.click('pds-chip');
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+    expect(await truncationTooltipText(page)).toBeNull();
+
+    await page.keyboard.press('ArrowRight');
+    await page.waitForChanges();
+
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
   });
 
   it('hides the tooltip once the pointer leaves after a hover', async () => {
