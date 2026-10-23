@@ -19,7 +19,7 @@ describe('pds-popover', () => {
       html: `<pds-popover component-id="popover-1"></pds-popover>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-popover component-id="popover-1" id="popover-1" placement="right">
+      <pds-popover component-id="popover-1" placement="right">
         <mock:shadow-root>
           <span class="pds-popover__trigger-wrapper">
             <slot name="trigger"></slot>
@@ -30,6 +30,15 @@ describe('pds-popover', () => {
         </mock:shadow-root>
       </pds-popover>
     `);
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: `<pds-popover id="author-id" component-id="popover-1"></pds-popover>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
   });
 
   it('should create portal on componentDidLoad', async () => {

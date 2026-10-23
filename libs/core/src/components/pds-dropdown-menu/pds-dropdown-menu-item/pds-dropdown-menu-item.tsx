@@ -13,7 +13,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Element() host: HTMLPdsDropdownMenuItemElement;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -157,7 +157,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
   render() {
     return (
-      <Host id={this.componentId}
+      <Host
         class={{ 'is-disabled': this.disabled, 'destructive': !this.disabled && this.destructive }}
         onClick={() => !this.disabled && this.handleClick()}
         role="none"

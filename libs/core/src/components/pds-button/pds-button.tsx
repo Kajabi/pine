@@ -24,7 +24,7 @@ export class PdsButton {
   @Element() el: HTMLPdsButtonElement;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -383,8 +383,6 @@ export class PdsButton {
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
-        // Binding id to an unset componentId would strip an id the consumer set whenever the button re-renders.
-        {...(this.componentId != null ? { id: this.componentId } : {})}
         onClick={this.handleClick}
         variant={this.variant}
       >

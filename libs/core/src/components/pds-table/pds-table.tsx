@@ -20,7 +20,7 @@ export class PdsTable {
   @Prop() compact: boolean;
 
   /**
-   * A unique identifier used for the table `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId!: string;
 
@@ -334,7 +334,6 @@ export class PdsTable {
       return (
         <Host
           class="pds-table is-responsive pds-table-responsive-host"
-          id={this.componentId}
           role="grid"
           selectable={this.selectable}
           tabindex="0"
@@ -356,7 +355,6 @@ export class PdsTable {
     return (
       <Host
         class={this.classNames()}
-        id={this.componentId}
         role="grid"
         selectable={this.selectable}
         tabindex="0"

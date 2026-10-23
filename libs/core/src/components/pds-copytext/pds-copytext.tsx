@@ -38,7 +38,7 @@ export class PdsCopytext {
   }
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -153,7 +153,7 @@ export class PdsCopytext {
     this.hostKeeper.record(hostClass);
 
     return (
-      <Host class={hostClass} id={this.componentId}>
+      <Host class={hostClass}>
         <pds-button type="button" variant="unstyled" onClick={this.handleClick}>
           <span ref={(el) => this.valueSpanEl = el}>{this.value}</span>
           <pds-icon aria-hidden="true" icon={copyIcon} size="16px"></pds-icon>

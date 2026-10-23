@@ -40,7 +40,7 @@ export class PdsDropdownMenu implements BasePdsProps {
   @State() hasHeader: boolean = false;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -446,7 +446,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         <slot
           name="trigger"
           onSlotchange={this.handleTriggerSlotChange}

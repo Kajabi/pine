@@ -82,7 +82,8 @@ export class PdsTabs {
   @Prop() tablistLabel!: string;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance, passed down to its tabs and panels.
+   * Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId!: string;
 
@@ -358,7 +359,7 @@ export class PdsTabs {
     this.hostKeeper.record(hostClass);
 
     return (
-      <Host active-tab-name={this.activeTabName} class={hostClass} id={this.componentId}>
+      <Host active-tab-name={this.activeTabName} class={hostClass}>
         {tabList}
         <slot name="tabpanels" />
       </Host>

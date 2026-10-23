@@ -20,11 +20,19 @@ describe('pds-dropdown-menu-separator', () => {
     expect(element).toBeDefined();
   });
 
-  it('applies component-id as id attribute', async () => {
+  it('does not apply component-id as the id attribute', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-dropdown-menu-separator component-id="test-separator"></pds-dropdown-menu-separator>');
 
     const element = await page.find('pds-dropdown-menu-separator');
-    expect(element.id).toBe('test-separator');
+    expect(element.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-dropdown-menu-separator id="author-id" component-id="test-separator"></pds-dropdown-menu-separator>');
+
+    const element = await page.find('pds-dropdown-menu-separator');
+    expect(element.id).toBe('author-id');
   });
 });

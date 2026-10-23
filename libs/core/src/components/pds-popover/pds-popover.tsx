@@ -125,7 +125,8 @@ export class PdsPopover {
   @Prop() popoverType: 'auto' | 'manual' = 'auto';
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance, used to build its portal element's `id`.
+   * Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -925,7 +926,7 @@ export class PdsPopover {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         <span class="pds-popover__trigger-wrapper">
           <slot name="trigger" onSlotchange={this.handleTriggerSlotChange}></slot>
         </span>

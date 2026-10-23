@@ -27,6 +27,24 @@ describe('pds-alert', () => {
     `);
   });
 
+  it('does not write component-id onto the host id', async () => {
+    const page = await newSpecPage({
+      components: [PdsAlert],
+      html: `<pds-alert component-id="test"></pds-alert>`,
+    });
+
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAlert],
+      html: `<pds-alert id="author-id" component-id="test"></pds-alert>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
   it('renders heading when provided', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],

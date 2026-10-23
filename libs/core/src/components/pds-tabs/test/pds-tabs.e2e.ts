@@ -322,6 +322,32 @@ describe('pds-tabs after its host classes and styles are stripped', () => {
   });
 });
 
+// A DOM morph pairs a live element with the incoming HTML by id. An id that Pine's own JS writes,
+// but the incoming HTML never carries, makes the morph throw the live element away and rebuild it
+// from scratch, losing its state (selected tab, open accordion, focus, etc).
+describe('pds-tabs and the host id', () => {
+  it('never writes component-id onto the host id', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-tabs component-id="tabs" tablist-label="Tabs"><pds-tab name="one" slot="tabs">One</pds-tab><pds-tabpanel name="one">Panel</pds-tabpanel></pds-tabs>',
+    );
+
+    expect(await page.$eval('pds-tabs', (el) => el.id)).toBe('');
+  });
+
+  it('keeps an author-set id untouched across a prop change', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-tabs id="my-tabs" component-id="tabs" active-tab-name="one" tablist-label="Tabs"><pds-tab name="one" slot="tabs">One</pds-tab><pds-tab name="two" slot="tabs">Two</pds-tab><pds-tabpanel name="one">One</pds-tabpanel><pds-tabpanel name="two">Two</pds-tabpanel></pds-tabs>',
+    );
+
+    await page.$eval('pds-tabs', (el) => el.setAttribute('active-tab-name', 'two'));
+    await page.waitForChanges();
+
+    expect(await page.$eval('pds-tabs', (el) => el.id)).toBe('my-tabs');
+  });
+});
+
 // The initial child collection only sees what's present at load (componentWillLoad). A tab or
 // panel added, removed or replaced afterwards — including by a DOM morph swapping in a fresh
 // copy of the server's HTML — needs to be re-collected the same way, or it's never reached.

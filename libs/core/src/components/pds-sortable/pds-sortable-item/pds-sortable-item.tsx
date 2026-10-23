@@ -31,7 +31,7 @@ export class PdsSortableItem {
   @Prop() enableActions = false;
 
   /**
-   * A unique identifier used for the sortable item `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -72,7 +72,7 @@ export class PdsSortableItem {
     this.hostKeeper.record('pds-sortable-item');
 
     return (
-      <Host class="pds-sortable-item" id={this.componentId}>
+      <Host class="pds-sortable-item">
         {this.showHandle && (
           <div class="pds-sortable-item__handle">
             <pds-icon aria-hidden="true" icon={handleIcon}></pds-icon>

@@ -15,7 +15,7 @@ describe('pds-sortable-item', () => {
     `);
   });
 
-  it('renders with id when prop is set', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsSortableItem],
       html: `
@@ -24,8 +24,19 @@ describe('pds-sortable-item', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-sortable-item class="pds-sortable-item" component-id="default" id="default">Content</pds-sortable-item>
+      <pds-sortable-item class="pds-sortable-item" component-id="default">Content</pds-sortable-item>
     `);
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsSortableItem],
+      html: `
+        <pds-sortable-item id="author-id" component-id="default">Content</pds-sortable-item>
+      `,
+    });
+
+    expect(page.root?.id).toBe('author-id');
   });
 
   it('renders with handle icon when prop is set', async () => {

@@ -47,14 +47,14 @@ describe('pds-accordion', () => {
     `);
   });
 
-  it('renders with id when prop is set', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsAccordion],
       html: `<pds-accordion component-id="test"></pds-accordion>`,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-accordion component-id="test" id="test" class="pds-accordion">
+      <pds-accordion component-id="test" class="pds-accordion">
         <mock:shadow-root>
           <details>
             <summary part="accordion-button">
@@ -68,6 +68,15 @@ describe('pds-accordion', () => {
         </mock:shadow-root>
       </pds-accordion>
     `);
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAccordion],
+      html: `<pds-accordion id="author-id" component-id="test"></pds-accordion>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
   });
 
   it('renders summary slot content when set', async () => {

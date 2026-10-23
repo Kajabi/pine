@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property        | Attribute        | Description                                                        | Type      | Default     |
-| --------------- | ---------------- | ------------------------------------------------------------------ | --------- | ----------- |
-| `componentId`   | `component-id`   | A unique identifier used for the sortable item `id` attribute.     | `string`  | `undefined` |
-| `enableActions` | `enable-actions` | Determines whether `sortable-item-actions` slot should be enabled. | `boolean` | `false`     |
-| `showHandle`    | `show-handle`    | Determines whether `sortable-item` should have a handle.           | `boolean` | `false`     |
+| Property        | Attribute        | Description                                                                                                                          | Type      | Default     |
+| --------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
+| `componentId`   | `component-id`   | A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one. | `string`  | `undefined` |
+| `enableActions` | `enable-actions` | Determines whether `sortable-item-actions` slot should be enabled.                                                                   | `boolean` | `false`     |
+| `showHandle`    | `show-handle`    | Determines whether `sortable-item` should have a handle.                                                                             | `boolean` | `false`     |
 
 
 ## Slots

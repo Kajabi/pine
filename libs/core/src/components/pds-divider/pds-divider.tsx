@@ -11,7 +11,7 @@ import { Component, Prop, Host, h } from '@stencil/core';
 })
 export class PdsDivider {
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -56,7 +56,7 @@ export class PdsDivider {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         {this.hasLabel ? (
           <div class={this.classNames()} role="separator" aria-label={this.label}>
             <span class="pds-divider__label" part="label" aria-hidden="true">{this.label}</span>

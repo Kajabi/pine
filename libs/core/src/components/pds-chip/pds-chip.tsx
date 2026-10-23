@@ -70,7 +70,7 @@ export class PdsChip {
   private truncationCleanup: (() => void) | null = null;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -380,7 +380,7 @@ export class PdsChip {
     this.hostKeeper.record(hostClass, hostStyles);
 
     return (
-      <Host class={hostClass} id={this.componentId} style={hostStyles}>
+      <Host class={hostClass} style={hostStyles}>
         {this.setChipContent()}
         {this.effectiveVariant === 'tag' && this.renderCloseButton()}
       </Host>

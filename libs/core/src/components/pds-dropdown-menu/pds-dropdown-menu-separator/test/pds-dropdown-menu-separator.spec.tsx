@@ -17,12 +17,21 @@ describe('pds-dropdown-menu-separator', () => {
     `);
   });
 
-  it('renders with componentId', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuSeparator],
       html: `<pds-dropdown-menu-separator component-id="test-separator"></pds-dropdown-menu-separator>`,
     });
-    
-    expect(page.root.id).toBe('test-separator');
+
+    expect(page.root.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuSeparator],
+      html: `<pds-dropdown-menu-separator id="author-id" component-id="test-separator"></pds-dropdown-menu-separator>`,
+    });
+
+    expect(page.root.id).toBe('author-id');
   });
 });

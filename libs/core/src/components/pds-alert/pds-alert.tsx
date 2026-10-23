@@ -15,7 +15,7 @@ export class PdsAlert {
   @Element() el: HTMLPdsAlertElement;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -120,7 +120,7 @@ export class PdsAlert {
     const iconName = iconMap[this.variant] || iconMap.default;
 
     return (
-      <Host class="pds-alert" id={this.componentId} variant={this.variant}>
+      <Host class="pds-alert" variant={this.variant}>
         <pds-box
           class={`pds-alert__container pds-alert__container--${this.variant}`}
           background-color="var(--pds-alert-background)"

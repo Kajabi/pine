@@ -46,7 +46,7 @@ describe('pds-table', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table is-responsive pds-table-responsive-host" responsive="true" component-id="test-table" id="test-table" role="grid" tabindex="0" part="table responsive-table">
+      <pds-table class="pds-table is-responsive pds-table-responsive-host" responsive="true" component-id="test-table" role="grid" tabindex="0" part="table responsive-table">
         <mock:shadow-root>
           <div class="scroll-shadow-left" style="opacity: 0;" part="scroll-shadow-left"></div>
           <div class="scroll-shadow-right" style="opacity: 0;" part="scroll-shadow-right"></div>
@@ -60,6 +60,33 @@ describe('pds-table', () => {
         </mock:shadow-root>
       </pds-table>
     `);
+  });
+
+  it('does not write component-id onto the host id (non-responsive branch)', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table component-id="test-table"></pds-table>`,
+    });
+
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table id="author-id" component-id="test-table"></pds-table>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
+  it('keeps an author-set id even when component-id is also set (responsive branch)', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table id="author-id" responsive="true" component-id="test-table"></pds-table>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
   });
 
   it('renders with rowDividers prop set', async () => {
