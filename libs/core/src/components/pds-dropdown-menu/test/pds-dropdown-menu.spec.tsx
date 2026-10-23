@@ -314,6 +314,7 @@ describe('pds-dropdown-menu', () => {
           <button slot="trigger">Used on</button>
           <pds-dropdown-menu-item href="/offers">3 offers</pds-dropdown-menu-item>
           <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item informational disabled>1 coupon</pds-dropdown-menu-item>
         </pds-dropdown-menu>
       `,
     });
@@ -327,9 +328,13 @@ describe('pds-dropdown-menu', () => {
 
     component.focusNextItem();
 
-    expect(component.menuItems).toHaveLength(2);
+    expect(component.menuItems).toHaveLength(3);
     expect(component.currentFocusIndex).toBe(1);
     expect(focusSpy).toHaveBeenCalled();
+
+    component.focusNextItem();
+
+    expect(component.currentFocusIndex).toBe(0);
     expect(warnSpy).not.toHaveBeenCalled();
     warnSpy.mockRestore();
   });

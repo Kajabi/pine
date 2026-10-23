@@ -525,6 +525,7 @@ describe('pds-dropdown-menu informational items', () => {
     const onlyInformational = `
       <pds-dropdown-menu-item informational>3 offers</pds-dropdown-menu-item>
       <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+      <pds-dropdown-menu-item informational disabled>1 coupon</pds-dropdown-menu-item>
     `;
 
     it.each(['Tab', 'ArrowDown'] as const)('moves focus from the trigger into the menu with %s', async (key) => {

@@ -454,7 +454,9 @@ describe('pds-dropdown-menu-item', () => {
 
       const content = page.root!.shadowRoot!.querySelector('[role="menuitem"]');
       expect(page.root).toHaveClass('is-disabled');
+      expect(page.root!.hasAttribute('aria-disabled')).toBe(false);
       expect(content).toEqualAttribute('tabindex', '-1');
+      expect(content).toEqualAttribute('aria-disabled', 'true');
     });
   });
 });
