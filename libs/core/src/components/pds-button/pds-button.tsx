@@ -198,6 +198,8 @@ export class PdsButton {
   }
 
 
+  // Copied rather than moved: frameworks and DOM morphs put host attributes back on every update,
+  // so taking them off the host would fight each one.
   private syncHostAria = () => {
     const forwarded: Record<string, string | null> = {};
     FORWARDED_ARIA_ATTRIBUTES.forEach((name) => (forwarded[name] = this.el.getAttribute(name)));
