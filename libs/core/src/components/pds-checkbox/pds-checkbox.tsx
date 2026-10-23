@@ -247,7 +247,7 @@ export class PdsCheckbox {
             id={messageId(this.componentId, 'error')}
             aria-live="assertive"
           >
-            <pds-icon icon={danger} size="small" />
+            <pds-icon aria-hidden="true" icon={danger} size="small" />
             {this.errorMessage}
           </div>
         }
