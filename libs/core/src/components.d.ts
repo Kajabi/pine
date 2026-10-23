@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType } from "./utils/types";
+import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
@@ -22,7 +22,7 @@ import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./component
 export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType } from "./utils/types";
+export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
@@ -2161,6 +2161,11 @@ export namespace Components {
           * @defaultValue 352
          */
         "maxWidth"?: number;
+        /**
+          * Sets the padding of the popover content
+          * @defaultValue "md"
+         */
+        "padding"?: PopoverPaddingType;
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
@@ -6080,6 +6085,11 @@ declare namespace LocalJSX {
          */
         "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         /**
+          * Sets the padding of the popover content
+          * @defaultValue "md"
+         */
+        "padding"?: PopoverPaddingType;
+        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -7402,6 +7412,7 @@ declare namespace LocalJSX {
         "popoverType": 'auto' | 'manual';
         "componentId": string;
         "maxWidth": number;
+        "padding": PopoverPaddingType;
         "placement": PlacementType;
     }
     interface PdsProgressAttributes {

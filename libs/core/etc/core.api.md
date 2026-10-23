@@ -593,6 +593,7 @@ export namespace Components {
         "componentId": string;
         "hide": () => Promise<void>;
         "maxWidth"?: number;
+        "padding"?: PopoverPaddingType;
         "placement": PlacementType;
         "popoverTargetAction": 'show' | 'toggle' | 'hide';
         "popoverType": 'auto' | 'manual';
@@ -2526,6 +2527,7 @@ export namespace LocalJSX {
         "maxWidth"?: number;
         "onPdsPopoverClose"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
+        "padding"?: PopoverPaddingType;
         "placement"?: PlacementType;
         "popoverTargetAction"?: 'show' | 'toggle' | 'hide';
         "popoverType"?: 'auto' | 'manual';
@@ -2537,6 +2539,8 @@ export namespace LocalJSX {
         "componentId": string;
         // (undocumented)
         "maxWidth": number;
+        // (undocumented)
+        "padding": PopoverPaddingType;
         // (undocumented)
         "placement": PlacementType;
         // (undocumented)
@@ -3524,6 +3528,9 @@ export type PlacementType = 'top-start' | 'top' | 'top-end' | 'left-start' | 'le
 
 // @public (undocumented)
 export type PluralForms = Partial<Record<Intl.LDMLPluralRule, string>>;
+
+// @public (undocumented)
+export type PopoverPaddingType = Extract<BoxSpacingType, 'none' | 'xs' | 'sm' | 'md'>;
 
 // @public (undocumented)
 export interface RadioGroupChangeEventDetail {

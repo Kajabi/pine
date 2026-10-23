@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
 import { closest, containsComposed } from '@utils/closest';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
-import { PlacementType } from '@utils/types';
+import { PlacementType, PopoverPaddingType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
 import { cssEscape } from '@utils/css';
 import { limitRestores } from '@utils/keep-hydrated';
@@ -134,6 +134,30 @@ export class PdsPopover {
    * @defaultValue 352
    */
   @Prop() maxWidth?: number = 352;
+
+  /**
+   * Sets the padding of the popover content
+   * @defaultValue "md"
+   */
+  @Prop() padding?: PopoverPaddingType = 'md';
+
+  @Watch('padding')
+  applyPadding() {
+    if (this.portalEl != null) this.portalEl.style.padding = this.paddingToken();
+  }
+
+  private paddingToken() {
+    switch (this.padding) {
+      case 'none':
+        return 'var(--pine-dimension-none)';
+      case 'xs':
+        return 'var(--pine-dimension-xs)';
+      case 'sm':
+        return 'var(--pine-dimension-sm)';
+      default:
+        return 'var(--pine-dimension-md)';
+    }
+  }
 
   /**
    * Determines the preferred position of the popover
@@ -359,7 +383,7 @@ export class PdsPopover {
     this.portalEl.style.borderRadius = 'var(--pine-dimension-125)';
     this.portalEl.style.boxShadow = 'var(--pine-box-shadow-200)';
     this.portalEl.style.margin = 'var(--pine-dimension-none)';
-    this.portalEl.style.padding = 'var(--pine-dimension-md)';
+    this.portalEl.style.padding = this.paddingToken();
 
     // Generate unique ID
     if (!this.componentId) {
