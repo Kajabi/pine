@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State }
 import type { BasePdsProps } from '@utils/interfaces';
 
 /**
- * @part button
+ * @part button - Exposes the item's inner element for styling. Appears on button and informational items, not on links.
  */
 @Component({
   tag: 'pds-dropdown-menu-item',
@@ -34,18 +34,28 @@ export class PdsDropdownMenuItem implements BasePdsProps {
    * Prompts the user to save the linked URL instead of navigating to it.
    * It can be used without a value to download with the default filename,
    * or with a string value to suggest a specific filename for the download.
-   * Only applies when href is set.
+   * Only applies when href is set. Ignored when `informational` is set.
    */
   @Prop() download?: string;
 
   /**
    *  If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+   *  Ignored when `informational` is set.
    */
   @Prop() href: string | undefined;
 
   /**
+   * It determines whether or not the dropdown-item is informational: text that the arrow keys
+   * reach but that can't be activated. Takes precedence over `href` and `destructive`.
+   * Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) informational: boolean = false;
+
+  /**
    * Determines whether the link should open in a new tab and display an external icon.
    * This is a simpler alternative to using `target="_blank"` for the common case.
+   * Ignored when `informational` is set.
    * @defaultValue false
    */
   @Prop({ reflect: true }) external: boolean = false;
@@ -53,7 +63,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   /**
    * Specifies where to open the linked document when href is provided.
    * Takes precedence over the `external` prop if both are set.
-   * Only applies when href is set.
+   * Only applies when href is set. Ignored when `informational` is set.
    * @defaultValue undefined
    */
   @Prop({ reflect: true }) target?: '_blank' | '_self' | '_parent' | '_top';
@@ -74,6 +84,8 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
 
   private handleClick() {
+    if (this.informational) return;
+
     // Filter only pds-dropdown-menu-item elements and find the index of the current item
     const menuItems = Array.from(this.host.parentNode.children).filter(
       (child) => child.tagName.toLowerCase() === 'pds-dropdown-menu-item'
@@ -100,7 +112,34 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     this.hasFocus = false;
   }
 
+  // Space would otherwise scroll the page, since nothing in the item takes the key.
+  private handleInformationalKeyDown = (event: KeyboardEvent) => {
+    if (event.key === ' ') {
+      event.preventDefault();
+    }
+  }
+
   private renderElement() {
+    if (this.informational) {
+      return (
+        <div
+          class={{
+            'pds-dropdown-menu-item__content': true,
+            'has-focus': this.hasFocus
+          }}
+          role="menuitem"
+          aria-disabled="true"
+          part="button"
+          tabIndex={this.disabled ? -1 : 0}
+          onKeyDown={this.handleInformationalKeyDown}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
+        >
+          <slot></slot>
+        </div>
+      );
+    }
+
     if (this.href != null) {
       return (
         <pds-link
@@ -158,11 +197,17 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   render() {
     return (
       <Host id={this.componentId}
-        class={{ 'is-disabled': this.disabled, 'destructive': !this.disabled && this.destructive }}
+        class={{
+          'is-disabled': this.disabled,
+          'is-informational': this.informational,
+          'destructive': !this.disabled && !this.informational && this.destructive
+        }}
         onClick={() => !this.disabled && this.handleClick()}
         role="none"
-        tabIndex={-1}
-        aria-disabled={this.disabled ? 'true' : null}
+        // ARIA ignores role="none" on focusable elements, so a focusable host would sit between
+        // the menu and the informational menuitem as an unexpected child.
+        tabIndex={this.informational ? null : -1}
+        aria-disabled={this.disabled && !this.informational ? 'true' : null}
       >
           {this.renderElement()}
       </Host>

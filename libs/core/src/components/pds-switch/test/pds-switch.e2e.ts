@@ -164,6 +164,13 @@ describe('pds-switch accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  it('has no axe violations with an error message', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch component-id="notify" label="Enable notifications" invalid error-message="Turn on notifications to continue"></pds-switch>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
   it('has no axe violations with slotted label content', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-switch component-id="tag"><pds-chip slot="label" sentiment="neutral">Spring Launch</pds-chip></pds-switch>');

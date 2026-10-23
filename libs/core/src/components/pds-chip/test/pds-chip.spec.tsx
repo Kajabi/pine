@@ -151,7 +151,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <button class="pds-chip__close" type="button" aria-label="Remove">
-          <pds-icon icon="${removeIcon}" size="10px"></pds-icon>
+          <pds-icon icon="${removeIcon}" size="10px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
     </pds-chip>
@@ -198,7 +198,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <button class="pds-chip__close" type="button" aria-label="Remove" >
-          <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
+          <pds-icon icon="${removeIcon}" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
     </pds-chip>
@@ -326,7 +326,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <button class="pds-chip__close" type="button" aria-label="Remove" >
-          <pds-icon icon="${removeIcon}" size="14px"></pds-icon>
+          <pds-icon icon="${removeIcon}" size="14px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
     </pds-chip>
@@ -582,7 +582,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <a class="pds-chip__close" href="/filters/remove/1" aria-label="Remove">
-          <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
+          <pds-icon icon="${removeIcon}" size="12px" aria-hidden="true"></pds-icon>
         </a>
       </mock:shadow-root>
     </pds-chip>
@@ -600,7 +600,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <a class="pds-chip__close" href="/tags/1" aria-label="Remove" data-method="delete" data-turbo-method="delete" rel="nofollow">
-          <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
+          <pds-icon icon="${removeIcon}" size="12px" aria-hidden="true"></pds-icon>
         </a>
       </mock:shadow-root>
     </pds-chip>
@@ -632,7 +632,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label"><span class="pds-chip__label-text"><slot></slot></span></span>
         <a class="pds-chip__close" href="/clear" aria-label="Remove" target="_blank" rel="noopener noreferrer">
-          <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
+          <pds-icon icon="${removeIcon}" size="12px" aria-hidden="true"></pds-icon>
         </a>
       </mock:shadow-root>
     </pds-chip>

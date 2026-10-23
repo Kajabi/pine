@@ -1,5 +1,30 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../../utils/test/axe';
+
+const LONG_CONTENT = 'Very long content that cannot possibly fit in this narrow column';
+
+const CLIPPED_CELL_TABLE = `
+  <div style="width: 240px;">
+    <pds-table>
+      <pds-table-body>
+        <pds-table-row>
+          <pds-table-cell>Short</pds-table-cell>
+          <pds-table-cell truncate>${LONG_CONTENT}</pds-table-cell>
+          <pds-table-cell>${LONG_CONTENT}</pds-table-cell>
+        </pds-table-row>
+      </pds-table-body>
+    </pds-table>
+  </div>
+`;
+
+const truncationTooltipText = (page: E2EPage) =>
+  page.evaluate(() => document.querySelector('.pds-truncation-tooltip')?.textContent.trim() ?? null);
+
+// The hide is delayed 100ms.
+const waitOutHideDelay = () => new Promise((resolve) => setTimeout(resolve, 300));
+
+const clippedCellHasFocus = (page: E2EPage) =>
+  page.evaluate(() => document.activeElement === document.querySelector('pds-table-cell[truncate]'));
 
 describe('pds-table-cell', () => {
   it('renders', async () => {
@@ -128,6 +153,52 @@ describe('pds-table-cell', () => {
     expect(tooltips).toEqual(['Very long content that cannot possibly fit in this narrow column']);
   });
 
+  it('shows the tooltip when Tab reaches a clipped cell', async () => {
+    const page = await newE2EPage();
+    await page.setContent(CLIPPED_CELL_TABLE);
+    await page.waitForChanges();
+
+    for (let stop = 0; stop < 5 && !(await clippedCellHasFocus(page)); stop++) {
+      await page.keyboard.press('Tab');
+    }
+    await page.waitForChanges();
+
+    expect(await clippedCellHasFocus(page)).toBe(true);
+    expect(await truncationTooltipText(page)).toBe(LONG_CONTENT);
+  });
+
+  // Clicking focuses the cell too, but only keyboard focus holds the tooltip open.
+  it('hides the tooltip once the pointer leaves after a click, though the cell keeps focus', async () => {
+    const page = await newE2EPage();
+    await page.setContent(CLIPPED_CELL_TABLE);
+    await page.waitForChanges();
+
+    await page.click('pds-table-cell[truncate]');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toBe(LONG_CONTENT);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await clippedCellHasFocus(page)).toBe(true);
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  it('hides the tooltip once the pointer leaves after a hover', async () => {
+    const page = await newE2EPage();
+    await page.setContent(CLIPPED_CELL_TABLE);
+    await page.waitForChanges();
+
+    await page.hover('pds-table-cell[truncate]');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toBe(LONG_CONTENT);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
   it('shows the fixed column shadow on scroll after the table sorts', async () => {
     const page = await newE2EPage();
     await page.setContent(`
@@ -173,11 +244,9 @@ describe('pds-table-cell', () => {
     );
     expect(shadowed).toEqual([true, true]);
 
-    // The sort icon's missing text alternative and the unfocusable scroll container belong to the
-    // head cell and pds-table, not the cell, so those two rules are off here.
+    // The unfocusable scroll container belongs to pds-table, not the cell, so that rule is off here.
     const violations = await runAxe(page, {
       rules: {
-        'role-img-alt': { enabled: false },
         'scrollable-region-focusable': { enabled: false },
       },
     });

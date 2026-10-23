@@ -158,7 +158,7 @@ describe('pds-radio-group', () => {
     const message = page.root?.querySelector('.pds-radio-group__message--error');
     expect(message).toBeTruthy();
     expect(message?.textContent?.trim()).toBe('Please select an option');
-    expect(message?.querySelector('pds-icon')).toBeTruthy();
+    expect(message?.querySelector('pds-icon')?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('applies is-invalid class when invalid prop is set', async () => {

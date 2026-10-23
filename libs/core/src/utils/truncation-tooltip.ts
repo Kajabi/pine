@@ -32,7 +32,7 @@ export interface TruncationTooltipOptions {
    */
   manageTabIndex?: boolean;
   /**
-   * The element whose focus shows the tooltip (default: `hostEl`).
+   * The element whose keyboard focus shows the tooltip (default: `hostEl`).
    *
    * Pass the wrapping control when it sits outside `hostEl`, so focusing it
    * still reveals the text once `manageTabIndex` is `false`.
@@ -102,11 +102,23 @@ function isOverflowing(el: HTMLElement): boolean {
 }
 
 /**
+ * Engines without `:focus-visible` throw on the selector, so there every
+ * focus counts as visible rather than none.
+ */
+function isFocusVisible(el: Element): boolean {
+  try {
+    return el.matches(':focus-visible');
+  } catch {
+    return true;
+  }
+}
+
+/**
  * Sets up automatic tooltip behavior for a truncated element.
  *
- * When the element's text overflows, hovering or focusing the host element
- * will display a tooltip showing the full text content. The tooltip is
- * rendered as a portal on document.body and positioned with Floating UI.
+ * When the element's text overflows, hovering the host element or giving it
+ * keyboard focus will display a tooltip showing the full text content. The
+ * tooltip is rendered as a portal on document.body and positioned with Floating UI.
  *
  * Also owns the element's `tabindex` while it is clipped — see syncTabIndex.
  *
@@ -314,9 +326,19 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     scheduleHide();
   }
 
-  function handleFocusIn(): void {
+  // Keyboard focus only: focus from a click would pin the tooltip open after the pointer leaves.
+  // Events from inside a shadow root arrive retargeted to its host, so test the innermost target.
+  function showForVisibleFocus(event: Event): void {
+    if (!isFocusVisible(event.composedPath()[0] as Element)) return;
     isFocused = true;
     showTooltip();
+  }
+
+  // A key press after a click makes focus visible in place, with no new focusin. keyup, not
+  // keydown, so Tab's focus move lands first; Escape asks to dismiss, never to reveal.
+  function handleKeyUp(event: KeyboardEvent): void {
+    if (isFocused || event.key === 'Escape') return;
+    showForVisibleFocus(event);
   }
 
   function handleFocusOut(): void {
@@ -326,8 +348,9 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   hostEl.addEventListener('mouseenter', handleMouseEnter);
   hostEl.addEventListener('mouseleave', handleMouseLeave);
-  focusEl.addEventListener('focusin', handleFocusIn);
+  focusEl.addEventListener('focusin', showForVisibleFocus);
   focusEl.addEventListener('focusout', handleFocusOut);
+  focusEl.addEventListener('keyup', handleKeyUp);
 
   // Return cleanup function
   return () => {
@@ -348,8 +371,9 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     }
     hostEl.removeEventListener('mouseenter', handleMouseEnter);
     hostEl.removeEventListener('mouseleave', handleMouseLeave);
-    focusEl.removeEventListener('focusin', handleFocusIn);
+    focusEl.removeEventListener('focusin', showForVisibleFocus);
     focusEl.removeEventListener('focusout', handleFocusOut);
+    focusEl.removeEventListener('keyup', handleKeyUp);
     removePortal();
   };
 }

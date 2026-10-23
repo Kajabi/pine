@@ -113,7 +113,7 @@ const TruncateTemplate = (args) => html`
     ${args.slot}
   </pds-text>
 </div>
-<pds-text tag="p" size="xs" color="secondary" gutter="sm">Hover over the truncated text above to see the full content in a tooltip.</pds-text>`;
+<pds-text tag="p" size="xs" color="secondary" gutter="sm">Hover over or tab to the truncated text above to see the full content in a tooltip.</pds-text>`;
 
 export const Truncate = TruncateTemplate.bind();
 Truncate.args = {

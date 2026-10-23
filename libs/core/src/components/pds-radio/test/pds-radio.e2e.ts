@@ -252,6 +252,13 @@ describe('pds-radio accessibility', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('has no axe violations with an error message', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-radio component-id="opt-1" label="Option one" invalid error-message="Choose an option"></pds-radio>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
 });
 
 describe('pds-radio reduced motion', () => {

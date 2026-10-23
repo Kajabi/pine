@@ -1490,7 +1490,7 @@ export class PdsMultiselect {
       >
         {isCreateOption ? (
           <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
-            <pds-icon name="add" size="small" />
+            <pds-icon name="add" size="small" aria-hidden="true" />
             <pds-text>{formatMessage(this.createOptionLabel, { text: option.text })}</pds-text>
           </pds-box>
         ) : (
@@ -1566,7 +1566,7 @@ export class PdsMultiselect {
       >
         {/* Search input */}
         <div class="pds-multiselect__search">
-          <pds-icon name="search" size="small" />
+          <pds-icon name="search" size="small" aria-hidden="true" />
           <input
             ref={el => (this.searchInputEl = el)}
             type="text"
@@ -1896,7 +1896,7 @@ export class PdsMultiselect {
 
           {this.errorMessage && (
             <p class="pds-multiselect__error" id={messageId(this.componentId, 'error')}>
-              <pds-icon icon={danger} size="small" />
+              <pds-icon aria-hidden="true" icon={danger} size="small" />
               {this.errorMessage}
             </p>
           )}

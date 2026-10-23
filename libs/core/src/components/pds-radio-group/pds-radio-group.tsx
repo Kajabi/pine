@@ -266,7 +266,7 @@ export class PdsRadioGroup {
             id={messageId(this._groupId, 'error')}
             aria-live="assertive"
           >
-            <pds-icon icon={danger} size="small" />
+            <pds-icon aria-hidden="true" icon={danger} size="small" />
             {this.errorMessage}
           </div>
         )}

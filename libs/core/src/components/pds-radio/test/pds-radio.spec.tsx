@@ -198,7 +198,7 @@ describe('pds-radio', () => {
           <span>Label text</span>
         </label>
         <div aria-live="assertive" class="pds-radio__message pds-radio__message--error" id="default__error-message">
-          <pds-icon icon="${danger}" size="small"></pds-icon>
+          <pds-icon aria-hidden="true" icon="${danger}" size="small"></pds-icon>
           This is a short error message.
         </div>
       </pds-radio>
