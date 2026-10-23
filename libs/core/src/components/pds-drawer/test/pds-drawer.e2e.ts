@@ -291,6 +291,97 @@ describe('pds-drawer', () => {
     expect(hitsPageButton).toBe(true);
   });
 
+  // A body-mounted dropdown opened from the drawer is portaled into the drawer's dialog, its nearest,
+  // under the click-through backdrop. Only the backdrop itself lets clicks through to the page. The
+  // trigger sits left of the panel's own edge so part of the list opens over the page, not the panel —
+  // a click there only proves the fix if a fallen-through click would have landed on the page, not on
+  // the (already-clickable) panel underneath.
+  it("lets a combobox's portaled dropdown take clicks, including the part that overhangs the page", async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setContent(`
+      <pds-drawer component-id="test" open>
+        <div style="position:fixed;top:100px;left:600px;">
+          <pds-combobox component-id="fruit" label="Fruit" trigger="button" mode="select-only" dropdown-mount="body">
+            <option value="apple">Apple</option>
+            <option value="pear">Pear</option>
+          </pds-combobox>
+        </div>
+      </pds-drawer>
+    `);
+    await page.waitForChanges();
+
+    const panelLeft = () =>
+      page.evaluate(
+        () => (document.querySelector('pds-drawer pds-modal .pds-modal') as HTMLElement).getBoundingClientRect().left,
+      );
+    expect(await panelLeft()).toBeGreaterThan(600);
+
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    // Floating UI places the list after it opens; hit-test where it ends up.
+    await page.waitForFunction(() => {
+      const root = document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot;
+      const listbox = root?.querySelector<HTMLElement>('.pds-combobox__listbox');
+      return Boolean(listbox?.style.top) && Array.from(root!.querySelectorAll('[role="option"]')).some((option) => option.getBoundingClientRect().height > 0);
+    });
+
+    const hit = await page.evaluate((panelLeft: number) => {
+      const portal = document.querySelector<HTMLElement>('.pds-combobox-dropdown-portal')!;
+      const option = Array.from(portal.shadowRoot!.querySelectorAll<HTMLElement>('[role="option"]')).find((candidate) => candidate.textContent?.trim() === 'Pear')!;
+      const rect = option.getBoundingClientRect();
+      // Inside the option, but left of the panel's own edge -- over the page, not the panel.
+      const x = rect.x + 10;
+      const y = rect.y + rect.height / 2;
+      const inner = portal.shadowRoot!.elementFromPoint(x, y);
+      return {
+        x,
+        y,
+        overPage: x < panelLeft,
+        inDialog: Boolean(portal.closest('dialog')),
+        onPortal: document.elementFromPoint(x, y) === portal,
+        onOption: Boolean(inner && option.contains(inner)),
+      };
+    }, await panelLeft());
+    expect(hit.overPage).toBe(true);
+    expect(hit.inDialog).toBe(true);
+    expect(hit.onPortal).toBe(true);
+    expect(hit.onOption).toBe(true);
+
+    await page.mouse.click(hit.x, hit.y);
+    await page.waitForChanges();
+    expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('pear');
+    expect(await (await page.find('pds-drawer')).getProperty('open')).toBe(true);
+  });
+
+  // In a form, a popover's panel goes at the end of the dialog, so its buttons don't submit the form.
+  it("lets a popover's panel in the drawer's dialog take clicks", async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setContent(`
+      <pds-drawer component-id="test" open>
+        <form>
+          <pds-popover component-id="pop"><button type="button" slot="trigger" id="pop-trigger">Open</button><div><button type="button" id="pop-inside">Inside</button></div></pds-popover>
+        </form>
+      </pds-drawer>
+    `);
+    await page.waitForChanges();
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+
+    const hit = await page.evaluate(() => {
+      const portal = document.getElementById('pop-portal')!;
+      const rect = document.getElementById('pop-inside')!.getBoundingClientRect();
+      return {
+        inDialog: portal.parentElement?.localName === 'dialog',
+        onButton: document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)?.id === 'pop-inside',
+      };
+    });
+    expect(hit.inDialog).toBe(true);
+    expect(hit.onButton).toBe(true);
+  });
+
   describe('lightDismiss', () => {
     it('does not steal focus from a page field the user just clicked', async () => {
       // Regression: hideModal() runs on the next frame under Stencil's async
