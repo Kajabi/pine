@@ -34,18 +34,20 @@ export class PdsDropdownMenuItem implements BasePdsProps {
    * Prompts the user to save the linked URL instead of navigating to it.
    * It can be used without a value to download with the default filename,
    * or with a string value to suggest a specific filename for the download.
-   * Only applies when href is set.
+   * Only applies when href is set. Ignored when `informational` is set.
    */
   @Prop() download?: string;
 
   /**
    *  If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+   *  Ignored when `informational` is set.
    */
   @Prop() href: string | undefined;
 
   /**
    * It determines whether or not the dropdown-item is informational: text that the arrow keys
    * reach but that can't be activated. Takes precedence over `href` and `destructive`.
+   * Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
    * @defaultValue false
    */
   @Prop({ reflect: true }) informational: boolean = false;
@@ -53,6 +55,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   /**
    * Determines whether the link should open in a new tab and display an external icon.
    * This is a simpler alternative to using `target="_blank"` for the common case.
+   * Ignored when `informational` is set.
    * @defaultValue false
    */
   @Prop({ reflect: true }) external: boolean = false;
@@ -60,7 +63,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   /**
    * Specifies where to open the linked document when href is provided.
    * Takes precedence over the `external` prop if both are set.
-   * Only applies when href is set.
+   * Only applies when href is set. Ignored when `informational` is set.
    * @defaultValue undefined
    */
   @Prop({ reflect: true }) target?: '_blank' | '_self' | '_parent' | '_top';
