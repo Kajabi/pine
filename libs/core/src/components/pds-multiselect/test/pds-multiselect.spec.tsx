@@ -1290,6 +1290,7 @@ describe('pds-multiselect', () => {
       expect(createOption).toBeTruthy();
       expect(createOption.getAttribute('aria-label')).toBe('Create new tag: NewTag');
       expect(createOption.getAttribute('role')).toBe('option');
+      expect(createOption.querySelector('pds-icon').getAttribute('aria-hidden')).toBe('true');
     });
   });
 
