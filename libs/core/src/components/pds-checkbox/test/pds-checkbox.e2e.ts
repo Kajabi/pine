@@ -154,6 +154,13 @@ describe('pds-checkbox accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  it('has no axe violations with an error message', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="terms" label="Accept the terms" invalid error-message="Accept the terms to continue"></pds-checkbox>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
   it('has no axe violations with slotted label content', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-checkbox component-id="tag"><pds-chip slot="label" sentiment="neutral">Spring Launch</pds-chip></pds-checkbox>');

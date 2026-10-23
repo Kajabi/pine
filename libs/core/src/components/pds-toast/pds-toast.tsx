@@ -209,7 +209,7 @@ export class PdsToast {
               }}
               aria-label={this.dismissLabel}
             >
-              <pds-icon name="remove" />
+              <pds-icon name="remove" aria-hidden="true" />
             </button>
           )}
         </div>

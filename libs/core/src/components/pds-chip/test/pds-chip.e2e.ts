@@ -703,6 +703,16 @@ describe('pds-chip accessibility', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('has no axe violations as a removable tag', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="tag">Spring Launch</pds-chip>
+      <pds-chip variant="tag" remove-url="/tags/1">Summer Sale</pds-chip>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
 });
 
 // A DOM morph makes the host match the server's HTML, which has none of the classes and styles

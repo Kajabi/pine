@@ -125,6 +125,7 @@ describe('pds-multiselect', () => {
     const error = page.root.shadowRoot.querySelector('.pds-multiselect__error');
     expect(error).toBeTruthy();
     expect(error.textContent).toContain('This is required');
+    expect(error.querySelector('pds-icon').getAttribute('aria-hidden')).toBe('true');
   });
 
   it('renders helper message', async () => {
@@ -507,6 +508,7 @@ describe('pds-multiselect', () => {
       const searchInput = page.root.shadowRoot.querySelector('.pds-multiselect__search-input');
       expect(searchInput).toBeTruthy();
       expect(searchInput.getAttribute('placeholder')).toBe('Find...');
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__search pds-icon').getAttribute('aria-hidden')).toBe('true');
     });
 
     it('renders selected items list at top of panel', async () => {
@@ -1288,6 +1290,7 @@ describe('pds-multiselect', () => {
       expect(createOption).toBeTruthy();
       expect(createOption.getAttribute('aria-label')).toBe('Create new tag: NewTag');
       expect(createOption.getAttribute('role')).toBe('option');
+      expect(createOption.querySelector('pds-icon').getAttribute('aria-hidden')).toBe('true');
     });
   });
 

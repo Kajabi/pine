@@ -269,6 +269,7 @@ describe('pds-combobox', () => {
     expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dot')).toBe(true);
     const icon = chipTrigger?.querySelector('pds-icon');
     expect(icon?.getAttribute('icon')).toBe('star');
+    expect(icon?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('renders chip trigger with large size', async () => {
@@ -1106,6 +1107,7 @@ describe('pds-combobox', () => {
 
     const checkIcon = page.root?.shadowRoot?.querySelector('.pds-combobox__option-check');
     expect(checkIcon).not.toBeNull();
+    expect(checkIcon?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('handles button trigger keyboard navigation', async () => {

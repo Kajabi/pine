@@ -601,6 +601,18 @@ describe('pds-multiselect', () => {
       expect(await axeViolations(page)).toBe('');
     });
 
+    it('finds no violations when open with an error message', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-multiselect component-id="tags" label="Tags" invalid error-message="Choose at least one tag">
+          <option value="1">Bestsellers</option>
+        </pds-multiselect>
+      `);
+      await openBuiltInTrigger(page);
+
+      expect(await axeViolations(page)).toBe('');
+    });
+
     it('finds no violations when open from a slotted trigger', async () => {
       const page = await newE2EPage();
       await page.setContent(`

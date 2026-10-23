@@ -15,7 +15,7 @@ describe('pds-toast', () => {
               <slot></slot>
             </span>
             <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
-              <pds-icon name="remove"></pds-icon>
+              <pds-icon aria-hidden="true" name="remove"></pds-icon>
             </button>
           </div>
         </mock:shadow-root>
@@ -37,7 +37,7 @@ describe('pds-toast', () => {
               <slot></slot>
             </span>
             <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
-              <pds-icon name="remove"></pds-icon>
+              <pds-icon aria-hidden="true" name="remove"></pds-icon>
             </button>
           </div>
         </mock:shadow-root>
@@ -63,7 +63,7 @@ describe('pds-toast', () => {
               <slot></slot>
             </span>
             <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
-              <pds-icon name="remove"></pds-icon>
+              <pds-icon aria-hidden="true" name="remove"></pds-icon>
             </button>
           </div>
         </mock:shadow-root>
@@ -84,7 +84,7 @@ describe('pds-toast', () => {
               <slot></slot>
             </span>
             <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
-              <pds-icon name="remove"></pds-icon>
+              <pds-icon aria-hidden="true" name="remove"></pds-icon>
             </button>
           </div>
         </mock:shadow-root>
@@ -128,7 +128,7 @@ describe('pds-toast', () => {
               <slot></slot>
             </span>
             <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
-              <pds-icon name="remove"></pds-icon>
+              <pds-icon aria-hidden="true" name="remove"></pds-icon>
             </button>
           </div>
         </mock:shadow-root>

@@ -141,7 +141,7 @@ describe('pds-switch', () => {
             <span><slot name="label"></slot>Switch error message</span>
           </label>
           <div aria-live="assertive" id="pds-switch-err__error-message" class="pds-switch__message pds-switch__message--error">
-            <pds-icon icon="${danger}" size="small"></pds-icon>
+            <pds-icon aria-hidden="true" icon="${danger}" size="small"></pds-icon>
             La croix blue bottle narwhal fam
           </div>
         </mock:shadow-root>
@@ -172,7 +172,7 @@ describe('pds-switch', () => {
           </label>
           <div id="switch-with-description__helper-message"  class="pds-switch__message">This is a helper message</div>
           <div aria-live="assertive" id="switch-with-description__error-message" class="pds-switch__message pds-switch__message--error">
-            <pds-icon icon="${danger}" size="small"></pds-icon>
+            <pds-icon aria-hidden="true" icon="${danger}" size="small"></pds-icon>
             This is an error message
           </div>
         </mock:shadow-root>

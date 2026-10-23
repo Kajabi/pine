@@ -244,11 +244,9 @@ describe('pds-table-cell', () => {
     );
     expect(shadowed).toEqual([true, true]);
 
-    // The sort icon's missing text alternative and the unfocusable scroll container belong to the
-    // head cell and pds-table, not the cell, so those two rules are off here.
+    // The unfocusable scroll container belongs to pds-table, not the cell, so that rule is off here.
     const violations = await runAxe(page, {
       rules: {
-        'role-img-alt': { enabled: false },
         'scrollable-region-focusable': { enabled: false },
       },
     });
