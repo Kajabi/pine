@@ -765,16 +765,20 @@ describe('pds-button', () => {
       expect(formatViolations(violations)).toBe('');
     });
 
-    it('has no axe violations as a toggle button with aria-pressed', async () => {
+    it('passes aria-pressed to the inner button with no axe violations', async () => {
       const page = await newE2EPage();
       await page.setContent('<pds-button variant="secondary" aria-pressed="true">Bold</pds-button>');
+
+      expect(await page.$eval('pds-button', (el) => el.shadowRoot?.querySelector('button')?.getAttribute('aria-pressed'))).toBe('true');
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
 
-    it('has no axe violations as a link to the current page', async () => {
+    it('passes aria-current to the inner link with no axe violations', async () => {
       const page = await newE2EPage();
       await page.setContent('<pds-button href="/settings" aria-current="page">Settings</pds-button>');
+
+      expect(await page.$eval('pds-button', (el) => el.shadowRoot?.querySelector('a')?.getAttribute('aria-current'))).toBe('page');
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
