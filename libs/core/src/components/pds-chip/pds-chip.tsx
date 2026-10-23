@@ -369,7 +369,7 @@ export class PdsChip {
 
     return (
       <CloseElement {...closeAttributes()} onClick={this.handleCloseClick}>
-        <pds-icon icon={remove} size={this.iconSize}></pds-icon>
+        <pds-icon icon={remove} size={this.iconSize} aria-hidden="true"></pds-icon>
       </CloseElement>
     );
   }
