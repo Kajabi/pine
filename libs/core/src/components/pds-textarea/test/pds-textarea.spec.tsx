@@ -55,7 +55,7 @@ describe('pds-textarea', () => {
               <textarea aria-describedby="pds-textarea-error__error-message" aria-invalid="true" class="pds-textarea__field is-invalid" id="pds-textarea-error" name="pds-textarea-error"></textarea>
             </div>
             <p aria-live="assertive" class="pds-textarea__error-message" id="pds-textarea-error__error-message">
-              <pds-icon icon="${danger}" size="small"></pds-icon>
+              <pds-icon aria-hidden="true" icon="${danger}" size="small"></pds-icon>
               error
             </p>
           </div>
@@ -301,7 +301,7 @@ describe('pds-textarea', () => {
               This is a helper message
             </p>
             <p aria-live="assertive" id="textarea-with-description__error-message" class="pds-textarea__error-message">
-              <pds-icon icon="${danger}" size="small"></pds-icon>
+              <pds-icon aria-hidden="true" icon="${danger}" size="small"></pds-icon>
               This is an error message
             </p>
           </div>

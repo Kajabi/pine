@@ -353,4 +353,16 @@ describe('pds-radio-group accessibility', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('has no axe violations with an error message', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio-group name="plan" invalid error-message="Choose a plan">
+        <pds-radio component-id="plan-basic" label="Basic" value="basic"></pds-radio>
+        <pds-radio component-id="plan-pro" label="Pro" value="pro"></pds-radio>
+      </pds-radio-group>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
 });

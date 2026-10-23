@@ -106,4 +106,11 @@ describe('pds-avatar accessibility', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('has no axe violations without an image', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar></pds-avatar><pds-avatar dropdown></pds-avatar>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
 });

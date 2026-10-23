@@ -50,6 +50,7 @@ describe('pds-table-head-cell', () => {
     const icon = tableHeadCell.shadowRoot.querySelector('pds-icon');
     expect(icon).toBeTruthy();
     expect(icon.getAttribute('icon')).toBe(upSmall);
+    expect(icon.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('renders with is-compact class when tableRef is compact', async () => {
