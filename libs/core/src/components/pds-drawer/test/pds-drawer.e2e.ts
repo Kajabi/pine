@@ -291,6 +291,46 @@ describe('pds-drawer', () => {
     expect(hitsPageButton).toBe(true);
   });
 
+  // A body-mounted dropdown opened from the drawer is portaled into the drawer's dialog, its nearest,
+  // under the click-through backdrop. Only the backdrop itself lets clicks through to the page.
+  it("lets a combobox's portaled dropdown take clicks", async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setContent(`
+      <pds-drawer component-id="test" open>
+        <pds-combobox component-id="fruit" label="Fruit" trigger="button" mode="select-only" dropdown-mount="body">
+          <option value="apple">Apple</option>
+          <option value="pear">Pear</option>
+        </pds-combobox>
+      </pds-drawer>
+    `);
+    await page.waitForChanges();
+
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => {
+      const root = document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot;
+      return Array.from(root?.querySelectorAll('[role="option"]') ?? []).some((option) => option.getBoundingClientRect().height > 0);
+    });
+
+    const hit = await page.evaluate(() => {
+      const portal = document.querySelector<HTMLElement>('.pds-combobox-dropdown-portal')!;
+      const option = Array.from(portal.shadowRoot!.querySelectorAll<HTMLElement>('[role="option"]')).find((candidate) => candidate.textContent?.trim() === 'Pear')!;
+      const rect = option.getBoundingClientRect();
+      const x = rect.x + rect.width / 2;
+      const y = rect.y + rect.height / 2;
+      const inner = portal.shadowRoot!.elementFromPoint(x, y);
+      return {
+        inDialog: Boolean(portal.closest('dialog')),
+        onPortal: document.elementFromPoint(x, y) === portal,
+        onOption: Boolean(inner && option.contains(inner)),
+      };
+    });
+    expect(hit.inDialog).toBe(true);
+    expect(hit.onPortal).toBe(true);
+    expect(hit.onOption).toBe(true);
+  });
+
   describe('lightDismiss', () => {
     it('does not steal focus from a page field the user just clicked', async () => {
       // Regression: hideModal() runs on the next frame under Stencil's async
