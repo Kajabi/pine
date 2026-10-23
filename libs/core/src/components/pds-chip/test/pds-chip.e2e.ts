@@ -1,6 +1,14 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
+
+const LONG_LABEL = 'A very long label that would otherwise overflow the chip';
+
+const truncationTooltipText = (page: E2EPage) =>
+  page.evaluate(() => document.querySelector('.pds-truncation-tooltip')?.textContent.trim() ?? null);
+
+// The hide is delayed 100ms.
+const waitOutHideDelay = () => new Promise((resolve) => setTimeout(resolve, 300));
 
 describe('pds-chip', () => {
   it('renders', async () => {
@@ -198,16 +206,12 @@ describe('pds-chip', () => {
       <pds-chip variant="dropdown" max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
     `);
 
-    const button = await page.find('pds-chip >>> .pds-chip__button');
-    await button.focus();
+    await page.keyboard.press('Tab');
     await page.waitForChanges();
 
-    const tooltipText = await page.evaluate(() => {
-      const portal = document.querySelector('.pds-truncation-tooltip');
-      return portal ? portal.textContent.trim() : null;
-    });
-
-    expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
+    const focusedClass = await page.$eval('pds-chip', (el) => el.shadowRoot.activeElement?.className);
+    expect(focusedClass).toContain('pds-chip__button');
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
   });
 
   // The same nesting as the dropdown variant, with the control supplied by the
@@ -308,6 +312,110 @@ describe('pds-chip', () => {
 
     expect(await page.evaluate(() => document.activeElement.id)).toBe('after');
     expect(await tooltipText()).toBeNull();
+  });
+
+  it('hides the tooltip once the pointer leaves after clicking the wrapping control', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-button variant="unstyled">
+        <pds-chip max-width="80px">${LONG_LABEL}</pds-chip>
+      </pds-button>
+    `);
+
+    await page.click('pds-chip');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await page.evaluate(() => document.activeElement.tagName)).toBe('PDS-BUTTON');
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  it('shows the tooltip when Tab reaches the clipped label', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    const focusedClass = await page.$eval('pds-chip', (el) => el.shadowRoot.activeElement?.className);
+    expect(focusedClass).toContain('pds-chip__label-text');
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  // Clicking focuses the label too, but only keyboard focus holds the tooltip open.
+  it('hides the tooltip once the pointer leaves after a click, though the label keeps focus', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.click('pds-chip');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    const focusedClass = await page.$eval('pds-chip', (el) => el.shadowRoot.activeElement?.className);
+    expect(focusedClass).toContain('pds-chip__label-text');
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  // A key press turns the label's click focus visible in place, with no new focusin.
+  it('shows the tooltip when a key press after a click makes the focus visible', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.click('pds-chip');
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+    expect(await truncationTooltipText(page)).toBeNull();
+
+    await page.keyboard.press('ArrowRight');
+    await page.waitForChanges();
+
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+  });
+
+  it('hides the tooltip once the pointer leaves after a hover', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.hover('pds-chip');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  // A tap fires emulated mouse events, so it reveals the label through mouseenter
+  // even though the focus it gives the label is not :focus-visible.
+  it('shows the tooltip on a tap and hides it on a tap elsewhere', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 800, height: 600, hasTouch: true, isMobile: true });
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    const box = await (await page.$('pds-chip')).boundingBox();
+    await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForChanges();
+
+    const labelFocusVisible = await page.$eval('pds-chip', (el) =>
+      el.shadowRoot.querySelector('.pds-chip__label-text').matches(':focus-visible'),
+    );
+    expect(labelFocusVisible).toBe(false);
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    await page.touchscreen.tap(400, 500);
+    await waitOutHideDelay();
+
+    expect(await truncationTooltipText(page)).toBeNull();
   });
 
   it('shows a tooltip with the full label on hover when the label is truncated', async () => {

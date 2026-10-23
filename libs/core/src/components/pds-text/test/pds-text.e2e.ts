@@ -1,5 +1,18 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
+
+const LONG_TEXT = 'A very long sentence that cannot possibly fit';
+
+const CLIPPED_TEXT = `<pds-text truncate style="width: 60px;">${LONG_TEXT}</pds-text>`;
+
+const truncationTooltipText = (page: E2EPage) =>
+  page.evaluate(() => document.querySelector('.pds-truncation-tooltip')?.textContent.trim() ?? null);
+
+// The hide is delayed 100ms.
+const waitOutHideDelay = () => new Promise((resolve) => setTimeout(resolve, 300));
+
+const contentHasFocus = (page: E2EPage) =>
+  page.$eval('pds-text', (el) => el.shadowRoot.activeElement === el.shadowRoot.querySelector('[part="content"]'));
 
 describe('pds-text', () => {
   it('renders', async () => {
@@ -99,6 +112,47 @@ describe('pds-text', () => {
 
     const tooltips = await page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
     expect(tooltips).toEqual(['A very long sentence that cannot possibly fit']);
+  });
+
+  it('shows the tooltip when Tab reaches the clipped text', async () => {
+    const page = await newE2EPage();
+    await page.setContent(CLIPPED_TEXT);
+
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    expect(await contentHasFocus(page)).toBe(true);
+    expect(await truncationTooltipText(page)).toBe(LONG_TEXT);
+  });
+
+  // Clicking focuses the text too, but only keyboard focus holds the tooltip open.
+  it('hides the tooltip once the pointer leaves after a click, though the text keeps focus', async () => {
+    const page = await newE2EPage();
+    await page.setContent(CLIPPED_TEXT);
+
+    await page.click('pds-text');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toBe(LONG_TEXT);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await contentHasFocus(page)).toBe(true);
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  it('hides the tooltip once the pointer leaves after a hover', async () => {
+    const page = await newE2EPage();
+    await page.setContent(CLIPPED_TEXT);
+
+    await page.hover('pds-text');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toBe(LONG_TEXT);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await truncationTooltipText(page)).toBeNull();
   });
 });
 
