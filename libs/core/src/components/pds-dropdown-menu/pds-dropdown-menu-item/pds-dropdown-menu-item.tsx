@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State }
 import type { BasePdsProps } from '@utils/interfaces';
 
 /**
- * @part button
+ * @part button - Exposes the item's inner element for styling. Appears on button and informational items, not on links.
  */
 @Component({
   tag: 'pds-dropdown-menu-item',
@@ -126,6 +126,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
           }}
           role="menuitem"
           aria-disabled="true"
+          part="button"
           tabIndex={this.disabled ? -1 : 0}
           onKeyDown={this.handleInformationalKeyDown}
           onFocus={this.handleFocus}

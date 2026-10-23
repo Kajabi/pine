@@ -41,9 +41,9 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part       | Description |
-| ---------- | ----------- |
-| `"button"` |             |
+| Part       | Description                                                                                            |
+| ---------- | ------------------------------------------------------------------------------------------------------ |
+| `"button"` | Exposes the item's inner element for styling. Appears on button and informational items, not on links. |
 
 
 ## Dependencies
