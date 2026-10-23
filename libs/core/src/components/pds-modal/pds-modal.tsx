@@ -110,7 +110,7 @@ function containsComposed(ancestor: Node, node: Node | null): boolean {
 const openModals = new Map<Element, number>();
 let openSequence = 0;
 
-/** Whether an open auto popover's panel sits in `root`, including inside shadow roots under it. */
+/** Whether the panel of an open popover that takes Escape sits in `root`, including inside shadow roots under it. */
 function hasOpenPopover(root: Element | ShadowRoot): boolean {
   if (root.querySelector('[data-pds-popover-open]')) return true;
   return Array.from(root.querySelectorAll('*')).some(el => !!el.shadowRoot && hasOpenPopover(el.shadowRoot));
