@@ -327,11 +327,18 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   }
 
   // Keyboard focus only: focus from a click would pin the tooltip open after the pointer leaves.
-  // Focus inside a shadow root arrives retargeted to its host, so test the innermost target.
-  function handleFocusIn(event: FocusEvent): void {
+  // Events from inside a shadow root arrive retargeted to its host, so test the innermost target.
+  function showForVisibleFocus(event: Event): void {
     if (!isFocusVisible(event.composedPath()[0] as Element)) return;
     isFocused = true;
     showTooltip();
+  }
+
+  // A key press after a click makes focus visible in place, with no new focusin. keyup, not
+  // keydown, so Tab's focus move lands first; Escape asks to dismiss, never to reveal.
+  function handleKeyUp(event: KeyboardEvent): void {
+    if (isFocused || event.key === 'Escape') return;
+    showForVisibleFocus(event);
   }
 
   function handleFocusOut(): void {
@@ -341,8 +348,9 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   hostEl.addEventListener('mouseenter', handleMouseEnter);
   hostEl.addEventListener('mouseleave', handleMouseLeave);
-  focusEl.addEventListener('focusin', handleFocusIn);
+  focusEl.addEventListener('focusin', showForVisibleFocus);
   focusEl.addEventListener('focusout', handleFocusOut);
+  focusEl.addEventListener('keyup', handleKeyUp);
 
   // Return cleanup function
   return () => {
@@ -363,8 +371,9 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     }
     hostEl.removeEventListener('mouseenter', handleMouseEnter);
     hostEl.removeEventListener('mouseleave', handleMouseLeave);
-    focusEl.removeEventListener('focusin', handleFocusIn);
+    focusEl.removeEventListener('focusin', showForVisibleFocus);
     focusEl.removeEventListener('focusout', handleFocusOut);
+    focusEl.removeEventListener('keyup', handleKeyUp);
     removePortal();
   };
 }
