@@ -138,6 +138,47 @@ describe('pds-radio-group', () => {
     expect(label?.textContent).toBe('Comments');
   });
 
+  it('names the group from group-label', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="grp" group-label="Comments" helper-message="Helper"></pds-radio-group>`,
+    });
+
+    const label = page.root?.querySelector('.pds-radio-group__label');
+    expect(page.root?.getAttribute('role')).toBe('radiogroup');
+    expect(label?.id).toBe('grp__label');
+    expect(page.root?.getAttribute('aria-labelledby')).toBe('grp__label');
+    expect(page.root?.getAttribute('aria-describedby')).toBe('grp__helper-message');
+  });
+
+  it('leaves aria-labelledby off without a group-label', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="grp"></pds-radio-group>`,
+    });
+
+    expect(page.root?.hasAttribute('aria-labelledby')).toBe(false);
+  });
+
+  it("keeps a consumer's aria-label as the group's name", async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="grp" group-label="Comments" aria-label="Comment preference"></pds-radio-group>`,
+    });
+
+    expect(page.root?.hasAttribute('aria-labelledby')).toBe(false);
+    expect(page.root?.getAttribute('aria-label')).toBe('Comment preference');
+  });
+
+  it("keeps a consumer's aria-labelledby", async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="grp" group-label="Comments" aria-labelledby="page-heading"></pds-radio-group>`,
+    });
+
+    expect(page.root?.getAttribute('aria-labelledby')).toBe('page-heading');
+  });
+
   it('renders helper message when helperMessage prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsRadioGroup],
