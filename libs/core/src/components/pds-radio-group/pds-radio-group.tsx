@@ -212,6 +212,19 @@ export class PdsRadioGroup {
     return `var(--pine-dimension-${this.gap})`;
   }
 
+  private get labelId(): string {
+    return `${this._groupId}__label`;
+  }
+
+  // Names the group from its visible label, unless the consumer named it with their own aria-label or aria-labelledby.
+  private getAriaLabelledBy(): string | undefined {
+    const consumerLabelledBy = this.el.getAttribute('aria-labelledby');
+    if (consumerLabelledBy && consumerLabelledBy !== this.labelId) return consumerLabelledBy;
+    if (this.el.hasAttribute('aria-label')) return undefined;
+
+    return this.groupLabel ? this.labelId : undefined;
+  }
+
   private getAriaDescribedBy(): string | undefined {
     const messageIds: string[] = [];
 
@@ -229,19 +242,21 @@ export class PdsRadioGroup {
   render() {
     const gapValue = this.getGapValue();
     const ariaDescribedBy = this.getAriaDescribedBy();
+    const ariaLabelledBy = this.getAriaLabelledBy();
 
     return (
       <Host
         class={this.classNames()}
         id={this._groupId}
-        role="group"
+        role="radiogroup"
+        aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
         style={{
           '--pds-radio-group-gap': gapValue,
         }}
       >
         {this.groupLabel && (
-          <div class="pds-radio-group__label">
+          <div class="pds-radio-group__label" id={this.labelId}>
             {this.groupLabel}
           </div>
         )}
