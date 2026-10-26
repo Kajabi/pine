@@ -595,6 +595,37 @@ Layout impact:
 - `inline-flex`: Creates an inline flex container
 - `block`: Creates a block-level container
 - `inline-block`: Creates an inline-block container
+- `contents`: Renders no box of its own; the box's children lay out as if they were direct children of its parent
+
+Use `contents` for a wrapper that exists only to carry a class, a ref, or a framework boundary and must not change the layout around it, for example a wrapper between a flex or grid container and its items. With `contents`, the box's own styling (padding, margin, border, background, shadow, gap, sizing) has no effect, because there is no box to apply it to; style the children or the parent instead.
+
+`pds-box` is a generic container with no semantics of its own, so `display: contents` doesn't hide anything from assistive technology here. Don't use it to remove a box around an element whose role matters, such as a button or a list.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsBox display="flex" gap="sm" border="true" padding="sm">
+  <PdsBox display="contents" className="wrapper">
+    <PdsBox border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="xs">Item 3</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box display="flex" gap="sm" border="true" padding="sm">
+  <pds-box display="contents" class="wrapper">
+    <pds-box border="true" padding="xs">Item 1</pds-box>
+    <pds-box border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="xs">Item 3</pds-box>
+</pds-box>`
+}}>
+  <pds-box display="flex" gap="sm" border="true" padding="sm">
+    <pds-box display="contents" class="wrapper">
+      <pds-box border="true" padding="xs">Item 1</pds-box>
+      <pds-box border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="xs">Item 3</pds-box>
+  </pds-box>
+</DocCanvas>
 
 ### Direction
 By default Box is `flex-direction: row`. Use `direction` to change the direction property `column` if the box's contents are intended to stack vertically.

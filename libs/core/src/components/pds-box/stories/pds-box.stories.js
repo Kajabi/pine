@@ -62,3 +62,14 @@ Default.args = {
   border: true,
   minHeight: '100px',
 };
+
+// A wrapper with display="contents" adds no box: its children are spaced by the outer box's gap
+// as if the wrapper weren't there.
+export const DisplayContents = () => html`
+<pds-box display="flex" gap="sm" border="true" padding="sm">
+  <pds-box display="contents">
+    <pds-box border="true" padding="xs">Item 1</pds-box>
+    <pds-box border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="xs">Item 3</pds-box>
+</pds-box>`;

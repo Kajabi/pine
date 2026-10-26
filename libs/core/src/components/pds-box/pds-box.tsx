@@ -178,10 +178,12 @@ export class PdsBox {
   @Prop() direction?: `row` | `column`;
 
   /**
-   * Defines the display style of the box.
+   * Defines the display style of the box. `contents` renders no box of its own, so its children lay
+   * out as direct children of its parent; use it for a wrapper that must not affect layout. With
+   * `contents`, the box's own styling (padding, border, background, gap, sizing) has no effect.
    * @defaultValue flex
   */
-  @Prop() display?: `flex` | `inline-flex` | `block` | `inline-block`;
+  @Prop() display?: `flex` | `inline-flex` | `block` | `inline-block` | `contents`;
 
   /**
    * If `true`, sets the box `max-width` to `100%`.
