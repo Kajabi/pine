@@ -30,6 +30,8 @@ export class PdsModalContent {
    */
   private userSetBorder = false;
 
+  private hasLoaded = false;
+
   componentWillLoad() {
     // Check if border was explicitly set via attribute or property
     const borderAttr = this.el.getAttribute('border');
@@ -40,6 +42,7 @@ export class PdsModalContent {
   }
 
   componentDidLoad() {
+    this.hasLoaded = true;
     this.calculateMaxHeight();
 
     if (!this.userSetBorder) {
@@ -49,11 +52,12 @@ export class PdsModalContent {
   }
 
   // Here rather than in componentDidLoad, which runs once: content taken out of the page and put
-  // back (a DOM morph or a framework moving it) gets back the listeners disconnectedCallback removed.
+  // back (a DOM morph or a framework moving it) gets its listeners and header/footer observer back.
   connectedCallback() {
     window.addEventListener('resize', this.handleResize);
     // The scroll happens on the component element itself (this.el), not the inner div
     this.el.addEventListener('scroll', this.handleScroll);
+    if (this.hasLoaded) this.calculateMaxHeight();
   }
 
   disconnectedCallback() {
@@ -62,6 +66,7 @@ export class PdsModalContent {
 
     if (this.mutationObserver) {
       this.mutationObserver.disconnect();
+      this.mutationObserver = undefined;
     }
   }
 
