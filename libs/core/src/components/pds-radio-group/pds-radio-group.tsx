@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Element, Watch, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, Host, h, Prop, Element, Watch, Event, EventEmitter, Listen, forceUpdate } from '@stencil/core';
 import { messageId } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 import { RadioGroupChangeEventDetail } from './radio-group-interface';
@@ -136,6 +136,21 @@ export class PdsRadioGroup {
         radio.removeAttribute('required');
       }
     });
+  }
+
+  private hostAriaObserver?: MutationObserver;
+
+  connectedCallback() {
+    if (typeof MutationObserver === 'undefined') return;
+
+    // Consumers can name the group after render (a prop change, an i18n swap, a morph); re-render so their name wins.
+    this.hostAriaObserver = new MutationObserver(() => forceUpdate(this));
+    this.hostAriaObserver.observe(this.el, { attributeFilter: ['aria-label', 'aria-labelledby'] });
+  }
+
+  disconnectedCallback() {
+    this.hostAriaObserver?.disconnect();
+    this.hostAriaObserver = undefined;
   }
 
   componentWillLoad() {
