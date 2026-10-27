@@ -68,12 +68,13 @@ describe('pds-modal-content', () => {
   });
 
   describe('header and footer observer', () => {
-    // mock-doc has no MutationObserver, so this one records what each observer watches and when it stops.
+    // mock-doc has no MutationObserver, so this one records what each observer watches and when it
+    // stops, and lets a test report a mutation the way a browser would.
     class RecordingObserver {
       static instances: RecordingObserver[] = [];
       target: Node | null = null;
       disconnected = false;
-      constructor() {
+      constructor(private callback: MutationCallback) {
         RecordingObserver.instances.push(this);
       }
       observe(target: Node) {
@@ -81,6 +82,9 @@ describe('pds-modal-content', () => {
       }
       disconnect() {
         this.disconnected = true;
+      }
+      notify() {
+        this.callback([], this as unknown as MutationObserver);
       }
     }
 
@@ -97,6 +101,7 @@ describe('pds-modal-content', () => {
 
     afterEach(() => {
       globalThis.MutationObserver = original;
+      jest.restoreAllMocks();
     });
 
     it('observes its modal again after being removed and put back', async () => {
@@ -114,6 +119,11 @@ describe('pds-modal-content', () => {
       await page.waitForChanges();
 
       expect(liveTargets()).toEqual(['pds-modal']);
+
+      const calculateMaxHeight = jest.spyOn(PdsModalContent.prototype as any, 'calculateMaxHeight');
+      RecordingObserver.instances.find((observer) => !observer.disconnected)!.notify();
+
+      expect(calculateMaxHeight).toHaveBeenCalledTimes(1);
     });
   });
 
