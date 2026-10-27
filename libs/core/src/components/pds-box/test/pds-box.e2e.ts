@@ -191,13 +191,15 @@ describe('pds-box display="contents"', () => {
         wrapperRect: wrapper.getBoundingClientRect().width + wrapper.getBoundingClientRect().height,
         // The parent's gap separates the wrapper's children, and the wrapper's padding adds nothing.
         between: b.left - a.right,
+        parentGap: parseFloat(getComputedStyle(document.getElementById('parent')!).columnGap),
         offset: a.left - parent.left,
       };
     });
 
     expect(layout.display).toBe('contents');
     expect(layout.wrapperRect).toBe(0);
-    expect(layout.between).toBe(24);
+    expect(layout.parentGap).toBeGreaterThan(0);
+    expect(layout.between).toBe(layout.parentGap);
     expect(layout.offset).toBe(0);
   });
 

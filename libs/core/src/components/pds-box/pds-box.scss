@@ -158,10 +158,9 @@ $box-border-color: var(--color-border-box, var(--pine-color-border));
   display: inline-block;
 }
 
-// Element selector outranks the single-class rules that also set display (the base
+// Doubled class raises specificity above the single-class rules that also set display (the base
 // [class*='pds-box'] rule, column sizes), so a contents box never gets a box of its own
-/* stylelint-disable-next-line selector-no-qualifying-type -- the type selector is what raises the specificity */
-pds-box.pds-box--display-contents {
+.pds-box--display-contents.pds-box--display-contents {
   display: contents;
 }
 
