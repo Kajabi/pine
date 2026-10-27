@@ -597,9 +597,9 @@ Layout impact:
 - `inline-block`: Creates an inline-block container
 - `contents`: Renders no box of its own; the box's children lay out as if they were direct children of its parent
 
-Use `contents` for a wrapper that exists only to carry a class, a ref, or a framework boundary and must not change the layout around it, for example a wrapper between a flex or grid container and its items. With `contents`, the box's own styling (padding, margin, border, background, shadow, gap, sizing) has no effect, because there is no box to apply it to; style the children or the parent instead.
+Use `contents` for a wrapper that exists only to carry a class, a ref, or a framework boundary and must not change the layout around it, for example a wrapper between a flex or grid container and its items. With `contents`, the box's own padding, margin, border width, radius, shadow, gap and sizing have no effect, because there is no box to apply them to; style the children or the parent instead. Its background colour, border colour, min-width and min-height are set as custom properties, so they still pass down to any child `pds-box`.
 
-`pds-box` is a generic container with no semantics of its own, so `display: contents` doesn't hide anything from assistive technology here. Don't use it to remove a box around an element whose role matters, such as a button or a list.
+`pds-box` is a generic container with no semantics of its own, so `display: contents` doesn't hide anything from assistive technology here. Don't use it to remove a box around an element whose role matters, such as a button or a list, and don't set `role`, `aria-*`, or `tabindex` on a `display="contents"` box: some browsers drop its role and name, and it can't take focus.
 
 <DocCanvas
   mdxSource={{

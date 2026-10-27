@@ -308,7 +308,7 @@ export namespace Components {
          */
         "direction"?: `row` | `column`;
         /**
-          * Defines the display style of the box. `contents` renders no box of its own, so its children lay out as direct children of its parent; use it for a wrapper that must not affect layout. With `contents`, the box's own styling (padding, border, background, gap, sizing) has no effect.
+          * Defines the display style of the box. `contents` renders no box of its own, so its children lay out as direct children of its parent; use it for a wrapper that must not affect layout. With `contents`, the box's own padding, margin, border width, radius, shadow, gap and sizing have no effect. Its colour and min-size props are custom properties, so they pass down to child boxes.
           * @defaultValue flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block` | `contents`;
@@ -4158,7 +4158,7 @@ declare namespace LocalJSX {
          */
         "direction"?: `row` | `column`;
         /**
-          * Defines the display style of the box. `contents` renders no box of its own, so its children lay out as direct children of its parent; use it for a wrapper that must not affect layout. With `contents`, the box's own styling (padding, border, background, gap, sizing) has no effect.
+          * Defines the display style of the box. `contents` renders no box of its own, so its children lay out as direct children of its parent; use it for a wrapper that must not affect layout. With `contents`, the box's own padding, margin, border width, radius, shadow, gap and sizing have no effect. Its colour and min-size props are custom properties, so they pass down to child boxes.
           * @defaultValue flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block` | `contents`;
