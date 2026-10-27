@@ -120,7 +120,7 @@ Month and weekday names come from the browser's `Intl` support for `locale`, whi
 
 `format` sets how the field shows dates and reads typed ones, with the tokens `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and for times `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM). Typed dates may drop leading zeros, and a typed ISO date is always accepted too.
 
-The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`) whatever the format, so what a form submits and what the change event carries never depends on how the field reads. Backends can parse it directly as ISO 8601.
+The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`) whatever the format, so what a form submits and what the change event carries never depends on how the field reads. Backends can parse it directly as ISO 8601: a `YYYY-MM-DD` value as a calendar date, not a midnight timestamp.
 
 <DocCanvas
   mdxSource={{
@@ -269,7 +269,7 @@ The open calendar is portaled: into the `<dialog>` or open popover around the da
 ## Values, time zones and servers
 
 - Values are plain ISO strings with no time zone: `YYYY-MM-DD`, and with the time picker `YYYY-MM-DDTHH:mm`, a wall-clock time. If the time needs a zone, attach it on the server when parsing, such as the account's time zone.
-- A range submits as one field, `start/end`. Split it on `/` on the server and parse each half as ISO 8601.
+- A range submits as one field, `start/end`. Split it on `/` on the server and parse each half as ISO 8601: a `YYYY-MM-DD` half as a calendar date, not a midnight timestamp.
 
 ## Form Integration
 
