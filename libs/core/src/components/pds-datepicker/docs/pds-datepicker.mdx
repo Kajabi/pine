@@ -98,10 +98,10 @@ Days outside `min` and `max` are shown but can't be picked, and the keyboard sto
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsDatepicker componentId="pds-datepicker-range-example" label="Delivery date" helperMessage="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></PdsDatepicker>',
-    webComponent: '<pds-datepicker component-id="pds-datepicker-range-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>'
+    react: '<PdsDatepicker componentId="pds-datepicker-min-max-example" label="Delivery date" helperMessage="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></PdsDatepicker>',
+    webComponent: '<pds-datepicker component-id="pds-datepicker-min-max-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>'
 }}>
-  <pds-datepicker component-id="pds-datepicker-range-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>
+  <pds-datepicker component-id="pds-datepicker-min-max-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>
 </DocCanvas>
 
 ### Locale and first day of the week
@@ -120,7 +120,7 @@ Month and weekday names come from the browser's `Intl` support for `locale`, whi
 
 `format` sets how the field shows dates and reads typed ones, with the tokens `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and for times `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM). Typed dates may drop leading zeros, and a typed ISO date is always accepted too.
 
-The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`) whatever the format, so what a form submits and what the change event carries never depends on how the field reads. Backends parse ISO 8601 directly, as Rails' `Date.parse` and `Time.zone.parse` do.
+The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`) whatever the format, so what a form submits and what the change event carries never depends on how the field reads. Backends can parse it directly as ISO 8601: a `YYYY-MM-DD` value as a calendar date, not a midnight timestamp.
 
 <DocCanvas
   mdxSource={{
@@ -268,8 +268,8 @@ The open calendar is portaled: into the `<dialog>` or open popover around the da
 
 ## Values, time zones and servers
 
-- Values are plain ISO strings with no time zone: `YYYY-MM-DD`, and with the time picker `YYYY-MM-DDTHH:mm`, a wall-clock time. Attach the zone on the server if the time needs one, as Rails' `Time.zone.parse` does with the account's zone.
-- A range submits as one field, `start/end`. Split it on the server, as `start, finish = params[:period].split('/')`; each half parses with `Date.parse` or `Time.zone.parse`.
+- Values are plain ISO strings with no time zone: `YYYY-MM-DD`, and with the time picker `YYYY-MM-DDTHH:mm`, a wall-clock time. If the time needs a zone, attach it on the server when parsing, such as the account's time zone.
+- A range submits as one field, `start/end`. Split it on `/` on the server and parse each half as ISO 8601: a `YYYY-MM-DD` half as a calendar date, not a midnight timestamp.
 
 ## Form Integration
 
