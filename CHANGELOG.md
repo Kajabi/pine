@@ -1,3 +1,27 @@
+## 4.8.0 (2026-10-27)
+
+### Features 🚀
+
+- **pds-dropdown-menu:** add informational prop to dropdown menu items ([#907](https://github.com/Kajabi/pine/pull/907))
+- **pds-popover:** add padding prop ([#909](https://github.com/Kajabi/pine/pull/909))
+- **pds-popover:** add open-on hover option ([#910](https://github.com/Kajabi/pine/pull/910))
+
+### Bug Fixes 🐛
+
+- **core:** open the truncation tooltip on keyboard focus only ([#906](https://github.com/Kajabi/pine/pull/906))
+- **core:** hide decorative icons inside components from assistive technology ([#908](https://github.com/Kajabi/pine/pull/908))
+- **pds-button:** forward aria-label, aria-pressed and aria-current to the inner element ([#905](https://github.com/Kajabi/pine/pull/905))
+- **pds-modal-content:** remove resize and scroll listeners on disconnect ([#914](https://github.com/Kajabi/pine/pull/914))
+
+### Documentation 📄
+
+- **pds-datepicker:** describe server parsing without Rails, fix the min/max example id ([#913](https://github.com/Kajabi/pine/pull/913))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.7.2 (2026-10-23)
 
 ### Bug Fixes 🐛
