@@ -67,6 +67,56 @@ describe('pds-modal-content', () => {
     });
   });
 
+  describe('header and footer observer', () => {
+    // mock-doc has no MutationObserver, so this one records what each observer watches and when it stops.
+    class RecordingObserver {
+      static instances: RecordingObserver[] = [];
+      target: Node | null = null;
+      disconnected = false;
+      constructor() {
+        RecordingObserver.instances.push(this);
+      }
+      observe(target: Node) {
+        this.target = target;
+      }
+      disconnect() {
+        this.disconnected = true;
+      }
+    }
+
+    const original = globalThis.MutationObserver;
+    const liveTargets = () =>
+      RecordingObserver.instances
+        .filter((observer) => !observer.disconnected)
+        .map((observer) => (observer.target as Element | null)?.localName);
+
+    beforeEach(() => {
+      RecordingObserver.instances = [];
+      globalThis.MutationObserver = RecordingObserver as unknown as typeof MutationObserver;
+    });
+
+    afterEach(() => {
+      globalThis.MutationObserver = original;
+    });
+
+    it('observes its modal again after being removed and put back', async () => {
+      const page = await newSpecPage({
+        components: [PdsModalContent],
+        html: `<pds-modal><pds-modal-content>Body</pds-modal-content></pds-modal>`,
+      });
+      const modal = page.body.querySelector('pds-modal')!;
+      const content = page.body.querySelector('pds-modal-content')!;
+
+      content.remove();
+      expect(liveTargets()).toEqual([]);
+
+      modal.appendChild(content);
+      await page.waitForChanges();
+
+      expect(liveTargets()).toEqual(['pds-modal']);
+    });
+  });
+
   describe('reconnecting over an already-hydrated snapshot', () => {
     // A page-cache restore (Turbo, bfcache) can reconnect this element with its own
     // prior render already in its light DOM, nesting a stale .pds-modal-content inside
