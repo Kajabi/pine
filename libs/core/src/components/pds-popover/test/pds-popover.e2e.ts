@@ -1043,6 +1043,38 @@ describe('pds-popover Tab order', () => {
     expect(await press(page, ['Shift+Tab', 'Shift+Tab', 'Shift+Tab'])).toEqual(['last', 'first', 'trigger']);
   });
 
+  it("doesn't reach the panel again past the popover", async () => {
+    const page = await setUp();
+    await open(page);
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['first', 'last', 'after']);
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.getElementById('pop-portal')!.contains(document.activeElement))).toBe(false);
+  });
+
+  it('wraps a pds-modal past the popover without going through the panel again', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="modal">
+        <div slot="header">Header</div>
+        <div>
+          <button type="button" id="modal-first">First in modal</button>
+          <form>
+            <pds-popover component-id="pop">
+              <button type="button" slot="trigger" id="trigger">Open</button>
+              <div>${BUTTONS}</div>
+            </pds-popover>
+            <button type="button" id="after">After</button>
+          </form>
+        </div>
+      </pds-modal>
+    `);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    await page.waitForChanges();
+    await open(page);
+
+    expect(await press(page, ['Tab', 'Tab', 'Tab', 'Tab'])).toEqual(['first', 'last', 'after', 'modal-first']);
+  });
+
   it('goes into the panel from the start when Tab comes from before a trigger that takes no focus', async () => {
     const page = await setUp({ trigger: '<span slot="trigger" id="trigger">Open</span>' });
     await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.show());
