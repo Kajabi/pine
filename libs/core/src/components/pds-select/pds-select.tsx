@@ -3,6 +3,26 @@ import { HostStylingKeeper } from '@utils/attributes';
 import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
+/** The tags of an option list in order, optgroup contents included: equal shapes can be patched in place. */
+const shapeOf = (items: Element[]): string =>
+  items.map((item) => item.tagName + (item.tagName === 'OPTGROUP' ? `(${shapeOf(Array.from(item.children))})` : '')).join();
+
+/** Brings an existing option or optgroup up to date with its copy, keeping the element itself. */
+const patchInPlace = (target: Element, copy: Element) => {
+  Array.from(target.attributes).forEach(({ name }) => {
+    if (!copy.hasAttribute(name)) target.removeAttribute(name);
+  });
+  Array.from(copy.attributes).forEach(({ name, value }) => {
+    if (target.getAttribute(name) !== value) target.setAttribute(name, value);
+  });
+
+  if (copy.tagName === 'OPTGROUP') {
+    Array.from(copy.children).forEach((child, index) => patchInPlace(target.children[index], child));
+  } else if (target.textContent !== copy.textContent) {
+    target.textContent = copy.textContent;
+  }
+};
+
 /**
  * @slot action - Content to be displayed in the label area, typically for help icons or links
  */
@@ -148,8 +168,12 @@ export class PdsSelect {
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
 
-    // Reconnected after a move: componentDidLoad won't run again.
-    if (this.selectEl !== undefined) this.startOptionSync();
+    // Reconnected after a move: componentDidLoad won't run again, and options may have changed
+    // while it was out of the document.
+    if (this.selectEl !== undefined) {
+      this.startOptionSync();
+      this.scheduleOptionSync();
+    }
   }
 
   disconnectedCallback() {
@@ -176,15 +200,22 @@ export class PdsSelect {
    * Changes are batched into one copy per animation frame.
    */
   private startOptionSync() {
-    if (this.optionObserver !== null || typeof MutationObserver === 'undefined') return;
+    if (this.optionObserver !== null || typeof MutationObserver === 'undefined' || !this.el.isConnected) return;
 
     this.optionObserver = new MutationObserver((mutations) => {
-      // The host's own attributes (its classes, aria-disabled) aren't options.
-      if (mutations.every((mutation) => mutation.type === 'attributes' && mutation.target === this.el)) return;
-      this.scheduleOptionSync();
+      if (mutations.some(this.touchesOption)) this.scheduleOptionSync();
     });
     this.optionObserver.observe(this.el, { childList: true, subtree: true, attributes: true, characterData: true });
   }
+
+  /**
+   * Whether a mutation is inside an option or optgroup. The host's own attributes and children
+   * (top-level adds and removes reach `slotchange`) and the action slot's content are not.
+   */
+  private touchesOption = ({ target }: MutationRecord): boolean => {
+    const element = target.nodeType === Node.TEXT_NODE ? target.parentElement : (target as Element);
+    return target !== this.el && element?.closest('option, optgroup') != null;
+  };
 
   private scheduleOptionSync() {
     if (this.optionSyncFrame !== null) return;
@@ -263,9 +294,13 @@ export class PdsSelect {
   /**
    * Copies the slotted <option> and <optgroup> elements into the inner select, then
    * reselects the current value. Runs on `slotchange` and when a slotted option changes
-   * (see startOptionSync). Skips the swap when the copies match what the select already
-   * holds, so a change elsewhere in the host doesn't rebuild the options. Selecting
-   * programmatically fires no change event, so a copy never emits `pdsSelectChange`.
+   * (see startOptionSync).
+   *
+   * Nothing happens when the copies match what the select already holds. When only text or
+   * attributes changed, the select's own options are updated in place rather than replaced,
+   * so an open picker keeps its highlight, a multiple select keeps its range anchor, and a
+   * screen reader keeps its place. Selecting programmatically fires no change event, so a
+   * copy never emits `pdsSelectChange`.
    */
   private handleSlotChange = () => {
     const slot = this.slotContainer?.querySelector('slot') as HTMLSlotElement | null;
@@ -274,20 +309,35 @@ export class PdsSelect {
     const copies = (slot.assignedElements({ flatten: true }) as Element[])
       .filter((item) => ['OPTION', 'OPTGROUP'].includes(item.tagName))
       .map((item) => item.cloneNode(true) as HTMLOptionElement | HTMLOptGroupElement);
+    const current = Array.from(this.selectEl.children);
 
     const markup = (items: Element[]) => items.map((item) => item.outerHTML).join('');
-    if (markup(copies) === markup(Array.from(this.selectEl.children))) return;
+    if (markup(copies) === markup(current)) return;
 
-    this.selectEl.innerHTML = '';
-    copies.forEach((clonedItem) => {
-      if (clonedItem.tagName === 'OPTION' && (clonedItem as HTMLOptionElement).value === this.value) {
-        (clonedItem as HTMLOptionElement).selected = true;
-      }
-      this.selectEl.appendChild(clonedItem);
-    });
+    if (shapeOf(copies) === shapeOf(current)) {
+      copies.forEach((copy, index) => patchInPlace(current[index], copy));
+    } else {
+      this.selectEl.innerHTML = '';
+      copies.forEach((copy) => this.selectEl.appendChild(copy));
+    }
 
     this.updateSelectedOption();
+    this.showNoSelectionWithoutMatch();
+    this.updateFormValue();
   };
+
+  /**
+   * After a copy, a value whose option was renamed or removed has nothing to select. Like a
+   * native select, show nothing selected rather than the first option; the value itself is
+   * kept, with no change event.
+   */
+  private showNoSelectionWithoutMatch() {
+    const wanted = ([] as string[]).concat(this.value ?? []).filter((value) => value !== '');
+    const options = Array.from(this.selectEl.options) as HTMLOptionElement[];
+    if (wanted.length > 0 && !options.some((option) => wanted.includes(option.value))) {
+      this.selectEl.selectedIndex = -1;
+    }
+  }
 
   private getHelperMessage() {
     return this.helperMessage && (
