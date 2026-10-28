@@ -86,6 +86,11 @@ export class PdsRadio {
    */
   @Prop() value: string;
 
+  /**
+   * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged.
+   * @defaultValue default
+   */
+  @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
    * Emits a boolean indicating whether the radio is currently checked or unchecked.
@@ -118,6 +123,10 @@ export class PdsRadio {
     return this._hasImage;
   }
 
+  private isPill(): boolean {
+    return this.variant === 'pill';
+  }
+
   private classNames() {
     const classNames = [];
 
@@ -127,8 +136,12 @@ export class PdsRadio {
     if (this.disabled) {
       classNames.push('is-disabled');
     }
-    if (this.hasBorder) {
+    // A pill is its own bordered shape, so has-border doesn't stack a card around it.
+    if (this.hasBorder && !this.isPill()) {
       classNames.push('has-border');
+    }
+    if (this.isPill()) {
+      classNames.push('pds-radio--pill');
     }
     if (this.hasImage()) {
       classNames.push('has-image');
@@ -180,7 +193,7 @@ export class PdsRadio {
           required={this.required}
           disabled={this.disabled}
           onChange={this.handleRadioChange}
-          class={this.hasImage() ? 'visually-hidden' : ''}
+          class={this.hasImage() || this.isPill() ? 'visually-hidden' : ''}
         />
         <span class={this.hideLabel ? 'visually-hidden' : ''}>
           {this.label}
