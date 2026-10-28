@@ -332,6 +332,14 @@ describe('pds-alert', () => {
       expect(severityOf(page)).toBe('Erreur');
     });
 
+    it('announces a severity-label set on the default variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert severity-label="Note">Message</pds-alert>`,
+      });
+      expect(severityOf(page)).toBe('Note');
+    });
+
     it('announces nothing when severity-label is an empty string', async () => {
       const page = await newSpecPage({
         components: [PdsAlert],

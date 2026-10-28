@@ -367,6 +367,22 @@ describe('pds-toast', () => {
       expect(severityOf(page)).toBe('Erreur');
     });
 
+    it('announces nothing for the danger type when severity-label is an empty string', async () => {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast type="danger" severity-label="">Upload failed</pds-toast>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.visually-hidden')).toBeNull();
+    });
+
+    it('announces a severity-label set on the default type', async () => {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast severity-label="Notice">Saved</pds-toast>`,
+      });
+      expect(severityOf(page)).toBe('Notice');
+    });
+
     it('keeps the severity inside the alert region, before the message', async () => {
       const page = await newSpecPage({
         components: [PdsToast],
