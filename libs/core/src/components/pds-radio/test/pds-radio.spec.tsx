@@ -368,4 +368,23 @@ describe('pds-radio pill variant', () => {
     expect(page.root).toHaveClass('pds-radio--pill');
     expect(page.root).not.toHaveClass('has-border');
   });
+
+  it('keeps the label visible on a pill even with hide-label', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="pill" label="Pill" variant="pill" hide-label></pds-radio>`,
+    });
+
+    expect(page.root?.querySelector('label span')).not.toHaveClass('visually-hidden');
+  });
+
+  it('does not apply the image card layout to a pill', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="pill" label="Pill" variant="pill"><span slot="image"></span></pds-radio>`,
+    });
+
+    expect(page.root).toHaveClass('pds-radio--pill');
+    expect(page.root).not.toHaveClass('has-image');
+  });
 });

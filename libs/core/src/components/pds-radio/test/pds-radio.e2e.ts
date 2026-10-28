@@ -323,6 +323,8 @@ describe('pds-radio pill variant', () => {
   it('checks the radio when the pill is clicked, without resizing it', async () => {
     const page = await newE2EPage();
     await page.setContent(group);
+    // Measure after the web font settles, so a late font swap doesn't read as a resize.
+    await page.evaluate(() => document.fonts.ready);
 
     const before = await pillStyle(page, 'pds-radio:first-of-type');
     await page.click('pds-radio:first-of-type label');
