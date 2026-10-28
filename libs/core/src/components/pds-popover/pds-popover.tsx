@@ -714,9 +714,14 @@ export class PdsPopover {
       document.addEventListener('keydown', this.boundEscapeKeyHandler);
     }
 
-    // Emit open event once the panel is positioned, with the side it took already on it
+    // Emit open event once the panel is positioned, with the side it took already on it. A reconnect, a
+    // trigger swap or another show() can start a newer run meanwhile, which drops this one, so wait for the latest.
     this.openEventPending = true;
-    await this.positioning;
+    let positioning: Promise<void>;
+    do {
+      positioning = this.positioning;
+      await positioning;
+    } while (positioning !== this.positioning);
     this.emitOpenEvent();
   }
 
