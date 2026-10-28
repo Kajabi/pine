@@ -1018,6 +1018,63 @@ describe('pds-popover Tab order', () => {
     expect(await press(page, ['Tab', 'Tab', 'Tab', 'Shift+Tab'])).toEqual(['first', 'last', 'after', 'last']);
   });
 
+  it('keeps Tab inside a pds-modal when the popover is its last control', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="modal">
+        <div slot="header">Header</div>
+        <div>
+          <button type="button" id="modal-first">First in modal</button>
+          <form>
+            <pds-popover component-id="pop">
+              <button type="button" slot="trigger" id="trigger">Open</button>
+              <div>${BUTTONS}</div>
+            </pds-popover>
+          </form>
+        </div>
+      </pds-modal>
+    `);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    await page.waitForChanges();
+    await open(page);
+    expect(await page.evaluate(() => document.getElementById('pop-portal')!.parentElement?.localName)).toBe('dialog');
+
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['first', 'last', 'modal-first']);
+    expect(await press(page, ['Shift+Tab', 'Shift+Tab', 'Shift+Tab'])).toEqual(['last', 'first', 'trigger']);
+  });
+
+  it('goes into the panel from the start when Tab comes from before a trigger that takes no focus', async () => {
+    const page = await setUp({ trigger: '<span slot="trigger" id="trigger">Open</span>' });
+    await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.show());
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    await page.focus('#before');
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['first', 'last', 'after']);
+  });
+
+  it('sends focus to the trigger when it reaches the guard with nothing in the panel to focus', async () => {
+    const page = await setUp();
+    await open(page);
+    await page.evaluate(() => {
+      document.getElementById('first')!.closest('div')!.replaceChildren('Nothing to focus');
+      const guard = document.querySelector('pds-popover')!.shadowRoot!.querySelector<HTMLElement>('.pds-popover__tab-guard')!;
+      guard.tabIndex = 0;
+      guard.focus();
+    });
+    expect(await focusedId(page)).toBe('trigger');
+  });
+
+  it('moves focus out of the panel before making it inert', async () => {
+    const page = await setUp();
+    await open(page);
+    await page.evaluate(() => {
+      document.getElementById('last')!.addEventListener('blur', () => {
+        (window as unknown as { inertOnBlur: boolean }).inertOnBlur = document.getElementById('pop-portal')!.inert;
+      });
+    });
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['first', 'last', 'after']);
+    expect(await page.evaluate(() => (window as unknown as { inertOnBlur: boolean }).inertOnBlur)).toBe(false);
+  });
+
   it('has no axe violations with focus in the panel', async () => {
     const page = await setUp();
     await open(page);
