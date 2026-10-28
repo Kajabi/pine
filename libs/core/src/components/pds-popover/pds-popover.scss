@@ -8,6 +8,14 @@
     display: inline-block;
   }
 
+  // Focus only passes through the guard, so it takes no space or pointer and shows no ring.
+  .pds-popover__tab-guard {
+    opacity: 0;
+    outline: none;
+    pointer-events: none;
+    position: fixed;
+  }
+
   // Content slot wrapper is hidden (content is rendered in portal)
   .pds-popover__content-slot-wrapper {
     display: none;
