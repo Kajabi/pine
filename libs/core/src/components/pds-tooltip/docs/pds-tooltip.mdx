@@ -77,8 +77,7 @@ Tooltip content may contain HTML elements. In these cases,
 enable the `htmlContent` property and provide your element in the `content` slot.
 
 The open tooltip shows a copy of the slotted content, and keeps it in step: content that loads or
-re-renders while the tooltip is open (a Turbo Frame that finishes loading, a framework re-render)
-appears without reopening it.
+re-renders while the tooltip is open appears without reopening it.
 
 - Screen readers announce updated content while the tooltip is open, so avoid content that changes
   continuously (timers, progress).

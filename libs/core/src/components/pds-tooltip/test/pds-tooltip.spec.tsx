@@ -684,8 +684,21 @@ describe('pds-tooltip', () => {
       expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
     });
 
-    it('leaves the portal alone when a nested element only gains its Stencil hydrated class', async () => {
-      const page = await openTooltip();
+    it('leaves the portal alone when a pds-* descendant only gains its Stencil hydrated class', async () => {
+      // Stencil only ever marks a custom-element host hydrated, never a plain tag — a pds-* element
+      // here is what a real hydration event looks like, not the `<p>` openTooltip() uses elsewhere.
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+          <pds-tooltip html-content="true">
+            <button>Trigger</button>
+            <div slot="content"><pds-box class="status">Loading</pds-box></div>
+          </pds-tooltip>`,
+      });
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+      queueFrames();
+
       const copied = portalStatus(page);
       const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
 
@@ -697,6 +710,41 @@ describe('pds-tooltip', () => {
       // Same node, not a clone with the hydrated class carried over: a reload-prone replace never happened.
       expect(portalStatus(page)).toBe(copied);
       expect(portalStatus(page)?.classList.contains('hydrated')).toBe(false);
+      expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
+    });
+
+    it('still recopies when a plain (non-pds-*) descendant gains a real class change', async () => {
+      // isStencilClass is host-scoped, so stripping is scoped to pds-* elements too — a plain
+      // element's own classes, hydrated-named or not, are never Stencil bookkeeping and must still
+      // count as a real change.
+      const page = await openTooltip();
+      const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
+
+      slottedStatus(page).classList.add('is-active');
+      observerCallback?.([{ type: 'attributes', target: slottedStatus(page) }]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(portalStatus(page)?.classList.contains('is-active')).toBe(true);
+      expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBeGreaterThan(positions);
+    });
+
+    it("doesn't drift into a permanent recopy loop when the portal copy changes after it connects", async () => {
+      const page = await openTooltip();
+      const copied = portalStatus(page);
+      const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
+
+      // Something unrelated to this sync — a nested light-DOM component's own connected-lifecycle
+      // bookkeeping, say — mutates the portal's live copy. The comparison must not use that live
+      // state as its baseline, or every later sync, even one with no real content change, would see
+      // a permanent difference and recopy forever.
+      page.body.querySelector('.pds-tooltip__content')?.appendChild(copied!.ownerDocument.createComment('x'));
+
+      observerCallback?.([{ type: 'characterData', target: slottedStatus(page) }]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(portalStatus(page)).toBe(copied);
       expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
     });
 

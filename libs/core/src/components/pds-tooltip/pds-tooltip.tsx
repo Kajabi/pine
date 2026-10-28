@@ -34,6 +34,7 @@ export class PdsTooltip {
   private resolvedPlacement: PlacementType = 'right';
   private triggerEl: HTMLElement | null = null;
   private contentDiv: HTMLElement | null = null;
+  private lastCopiedHtml: string | null = null;
   private slotMutationObserver: MutationObserver | null = null;
   private contentSyncFrame: number | null = null;
   private currentPathname: string = '';
@@ -331,7 +332,9 @@ export class PdsTooltip {
     this.contentDiv.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
     this.contentDiv.setAttribute('aria-live', this.opened ? 'polite' : 'off');
 
-    this.contentDiv.append(...Array.from(this.copySlottedContent().childNodes));
+    const initialCopy = this.copySlottedContent();
+    this.lastCopiedHtml = this.strippedHtml(initialCopy);
+    this.contentDiv.append(...Array.from(initialCopy.childNodes));
 
     this.portalEl.appendChild(this.contentDiv);
     document.body.appendChild(this.portalEl);
@@ -398,11 +401,11 @@ export class PdsTooltip {
 
   /**
    * While the tooltip is open, keeps the portal's copy in step with the slotted content at any
-   * depth: content that loads or re-renders after opening (a Turbo Frame that finishes loading, a
-   * framework re-render) shows without reopening. Changes are batched to one re-copy per animation
-   * frame, and a re-copy that matches what the portal shows is dropped, so screen readers aren't
-   * re-announced, iframes don't reload and the tooltip isn't repositioned for nothing. Only the
-   * hidden slot wrapper is observed, so copying into the portal can't trigger another sync.
+   * depth: content that loads or re-renders after opening shows without reopening. Changes are
+   * batched to one re-copy per animation frame, and a re-copy that matches the last one shown is
+   * dropped, so screen readers aren't re-announced, iframes don't reload and the tooltip isn't
+   * repositioned for nothing. Only the hidden slot wrapper is observed, so copying into the portal
+   * can't trigger another sync.
    */
   private startContentSync() {
     const contentSlotWrapper = this.contentSlotWrapper;
@@ -425,8 +428,10 @@ export class PdsTooltip {
       if (this.portalEl === null || this.contentDiv === null) return;
 
       const copy = this.copySlottedContent();
-      if (this.strippedHtml(copy) === this.strippedHtml(this.contentDiv)) return;
+      const strippedCopy = this.strippedHtml(copy);
+      if (strippedCopy === this.lastCopiedHtml) return;
 
+      this.lastCopiedHtml = strippedCopy;
       this.contentDiv.textContent = '';
       this.contentDiv.append(...Array.from(copy.childNodes));
       this.repositionPortal().catch(error => {
@@ -437,14 +442,18 @@ export class PdsTooltip {
 
   /**
    * A copy's serialized HTML with Stencil's own hydration and scope classes removed from every
-   * descendant, so a nested component finishing hydration (or re-hydrating once reconnected inside
-   * the portal) isn't mistaken for a real content change. Without this, that class-only difference
-   * fails the equality check above and triggers a recopy that replaces still-loaded nodes — reloading
-   * any iframe or media the slotted content held, which is the portal-media bug this guards against.
+   * `pds-*` descendant, so a nested component finishing hydration (or re-hydrating once reconnected
+   * inside the portal) isn't mistaken for a real content change. Without this, that class-only
+   * difference fails the equality check above and triggers a recopy that replaces still-loaded
+   * nodes — reloading any iframe or media the slotted content held.
    */
   private strippedHtml(root: Element): string {
     const clone = root.cloneNode(true) as Element;
     clone.querySelectorAll('*').forEach((el) => {
+      // isStencilClass is host-scoped (its own doc: "another sc- class may be a consumer's"), so it
+      // only applies to pds-* elements — the same check keepPineHydrated makes before using it.
+      if (!el.localName.startsWith('pds-')) return;
+
       // Not `el.className`: on an SVG element that's an SVGAnimatedString, not a string,
       // so classNamesOf would silently drop its classes from the comparison. The `class`
       // attribute is a plain string on every element, SVG included.
@@ -507,6 +516,7 @@ export class PdsTooltip {
       this.triggerEl.removeAttribute('aria-describedby');
     }
     this.contentDiv = null;
+    this.lastCopiedHtml = null;
   }
 
   render() {
