@@ -963,3 +963,178 @@ describe('aria associations', () => {
     expect(describedBy).toBeNull();
   });
 });
+
+describe('option sync', () => {
+  const originalMutationObserver = globalThis.MutationObserver;
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+  const originalCancelAnimationFrame = globalThis.cancelAnimationFrame;
+
+  let observerCallback: MutationCallback;
+  let observe: jest.Mock;
+  let disconnect: jest.Mock;
+  let frames: Map<number, FrameRequestCallback>;
+
+  beforeEach(() => {
+    observe = jest.fn();
+    disconnect = jest.fn();
+    globalThis.MutationObserver = jest.fn((callback: MutationCallback) => {
+      observerCallback = callback;
+      return { observe, disconnect, takeRecords: () => [] };
+    }) as unknown as typeof MutationObserver;
+
+    frames = new Map();
+    let nextFrame = 1;
+    globalThis.requestAnimationFrame = jest.fn((callback: FrameRequestCallback) => {
+      const id = nextFrame++;
+      frames.set(id, callback);
+      return id;
+    });
+    globalThis.cancelAnimationFrame = jest.fn((id: number) => {
+      frames.delete(id);
+    });
+  });
+
+  afterEach(() => {
+    globalThis.MutationObserver = originalMutationObserver;
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+    globalThis.cancelAnimationFrame = originalCancelAnimationFrame;
+  });
+
+  const flushFrames = () => {
+    const pending = Array.from(frames.values());
+    frames.clear();
+    pending.forEach((callback) => callback(0));
+  };
+
+  // The spec DOM has no slot assignment, so the slot hands back the host's light-DOM options.
+  const setup = async (options: string, value = 'b') => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" value="${value}">${options}</pds-select>`,
+    });
+    const component = page.rootInstance;
+    const slot = {
+      assignedElements: () => Array.from(page.root.children).filter((el) => !el.hasAttribute('slot')),
+    };
+    component.slotContainer = { querySelector: () => slot } as unknown as HTMLDivElement;
+    // The spec DOM's select has no options collection.
+    const select = component.selectEl as HTMLSelectElement;
+    Object.defineProperty(select, 'options', { get: () => select.querySelectorAll('option') });
+    component.handleSlotChange();
+
+    const notify = (records: Partial<MutationRecord>[] = [{ type: 'characterData', target: page.root }]) =>
+      observerCallback(records as MutationRecord[], {} as MutationObserver);
+
+    return { page, component, select, notify };
+  };
+
+  const OPTIONS = '<option value="a">Alpha</option><option value="b">Beta</option>';
+
+  it('watches the slotted options at any depth', async () => {
+    const { page } = await setup(OPTIONS);
+
+    expect(observe).toHaveBeenCalledWith(page.root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true,
+    });
+  });
+
+  it('copies an option whose text changed', async () => {
+    const { page, select, notify } = await setup(OPTIONS);
+
+    page.root.querySelector('option[value="a"]').textContent = 'Apple';
+    notify();
+    flushFrames();
+
+    expect(select.children[0].textContent).toBe('Apple');
+  });
+
+  it('copies an option whose value or disabled state changed', async () => {
+    const { page, select, notify } = await setup(OPTIONS);
+
+    const option = page.root.querySelector('option[value="a"]');
+    option.setAttribute('value', 'a2');
+    option.setAttribute('disabled', '');
+    notify();
+    flushFrames();
+
+    expect(select.children[0].getAttribute('value')).toBe('a2');
+    expect(select.children[0].hasAttribute('disabled')).toBe(true);
+  });
+
+  it('copies an option added inside an optgroup', async () => {
+    const { page, select, notify } = await setup(
+      '<optgroup label="Group"><option value="a">Alpha</option></optgroup><option value="b">Beta</option>',
+    );
+
+    const added = document.createElement('option');
+    added.setAttribute('value', 'c');
+    added.textContent = 'Gamma';
+    page.root.querySelector('optgroup').appendChild(added);
+    notify();
+    flushFrames();
+
+    expect(select.querySelectorAll('optgroup option').length).toBe(2);
+    expect(select.querySelector('optgroup option[value="c"]').textContent).toBe('Gamma');
+  });
+
+  // Keeping the value selected is covered in the e2e: the spec DOM's options don't reflect `value`.
+  it('emits no change event when it copies', async () => {
+    const { page, notify } = await setup(OPTIONS);
+    const changed = jest.fn();
+    page.root.addEventListener('pdsSelectChange', changed);
+
+    page.root.querySelector('option[value="a"]').textContent = 'Apple';
+    notify();
+    flushFrames();
+
+    expect(changed).not.toHaveBeenCalled();
+  });
+
+  it('copies once for several changes before a frame', async () => {
+    const { page, select, notify } = await setup(OPTIONS);
+
+    page.root.querySelector('option[value="a"]').textContent = 'Apple';
+    notify();
+    page.root.querySelector('option[value="b"]').textContent = 'Banana';
+    notify();
+
+    expect(globalThis.requestAnimationFrame).toHaveBeenCalledTimes(1);
+    flushFrames();
+    expect(select.children[0].textContent).toBe('Apple');
+    expect(select.children[1].textContent).toBe('Banana');
+  });
+
+  it('leaves the select alone when the copies would be unchanged', async () => {
+    const { select, notify } = await setup(OPTIONS);
+    const before = select.children[0];
+
+    notify();
+    flushFrames();
+
+    expect(select.children[0]).toBe(before);
+  });
+
+  it('ignores changes to the host’s own attributes', async () => {
+    const { page, notify } = await setup(OPTIONS);
+
+    notify([{ type: 'attributes', target: page.root }]);
+
+    expect(globalThis.requestAnimationFrame).not.toHaveBeenCalled();
+  });
+
+  it('stops watching and cancels a pending copy when removed', async () => {
+    const { page, component, notify } = await setup(OPTIONS);
+
+    notify();
+    const pending = component.optionSyncFrame;
+    expect(frames.has(pending)).toBe(true);
+    page.root.remove();
+
+    expect(disconnect).toHaveBeenCalled();
+    expect(globalThis.cancelAnimationFrame).toHaveBeenCalledWith(pending);
+    expect(frames.has(pending)).toBe(false);
+  });
+});
