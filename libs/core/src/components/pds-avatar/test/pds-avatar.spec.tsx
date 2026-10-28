@@ -63,7 +63,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
             <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
-            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-label="Verified" class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -128,7 +128,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px">
             <img alt="Customer Profile" src="https://placehold.co/64x64"/>
-            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-label="Verified" class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -231,7 +231,7 @@ describe('pds-avatar', () => {
             <svg class="pds-avatar__initials" part="initials" viewBox="0 0 32 32">
               <text x="16" y="20">KJ</text>
             </svg>
-            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-label="Verified" class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -350,4 +350,31 @@ describe('pds-avatar', () => {
     expect(initials.textContent).toContain('QJ');
   });
 
+  describe('badge label', () => {
+    it('labels the badge "Verified" by default', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar badge="true"></pds-avatar>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.pds-avatar__badge').getAttribute('aria-label')).toBe('Verified');
+    });
+
+    it('uses a custom badge-label in place of the default', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar badge="true" badge-label="Vérifié"></pds-avatar>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.pds-avatar__badge').getAttribute('aria-label')).toBe('Vérifié');
+    });
+
+    it('hides the badge inside a dropdown trigger, whose label owns the name', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar badge="true" dropdown="true"></pds-avatar>`,
+      });
+      const badge = page.root.shadowRoot.querySelector('.pds-avatar__badge');
+      expect(badge.getAttribute('aria-hidden')).toBe('true');
+      expect(badge.hasAttribute('aria-label')).toBe(false);
+    });
+  });
 });

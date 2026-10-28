@@ -29,6 +29,14 @@ export class PdsAvatar {
   @Prop() badge? = false;
 
   /**
+   * Accessible label for the badge icon. Pass a translated string to localize
+   * it; defaults to English. Has no effect on dropdown avatars, where the
+   * trigger's `triggerLabel` owns the accessible name.
+   * @defaultValue 'Verified'
+   */
+  @Prop() badgeLabel = 'Verified';
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
@@ -162,7 +170,16 @@ export class PdsAvatar {
     // Percentage is average size of icon in relation to total avatar size
     // of all preset sizes found in Figma.
     // Used to allow icons to scale to container size
-      && <pds-icon color="var(--pine-color-purple-600)" class="pds-avatar__badge" icon={checkCircleFilled} size="33.53%"></pds-icon>
+      && <pds-icon
+        color="var(--pine-color-purple-600)"
+        class="pds-avatar__badge"
+        icon={checkCircleFilled}
+        size="33.53%"
+        // Inside the dropdown trigger the button's aria-label is the name, so
+        // the badge is decorative there, as the status dot is.
+        aria-label={this.dropdown ? undefined : this.badgeLabel}
+        aria-hidden={this.dropdown ? 'true' : undefined}
+      ></pds-icon>
   );
 
   private renderStatus = () => {
