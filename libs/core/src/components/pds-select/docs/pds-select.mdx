@@ -30,9 +30,12 @@ Selects present a single-choice dropdown, letting users pick one value from a pr
 - Provide helper text or error messages for guidance and validation.
 - Avoid overloading dropdowns with excessive options to prevent overwhelm.
 - State on the host follows the component's props and slots: the `is-invalid` and `is-disabled` classes, `aria-disabled`, and `has-action` when an `action` slot is shown. It comes back if something removes it, such as a DOM morph, so change it through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
-- The dropdown follows its options. Changing an option's text, value or disabled state, or adding an option inside an `optgroup`, updates it without re-rendering the select, and the current value stays selected.
 
 ## Usage Notes
+
+### Options stay in sync
+
+Changing an option's text, value or disabled state, or adding, removing or reordering options (including inside an `optgroup`), is reflected in the dropdown on the next frame without re-rendering the component. The current value stays selected while an option with that value exists; if none does, nothing is shown selected and the value is kept.
 
 ### Working with Labels
 
