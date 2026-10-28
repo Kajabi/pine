@@ -1,5 +1,6 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
 import { PlacementType } from '@utils/types';
+import { classNamesOf, isStencilClass } from '@utils/keep-hydrated';
 import {
   autoUpdate,
   computePosition,
@@ -424,7 +425,7 @@ export class PdsTooltip {
       if (this.portalEl === null || this.contentDiv === null) return;
 
       const copy = this.copySlottedContent();
-      if (copy.innerHTML === this.contentDiv.innerHTML) return;
+      if (this.strippedHtml(copy) === this.strippedHtml(this.contentDiv)) return;
 
       this.contentDiv.textContent = '';
       this.contentDiv.append(...Array.from(copy.childNodes));
@@ -433,6 +434,26 @@ export class PdsTooltip {
       });
     });
   };
+
+  /**
+   * A copy's serialized HTML with Stencil's own hydration and scope classes removed from every
+   * descendant, so a nested component finishing hydration (or re-hydrating once reconnected inside
+   * the portal) isn't mistaken for a real content change. Without this, that class-only difference
+   * fails the equality check above and triggers a recopy that replaces still-loaded nodes — reloading
+   * any iframe or media the slotted content held, which is the portal-media bug this guards against.
+   */
+  private strippedHtml(root: Element): string {
+    const clone = root.cloneNode(true) as Element;
+    clone.querySelectorAll('*').forEach((el) => {
+      const kept = classNamesOf(el.className).filter((name) => !isStencilClass(el, name));
+      if (kept.length === 0) {
+        el.removeAttribute('class');
+      } else {
+        el.setAttribute('class', kept.join(' '));
+      }
+    });
+    return clone.innerHTML;
+  }
 
   private stopContentSync() {
     if (this.slotMutationObserver !== null) {

@@ -684,6 +684,22 @@ describe('pds-tooltip', () => {
       expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
     });
 
+    it('leaves the portal alone when a nested element only gains its Stencil hydrated class', async () => {
+      const page = await openTooltip();
+      const copied = portalStatus(page);
+      const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
+
+      slottedStatus(page).classList.add('hydrated');
+      observerCallback?.([{ type: 'attributes', target: slottedStatus(page) }]);
+      runFrames();
+      await page.waitForChanges();
+
+      // Same node, not a clone with the hydrated class carried over: a reload-prone replace never happened.
+      expect(portalStatus(page)).toBe(copied);
+      expect(portalStatus(page)?.classList.contains('hydrated')).toBe(false);
+      expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
+    });
+
     it('stops watching when the tooltip closes', async () => {
       const page = await openTooltip();
 
