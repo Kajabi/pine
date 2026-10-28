@@ -1138,6 +1138,26 @@ describe('option sync', () => {
     expect(select.selectedIndex).not.toBe(-1);
   });
 
+  // An async reload (`{loading ? null : options}`) can leave the select briefly empty between the
+  // old options and the new ones. That emptiness must not look like the very first copy again: the
+  // first copy's own "hadOptions" check used the select's current emptiness, which this reload
+  // revisits, so the no-match blank state got skipped and a mismatched value looked selected again.
+  it('shows no selection, not the first option, when the replacement set after a reload matches nothing', async () => {
+    const { page, select, component } = await setup(OPTIONS, 'b');
+
+    Array.from(page.root.querySelectorAll('option')).forEach((option) => option.remove());
+    component.handleSlotChange();
+    expect(select.children.length).toBe(0);
+
+    const replacement = document.createElement('option');
+    replacement.setAttribute('value', 'z');
+    replacement.textContent = 'Zeta';
+    page.root.appendChild(replacement);
+    component.handleSlotChange();
+
+    expect(select.selectedIndex).toBe(-1);
+  });
+
   // updateFormValue() returns early under isSpecTest(), so this only checks it's called once per
   // changed copy rather than on every mutation; real validity recomputation is covered in e2e.
   it('calls updateFormValue once after a copy that changed something, not on every mutation', async () => {

@@ -40,6 +40,7 @@ export class PdsSelect {
   private _type: 'select-one' | 'select-multiple' = 'select-one';
   private optionObserver: MutationObserver | null = null;
   private optionSyncFrame: number | null = null;
+  private hasHadOptions = false;
 
   @Element() el: HTMLPdsSelectElement;
   private hostKeeper = new HostStylingKeeper();
@@ -318,8 +319,11 @@ export class PdsSelect {
     const current = Array.from(this.selectEl.children);
     // The very first copy populates an empty select, where falling back to the first option (like
     // a native select) is correct; the no-match blank state is for options changing under a value
-    // that was already showing selected.
-    const hadOptions = current.length > 0;
+    // that was already showing selected. Tracked separately from the select's current emptiness:
+    // an async reload that clears options before the next set lands would otherwise look like a
+    // first render again, and the no-match state must still apply once that next set arrives.
+    const hadOptions = this.hasHadOptions;
+    if (copies.length > 0) this.hasHadOptions = true;
 
     const markup = (items: Element[]) => items.map((item) => item.outerHTML).join('');
     if (markup(copies) === markup(current)) return;
