@@ -532,29 +532,103 @@ describe('pds-tooltip', () => {
     expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
   });
 
-  it('should handle mutation observer setup properly', async () => {
-    const mockObserve = jest.fn();
-    (global.MutationObserver as jest.Mock).mockImplementation(() => ({
-      observe: mockObserve,
-      disconnect: jest.fn(),
-      takeRecords: jest.fn(),
-    }));
+  describe('keeping the open tooltip in step with its slotted content', () => {
+    let observerCallback: ((mutations: Partial<MutationRecord>[]) => void) | null;
+    let mockObserve: jest.Mock;
+    let mockDisconnect: jest.Mock;
 
-    const page = await newSpecPage({
-      components: [PdsTooltip],
-      html: `
-        <pds-tooltip html-content="true">
-          <button>Trigger</button>
-          <div slot="content">
-            <p>Initial content</p>
-          </div>
-        </pds-tooltip>`,
+    beforeEach(() => {
+      observerCallback = null;
+      mockObserve = jest.fn();
+      mockDisconnect = jest.fn();
+      (global.MutationObserver as jest.Mock).mockImplementation((callback) => {
+        observerCallback = callback;
+        return { observe: mockObserve, disconnect: mockDisconnect, takeRecords: jest.fn() };
+      });
     });
 
-    await page.waitForChanges();
+    // Runs a sync's animation frame straight away, on the page's own window and the global the
+    // component reads.
+    const runFramesNow = (page: { win: Window }) => {
+      const now = ((callback: FrameRequestCallback) => {
+        callback(0);
+        return 1;
+      }) as typeof window.requestAnimationFrame;
+      page.win.requestAnimationFrame = now;
+      globalThis.requestAnimationFrame = now;
+    };
 
-    // Verify that MutationObserver.observe was called
-    expect(mockObserve).toHaveBeenCalled();
+    const openTooltip = async () => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+          <pds-tooltip html-content="true">
+            <button>Trigger</button>
+            <div slot="content"><p class="status">Loading</p></div>
+          </pds-tooltip>`,
+      });
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+      runFramesNow(page);
+      return page;
+    };
+
+    it('only watches the content while the tooltip is open, at any depth', async () => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+          <pds-tooltip html-content="true">
+            <button>Trigger</button>
+            <div slot="content"><p>Initial content</p></div>
+          </pds-tooltip>`,
+      });
+      await page.waitForChanges();
+      expect(mockObserve).not.toHaveBeenCalled();
+
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+
+      expect(mockObserve).toHaveBeenCalledWith(
+        page.root?.querySelector('.pds-tooltip__content-slot-wrapper'),
+        expect.objectContaining({ childList: true, subtree: true, attributes: true, characterData: true }),
+      );
+    });
+
+    it('shows content that changes after the tooltip opens', async () => {
+      const page = await openTooltip();
+      expect(page.body.querySelector('.pds-tooltip__content .status')?.textContent).toBe('Loading');
+
+      const status = page.root?.querySelector('[slot="content"] .status') as HTMLElement;
+      status.textContent = 'Loaded';
+      observerCallback?.([{ type: 'characterData', target: status }]);
+      await page.waitForChanges();
+
+      const portalContent = page.body.querySelector('.pds-tooltip__content');
+      expect(portalContent?.querySelectorAll('.status')).toHaveLength(1);
+      expect(portalContent?.querySelector('.status')?.textContent).toBe('Loaded');
+    });
+
+    it('ignores Stencil marking slotted content hydrated', async () => {
+      const page = await openTooltip();
+      const status = page.root?.querySelector('[slot="content"] .status') as HTMLElement;
+      const copied = page.body.querySelector('.pds-tooltip__content .status');
+
+      status.classList.add('hydrated');
+      observerCallback?.([{ type: 'attributes', attributeName: 'class', oldValue: 'status', target: status }]);
+      await page.waitForChanges();
+
+      expect(page.body.querySelector('.pds-tooltip__content .status')).toBe(copied);
+    });
+
+    it('stops watching when the tooltip closes', async () => {
+      const page = await openTooltip();
+
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseleave'));
+      await page.waitForChanges();
+
+      expect(mockDisconnect).toHaveBeenCalled();
+      expect(page.body.querySelector('.pds-tooltip__content')).toBeNull();
+    });
   });
 
   it('should handle SPA navigation pathname changes', async () => {
