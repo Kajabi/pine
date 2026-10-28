@@ -91,6 +91,16 @@ export class PdsPopover {
   private positioningRun = 0;
 
   /**
+   * The latest positioning run, which pdsPopoverOpen waits for so the panel's side is set when it fires
+   */
+  private positioning: Promise<void> = Promise.resolve();
+
+  /**
+   * Set while show() waits to emit pdsPopoverOpen, so a hide() in the meantime emits it first
+   */
+  private openEventPending = false;
+
+  /**
    * Track moved nodes and their placeholders for restoration
    */
   private movedNodes: Array<{ node: Node; placeholder: Comment }> = [];
@@ -262,6 +272,9 @@ export class PdsPopover {
     } else {
       this.triggerEl = null;
     }
+
+    // autoUpdate watches the trigger it started with, so an open popover starts it again on the new one.
+    if (this.active) this.addScrollAndResizeListeners();
 
     this.observeTrigger();
   };
@@ -472,6 +485,7 @@ export class PdsPopover {
       this.restorePortalContent();
       this.active = false;
       this.linkTriggerToPortal();
+      this.emitOpenEvent();
       this.pdsPopoverClose.emit({
         componentId: this.componentId,
         popoverType: this.popoverType,
@@ -700,7 +714,15 @@ export class PdsPopover {
       document.addEventListener('keydown', this.boundEscapeKeyHandler);
     }
 
-    // Emit open event
+    // Emit open event once the panel is positioned, with the side it took already on it
+    this.openEventPending = true;
+    await this.positioning;
+    this.emitOpenEvent();
+  }
+
+  private emitOpenEvent() {
+    if (!this.openEventPending) return;
+    this.openEventPending = false;
     this.pdsPopoverOpen.emit({
       componentId: this.componentId,
       popoverType: this.popoverType,
@@ -731,6 +753,7 @@ export class PdsPopover {
     // Hide portal. The dark-mode border set in a shadow root is worked out again on the next open.
     this.portalEl.style.border = '';
     this.portalEl.removeAttribute('data-pds-popover-open');
+    this.portalEl.removeAttribute('data-pds-popover-placement');
     this.portalEl.style.display = 'none';
     this.portalEl.style.opacity = '0';
     this.portalEl.style.visibility = 'hidden';
@@ -746,6 +769,9 @@ export class PdsPopover {
     this.removeLightDismissListeners();
     this.removeScrollAndResizeListeners();
     document.removeEventListener('submit', this.handleSubmitFromPanel, true);
+
+    // Closed before its first position resolved, it still announces the open before the close.
+    this.emitOpenEvent();
 
     // Emit close event
     this.pdsPopoverClose.emit({
@@ -870,7 +896,9 @@ export class PdsPopover {
   private addScrollAndResizeListeners() {
     this.removeScrollAndResizeListeners();
     if (this.triggerEl == null || this.portalEl == null) return;
-    this.stopAutoUpdate = autoUpdate(this.triggerEl, this.portalEl, () => this.handlePopoverPositioning());
+    this.stopAutoUpdate = autoUpdate(this.triggerEl, this.portalEl, () => {
+      this.positioning = this.handlePopoverPositioning().catch(error => console.warn('pds-popover: failed to position the panel', error));
+    });
   }
 
   /**
@@ -955,13 +983,14 @@ export class PdsPopover {
    * room and shifting to stay 8px inside the viewport. The side it takes goes on the panel's `data-pds-popover-placement`.
    */
   private async handlePopoverPositioning() {
+    // Counted before the guards, so a run still in flight is dropped even when this one can't position.
+    const run = ++this.positioningRun;
     if (this.triggerEl == null || this.portalEl == null) return;
 
     // Safety check: ensure trigger has valid dimensions (is rendered and visible)
     const triggerRect = this.triggerEl.getBoundingClientRect();
     if (triggerRect.width === 0 || triggerRect.height === 0) return;
 
-    const run = ++this.positioningRun;
     const portal = this.portalEl;
     const { x: left, y: top, placement } = await computePosition(this.triggerEl, portal, {
       placement: this.placement,
