@@ -1,6 +1,11 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsPopover } from '../pds-popover';
 
+// Spied on as the required module, which the component reads from at call time. Since Stencil 4.43, a
+// jest.mock() factory no longer intercepts it.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const floatingUI = require('@floating-ui/dom');
+
 describe('pds-popover', () => {
   // Clean up portal elements after each test to prevent test pollution
   afterEach(() => {
@@ -40,103 +45,6 @@ describe('pds-popover', () => {
 
     expect((page.rootInstance as any).portalEl).toBeTruthy();
     expect((page.rootInstance as any).portalEl.id).toBe('popover-1-portal');
-  });
-
-  it('should handle positioning for all placements', async () => {
-    const mockTriggerRect = {
-      top: 100,
-      right: 200,
-      bottom: 150,
-      left: 100,
-      width: 100,
-      height: 50
-    };
-
-    const mockPopoverRect = {
-      width: 200,
-      height: 100
-    };
-
-    const OFFSET = 8;
-    const placements = {
-      'top': {
-        top: mockTriggerRect.top - mockPopoverRect.height - OFFSET,
-        left: mockTriggerRect.left + (mockTriggerRect.width - mockPopoverRect.width) / 2
-      },
-      'top-start': {
-        top: mockTriggerRect.top - mockPopoverRect.height - OFFSET,
-        left: mockTriggerRect.left
-      },
-      'top-end': {
-        top: mockTriggerRect.top - mockPopoverRect.height - OFFSET,
-        left: mockTriggerRect.right - mockPopoverRect.width
-      },
-      'right': {
-        top: mockTriggerRect.top + (mockTriggerRect.height - mockPopoverRect.height) / 2,
-        left: mockTriggerRect.right + OFFSET
-      },
-      'right-start': {
-        top: mockTriggerRect.top,
-        left: mockTriggerRect.right + OFFSET
-      },
-      'right-end': {
-        top: mockTriggerRect.bottom - mockPopoverRect.height,
-        left: mockTriggerRect.right + OFFSET
-      },
-      'bottom': {
-        top: mockTriggerRect.bottom + OFFSET,
-        left: mockTriggerRect.left + (mockTriggerRect.width - mockPopoverRect.width) / 2
-      },
-      'bottom-start': {
-        top: mockTriggerRect.bottom + OFFSET,
-        left: mockTriggerRect.left
-      },
-      'bottom-end': {
-        top: mockTriggerRect.bottom + OFFSET,
-        left: mockTriggerRect.right - mockPopoverRect.width
-      },
-      'left': {
-        top: mockTriggerRect.top + (mockTriggerRect.height - mockPopoverRect.height) / 2,
-        left: mockTriggerRect.left - mockPopoverRect.width - OFFSET
-      },
-      'left-start': {
-        top: mockTriggerRect.top,
-        left: mockTriggerRect.left - mockPopoverRect.width - OFFSET
-      },
-      'left-end': {
-        top: mockTriggerRect.bottom - mockPopoverRect.height,
-        left: mockTriggerRect.left - mockPopoverRect.width - OFFSET
-      }
-    };
-
-    // Test each placement separately to avoid prop immutability issues
-    for (const [placement, expected] of Object.entries(placements)) {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: `<pds-popover component-id="my-popover" placement="${placement}"></pds-popover>`
-      });
-
-      // Mock trigger element
-      const mockTriggerEl = { getBoundingClientRect: () => mockTriggerRect } as HTMLElement;
-      (page.rootInstance as any).triggerEl = mockTriggerEl;
-
-      // Mock portal element
-      const portalEl = (page.rootInstance as any).portalEl as HTMLElement;
-      Object.defineProperty(portalEl, 'getBoundingClientRect', {
-        value: () => mockPopoverRect
-      });
-
-      // Reset positioning guard
-      (page.rootInstance as any).isRepositioning = false;
-      (page.rootInstance as any).handlePopoverPositioning();
-
-      // Wait for the positioning timeout to complete (16ms guard reset)
-      await new Promise(resolve => setTimeout(resolve, 20));
-      await page.waitForChanges();
-
-      expect(portalEl.style.top).toBe(`${expected.top}px`);
-      expect(portalEl.style.left).toBe(`${expected.left}px`);
-    }
   });
 
   it('should emit pdsPopoverOpen event when show() is called', async () => {
@@ -603,123 +511,170 @@ describe('pds-popover', () => {
     });
   });
 
-  describe('Positioning Edge Cases', () => {
-    it('should not position when isRepositioning is true', async () => {
+  describe('Positioning', () => {
+    const setUp = async (placement = 'bottom-start') => {
       const page = await newSpecPage({
         components: [PdsPopover],
-        html: '<pds-popover component-id="test-popover"></pds-popover>'
+        html: `<pds-popover component-id="test-popover" placement="${placement}"><button slot="trigger">Open</button><p>Body</p></pds-popover>`,
       });
+      const instance = page.rootInstance as any;
+      jest.spyOn(instance.triggerEl, 'getBoundingClientRect').mockReturnValue({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 });
+      const portal = instance.portalEl as HTMLElement;
+      // With no containing block, the panel lands where its styles put it.
+      jest.spyOn(portal, 'getBoundingClientRect').mockImplementation(() => ({ top: parseFloat(portal.style.top), left: parseFloat(portal.style.left) }) as DOMRect);
+      return { page, instance, portal };
+    };
 
-      // Set up mocks
-      const mockTriggerEl = {
-        getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 })
-      } as HTMLElement;
-      (page.rootInstance as any).triggerEl = mockTriggerEl;
-
-      const portalEl = (page.rootInstance as any).portalEl as HTMLElement;
-      Object.defineProperty(portalEl, 'getBoundingClientRect', {
-        value: () => ({ width: 100, height: 50 })
-      });
-
-      // Set isRepositioning to true
-      (page.rootInstance as any).isRepositioning = true;
-
-      // Store initial style
-      const initialTop = portalEl.style.top;
-
-      (page.rootInstance as any).handlePopoverPositioning();
-
-      // Styles should not have changed
-      expect(portalEl.style.top).toBe(initialTop);
+    const positionedAt = (portal: HTMLElement) => ({
+      top: portal.style.top,
+      left: portal.style.left,
+      side: portal.getAttribute('data-pds-popover-placement'),
     });
 
-    it('should not position when trigger has zero dimensions', async () => {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: '<pds-popover component-id="test-popover"></pds-popover>'
-      });
+    afterEach(() => jest.restoreAllMocks());
 
-      // Set up trigger with zero dimensions
-      const mockTriggerEl = {
-        getBoundingClientRect: () => ({ top: 0, left: 0, width: 0, height: 0, right: 0, bottom: 0 })
-      } as HTMLElement;
-      (page.rootInstance as any).triggerEl = mockTriggerEl;
+    it('positions with floating-ui from the placement, flipping and shifting in viewport coordinates', async () => {
+      const computePosition = jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 40, y: 60, placement: 'bottom-start' });
+      const { instance, portal } = await setUp('bottom-start');
+      instance.active = true;
 
-      const portalEl = (page.rootInstance as any).portalEl as HTMLElement;
-      Object.defineProperty(portalEl, 'getBoundingClientRect', {
-        value: () => ({ width: 100, height: 50 })
-      });
+      await instance.handlePopoverPositioning();
 
-      // Store initial style
-      const initialTop = portalEl.style.top;
-
-      (page.rootInstance as any).isRepositioning = false;
-      (page.rootInstance as any).handlePopoverPositioning();
-
-      // Styles should not have changed
-      expect(portalEl.style.top).toBe(initialTop);
+      const [reference, floating, options] = computePosition.mock.calls[0] as any[];
+      expect(reference).toBe(instance.triggerEl);
+      expect(floating).toBe(portal);
+      expect(options.placement).toBe('bottom-start');
+      expect(options.strategy).toBe('fixed');
+      expect(options.middleware.map((middleware: { name: string; options: unknown }) => [middleware.name, middleware.options])).toEqual([
+        ['offset', 8],
+        ['flip', { fallbackStrategy: 'initialPlacement' }],
+        ['shift', { padding: 8 }],
+      ]);
+      expect(options.platform.getOffsetParent()).toBe(window);
+      expect(positionedAt(portal)).toEqual({ top: '60px', left: '40px', side: 'bottom-start' });
     });
 
-    it('should not position when component is not mounted in show()', async () => {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: '<pds-popover component-id="test-popover"></pds-popover>'
-      });
+    it('puts the side it took on the panel, leaving the placement attribute as set', async () => {
+      jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 100, y: 20, placement: 'top-start' });
+      const { page, instance, portal } = await setUp('bottom-start');
+      instance.active = true;
 
-      // Set up mocks
-      (page.rootInstance as any).triggerEl = {
-        getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 }),
-        getAttribute: jest.fn().mockReturnValue(null),
-        setAttribute: jest.fn(),
-        focus: jest.fn()
-      };
+      await instance.handlePopoverPositioning();
+      await page.waitForChanges();
 
-      const positioningSpy = jest.spyOn(page.rootInstance as any, 'handlePopoverPositioning');
-
-      // Mark component as not mounted
-      (page.rootInstance as any).isComponentMounted = false;
-
-      await page.rootInstance.show();
-
-      // Wait for requestAnimationFrame
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      // Positioning should not have been called due to early return
-      expect(positioningSpy).not.toHaveBeenCalled();
+      expect(portal.getAttribute('data-pds-popover-placement')).toBe('top-start');
+      expect(page.root!.getAttribute('placement')).toBe('bottom-start');
+      expect(instance.placement).toBe('bottom-start');
     });
 
-    it('should position when component is mounted in show()', async () => {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: '<pds-popover component-id="test-popover"></pds-popover>'
+    it('moves the panel back by however far a containing block put it from the spot', async () => {
+      jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 40, y: 60, placement: 'bottom-start' });
+      const { instance, portal } = await setUp();
+      (portal.getBoundingClientRect as jest.Mock).mockReturnValue({ top: 160, left: 70 });
+      instance.active = true;
+
+      await instance.handlePopoverPositioning();
+
+      expect(positionedAt(portal)).toEqual({ top: '-40px', left: '10px', side: 'bottom-start' });
+    });
+
+    it('does not position when trigger has zero dimensions', async () => {
+      const computePosition = jest.spyOn(floatingUI, 'computePosition');
+      const { instance, portal } = await setUp();
+      (instance.triggerEl.getBoundingClientRect as jest.Mock).mockReturnValue({ top: 0, left: 0, width: 0, height: 0, right: 0, bottom: 0 });
+      instance.active = true;
+
+      await instance.handlePopoverPositioning();
+
+      expect(computePosition).not.toHaveBeenCalled();
+      expect(positionedAt(portal)).toEqual({ top: '', left: '', side: null });
+    });
+
+    it('drops a position that resolves after the popover closes', async () => {
+      let resolve: (value: unknown) => void = () => undefined;
+      jest.spyOn(floatingUI, 'computePosition').mockReturnValue(new Promise(r => (resolve = r)));
+      const { instance, portal } = await setUp();
+      instance.active = true;
+
+      const positioning = instance.handlePopoverPositioning();
+      instance.active = false;
+      resolve({ x: 40, y: 60, placement: 'top-start' });
+      await positioning;
+
+      expect(positionedAt(portal)).toEqual({ top: '', left: '', side: null });
+    });
+
+    it('positions on every update with no pause between them, keeping the latest when they resolve out of order', async () => {
+      const resolvers: Array<(value: unknown) => void> = [];
+      const computePosition = jest.spyOn(floatingUI, 'computePosition').mockImplementation(() => new Promise(r => resolvers.push(r)));
+      const { instance, portal } = await setUp();
+      instance.active = true;
+
+      const first = instance.handlePopoverPositioning();
+      const second = instance.handlePopoverPositioning();
+      expect(computePosition).toHaveBeenCalledTimes(2);
+
+      resolvers[1]({ x: 40, y: 60, placement: 'top-start' });
+      await second;
+      resolvers[0]({ x: 400, y: 600, placement: 'bottom-start' });
+      await first;
+
+      expect(positionedAt(portal)).toEqual({ top: '60px', left: '40px', side: 'top-start' });
+    });
+
+    it('positions as soon as it opens, without waiting for a frame', async () => {
+      const computePosition = jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 40, y: 60, placement: 'bottom-start' });
+      const { instance } = await setUp();
+
+      await instance.show();
+
+      expect(computePosition).toHaveBeenCalled();
+    });
+
+    it('repositions with autoUpdate on its trigger and panel while open, and stops when it closes', async () => {
+      const stop = jest.fn();
+      const autoUpdate = jest.spyOn(floatingUI, 'autoUpdate').mockReturnValue(stop);
+      const computePosition = jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 40, y: 60, placement: 'bottom-start' });
+      const { instance, portal } = await setUp();
+
+      await instance.show();
+      expect(autoUpdate).toHaveBeenCalledWith(instance.triggerEl, portal, expect.any(Function));
+
+      const update = autoUpdate.mock.calls[0][2] as () => void;
+      update();
+      expect(computePosition).toHaveBeenCalledTimes(1);
+
+      await instance.hide();
+      expect(stop).toHaveBeenCalledTimes(1);
+    });
+
+    it('stops autoUpdate when removed from the page while open', async () => {
+      const stop = jest.fn();
+      jest.spyOn(floatingUI, 'autoUpdate').mockReturnValue(stop);
+      const { page, instance } = await setUp();
+
+      await instance.show();
+      page.root!.remove();
+
+      expect(stop).toHaveBeenCalledTimes(1);
+    });
+
+    it('starts autoUpdate again when moved while open', async () => {
+      const stops: jest.Mock[] = [];
+      const autoUpdate = jest.spyOn(floatingUI, 'autoUpdate').mockImplementation(() => {
+        const stop = jest.fn();
+        stops.push(stop);
+        return stop;
       });
+      const { instance } = await setUp();
 
-      // Set up mocks
-      (page.rootInstance as any).triggerEl = {
-        getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 }),
-        getAttribute: jest.fn().mockReturnValue(null),
-        setAttribute: jest.fn(),
-        focus: jest.fn()
-      };
+      await instance.show();
+      // A move in one operation reconnects the popover without disconnecting it first.
+      instance.connectedCallback();
 
-      const portalEl = (page.rootInstance as any).portalEl as HTMLElement;
-      Object.defineProperty(portalEl, 'getBoundingClientRect', {
-        value: () => ({ width: 100, height: 50 })
-      });
-
-      const positioningSpy = jest.spyOn(page.rootInstance as any, 'handlePopoverPositioning');
-
-      // Ensure component is marked as mounted
-      (page.rootInstance as any).isComponentMounted = true;
-      (page.rootInstance as any).isRepositioning = false;
-
-      await page.rootInstance.show();
-
-      // Wait for requestAnimationFrame to complete
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      // Positioning should have been called
-      expect(positioningSpy).toHaveBeenCalled();
+      expect(autoUpdate).toHaveBeenCalledTimes(2);
+      expect(stops[0]).toHaveBeenCalledTimes(1);
+      expect(stops[1]).not.toHaveBeenCalled();
     });
   });
 
