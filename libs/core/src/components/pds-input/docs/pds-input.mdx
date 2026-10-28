@@ -400,18 +400,18 @@ Prepend and append elements are placed outside the input container, next to the 
 <DocCanvas
   mdxSource={{
     react: `<PdsInput componentId="pds-input-suffix-button" label="Search" type="text" value="">
-      <PdsButton variant="unstyled" slot="suffix">
+      <PdsButton variant="unstyled" slot="suffix" aria-label="Search">
         <PdsIcon name="search"></PdsIcon>
       </PdsButton>
     </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-suffix-button" label="Search" type="text" value="">
-      <pds-button variant="unstyled" slot="suffix">
+      <pds-button variant="unstyled" slot="suffix" aria-label="Search">
         <pds-icon name="search"></pds-icon>
       </pds-button>
     </pds-input>`
   }}>
   <pds-input component-id="pds-input-suffix-button" label="Search" type="text" value="">
-    <pds-button variant="unstyled" slot="suffix">
+    <pds-button variant="unstyled" slot="suffix" aria-label="Search">
       <pds-icon name="search"></pds-icon>
     </pds-button>
   </pds-input>
@@ -422,20 +422,20 @@ Prepend and append elements are placed outside the input container, next to the 
   mdxSource={{
     react: `<PdsInput componentId="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
       <PdsIcon name="mail" slot="prefix"></PdsIcon>
-      <PdsButton variant="unstyled" slot="suffix">
+      <PdsButton variant="unstyled" slot="suffix" aria-label="Clear">
         <PdsIcon name="remove-circle"></PdsIcon>
       </PdsButton>
     </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
       <pds-icon name="mail" slot="prefix"></pds-icon>
-      <pds-button variant="unstyled" slot="suffix">
+      <pds-button variant="unstyled" slot="suffix" aria-label="Clear">
         <pds-icon name="remove-circle"></pds-icon>
       </pds-button>
     </pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
     <pds-icon name="mail" slot="prefix"></pds-icon>
-    <pds-button variant="unstyled" slot="suffix">
+    <pds-button variant="unstyled" slot="suffix" aria-label="Clear">
       <pds-icon name="remove-circle"></pds-icon>
     </pds-button>
   </pds-input>
