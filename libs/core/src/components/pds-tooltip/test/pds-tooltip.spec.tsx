@@ -532,29 +532,257 @@ describe('pds-tooltip', () => {
     expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
   });
 
-  it('should handle mutation observer setup properly', async () => {
-    const mockObserve = jest.fn();
-    (global.MutationObserver as jest.Mock).mockImplementation(() => ({
-      observe: mockObserve,
-      disconnect: jest.fn(),
-      takeRecords: jest.fn(),
-    }));
+  describe('keeping the open tooltip in step with its slotted content', () => {
+    let observerCallback: ((mutations: Partial<MutationRecord>[]) => void) | null;
+    let mockObserve: jest.Mock;
+    let mockDisconnect: jest.Mock;
+    let defaultObserver: ReturnType<jest.Mock['getMockImplementation']>;
+    let frames: Map<number, FrameRequestCallback>;
+    let nextFrame: number;
+    let originalRequestAnimationFrame: typeof globalThis.requestAnimationFrame;
+    let originalCancelAnimationFrame: typeof globalThis.cancelAnimationFrame;
 
-    const page = await newSpecPage({
-      components: [PdsTooltip],
-      html: `
-        <pds-tooltip html-content="true">
-          <button>Trigger</button>
-          <div slot="content">
-            <p>Initial content</p>
-          </div>
-        </pds-tooltip>`,
+    // Queues animation frames so a test decides when a sync runs.
+    const requestFrame = ((callback: FrameRequestCallback) => {
+      nextFrame += 1;
+      frames.set(nextFrame, callback);
+      return nextFrame;
+    }) as typeof globalThis.requestAnimationFrame;
+    const cancelFrame = ((id: number) => {
+      frames.delete(id);
+    }) as typeof globalThis.cancelAnimationFrame;
+    const runFrames = () => {
+      const queued = Array.from(frames.values());
+      frames.clear();
+      queued.forEach((callback) => callback(0));
+    };
+
+    beforeEach(() => {
+      observerCallback = null;
+      mockObserve = jest.fn();
+      mockDisconnect = jest.fn();
+      defaultObserver = (global.MutationObserver as jest.Mock).getMockImplementation();
+      (global.MutationObserver as jest.Mock).mockImplementation((callback) => {
+        observerCallback = callback;
+        return { observe: mockObserve, disconnect: mockDisconnect, takeRecords: jest.fn() };
+      });
+      frames = new Map();
+      nextFrame = 0;
+      originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+      originalCancelAnimationFrame = globalThis.cancelAnimationFrame;
     });
 
-    await page.waitForChanges();
+    afterEach(() => {
+      (global.MutationObserver as jest.Mock).mockImplementation(defaultObserver);
+      globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+      globalThis.cancelAnimationFrame = originalCancelAnimationFrame;
+    });
 
-    // Verify that MutationObserver.observe was called
-    expect(mockObserve).toHaveBeenCalled();
+    // Only the global the component reads: the page's window also schedules Stencil's own renders.
+    const queueFrames = () => {
+      globalThis.requestAnimationFrame = requestFrame;
+      globalThis.cancelAnimationFrame = cancelFrame;
+    };
+
+    const openTooltip = async () => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+          <pds-tooltip html-content="true">
+            <button>Trigger</button>
+            <div slot="content"><p class="status">Loading</p></div>
+          </pds-tooltip>`,
+      });
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+      queueFrames();
+      return page;
+    };
+
+    const slottedStatus = (page: { root?: HTMLElement }) =>
+      page.root?.querySelector('[slot="content"] .status') as HTMLElement;
+    const portalStatus = (page: { body: HTMLElement }) => page.body.querySelector('.pds-tooltip__content .status');
+
+    const loaded = (page: { root?: HTMLElement }) => {
+      const status = slottedStatus(page);
+      status.textContent = 'Loaded';
+      return { type: 'characterData', target: status } as Partial<MutationRecord>;
+    };
+
+    it('only watches the content while the tooltip is open, at any depth', async () => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+          <pds-tooltip html-content="true">
+            <button>Trigger</button>
+            <div slot="content"><p>Initial content</p></div>
+          </pds-tooltip>`,
+      });
+      await page.waitForChanges();
+      expect(mockObserve).not.toHaveBeenCalled();
+
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+
+      const ownWrapper = Array.from(page.root?.children ?? []).find((child) =>
+        child.matches('.pds-tooltip__content-slot-wrapper'),
+      );
+      expect(mockObserve).toHaveBeenCalledWith(
+        ownWrapper,
+        expect.objectContaining({ childList: true, subtree: true, attributes: true, characterData: true }),
+      );
+    });
+
+    it('shows content that changes after the tooltip opens', async () => {
+      const page = await openTooltip();
+      expect(portalStatus(page)?.textContent).toBe('Loading');
+
+      observerCallback?.([loaded(page)]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(page.body.querySelectorAll('.pds-tooltip__content .status')).toHaveLength(1);
+      expect(portalStatus(page)?.textContent).toBe('Loaded');
+    });
+
+    it('re-copies once for changes that arrive before the next frame', async () => {
+      const page = await openTooltip();
+
+      observerCallback?.([loaded(page)]);
+      observerCallback?.([{ type: 'characterData', target: slottedStatus(page) }]);
+
+      expect(frames.size).toBe(1);
+      runFrames();
+      await page.waitForChanges();
+      expect(portalStatus(page)?.textContent).toBe('Loaded');
+    });
+
+    it('keeps the same portal, id and trigger description through a re-copy', async () => {
+      const page = await openTooltip();
+      const portal = page.body.querySelector('.pds-tooltip');
+      const portalId = portal?.id;
+
+      observerCallback?.([loaded(page)]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(page.body.querySelector('.pds-tooltip')).toBe(portal);
+      expect(portal?.id).toBe(portalId);
+      expect(page.root?.querySelector('.pds-tooltip__trigger')?.getAttribute('aria-describedby')).toBe(portalId);
+    });
+
+    it('leaves the portal alone when a change leaves the content as it was', async () => {
+      const page = await openTooltip();
+      const copied = portalStatus(page);
+      const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
+
+      observerCallback?.([{ type: 'characterData', target: slottedStatus(page) }]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(portalStatus(page)).toBe(copied);
+      expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
+    });
+
+    it('leaves the portal alone when a pds-* descendant only gains its Stencil hydrated class', async () => {
+      // Stencil only ever marks a custom-element host hydrated, never a plain tag — a pds-* element
+      // here is what a real hydration event looks like, not the `<p>` openTooltip() uses elsewhere.
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `
+          <pds-tooltip html-content="true">
+            <button>Trigger</button>
+            <div slot="content"><pds-box class="status">Loading</pds-box></div>
+          </pds-tooltip>`,
+      });
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+      queueFrames();
+
+      const copied = portalStatus(page);
+      const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
+
+      slottedStatus(page).classList.add('hydrated');
+      observerCallback?.([{ type: 'attributes', target: slottedStatus(page) }]);
+      runFrames();
+      await page.waitForChanges();
+
+      // Same node, not a clone with the hydrated class carried over: a reload-prone replace never happened.
+      expect(portalStatus(page)).toBe(copied);
+      expect(portalStatus(page)?.classList.contains('hydrated')).toBe(false);
+      expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
+    });
+
+    it('still recopies when a plain (non-pds-*) descendant gains a real class change', async () => {
+      // isStencilClass is host-scoped, so stripping is scoped to pds-* elements too — a plain
+      // element's own classes, hydrated-named or not, are never Stencil bookkeeping and must still
+      // count as a real change.
+      const page = await openTooltip();
+      const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
+
+      slottedStatus(page).classList.add('is-active');
+      observerCallback?.([{ type: 'attributes', target: slottedStatus(page) }]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(portalStatus(page)?.classList.contains('is-active')).toBe(true);
+      expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBeGreaterThan(positions);
+    });
+
+    it("doesn't drift into a permanent recopy loop when the portal copy changes after it connects", async () => {
+      const page = await openTooltip();
+      const copied = portalStatus(page);
+      const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
+
+      // Something unrelated to this sync — a nested light-DOM component's own connected-lifecycle
+      // bookkeeping, say — mutates the portal's live copy. The comparison must not use that live
+      // state as its baseline, or every later sync, even one with no real content change, would see
+      // a permanent difference and recopy forever.
+      page.body.querySelector('.pds-tooltip__content')?.appendChild(copied!.ownerDocument.createComment('x'));
+
+      observerCallback?.([{ type: 'characterData', target: slottedStatus(page) }]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(portalStatus(page)).toBe(copied);
+      expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
+    });
+
+    it('stops watching when the tooltip closes', async () => {
+      const page = await openTooltip();
+
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseleave'));
+      await page.waitForChanges();
+
+      expect(mockDisconnect).toHaveBeenCalled();
+      expect(page.body.querySelector('.pds-tooltip__content')).toBeNull();
+    });
+
+    it('drops a pending re-copy when the tooltip closes', async () => {
+      const page = await openTooltip();
+
+      observerCallback?.([loaded(page)]);
+      const pending = nextFrame;
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseleave'));
+      await page.waitForChanges();
+
+      expect(frames.has(pending)).toBe(false);
+      expect(() => runFrames()).not.toThrow();
+      expect(page.body.querySelector('.pds-tooltip')).toBeNull();
+    });
+
+    it('drops a pending re-copy when the tooltip is removed', async () => {
+      const page = await openTooltip();
+
+      observerCallback?.([loaded(page)]);
+      const pending = nextFrame;
+      page.root?.remove();
+      await page.waitForChanges();
+
+      // Stencil may queue its own frames on removal; the re-copy's is the one that must be gone.
+      expect(frames.has(pending)).toBe(false);
+      expect(page.body.querySelector('.pds-tooltip')).toBeNull();
+    });
   });
 
   it('should handle SPA navigation pathname changes', async () => {

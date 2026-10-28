@@ -1,5 +1,6 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
 import { PlacementType } from '@utils/types';
+import { classNamesOf, isStencilClass } from '@utils/keep-hydrated';
 import {
   autoUpdate,
   computePosition,
@@ -33,7 +34,9 @@ export class PdsTooltip {
   private resolvedPlacement: PlacementType = 'right';
   private triggerEl: HTMLElement | null = null;
   private contentDiv: HTMLElement | null = null;
+  private lastCopiedHtml: string | null = null;
   private slotMutationObserver: MutationObserver | null = null;
+  private contentSyncFrame: number | null = null;
   private currentPathname: string = '';
   private pathnameCheckInterval: ReturnType<typeof setInterval> | null = null;
   private stopAutoUpdate: (() => void) | null = null;
@@ -100,17 +103,6 @@ export class PdsTooltip {
     window.addEventListener('pageshow', this.handlePageShow);
     this.currentPathname = window.location.pathname;
     this.triggerEl = this.el.querySelector('.pds-tooltip__trigger') as HTMLElement;
-    const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
-
-    if (contentSlotWrapper !== null) {
-      this.slotMutationObserver = new MutationObserver(() => {
-        if (this.opened && this.portalEl !== null) {
-          this.removePortal();
-          this.createPortal();
-        }
-      });
-      this.slotMutationObserver.observe(contentSlotWrapper, { childList: true, subtree: false });
-    }
 
     // no return; Stencil ignores teardown functions here
   }
@@ -126,10 +118,6 @@ export class PdsTooltip {
 
   disconnectedCallback() {
     window.removeEventListener('pageshow', this.handlePageShow);
-    if (this.slotMutationObserver !== null) {
-      this.slotMutationObserver.disconnect();
-      this.slotMutationObserver = null;
-    }
     // Ensure global listeners/intervals are removed if still present
     if (this.portalEl !== null) {
       this.removePortal();
@@ -344,33 +332,9 @@ export class PdsTooltip {
     this.contentDiv.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
     this.contentDiv.setAttribute('aria-live', this.opened ? 'polite' : 'off');
 
-    const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
-    const slottedContentContainer = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
-    let hasSlottedContent = false;
-
-    if (slottedContentContainer !== null) {
-      const childrenToClone = Array.from(slottedContentContainer.childNodes);
-
-      if (childrenToClone.length > 0) {
-        const hasMeaningfulNode = childrenToClone.some(node =>
-          node.nodeType === Node.ELEMENT_NODE ||
-          (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')
-        );
-
-        if (hasMeaningfulNode) {
-          hasSlottedContent = true;
-          childrenToClone.forEach((node /*, index*/) => {
-            if (node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')) {
-              this.contentDiv.appendChild(node.cloneNode(true));
-            }
-          });
-        }
-      }
-    }
-
-    if (!hasSlottedContent && typeof this.content === 'string' && this.content.trim() !== '') {
-      this.contentDiv.textContent = this.content;
-    }
+    const initialCopy = this.copySlottedContent();
+    this.lastCopiedHtml = this.strippedHtml(initialCopy);
+    this.contentDiv.append(...Array.from(initialCopy.childNodes));
 
     this.portalEl.appendChild(this.contentDiv);
     document.body.appendChild(this.portalEl);
@@ -403,9 +367,120 @@ export class PdsTooltip {
     if (this.triggerEl !== null && this.portalEl.id !== '') {
       this.triggerEl.setAttribute('aria-describedby', this.portalEl.id);
     }
+
+    this.startContentSync();
+  }
+
+  /**
+   * The host's own content slot wrapper. Matched among direct children only, so a nested
+   * pds-tooltip inside the trigger slot isn't mistaken for this one's.
+   */
+  private get contentSlotWrapper(): Element | undefined {
+    return Array.from(this.el.children).find((child) => child.matches('.pds-tooltip__content-slot-wrapper'));
+  }
+
+  /**
+   * Copies the slotted content (or the `content` prop's text) into a detached container. The
+   * portal holds copies so the framework that owns the slotted nodes keeps them.
+   */
+  private copySlottedContent(): HTMLElement {
+    const copy = document.createElement('div');
+    const slottedContentContainer = this.contentSlotWrapper?.querySelector('[slot="content"]');
+    const meaningfulNodes = Array.from(slottedContentContainer?.childNodes ?? []).filter(node =>
+      node.nodeType === Node.ELEMENT_NODE ||
+      (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')
+    );
+    meaningfulNodes.forEach(node => copy.appendChild(node.cloneNode(true)));
+
+    if (meaningfulNodes.length === 0 && typeof this.content === 'string' && this.content.trim() !== '') {
+      copy.textContent = this.content;
+    }
+
+    return copy;
+  }
+
+  /**
+   * While the tooltip is open, keeps the portal's copy in step with the slotted content at any
+   * depth: content that loads or re-renders after opening shows without reopening. Changes are
+   * batched to one re-copy per animation frame, and a re-copy that matches the last one shown is
+   * dropped, so screen readers aren't re-announced, iframes don't reload and the tooltip isn't
+   * repositioned for nothing. Only the hidden slot wrapper is observed, so copying into the portal
+   * can't trigger another sync.
+   */
+  private startContentSync() {
+    const contentSlotWrapper = this.contentSlotWrapper;
+    if (contentSlotWrapper === undefined || typeof MutationObserver === 'undefined') return;
+
+    this.slotMutationObserver = new MutationObserver(this.scheduleContentSync);
+    this.slotMutationObserver.observe(contentSlotWrapper, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true,
+    });
+  }
+
+  private scheduleContentSync = () => {
+    if (this.contentSyncFrame !== null) return;
+
+    this.contentSyncFrame = requestAnimationFrame(() => {
+      this.contentSyncFrame = null;
+      if (this.portalEl === null || this.contentDiv === null) return;
+
+      const copy = this.copySlottedContent();
+      const strippedCopy = this.strippedHtml(copy);
+      if (strippedCopy === this.lastCopiedHtml) return;
+
+      this.lastCopiedHtml = strippedCopy;
+      this.contentDiv.textContent = '';
+      this.contentDiv.append(...Array.from(copy.childNodes));
+      this.repositionPortal().catch(error => {
+        console.warn('Failed to reposition tooltip after a content change:', error);
+      });
+    });
+  };
+
+  /**
+   * A copy's serialized HTML with Stencil's own hydration and scope classes removed from every
+   * `pds-*` descendant, so a nested component finishing hydration (or re-hydrating once reconnected
+   * inside the portal) isn't mistaken for a real content change. Without this, that class-only
+   * difference fails the equality check above and triggers a recopy that replaces still-loaded
+   * nodes — reloading any iframe or media the slotted content held.
+   */
+  private strippedHtml(root: Element): string {
+    const clone = root.cloneNode(true) as Element;
+    clone.querySelectorAll('*').forEach((el) => {
+      // isStencilClass is host-scoped (its own doc: "another sc- class may be a consumer's"), so it
+      // only applies to pds-* elements — the same check keepPineHydrated makes before using it.
+      if (!el.localName.startsWith('pds-')) return;
+
+      // Not `el.className`: on an SVG element that's an SVGAnimatedString, not a string,
+      // so classNamesOf would silently drop its classes from the comparison. The `class`
+      // attribute is a plain string on every element, SVG included.
+      const kept = classNamesOf(el.getAttribute('class') || '').filter((name) => !isStencilClass(el, name));
+      if (kept.length === 0) {
+        el.removeAttribute('class');
+      } else {
+        el.setAttribute('class', kept.join(' '));
+      }
+    });
+    return clone.innerHTML;
+  }
+
+  private stopContentSync() {
+    if (this.slotMutationObserver !== null) {
+      this.slotMutationObserver.disconnect();
+      this.slotMutationObserver = null;
+    }
+    if (this.contentSyncFrame !== null) {
+      cancelAnimationFrame(this.contentSyncFrame);
+      this.contentSyncFrame = null;
+    }
   }
 
   private removePortal() {
+    this.stopContentSync();
+
     // Stop Floating UI's autoUpdate
     if (this.stopAutoUpdate !== null) {
       this.stopAutoUpdate();
@@ -441,6 +516,7 @@ export class PdsTooltip {
       this.triggerEl.removeAttribute('aria-describedby');
     }
     this.contentDiv = null;
+    this.lastCopiedHtml = null;
   }
 
   render() {
