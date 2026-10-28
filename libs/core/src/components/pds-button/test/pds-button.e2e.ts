@@ -639,6 +639,46 @@ describe('pds-button', () => {
       expect(controls).toEqual(['nested-popover-portal']);
     });
 
+    it('describes the inner button with the text aria-describedby points at, and follows changes', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <p id="why">Choose a trigger first.</p>
+        <p id="other">Something else.</p>
+        <pds-button aria-describedby="why" disabled>Open in builder</pds-button>
+      `);
+      const description = async () => {
+        const button = await page.evaluateHandle(
+          () => document.querySelector('pds-button')?.shadowRoot?.querySelector('button') as HTMLButtonElement,
+        );
+        const node = await page.accessibility.snapshot({ root: button, interestingOnly: false });
+        return node?.description ?? '';
+      };
+
+      expect(await description()).toBe('Choose a trigger first.');
+
+      await page.$eval('pds-button', (el) => el.setAttribute('aria-describedby', 'other'));
+      await page.waitForChanges();
+      expect(await description()).toBe('Something else.');
+
+      await page.$eval('pds-button', (el) => el.removeAttribute('aria-describedby'));
+      await page.waitForChanges();
+      expect(await description()).toBe('');
+    });
+
+    it('names the inner button from the text aria-labelledby points at', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <h2 id="heading">Billing</h2>
+        <pds-button aria-labelledby="heading" icon-only><pds-icon slot="start" name="gear"></pds-icon></pds-button>
+      `);
+
+      const button = await page.evaluateHandle(
+        () => document.querySelector('pds-button')?.shadowRoot?.querySelector('button') as HTMLButtonElement,
+      );
+      const node = await page.accessibility.snapshot({ root: button, interestingOnly: false });
+      expect(node?.name).toBe('Billing');
+    });
+
     it('returns focus and forwards aria-expanded and aria-haspopup with pds-dropdown-menu', async () => {
       const page = await newE2EPage();
       await page.setContent(`
@@ -726,6 +766,16 @@ describe('pds-button', () => {
       const violations = await runAxe(page, {
         rules: { 'aria-required-children': { enabled: false } },
       });
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('has no axe violations when described by text outside it', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <p id="why">Choose a trigger first.</p>
+        <pds-button aria-describedby="why" disabled>Open in builder</pds-button>
+      `);
+      const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
 
