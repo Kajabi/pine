@@ -639,6 +639,15 @@ describe('pds-button', () => {
       expect(controls).toEqual(['nested-popover-portal']);
     });
 
+    // The accessibility tree node of the inner button (or anchor), as a screen reader reads it.
+    const innerAxNode = async (page: Awaited<ReturnType<typeof newE2EPage>>, tag = 'button') => {
+      const inner = await page.evaluateHandle(
+        (selector) => document.querySelector('pds-button')?.shadowRoot?.querySelector(selector) as HTMLElement,
+        tag,
+      );
+      return page.accessibility.snapshot({ root: inner, interestingOnly: false });
+    };
+
     it('describes the inner button with the text aria-describedby points at, and follows changes', async () => {
       const page = await newE2EPage();
       await page.setContent(`
@@ -646,37 +655,88 @@ describe('pds-button', () => {
         <p id="other">Something else.</p>
         <pds-button aria-describedby="why" disabled>Open in builder</pds-button>
       `);
-      const description = async () => {
-        const button = await page.evaluateHandle(
-          () => document.querySelector('pds-button')?.shadowRoot?.querySelector('button') as HTMLButtonElement,
-        );
-        const node = await page.accessibility.snapshot({ root: button, interestingOnly: false });
-        return node?.description ?? '';
-      };
 
-      expect(await description()).toBe('Choose a trigger first.');
+      expect((await innerAxNode(page))?.description).toBe('Choose a trigger first.');
 
       await page.$eval('pds-button', (el) => el.setAttribute('aria-describedby', 'other'));
       await page.waitForChanges();
-      expect(await description()).toBe('Something else.');
+      expect((await innerAxNode(page))?.description).toBe('Something else.');
 
       await page.$eval('pds-button', (el) => el.removeAttribute('aria-describedby'));
       await page.waitForChanges();
-      expect(await description()).toBe('');
+      expect((await innerAxNode(page))?.description ?? '').toBe('');
     });
 
-    it('names the inner button from the text aria-labelledby points at', async () => {
+    it('picks up a description added after the button, or replaced, once it is focused', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`<pds-button aria-describedby="hint">Save</pds-button>`);
+
+      await page.evaluate(() => {
+        const hint = document.createElement('p');
+        hint.id = 'hint';
+        hint.textContent = 'Saves a draft.';
+        document.body.appendChild(hint);
+      });
+      await page.$eval('pds-button', (el: HTMLElement) => el.focus());
+      await page.waitForChanges();
+      expect((await innerAxNode(page))?.description).toBe('Saves a draft.');
+
+      // A framework re-keying the hint, or a DOM morph, replaces the node under the same id.
+      await page.evaluate(() => {
+        const replacement = document.createElement('p');
+        replacement.id = 'hint';
+        replacement.textContent = 'Publishes it.';
+        document.getElementById('hint')?.replaceWith(replacement);
+        (document.activeElement as HTMLElement | null)?.blur();
+      });
+      await page.$eval('pds-button', (el: HTMLElement) => el.focus());
+      await page.waitForChanges();
+      expect((await innerAxNode(page))?.description).toBe('Publishes it.');
+    });
+
+    it('describes the inner anchor when href is set after aria-describedby', async () => {
       const page = await newE2EPage();
       await page.setContent(`
-        <h2 id="heading">Billing</h2>
-        <pds-button aria-labelledby="heading" icon-only><pds-icon slot="start" name="gear"></pds-icon></pds-button>
+        <p id="where">Opens the billing page.</p>
+        <pds-button aria-describedby="where">Billing</pds-button>
       `);
 
-      const button = await page.evaluateHandle(
-        () => document.querySelector('pds-button')?.shadowRoot?.querySelector('button') as HTMLButtonElement,
-      );
-      const node = await page.accessibility.snapshot({ root: button, interestingOnly: false });
-      expect(node?.name).toBe('Billing');
+      await page.$eval('pds-button', (el) => el.setAttribute('href', '/billing'));
+      await page.waitForChanges();
+
+      expect((await innerAxNode(page, 'a'))?.description).toBe('Opens the billing page.');
+    });
+
+    it('names the inner button from aria-labelledby, follows changes, and falls back when it is removed', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <h2 id="billing">Billing</h2>
+        <h2 id="profile">Profile</h2>
+        <pds-button aria-labelledby="billing" aria-label="Settings" icon-only>
+          <pds-icon slot="start" aria-hidden="true" icon="${favorite}"></pds-icon>
+        </pds-button>
+      `);
+
+      // aria-labelledby wins over aria-label.
+      expect((await innerAxNode(page))?.name).toBe('Billing');
+
+      await page.$eval('pds-button', (el) => el.setAttribute('aria-labelledby', 'profile'));
+      await page.waitForChanges();
+      expect((await innerAxNode(page))?.name).toBe('Profile');
+
+      await page.$eval('pds-button', (el) => el.removeAttribute('aria-labelledby'));
+      await page.waitForChanges();
+      expect((await innerAxNode(page))?.name).toBe('Settings');
+    });
+
+    it('lets aria-labelledby replace the slot text as the name', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <h2 id="billing">Billing settings</h2>
+        <pds-button aria-labelledby="billing">Edit</pds-button>
+      `);
+
+      expect((await innerAxNode(page))?.name).toBe('Billing settings');
     });
 
     it('returns focus and forwards aria-expanded and aria-haspopup with pds-dropdown-menu', async () => {
@@ -776,6 +836,23 @@ describe('pds-button', () => {
         <pds-button aria-describedby="why" disabled>Open in builder</pds-button>
       `);
       const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('has no axe violations as an icon-only button named by aria-labelledby', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <h2 id="billing">Billing</h2>
+        <pds-button aria-labelledby="billing" icon-only>
+          <pds-icon slot="start" aria-hidden="true" icon="${favorite}"></pds-icon>
+        </pds-button>
+      `);
+      // axe-core reads ID-reference attributes, not ARIA element reflection, so it misses the name the
+      // browser computes (the aria-labelledby test above checks that name) and flags aria-labelledby on
+      // the role-less host. Both are axe limitations; this checks nothing else is wrong.
+      const violations = await runAxe(page, {
+        rules: { 'button-name': { enabled: false }, 'aria-prohibited-attr': { enabled: false } },
+      });
       expect(formatViolations(violations)).toBe('');
     });
 
