@@ -49,7 +49,7 @@ export class PdsRadio {
   @Prop() helperMessage: string;
 
   /**
-   * Adds a border around the radio component for better visual separation.
+   * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
    * @defaultValue false
    */
   @Prop() hasBorder = false;
@@ -87,7 +87,7 @@ export class PdsRadio {
   @Prop() value: string;
 
   /**
-   * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged.
+   * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel`, `hasBorder`, and the `image` slot don't apply.
    * @defaultValue default
    */
   @Prop() variant: 'default' | 'pill' = 'default';
@@ -143,7 +143,7 @@ export class PdsRadio {
     if (this.isPill()) {
       classNames.push('pds-radio--pill');
     }
-    if (this.hasImage()) {
+    if (this.hasImage() && !this.isPill()) {
       classNames.push('has-image');
     }
 
@@ -195,7 +195,7 @@ export class PdsRadio {
           onChange={this.handleRadioChange}
           class={this.hasImage() || this.isPill() ? 'visually-hidden' : ''}
         />
-        <span class={this.hideLabel ? 'visually-hidden' : ''}>
+        <span class={this.hideLabel && !this.isPill() ? 'visually-hidden' : ''}>
           {this.label}
         </span>
       </label>,

@@ -370,13 +370,21 @@ label:has(input:disabled) {
     &:has(input:disabled) {
       background: var(--pine-color-background-container-disabled);
       border-color: var(--pine-color-border-disabled);
-      color: var(--pine-color-text-disabled);
+      color: var(--pine-color-text-label-disabled);
       cursor: not-allowed;
     }
 
     &:has(input:disabled:checked) {
-      border-color: var(--pine-color-text-disabled);
-      box-shadow: inset 0 0 0 var(--pine-border-width) var(--pine-color-text-disabled);
+      border-color: var(--pine-color-text-label-disabled);
+      box-shadow: inset 0 0 0 var(--pine-border-width) var(--pine-color-text-label-disabled);
+    }
+
+    // Forced colors drop the box-shadow ring and repaint the border, so draw the checked state with a system color.
+    @media (forced-colors: active) {
+      &:has(input:checked) {
+        outline: var(--pine-border-width-thick) solid Highlight;
+        outline-offset: calc(-1 * var(--pine-border-width-thick));
+      }
     }
   }
 
