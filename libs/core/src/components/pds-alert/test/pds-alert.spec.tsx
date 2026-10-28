@@ -12,7 +12,7 @@ describe('pds-alert', () => {
         <mock:shadow-root>
           <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
-              <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
+              <pds-icon aria-hidden="true" class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <div>
                   <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
@@ -37,7 +37,7 @@ describe('pds-alert', () => {
         <mock:shadow-root>
           <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
-              <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
+              <pds-icon aria-hidden="true" class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <pds-text class="pds-alert__heading" color="var(--pds-alert-color-text)" size="h5" tag="h3" weight="medium">Test Alert Heading</pds-text>
                 <div>
@@ -63,7 +63,7 @@ describe('pds-alert', () => {
         <mock:shadow-root>
           <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
-              <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
+              <pds-icon aria-hidden="true" class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <div>
                   <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
@@ -89,7 +89,7 @@ describe('pds-alert', () => {
         <mock:shadow-root>
           <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box align-items="center" display="flex" gap="sm">
-              <pds-icon class="pds-alert__icon pds-alert__icon--small" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
+              <pds-icon aria-hidden="true" class="pds-alert__icon pds-alert__icon--small" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <pds-box align-items="center" display="flex" gap="md">
                   <pds-text class="pds-alert__description--small" color="var(--pds-alert-color-text)" tag="p" truncate="">
@@ -115,7 +115,7 @@ describe('pds-alert', () => {
         <mock:shadow-root>
           <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
-              <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
+              <pds-icon aria-hidden="true" class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <div>
                   <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
@@ -298,5 +298,71 @@ describe('pds-alert', () => {
       const smallDescriptionText = page.root.shadowRoot.querySelector('.pds-alert__description--small');
       expect(smallDescriptionText).toBeNull();
     }
+  });
+
+  describe('severity label', () => {
+    const severityOf = (page) => page.root.shadowRoot.querySelector('.visually-hidden')?.textContent;
+
+    it.each([
+      ['danger', 'Error'],
+      ['info', 'Info'],
+      ['success', 'Success'],
+      ['warning', 'Warning'],
+    ])('announces %s as "%s" by default', async (variant, label) => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert variant="${variant}">Message</pds-alert>`,
+      });
+      expect(severityOf(page)).toBe(label);
+    });
+
+    it('announces nothing for the default variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert>Message</pds-alert>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.visually-hidden')).toBeNull();
+    });
+
+    it('uses a custom severity-label in place of the default', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert variant="danger" severity-label="Erreur">Message</pds-alert>`,
+      });
+      expect(severityOf(page)).toBe('Erreur');
+    });
+
+    it('announces a severity-label set on the default variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert severity-label="Note">Message</pds-alert>`,
+      });
+      expect(severityOf(page)).toBe('Note');
+    });
+
+    it('announces nothing when severity-label is an empty string', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert variant="danger" severity-label="">Message</pds-alert>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.visually-hidden')).toBeNull();
+    });
+
+    it('still announces severity when the icon is hidden', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert variant="warning" hide-icon="true">Message</pds-alert>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.pds-alert__icon')).toBeNull();
+      expect(severityOf(page)).toBe('Warning');
+    });
+
+    it('hides the severity icon, which the text replaces', async () => {
+      const page = await newSpecPage({
+        components: [PdsAlert],
+        html: `<pds-alert variant="success">Message</pds-alert>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.pds-alert__icon').getAttribute('aria-hidden')).toBe('true');
+    });
   });
 });
