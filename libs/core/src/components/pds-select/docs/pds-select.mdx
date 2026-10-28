@@ -33,6 +33,10 @@ Selects present a single-choice dropdown, letting users pick one value from a pr
 
 ## Usage Notes
 
+### Options stay in sync
+
+Changing an option's text, value or disabled state, or adding, removing or reordering options (including inside an `optgroup`), is reflected in the dropdown on the next frame without re-rendering the component. The current value stays selected while an option with that value exists. When an option change leaves a non-empty value with no matching option, nothing is shown selected and the value is kept.
+
 ### Working with Labels
 
 When analyzing designs or screenshots, text that appears above a select dropdown is the select's label, not a separate `pds-text` component. The `label` prop creates text that appears above the select field and integrates properly with the component's styling and accessibility features.

@@ -169,6 +169,62 @@ describe('pds-select', () => {
   });
 });
 
+describe('pds-select option sync', () => {
+  it('shows an existing option whose text changed, keeping the value selected', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-select component-id="fruit" label="Fruit" value="b">
+        <option value="a">Alpha</option>
+        <option value="b">Beta</option>
+      </pds-select>
+    `);
+    await page.waitForChanges();
+
+    const host = await page.find('pds-select');
+    const changeEvent = await host.spyOnEvent('pdsSelectChange');
+
+    await page.$eval('pds-select option[value="a"]', (option: HTMLOptionElement) => {
+      option.textContent = 'Apple';
+    });
+    await page.waitForFunction(() => {
+      const select = document.querySelector('pds-select').shadowRoot.querySelector('select');
+      return select.options[0]?.textContent === 'Apple';
+    });
+
+    const selected = await page.$eval('pds-select', (el: HTMLElement) => {
+      const select = el.shadowRoot.querySelector('select');
+      return select.value;
+    });
+    expect(selected).toBe('b');
+    expect(changeEvent).toHaveReceivedEventTimes(0);
+  });
+
+  it('goes required-invalid when the selected option is renamed away', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-select component-id="fruit" label="Fruit" value="b" required>
+        <option value="a">Alpha</option>
+        <option value="b">Beta</option>
+      </pds-select>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-select option[value="b"]', (option: HTMLOptionElement) => {
+      option.setAttribute('value', 'b2');
+    });
+    await page.waitForFunction(() => {
+      const select = document.querySelector('pds-select').shadowRoot.querySelector('select');
+      return select.selectedIndex === -1;
+    });
+
+    // `validity`/`validationMessage` live on ElementInternals, not mirrored onto the host element
+    // itself, so `:invalid` (which the UA does apply to a form-associated custom element based on
+    // its internals) is the correct way to observe this from outside.
+    const invalid = await page.$eval('pds-select', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+});
+
 describe('pds-select accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
