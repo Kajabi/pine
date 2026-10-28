@@ -1,16 +1,10 @@
 import { Component, Element, Event, EventEmitter, Host, h, Listen, Prop, State } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
+import { ARIA_REFERENCE_ATTRIBUTES, forwardAriaReferences } from '../../utils/aria-references';
 
 import { caretDown, addCircle } from '@pine-ds/icons/icons';
 
 const FORWARDED_ARIA_ATTRIBUTES = ['aria-current', 'aria-expanded', 'aria-haspopup', 'aria-label', 'aria-pressed'];
-
-// ID references can't cross the shadow boundary, so these are forwarded as element references.
-const FORWARDED_ARIA_REFERENCES = {
-  'aria-controls': 'ariaControlsElements',
-  'aria-describedby': 'ariaDescribedByElements',
-  'aria-labelledby': 'ariaLabelledByElements',
-} as const;
 
 /**
  * @part button - Exposes the underlying button (or anchor) element for styling, including custom size, shape, or surface on icon-only placements (e.g. a compact square or inverse icon button).
@@ -133,7 +127,7 @@ export class PdsButton {
     // Consumers, popovers and menus set these on the host, often after render, but only the inner element is announced.
     this.hostAriaObserver = new MutationObserver(this.syncHostAria);
     this.hostAriaObserver.observe(this.el, {
-      attributeFilter: FORWARDED_ARIA_ATTRIBUTES.concat(Object.keys(FORWARDED_ARIA_REFERENCES)),
+      attributeFilter: FORWARDED_ARIA_ATTRIBUTES.concat(ARIA_REFERENCE_ATTRIBUTES),
     });
   }
 
@@ -145,6 +139,7 @@ export class PdsButton {
   componentDidRender() {
     this.forwardAriaReferences();
   }
+
 
   /**
    * Listen for Enter key presses on form inputs to trigger submit
@@ -217,30 +212,15 @@ export class PdsButton {
     this.forwardAriaReferences();
   };
 
-  // A browser without ARIA element reflection gets none of these; the other forwarded attributes still apply.
   private forwardAriaReferences() {
-    const contentEl = this.contentEl;
-    if (!contentEl) return;
-
-    Object.entries(FORWARDED_ARIA_REFERENCES).forEach(([attribute, property]) => {
-      if (!(property in contentEl)) return;
-
-      const ids = this.el.getAttribute(attribute)?.split(/\s+/).filter(Boolean) ?? [];
-      const referenced = ids.map((id) => this.findInAncestorRoots(id)).filter((el): el is HTMLElement => el !== null);
-      contentEl[property] = referenced.length > 0 ? referenced : null;
-    });
+    if (this.contentEl) forwardAriaReferences(this.el, this.contentEl);
   }
 
-  // A trigger inside another component's shadow root still controls a popover portal on document.body.
-  private findInAncestorRoots(id: string): HTMLElement | null {
-    let root = this.el.getRootNode();
-    while (root instanceof ShadowRoot) {
-      const found = root.getElementById(id);
-      if (found) return found;
-      root = root.host.getRootNode();
-    }
-    return root instanceof Document ? root.getElementById(id) : null;
-  }
+  // A hint added after the button, or replaced by a framework or a DOM morph, is picked up by the
+  // time focus reaches the button and it's announced.
+  private handleFocusIn = () => {
+    this.forwardAriaReferences();
+  };
 
   private handleStartSlotChange = (event: Event) => {
     this.hasStartContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
@@ -406,6 +386,7 @@ export class PdsButton {
         // Binding id to an unset componentId would strip an id the consumer set whenever the button re-renders.
         {...(this.componentId != null ? { id: this.componentId } : {})}
         onClick={this.handleClick}
+        onFocusin={this.handleFocusIn}
         variant={this.variant}
       >
         <ContentElement {...attributes()}>
