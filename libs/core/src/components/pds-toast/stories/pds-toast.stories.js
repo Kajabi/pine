@@ -45,7 +45,7 @@ Default.args = {
 export const Danger = BaseTemplate.bind();
 Danger.args = {
   componentId: 'toast-danger',
-  content: 'An error occurred. Please try again.',
+  content: 'Payment failed. Please try again.',
   dismissible: true,
   duration: 0,
   type: 'danger',

@@ -33,7 +33,7 @@ For accessibility, it is strongly encouraged to follow these best practices:
 
 - Keep toast messages concise and clear.
 - Use appropriate toast types (default, danger, loading) to convey the message importance.
-- A `danger` toast announces "Error" before its message, so the severity isn't conveyed by color alone. Pass a translated `severityLabel` to localize it, or to announce a severity on another type.
+- A `danger` toast announces "Error" before its message, so the severity isn't conveyed by color alone. Pass a translated `severityLabel` to localize it, or to announce a severity on another type. Because the severity is read first, don't start the message with the same word ("Error: payment failed" would be heard as "Error Error: payment failed"); pass `severityLabel=""` to turn the announcement off if the message already says it.
 - The toast's `icon` is decorative and hidden from assistive technology; put anything it means in the message.
 
 ## Properties
@@ -62,10 +62,10 @@ A toast notification indicating an error or critical message.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsToast componentId="toast-danger" duration={0} type="danger">An error occurred</PdsToast>',
-    webComponent: '<pds-toast component-id="toast-danger" duration="0" type="danger">An error occurred</pds-toast>'
+    react: '<PdsToast componentId="toast-danger" duration={0} type="danger">Payment failed</PdsToast>',
+    webComponent: '<pds-toast component-id="toast-danger" duration="0" type="danger">Payment failed</pds-toast>'
 }}>
-  <pds-toast component-id="toast-danger" duration="0" type="danger">An error occurred</pds-toast>
+  <pds-toast component-id="toast-danger" duration="0" type="danger">Payment failed</pds-toast>
 </DocCanvas>
 
 ### Loading
