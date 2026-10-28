@@ -181,8 +181,8 @@ export const withActionButton = (args) => html`<pds-textarea
   value="${args.value}"
   data-tooltip-id="foo"
   title="bar">
-  <pds-button slot="action" variant="unstyled" aria-label="Help">
-    <pds-icon name="question-circle"></pds-icon>
+  <pds-button slot="action" variant="unstyled" aria-label="Help with description">
+    <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
   </pds-button>
 </pds-textarea>`;
 
