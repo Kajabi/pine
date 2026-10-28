@@ -1,5 +1,14 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
 
+// What each variant announces when `severityLabel` isn't set. The `default`
+// variant has no severity.
+const SEVERITY_LABELS: Partial<Record<'default' | 'danger' | 'info' | 'success' | 'warning', string>> = {
+  danger: 'Error',
+  info: 'Info',
+  success: 'Success',
+  warning: 'Warning',
+};
+
 /**
  * @slot actions - Slot for alert actions.
  * @part dismiss
@@ -118,14 +127,7 @@ export class PdsAlert {
   }
 
   private severityText(): string | undefined {
-    const defaults: Partial<Record<typeof this.variant, string>> = {
-      danger: 'Error',
-      info: 'Info',
-      success: 'Success',
-      warning: 'Warning',
-    };
-
-    return this.severityLabel ?? defaults[this.variant];
+    return this.severityLabel ?? SEVERITY_LABELS[this.variant];
   }
 
   render() {
