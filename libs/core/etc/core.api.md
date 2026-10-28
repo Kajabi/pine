@@ -91,7 +91,7 @@ export namespace Components {
     export interface PdsAvatar {
         "alt"?: string | null;
         "badge"?: boolean;
-        "badgeLabel": string;
+        "badgeLabel"?: string;
         "componentId": string;
         "dropdown"?: boolean;
         "image"?: string | null;
@@ -427,6 +427,7 @@ export namespace Components {
         "disabled": boolean;
         "download"?: string;
         "external": boolean;
+        "externalLabel"?: string;
         "href": string | undefined;
         "informational": boolean;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -494,7 +495,7 @@ export namespace Components {
         "download"?: string;
         // @deprecated
         "external": boolean;
-        "externalLabel": string;
+        "externalLabel"?: string;
         "fontSize": 'sm' | 'md' | 'lg';
         "href": string;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -2058,6 +2059,7 @@ export namespace LocalJSX {
         "disabled"?: boolean;
         "download"?: string;
         "external"?: boolean;
+        "externalLabel"?: string;
         "href"?: string | undefined;
         "informational"?: boolean;
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
@@ -2076,6 +2078,8 @@ export namespace LocalJSX {
         "download": string;
         // (undocumented)
         "external": boolean;
+        // (undocumented)
+        "externalLabel": string;
         // (undocumented)
         "href": string | undefined;
         // (undocumented)

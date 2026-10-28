@@ -61,6 +61,14 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop({ reflect: true }) external: boolean = false;
 
   /**
+   * Accessible label for the external-link icon, passed to the inner
+   * `pds-link`. Pass a translated string to localize it; defaults to English.
+   * Pass an empty string to make the icon decorative.
+   * @defaultValue '(opens in a new tab)'
+   */
+  @Prop() externalLabel?: string;
+
+  /**
    * Specifies where to open the linked document when href is provided.
    * Takes precedence over the `external` prop if both are set.
    * Only applies when href is set. Ignored when `informational` is set.
@@ -146,6 +154,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
           download={this.download}
           href={this.disabled ? null : this.href}
           external={this.external}
+          externalLabel={this.externalLabel}
           target={this.target}
           class={{
             'pds-dropdown-menu-item__content': true,

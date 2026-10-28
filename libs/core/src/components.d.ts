@@ -139,7 +139,7 @@ export namespace Components {
           * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Pass an empty string to make the badge decorative. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
           * @defaultValue 'Verified'
          */
-        "badgeLabel": string;
+        "badgeLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -1550,6 +1550,11 @@ export namespace Components {
          */
         "external": boolean;
         /**
+          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
           * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href": string | undefined;
@@ -1778,7 +1783,7 @@ export namespace Components {
           * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
-        "externalLabel": string;
+        "externalLabel"?: string;
         /**
           * The font size of the link's text.
           * @defaultValue lg
@@ -5450,6 +5455,11 @@ declare namespace LocalJSX {
          */
         "external"?: boolean;
         /**
+          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
           * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href"?: string | undefined;
@@ -7321,6 +7331,7 @@ declare namespace LocalJSX {
         "href": string | undefined;
         "informational": boolean;
         "external": boolean;
+        "externalLabel": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
     }
     interface PdsDropdownMenuSeparatorAttributes {
