@@ -684,31 +684,6 @@ describe('pds-tooltip', () => {
       expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
     });
 
-    it('ignores Stencil marking slotted content hydrated', async () => {
-      const page = await openTooltip();
-      const status = slottedStatus(page);
-
-      status.classList.add('hydrated');
-      observerCallback?.([{ type: 'attributes', attributeName: 'class', oldValue: 'status', target: status }]);
-
-      expect(frames.size).toBe(0);
-    });
-
-    it('re-copies when a hydration change arrives with a real one', async () => {
-      const page = await openTooltip();
-      const status = slottedStatus(page);
-      status.classList.add('hydrated');
-
-      observerCallback?.([
-        { type: 'attributes', attributeName: 'class', oldValue: 'status', target: status },
-        loaded(page),
-      ]);
-      runFrames();
-      await page.waitForChanges();
-
-      expect(portalStatus(page)?.textContent).toBe('Loaded');
-    });
-
     it('stops watching when the tooltip closes', async () => {
       const page = await openTooltip();
 

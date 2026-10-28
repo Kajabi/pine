@@ -8,15 +8,6 @@ import {
   shift,
 } from '@floating-ui/dom';
 
-const withoutHydrated = (classes: string | null) =>
-  (classes ?? '').split(/\s+/).filter(name => name !== '' && name !== 'hydrated').sort().join(' ');
-
-// A class change that only adds or removes Stencil's `hydrated` marker.
-const isHydrationOnly = (mutation: MutationRecord) =>
-  mutation.type === 'attributes' &&
-  mutation.attributeName === 'class' &&
-  withoutHydrated(mutation.oldValue) === withoutHydrated((mutation.target as Element).getAttribute('class'));
-
 /**
  * @slot (default) - The tooltip's target element
  * @slot content - HTML content for the tooltip
@@ -390,30 +381,14 @@ export class PdsTooltip {
    */
   private copySlottedContent(): HTMLElement {
     const copy = document.createElement('div');
-    const slottedContentContainer = this.contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
-    let hasSlottedContent = false;
+    const slottedContentContainer = this.contentSlotWrapper?.querySelector('[slot="content"]');
+    const meaningfulNodes = Array.from(slottedContentContainer?.childNodes ?? []).filter(node =>
+      node.nodeType === Node.ELEMENT_NODE ||
+      (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')
+    );
+    meaningfulNodes.forEach(node => copy.appendChild(node.cloneNode(true)));
 
-    if (slottedContentContainer !== null) {
-      const childrenToClone = Array.from(slottedContentContainer.childNodes);
-
-      if (childrenToClone.length > 0) {
-        const hasMeaningfulNode = childrenToClone.some(node =>
-          node.nodeType === Node.ELEMENT_NODE ||
-          (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')
-        );
-
-        if (hasMeaningfulNode) {
-          hasSlottedContent = true;
-          childrenToClone.forEach((node /*, index*/) => {
-            if (node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')) {
-              copy.appendChild(node.cloneNode(true));
-            }
-          });
-        }
-      }
-    }
-
-    if (!hasSlottedContent && typeof this.content === 'string' && this.content.trim() !== '') {
+    if (meaningfulNodes.length === 0 && typeof this.content === 'string' && this.content.trim() !== '') {
       copy.textContent = this.content;
     }
 
@@ -437,15 +412,12 @@ export class PdsTooltip {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeOldValue: true,
       characterData: true,
     });
   }
 
-  // Stencil marking a slotted component `hydrated` isn't a content change; skipping it here saves
-  // building a throwaway copy on every component that hydrates.
-  private scheduleContentSync = (mutations: MutationRecord[]) => {
-    if (this.contentSyncFrame !== null || mutations.every(isHydrationOnly)) return;
+  private scheduleContentSync = () => {
+    if (this.contentSyncFrame !== null) return;
 
     this.contentSyncFrame = requestAnimationFrame(() => {
       this.contentSyncFrame = null;
