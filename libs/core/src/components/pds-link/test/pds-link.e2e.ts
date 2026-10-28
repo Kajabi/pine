@@ -54,7 +54,7 @@ describe('pds-link external label', () => {
     await page.setContent('<pds-link href="https://example.com" external>Docs</pds-link>');
 
     const tree = await page.accessibility.snapshot();
-    expect(linkNames(tree)).toEqual(['Docs opens in a new tab']);
+    expect(linkNames(tree)).toEqual(['Docs (opens in a new tab)']);
   });
 
   it('has no axe violations on an external link', async () => {

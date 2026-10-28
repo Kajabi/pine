@@ -78,7 +78,7 @@ The `plain` variant displays a standard plain hyperlink without an underline.
 
 ### External
 
-An `external` link is styled with an icon to indicate that it will redirect users to an external website or resource in a new tab. Screen readers hear "opens in a new tab" after the link text; pass a translated `externalLabel` to localize it.
+An `external` link is styled with an icon to indicate that it will redirect users to an external website or resource in a new tab. Screen readers hear "(opens in a new tab)" after the link text; pass a translated `externalLabel` to localize it, or an empty string to leave it out. The icon only appears with `external`, so a link that sets only `target="_blank"` announces nothing extra.
 
 <DocCanvas
   mdxSource={{
