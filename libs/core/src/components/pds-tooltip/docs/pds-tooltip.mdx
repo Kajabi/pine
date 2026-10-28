@@ -77,9 +77,13 @@ Tooltip content may contain HTML elements. In these cases,
 enable the `htmlContent` property and provide your element in the `content` slot.
 
 The open tooltip shows a copy of the slotted content, and keeps it in step: content that loads or
-re-renders while the tooltip is open (a frame that finishes loading, a framework re-render) appears
-without reopening it. Each change re-copies the whole content, so an iframe or media element inside
-it reloads.
+re-renders while the tooltip is open (a Turbo Frame that finishes loading, a framework re-render)
+appears without reopening it.
+
+- Screen readers announce updated content while the tooltip is open, so avoid content that changes
+  continuously (timers, progress).
+- Avoid iframes or media in tooltip content: they reload when the content changes.
+- Don't rely on `id`s inside tooltip content. The tooltip shows a copy, so an `id` appears twice.
 
 <DocCanvas
   mdxSource={{
