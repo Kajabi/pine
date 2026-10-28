@@ -30,8 +30,9 @@ export class PdsAvatar {
 
   /**
    * Accessible label for the badge icon. Pass a translated string to localize
-   * it; defaults to English. Has no effect on dropdown avatars, where the
-   * trigger's `triggerLabel` owns the accessible name.
+   * it; defaults to English. Pass an empty string to make the badge
+   * decorative. Has no effect on dropdown avatars, where the trigger's
+   * `triggerLabel` owns the accessible name.
    * @defaultValue 'Verified'
    */
   @Prop() badgeLabel = 'Verified';
@@ -163,7 +164,13 @@ export class PdsAvatar {
     )
   };
 
-  private renderBadge = () => (
+  private renderBadge = () => {
+    // Inside the dropdown trigger the button's aria-label is the name, so the
+    // badge is decorative there, as the status dot is. An empty label is
+    // decorative too, rather than an image with no name.
+    const label = this.dropdown ? undefined : (this.badgeLabel || undefined);
+
+    return (
     // `badge` and `status` share the bottom-end corner; `status` wins so the
     // presence dot is never painted over the badge.
     this.badge && !this.status
@@ -175,12 +182,11 @@ export class PdsAvatar {
         class="pds-avatar__badge"
         icon={checkCircleFilled}
         size="33.53%"
-        // Inside the dropdown trigger the button's aria-label is the name, so
-        // the badge is decorative there, as the status dot is.
-        aria-label={this.dropdown ? undefined : this.badgeLabel}
-        aria-hidden={this.dropdown ? 'true' : undefined}
+        aria-label={label}
+        aria-hidden={label === undefined ? 'true' : undefined}
       ></pds-icon>
-  );
+    );
+  };
 
   private renderStatus = () => {
     if (!this.status) return null;

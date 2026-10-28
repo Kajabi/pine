@@ -367,6 +367,16 @@ describe('pds-avatar', () => {
       expect(page.root.shadowRoot.querySelector('.pds-avatar__badge').getAttribute('aria-label')).toBe('Vérifié');
     });
 
+    it('makes the badge decorative when badge-label is empty', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar badge="true" badge-label=""></pds-avatar>`,
+      });
+      const badge = page.root.shadowRoot.querySelector('.pds-avatar__badge');
+      expect(badge.getAttribute('aria-hidden')).toBe('true');
+      expect(badge.hasAttribute('aria-label')).toBe(false);
+    });
+
     it('hides the badge inside a dropdown trigger, whose label owns the name', async () => {
       const page = await newSpecPage({
         components: [PdsAvatar],
