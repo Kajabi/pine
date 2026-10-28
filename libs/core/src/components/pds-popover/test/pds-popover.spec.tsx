@@ -676,6 +676,88 @@ describe('pds-popover', () => {
       expect(stops[0]).toHaveBeenCalledTimes(1);
       expect(stops[1]).not.toHaveBeenCalled();
     });
+
+    it('starts autoUpdate again on a trigger swapped in while open', async () => {
+      const stops: jest.Mock[] = [];
+      const autoUpdate = jest.spyOn(floatingUI, 'autoUpdate').mockImplementation(() => {
+        const stop = jest.fn();
+        stops.push(stop);
+        return stop;
+      });
+      const { page, instance, portal } = await setUp();
+      await instance.show();
+
+      const next = page.doc.createElement('button');
+      next.setAttribute('slot', 'trigger');
+      page.root!.insertBefore(next, instance.triggerEl);
+      instance.triggerEl.remove();
+      const slotChange = new Event('slotchange');
+      Object.defineProperty(slotChange, 'target', { value: page.root!.shadowRoot!.querySelector('slot[name="trigger"]') });
+      instance.handleTriggerSlotChange(slotChange);
+
+      expect(autoUpdate).toHaveBeenLastCalledWith(next, portal, expect.any(Function));
+      expect(stops[0]).toHaveBeenCalledTimes(1);
+      expect(stops[stops.length - 1]).not.toHaveBeenCalled();
+    });
+
+    it('drops a position that resolves after the trigger has lost its size', async () => {
+      let resolve: (value: unknown) => void = () => undefined;
+      jest.spyOn(floatingUI, 'computePosition').mockReturnValue(new Promise(r => (resolve = r)));
+      const { instance, portal } = await setUp();
+      instance.active = true;
+
+      const first = instance.handlePopoverPositioning();
+      (instance.triggerEl.getBoundingClientRect as jest.Mock).mockReturnValue({ top: 0, left: 0, width: 0, height: 0, right: 0, bottom: 0 });
+      await instance.handlePopoverPositioning();
+      resolve({ x: 40, y: 60, placement: 'top-start' });
+      await first;
+
+      expect(positionedAt(portal)).toEqual({ top: '', left: '', side: null });
+    });
+
+    it('warns instead of rejecting when positioning fails, and still emits pdsPopoverOpen', async () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const error = new Error('detached');
+      jest.spyOn(floatingUI, 'computePosition').mockRejectedValue(error);
+      const { page, instance, portal } = await setUp();
+      const opened = jest.fn();
+      page.root!.addEventListener('pdsPopoverOpen', opened);
+
+      await instance.show();
+
+      expect(warn).toHaveBeenCalledWith('pds-popover: failed to position the panel', error);
+      expect(opened).toHaveBeenCalledTimes(1);
+      expect(positionedAt(portal)).toEqual({ top: '', left: '', side: null });
+    });
+
+    it('emits pdsPopoverOpen once the panel has its side, and clears the side when it closes', async () => {
+      jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 40, y: 60, placement: 'top-start' });
+      const { page, instance, portal } = await setUp();
+      const sidesOnOpen: Array<string | null> = [];
+      page.root!.addEventListener('pdsPopoverOpen', () => sidesOnOpen.push(portal.getAttribute('data-pds-popover-placement')));
+
+      await instance.show();
+      expect(sidesOnOpen).toEqual(['top-start']);
+
+      await instance.hide();
+      expect(portal.hasAttribute('data-pds-popover-placement')).toBe(false);
+    });
+
+    it('emits pdsPopoverOpen before pdsPopoverClose when closed before its first position resolves', async () => {
+      let resolve: (value: unknown) => void = () => undefined;
+      jest.spyOn(floatingUI, 'computePosition').mockReturnValue(new Promise(r => (resolve = r)));
+      const { page, instance } = await setUp();
+      const events: string[] = [];
+      page.root!.addEventListener('pdsPopoverOpen', () => events.push('open'));
+      page.root!.addEventListener('pdsPopoverClose', () => events.push('close'));
+
+      const showing = instance.show();
+      await instance.hide();
+      resolve({ x: 40, y: 60, placement: 'bottom-start' });
+      await showing;
+
+      expect(events).toEqual(['open', 'close']);
+    });
   });
 
   describe('Portal Creation', () => {
@@ -1058,7 +1140,7 @@ describe('pds-popover', () => {
         page.root!.addEventListener('pdsPopoverOpen', opened);
         page.root!.addEventListener('pdsPopoverClose', closed);
 
-        instance.show();
+        await instance.show();
         expect(opened).toHaveBeenCalledTimes(1);
         expect(opened.mock.calls[0][0].detail).toStrictEqual({ componentId: 'hover-popover', popoverType: 'auto' });
 

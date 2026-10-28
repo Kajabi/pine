@@ -1554,6 +1554,40 @@ describe('pds-popover near the edge of the viewport', () => {
     expect({ side: above.side, endOffset: above.endOffset }).toEqual({ side: 'top-start', endOffset: 0 });
   });
 
+  it('follows a trigger swapped in while open as it changes size', async () => {
+    const page = await setUp(popoverAt('top: 100px; left: 100px;', 'placement="bottom-end"'));
+    await open(page);
+
+    await page.evaluate(() => {
+      const next = document.createElement('button');
+      next.slot = 'trigger';
+      next.id = 'pop-trigger';
+      next.textContent = 'Open';
+      document.getElementById('pop-trigger')!.replaceWith(next);
+    });
+    await settle(page);
+    await page.$eval('#pop-trigger', (el: HTMLElement) => (el.style.width = '300px'));
+    await settle(page);
+
+    const { side, gapBelow, endOffset } = await layout(page);
+    expect({ side, gapBelow, endOffset }).toEqual({ side: 'bottom-end', gapBelow: 8, endOffset: 0 });
+  });
+
+  it('has the side it took on its portal when pdsPopoverOpen fires, and drops it on close', async () => {
+    const page = await setUp(popoverAt('top: 540px; left: 100px;'));
+    await page.$eval('pds-popover', (el) =>
+      el.addEventListener('pdsPopoverOpen', () => {
+        (window as unknown as { sideOnOpen: string | null }).sideOnOpen = document.getElementById('pop-portal')!.getAttribute('data-pds-popover-placement');
+      }),
+    );
+
+    await open(page);
+    expect(await page.evaluate(() => (window as unknown as { sideOnOpen: string | null }).sideOnOpen)).toBe('top-start');
+
+    await close(page);
+    expect(await page.$eval('#pop-portal', (el) => el.getAttribute('data-pds-popover-placement'))).toBeNull();
+  });
+
   it('has no axe violations while flipped', async () => {
     const page = await setUp(popoverAt('top: 540px; left: 100px;'));
     await open(page);
