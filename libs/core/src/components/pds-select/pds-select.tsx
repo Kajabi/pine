@@ -18,6 +18,8 @@ export class PdsSelect {
   private slotContainer!: HTMLDivElement;
   private internals?: ElementInternals;
   private _type: 'select-one' | 'select-multiple' = 'select-one';
+  private optionObserver: MutationObserver | null = null;
+  private optionSyncFrame: number | null = null;
 
   @Element() el: HTMLPdsSelectElement;
   private hostKeeper = new HostStylingKeeper();
@@ -145,10 +147,14 @@ export class PdsSelect {
 
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+
+    // Reconnected after a move: componentDidLoad won't run again.
+    if (this.selectEl !== undefined) this.startOptionSync();
   }
 
   disconnectedCallback() {
     this.hostKeeper.disconnect();
+    this.stopOptionSync();
   }
 
   componentWillLoad() {
@@ -160,6 +166,42 @@ export class PdsSelect {
   componentDidLoad() {
     // Set initial form value
     this.updateFormValue();
+    this.startOptionSync();
+  }
+
+  /**
+   * Keeps the inner select in step with the slotted options. `slotchange` only fires when
+   * top-level options are added or removed, so an option's text, value or disabled state
+   * changing, or an option added inside an optgroup, would otherwise never reach the select.
+   * Changes are batched into one copy per animation frame.
+   */
+  private startOptionSync() {
+    if (this.optionObserver !== null || typeof MutationObserver === 'undefined') return;
+
+    this.optionObserver = new MutationObserver((mutations) => {
+      // The host's own attributes (its classes, aria-disabled) aren't options.
+      if (mutations.every((mutation) => mutation.type === 'attributes' && mutation.target === this.el)) return;
+      this.scheduleOptionSync();
+    });
+    this.optionObserver.observe(this.el, { childList: true, subtree: true, attributes: true, characterData: true });
+  }
+
+  private scheduleOptionSync() {
+    if (this.optionSyncFrame !== null) return;
+
+    this.optionSyncFrame = requestAnimationFrame(() => {
+      this.optionSyncFrame = null;
+      this.handleSlotChange();
+    });
+  }
+
+  private stopOptionSync() {
+    this.optionObserver?.disconnect();
+    this.optionObserver = null;
+    if (this.optionSyncFrame !== null) {
+      cancelAnimationFrame(this.optionSyncFrame);
+      this.optionSyncFrame = null;
+    }
   }
 
   /**
@@ -219,25 +261,29 @@ export class PdsSelect {
   };
 
   /**
-   * Handles the change event for the slot element.
-   * This method is triggered when the slot content changes.
-   * It updates the inner HTML of the select element by cloning and appending
-   * the assigned <option> elements from the slot.
+   * Copies the slotted <option> and <optgroup> elements into the inner select, then
+   * reselects the current value. Runs on `slotchange` and when a slotted option changes
+   * (see startOptionSync). Skips the swap when the copies match what the select already
+   * holds, so a change elsewhere in the host doesn't rebuild the options. Selecting
+   * programmatically fires no change event, so a copy never emits `pdsSelectChange`.
    */
   private handleSlotChange = () => {
-    const slot = this.slotContainer.querySelector('slot') as HTMLSlotElement;
+    const slot = this.slotContainer?.querySelector('slot') as HTMLSlotElement | null;
+    if (slot === null || slot === undefined || this.selectEl === undefined) return;
+
+    const copies = (slot.assignedElements({ flatten: true }) as Element[])
+      .filter((item) => ['OPTION', 'OPTGROUP'].includes(item.tagName))
+      .map((item) => item.cloneNode(true) as HTMLOptionElement | HTMLOptGroupElement);
+
+    const markup = (items: Element[]) => items.map((item) => item.outerHTML).join('');
+    if (markup(copies) === markup(Array.from(this.selectEl.children))) return;
 
     this.selectEl.innerHTML = '';
-    const assignedElements = slot.assignedElements({ flatten: true }) as (HTMLOptionElement | HTMLOptGroupElement)[];
-
-    assignedElements.forEach((item) => {
-      if ( ['OPTION', 'OPTGROUP'].includes(item.tagName)) {
-        const clonedItem = item.cloneNode(true) as HTMLOptionElement | HTMLOptGroupElement;
-        if (clonedItem.tagName === 'OPTION' && (clonedItem as HTMLOptionElement).value === this.value) {
-          (clonedItem as HTMLOptionElement).selected = true;
-        }
-        this.selectEl.appendChild(clonedItem);
+    copies.forEach((clonedItem) => {
+      if (clonedItem.tagName === 'OPTION' && (clonedItem as HTMLOptionElement).value === this.value) {
+        (clonedItem as HTMLOptionElement).selected = true;
       }
+      this.selectEl.appendChild(clonedItem);
     });
 
     this.updateSelectedOption();
