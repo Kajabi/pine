@@ -301,3 +301,16 @@ describe('pds-toast accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+describe('pds-toast severity', () => {
+  const text = (node) => [node.name, ...(node.children ?? []).flatMap(text)].filter(Boolean).join(' ');
+
+  it('announces Error before a danger message, and not the icon name', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-toast type="danger" icon="warning-filled" duration="0">Upload failed</pds-toast>');
+
+    const spoken = text(await page.accessibility.snapshot());
+    expect(spoken).toMatch(/Error.*Upload failed/);
+    expect(spoken).not.toMatch(/warning filled/);
+  });
+});

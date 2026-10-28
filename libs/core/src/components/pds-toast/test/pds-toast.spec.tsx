@@ -32,7 +32,7 @@ describe('pds-toast', () => {
       <pds-toast component-id="test-toast" icon="info">
         <mock:shadow-root>
           <div aria-live="polite" class="pds-toast" role="alert">
-            <pds-icon class="pds-toast__icon" name="info"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-toast__icon" name="info"></pds-icon>
             <span class="pds-toast__message">
               <slot></slot>
             </span>
@@ -80,6 +80,7 @@ describe('pds-toast', () => {
       <pds-toast component-id="test-toast" type="danger">
         <mock:shadow-root>
           <div aria-live="polite" class="pds-toast pds-toast--danger" role="alert">
+            <span class="visually-hidden">Error</span>
             <span class="pds-toast__message">
               <slot></slot>
             </span>
@@ -336,6 +337,44 @@ describe('pds-toast', () => {
         html: `<pds-toast component-id="test-toast" dismiss-label="Descartar mensaje"></pds-toast>`,
       });
       expect(dismissLabelOf(page)).toBe('Descartar mensaje');
+    });
+  });
+
+  describe('severity label', () => {
+    const severityOf = (page) => page.root.shadowRoot.querySelector('.visually-hidden')?.textContent;
+
+    it('announces Error for the danger type by default', async () => {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast type="danger">Upload failed</pds-toast>`,
+      });
+      expect(severityOf(page)).toBe('Error');
+    });
+
+    it('announces nothing for the default type', async () => {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast>Saved</pds-toast>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.visually-hidden')).toBeNull();
+    });
+
+    it('uses a custom severity-label in place of the default', async () => {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast type="danger" severity-label="Erreur">Échec</pds-toast>`,
+      });
+      expect(severityOf(page)).toBe('Erreur');
+    });
+
+    it('keeps the severity inside the alert region, before the message', async () => {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast type="danger">Upload failed</pds-toast>`,
+      });
+      const region = page.root.shadowRoot.querySelector('[role="alert"]');
+      const severity = region.querySelector('.visually-hidden');
+      expect(severity.nextElementSibling.classList.contains('pds-toast__message')).toBe(true);
     });
   });
 });
