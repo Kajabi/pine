@@ -906,6 +906,126 @@ describe('pds-popover accessibility', () => {
   });
 });
 
+// The panel sits at the end of the body, but Tab reaches it as if it came right after the trigger.
+describe('pds-popover Tab order', () => {
+  type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+  const BUTTONS = '<button id="first">First</button><button id="last">Last</button>';
+
+  const setUp = async ({ content = BUTTONS, after = '<button id="after">After</button>', trigger = '' } = {}) => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <button id="before">Before</button>
+      <pds-popover component-id="pop">
+        ${trigger || '<button slot="trigger" id="trigger">Open</button>'}
+        <div>${content}</div>
+      </pds-popover>
+      ${after}
+    `);
+    return page;
+  };
+
+  const open = async (page: Page) => {
+    await page.focus('#trigger');
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+  };
+
+  const focusedId = (page: Page) => page.evaluate(() => document.activeElement?.id || document.activeElement?.localName);
+
+  const press = async (page: Page, keys: Array<'Tab' | 'Shift+Tab'>) => {
+    const order: string[] = [];
+    for (const key of keys) {
+      if (key === 'Shift+Tab') await page.keyboard.down('Shift');
+      await page.keyboard.press('Tab');
+      if (key === 'Shift+Tab') await page.keyboard.up('Shift');
+      order.push(await focusedId(page));
+    }
+    return order;
+  };
+
+  it('goes from the trigger through the open panel to what follows the popover', async () => {
+    const page = await setUp();
+    await open(page);
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['first', 'last', 'after']);
+  });
+
+  it('goes back through the open panel to the trigger on Shift+Tab', async () => {
+    const page = await setUp();
+    await open(page);
+    await page.focus('#after');
+    expect(await press(page, ['Shift+Tab', 'Shift+Tab', 'Shift+Tab'])).toEqual(['last', 'first', 'trigger']);
+  });
+
+  it('skips the panel once it closes', async () => {
+    const page = await setUp();
+    await open(page);
+    expect(await press(page, ['Tab'])).toEqual(['first']);
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'none');
+    expect(await focusedId(page)).toBe('trigger');
+    expect(await press(page, ['Tab'])).toEqual(['after']);
+  });
+
+  it('skips an open panel with nothing to focus', async () => {
+    const page = await setUp({ content: '<p>Details</p>' });
+    await open(page);
+    expect(await press(page, ['Tab', 'Shift+Tab'])).toEqual(['after', 'trigger']);
+  });
+
+  it('reaches content added to the panel after it opens', async () => {
+    const page = await setUp({ content: '<p id="loading">Loading</p>' });
+    await open(page);
+    await page.evaluate(() => {
+      const late = document.createElement('button');
+      late.id = 'late';
+      document.getElementById('loading')!.replaceWith(late);
+    });
+    expect(await press(page, ['Tab', 'Tab'])).toEqual(['late', 'after']);
+  });
+
+  it("doesn't come back to the panel when nothing focusable follows the popover", async () => {
+    const page = await setUp({ after: '<p>Nothing to focus</p>' });
+    await open(page);
+    expect(await press(page, ['Tab', 'Tab'])).toEqual(['first', 'last']);
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.getElementById('pop-portal')!.contains(document.activeElement))).toBe(false);
+  });
+
+  it('goes into the panel from a pds-button trigger and back to it', async () => {
+    const page = await setUp({ trigger: '<pds-button slot="trigger" id="trigger">Open</pds-button>' });
+    await open(page);
+    expect(await press(page, ['Tab', 'Shift+Tab'])).toEqual(['first', 'trigger']);
+  });
+
+  it('goes through a panel placed at the end of a dialog', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <dialog id="dialog">
+        <form>
+          <pds-popover component-id="pop">
+            <button type="button" slot="trigger" id="trigger">Open</button>
+            <div>${BUTTONS}</div>
+          </pds-popover>
+          <button type="button" id="after">After</button>
+        </form>
+      </dialog>
+    `);
+    await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).showModal());
+    await open(page);
+    expect(await page.evaluate(() => document.getElementById('pop-portal')!.parentElement?.id)).toBe('dialog');
+
+    expect(await press(page, ['Tab', 'Tab', 'Tab', 'Shift+Tab'])).toEqual(['first', 'last', 'after', 'last']);
+  });
+
+  it('has no axe violations with focus in the panel', async () => {
+    const page = await setUp();
+    await open(page);
+    await page.keyboard.press('Tab');
+    expect(formatViolations(await runAxe(page))).toBe('');
+  });
+});
+
 // A script that keeps removing what the popover puts back would keep both running forever in
 // microtasks; the popover gives up after a few rounds instead of hanging the page.
 describe('pds-popover with a script fighting its trigger ARIA', () => {
@@ -1596,7 +1716,7 @@ describe('pds-popover open-on hover', () => {
   });
 
   // Like a clicked-open panel, a hover-opened one sits at the end of the body outside a dialog,
-  // and right after the popover inside one.
+  // and right after the popover inside one. Either way, Tab reaches it right after the trigger.
   describe('Tab from the trigger', () => {
     const tabOrder = async (page: Page, open: () => Promise<void>) => {
       await page.focus('#hover-trigger');
@@ -1621,7 +1741,7 @@ describe('pds-popover open-on hover', () => {
         await waitUntilShown(clickPage, true);
       });
 
-      expect(hovered).toEqual({ order: ['elsewhere', 'hover-inside'], shown: true });
+      expect(hovered).toEqual({ order: ['hover-inside', 'elsewhere'], shown: true });
       expect(clicked).toEqual(hovered);
     });
 
@@ -1640,6 +1760,22 @@ describe('pds-popover open-on hover', () => {
       await page.evaluate(() => (document.getElementById('dialog') as HTMLDialogElement).showModal());
 
       expect(await tabOrder(page, () => hoverOpen(page))).toEqual({ order: ['hover-inside', 'elsewhere'], shown: true });
+    });
+
+    it('closes once Tab leaves the panel after the pointer has', async () => {
+      const page = await setUp();
+      await page.focus('#hover-trigger');
+      await hoverOpen(page);
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('hover-inside');
+
+      await moveTo(page, 'elsewhere');
+      await pause(400);
+      expect(await isShown(page)).toBe(true);
+
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('elsewhere');
+      await waitUntilShown(page, false);
     });
   });
 });
