@@ -55,6 +55,16 @@ export class PdsAlert {
   @Prop() dismissLabel = 'Dismiss alert';
 
   /**
+   * Accessible label announcing the alert's severity, read before the heading
+   * and message. Pass a translated string to localize it; defaults to English
+   * for each variant (`Error`, `Info`, `Success`, `Warning`). The `default`
+   * variant has no severity and announces none unless this is set; pass an
+   * empty string to announce none for any variant.
+   * @defaultValue undefined
+   */
+  @Prop() severityLabel?: string;
+
+  /**
    * Event emitted when the dismiss button is clicked.
    */
   @Event() pdsAlertDismissClick: EventEmitter<void>;
@@ -107,7 +117,19 @@ export class PdsAlert {
     );
   }
 
+  private severityText(): string | undefined {
+    const defaults: Partial<Record<typeof this.variant, string>> = {
+      danger: 'Error',
+      info: 'Info',
+      success: 'Success',
+      warning: 'Warning',
+    };
+
+    return this.severityLabel ?? defaults[this.variant];
+  }
+
   render() {
+    const severity = this.severityText();
     const iconMap = {
       danger: 'warning-filled',
       default: 'info-circle-filled',
@@ -130,12 +152,16 @@ export class PdsAlert {
           display="block"
         >
           <pds-box gap="sm" display="flex" align-items={this.small ? "center" : undefined}>
+            {/* Text rather than an icon label, so severity is still announced
+                when the icon is hidden and color is the only visual cue. */}
+            {severity && <span class="visually-hidden">{severity}</span>}
             {!this.hideIcon && (
               <pds-icon
                 class={`pds-alert__icon ${this.small ? 'pds-alert__icon--small' : ''}`}
                 color="var(--pds-alert-color-icon)"
                 icon={iconName}
                 size="var(--pds-alert-icon-size)"
+                aria-hidden="true"
               />
             )}
             <pds-box class="pds-alert__content-wrapper" direction="column" gap="xs" flex="grow">
