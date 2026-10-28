@@ -125,7 +125,6 @@ export class PdsTooltip {
 
   disconnectedCallback() {
     window.removeEventListener('pageshow', this.handlePageShow);
-    this.stopContentSync();
     // Ensure global listeners/intervals are removed if still present
     if (this.portalEl !== null) {
       this.removePortal();
@@ -340,7 +339,7 @@ export class PdsTooltip {
     this.contentDiv.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
     this.contentDiv.setAttribute('aria-live', this.opened ? 'polite' : 'off');
 
-    this.fillPortalContent();
+    this.contentDiv.append(...Array.from(this.copySlottedContent().childNodes));
 
     this.portalEl.appendChild(this.contentDiv);
     document.body.appendChild(this.portalEl);
@@ -378,16 +377,20 @@ export class PdsTooltip {
   }
 
   /**
-   * Copies the slotted content (or the `content` prop's text) into the portal, replacing what it
-   * held. The portal holds copies so the framework that owns the slotted nodes keeps them.
+   * The host's own content slot wrapper. Matched among direct children only, so a nested
+   * pds-tooltip inside the trigger slot isn't mistaken for this one's.
    */
-  private fillPortalContent() {
-    if (this.contentDiv === null) return;
+  private get contentSlotWrapper(): Element | undefined {
+    return Array.from(this.el.children).find((child) => child.matches('.pds-tooltip__content-slot-wrapper'));
+  }
 
-    this.contentDiv.textContent = '';
-
-    const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
-    const slottedContentContainer = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
+  /**
+   * Copies the slotted content (or the `content` prop's text) into a detached container. The
+   * portal holds copies so the framework that owns the slotted nodes keeps them.
+   */
+  private copySlottedContent(): HTMLElement {
+    const copy = document.createElement('div');
+    const slottedContentContainer = this.contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
     let hasSlottedContent = false;
 
     if (slottedContentContainer !== null) {
@@ -403,7 +406,7 @@ export class PdsTooltip {
           hasSlottedContent = true;
           childrenToClone.forEach((node /*, index*/) => {
             if (node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')) {
-              this.contentDiv.appendChild(node.cloneNode(true));
+              copy.appendChild(node.cloneNode(true));
             }
           });
         }
@@ -411,20 +414,23 @@ export class PdsTooltip {
     }
 
     if (!hasSlottedContent && typeof this.content === 'string' && this.content.trim() !== '') {
-      this.contentDiv.textContent = this.content;
+      copy.textContent = this.content;
     }
+
+    return copy;
   }
 
   /**
    * While the tooltip is open, keeps the portal's copy in step with the slotted content at any
-   * depth: content that loads or re-renders after opening (a frame that finishes loading, a
+   * depth: content that loads or re-renders after opening (a Turbo Frame that finishes loading, a
    * framework re-render) shows without reopening. Changes are batched to one re-copy per animation
-   * frame. Only the hidden slot wrapper is observed, so copying into the portal can't trigger
-   * another sync, and Stencil marking a slotted component `hydrated` isn't a content change.
+   * frame, and a re-copy that matches what the portal shows is dropped, so screen readers aren't
+   * re-announced, iframes don't reload and the tooltip isn't repositioned for nothing. Only the
+   * hidden slot wrapper is observed, so copying into the portal can't trigger another sync.
    */
   private startContentSync() {
-    const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
-    if (contentSlotWrapper === null || typeof MutationObserver === 'undefined') return;
+    const contentSlotWrapper = this.contentSlotWrapper;
+    if (contentSlotWrapper === undefined || typeof MutationObserver === 'undefined') return;
 
     this.slotMutationObserver = new MutationObserver(this.scheduleContentSync);
     this.slotMutationObserver.observe(contentSlotWrapper, {
@@ -436,14 +442,20 @@ export class PdsTooltip {
     });
   }
 
+  // Stencil marking a slotted component `hydrated` isn't a content change; skipping it here saves
+  // building a throwaway copy on every component that hydrates.
   private scheduleContentSync = (mutations: MutationRecord[]) => {
     if (this.contentSyncFrame !== null || mutations.every(isHydrationOnly)) return;
 
     this.contentSyncFrame = requestAnimationFrame(() => {
       this.contentSyncFrame = null;
-      if (this.portalEl === null) return;
+      if (this.portalEl === null || this.contentDiv === null) return;
 
-      this.fillPortalContent();
+      const copy = this.copySlottedContent();
+      if (copy.innerHTML === this.contentDiv.innerHTML) return;
+
+      this.contentDiv.textContent = '';
+      this.contentDiv.append(...Array.from(copy.childNodes));
       this.repositionPortal().catch(error => {
         console.warn('Failed to reposition tooltip after a content change:', error);
       });
