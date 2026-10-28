@@ -963,3 +963,276 @@ describe('aria associations', () => {
     expect(describedBy).toBeNull();
   });
 });
+
+describe('option sync', () => {
+  const OPTION_OBSERVER_INIT = { childList: true, subtree: true, attributes: true, characterData: true };
+  const originalMutationObserver = globalThis.MutationObserver;
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+  const originalCancelAnimationFrame = globalThis.cancelAnimationFrame;
+
+  type MockObserver = { callback: MutationCallback; observe: jest.Mock; disconnect: jest.Mock };
+  let observers: MockObserver[];
+  let frames: Map<number, FrameRequestCallback>;
+
+  // The spec DOM's options don't reflect `value` from the attribute; give them a native-like one.
+  const optionProto = Object.getPrototypeOf(document.createElement('option'));
+  const hadOwnValue = Object.prototype.hasOwnProperty.call(optionProto, 'value');
+
+  beforeAll(() => {
+    if (!hadOwnValue) {
+      Object.defineProperty(optionProto, 'value', {
+        configurable: true,
+        get() {
+          return this.getAttribute('value') ?? this.textContent;
+        },
+        set(value: string) {
+          this.setAttribute('value', value);
+        },
+      });
+    }
+  });
+
+  afterAll(() => {
+    if (!hadOwnValue) delete optionProto.value;
+  });
+
+  beforeEach(() => {
+    observers = [];
+    globalThis.MutationObserver = jest.fn((callback: MutationCallback) => {
+      const observer = { callback, observe: jest.fn(), disconnect: jest.fn(), takeRecords: () => [] };
+      observers.push(observer);
+      return observer;
+    }) as unknown as typeof MutationObserver;
+
+    frames = new Map();
+    let nextFrame = 1;
+    globalThis.requestAnimationFrame = jest.fn((callback: FrameRequestCallback) => {
+      const id = nextFrame++;
+      frames.set(id, callback);
+      return id;
+    });
+    globalThis.cancelAnimationFrame = jest.fn((id: number) => {
+      frames.delete(id);
+    });
+  });
+
+  afterEach(() => {
+    globalThis.MutationObserver = originalMutationObserver;
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+    globalThis.cancelAnimationFrame = originalCancelAnimationFrame;
+  });
+
+  const flushFrames = () => {
+    const pending = Array.from(frames.values());
+    frames.clear();
+    pending.forEach((callback) => callback(0));
+  };
+
+  // The latest observer watching the options (the host keeper has its own).
+  const optionObserver = () =>
+    [...observers].reverse().find(({ observe }) =>
+      observe.mock.calls.some(([, init]) => JSON.stringify(init) === JSON.stringify(OPTION_OBSERVER_INIT)),
+    );
+
+  const setup = async (options: string, value = 'b', extraAttributes = '') => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" value="${value}" ${extraAttributes}>${options}</pds-select>`,
+    });
+    const component = page.rootInstance;
+    // The spec DOM's select has no options collection.
+    const select = component.selectEl as HTMLSelectElement;
+    Object.defineProperty(select, 'options', { get: () => select.querySelectorAll('option') });
+    component.handleSlotChange();
+    // componentDidLoad's own catch-up sync is already pending by now; settle it so every test
+    // starts from a clean zero-pending-frames baseline.
+    flushFrames();
+
+    const option = (optionValue: string) => page.root.querySelector(`option[value="${optionValue}"]`);
+    const notify = (target: Node, type: MutationRecordType = 'characterData') =>
+      optionObserver().callback([{ type, target } as MutationRecord], {} as MutationObserver);
+
+    return { page, component, select, option, notify };
+  };
+
+  const OPTIONS = '<option value="a">Alpha</option><option value="b">Beta</option>';
+
+  it('watches the slotted options at any depth', async () => {
+    const { page } = await setup(OPTIONS);
+
+    expect(optionObserver().observe).toHaveBeenCalledWith(page.root, OPTION_OBSERVER_INIT);
+  });
+
+  it('updates an option whose text changed in place', async () => {
+    const { select, option, notify } = await setup(OPTIONS);
+    const before = select.children[0];
+
+    option('a').textContent = 'Apple';
+    notify(option('a'));
+    flushFrames();
+
+    expect(select.children[0]).toBe(before);
+    expect(select.children[0].textContent).toBe('Apple');
+  });
+
+  it('updates an option whose value or disabled state changed in place', async () => {
+    const { select, option, notify } = await setup(OPTIONS);
+    const before = select.children[0];
+
+    const changed = option('a');
+    changed.setAttribute('value', 'a2');
+    changed.setAttribute('disabled', '');
+    notify(changed, 'attributes');
+    flushFrames();
+
+    expect(select.children[0]).toBe(before);
+    expect(select.children[0].getAttribute('value')).toBe('a2');
+    expect(select.children[0].hasAttribute('disabled')).toBe(true);
+  });
+
+  it('rebuilds the options when an option is added inside an optgroup', async () => {
+    const { page, select, notify } = await setup(
+      '<optgroup label="Group"><option value="a">Alpha</option></optgroup><option value="b">Beta</option>',
+    );
+
+    const added = document.createElement('option');
+    added.setAttribute('value', 'c');
+    added.textContent = 'Gamma';
+    const group = page.root.querySelector('optgroup');
+    group.appendChild(added);
+    notify(group, 'childList');
+    flushFrames();
+
+    expect(select.querySelectorAll('optgroup option').length).toBe(2);
+    expect(select.querySelector('optgroup option[value="c"]').textContent).toBe('Gamma');
+  });
+
+  it('keeps the value selected through a copy', async () => {
+    const { select, option, notify } = await setup(OPTIONS);
+
+    option('a').textContent = 'Apple';
+    notify(option('a'));
+    flushFrames();
+
+    expect((select.querySelector('option[value="b"]') as HTMLOptionElement).selected).toBe(true);
+  });
+
+  it('shows no selection, keeps the value and emits nothing when the selected option is renamed', async () => {
+    const { page, component, select, option, notify } = await setup(OPTIONS);
+    const changed = jest.fn();
+    page.root.addEventListener('pdsSelectChange', changed);
+
+    const renamed = option('b');
+    renamed.setAttribute('value', 'b2');
+    notify(renamed, 'attributes');
+    flushFrames();
+
+    expect(select.selectedIndex).toBe(-1);
+    expect(component.value).toBe('b');
+    expect(changed).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the first option on the first copy when the value matches nothing, like a native select', async () => {
+    const { select } = await setup(OPTIONS, 'nope');
+
+    expect(select.selectedIndex).not.toBe(-1);
+  });
+
+  // An async reload (`{loading ? null : options}`) can leave the select briefly empty between the
+  // old options and the new ones. That emptiness must not look like the very first copy again: the
+  // first copy's own "hadOptions" check used the select's current emptiness, which this reload
+  // revisits, so the no-match blank state got skipped and a mismatched value looked selected again.
+  it('shows no selection, not the first option, when the replacement set after a reload matches nothing', async () => {
+    const { page, select, component } = await setup(OPTIONS, 'b');
+
+    Array.from(page.root.querySelectorAll('option')).forEach((option) => option.remove());
+    component.handleSlotChange();
+    expect(select.children.length).toBe(0);
+
+    const replacement = document.createElement('option');
+    replacement.setAttribute('value', 'z');
+    replacement.textContent = 'Zeta';
+    page.root.appendChild(replacement);
+    component.handleSlotChange();
+
+    expect(select.selectedIndex).toBe(-1);
+  });
+
+  // updateFormValue() returns early under isSpecTest(), so this only checks it's called once per
+  // changed copy rather than on every mutation; real validity recomputation is covered in e2e.
+  it('calls updateFormValue once after a copy that changed something, not on every mutation', async () => {
+    const { component, option, notify } = await setup(OPTIONS, 'b', 'required');
+    const updateFormValue = jest.spyOn(component, 'updateFormValue');
+
+    option('b').setAttribute('disabled', '');
+    notify(option('b'), 'attributes');
+    flushFrames();
+    expect(updateFormValue).toHaveBeenCalledTimes(1);
+
+    notify(option('b'), 'attributes');
+    flushFrames();
+    expect(updateFormValue).toHaveBeenCalledTimes(1);
+  });
+
+  it('copies once for several changes before a frame', async () => {
+    const { select, option, notify } = await setup(OPTIONS);
+
+    option('a').textContent = 'Apple';
+    notify(option('a'));
+    option('b').textContent = 'Banana';
+    notify(option('b'));
+
+    expect(frames.size).toBe(1);
+    flushFrames();
+    expect(select.children[0].textContent).toBe('Apple');
+    expect(select.children[1].textContent).toBe('Banana');
+  });
+
+  it('leaves the select alone when the copies would be unchanged', async () => {
+    const { select, option, notify } = await setup(OPTIONS);
+    const before = Array.from(select.children);
+
+    notify(option('a'));
+    flushFrames();
+
+    expect(Array.from(select.children)).toEqual(before);
+  });
+
+  it('ignores the host’s own attributes and children, and the action slot', async () => {
+    const { page, notify } = await setup(`<span slot="action">Help</span>${OPTIONS}`);
+
+    notify(page.root, 'attributes');
+    notify(page.root, 'childList');
+    notify(page.root.querySelector('[slot="action"]').firstChild);
+
+    expect(frames.size).toBe(0);
+  });
+
+  it('catches up on changes made while it was out of the document', async () => {
+    const { page, select, option, notify } = await setup(OPTIONS);
+    const parent = page.root.parentElement;
+
+    notify(option('a'));
+    page.root.remove();
+    option('a').textContent = 'Apple';
+    parent.appendChild(page.root);
+    flushFrames();
+
+    expect(select.children[0].textContent).toBe('Apple');
+  });
+
+  it('stops watching and cancels a pending copy when removed', async () => {
+    const { page, component, option, notify } = await setup(OPTIONS);
+    const observer = optionObserver();
+
+    notify(option('a'));
+    const pending = component.optionSyncFrame;
+    expect(frames.has(pending)).toBe(true);
+    page.root.remove();
+
+    expect(observer.disconnect).toHaveBeenCalled();
+    expect(component.optionObserver).toBeNull();
+    expect(globalThis.cancelAnimationFrame).toHaveBeenCalledWith(pending);
+    expect(frames.has(pending)).toBe(false);
+  });
+});
