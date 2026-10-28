@@ -120,6 +120,41 @@ Use the `label` slot when the label needs more than text, such as a `pds-chip`. 
   <pds-checkbox component-id="label-slot"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-checkbox>
 </DocCanvas>
 
+### Pill
+
+Set `variant="pill"` to render the checkbox as a pill-shaped choice for picking several short options. The checkbox square is visually hidden and the label becomes the pill, so the input is still a native checkbox: Space toggles it, it submits with the form, and screen readers announce it as a checkbox. Checking a pill adds an inset ring instead of a thicker border, so the pill doesn't change size. The focus ring shows for keyboard focus only. `invalid` turns the pill's border red; `indeterminate` has no pill style.
+
+Wrap related pills in a `fieldset` with a `legend` so the group has a name, and lay them out in a wrapping row.
+
+<DocCanvas
+  mdxSource={{
+    react: `<fieldset>
+  <legend>Send to</legend>
+  <PdsBox wrap gap="xs">
+    <PdsCheckbox componentId="pill-email" name="channels" value="email" label="Email" variant="pill" checked />
+    <PdsCheckbox componentId="pill-sms" name="channels" value="sms" label="SMS" variant="pill" />
+    <PdsCheckbox componentId="pill-push" name="channels" value="push" label="Push notification" variant="pill" />
+  </PdsBox>
+</fieldset>`,
+    webComponent: `<fieldset>
+  <legend>Send to</legend>
+  <pds-box wrap gap="xs">
+    <pds-checkbox component-id="pill-email" name="channels" value="email" label="Email" variant="pill" checked></pds-checkbox>
+    <pds-checkbox component-id="pill-sms" name="channels" value="sms" label="SMS" variant="pill"></pds-checkbox>
+    <pds-checkbox component-id="pill-push" name="channels" value="push" label="Push notification" variant="pill"></pds-checkbox>
+  </pds-box>
+</fieldset>`
+}}>
+  <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
+    <legend style={{ marginBlockEnd: 'var(--pine-dimension-xs)', padding: 0 }}>Send to</legend>
+    <pds-box wrap gap="xs">
+      <pds-checkbox component-id="pill-email" name="channels" value="email" label="Email" variant="pill" checked></pds-checkbox>
+      <pds-checkbox component-id="pill-sms" name="channels" value="sms" label="SMS" variant="pill"></pds-checkbox>
+      <pds-checkbox component-id="pill-push" name="channels" value="push" label="Push notification" variant="pill"></pds-checkbox>
+    </pds-box>
+  </fieldset>
+</DocCanvas>
+
 ## Events
 
 ### pdsCheckboxChange
