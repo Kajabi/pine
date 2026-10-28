@@ -34,7 +34,7 @@ While accessible out of the box, there are some best practices to keep in mind w
 - Name an icon-only button with `aria-label` on `pds-button` (see [Icon Only](#icon-only)). The component passes it to the focusable `<button>` inside it (or `<a>` when `href` is set). Text in the default slot works too, since `icon-only` hides it visually but not from screen readers.
 - An `aria-label` replaces the slot text as the button's name, so start it with the visible text (e.g. "Edit profile" on a button that shows "Edit"). People using voice control say the words they see.
 - Use `aria-pressed` for a button that toggles on and off, and `aria-current` for a link to the current page or step. Both pass to the inner element, except that a link never gets `aria-pressed`, which ARIA allows only on buttons. `aria-expanded`, `aria-haspopup` and `aria-controls` pass through too, so the button can open a popover or menu.
-- `aria-labelledby` and `aria-describedby` take IDs, which can't reach the inner element through the shadow DOM, so they don't name or describe the button. Use `aria-label` for the name.
+- `aria-labelledby` and `aria-describedby` name and describe the button from text elsewhere on the page, such as the reason a disabled button can't be used yet. Like `aria-controls`, they pass to the inner element as references to the elements their IDs point at, so the IDs must be in the same document as `pds-button` or in a shadow root that contains it, not inside another component's shadow DOM. A browser without ARIA element reflection ignores all three. Later changes to the attributes reach the inner element too.
 
 ### Buttons vs Links
 
