@@ -25,10 +25,9 @@ Icons render scalable glyphs from Pine's icon set, representing actions, statuse
 ### Accessibility
 - Ensure sufficient contrast between the icon and the background for visibility.
 - Don't rely solely on icons for critical actions.
-- Give every icon either `aria-hidden="true"` or an `aria-label`:
-  - Use `aria-hidden="true"` when the icon is decorative: it sits next to text that says the same thing, or inside a control that has its own accessible name, such as an icon-only button with an `aria-label`.
-  - Use `aria-label` when the icon carries meaning on its own, such as a status icon with no text beside it.
-- `pds-icon` is always exposed as an image, so an icon with neither is still announced. An icon given by name uses that name as its label, so `<button>Remove <pds-icon name="remove"></pds-icon></button>` is read as "Remove remove". An imported icon gets no label and is exposed as an image with no name.
+- A decorative icon needs no attributes. `pds-icon` is hidden from assistive technology unless you name it, so it adds nothing to the accessible name of the control it sits in: `<button>Remove <pds-icon name="remove"></pds-icon></button>` is read as "Remove". An icon's `name` is an asset id rather than copy, so it is never used as a label.
+- Give an icon an `aria-label` only when it carries meaning on its own, such as a status icon with no text beside it. A named icon is exposed as an image with that name.
+- The control still needs its own name, because the icon no longer supplies one. Name an icon-only control with `aria-label` on `pds-button`, or leave the text in the default slot, which `icon-only` hides visually but not from screen readers.
 
 ## Properties
 
