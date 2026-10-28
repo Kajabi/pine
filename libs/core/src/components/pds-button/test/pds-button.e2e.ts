@@ -847,9 +847,13 @@ describe('pds-button', () => {
           <pds-icon slot="start" aria-hidden="true" icon="${favorite}"></pds-icon>
         </pds-button>
       `);
-      // axe-core reads ID-reference attributes, not ARIA element reflection, so it misses the name the
-      // browser computes (the aria-labelledby test above checks that name) and flags aria-labelledby on
-      // the role-less host. Both are axe limitations; this checks nothing else is wrong.
+      // Two rules are off, for different reasons. `button-name` is an axe limitation: axe-core reads
+      // ID-reference attributes, not ARIA element reflection, so it misses the name the browser
+      // computes (the aria-labelledby test above checks that name). `aria-prohibited-attr` is a real
+      // finding: the host keeps the author's aria-labelledby and has no role, and ARIA 1.2 prohibits
+      // naming a role-less element. An aria-label avoids it only because the inner button's literal
+      // aria-label counts as text inside the host, so axe marks it incomplete instead. The docs warn
+      // about both; this checks nothing else is wrong.
       const violations = await runAxe(page, {
         rules: { 'button-name': { enabled: false }, 'aria-prohibited-attr': { enabled: false } },
       });
