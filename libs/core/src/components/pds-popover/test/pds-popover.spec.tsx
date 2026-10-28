@@ -758,6 +758,50 @@ describe('pds-popover', () => {
 
       expect(events).toEqual(['open', 'close']);
     });
+
+    describe('when a newer position starts before the first resolves', () => {
+      const flush = () => new Promise(resolve => setTimeout(resolve));
+
+      const setUpPending = async () => {
+        const resolvers: Array<(value: unknown) => void> = [];
+        jest.spyOn(floatingUI, 'computePosition').mockImplementation(() => new Promise(r => resolvers.push(r)));
+        const { page, instance, portal } = await setUp();
+        const sidesOnOpen: Array<string | null> = [];
+        page.root!.addEventListener('pdsPopoverOpen', () => sidesOnOpen.push(portal.getAttribute('data-pds-popover-placement')));
+        return { instance, resolvers, sidesOnOpen };
+      };
+
+      it('waits for the newer one after a move before emitting pdsPopoverOpen', async () => {
+        const { instance, resolvers, sidesOnOpen } = await setUpPending();
+
+        const showing = instance.show();
+        // A move in one operation reconnects the popover, which starts a newer positioning run.
+        instance.connectedCallback();
+        resolvers[0]({ x: 400, y: 600, placement: 'bottom-start' });
+        await flush();
+        expect(sidesOnOpen).toEqual([]);
+
+        resolvers[1]({ x: 40, y: 60, placement: 'top-start' });
+        await showing;
+        expect(sidesOnOpen).toEqual(['top-start']);
+      });
+
+      it('emits the second open of a show(), hide(), show() with the side the second one took', async () => {
+        const { instance, resolvers, sidesOnOpen } = await setUpPending();
+
+        const first = instance.show();
+        await instance.hide();
+        const second = instance.show();
+        resolvers[0]({ x: 400, y: 600, placement: 'bottom-start' });
+        await flush();
+        // The first open closed before it was positioned, so it had no side.
+        expect(sidesOnOpen).toEqual([null]);
+
+        resolvers[1]({ x: 40, y: 60, placement: 'top-start' });
+        await Promise.all([first, second]);
+        expect(sidesOnOpen).toEqual([null, 'top-start']);
+      });
+    });
   });
 
   describe('Portal Creation', () => {
