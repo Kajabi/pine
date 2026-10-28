@@ -891,7 +891,7 @@ export namespace Components {
          */
         "value": string;
         /**
-          * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged.
+          * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel` doesn't apply, and `indeterminate` has no pill style.
           * @defaultValue default
          */
         "variant": 'default' | 'pill';
@@ -2284,7 +2284,7 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder": boolean;
@@ -2319,7 +2319,7 @@ export namespace Components {
          */
         "value": string;
         /**
-          * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged.
+          * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel`, `hasBorder`, and the `image` slot don't apply.
           * @defaultValue default
          */
         "variant": 'default' | 'pill';
@@ -4786,7 +4786,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
         /**
-          * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged.
+          * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel` doesn't apply, and `indeterminate` has no pill style.
           * @defaultValue default
          */
         "variant"?: 'default' | 'pill';
@@ -6239,7 +6239,7 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder"?: boolean;
@@ -6278,7 +6278,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
         /**
-          * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged.
+          * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel`, `hasBorder`, and the `image` slot don't apply.
           * @defaultValue default
          */
         "variant"?: 'default' | 'pill';

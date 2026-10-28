@@ -87,7 +87,7 @@ export class PdsCheckbox {
   @Prop() value: string;
 
   /**
-   * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged.
+   * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel` doesn't apply, and `indeterminate` has no pill style.
    * @defaultValue default
    */
   @Prop() variant: 'default' | 'pill' = 'default';
@@ -234,7 +234,7 @@ export class PdsCheckbox {
             class={this.variant === 'pill' ? 'visually-hidden' : undefined}
             {...this.inheritedAttributes}
           />
-          <span class={this.hideLabel ? 'visually-hidden' : ''}>
+          <span class={this.hideLabel && this.variant !== 'pill' ? 'visually-hidden' : ''}>
             <slot name="label" onSlotchange={this.updateHasLabelSlot} />
             {/* A text node, not slot fallback: older ChromeDriver text extraction skips fallback content. */}
             {!this.hasLabelSlot && this.label}
