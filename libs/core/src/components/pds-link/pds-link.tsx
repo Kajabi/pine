@@ -46,6 +46,14 @@ export class PdsLink {
   @Prop() external = false;
 
   /**
+   * Accessible label for the external-link icon, appended to the link's name
+   * when the link opens in a new tab. Pass a translated string to localize it;
+   * defaults to English.
+   * @defaultValue 'opens in a new tab'
+   */
+  @Prop() externalLabel = 'opens in a new tab';
+
+  /**
    * Specifies where to open the linked document.
    * @defaultValue undefined
    * @example
@@ -149,7 +157,8 @@ export class PdsLink {
   render() {
     const targetValue = this.target || (this.external ? '_blank' : undefined);
     const showExternalIcon = this.external;
-    const relValue = targetValue === '_blank' ? 'noopener noreferrer' : undefined;
+    const opensInNewTab = targetValue === '_blank';
+    const relValue = opensInNewTab ? 'noopener noreferrer' : undefined;
 
     return (
       <a
@@ -173,7 +182,14 @@ export class PdsLink {
       >
         <slot>{this.href}</slot>
         {showExternalIcon &&
-          <pds-icon icon={launch} size={this.fontSize}></pds-icon>
+          <pds-icon
+            icon={launch}
+            size={this.fontSize}
+            // A `target` other than _blank overrides `external`, and then the
+            // label would be false; the icon is decorative there.
+            aria-label={opensInNewTab ? this.externalLabel : undefined}
+            aria-hidden={opensInNewTab ? undefined : 'true'}
+          ></pds-icon>
         }
       </a>
     );

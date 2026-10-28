@@ -255,4 +255,32 @@ describe('pds-link', () => {
       expect(root?.hasAttribute('active')).toBe(false);
     });
   });
+
+  describe('external label', () => {
+    it('labels the external icon "opens in a new tab" by default', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="#" external="true">Docs</pds-link>`,
+      });
+      expect(root?.shadowRoot?.querySelector('pds-icon')?.getAttribute('aria-label')).toBe('opens in a new tab');
+    });
+
+    it('uses a custom external-label in place of the default', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="#" external="true" external-label="s'ouvre dans un nouvel onglet">Docs</pds-link>`,
+      });
+      expect(root?.shadowRoot?.querySelector('pds-icon')?.getAttribute('aria-label')).toBe("s'ouvre dans un nouvel onglet");
+    });
+
+    it('hides the icon when target keeps the link in the same tab', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="#" external="true" target="_self">Docs</pds-link>`,
+      });
+      const icon = root?.shadowRoot?.querySelector('pds-icon');
+      expect(icon?.hasAttribute('aria-label')).toBe(false);
+      expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    });
+  });
 });
