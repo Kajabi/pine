@@ -76,6 +76,11 @@ tooltip content is expected to be a string.
 Tooltip content may contain HTML elements. In these cases,
 enable the `htmlContent` property and provide your element in the `content` slot.
 
+The open tooltip shows a copy of the slotted content, and keeps it in step: content that loads or
+re-renders while the tooltip is open (a frame that finishes loading, a framework re-render) appears
+without reopening it. Each change re-copies the whole content, so an iframe or media element inside
+it reloads.
+
 <DocCanvas
   mdxSource={{
     react: `
