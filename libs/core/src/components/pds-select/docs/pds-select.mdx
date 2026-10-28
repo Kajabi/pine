@@ -394,7 +394,9 @@ The action slot allows you to add helpful content next to the select label, such
   mdxSource={{
     react: `<PdsSelect componentId="pds-select-action-tooltip" label="Country" name="country" required>
   <PdsTooltip slot="action" placement="bottom-start">
-    <PdsIcon name="question-circle"></PdsIcon>
+    <PdsButton variant="unstyled" aria-label="Help with country">
+      <PdsIcon name="question-circle" aria-hidden="true"></PdsIcon>
+    </PdsButton>
     <span slot="content">Select your country of residence for shipping purposes</span>
   </PdsTooltip>
   <option value="">Choose a country</option>
@@ -405,7 +407,9 @@ The action slot allows you to add helpful content next to the select label, such
 </PdsSelect>`,
     webComponent: `<pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
   <pds-tooltip slot="action" placement="bottom-start">
-    <pds-icon name="question-circle"></pds-icon>
+    <pds-button variant="unstyled" aria-label="Help with country">
+      <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+    </pds-button>
     <span slot="content">Select your country of residence for shipping purposes</span>
   </pds-tooltip>
   <option value="">Choose a country</option>
@@ -417,7 +421,9 @@ The action slot allows you to add helpful content next to the select label, such
 }}>
   <pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
     <pds-tooltip slot="action" placement="bottom-start">
-      <pds-icon name="question-circle"></pds-icon>
+      <pds-button variant="unstyled" aria-label="Help with country">
+        <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+      </pds-button>
       <span slot="content">Select your country of residence for shipping purposes</span>
     </pds-tooltip>
     <option value="">Choose a country</option>
