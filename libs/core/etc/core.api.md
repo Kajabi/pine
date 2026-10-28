@@ -264,6 +264,7 @@ export namespace Components {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     // (undocumented)
     export interface PdsChip {
@@ -632,6 +633,7 @@ export namespace Components {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     export interface PdsRadioGroup {
         "componentId": string;
@@ -1583,6 +1585,7 @@ export namespace LocalJSX {
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         "required"?: boolean;
         "value"?: string;
+        "variant"?: 'default' | 'pill';
     }
 
     // (undocumented)
@@ -1611,6 +1614,8 @@ export namespace LocalJSX {
         "required": boolean;
         // (undocumented)
         "value": string;
+        // (undocumented)
+        "variant": 'default' | 'pill';
     }
 
     // (undocumented)
@@ -2624,6 +2629,7 @@ export namespace LocalJSX {
         "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         "required"?: boolean;
         "value"?: string;
+        "variant"?: 'default' | 'pill';
     }
 
     // (undocumented)
@@ -2652,6 +2658,8 @@ export namespace LocalJSX {
         "required": boolean;
         // (undocumented)
         "value": string;
+        // (undocumented)
+        "variant": 'default' | 'pill';
     }
 
     export interface PdsRadioGroup {

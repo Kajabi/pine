@@ -890,6 +890,11 @@ export namespace Components {
           * The value of the checkbox that is submitted with a form.
          */
         "value": string;
+        /**
+          * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -2313,6 +2318,11 @@ export namespace Components {
           * The value of the radio that is submitted with a form.
          */
         "value": string;
+        /**
+          * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     /**
      * @lightDom renders-markup
@@ -4775,6 +4785,11 @@ declare namespace LocalJSX {
           * The value of the checkbox that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -6262,6 +6277,11 @@ declare namespace LocalJSX {
           * The value of the radio that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     /**
      * @lightDom renders-markup
@@ -7188,6 +7208,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsChipAttributes {
         "componentId": string;
@@ -7505,6 +7526,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsRadioGroupAttributes {
         "componentId": string;

@@ -86,6 +86,11 @@ export class PdsCheckbox {
    */
   @Prop() value: string;
 
+  /**
+   * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged.
+   * @defaultValue default
+   */
+  @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
    * Event emitted that contains the `value` and `checked`.
@@ -129,6 +134,7 @@ export class PdsCheckbox {
     if (this.indeterminate) { classNames.push('is-indeterminate'); }
     if (this.disabled) { classNames.push('is-disabled'); }
     if (this.hasLabelSlot) { classNames.push('has-label-slot'); }
+    if (this.variant === 'pill') { classNames.push('pds-checkbox--pill'); }
 
     return classNames.join('  ');
   }
@@ -225,6 +231,7 @@ export class PdsCheckbox {
             disabled={this.disabled}
             onChange={this.handleCheckboxChange}
             onInput={this.handleInput}
+            class={this.variant === 'pill' ? 'visually-hidden' : undefined}
             {...this.inheritedAttributes}
           />
           <span class={this.hideLabel ? 'visually-hidden' : ''}>

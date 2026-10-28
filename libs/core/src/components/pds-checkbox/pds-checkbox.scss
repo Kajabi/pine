@@ -187,3 +187,69 @@ label {
     margin-block-start: var(--pine-dimension-025);
   }
 }
+
+// Pill variant: the native checkbox is visually hidden (see render) and the label is the pill.
+:host(.pds-checkbox--pill) {
+  label {
+    align-items: center;
+    background: var(--pine-color-background-container);
+    border: var(--pine-border);
+    border-radius: var(--pine-border-radius-full);
+    box-sizing: border-box;
+    color: var(--pine-color-text-active);
+    cursor: pointer;
+    font: var(--pine-typography-body);
+    min-block-size: var(--pine-dimension-xl);
+    padding: 0 var(--pine-dimension-sm);
+    transition: border-color var(--pine-motion-duration-fast) ease;
+
+    &:hover {
+      border-color: var(--pine-color-text);
+    }
+
+    // An inset ring rather than a thicker border, so checking a pill doesn't resize it and shift the row.
+    &:has(input:checked) {
+      border-color: var(--pine-color-text-active);
+      box-shadow: inset 0 0 0 var(--pine-border-width) var(--pine-color-text-active);
+    }
+
+    // Keyboard focus only; a mouse click doesn't show the ring.
+    &:has(input:focus-visible) {
+      outline: var(--pine-outline-focus);
+      outline-offset: var(--pine-border-width-thick);
+    }
+
+    &:has(input:disabled) {
+      background: var(--pine-color-background-container-disabled);
+      border-color: var(--pine-color-border-disabled);
+      color: var(--pine-color-text-disabled);
+      cursor: not-allowed;
+    }
+
+    &:has(input:disabled:checked) {
+      border-color: var(--pine-color-text-disabled);
+      box-shadow: inset 0 0 0 var(--pine-border-width) var(--pine-color-text-disabled);
+    }
+  }
+
+  .pds-checkbox__message {
+    margin-inline-start: 0;
+  }
+}
+
+// An invalid pill keeps its text color; the border and focus ring carry the danger state.
+:host(.pds-checkbox--pill.is-invalid) {
+  label {
+    border-color: var(--pine-color-border-danger);
+    color: var(--pine-color-text-active);
+
+    &:has(input:checked) {
+      border-color: var(--pine-color-border-danger);
+      box-shadow: inset 0 0 0 var(--pine-border-width) var(--pine-color-border-danger);
+    }
+
+    &:has(input:focus-visible) {
+      outline: var(--pine-outline-focus-danger);
+    }
+  }
+}
