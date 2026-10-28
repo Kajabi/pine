@@ -230,6 +230,8 @@ describe('pds-checkbox pill variant', () => {
   it('toggles when the pill is clicked, without resizing it or showing a focus ring', async () => {
     const page = await newE2EPage();
     await page.setContent(pills);
+    // Measure after the web font settles, so a late font swap doesn't read as a resize.
+    await page.evaluate(() => document.fonts.ready);
 
     const before = await pillStyle(page, '#email');
     const label = await page.find('#email >>> label');

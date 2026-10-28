@@ -321,4 +321,13 @@ describe('pds-checkbox pill variant', () => {
 
     expect(page.root).not.toHaveClass('pds-checkbox--pill');
   });
+
+  it('keeps the label visible on a pill even with hide-label', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill" hide-label></pds-checkbox>`,
+    });
+
+    expect(page.root?.shadowRoot?.querySelector('label span')).not.toHaveClass('visually-hidden');
+  });
 });
