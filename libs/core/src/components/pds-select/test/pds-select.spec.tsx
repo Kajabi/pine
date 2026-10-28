@@ -1034,21 +1034,19 @@ describe('option sync', () => {
       observe.mock.calls.some(([, init]) => JSON.stringify(init) === JSON.stringify(OPTION_OBSERVER_INIT)),
     );
 
-  // The spec DOM has no slot assignment, so the slot hands back the host's light-DOM options.
   const setup = async (options: string, value = 'b', extraAttributes = '') => {
     const page = await newSpecPage({
       components: [PdsSelect],
       html: `<pds-select component-id="field-1" value="${value}" ${extraAttributes}>${options}</pds-select>`,
     });
     const component = page.rootInstance;
-    const slot = {
-      assignedElements: () => Array.from(page.root.children).filter((el) => !el.hasAttribute('slot')),
-    };
-    component.slotContainer = { querySelector: () => slot } as unknown as HTMLDivElement;
     // The spec DOM's select has no options collection.
     const select = component.selectEl as HTMLSelectElement;
     Object.defineProperty(select, 'options', { get: () => select.querySelectorAll('option') });
     component.handleSlotChange();
+    // componentDidLoad's own catch-up sync is already pending by now; settle it so every test
+    // starts from a clean zero-pending-frames baseline.
+    flushFrames();
 
     const option = (optionValue: string) => page.root.querySelector(`option[value="${optionValue}"]`);
     const notify = (target: Node, type: MutationRecordType = 'characterData') =>
@@ -1134,7 +1132,15 @@ describe('option sync', () => {
     expect(changed).not.toHaveBeenCalled();
   });
 
-  it('recomputes the form value and validity after a copy that changed something', async () => {
+  it('falls back to the first option on the first copy when the value matches nothing, like a native select', async () => {
+    const { select } = await setup(OPTIONS, 'nope');
+
+    expect(select.selectedIndex).not.toBe(-1);
+  });
+
+  // updateFormValue() returns early under isSpecTest(), so this only checks it's called once per
+  // changed copy rather than on every mutation; real validity recomputation is covered in e2e.
+  it('calls updateFormValue once after a copy that changed something, not on every mutation', async () => {
     const { component, option, notify } = await setup(OPTIONS, 'b', 'required');
     const updateFormValue = jest.spyOn(component, 'updateFormValue');
 

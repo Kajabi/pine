@@ -198,6 +198,31 @@ describe('pds-select option sync', () => {
     expect(selected).toBe('b');
     expect(changeEvent).toHaveReceivedEventTimes(0);
   });
+
+  it('goes required-invalid when the selected option is renamed away', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-select component-id="fruit" label="Fruit" value="b" required>
+        <option value="a">Alpha</option>
+        <option value="b">Beta</option>
+      </pds-select>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-select option[value="b"]', (option: HTMLOptionElement) => {
+      option.setAttribute('value', 'b2');
+    });
+    await page.waitForFunction(() => {
+      const select = document.querySelector('pds-select').shadowRoot.querySelector('select');
+      return select.selectedIndex === -1;
+    });
+
+    // `validity`/`validationMessage` live on ElementInternals, not mirrored onto the host element
+    // itself, so `:invalid` (which the UA does apply to a form-associated custom element based on
+    // its internals) is the correct way to observe this from outside.
+    const invalid = await page.$eval('pds-select', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
 });
 
 describe('pds-select accessibility', () => {

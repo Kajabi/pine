@@ -190,7 +190,11 @@ export class PdsSelect {
   componentDidLoad() {
     // Set initial form value
     this.updateFormValue();
+    // Stencil holds componentDidLoad until the shadow root's pds-icon has loaded, so options can
+    // change between the first slotchange copy and here with nothing observing yet — the same gap
+    // the reconnect path closes with a catch-up sync.
     this.startOptionSync();
+    this.scheduleOptionSync();
   }
 
   /**
@@ -213,7 +217,9 @@ export class PdsSelect {
    * (top-level adds and removes reach `slotchange`) and the action slot's content are not.
    */
   private touchesOption = ({ target }: MutationRecord): boolean => {
-    const element = target.nodeType === Node.TEXT_NODE ? target.parentElement : (target as Element);
+    // Not just TEXT_NODE: characterData also reports comment nodes, and a Comment has no
+    // .closest() — treating anything non-Element as a Text node crashed on one.
+    const element = target.nodeType === Node.ELEMENT_NODE ? (target as Element) : target.parentElement;
     return target !== this.el && element?.closest('option, optgroup') != null;
   };
 
@@ -310,6 +316,10 @@ export class PdsSelect {
       .filter((item) => ['OPTION', 'OPTGROUP'].includes(item.tagName))
       .map((item) => item.cloneNode(true) as HTMLOptionElement | HTMLOptGroupElement);
     const current = Array.from(this.selectEl.children);
+    // The very first copy populates an empty select, where falling back to the first option (like
+    // a native select) is correct; the no-match blank state is for options changing under a value
+    // that was already showing selected.
+    const hadOptions = current.length > 0;
 
     const markup = (items: Element[]) => items.map((item) => item.outerHTML).join('');
     if (markup(copies) === markup(current)) return;
@@ -322,14 +332,14 @@ export class PdsSelect {
     }
 
     this.updateSelectedOption();
-    this.showNoSelectionWithoutMatch();
+    if (hadOptions) this.showNoSelectionWithoutMatch();
     this.updateFormValue();
   };
 
   /**
-   * After a copy, a value whose option was renamed or removed has nothing to select. Like a
-   * native select, show nothing selected rather than the first option; the value itself is
-   * kept, with no change event.
+   * After a copy that changes an existing option set, a value whose option was renamed or removed
+   * has nothing to select. Like a native select, show nothing selected rather than the first
+   * option; the value itself is kept, with no change event.
    */
   private showNoSelectionWithoutMatch() {
     const wanted = ([] as string[]).concat(this.value ?? []).filter((value) => value !== '');
