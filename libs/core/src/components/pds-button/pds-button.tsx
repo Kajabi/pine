@@ -5,6 +5,13 @@ import { caretDown, addCircle } from '@pine-ds/icons/icons';
 
 const FORWARDED_ARIA_ATTRIBUTES = ['aria-current', 'aria-expanded', 'aria-haspopup', 'aria-label', 'aria-pressed'];
 
+// ID references can't cross the shadow boundary, so these are forwarded as element references.
+const FORWARDED_ARIA_REFERENCES = {
+  'aria-controls': 'ariaControlsElements',
+  'aria-describedby': 'ariaDescribedByElements',
+  'aria-labelledby': 'ariaLabelledByElements',
+} as const;
+
 /**
  * @part button - Exposes the underlying button (or anchor) element for styling, including custom size, shape, or surface on icon-only placements (e.g. a compact square or inverse icon button).
  * @part button-content - Exposes the button content for styling.
@@ -126,7 +133,7 @@ export class PdsButton {
     // Consumers, popovers and menus set these on the host, often after render, but only the inner element is announced.
     this.hostAriaObserver = new MutationObserver(this.syncHostAria);
     this.hostAriaObserver.observe(this.el, {
-      attributeFilter: FORWARDED_ARIA_ATTRIBUTES.concat('aria-controls'),
+      attributeFilter: FORWARDED_ARIA_ATTRIBUTES.concat(Object.keys(FORWARDED_ARIA_REFERENCES)),
     });
   }
 
@@ -136,7 +143,7 @@ export class PdsButton {
   }
 
   componentDidRender() {
-    this.forwardAriaControls();
+    this.forwardAriaReferences();
   }
 
   /**
@@ -207,16 +214,21 @@ export class PdsButton {
     if (FORWARDED_ARIA_ATTRIBUTES.some((name) => forwarded[name] !== this.forwardedAria[name])) {
       this.forwardedAria = forwarded;
     }
-    this.forwardAriaControls();
+    this.forwardAriaReferences();
   };
 
-  // ID references can't cross the shadow boundary, so aria-controls is forwarded as element references.
-  private forwardAriaControls() {
-    if (!this.contentEl || !('ariaControlsElements' in this.contentEl)) return;
+  // A browser without ARIA element reflection gets none of these; the other forwarded attributes still apply.
+  private forwardAriaReferences() {
+    const contentEl = this.contentEl;
+    if (!contentEl) return;
 
-    const ids = this.el.getAttribute('aria-controls')?.split(/\s+/).filter(Boolean) ?? [];
-    const controlled = ids.map((id) => this.findInAncestorRoots(id)).filter((el): el is HTMLElement => el !== null);
-    this.contentEl.ariaControlsElements = controlled.length > 0 ? controlled : null;
+    Object.entries(FORWARDED_ARIA_REFERENCES).forEach(([attribute, property]) => {
+      if (!(property in contentEl)) return;
+
+      const ids = this.el.getAttribute(attribute)?.split(/\s+/).filter(Boolean) ?? [];
+      const referenced = ids.map((id) => this.findInAncestorRoots(id)).filter((el): el is HTMLElement => el !== null);
+      contentEl[property] = referenced.length > 0 ? referenced : null;
+    });
   }
 
   // A trigger inside another component's shadow root still controls a popover portal on document.body.
