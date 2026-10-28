@@ -109,6 +109,11 @@ export namespace Components {
          */
         "hideIcon": boolean;
         /**
+          * Accessible label announcing the alert's severity, read before the heading and message. Pass a translated string to localize it; defaults to English for each variant (`Error`, `Info`, `Success`, `Warning`). The `default` variant has no severity and announces none unless this is set; pass an empty string to announce none for any variant.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -130,6 +135,11 @@ export namespace Components {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
+          * @defaultValue 'Verified'
+         */
+        "badgeLabel": string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -1765,6 +1775,11 @@ export namespace Components {
          */
         "external": boolean;
         /**
+          * Accessible label for the external-link icon, appended to the link's name when the link opens in a new tab. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'opens in a new tab'
+         */
+        "externalLabel": string;
+        /**
           * The font size of the link's text.
           * @defaultValue lg
          */
@@ -2909,6 +2924,11 @@ export namespace Components {
          */
         "icon"?: string;
         /**
+          * Accessible label announcing the toast's severity, read before the message. Pass a translated string to localize it; defaults to English (`Error`) for the `danger` type. Other types announce none unless this is set; pass an empty string to announce none.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
           * @default 'default'
          */
@@ -3959,6 +3979,11 @@ declare namespace LocalJSX {
          */
         "onPdsAlertDismissClick"?: (event: PdsAlertCustomEvent<void>) => void;
         /**
+          * Accessible label announcing the alert's severity, read before the heading and message. Pass a translated string to localize it; defaults to English for each variant (`Error`, `Info`, `Success`, `Warning`). The `default` variant has no severity and announces none unless this is set; pass an empty string to announce none for any variant.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -3980,6 +4005,11 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
+          * @defaultValue 'Verified'
+         */
+        "badgeLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -5673,6 +5703,11 @@ declare namespace LocalJSX {
          */
         "external"?: boolean;
         /**
+          * Accessible label for the external-link icon, appended to the link's name when the link opens in a new tab. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'opens in a new tab'
+         */
+        "externalLabel"?: string;
+        /**
           * The font size of the link's text.
           * @defaultValue lg
          */
@@ -6900,6 +6935,11 @@ declare namespace LocalJSX {
          */
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
         /**
+          * Accessible label announcing the toast's severity, read before the message. Pass a translated string to localize it; defaults to English (`Error`) for the `danger` type. Other types announce none unless this is set; pass an empty string to announce none.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
           * @default 'default'
          */
@@ -6963,10 +7003,12 @@ declare namespace LocalJSX {
         "hideIcon": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
         "dismissLabel": string;
+        "severityLabel": string;
     }
     interface PdsAvatarAttributes {
         "alt": string | null;
         "badge": boolean;
+        "badgeLabel": string;
         "componentId": string;
         "dropdown": boolean;
         "image": string | null;
@@ -7335,6 +7377,7 @@ declare namespace LocalJSX {
         "download": string;
         "componentId": string;
         "external": boolean;
+        "externalLabel": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
         "variant": 'inline' | 'plain';
         "fontSize": 'sm' | 'md' | 'lg';
@@ -7629,6 +7672,7 @@ declare namespace LocalJSX {
         "icon": string;
         "type": 'default' | 'danger' | 'loading';
         "dismissLabel": string;
+        "severityLabel": string;
     }
     interface PdsTooltipAttributes {
         "content": string;
