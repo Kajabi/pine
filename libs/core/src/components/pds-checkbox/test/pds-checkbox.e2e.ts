@@ -204,3 +204,96 @@ describe('pds-checkbox in a disabled fieldset', () => {
     expect(await disabled()).toBe(false);
   });
 });
+
+describe('pds-checkbox pill variant', () => {
+  const pillStyle = (page, selector: string) =>
+    page.$eval(selector, (el) => {
+      const label = el.shadowRoot.querySelector('label');
+      const style = getComputedStyle(label);
+      const rect = label.getBoundingClientRect();
+      return {
+        boxShadow: style.boxShadow,
+        borderColor: style.borderTopColor,
+        outlineStyle: style.outlineStyle,
+        width: rect.width,
+        height: rect.height,
+      };
+    });
+
+  const pills = `
+    <form>
+      <pds-checkbox id="email" component-id="email" name="channels" value="email" label="Email" variant="pill"></pds-checkbox>
+      <pds-checkbox id="sms" component-id="sms" name="channels" value="sms" label="SMS" variant="pill"></pds-checkbox>
+    </form>
+  `;
+
+  it('toggles when the pill is clicked, without resizing it or showing a focus ring', async () => {
+    const page = await newE2EPage();
+    await page.setContent(pills);
+
+    const before = await pillStyle(page, '#email');
+    const label = await page.find('#email >>> label');
+    await label.click();
+    await page.waitForChanges();
+    const after = await pillStyle(page, '#email');
+
+    expect(await page.$eval('#email', (el: HTMLPdsCheckboxElement) => el.checked)).toBe(true);
+    expect(after.boxShadow).not.toBe('none');
+    expect(after.width).toBe(before.width);
+    expect(after.height).toBe(before.height);
+    expect(after.outlineStyle).toBe('none');
+  });
+
+  it('toggles with Space and shows the focus ring from the keyboard', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<button>before</button>${pills}`);
+
+    await page.focus('button');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+
+    expect(await page.$eval('#email', (el: HTMLPdsCheckboxElement) => el.checked)).toBe(true);
+    expect((await pillStyle(page, '#email')).outlineStyle).toBe('solid');
+
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+    expect(await page.$eval('#email', (el: HTMLPdsCheckboxElement) => el.checked)).toBe(false);
+  });
+
+  it('submits checked values with the form', async () => {
+    const page = await newE2EPage();
+    await page.setContent(pills);
+
+    await (await page.find('#email >>> label')).click();
+    await (await page.find('#sms >>> label')).click();
+    await page.waitForChanges();
+
+    const values = await page.$eval('form', (form: HTMLFormElement) => new FormData(form).getAll('channels'));
+    expect(values).toEqual(['email', 'sms']);
+  });
+
+  it('follows the theme in dark mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox id="light" component-id="light" label="Light" variant="pill" checked></pds-checkbox>
+      <div data-theme="dark">
+        <pds-checkbox id="dark" component-id="dark" label="Dark" variant="pill" checked></pds-checkbox>
+      </div>
+    `);
+
+    const light = await pillStyle(page, '#light');
+    const dark = await pillStyle(page, '#dark');
+    expect(dark.borderColor).not.toBe(light.borderColor);
+  });
+
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox component-id="a" label="Email" variant="pill" checked></pds-checkbox>
+      <pds-checkbox component-id="b" label="SMS" variant="pill" invalid error-message="Pick a channel"></pds-checkbox>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});

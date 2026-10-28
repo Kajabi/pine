@@ -301,3 +301,24 @@ describe('pds-checkbox', () => {
     expect(page.root.disabled).toBe(false);
   });
 });
+
+describe('pds-checkbox pill variant', () => {
+  it('adds the pill class and keeps a native checkbox', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill"></pds-checkbox>`,
+    });
+
+    expect(page.root).toHaveClass('pds-checkbox--pill');
+    expect(page.root?.shadowRoot?.querySelector('input')?.getAttribute('type')).toBe('checkbox');
+  });
+
+  it('does not add the pill class by default', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="default" label="Default"></pds-checkbox>`,
+    });
+
+    expect(page.root).not.toHaveClass('pds-checkbox--pill');
+  });
+});
