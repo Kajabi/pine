@@ -94,6 +94,26 @@ describe('pds-tooltip', () => {
     });
     expect(isStillOpenAfterMouseOut).toBe(false);
   });
+
+  it('shows slotted content that changes while the tooltip is open', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tooltip html-content="true" opened="true">
+        <button>Trigger</button>
+        <div slot="content"><div><p class="status">Loading</p></div></div>
+      </pds-tooltip>`);
+    await page.waitForChanges();
+
+    expect(await page.evaluate(() => document.querySelector('.pds-tooltip__content')?.textContent?.trim())).toBe('Loading');
+
+    await page.evaluate(() => {
+      const status = document.querySelector('pds-tooltip .status') as HTMLElement;
+      status.replaceWith(Object.assign(document.createElement('p'), { className: 'status', textContent: 'Loaded' }));
+    });
+    await page.waitForFunction(() => document.querySelector('.pds-tooltip__content')?.textContent?.trim() === 'Loaded');
+
+    expect(await page.evaluate(() => document.querySelectorAll('.pds-tooltip__content p').length)).toBe(1);
+  });
 });
 
 describe('pds-tooltip accessibility', () => {
@@ -115,25 +135,5 @@ describe('pds-tooltip accessibility', () => {
     );
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
-  });
-
-  it('shows slotted content that changes while the tooltip is open', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`
-      <pds-tooltip html-content="true" opened="true">
-        <button id="trigger">Trigger</button>
-        <div slot="content"><div><p id="status">Loading</p></div></div>
-      </pds-tooltip>`);
-    await page.waitForChanges();
-
-    expect(await page.evaluate(() => document.querySelector('.pds-tooltip__content')?.textContent?.trim())).toBe('Loading');
-
-    await page.evaluate(() => {
-      const status = document.querySelector('pds-tooltip #status') as HTMLElement;
-      status.replaceWith(Object.assign(document.createElement('p'), { textContent: 'Loaded' }));
-    });
-    await page.waitForFunction(() => document.querySelector('.pds-tooltip__content')?.textContent?.trim() === 'Loaded');
-
-    expect(await page.evaluate(() => document.querySelector('.pds-tooltip__content')?.textContent?.trim())).toBe('Loaded');
   });
 });

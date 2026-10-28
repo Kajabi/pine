@@ -536,26 +536,52 @@ describe('pds-tooltip', () => {
     let observerCallback: ((mutations: Partial<MutationRecord>[]) => void) | null;
     let mockObserve: jest.Mock;
     let mockDisconnect: jest.Mock;
+    let defaultObserver: ReturnType<jest.Mock['getMockImplementation']>;
+    let frames: Map<number, FrameRequestCallback>;
+    let nextFrame: number;
+    let originalRequestAnimationFrame: typeof globalThis.requestAnimationFrame;
+    let originalCancelAnimationFrame: typeof globalThis.cancelAnimationFrame;
+
+    // Queues animation frames so a test decides when a sync runs.
+    const requestFrame = ((callback: FrameRequestCallback) => {
+      nextFrame += 1;
+      frames.set(nextFrame, callback);
+      return nextFrame;
+    }) as typeof globalThis.requestAnimationFrame;
+    const cancelFrame = ((id: number) => {
+      frames.delete(id);
+    }) as typeof globalThis.cancelAnimationFrame;
+    const runFrames = () => {
+      const queued = Array.from(frames.values());
+      frames.clear();
+      queued.forEach((callback) => callback(0));
+    };
 
     beforeEach(() => {
       observerCallback = null;
       mockObserve = jest.fn();
       mockDisconnect = jest.fn();
+      defaultObserver = (global.MutationObserver as jest.Mock).getMockImplementation();
       (global.MutationObserver as jest.Mock).mockImplementation((callback) => {
         observerCallback = callback;
         return { observe: mockObserve, disconnect: mockDisconnect, takeRecords: jest.fn() };
       });
+      frames = new Map();
+      nextFrame = 0;
+      originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+      originalCancelAnimationFrame = globalThis.cancelAnimationFrame;
     });
 
-    // Runs a sync's animation frame straight away, on the page's own window and the global the
-    // component reads.
-    const runFramesNow = (page: { win: Window }) => {
-      const now = ((callback: FrameRequestCallback) => {
-        callback(0);
-        return 1;
-      }) as typeof window.requestAnimationFrame;
-      page.win.requestAnimationFrame = now;
-      globalThis.requestAnimationFrame = now;
+    afterEach(() => {
+      (global.MutationObserver as jest.Mock).mockImplementation(defaultObserver);
+      globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+      globalThis.cancelAnimationFrame = originalCancelAnimationFrame;
+    });
+
+    // Only the global the component reads: the page's window also schedules Stencil's own renders.
+    const queueFrames = () => {
+      globalThis.requestAnimationFrame = requestFrame;
+      globalThis.cancelAnimationFrame = cancelFrame;
     };
 
     const openTooltip = async () => {
@@ -569,8 +595,18 @@ describe('pds-tooltip', () => {
       });
       page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
       await page.waitForChanges();
-      runFramesNow(page);
+      queueFrames();
       return page;
+    };
+
+    const slottedStatus = (page: { root?: HTMLElement }) =>
+      page.root?.querySelector('[slot="content"] .status') as HTMLElement;
+    const portalStatus = (page: { body: HTMLElement }) => page.body.querySelector('.pds-tooltip__content .status');
+
+    const loaded = (page: { root?: HTMLElement }) => {
+      const status = slottedStatus(page);
+      status.textContent = 'Loaded';
+      return { type: 'characterData', target: status } as Partial<MutationRecord>;
     };
 
     it('only watches the content while the tooltip is open, at any depth', async () => {
@@ -588,36 +624,89 @@ describe('pds-tooltip', () => {
       page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
       await page.waitForChanges();
 
+      const ownWrapper = Array.from(page.root?.children ?? []).find((child) =>
+        child.matches('.pds-tooltip__content-slot-wrapper'),
+      );
       expect(mockObserve).toHaveBeenCalledWith(
-        page.root?.querySelector('.pds-tooltip__content-slot-wrapper'),
+        ownWrapper,
         expect.objectContaining({ childList: true, subtree: true, attributes: true, characterData: true }),
       );
     });
 
     it('shows content that changes after the tooltip opens', async () => {
       const page = await openTooltip();
-      expect(page.body.querySelector('.pds-tooltip__content .status')?.textContent).toBe('Loading');
+      expect(portalStatus(page)?.textContent).toBe('Loading');
 
-      const status = page.root?.querySelector('[slot="content"] .status') as HTMLElement;
-      status.textContent = 'Loaded';
-      observerCallback?.([{ type: 'characterData', target: status }]);
+      observerCallback?.([loaded(page)]);
+      runFrames();
       await page.waitForChanges();
 
-      const portalContent = page.body.querySelector('.pds-tooltip__content');
-      expect(portalContent?.querySelectorAll('.status')).toHaveLength(1);
-      expect(portalContent?.querySelector('.status')?.textContent).toBe('Loaded');
+      expect(page.body.querySelectorAll('.pds-tooltip__content .status')).toHaveLength(1);
+      expect(portalStatus(page)?.textContent).toBe('Loaded');
+    });
+
+    it('re-copies once for changes that arrive before the next frame', async () => {
+      const page = await openTooltip();
+
+      observerCallback?.([loaded(page)]);
+      observerCallback?.([{ type: 'characterData', target: slottedStatus(page) }]);
+
+      expect(frames.size).toBe(1);
+      runFrames();
+      await page.waitForChanges();
+      expect(portalStatus(page)?.textContent).toBe('Loaded');
+    });
+
+    it('keeps the same portal, id and trigger description through a re-copy', async () => {
+      const page = await openTooltip();
+      const portal = page.body.querySelector('.pds-tooltip');
+      const portalId = portal?.id;
+
+      observerCallback?.([loaded(page)]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(page.body.querySelector('.pds-tooltip')).toBe(portal);
+      expect(portal?.id).toBe(portalId);
+      expect(page.root?.querySelector('.pds-tooltip__trigger')?.getAttribute('aria-describedby')).toBe(portalId);
+    });
+
+    it('leaves the portal alone when a change leaves the content as it was', async () => {
+      const page = await openTooltip();
+      const copied = portalStatus(page);
+      const positions = (floatingUI.computePosition as jest.Mock).mock.calls.length;
+
+      observerCallback?.([{ type: 'characterData', target: slottedStatus(page) }]);
+      runFrames();
+      await page.waitForChanges();
+
+      expect(portalStatus(page)).toBe(copied);
+      expect((floatingUI.computePosition as jest.Mock).mock.calls.length).toBe(positions);
     });
 
     it('ignores Stencil marking slotted content hydrated', async () => {
       const page = await openTooltip();
-      const status = page.root?.querySelector('[slot="content"] .status') as HTMLElement;
-      const copied = page.body.querySelector('.pds-tooltip__content .status');
+      const status = slottedStatus(page);
 
       status.classList.add('hydrated');
       observerCallback?.([{ type: 'attributes', attributeName: 'class', oldValue: 'status', target: status }]);
+
+      expect(frames.size).toBe(0);
+    });
+
+    it('re-copies when a hydration change arrives with a real one', async () => {
+      const page = await openTooltip();
+      const status = slottedStatus(page);
+      status.classList.add('hydrated');
+
+      observerCallback?.([
+        { type: 'attributes', attributeName: 'class', oldValue: 'status', target: status },
+        loaded(page),
+      ]);
+      runFrames();
       await page.waitForChanges();
 
-      expect(page.body.querySelector('.pds-tooltip__content .status')).toBe(copied);
+      expect(portalStatus(page)?.textContent).toBe('Loaded');
     });
 
     it('stops watching when the tooltip closes', async () => {
@@ -628,6 +717,32 @@ describe('pds-tooltip', () => {
 
       expect(mockDisconnect).toHaveBeenCalled();
       expect(page.body.querySelector('.pds-tooltip__content')).toBeNull();
+    });
+
+    it('drops a pending re-copy when the tooltip closes', async () => {
+      const page = await openTooltip();
+
+      observerCallback?.([loaded(page)]);
+      const pending = nextFrame;
+      page.root?.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseleave'));
+      await page.waitForChanges();
+
+      expect(frames.has(pending)).toBe(false);
+      expect(() => runFrames()).not.toThrow();
+      expect(page.body.querySelector('.pds-tooltip')).toBeNull();
+    });
+
+    it('drops a pending re-copy when the tooltip is removed', async () => {
+      const page = await openTooltip();
+
+      observerCallback?.([loaded(page)]);
+      const pending = nextFrame;
+      page.root?.remove();
+      await page.waitForChanges();
+
+      // Stencil may queue its own frames on removal; the re-copy's is the one that must be gone.
+      expect(frames.has(pending)).toBe(false);
+      expect(page.body.querySelector('.pds-tooltip')).toBeNull();
     });
   });
 
