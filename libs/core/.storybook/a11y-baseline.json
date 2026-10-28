@@ -1,16 +1,10 @@
 {
   "$schema": "Story ID -> axe rule IDs that already failed when the gate landed.",
   "$docs": "See CONTRIBUTING.md § Accessibility gate. Entries may be removed, never added by hand.",
-  "generatedAt": "2026-10-23",
-  "storyCount": 28,
-  "violationCount": 28,
+  "generatedAt": "2026-10-28",
+  "storyCount": 25,
+  "violationCount": 25,
   "stories": {
-    "components-avatar--badge": [
-      "role-img-alt"
-    ],
-    "components-avatar--initials-with-badge": [
-      "role-img-alt"
-    ],
     "components-filters--default": [
       "color-contrast"
     ],
@@ -31,9 +25,6 @@
     ],
     "components-input--with-prepend-and-suffix": [
       "select-name"
-    ],
-    "components-link--external": [
-      "role-img-alt"
     ],
     "components-multiselect--close-panel-on-select": [
       "color-contrast"
