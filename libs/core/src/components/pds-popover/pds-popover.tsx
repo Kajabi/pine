@@ -926,9 +926,23 @@ export class PdsPopover {
     if (this.leavingPanel) return;
     const tabbables = this.guardedTabbables();
     const from = event.relatedTarget as Node | null;
-    const fromAfterPopover = from != null && !containsComposed(this.el, from);
-    (fromAfterPopover ? tabbables[tabbables.length - 1] : tabbables[0])?.focus();
+    const target = from != null && this.isAfterPopover(from) ? tabbables[tabbables.length - 1] : tabbables[0];
+    // Focus can reach the guard without a Tab keydown here (from a frame, or assistive tech) after
+    // the panel's controls are gone. The trigger is the nearest visible place for it.
+    if (target == null) this.returnFocusToTrigger();
+    else target.focus();
   };
+
+  /** Whether `node` comes after the popover in the page, compared in the tree that holds `node`. */
+  private isAfterPopover(node: Node) {
+    if (containsComposed(this.el, node)) return false;
+    let popover: Node = this.el;
+    while (popover.getRootNode() !== node.getRootNode() && popover.getRootNode() instanceof ShadowRoot) {
+      popover = (popover.getRootNode() as ShadowRoot).host;
+    }
+    const position = popover.compareDocumentPosition(node);
+    return (position & Node.DOCUMENT_POSITION_DISCONNECTED) === 0 && (position & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+  }
 
   private handleTabFromPanel = (event: KeyboardEvent) => {
     if (event.key !== 'Tab' || event.defaultPrevented || this.tabGuardEl == null) return;
@@ -938,14 +952,18 @@ export class PdsPopover {
 
     // Not prevented, the browser's Tab carries on from the guard. Inert until then, the panel can't
     // be where it lands when nothing follows the popover.
-    if (!event.shiftKey) {
-      this.portalEl!.inert = true;
-      setTimeout(this.releasePanel);
-    }
     this.leavingPanel = true;
     this.tabGuardEl.focus();
     this.leavingPanel = false;
+    if (!event.shiftKey) this.portalEl!.inert = true;
+    setTimeout(() => this.finishLeavingPanel(edge));
   };
+
+  // With nowhere for the browser's Tab to go, focus would stay on the invisible guard.
+  private finishLeavingPanel(edge: HTMLElement) {
+    this.releasePanel();
+    if (this.active && this.el.shadowRoot?.activeElement === this.tabGuardEl) edge.focus();
+  }
 
   private releasePanel = () => {
     if (this.portalEl != null) this.portalEl.inert = false;
