@@ -1051,6 +1051,14 @@ describe('pds-popover Tab order', () => {
     expect(await page.evaluate(() => document.getElementById('pop-portal')!.contains(document.activeElement))).toBe(false);
   });
 
+  it("doesn't reach the panel again from a component's own control past the popover", async () => {
+    const page = await setUp({ after: '<pds-button id="after">After</pds-button>' });
+    await open(page);
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['first', 'last', 'after']);
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.getElementById('pop-portal')!.contains(document.activeElement))).toBe(false);
+  });
+
   it('wraps a pds-modal past the popover without going through the panel again', async () => {
     const page = await newE2EPage();
     await page.setContent(`
