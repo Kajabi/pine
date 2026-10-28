@@ -1083,6 +1083,75 @@ describe('pds-popover Tab order', () => {
     expect(await press(page, ['Tab', 'Tab', 'Tab', 'Tab'])).toEqual(['first', 'last', 'after', 'modal-first']);
   });
 
+  it('reaches what follows the popover first when Shift+Tab starts with nothing focused', async () => {
+    const page = await setUp();
+    await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.show());
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    expect(await press(page, ['Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab'])).toEqual(['after', 'last', 'first', 'trigger']);
+  });
+
+  it('wraps a pds-modal backward to what follows the popover', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="modal">
+        <div slot="header">Header</div>
+        <div>
+          <button type="button" id="modal-first">First in modal</button>
+          <form>
+            <pds-popover component-id="pop">
+              <button type="button" slot="trigger" id="trigger">Open</button>
+              <div>${BUTTONS}</div>
+            </pds-popover>
+            <button type="button" id="after">After</button>
+          </form>
+        </div>
+      </pds-modal>
+    `);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    await page.waitForChanges();
+    await open(page);
+    await page.focus('#modal-first');
+
+    expect(await press(page, ['Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab'])).toEqual(['after', 'last', 'first', 'trigger']);
+  });
+
+  describe("with a popover in another popover's panel", () => {
+    const setUpNested = async (innerLast: boolean) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <button id="before">Before</button>
+        <pds-popover component-id="pop">
+          <button slot="trigger" id="trigger">Open</button>
+          <div>
+            <button id="first">First</button>
+            <pds-popover component-id="inner">
+              <button slot="trigger" id="inner-trigger">Inner</button>
+              <div><button id="inner-first">Inner first</button><button id="inner-last">Inner last</button></div>
+            </pds-popover>
+            ${innerLast ? '' : '<button id="last">Last</button>'}
+          </div>
+        </pds-popover>
+        <button id="after">After</button>
+      `);
+      await page.$eval('pds-popover[component-id="pop"]', (el: HTMLPdsPopoverElement) => el.show());
+      await page.$eval('pds-popover[component-id="inner"]', (el: HTMLPdsPopoverElement) => el.show());
+      await page.waitForChanges();
+      await page.focus('#trigger');
+      return page;
+    };
+
+    it('goes through the inner panel and on through the outer one', async () => {
+      const page = await setUpNested(false);
+      expect(await press(page, ['Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Tab'])).toEqual(['first', 'inner-trigger', 'inner-first', 'inner-last', 'last', 'after']);
+      expect(await press(page, ['Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab'])).toEqual(['last', 'inner-last', 'inner-first', 'inner-trigger', 'first', 'trigger']);
+    });
+
+    it('goes from the end of an inner panel that ends the outer one to what follows the outer popover', async () => {
+      const page = await setUpNested(true);
+      expect(await press(page, ['Tab', 'Tab', 'Tab', 'Tab', 'Tab'])).toEqual(['first', 'inner-trigger', 'inner-first', 'inner-last', 'after']);
+    });
+  });
+
   it('goes into the panel from the start when Tab comes from before a trigger that takes no focus', async () => {
     const page = await setUp({ trigger: '<span slot="trigger" id="trigger">Open</span>' });
     await page.$eval('pds-popover', (el: HTMLPdsPopoverElement) => el.show());
