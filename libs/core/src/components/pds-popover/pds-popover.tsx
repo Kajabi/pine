@@ -23,6 +23,27 @@ function deepActiveElement(): Element | null {
   return active;
 }
 
+/** `node`, or the shadow host it sits in, lifted until it shares a tree with `other` or reaches the document. */
+function liftToTreeOf(node: Node, other: Node): Node {
+  let current = node;
+  while (current.getRootNode() !== other.getRootNode() && current.getRootNode() instanceof ShadowRoot) {
+    current = (current.getRootNode() as ShadowRoot).host;
+  }
+  return current;
+}
+
+/**
+ * Where `node` sits relative to `ref`, as `compareDocumentPosition` reports it. Whichever of the two
+ * is inside a shadow root is lifted to its host first, so a control inside a component compares too.
+ */
+function positionAcrossTrees(ref: Node, node: Node): number {
+  const lifted = liftToTreeOf(node, ref);
+  return liftToTreeOf(ref, lifted).compareDocumentPosition(lifted);
+}
+
+const isPosition = (position: number, flag: number) =>
+  (position & Node.DOCUMENT_POSITION_DISCONNECTED) === 0 && (position & flag) !== 0;
+
 /**
  * @slot trigger - The trigger element for the popover
  * @slot (default) - The content to display inside the popover
@@ -944,29 +965,14 @@ export class PdsPopover {
     else target.focus();
   };
 
-  /** Whether `node` comes after the popover in the page, compared in the tree that holds `node`. */
   private isAfterPopover(node: Node) {
     if (containsComposed(this.el, node)) return false;
-    let popover: Node = this.el;
-    while (popover.getRootNode() !== node.getRootNode() && popover.getRootNode() instanceof ShadowRoot) {
-      popover = (popover.getRootNode() as ShadowRoot).host;
-    }
-    const position = popover.compareDocumentPosition(node);
-    return (position & Node.DOCUMENT_POSITION_DISCONNECTED) === 0 && (position & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+    return isPosition(positionAcrossTrees(this.el, node), Node.DOCUMENT_POSITION_FOLLOWING);
   }
 
-  /**
-   * Whether `node` comes before the panel in the page, compared in the tree that holds the panel. A
-   * nested popover's panel or a calendar opened from this one is added after it, so it isn't.
-   */
+  // A nested popover's panel or a calendar opened from this one is added after it, so it isn't before.
   private isBeforePanel(node: Node) {
-    const panel = this.portalEl!;
-    let current = node;
-    while (current.getRootNode() !== panel.getRootNode() && current.getRootNode() instanceof ShadowRoot) {
-      current = (current.getRootNode() as ShadowRoot).host;
-    }
-    const position = panel.compareDocumentPosition(current);
-    return (position & Node.DOCUMENT_POSITION_DISCONNECTED) === 0 && (position & Node.DOCUMENT_POSITION_PRECEDING) !== 0;
+    return isPosition(positionAcrossTrees(this.portalEl!, node), Node.DOCUMENT_POSITION_PRECEDING);
   }
 
   private handleTabFromPanel = (event: KeyboardEvent) => {
