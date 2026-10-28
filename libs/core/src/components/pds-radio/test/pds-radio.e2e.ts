@@ -296,3 +296,98 @@ describe('pds-radio after its host classes and styles are stripped', () => {
     expect(classes).toEqual(expect.arrayContaining(['hydrated', 'sc-pds-radio-h']));
   });
 });
+
+describe('pds-radio pill variant', () => {
+  const pillStyle = (page, selector: string) =>
+    page.$eval(selector, (el) => {
+      const label = el.querySelector('label');
+      const style = getComputedStyle(label);
+      const rect = label.getBoundingClientRect();
+      return {
+        boxShadow: style.boxShadow,
+        borderColor: style.borderTopColor,
+        outlineStyle: style.outlineStyle,
+        width: rect.width,
+        height: rect.height,
+      };
+    });
+
+  const group = `
+    <pds-radio-group name="plan" group-label="Plan" direction="row">
+      <pds-radio component-id="free" value="free" label="Free" variant="pill"></pds-radio>
+      <pds-radio component-id="pro" value="pro" label="Pro" variant="pill"></pds-radio>
+      <pds-radio component-id="team" value="team" label="Team" variant="pill"></pds-radio>
+    </pds-radio-group>
+  `;
+
+  it('checks the radio when the pill is clicked, without resizing it', async () => {
+    const page = await newE2EPage();
+    await page.setContent(group);
+
+    const before = await pillStyle(page, 'pds-radio:first-of-type');
+    await page.click('pds-radio:first-of-type label');
+    await page.waitForChanges();
+    const after = await pillStyle(page, 'pds-radio:first-of-type');
+
+    expect(await page.$eval('#free', (el: HTMLInputElement) => el.checked)).toBe(true);
+    expect(after.boxShadow).not.toBe('none');
+    expect(after.width).toBe(before.width);
+    expect(after.height).toBe(before.height);
+  });
+
+  it('shows no focus ring on a mouse click', async () => {
+    const page = await newE2EPage();
+    await page.setContent(group);
+
+    await page.click('pds-radio:first-of-type label');
+    await page.waitForChanges();
+
+    expect((await pillStyle(page, 'pds-radio:first-of-type')).outlineStyle).toBe('none');
+  });
+
+  it('moves the checked radio with arrow keys and shows the focus ring', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<button>before</button>${group}`);
+
+    await page.focus('button');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('ArrowRight');
+    await page.waitForChanges();
+
+    expect(await page.$eval('#pro', (el: HTMLInputElement) => el.checked)).toBe(true);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('pro');
+    expect((await pillStyle(page, 'pds-radio:nth-of-type(2)')).outlineStyle).toBe('solid');
+  });
+
+  it('submits the checked value with the form', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<form>${group}</form>`);
+
+    await page.click('pds-radio:nth-of-type(3) label');
+    await page.waitForChanges();
+
+    const value = await page.$eval('form', (form: HTMLFormElement) => new FormData(form).get('plan'));
+    expect(value).toBe('team');
+  });
+
+  it('follows the theme in dark mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio id="light" component-id="light" label="Light" variant="pill" checked></pds-radio>
+      <div data-theme="dark">
+        <pds-radio id="dark" component-id="dark" label="Dark" variant="pill" checked></pds-radio>
+      </div>
+    `);
+
+    const light = await pillStyle(page, '#light');
+    const dark = await pillStyle(page, '#dark');
+    expect(dark.borderColor).not.toBe(light.borderColor);
+  });
+
+  it('has no axe violations in a group', async () => {
+    const page = await newE2EPage();
+    await page.setContent(group);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});
