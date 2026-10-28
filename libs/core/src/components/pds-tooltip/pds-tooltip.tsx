@@ -445,7 +445,10 @@ export class PdsTooltip {
   private strippedHtml(root: Element): string {
     const clone = root.cloneNode(true) as Element;
     clone.querySelectorAll('*').forEach((el) => {
-      const kept = classNamesOf(el.className).filter((name) => !isStencilClass(el, name));
+      // Not `el.className`: on an SVG element that's an SVGAnimatedString, not a string,
+      // so classNamesOf would silently drop its classes from the comparison. The `class`
+      // attribute is a plain string on every element, SVG included.
+      const kept = classNamesOf(el.getAttribute('class') || '').filter((name) => !isStencilClass(el, name));
       if (kept.length === 0) {
         el.removeAttribute('class');
       } else {
