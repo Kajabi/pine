@@ -283,6 +283,20 @@ describe('pds-link', () => {
       expect(icon?.getAttribute('aria-hidden')).toBe('true');
     });
 
+    it('falls back to the default label when externalLabel is cleared to undefined or null', async () => {
+      for (const value of [undefined, null]) {
+        const page = await newSpecPage({
+          components: [PdsLink],
+          html: `<pds-link href="#" external="true" external-label="Custom">Docs</pds-link>`,
+        });
+        (page.root as HTMLPdsLinkElement).externalLabel = value as unknown as string;
+        await page.waitForChanges();
+        const icon = page.root?.shadowRoot?.querySelector('pds-icon');
+        expect(icon?.getAttribute('aria-label')).toBe('(opens in a new tab)');
+        expect(icon?.hasAttribute('aria-hidden')).toBe(false);
+      }
+    });
+
     it('hides the icon when target keeps the link in the same tab', async () => {
       const { root } = await newSpecPage({
         components: [PdsLink],

@@ -3,6 +3,9 @@ import { setColor } from '../../utils/utils';
 
 import { launch } from '@pine-ds/icons/icons';
 
+// Used when `externalLabel` is unset; an empty string hides the icon instead.
+const DEFAULT_EXTERNAL_LABEL = '(opens in a new tab)';
+
 /**
  * @part link - Link element styles.
  * @slot (default) - Text content placed between the opening and closing tags. If no text is provided, the **href** will be used as a fallback.
@@ -52,7 +55,7 @@ export class PdsLink {
    * empty string to make the icon decorative.
    * @defaultValue '(opens in a new tab)'
    */
-  @Prop() externalLabel = '(opens in a new tab)';
+  @Prop() externalLabel?: string;
 
   /**
    * Specifies where to open the linked document.
@@ -163,7 +166,8 @@ export class PdsLink {
     // A `target` other than _blank overrides `external`, and then the label
     // would be false, so the icon is decorative there, as it is when the
     // label is empty.
-    const externalIconLabel = opensInNewTab ? (this.externalLabel || undefined) : undefined;
+    const externalLabel = this.externalLabel ?? DEFAULT_EXTERNAL_LABEL;
+    const externalIconLabel = opensInNewTab && externalLabel !== '' ? externalLabel : undefined;
 
     return (
       <a
