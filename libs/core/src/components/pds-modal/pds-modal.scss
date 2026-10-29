@@ -22,8 +22,9 @@
     backdrop-filter: blur(3px);
   }
 
-  // Increase z-index for nested modals
-  pds-modal & {
+  // Raise a modal nested inside another modal above its parent. The backdrop always has a
+  // pds-modal ancestor (its own host), so the selector needs two to mean "nested".
+  pds-modal pds-modal & {
     z-index: var(--pine-z-index-priority);
   }
 

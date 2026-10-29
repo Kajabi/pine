@@ -218,6 +218,40 @@ describe('pds-modal', () => {
       expect(await modal.getProperty('open')).toBe(false);
     });
 
+    it('keeps a lone non-modal dialog at the modal tier so a modal-tier overlay can stack above it', async () => {
+      // The "nested modal" backdrop rule must not fire for a modal that is not nested: every
+      // backdrop has its own host as a pds-modal ancestor, and at the priority tier a
+      // non-top-layer dialog covered the modal-tier overlays disableTopLayer exists for.
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="tl-tier" disable-top-layer="true"><div>Content</div></pds-modal>
+        <pds-modal component-id="tl-outer"><pds-modal component-id="tl-inner"><div>Inner</div></pds-modal></pds-modal>
+      `);
+      await page.waitForChanges();
+
+      const tiers = await page.evaluate(() => {
+        const token = (name: string) =>
+          parseInt(getComputedStyle(document.documentElement).getPropertyValue(name), 10);
+        const backdropZIndex = (id: string) =>
+          parseInt(
+            getComputedStyle(
+              document.querySelector(`pds-modal[component-id="${id}"] > dialog`) as HTMLElement,
+            ).zIndex,
+            10,
+          );
+        return {
+          modal: token('--pine-z-index-modal'),
+          priority: token('--pine-z-index-priority'),
+          lone: backdropZIndex('tl-tier'),
+          outer: backdropZIndex('tl-outer'),
+          nested: backdropZIndex('tl-inner'),
+        };
+      });
+      expect(tiers.lone).toBe(tiers.modal);
+      expect(tiers.outer).toBe(tiers.modal);
+      expect(tiers.nested).toBe(tiers.priority);
+    });
+
     it('lets a higher z-index overlay paint above the non-modal dialog', async () => {
       const page = await newE2EPage();
       await page.setContent(
