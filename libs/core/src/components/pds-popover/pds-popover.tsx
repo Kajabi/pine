@@ -23,6 +23,19 @@ const HOVER_CLOSE_DELAY_MS = 200;
  */
 const viewportPlatform = { ...platform, getOffsetParent: () => window };
 
+/**
+ * Where `top: 0; left: 0` puts a fixed element beside the given one. An empty probe is measured instead of the
+ * element, whose own transforms, such as an entrance animation, would otherwise read as part of the offset.
+ */
+const containingBlockOrigin = (element: HTMLElement) => {
+  const probe = document.createElement('div');
+  probe.style.cssText = 'all: initial; position: fixed; top: 0; left: 0;';
+  element.parentNode?.insertBefore(probe, element);
+  const { top, left } = probe.getBoundingClientRect();
+  probe.remove();
+  return { top, left };
+};
+
 /** The focused element, followed down through shadow roots to the control that has focus. */
 function deepActiveElement(): Element | null {
   let active = document.activeElement;
@@ -1147,16 +1160,12 @@ export class PdsPopover {
     if (!this.active || run !== this.positioningRun || portal !== this.portalEl) return;
 
     portal.setAttribute('data-pds-popover-placement', placement);
-    portal.style.top = `${top}px`;
-    portal.style.left = `${left}px`;
 
     // `position: fixed` measures from the viewport unless an ancestor becomes its containing block,
-    // as a modal dialog does with its backdrop filter. Shift by however far it landed from the spot.
-    const placed = portal.getBoundingClientRect();
-    if (Math.abs(placed.top - top) > 0.5 || Math.abs(placed.left - left) > 0.5) {
-      portal.style.top = `${2 * top - placed.top}px`;
-      portal.style.left = `${2 * left - placed.left}px`;
-    }
+    // as a modal dialog does with its backdrop filter. Offset by however far that block's corner is from the viewport's.
+    const origin = containingBlockOrigin(portal);
+    portal.style.top = `${top - origin.top}px`;
+    portal.style.left = `${left - origin.left}px`;
   }
 
   render() {
