@@ -791,9 +791,9 @@ export class PdsPopover {
   @Method()
   async toggle() {
     if (this.active) {
-      this.hide();
+      await this.hide();
     } else {
-      this.show();
+      await this.show();
     }
   }
 
