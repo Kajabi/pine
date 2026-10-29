@@ -1,0 +1,93 @@
+// Spacing, radius and dividers come from the parent pds-list's inherited custom properties,
+// with the same defaults here for an item rendered on its own.
+:host {
+  display: block;
+}
+
+:host(:not(:last-child)) .pds-list-item {
+  border-block-end: var(--pds-list-item-divider, none);
+}
+
+.pds-list-item {
+  align-items: center;
+  border-radius: var(--pds-list-item-border-radius, var(--pine-border-radius-md));
+  color: var(--pine-color-text);
+  display: flex;
+  gap: var(--pine-dimension-md);
+  padding-block: var(--pds-list-item-padding-block, var(--pine-dimension-sm));
+  padding-inline: var(--pds-list-item-padding-inline, var(--pine-dimension-md));
+  position: relative;
+}
+
+.pds-list-item__leading,
+.pds-list-item__trailing {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--pine-dimension-sm);
+}
+
+// Above the link's stretched click area, so its controls stay clickable.
+.pds-list-item__trailing {
+  margin-inline-start: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.pds-list-item__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--pine-dimension-025);
+  min-width: 0;
+}
+
+// Truncated with CSS rather than pds-text's truncate, which adds a tab stop.
+.pds-list-item__title,
+.pds-list-item__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pds-list-item__title {
+  color: var(--pine-color-text);
+  font: var(--pine-typography-body-medium);
+}
+
+.pds-list-item__description {
+  color: var(--pine-color-text-secondary);
+  font: var(--pine-typography-body-sm);
+}
+
+.pds-list-item__link {
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  // Stretches the link over the whole item, so the row is one click target and one focus ring.
+  &::after {
+    border-radius: var(--pds-list-item-border-radius, var(--pine-border-radius-md));
+    content: '';
+    inset: 0;
+    position: absolute;
+  }
+
+  &:focus-visible::after {
+    outline: var(--pine-outline-focus);
+    outline-offset: calc(var(--pine-border-width-thick) * -1);
+  }
+}
+
+.pds-list-item--interactive:hover {
+  background-color: var(--pine-color-background-container-hover);
+}
+
+// Empty slots take no space, so an item without leading or trailing content has no stray gap.
+.pds-list-item__leading[hidden],
+.pds-list-item__trailing[hidden],
+.pds-list-item__description[hidden] {
+  display: none;
+}
