@@ -743,6 +743,18 @@ describe('pds-popover', () => {
       expect(portal.hasAttribute('data-pds-popover-placement')).toBe(false);
     });
 
+    it('resolves toggle() once the panel is positioned and pdsPopoverOpen has fired, as show() does', async () => {
+      jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 40, y: 60, placement: 'top-start' });
+      const { page, instance, portal } = await setUp();
+      const opened = jest.fn();
+      page.root!.addEventListener('pdsPopoverOpen', opened);
+
+      await instance.toggle();
+
+      expect(opened).toHaveBeenCalledTimes(1);
+      expect(positionedAt(portal)).toEqual({ top: '60px', left: '40px', side: 'top-start' });
+    });
+
     it('emits pdsPopoverOpen before pdsPopoverClose when closed before its first position resolves', async () => {
       let resolve: (value: unknown) => void = () => undefined;
       jest.spyOn(floatingUI, 'computePosition').mockReturnValue(new Promise(r => (resolve = r)));
