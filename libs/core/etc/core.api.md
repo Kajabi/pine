@@ -326,6 +326,7 @@ export namespace Components {
         "triggerShape": 'pill' | 'input';
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerWidth": string;
+        "truncate": boolean;
         "value": string;
     }
     // (undocumented)
@@ -1711,6 +1712,7 @@ export namespace LocalJSX {
         "triggerShape"?: 'pill' | 'input';
         "triggerVariant"?: 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerWidth"?: string;
+        "truncate"?: boolean;
         "value"?: string;
     }
 
@@ -1790,6 +1792,8 @@ export namespace LocalJSX {
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         // (undocumented)
         "triggerWidth": string;
+        // (undocumented)
+        "truncate": boolean;
         // (undocumented)
         "value": string;
     }
