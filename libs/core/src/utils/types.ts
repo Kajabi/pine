@@ -78,6 +78,9 @@ export type ChipSentimentType =
 
 export type ModalSizeType = 'sm' | 'md' | 'lg' | 'fullscreen';
 
+/** An opt-in view transition for pds-modal: `grow` from its trigger, or `morph` into the next modal. */
+export type ModalTransition = 'grow' | 'morph';
+
 export type ChipSizeType =
   'sm'
   | 'md'

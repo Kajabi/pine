@@ -1,8 +1,9 @@
 import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
 import { closest } from '@utils/closest';
+import { isShowing, runModalTransition } from '@utils/modal-view-transition';
 import { tabbableIn } from '@utils/tabbable';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
-import type { ModalSizeType } from '@utils/types';
+import type { ModalSizeType, ModalTransition } from '@utils/types';
 
 const PRESET_SIZES: readonly ModalSizeType[] = ['sm', 'md', 'lg', 'fullscreen'];
 
@@ -25,6 +26,20 @@ function containsComposed(ancestor: Node, node: Node | null): boolean {
  * another component's shadow root.
  */
 const openModals = new Map<Element, number>();
+
+/**
+ * The control last pressed, for a `grow` transition's origin when the browser doesn't focus what
+ * was clicked. The host stands in for a control inside a shadow root: it's what the page lays out.
+ */
+let lastPressed: Element | null = null;
+let listeningForPresses = false;
+const recordPress = (e: Event) => {
+  // `Element` here is Stencil's decorator, so check the node type rather than instanceof.
+  const target = (e.composedPath?.()[0] ?? e.target) as Node | null;
+  if (target?.nodeType !== Node.ELEMENT_NODE) return;
+  const root = target.getRootNode();
+  lastPressed = root instanceof ShadowRoot ? root.host : (target as HTMLElement);
+};
 let openSequence = 0;
 
 /** Whether the panel of an open popover that takes Escape sits in `root`, including inside shadow roots under it. */
@@ -68,6 +83,10 @@ export class PdsModal {
   private modalRef: HTMLDialogElement;
   private previousActiveElement: HTMLElement;
   private focusableElements: HTMLElement[] = [];
+  /** The element a `grow` transition opened from, which the panel shrinks back into on close. */
+  private transitionOriginElement: Element | null = null;
+  /** A transition queued to open or close the modal hasn't run yet: which way it goes. */
+  private pendingTransition: 'open' | 'close' | null = null;
 
   @Element() el: HTMLPdsModalElement;
 
@@ -129,6 +148,22 @@ export class PdsModal {
   @Prop() disableInitialFocus = false;
 
   /**
+   * An opt-in view transition for opening and closing the modal. `grow` grows the panel from the
+   * control that opened it and shrinks it back on close, for a modal opened over another one.
+   * `morph` turns the open panel of one `morph` modal into the next one's when one closes as the
+   * other opens in the same task, as in a chain of modals; opening the previous one again plays it
+   * backward. Plays only where the browser supports the View Transitions API and the user hasn't
+   * asked for reduced motion; otherwise the modal opens and closes as it does without it.
+   */
+  @Prop() transition?: ModalTransition;
+
+  /**
+   * The `id` of the element a `grow` transition opens from. Defaults to the focused element, or
+   * the element last pressed, when the modal opens.
+   */
+  @Prop() transitionOrigin?: string;
+
+  /**
    * Emitted when the modal is opened
    */
   @Event() pdsModalOpen: EventEmitter<void>;
@@ -177,6 +212,10 @@ export class PdsModal {
   // open modals, back too. Adding the same listener twice is a no-op.
   connectedCallback() {
     document.addEventListener('keydown', this.handleKeyDown);
+    if (!listeningForPresses) {
+      listeningForPresses = true;
+      document.addEventListener('pointerdown', recordPress, true);
+    }
     if (this.open && !openModals.has(this.el)) openModals.set(this.el, ++openSequence);
   }
 
@@ -229,11 +268,36 @@ export class PdsModal {
    */
   @Method()
   async showModal() {
+    if (!this.modalRef) return;
+    if (this.transition && !this.modalRef.open && this.pendingTransition !== 'open') {
+      // Read now: by the time the transition runs, a second click could have moved focus.
+      this.previousActiveElement = document.activeElement as HTMLElement;
+      this.transitionOriginElement = this.resolveTransitionOrigin();
+      this.pendingTransition = 'open';
+      return runModalTransition({
+        modal: this.el,
+        kind: this.transition,
+        opening: true,
+        panel: this.panel(),
+        origin: this.transitionOriginElement,
+        run: () => {
+          if (this.pendingTransition !== 'open') return;
+          this.pendingTransition = null;
+          this.openDialog(false);
+        },
+      });
+    }
+    if (this.pendingTransition === 'open') return;
+    this.openDialog(true);
+  }
+
+  private openDialog(recordFocus: boolean) {
     if (this.modalRef) {
       try {
         // Store the currently focused element to restore focus when modal closes. Showing an open
-        // modal again (the open watcher does) would record a control inside it instead.
-        if (!this.modalRef.open) this.previousActiveElement = document.activeElement as HTMLElement;
+        // modal again (the open watcher does) would record a control inside it instead. A
+        // transition records it before it defers the open.
+        if (recordFocus && !this.modalRef.open) this.previousActiveElement = document.activeElement as HTMLElement;
 
         // showModal() promotes the dialog to the browser top layer (and makes the
         // rest of the page inert), which prevents any overlay outside the dialog
@@ -310,6 +374,41 @@ export class PdsModal {
    */
   @Method()
   async hideModal() {
+    if (!this.modalRef) return;
+    if (this.pendingTransition === 'open') {
+      // Closed again before it opened: the queued open does nothing, and there's nothing to close.
+      this.pendingTransition = null;
+      this.open = false;
+      return;
+    }
+    if (this.transition && this.modalRef.open && this.pendingTransition !== 'close') {
+      // Read now: by the time the transition runs, a click elsewhere may have moved focus there.
+      const focusMoved = this.focusMovedElsewhere();
+      this.pendingTransition = 'close';
+      return runModalTransition({
+        modal: this.el,
+        kind: this.transition,
+        opening: false,
+        panel: this.panel(),
+        origin: this.transitionOriginElement,
+        run: () => {
+          if (this.pendingTransition !== 'close') return;
+          this.pendingTransition = null;
+          this.closeDialog(focusMoved);
+        },
+      });
+    }
+    if (this.pendingTransition === 'close') return;
+    this.closeDialog(this.focusMovedElsewhere());
+  }
+
+  /** Whether focus has left the modal for something else, which closing then leaves alone. */
+  private focusMovedElsewhere(): boolean {
+    const activeElement = document.activeElement;
+    return activeElement !== null && activeElement !== document.body && !this.modalRef?.contains(activeElement);
+  }
+
+  private closeDialog(focusAlreadyMovedElsewhere: boolean) {
     if (this.modalRef) {
       try {
         // Capture before close(): with the async task queue, a prop change
@@ -319,11 +418,8 @@ export class PdsModal {
         // click actually landed on. Restoring previousActiveElement in that
         // case would steal focus back from a real new destination; only
         // restore it when focus is still inside the modal (or nowhere, i.e.
-        // document.body), meaning nothing else has claimed it since.
-        const activeElement = document.activeElement;
-        const focusAlreadyMovedElsewhere =
-          activeElement !== null && activeElement !== document.body && !this.modalRef.contains(activeElement);
-
+        // document.body), meaning nothing else has claimed it since. That's read before close(),
+        // and before a transition defers the close.
         this.modalRef.close();
         this.open = false;
         openModals.delete(this.el);
@@ -632,6 +728,26 @@ export class PdsModal {
     console.warn(`pds-modal: invalid size "${String(this.size).slice(0, 50)}", using md`);
   }
 
+  private panel(): HTMLElement | null {
+    return this.el.querySelector('.pds-modal');
+  }
+
+  /**
+   * The element a `grow` transition opens from: the `transitionOrigin` element, or the focused
+   * element, or the element last pressed (Safari doesn't focus a button on click).
+   */
+  private resolveTransitionOrigin(): Element | null {
+    if (this.transition !== 'grow') return null;
+    if (this.transitionOrigin) {
+      const root = this.el.getRootNode() as Document | ShadowRoot;
+      const byId = root.getElementById?.(this.transitionOrigin) ?? document.getElementById(this.transitionOrigin);
+      if (byId) return byId;
+    }
+    const active = document.activeElement;
+    if (active && active !== document.body && !this.el.contains(active) && isShowing(active)) return active;
+    return lastPressed && !this.el.contains(lastPressed) && isShowing(lastPressed) ? lastPressed : null;
+  }
+
   render() {
     const [sizeClass = 'md', customSize] = this.resolveSize();
 
@@ -639,6 +755,7 @@ export class PdsModal {
       <dialog
         class={{
           'pds-modal__backdrop': true,
+          'pds-modal__backdrop--transition': !!this.transition,
           'open': this.open
         }}
         aria-modal={this.disableTopLayer ? 'false' : 'true'}
