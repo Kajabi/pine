@@ -105,6 +105,12 @@ export const PdsInput: ForwardRefExoticComponent<JSX_2.PdsInput & Omit<HTMLAttri
 export const PdsLink: ForwardRefExoticComponent<JSX_2.PdsLink & Omit<HTMLAttributes<HTMLPdsLinkElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsLinkElement>>;
 
 // @public (undocumented)
+export const PdsList: ForwardRefExoticComponent<JSX_2.PdsList & Omit<HTMLAttributes<HTMLPdsListElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsListElement>>;
+
+// @public (undocumented)
+export const PdsListItem: ForwardRefExoticComponent<JSX_2.PdsListItem & Omit<HTMLAttributes<HTMLPdsListItemElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsListItemElement>>;
+
+// @public (undocumented)
 export const PdsLoader: ForwardRefExoticComponent<JSX_2.PdsLoader & Omit<HTMLAttributes<HTMLPdsLoaderElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsLoaderElement>>;
 
 // @public (undocumented)

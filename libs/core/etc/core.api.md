@@ -511,6 +511,19 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     // (undocumented)
+    export interface PdsList {
+        "border": boolean;
+        "compact": boolean;
+        "componentId": string;
+        "dividers": boolean;
+    }
+    // (undocumented)
+    export interface PdsListItem {
+        "componentId": string;
+        "href"?: string;
+        "target"?: '_blank' | '_self' | '_parent' | '_top';
+    }
+    // (undocumented)
     export interface PdsLoader {
         "isLoading": boolean;
         "showLabel"?: boolean;
@@ -948,6 +961,10 @@ export namespace LocalJSX {
         "pds-input": Omit<PdsInput, keyof PdsInputAttributes> & { [K in keyof PdsInput & keyof PdsInputAttributes]?: PdsInput[K] } & { [K in keyof PdsInput & keyof PdsInputAttributes as `attr:${K}`]?: PdsInputAttributes[K] } & { [K in keyof PdsInput & keyof PdsInputAttributes as `prop:${K}`]?: PdsInput[K] } & OneOf<"componentId", PdsInput["componentId"], PdsInputAttributes["componentId"]>;
         // (undocumented)
         "pds-link": Omit<PdsLink, keyof PdsLinkAttributes> & { [K in keyof PdsLink & keyof PdsLinkAttributes]?: PdsLink[K] } & { [K in keyof PdsLink & keyof PdsLinkAttributes as `attr:${K}`]?: PdsLinkAttributes[K] } & { [K in keyof PdsLink & keyof PdsLinkAttributes as `prop:${K}`]?: PdsLink[K] } & OneOf<"href", PdsLink["href"], PdsLinkAttributes["href"]>;
+        // (undocumented)
+        "pds-list": Omit<PdsList, keyof PdsListAttributes> & { [K in keyof PdsList & keyof PdsListAttributes]?: PdsList[K] } & { [K in keyof PdsList & keyof PdsListAttributes as `attr:${K}`]?: PdsListAttributes[K] } & { [K in keyof PdsList & keyof PdsListAttributes as `prop:${K}`]?: PdsList[K] };
+        // (undocumented)
+        "pds-list-item": Omit<PdsListItem, keyof PdsListItemAttributes> & { [K in keyof PdsListItem & keyof PdsListItemAttributes]?: PdsListItem[K] } & { [K in keyof PdsListItem & keyof PdsListItemAttributes as `attr:${K}`]?: PdsListItemAttributes[K] } & { [K in keyof PdsListItem & keyof PdsListItemAttributes as `prop:${K}`]?: PdsListItem[K] };
         // (undocumented)
         "pds-loader": Omit<PdsLoader, keyof PdsLoaderAttributes> & { [K in keyof PdsLoader & keyof PdsLoaderAttributes]?: PdsLoader[K] } & { [K in keyof PdsLoader & keyof PdsLoaderAttributes as `attr:${K}`]?: PdsLoaderAttributes[K] } & { [K in keyof PdsLoader & keyof PdsLoaderAttributes as `prop:${K}`]?: PdsLoader[K] };
         // (undocumented)
@@ -2316,6 +2333,43 @@ export namespace LocalJSX {
         "turboStream": string;
         // (undocumented)
         "variant": 'inline' | 'plain';
+    }
+
+    // (undocumented)
+    export interface PdsList {
+        "border"?: boolean;
+        "compact"?: boolean;
+        "componentId"?: string;
+        "dividers"?: boolean;
+    }
+
+    // (undocumented)
+    export interface PdsListAttributes {
+        // (undocumented)
+        "border": boolean;
+        // (undocumented)
+        "compact": boolean;
+        // (undocumented)
+        "componentId": string;
+        // (undocumented)
+        "dividers": boolean;
+    }
+
+    // (undocumented)
+    export interface PdsListItem {
+        "componentId"?: string;
+        "href"?: string;
+        "target"?: '_blank' | '_self' | '_parent' | '_top';
+    }
+
+    // (undocumented)
+    export interface PdsListItemAttributes {
+        // (undocumented)
+        "componentId": string;
+        // (undocumented)
+        "href": string;
+        // (undocumented)
+        "target": '_blank' | '_self' | '_parent' | '_top';
     }
 
     // (undocumented)

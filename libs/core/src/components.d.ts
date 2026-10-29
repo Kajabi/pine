@@ -1842,6 +1842,41 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface PdsList {
+        /**
+          * Determines whether `list` should have a border.
+          * @defaultValue false
+         */
+        "border": boolean;
+        /**
+          * Determines if the list displays with reduced item padding.
+          * @defaultValue false
+         */
+        "compact": boolean;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Determines whether `list` items should be divided with border.
+          * @defaultValue false
+         */
+        "dividers": boolean;
+    }
+    interface PdsListItem {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * If provided, renders the title as an anchor (`<a>`) to this URL, and the whole item becomes its click target. Content in the `trailing` slot stays separately clickable.
+         */
+        "href"?: string;
+        /**
+          * Specifies where to open the linked document when href is provided. Only applies when href is set.
+         */
+        "target"?: '_blank' | '_self' | '_parent' | '_top';
+    }
     interface PdsLoader {
         /**
           * If false, the loader will be hidden.
@@ -3458,6 +3493,18 @@ declare global {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
     };
+    interface HTMLPdsListElement extends Components.PdsList, HTMLStencilElement {
+    }
+    var HTMLPdsListElement: {
+        prototype: HTMLPdsListElement;
+        new (): HTMLPdsListElement;
+    };
+    interface HTMLPdsListItemElement extends Components.PdsListItem, HTMLStencilElement {
+    }
+    var HTMLPdsListItemElement: {
+        prototype: HTMLPdsListItemElement;
+        new (): HTMLPdsListItemElement;
+    };
     interface HTMLPdsLoaderElement extends Components.PdsLoader, HTMLStencilElement {
     }
     var HTMLPdsLoaderElement: {
@@ -3873,6 +3920,8 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
+        "pds-list": HTMLPdsListElement;
+        "pds-list-item": HTMLPdsListItemElement;
         "pds-loader": HTMLPdsLoaderElement;
         "pds-modal": HTMLPdsModalElement;
         "pds-modal-content": HTMLPdsModalContentElement;
@@ -5785,6 +5834,41 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface PdsList {
+        /**
+          * Determines whether `list` should have a border.
+          * @defaultValue false
+         */
+        "border"?: boolean;
+        /**
+          * Determines if the list displays with reduced item padding.
+          * @defaultValue false
+         */
+        "compact"?: boolean;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Determines whether `list` items should be divided with border.
+          * @defaultValue false
+         */
+        "dividers"?: boolean;
+    }
+    interface PdsListItem {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * If provided, renders the title as an anchor (`<a>`) to this URL, and the whole item becomes its click target. Content in the `trailing` slot stays separately clickable.
+         */
+        "href"?: string;
+        /**
+          * Specifies where to open the linked document when href is provided. Only applies when href is set.
+         */
+        "target"?: '_blank' | '_self' | '_parent' | '_top';
+    }
     interface PdsLoader {
         /**
           * If false, the loader will be hidden.
@@ -7423,6 +7507,17 @@ declare namespace LocalJSX {
         "turboPrefetch": string;
         "turboPreload": string;
     }
+    interface PdsListAttributes {
+        "componentId": string;
+        "border": boolean;
+        "compact": boolean;
+        "dividers": boolean;
+    }
+    interface PdsListItemAttributes {
+        "componentId": string;
+        "href": string;
+        "target": '_blank' | '_self' | '_parent' | '_top';
+    }
     interface PdsLoaderAttributes {
         "isLoading": boolean;
         "showLabel": boolean;
@@ -7743,6 +7838,8 @@ declare namespace LocalJSX {
         "pds-image": Omit<PdsImage, keyof PdsImageAttributes> & { [K in keyof PdsImage & keyof PdsImageAttributes]?: PdsImage[K] } & { [K in keyof PdsImage & keyof PdsImageAttributes as `attr:${K}`]?: PdsImageAttributes[K] } & { [K in keyof PdsImage & keyof PdsImageAttributes as `prop:${K}`]?: PdsImage[K] };
         "pds-input": Omit<PdsInput, keyof PdsInputAttributes> & { [K in keyof PdsInput & keyof PdsInputAttributes]?: PdsInput[K] } & { [K in keyof PdsInput & keyof PdsInputAttributes as `attr:${K}`]?: PdsInputAttributes[K] } & { [K in keyof PdsInput & keyof PdsInputAttributes as `prop:${K}`]?: PdsInput[K] } & OneOf<"componentId", PdsInput["componentId"], PdsInputAttributes["componentId"]>;
         "pds-link": Omit<PdsLink, keyof PdsLinkAttributes> & { [K in keyof PdsLink & keyof PdsLinkAttributes]?: PdsLink[K] } & { [K in keyof PdsLink & keyof PdsLinkAttributes as `attr:${K}`]?: PdsLinkAttributes[K] } & { [K in keyof PdsLink & keyof PdsLinkAttributes as `prop:${K}`]?: PdsLink[K] } & OneOf<"href", PdsLink["href"], PdsLinkAttributes["href"]>;
+        "pds-list": Omit<PdsList, keyof PdsListAttributes> & { [K in keyof PdsList & keyof PdsListAttributes]?: PdsList[K] } & { [K in keyof PdsList & keyof PdsListAttributes as `attr:${K}`]?: PdsListAttributes[K] } & { [K in keyof PdsList & keyof PdsListAttributes as `prop:${K}`]?: PdsList[K] };
+        "pds-list-item": Omit<PdsListItem, keyof PdsListItemAttributes> & { [K in keyof PdsListItem & keyof PdsListItemAttributes]?: PdsListItem[K] } & { [K in keyof PdsListItem & keyof PdsListItemAttributes as `attr:${K}`]?: PdsListItemAttributes[K] } & { [K in keyof PdsListItem & keyof PdsListItemAttributes as `prop:${K}`]?: PdsListItem[K] };
         "pds-loader": Omit<PdsLoader, keyof PdsLoaderAttributes> & { [K in keyof PdsLoader & keyof PdsLoaderAttributes]?: PdsLoader[K] } & { [K in keyof PdsLoader & keyof PdsLoaderAttributes as `attr:${K}`]?: PdsLoaderAttributes[K] } & { [K in keyof PdsLoader & keyof PdsLoaderAttributes as `prop:${K}`]?: PdsLoader[K] };
         "pds-modal": Omit<PdsModal, keyof PdsModalAttributes> & { [K in keyof PdsModal & keyof PdsModalAttributes]?: PdsModal[K] } & { [K in keyof PdsModal & keyof PdsModalAttributes as `attr:${K}`]?: PdsModalAttributes[K] } & { [K in keyof PdsModal & keyof PdsModalAttributes as `prop:${K}`]?: PdsModal[K] };
         "pds-modal-content": Omit<PdsModalContent, keyof PdsModalContentAttributes> & { [K in keyof PdsModalContent & keyof PdsModalContentAttributes]?: PdsModalContent[K] } & { [K in keyof PdsModalContent & keyof PdsModalContentAttributes as `attr:${K}`]?: PdsModalContentAttributes[K] } & { [K in keyof PdsModalContent & keyof PdsModalContentAttributes as `prop:${K}`]?: PdsModalContent[K] };
@@ -7845,6 +7942,8 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.IntrinsicElements["pds-image"] & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.IntrinsicElements["pds-input"] & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.IntrinsicElements["pds-link"] & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-list": LocalJSX.IntrinsicElements["pds-list"] & JSXBase.HTMLAttributes<HTMLPdsListElement>;
+            "pds-list-item": LocalJSX.IntrinsicElements["pds-list-item"] & JSXBase.HTMLAttributes<HTMLPdsListItemElement>;
             "pds-loader": LocalJSX.IntrinsicElements["pds-loader"] & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
             /**
              * @lightDom renders-markup
