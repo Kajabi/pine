@@ -76,6 +76,31 @@ describe('pds-dropdown-menu-item', () => {
     expect(linkElement?.external).toBe(true);
   });
 
+  describe('externalLabel', () => {
+    const iconFor = async (attrs: string) => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item href="https://example.com" external ${attrs}>Docs</pds-dropdown-menu-item>`,
+      });
+      const link = page.root?.shadowRoot?.querySelector('pds-link');
+      return link?.shadowRoot?.querySelector('pds-icon');
+    };
+
+    it('lets the inner link use its default label', async () => {
+      expect((await iconFor('')).getAttribute('aria-label')).toBe('(opens in a new tab)');
+    });
+
+    it('passes a translated label to the inner link', async () => {
+      expect((await iconFor('external-label="(ouvre un nouvel onglet)"')).getAttribute('aria-label')).toBe('(ouvre un nouvel onglet)');
+    });
+
+    it('passes an empty label through, making the icon decorative', async () => {
+      const icon = await iconFor('external-label=""');
+      expect(icon.hasAttribute('aria-label')).toBe(false);
+      expect(icon.getAttribute('aria-hidden')).toBe('true');
+    });
+  });
+
   it('renders as a link with target="_blank" when both href and target are provided', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuItem, PdsLink],
