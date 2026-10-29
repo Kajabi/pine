@@ -35,6 +35,7 @@
     "pds-image": { "status": "stable" },
     "pds-input": { "status": "stable" },
     "pds-link": { "status": "stable" },
+    "pds-list": { "status": "beta", "note": "Rows of items with a leading visual, title, description and trailing actions." },
     "pds-loader": { "status": "stable" },
     "pds-modal": { "status": "stable" },
     "pds-multiselect": { "status": "stable" },
