@@ -243,10 +243,12 @@ describe('pds-modal', () => {
           modal: token('--pine-z-index-modal'),
           priority: token('--pine-z-index-priority'),
           lone: backdropZIndex('tl-tier'),
+          outer: backdropZIndex('tl-outer'),
           nested: backdropZIndex('tl-inner'),
         };
       });
       expect(tiers.lone).toBe(tiers.modal);
+      expect(tiers.outer).toBe(tiers.modal);
       expect(tiers.nested).toBe(tiers.priority);
     });
 
