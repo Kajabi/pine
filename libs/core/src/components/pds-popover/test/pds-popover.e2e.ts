@@ -1771,6 +1771,52 @@ describe('pds-popover near the edge of the viewport', () => {
     expect({ side, gapAbove, startOffset }).toEqual({ side: 'top-start', gapAbove: 8, startOffset: 0 });
   });
 
+  describe('with an entrance animation on the side it took', () => {
+    const entrance = `
+      <style>
+        @keyframes pop-rise { from { transform: translateY(8px); } }
+        [data-pds-popover-placement^="top"] { animation: pop-rise 150ms; }
+      </style>
+    `;
+
+    // autoUpdate repositions while the animation runs, so the gap is only right if that run ignores it.
+    const openAndFinishAnimating = async (page: Page) => {
+      await open(page);
+      await page.waitForFunction(() => document.getAnimations().length === 0);
+    };
+
+    it('keeps its 8px gap once the animation ends', async () => {
+      const page = await setUp(`${entrance}${popoverAt('top: 540px; left: 100px;')}`);
+      await openAndFinishAnimating(page);
+
+      const { side, gapAbove, startOffset } = await layout(page);
+      expect({ side, gapAbove, startOffset }).toEqual({ side: 'top-start', gapAbove: 8, startOffset: 0 });
+    });
+
+    it('keeps its 8px gap once the animation ends inside a scrolled dialog with a backdrop filter', async () => {
+      const page = await setUp(`
+        ${entrance}
+        <dialog id="dialog" style="backdrop-filter: blur(3px); max-height: none; height: 100vh; overflow: auto; margin: 0; width: 100vw; max-width: none; padding: 0 40px;">
+          <div style="height: 1200px"></div>
+          <pds-popover component-id="pop" placement="bottom-start">
+            <button slot="trigger" id="pop-trigger">Open</button>
+            <div style="width: 200px; height: 150px;">Panel</div>
+          </pds-popover>
+          <div style="height: 1200px"></div>
+        </dialog>
+      `);
+      await page.evaluate(() => {
+        const dialog = document.getElementById('dialog') as HTMLDialogElement;
+        dialog.showModal();
+        dialog.scrollTop = 750;
+      });
+      await openAndFinishAnimating(page);
+
+      const { side, gapAbove, startOffset } = await layout(page);
+      expect({ side, gapAbove, startOffset }).toEqual({ side: 'top-start', gapAbove: 8, startOffset: 0 });
+    });
+  });
+
   it('flips inside a scrolled pds-modal, and back as it scrolls', async () => {
     const page = await setUp(`
       <pds-modal component-id="modal" scrollable="false">

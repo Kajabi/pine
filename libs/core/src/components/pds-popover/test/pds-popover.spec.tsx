@@ -568,15 +568,34 @@ describe('pds-popover', () => {
       expect(instance.placement).toBe('bottom-start');
     });
 
-    it('moves the panel back by however far a containing block put it from the spot', async () => {
+    it('offsets the panel by where its containing block puts a fixed element at top 0, left 0', async () => {
       jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 40, y: 60, placement: 'bottom-start' });
       const { instance, portal } = await setUp();
-      (portal.getBoundingClientRect as jest.Mock).mockReturnValue({ top: 160, left: 70 });
+      const createElement = document.createElement.bind(document);
+      jest.spyOn(document, 'createElement').mockImplementation((tagName: string) => {
+        const element = createElement(tagName);
+        jest.spyOn(element, 'getBoundingClientRect').mockReturnValue({ top: 100, left: 30 } as DOMRect);
+        return element;
+      });
       instance.active = true;
 
       await instance.handlePopoverPositioning();
 
       expect(positionedAt(portal)).toEqual({ top: '-40px', left: '10px', side: 'bottom-start' });
+    });
+
+    it('ignores where the panel’s own transforms put it, and leaves nothing beside it', async () => {
+      jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({ x: 40, y: 60, placement: 'bottom-start' });
+      const { instance, portal } = await setUp();
+      // An entrance animation partway through, 8px above the spot.
+      (portal.getBoundingClientRect as jest.Mock).mockReturnValue({ top: 52, left: 40 });
+      const siblings = portal.parentNode!.childNodes.length;
+      instance.active = true;
+
+      await instance.handlePopoverPositioning();
+
+      expect(positionedAt(portal)).toEqual({ top: '60px', left: '40px', side: 'bottom-start' });
+      expect(portal.parentNode!.childNodes.length).toBe(siblings);
     });
 
     it('does not position when trigger has zero dimensions', async () => {
