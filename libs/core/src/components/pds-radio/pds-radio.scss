@@ -394,6 +394,13 @@ label:has(input:disabled) {
       &:has(input:checked) {
         border-color: Highlight;
       }
+
+      // :has(input:disabled:checked) outranks :has(input:checked) above (two pseudo-classes vs
+      // one), so a checked disabled pill needs its own override or it would keep the plain
+      // disabled border-color above and lose the checked distinction.
+      &:has(input:disabled:checked) {
+        border-color: GrayText;
+      }
     }
   }
 

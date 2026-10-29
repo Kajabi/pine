@@ -246,6 +246,13 @@ label {
       &:has(input:checked) {
         border-color: Highlight;
       }
+
+      // :has(input:disabled:checked) outranks :has(input:checked) above (two pseudo-classes vs
+      // one), so a checked disabled pill needs its own override or it would keep the plain
+      // disabled border-color above and lose the checked distinction.
+      &:has(input:disabled:checked) {
+        border-color: GrayText;
+      }
     }
   }
 
@@ -267,6 +274,16 @@ label {
 
     &:has(input:focus-visible) {
       outline: var(--pine-outline-focus-danger);
+    }
+
+    // This selector outranks the base pill's forced-colors override, so an invalid checked pill
+    // needs its own or it would keep the (non-system) danger border-color above and lose the
+    // checked distinction. Forced colors has no system "danger" color, so this uses the same
+    // Highlight the base pill does; the error message still carries the invalid meaning.
+    @media (forced-colors: active) {
+      &:has(input:checked) {
+        border-color: Highlight;
+      }
     }
   }
 }
