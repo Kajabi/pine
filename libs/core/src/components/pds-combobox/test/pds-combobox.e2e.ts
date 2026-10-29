@@ -1434,6 +1434,202 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
   });
+
+  describe('truncate', () => {
+    const LONG = 'Assessment for the quarterly onboarding cohort of new members';
+
+    type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+    const setUp = async (attributes: string, { open = false, value = 'long' } = {}) => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="long" label="Category" mode="select-only" value="${value}"
+            trigger-width="200px" dropdown-width="200px" ${attributes}>
+            <option value="long">${LONG}</option>
+            <option value="icon" data-icon="assessment">${LONG} with an icon</option>
+            <option value="short">Event</option>
+          </pds-combobox>
+        </div>
+      `);
+      await page.waitForChanges();
+      if (open) {
+        const trigger = attributes.includes('trigger="input"') ? 'input' : '.pds-combobox__button-trigger';
+        await (await page.find(`pds-combobox >>> ${trigger}`)).click();
+        await page.waitForChanges();
+        // Positioning gives the panel its dropdown-width; until then it's as wide as its widest label.
+        await page.waitForFunction(() =>
+          [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot].some(
+            root => root?.querySelector<HTMLElement>('.pds-combobox__listbox')?.style.width === '200px',
+          ),
+        );
+      }
+      return page;
+    };
+
+    /** The trigger's text: whether it's on one line, clipped, with an ellipsis, and the trigger's width. */
+    const triggerText = (page: Page) =>
+      page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const triggerEl = root.querySelector<HTMLElement>('.pds-combobox__button-trigger')!;
+        const text = root.querySelector<HTMLElement>('.pds-combobox__button-trigger-text');
+        const label = root.querySelector<HTMLElement>('.pds-combobox__button-trigger-label')!;
+        const style = text ? getComputedStyle(text) : null;
+        const lineHeight = parseFloat(getComputedStyle(label).lineHeight);
+        return {
+          hasTextSpan: !!text,
+          whiteSpace: style?.whiteSpace ?? getComputedStyle(label).whiteSpace,
+          textOverflow: style?.textOverflow ?? null,
+          clipped: text ? text.scrollWidth > text.clientWidth : false,
+          oneLine: (text ?? label).getBoundingClientRect().height <= lineHeight + 1,
+          fits: triggerEl.getBoundingClientRect().width <= 200,
+        };
+      });
+
+    it.each([
+      ['button', 'trigger="button"'],
+      ['input-shape button', 'trigger="button" trigger-shape="input"'],
+    ])('wraps a long label in a %s trigger without truncate, as before', async (_trigger, attributes) => {
+      const page = await setUp(attributes);
+      const text = await triggerText(page);
+
+      expect(text.hasTextSpan).toBe(false);
+      expect(text.whiteSpace).toBe('normal');
+      expect(text.oneLine).toBe(false);
+    });
+
+    it.each([
+      ['button', 'trigger="button"', 'long'],
+      ['input-shape button', 'trigger="button" trigger-shape="input"', 'long'],
+      ['button with an icon', 'trigger="button" trigger-shape="input"', 'icon'],
+      ['primary button', 'trigger="button" trigger-variant="primary"', 'long'],
+    ])('keeps a long label in a %s trigger on one line with an ellipsis', async (_trigger, attributes, value) => {
+      const page = await setUp(`${attributes} truncate`, { value });
+      const text = await triggerText(page);
+
+      expect(text).toEqual({
+        hasTextSpan: true,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        clipped: true,
+        oneLine: true,
+        fits: true,
+      });
+    });
+
+    it('keeps the trigger within a narrower container at its default fit-content width', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="width: 160px">
+          <pds-combobox component-id="long" label="Category" trigger="button" mode="select-only" value="long" truncate>
+            <option value="long">${LONG}</option>
+          </pds-combobox>
+        </div>
+      `);
+      await page.waitForChanges();
+
+      const width = await page.evaluate(
+        () => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!.getBoundingClientRect().width,
+      );
+      expect(width).toBeLessThanOrEqual(160);
+    });
+
+    const hoverTriggerTitle = async (page: Page) => {
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).hover();
+      await page.waitForChanges();
+      return page.evaluate(
+        () => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger-text')!.getAttribute('title'),
+      );
+    };
+
+    it('gives a cut trigger label its full text as a title on hover', async () => {
+      const page = await setUp('trigger="button" truncate');
+      expect(await hoverTriggerTitle(page)).toBe(LONG);
+    });
+
+    it('gives a trigger label that fits no title', async () => {
+      const page = await setUp('trigger="button" truncate', { value: 'short' });
+      expect(await hoverTriggerTitle(page)).toBeNull();
+    });
+
+    /** Each option's text: on one line with an ellipsis, clipped, and its `title`. */
+    const optionTexts = (page: Page, inPortal: boolean) =>
+      page.evaluate(portal => {
+        const root = portal
+          ? document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!
+          : document.querySelector('pds-combobox')!.shadowRoot!;
+        return Array.from(root.querySelectorAll<HTMLElement>('[role="option"]')).map(option => {
+          const text = option.querySelector<HTMLElement>('.pds-combobox__option-text');
+          const style = getComputedStyle(text ?? option);
+          return {
+            whiteSpace: style.whiteSpace,
+            textOverflow: text ? style.textOverflow : null,
+            clipped: text ? text.scrollWidth > text.clientWidth : false,
+            title: text?.getAttribute('title') ?? null,
+          };
+        });
+      }, inPortal);
+
+    it('wraps long option labels without truncate, as before', async () => {
+      const page = await setUp('trigger="button"', { open: true });
+      const texts = await optionTexts(page, false);
+
+      expect(texts.map(text => text.textOverflow)).toEqual([null, null, null]);
+      // The long labels wrap: their options are taller than the short one's.
+      const heights = await page.evaluate(() =>
+        Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('[role="option"]')).map(option => option.getBoundingClientRect().height),
+      );
+      expect(heights[0]).toBeGreaterThan(heights[2]);
+      expect(texts.map(text => text.whiteSpace)).toEqual(['normal', 'normal', 'normal']);
+    });
+
+    it.each([
+      ['in the field', 'trigger="button"', false],
+      ['in the body', 'trigger="button" dropdown-mount="body"', true],
+      ['with panel search', 'trigger="button" panel-search', false],
+      ['with an input trigger', 'trigger="input"', false],
+    ])('keeps long option labels on one line with an ellipsis %s', async (_where, attributes, inPortal) => {
+      const page = await setUp(`${attributes} truncate`, { open: true });
+      const texts = await optionTexts(page, inPortal);
+
+      expect(texts.map(({ whiteSpace, textOverflow, clipped }) => ({ whiteSpace, textOverflow, clipped }))).toEqual([
+        { whiteSpace: 'nowrap', textOverflow: 'ellipsis', clipped: true },
+        { whiteSpace: 'nowrap', textOverflow: 'ellipsis', clipped: true },
+        { whiteSpace: 'nowrap', textOverflow: 'ellipsis', clipped: false },
+      ]);
+    });
+
+    it('gives a cut option label its full text as a title on hover, and a label that fits none', async () => {
+      const page = await setUp('trigger="button" truncate', { open: true });
+
+      for (const index of [0, 1, 2]) {
+        await (await page.find(`pds-combobox >>> [data-option-index="${index}"]`)).hover();
+        await page.waitForChanges();
+      }
+
+      expect((await optionTexts(page, false)).map(text => text.title)).toEqual([LONG, `${LONG} with an icon`, null]);
+    });
+
+    it('names the options and the trigger by their full labels', async () => {
+      const page = await setUp('trigger="button" truncate', { open: true });
+
+      const tree = await page.accessibility.snapshot();
+      const find = (node, role) => [node.role === role ? node : null, ...(node.children ?? []).flatMap(child => find(child, role))].filter(Boolean);
+
+      expect(find(tree, 'option').map(option => option.name)).toEqual([LONG, `${LONG} with an icon`, 'Event']);
+      const [combobox] = find(tree, 'combobox');
+      expect(combobox.name).toBe('Category');
+      expect(combobox.value).toBe(LONG);
+    });
+
+    it('has no axe violations with truncated labels open', async () => {
+      const page = await setUp('trigger="button" truncate', { open: true });
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
 });
 
 describe('pds-combobox in a disabled fieldset', () => {
