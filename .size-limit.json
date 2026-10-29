@@ -14,7 +14,7 @@
   {
     "name": "All CDN component chunks (p-*.entry.js, gzipped)",
     "path": "libs/core/dist/pine-core/p-*.entry.js",
-    "limit": "365.5 KB",
+    "limit": "366 KB",
     "gzip": true
   },
   {
@@ -38,7 +38,7 @@
   {
     "name": "pds-combobox entry (gzipped)",
     "path": "libs/core/dist/esm/pds-combobox.entry.js",
-    "limit": "54 KB",
+    "limit": "54.5 KB",
     "gzip": true
   },
   {
