@@ -22,6 +22,7 @@ export default {
     trigger: 'input',
     triggerVariant: 'secondary',
     triggerWidth: 'fit-content',
+    truncate: false,
     chipSentiment: 'neutral',
     chipLarge: false,
     chipIcon: null,
@@ -55,6 +56,7 @@ const BaseTemplate = (args) => html`
   trigger=${args.trigger}
   trigger-variant=${args.triggerVariant}
   trigger-width=${args.triggerWidth}
+  truncate=${args.truncate}
   chip-sentiment=${args.chipSentiment}
   chip-large=${args.chipLarge}
   chip-icon=${args.chipIcon}
@@ -602,6 +604,48 @@ OptionIconsWithGroups.args = {
     { id: 'form', text: 'Form', icon: 'form' },
     { id: 'tag', text: 'Tag', icon: 'hashtag' },
   ],
+};
+
+// truncate: a long label in the trigger and the options, without it (wrapping, as by default) and
+// with it (one line, with an ellipsis). Options with an icon and in a group truncate too.
+const truncateOptions = [
+  { id: 'onboarding', text: 'Assessment for the quarterly onboarding cohort', icon: 'assessment' },
+  { id: 'contact', text: 'Contact who joined during the spring membership launch', icon: 'contact' },
+  { id: 'broadcast', text: 'Broadcast to everyone who joined the spring membership launch', group: 'Email', groupIcon: 'mail' },
+  { id: 'sequence', text: 'Sequence', group: 'Email' },
+  { id: 'tag', text: 'Tag', icon: 'hashtag' },
+];
+
+export const Truncate = (args) => html`
+<div style="display: flex; gap: 48px; min-height: 360px;">
+  ${[false, true].map(truncate => html`
+  <pds-combobox
+    component-id=${`combobox-truncate-${truncate ? 'on' : 'off'}`}
+    label=${truncate ? 'With truncate' : 'Without truncate'}
+    trigger=${args.trigger}
+    trigger-shape=${args.triggerShape}
+    trigger-variant=${args.triggerVariant}
+    mode="select-only"
+    trigger-width=${args.triggerWidth}
+    dropdown-width=${args.triggerWidth}
+    value=${args.value}
+    ?truncate=${truncate}
+    .options=${args.options}
+  ></pds-combobox>`)}
+</div>`;
+
+Truncate.args = {
+  trigger: 'button',
+  triggerShape: 'input',
+  triggerVariant: 'secondary',
+  triggerWidth: '240px',
+  value: 'onboarding',
+  options: truncateOptions,
+};
+
+Truncate.argTypes = {
+  trigger: { control: 'select', options: ['input', 'button'] },
+  triggerShape: { control: 'select', options: ['pill', 'input'] },
 };
 
 // A large action catalog: many groups, a button trigger and panel search. The narrower widths
