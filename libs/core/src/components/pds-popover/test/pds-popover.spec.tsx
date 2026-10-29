@@ -29,6 +29,7 @@ describe('pds-popover', () => {
           <span class="pds-popover__trigger-wrapper">
             <slot name="trigger"></slot>
           </span>
+          <span class="pds-popover__tab-guard"></span>
           <div class="pds-popover__content-slot-wrapper">
             <slot></slot>
           </div>
@@ -1121,14 +1122,14 @@ describe('pds-popover', () => {
       async (attrs) => {
         const { page, instance, trigger } = await setUp(attrs);
         expect(triggerListenerTypes(page, trigger)).toEqual(['click']);
-        expect(panelListenerTypes(instance)).toEqual([]);
+        expect(panelListenerTypes(instance)).toEqual(['keydown']);
       },
     );
 
     it('adds pointer and focus listeners to the trigger and panel in hover mode', async () => {
       const { page, instance, trigger } = await setUp('open-on="hover"');
       expect(triggerListenerTypes(page, trigger)).toEqual(['click', 'pointerenter', 'pointerleave', 'focusout']);
-      expect(panelListenerTypes(instance)).toEqual(['pointerenter', 'pointerleave', 'focusout']);
+      expect(panelListenerTypes(instance)).toEqual(['pointerenter', 'pointerleave', 'focusout', 'keydown']);
     });
 
     it.each([

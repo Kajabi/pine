@@ -6,6 +6,7 @@ import { PlacementType, PopoverPaddingType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
 import { cssEscape } from '@utils/css';
 import { limitRestores } from '@utils/keep-hydrated';
+import { tabbableIn } from '@utils/tabbable';
 import { PdsPopoverEventDetail } from './popover-interface';
 
 /** Open popovers that close on Escape, in the order they opened: Escape goes to the last one it applies to. */
@@ -28,6 +29,33 @@ function deepActiveElement(): Element | null {
   while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
   return active;
 }
+
+/** `node`, or the shadow host it sits in, lifted until it shares a tree with `other` or reaches the document. */
+function liftToTreeOf(node: Node, other: Node): Node {
+  let current = node;
+  while (current.getRootNode() !== other.getRootNode() && current.getRootNode() instanceof ShadowRoot) {
+    current = (current.getRootNode() as ShadowRoot).host;
+  }
+  return current;
+}
+
+/**
+ * Where `node` sits relative to `ref`, as `compareDocumentPosition` reports it. Whichever of the two
+ * is inside a shadow root is lifted to its host first, so a control inside a component compares too.
+ */
+function positionAcrossTrees(ref: Node, node: Node): number {
+  const lifted = liftToTreeOf(node, ref);
+  return liftToTreeOf(ref, lifted).compareDocumentPosition(lifted);
+}
+
+const isPosition = (position: number, flag: number) =>
+  (position & Node.DOCUMENT_POSITION_DISCONNECTED) === 0 && (position & flag) !== 0;
+
+/** The popover each panel belongs to, so a popover inside another one's panel can find it. */
+const panelOwners = new WeakMap<Element, PdsPopover>();
+
+/** Floating layers Pine components put at the end of the page or of a dialog, as a popover does its panel. */
+const FLOATING_LAYERS = '.pds-popover, .pds-datepicker-calendar-portal, .pds-combobox-dropdown-portal';
 
 /**
  * @slot trigger - The trigger element for the popover
@@ -126,6 +154,21 @@ export class PdsPopover {
    * How far the pointer was from the panel at its last move after leaving the trigger
    */
   private panelDistance = Infinity;
+
+  /**
+   * Stands in for the panel in the Tab order, right after the trigger, while the popover is open
+   */
+  private tabGuardEl: HTMLSpanElement | null = null;
+
+  /**
+   * Set while focus passes through the guard on its way out of the panel
+   */
+  private leavingPanel = false;
+
+  /**
+   * The direction of the Tab key being handled, until its default action has run
+   */
+  private tabDirection: 'forward' | 'backward' | null = null;
 
   /**
    * Instance counter for unique IDs
@@ -505,6 +548,8 @@ export class PdsPopover {
     this.removeLightDismissListeners();
     this.removeScrollAndResizeListeners();
     document.removeEventListener('submit', this.handleSubmitFromPanel, true);
+    document.removeEventListener('keydown', this.syncTabGuard, true);
+    this.tabGuardEl?.removeAttribute('tabindex');
 
     this.clearHoverTimers();
     this.hoverOpened = false;
@@ -518,6 +563,7 @@ export class PdsPopover {
 
     this.portalEl = document.createElement('div');
     this.portalEl.className = 'pds-popover';
+    panelOwners.set(this.portalEl, this);
 
     // Apply all styles inline since portal is outside shadow DOM
     this.portalEl.style.position = 'fixed';
@@ -547,6 +593,7 @@ export class PdsPopover {
     // This is done after appending to ensure it's part of the document and can access CSS variables
     this.addPortalFocusStyles();
     this.listenForHover(this.portalEl);
+    this.portalEl.addEventListener('keydown', this.handleTabFromPanel);
   }
 
   /**
@@ -703,6 +750,7 @@ export class PdsPopover {
     // Position the popover now, and again whenever its trigger or the page moves or resizes
     this.addScrollAndResizeListeners();
     document.addEventListener('submit', this.handleSubmitFromPanel, true);
+    document.addEventListener('keydown', this.syncTabGuard, true);
 
     // Add document listeners for light dismiss and escape key (auto type only), or for the escape
     // key alone while hover holds a manual popover open
@@ -774,6 +822,9 @@ export class PdsPopover {
     this.removeLightDismissListeners();
     this.removeScrollAndResizeListeners();
     document.removeEventListener('submit', this.handleSubmitFromPanel, true);
+    document.removeEventListener('keydown', this.syncTabGuard, true);
+    this.tabGuardEl?.removeAttribute('tabindex');
+    this.releasePanel();
 
     // Closed before its first position resolved, it still announces the open before the close.
     this.emitOpenEvent();
@@ -893,6 +944,94 @@ export class PdsPopover {
       event.preventDefault();
       event.stopPropagation();
     }
+  };
+
+  /**
+   * The panel's controls that Tab reaches through the guard. None when the panel sits right after
+   * the popover, in a dialog, where it's already next in the Tab order.
+   */
+  private guardedTabbables(): HTMLElement[] {
+    if (this.portalEl == null || this.el.nextElementSibling === this.portalEl) return [];
+    return tabbableIn(this.portalEl);
+  }
+
+  // At the end of the body or of a dialog, the panel would come last in the Tab order. The guard
+  // after the trigger takes its place there, while the panel has a control for it to lead to.
+  private syncTabGuard = (event: KeyboardEvent) => {
+    if (event.key !== 'Tab') return;
+    this.releasePanel();
+    this.tabDirection = event.shiftKey ? 'backward' : 'forward';
+    setTimeout(this.endTabKey);
+    // Read on each Tab, as the panel's content can arrive after it opens.
+    const guarding = this.guardedTabbables().length > 0;
+    if (this.tabGuardEl != null) this.tabGuardEl.tabIndex = guarding ? 0 : -1;
+
+    // Inert for this key press, the panel is reached only through the guard, either way round. A
+    // control in another floating layer, such as a nested popover's panel, may move focus back into it.
+    const focused = deepActiveElement();
+    if (guarding && !containsComposed(this.portalEl, focused) && !closest(FLOATING_LAYERS, focused ?? document)) {
+      this.portalEl!.inert = true;
+    }
+  };
+
+  private endTabKey = () => {
+    this.tabDirection = null;
+    this.releasePanel();
+  };
+
+  private handleTabGuardFocus = (event: FocusEvent) => {
+    if (this.leavingPanel) return;
+    // An inert panel's controls aren't tabbable, so the guard would find none to send focus to.
+    this.releasePanel();
+    const tabbables = this.guardedTabbables();
+    // A Tab press says which end of the panel focus comes in at; without one, where it came from does.
+    const from = event.relatedTarget as Node | null;
+    const backward = this.tabDirection != null ? this.tabDirection === 'backward' : from != null && this.isAfterPopover(from);
+    const target = backward ? tabbables[tabbables.length - 1] : tabbables[0];
+    // Focus can reach the guard without a Tab keydown here (from a frame, or assistive tech) after
+    // the panel's controls are gone. The trigger is the nearest visible place for it.
+    if (target == null) this.returnFocusToTrigger();
+    else target.focus();
+  };
+
+  private isAfterPopover(node: Node) {
+    if (containsComposed(this.el, node)) return false;
+    return isPosition(positionAcrossTrees(this.el, node), Node.DOCUMENT_POSITION_FOLLOWING);
+  }
+
+  private handleTabFromPanel = (event: KeyboardEvent) => {
+    if (event.key !== 'Tab' || event.defaultPrevented || this.tabGuardEl == null) return;
+    const tabbables = this.guardedTabbables();
+    const edge = event.shiftKey ? tabbables[0] : tabbables[tabbables.length - 1];
+    if (edge == null || deepActiveElement() !== edge) return;
+    this.leavePanel(edge, event.shiftKey);
+  };
+
+  /**
+   * Moves focus to the guard without preventing the Tab, so the browser's Tab carries on from there.
+   * Inert until then, the panel can't be where it lands.
+   */
+  private leavePanel(edge: HTMLElement, backward: boolean) {
+    this.leavingPanel = true;
+    this.tabGuardEl?.focus();
+    this.leavingPanel = false;
+    this.portalEl!.inert = true;
+    setTimeout(() => this.finishLeavingPanel(edge));
+
+    // Last in another popover's panel, the guard hands the Tab on to that popover's own guard.
+    const outer = panelOwners.get(closest('.pds-popover', this.el) as Element);
+    const outerTabbables = outer?.guardedTabbables() ?? [];
+    if (!backward && outerTabbables[outerTabbables.length - 1] === this.tabGuardEl) outer!.leavePanel(edge, false);
+  }
+
+  // With nowhere for the browser's Tab to go, focus would stay on the invisible guard.
+  private finishLeavingPanel(edge: HTMLElement) {
+    this.releasePanel();
+    if (this.active && this.el.shadowRoot?.activeElement === this.tabGuardEl) edge.focus();
+  }
+
+  private releasePanel = () => {
+    if (this.portalEl != null) this.portalEl.inert = false;
   };
 
   /**
@@ -1026,6 +1165,12 @@ export class PdsPopover {
         <span class="pds-popover__trigger-wrapper">
           <slot name="trigger" onSlotchange={this.handleTriggerSlotChange}></slot>
         </span>
+
+        <span
+          class="pds-popover__tab-guard"
+          ref={(el) => (this.tabGuardEl = el ?? null)}
+          onFocus={this.handleTabGuardFocus}
+        ></span>
 
         <div class="pds-popover__content-slot-wrapper">
           <slot onSlotchange={this.handleContentSlotChange}></slot>
