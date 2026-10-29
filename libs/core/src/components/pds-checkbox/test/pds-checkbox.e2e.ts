@@ -398,4 +398,21 @@ describe('pds-checkbox pill variant', () => {
     expect(checked.borderColor).not.toBe(unchecked.borderColor);
     expect(checked.borderWidth).not.toBe(unchecked.borderWidth);
   });
+
+  // Regression: the thicker forced-colors checked border grew the pill, since its label has no
+  // explicit width for box-sizing: border-box to hold steady — the same resize this pill design
+  // avoids outside forced-colors with an inset ring instead of a border change.
+  it('does not resize a pill when its thicker forced-colors checked border appears', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(pills);
+    await page.evaluate(() => document.fonts.ready);
+
+    const before = await pillStyle(page, '#email');
+    await (await page.find('#email >>> label')).click();
+    await page.waitForChanges();
+    const after = await pillStyle(page, '#email');
+
+    expect(after.width).toBe(before.width);
+    expect(after.height).toBe(before.height);
+  });
 });
