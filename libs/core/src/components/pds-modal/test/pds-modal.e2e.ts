@@ -1926,6 +1926,159 @@ describe('pds-modal', () => {
   });
 });
 
+describe('pds-modal transition', () => {
+  // Counts view transitions and keeps each one's <html> classes once it's ready, and waits on them.
+  const instrument = () => {
+    const w = window as unknown as { __vts: { classes: string; done: Promise<unknown> }[] };
+    w.__vts = [];
+    const start = document.startViewTransition?.bind(document);
+    if (!start) return;
+    document.startViewTransition = ((update: () => void) => {
+      const t = start(update);
+      const record = { classes: '', done: t.finished.catch(() => undefined) };
+      t.ready.then(() => (record.classes = document.documentElement.className)).catch(() => undefined);
+      w.__vts.push(record);
+      return t;
+    }) as typeof document.startViewTransition;
+  };
+  const settle = async (page) => {
+    await page.evaluate(async () => {
+      const w = window as unknown as { __vts: { done: Promise<unknown> }[] };
+      await Promise.all(w.__vts.map(t => t.done));
+      await new Promise(resolve => setTimeout(resolve, 150));
+    });
+    await page.waitForChanges();
+  };
+  const count = page => page.evaluate(() => (window as unknown as { __vts: unknown[] }).__vts.length);
+  const leftovers = page =>
+    page.evaluate(() => ({
+      rootClass: document.documentElement.className,
+      named: document.querySelectorAll('[style*="view-transition-name"]').length,
+    }));
+
+  const nestedMarkup = `
+    <pds-modal component-id="outer" size="fullscreen">
+      <pds-modal-content>
+        <button id="open-inner" onclick="document.getElementById('inner').open = true">Open inner</button>
+      </pds-modal-content>
+    </pds-modal>
+    <pds-modal id="inner" component-id="inner" transition="grow">
+      <pds-modal-content>
+        <button id="inner-button">Inner</button>
+        <button id="close-both" onclick="document.querySelector('[component-id=outer]').open = false; document.getElementById('inner').open = false">Close both</button>
+      </pds-modal-content>
+    </pds-modal>
+  `;
+
+  const openNested = async page => {
+    await page.setContent(nestedMarkup);
+    await page.evaluate(instrument);
+    const outer = await page.find('pds-modal[component-id="outer"]');
+    await outer.callMethod('showModal');
+    await page.waitForChanges();
+    await page.click('#open-inner');
+    await settle(page);
+  };
+
+  it('grows the inner modal from its trigger and moves focus into it', async () => {
+    const page = await newE2EPage();
+    await openNested(page);
+
+    expect(await count(page)).toBe(1);
+    expect(await page.evaluate(() => (document.querySelector('#inner dialog') as HTMLDialogElement).open)).toBe(true);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('inner-button');
+    expect(await leftovers(page)).toEqual({ rootClass: '', named: 0 });
+  });
+
+  it('shrinks back on Escape and returns focus to the trigger', async () => {
+    const page = await newE2EPage();
+    await openNested(page);
+
+    await page.keyboard.press('Escape');
+    await settle(page);
+
+    expect(await count(page)).toBe(2);
+    expect(await page.evaluate(() => (document.querySelector('#inner dialog') as HTMLDialogElement).open)).toBe(false);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('open-inner');
+    expect(await leftovers(page)).toEqual({ rootClass: '', named: 0 });
+  });
+
+  it('closes both modals from the inner one without leaving the page mid-transition', async () => {
+    const page = await newE2EPage();
+    await openNested(page);
+
+    await page.click('#close-both');
+    await settle(page);
+
+    expect(await page.evaluate(() => Array.from(document.querySelectorAll('dialog')).some(d => d.open))).toBe(false);
+    expect(await leftovers(page)).toEqual({ rootClass: '', named: 0 });
+  });
+
+  it('ends closed when Escape lands while the opening transition still runs', async () => {
+    const page = await newE2EPage();
+    await page.setContent(nestedMarkup);
+    await page.evaluate(instrument);
+    const outer = await page.find('pds-modal[component-id="outer"]');
+    await outer.callMethod('showModal');
+    await page.waitForChanges();
+
+    await page.click('#open-inner');
+    await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 60)));
+    await page.keyboard.press('Escape');
+    await settle(page);
+
+    expect(await page.evaluate(() => (document.querySelector('#inner dialog') as HTMLDialogElement).open)).toBe(false);
+    expect(await page.evaluate(() => (document.querySelector('[component-id=outer] dialog') as HTMLDialogElement).open)).toBe(true);
+    expect(await leftovers(page)).toEqual({ rootClass: '', named: 0 });
+  });
+
+  it('opens without a transition under reduced motion', async () => {
+    const page = await newE2EPage();
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await openNested(page);
+
+    expect(await count(page)).toBe(0);
+    expect(await page.evaluate(() => (document.querySelector('#inner dialog') as HTMLDialogElement).open)).toBe(true);
+  });
+
+  it('morphs one chained modal into the next, and back', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal id="one" component-id="one" transition="morph">
+        <pds-modal-content>
+          <button id="next" onclick="document.getElementById('one').open = false; document.getElementById('two').open = true">Next</button>
+        </pds-modal-content>
+      </pds-modal>
+      <pds-modal id="two" component-id="two" transition="morph" size="lg">
+        <pds-modal-content>
+          <button id="back" onclick="document.getElementById('two').open = false; document.getElementById('one').open = true">Back</button>
+        </pds-modal-content>
+      </pds-modal>
+    `);
+    await page.evaluate(instrument);
+    const one = await page.find('#one');
+    await one.callMethod('showModal');
+    await settle(page);
+
+    await page.click('#next');
+    await settle(page);
+    const isOpen = () => page.evaluate(() => ['one', 'two'].map(id => (document.querySelector(`#${id} dialog`) as HTMLDialogElement).open));
+    expect(await isOpen()).toEqual([false, true]);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('back');
+
+    await page.click('#back');
+    await settle(page);
+    expect(await isOpen()).toEqual([true, false]);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('next');
+
+    const classes = await page.evaluate(() => (window as unknown as { __vts: { classes: string }[] }).__vts.map(t => t.classes));
+    expect(classes.length).toBe(3);
+    expect(classes[1]).toContain('pds-modal-vt--forward');
+    expect(classes[2]).toContain('pds-modal-vt--back');
+    expect(await leftovers(page)).toEqual({ rootClass: '', named: 0 });
+  });
+});
+
 describe('pds-modal reduced motion', () => {
   it('zeroes out the backdrop transition under prefers-reduced-motion', async () => {
     const page = await newE2EPage();
