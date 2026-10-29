@@ -1152,7 +1152,7 @@ export namespace Components {
          */
         "triggerWidth": string;
         /**
-          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover.
+          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover. Chip options, custom layouts and group rows aren't affected.
           * @defaultValue false
          */
         "truncate": boolean;
@@ -5060,7 +5060,7 @@ declare namespace LocalJSX {
          */
         "triggerWidth"?: string;
         /**
-          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover.
+          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover. Chip options, custom layouts and group rows aren't affected.
           * @defaultValue false
          */
         "truncate"?: boolean;

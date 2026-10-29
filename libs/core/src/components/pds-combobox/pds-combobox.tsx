@@ -556,10 +556,7 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   // A `title` only while the text is cut, measured on hover. On the span, not the option or trigger,
-  // so it isn't read again as their description. Two side effects of that: the native tooltip only
-  // shows while the pointer is over the text itself, not the icon, chevron, check mark or padding;
-  // and it's the browser's unstyled tooltip, so unlike the siblings' truncation tooltip it doesn't
-  // follow the theme.
+  // so it isn't read again as their description.
   private syncTitle(el: HTMLElement, selector: string) {
     const text = el.querySelector<HTMLElement>(selector);
     if (!text) return;
