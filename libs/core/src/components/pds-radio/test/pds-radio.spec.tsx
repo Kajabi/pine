@@ -387,4 +387,14 @@ describe('pds-radio pill variant', () => {
     expect(page.root).toHaveClass('pds-radio--pill');
     expect(page.root).not.toHaveClass('has-image');
   });
+
+  it('does not render the image container or content wrapper on a pill', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="pill" label="Pill" variant="pill"><span slot="image"></span></pds-radio>`,
+    });
+
+    expect(page.root?.querySelector('.pds-radio__image-container')).toBeNull();
+    expect(page.root?.querySelector('.pds-radio__content-wrapper')).toBeNull();
+  });
 });

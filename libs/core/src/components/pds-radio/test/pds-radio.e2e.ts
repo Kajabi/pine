@@ -392,4 +392,72 @@ describe('pds-radio pill variant', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('looks disabled and ignores clicks', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio id="free" component-id="free" value="free" label="Free" variant="pill"></pds-radio>
+      <pds-radio id="pro" component-id="pro" value="pro" label="Pro" variant="pill" disabled></pds-radio>
+    `);
+
+    const enabled = await pillStyle(page, '#free');
+    const disabled = await pillStyle(page, '#pro');
+    expect(disabled.borderColor).not.toBe(enabled.borderColor);
+
+    await page.click('#pro label');
+    await page.waitForChanges();
+    expect(await page.$eval('#pro', (el: HTMLInputElement) => el.checked)).toBe(false);
+  });
+
+  // Unlike the checkbox pill, an invalid radio pill has no border rule: it shows only the
+  // error message, as pds-radio.mdx documents.
+  it('shows only the error message when invalid, with no border change', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio id="free" component-id="free" value="free" label="Free" variant="pill"></pds-radio>
+      <pds-radio
+        id="pro"
+        component-id="pro"
+        value="pro"
+        label="Pro"
+        variant="pill"
+        invalid
+        error-message="Pick a plan"
+      ></pds-radio>
+    `);
+
+    const valid = await pillStyle(page, '#free');
+    const invalid = await pillStyle(page, '#pro');
+    expect(invalid.borderColor).toBe(valid.borderColor);
+
+    const message = await page.find('#pro .pds-radio__message--error');
+    expect(message.textContent).toContain('Pick a plan');
+  });
+
+  // Regression: the checked state's forced-colors outline used to win over the focus-visible
+  // outline (same specificity, later in the stylesheet), so a checked, keyboard-focused pill
+  // was indistinguishable from a checked, unfocused one.
+  it('keeps a visible focus ring on a checked pill in forced-colors mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<button>before</button>${group}`);
+    // emulateMediaFeatures only allows prefers-color-scheme/prefers-reduced-motion/color-gamut;
+    // forced-colors needs the raw CDP call.
+    const client = await page.createCDPSession();
+    await client.send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'forced-colors', value: 'active' }],
+    });
+    await page.waitForChanges();
+
+    await page.click('pds-radio:first-of-type label');
+    await page.waitForChanges();
+    const checkedOnly = await pillStyle(page, 'pds-radio:first-of-type');
+
+    await page.focus('button');
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+    const checkedAndFocused = await pillStyle(page, 'pds-radio:first-of-type');
+
+    expect(checkedOnly.outlineStyle).toBe('none');
+    expect(checkedAndFocused.outlineStyle).toBe('solid');
+  });
 });

@@ -298,4 +298,59 @@ describe('pds-checkbox pill variant', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('looks disabled and ignores clicks', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox id="email" component-id="email" label="Email" variant="pill"></pds-checkbox>
+      <pds-checkbox id="sms" component-id="sms" label="SMS" variant="pill" disabled></pds-checkbox>
+    `);
+
+    const enabled = await pillStyle(page, '#email');
+    const disabled = await pillStyle(page, '#sms');
+    expect(disabled.borderColor).not.toBe(enabled.borderColor);
+
+    await (await page.find('#sms >>> label')).click();
+    await page.waitForChanges();
+    expect(await page.$eval('#sms', (el: HTMLPdsCheckboxElement) => el.checked)).toBe(false);
+  });
+
+  it('turns the border red when invalid', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox id="email" component-id="email" label="Email" variant="pill"></pds-checkbox>
+      <pds-checkbox id="sms" component-id="sms" label="SMS" variant="pill" invalid error-message="Pick a channel"></pds-checkbox>
+    `);
+
+    const valid = await pillStyle(page, '#email');
+    const invalid = await pillStyle(page, '#sms');
+    expect(invalid.borderColor).not.toBe(valid.borderColor);
+  });
+
+  // Regression: the checked state's forced-colors outline used to win over the focus-visible
+  // outline (same specificity, later in the stylesheet), so a checked, keyboard-focused pill
+  // was indistinguishable from a checked, unfocused one.
+  it('keeps a visible focus ring on a checked pill in forced-colors mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<button>before</button>${pills}`);
+    // emulateMediaFeatures only allows prefers-color-scheme/prefers-reduced-motion/color-gamut;
+    // forced-colors needs the raw CDP call.
+    const client = await page.createCDPSession();
+    await client.send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'forced-colors', value: 'active' }],
+    });
+    await page.waitForChanges();
+
+    await (await page.find('#email >>> label')).click();
+    await page.waitForChanges();
+    const checkedOnly = await pillStyle(page, '#email');
+
+    await page.focus('button');
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+    const checkedAndFocused = await pillStyle(page, '#email');
+
+    expect(checkedOnly.outlineStyle).toBe('none');
+    expect(checkedAndFocused.outlineStyle).toBe('solid');
+  });
 });
