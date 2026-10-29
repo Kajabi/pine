@@ -1427,7 +1427,7 @@ describe('pds-popover inside a dialog', () => {
     const page = await newE2EPage();
     await page.setViewport({ width: 1000, height: 600 });
     await page.setContent(`
-      <dialog id="dialog" style="backdrop-filter: blur(3px); max-height: none; height: 100vh; overflow: auto; margin: 0; width: 100vw; max-width: none; padding: 0;">
+      <dialog id="dialog" style="backdrop-filter: blur(3px); max-height: none; height: 100vh; overflow: auto; margin: 0; width: 100vw; max-width: none; padding: 0 40px;">
         <div style="height: 1200px"></div>
         <pds-popover component-id="pop" placement="bottom-start">
           <button slot="trigger" id="pop-trigger">Open</button>
@@ -1604,6 +1604,331 @@ describe('nested pds-popovers', () => {
 
 // Puppeteer's mouse sends mouse pointer events even where the browser reports (hover: none), as
 // CI's headless Chrome does, so these drive the real hover path.
+describe('pds-popover near the edge of the viewport', () => {
+  type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+  const setUp = async (content: string, viewport = { width: 1000, height: 600 }) => {
+    const page = await newE2EPage();
+    await page.setViewport(viewport);
+    await page.setContent(content);
+    return page;
+  };
+
+  const popoverAt = (position: string, attrs = 'placement="bottom-start"', contentSize = 'width: 200px; height: 150px;') => `
+    <div id="wrapper" style="position: absolute; ${position}">
+      <pds-popover component-id="pop" ${attrs}>
+        <button slot="trigger" id="pop-trigger">Open</button>
+        <div id="pop-content" style="${contentSize}"><button id="pop-inside">Inside</button></div>
+      </pds-popover>
+    </div>
+  `;
+
+  const pause = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  // autoUpdate repositions after layout, which a frame later has run.
+  const settle = (page: Page) => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+
+  const waitUntilShown = (page: Page) => page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+
+  const open = async (page: Page) => {
+    await page.click('#pop-trigger');
+    await waitUntilShown(page);
+    await settle(page);
+  };
+
+  const close = async (page: Page) => {
+    await (await page.find('pds-popover')).callMethod('hide');
+    await page.waitForChanges();
+  };
+
+  const layout = (page: Page) =>
+    page.evaluate(() => {
+      const trigger = document.getElementById('pop-trigger')!.getBoundingClientRect();
+      const portal = document.getElementById('pop-portal')!;
+      const panel = portal.getBoundingClientRect();
+      return {
+        side: portal.getAttribute('data-pds-popover-placement'),
+        placement: document.querySelector('pds-popover')!.getAttribute('placement'),
+        gapAbove: Math.round(trigger.top - panel.bottom),
+        gapBelow: Math.round(panel.top - trigger.bottom),
+        gapBeside: Math.round(trigger.left - panel.right),
+        startOffset: Math.round(panel.left - trigger.left),
+        endOffset: Math.round(panel.right - trigger.right),
+        left: Math.round(panel.left),
+        right: Math.round(panel.right),
+        viewportWidth: innerWidth,
+      };
+    });
+
+  const scrollTo = async (page: Page, top: number) => {
+    await page.evaluate((top: number) => window.scrollTo(0, top), top);
+    await settle(page);
+  };
+
+  it('flips a bottom-start panel above its trigger near the bottom of the viewport, leaving its placement as set', async () => {
+    const page = await setUp(popoverAt('top: 540px; left: 100px;'));
+    await open(page);
+
+    const { side, placement, gapAbove, startOffset } = await layout(page);
+    expect({ side, placement, gapAbove, startOffset }).toEqual({ side: 'top-start', placement: 'bottom-start', gapAbove: 8, startOffset: 0 });
+  });
+
+  it('keeps a wide panel within 8px of both edges of a narrow viewport', async () => {
+    const page = await setUp(popoverAt('top: 100px; left: 320px;', 'placement="bottom-start"', 'width: 292px; height: 80px;'), { width: 390, height: 700 });
+    await open(page);
+
+    const { side, gapBelow, left, right, viewportWidth } = await layout(page);
+    expect(right - left).toBe(340);
+    expect(left).toBeGreaterThanOrEqual(8);
+    expect(right).toBeLessThanOrEqual(viewportWidth - 8);
+    expect({ side, gapBelow }).toEqual({ side: 'bottom-end', gapBelow: 8 });
+  });
+
+  it('flips above, within 8px of both edges, near the bottom of a viewport narrower than the panel allows on either end', async () => {
+    const page = await setUp(popoverAt('top: 640px; left: 170px;', 'placement="bottom-start"', 'width: 292px; height: 80px;'), { width: 390, height: 700 });
+    await open(page);
+
+    const { side, gapAbove, left, right, viewportWidth } = await layout(page);
+    expect(side).toMatch(/^top-/);
+    expect(gapAbove).toBe(8);
+    expect(left).toBeGreaterThanOrEqual(8);
+    expect(right).toBeLessThanOrEqual(viewportWidth - 8);
+  });
+
+  it('shifts a centered panel to stay 8px inside the viewport', async () => {
+    const page = await setUp(popoverAt('top: 100px; left: 10px;', 'placement="bottom"'));
+    await open(page);
+
+    const { side, gapBelow, left } = await layout(page);
+    expect({ side, gapBelow, left }).toEqual({ side: 'bottom', gapBelow: 8, left: 8 });
+  });
+
+  it('flips a right panel to the left of its trigger near the right edge', async () => {
+    const page = await setUp(popoverAt('top: 200px; left: 900px;', 'placement="right"'));
+    await open(page);
+
+    const { side, gapBeside } = await layout(page);
+    expect({ side, gapBeside }).toEqual({ side: 'left', gapBeside: 8 });
+  });
+
+  it('flips back to its placement once there is room, as the page scrolls and when it opens again', async () => {
+    const page = await setUp(`<div style="height: 3000px"></div>${popoverAt('top: 540px; left: 100px;')}`);
+    await open(page);
+    expect((await layout(page)).side).toBe('top-start');
+
+    await close(page);
+    await scrollTo(page, 400);
+    await open(page);
+    expect((await layout(page)).side).toBe('bottom-start');
+
+    await scrollTo(page, 0);
+    const above = await layout(page);
+    expect({ side: above.side, gapAbove: above.gapAbove }).toEqual({ side: 'top-start', gapAbove: 8 });
+
+    await scrollTo(page, 400);
+    const below = await layout(page);
+    expect({ side: below.side, gapBelow: below.gapBelow }).toEqual({ side: 'bottom-start', gapBelow: 8 });
+  });
+
+  it('stays on its preferred side when neither side has room', async () => {
+    const page = await setUp(popoverAt('top: 280px; left: 100px;', 'placement="bottom-start"', 'width: 200px; height: 352px;'));
+    await open(page);
+
+    const { side, gapBelow } = await layout(page);
+    expect({ side, gapBelow }).toEqual({ side: 'bottom-start', gapBelow: 8 });
+  });
+
+  it('stays anchored above its trigger as its content grows while flipped', async () => {
+    const page = await setUp(popoverAt('top: 540px; left: 100px;'));
+    await open(page);
+
+    await page.$eval('#pop-content', (el: HTMLElement) => (el.style.height = '250px'));
+    await settle(page);
+
+    const { side, gapAbove } = await layout(page);
+    expect({ side, gapAbove }).toEqual({ side: 'top-start', gapAbove: 8 });
+  });
+
+  it('flips inside a scrolled dialog with a backdrop filter', async () => {
+    const page = await setUp(`
+      <dialog id="dialog" style="backdrop-filter: blur(3px); max-height: none; height: 100vh; overflow: auto; margin: 0; width: 100vw; max-width: none; padding: 0 40px;">
+        <div style="height: 1200px"></div>
+        <pds-popover component-id="pop" placement="bottom-start">
+          <button slot="trigger" id="pop-trigger">Open</button>
+          <div style="width: 200px; height: 150px;">Panel</div>
+        </pds-popover>
+        <div style="height: 1200px"></div>
+      </dialog>
+    `);
+    await page.evaluate(() => {
+      const dialog = document.getElementById('dialog') as HTMLDialogElement;
+      dialog.showModal();
+      dialog.scrollTop = 750;
+    });
+    await open(page);
+
+    const { side, gapAbove, startOffset } = await layout(page);
+    expect({ side, gapAbove, startOffset }).toEqual({ side: 'top-start', gapAbove: 8, startOffset: 0 });
+  });
+
+  describe('with an entrance animation on the side it took', () => {
+    const entrance = `
+      <style>
+        @keyframes pop-rise { from { transform: translateY(8px); } }
+        [data-pds-popover-placement^="top"] { animation: pop-rise 150ms; }
+      </style>
+    `;
+
+    // autoUpdate repositions while the animation runs, so the gap is only right if that run ignores it.
+    const openAndFinishAnimating = async (page: Page) => {
+      await open(page);
+      await page.waitForFunction(() => document.getAnimations().length === 0);
+    };
+
+    it('keeps its 8px gap once the animation ends', async () => {
+      const page = await setUp(`${entrance}${popoverAt('top: 540px; left: 100px;')}`);
+      await openAndFinishAnimating(page);
+
+      const { side, gapAbove, startOffset } = await layout(page);
+      expect({ side, gapAbove, startOffset }).toEqual({ side: 'top-start', gapAbove: 8, startOffset: 0 });
+    });
+
+    it('keeps its 8px gap once the animation ends inside a scrolled dialog with a backdrop filter', async () => {
+      const page = await setUp(`
+        ${entrance}
+        <dialog id="dialog" style="backdrop-filter: blur(3px); max-height: none; height: 100vh; overflow: auto; margin: 0; width: 100vw; max-width: none; padding: 0 40px;">
+          <div style="height: 1200px"></div>
+          <pds-popover component-id="pop" placement="bottom-start">
+            <button slot="trigger" id="pop-trigger">Open</button>
+            <div style="width: 200px; height: 150px;">Panel</div>
+          </pds-popover>
+          <div style="height: 1200px"></div>
+        </dialog>
+      `);
+      await page.evaluate(() => {
+        const dialog = document.getElementById('dialog') as HTMLDialogElement;
+        dialog.showModal();
+        dialog.scrollTop = 750;
+      });
+      await openAndFinishAnimating(page);
+
+      const { side, gapAbove, startOffset } = await layout(page);
+      expect({ side, gapAbove, startOffset }).toEqual({ side: 'top-start', gapAbove: 8, startOffset: 0 });
+    });
+  });
+
+  it('flips inside a scrolled pds-modal, and back as it scrolls', async () => {
+    const page = await setUp(`
+      <pds-modal component-id="modal" scrollable="false">
+        <pds-modal-header><h2>Title</h2></pds-modal-header>
+        <pds-modal-content>
+          <div style="height: 900px"></div>
+          <pds-popover component-id="pop" placement="bottom-start">
+            <button slot="trigger" id="pop-trigger">Open</button>
+            <div style="width: 200px; height: 150px;">Panel</div>
+          </pds-popover>
+          <div style="height: 900px"></div>
+        </pds-modal-content>
+      </pds-modal>
+    `);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    await page.waitForChanges();
+    // The modal's backdrop is the dialog that scrolls when the modal isn't scrollable itself.
+    const scrollTriggerTo = async (top: number) => {
+      await page.evaluate((top: number) => {
+        const backdrop = document.querySelector('pds-modal dialog')!;
+        backdrop.scrollTop += document.getElementById('pop-trigger')!.getBoundingClientRect().top - top;
+      }, top);
+      await settle(page);
+    };
+
+    await scrollTriggerTo(100);
+    await open(page);
+    const below = await layout(page);
+    expect({ side: below.side, gapBelow: below.gapBelow, startOffset: below.startOffset }).toEqual({ side: 'bottom-start', gapBelow: 8, startOffset: 0 });
+
+    await scrollTriggerTo(480);
+    const above = await layout(page);
+    expect({ side: above.side, gapAbove: above.gapAbove, startOffset: above.startOffset }).toEqual({ side: 'top-start', gapAbove: 8, startOffset: 0 });
+  });
+
+  it('stays open as the pointer moves from its trigger into a hover-opened panel flipped above it', async () => {
+    const page = await setUp(popoverAt('top: 540px; left: 100px;', 'placement="bottom-start" open-on="hover"'));
+    const moveTo = async (id: string) => {
+      const { x, y } = await page.$eval(`#${id}`, (el) => {
+        const rect = el.getBoundingClientRect();
+        return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+      });
+      await page.mouse.move(x, y, { steps: 4 });
+    };
+
+    await moveTo('pop-trigger');
+    await waitUntilShown(page);
+    await settle(page);
+    expect((await layout(page)).side).toBe('top-start');
+
+    await moveTo('pop-inside');
+    await pause(300);
+    expect(await page.evaluate(() => document.getElementById('pop-portal')!.style.display)).toBe('block');
+  });
+
+  it('lines a -start panel up with the right edge of its trigger on a right-to-left page, flipped or not', async () => {
+    const page = await setUp(popoverAt('top: 100px; left: 300px;'));
+    await page.evaluate(() => (document.documentElement.dir = 'rtl'));
+    await open(page);
+    const below = await layout(page);
+    expect({ side: below.side, endOffset: below.endOffset }).toEqual({ side: 'bottom-start', endOffset: 0 });
+
+    await close(page);
+    await page.$eval('#wrapper', (el: HTMLElement) => (el.style.top = '540px'));
+    await open(page);
+    const above = await layout(page);
+    expect({ side: above.side, endOffset: above.endOffset }).toEqual({ side: 'top-start', endOffset: 0 });
+  });
+
+  it('follows a trigger swapped in while open as it changes size', async () => {
+    const page = await setUp(popoverAt('top: 100px; left: 100px;', 'placement="bottom-end"'));
+    await open(page);
+
+    await page.evaluate(() => {
+      const next = document.createElement('button');
+      next.slot = 'trigger';
+      next.id = 'pop-trigger';
+      next.textContent = 'Open';
+      document.getElementById('pop-trigger')!.replaceWith(next);
+    });
+    await settle(page);
+    await page.$eval('#pop-trigger', (el: HTMLElement) => (el.style.width = '300px'));
+    await settle(page);
+
+    const { side, gapBelow, endOffset } = await layout(page);
+    expect({ side, gapBelow, endOffset }).toEqual({ side: 'bottom-end', gapBelow: 8, endOffset: 0 });
+  });
+
+  it('has the side it took on its portal when pdsPopoverOpen fires, and drops it on close', async () => {
+    const page = await setUp(popoverAt('top: 540px; left: 100px;'));
+    await page.$eval('pds-popover', (el) =>
+      el.addEventListener('pdsPopoverOpen', () => {
+        (window as unknown as { sideOnOpen: string | null }).sideOnOpen = document.getElementById('pop-portal')!.getAttribute('data-pds-popover-placement');
+      }),
+    );
+
+    await open(page);
+    expect(await page.evaluate(() => (window as unknown as { sideOnOpen: string | null }).sideOnOpen)).toBe('top-start');
+
+    await close(page);
+    expect(await page.$eval('#pop-portal', (el) => el.getAttribute('data-pds-popover-placement'))).toBeNull();
+  });
+
+  it('has no axe violations while flipped', async () => {
+    const page = await setUp(popoverAt('top: 540px; left: 100px;'));
+    await open(page);
+    expect((await layout(page)).side).toBe('top-start');
+
+    expect(formatViolations(await runAxe(page))).toBe('');
+  });
+});
+
 describe('pds-popover open-on hover', () => {
   type Page = Awaited<ReturnType<typeof newE2EPage>>;
 

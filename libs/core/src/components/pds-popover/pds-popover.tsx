@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
+import { autoUpdate, computePosition, flip, offset, platform, shift } from '@floating-ui/dom';
 import { closest, containsComposed } from '@utils/closest';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { PlacementType, PopoverPaddingType } from '@utils/types';
@@ -15,6 +16,25 @@ const popoversTakingEscape: PdsPopover[] = [];
 const HOVER_OPEN_DELAY_MS = 120;
 /** Leaving the trigger and panel waits this long before closing, which covers the gap between them. */
 const HOVER_CLOSE_DELAY_MS = 200;
+
+/**
+ * floating-ui reporting viewport coordinates, as `position: fixed` uses without a containing block. Its own
+ * containing-block check misses a backdrop filter in WebKit, so handlePopoverPositioning corrects for one itself.
+ */
+const viewportPlatform = { ...platform, getOffsetParent: () => window };
+
+/**
+ * Where `top: 0; left: 0` puts a fixed element beside the given one. An empty probe is measured instead of the
+ * element, whose own transforms, such as an entrance animation, would otherwise read as part of the offset.
+ */
+const containingBlockOrigin = (element: HTMLElement) => {
+  const probe = document.createElement('div');
+  probe.style.cssText = 'all: initial; position: fixed; top: 0; left: 0;';
+  element.parentNode?.insertBefore(probe, element);
+  const { top, left } = probe.getBoundingClientRect();
+  probe.remove();
+  return { top, left };
+};
 
 /** The focused element, followed down through shadow roots to the control that has focus. */
 function deepActiveElement(): Element | null {
@@ -102,15 +122,24 @@ export class PdsPopover {
   private portalEl: HTMLElement | null = null;
 
   /**
-   * Guard to prevent repositioning loops
+   * Stops floating-ui's autoUpdate, which repositions the open panel as its trigger or the page moves or resizes
    */
-  private isRepositioning = false;
+  private stopAutoUpdate: (() => void) | null = null;
 
   /**
-   * Debounce timers for performance optimization
+   * Counts positioning runs, so a run that resolves after a newer one started is dropped
    */
-  private scrollDebounceTimer: ReturnType<typeof setTimeout> | null = null;
-  private resizeDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private positioningRun = 0;
+
+  /**
+   * The latest positioning run, which pdsPopoverOpen waits for so the panel's side is set when it fires
+   */
+  private positioning: Promise<void> = Promise.resolve();
+
+  /**
+   * Set while show() waits to emit pdsPopoverOpen, so a hide() in the meantime emits it first
+   */
+  private openEventPending = false;
 
   /**
    * Track moved nodes and their placeholders for restoration
@@ -164,8 +193,6 @@ export class PdsPopover {
    */
   private boundClickOutsideHandler: (event: MouseEvent) => void;
   private boundEscapeKeyHandler: (event: KeyboardEvent) => void;
-  private boundScrollHandler: () => void;
-  private boundResizeHandler: () => void;
 
   /**
    * Emitted when the popover is opened
@@ -257,8 +284,6 @@ export class PdsPopover {
     // Bind event handlers for cleanup
     this.boundClickOutsideHandler = this.handleClickOutside.bind(this);
     this.boundEscapeKeyHandler = this.handleEscapeKey.bind(this);
-    this.boundScrollHandler = this.handleScroll.bind(this);
-    this.boundResizeHandler = this.handleResize.bind(this);
 
     // Create portal element
     this.createPortal();
@@ -303,6 +328,9 @@ export class PdsPopover {
     } else {
       this.triggerEl = null;
     }
+
+    // autoUpdate watches the trigger it started with, so an open popover starts it again on the new one.
+    if (this.active) this.addScrollAndResizeListeners();
 
     this.observeTrigger();
   };
@@ -492,7 +520,8 @@ export class PdsPopover {
     // is in now, if any.
     if (this.active) {
       this.placePortal();
-      requestAnimationFrame(() => this.handlePopoverPositioning());
+      // autoUpdate listens to the scroll containers around where the trigger was, so it starts again.
+      this.addScrollAndResizeListeners();
     }
   }
 
@@ -512,6 +541,7 @@ export class PdsPopover {
       this.restorePortalContent();
       this.active = false;
       this.linkTriggerToPortal();
+      this.emitOpenEvent();
       this.pdsPopoverClose.emit({
         componentId: this.componentId,
         popoverType: this.popoverType,
@@ -534,27 +564,11 @@ export class PdsPopover {
     document.removeEventListener('keydown', this.syncTabGuard, true);
     this.tabGuardEl?.removeAttribute('tabindex');
 
-    // Clear any pending debounce timers
-    this.clearDebounceTimers();
     this.clearHoverTimers();
     this.hoverOpened = false;
 
     // Remove portal from DOM
     this.removePortal();
-  }
-
-  /**
-   * Clears any pending debounce timers
-   */
-  private clearDebounceTimers() {
-    if (this.scrollDebounceTimer !== null) {
-      clearTimeout(this.scrollDebounceTimer);
-      this.scrollDebounceTimer = null;
-    }
-    if (this.resizeDebounceTimer !== null) {
-      clearTimeout(this.resizeDebounceTimer);
-      this.resizeDebounceTimer = null;
-    }
   }
 
   private createPortal() {
@@ -746,13 +760,7 @@ export class PdsPopover {
     this.portalEl.style.opacity = '1';
     this.portalEl.style.visibility = 'visible';
 
-    // Position the popover
-    requestAnimationFrame(() => {
-      if (!this.isComponentMounted) return;
-      this.handlePopoverPositioning();
-    });
-
-    // Add scroll and resize listeners for repositioning (always)
+    // Position the popover now, and again whenever its trigger or the page moves or resizes
     this.addScrollAndResizeListeners();
     document.addEventListener('submit', this.handleSubmitFromPanel, true);
     document.addEventListener('keydown', this.syncTabGuard, true);
@@ -767,7 +775,20 @@ export class PdsPopover {
       document.addEventListener('keydown', this.boundEscapeKeyHandler);
     }
 
-    // Emit open event
+    // Emit open event once the panel is positioned, with the side it took already on it. A reconnect, a
+    // trigger swap or another show() can start a newer run meanwhile, which drops this one, so wait for the latest.
+    this.openEventPending = true;
+    let positioning: Promise<void>;
+    do {
+      positioning = this.positioning;
+      await positioning;
+    } while (positioning !== this.positioning);
+    this.emitOpenEvent();
+  }
+
+  private emitOpenEvent() {
+    if (!this.openEventPending) return;
+    this.openEventPending = false;
     this.pdsPopoverOpen.emit({
       componentId: this.componentId,
       popoverType: this.popoverType,
@@ -798,6 +819,7 @@ export class PdsPopover {
     // Hide portal. The dark-mode border set in a shadow root is worked out again on the next open.
     this.portalEl.style.border = '';
     this.portalEl.removeAttribute('data-pds-popover-open');
+    this.portalEl.removeAttribute('data-pds-popover-placement');
     this.portalEl.style.display = 'none';
     this.portalEl.style.opacity = '0';
     this.portalEl.style.visibility = 'hidden';
@@ -817,8 +839,8 @@ export class PdsPopover {
     this.tabGuardEl?.removeAttribute('tabindex');
     this.releasePanel();
 
-    // Clear any pending timers
-    this.clearDebounceTimers();
+    // Closed before its first position resolved, it still announces the open before the close.
+    this.emitOpenEvent();
 
     // Emit close event
     this.pdsPopoverClose.emit({
@@ -833,9 +855,9 @@ export class PdsPopover {
   @Method()
   async toggle() {
     if (this.active) {
-      this.hide();
+      await this.hide();
     } else {
-      this.show();
+      await this.show();
     }
   }
 
@@ -1029,16 +1051,19 @@ export class PdsPopover {
    * Adds scroll and resize listeners for repositioning
    */
   private addScrollAndResizeListeners() {
-    window.addEventListener('scroll', this.boundScrollHandler, true);
-    window.addEventListener('resize', this.boundResizeHandler);
+    this.removeScrollAndResizeListeners();
+    if (this.triggerEl == null || this.portalEl == null) return;
+    this.stopAutoUpdate = autoUpdate(this.triggerEl, this.portalEl, () => {
+      this.positioning = this.handlePopoverPositioning().catch(error => console.warn('pds-popover: failed to position the panel', error));
+    });
   }
 
   /**
    * Removes scroll and resize listeners
    */
   private removeScrollAndResizeListeners() {
-    window.removeEventListener('scroll', this.boundScrollHandler, true);
-    window.removeEventListener('resize', this.boundResizeHandler);
+    this.stopAutoUpdate?.();
+    this.stopAutoUpdate = null;
   }
 
   /**
@@ -1111,132 +1136,36 @@ export class PdsPopover {
   }
 
   /**
-   * Handles scroll events to reposition the popover (debounced for performance)
+   * Positions the popover relative to its trigger element, flipping to the opposite side when only that side has
+   * room and shifting to stay 8px inside the viewport. The side it takes goes on the panel's `data-pds-popover-placement`.
    */
-  private handleScroll() {
-    if (!this.active) return;
-
-    if (this.scrollDebounceTimer !== null) {
-      clearTimeout(this.scrollDebounceTimer);
-    }
-
-    this.scrollDebounceTimer = setTimeout(() => {
-      this.handlePopoverPositioning();
-      this.scrollDebounceTimer = null;
-    }, 10); // 10ms debounce for smooth repositioning
-  }
-
-  /**
-   * Handles resize events to reposition the popover (debounced for performance)
-   */
-  private handleResize() {
-    if (!this.active) return;
-
-    if (this.resizeDebounceTimer !== null) {
-      clearTimeout(this.resizeDebounceTimer);
-    }
-
-    this.resizeDebounceTimer = setTimeout(() => {
-      this.handlePopoverPositioning();
-      this.resizeDebounceTimer = null;
-    }, 100); // 100ms debounce for resize
-  }
-
-  /**
-   * Positions the popover relative to its trigger element
-   */
-  private handlePopoverPositioning() {
-    // Prevent repositioning loops
-    if (this.isRepositioning) {
-      return;
-    }
-
-    this.isRepositioning = true;
-
-    if (this.triggerEl == null || this.portalEl == null) {
-      this.isRepositioning = false;
-      return;
-    }
-
-    const triggerRect = this.triggerEl.getBoundingClientRect();
-    const popoverRect = this.portalEl.getBoundingClientRect();
+  private async handlePopoverPositioning() {
+    // Counted before the guards, so a run still in flight is dropped even when this one can't position.
+    const run = ++this.positioningRun;
+    if (this.triggerEl == null || this.portalEl == null) return;
 
     // Safety check: ensure trigger has valid dimensions (is rendered and visible)
-    if (triggerRect.width === 0 || triggerRect.height === 0) {
-      this.isRepositioning = false;
-      return;
-    }
+    const triggerRect = this.triggerEl.getBoundingClientRect();
+    if (triggerRect.width === 0 || triggerRect.height === 0) return;
 
-    let top = 0;
-    let left = 0;
-    const offset = 8;
+    const portal = this.portalEl;
+    const { x: left, y: top, placement } = await computePosition(this.triggerEl, portal, {
+      placement: this.placement,
+      strategy: 'fixed',
+      // With no room on either side, stay on the preferred side: the side that overflows less can still push
+      // a tall panel's start above the viewport.
+      middleware: [offset(8), flip({ fallbackStrategy: 'initialPlacement' }), shift({ padding: 8 })],
+      platform: viewportPlatform,
+    });
+    if (!this.active || run !== this.positioningRun || portal !== this.portalEl) return;
 
-    switch (this.placement) {
-      case 'top':
-        top = triggerRect.top - popoverRect.height - offset;
-        left = triggerRect.left + (triggerRect.width - popoverRect.width) / 2;
-        break;
-      case 'top-start':
-        top = triggerRect.top - popoverRect.height - offset;
-        left = triggerRect.left;
-        break;
-      case 'top-end':
-        top = triggerRect.top - popoverRect.height - offset;
-        left = triggerRect.right - popoverRect.width;
-        break;
-      case 'right':
-        top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2;
-        left = triggerRect.right + offset;
-        break;
-      case 'right-start':
-        top = triggerRect.top;
-        left = triggerRect.right + offset;
-        break;
-      case 'right-end':
-        top = triggerRect.bottom - popoverRect.height;
-        left = triggerRect.right + offset;
-        break;
-      case 'bottom':
-        top = triggerRect.bottom + offset;
-        left = triggerRect.left + (triggerRect.width - popoverRect.width) / 2;
-        break;
-      case 'bottom-start':
-        top = triggerRect.bottom + offset;
-        left = triggerRect.left;
-        break;
-      case 'bottom-end':
-        top = triggerRect.bottom + offset;
-        left = triggerRect.right - popoverRect.width;
-        break;
-      case 'left':
-        top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2;
-        left = triggerRect.left - popoverRect.width - offset;
-        break;
-      case 'left-start':
-        top = triggerRect.top;
-        left = triggerRect.left - popoverRect.width - offset;
-        break;
-      case 'left-end':
-        top = triggerRect.bottom - popoverRect.height;
-        left = triggerRect.left - popoverRect.width - offset;
-        break;
-    }
-
-    this.portalEl.style.top = `${top}px`;
-    this.portalEl.style.left = `${left}px`;
+    portal.setAttribute('data-pds-popover-placement', placement);
 
     // `position: fixed` measures from the viewport unless an ancestor becomes its containing block,
-    // as a modal dialog does with its backdrop filter. Shift by however far it landed from the spot.
-    const placed = this.portalEl.getBoundingClientRect();
-    if (Math.abs(placed.top - top) > 0.5 || Math.abs(placed.left - left) > 0.5) {
-      this.portalEl.style.top = `${2 * top - placed.top}px`;
-      this.portalEl.style.left = `${2 * left - placed.left}px`;
-    }
-
-    // Reset the repositioning guard after a short delay
-    setTimeout(() => {
-      this.isRepositioning = false;
-    }, 16); // ~1 frame at 60fps
+    // as a modal dialog does with its backdrop filter. Offset by however far that block's corner is from the viewport's.
+    const origin = containingBlockOrigin(portal);
+    portal.style.top = `${top - origin.top}px`;
+    portal.style.left = `${left - origin.left}px`;
   }
 
   render() {
