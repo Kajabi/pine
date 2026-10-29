@@ -863,11 +863,11 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate": boolean;
         /**
@@ -891,7 +891,7 @@ export namespace Components {
          */
         "value": string;
         /**
-          * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel` doesn't apply, and `indeterminate` has no pill style.
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
           * @defaultValue default
          */
         "variant": 'default' | 'pill';
@@ -2293,7 +2293,7 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
@@ -2319,7 +2319,7 @@ export namespace Components {
          */
         "value": string;
         /**
-          * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel`, `hasBorder`, and the `image` slot don't apply.
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
           * @defaultValue default
          */
         "variant": 'default' | 'pill';
@@ -4753,11 +4753,11 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate"?: boolean;
         /**
@@ -4786,7 +4786,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
         /**
-          * Determines the visual style of the checkbox. `pill` hides the checkbox square and renders the label as a pill-shaped choice. The input stays a native checkbox, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel` doesn't apply, and `indeterminate` has no pill style.
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
           * @defaultValue default
          */
         "variant"?: 'default' | 'pill';
@@ -6248,7 +6248,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
@@ -6278,7 +6278,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
         /**
-          * Determines the visual style of the radio. `pill` hides the radio circle and renders the label as a pill-shaped choice. The input stays a native radio, so keyboard, form, and screen reader behavior are unchanged. A pill always shows its label, so `hideLabel`, `hasBorder`, and the `image` slot don't apply.
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
           * @defaultValue default
          */
         "variant"?: 'default' | 'pill';

@@ -106,7 +106,7 @@ Add a border around the radio component for better visual separation, useful for
 
 ### Pill
 
-Set `variant="pill"` to render the radio as a pill-shaped choice. The radio circle is visually hidden and the label becomes the pill, so the input is still a native radio: it submits with the form, arrow keys move between pills in a group, and screen readers announce it as a radio. Checking a pill adds an inset ring instead of a thicker border, so the pill doesn't change size. The focus ring shows for keyboard focus only.
+Set `variant="pill"` to render the radio as a pill-shaped choice. The radio circle is visually hidden and the label becomes the pill, so the input is still a native radio: it submits with the form, arrow keys move between pills in a group, and screen readers announce it as a radio. Checking a pill adds an inset ring instead of a thicker border, so the pill doesn't change size. The focus ring shows for keyboard focus only. A pill always shows its label, so `hideLabel` is ignored. `invalid` shows only the error message below the pill, with no border change.
 
 Use pills for short, single-line labels such as answers to an onboarding question. Group them with `pds-radio-group` and `direction="row"`, which wraps them onto new lines as needed. A pill is its own bordered shape, so `hasBorder` has no effect, and it doesn't support the `image` slot.
 

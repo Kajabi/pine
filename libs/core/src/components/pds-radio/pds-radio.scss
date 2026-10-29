@@ -351,6 +351,14 @@ label:has(input:disabled) {
     padding: 0 var(--pine-dimension-sm);
     transition: border-color var(--pine-motion-duration-fast) ease;
 
+    // The label text is a flex item, whose default min-width keeps it at its intrinsic width;
+    // an unbroken string (a URL, a long word) would then run past the pill's border instead of
+    // wrapping inside it, as pds-combobox.scss's trigger label does.
+    span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
     &:hover {
       border-color: var(--pine-color-text);
     }
@@ -379,11 +387,12 @@ label:has(input:disabled) {
       box-shadow: inset 0 0 0 var(--pine-border-width) var(--pine-color-text-label-disabled);
     }
 
-    // Forced colors drop the box-shadow ring and repaint the border, so draw the checked state with a system color.
+    // Forced colors drop the box-shadow ring, so draw the checked state with a system border color.
+    // Left as border, not outline: focus-visible above already claims outline, and a checked,
+    // keyboard-focused pill needs both to stay distinguishable from a checked, unfocused one.
     @media (forced-colors: active) {
       &:has(input:checked) {
-        outline: var(--pine-border-width-thick) solid Highlight;
-        outline-offset: calc(-1 * var(--pine-border-width-thick));
+        border-color: Highlight;
       }
     }
   }

@@ -122,7 +122,7 @@ Use the `label` slot when the label needs more than text, such as a `pds-chip`. 
 
 ### Pill
 
-Set `variant="pill"` to render the checkbox as a pill-shaped choice for picking several short options. The checkbox square is visually hidden and the label becomes the pill, so the input is still a native checkbox: Space toggles it, it submits with the form, and screen readers announce it as a checkbox. Checking a pill adds an inset ring instead of a thicker border, so the pill doesn't change size. The focus ring shows for keyboard focus only. `invalid` turns the pill's border red; `indeterminate` has no pill style.
+Set `variant="pill"` to render the checkbox as a pill-shaped choice for picking several short options. The checkbox square is visually hidden and the label becomes the pill, so the input is still a native checkbox: Space toggles it, it submits with the form, and screen readers announce it as a checkbox. Checking a pill adds an inset ring instead of a thicker border, so the pill doesn't change size. The focus ring shows for keyboard focus only. A pill always shows its label, so `hideLabel` is ignored. `invalid` turns the pill's border red; `indeterminate` has no pill style.
 
 Wrap related pills in a `fieldset` with a `legend` so the group has a name, and lay them out in a wrapping row.
 
