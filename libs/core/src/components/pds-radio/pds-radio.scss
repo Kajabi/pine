@@ -391,15 +391,29 @@ label:has(input:disabled) {
     // Left as border, not outline: focus-visible above already claims outline, and a checked,
     // keyboard-focused pill needs both to stay distinguishable from a checked, unfocused one.
     @media (forced-colors: active) {
-      &:has(input:checked) {
-        border-color: Highlight;
+      // The visible input on the default variant is dimmed to GrayText automatically; this pill's
+      // input is hidden, so its label chrome needs its own disabled override or it keeps the same
+      // auto-remapped color as an enabled pill.
+      &:has(input:disabled) {
+        border-color: GrayText;
       }
 
-      // :has(input:disabled:checked) outranks :has(input:checked) above (two pseudo-classes vs
-      // one), so a checked disabled pill needs its own override or it would keep the plain
-      // disabled border-color above and lose the checked distinction.
+      // A thicker border, not just a different color, marks checked: some forced-colors palettes
+      // put Highlight and GrayText close in lightness, and native checked controls get a filled
+      // dot as a shape cue this label can't reproduce. box-sizing: border-box above keeps the
+      // extra width from resizing the pill.
+      &:has(input:checked) {
+        border-color: Highlight;
+        border-width: var(--pine-border-width-thick);
+      }
+
+      // Needed because the non-media &:has(input:disabled:checked) above outranks both
+      // &:has(input:disabled) and &:has(input:checked) in this block (two pseudo-classes vs one),
+      // so without this a disabled checked pill would keep that rule's non-system color and the
+      // thin border, losing the checked cue.
       &:has(input:disabled:checked) {
         border-color: GrayText;
+        border-width: var(--pine-border-width-thick);
       }
     }
   }
