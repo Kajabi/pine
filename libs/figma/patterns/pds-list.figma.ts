@@ -207,449 +207,98 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   props: {
     variant: figma.enum("Variant", {
       "All products": html`
-      <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Course title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip sentiment="accent" >Course</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Podcast title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip sentiment="accent" >Course</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Coaching title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip sentiment="accent" >Course</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Community title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip sentiment="accent" >Course</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-      `,
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Course title
+    <pds-box slot="description" gap="sm"><pds-property icon="users">14</pds-property><pds-property icon="calendar-date">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-chip slot="trailing" sentiment="accent">Course</pds-chip>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Podcast title
+    <pds-box slot="description" gap="sm"><pds-property icon="users">14</pds-property><pds-property icon="calendar-date">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-chip slot="trailing" sentiment="accent">Podcast</pds-chip>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>`,
       "Courses": html`
-  <!-- Course -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Course title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Course -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Course title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Course title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-      `,
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Course title
+    <pds-box slot="description" gap="sm"><pds-property icon="users">14</pds-property><pds-property icon="calendar-date">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Course title
+    <pds-box slot="description" gap="sm"><pds-property icon="users">14</pds-property><pds-property icon="calendar-date">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>`,
       "Podcasts": html`
-  <!-- Podcast -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">The Daily Seed: Conversations with Floral Designers</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="file">4 episodes</pds-property>
-        <pds-property icon="chart">32 downloads</pds-property>
-        <pds-property icon="calendar-simple">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip sentiment="accent" >Private</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Podcast -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">The Daily Seed: Conversations with Floral Designers</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="file">4 episodes</pds-property>
-        <pds-property icon="chart">32 downloads</pds-property>
-        <pds-property icon="calendar-simple">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip sentiment="accent" >Private</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Podcast -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">The Daily Seed: Conversations with Floral Designers</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="file">4 episodes</pds-property>
-        <pds-property icon="chart">32 downloads</pds-property>
-        <pds-property icon="calendar-simple">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip sentiment="accent" >Private</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  `,
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    The Daily Seed: Conversations with Floral Designers
+    <pds-box slot="description" gap="sm"><pds-property icon="file">4 episodes</pds-property><pds-property icon="chart">32 downloads</pds-property><pds-property icon="calendar-simple">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-chip slot="trailing" sentiment="accent">Private</pds-chip>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>`,
       "Coaching": html`
-  <!-- Coaching -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Program title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Coaching -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Program title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Coaching -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Program title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>`,
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Program title
+    <pds-box slot="description" gap="sm"><pds-property icon="users">14</pds-property><pds-property icon="calendar-date">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Program title
+    <pds-box slot="description" gap="sm"><pds-property icon="users">14</pds-property><pds-property icon="calendar-date">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>`,
       "Community": html`
-  <!-- Community -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Program title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Community -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Program title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Community -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Program title</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="users" value="Category">14</pds-property>
-        <pds-property icon="calendar-date" value="Category">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-      </pds-button>
-    </pds-box>
-  </pds-box>`,
-    "Pages": html`
-  <!-- Page -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Library</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="calendar-simple">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip dot sentiment="info" dropdown>System</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="preview-on" slot="start"/>
-        Preview
-      </pds-button>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="customize" slot="start"/>
-        More options
-      </pds-button>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-        More options
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Page -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Landing page</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="calendar-simple">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip dot sentiment="success" dropdown>Published</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="preview-on" slot="start"/>
-        Preview
-      </pds-button>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="customize" slot="start"/>
-        More options
-      </pds-button>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-        More options
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  <!-- Page -->
-  <pds-box gap="sm">
-    <!-- Image -->
-    <pds-box flex="shrink">
-      <pds-image src={image} alt="Offers" width="100px"/>
-    </pds-box>
-    <!-- Title and properties -->
-    <pds-box direction="column" flex="grow">
-      <pds-text weight="bold">Library</pds-text>
-      <pds-box gap="sm">
-        <pds-property icon="calendar-simple">Created on April 20th, 2022</pds-property>
-      </pds-box>
-    </pds-box>
-    <!-- Actions -->
-    <pds-box flex="shrink" align-items="center" gap="sm">
-      <pds-chip dot sentiment="neutral" dropdown>System</pds-chip>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="preview-on" slot="start"/>
-        Preview
-      </pds-button>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="customize" slot="start"/>
-        More options
-      </pds-button>
-      <pds-button variant="unstyled" icon-only>
-        <pds-icon name="dot-menu-horizontal" slot="start"/>
-        More options
-      </pds-button>
-    </pds-box>
-  </pds-box>
-  `,
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Program title
+    <pds-box slot="description" gap="sm"><pds-property icon="users">14</pds-property><pds-property icon="calendar-date">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Program title
+    <pds-box slot="description" gap="sm"><pds-property icon="users">14</pds-property><pds-property icon="calendar-date">Created on April 20th, 2022</pds-property></pds-box>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>`,
+      "Pages": html`
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Library
+    <pds-property slot="description" icon="calendar-simple">Updated April 20th, 2022</pds-property>
+    <pds-chip slot="trailing" dot sentiment="info">System</pds-chip>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="preview-on" aria-hidden="true"></pds-icon>Preview</pds-button>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="customize" aria-hidden="true"></pds-icon>Customize</pds-button>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Landing page
+    <pds-property slot="description" icon="calendar-simple">Updated April 20th, 2022</pds-property>
+    <pds-chip slot="trailing" dot sentiment="success">Published</pds-chip>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="preview-on" aria-hidden="true"></pds-icon>Preview</pds-button>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="customize" aria-hidden="true"></pds-icon>Customize</pds-button>
+    <pds-button slot="trailing" variant="unstyled" icon-only><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>More options</pds-button>
+  </pds-list-item>`,
     }),
   },
-  example: (props) => html`<pds-box direction="column" gap="sm" fit>
-  ${props.variant}
-</pds-box>`,
+  example: (props) => html`<pds-list component-id="product-list">
+${props.variant}
+</pds-list>`,
+});
+
+figma.connect("<FIGMA_LIST_ITEM>", {
+  example: () => html`<pds-list component-id="list">
+  <pds-list-item href="#">
+    <pds-image slot="leading" src={image} alt="" width="100px"></pds-image>
+    Product title
+  </pds-list-item>
+</pds-list>`,
 });
