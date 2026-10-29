@@ -237,6 +237,8 @@
 // In a swap the group paints the panel's surface, so the box stays solid while one panel's content
 // gives way to the next; the content cross-fades over it without blending.
 .pds-modal-vt--morph::view-transition-group(pds-modal-morph) {
+  animation-duration: var(--pds-modal-morph-box-duration, var(--pine-motion-duration-slow));
+  animation-timing-function: var(--pds-modal-morph-box-easing, var(--pine-motion-easing-in-out));
   background: var(--pine-color-background-overlay);
   box-shadow: var(--pine-box-shadow-400);
 }
@@ -248,17 +250,22 @@
 
 // One panel's content at a time: the old gives way while the box starts to change, and the new
 // comes in only once it's gone, landing with the box. Overlapping, the two slid past each other.
+// The --pds-modal-morph-* properties are internal, for tuning the timing (the morph playground story).
 .pds-modal-vt--morph::view-transition-old(pds-modal-morph) {
-  animation-duration: var(--pine-motion-duration-fast);
+  animation-delay: var(--pds-modal-morph-old-delay, 0ms);
+  animation-duration: var(--pds-modal-morph-old-duration, var(--pine-motion-duration-fast));
   animation-fill-mode: both;
-  animation-timing-function: var(--pine-motion-easing-in);
+  animation-timing-function: var(--pds-modal-morph-old-easing, var(--pine-motion-easing-in));
 }
 
 .pds-modal-vt--morph::view-transition-new(pds-modal-morph) {
-  animation-delay: var(--pine-motion-duration-fast);
-  animation-duration: calc(var(--pine-motion-duration-slow) - var(--pine-motion-duration-fast));
+  animation-delay: var(--pds-modal-morph-new-delay, var(--pine-motion-duration-fast));
+  animation-duration: var(
+    --pds-modal-morph-new-duration,
+    calc(var(--pine-motion-duration-slow) - var(--pine-motion-duration-fast))
+  );
   animation-fill-mode: both;
-  animation-timing-function: var(--pine-motion-easing-out);
+  animation-timing-function: var(--pds-modal-morph-new-easing, var(--pine-motion-easing-out));
 }
 
 // A chain moving forward brings the next panel's content in from the inline end; back reverses it.
@@ -313,24 +320,24 @@
 
 @keyframes pds-modal-slide-from-end {
   from {
-    translate: var(--pine-dimension-lg) 0;
+    translate: var(--pds-modal-morph-slide, var(--pine-dimension-lg)) 0;
   }
 }
 
 @keyframes pds-modal-slide-to-start {
   to {
-    translate: calc(var(--pine-dimension-lg) * -1) 0;
+    translate: calc(var(--pds-modal-morph-slide, var(--pine-dimension-lg)) * -1) 0;
   }
 }
 
 @keyframes pds-modal-slide-from-start {
   from {
-    translate: calc(var(--pine-dimension-lg) * -1) 0;
+    translate: calc(var(--pds-modal-morph-slide, var(--pine-dimension-lg)) * -1) 0;
   }
 }
 
 @keyframes pds-modal-slide-to-end {
   to {
-    translate: var(--pine-dimension-lg) 0;
+    translate: var(--pds-modal-morph-slide, var(--pine-dimension-lg)) 0;
   }
 }
