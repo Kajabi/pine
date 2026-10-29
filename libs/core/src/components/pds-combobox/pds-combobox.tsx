@@ -233,9 +233,10 @@ export class PdsCombobox implements BasePdsProps {
   /**
    * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis.
    * When a label overflows, a `title` showing the full label will appear on hover.
+   * Chip options, custom layouts and group rows aren't affected.
    * @defaultValue false
    */
-  @Prop() truncate = false;
+  @Prop({ reflect: true }) truncate = false;
 
   /**
    * The sentiment for the chip trigger. Matches Pine chip sentiments.
@@ -555,7 +556,10 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   // A `title` only while the text is cut, measured on hover. On the span, not the option or trigger,
-  // so it isn't read again as their description.
+  // so it isn't read again as their description. Two side effects of that: the native tooltip only
+  // shows while the pointer is over the text itself, not the icon, chevron, check mark or padding;
+  // and it's the browser's unstyled tooltip, so unlike the siblings' truncation tooltip it doesn't
+  // follow the theme.
   private syncTitle(el: HTMLElement, selector: string) {
     const text = el.querySelector<HTMLElement>(selector);
     if (!text) return;
@@ -2783,7 +2787,11 @@ export class PdsCombobox implements BasePdsProps {
   /** An option's text, after its `data-icon` when it has one. */
   private renderOptionLabel(option: HTMLOptionElement) {
     const icon = optionIconOf(option);
-    const label = this.truncate ? <span class="pds-combobox__option-text">{this.getOptionLabel(option)}</span> : this.getOptionLabel(option);
+    const label = this.truncate ? (
+      <span key={this.getOptionLabel(option)} class="pds-combobox__option-text">
+        {this.getOptionLabel(option)}
+      </span>
+    ) : this.getOptionLabel(option);
     if (icon === null) return label;
     return (
       <span class="pds-combobox__option-label">
