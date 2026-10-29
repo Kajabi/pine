@@ -214,6 +214,7 @@ describe('pds-checkbox pill variant', () => {
       return {
         boxShadow: style.boxShadow,
         borderColor: style.borderTopColor,
+        borderWidth: style.borderTopWidth,
         outlineStyle: style.outlineStyle,
         width: rect.width,
         height: rect.height,
@@ -327,18 +328,26 @@ describe('pds-checkbox pill variant', () => {
     expect(invalid.borderColor).not.toBe(valid.borderColor);
   });
 
+  // The CDP forced-colors emulation below only takes effect on content rendered after it's set;
+  // setting it after setContent() leaves a pill's shadow DOM showing its normal, unremapped
+  // colors, so every forced-colors test below sets it up first.
+  async function forcedColorsPage() {
+    const page = await newE2EPage();
+    const client = await page.createCDPSession();
+    // emulateMediaFeatures only allows prefers-color-scheme/prefers-reduced-motion/color-gamut;
+    // forced-colors needs the raw CDP call.
+    await client.send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'forced-colors', value: 'active' }],
+    });
+    return page;
+  }
+
   // Regression: the checked state's forced-colors outline used to win over the focus-visible
   // outline (same specificity, later in the stylesheet), so a checked, keyboard-focused pill
   // was indistinguishable from a checked, unfocused one.
   it('keeps a visible focus ring on a checked pill in forced-colors mode', async () => {
-    const page = await newE2EPage();
+    const page = await forcedColorsPage();
     await page.setContent(`<button>before</button>${pills}`);
-    // emulateMediaFeatures only allows prefers-color-scheme/prefers-reduced-motion/color-gamut;
-    // forced-colors needs the raw CDP call.
-    const client = await page.createCDPSession();
-    await client.send('Emulation.setEmulatedMedia', {
-      features: [{ name: 'forced-colors', value: 'active' }],
-    });
     await page.waitForChanges();
 
     await (await page.find('#email >>> label')).click();
@@ -352,5 +361,41 @@ describe('pds-checkbox pill variant', () => {
 
     expect(checkedOnly.outlineStyle).toBe('none');
     expect(checkedAndFocused.outlineStyle).toBe('solid');
+  });
+
+  it('distinguishes checked, disabled and disabled-checked pills by color and border width in forced-colors mode', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(`
+      <pds-checkbox id="checked" component-id="checked" label="Checked" variant="pill" checked></pds-checkbox>
+      <pds-checkbox id="disabled" component-id="disabled" label="Disabled" variant="pill" disabled></pds-checkbox>
+      <pds-checkbox id="disabled-checked" component-id="disabled-checked" label="Disabled checked" variant="pill" disabled checked></pds-checkbox>
+    `);
+    await page.waitForChanges();
+
+    const checked = await pillStyle(page, '#checked');
+    const disabled = await pillStyle(page, '#disabled');
+    const disabledChecked = await pillStyle(page, '#disabled-checked');
+
+    // Highlight vs GrayText: checked (enabled) and disabled don't share a color.
+    expect(checked.borderColor).not.toBe(disabled.borderColor);
+    // Both disabled states share GrayText; only the checked one is distinguishable by width.
+    expect(disabledChecked.borderColor).toBe(disabled.borderColor);
+    expect(disabledChecked.borderWidth).not.toBe(disabled.borderWidth);
+    expect(checked.borderWidth).toBe(disabledChecked.borderWidth);
+  });
+
+  it('distinguishes an invalid checked pill from an invalid unchecked one in forced-colors mode', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(`
+      <pds-checkbox id="checked" component-id="checked" label="Checked" variant="pill" invalid="true" checked></pds-checkbox>
+      <pds-checkbox id="unchecked" component-id="unchecked" label="Unchecked" variant="pill" invalid="true"></pds-checkbox>
+    `);
+    await page.waitForChanges();
+
+    const checked = await pillStyle(page, '#checked');
+    const unchecked = await pillStyle(page, '#unchecked');
+
+    expect(checked.borderColor).not.toBe(unchecked.borderColor);
+    expect(checked.borderWidth).not.toBe(unchecked.borderWidth);
   });
 });

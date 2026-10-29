@@ -330,4 +330,17 @@ describe('pds-checkbox pill variant', () => {
 
     expect(page.root?.shadowRoot?.querySelector('label span')).not.toHaveClass('visually-hidden');
   });
+
+  it('keeps the is-indeterminate class on a pill, though the pill has no style for it', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill" indeterminate></pds-checkbox>`,
+    });
+
+    expect(page.root).toHaveClass('is-indeterminate');
+    expect(page.root).toHaveClass('pds-checkbox--pill');
+    expect(page.root?.shadowRoot?.querySelector('input')?.hasAttribute('indeterminate')).toBe(
+      true,
+    );
+  });
 });
