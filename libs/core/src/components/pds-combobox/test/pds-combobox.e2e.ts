@@ -1548,6 +1548,21 @@ describe('pds-combobox', () => {
       expect(await hoverTriggerTitle(page)).toBe(LONG);
     });
 
+    it("drops the trigger's title when the label changes under the pointer", async () => {
+      const page = await setUp('trigger="button" truncate');
+      expect(await hoverTriggerTitle(page)).toBe(LONG);
+
+      await page.$eval('pds-combobox', (el: HTMLElement & { value: string }) => {
+        el.value = 'short';
+      });
+      await page.waitForChanges();
+
+      const title = await page.evaluate(
+        () => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger-text')!.getAttribute('title'),
+      );
+      expect(title).toBeNull();
+    });
+
     it('gives a trigger label that fits no title', async () => {
       const page = await setUp('trigger="button" truncate', { value: 'short' });
       expect(await hoverTriggerTitle(page)).toBeNull();
