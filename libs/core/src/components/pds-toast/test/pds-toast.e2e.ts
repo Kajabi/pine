@@ -102,7 +102,11 @@ describe('pds-toast', () => {
     // Listen for the dismiss event
     const dismissEvent = await element.spyOnEvent('pdsToastDismissed');
 
-    await Promise.all([element.waitForEvent('pdsToastDismissed'), dismissButton.click()]);
+    // The spy records the event however soon it fires; a waitForEvent set up beside the click
+    // can miss one that fires first.
+    await dismissButton.click();
+    await page.waitForChanges();
+    for (let i = 0; i < 60 && dismissEvent.length === 0; i++) await new Promise(resolve => setTimeout(resolve, 50));
 
     expect(dismissEvent).toHaveReceivedEventTimes(1);
     expect(dismissEvent).toHaveReceivedEventDetail({ componentId: 'test-toast' });
@@ -295,5 +299,18 @@ describe('pds-toast accessibility', () => {
     `);
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+describe('pds-toast severity', () => {
+  const text = (node) => [node.name, ...(node.children ?? []).flatMap(text)].filter(Boolean).join(' ');
+
+  it('announces Error before a danger message, and not the icon name', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-toast type="danger" icon="warning-filled" duration="0">Upload failed</pds-toast>');
+
+    const spoken = text(await page.accessibility.snapshot());
+    expect(spoken).toMatch(/Error.*Upload failed/);
+    expect(spoken).not.toMatch(/warning filled/);
   });
 });

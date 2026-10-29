@@ -389,6 +389,18 @@ export class PdsMultiselect {
     }
   }
 
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    // Also fires when this element's own `disabled` attribute is merely present, even as the
+    // literal string "false" (a consumer's or React's attribute serialization can write that) —
+    // the platform treats any value as disabled, independent of fieldset state. A real disabled
+    // fieldset ancestor confirms this is genuinely that, not this element's own attribute.
+    if (disabled && !this.el.closest('fieldset[disabled]')) return;
+    this.disabled = disabled;
+  }
+
   componentWillLoad() {
     this.originalSearchEmitter = this.pdsMultiselectSearch;
     this.syncSelectedItems();
@@ -500,8 +512,18 @@ export class PdsMultiselect {
   }
 
   @Watch('disabled')
-  protected disabledChanged() {
+  protected disabledChanged(disabled: boolean) {
     this.syncSlottedTrigger();
+    // A disabled control can't stay open, or its options could still be toggled.
+    if (!disabled || !this.isOpen) return;
+
+    const activeElement = document.activeElement;
+    const focusInside = !!(this.el.shadowRoot?.contains(activeElement) || this.el.contains(activeElement));
+    this.closeDropdown();
+    // A disabled built-in trigger can't take focus back (falls to <body>, as natively); a slotted
+    // trigger without its own disabled property only gets aria-disabled and stays focusable, so
+    // focus would otherwise stay stranded on the closed panel's former content.
+    if (focusInside) this.activeTriggerEl?.focus();
   }
 
   /**
@@ -513,7 +535,8 @@ export class PdsMultiselect {
   }
 
   /**
-   * Clears all selected values and resets the component.
+   * Clears all selected values and resets the component. Works while disabled too, as setting a
+   * native control's value from script does.
    */
   @Method()
   async clear() {
@@ -540,11 +563,12 @@ export class PdsMultiselect {
 
   /**
    * Handle global keyboard events for accessibility.
-   * Closes dropdown on Escape key press regardless of focus location.
+   * Closes dropdown on Escape key press regardless of focus location. Taken in document's capture
+   * phase, before a modal around the multiselect hears it on document and closes too.
    */
-  @Listen('keydown', { target: 'window' })
+  @Listen('keydown', { target: 'document', capture: true })
   handleWindowKeyDown(event: KeyboardEvent) {
-    if (!this.isOpen) return;
+    if (!this.isOpen || event.defaultPrevented) return;
 
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -1364,6 +1388,12 @@ export class PdsMultiselect {
     this.toggleOption(option);
   };
 
+  // mousedown already toggled the option. Without this, a click on the chip reaches the
+  // checkbox through its label and toggles it a second time.
+  private handleOptionClick = (e: MouseEvent) => {
+    e.preventDefault();
+  };
+
   private handleOptionMouseEnter = (index: number, option: MultiselectOption) => () => {
     if (option.disabled) return;
     this.highlightedIndex = index;
@@ -1455,11 +1485,12 @@ export class PdsMultiselect {
         aria-describedby={hasAction ? `${optionId}-action-description` : undefined}
         data-index={index}
         onMouseDown={this.handleOptionMouseDown(option)}
+        onClick={this.handleOptionClick}
         onMouseEnter={this.handleOptionMouseEnter(index, option)}
       >
         {isCreateOption ? (
           <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
-            <pds-icon name="add" size="small" />
+            <pds-icon name="add" size="small" aria-hidden="true" />
             <pds-text>{formatMessage(this.createOptionLabel, { text: option.text })}</pds-text>
           </pds-box>
         ) : (
@@ -1471,7 +1502,7 @@ export class PdsMultiselect {
             style={{ pointerEvents: 'none' }}
           >
             {this.optionDisplay === 'chip' && (
-              <pds-chip slot="label" sentiment="subtle" dot={!!option.dotColor} dot-color={option.dotColor}>
+              <pds-chip slot="label" sentiment="subtle" dot={!!option.dotColor} dot-color={option.dotColor} max-width="100%">
                 {option.text}
               </pds-chip>
             )}
@@ -1535,7 +1566,7 @@ export class PdsMultiselect {
       >
         {/* Search input */}
         <div class="pds-multiselect__search">
-          <pds-icon name="search" size="small" />
+          <pds-icon name="search" size="small" aria-hidden="true" />
           <input
             ref={el => (this.searchInputEl = el)}
             type="text"
@@ -1865,7 +1896,7 @@ export class PdsMultiselect {
 
           {this.errorMessage && (
             <p class="pds-multiselect__error" id={messageId(this.componentId, 'error')}>
-              <pds-icon icon={danger} size="small" />
+              <pds-icon aria-hidden="true" icon={danger} size="small" />
               {this.errorMessage}
             </p>
           )}

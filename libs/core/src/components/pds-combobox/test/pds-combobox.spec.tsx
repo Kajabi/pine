@@ -269,6 +269,7 @@ describe('pds-combobox', () => {
     expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dot')).toBe(true);
     const icon = chipTrigger?.querySelector('pds-icon');
     expect(icon?.getAttribute('icon')).toBe('star');
+    expect(icon?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('renders chip trigger with large size', async () => {
@@ -1106,6 +1107,7 @@ describe('pds-combobox', () => {
 
     const checkIcon = page.root?.shadowRoot?.querySelector('.pds-combobox__option-check');
     expect(checkIcon).not.toBeNull();
+    expect(checkIcon?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('handles button trigger keyboard navigation', async () => {
@@ -3187,7 +3189,7 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       expect(list().classList.contains('pds-combobox__listbox--drill-in')).toBe(true);
 
-      list().dispatchEvent(animationEnd('pds-combobox-drill-from-end'));
+      list().dispatchEvent(animationEnd('pds-combobox-drill'));
       await page.waitForChanges();
       expect(list().classList.contains('pds-combobox__listbox--drill-in')).toBe(false);
 
@@ -3216,6 +3218,152 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       expect(component.openGroup).toBeNull();
       expect(component.drillDirection).toBeNull();
+    });
+
+    // A shaded row reads as picked, so drill-in shades none: not the group holding the selection, and
+    // not the row a pointer user comes back to. The keyboard's place still shows.
+    const shadedRows = (root: ShadowRoot) =>
+      Array.from(root.querySelectorAll('.pds-combobox__group-row'))
+        .filter(row => row.classList.contains('pds-combobox__group-row--has-selection') || row.classList.contains('pds-combobox__group-row--highlighted'))
+        .map(row => row.querySelector('.pds-combobox__group-row-label')!.textContent);
+
+    it('shades no group row after the pointer goes back, even the one holding the selection', async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" value="email-send"');
+      component.openGroup = null;
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual([]);
+
+      const emailRow = root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement;
+      emailRow.dispatchEvent(new Event('mouseenter'));
+      emailRow.click();
+      await page.waitForChanges();
+      (root.querySelector('.pds-combobox__group-back-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(component.openGroup).toBeNull();
+      expect(shadedRows(root)).toEqual([]);
+      expect(root.querySelector('.pds-combobox__group-row--keyboard')).toBeNull();
+    });
+
+    it('still shows the group the keys come back to', async () => {
+      const { page, component, root } = await openDrillIn();
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+      await page.waitForChanges();
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true }));
+      await page.waitForChanges();
+
+      expect(shadedRows(root)).toEqual(['Tag']);
+      expect(root.querySelector('.pds-combobox__group-row--keyboard .pds-combobox__group-row-label')?.textContent).toBe('Tag');
+    });
+
+    it('shows the first row on the first arrow after a click opens the panel, rather than skipping it', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="drill" group-display="drill-in" mode="select-only" trigger="button"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const root = page.root!.shadowRoot!;
+      (page.root as HTMLPdsComboboxElement).options = actions;
+      await page.waitForChanges();
+      (root.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual([]);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual(['Tag']);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual(['Email']);
+    });
+
+    it('says the row the first arrow shows, since the active descendant already pointed at it', async () => {
+      const { page, component, root } = await openDrillIn();
+      const statuses = () => Array.from(root.querySelectorAll('[role="status"]')).map(el => el.textContent);
+      const status = () => statuses()[1];
+      root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+      expect(status()).toBe('');
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(status()).toBe('Email');
+
+      // Opening the revealed row is announced in the other region, so the change is heard.
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+      await page.waitForChanges();
+      expect(statuses()).toEqual(['Email', '']);
+    });
+
+    it('clears the revealed row once the keys move on', async () => {
+      const { page, component, root } = await openDrillIn();
+      const status = () => root.querySelectorAll('[role="status"]')[1].textContent;
+      root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(status()).toBe('Email');
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(status()).toBe('');
+    });
+
+    it('shades group rows on hover for a mouse or pen, not after a touch', async () => {
+      const { page, root } = await openDrillIn();
+      const list = () => root.querySelector('[role="tree"]')!;
+      const pointer = (pointerType: string) => {
+        const event = new Event('pointerdown', { bubbles: true });
+        Object.defineProperty(event, 'pointerType', { value: pointerType });
+        list().dispatchEvent(event);
+      };
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(true);
+
+      pointer('touch');
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(false);
+
+      pointer('mouse');
+      await page.waitForChanges();
+      expect(list().classList.contains('pds-combobox__listbox--pointer-hover')).toBe(true);
+    });
+
+    it('shows the row the pointer came back to on the first arrow, so the keys carry on from it', async () => {
+      const { page, component, root } = await openDrillIn();
+      component.openGroup = groupNamed(component, 'Email');
+      await page.waitForChanges();
+      (root.querySelector('.pds-combobox__group-back-trigger') as HTMLElement).click();
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual([]);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(shadedRows(root)).toEqual(['Email']);
+    });
+
+    it("doesn't keep the row back shaded for the pointer", async () => {
+      const { page, component, root } = await openDrillIn();
+      component.openGroup = groupNamed(component, 'Tag');
+      await page.waitForChanges();
+
+      root.querySelector('.pds-combobox__group-back-trigger')!.dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+      expect(root.querySelector('.pds-combobox__group-back')!.classList.contains('pds-combobox__group-back--highlighted')).toBe(false);
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(root.querySelector('.pds-combobox__group-back')!.classList.contains('pds-combobox__group-back--highlighted')).toBe(true);
+    });
+
+    it('shades no row for the selection when a flyout drills in for lack of room', async () => {
+      const { page, component, root } = await openDrillIn('group-display="flyout" mode="select-only" value="email-send"');
+      component.flyoutFallback = true;
+      component.openGroup = null;
+      await page.waitForChanges();
+
+      expect(shadedRows(root)).toEqual([]);
     });
 
     it('slides out when the keys leave a group too', async () => {
@@ -3334,6 +3482,8 @@ describe('pds-combobox', () => {
         await page.waitForChanges();
       };
       component.setInitialHighlightedIndex();
+      // Opened from the keyboard, as ArrowDown on the trigger does, so the first row already shows.
+      component.keyboardNavigating = true;
       await page.waitForChanges();
 
       await press('ArrowDown');
@@ -3388,12 +3538,21 @@ describe('pds-combobox', () => {
 
       rows()[1].querySelector('.pds-combobox__group-row-trigger')!.dispatchEvent(new Event('mouseenter'));
       await page.waitForChanges();
-      expect(rows()[1].classList.contains('pds-combobox__group-row--highlighted')).toBe(true);
+      // The keys carry on from the row under the pointer, which only `:hover` shades: a class would
+      // keep it shaded once the pointer moves on.
+      expect(component.highlightedGroup === groupNamed(component, 'Email')).toBe(true);
+      expect(rows()[1].classList.contains('pds-combobox__group-row--highlighted')).toBe(false);
       expect(rows()[1].classList.contains('pds-combobox__group-row--keyboard')).toBe(false);
+
+      // The first arrow shows the row under the pointer; the next moves on from it.
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
+      await page.waitForChanges();
+      expect(rows()[1].classList.contains('pds-combobox__group-row--keyboard')).toBe(true);
 
       component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true }));
       await page.waitForChanges();
       expect(rows()[0].classList.contains('pds-combobox__group-row--keyboard')).toBe(true);
+      expect(rows()[0].classList.contains('pds-combobox__group-row--highlighted')).toBe(true);
     });
 
     it('follows the open group to the optgroup an options reload rebuilds, and resets the highlight', async () => {
@@ -3589,6 +3748,172 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       expect(label().textContent).toBe('Apple');
       expect(label().classList.contains('pds-combobox__button-trigger-label--placeholder')).toBe(false);
+    });
+  });
+
+  describe('option icons', () => {
+    // A category list: ungrouped options with icons, with groups listed between them.
+    const categories = [
+      { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+      { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+      { id: 'sequence', text: 'Sequence', group: 'Email' },
+      { id: 'event', text: 'Event', icon: 'calendar-date' },
+      { id: 'custom', text: 'Custom fields', group: 'Fields', groupIcon: 'columns' },
+      { id: 'tag', text: 'Tag', icon: 'hashtag' },
+    ];
+
+    const open = async (attrs: string, options: unknown[] = categories) => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="categories" mode="select-only" ${attrs}></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      (page.root as HTMLPdsComboboxElement).options = options;
+      await page.waitForChanges();
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component, root: page.root!.shadowRoot! };
+    };
+
+    // A panel row's name: its text, or `group:` and its label for a group's row.
+    const panelRows = (root: ShadowRoot) =>
+      Array.from(root.querySelectorAll('.pds-combobox__group-row, [role="treeitem"].pds-combobox__option')).map(row =>
+        row.classList.contains('pds-combobox__group-row') ? `group:${row.querySelector('.pds-combobox__group-row-label')!.textContent}` : row.textContent,
+      );
+
+    it("renders an option's icon before its text, hidden from assistive technology", async () => {
+      const { root } = await open('');
+
+      const assessment = Array.from(root.querySelectorAll('[role="option"]')).find(o => o.textContent === 'Assessment')!;
+      const icon = assessment.querySelector('.pds-combobox__option-label > pds-icon.pds-combobox__option-icon')!;
+      expect(icon.getAttribute('name')).toBe('assessment');
+      expect(icon.getAttribute('aria-hidden')).toBe('true');
+      // An option without one renders its text alone.
+      const broadcast = Array.from(root.querySelectorAll('[role="option"]')).find(o => o.textContent === 'Broadcast')!;
+      expect(broadcast.querySelector('pds-icon')).toBeNull();
+    });
+
+    // `icon` also loads URLs and data: SVGs into pds-icon unsanitized; `name` accepts icon names only.
+    it('renders an option icon only for a Pine icon name, never a URL or data: SVG, and only from a string', async () => {
+      const { component, root } = await open('', [
+        { id: 'data', text: 'Data', icon: 'data:image/svg+xml;utf8,<svg></svg>' },
+        { id: 'path', text: 'Path', icon: '/icons/evil.svg' },
+        { id: 'number', text: 'Number', icon: 42 },
+        { id: 'named', text: 'Named', icon: 'hashtag' },
+      ]);
+
+      expect(component.optionEls[2].hasAttribute('data-icon')).toBe(false);
+      const icons = Array.from(root.querySelectorAll('[role="option"]')).map(o => o.querySelector('pds-icon'));
+      expect(icons.slice(0, 3)).toEqual([null, null, null]);
+      expect(icons[3]?.getAttribute('name')).toBe('hashtag');
+      expect(icons[3]?.hasAttribute('icon')).toBe(false);
+    });
+
+    it("renders a slotted option's data-icon", async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="slotted-icon" mode="select-only"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      // The spec environment doesn't populate slot assignment, so the option is handed over directly.
+      const option = page.doc.createElement('option') as HTMLOptionElement;
+      option.value = 'tag';
+      option.textContent = 'Tag';
+      option.setAttribute('data-icon', 'hashtag');
+      component.optionEls = [option];
+      component.allItems = [option];
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+
+      expect(page.root!.shadowRoot!.querySelector('[role="option"] pds-icon')?.getAttribute('name')).toBe('hashtag');
+    });
+
+    it.each(['flyout', 'drill-in'])('draws group-display="%s" rows in the order of the data', async display => {
+      const { root } = await open(`group-display="${display}"`);
+
+      expect(panelRows(root)).toEqual(['Assessment', 'group:Email', 'Event', 'group:Fields', 'Tag']);
+      const positions = Array.from(root.querySelectorAll('[aria-level="1"]')).map(row => row.getAttribute('aria-posinset'));
+      expect(positions).toEqual(['1', '2', '3', '4', '5']);
+    });
+
+    // A loose option after a group's options would read as part of that group under its heading.
+    it('still lists ungrouped options first in the inline list', async () => {
+      const { root } = await open('');
+
+      const rows = Array.from(root.querySelectorAll('.pds-combobox__group-label, [role="option"]')).map(row =>
+        row.classList.contains('pds-combobox__group-label') ? `group:${row.textContent}` : row.textContent,
+      );
+      expect(rows).toEqual(['Assessment', 'Event', 'Tag', 'group:Email', 'Broadcast', 'Sequence', 'group:Fields', 'Custom fields']);
+    });
+
+    it('opens the group a flyout row names, wherever the data puts it', async () => {
+      const { page, component, root } = await open('group-display="flyout"');
+
+      // Fields is the second group row, drawn after the ungrouped Assessment and Event.
+      const fields = Array.from(root.querySelectorAll('.pds-combobox__group-row-trigger')).find(row => row.textContent === 'Fields')!;
+      (fields as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(component.openGroup?.label).toBe('Fields');
+      expect(Array.from(root.querySelectorAll('.pds-combobox__flyout [role="treeitem"]')).map(o => o.textContent)).toEqual(['Custom fields']);
+    });
+
+    // Async results: each page is merged into the options already loaded.
+    it("adds a later page's options to their groups, and its ungrouped options after the rows above", async () => {
+      const { page, root } = await open('group-display="drill-in"', [
+        { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+        { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+      ]);
+
+      (page.root as HTMLPdsComboboxElement).options = [
+        { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+        { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+        { id: 'sequence', text: 'Sequence', group: 'Email' },
+        { id: 'tag', text: 'Tag', icon: 'hashtag' },
+      ];
+      await page.waitForChanges();
+
+      expect(panelRows(root)).toEqual(['Assessment', 'group:Email', 'Tag']);
+    });
+
+    it('keeps the order of the data when the options change', async () => {
+      const { page, root } = await open('group-display="drill-in"');
+
+      (page.root as HTMLPdsComboboxElement).options = [...categories].reverse();
+      await page.waitForChanges();
+
+      expect(panelRows(root)).toEqual(['Tag', 'group:Fields', 'Event', 'group:Email', 'Assessment']);
+    });
+
+    describe('in the button trigger', () => {
+      const triggerIcon = (root: ShadowRoot) => root.querySelector('.pds-combobox__button-trigger-label pds-icon');
+
+      it.each([
+        ['its own icon', 'event', 'calendar-date'],
+        ["its group's icon when it has none", 'sequence', 'mail'],
+      ])('shows a selected option with %s', async (_case, value, icon) => {
+        const { page, root } = await open(`trigger="button" group-display="drill-in" value="${value}"`);
+        await page.waitForChanges();
+
+        expect(triggerIcon(root)?.getAttribute('name')).toBe(icon);
+        expect(triggerIcon(root)?.getAttribute('aria-hidden')).toBe('true');
+      });
+
+      it('shows no icon for the placeholder, or for a selection with no icon of its own or its group', async () => {
+        const { page, root } = await open('trigger="button" placeholder="Select a category"', [
+          { id: 'plain', text: 'Plain' },
+          { id: 'grouped', text: 'Grouped', group: 'No icon' },
+        ]);
+        expect(triggerIcon(root)).toBeNull();
+
+        for (const value of ['plain', 'grouped']) {
+          page.root!.setAttribute('value', value);
+          await page.waitForChanges();
+          expect(triggerIcon(root)).toBeNull();
+        }
+      });
     });
   });
 
@@ -3854,6 +4179,8 @@ describe('pds-combobox', () => {
 
       it('drills into a disabled group from the keyboard', async () => {
         const { page, component } = await openList(actions, 'mode="select-only" trigger="button" group-display="drill-in"');
+        // Opened from the keyboard, so the first row already shows.
+        component.keyboardNavigating = true;
         key(component, 'ArrowDown');
         key(component, 'ArrowRight');
         await page.waitForChanges();
@@ -4466,5 +4793,130 @@ describe('pds-combobox validation messages', () => {
     expect(describedBy).toBe('cb__error-message');
     expect(ariaInvalid).toBe('true');
     expect(describedText(describedBy)).toContain('Required');
+  });
+});
+
+describe('pds-combobox truncate', () => {
+  const LONG = 'Assessment for the quarterly onboarding cohort';
+
+  // The spec environment doesn't populate slot assignment, so the options come from the prop.
+  const render = async (attributes = '') => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="cb" label="Category" mode="select-only" ${attributes}></pds-combobox>`,
+    });
+    const root = page.root as HTMLPdsComboboxElement;
+    root.options = [
+      { id: 'long', text: LONG },
+      { id: 'icon', text: `${LONG} with an icon`, icon: 'assessment' },
+    ];
+    await page.waitForChanges();
+    if (root.value === '') root.value = 'long';
+    await page.waitForChanges();
+    const shadow = page.root!.shadowRoot!;
+    const open = async () => {
+      page.rootInstance.isOpen = true;
+      page.rootInstance.filterOptions();
+      await page.waitForChanges();
+    };
+    return { page, shadow, open };
+  };
+
+  it('defaults to false', async () => {
+    const { page } = await render();
+    expect(page.rootInstance.truncate).toBe(false);
+  });
+
+  it('renders the button trigger and the options as before without truncate', async () => {
+    const { shadow, open } = await render('trigger="button"');
+    await open();
+
+    expect(shadow.querySelector('.pds-combobox__button-trigger')!.classList.contains('pds-combobox__button-trigger--truncate')).toBe(false);
+    expect(shadow.querySelector('.pds-combobox__button-trigger-text')).toBeNull();
+    expect(shadow.querySelector('.pds-combobox__button-trigger-label')!.textContent).toBe(LONG);
+    expect(shadow.querySelector('.pds-combobox__listbox')!.classList.contains('pds-combobox__listbox--truncate')).toBe(false);
+    expect(shadow.querySelector('.pds-combobox__option-text')).toBeNull();
+  });
+
+  it('puts the button trigger text in a span that clips', async () => {
+    const { shadow } = await render('trigger="button" truncate');
+
+    expect(shadow.querySelector('.pds-combobox__button-trigger')!.classList.contains('pds-combobox__button-trigger--truncate')).toBe(true);
+    expect(shadow.querySelector('.pds-combobox__button-trigger-label > .pds-combobox__button-trigger-text')!.textContent).toBe(LONG);
+  });
+
+  it('puts the button trigger text in a span after the icon', async () => {
+    const { shadow } = await render('trigger="button" truncate value="icon"');
+
+    const label = shadow.querySelector('.pds-combobox__button-trigger-label')!;
+    expect(label.querySelector('pds-icon')!.getAttribute('name')).toBe('assessment');
+    expect(label.querySelector('.pds-combobox__button-trigger-text')!.textContent).toBe(`${LONG} with an icon`);
+  });
+
+  it('leaves the chip trigger as it is', async () => {
+    const { shadow } = await render('trigger="chip" truncate');
+
+    const label = shadow.querySelector('.pds-combobox__chip-trigger-label')!;
+    expect(label.children.length).toBe(0);
+    expect(label.textContent).toBe(LONG);
+  });
+
+  it('leaves the input trigger alone, and truncates its options', async () => {
+    const { shadow, open } = await render('truncate');
+    await open();
+
+    expect(shadow.querySelector('.pds-combobox__button-trigger-text')).toBeNull();
+    expect(shadow.querySelector('.pds-combobox__listbox')!.classList.contains('pds-combobox__listbox--truncate')).toBe(true);
+  });
+
+  it('puts each option label in a span that clips, after its icon too', async () => {
+    const { shadow, open } = await render('trigger="button" truncate');
+    await open();
+
+    const options = Array.from(shadow.querySelectorAll('[role="option"]'));
+    expect(options.map(option => option.querySelector('.pds-combobox__option-text')!.textContent)).toEqual([LONG, `${LONG} with an icon`]);
+    expect(options[1].querySelector('.pds-combobox__option-label > .pds-combobox__option-text')).not.toBeNull();
+    // The option keeps its name from its text: no aria-label, and no title on the option itself.
+    expect(options.every(option => !option.hasAttribute('aria-label') && !option.hasAttribute('title'))).toBe(true);
+  });
+
+  const measure = (el: HTMLElement, scrollWidth: number, clientWidth: number) => {
+    Object.defineProperty(el, 'scrollWidth', { configurable: true, value: scrollWidth });
+    Object.defineProperty(el, 'clientWidth', { configurable: true, value: clientWidth });
+  };
+
+  it('titles a cut option label with its full text on hover, and drops the title once it fits', async () => {
+    const { page, shadow, open } = await render('trigger="button" truncate');
+    await open();
+
+    const option = shadow.querySelector<HTMLElement>('[role="option"][data-option-index="1"]')!;
+    const text = option.querySelector<HTMLElement>('.pds-combobox__option-text')!;
+
+    measure(text, 400, 150);
+    option.dispatchEvent(new Event('mouseenter'));
+    await page.waitForChanges();
+    expect(text.getAttribute('title')).toBe(`${LONG} with an icon`);
+
+    measure(text, 150, 150);
+    option.dispatchEvent(new Event('mouseenter'));
+    await page.waitForChanges();
+    expect(text.hasAttribute('title')).toBe(false);
+  });
+
+  it('titles a cut trigger label with its full text on hover, and drops the title once it fits', async () => {
+    const { page, shadow } = await render('trigger="button" truncate');
+
+    const trigger = shadow.querySelector<HTMLElement>('.pds-combobox__button-trigger')!;
+    const text = shadow.querySelector<HTMLElement>('.pds-combobox__button-trigger-text')!;
+
+    measure(text, 400, 150);
+    trigger.dispatchEvent(new Event('mouseenter'));
+    await page.waitForChanges();
+    expect(text.getAttribute('title')).toBe(LONG);
+
+    measure(text, 150, 150);
+    trigger.dispatchEvent(new Event('mouseenter'));
+    await page.waitForChanges();
+    expect(text.hasAttribute('title')).toBe(false);
   });
 });

@@ -216,6 +216,9 @@ label:has(input:disabled) {
   column-gap: var(--pine-dimension-xs);
   display: flex;
   flex: 1;
+  // A row whatever has-border says: the image card is already bordered, and has-border's
+  // column would stack the image over the text.
+  flex-direction: row;
   padding: var(--pine-dimension-md);
 
   // On small screens, ensure full width when in a row layout
@@ -277,6 +280,16 @@ label:has(input:disabled) {
     }
   }
 
+  // Takes the room beside the image and wraps there; at its natural width a long message
+  // would push it onto its own line under the image. overflow-wrap breaks an unbroken string
+  // (e.g. a URL) wider than that room instead of running past the card's edge, as
+  // pds-combobox.scss's trigger label does.
+  .pds-radio__content-wrapper {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .pds-radio__message {
     grid-area: message;
     margin-block-start: 0;
@@ -320,5 +333,95 @@ label:has(input:disabled) {
     .pds-radio__message--error {
       color: var(--pine-color-text-message-danger);
     }
+  }
+}
+
+// Pill variant: the native radio is visually hidden and the label is the pill.
+:host(.pds-radio--pill) {
+  label {
+    align-items: center;
+    background: var(--pine-color-background-container);
+    border: var(--pine-border);
+    border-radius: var(--pine-border-radius-full);
+    box-sizing: border-box;
+    color: var(--pine-color-text-active);
+    cursor: pointer;
+    font: var(--pine-typography-body);
+    min-block-size: var(--pine-dimension-xl);
+    padding: 0 var(--pine-dimension-sm);
+    transition: border-color var(--pine-motion-duration-fast) ease;
+
+    // The label text is a flex item, whose default min-width keeps it at its intrinsic width;
+    // an unbroken string (a URL, a long word) would then run past the pill's border instead of
+    // wrapping inside it, as pds-combobox.scss's trigger label does.
+    span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    &:hover {
+      border-color: var(--pine-color-text);
+    }
+
+    // An inset ring rather than a thicker border, so checking a pill doesn't resize it and shift the row.
+    &:has(input:checked) {
+      border-color: var(--pine-color-text-active);
+      box-shadow: inset 0 0 0 var(--pine-border-width) var(--pine-color-text-active);
+    }
+
+    // Keyboard focus only; a mouse click doesn't show the ring.
+    &:has(input:focus-visible) {
+      outline: var(--pine-outline-focus);
+      outline-offset: var(--pine-border-width-thick);
+    }
+
+    &:has(input:disabled) {
+      background: var(--pine-color-background-container-disabled);
+      border-color: var(--pine-color-border-disabled);
+      color: var(--pine-color-text-label-disabled);
+      cursor: not-allowed;
+    }
+
+    &:has(input:disabled:checked) {
+      border-color: var(--pine-color-text-label-disabled);
+      box-shadow: inset 0 0 0 var(--pine-border-width) var(--pine-color-text-label-disabled);
+    }
+
+    // Forced colors drop the box-shadow ring, so draw the checked state with a system border color.
+    // Left as border, not outline: focus-visible above already claims outline, and a checked,
+    // keyboard-focused pill needs both to stay distinguishable from a checked, unfocused one.
+    @media (forced-colors: active) {
+      // The visible input on the default variant is dimmed to GrayText automatically; this pill's
+      // input is hidden, so its label chrome needs its own disabled override or it keeps the same
+      // auto-remapped color as an enabled pill.
+      &:has(input:disabled) {
+        border-color: GrayText;
+      }
+
+      // A thicker border, not just a different color, marks checked: some forced-colors palettes
+      // put Highlight and GrayText close in lightness, and native checked controls get a filled
+      // dot as a shape cue this label can't reproduce. The label has no explicit width, so
+      // box-sizing: border-box above doesn't hold its rendered size steady on its own; the padding
+      // is cut by the same amount the border grows, on each side, so the pill doesn't resize.
+      &:has(input:checked) {
+        border-color: Highlight;
+        border-width: var(--pine-border-width-thick);
+        padding-inline: calc(var(--pine-dimension-sm) - (var(--pine-border-width-thick) - var(--pine-border-width)));
+      }
+
+      // Needed because the non-media &:has(input:disabled:checked) above outranks both
+      // &:has(input:disabled) and &:has(input:checked) in this block (two pseudo-classes vs one),
+      // so without this a disabled checked pill would keep that rule's non-system color and the
+      // thin border, losing the checked cue.
+      &:has(input:disabled:checked) {
+        border-color: GrayText;
+        border-width: var(--pine-border-width-thick);
+        padding-inline: calc(var(--pine-dimension-sm) - (var(--pine-border-width-thick) - var(--pine-border-width)));
+      }
+    }
+  }
+
+  .pds-radio__message {
+    margin-inline-start: 0;
   }
 }

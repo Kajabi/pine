@@ -1,3 +1,123 @@
+## 4.9.0 (2026-10-29)
+
+### Features 🚀
+
+- **pds-combobox:** add an opt-in truncate for long labels ([#925](https://github.com/Kajabi/pine/pull/925))
+- **pds-radio, pds-checkbox:** add a pill variant ([#923](https://github.com/Kajabi/pine/pull/923))
+
+### Bug Fixes 🐛
+
+- label the meaningful icons in pds-alert, pds-toast, pds-avatar and pds-link ([#920](https://github.com/Kajabi/pine/pull/920))
+- **pds-button:** forward aria-describedby and aria-labelledby to the inner button ([#919](https://github.com/Kajabi/pine/pull/919))
+- **pds-popover:** put an open panel next in the tab order after its trigger ([#921](https://github.com/Kajabi/pine/pull/921))
+- **pds-popover:** flip and shift the panel to stay in the viewport ([#922](https://github.com/Kajabi/pine/pull/922))
+- **pds-select:** keep the inner select in step with changes to existing options ([#917](https://github.com/Kajabi/pine/pull/917))
+- **pds-tooltip:** keep an open tooltip in step with its slotted content ([#915](https://github.com/Kajabi/pine/pull/915))
+
+### Documentation 📄
+
+- **core:** name the icon-only buttons in input, select, textarea and table examples ([#918](https://github.com/Kajabi/pine/pull/918))
+- **pds-icon:** describe the decorative default instead of the name-derived label ([#916](https://github.com/Kajabi/pine/pull/916))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.8.0 (2026-10-27)
+
+### Features 🚀
+
+- **pds-dropdown-menu:** add informational prop to dropdown menu items ([#907](https://github.com/Kajabi/pine/pull/907))
+- **pds-popover:** add padding prop ([#909](https://github.com/Kajabi/pine/pull/909))
+- **pds-popover:** add open-on hover option ([#910](https://github.com/Kajabi/pine/pull/910))
+
+### Bug Fixes 🐛
+
+- **core:** open the truncation tooltip on keyboard focus only ([#906](https://github.com/Kajabi/pine/pull/906))
+- **core:** hide decorative icons inside components from assistive technology ([#908](https://github.com/Kajabi/pine/pull/908))
+- **pds-button:** forward aria-label, aria-pressed and aria-current to the inner element ([#905](https://github.com/Kajabi/pine/pull/905))
+- **pds-modal-content:** remove resize and scroll listeners on disconnect ([#914](https://github.com/Kajabi/pine/pull/914))
+
+### Documentation 📄
+
+- **pds-datepicker:** describe server parsing without Rails, fix the min/max example id ([#913](https://github.com/Kajabi/pine/pull/913))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.7.2 (2026-10-23)
+
+### Bug Fixes 🐛
+
+- **pds-drawer:** let overlays portaled into a non-modal drawer take clicks ([#903](https://github.com/Kajabi/pine/pull/903))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.7.1 (2026-10-22)
+
+### Bug Fixes 🐛
+
+- **core:** keep truncation tooltips after a DOM move and skip a chip's nested tab stop ([#900](https://github.com/Kajabi/pine/pull/900))
+- **pds-box:** treat a prop as unset when its attribute is removed ([8ed4239d](https://github.com/Kajabi/pine/commit/8ed4239d))
+- **pds-combobox:** take the disabled state of a disabled fieldset ([#894](https://github.com/Kajabi/pine/pull/894))
+- **pds-dropdown-menu-item:** render a button again when the href attribute is removed ([8122521c](https://github.com/Kajabi/pine/commit/8122521c))
+- **pds-modal:** return focus to the top open modal when the trigger can't take it ([#893](https://github.com/Kajabi/pine/pull/893))
+- **pds-multiselect:** truncate long option chips and keep the option action in view ([#902](https://github.com/Kajabi/pine/pull/902))
+- **pds-radio:** keep the image card a row and its text beside the image ([#899](https://github.com/Kajabi/pine/pull/899))
+- **pds-row:** treat a prop as unset when its attribute is removed ([4d32fdfc](https://github.com/Kajabi/pine/commit/4d32fdfc))
+- **pds-table-cell:** restore the fixed column scroll shadow after the table sorts ([#901](https://github.com/Kajabi/pine/pull/901))
+- **pds-text:** treat a prop as unset when its attribute is removed, without a size warning ([f66ce93f](https://github.com/Kajabi/pine/commit/f66ce93f))
+
+### ❤️ Thank You
+
+- Kelly Redding
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.7.0 (2026-10-21)
+
+### Features 🚀
+
+- **pds-drawer:** add a modal option that makes the page inert behind the drawer ([#892](https://github.com/Kajabi/pine/pull/892))
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** keep a disabled button or chip trigger from opening ([#889](https://github.com/Kajabi/pine/pull/889))
+- **pds-modal:** stay open when a control inside has already handled escape ([#888](https://github.com/Kajabi/pine/pull/888))
+- **pds-modal:** close only the innermost modal on escape when modals are nested ([#890](https://github.com/Kajabi/pine/pull/890))
+- **pds-popover:** open inside a modal and close before it on escape ([#891](https://github.com/Kajabi/pine/pull/891))
+- **pds-popover:** carry the focus ring and dark border into a shadow-root dialog ([#896](https://github.com/Kajabi/pine/pull/896))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.6.0 (2026-10-20)
+
+### Features 🚀
+
+- **pds-combobox:** show option icons and keep the data's order in grouped panels ([#869](https://github.com/Kajabi/pine/pull/869))
+- **pds-dropdown-menu:** add a header slot for non-item content ([#886](https://github.com/Kajabi/pine/pull/886))
+
+### Bug Fixes 🐛
+
+- **core:** stop restoring after a few rounds when another script keeps undoing it ([#880](https://github.com/Kajabi/pine/pull/880))
+- **pds-combobox:** shade drill-in group rows only for the keys ([#879](https://github.com/Kajabi/pine/pull/879))
+- **pds-combobox:** slide into and out of a drill-in group the same way ([#881](https://github.com/Kajabi/pine/pull/881))
+- **pds-popover:** escape componentId in the portal's focus stylesheet and selectors ([#884](https://github.com/Kajabi/pine/pull/884))
+- **pds-tab:** keep their slot attribute and classes through a Turbo morph ([#885](https://github.com/Kajabi/pine/pull/885))
+- **pds-tabs:** re-collect tabs and panels on slotchange ([#883](https://github.com/Kajabi/pine/pull/883))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.5.0 (2026-10-16)
 
 ### Features 🚀

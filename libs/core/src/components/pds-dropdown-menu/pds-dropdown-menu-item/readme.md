@@ -7,15 +7,17 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                                                                                                                                                                                                                                       | Type                                         | Default     |
-| ------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------- |
-| `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute.                                                                                                                                                                             | `string`                                     | `undefined` |
-| `destructive` | `destructive`  | It determines whether or not the dropdown-item is destructive.                                                                                                                                                                                    | `boolean`                                    | `false`     |
-| `disabled`    | `disabled`     | It determines whether or not the dropdown-item is disabled.                                                                                                                                                                                       | `boolean`                                    | `false`     |
-| `download`    | `download`     | Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set. | `string`                                     | `undefined` |
-| `external`    | `external`     | Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.                                                                                  | `boolean`                                    | `false`     |
-| `href`        | `href`         | If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.                                                                                                                                                          | `string`                                     | `undefined` |
-| `target`      | `target`       | Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.                                                                                      | `"_blank" \| "_parent" \| "_self" \| "_top"` | `undefined` |
+| Property        | Attribute        | Description                                                                                                                                                                                                                                                                            | Type                                         | Default     |
+| --------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------- |
+| `componentId`   | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                                                                                                                                                                                                  | `string`                                     | `undefined` |
+| `destructive`   | `destructive`    | It determines whether or not the dropdown-item is destructive.                                                                                                                                                                                                                         | `boolean`                                    | `false`     |
+| `disabled`      | `disabled`       | It determines whether or not the dropdown-item is disabled.                                                                                                                                                                                                                            | `boolean`                                    | `false`     |
+| `download`      | `download`       | Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set. Ignored when `informational` is set. | `string`                                     | `undefined` |
+| `external`      | `external`       | Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.                                                                                  | `boolean`                                    | `false`     |
+| `externalLabel` | `external-label` | Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.                                                                                           | `string`                                     | `undefined` |
+| `href`          | `href`           | If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.                                                                                                                                                          | `string`                                     | `undefined` |
+| `informational` | `informational`  | It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.                     | `boolean`                                    | `false`     |
+| `target`        | `target`         | Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.                                                                                      | `"_blank" \| "_parent" \| "_self" \| "_top"` | `undefined` |
 
 
 ## Events
@@ -40,9 +42,9 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part       | Description |
-| ---------- | ----------- |
-| `"button"` |             |
+| Part       | Description                                                                                            |
+| ---------- | ------------------------------------------------------------------------------------------------------ |
+| `"button"` | Exposes the item's inner element for styling. Appears on button and informational items, not on links. |
 
 
 ## Dependencies

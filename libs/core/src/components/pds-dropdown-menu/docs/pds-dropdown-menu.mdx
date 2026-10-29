@@ -29,8 +29,10 @@ Dropdown Menus reveal a list of actions from a button trigger, implementing the 
 ### Accessibility
 
 - Implements the WAI-ARIA Menu Button Pattern for screen reader compatibility
-- Sets `aria-haspopup="menu"` and `aria-expanded` on the trigger and keeps them in step with the menu. If anything removes or changes them, such as a Turbo morph, the menu puts its values back, so don't set your own
+- Sets `aria-haspopup="menu"` and `aria-expanded` on the trigger and keeps them in step with the menu. If anything removes or changes them, such as a DOM morph, the menu puts its values back, so don't set your own. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning
 - Supports full keyboard navigation with arrow keys, Enter, Space, Home, and End
+- Renders `header` slot content outside the menu, so screen readers read it as plain content rather than as a menu item. Keyboard navigation moves between menu items only, so keep links and actions out of the header
+- Keeps `informational` items in keyboard navigation and exposes them as menu items with `aria-disabled="true"`, so people can reach and read them but not activate them. Navigation skips `disabled` items
 - Traps focus within the dropdown when open
 - Provides high-contrast focus indicators for all interactive elements
 
@@ -73,7 +75,7 @@ Dropdown Menus reveal a list of actions from a button trigger, implementing the 
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Enter / Space (on menu item)</pds-table-cell>
-        <pds-table-cell>Activates the item</pds-table-cell>
+        <pds-table-cell>Activates the item. Does nothing on an informational item</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
@@ -218,6 +220,64 @@ Menu items can display icons before the text by including a `pds-icon` component
 </div>
 </DocCanvas>
 
+### With Header
+
+Use the `header` slot for non-interactive content above the menu items. The menu draws a divider below the header and lines its content up with the item text, so a separator isn't needed.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+<PdsDropdownMenu placement="bottom-end">
+  <PdsButton slot="trigger" variant="secondary">Account</PdsButton>
+  <PdsBox slot="header" display="flex" alignItems="center" gap="xs">
+    <PdsAvatar initials="JD" size="40px" />
+    <PdsBox display="flex" direction="column">
+      <PdsText tag="span" size="sm" weight="medium">Jane Doe</PdsText>
+      <PdsText tag="span" size="sm">jane@example.com</PdsText>
+    </PdsBox>
+  </PdsBox>
+  <PdsDropdownMenuItem>Account settings</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Billing</PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <PdsDropdownMenuItem>Log out</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu placement="bottom-end">
+  <pds-button slot="trigger" variant="secondary">Account</pds-button>
+  <pds-box slot="header" display="flex" align-items="center" gap="xs">
+    <pds-avatar initials="JD" size="40px"></pds-avatar>
+    <pds-box display="flex" direction="column">
+      <pds-text tag="span" size="sm" weight="medium">Jane Doe</pds-text>
+      <pds-text tag="span" size="sm">jane@example.com</pds-text>
+    </pds-box>
+  </pds-box>
+  <pds-dropdown-menu-item>Account settings</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Billing</pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+  <pds-dropdown-menu-item>Log out</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '275px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu placement="bottom-end">
+    <pds-button slot="trigger" variant="secondary">Account</pds-button>
+    <pds-box slot="header" display="flex" align-items="center" gap="xs">
+      <pds-avatar initials="JD" size="40px"></pds-avatar>
+      <pds-box display="flex" direction="column">
+        <pds-text tag="span" size="sm" weight="medium">Jane Doe</pds-text>
+        <pds-text tag="span" size="sm">jane@example.com</pds-text>
+      </pds-box>
+    </pds-box>
+    <pds-dropdown-menu-item>Account settings</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Billing</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+    <pds-dropdown-menu-item>Log out</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
 ### With Links
 
 Menu items can function as links by using the href attribute.
@@ -288,6 +348,49 @@ Menu items can open links in a new tab using the `external` boolean prop. This d
 </DocCanvas>
 
 >**Note:** You can also use the `target` prop for more control (e.g., `target="_blank"`, `target="_parent"`). The `target` prop takes precedence over `external` if both are set.
+
+### With Informational Items
+
+Use `informational` for a row people should read but can't act on, such as a count with nowhere to link. The arrow keys still reach it, even when every row in the menu is informational, but clicking it or pressing Enter or Space does nothing. It keeps the normal text color and has no hover style. Screen readers announce it as a menu item that is dimmed or unavailable, the same way they announce a disabled one, because `aria-disabled` is the only way ARIA marks a menu item that can't be activated.
+
+`informational` takes precedence over `href` and `destructive`. To show a row as a link only when it has somewhere to go, keep the `href` and toggle `informational`: the row renders as plain text while it's set. `disabled` still applies on top: a disabled informational item is dimmed and skipped like any other disabled item.
+
+Informational items expose the same `button` part as button items, so `::part(button)` rules reach them too. To keep a hover or cursor style off them, scope it with `pds-dropdown-menu-item:not([informational])::part(button)`.
+
+Use `disabled` instead for an action that's unavailable right now, and the `header` slot for a single block of content above the items.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger" variant="secondary">Used on</PdsButton>
+  <PdsDropdownMenuItem href="/products">3 products</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem informational>2 forms</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem href="/emails">5 emails</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem informational href="/pages">1 page</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu>
+  <pds-button slot="trigger" variant="secondary">Used on</pds-button>
+  <pds-dropdown-menu-item href="/products">3 products</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item href="/emails">5 emails</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item informational href="/pages">1 page</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger" variant="secondary">Used on</pds-button>
+    <pds-dropdown-menu-item href="#products">3 products</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item href="#emails">5 emails</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational href="#pages">1 page</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
 
 ### Mixing Menu Items with Raw Elements
 

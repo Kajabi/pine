@@ -560,7 +560,7 @@ export class PdsTextarea {
               class="pds-textarea__error-message"
               id={messageId(this.componentId, 'error')}
             >
-              <pds-icon icon={danger} size="small" />
+              <pds-icon aria-hidden="true" icon={danger} size="small" />
               {this.errorMessage}
             </p>
           }

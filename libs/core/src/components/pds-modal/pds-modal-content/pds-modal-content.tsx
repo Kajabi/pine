@@ -30,6 +30,8 @@ export class PdsModalContent {
    */
   private userSetBorder = false;
 
+  private hasLoaded = false;
+
   componentWillLoad() {
     // Check if border was explicitly set via attribute or property
     const borderAttr = this.el.getAttribute('border');
@@ -40,50 +42,49 @@ export class PdsModalContent {
   }
 
   componentDidLoad() {
+    this.hasLoaded = true;
     this.calculateMaxHeight();
 
-    // Set up resize listener
-    window.addEventListener('resize', this.handleResize.bind(this));
-
-    // Only set up scroll listener for border updates if borders are managed automatically
     if (!this.userSetBorder) {
-      setTimeout(() => {
-        // The scroll happens on the component element itself (this.el), not the inner div
-        this.el.addEventListener('scroll', this.handleScroll.bind(this));
-        // Initial border update after everything is set up
-        setTimeout(() => this.updateBorders(), 100);
-      }, 100);
+      // Initial border update after everything is set up
+      setTimeout(() => this.updateBorders(), 200);
     }
   }
 
-  disconnectedCallback() {
-    window.removeEventListener('resize', this.handleResize.bind(this));
+  // Here rather than in componentDidLoad, which runs once: content taken out of the page and put
+  // back (a DOM morph or a framework moving it) gets its listeners and header/footer observer back.
+  connectedCallback() {
+    window.addEventListener('resize', this.handleResize);
+    // The scroll happens on the component element itself (this.el), not the inner div
+    this.el.addEventListener('scroll', this.handleScroll);
+    if (this.hasLoaded) this.calculateMaxHeight();
+  }
 
-    // Clean up scroll listener only if it was set up
-    if (!this.userSetBorder) {
-      this.el.removeEventListener('scroll', this.handleScroll.bind(this));
-    }
+  disconnectedCallback() {
+    window.removeEventListener('resize', this.handleResize);
+    this.el.removeEventListener('scroll', this.handleScroll);
 
     if (this.mutationObserver) {
       this.mutationObserver.disconnect();
+      this.mutationObserver = undefined;
     }
   }
 
   /**
    * Handle scroll events
    */
-  private handleScroll() {
+  private handleScroll = () => {
     this.updateBorders();
-  }
+  };
 
   /**
    * Handle resize events
    */
-  private handleResize() {
+  private handleResize = () => {
     this.calculateMaxHeight();
     // Update borders after resize as content scrollability might change
     setTimeout(() => this.updateBorders(), 50);
-  }
+  };
 
   /**
    * Calculates the max-height based on header and footer heights

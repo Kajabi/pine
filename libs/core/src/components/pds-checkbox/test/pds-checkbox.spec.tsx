@@ -164,7 +164,7 @@ describe('pds-checkbox', () => {
             <span><slot name="label"></slot>Label text</span>
           </label>
           <div aria-live="assertive" class="pds-checkbox__message pds-checkbox__message--error" id="default__error-message">
-            <pds-icon icon="${danger}" size="small"></pds-icon>
+            <pds-icon aria-hidden="true" icon="${danger}" size="small"></pds-icon>
             This is a short error message.
           </div>
         </mock:shadow-root>
@@ -269,5 +269,78 @@ describe('pds-checkbox', () => {
     const [slotted, prop] = Array.from(page.body.querySelectorAll('pds-checkbox'));
     expect(slotted).toHaveClass('has-label-slot');
     expect(prop).not.toHaveClass('has-label-slot');
+  });
+
+  it('takes its disabled state from a disabled fieldset', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<fieldset disabled><pds-checkbox component-id="in-fieldset" label="Label"></pds-checkbox></fieldset>`,
+    });
+
+    page.rootInstance.formDisabledCallback(true);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(true);
+
+    page.rootInstance.formDisabledCallback(false);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(false);
+  });
+
+  // formDisabledCallback also fires when this element's own `disabled` attribute is merely
+  // present (even as the literal string "false", which a consumer's or React's attribute
+  // serialization can write) — the platform treats any value as disabled, independent of a real
+  // fieldset. Without a disabled fieldset ancestor, that call must not disable the checkbox.
+  it("ignores formDisabledCallback(true) with no disabled fieldset ancestor", async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="no-fieldset" label="Label" disabled="false"></pds-checkbox>`,
+    });
+
+    page.rootInstance.formDisabledCallback(true);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(false);
+  });
+});
+
+describe('pds-checkbox pill variant', () => {
+  it('adds the pill class and keeps a native checkbox', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill"></pds-checkbox>`,
+    });
+
+    expect(page.root).toHaveClass('pds-checkbox--pill');
+    expect(page.root?.shadowRoot?.querySelector('input')?.getAttribute('type')).toBe('checkbox');
+  });
+
+  it('does not add the pill class by default', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="default" label="Default"></pds-checkbox>`,
+    });
+
+    expect(page.root).not.toHaveClass('pds-checkbox--pill');
+  });
+
+  it('keeps the label visible on a pill even with hide-label', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill" hide-label></pds-checkbox>`,
+    });
+
+    expect(page.root?.shadowRoot?.querySelector('label span')).not.toHaveClass('visually-hidden');
+  });
+
+  it('keeps the is-indeterminate class on a pill, though the pill has no style for it', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill" indeterminate></pds-checkbox>`,
+    });
+
+    expect(page.root).toHaveClass('is-indeterminate');
+    expect(page.root).toHaveClass('pds-checkbox--pill');
+    expect(page.root?.shadowRoot?.querySelector('input')?.hasAttribute('indeterminate')).toBe(
+      true,
+    );
   });
 });

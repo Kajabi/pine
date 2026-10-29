@@ -43,6 +43,18 @@ describe('pds-drawer', () => {
     expect(modal.disableTopLayer).toBe(true);
   });
 
+  it('opens the inner pds-modal in the top layer when modal, and ignores initialFocus none', async () => {
+    const page = await newSpecPage({
+      components: [PdsDrawer, PdsModal],
+      html: `<pds-drawer component-id="modal-test" modal initial-focus="none"></pds-drawer>`,
+    });
+
+    const modal = page.root?.querySelector('pds-modal') as HTMLPdsModalElement;
+    expect(modal.disableTopLayer).toBe(false);
+    expect(modal.disableInitialFocus).toBe(false);
+    expect(modal).toHaveClass('pds-drawer__modal--modal');
+  });
+
   it('maps lightDismiss onto the inner pds-modal backdropDismiss', async () => {
     const page = await newSpecPage({
       components: [PdsDrawer, PdsModal],

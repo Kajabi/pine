@@ -79,6 +79,30 @@
     opacity: 0.5;
   }
 
+  // An option with a `data-icon`: the icon, then the text, kept together on the start side.
+  .pds-combobox__option-label {
+    align-items: center;
+    display: flex;
+    gap: var(--pine-dimension-xs);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .pds-combobox__option-icon {
+    flex-shrink: 0;
+  }
+
+  .pds-combobox__listbox--truncate {
+    .pds-combobox__option-label {
+      flex: 1 1 auto;
+      overflow-wrap: normal;
+    }
+
+    .pds-combobox__option-check {
+      flex-shrink: 0;
+    }
+  }
+
   .pds-combobox__option-check {
     color: currentColor;
     font-size: var(--pine-dimension-150);
@@ -155,38 +179,46 @@
   .pds-combobox__group-row--open > .pds-combobox__group-row-trigger,
   .pds-combobox__group-row--has-selection > .pds-combobox__group-row-trigger,
   .pds-combobox__group-row--highlighted > .pds-combobox__group-row-trigger,
-  .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger,
-  .pds-combobox__group-row-trigger:hover {
+  .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger {
     background: var(--pine-color-background-muted);
   }
 
-  // Drilling into a group slides it in from the right; going back slides the groups in from the
-  // left. Timed by the motion tokens, which drop to 0ms under prefers-reduced-motion.
+  // Only for a pointer that can hover (`pointerCanHover`): a touch browser keeps a tapped row hovered,
+  // so tapping the row back would leave the row that takes its place shaded.
+  .pds-combobox__listbox--pointer-hover .pds-combobox__group-row-trigger:hover {
+    background: var(--pine-color-background-muted);
+  }
+
+  // One slide, mirrored: entering slides in from the end, going back from the start. Motion tokens
+  // drop it to 0ms under reduced motion.
   // The slide's offset would otherwise widen the list's scroll area and flash a horizontal scrollbar.
   .pds-combobox__listbox--drill-in,
   .pds-combobox__listbox--drill-out {
     overflow-x: hidden;
   }
 
-  .pds-combobox__listbox--drill-in > .pds-combobox__group-back {
-    animation: pds-combobox-drill-from-end var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  // Internal, not a consumer hook.
+  .pds-combobox__listbox--drill-in,
+  .pds-combobox__listbox--drill-out:dir(rtl) {
+    --pds-combobox-drill-from: var(--pine-dimension-sm);
   }
 
+  .pds-combobox__listbox--drill-out,
+  .pds-combobox__listbox--drill-in:dir(rtl) {
+    --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
+  }
+
+  // The row back slides with the options; only its trigger moves, so it stays sticky.
+  .pds-combobox__listbox--drill-in .pds-combobox__drill-in-options > li,
+  .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger,
   .pds-combobox__listbox--drill-out > li {
-    animation: pds-combobox-drill-from-start var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+    animation: pds-combobox-drill var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   }
 
-  @keyframes pds-combobox-drill-from-end {
+  @keyframes pds-combobox-drill {
     from {
       opacity: 0;
-      transform: translateX(var(--pine-dimension-sm));
-    }
-  }
-
-  @keyframes pds-combobox-drill-from-start {
-    from {
-      opacity: 0;
-      transform: translateX(calc(var(--pine-dimension-sm) * -1));
+      transform: translateX(var(--pds-combobox-drill-from));
     }
   }
 

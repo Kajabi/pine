@@ -211,8 +211,8 @@ export const withSuffixButton = (args) => html`<pds-input
   ?required=${args.required}
   type="text"
   value="${args.value}">
-  <pds-button slot="suffix" variant="unstyled" class="pds-input__suffix">
-    <pds-icon name="search" size="small"></pds-icon>
+  <pds-button slot="suffix" variant="unstyled" class="pds-input__suffix" aria-label="Submit search">
+    <pds-icon name="search" size="small" aria-hidden="true"></pds-icon>
   </pds-button>
 </pds-input>`;
 
@@ -355,8 +355,8 @@ export const withPrependAndSuffix = (args) => html`<pds-input
     <option value="EUR">EUR</option>
     <option value="GBP">GBP</option>
   </pds-select>
-  <pds-button slot="suffix" variant="unstyled" class="pds-input__suffix">
-    <pds-icon name="remove-circle" size="small"></pds-icon>
+  <pds-button slot="suffix" variant="unstyled" class="pds-input__suffix" aria-label="Clear amount">
+    <pds-icon name="remove-circle" size="small" aria-hidden="true"></pds-icon>
   </pds-button>
 </pds-input>`;
 
@@ -399,7 +399,7 @@ export const withActionButton = (args) => html`<pds-input
   ?required=${args.required}
   type="text"
   value="${args.value}">
-  <pds-button slot="action" variant="unstyled">
-    <pds-icon name="question-circle"></pds-icon>
+  <pds-button slot="action" variant="unstyled" aria-label="Help with username">
+    <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
   </pds-button>
 </pds-input>`;

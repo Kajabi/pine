@@ -56,6 +56,15 @@ export class PdsToast {
   @Prop() dismissLabel = 'Dismiss message';
 
   /**
+   * Accessible label announcing the toast's severity, read before the message.
+   * Pass a translated string to localize it; defaults to English (`Error`) for
+   * the `danger` type. Other types announce none unless this is set; pass an
+   * empty string to announce none.
+   * @defaultValue undefined
+   */
+  @Prop() severityLabel?: string;
+
+  /**
    * Whether the toast is currently visible.
    */
   @State() isVisible: boolean = true;
@@ -177,11 +186,18 @@ export class PdsToast {
       );
     }
 
-    // Return icon if provided, otherwise undefined (which renders as nothing)
-    return this.icon && <pds-icon name={this.icon} class="pds-toast__icon" />;
+    // Decorative: inside role="alert" an icon name would be read out with the
+    // message. Severity is announced as text instead (see severityLabel).
+    return this.icon && <pds-icon name={this.icon} class="pds-toast__icon" aria-hidden="true" />;
+  }
+
+  private severityText(): string | undefined {
+    return this.severityLabel ?? (this.type === 'danger' ? 'Error' : undefined);
   }
 
   render() {
+    const severity = this.severityText();
+
     return (
       <Host hidden={!this.isVisible}>
         <div
@@ -194,6 +210,8 @@ export class PdsToast {
           aria-live="polite"
         >
           {this.renderIcon()}
+
+          {severity && <span class="visually-hidden">{severity}</span>}
 
           <span class="pds-toast__message">
             <slot></slot>
@@ -209,7 +227,7 @@ export class PdsToast {
               }}
               aria-label={this.dismissLabel}
             >
-              <pds-icon name="remove" />
+              <pds-icon name="remove" aria-hidden="true" />
             </button>
           )}
         </div>

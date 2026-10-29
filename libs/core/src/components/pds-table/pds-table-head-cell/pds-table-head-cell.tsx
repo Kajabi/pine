@@ -276,7 +276,7 @@ export class PdsTableHeadCell {
       >
         <slot></slot>
         {this.sortable && this.isActive && (
-          <pds-icon icon={this.sortingDirection === 'asc' ? upSmall : downSmall} part="sort-icon" />
+          <pds-icon icon={this.sortingDirection === 'asc' ? upSmall : downSmall} part="sort-icon" aria-hidden="true" />
         )}
       </Host>
     );

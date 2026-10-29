@@ -17,13 +17,63 @@ export class PdsTabs {
 
   @Element() el: HTMLPdsTabsElement;
   private hostKeeper = new HostStylingKeeper();
+  private tabsSlot: HTMLSlotElement;
+  private tabPanelsSlot: HTMLSlotElement;
+  private slotChangeScheduled = false;
+  private activeTabNameBeforeSlotChange: string | undefined;
+  // The tab that most recently had focus, tracked continuously via `focusin` rather
+  // than sampled inside handleSlotChange: removing a focused element blurs it to
+  // <body> synchronously, but slotchange only fires later (a microtask checkpoint),
+  // by which point the sample would already read <body>.
+  private lastFocusedTab: Element | null = null;
 
   connectedCallback() {
     this.hostKeeper.connect(this.el);
+    this.el.addEventListener('focusin', this.handleFocusIn);
+    this.el.addEventListener('focusout', this.handleFocusOut);
+    // componentDidLoad only runs once, so a reconnect (the element moved in the DOM) re-attaches
+    // the slotchange listeners disconnectedCallback removed. Before the first render the slots
+    // don't exist yet, so this is a no-op and componentDidLoad attaches them.
+    const isReconnect = this.tabsSlot != null;
+    this.setupSlotChangeListeners();
+    // Content can change while detached, with no listener to see it — re-collect now
+    // instead of waiting on a slotchange that may never come if nothing changes again.
+    if (isReconnect) this.handleSlotChange();
   }
 
   disconnectedCallback() {
     this.hostKeeper.disconnect();
+    this.el.removeEventListener('focusin', this.handleFocusIn);
+    this.el.removeEventListener('focusout', this.handleFocusOut);
+    this.tabsSlot?.removeEventListener('slotchange', this.handleSlotChange);
+    this.tabPanelsSlot?.removeEventListener('slotchange', this.handleSlotChange);
+  }
+
+  private handleFocusIn = (event: FocusEvent) => {
+    const tab = (event.target as HTMLElement)?.closest('pds-tab');
+    if (tab && tab.closest('pds-tabs') === this.el) {
+      this.lastFocusedTab = tab;
+    }
+  };
+
+  // Focus that leaves a tab forgets it, so replacing the tab later doesn't pull focus back,
+  // including focus that moves into a panel. Focus moving to another tab is tracked again
+  // by focusin, which follows focusout. Removing a focused tab also fires focusout (with no
+  // relatedTarget), while the tab is still connected, so that case is checked a microtask
+  // later: a tab that's gone by then was removed, and is kept so its focus can be restored.
+  private handleFocusOut = (event: FocusEvent) => {
+    const tab = this.lastFocusedTab;
+    if (event.relatedTarget) {
+      this.lastFocusedTab = null;
+      return;
+    }
+    queueMicrotask(() => {
+      if (this.lastFocusedTab === tab && tab?.isConnected) this.lastFocusedTab = null;
+    });
+  };
+
+  componentDidLoad() {
+    this.setupSlotChangeListeners();
   }
 
   /**
@@ -37,9 +87,10 @@ export class PdsTabs {
   @Prop() componentId!: string;
 
   /**
-   * Sets tabs variant styles as outlined in Figma documentation
+   * Sets tabs variant styles as outlined in Figma documentation.
+   * Applies in both panel and nav mode; omitting it renders the primary style.
    */
-  @Prop() variant!: 'primary' | 'availability' | 'filter' | 'pill';
+  @Prop() variant?: 'primary' | 'availability' | 'filter' | 'pill';
 
   /**
    * Adds a divider rule beneath the tab list.
@@ -111,8 +162,8 @@ export class PdsTabs {
   // Navigation mode is an explicit, single source of truth: `nav` drives both the
   // container (<nav> of links vs role=tablist of buttons) and every child tab (via
   // `navMode`), so the tabs present when the strip initializes can't mix the two.
-  // (Child discovery is load-time only, like `variant`/`id`; tabs added after load
-  // aren't managed.)
+  // Unlike child discovery (re-run on slotchange), `nav` itself isn't watched — it's
+  // a load-time mode switch, not something a consumer is expected to toggle live.
   private get isNav() {
     return !!this.nav;
   }
@@ -172,9 +223,70 @@ export class PdsTabs {
     this.tabPanels = allTabPanels.filter(panel => panel.closest('pds-tabs') === this.el);
   }
 
+  // The initial collection (componentWillLoad) only sees tabs/panels present at load.
+  // A tab or panel added, removed or replaced afterwards — including by a DOM morph
+  // swapping in a fresh copy — needs to be re-collected the same way pds-dropdown-menu,
+  // pds-select and pds-multiselect already do for their own slotted content.
+  private setupSlotChangeListeners() {
+    this.tabsSlot = this.el.shadowRoot?.querySelector('slot[name="tabs"]');
+    this.tabPanelsSlot = this.el.shadowRoot?.querySelector('slot[name="tabpanels"]');
+
+    this.tabsSlot?.addEventListener('slotchange', this.handleSlotChange);
+    this.tabPanelsSlot?.addEventListener('slotchange', this.handleSlotChange);
+  }
+
+  // The tabs and tabpanels slots fire slotchange separately, even for the same morph
+  // (both swapped together). Coalesce same-tick firings into one re-collection pass
+  // with a microtask, the way a single DOM mutation already only triggers one event.
+  private handleSlotChange = () => {
+    if (this.slotChangeScheduled) return;
+    this.slotChangeScheduled = true;
+    this.activeTabNameBeforeSlotChange = this.activeTabName;
+
+    queueMicrotask(() => {
+      this.slotChangeScheduled = false;
+      this.recollectAfterSlotChange();
+    });
+  };
+
+  private recollectAfterSlotChange() {
+    const previousActiveTabName = this.activeTabNameBeforeSlotChange;
+    // A removed node stays referenced but disconnected — checked before
+    // findAllChildren() re-collects, since that doesn't affect this either way.
+    const focusedTabWasRemoved = !this.isNav && this.lastFocusedTab != null && !this.lastFocusedTab.isConnected;
+
+    this.findAllChildren();
+    this.warnOnNavConfig();
+
+    // Keep the current selection if it still exists. Otherwise clear it so
+    // passPropsToChildren() falls back to the first enabled tab, the same way
+    // it does when a consumer never set activeTabName in the first place.
+    if (previousActiveTabName != null && !this.tabs.some((tab) => tab.name === previousActiveTabName)) {
+      this.activeTabName = undefined;
+    }
+
+    this.passPropsToChildren();
+
+    // If the tab that last had focus was removed (e.g. replaced by a fresh copy),
+    // the browser already silently dropped focus to <body> — restore it to the new
+    // active tab's button so keyboard/screen-reader users don't lose their place.
+    // Deferred a frame since a freshly-created pds-tab's button doesn't exist until
+    // its own render completes; re-checked then in case focus moved on its own, to
+    // the tabs or anywhere else — only focus the removal dropped to <body> is restored.
+    if (focusedTabWasRemoved) {
+      this.lastFocusedTab = null;
+      requestAnimationFrame(() => {
+        const active = document.activeElement;
+        if (active && active !== document.body) return;
+        const newActiveTab = this.tabs.find((tab) => tab.name === this.activeTabName);
+        (newActiveTab?.querySelector('button') as HTMLButtonElement)?.focus();
+      });
+    }
+  }
+
   private propGeneration(child, index = 0) {
     child.parentComponentId = this.componentId.toString();
-    child.variant = this.variant.toString();
+    child.variant = this.variant;
     child.selected = (this.activeTabName === child.name) ? true : false;
     child['index'] = index;
   }

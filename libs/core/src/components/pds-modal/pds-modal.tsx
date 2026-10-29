@@ -1,5 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
 import { closest } from '@utils/closest';
+import { tabbableIn } from '@utils/tabbable';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 import type { ModalSizeType } from '@utils/types';
 
@@ -10,79 +11,40 @@ const isCustomLength = (value: string): boolean =>
   /\d/.test(value) &&
   (typeof CSS === 'undefined' || CSS.supports('max-width', value));
 
-const TABBABLE = [
-  'a[href]',
-  'area[href]',
-  'button',
-  'input:not([type="hidden"])',
-  'select',
-  'textarea',
-  'iframe',
-  'summary',
-  '[contenteditable]:not([contenteditable="false"])',
-  '[tabindex]',
-].join(',');
-
-/**
- * Collects the tabbable elements under `root` in focus order, walking into open shadow roots and
- * following slots, so a component's own controls (the input inside pds-combobox or pds-textarea)
- * count without being registered here by tag name. Positive tabindex values are not reordered,
- * and a closed shadow root can't be seen into.
- */
-function collectTabbable(root: Element | ShadowRoot, found: HTMLElement[]) {
-  for (const child of Array.from(root.children)) visitTabbable(child, found);
-}
-
-// An editing host reports tabIndex -1 but is still a Tab stop; editable content inside it is not.
-const isTabStop = (el: HTMLElement) =>
-  el.tabIndex >= 0 || (el.isContentEditable && !el.hasAttribute('tabindex') && !el.parentElement?.isContentEditable);
-
-function visitTabbable(el: Element, found: HTMLElement[]) {
-  if (el.hasAttribute('inert')) return;
-  if (el.localName === 'slot') {
-    const slot = el as HTMLSlotElement;
-    // Fallback content renders only when nothing at all is assigned, text included.
-    if ((slot.assignedNodes?.({ flatten: true }) ?? []).length === 0) return collectTabbable(el, found);
-    for (const slotted of slot.assignedElements({ flatten: true })) visitTabbable(slotted, found);
-    return;
-  }
-  // A delegatesFocus host passes focus to its first control, which the walk below finds.
-  const delegates = el.shadowRoot?.delegatesFocus === true;
-  if (el instanceof HTMLElement && !delegates && isTabStop(el) && el.matches(TABBABLE) && !el.matches(':disabled')) {
-    found.push(el);
-  }
-  // A shadow host's light children render only through its slots, which the walk reaches.
-  collectTabbable(el.shadowRoot ?? el, found);
-}
-
-/** The element as a radio in a named group, or `null`. */
-const groupedRadio = (el: HTMLElement): HTMLInputElement | null =>
-  el instanceof HTMLInputElement && el.type === 'radio' && el.name !== '' ? el : null;
-
-/**
- * Keeps one radio per named group, as the browser does: the checked one, or the first. The others
- * are reached with the arrow keys, so they can't be the first or last stop of the trap.
- */
-function oneRadioPerGroup(elements: HTMLElement[]): HTMLElement[] {
-  // Radios group by name and form within one tree, so each shadow root starts its own groups.
-  const groups: HTMLInputElement[][] = [];
-  for (const el of elements) {
-    const radio = groupedRadio(el);
-    if (radio === null) continue;
-    const group = groups.find(
-      ([first]) => first.name === radio.name && first.form === radio.form && first.getRootNode() === radio.getRootNode(),
-    );
-    if (group) group.push(radio);
-    else groups.push([radio]);
-  }
-  const stops = new Set<HTMLElement>(groups.map((radios) => radios.find((radio) => radio.checked) ?? radios[0]));
-  return elements.filter((el) => groupedRadio(el) === null || stops.has(el));
-}
-
 /** Whether `node` is `ancestor` or inside it, crossing shadow roots, which `Node.contains` doesn't. */
 function containsComposed(ancestor: Node, node: Node | null): boolean {
   for (let current = node; current; current = current instanceof ShadowRoot ? current.host : current.parentNode) {
     if (current === ancestor) return true;
+  }
+  return false;
+}
+
+/**
+ * Every open modal, with the order it opened in, which ranks top-layer modals and the modals
+ * inside them. Kept here rather than queried from the document, which can't see a modal inside
+ * another component's shadow root.
+ */
+const openModals = new Map<Element, number>();
+let openSequence = 0;
+
+/** Whether the panel of an open popover that takes Escape sits in `root`, including inside shadow roots under it. */
+function hasOpenPopover(root: Element | ShadowRoot): boolean {
+  if (root.querySelector('[data-pds-popover-open]')) return true;
+  return Array.from(root.querySelectorAll('*')).some(el => !!el.shadowRoot && hasOpenPopover(el.shadowRoot));
+}
+
+/**
+ * Whether `a` comes before `b` in the page. `compareDocumentPosition` is arbitrary across a shadow
+ * boundary, so each side climbs to its host until both are in the same tree.
+ */
+function precedesComposed(a: Element, b: Element): boolean {
+  // A document has no host, which ends each climb.
+  for (let x: Element | undefined = a; x; x = (x.getRootNode() as ShadowRoot).host) {
+    for (let y: Element | undefined = b; y; y = (y.getRootNode() as ShadowRoot).host) {
+      if (x.getRootNode() === y.getRootNode()) {
+        return !!(x.compareDocumentPosition(y) & Node.DOCUMENT_POSITION_FOLLOWING);
+      }
+    }
   }
   return false;
 }
@@ -110,7 +72,8 @@ export class PdsModal {
   @Element() el: HTMLPdsModalElement;
 
   /**
-   * Whether the modal can be dismissed by clicking the backdrop
+   * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's
+   * own close request (such as a back gesture)
    * @default true
    */
   @Prop() backdropDismiss = true;
@@ -191,8 +154,6 @@ export class PdsModal {
 
   componentDidLoad() {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
-    // Add keyboard event listener
-    document.addEventListener('keydown', this.handleKeyDown);
 
     // @Watch('open') only fires on a later change, not the prop's initial
     // value — a modal mounted with `open` already true (static markup, or a
@@ -211,9 +172,18 @@ export class PdsModal {
     unwrapReconnectedContent(this.el.querySelector('.pds-modal'), 'dialog.pds-modal__backdrop', '.pds-modal');
   }
 
+  // Here rather than in componentDidLoad, which runs once: a modal taken out of the page and put
+  // back (a morph or a framework moving it) gets its keyboard handling, and its place among the
+  // open modals, back too. Adding the same listener twice is a no-op.
+  connectedCallback() {
+    document.addEventListener('keydown', this.handleKeyDown);
+    if (this.open && !openModals.has(this.el)) openModals.set(this.el, ++openSequence);
+  }
+
   disconnectedCallback() {
     // Clean up event listener
     document.removeEventListener('keydown', this.handleKeyDown);
+    openModals.delete(this.el);
   }
 
   @Watch('open')
@@ -230,19 +200,7 @@ export class PdsModal {
    */
   private updateFocusableElements() {
     if (!this.modalRef) return;
-
-    this.focusableElements = [];
-    collectTabbable(this.modalRef, this.focusableElements);
-
-    // checkVisibility() also drops an element inside a hidden ancestor, whose own computed
-    // display isn't none; such an element can't take focus, so it can't anchor the trap.
-    this.focusableElements = this.focusableElements.filter(el => {
-      if (typeof el.checkVisibility === 'function') return el.checkVisibility({ checkVisibilityCSS: true });
-
-      const style = window.getComputedStyle(el);
-      return style.display !== 'none' && style.visibility !== 'hidden';
-    });
-    this.focusableElements = oneRadioPerGroup(this.focusableElements);
+    this.focusableElements = tabbableIn(this.modalRef);
   }
 
   /**
@@ -273,8 +231,9 @@ export class PdsModal {
   async showModal() {
     if (this.modalRef) {
       try {
-        // Store the currently focused element to restore focus when modal closes
-        this.previousActiveElement = document.activeElement as HTMLElement;
+        // Store the currently focused element to restore focus when modal closes. Showing an open
+        // modal again (the open watcher does) would record a control inside it instead.
+        if (!this.modalRef.open) this.previousActiveElement = document.activeElement as HTMLElement;
 
         // showModal() promotes the dialog to the browser top layer (and makes the
         // rest of the page inert), which prevents any overlay outside the dialog
@@ -286,11 +245,27 @@ export class PdsModal {
           this.modalRef.showModal();
         }
         this.open = true;
+        // Showing an open modal again doesn't move it above one opened after it.
+        if (!openModals.has(this.el)) openModals.set(this.el, ++openSequence);
 
         // Update focusable elements and set initial focus
         // Using a longer timeout to ensure all components are fully rendered
+        const openedAs = openModals.get(this.el) ?? 0;
         setTimeout(() => {
           this.updateFocusableElements();
+          // A modal opened above this one in the meantime has focus; don't take it back. Not this
+          // modal itself (moving it gives it a new place), and not a disableTopLayer modal outside
+          // it while this one is in the top layer, which sits below it.
+          const openedAbove = Array.from(openModals).some(
+            ([modal, sequence]) =>
+              sequence > openedAs &&
+              modal !== this.el &&
+              (containsComposed(this.el, modal) || !(modal as HTMLPdsModalElement).disableTopLayer || this.disableTopLayer),
+          );
+          if (openedAbove) {
+            this.pdsModalOpen.emit();
+            return;
+          }
           if (this.disableInitialFocus) {
             // show()/showModal() also move focus into the dialog natively (the
             // HTML spec's "dialog focusing steps") — that native step isn't
@@ -351,14 +326,19 @@ export class PdsModal {
 
         this.modalRef.close();
         this.open = false;
+        openModals.delete(this.el);
 
-        // Restore focus to the element that was focused before the modal was opened
-        if (
-          !focusAlreadyMovedElsewhere &&
-          this.previousActiveElement &&
-          typeof this.previousActiveElement.focus === 'function'
-        ) {
-          this.previousActiveElement.focus();
+        // Restore focus to the element that was focused before the modal was opened. If that's
+        // gone or can't take focus (disabled, hidden, or nothing), fall back to the open modal now
+        // on top, so focus doesn't land on an inert page behind it.
+        if (!focusAlreadyMovedElsewhere) {
+          const previous = this.previousActiveElement;
+          if (previous && previous !== document.body && previous.isConnected) previous.focus?.();
+          const active = deepActiveElement();
+          // document.body isn't a real restore target — it's just where focus lands when nothing
+          // was focused before opening, so landing back there never counts as a successful restore.
+          if (!previous || previous === document.body || !containsComposed(previous, active) || containsComposed(this.el, active))
+            this.focusTopModal();
         }
 
         this.pdsModalClose.emit();
@@ -368,14 +348,41 @@ export class PdsModal {
     }
   }
 
+  /**
+   * Focuses the first control of the open modal now on top, when the page behind it is inert: that
+   * modal is in the top layer (or paints there inside a top-layer one), or it wraps this one. A
+   * non-modal one over an interactive page, like a drawer, is left alone.
+   */
+  private focusTopModal() {
+    const top = this.innermostOpenModal();
+    const dialog = top?.querySelector('.pds-modal__backdrop');
+    if (!dialog) return;
+    if (!closest('dialog:modal', dialog) && !containsComposed(top, this.el)) return;
+    tabbableIn(dialog).find(el => !containsComposed(this.el, el))?.focus();
+  }
+
+
+  // The browser's own close request (an Escape nothing prevented, a back gesture) would close the
+  // dialog without updating `open`, so close it through hideModal() instead, or not at all.
+  private handleCancel = (e: Event) => {
+    e.preventDefault();
+    if (!this.open) return;
+    // The request reaches the top-layer dialog even when a disableTopLayer modal inside it is on
+    // top; that one closes first, as it would on Escape.
+    const top = this.innermostOpenModal();
+    const target = (top && containsComposed(this.el, top) ? top : this.el) as HTMLPdsModalElement;
+    if (target.backdropDismiss) target.hideModal();
+  };
+
   private handleBackdropClick = (e: MouseEvent) => {
     if (!this.backdropDismiss || !this.open) return;
 
-    if ((e.target as HTMLElement).classList.contains('pds-modal__backdrop')) {
+    // This modal's own backdrop; a nested modal's backdrop handles its own clicks.
+    if (e.target === this.modalRef) {
       e.stopPropagation();
 
       // Only close if this is the innermost modal
-      if (this.isInnermostModal()) {
+      if (this.innermostOpenModal() === this.el) {
         this.hideModal();
       }
     }
@@ -386,7 +393,9 @@ export class PdsModal {
    */
   private getBackdropZIndex(modal: Element): number {
     const backdrop = modal.querySelector('.pds-modal__backdrop');
-    return backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
+    // `auto` (no z-index token loaded) parses to NaN, which no comparison can rank.
+    const zIndex = backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
+    return Number.isNaN(zIndex) ? 0 : zIndex;
   }
 
   /**
@@ -414,7 +423,8 @@ export class PdsModal {
    * lose that evidence depending on listener order.
    */
   private isStackedAboveOverlay(active: Element, topLayerDialog: Element | null, topLayerDialogWasModal: boolean): boolean {
-    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialogWasModal) {
+    // A top-layer dialog this modal sits inside is underneath it, not an overlay above.
+    if (topLayerDialog && topLayerDialog !== this.modalRef && topLayerDialogWasModal && !containsComposed(topLayerDialog, this.el)) {
       return true;
     }
 
@@ -436,29 +446,36 @@ export class PdsModal {
   }
 
   /**
-   * Checks if this modal is the innermost (highest z-index) modal
+   * The open modal that takes Escape or a backdrop click, among those with no other open modal
+   * inside them (a nested modal's backdrop can share its outer modal's z-index). A top-layer dialog
+   * (or a modal inside one) paints above anything outside it, and within the top layer the last
+   * opened is on top. Modals in the same layer (the page, or one top-layer dialog) then rank by
+   * the highest backdrop, then the one later in the page.
    */
-  private isInnermostModal(): boolean {
-    // Find all open modals
-    const openModals = Array.from(document.querySelectorAll('pds-modal')).filter(
-      modal => modal.open
-    );
-
-    if (openModals.length === 0) return false;
-
-    // Get this modal's backdrop element
-    const thisBackdrop = this.el.querySelector('.pds-modal__backdrop');
-    if (!thisBackdrop) return false;
-
-    // Get computed z-index of all open modal backdrops
-    const modalZIndexes = openModals.map(modal => this.getBackdropZIndex(modal));
-
-    // Get the highest z-index
-    const maxZIndex = Math.max(...modalZIndexes);
-
-    // Check if this modal's backdrop has the highest z-index
-    const thisZIndex = this.getBackdropZIndex(this.el);
-    return thisZIndex === maxZIndex;
+  private innermostOpenModal(): Element | null {
+    const open = Array.from(openModals.keys()).filter(modal => modal.isConnected);
+    const innermost = open.filter(modal => !open.some(other => other !== modal && containsComposed(modal, other)));
+    const byDocumentOrder = [...innermost].sort((a, b) => (precedesComposed(a, b) ? -1 : 1));
+    // A modal inside a top-layer dialog paints in that dialog's place in the top layer, even when it
+    // isn't in the top layer itself (disableTopLayer), so that dialog's open order ranks it first.
+    const rank = (modal: Element): [number, number, number, number] => {
+      const backdrop = modal.querySelector('.pds-modal__backdrop');
+      const topLayerDialog = backdrop ? (closest('dialog:modal', backdrop) as Element | null) : null;
+      const topLayerModal = topLayerDialog?.closest('pds-modal');
+      const layer = topLayerDialog ? ((topLayerModal && openModals.get(topLayerModal)) ?? 0) : 0;
+      return [topLayerDialog ? 1 : 0, layer, this.getBackdropZIndex(modal), byDocumentOrder.indexOf(modal)];
+    };
+    let top: Element | null = null;
+    let topRank: [number, number, number, number] = [-1, -1, -1, -1];
+    for (const modal of innermost) {
+      const modalRank = rank(modal);
+      const above = modalRank.findIndex((value, i) => value !== topRank[i]);
+      if (above >= 0 && modalRank[above] > topRank[above]) {
+        top = modal;
+        topRank = modalRank;
+      }
+    }
+    return top;
   }
 
   /** Whether a modal dialog other than this one sits between the focused element and this modal. */
@@ -503,16 +520,29 @@ export class PdsModal {
       // instance has had a chance to act on this keypress.
       const eventSnapshot = e as KeyboardEvent & {
         __pdsActiveElementAtEscape?: Element | null;
+        __pdsDeepActiveElementAtEscape?: Element | null;
         __pdsTopLayerDialogAtEscape?: Element | null;
         __pdsTopLayerDialogWasModalAtEscape?: boolean;
+        __pdsEscapeHandledInside?: boolean;
+        __pdsInnermostModalAtEscape?: Element | null;
       };
       if (!('__pdsActiveElementAtEscape' in eventSnapshot)) {
         const activeAtDispatch = document.activeElement;
         eventSnapshot.__pdsActiveElementAtEscape = activeAtDispatch;
+        // Followed into shadow roots: for a modal inside one, document.activeElement is only the host.
+        eventSnapshot.__pdsDeepActiveElementAtEscape = deepActiveElement();
         const topLayerDialog = activeAtDispatch?.closest('dialog') ?? null;
         eventSnapshot.__pdsTopLayerDialogAtEscape = topLayerDialog;
         eventSnapshot.__pdsTopLayerDialogWasModalAtEscape = !!(topLayerDialog && topLayerDialog.matches(':modal'));
+        // A control that closed on this Escape (a combobox on its own element, a dropdown menu or
+        // multiselect in document's capture phase) has prevented it before this bubble listener.
+        // Read before any modal prevents it below.
+        eventSnapshot.__pdsEscapeHandledInside = e.defaultPrevented;
+        // Which modal is innermost is read once too: the inner one closing first would make its
+        // outer modal the innermost by the time that modal's listener runs.
+        eventSnapshot.__pdsInnermostModalAtEscape = this.innermostOpenModal();
       }
+      if (eventSnapshot.__pdsEscapeHandledInside) return;
       // Leave Escape to a genuinely stacked-above overlay (disableTopLayer's
       // reason for existing) — not just to anything outside this modal.
       const active = eventSnapshot.__pdsActiveElementAtEscape;
@@ -520,7 +550,7 @@ export class PdsModal {
         this.disableTopLayer &&
         active &&
         active !== document.body &&
-        !this.el.contains(active) &&
+        !containsComposed(this.el, eventSnapshot.__pdsDeepActiveElementAtEscape ?? active) &&
         this.isStackedAboveOverlay(
           active,
           eventSnapshot.__pdsTopLayerDialogAtEscape ?? null,
@@ -529,10 +559,13 @@ export class PdsModal {
       ) {
         return;
       }
+      // An open popover inside takes Escape from its own document listener, which runs after this
+      // one, so leave the key for it. Its preventDefault() keeps the native dialog open.
+      if (this.modalRef && hasOpenPopover(this.modalRef)) return;
       // Always prevent native dialog close behavior
       e.preventDefault();
       // Only close if backdropDismiss is enabled and this is the innermost modal
-      if (this.backdropDismiss && this.isInnermostModal()) {
+      if (this.backdropDismiss && eventSnapshot.__pdsInnermostModalAtEscape === this.el) {
         this.hideModal();
       }
       return;
@@ -611,6 +644,7 @@ export class PdsModal {
         aria-modal={this.disableTopLayer ? 'false' : 'true'}
         aria-labelledby={`${this.componentId}-heading`}
         onClick={this.handleBackdropClick}
+        onCancel={this.handleCancel}
       >
         <div
           class={{

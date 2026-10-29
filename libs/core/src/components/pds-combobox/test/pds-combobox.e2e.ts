@@ -66,6 +66,24 @@ describe('pds-combobox', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  it('names a selected option by its label alone', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-combobox component-id="fruit" label="Fruit" trigger="button" mode="select-only" value="apple">
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+      </pds-combobox>
+    `);
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+
+    const tree = await page.accessibility.snapshot();
+    const findOptions = (node) => [node.role === 'option' ? [node.name, !!node.selected] : null, ...(node.children ?? []).flatMap(findOptions)].filter(Boolean);
+
+    expect(findOptions(tree)).toEqual([['Apple', true], ['Banana', false]]);
+  });
+
   // trigger-width sets the trigger's whole box, so 100% fills its container, padding and border included.
   // The brand chip is the one chip trigger that keeps padding (1px) in its dropdown variant.
   it.each([
@@ -91,6 +109,137 @@ describe('pds-combobox', () => {
 
     expect(widths.host).toBe(300);
     expect(widths.trigger).toBe(300);
+  });
+
+  // The button and chip triggers are divs, which take clicks and focus whether or not they're disabled.
+  describe.each([
+    ['button', 'trigger="button"', '.pds-combobox__button-trigger'],
+    ['chip', 'trigger="chip"', '.pds-combobox__chip-trigger'],
+  ])('a disabled %s trigger', (_trigger, attributes, selector) => {
+    const setUp = async (disabled: boolean) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="locked" label="Trigger" ${attributes} mode="select-only" ${disabled ? 'disabled' : ''}>
+          <option value="a">A</option>
+          <option value="b">B</option>
+        </pds-combobox>
+      `);
+      await page.waitForChanges();
+      return page;
+    };
+
+    const openState = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(triggerSelector => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        return {
+          expanded: root.querySelector(triggerSelector)!.getAttribute('aria-expanded'),
+          listbox: !!root.querySelector('.pds-combobox__listbox'),
+        };
+      }, selector);
+
+    it('stays closed when clicked', async () => {
+      const page = await setUp(true);
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+
+      expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+    });
+
+    it('stays closed on the opening keys once focused through setFocus()', async () => {
+      const page = await setUp(true);
+      await (await page.find('pds-combobox')).callMethod('setFocus');
+      await page.waitForChanges();
+
+      const keys: Array<'Enter' | 'Space' | 'ArrowDown' | 'ArrowUp'> = ['Enter', 'Space', 'ArrowDown', 'ArrowUp'];
+      for (const key of keys) {
+        await page.keyboard.press(key);
+        await page.waitForChanges();
+        expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+      }
+    });
+
+    it('closes when disabled while open', async () => {
+      const page = await setUp(false);
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+      expect(await openState(page)).toEqual({ expanded: 'true', listbox: true });
+
+      await (await page.find('pds-combobox')).setProperty('disabled', true);
+      await page.waitForChanges();
+      expect(await openState(page)).toEqual({ expanded: 'false', listbox: false });
+    });
+
+    // A dropdown mounted in the body keeps its search field in the portal's own shadow root.
+    it.each([
+      ['in the field', ''],
+      ['in the body', 'body'],
+    ])('moves focus from the panel search to the trigger when disabled while open (dropdown %s)', async (_mount, dropdownMount) => {
+      const page = await setUp(false);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement, mount) => {
+          el.setAttribute('panel-search', '');
+          if (mount) el.setAttribute('dropdown-mount', mount);
+        },
+        dropdownMount,
+      );
+      await page.waitForChanges();
+      await (await page.find(`pds-combobox >>> ${selector}`)).click();
+      await page.waitForChanges();
+      const searchFocused = () =>
+        page.evaluate(() => {
+          const roots = [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot];
+          return roots.some(root => (root?.activeElement as HTMLElement | null)?.classList.contains('pds-combobox__panel-search-input'));
+        });
+      const active = () =>
+        page.evaluate(() => (document.querySelector('pds-combobox')!.shadowRoot!.activeElement as HTMLElement | null)?.className ?? '');
+      expect(await searchFocused()).toBe(true);
+
+      await (await page.find('pds-combobox')).setProperty('disabled', true);
+      await page.waitForChanges();
+      await page.waitForFunction(
+        triggerSelector => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.matches(triggerSelector),
+        {},
+        selector,
+      );
+      expect(await active()).toContain(selector.slice(1));
+    });
+  });
+
+  // Outside drill-in, showing the highlighted row scrolls whatever holds it, as `scrollIntoView`
+  // does: here a container the dropdown runs past. Flyout group rows take the highlight without
+  // focus, so nothing else scrolls the container to them.
+  it('scrolls a container the dropdown runs past to show the highlighted group row', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setContent(`
+      <div id="scroller" style="height: 200px; overflow: auto;">
+        <pds-combobox component-id="many" label="Option" trigger="button" mode="select-only" group-display="flyout" dropdown-width="300px">
+          ${Array.from({ length: 20 }, (_, i) => `<optgroup label="Group ${i}"><option value="o${i}">Option ${i}</option></optgroup>`).join('')}
+        </pds-combobox>
+      </div>
+    `);
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await page.mouse.move(0, 0);
+
+    await page.keyboard.press('End');
+    await page.waitForChanges();
+
+    // Wait for the scroll to bring the row in. A regression fails on the timeout.
+    const shown = await page
+      .waitForFunction(
+        () => {
+          const scroller = document.getElementById('scroller')!.getBoundingClientRect();
+          const row = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-row:last-of-type')!.getBoundingClientRect();
+          return row.bottom <= scroller.bottom + 0.5;
+        },
+        { timeout: 3000 },
+      )
+      .then(() => true)
+      .catch(() => false);
+    expect(shown).toBe(true);
   });
 
   describe('grouped options', () => {
@@ -317,6 +466,17 @@ describe('pds-combobox', () => {
     it('flips the flyout to the left when there is no room on the right', async () => {
       const page = await setUp('display: flex; justify-content: flex-end; padding: 40px 8px;');
       await hoverGroup(page, 'Tag');
+      // The flyout is placed a frame after it opens; under load, a single read can land first.
+      await page
+        .waitForFunction(
+          () => {
+            const root = document.querySelector('pds-combobox')!.shadowRoot!;
+            const flyout = root.querySelector('.pds-combobox__flyout');
+            return !!flyout && flyout.getBoundingClientRect().right <= root.querySelector('.pds-combobox__listbox')!.getBoundingClientRect().left;
+          },
+          { timeout: 3000 },
+        )
+        .catch(() => undefined);
 
       const { panel, flyout } = await geometry(page);
       expect(flyout.right).toBeLessThanOrEqual(panel.left);
@@ -584,6 +744,126 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
     });
 
+    describe('the slide between the groups and a group', () => {
+      type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+      // Animations held at their first frame, so the test reads where each row starts from.
+      const holdAnimations = async (page: Page) => {
+        const client = await page.target().createCDPSession();
+        await client.send('Animation.enable');
+        await client.send('Animation.setPlaybackRate', { playbackRate: 0 });
+      };
+
+      // Each matching row's start: which way it's offset, or `still` when it doesn't move. Adds up the
+      // offsets of the row and every element above it, so a sliding parent counts too.
+      const starts = (page: Page, selector: string) =>
+        page.evaluate(sel => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          return Array.from(root.querySelectorAll(sel)).map(el => {
+            let x = 0;
+            for (let node: Element | null = el; node; node = node.parentElement) {
+              const { transform } = getComputedStyle(node);
+              if (transform !== 'none') x += new DOMMatrixReadOnly(transform).m41;
+            }
+            return x > 0 ? 'from-right' : x < 0 ? 'from-left' : 'still';
+          });
+        }, selector);
+
+      // Waits for the click's own slide to start before reading where rows start from: under load,
+      // a read can land before the drill class and its animation are applied, and every row reads
+      // `still`. Animations from an earlier click are held too, so only a new one counts.
+      const click = async (page: Page, selector: string, { slides = true } = {}) => {
+        await page.evaluate(() => {
+          (window as unknown as { heldAnimations: Set<Animation> }).heldAnimations = new Set(
+            document.querySelector('pds-combobox')!.shadowRoot!.getAnimations(),
+          );
+        });
+        await (await page.find(`pds-combobox >>> ${selector}`)).click();
+        await page.waitForChanges();
+        if (!slides) return;
+        await page.waitForFunction(
+          () => {
+            const held = (window as unknown as { heldAnimations: Set<Animation> }).heldAnimations;
+            return document
+              .querySelector('pds-combobox')!
+              .shadowRoot!.getAnimations()
+              .some(a => !held.has(a) && (a as CSSAnimation).animationName === 'pds-combobox-drill');
+          },
+          { timeout: 3000 },
+        );
+      };
+
+      it("slides a group's options and its row back in from the right, and the groups back from the left", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        // The row back moves with the options; its list item, which keeps it sticky, doesn't.
+        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
+        expect(await starts(page, '.pds-combobox__group-back')).toEqual(['still']);
+
+        await click(page, '.pds-combobox__group-back-trigger');
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['from-left', 'from-left']);
+        expect(await starts(page, '.pds-combobox__panel-search')).toEqual(['still']);
+      });
+
+      // Showing the highlighted option mustn't scroll the list sideways to reach a row the slide
+      // still offsets past its edge: that scroll eats the slide, so entering looks faster than leaving.
+      it("doesn't scroll the list sideways while a group slides in", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        expect(await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('[role="tree"]')!.scrollLeft)).toBe(0);
+      });
+
+      it('slides the row back in with the options when there is no panel search', async () => {
+        const page = await setUp('group-display="drill-in"');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(1) .pds-combobox__group-row-trigger');
+
+        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right', 'from-right']);
+      });
+
+      it('mirrors the slide right to left', async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-left']);
+
+        await click(page, '.pds-combobox__group-back-trigger');
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['from-right', 'from-right']);
+      });
+
+      it("doesn't slide with reduced motion", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+        // The same page slides before reduced motion is on, so stillness below is down to it.
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
+        await click(page, '.pds-combobox__group-back-trigger');
+
+        await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+        const duration = await page.evaluate(() =>
+          getComputedStyle(document.querySelector('pds-combobox')!.shadowRoot!.querySelector('[role="tree"]')!).getPropertyValue('--pine-motion-duration-base').trim(),
+        );
+        expect(duration).toBe('0ms');
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger', { slides: false });
+        expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['still']);
+
+        await click(page, '.pds-combobox__group-back-trigger', { slides: false });
+        expect(await starts(page, '.pds-combobox__group-row')).toEqual(['still', 'still']);
+      });
+    });
+
     it('drills in from the search field by keyboard, and back to it, then closes with Escape', async () => {
       const page = await setUp('group-display="drill-in" panel-search');
       const listAD = () =>
@@ -686,6 +966,49 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__listbox-options');
     });
 
+    // The scroll padding keeps options clear of the sticky row back; the row back itself is always
+    // in view, so highlighting it mustn't scroll the list by that padding.
+    it("doesn't scroll the list when the keys reach the sticky row back in a group that scrolls", async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" panel-search max-height="160px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.mouse.move(0, 0);
+
+      const scrollTop = () =>
+        page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox-options')!.scrollTop);
+
+      // Down to the last option, then let the smooth scroll settle.
+      await page.keyboard.press('End');
+      await page.waitForChanges();
+      let settled = await scrollTop();
+      for (let i = 0; i < 30; i++) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const now = await scrollTop();
+        if (now === settled && now > 0) break;
+        settled = now;
+      }
+      expect(settled).toBeGreaterThan(0);
+
+      // Home highlights the row back, which sticks in view however far the list has scrolled.
+      await page.keyboard.press('Home');
+      await page.waitForChanges();
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      expect(await page.find('pds-combobox >>> .pds-combobox__group-back--highlighted')).not.toBeNull();
+      expect(await scrollTop()).toBe(settled);
+    });
+
     it("keeps the highlighted option clear of the sticky row back in a group that scrolls", async () => {
       const page = await newE2EPage();
       await page.setViewport({ width: 1200, height: 800 });
@@ -758,6 +1081,38 @@ describe('pds-combobox', () => {
       expect(state.back).toBe(false);
       expect(state.ad).toBe(state.tagRow);
       expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
+    });
+
+    // The row back's list item wraps the group's options, so it's taller than a list that scrolls;
+    // showing the item's bottom edge would scroll the highlighted row back out of view.
+    it('shows the highlighted row back, not the end of its group, in a group taller than the list', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" max-height="160px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.mouse.move(0, 0);
+
+      await page.keyboard.press('Home');
+      await page.waitForChanges();
+
+      const shown = await page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const list = root.querySelector('.pds-combobox__listbox')!.getBoundingClientRect();
+        const back = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+        return back.top >= list.top - 0.5 && back.bottom <= list.bottom + 0.5;
+      });
+      expect(await page.find('pds-combobox >>> .pds-combobox__group-back--highlighted')).not.toBeNull();
+      expect(shown).toBe(true);
     });
 
     it('stays open when a flyout with panel search drills in for lack of room, on a selection', async () => {
@@ -974,5 +1329,376 @@ describe('pds-combobox', () => {
       expect(searchPadding).toBe('16px');
       expect(back).toBe(search);
     });
+  });
+
+  describe('option icons', () => {
+    // A category list: ungrouped options with icons, with groups listed between them.
+    const categories = [
+      { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+      { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+      { id: 'sequence', text: 'Sequence', group: 'Email' },
+      { id: 'event', text: 'Event', icon: 'calendar-date' },
+    ];
+
+    const setUp = async (display = 'drill-in') => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="categories" label="Category" trigger="button" mode="select-only"
+            group-display="${display}" panel-search search-placeholder="Search categories" dropdown-width="300px"></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        categories,
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    const highlighted = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        const row = document
+          .querySelector('pds-combobox')!
+          .shadowRoot!.querySelector('.pds-combobox__option--highlighted, .pds-combobox__group-row--highlighted');
+        return row?.classList.contains('pds-combobox__group-row')
+          ? `group:${row.querySelector('.pds-combobox__group-row-label')!.textContent}`
+          : row?.textContent ?? null;
+      });
+
+    it.each(['flyout', 'drill-in'])('moves through group-display="%s" rows by keyboard in the order they are drawn', async display => {
+      const page = await setUp(display);
+
+      // Opening highlights the first row.
+      const visited = [await highlighted(page)];
+      for (let step = 0; step < 2; step++) {
+        await page.keyboard.press('ArrowDown');
+        await page.waitForChanges();
+        visited.push(await highlighted(page));
+      }
+
+      expect(visited).toEqual(['Assessment', 'group:Email', 'Event']);
+    });
+
+    it('shows the picked option with its icon in the trigger', async () => {
+      const page = await setUp();
+
+      // Assessment, the first row, is highlighted on opening.
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+
+      expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('assessment');
+      const icon = await page.find('pds-combobox >>> .pds-combobox__button-trigger-label pds-icon');
+      expect(icon.getAttribute('name')).toBe('assessment');
+    });
+
+    it('wraps a long picked label beside its icon within the trigger width', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Category" trigger="button" mode="select-only" trigger-width="160px" value="long">
+          <option value="long" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+          <option value="word" data-icon="assessment">Supercalifragilisticexpialidocious</option>
+        </pds-combobox>
+      `);
+      await page.waitForChanges();
+
+      const overflow = () =>
+        page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          const trigger = root.querySelector('.pds-combobox__button-trigger')!.getBoundingClientRect();
+          const label = root.querySelector('.pds-combobox__button-trigger-label')!;
+          const range = document.createRange();
+          range.selectNodeContents(label);
+          return Math.max(0, Math.ceil(range.getBoundingClientRect().right - trigger.right));
+        });
+
+      expect(await overflow()).toBe(0);
+
+      const combobox = await page.find('pds-combobox');
+      combobox.setProperty('value', 'word');
+      await page.waitForChanges();
+
+      expect(await overflow()).toBe(0);
+    });
+
+    it('has no axe violations with option icons open', async () => {
+      const page = await setUp();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
+
+  describe('truncate', () => {
+    const LONG = 'Assessment for the quarterly onboarding cohort of new members';
+
+    type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+    const setUp = async (attributes: string, { open = false, value = 'long' } = {}) => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="long" label="Category" mode="select-only" value="${value}"
+            trigger-width="200px" dropdown-width="200px" ${attributes}>
+            <option value="long">${LONG}</option>
+            <option value="icon" data-icon="assessment">${LONG} with an icon</option>
+            <option value="short">Event</option>
+          </pds-combobox>
+        </div>
+      `);
+      await page.waitForChanges();
+      if (open) {
+        const trigger = attributes.includes('trigger="input"') ? 'input' : '.pds-combobox__button-trigger';
+        await (await page.find(`pds-combobox >>> ${trigger}`)).click();
+        await page.waitForChanges();
+        // Positioning gives the panel its dropdown-width; until then it's as wide as its widest label.
+        await page.waitForFunction(() =>
+          [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot].some(
+            root => root?.querySelector<HTMLElement>('.pds-combobox__listbox')?.style.width === '200px',
+          ),
+        );
+      }
+      return page;
+    };
+
+    /** The trigger's text: whether it's on one line, clipped, with an ellipsis, and the trigger's width. */
+    const triggerText = (page: Page) =>
+      page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const triggerEl = root.querySelector<HTMLElement>('.pds-combobox__button-trigger')!;
+        const text = root.querySelector<HTMLElement>('.pds-combobox__button-trigger-text');
+        const label = root.querySelector<HTMLElement>('.pds-combobox__button-trigger-label')!;
+        const style = text ? getComputedStyle(text) : null;
+        const lineHeight = parseFloat(getComputedStyle(label).lineHeight);
+        return {
+          hasTextSpan: !!text,
+          whiteSpace: style?.whiteSpace ?? getComputedStyle(label).whiteSpace,
+          textOverflow: style?.textOverflow ?? null,
+          clipped: text ? text.scrollWidth > text.clientWidth : false,
+          oneLine: (text ?? label).getBoundingClientRect().height <= lineHeight + 1,
+          fits: triggerEl.getBoundingClientRect().width <= 200,
+        };
+      });
+
+    it.each([
+      ['button', 'trigger="button"'],
+      ['input-shape button', 'trigger="button" trigger-shape="input"'],
+    ])('wraps a long label in a %s trigger without truncate, as before', async (_trigger, attributes) => {
+      const page = await setUp(attributes);
+      const text = await triggerText(page);
+
+      expect(text.hasTextSpan).toBe(false);
+      expect(text.whiteSpace).toBe('normal');
+      expect(text.oneLine).toBe(false);
+    });
+
+    it.each([
+      ['button', 'trigger="button"', 'long'],
+      ['input-shape button', 'trigger="button" trigger-shape="input"', 'long'],
+      ['button with an icon', 'trigger="button" trigger-shape="input"', 'icon'],
+      ['primary button', 'trigger="button" trigger-variant="primary"', 'long'],
+    ])('keeps a long label in a %s trigger on one line with an ellipsis', async (_trigger, attributes, value) => {
+      const page = await setUp(`${attributes} truncate`, { value });
+      const text = await triggerText(page);
+
+      expect(text).toEqual({
+        hasTextSpan: true,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        clipped: true,
+        oneLine: true,
+        fits: true,
+      });
+    });
+
+    it('keeps the trigger within a narrower container at its default fit-content width', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="width: 160px">
+          <pds-combobox component-id="long" label="Category" trigger="button" mode="select-only" value="long" truncate>
+            <option value="long">${LONG}</option>
+          </pds-combobox>
+        </div>
+      `);
+      await page.waitForChanges();
+
+      const width = await page.evaluate(
+        () => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!.getBoundingClientRect().width,
+      );
+      expect(width).toBeLessThanOrEqual(160);
+    });
+
+    // A flex item's default min-width is auto (its content size), not 0, so a block host alone
+    // wouldn't shrink below the label here the way it does in a non-flex narrow container above;
+    // truncate needs to reflect so :host([truncate]) can set min-width: 0 for this case.
+    it('keeps the trigger within a narrower flex container at its default fit-content width', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="display: flex; width: 160px">
+          <pds-combobox component-id="long" label="Category" trigger="button" mode="select-only" value="long" truncate>
+            <option value="long">${LONG}</option>
+          </pds-combobox>
+        </div>
+      `);
+      await page.waitForChanges();
+
+      const width = await page.evaluate(
+        () => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!.getBoundingClientRect().width,
+      );
+      expect(width).toBeLessThanOrEqual(160);
+    });
+
+    const hoverTriggerTitle = async (page: Page) => {
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).hover();
+      await page.waitForChanges();
+      return page.evaluate(
+        () => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger-text')!.getAttribute('title'),
+      );
+    };
+
+    it('gives a cut trigger label its full text as a title on hover', async () => {
+      const page = await setUp('trigger="button" truncate');
+      expect(await hoverTriggerTitle(page)).toBe(LONG);
+    });
+
+    it("drops the trigger's title when the label changes under the pointer", async () => {
+      const page = await setUp('trigger="button" truncate');
+      expect(await hoverTriggerTitle(page)).toBe(LONG);
+
+      await page.$eval('pds-combobox', (el: HTMLElement & { value: string }) => {
+        el.value = 'short';
+      });
+      await page.waitForChanges();
+
+      const title = await page.evaluate(
+        () => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger-text')!.getAttribute('title'),
+      );
+      expect(title).toBeNull();
+    });
+
+    it('gives a trigger label that fits no title', async () => {
+      const page = await setUp('trigger="button" truncate', { value: 'short' });
+      expect(await hoverTriggerTitle(page)).toBeNull();
+    });
+
+    /** Each option's text: on one line with an ellipsis, clipped, and its `title`. */
+    const optionTexts = (page: Page, inPortal: boolean) =>
+      page.evaluate(portal => {
+        const root = portal
+          ? document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!
+          : document.querySelector('pds-combobox')!.shadowRoot!;
+        return Array.from(root.querySelectorAll<HTMLElement>('[role="option"]')).map(option => {
+          const text = option.querySelector<HTMLElement>('.pds-combobox__option-text');
+          const style = getComputedStyle(text ?? option);
+          return {
+            whiteSpace: style.whiteSpace,
+            textOverflow: text ? style.textOverflow : null,
+            clipped: text ? text.scrollWidth > text.clientWidth : false,
+            title: text?.getAttribute('title') ?? null,
+          };
+        });
+      }, inPortal);
+
+    it('wraps long option labels without truncate, as before', async () => {
+      const page = await setUp('trigger="button"', { open: true });
+      const texts = await optionTexts(page, false);
+
+      expect(texts.map(text => text.textOverflow)).toEqual([null, null, null]);
+      // The long labels wrap: their options are taller than the short one's.
+      const heights = await page.evaluate(() =>
+        Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('[role="option"]')).map(option => option.getBoundingClientRect().height),
+      );
+      expect(heights[0]).toBeGreaterThan(heights[2]);
+      expect(texts.map(text => text.whiteSpace)).toEqual(['normal', 'normal', 'normal']);
+    });
+
+    it.each([
+      ['in the field', 'trigger="button"', false],
+      ['in the body', 'trigger="button" dropdown-mount="body"', true],
+      ['with panel search', 'trigger="button" panel-search', false],
+      ['with an input trigger', 'trigger="input"', false],
+    ])('keeps long option labels on one line with an ellipsis %s', async (_where, attributes, inPortal) => {
+      const page = await setUp(`${attributes} truncate`, { open: true });
+      const texts = await optionTexts(page, inPortal);
+
+      expect(texts.map(({ whiteSpace, textOverflow, clipped }) => ({ whiteSpace, textOverflow, clipped }))).toEqual([
+        { whiteSpace: 'nowrap', textOverflow: 'ellipsis', clipped: true },
+        { whiteSpace: 'nowrap', textOverflow: 'ellipsis', clipped: true },
+        { whiteSpace: 'nowrap', textOverflow: 'ellipsis', clipped: false },
+      ]);
+    });
+
+    it('gives a cut option label its full text as a title on hover, and a label that fits none', async () => {
+      const page = await setUp('trigger="button" truncate', { open: true });
+
+      for (const index of [0, 1, 2]) {
+        await (await page.find(`pds-combobox >>> [data-option-index="${index}"]`)).hover();
+        await page.waitForChanges();
+      }
+
+      expect((await optionTexts(page, false)).map(text => text.title)).toEqual([LONG, `${LONG} with an icon`, null]);
+    });
+
+    it('names the options and the trigger by their full labels', async () => {
+      const page = await setUp('trigger="button" truncate', { open: true });
+
+      const tree = await page.accessibility.snapshot();
+      const find = (node, role) => [node.role === role ? node : null, ...(node.children ?? []).flatMap(child => find(child, role))].filter(Boolean);
+
+      expect(find(tree, 'option').map(option => option.name)).toEqual([LONG, `${LONG} with an icon`, 'Event']);
+      const [combobox] = find(tree, 'combobox');
+      expect(combobox.name).toBe('Category');
+      expect(combobox.value).toBe(LONG);
+    });
+
+    it('has no axe violations with truncated labels open', async () => {
+      const page = await setUp('trigger="button" truncate', { open: true });
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
+});
+
+describe('pds-combobox in a disabled fieldset', () => {
+  it('is disabled while the fieldset is, and comes back when it is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-combobox component-id="in-fieldset" name="choice" label="Choice" trigger="button" mode="select-only">
+            <option value="a">A</option>
+          </pds-combobox>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+    const state = () =>
+      page.evaluate(() => {
+        const host = document.querySelector('pds-combobox') as HTMLElement & { disabled: boolean };
+        const trigger = host.shadowRoot!.querySelector('.pds-combobox__button-trigger')!;
+        return { disabled: host.disabled, expanded: trigger.getAttribute('aria-expanded') };
+      });
+
+    expect((await state()).disabled).toBe(true);
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    expect(await state()).toEqual({ disabled: true, expanded: 'false' });
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+
+    await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    expect(await state()).toEqual({ disabled: false, expanded: 'true' });
   });
 });

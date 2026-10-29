@@ -6,8 +6,17 @@ export default {
 	args: {
 		popoverTargetAction: 'toggle',
 		popoverType: 'auto',
+		openOn: 'click',
 		placement: 'bottom-start',
+		padding: 'md',
 		componentId: 'popover-playground',
+	},
+	argTypes: {
+		padding: {
+			control: { type: 'select' },
+			options: ['none', 'xs', 'sm', 'md'],
+		},
+		openOn: { control: 'inline-radio', options: ['click', 'hover'] },
 	},
 	component: 'pds-popover',
 	parameters: {},
@@ -19,8 +28,10 @@ const BaseTemplate = (args) => html`
 		component-id=${args.componentId}
 		popover-target-action=${args.popoverTargetAction}
 		popover-type=${args.popoverType}
+		open-on=${args.openOn}
 		placement=${args.placement}
 		.maxWidth=${args.maxWidth}
+		padding=${args.padding}
 	>
 		<pds-button slot="trigger">Show popover</pds-button>
 		<p>This is popover content that can be configured using the controls below.</p>
@@ -83,4 +94,24 @@ export const WithContent = (args) => html`
 `;
 WithContent.args = {
 	componentId: 'popover-rich'
+};
+
+export const OpenOnHover = (args) => html`
+	<pds-popover
+		component-id=${args.componentId || 'popover-hover'}
+		open-on="hover"
+		popover-target-action=${args.popoverTargetAction}
+		popover-type=${args.popoverType}
+		placement=${args.placement}
+		.maxWidth=${args.maxWidth}
+	>
+		<pds-button slot="trigger" variant="secondary">Hover for details</pds-button>
+		<pds-box direction="column" gap="xs" fit="true">
+			<pds-text tag="h3" size="md" weight="semibold">Project summary</pds-text>
+			<pds-text tag="p" size="sm" color="secondary">Rest the pointer on the trigger to preview supporting details. Click the trigger to keep this open while you read.</pds-text>
+		</pds-box>
+	</pds-popover>
+`;
+OpenOnHover.args = {
+	componentId: 'popover-hover'
 };

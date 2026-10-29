@@ -47,6 +47,7 @@ export interface ComboboxOption {
     disabled?: boolean;
     group?: string;
     groupIcon?: string;
+    icon?: string;
     // (undocumented)
     id: string | number;
     // (undocumented)
@@ -82,6 +83,7 @@ export namespace Components {
         "dismissLabel": string;
         "heading": string;
         "hideIcon": boolean;
+        "severityLabel"?: string;
         "small": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
     }
@@ -89,6 +91,7 @@ export namespace Components {
     export interface PdsAvatar {
         "alt"?: string | null;
         "badge"?: boolean;
+        "badgeLabel"?: string;
         "componentId": string;
         "dropdown"?: boolean;
         "image"?: string | null;
@@ -261,6 +264,7 @@ export namespace Components {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     // (undocumented)
     export interface PdsChip {
@@ -322,6 +326,7 @@ export namespace Components {
         "triggerShape": 'pill' | 'input';
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerWidth": string;
+        "truncate": boolean;
         "value": string;
     }
     // (undocumented)
@@ -399,6 +404,7 @@ export namespace Components {
         "componentId": string;
         "initialFocus": 'auto' | 'none';
         "lightDismiss": boolean;
+        "modal": boolean;
         "open": boolean;
         "scrollable": boolean;
         "side": 'start' | 'end';
@@ -423,7 +429,9 @@ export namespace Components {
         "disabled": boolean;
         "download"?: string;
         "external": boolean;
+        "externalLabel"?: string;
         "href": string | undefined;
+        "informational": boolean;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
     }
     // (undocumented)
@@ -489,6 +497,7 @@ export namespace Components {
         "download"?: string;
         // @deprecated
         "external": boolean;
+        "externalLabel"?: string;
         "fontSize": 'sm' | 'md' | 'lg';
         "href": string;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -590,6 +599,8 @@ export namespace Components {
         "componentId": string;
         "hide": () => Promise<void>;
         "maxWidth"?: number;
+        "openOn"?: 'click' | 'hover';
+        "padding"?: PopoverPaddingType;
         "placement": PlacementType;
         "popoverTargetAction": 'show' | 'toggle' | 'hide';
         "popoverType": 'auto' | 'manual';
@@ -623,6 +634,7 @@ export namespace Components {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     export interface PdsRadioGroup {
         "componentId": string;
@@ -765,7 +777,7 @@ export namespace Components {
         "nav"?: boolean;
         "stretch"?: boolean;
         "tablistLabel": string;
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
     // (undocumented)
     export interface PdsText {
@@ -826,6 +838,7 @@ export namespace Components {
         "dismissLabel": string;
         "duration": number;
         "icon"?: string;
+        "severityLabel"?: string;
         "type": 'default' | 'danger' | 'loading';
     }
     export interface PdsTooltip {
@@ -985,7 +998,7 @@ export namespace LocalJSX {
         // (undocumented)
         "pds-tabpanel": Omit<PdsTabpanel, keyof PdsTabpanelAttributes> & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes]?: PdsTabpanel[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `attr:${K}`]?: PdsTabpanelAttributes[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `prop:${K}`]?: PdsTabpanel[K] } & OneOf<"name", PdsTabpanel["name"], PdsTabpanelAttributes["name"]>;
         // (undocumented)
-        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]> & OneOf<"variant", PdsTabs["variant"], PdsTabsAttributes["variant"]>;
+        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]>;
         // (undocumented)
         "pds-text": Omit<PdsText, keyof PdsTextAttributes> & { [K in keyof PdsText & keyof PdsTextAttributes]?: PdsText[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `attr:${K}`]?: PdsTextAttributes[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `prop:${K}`]?: PdsText[K] };
         // (undocumented)
@@ -1047,6 +1060,7 @@ export namespace LocalJSX {
         "heading"?: string;
         "hideIcon"?: boolean;
         "onPdsAlertDismissClick"?: (event: PdsAlertCustomEvent<void>) => void;
+        "severityLabel"?: string;
         "small"?: boolean;
         "variant"?: 'default' | 'danger' | 'info' | 'success' | 'warning';
     }
@@ -1064,6 +1078,8 @@ export namespace LocalJSX {
         // (undocumented)
         "hideIcon": boolean;
         // (undocumented)
+        "severityLabel": string;
+        // (undocumented)
         "small": boolean;
         // (undocumented)
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
@@ -1073,6 +1089,7 @@ export namespace LocalJSX {
     export interface PdsAvatar {
         "alt"?: string | null;
         "badge"?: boolean;
+        "badgeLabel"?: string;
         "componentId"?: string;
         "dropdown"?: boolean;
         "image"?: string | null;
@@ -1096,6 +1113,8 @@ export namespace LocalJSX {
         "alt": string | null;
         // (undocumented)
         "badge": boolean;
+        // (undocumented)
+        "badgeLabel": string;
         // (undocumented)
         "componentId": string;
         // (undocumented)
@@ -1567,6 +1586,7 @@ export namespace LocalJSX {
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         "required"?: boolean;
         "value"?: string;
+        "variant"?: 'default' | 'pill';
     }
 
     // (undocumented)
@@ -1595,6 +1615,8 @@ export namespace LocalJSX {
         "required": boolean;
         // (undocumented)
         "value": string;
+        // (undocumented)
+        "variant": 'default' | 'pill';
     }
 
     // (undocumented)
@@ -1690,6 +1712,7 @@ export namespace LocalJSX {
         "triggerShape"?: 'pill' | 'input';
         "triggerVariant"?: 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerWidth"?: string;
+        "truncate"?: boolean;
         "value"?: string;
     }
 
@@ -1769,6 +1792,8 @@ export namespace LocalJSX {
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         // (undocumented)
         "triggerWidth": string;
+        // (undocumented)
+        "truncate": boolean;
         // (undocumented)
         "value": string;
     }
@@ -1984,6 +2009,7 @@ export namespace LocalJSX {
         "componentId"?: string;
         "initialFocus"?: 'auto' | 'none';
         "lightDismiss"?: boolean;
+        "modal"?: boolean;
         "onPdsDrawerClose"?: (event: PdsDrawerCustomEvent<void>) => void;
         "onPdsDrawerOpen"?: (event: PdsDrawerCustomEvent<void>) => void;
         "open"?: boolean;
@@ -2000,6 +2026,8 @@ export namespace LocalJSX {
         "initialFocus": 'auto' | 'none';
         // (undocumented)
         "lightDismiss": boolean;
+        // (undocumented)
+        "modal": boolean;
         // (undocumented)
         "open": boolean;
         // (undocumented)
@@ -2040,7 +2068,9 @@ export namespace LocalJSX {
         "disabled"?: boolean;
         "download"?: string;
         "external"?: boolean;
+        "externalLabel"?: string;
         "href"?: string | undefined;
+        "informational"?: boolean;
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
     }
@@ -2058,7 +2088,11 @@ export namespace LocalJSX {
         // (undocumented)
         "external": boolean;
         // (undocumented)
+        "externalLabel": string;
+        // (undocumented)
         "href": string | undefined;
+        // (undocumented)
+        "informational": boolean;
         // (undocumented)
         "target": '_blank' | '_self' | '_parent' | '_top';
     }
@@ -2233,6 +2267,7 @@ export namespace LocalJSX {
         "download"?: string;
         // @deprecated
         "external"?: boolean;
+        "externalLabel"?: string;
         "fontSize"?: 'sm' | 'md' | 'lg';
         "href": string;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -2259,6 +2294,8 @@ export namespace LocalJSX {
         "download": string;
         // (undocumented)
         "external": boolean;
+        // (undocumented)
+        "externalLabel": string;
         // (undocumented)
         "fontSize": 'sm' | 'md' | 'lg';
         // (undocumented)
@@ -2517,6 +2554,8 @@ export namespace LocalJSX {
         "maxWidth"?: number;
         "onPdsPopoverClose"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
+        "openOn"?: 'click' | 'hover';
+        "padding"?: PopoverPaddingType;
         "placement"?: PlacementType;
         "popoverTargetAction"?: 'show' | 'toggle' | 'hide';
         "popoverType"?: 'auto' | 'manual';
@@ -2528,6 +2567,10 @@ export namespace LocalJSX {
         "componentId": string;
         // (undocumented)
         "maxWidth": number;
+        // (undocumented)
+        "openOn": 'click' | 'hover';
+        // (undocumented)
+        "padding": PopoverPaddingType;
         // (undocumented)
         "placement": PlacementType;
         // (undocumented)
@@ -2590,6 +2633,7 @@ export namespace LocalJSX {
         "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         "required"?: boolean;
         "value"?: string;
+        "variant"?: 'default' | 'pill';
     }
 
     // (undocumented)
@@ -2618,6 +2662,8 @@ export namespace LocalJSX {
         "required": boolean;
         // (undocumented)
         "value": string;
+        // (undocumented)
+        "variant": 'default' | 'pill';
     }
 
     export interface PdsRadioGroup {
@@ -2977,7 +3023,7 @@ export namespace LocalJSX {
         "nav"?: boolean;
         "stretch"?: boolean;
         "tablistLabel": string;
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
 
     // (undocumented)
@@ -3141,6 +3187,7 @@ export namespace LocalJSX {
         "duration"?: number;
         "icon"?: string;
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
+        "severityLabel"?: string;
         "type"?: 'default' | 'danger' | 'loading';
     }
 
@@ -3156,6 +3203,8 @@ export namespace LocalJSX {
         "duration": number;
         // (undocumented)
         "icon": string;
+        // (undocumented)
+        "severityLabel": string;
         // (undocumented)
         "type": 'default' | 'danger' | 'loading';
     }
@@ -3515,6 +3564,9 @@ export type PlacementType = 'top-start' | 'top' | 'top-end' | 'left-start' | 'le
 
 // @public (undocumented)
 export type PluralForms = Partial<Record<Intl.LDMLPluralRule, string>>;
+
+// @public (undocumented)
+export type PopoverPaddingType = Extract<BoxSpacingType, 'none' | 'xs' | 'sm' | 'md'>;
 
 // @public (undocumented)
 export interface RadioGroupChangeEventDetail {

@@ -1,4 +1,4 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { newSpecPage, SpecPage } from '@stencil/core/testing';
 import { PdsButton } from '../pds-button';
 import { caretDown, addCircle } from '@pine-ds/icons/icons';
 
@@ -546,6 +546,227 @@ describe('pds-button', () => {
     expect(button?.getAttribute('aria-expanded')).toBe('false');
     expect(button?.getAttribute('aria-haspopup')).toBe('menu');
     expect(root?.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  describe('naming and state attributes on the host', () => {
+    // mock-doc has no MutationObserver, so this one reports host attribute changes the way a browser would.
+    class HostAttributeObserver {
+      static instances: HostAttributeObserver[] = [];
+      private attributeFilter: string[] = [];
+      constructor(private callback: MutationCallback) {
+        HostAttributeObserver.instances.push(this);
+      }
+      observe(_target: Node, options: MutationObserverInit) {
+        this.attributeFilter = options.attributeFilter ?? [];
+      }
+      disconnect() {}
+      notify(attributeName: string) {
+        if (this.attributeFilter.includes(attributeName)) this.callback([], this as unknown as MutationObserver);
+      }
+    }
+
+    const original = globalThis.MutationObserver;
+
+    beforeEach(() => {
+      HostAttributeObserver.instances = [];
+      globalThis.MutationObserver = HostAttributeObserver as unknown as typeof MutationObserver;
+    });
+
+    afterEach(() => {
+      globalThis.MutationObserver = original;
+    });
+
+    const setHostAttribute = async (page: SpecPage, name: string, value: string | null) => {
+      if (value === null) {
+        page.root?.removeAttribute(name);
+      } else {
+        page.root?.setAttribute(name, value);
+      }
+      HostAttributeObserver.instances.forEach((observer) => observer.notify(name));
+      await page.waitForChanges();
+    };
+
+    describe.each([
+      ['aria-label', 'More actions', 'Fewer actions'],
+      ['aria-pressed', 'false', 'true'],
+      ['aria-current', 'page', 'step'],
+    ])('%s', (name, initial, updated) => {
+      it('reaches the inner button and stays on the host', async () => {
+        const { root } = await newSpecPage({
+          components: [PdsButton],
+          html: `<pds-button ${name}="${initial}">Save</pds-button>`,
+        });
+
+        expect(root?.shadowRoot?.querySelector('button')?.getAttribute(name)).toBe(initial);
+        expect(root?.getAttribute(name)).toBe(initial);
+      });
+
+      it('updates the inner element when it changes after load', async () => {
+        const page = await newSpecPage({
+          components: [PdsButton],
+          html: `<pds-button ${name}="${initial}">Save</pds-button>`,
+        });
+
+        await setHostAttribute(page, name, updated);
+
+        expect(page.root?.shadowRoot?.querySelector('button')?.getAttribute(name)).toBe(updated);
+      });
+
+      it('removes it from the inner element when it is removed from the host', async () => {
+        const page = await newSpecPage({
+          components: [PdsButton],
+          html: `<pds-button ${name}="${initial}">Save</pds-button>`,
+        });
+
+        await setHostAttribute(page, name, null);
+
+        expect(page.root?.shadowRoot?.querySelector('button')?.hasAttribute(name)).toBe(false);
+      });
+
+      it('reaches the inner element when it is added after load', async () => {
+        const page = await newSpecPage({
+          components: [PdsButton],
+          html: `<pds-button>Save</pds-button>`,
+        });
+
+        await setHostAttribute(page, name, updated);
+
+        expect(page.root?.shadowRoot?.querySelector('button')?.getAttribute(name)).toBe(updated);
+      });
+    });
+
+    describe.each([
+      ['aria-label', 'Account settings', 'Billing settings'],
+      ['aria-current', 'page', 'step'],
+    ])('%s with href', (name, initial, updated) => {
+      it('reaches the inner anchor', async () => {
+        const { root } = await newSpecPage({
+          components: [PdsButton],
+          html: `<pds-button href="/settings" ${name}="${initial}">Settings</pds-button>`,
+        });
+
+        expect(root?.shadowRoot?.querySelector('a')?.getAttribute(name)).toBe(initial);
+      });
+
+      it('updates and removes it on the inner anchor after load', async () => {
+        const page = await newSpecPage({
+          components: [PdsButton],
+          html: `<pds-button href="/settings" ${name}="${initial}">Settings</pds-button>`,
+        });
+        const anchor = () => page.root?.shadowRoot?.querySelector('a');
+
+        await setHostAttribute(page, name, updated);
+        expect(anchor()?.getAttribute(name)).toBe(updated);
+
+        await setHostAttribute(page, name, null);
+        expect(anchor()?.hasAttribute(name)).toBe(false);
+      });
+    });
+
+    it('keeps aria-pressed off the inner anchor, since a link cannot be pressed', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button href="/settings" aria-pressed="true">Settings</pds-button>`,
+      });
+
+      expect(root?.shadowRoot?.querySelector('a')?.hasAttribute('aria-pressed')).toBe(false);
+    });
+
+    describe.each([
+      ['aria-describedby', 'ariaDescribedByElements'],
+      ['aria-labelledby', 'ariaLabelledByElements'],
+      ['aria-controls', 'ariaControlsElements'],
+    ])('%s', (name, property) => {
+      // mock-doc has no global Document to tell the document root apart, so it gets the spec page's.
+      let hadDocument = false;
+      let originalDocument: unknown;
+
+      beforeEach(() => {
+        hadDocument = 'Document' in globalThis;
+        originalDocument = (globalThis as { Document?: unknown }).Document;
+      });
+
+      afterEach(() => {
+        if (hadDocument) {
+          (globalThis as { Document?: unknown }).Document = originalDocument;
+        } else {
+          delete (globalThis as { Document?: unknown }).Document;
+        }
+      });
+
+      const newPage = async (html: string) => {
+        const page = await newSpecPage({ components: [PdsButton], html });
+        (globalThis as { Document?: unknown }).Document = page.doc.constructor;
+        return page;
+      };
+
+      describe.each([
+        ['button', ''],
+        ['a', ' href="/settings"'],
+      ])('on the inner %s', (tag, attributes) => {
+        // mock-doc has no ARIA element reflection, so the inner element gets the property a browser would have.
+        const renderWithReflection = async (html: string) => {
+          const page = await newPage(html);
+          const inner = page.root?.shadowRoot?.querySelector(tag) as HTMLElement;
+          Object.defineProperty(inner, property, { value: null, writable: true });
+          return { page, inner };
+        };
+        const referencedIds = (inner: HTMLElement) =>
+          Array.from(((inner as unknown as Record<string, Element[] | null>)[property] ?? []), (el) => el.id);
+
+        it('gets element references, and follows changes and removal', async () => {
+          const { page, inner } = await renderWithReflection(`
+            <p id="first">First</p>
+            <p id="second">Second</p>
+            <pds-button${attributes}>Save</pds-button>
+          `);
+
+          await setHostAttribute(page, name, 'first missing');
+          expect(referencedIds(inner)).toEqual(['first']);
+
+          await setHostAttribute(page, name, 'first second');
+          expect(referencedIds(inner)).toEqual(['first', 'second']);
+
+          await setHostAttribute(page, name, null);
+          expect((inner as unknown as Record<string, unknown>)[property]).toBeNull();
+        });
+
+        it('picks up a referenced element added after the button when focus reaches it', async () => {
+          const { page, inner } = await renderWithReflection(`<pds-button${attributes} ${name}="late">Save</pds-button>`);
+          expect(referencedIds(inner)).toEqual([]);
+
+          const late = page.doc.createElement('p');
+          late.id = 'late';
+          page.body.appendChild(late);
+          page.root?.dispatchEvent(new Event('focusin'));
+          await page.waitForChanges();
+
+          expect(referencedIds(inner)).toEqual(['late']);
+        });
+
+        it('leaves the inner element alone in a browser without ARIA element reflection', async () => {
+          const page = await newPage(`<p id="first">First</p><pds-button${attributes}>Save</pds-button>`);
+
+          await setHostAttribute(page, name, 'first');
+
+          const inner = page.root?.shadowRoot?.querySelector(tag);
+          expect(inner && property in inner).toBe(false);
+          expect(inner?.hasAttribute(name)).toBe(false);
+        });
+      });
+    });
+
+    it('does not re-render when a host attribute is set to the value it already has', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button aria-label="More actions">Save</pds-button>`,
+      });
+      const didRender = jest.spyOn(page.rootInstance, 'componentDidRender');
+
+      await setHostAttribute(page, 'aria-label', 'More actions');
+
+      expect(didRender).not.toHaveBeenCalled();
+    });
   });
 
   describe('Enter key form submission', () => {

@@ -43,6 +43,22 @@ describe('pds-dropdown-menu-item', () => {
     expect(linkElement?.href).toBe('https://example.com');
   });
 
+  // Removing an attribute from a live element (as a DOM morph does) sets its
+  // string prop to `null`, not `undefined`.
+  it('renders as a button again when the href attribute is removed', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuItem, PdsLink],
+      html: `<pds-dropdown-menu-item href="https://example.com">Link Item</pds-dropdown-menu-item>`,
+    });
+
+    page.root!.removeAttribute('href');
+    await page.waitForChanges();
+
+    const shadowRoot = page.root!.shadowRoot!;
+    expect(shadowRoot.querySelector('pds-link')).toBeNull();
+    expect(shadowRoot.querySelector('button')).not.toBeNull();
+  });
+
   it('renders as a link with external prop when both href and external are provided', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuItem, PdsLink],
@@ -58,6 +74,31 @@ describe('pds-dropdown-menu-item', () => {
     expect(linkElement).not.toBeNull();
     expect(linkElement?.href).toBe('https://example.com');
     expect(linkElement?.external).toBe(true);
+  });
+
+  describe('externalLabel', () => {
+    const iconFor = async (attrs: string) => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item href="https://example.com" external ${attrs}>Docs</pds-dropdown-menu-item>`,
+      });
+      const link = page.root?.shadowRoot?.querySelector('pds-link');
+      return link?.shadowRoot?.querySelector('pds-icon');
+    };
+
+    it('lets the inner link use its default label', async () => {
+      expect((await iconFor('')).getAttribute('aria-label')).toBe('(opens in a new tab)');
+    });
+
+    it('passes a translated label to the inner link', async () => {
+      expect((await iconFor('external-label="(ouvre un nouvel onglet)"')).getAttribute('aria-label')).toBe('(ouvre un nouvel onglet)');
+    });
+
+    it('passes an empty label through, making the icon decorative', async () => {
+      const icon = await iconFor('external-label=""');
+      expect(icon.hasAttribute('aria-label')).toBe(false);
+      expect(icon.getAttribute('aria-hidden')).toBe('true');
+    });
   });
 
   it('renders as a link with target="_blank" when both href and target are provided', async () => {
@@ -324,7 +365,137 @@ describe('pds-dropdown-menu-item', () => {
     // Simulate Enter key press on disabled item
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
     page.root.dispatchEvent(enterEvent);
-    
+
     expect(clickSpy).not.toHaveBeenCalled();
+  });
+
+  describe('informational', () => {
+    it('renders a focusable menuitem with aria-disabled, without dimming', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>`,
+      });
+
+      const host = page.root!;
+      const content = host.shadowRoot!.querySelector('.pds-dropdown-menu-item__content');
+
+      expect(host.getAttribute('role')).toBe('none');
+      expect(host.hasAttribute('tabindex')).toBe(false);
+      expect(host).toHaveClass('is-informational');
+      expect(host).not.toHaveClass('is-disabled');
+      expect(host.hasAttribute('aria-disabled')).toBe(false);
+      expect(content?.tagName).toBe('DIV');
+      expect(content).toEqualAttribute('role', 'menuitem');
+      expect(content).toEqualAttribute('aria-disabled', 'true');
+      expect(content).toEqualAttribute('tabindex', '0');
+      expect(content).toEqualAttribute('part', 'button');
+      expect(host.shadowRoot!.querySelector('button')).toBeNull();
+    });
+
+    it('reflects the informational attribute', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item>2 forms</pds-dropdown-menu-item>`,
+      });
+
+      page.root!.informational = true;
+      await page.waitForChanges();
+
+      expect(page.root!.hasAttribute('informational')).toBe(true);
+    });
+
+    it('ignores href, so the item never navigates', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item informational href="/offers" external>3 offers</pds-dropdown-menu-item>`,
+      });
+
+      const shadowRoot = page.root!.shadowRoot!;
+      expect(shadowRoot.querySelector('pds-link')).toBeNull();
+      expect(shadowRoot.querySelector('a')).toBeNull();
+      expect(shadowRoot.querySelector('[role="menuitem"]')).not.toBeNull();
+    });
+
+    it('becomes a link when informational is turned off on an item with href', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item informational href="/offers">3 offers</pds-dropdown-menu-item>`,
+      });
+
+      page.root!.removeAttribute('informational');
+      await page.waitForChanges();
+
+      const shadowRoot = page.root!.shadowRoot!;
+      expect(shadowRoot.querySelector('pds-link')?.href).toBe('/offers');
+      expect(shadowRoot.querySelector('[role="menuitem"]')).toBeNull();
+    });
+
+    it('ignores destructive', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational destructive>2 forms</pds-dropdown-menu-item>`,
+      });
+
+      expect(page.root).not.toHaveClass('destructive');
+    });
+
+    it('does not emit pdsClick when clicked', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      page.root!.click();
+      await page.waitForChanges();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not emit pdsClick from clickItem()', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      await page.root!.clickItem();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('does nothing on Enter, and keeps Space from scrolling the page', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+      const content = page.root!.shadowRoot!.querySelector('[role="menuitem"]')!;
+
+      const enter = new KeyboardEvent('keydown', { key: 'Enter', cancelable: true });
+      const space = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
+      content.dispatchEvent(enter);
+      content.dispatchEvent(space);
+
+      expect(clickSpy).not.toHaveBeenCalled();
+      expect(enter.defaultPrevented).toBe(false);
+      expect(space.defaultPrevented).toBe(true);
+    });
+
+    it('takes it out of the tab order when also disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational disabled>2 forms</pds-dropdown-menu-item>`,
+      });
+
+      const content = page.root!.shadowRoot!.querySelector('[role="menuitem"]');
+      expect(page.root).toHaveClass('is-disabled');
+      expect(page.root!.hasAttribute('aria-disabled')).toBe(false);
+      expect(content).toEqualAttribute('tabindex', '-1');
+      expect(content).toEqualAttribute('aria-disabled', 'true');
+    });
   });
 });

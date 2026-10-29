@@ -2,6 +2,7 @@ import { Component, Element, Host, h, Prop, Listen, State } from '@stencil/core'
 import type { BasePdsProps } from '@utils/interfaces';
 import { PlacementType } from '@utils/types';
 import { setAttributesIfChanged } from '@utils/attributes';
+import { limitRestores } from '@utils/keep-hydrated';
 import {  computePosition,
   flip,
   offset,
@@ -15,6 +16,7 @@ import {  computePosition,
 type MenuItemElement = HTMLPdsDropdownMenuItemElement | HTMLAnchorElement | HTMLButtonElement;
 
 /**
+ * @slot header - Non-interactive content displayed above the menu items inside the dropdown panel. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item.
  * @part menu-panel - Exposes the dropdown menu container for styling.
  */
 @Component({
@@ -35,6 +37,8 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   @State() currentFocusIndex: number = -1;
 
+  @State() hasHeader: boolean = false;
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -44,6 +48,10 @@ export class PdsDropdownMenu implements BasePdsProps {
    * The placement of the dropdown panel relative to the trigger.
    */
   @Prop() placement: PlacementType = 'bottom-start';
+
+  componentWillLoad() {
+    this.hasHeader = Array.from(this.host.children).some(el => el.getAttribute('slot') === 'header');
+  }
 
   componentDidRender() {
     this.panelEl = this.host.shadowRoot?.querySelector('pds-box') as HTMLPdsBoxElement;
@@ -83,9 +91,9 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   // Writes the trigger's ARIA from the menu's state, so the observer's own callback doesn't loop.
   private syncTriggerAria = () => {
-    if (!this.triggerEl) return;
+    if (!this.triggerEl) return false;
 
-    setAttributesIfChanged(this.triggerEl, { 'aria-haspopup': 'menu', 'aria-expanded': String(this.isOpen) });
+    return setAttributesIfChanged(this.triggerEl, { 'aria-haspopup': 'menu', 'aria-expanded': String(this.isOpen) });
   }
 
   // The trigger is the consumer's element, so anything can rewrite its attributes (a Turbo morph
@@ -95,11 +103,22 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.triggerObserver = null;
     if (!this.triggerEl || typeof MutationObserver === 'undefined') return;
 
-    this.triggerObserver = new MutationObserver(this.syncTriggerAria);
+    // Capped against a script that keeps undoing it; opening and closing still write it directly.
+    this.triggerObserver = new MutationObserver(
+      limitRestores(
+        this.syncTriggerAria,
+        'pds-dropdown-menu: stopped restoring its trigger ARIA, as another script keeps changing it. It may be wrong until the menu opens or closes.',
+        this.triggerEl,
+      ),
+    );
     this.triggerObserver.observe(this.triggerEl, {
       attributes: true,
       attributeFilter: ['aria-haspopup', 'aria-expanded'],
     });
+  }
+
+  private handleHeaderSlotChange = (event: Event) => {
+    this.hasHeader = (event.target as HTMLSlotElement).assignedElements().length > 0;
   }
 
   private handleSlotChange = (event: Event) => {
@@ -250,12 +269,12 @@ export class PdsDropdownMenu implements BasePdsProps {
       if (tagName === 'pds-dropdown-menu-item') {
         // For pds-dropdown-menu-item, focus the inner element
         const menuItem = item as HTMLPdsDropdownMenuItemElement;
-        const innerButton = menuItem.shadowRoot?.querySelector('button');
+        const innerControl = menuItem.shadowRoot?.querySelector<HTMLElement>('button, [role="menuitem"]');
         const innerLink = menuItem.shadowRoot?.querySelector('pds-link')?.shadowRoot?.querySelector('a')
           || menuItem.shadowRoot?.querySelector('a');
 
-        if (innerButton) {
-          innerButton.focus();
+        if (innerControl) {
+          innerControl.focus();
         } else if (innerLink) {
           innerLink.focus();
         } else {
@@ -309,17 +328,21 @@ export class PdsDropdownMenu implements BasePdsProps {
     }
   }
 
+  // Escape is taken in document's capture phase, before a modal around the menu hears it on
+  // document and closes too.
+  @Listen('keydown', { target: 'document', capture: true })
+  handleEscapeKeyDown(event: KeyboardEvent) {
+    if (!this.isOpen || event.key !== 'Escape' || event.defaultPrevented) return;
+    event.preventDefault();
+    this.closeDropdown();
+  }
+
   // Handle keyboard events for the dropdown
   @Listen('keydown', { target: 'window' })
   handleKeyDown(event: KeyboardEvent) {
     if (!this.isOpen) return;
 
     switch (event.key) {
-      case 'Escape':
-        event.preventDefault();
-        this.closeDropdown();
-        break;
-
       case 'ArrowDown':
         event.preventDefault();
         this.focusNextItem();
@@ -434,11 +457,14 @@ export class PdsDropdownMenu implements BasePdsProps {
           direction="column"
           class="pds-dropdown-menu--panel is-hidden"
           shadow="100"
-          role="menu"
-          aria-orientation="vertical"
           part="menu-panel"
         >
-          <slot onSlotchange={this.handleSlotChange}></slot>
+          <div class={{ 'pds-dropdown-menu__header': true, 'is-hidden': !this.hasHeader }}>
+            <slot name="header" onSlotchange={this.handleHeaderSlotChange}></slot>
+          </div>
+          <div class="pds-dropdown-menu__items" role="menu" aria-orientation="vertical">
+            <slot onSlotchange={this.handleSlotChange}></slot>
+          </div>
         </pds-box>
       </Host>
     );

@@ -164,6 +164,13 @@ describe('pds-switch accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  it('has no axe violations with an error message', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch component-id="notify" label="Enable notifications" invalid error-message="Turn on notifications to continue"></pds-switch>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
   it('has no axe violations with slotted label content', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-switch component-id="tag"><pds-chip slot="label" sentiment="neutral">Spring Launch</pds-chip></pds-switch>');
@@ -180,5 +187,30 @@ describe('pds-switch after its host classes and styles are stripped', () => {
     await page.setContent('<pds-switch class="consumer" component-id="switch" label="Switch" invalid disabled helper-message="Help"></pds-switch>');
 
     await expectStylingSurvivesStrip(page, 'pds-switch', { removeAttributes: ['aria-disabled'] });
+  });
+});
+
+describe('pds-switch in a disabled fieldset', () => {
+  it('is disabled while the fieldset is, and comes back when it is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-switch component-id="in-fieldset" name="notify" label="Enable notifications"></pds-switch>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+    const disabled = () =>
+      page.evaluate(() => (document.querySelector('pds-switch') as HTMLElement & { disabled: boolean }).disabled);
+
+    expect(await disabled()).toBe(true);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+
+    await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
+    await page.waitForChanges();
+    expect(await disabled()).toBe(false);
   });
 });

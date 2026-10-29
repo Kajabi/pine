@@ -517,6 +517,72 @@ The `triggerWidth` prop also works with input triggers. This example shows an in
   </pds-combobox>
 </DocCanvas>
 
+### Truncate
+By default, a long label wraps in the button trigger and in the options. Set `truncate` to keep each one on one line, with an ellipsis where it's cut. It applies to the button trigger's default label (every variant and shape, with or without an icon) and to text option labels, including those with an icon and those inside a group. The input trigger is already one line, so there `truncate` only changes the options. It doesn't change the chip trigger, custom layouts (`trigger-content`, layout and chip options), or group captions and group rows, which still wrap. `truncate` reflects, so the host can shrink below the label's width in a flex row on its own; give it a `trigger-width` for an exact width instead.
+
+The full label stays available:
+
+- The trigger's accessible name and value, and each option's name, are the full label; truncation only changes how it looks.
+- When the trigger's or an option's label is cut, hovering it with a pointer shows the full label in a `title`. A label that fits gets no `title`. A `title` doesn't show on keyboard focus or touch, so keyboard and touch users see only the cut text; keep labels that must be read in full short enough to fit. The `title` only shows while the pointer is over the label text itself — hovering an option's icon, chevron or check mark, or the surrounding padding, shows nothing. It's also the browser's own unstyled tooltip, so unlike Pine's other truncation tooltips it doesn't follow the theme.
+
+Without `truncate` (wraps):
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-truncate-off" label="Category" trigger="button" trigger-shape="input" mode="select-only" trigger-width="240px" dropdown-width="240px" value="onboarding">
+  <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-truncate-off" label="Category" trigger="button" triggerShape="input" mode="select-only" triggerWidth="240px" dropdownWidth="240px" value="onboarding">
+  <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-truncate-off" label="Category" trigger="button" trigger-shape="input" mode="select-only" trigger-width="240px" dropdown-width="240px" value="onboarding">
+    <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+    <optgroup label="Email" data-icon="mail">
+      <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+      <option value="sequence">Sequence</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
+
+With `truncate`:
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-truncate" label="Category" trigger="button" trigger-shape="input" mode="select-only" trigger-width="240px" dropdown-width="240px" value="onboarding" truncate>
+  <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-truncate" label="Category" trigger="button" triggerShape="input" mode="select-only" triggerWidth="240px" dropdownWidth="240px" value="onboarding" truncate>
+  <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-truncate" label="Category" trigger="button" trigger-shape="input" mode="select-only" trigger-width="240px" dropdown-width="240px" value="onboarding" truncate>
+    <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+    <optgroup label="Email" data-icon="mail">
+      <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+      <option value="sequence">Sequence</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
+
 ### Custom Max Height
 When dealing with long lists of options, you can set a maximum height for the dropdown. This example limits the dropdown to 200px height - when there are more options than can fit, users can scroll through them.
 
@@ -1079,9 +1145,89 @@ Add `data-icon` to an `<optgroup>` to show a Pine icon beside its label. Use an 
   </pds-combobox>
 </DocCanvas>
 
+### Option Icons
+
+Set `icon` on an option from the `options` prop, or `data-icon` on a slotted `<option>`, to show a Pine icon before its text. The rules are the same as for group icons: an icon name only, decorative, and hidden from assistive technology. Once an option is chosen, the `button` trigger shows its icon too, or its group's icon when the option has none. The `input` and `chip` triggers don't show option icons.
+
+Option icons suit a list of categories, where the ungrouped options and the groups between them all have icons. With `flyout` and `drill-in`, the groups sit between the options in the array's order. See the `OptionIconsWithGroups` story.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsCombobox
+  componentId="combobox-option-icons-example"
+  label="Category"
+  hideLabel
+  placeholder="Select category"
+  trigger="button"
+  triggerShape="input"
+  triggerWidth="320px"
+  dropdownWidth="320px"
+  mode="select-only"
+  groupDisplay="drill-in"
+  panelSearch
+  searchPlaceholder="Search categories"
+  searchOptionsLabel="Search categories"
+  options={[
+    { id: 'assessment', text: 'Assessment', icon: 'assessment' },
+    { id: 'broadcast', text: 'Broadcast', group: 'Email', groupIcon: 'mail' },
+    { id: 'sequence', text: 'Sequence', group: 'Email' },
+    { id: 'event', text: 'Event', icon: 'calendar-date' },
+    { id: 'tag', text: 'Tag', icon: 'hashtag' },
+  ]}
+/>`,
+    webComponent: `<pds-combobox
+  component-id="combobox-option-icons-example"
+  label="Category"
+  hide-label
+  placeholder="Select category"
+  trigger="button"
+  trigger-shape="input"
+  trigger-width="320px"
+  dropdown-width="320px"
+  mode="select-only"
+  group-display="drill-in"
+  panel-search
+  search-placeholder="Search categories"
+  search-options-label="Search categories">
+  <option value="assessment" data-icon="assessment">Assessment</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+  <option value="event" data-icon="calendar-date">Event</option>
+  <option value="tag" data-icon="hashtag">Tag</option>
+</pds-combobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-option-icons-example"
+    label="Category"
+    hide-label
+    placeholder="Select category"
+    trigger="button"
+    trigger-shape="input"
+    trigger-width="320px"
+    dropdown-width="320px"
+    mode="select-only"
+    group-display="drill-in"
+    panel-search
+    search-placeholder="Search categories"
+    search-options-label="Search categories">
+    <option value="assessment" data-icon="assessment">Assessment</option>
+    <optgroup label="Email" data-icon="mail">
+      <option value="broadcast">Broadcast</option>
+      <option value="sequence">Sequence</option>
+    </optgroup>
+    <option value="event" data-icon="calendar-date">Event</option>
+    <option value="tag" data-icon="hashtag">Tag</option>
+  </pds-combobox>
+</DocCanvas>
+
+Search results, and the `inline` display, list a group's options under its label. With the `options` prop, ungrouped options come first; slotted markup keeps its own order. Options there with an icon and without one sit side by side, so give a group's own options icons only if every option in that list has one.
+
 ### Grouping the `options` Prop
 
-When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. Options without a group are listed before every group, wherever they appear in the array. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
+When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. With `group-display="inline"`, options without a group are listed before every group, wherever they appear in the array, so none reads as part of the group above it. With `flyout` and `drill-in`, groups are rows of their own, so options without a group and groups keep the array's order. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
 
 ```jsx
 <PdsCombobox
@@ -1134,7 +1280,8 @@ When options come from the `options` prop, set `group` on each option, and optio
 - **Pass `drill-in-back-label` with `flyout` too.** A flyout drills in when there's no room beside the dropdown, and the back row's screen-reader prefix is English by default.
 - **Give every group an icon or none.** A mix reads as unfinished.
 - **For server-searched lists (`async-url`), prefer `inline`.** Results replace the groups as soon as you type, so a group list adds a step without helping.
-- **In slotted markup, list ungrouped options first.** One placed after a group reads as part of it; the `options` prop lists them first for you.
+- **With `inline`, list ungrouped options first in slotted markup.** One placed after a group reads as part of it; the `options` prop lists them first for you. With `flyout` and `drill-in`, groups are rows, so ungrouped options can sit between them, in the order you list them.
+- **Give every top-level row an icon or none.** That's the ungrouped options' `icon` and the groups' `groupIcon` together. A group's own options usually have none: once one is chosen, the trigger shows its group's icon.
 - **Use `panel-search` with the `button` and `chip` triggers** once a grouped list is long enough to need searching. The `input` trigger already searches.
 - **Inside a `pds-modal` (or any `<dialog>`), set `dropdown-mount="body"`.** The flyout moves with the dropdown, and focus stays inside the dialog. For other focus traps, see [Searching From the Panel](#searching-from-the-panel).
 
@@ -1281,6 +1428,8 @@ Set `group-display="flyout"` to list the groups instead of every option. Hoverin
 ### Drill-In Groups
 
 Set `group-display="drill-in"` where nothing can open beside the dropdown, such as a side panel. The dropdown lists the groups, and clicking one replaces the list with that group's options and a row back to the groups. `group-display="flyout"` drills in on its own when there is no room for a flyout on either side. Translate the back row's screen-reader prefix with `drill-in-back-label` (default `Back`). ArrowLeft or Escape also steps back to the groups, and so does Backspace with `panel-search`.
+
+Unlike `flyout`, drill-in doesn't shade the group holding the selection, or the row you come back to with the pointer: a shaded row there reads as picked. The selected option shows its check inside its group. A row shades while the pointer is over it, and with the arrow keys the row you're on is shaded and outlined; the first arrow press shows, and announces, where the keys start. After a touch, rows don't shade on hover, since touch browsers keep a tapped row hovered. A `flyout` that drills in for lack of room works the same way.
 
 With `panel-search`, the search field shows only over the groups. Inside a group, the back row takes its place above the divider, since one group's options don't need searching, and typing a character starts a search of the whole list.
 

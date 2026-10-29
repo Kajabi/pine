@@ -26,7 +26,7 @@ Checkboxes provide users with selectable options like toggling a single setting 
 - Provide a clear, descriptive label for each checkbox to ensure that screen readers can identify the option effectively.
 - The `aria-describedby` attribute is used to associate the checkbox with an error message or helper message but may not be read out by all screen readers.
 - Put only non-interactive content in the `label` slot. Buttons and links inside a label are invalid HTML.
-- State classes on the host (such as `is-invalid` and `is-disabled`) follow the component's props, and `has-label-slot` follows the `label` slot's content. They come back if something removes them, such as a DOM morph, so change them through props or the slot.
+- State classes on the host (such as `is-invalid` and `is-disabled`) follow the component's props, and `has-label-slot` follows the `label` slot's content. They come back if something removes them, such as a DOM morph, so change them through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ## Properties
 
@@ -118,6 +118,41 @@ Use the `label` slot when the label needs more than text, such as a `pds-chip`. 
     webComponent: `<pds-checkbox component-id="label-slot"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-checkbox>`
 }}>
   <pds-checkbox component-id="label-slot"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-checkbox>
+</DocCanvas>
+
+### Pill
+
+Set `variant="pill"` to render the checkbox as a pill-shaped choice for picking several short options. The checkbox square is visually hidden and the label becomes the pill, so the input is still a native checkbox: Space toggles it, it submits with the form, and screen readers announce it as a checkbox. Checking a pill adds an inset ring instead of a thicker border, so the pill doesn't change size. The focus ring shows for keyboard focus only. A pill always shows its label, so `hideLabel` is ignored. `invalid` turns the pill's border red; `indeterminate` has no pill style.
+
+Wrap related pills in a `fieldset` with a `legend` so the group has a name, and lay them out in a wrapping row.
+
+<DocCanvas
+  mdxSource={{
+    react: `<fieldset>
+  <legend>Send to</legend>
+  <PdsBox wrap gap="xs">
+    <PdsCheckbox componentId="pill-email" name="channels" value="email" label="Email" variant="pill" checked />
+    <PdsCheckbox componentId="pill-sms" name="channels" value="sms" label="SMS" variant="pill" />
+    <PdsCheckbox componentId="pill-push" name="channels" value="push" label="Push notification" variant="pill" />
+  </PdsBox>
+</fieldset>`,
+    webComponent: `<fieldset>
+  <legend>Send to</legend>
+  <pds-box wrap gap="xs">
+    <pds-checkbox component-id="pill-email" name="channels" value="email" label="Email" variant="pill" checked></pds-checkbox>
+    <pds-checkbox component-id="pill-sms" name="channels" value="sms" label="SMS" variant="pill"></pds-checkbox>
+    <pds-checkbox component-id="pill-push" name="channels" value="push" label="Push notification" variant="pill"></pds-checkbox>
+  </pds-box>
+</fieldset>`
+}}>
+  <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
+    <legend style={{ marginBlockEnd: 'var(--pine-dimension-xs)', padding: 0 }}>Send to</legend>
+    <pds-box wrap gap="xs">
+      <pds-checkbox component-id="pill-email" name="channels" value="email" label="Email" variant="pill" checked></pds-checkbox>
+      <pds-checkbox component-id="pill-sms" name="channels" value="sms" label="SMS" variant="pill"></pds-checkbox>
+      <pds-checkbox component-id="pill-push" name="channels" value="push" label="Push notification" variant="pill"></pds-checkbox>
+    </pds-box>
+  </fieldset>
 </DocCanvas>
 
 ## Events

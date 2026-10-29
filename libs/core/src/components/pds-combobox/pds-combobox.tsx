@@ -14,10 +14,11 @@ import {
   groupLabelOf,
   isGroupDisabled,
   isOptionDisabled,
+  optionIconOf,
   panelColumn,
   parentOptgroupOf,
 } from './grouped-options-panel';
-import type { PanelGroup, PanelItem } from './grouped-options-panel';
+import type { PanelEntry, PanelGroup, PanelItem } from './grouped-options-panel';
 import type {
   ComboboxOption,
   ComboboxSearchEventDetail,
@@ -230,6 +231,14 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() triggerShape: 'pill' | 'input' = 'pill';
 
   /**
+   * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis.
+   * When a label overflows, a `title` showing the full label will appear on hover.
+   * Chip options, custom layouts and group rows aren't affected.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) truncate = false;
+
+  /**
    * The sentiment for the chip trigger. Matches Pine chip sentiments.
    * @default 'neutral'
    */
@@ -349,6 +358,19 @@ export class PdsCombobox implements BasePdsProps {
   @State() keyboardNavigating: boolean = false;
 
   /**
+   * A drill-in group row the first arrow showed rather than moved past. `aria-activedescendant`
+   * already pointed at it, so the status region says it instead.
+   */
+  @State() revealedGroupLabel: string | null = null;
+
+  /**
+   * The pointer in the panel can hover: a mouse or pen, not touch. Touch browsers keep a tapped row
+   * hovered, so group rows shade on `:hover` only for a pointer that can hover. Checked on the
+   * pointer itself rather than `(hover: hover)`, which a touch-first device with a trackpad fails.
+   */
+  @State() pointerCanHover: boolean = true;
+
+  /**
    * What's typed in the dropdown's own search field (`panelSearch`).
    */
   @State() panelQuery: string = '';
@@ -415,6 +437,12 @@ export class PdsCombobox implements BasePdsProps {
   );
   /** The groups in the flyout panel's last render, so a row's index finds its optgroup. */
   private renderedGroups: PanelGroup[] = [];
+
+  /**
+   * Where each ungrouped option and optgroup built from the `options` prop came in the data, so
+   * the flyout and drill-in panels draw them in that order. Slotted markup is already in order.
+   */
+  private panelPositions = new WeakMap<Element, number>();
   private panelSearchEl?: HTMLInputElement;
   /** With panel search, the options' list, which takes focus while a group is drilled into. */
   private panelTreeEl?: HTMLElement;
@@ -440,6 +468,18 @@ export class PdsCombobox implements BasePdsProps {
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
     }
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    // Also fires when this element's own `disabled` attribute is merely present, even as the
+    // literal string "false" (a consumer's or React's attribute serialization can write that) —
+    // the platform treats any value as disabled, independent of fieldset state. A real disabled
+    // fieldset ancestor confirms this is genuinely that, not this element's own attribute.
+    if (disabled && !this.el.closest('fieldset[disabled]')) return;
+    this.disabled = disabled;
   }
 
   componentWillLoad() {
@@ -515,6 +555,42 @@ export class PdsCombobox implements BasePdsProps {
     }
   }
 
+  // A `title` only while the text is cut, measured on hover. On the span, not the option or trigger,
+  // so it isn't read again as their description.
+  private syncTitle(el: HTMLElement, selector: string) {
+    const text = el.querySelector<HTMLElement>(selector);
+    if (!text) return;
+    if (text.scrollWidth > text.clientWidth) {
+      text.title = text.textContent || '';
+    } else {
+      text.removeAttribute('title');
+    }
+  }
+
+  /**
+   * Scrolls just enough to show `el`, as `scrollIntoView({ block: 'nearest' })` does. In the drill-in
+   * panel it scrolls the list alone, and never sideways: while a drill-in slide offsets a row past
+   * the list's edge, `scrollIntoView` also scrolls the list horizontally to reach it, which eats most
+   * of the slide. There it keeps clear of the sticky row back, through the scroll padding set for it,
+   * but doesn't scroll the page or a scrolling ancestor.
+   */
+  private scrollIntoViewNearest(el: HTMLElement, smooth: boolean) {
+    const behavior = smooth ? 'smooth' : 'auto';
+    if (!this.showsGroupedPanel || this.effectiveGroupDisplay !== 'drill-in') {
+      el.scrollIntoView({ block: 'nearest', behavior });
+      return;
+    }
+    const list = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
+    if (!list) return;
+    const offset = el.getBoundingClientRect().top - list.getBoundingClientRect().top - list.clientTop;
+    // The padding keeps rows clear of the sticky row back; the row back itself doesn't need it.
+    const padding = el.classList.contains('pds-combobox__group-back-trigger') ? 0 : parseFloat(list.style.scrollPaddingBlockStart) || 0;
+    const top = list.scrollTop + offset - padding;
+    const bottom = list.scrollTop + offset + el.offsetHeight - list.clientHeight;
+    const target = top < list.scrollTop ? top : bottom > list.scrollTop ? bottom : null;
+    if (target !== null) list.scrollTo({ top: target, behavior });
+  }
+
   private focusPanel(el: HTMLElement) {
     this.panelFocusEl = el;
     // Before the dropdown is positioned it sits in the page's flow; don't scroll to it.
@@ -538,6 +614,7 @@ export class PdsCombobox implements BasePdsProps {
   @Watch('openGroup')
   protected openGroupChanged(next: HTMLOptGroupElement | null, previous: HTMLOptGroupElement | null) {
     this.handPanelFocusToList();
+    this.revealedGroupLabel = null;
     // Only moves between the drill-in panel's views slide; search results don't.
     if (!this.isOpen || this.effectiveGroupDisplay !== 'drill-in' || !this.showsGroupedPanel) return;
     if (next !== null && previous === null) this.drillDirection = 'in';
@@ -558,14 +635,36 @@ export class PdsCombobox implements BasePdsProps {
     if (this.isOpen && this.hidesPanelSearch && this.panelTreeEl) this.focusPanel(this.panelTreeEl);
   }
 
+  private onPanelPointer = (event: PointerEvent) => {
+    const canHover = event.pointerType !== 'touch';
+    if (this.pointerCanHover !== canHover) this.pointerCanHover = canHover;
+  };
+
   private onDrillAnimationEnd = (event: AnimationEvent) => {
     // Only the slide's own end: slotted consumer content can animate inside the list too.
-    if (event.animationName?.startsWith('pds-combobox-drill')) this.drillDirection = null;
+    if (event.animationName === 'pds-combobox-drill') this.drillDirection = null;
   };
+
+  @Watch('disabled')
+  protected disabledChanged(disabled: boolean) {
+    if (!disabled || !this.isOpen) return;
+    const shadowActive = this.el.shadowRoot?.activeElement ?? null;
+    const focusInDropdown =
+      !!this.portalEl?.shadowRoot?.activeElement || (!!shadowActive && !!this.listboxEl?.contains(shadowActive));
+    this.isOpen = false;
+    this.highlightedIndex = -1;
+    this.isArrowKeyNavigationMode = false;
+    this.clearExpandFilterList();
+    this.updateAriaActiveDescendant();
+    // Closing removes the search field or option that held focus. A button or chip trigger can still
+    // take it (aria-disabled), so focus doesn't fall to the page; a disabled input can't, as natively.
+    if (focusInDropdown && this.trigger !== 'input') this.restoreFocusToTrigger();
+  }
 
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
     if (!isOpen) {
+      this.revealedGroupLabel = null;
       this.drillDirection = null;
       this.openGroup = null;
       this.highlightedGroup = null;
@@ -897,20 +996,24 @@ export class PdsCombobox implements BasePdsProps {
     // slotted markup would be, so grouping, filtering and labels work the same either way. Each
     // group is listed where it first appears with all of its options, even when the data
     // interleaves groups, so an option never renders under another group's label. Ungrouped
-    // options come first, so none reads as part of the group above it.
+    // options come first, so none reads as part of the group above it. The flyout and drill-in
+    // panels draw groups as rows, where that can't happen, so they keep the data's order instead.
     const asyncOptions = this.options || this.internalOptions;
     const groups = new Map<string, HTMLOptGroupElement>();
     const ungrouped: HTMLOptionElement[] = [];
     const groupEntries: HTMLOptGroupElement[] = [];
-    asyncOptions.forEach(opt => {
+    this.panelPositions = new WeakMap();
+    asyncOptions.forEach((opt, position) => {
       const optionEl = document.createElement('option') as HTMLOptionElement;
       optionEl.value = String(opt.id);
       optionEl.textContent = opt.text;
       if (opt.disabled === true) optionEl.setAttribute('disabled', '');
-
       // Only strings group an option or name an icon; anything else from JS is ignored, not coerced.
+      if (typeof opt.icon === 'string' && opt.icon !== '') optionEl.setAttribute('data-icon', opt.icon);
+
       if (typeof opt.group !== 'string' || opt.group === '') {
         ungrouped.push(optionEl);
+        this.panelPositions.set(optionEl, position);
         return;
       }
 
@@ -920,6 +1023,7 @@ export class PdsCombobox implements BasePdsProps {
         optgroup.label = opt.group;
         groups.set(opt.group, optgroup);
         groupEntries.push(optgroup);
+        this.panelPositions.set(optgroup, position);
       }
       if (!optgroup.hasAttribute('data-icon') && typeof opt.groupIcon === 'string' && opt.groupIcon !== '') {
         optgroup.setAttribute('data-icon', opt.groupIcon);
@@ -1559,6 +1663,7 @@ export class PdsCombobox implements BasePdsProps {
    */
   private handleGroupedPanelKey(e: KeyboardEvent): boolean {
     if (!this.showsGroupedPanel) return false;
+    const highlightShown = this.keyboardNavigating;
     this.keyboardNavigating = true;
     // In the input trigger, Left and Right still move the caret through typed text, and Space,
     // Home and End edit it, as they do in the panel's search field.
@@ -1567,24 +1672,33 @@ export class PdsCombobox implements BasePdsProps {
       if (e.key === ' ' || e.key === 'Home' || e.key === 'End') return false;
     }
 
-    const entries = buildPanelEntries(this.filteredItems);
+    const entries = this.panelEntries();
     const drilledIn = this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null;
     const current = this.currentPanelItem();
     const column = panelColumn(entries, this.openGroup, current, drilledIn);
     if (column.length === 0) return false;
     const position = current === null ? -1 : column.indexOf(current);
+    // Drill-in doesn't shade a group row the pointer or a click-open highlighted, so the first Up or
+    // Down shows that row rather than moving past one the user never saw.
+    const unseenRow = !highlightShown && this.effectiveGroupDisplay === 'drill-in' && current !== null && typeof current !== 'number' && current !== this.openGroup;
 
     const moveTo = (to: number) => {
       e.preventDefault();
       this.highlightPanelItem(column[Math.max(0, Math.min(column.length - 1, to))]);
+      this.revealedGroupLabel = null;
+      return true;
+    };
+    const reveal = () => {
+      e.preventDefault();
+      this.revealedGroupLabel = (current as HTMLOptGroupElement).label;
       return true;
     };
 
     switch (e.key) {
       case 'ArrowDown':
-        return moveTo(position < 0 ? 0 : position + 1);
+        return unseenRow ? reveal() : moveTo(position < 0 ? 0 : position + 1);
       case 'ArrowUp':
-        return moveTo(position < 0 ? column.length - 1 : position - 1);
+        return unseenRow ? reveal() : moveTo(position < 0 ? column.length - 1 : position - 1);
       case 'Home':
         return moveTo(0);
       case 'End':
@@ -1716,7 +1830,7 @@ export class PdsCombobox implements BasePdsProps {
     // In the grouped panel, the first row with something to choose: a group stays closed until
     // it's opened.
     if (this.showsGroupedPanel) {
-      const first = buildPanelEntries(this.filteredItems).find(entry =>
+      const first = this.panelEntries().find(entry =>
         entry.kind === 'group' ? !isGroupDisabled(entry.group) : !isOptionDisabled(entry.option),
       );
       this.highlightedIndex = first?.kind === 'option' ? first.index : -1;
@@ -1792,9 +1906,12 @@ export class PdsCombobox implements BasePdsProps {
       }
       // Matched by id, not a selector: componentId is consumer text and may not be selector-safe.
       const id = this.groupDomId(groupRow);
-      Array.from(this.listboxEl.querySelectorAll('[role="treeitem"]'))
-        .find(row => row.id === id)
-        ?.scrollIntoView({ block: 'nearest' });
+      const row = Array.from(this.listboxEl.querySelectorAll('[role="treeitem"]'))
+        .find(item => item.id === id);
+      // The row's trigger, not its item: the row back's item wraps the group's options, and showing
+      // all of a group taller than the list would scroll the row back itself out of view.
+      const trigger = Array.from(row?.children ?? []).find(child => child.classList.contains('pds-combobox__group-row-trigger'));
+      if (trigger) this.scrollIntoViewNearest(trigger as HTMLElement, false);
       this.updateAriaActiveDescendant();
       return;
     }
@@ -1852,7 +1969,7 @@ export class PdsCombobox implements BasePdsProps {
       if (flyout) {
         this.flyout.reveal(flyout, currentOption);
       } else {
-        currentOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        this.scrollIntoViewNearest(currentOption, true);
       }
     }
 
@@ -1926,7 +2043,8 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Clears the selected value and resets the component.
+   * Clears the selected value and resets the component. Works while disabled too, as setting a
+   * native control's value from script does.
    */
   @Method()
   async clear() {
@@ -1955,10 +2073,15 @@ export class PdsCombobox implements BasePdsProps {
     if (this.usesPanelSearch) this.restoreFocusToTrigger();
   };
 
+  private onButtonTriggerMouseEnter = (event: Event) => {
+    this.syncTitle(event.currentTarget as HTMLElement, '.pds-combobox__button-trigger-text');
+  };
+
   // Event handler for mouse enter on option
   private onOptionMouseEnter = (event: Event) => {
-    const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
-    this.highlightedIndex = idx;
+    const row = event.currentTarget as HTMLElement;
+    if (this.truncate) this.syncTitle(row, '.pds-combobox__option-text');
+    this.highlightedIndex = Number(row.getAttribute('data-option-index'));
     this.keyboardNavigating = false;
   };
 
@@ -1992,6 +2115,8 @@ export class PdsCombobox implements BasePdsProps {
     this.highlightedIndex = -1;
     this.highlightedGroup = group;
     this.keyboardNavigating = false;
+    // So revealing this row again later is announced again.
+    this.revealedGroupLabel = null;
   }
 
   private onGroupRowClick = (event: Event) => {
@@ -2142,6 +2267,8 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger click
   private onButtonTriggerClick = () => {
+    // The button and chip triggers are divs, so a click reaches them even while disabled.
+    if (this.disabled) return;
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
       this.prepareExpandFilterListOnOpen();
@@ -2176,6 +2303,12 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger keyboard events
   private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
+    // Disabled takes it out of the tab order, but setFocus() or a click can still focus it.
+    if (this.disabled) {
+      // Keep Space from scrolling the page, as on a native disabled button.
+      if (e.key === ' ') e.preventDefault();
+      return;
+    }
     // Escape closes an open group before the dropdown. Other keys reach the tree through handleKeyDown.
     if (this.isOpen && e.key === 'Escape' && this.handleGroupedPanelKey(e)) return;
     if ((e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') && !this.isOpen) {
@@ -2195,8 +2328,9 @@ export class PdsCombobox implements BasePdsProps {
         this.focusFirstOptionForArrowKeys();
       }, 0);
     } else if (e.key === 'Escape') {
-      e.preventDefault();
+      // Only an open dropdown claims Escape; a closed one leaves it to a modal or popover around it.
       if (this.isOpen) {
+        e.preventDefault();
         this.isOpen = false;
         this.highlightedIndex = -1;
         this.clearExpandFilterList();
@@ -2295,8 +2429,12 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__listbox--grouped': this.groupDisplay !== 'inline',
           'pds-combobox__listbox--drill-in': this.drillDirection === 'in',
           'pds-combobox__listbox--drill-out': this.drillDirection === 'out',
+          'pds-combobox__listbox--pointer-hover': this.pointerCanHover,
+          'pds-combobox__listbox--truncate': this.truncate,
         }}
         onAnimationEnd={this.onDrillAnimationEnd}
+        onPointerMove={this.onPanelPointer}
+        onPointerDown={this.onPanelPointer}
         role={this.showsGroupedPanel ? 'tree' : 'listbox'}
         id={this.listboxId}
         aria-label={this.label || 'Options'}
@@ -2636,11 +2774,36 @@ export class PdsCombobox implements BasePdsProps {
         ) : isChip ? (
           this.renderOptionChip(option)
         ) : (
-          this.getOptionLabel(option)
+          this.renderOptionLabel(option)
         )}
-        {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
+        {isSelected && <pds-icon icon="check" size="regular" aria-hidden="true" class="pds-combobox__option-check" />}
       </li>
     );
+  }
+
+  /** An option's text, after its `data-icon` when it has one. */
+  private renderOptionLabel(option: HTMLOptionElement) {
+    const icon = optionIconOf(option);
+    const label = this.truncate ? (
+      <span key={this.getOptionLabel(option)} class="pds-combobox__option-text">
+        {this.getOptionLabel(option)}
+      </span>
+    ) : this.getOptionLabel(option);
+    if (icon === null) return label;
+    return (
+      <span class="pds-combobox__option-label">
+        {/* `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized. */}
+        <pds-icon name={icon} size="regular" aria-hidden="true" class="pds-combobox__option-icon" />
+        {label}
+      </span>
+    );
+  }
+
+  /** The grouped panel's rows, in the order the panel draws them and the keyboard moves through. */
+  private panelEntries(): PanelEntry[] {
+    // Slotted markup is already in order; only options from data record positions.
+    if (this.options === undefined && !this.asyncUrl) return buildPanelEntries(this.filteredItems);
+    return buildPanelEntries(this.filteredItems, element => this.panelPositions.get(element));
   }
 
   /**
@@ -2649,7 +2812,7 @@ export class PdsCombobox implements BasePdsProps {
    * it's a tree: the rows and ungrouped options are level 1, a group's options level 2.
    */
   private renderGroupedPanel() {
-    const entries = buildPanelEntries(this.filteredItems);
+    const entries = this.panelEntries();
     const setsize = entries.length;
 
     if (this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null) {
@@ -2688,7 +2851,8 @@ export class PdsCombobox implements BasePdsProps {
         class={{
           'pds-combobox__group-back': true,
           'pds-combobox__group-back--disabled': disabled,
-          'pds-combobox__group-back--highlighted': this.highlightedGroupRow === group.optgroup,
+          // As the group rows: shaded for the keys, and by `:hover` for the pointer.
+          'pds-combobox__group-back--highlighted': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
           'pds-combobox__group-back--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
         }}
         role="treeitem"
@@ -2721,7 +2885,10 @@ export class PdsCombobox implements BasePdsProps {
   private renderGroupRow(group: PanelGroup, groupIndex: number, { posinset, setsize }: { posinset: number; setsize: number }) {
     const flyout = this.effectiveGroupDisplay === 'flyout';
     const isOpen = flyout && this.openGroup === group.optgroup;
-    const hasSelection = group.options.some(({ option }) => this.isOptionSelected(option));
+    // Drill-in shades a group row only for the keys: not for the group holding the selection, or the
+    // row the pointer or a click-open left highlighted, which read as picked. `:hover` covers the pointer.
+    const hasSelection = flyout && group.options.some(({ option }) => this.isOptionSelected(option));
+    const isCurrent = this.highlightedGroupRow === group.optgroup;
     const disabled = isGroupDisabled(group);
     const id = this.groupDomId(group.optgroup);
 
@@ -2733,8 +2900,8 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__group-row': true,
           'pds-combobox__group-row--open': isOpen,
           'pds-combobox__group-row--has-selection': hasSelection,
-          'pds-combobox__group-row--highlighted': this.highlightedGroupRow === group.optgroup,
-          'pds-combobox__group-row--keyboard': this.keyboardNavigating && this.highlightedGroupRow === group.optgroup,
+          'pds-combobox__group-row--highlighted': isCurrent && (flyout || this.keyboardNavigating),
+          'pds-combobox__group-row--keyboard': isCurrent && this.keyboardNavigating,
           'pds-combobox__group-row--disabled': disabled,
         }}
         role="treeitem"
@@ -2793,11 +2960,37 @@ export class PdsCombobox implements BasePdsProps {
 
   // Helper method to render default text content
   private renderDefaultContent() {
+    const icon = this.selectedIcon;
     return (
-      <span class={{ 'pds-combobox__button-trigger-label': true, 'pds-combobox__button-trigger-label--placeholder': !this.selectedLabel }}>
-        {this.selectedLabel || this.placeholder}
+      <span
+        class={{
+          'pds-combobox__button-trigger-label': true,
+          'pds-combobox__button-trigger-label--placeholder': !this.selectedLabel,
+          'pds-combobox__button-trigger-label--with-icon': icon !== null,
+        }}
+      >
+        {icon !== null && (
+          // `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized.
+          <pds-icon name={icon} size="regular" aria-hidden="true" class="pds-combobox__button-trigger-icon" />
+        )}
+        {this.truncate ? (
+          // Keyed so a new label drops a stale `title`.
+          <span key={this.selectedLabel || this.placeholder} class="pds-combobox__button-trigger-text">
+            {this.selectedLabel || this.placeholder}
+          </span>
+        ) : (
+          this.selectedLabel || this.placeholder
+        )}
       </span>
     );
+  }
+
+  /** The selection's icon for the button trigger: the option's own, or else its group's. */
+  private get selectedIcon(): string | null {
+    const option = this.selectedOption;
+    if (!option) return null;
+    const optgroup = parentOptgroupOf(option);
+    return optionIconOf(option) ?? (optgroup !== null ? groupIconOf(optgroup) : null);
   }
 
   // Helper method to check if we should show layout content
@@ -2926,7 +3119,7 @@ export class PdsCombobox implements BasePdsProps {
   private renderChipTriggerDefaultContent() {
     return (
       <span class="pds-combobox__chip-trigger-label">
-        {this.selectedChipIcon && <pds-icon icon={this.selectedChipIcon} class="pds-combobox__chip-trigger-icon" />}
+        {this.selectedChipIcon && <pds-icon icon={this.selectedChipIcon} aria-hidden="true" class="pds-combobox__chip-trigger-icon" />}
         {this.selectedLabel || this.placeholder}
       </span>
     );
@@ -2981,6 +3174,7 @@ export class PdsCombobox implements BasePdsProps {
       'pds-combobox__button-trigger',
       `pds-combobox__button-trigger--${this.triggerVariant}`,
       this.triggerShape === 'input' && 'pds-combobox__button-trigger--input-shape',
+      this.truncate && 'pds-combobox__button-trigger--truncate',
     ]
       .filter(Boolean)
       .join(' ');
@@ -3076,6 +3270,7 @@ export class PdsCombobox implements BasePdsProps {
               data-layout={this.customTriggerContent}
               onKeyDown={this.onButtonTriggerKeyDown}
               onKeyUp={this.onButtonTriggerKeyUp}
+              onMouseEnter={this.truncate ? this.onButtonTriggerMouseEnter : undefined}
               ref={el => (this.triggerEl = el as HTMLElement)}
               part="button-trigger"
             >
@@ -3090,11 +3285,16 @@ export class PdsCombobox implements BasePdsProps {
           {this.renderDropdown()}
           {/* Announces the group drilled into, which focus alone doesn't. Rendered for any grouped
               display, so it's in place before a flyout falls back to drilling in. */}
-          {this.groupDisplay !== 'inline' && (
-            <span class="visually-hidden" role="status" aria-live="polite">
+          {this.groupDisplay !== 'inline' && [
+            <span key="drill-status" class="visually-hidden" role="status" aria-live="polite">
               {this.isOpen && this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null ? this.openGroup.label : ''}
-            </span>
-          )}
+            </span>,
+            // Its own region: sharing one, revealing a row then opening it would leave the text the
+            // same, and opening the group would go unannounced.
+            <span key="reveal-status" class="visually-hidden" role="status" aria-live="polite">
+              {this.isOpen ? this.revealedGroupLabel ?? '' : ''}
+            </span>,
+          ]}
         </div>
       </Host>
     );

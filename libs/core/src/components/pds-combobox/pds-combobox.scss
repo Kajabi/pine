@@ -4,6 +4,13 @@
   display: block;
 }
 
+// So the host can shrink below the full label's width in a flex row, the same as pds-text's own
+// reflected truncate host rule: at the default fit-content width, block alone won't shrink past it.
+:host([truncate]) {
+  display: block;
+  min-width: 0;
+}
+
 :host([aria-disabled="true"]) {
   .pds-combobox__input-icon {
     color: var(--pine-color-text-disabled);
@@ -178,7 +185,43 @@
 .pds-combobox__button-trigger-label {
   color: inherit;
   flex: 1 1 auto;
+  // Shrink to the trigger width and break a long word, with or without an icon.
+  min-width: 0;
+  overflow-wrap: anywhere;
   text-align: start;
+}
+
+// The selection's icon, from its option or its group, before the label.
+.pds-combobox__button-trigger-label--with-icon {
+  align-items: center;
+  display: flex;
+  gap: var(--pine-dimension-xs);
+}
+
+.pds-combobox__button-trigger-icon {
+  flex-shrink: 0;
+}
+
+.pds-combobox__button-trigger--truncate {
+  max-width: 100%;
+
+  .pds-combobox__button-trigger-label {
+    overflow-wrap: normal;
+  }
+
+  .pds-combobox__button-trigger-chevron {
+    flex-shrink: 0;
+  }
+}
+
+.pds-combobox__button-trigger-text,
+.pds-combobox__listbox--truncate .pds-combobox__option-text {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .pds-combobox__button-trigger--input-shape {

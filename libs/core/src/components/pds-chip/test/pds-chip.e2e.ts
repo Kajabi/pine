@@ -1,6 +1,14 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
+
+const LONG_LABEL = 'A very long label that would otherwise overflow the chip';
+
+const truncationTooltipText = (page: E2EPage) =>
+  page.evaluate(() => document.querySelector('.pds-truncation-tooltip')?.textContent.trim() ?? null);
+
+// The hide is delayed 100ms.
+const waitOutHideDelay = () => new Promise((resolve) => setTimeout(resolve, 300));
 
 describe('pds-chip', () => {
   it('renders', async () => {
@@ -198,16 +206,216 @@ describe('pds-chip', () => {
       <pds-chip variant="dropdown" max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
     `);
 
-    const button = await page.find('pds-chip >>> .pds-chip__button');
-    await button.focus();
+    await page.keyboard.press('Tab');
     await page.waitForChanges();
 
-    const tooltipText = await page.evaluate(() => {
-      const portal = document.querySelector('.pds-truncation-tooltip');
-      return portal ? portal.textContent.trim() : null;
+    const focusedClass = await page.$eval('pds-chip', (el) => el.shadowRoot.activeElement?.className);
+    expect(focusedClass).toContain('pds-chip__button');
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+  });
+
+  // The same nesting as the dropdown variant, with the control supplied by the
+  // consumer: a chip used as the label of a pds-button trigger or a link.
+  it.each([
+    ['pds-button', '<pds-button variant="unstyled">', '</pds-button>'],
+    ['button', '<button type="button">', '</button>'],
+    ['link', '<a href="#">', '</a>'],
+    ['pds-link', '<pds-link href="#">', '</pds-link>'],
+    ['pds-dropdown-menu-item', '<pds-dropdown-menu-item>', '</pds-dropdown-menu-item>'],
+    ['listbox option', '<ul role="listbox" aria-label="Tags"><li role="option" aria-selected="false">', '</li></ul>'],
+    // Its own <a> drops the href while disabled, so only the pds-tab entry catches it.
+    [
+      'disabled navigation pds-tab',
+      '<pds-tabs component-id="tabs" nav><pds-tab name="one" href="#one" disabled slot="tabs">',
+      '</pds-tab></pds-tabs>',
+    ],
+  ])('gives a clipped label no tab stop of its own inside a %s', async (_name, open, close) => {
+    const page = await newE2EPage();
+    await page.setContent(
+      `${open}<pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>${close}`,
+    );
+
+    const labelTabindex = await page.$eval('pds-chip', (el) =>
+      el.shadowRoot.querySelector('.pds-chip__label-text').getAttribute('tabindex'),
+    );
+
+    expect(labelTabindex).toBeNull();
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  describe('inside a listbox option', () => {
+    const hoverClippedOption = async (listboxMargin: string) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <ul role="listbox" aria-label="Tags" style="list-style: none; margin: ${listboxMargin}; padding: 8px; width: 200px;">
+          <li role="option" aria-selected="false">Short</li>
+          <li role="option" aria-selected="false"><pds-chip max-width="100%">A very long label that would otherwise overflow the chip</pds-chip></li>
+        </ul>
+      `);
+
+      await (await page.find('pds-chip')).hover();
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+      return page.evaluate(() => {
+        const tip = document.querySelector('.pds-truncation-tooltip').getBoundingClientRect();
+        const listbox = document.querySelector('[role="listbox"]').getBoundingClientRect();
+        const option = document.querySelector('pds-chip').closest('[role="option"]').getBoundingClientRect();
+        return {
+          rightOfListbox: tip.left >= listbox.right,
+          leftOfListbox: tip.right <= listbox.left,
+          rowOffset: Math.abs(tip.top + tip.height / 2 - (option.top + option.height / 2)),
+        };
+      });
+    };
+
+    it('shows the tooltip beside the listbox, level with the option, so it covers no other option', async () => {
+      const position = await hoverClippedOption('100px 0 0');
+
+      expect(position.rightOfListbox).toBe(true);
+      expect(position.rowOffset).toBeLessThan(1);
     });
 
-    expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
+    it('flips the tooltip to the left of the listbox at the right edge of the window', async () => {
+      const position = await hoverClippedOption('100px 0 0 auto');
+
+      expect(position.leftOfListbox).toBe(true);
+      expect(position.rowOffset).toBeLessThan(1);
+    });
+  });
+
+  it('shows the tooltip while the wrapping control has focus, and Tab leaves without stopping on the label', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-button variant="unstyled">
+        <pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
+      </pds-button>
+      <button type="button" id="after">After</button>
+    `);
+
+    const tooltipText = () =>
+      page.evaluate(() => {
+        const portal = document.querySelector('.pds-truncation-tooltip');
+        return portal ? portal.textContent.trim() : null;
+      });
+
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    expect(await page.evaluate(() => document.activeElement.tagName)).toBe('PDS-BUTTON');
+    expect(await tooltipText()).toContain('A very long label that would otherwise overflow the chip');
+
+    await page.keyboard.press('Tab');
+    // The hide is delayed 100ms.
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    expect(await page.evaluate(() => document.activeElement.id)).toBe('after');
+    expect(await tooltipText()).toBeNull();
+  });
+
+  it('hides the tooltip once the pointer leaves after clicking the wrapping control', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-button variant="unstyled">
+        <pds-chip max-width="80px">${LONG_LABEL}</pds-chip>
+      </pds-button>
+    `);
+
+    await page.click('pds-chip');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await page.evaluate(() => document.activeElement.tagName)).toBe('PDS-BUTTON');
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  it('shows the tooltip when Tab reaches the clipped label', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    const focusedClass = await page.$eval('pds-chip', (el) => el.shadowRoot.activeElement?.className);
+    expect(focusedClass).toContain('pds-chip__label-text');
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  // Clicking focuses the label too, but only keyboard focus holds the tooltip open.
+  it('hides the tooltip once the pointer leaves after a click, though the label keeps focus', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.click('pds-chip');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    const focusedClass = await page.$eval('pds-chip', (el) => el.shadowRoot.activeElement?.className);
+    expect(focusedClass).toContain('pds-chip__label-text');
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  // A key press turns the label's click focus visible in place, with no new focusin.
+  it('shows the tooltip when a key press after a click makes the focus visible', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.click('pds-chip');
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+    expect(await truncationTooltipText(page)).toBeNull();
+
+    await page.keyboard.press('ArrowRight');
+    await page.waitForChanges();
+
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+  });
+
+  it('hides the tooltip once the pointer leaves after a hover', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    await page.hover('pds-chip');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  // A tap fires emulated mouse events, so it reveals the label through mouseenter
+  // even though the focus it gives the label is not :focus-visible.
+  it('shows the tooltip on a tap and hides it on a tap elsewhere', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 800, height: 600, hasTouch: true, isMobile: true });
+    await page.setContent(`<pds-chip max-width="80px">${LONG_LABEL}</pds-chip>`);
+
+    const box = await (await page.$('pds-chip')).boundingBox();
+    await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForChanges();
+
+    const labelFocusVisible = await page.$eval('pds-chip', (el) =>
+      el.shadowRoot.querySelector('.pds-chip__label-text').matches(':focus-visible'),
+    );
+    expect(labelFocusVisible).toBe(false);
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+
+    await page.touchscreen.tap(400, 500);
+    await waitOutHideDelay();
+
+    expect(await truncationTooltipText(page)).toBeNull();
   });
 
   it('shows a tooltip with the full label on hover when the label is truncated', async () => {
@@ -248,6 +456,62 @@ describe('pds-chip', () => {
     });
 
     expect(tooltipText).toContain('A very long label that would otherwise overflow the chip');
+  });
+
+  // Moving an element disconnects and reconnects it without a re-render, so the
+  // tooltip torn down on disconnect has to come back on reconnect.
+  it('keeps the tooltip and tab stop after the chip moves in the DOM', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="from"><pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip></div>
+      <div id="to"></div>
+    `);
+
+    await page.$eval('#to', (to) => to.append(document.querySelector('pds-chip')));
+    await page.waitForChanges();
+
+    const labelTabindex = () =>
+      page.$eval('pds-chip', (el) => el.shadowRoot.querySelector('.pds-chip__label-text').getAttribute('tabindex'));
+
+    expect(await labelTabindex()).toBe('0');
+
+    await page.hover('pds-chip');
+    await page.waitForChanges();
+
+    const tooltips = await page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
+    expect(tooltips).toEqual(['A very long label that would otherwise overflow the chip']);
+
+    // Only the re-bound ResizeObserver can drop the stop here: the label node is unchanged, so the
+    // re-render doesn't re-bind.
+    const chip = await page.find('pds-chip');
+    chip.setProperty('maxWidth', '600px');
+    await page.waitForChanges();
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    expect(await labelTabindex()).toBeNull();
+  });
+
+  it('updates the tab stop when the chip moves into or out of a focusable control', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-button variant="unstyled">
+        <pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip>
+      </pds-button>
+      <div id="plain"></div>
+    `);
+
+    const labelTabindex = () =>
+      page.$eval('pds-chip', (el) => el.shadowRoot.querySelector('.pds-chip__label-text').getAttribute('tabindex'));
+
+    expect(await labelTabindex()).toBeNull();
+
+    await page.$eval('#plain', (plain) => plain.append(document.querySelector('pds-chip')));
+    await page.waitForChanges();
+    expect(await labelTabindex()).toBe('0');
+
+    await page.$eval('pds-button', (button) => button.append(document.querySelector('pds-chip')));
+    await page.waitForChanges();
+    expect(await labelTabindex()).toBeNull();
   });
 
   it('emits "pdsTagCloseClick" event when close button is clicked in tag variant', async () => {
@@ -436,6 +700,16 @@ describe('pds-chip accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-chip>Active</pds-chip>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('has no axe violations as a removable tag', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-chip variant="tag">Spring Launch</pds-chip>
+      <pds-chip variant="tag" remove-url="/tags/1">Summer Sale</pds-chip>
+    `);
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });

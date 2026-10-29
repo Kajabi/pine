@@ -80,6 +80,146 @@ describe('pds-drawer', () => {
     expect(state.ariaModal).toBe('false');
   });
 
+  describe('modal', () => {
+    const openModal = async (attrs = '') => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <button id="page-button" style="position:fixed;top:0;left:0;width:50px;height:50px;">Page button</button>
+        <pds-drawer component-id="test" modal ${attrs}>
+          <pds-modal-content>
+            <button id="first">First</button>
+            <button id="last">Last</button>
+          </pds-modal-content>
+        </pds-drawer>
+      `);
+      const drawer = await page.find('pds-drawer');
+      drawer.setProperty('open', true);
+      await page.waitForChanges();
+      return { page, drawer };
+    };
+
+    it('opens in the top layer, with aria-modal true', async () => {
+      const { page } = await openModal();
+      const state = await page.evaluate(() => {
+        const dialog = document.querySelector('pds-drawer pds-modal dialog') as HTMLDialogElement;
+        return { isModal: dialog.matches(':modal'), ariaModal: dialog.getAttribute('aria-modal') };
+      });
+      expect(state).toEqual({ isModal: true, ariaModal: 'true' });
+    });
+
+    it('dims the page and blocks it, like a modal', async () => {
+      const { page } = await openModal();
+      const state = await page.evaluate(() => {
+        const backdrop = document.querySelector('pds-drawer pds-modal .pds-modal__backdrop') as HTMLElement;
+        const button = document.getElementById('page-button')!;
+        button.focus();
+        return {
+          background: getComputedStyle(backdrop).backgroundColor,
+          hitsPageButton: document.elementFromPoint(10, 10) === button,
+          pageButtonFocused: document.activeElement === button,
+        };
+      });
+      expect(state.background).not.toBe('rgba(0, 0, 0, 0)');
+      expect(state.hitsPageButton).toBe(false);
+      expect(state.pageButtonFocused).toBe(false);
+    });
+
+    for (const [name, attrs] of [
+      ['', ''],
+      [', even with initial-focus="none"', 'initial-focus="none"'],
+    ]) {
+      it(`moves focus into the drawer on open${name}`, async () => {
+        const { page } = await openModal(attrs);
+        await new Promise(resolve => setTimeout(resolve, 150));
+        expect(await page.evaluate(() => document.activeElement?.id)).toBe('first');
+      });
+    }
+
+    it('shows a popover inside the drawer above it, where it can be clicked', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-drawer component-id="test" modal>
+          <pds-modal-content>
+            <pds-popover component-id="pop"><button slot="trigger" id="pop-trigger">Open</button><div><button id="pop-inside">Inside</button></div></pds-popover>
+          </pds-modal-content>
+        </pds-drawer>
+      `);
+      const drawer = await page.find('pds-drawer');
+      drawer.setProperty('open', true);
+      await page.waitForChanges();
+      await (await page.find('#pop-trigger')).click();
+      await page.waitForChanges();
+      await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+
+      const hitsInside = await page.evaluate(() => {
+        const rect = document.getElementById('pop-inside')!.getBoundingClientRect();
+        return document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)?.id === 'pop-inside';
+      });
+      expect(hitsInside).toBe(true);
+    });
+
+    it('keeps Tab inside the drawer', async () => {
+      const { page } = await openModal();
+      await page.evaluate(() => (document.getElementById('last') as HTMLElement).focus());
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('first');
+
+      await page.keyboard.down('Shift');
+      await page.keyboard.press('Tab');
+      await page.keyboard.up('Shift');
+      expect(await page.evaluate(() => document.activeElement?.id)).toBe('last');
+    });
+
+    it('still docks to its side at its size', async () => {
+      const { page } = await openModal('side="start" size="sm"');
+      const rect = await page.evaluate(() => {
+        const panel = (document.querySelector('pds-drawer pds-modal .pds-modal') as HTMLElement).getBoundingClientRect();
+        return { left: Math.round(panel.left), width: Math.round(panel.width), height: Math.round(panel.height) };
+      });
+      expect(rect).toEqual({ left: 0, width: 360, height: 800 });
+    });
+
+    it('closes on a click on its backdrop', async () => {
+      const { page, drawer } = await openModal();
+      const closeSpy = await page.spyOnEvent('pdsDrawerClose');
+      await page.mouse.click(10, 10);
+      await page.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(false);
+      expect(closeSpy).toHaveReceivedEvent();
+    });
+
+    it('stays open on a backdrop click when lightDismiss is false', async () => {
+      const { page, drawer } = await openModal('light-dismiss="false"');
+      await page.mouse.click(10, 10);
+      await page.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(true);
+    });
+
+    it('closes on Escape', async () => {
+      const { page, drawer } = await openModal();
+      await page.evaluate(() => (document.getElementById('first') as HTMLElement).focus());
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(false);
+    });
+
+    it('stays open on Escape when lightDismiss is false', async () => {
+      const { page, drawer } = await openModal('light-dismiss="false"');
+      await page.evaluate(() => (document.getElementById('first') as HTMLElement).focus());
+      await page.keyboard.press('Escape');
+      await page.waitForChanges();
+      expect(await drawer.getProperty('open')).toBe(true);
+    });
+
+    it('has no axe violations when open', async () => {
+      const { page } = await openModal();
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
+
   describe('side', () => {
     it('docks to the inline-end edge by default', async () => {
       const page = await newE2EPage();
@@ -149,6 +289,97 @@ describe('pds-drawer', () => {
       return document.elementFromPoint(10, 10) === button;
     });
     expect(hitsPageButton).toBe(true);
+  });
+
+  // A body-mounted dropdown opened from the drawer is portaled into the drawer's dialog, its nearest,
+  // under the click-through backdrop. Only the backdrop itself lets clicks through to the page. The
+  // trigger sits left of the panel's own edge so part of the list opens over the page, not the panel —
+  // a click there only proves the fix if a fallen-through click would have landed on the page, not on
+  // the (already-clickable) panel underneath.
+  it("lets a combobox's portaled dropdown take clicks, including the part that overhangs the page", async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setContent(`
+      <pds-drawer component-id="test" open>
+        <div style="position:fixed;top:100px;left:600px;">
+          <pds-combobox component-id="fruit" label="Fruit" trigger="button" mode="select-only" dropdown-mount="body">
+            <option value="apple">Apple</option>
+            <option value="pear">Pear</option>
+          </pds-combobox>
+        </div>
+      </pds-drawer>
+    `);
+    await page.waitForChanges();
+
+    const panelLeft = () =>
+      page.evaluate(
+        () => (document.querySelector('pds-drawer pds-modal .pds-modal') as HTMLElement).getBoundingClientRect().left,
+      );
+    expect(await panelLeft()).toBeGreaterThan(600);
+
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    // Floating UI places the list after it opens; hit-test where it ends up.
+    await page.waitForFunction(() => {
+      const root = document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot;
+      const listbox = root?.querySelector<HTMLElement>('.pds-combobox__listbox');
+      return Boolean(listbox?.style.top) && Array.from(root!.querySelectorAll('[role="option"]')).some((option) => option.getBoundingClientRect().height > 0);
+    });
+
+    const hit = await page.evaluate((panelLeft: number) => {
+      const portal = document.querySelector<HTMLElement>('.pds-combobox-dropdown-portal')!;
+      const option = Array.from(portal.shadowRoot!.querySelectorAll<HTMLElement>('[role="option"]')).find((candidate) => candidate.textContent?.trim() === 'Pear')!;
+      const rect = option.getBoundingClientRect();
+      // Inside the option, but left of the panel's own edge -- over the page, not the panel.
+      const x = rect.x + 10;
+      const y = rect.y + rect.height / 2;
+      const inner = portal.shadowRoot!.elementFromPoint(x, y);
+      return {
+        x,
+        y,
+        overPage: x < panelLeft,
+        inDialog: Boolean(portal.closest('dialog')),
+        onPortal: document.elementFromPoint(x, y) === portal,
+        onOption: Boolean(inner && option.contains(inner)),
+      };
+    }, await panelLeft());
+    expect(hit.overPage).toBe(true);
+    expect(hit.inDialog).toBe(true);
+    expect(hit.onPortal).toBe(true);
+    expect(hit.onOption).toBe(true);
+
+    await page.mouse.click(hit.x, hit.y);
+    await page.waitForChanges();
+    expect(await (await page.find('pds-combobox')).getProperty('value')).toBe('pear');
+    expect(await (await page.find('pds-drawer')).getProperty('open')).toBe(true);
+  });
+
+  // In a form, a popover's panel goes at the end of the dialog, so its buttons don't submit the form.
+  it("lets a popover's panel in the drawer's dialog take clicks", async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setContent(`
+      <pds-drawer component-id="test" open>
+        <form>
+          <pds-popover component-id="pop"><button type="button" slot="trigger" id="pop-trigger">Open</button><div><button type="button" id="pop-inside">Inside</button></div></pds-popover>
+        </form>
+      </pds-drawer>
+    `);
+    await page.waitForChanges();
+    await (await page.find('#pop-trigger')).click();
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+
+    const hit = await page.evaluate(() => {
+      const portal = document.getElementById('pop-portal')!;
+      const rect = document.getElementById('pop-inside')!.getBoundingClientRect();
+      return {
+        inDialog: portal.parentElement?.localName === 'dialog',
+        onButton: document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)?.id === 'pop-inside',
+      };
+    });
+    expect(hit.inDialog).toBe(true);
+    expect(hit.onButton).toBe(true);
   });
 
   describe('lightDismiss', () => {

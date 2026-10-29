@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType } from "./utils/types";
+import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
@@ -22,7 +22,7 @@ import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./component
 export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType } from "./utils/types";
+export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
@@ -109,6 +109,11 @@ export namespace Components {
          */
         "hideIcon": boolean;
         /**
+          * Accessible label announcing the alert's severity, read before the heading and message. Pass a translated string to localize it; defaults to English for each variant (`Error`, `Info`, `Success`, `Warning`). The `default` variant has no severity and announces none unless this is set; pass an empty string to announce none for any variant.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -130,6 +135,11 @@ export namespace Components {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Pass an empty string to make the badge decorative. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
+          * @defaultValue 'Verified'
+         */
+        "badgeLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -853,11 +863,11 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate": boolean;
         /**
@@ -880,6 +890,11 @@ export namespace Components {
           * The value of the checkbox that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -970,7 +985,7 @@ export namespace Components {
          */
         "chipSentiment": ChipSentimentType;
         /**
-          * Clears the selected value and resets the component.
+          * Clears the selected value and resets the component. Works while disabled too, as setting a native control's value from script does.
          */
         "clear": () => Promise<void>;
         /**
@@ -1136,6 +1151,11 @@ export namespace Components {
           * @default 'fit-content'
          */
         "triggerWidth": string;
+        /**
+          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover. Chip options, custom layouts and group rows aren't affected.
+          * @defaultValue false
+         */
+        "truncate": boolean;
         /**
           * The value of the combobox input.
           * @default ''
@@ -1430,12 +1450,13 @@ export namespace Components {
         "vertical": boolean;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`.
-     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
-     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * A side panel composed from `pds-modal`, non-modal by default.
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -1445,15 +1466,20 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance.
+          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance. A `modal` drawer ignores `none`: the page behind it is inert, so focus starts in the drawer.
           * @default 'auto'
          */
         "initialFocus": 'auto' | 'none';
         /**
-          * Whether the drawer can be dismissed with a pointerdown outside it. Replaces `pds-modal`'s `backdropDismiss` — there is no backdrop to click. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
           * @default true
          */
         "lightDismiss": boolean;
+        /**
+          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page. Read when the drawer opens; changing it while the drawer is open is not supported.
+          * @default false
+         */
+        "modal": boolean;
         /**
           * Whether the drawer is open
           * @default false
@@ -1525,20 +1551,30 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set. Ignored when `informational` is set.
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.
+          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.
           * @defaultValue false
          */
         "external": boolean;
         /**
-          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
+          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href": string | undefined;
         /**
-          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.
+          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+          * @defaultValue false
+         */
+        "informational": boolean;
+        /**
+          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -1754,6 +1790,11 @@ export namespace Components {
          */
         "external": boolean;
         /**
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
           * The font size of the link's text.
           * @defaultValue lg
          */
@@ -1838,7 +1879,7 @@ export namespace Components {
      */
     interface PdsModal {
         /**
-          * Whether the modal can be dismissed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's own close request (such as a back gesture)
           * @default true
          */
         "backdropDismiss": boolean;
@@ -1911,7 +1952,7 @@ export namespace Components {
          */
         "asyncUrl"?: string;
         /**
-          * Clears all selected values and resets the component.
+          * Clears all selected values and resets the component. Works while disabled too, as setting a native control's value from script does.
          */
         "clear": () => Promise<void>;
         /**
@@ -2151,6 +2192,16 @@ export namespace Components {
          */
         "maxWidth"?: number;
         /**
+          * Determines how the popover opens. With `hover`, it also opens when the pointer rests on the trigger and closes when the pointer leaves, until a click on the trigger keeps it open. Enter or Space on the trigger opens it either way.
+          * @defaultValue "click"
+         */
+        "openOn"?: 'click' | 'hover';
+        /**
+          * Sets the padding of the popover content
+          * @defaultValue "md"
+         */
+        "padding"?: PopoverPaddingType;
+        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -2238,7 +2289,7 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder": boolean;
@@ -2247,7 +2298,7 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
@@ -2272,6 +2323,11 @@ export namespace Components {
           * The value of the radio that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     /**
      * @lightDom renders-markup
@@ -2718,9 +2774,9 @@ export namespace Components {
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation
+          * Sets tabs variant styles as outlined in Figma documentation. Applies in both panel and nav mode; omitting it renders the primary style.
          */
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
     interface PdsText {
         /**
@@ -2887,6 +2943,11 @@ export namespace Components {
           * The name of the icon to display in the toast.
          */
         "icon"?: string;
+        /**
+          * Accessible label announcing the toast's severity, read before the message. Pass a translated string to localize it; defaults to English (`Error`) for the `danger` type. Other types announce none unless this is set; pass an empty string to announce none.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
         /**
           * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
           * @default 'default'
@@ -3254,12 +3315,13 @@ declare global {
         "pdsDrawerClose": void;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`.
-     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
-     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * A side panel composed from `pds-modal`, non-modal by default.
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -3937,6 +3999,11 @@ declare namespace LocalJSX {
          */
         "onPdsAlertDismissClick"?: (event: PdsAlertCustomEvent<void>) => void;
         /**
+          * Accessible label announcing the alert's severity, read before the heading and message. Pass a translated string to localize it; defaults to English for each variant (`Error`, `Info`, `Success`, `Warning`). The `default` variant has no severity and announces none unless this is set; pass an empty string to announce none for any variant.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -3958,6 +4025,11 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Pass an empty string to make the badge decorative. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
+          * @defaultValue 'Verified'
+         */
+        "badgeLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -4686,11 +4758,11 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate"?: boolean;
         /**
@@ -4718,6 +4790,11 @@ declare namespace LocalJSX {
           * The value of the checkbox that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -4982,6 +5059,11 @@ declare namespace LocalJSX {
           * @default 'fit-content'
          */
         "triggerWidth"?: string;
+        /**
+          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover. Chip options, custom layouts and group rows aren't affected.
+          * @defaultValue false
+         */
+        "truncate"?: boolean;
         /**
           * The value of the combobox input.
           * @default ''
@@ -5284,12 +5366,13 @@ declare namespace LocalJSX {
         "vertical"?: boolean;
     }
     /**
-     * A non-modal side panel composed from `pds-modal`.
-     * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
-     * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-     * `pds-modal` internally with `disableTopLayer` always on and its backdrop
-     * suppressed, and adds the edge, width and dismiss behavior a side panel
-     * needs on top. It does not reimplement focus, Escape or dialog semantics —
+     * A side panel composed from `pds-modal`, non-modal by default.
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
      * those come from `pds-modal` unchanged.
      * @lightDom renders-markup
      */
@@ -5299,15 +5382,20 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance.
+          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance. A `modal` drawer ignores `none`: the page behind it is inert, so focus starts in the drawer.
           * @default 'auto'
          */
         "initialFocus"?: 'auto' | 'none';
         /**
-          * Whether the drawer can be dismissed with a pointerdown outside it. Replaces `pds-modal`'s `backdropDismiss` — there is no backdrop to click. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
           * @default true
          */
         "lightDismiss"?: boolean;
+        /**
+          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page. Read when the drawer opens; changing it while the drawer is open is not supported.
+          * @default false
+         */
+        "modal"?: boolean;
         /**
           * Emitted when the drawer is closed
          */
@@ -5383,24 +5471,34 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set. Ignored when `informational` is set.
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.
+          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.
           * @defaultValue false
          */
         "external"?: boolean;
         /**
-          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
+          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href"?: string | undefined;
+        /**
+          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+          * @defaultValue false
+         */
+        "informational"?: boolean;
         /**
           * Emitted when the dropdown-item is clicked.
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
         /**
-          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.
+          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -5640,6 +5738,11 @@ declare namespace LocalJSX {
          */
         "external"?: boolean;
         /**
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
           * The font size of the link's text.
           * @defaultValue lg
          */
@@ -5724,7 +5827,7 @@ declare namespace LocalJSX {
      */
     interface PdsModal {
         /**
-          * Whether the modal can be dismissed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's own close request (such as a back gesture)
           * @default true
          */
         "backdropDismiss"?: boolean;
@@ -6057,6 +6160,16 @@ declare namespace LocalJSX {
          */
         "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         /**
+          * Determines how the popover opens. With `hover`, it also opens when the pointer rests on the trigger and closes when the pointer leaves, until a click on the trigger keeps it open. Enter or Space on the trigger opens it either way.
+          * @defaultValue "click"
+         */
+        "openOn"?: 'click' | 'hover';
+        /**
+          * Sets the padding of the popover content
+          * @defaultValue "md"
+         */
+        "padding"?: PopoverPaddingType;
+        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -6136,7 +6249,7 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder"?: boolean;
@@ -6145,7 +6258,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
@@ -6174,6 +6287,11 @@ declare namespace LocalJSX {
           * The value of the radio that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     /**
      * @lightDom renders-markup
@@ -6664,9 +6782,9 @@ declare namespace LocalJSX {
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation
+          * Sets tabs variant styles as outlined in Figma documentation. Applies in both panel and nav mode; omitting it renders the primary style.
          */
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
     interface PdsText {
         /**
@@ -6857,6 +6975,11 @@ declare namespace LocalJSX {
          */
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
         /**
+          * Accessible label announcing the toast's severity, read before the message. Pass a translated string to localize it; defaults to English (`Error`) for the `danger` type. Other types announce none unless this is set; pass an empty string to announce none.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
           * @default 'default'
          */
@@ -6920,10 +7043,12 @@ declare namespace LocalJSX {
         "hideIcon": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
         "dismissLabel": string;
+        "severityLabel": string;
     }
     interface PdsAvatarAttributes {
         "alt": string | null;
         "badge": boolean;
+        "badgeLabel": string;
         "componentId": string;
         "dropdown": boolean;
         "image": string | null;
@@ -7093,6 +7218,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsChipAttributes {
         "componentId": string;
@@ -7138,6 +7264,7 @@ declare namespace LocalJSX {
         "triggerWidth": string;
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerShape": 'pill' | 'input';
+        "truncate": boolean;
         "chipSentiment": ChipSentimentType;
         "chipLarge": boolean;
         "chipIcon": string;
@@ -7220,6 +7347,7 @@ declare namespace LocalJSX {
         "side": 'start' | 'end';
         "size": 'sm' | 'md';
         "scrollable": boolean;
+        "modal": boolean;
         "lightDismiss": boolean;
         "initialFocus": 'auto' | 'none';
     }
@@ -7233,7 +7361,9 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "download": string;
         "href": string | undefined;
+        "informational": boolean;
         "external": boolean;
+        "externalLabel": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
     }
     interface PdsDropdownMenuSeparatorAttributes {
@@ -7290,6 +7420,7 @@ declare namespace LocalJSX {
         "download": string;
         "componentId": string;
         "external": boolean;
+        "externalLabel": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
         "variant": 'inline' | 'plain';
         "fontSize": 'sm' | 'md' | 'lg';
@@ -7374,9 +7505,11 @@ declare namespace LocalJSX {
     }
     interface PdsPopoverAttributes {
         "popoverTargetAction": 'show' | 'toggle' | 'hide';
+        "openOn": 'click' | 'hover';
         "popoverType": 'auto' | 'manual';
         "componentId": string;
         "maxWidth": number;
+        "padding": PopoverPaddingType;
         "placement": PlacementType;
     }
     interface PdsProgressAttributes {
@@ -7404,6 +7537,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsRadioGroupAttributes {
         "componentId": string;
@@ -7582,6 +7716,7 @@ declare namespace LocalJSX {
         "icon": string;
         "type": 'default' | 'danger' | 'loading';
         "dismissLabel": string;
+        "severityLabel": string;
     }
     interface PdsTooltipAttributes {
         "content": string;
@@ -7643,7 +7778,7 @@ declare namespace LocalJSX {
         "pds-table-head-cell": Omit<PdsTableHeadCell, keyof PdsTableHeadCellAttributes> & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes]?: PdsTableHeadCell[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `attr:${K}`]?: PdsTableHeadCellAttributes[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `prop:${K}`]?: PdsTableHeadCell[K] };
         "pds-table-row": Omit<PdsTableRow, keyof PdsTableRowAttributes> & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes]?: PdsTableRow[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `attr:${K}`]?: PdsTableRowAttributes[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `prop:${K}`]?: PdsTableRow[K] };
         "pds-tabpanel": Omit<PdsTabpanel, keyof PdsTabpanelAttributes> & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes]?: PdsTabpanel[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `attr:${K}`]?: PdsTabpanelAttributes[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `prop:${K}`]?: PdsTabpanel[K] } & OneOf<"name", PdsTabpanel["name"], PdsTabpanelAttributes["name"]>;
-        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]> & OneOf<"variant", PdsTabs["variant"], PdsTabsAttributes["variant"]>;
+        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]>;
         "pds-text": Omit<PdsText, keyof PdsTextAttributes> & { [K in keyof PdsText & keyof PdsTextAttributes]?: PdsText[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `attr:${K}`]?: PdsTextAttributes[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `prop:${K}`]?: PdsText[K] };
         "pds-textarea": Omit<PdsTextarea, keyof PdsTextareaAttributes> & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes]?: PdsTextarea[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `attr:${K}`]?: PdsTextareaAttributes[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `prop:${K}`]?: PdsTextarea[K] } & OneOf<"componentId", PdsTextarea["componentId"], PdsTextareaAttributes["componentId"]>;
         "pds-toast": Omit<PdsToast, keyof PdsToastAttributes> & { [K in keyof PdsToast & keyof PdsToastAttributes]?: PdsToast[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `attr:${K}`]?: PdsToastAttributes[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `prop:${K}`]?: PdsToast[K] } & OneOf<"componentId", PdsToast["componentId"], PdsToastAttributes["componentId"]>;
@@ -7680,12 +7815,13 @@ declare module "@stencil/core" {
             "pds-datepicker": LocalJSX.IntrinsicElements["pds-datepicker"] & JSXBase.HTMLAttributes<HTMLPdsDatepickerElement>;
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             /**
-             * A non-modal side panel composed from `pds-modal`.
-             * Unlike `pds-modal`, the page stays interactive while a drawer is open: no
-             * dimming, no blur, no scroll lock, no click blocking. `pds-drawer` renders a
-             * `pds-modal` internally with `disableTopLayer` always on and its backdrop
-             * suppressed, and adds the edge, width and dismiss behavior a side panel
-             * needs on top. It does not reimplement focus, Escape or dialog semantics —
+             * A side panel composed from `pds-modal`, non-modal by default.
+             * By default, unlike `pds-modal`, the page stays interactive while a drawer
+             * is open: no dimming, no blur, no scroll lock, no click blocking.
+             * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+             * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+             * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+             * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
              * those come from `pds-modal` unchanged.
              * @lightDom renders-markup
              */

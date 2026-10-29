@@ -2,7 +2,8 @@
 // reachable from here) and overrides the parts of it that make a modal feel
 // modal: the full-viewport dimmed, click-blocking backdrop becomes an
 // invisible, non-blocking area so the page stays interactive, and the
-// centered panel becomes an edge-docked one at `--pds-drawer-width`.
+// centered panel becomes an edge-docked one at `--pds-drawer-width`. A
+// `modal` drawer keeps the modal's backdrop (`.pds-drawer__modal--modal`).
 //
 // `.pds-drawer__modal` (set on the drawer's own inner pds-modal in the
 // render) is the scoping anchor below, not the bare `pds-modal` tag or a
@@ -11,6 +12,9 @@
 // sits inside ours too. Only our own wrapper carries the marker.
 .pds-drawer__modal > .pds-modal__backdrop {
   align-items: stretch;
+}
+
+.pds-drawer__modal:not(.pds-drawer__modal--modal) > .pds-modal__backdrop {
   background-color: transparent;
   pointer-events: none;
 
@@ -19,7 +23,13 @@
   }
 }
 
-// Out of the top layer (always, for a drawer) the modal blurs from a ::before layer behind it
+// Only the backdrop lets clicks through. Besides the panel, the dialog holds what's portaled into it
+// as the nearest one, such as a combobox's dropdown or a popover in a form.
+.pds-drawer__modal:not(.pds-drawer__modal--modal) > .pds-modal__backdrop > * {
+  pointer-events: auto;
+}
+
+// Out of the top layer (a non-modal drawer) the modal blurs from a ::before layer behind it
 // instead of the backdrop's own filter. [aria-modal] outranks the modal's rule, whichever
 // component's stylesheet loads last.
 .pds-drawer__modal > .pds-modal__backdrop[aria-modal]::before {

@@ -160,6 +160,18 @@ export class PdsSwitch {
     }
   }
 
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    // Also fires when this element's own `disabled` attribute is merely present, even as the
+    // literal string "false" (a consumer's or React's attribute serialization can write that) —
+    // the platform treats any value as disabled, independent of fieldset state. A real disabled
+    // fieldset ancestor confirms this is genuinely that, not this element's own attribute.
+    if (disabled && !this.el.closest('fieldset[disabled]')) return;
+    this.disabled = disabled;
+  }
+
   componentWillLoad() {
     this.inheritedAttributes = {
       ...inheritAriaAttributes(this.el)
@@ -213,7 +225,7 @@ export class PdsSwitch {
             id={messageId(this.componentId, 'error')}
             aria-live="assertive"
           >
-            <pds-icon icon={danger} size="small" />
+            <pds-icon aria-hidden="true" icon={danger} size="small" />
             {this.errorMessage}
           </div>
         }
