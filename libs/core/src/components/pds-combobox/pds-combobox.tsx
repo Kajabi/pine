@@ -2968,7 +2968,14 @@ export class PdsCombobox implements BasePdsProps {
           // `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized.
           <pds-icon name={icon} size="regular" aria-hidden="true" class="pds-combobox__button-trigger-icon" />
         )}
-        {this.truncate ? <span class="pds-combobox__button-trigger-text">{this.selectedLabel || this.placeholder}</span> : this.selectedLabel || this.placeholder}
+        {this.truncate ? (
+          // Keyed so a new label drops a stale `title`.
+          <span key={this.selectedLabel || this.placeholder} class="pds-combobox__button-trigger-text">
+            {this.selectedLabel || this.placeholder}
+          </span>
+        ) : (
+          this.selectedLabel || this.placeholder
+        )}
       </span>
     );
   }
