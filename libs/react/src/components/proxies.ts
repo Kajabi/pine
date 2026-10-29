@@ -30,6 +30,8 @@ import { defineCustomElement as definePdsFilters } from '@pine-ds/core/component
 import { defineCustomElement as definePdsImage } from '@pine-ds/core/components/pds-image.js';
 import { defineCustomElement as definePdsInput } from '@pine-ds/core/components/pds-input.js';
 import { defineCustomElement as definePdsLink } from '@pine-ds/core/components/pds-link.js';
+import { defineCustomElement as definePdsList } from '@pine-ds/core/components/pds-list.js';
+import { defineCustomElement as definePdsListItem } from '@pine-ds/core/components/pds-list-item.js';
 import { defineCustomElement as definePdsLoader } from '@pine-ds/core/components/pds-loader.js';
 import { defineCustomElement as definePdsModal } from '@pine-ds/core/components/pds-modal.js';
 import { defineCustomElement as definePdsModalContent } from '@pine-ds/core/components/pds-modal-content.js';
@@ -85,6 +87,8 @@ export const PdsFilters = /*@__PURE__*/createReactComponent<JSX.PdsFilters, HTML
 export const PdsImage = /*@__PURE__*/createReactComponent<JSX.PdsImage, HTMLPdsImageElement>('pds-image', undefined, undefined, definePdsImage);
 export const PdsInput = /*@__PURE__*/createReactComponent<JSX.PdsInput, HTMLPdsInputElement>('pds-input', undefined, undefined, definePdsInput);
 export const PdsLink = /*@__PURE__*/createReactComponent<JSX.PdsLink, HTMLPdsLinkElement>('pds-link', undefined, undefined, definePdsLink);
+export const PdsList = /*@__PURE__*/createReactComponent<JSX.PdsList, HTMLPdsListElement>('pds-list', undefined, undefined, definePdsList);
+export const PdsListItem = /*@__PURE__*/createReactComponent<JSX.PdsListItem, HTMLPdsListItemElement>('pds-list-item', undefined, undefined, definePdsListItem);
 export const PdsLoader = /*@__PURE__*/createReactComponent<JSX.PdsLoader, HTMLPdsLoaderElement>('pds-loader', undefined, undefined, definePdsLoader);
 export const PdsModal = /*@__PURE__*/createReactComponent<JSX.PdsModal, HTMLPdsModalElement>('pds-modal', undefined, undefined, definePdsModal);
 export const PdsModalContent = /*@__PURE__*/createReactComponent<JSX.PdsModalContent, HTMLPdsModalContentElement>('pds-modal-content', undefined, undefined, definePdsModalContent);

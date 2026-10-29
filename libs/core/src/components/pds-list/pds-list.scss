@@ -1,0 +1,28 @@
+// pds-list-item reads these inherited custom properties, so the list sets spacing and
+// dividers for all of its items at once.
+:host {
+  --pds-list-item-border-radius: var(--pine-border-radius-md);
+  --pds-list-item-divider: none;
+  --pds-list-item-padding-block: var(--pine-dimension-sm);
+  --pds-list-item-padding-inline: var(--pine-dimension-md);
+
+  display: block;
+}
+
+:host([border]) {
+  background-color: var(--pine-color-background-container);
+  border: var(--pine-border);
+  border-radius: var(--pine-border-radius-md);
+  overflow: hidden;
+}
+
+// A rounded hover would break between rules, so divided items are square.
+:host([dividers]) {
+  --pds-list-item-border-radius: 0;
+  --pds-list-item-divider: var(--pine-border);
+}
+
+:host([compact]) {
+  --pds-list-item-padding-block: var(--pine-dimension-xs);
+  --pds-list-item-padding-inline: var(--pine-dimension-sm);
+}
