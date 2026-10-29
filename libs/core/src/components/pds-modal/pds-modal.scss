@@ -246,8 +246,19 @@
   mix-blend-mode: normal;
 }
 
+// One panel's content at a time: the old gives way while the box starts to change, and the new
+// comes in only once it's gone, landing with the box. Overlapping, the two slid past each other.
 .pds-modal-vt--morph::view-transition-old(pds-modal-morph) {
   animation-duration: var(--pine-motion-duration-fast);
+  animation-fill-mode: both;
+  animation-timing-function: var(--pine-motion-easing-in);
+}
+
+.pds-modal-vt--morph::view-transition-new(pds-modal-morph) {
+  animation-delay: var(--pine-motion-duration-fast);
+  animation-duration: calc(var(--pine-motion-duration-slow) - var(--pine-motion-duration-fast));
+  animation-fill-mode: both;
+  animation-timing-function: var(--pine-motion-easing-out);
 }
 
 // A chain moving forward brings the next panel's content in from the inline end; back reverses it.
