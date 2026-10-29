@@ -335,3 +335,66 @@ describe('pds-radio', () => {
   });
 
 });
+
+describe('pds-radio pill variant', () => {
+  it('adds the pill class and visually hides the native radio', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="pill" label="Pill" variant="pill"></pds-radio>`,
+    });
+
+    expect(page.root).toHaveClass('pds-radio--pill');
+    const input = page.root?.querySelector('input');
+    expect(input?.getAttribute('type')).toBe('radio');
+    expect(input).toHaveClass('visually-hidden');
+  });
+
+  it('keeps the radio visible without the pill variant', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Default"></pds-radio>`,
+    });
+
+    expect(page.root).not.toHaveClass('pds-radio--pill');
+    expect(page.root?.querySelector('input')).not.toHaveClass('visually-hidden');
+  });
+
+  it('ignores has-border on a pill', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="pill" label="Pill" variant="pill" has-border></pds-radio>`,
+    });
+
+    expect(page.root).toHaveClass('pds-radio--pill');
+    expect(page.root).not.toHaveClass('has-border');
+  });
+
+  it('keeps the label visible on a pill even with hide-label', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="pill" label="Pill" variant="pill" hide-label></pds-radio>`,
+    });
+
+    expect(page.root?.querySelector('label span')).not.toHaveClass('visually-hidden');
+  });
+
+  it('does not apply the image card layout to a pill', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="pill" label="Pill" variant="pill"><span slot="image"></span></pds-radio>`,
+    });
+
+    expect(page.root).toHaveClass('pds-radio--pill');
+    expect(page.root).not.toHaveClass('has-image');
+  });
+
+  it('does not render the image container or content wrapper on a pill', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="pill" label="Pill" variant="pill"><span slot="image"></span></pds-radio>`,
+    });
+
+    expect(page.root?.querySelector('.pds-radio__image-container')).toBeNull();
+    expect(page.root?.querySelector('.pds-radio__content-wrapper')).toBeNull();
+  });
+});

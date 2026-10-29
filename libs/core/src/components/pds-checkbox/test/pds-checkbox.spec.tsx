@@ -301,3 +301,46 @@ describe('pds-checkbox', () => {
     expect(page.root.disabled).toBe(false);
   });
 });
+
+describe('pds-checkbox pill variant', () => {
+  it('adds the pill class and keeps a native checkbox', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill"></pds-checkbox>`,
+    });
+
+    expect(page.root).toHaveClass('pds-checkbox--pill');
+    expect(page.root?.shadowRoot?.querySelector('input')?.getAttribute('type')).toBe('checkbox');
+  });
+
+  it('does not add the pill class by default', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="default" label="Default"></pds-checkbox>`,
+    });
+
+    expect(page.root).not.toHaveClass('pds-checkbox--pill');
+  });
+
+  it('keeps the label visible on a pill even with hide-label', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill" hide-label></pds-checkbox>`,
+    });
+
+    expect(page.root?.shadowRoot?.querySelector('label span')).not.toHaveClass('visually-hidden');
+  });
+
+  it('keeps the is-indeterminate class on a pill, though the pill has no style for it', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="pill" label="Pill" variant="pill" indeterminate></pds-checkbox>`,
+    });
+
+    expect(page.root).toHaveClass('is-indeterminate');
+    expect(page.root).toHaveClass('pds-checkbox--pill');
+    expect(page.root?.shadowRoot?.querySelector('input')?.hasAttribute('indeterminate')).toBe(
+      true,
+    );
+  });
+});

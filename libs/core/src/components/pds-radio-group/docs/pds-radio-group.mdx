@@ -205,6 +205,32 @@ Radio groups can be displayed horizontally using the `direction="row"` prop. The
   </pds-box>
 </DocCanvas>
 
+### Pill
+
+Radios with `variant="pill"` in a `direction="row"` group sit side by side and wrap onto new lines as needed. The group label, helper message, and error message work the same as with any other radio.
+
+<DocCanvas mdxSource={{
+  react: `<PdsRadioGroup name="example-pill" groupLabel="How big is your team?" direction="row" invalid errorMessage="Choose a team size to continue">
+  <PdsRadio componentId="pill-group-solo" label="Just me" value="solo" variant="pill" />
+  <PdsRadio componentId="pill-group-small" label="2-10 people" value="small" variant="pill" />
+  <PdsRadio componentId="pill-group-medium" label="11-50 people" value="medium" variant="pill" />
+  <PdsRadio componentId="pill-group-large" label="More than 50" value="large" variant="pill" />
+</PdsRadioGroup>`,
+  webComponent: `<pds-radio-group name="example-pill" group-label="How big is your team?" direction="row" invalid error-message="Choose a team size to continue">
+  <pds-radio component-id="pill-group-solo" label="Just me" value="solo" variant="pill"></pds-radio>
+  <pds-radio component-id="pill-group-small" label="2-10 people" value="small" variant="pill"></pds-radio>
+  <pds-radio component-id="pill-group-medium" label="11-50 people" value="medium" variant="pill"></pds-radio>
+  <pds-radio component-id="pill-group-large" label="More than 50" value="large" variant="pill"></pds-radio>
+</pds-radio-group>`
+}}>
+  <pds-radio-group name="example-pill" group-label="How big is your team?" direction="row" invalid error-message="Choose a team size to continue">
+    <pds-radio component-id="pill-group-solo" label="Just me" value="solo" variant="pill"></pds-radio>
+    <pds-radio component-id="pill-group-small" label="2-10 people" value="small" variant="pill"></pds-radio>
+    <pds-radio component-id="pill-group-medium" label="11-50 people" value="medium" variant="pill"></pds-radio>
+    <pds-radio component-id="pill-group-large" label="More than 50" value="large" variant="pill"></pds-radio>
+  </pds-radio-group>
+</DocCanvas>
+
 ### With Images
 
 Radio groups work seamlessly with image-based radios.

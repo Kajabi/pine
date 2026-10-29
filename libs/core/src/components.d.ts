@@ -863,11 +863,11 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate": boolean;
         /**
@@ -890,6 +890,11 @@ export namespace Components {
           * The value of the checkbox that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -2279,7 +2284,7 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder": boolean;
@@ -2288,7 +2293,7 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
@@ -2313,6 +2318,11 @@ export namespace Components {
           * The value of the radio that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     /**
      * @lightDom renders-markup
@@ -4743,11 +4753,11 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate"?: boolean;
         /**
@@ -4775,6 +4785,11 @@ declare namespace LocalJSX {
           * The value of the checkbox that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -6224,7 +6239,7 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder"?: boolean;
@@ -6233,7 +6248,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
@@ -6262,6 +6277,11 @@ declare namespace LocalJSX {
           * The value of the radio that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     /**
      * @lightDom renders-markup
@@ -7188,6 +7208,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsChipAttributes {
         "componentId": string;
@@ -7505,6 +7526,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsRadioGroupAttributes {
         "componentId": string;
