@@ -92,6 +92,17 @@
     flex-shrink: 0;
   }
 
+  .pds-combobox__listbox--truncate {
+    .pds-combobox__option-label {
+      flex: 1 1 auto;
+      overflow-wrap: normal;
+    }
+
+    .pds-combobox__option-check {
+      flex-shrink: 0;
+    }
+  }
+
   .pds-combobox__option-check {
     color: currentColor;
     font-size: var(--pine-dimension-150);

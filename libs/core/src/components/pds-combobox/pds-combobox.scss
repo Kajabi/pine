@@ -195,6 +195,28 @@
   flex-shrink: 0;
 }
 
+.pds-combobox__button-trigger--truncate {
+  max-width: 100%;
+
+  .pds-combobox__button-trigger-label {
+    overflow-wrap: normal;
+  }
+
+  .pds-combobox__button-trigger-chevron {
+    flex-shrink: 0;
+  }
+}
+
+.pds-combobox__button-trigger-text,
+.pds-combobox__listbox--truncate .pds-combobox__option-text {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .pds-combobox__button-trigger--input-shape {
   border-radius: var(--pine-dimension-125);
   // The same field as pds-select: its height, padding and type.
