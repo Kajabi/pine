@@ -1,0 +1,182 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-list.stories.js';
+
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+import { StatusBadge } from '../../../stories/_helpers';
+
+<Meta of={stories} />
+
+<StatusBadge component="pds-list" />
+
+# List
+
+A list shows a set of items of the same kind as rows, each with an optional leading visual, a title, a short description, and trailing actions. Use it for files, lessons, pages, products, or tasks.
+
+## Guidelines
+
+### When to use
+- Show items of the same kind that people scan, open, or act on one at a time.
+- Show each item with a title and at most one line of secondary information, such as a date, size, or type.
+
+### When not to use
+- Use a `pds-table` when people compare values across items, or need to sort and filter by columns.
+- Use `pds-dropdown-menu` items for choices inside a menu.
+- Don't use it for navigation links in a sidebar. Those are navigation, not a list of content.
+
+### Accessibility
+- The list is announced as a list, and each `pds-list-item` as an item in it.
+- With `href`, the title is the item's one link, so its accessible name is the title. The whole row is clickable, but it is still a single tab stop.
+- Controls in the `trailing` slot keep their own tab stop and click target. Give each icon-only button a label that names the item, such as "Download Onboarding worksheet".
+- Put decorative icons in the `leading` slot with `aria-hidden="true"`. A checkbox in the `leading` slot needs its own label; use `hide-label` when the title already shows it.
+
+## Properties
+
+<DocArgsTable componentName='pds-list' docSource={components} />
+
+### List items
+
+`pds-list-item` is a row in a `pds-list`. Put the title in the default slot, and other content in the `leading`, `description`, and `trailing` slots. Empty slots take no space. The title and description each truncate to one line.
+
+<DocArgsTable componentName='pds-list-item' docSource={components} />
+
+## Examples
+
+### Default
+
+<DocCanvas display="block" mdxSource={{
+  react: `<PdsList componentId="default">
+  <PdsListItem>
+    <PdsIcon slot="leading" name="file" aria-hidden="true" />
+    Onboarding worksheet
+    <span slot="description">PDF · 1.2 MB</span>
+  </PdsListItem>
+  <PdsListItem>
+    <PdsIcon slot="leading" name="file" aria-hidden="true" />
+    Pricing calculator
+    <span slot="description">XLSX · 84 KB</span>
+  </PdsListItem>
+</PdsList>`,
+  webComponent: `<pds-list component-id="default">
+  <pds-list-item>
+    <pds-icon slot="leading" name="file" aria-hidden="true"></pds-icon>
+    Onboarding worksheet
+    <span slot="description">PDF · 1.2 MB</span>
+  </pds-list-item>
+  <pds-list-item>
+    <pds-icon slot="leading" name="file" aria-hidden="true"></pds-icon>
+    Pricing calculator
+    <span slot="description">XLSX · 84 KB</span>
+  </pds-list-item>
+</pds-list>`
+}}>
+  <pds-list component-id="default">
+    <pds-list-item>
+      <pds-icon slot="leading" name="file" aria-hidden="true"></pds-icon>
+      Onboarding worksheet
+      <span slot="description">PDF · 1.2 MB</span>
+    </pds-list-item>
+    <pds-list-item>
+      <pds-icon slot="leading" name="file" aria-hidden="true"></pds-icon>
+      Pricing calculator
+      <span slot="description">XLSX · 84 KB</span>
+    </pds-list-item>
+  </pds-list>
+</DocCanvas>
+
+### Border, dividers, and compact
+
+`border` draws a border around the list, `dividers` draws a rule between items, and `compact` reduces each item's padding. The list sets these for all of its items, so items in one list always match.
+
+<DocCanvas display="block" mdxSource={{
+  react: `<PdsList componentId="compact" border dividers compact>
+  <PdsListItem>Onboarding worksheet</PdsListItem>
+  <PdsListItem>Pricing calculator</PdsListItem>
+</PdsList>`,
+  webComponent: `<pds-list component-id="compact" border dividers compact>
+  <pds-list-item>Onboarding worksheet</pds-list-item>
+  <pds-list-item>Pricing calculator</pds-list-item>
+</pds-list>`
+}}>
+  <pds-list component-id="compact" border dividers compact>
+    <pds-list-item>Onboarding worksheet</pds-list-item>
+    <pds-list-item>Pricing calculator</pds-list-item>
+  </pds-list>
+</DocCanvas>
+
+### Linked items with actions
+
+With `href`, the whole item opens the link and shows a hover state. Controls in the `trailing` slot stay separately clickable.
+
+<DocCanvas display="block" mdxSource={{
+  react: `<PdsList componentId="pages">
+  <PdsListItem href="/pages/landing">
+    Landing page
+    <PdsProperty slot="description" icon="calendar-date">Updated April 20, 2026</PdsProperty>
+    <PdsChip slot="trailing" dot sentiment="success">Published</PdsChip>
+    <PdsButton slot="trailing" variant="unstyled" iconOnly>
+      <PdsIcon slot="start" name="dot-menu-horizontal" aria-hidden="true" />
+      More options for Landing page
+    </PdsButton>
+  </PdsListItem>
+</PdsList>`,
+  webComponent: `<pds-list component-id="pages">
+  <pds-list-item href="/pages/landing">
+    Landing page
+    <pds-property slot="description" icon="calendar-date">Updated April 20, 2026</pds-property>
+    <pds-chip slot="trailing" dot sentiment="success">Published</pds-chip>
+    <pds-button slot="trailing" variant="unstyled" icon-only>
+      <pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>
+      More options for Landing page
+    </pds-button>
+  </pds-list-item>
+</pds-list>`
+}}>
+  <pds-list component-id="pages">
+    <pds-list-item href="#landing-page">
+      Landing page
+      <pds-property slot="description" icon="calendar-date">Updated April 20, 2026</pds-property>
+      <pds-chip slot="trailing" dot sentiment="success">Published</pds-chip>
+      <pds-button slot="trailing" variant="unstyled" icon-only>
+        <pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon>
+        More options for Landing page
+      </pds-button>
+    </pds-list-item>
+  </pds-list>
+</DocCanvas>
+
+### In a sortable list
+
+To let people reorder items, put each `pds-list-item` inside a `pds-sortable-item`. Reordering stays with `pds-sortable`. Outside a `pds-list`, an item lays out its row but isn't announced as a list item.
+
+<DocCanvas display="block" mdxSource={{
+  react: `<PdsSortable componentId="lessons" handleType="handle" border dividers>
+  <PdsSortableItem>
+    <PdsListItem>Lesson 1: Welcome</PdsListItem>
+  </PdsSortableItem>
+  <PdsSortableItem>
+    <PdsListItem>Lesson 2: Setting your prices</PdsListItem>
+  </PdsSortableItem>
+</PdsSortable>`,
+  webComponent: `<pds-sortable component-id="lessons" handle-type="handle" border dividers>
+  <pds-sortable-item>
+    <pds-list-item>Lesson 1: Welcome</pds-list-item>
+  </pds-sortable-item>
+  <pds-sortable-item>
+    <pds-list-item>Lesson 2: Setting your prices</pds-list-item>
+  </pds-sortable-item>
+</pds-sortable>`
+}}>
+  <pds-sortable component-id="lessons" handle-type="handle" border dividers>
+    <pds-sortable-item>
+      <pds-list-item>Lesson 1: Welcome</pds-list-item>
+    </pds-sortable-item>
+    <pds-sortable-item>
+      <pds-list-item>Lesson 2: Setting your prices</pds-list-item>
+    </pds-sortable-item>
+  </pds-sortable>
+</DocCanvas>
+
+## Styling
+
+`pds-list-item` exposes two parts: `item`, the row, and `link`, the title's anchor when `href` is set. Prefer the list's `border`, `dividers`, and `compact` props over styling the parts.
