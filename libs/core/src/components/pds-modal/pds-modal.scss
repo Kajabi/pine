@@ -156,3 +156,170 @@
   }
 }
 
+
+// Opt-in view transitions (the `transition` prop, run by utils/modal-view-transition.ts). While one
+// runs, <html> has .pds-modal-vt and the browser has paused rendering, so the `open` class this
+// component renders on a frame can lag the dialog. Key the dialog's visibility to [open] instead,
+// and hold the fade: it would otherwise play inside the snapshot.
+.pds-modal-vt .pds-modal__backdrop--transition {
+  transition: none;
+
+  &[open] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &:not([open]) {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+// The view transition pseudo-elements postdate stylelint's list of known ones.
+/* stylelint-disable selector-pseudo-element-no-unknown */
+
+// grow: the panel's box grows from the control that opened it, and shrinks back on close. Both
+// images scale evenly to cover the box (object-fit: cover), so text zooms but never stretches.
+// morph: one panel's box becomes the next one's. Its content isn't scaled (object-fit: none); the
+// box clips it as it changes size.
+::view-transition-group(pds-modal-grow),
+::view-transition-group(pds-modal-morph) {
+  animation-duration: var(--pine-motion-duration-slow);
+  animation-timing-function: var(--pine-motion-easing-in-out);
+  border-radius: var(--pine-dimension-sm);
+  overflow: clip;
+}
+
+::view-transition-old(pds-modal-grow),
+::view-transition-new(pds-modal-grow),
+::view-transition-old(pds-modal-morph),
+::view-transition-new(pds-modal-morph) {
+  animation-duration: var(--pine-motion-duration-base);
+  height: 100%;
+  object-position: top;
+}
+
+::view-transition-old(pds-modal-grow),
+::view-transition-new(pds-modal-grow) {
+  object-fit: cover;
+}
+
+// Pinned to the box's start edge, so the heading stays in view as the box changes width.
+::view-transition-old(pds-modal-morph),
+::view-transition-new(pds-modal-morph) {
+  object-fit: none;
+  object-position: left top;
+}
+
+// Opening, the trigger gives way to the panel early, so the panel reads as growing rather than
+// the trigger zooming. Closing, the trigger comes back only as the box lands on it.
+.pds-modal-vt--grow-open::view-transition-old(pds-modal-grow),
+.pds-modal-vt--grow-open::view-transition-new(pds-modal-grow) {
+  animation-duration: var(--pine-motion-duration-fast);
+}
+
+.pds-modal-vt--grow-close::view-transition-old(pds-modal-grow),
+.pds-modal-vt--grow-close::view-transition-new(pds-modal-grow) {
+  animation-delay: calc(var(--pine-motion-duration-slow) - var(--pine-motion-duration-fast));
+  animation-duration: var(--pine-motion-duration-fast);
+}
+
+// With nothing to grow from (opened from code, or the trigger is gone on close), the panel scales
+// in and out where it is.
+::view-transition-new(pds-modal-grow):only-child {
+  animation: pds-modal-scale-in var(--pine-motion-duration-base) var(--pine-motion-easing-out) both;
+}
+
+::view-transition-old(pds-modal-grow):only-child {
+  animation: pds-modal-scale-in var(--pine-motion-duration-base) var(--pine-motion-easing-in) reverse both;
+}
+
+// In a swap the group paints the panel's surface, so the box stays solid while one panel's content
+// gives way to the next; the content cross-fades over it without blending.
+.pds-modal-vt--morph::view-transition-group(pds-modal-morph) {
+  background: var(--pine-color-background-overlay);
+  box-shadow: var(--pine-box-shadow-400);
+}
+
+.pds-modal-vt--morph::view-transition-old(pds-modal-morph),
+.pds-modal-vt--morph::view-transition-new(pds-modal-morph) {
+  mix-blend-mode: normal;
+}
+
+.pds-modal-vt--morph::view-transition-old(pds-modal-morph) {
+  animation-duration: var(--pine-motion-duration-fast);
+}
+
+// A chain moving forward brings the next panel's content in from the inline end; back reverses it.
+.pds-modal-vt--forward::view-transition-new(pds-modal-morph) {
+  animation-name: pds-modal-fade-in, pds-modal-slide-from-end;
+}
+
+.pds-modal-vt--forward::view-transition-old(pds-modal-morph) {
+  animation-name: pds-modal-fade-out, pds-modal-slide-to-start;
+}
+
+.pds-modal-vt--back::view-transition-new(pds-modal-morph) {
+  animation-name: pds-modal-fade-in, pds-modal-slide-from-start;
+}
+
+.pds-modal-vt--back::view-transition-old(pds-modal-morph) {
+  animation-name: pds-modal-fade-out, pds-modal-slide-to-end;
+}
+
+// grow: the root cross-fade fades the new modal's backdrop in and out. A morph keeps one backdrop
+// throughout, so the root holds still.
+.pds-modal-vt::view-transition-old(root),
+.pds-modal-vt::view-transition-new(root) {
+  animation-duration: var(--pine-motion-duration-slow);
+}
+
+.pds-modal-vt--morph::view-transition-old(root),
+.pds-modal-vt--morph::view-transition-new(root) {
+  animation: none;
+}
+
+/* stylelint-enable selector-pseudo-element-no-unknown */
+
+@keyframes pds-modal-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pds-modal-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pds-modal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes pds-modal-slide-from-end {
+  from {
+    translate: var(--pine-dimension-lg) 0;
+  }
+}
+
+@keyframes pds-modal-slide-to-start {
+  to {
+    translate: calc(var(--pine-dimension-lg) * -1) 0;
+  }
+}
+
+@keyframes pds-modal-slide-from-start {
+  from {
+    translate: calc(var(--pine-dimension-lg) * -1) 0;
+  }
+}
+
+@keyframes pds-modal-slide-to-end {
+  to {
+    translate: var(--pine-dimension-lg) 0;
+  }
+}
