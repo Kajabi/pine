@@ -1535,6 +1535,26 @@ describe('pds-combobox', () => {
       expect(width).toBeLessThanOrEqual(160);
     });
 
+    // A flex item's default min-width is auto (its content size), not 0, so a block host alone
+    // wouldn't shrink below the label here the way it does in a non-flex narrow container above;
+    // truncate needs to reflect so :host([truncate]) can set min-width: 0 for this case.
+    it('keeps the trigger within a narrower flex container at its default fit-content width', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="display: flex; width: 160px">
+          <pds-combobox component-id="long" label="Category" trigger="button" mode="select-only" value="long" truncate>
+            <option value="long">${LONG}</option>
+          </pds-combobox>
+        </div>
+      `);
+      await page.waitForChanges();
+
+      const width = await page.evaluate(
+        () => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!.getBoundingClientRect().width,
+      );
+      expect(width).toBeLessThanOrEqual(160);
+    });
+
     const hoverTriggerTitle = async (page: Page) => {
       await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).hover();
       await page.waitForChanges();
