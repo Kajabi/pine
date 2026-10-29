@@ -257,11 +257,13 @@ label {
 
       // A thicker border, not just a different color, marks checked: some forced-colors palettes
       // put Highlight and GrayText close in lightness, and native checked controls get a check
-      // mark as a shape cue this label can't reproduce. box-sizing: border-box above keeps the
-      // extra width from resizing the pill.
+      // mark as a shape cue this label can't reproduce. The label has no explicit width, so
+      // box-sizing: border-box above doesn't hold its rendered size steady on its own; the padding
+      // is cut by the same amount the border grows, on each side, so the pill doesn't resize.
       &:has(input:checked) {
         border-color: Highlight;
         border-width: var(--pine-border-width-thick);
+        padding-inline: calc(var(--pine-dimension-sm) - (var(--pine-border-width-thick) - var(--pine-border-width)));
       }
 
       // Needed because the non-media &:has(input:disabled:checked) above outranks both
@@ -271,6 +273,7 @@ label {
       &:has(input:disabled:checked) {
         border-color: GrayText;
         border-width: var(--pine-border-width-thick);
+        padding-inline: calc(var(--pine-dimension-sm) - (var(--pine-border-width-thick) - var(--pine-border-width)));
       }
     }
   }
@@ -298,12 +301,13 @@ label {
     // This selector outranks the base pill's forced-colors override, so an invalid checked pill
     // needs its own or it would keep the (non-system) danger border-color above and lose the
     // checked distinction. Forced colors has no system "danger" color, so this uses the same
-    // Highlight and thicker border the base pill's checked state does; the error message still
-    // carries the invalid meaning.
+    // Highlight and thicker border the base pill's checked state does, with the same padding
+    // compensation so it doesn't resize; the error message still carries the invalid meaning.
     @media (forced-colors: active) {
       &:has(input:checked) {
         border-color: Highlight;
         border-width: var(--pine-border-width-thick);
+        padding-inline: calc(var(--pine-dimension-sm) - (var(--pine-border-width-thick) - var(--pine-border-width)));
       }
     }
   }
