@@ -725,3 +725,31 @@ describe('pds-chip after its host classes and styles are stripped', () => {
     await expectStylingSurvivesStrip(page, 'pds-chip');
   });
 });
+
+describe('pds-chip inside an open pds-modal', () => {
+  it('shows its truncation tooltip above the modal', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="tags">
+        <button id="first">First</button>
+        <pds-chip max-width="80px">${LONG_LABEL}</pds-chip>
+      </pds-modal>`);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    // The modal moves focus to its first control after a short delay.
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    await page.hover('pds-chip');
+    await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+    const placement = await page.evaluate(() => {
+      const portal = document.querySelector('.pds-truncation-tooltip') as HTMLElement;
+      const box = (portal.firstElementChild as HTMLElement).getBoundingClientRect();
+      const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+      return { parent: portal.parentElement?.localName, hitsTooltip: portal.contains(hit) };
+    });
+    expect(placement).toEqual({ parent: 'dialog', hitsTooltip: true });
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});
