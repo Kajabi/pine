@@ -4,7 +4,7 @@
   --pds-list-item-border-radius: var(--pine-border-radius-md);
   --pds-list-item-divider: none;
   --pds-list-item-padding-block: var(--pine-dimension-sm);
-  --pds-list-item-padding-inline: var(--pine-dimension-md);
+  --pds-list-item-padding-inline: var(--pine-dimension-sm);
 
   display: block;
 }
@@ -24,5 +24,4 @@
 
 :host([compact]) {
   --pds-list-item-padding-block: var(--pine-dimension-xs);
-  --pds-list-item-padding-inline: var(--pine-dimension-sm);
 }
