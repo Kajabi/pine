@@ -6,6 +6,7 @@ import {
   shift,
 } from '@floating-ui/dom';
 import type { ReferenceElement } from '@floating-ui/dom';
+import { findPortalTarget, isTopLayerInDocument } from './portal-target';
 
 export interface TruncationTooltipOptions {
   /** The host element (for hover listeners and positioning anchor; focus listeners too, unless `focusEl` is set) */
@@ -90,6 +91,15 @@ function injectStyles(): void {
       opacity: 1;
       visibility: visible;
     }
+    :is(dialog, [popover]) > .${TOOLTIP_CLASS} {
+      font-style: normal;
+      font-weight: normal;
+      text-align: start;
+      text-indent: 0;
+      text-transform: none;
+      white-space: normal;
+      word-spacing: normal;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -118,7 +128,8 @@ function isFocusVisible(el: Element): boolean {
  *
  * When the element's text overflows, hovering the host element or giving it
  * keyboard focus will display a tooltip showing the full text content. The
- * tooltip is rendered as a portal on document.body and positioned with Floating UI.
+ * tooltip is rendered as a portal on document.body, or in the modal dialog or open popover around
+ * the host, and positioned with Floating UI.
  *
  * Also owns the element's `tabindex` while it is clipped — see syncTabIndex.
  *
@@ -211,7 +222,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     contentDiv.textContent = text.trim();
 
     portalEl.appendChild(contentDiv);
-    document.body.appendChild(portalEl);
+    findPortalTarget(hostEl, isTopLayerInDocument).appendChild(portalEl);
 
     // Allow the user to hover into the tooltip to select/copy text
     portalEl.addEventListener('mouseenter', handlePortalMouseEnter);
