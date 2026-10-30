@@ -209,7 +209,7 @@ To truncate text, add the `truncate` attribute to the component. Text truncation
   <pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>
 </DocCanvas>
 
-While the text is clipped, it becomes a tab stop so keyboard users can reach the tooltip. Inside a link, button, or other focusable control, it adds no tab stop of its own: the tooltip appears when that control receives keyboard focus.
+While the text is clipped, it becomes a tab stop so keyboard users can reach the tooltip. Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`), it adds no tab stop of its own: the tooltip appears when that control receives keyboard focus, and on hover as usual. A control that holds more than one truncated text keeps a tab stop on each, so their tooltips never open at once.
 
 <DocCanvas
   mdxSource={{
