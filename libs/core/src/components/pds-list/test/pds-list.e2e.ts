@@ -109,6 +109,35 @@ describe('pds-list', () => {
     expect(styles.lastDivider).toBe('none');
   });
 
+  it('draws a border around the list only when border is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-list id="plain">${ROWS}</pds-list><pds-list id="bordered" border>${ROWS}</pds-list>`);
+
+    const borders = await page.evaluate(() =>
+      ['plain', 'bordered'].map((id) => getComputedStyle(document.getElementById(id)).borderTopStyle),
+    );
+    expect(borders).toEqual(['none', 'solid']);
+  });
+
+  it('fills a sortable row, so trailing content stays at the end', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-sortable component-id="lessons" handle-type="handle" style="width: 600px">
+        <pds-sortable-item>
+          <pds-list-item>Lesson 1<pds-chip slot="trailing">Draft</pds-chip></pds-list-item>
+        </pds-sortable-item>
+      </pds-sortable>
+    `);
+
+    const gap = await page.evaluate(() => {
+      const row = document.querySelector('pds-sortable-item').getBoundingClientRect();
+      const chip = document.querySelector('pds-chip').getBoundingClientRect();
+      return row.right - chip.right;
+    });
+    // Only the sortable item's and list item's own inline padding sit after the chip.
+    expect(gap).toBeLessThan(48);
+  });
+
   it('has no axe violations with linked rows and trailing controls', async () => {
     const page = await newE2EPage();
     await page.setContent(`<pds-list border dividers>${ROWS}</pds-list>`);
