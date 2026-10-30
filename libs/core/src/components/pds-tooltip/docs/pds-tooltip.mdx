@@ -296,7 +296,7 @@ tooltip renders inside that dialog or popover so it shows above it. Open the mod
 - Use the `opened` property when the tooltip should persist for longer than a hover/focus interaction (for example, guided tours). Because `opened` reflects as an attribute, you can also toggle it declaratively via frameworks or CSS selectors.
 - Call the public methods `showTooltip()` and `hideTooltip()` for advanced interactions (focus trapping, commanded display, or analytics). These methods return a promise that resolves once the visibility state changes.
 - The open tooltip renders at the end of `<body>`, or inside the open modal dialog or popover around its trigger. Where it renders is decided when it opens: a tooltip opened with `opened` before its modal opens stays behind the modal until it opens again. A tooltip in a popover inside another component's shadow root, such as a `pds-filter` panel, still renders in the body.
-- When `html-content="true"`, avoid placing focusable elements inside the `content` slot. Tooltips are not intended for interactive elements. If you require buttons or links, switch to `<pds-popover>`, which manages focus and dismissal affordances.
+- When `html-content="true"`, avoid placing focusable elements inside the `content` slot. Tooltips are not intended for interactive elements. If you require buttons or links, switch to `<pds-popover>`, which manages focus and dismissal affordances. Tooltip content is never a Tab stop: a focus trap such as `pds-modal`'s skips it.
 
 ```tsx
 // React example showing imperative control
