@@ -2820,7 +2820,7 @@ export namespace Components {
     | 'strong'
     | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order. Inside a link, button, or other focusable control, no tab stop is added; the tooltip appears when that control receives keyboard focus.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order. Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`) that holds no other truncated text, no tab stop is added; the tooltip appears when that control receives keyboard focus.
          */
         "truncate"?: boolean;
         /**
@@ -6828,7 +6828,7 @@ declare namespace LocalJSX {
     | 'strong'
     | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order. Inside a link, button, or other focusable control, no tab stop is added; the tooltip appears when that control receives keyboard focus.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order. Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`) that holds no other truncated text, no tab stop is added; the tooltip appears when that control receives keyboard focus.
          */
         "truncate"?: boolean;
         /**

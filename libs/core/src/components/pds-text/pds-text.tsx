@@ -78,8 +78,9 @@ export class PdsText {
    * When text overflows, a tooltip showing the full text will appear on hover/focus.
    * Note: While the text is overflowing, the element receives tabindex="0" so the
    * tooltip can be reached by keyboard. Text that fits is left out of the tab order.
-   * Inside a link, button, or other focusable control, no tab stop is added; the
-   * tooltip appears when that control receives keyboard focus.
+   * Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and
+   * `pds-dropdown-menu-item`) that holds no other truncated text, no tab stop is
+   * added; the tooltip appears when that control receives keyboard focus.
    */
   @Prop({ reflect: true }) truncate?: boolean;
 
@@ -139,7 +140,7 @@ export class PdsText {
     this.destroyTruncationTooltip();
 
     if (this.contentEl) {
-      const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
+      const wrapper = this.soleTruncatedTextWrapper();
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.contentEl,
@@ -149,6 +150,13 @@ export class PdsText {
         focusEl: wrapper ?? this.el,
       });
     }
+  }
+
+  // One focus on the wrapper would open every clipped text's tooltip at once, stacked over each
+  // other, so a control holding more than one truncated text leaves each its own tab stop.
+  private soleTruncatedTextWrapper(): HTMLElement | null {
+    const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
+    return wrapper !== null && wrapper.querySelectorAll('pds-text[truncate]').length === 1 ? wrapper : null;
   }
 
   private destroyTruncationTooltip() {
