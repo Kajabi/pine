@@ -123,3 +123,19 @@ Truncate.args = {
   truncate: true,
   width: '250px',
 };
+
+const TruncateInLinkTemplate = (args) => html`
+<div style="width: ${args.width || '250px'};">
+  <a href="#">
+    <pds-text tag="${args.tag}" ?truncate="${args.truncate}">${args.slot}</pds-text>
+  </a>
+</div>
+<pds-text tag="p" size="xs" color="secondary" gutter="sm">Tab to the link to see the full content in a tooltip. The truncated text adds no tab stop of its own.</pds-text>`;
+
+export const TruncateInLink = TruncateInLinkTemplate.bind();
+TruncateInLink.args = {
+  slot: 'Id irure id magna ipsum voluptate irure esse eu nulla. Ullamco officia adipisicing qui nulla non sint.',
+  tag: 'p',
+  truncate: true,
+  width: '250px',
+};
