@@ -1,6 +1,7 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
 import { PlacementType } from '@utils/types';
 import { classNamesOf, isStencilClass } from '@utils/keep-hydrated';
+import { findPortalTarget, isTopLayerInDocument } from '@utils/portal-target';
 import {
   autoUpdate,
   computePosition,
@@ -337,7 +338,8 @@ export class PdsTooltip {
     this.contentDiv.append(...Array.from(initialCopy.childNodes));
 
     this.portalEl.appendChild(this.contentDiv);
-    document.body.appendChild(this.portalEl);
+    // Nothing in the body paints above a modal dialog or open popover, so the portal goes inside one.
+    findPortalTarget(this.el, isTopLayerInDocument).appendChild(this.portalEl);
 
     this.repositionPortal().catch(error => {
       console.warn('Failed to position tooltip on creation:', error);

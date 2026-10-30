@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-tooltip', () => {
@@ -135,5 +135,107 @@ describe('pds-tooltip accessibility', () => {
     );
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+describe('pds-tooltip inside an open pds-modal', () => {
+  // The modal moves focus to its first control after a short delay; waiting for that keeps it from
+  // moving focus mid-test.
+  const openModal = async (page: E2EPage, html: string) => {
+    await page.setContent(html);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    await page.waitForFunction(() => document.activeElement?.id === 'first');
+  };
+
+  const openTooltip = (page: E2EPage) =>
+    page.evaluate(async () => {
+      for (let i = 0; i < 40 && !document.querySelector('.pds-tooltip.pds-tooltip--is-open'); i++) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+      const portal = document.querySelector('.pds-tooltip.pds-tooltip--is-open') as HTMLElement;
+      const content = portal.querySelector('.pds-tooltip__content') as HTMLElement;
+      const box = content.getBoundingClientRect();
+      const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+      const style = getComputedStyle(content);
+      return {
+        parent: portal.parentElement === document.body ? 'body' : portal.parentElement?.localName,
+        hitsTooltip: portal.contains(hit),
+        textAlign: style.textAlign,
+        whiteSpace: style.whiteSpace,
+      };
+    });
+
+  it('shows above the modal', async () => {
+    const page = await newE2EPage();
+    await openModal(page, `
+      <pds-modal component-id="review">
+        <button id="first">First</button>
+        <pds-tooltip content="Why this is disabled" placement="top"><button id="review">Review</button></pds-tooltip>
+      </pds-modal>`);
+
+    await page.hover('#review');
+
+    expect(await openTooltip(page)).toMatchObject({ parent: 'dialog', hitsTooltip: true });
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('keeps the text styles it has in the body rather than those around the modal', async () => {
+    const page = await newE2EPage();
+    await openModal(page, `
+      <div style="text-align: center; white-space: nowrap">
+        <pds-modal component-id="review">
+          <button id="first">First</button>
+          <pds-tooltip content="A tooltip long enough to wrap onto a second line at its maximum width" placement="top">
+            <button id="review">Review</button>
+          </pds-tooltip>
+        </pds-modal>
+      </div>`);
+
+    await page.hover('#review');
+
+    expect(await openTooltip(page)).toEqual({ parent: 'dialog', hitsTooltip: true, textAlign: 'start', whiteSpace: 'normal' });
+  });
+
+  it('stays in the body outside any dialog or popover', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-tooltip content="More information"><button id="help">Help</button></pds-tooltip>');
+    await page.waitForChanges();
+
+    await page.hover('#help');
+
+    expect(await openTooltip(page)).toMatchObject({ parent: 'body', hitsTooltip: true });
+  });
+
+  it('stays in the body inside a modal kept out of the top layer, which it already shows above', async () => {
+    const page = await newE2EPage();
+    await openModal(page, `
+      <pds-modal component-id="review" disable-top-layer>
+        <button id="first">First</button>
+        <pds-tooltip content="Why this is disabled" placement="top"><button id="review">Review</button></pds-tooltip>
+      </pds-modal>`);
+
+    await page.hover('#review');
+
+    expect(await openTooltip(page)).toMatchObject({ parent: 'body', hitsTooltip: true });
+  });
+
+  it("keeps Tab in the modal when the tooltip's content holds a link", async () => {
+    const page = await newE2EPage();
+    await openModal(page, `
+      <pds-modal component-id="review">
+        <button id="first">First</button>
+        <pds-tooltip html-content="true" placement="top">
+          <button id="last">Last</button>
+          <div slot="content">See <a href="#docs">the docs</a></div>
+        </pds-tooltip>
+      </pds-modal>`);
+
+    await page.focus('#last');
+    expect(await openTooltip(page)).toMatchObject({ parent: 'dialog' });
+
+    await page.keyboard.press('Tab');
+
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('first');
   });
 });
