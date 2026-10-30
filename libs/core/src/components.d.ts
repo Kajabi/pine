@@ -1869,11 +1869,11 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * If provided, renders the title as an anchor (`<a>`) to this URL, and the whole item becomes its click target. Content in the `trailing` slot stays separately clickable.
+          * The hyperlink's destination URL. If provided, renders the title as an anchor (`<a>`) and the whole item becomes its click target. Content in the `trailing` slot stays separately clickable.
          */
         "href"?: string;
         /**
-          * Specifies where to open the linked document when href is provided. Only applies when href is set.
+          * Specifies where to open the linked document. Only applies when href is set.
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
     }
@@ -5861,11 +5861,11 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * If provided, renders the title as an anchor (`<a>`) to this URL, and the whole item becomes its click target. Content in the `trailing` slot stays separately clickable.
+          * The hyperlink's destination URL. If provided, renders the title as an anchor (`<a>`) and the whole item becomes its click target. Content in the `trailing` slot stays separately clickable.
          */
         "href"?: string;
         /**
-          * Specifies where to open the linked document when href is provided. Only applies when href is set.
+          * Specifies where to open the linked document. Only applies when href is set.
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
     }

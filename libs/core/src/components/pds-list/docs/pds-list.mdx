@@ -29,6 +29,8 @@ A list shows a set of items of the same kind as rows, each with an optional lead
 - With `href`, the title is the item's one link, so its accessible name is the title. The whole row is clickable, but it is still a single tab stop.
 - Controls in the `trailing` slot keep their own tab stop and click target. Give each icon-only button a label that names the item, such as "Download Onboarding worksheet".
 - Put decorative icons in the `leading` slot with `aria-hidden="true"`. A checkbox in the `leading` slot needs its own label; use `hide-label` when the title already shows it.
+- When `href` is set, the `leading` slot is part of the item's link, so a checkbox or button there can't be clicked. Put interactive controls in `trailing`, or leave `href` off for a checklist.
+- Place each `pds-list-item` directly inside `pds-list`. A wrapper element between them breaks the list for screen readers.
 
 ## Properties
 
@@ -147,7 +149,7 @@ With `href`, the whole item opens the link and shows a hover state. Controls in 
 
 ### In a sortable list
 
-To let people reorder items, put each `pds-list-item` inside a `pds-sortable-item`. Reordering stays with `pds-sortable`. Outside a `pds-list`, an item lays out its row but isn't announced as a list item.
+To let people reorder items, put each `pds-list-item` inside a `pds-sortable-item`. Reordering stays with `pds-sortable`. Outside a `pds-list`, an item lays out its row but isn't announced as a list item. Put the item's actions in its `trailing` slot rather than the sortable item's `sortable-item-actions` slot, so they line up with the rest of the row.
 
 <DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="lessons" handleType="handle" border dividers>
