@@ -1,6 +1,6 @@
 import { Component, h, Prop, Element, Watch } from '@stencil/core';
 import { setColor } from '../../utils/utils';
-import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { FOCUSABLE_WRAPPER, setupTruncationTooltip } from '../../utils/truncation-tooltip';
 import { TEXT_SIZES, TextSizeType } from '../../utils/types';
 
 /**
@@ -78,6 +78,8 @@ export class PdsText {
    * When text overflows, a tooltip showing the full text will appear on hover/focus.
    * Note: While the text is overflowing, the element receives tabindex="0" so the
    * tooltip can be reached by keyboard. Text that fits is left out of the tab order.
+   * Inside a link, button, or other focusable control, no tab stop is added; the
+   * tooltip appears when that control receives keyboard focus.
    */
   @Prop({ reflect: true }) truncate?: boolean;
 
@@ -137,10 +139,14 @@ export class PdsText {
     this.destroyTruncationTooltip();
 
     if (this.contentEl) {
+      const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.contentEl,
         getTooltipText: () => this.el.textContent || '',
+        // A wrapping link or button already takes focus, so its focus reveals the text instead of a nested tab stop.
+        manageTabIndex: wrapper === null,
+        focusEl: wrapper ?? this.el,
       });
     }
   }
