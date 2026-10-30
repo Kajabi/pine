@@ -587,6 +587,140 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('Tab out of the open panel', () => {
+    // Followed into shadow roots; a built-in trigger's id is its component-id.
+    const focusedId = (page: Page) =>
+      page.evaluate(() => {
+        let el = document.activeElement;
+        while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
+        return el?.id || el?.localName;
+      });
+
+    // Pauses between keys as a person does, so the closed panel has re-rendered before the next one.
+    const pressTabs = async (page: Page, keys: Array<'Tab' | 'Shift+Tab'>) => {
+      const order: string[] = [];
+      for (const key of keys) {
+        if (key === 'Shift+Tab') await page.keyboard.down('Shift');
+        await page.keyboard.press('Tab');
+        if (key === 'Shift+Tab') await page.keyboard.up('Shift');
+        await settle(300);
+        order.push(await focusedId(page));
+      }
+      return order;
+    };
+
+    const waitForSearchFocusIn = (page: Page, componentId: string) =>
+      page.waitForFunction(
+        id =>
+          document
+            .querySelector(`pds-multiselect[component-id="${id}"]`)
+            ?.shadowRoot?.activeElement?.classList.contains('pds-multiselect__search-input'),
+        {},
+        componentId,
+      );
+
+    for (const [name, attributes, trigger, triggerId] of [
+      ['the built-in trigger', '', '', 'tags'],
+      ['the inline-pill trigger', 'selected-display="pill" pill-position="inline"', '', 'tags'],
+      ['a slotted trigger', '', '<button slot="trigger" type="button" id="slotted">Add tag</button>', 'slotted'],
+    ]) {
+      describe(`with ${name}`, () => {
+        const openFromKeyboard = async () => {
+          const page = await newE2EPage();
+          await page.setContent(`
+            <button type="button" id="before">Before</button>
+            <pds-multiselect component-id="tags" label="Tags" ${attributes}>
+              ${trigger}
+              <option value="1">Bestsellers</option>
+              <option value="2">Webinar</option>
+            </pds-multiselect>
+            <button type="button" id="after">After</button>
+          `);
+          await page.focus('#before');
+          await page.keyboard.press('Tab');
+          await page.keyboard.press('Enter');
+          await waitForSearchFocus(page);
+          return page;
+        };
+
+        it('returns focus to the trigger on Tab, and the next Tab moves on', async () => {
+          const page = await openFromKeyboard();
+          const dismiss = await page.spyOnEvent('pdsMultiselectDismiss');
+
+          expect(await pressTabs(page, ['Tab', 'Tab'])).toEqual([triggerId, 'after']);
+          expect(await isPanelOpen(page)).toBe(false);
+          expect(dismiss).not.toHaveReceivedEvent();
+          expect(await axeViolations(page)).toBe('');
+        });
+
+        it('returns focus to the trigger on Shift+Tab, and the next Shift+Tab moves back', async () => {
+          const page = await openFromKeyboard();
+
+          expect(await pressTabs(page, ['Shift+Tab', 'Shift+Tab'])).toEqual([triggerId, 'before']);
+          expect(await isPanelOpen(page)).toBe(false);
+        });
+      });
+    }
+
+    describe('in a pds-popover', () => {
+      const popover = `
+        <pds-popover component-id="filters">
+          <button type="button" slot="trigger" id="trigger">Filters</button>
+          <div>
+            <pds-multiselect component-id="tags" label="Tags"><option value="1">Bestsellers</option></pds-multiselect>
+            <pds-multiselect component-id="location" label="Location"><option value="1">Course</option></pds-multiselect>
+          </div>
+        </pds-popover>
+        <button type="button" id="after">After</button>
+      `;
+
+      const openInPanel = async (page: Page, componentId: 'tags' | 'location') => {
+        await page.focus('#trigger');
+        await page.keyboard.press('Enter');
+        await page.waitForFunction(() => document.getElementById('filters-portal')?.style.display === 'block');
+        await pressTabs(page, componentId === 'tags' ? ['Tab'] : ['Tab', 'Tab']);
+        await page.keyboard.press('Enter');
+        await waitForSearchFocusIn(page, componentId);
+      };
+
+      for (const [where, inModal] of [
+        ['at the end of the page', false],
+        ['inside a pds-modal', true],
+      ] as const) {
+        describe(where, () => {
+          const setUp = async () => {
+            const page = await newE2EPage();
+            await page.setContent(
+              inModal
+                ? `<pds-modal component-id="modal"><div slot="header">Filters</div><div>${popover}</div></pds-modal>`
+                : popover,
+            );
+            if (inModal) {
+              await (await page.find('pds-modal')).callMethod('showModal');
+              await page.waitForChanges();
+            }
+            return page;
+          };
+
+          it('goes from an open multiselect to its trigger, then on to the next control', async () => {
+            const page = await setUp();
+            await openInPanel(page, 'tags');
+
+            expect(await pressTabs(page, ['Tab', 'Tab', 'Tab'])).toEqual(['tags', 'location', 'after']);
+            expect(await axeViolations(page)).toBe('');
+          });
+
+          it('leaves the panel on the second Tab when the open multiselect is its last control', async () => {
+            const page = await setUp();
+            await openInPanel(page, 'location');
+
+            expect(await pressTabs(page, ['Tab', 'Tab'])).toEqual(['location', 'after']);
+          });
+        });
+      }
+    });
+  });
+
   describe('axe', () => {
     it('finds no violations when open from the built-in trigger', async () => {
       const page = await newE2EPage();
