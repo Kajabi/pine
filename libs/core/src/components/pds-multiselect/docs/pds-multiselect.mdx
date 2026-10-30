@@ -28,6 +28,7 @@ Multiselects let users pick several options from a searchable dropdown list. The
 ### Accessibility
 - Implements WAI-ARIA Combobox pattern with multiselect support
 - Full keyboard navigation: Arrow keys, Enter, Escape, Tab
+- Tab from the search input closes the panel and returns focus to the trigger, as Escape does, so the next Tab moves on to the next control. When the `footer` has a focusable control, Tab goes there first, and Tab from its last control closes the panel and moves on
 - Screen reader announces selected count and available options
 - Checkboxes in dropdown provide clear selection state
 
@@ -1162,7 +1163,7 @@ In the disabled state, pills render without close buttons and the trigger is non
 
 An element in the `trigger` slot replaces the built-in trigger, so the multiselect can open from other UI, such as a table cell.
 
-- The multiselect opens the panel from the element's click, Enter, Space, and arrow keys, sets `aria-expanded` and `aria-haspopup` on it, positions the panel against it, and returns focus to it on Escape.
+- The multiselect opens the panel from the element's click, Enter, Space, and arrow keys, sets `aria-expanded` and `aria-haspopup` on it, positions the panel against it, and returns focus to it on Escape and on Tab from the search input.
 - Slot the focusable control itself, such as a `button` or `pds-button`, not a wrapper around it. The multiselect handles keys on the slotted element and returns focus to it, so a wrapper only opens on click.
 - While the multiselect is `disabled`, it sets `aria-disabled` on the trigger and disables a trigger that has a `disabled` property, like `button` and `pds-button`. It only re-enables a trigger it disabled.
 - Give the trigger an accessible name that says what it's for, like `aria-label="Labels: Featured"`, and keep it meaningful when nothing is selected.
