@@ -658,6 +658,7 @@ describe('pds-multiselect', () => {
 
           expect(await pressTabs(page, ['Shift+Tab', 'Shift+Tab'])).toEqual([triggerId, 'before']);
           expect(await isPanelOpen(page)).toBe(false);
+          expect(await axeViolations(page)).toBe('');
         });
       });
     }
@@ -715,6 +716,7 @@ describe('pds-multiselect', () => {
             await openInPanel(page, 'location');
 
             expect(await pressTabs(page, ['Tab', 'Tab'])).toEqual(['location', 'after']);
+            expect(await axeViolations(page)).toBe('');
           });
         });
       }
