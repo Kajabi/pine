@@ -222,6 +222,21 @@ describe('pds-text inside a focusable control', () => {
 
     expect(await contentTabindex(page)).toBe('0');
   });
+
+  it('keeps a tab stop on each clipped text when one control holds several, so their tooltips never stack', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<a href="#">${CLIPPED_TEXT}${CLIPPED_TEXT}</a>`);
+
+    const tabindexes = await page.$$eval('pds-text', (els) =>
+      els.map((el) => el.shadowRoot.querySelector('[part="content"]').getAttribute('tabindex')),
+    );
+    expect(tabindexes).toEqual(['0', '0']);
+
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.length)).toBe(0);
+  });
 });
 
 describe('pds-text accessibility', () => {

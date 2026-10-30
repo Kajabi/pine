@@ -269,6 +269,30 @@ describe('pds-text', () => {
       expect(lastOptions().manageTabIndex).toBe(true);
       expect(lastOptions().focusEl).toBe(page.body.querySelector('pds-text'));
     });
+
+    it('keeps a tab stop on each truncated text when one control holds several', async () => {
+      await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text><pds-text truncate>Subtitle</pds-text></a>`,
+      });
+
+      const allOptions = setupSpy.mock.calls.map(([options]) => options);
+      expect(allOptions.length).toBeGreaterThanOrEqual(2);
+      allOptions.forEach((options) => {
+        expect(options.manageTabIndex).toBe(true);
+        expect(options.focusEl).toBe(options.hostEl);
+      });
+    });
+
+    it('hands focus to the control when its other text is not truncated', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text><pds-text>Subtitle</pds-text></a>`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(false);
+      expect(lastOptions().focusEl).toBe(page.body.firstElementChild);
+    });
   });
 
   describe('size validation', () => {
