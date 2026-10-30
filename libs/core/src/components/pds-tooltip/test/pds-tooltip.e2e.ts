@@ -139,13 +139,12 @@ describe('pds-tooltip accessibility', () => {
 });
 
 describe('pds-tooltip inside an open pds-modal', () => {
-  // The modal moves focus to its first control after a short delay; waiting it out keeps it from
+  // The modal moves focus to its first control after a short delay; waiting for that keeps it from
   // moving focus mid-test.
   const openModal = async (page: E2EPage, html: string) => {
     await page.setContent(html);
     await (await page.find('pds-modal')).callMethod('showModal');
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    await page.waitForChanges();
+    await page.waitForFunction(() => document.activeElement?.id === 'first');
   };
 
   const openTooltip = (page: E2EPage) =>

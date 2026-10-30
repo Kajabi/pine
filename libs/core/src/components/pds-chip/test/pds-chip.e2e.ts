@@ -736,7 +736,7 @@ describe('pds-chip inside an open pds-modal', () => {
       </pds-modal>`);
     await (await page.find('pds-modal')).callMethod('showModal');
     // The modal moves focus to its first control after a short delay.
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await page.waitForFunction(() => document.activeElement?.id === 'first');
 
     await page.hover('pds-chip');
     await page.waitForSelector('.pds-truncation-tooltip--visible');
