@@ -3,6 +3,10 @@ import { setColor } from '../../utils/utils';
 import { FOCUSABLE_WRAPPER, setupTruncationTooltip } from '../../utils/truncation-tooltip';
 import { TEXT_SIZES, TextSizeType } from '../../utils/types';
 
+// Re-runs setup for each text bound to its wrapping control, keyed by host, so a truncated
+// text that joins the same control later can take that control's focus away from it.
+const textsUsingWrapper = new WeakMap<HTMLElement, () => void>();
+
 /**
  * @part content - The text content container
  */
@@ -140,26 +144,34 @@ export class PdsText {
     this.destroyTruncationTooltip();
 
     if (this.contentEl) {
-      const wrapper = this.soleTruncatedTextWrapper();
+      const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
+      const texts = wrapper === null ? [] : wrapper.querySelectorAll<HTMLPdsTextElement>('pds-text');
+      // One focus on a shared wrapper would open every clipped text's tooltip at once, so texts sharing one each keep
+      // their own stop, and a text bound before this one joined lets go: this one's focus bubbles to the wrapper too.
+      let sharesWrapper = false;
+      for (let i = 0; i < texts.length; i++) {
+        const text = texts[i];
+        // The property counts too: setting `truncate` runs setup before the next render reflects the attribute.
+        if (text !== this.el && (text.truncate || text.hasAttribute('truncate'))) {
+          sharesWrapper = true;
+          textsUsingWrapper.get(text)?.();
+        }
+      }
+      const usesWrapper = wrapper !== null && !sharesWrapper;
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.contentEl,
         getTooltipText: () => this.el.textContent || '',
         // A wrapping link or button already takes focus, so its focus reveals the text instead of a nested tab stop.
-        manageTabIndex: wrapper === null,
-        focusEl: wrapper ?? this.el,
+        manageTabIndex: !usesWrapper,
+        focusEl: usesWrapper ? wrapper : this.el,
       });
+      if (usesWrapper) textsUsingWrapper.set(this.el, () => this.initTruncationTooltip());
     }
   }
 
-  // One focus on the wrapper would open every clipped text's tooltip at once, stacked over each
-  // other, so a control holding more than one truncated text leaves each its own tab stop.
-  private soleTruncatedTextWrapper(): HTMLElement | null {
-    const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
-    return wrapper !== null && wrapper.querySelectorAll('pds-text[truncate]').length === 1 ? wrapper : null;
-  }
-
   private destroyTruncationTooltip() {
+    textsUsingWrapper.delete(this.el);
     if (this.truncationCleanup) {
       this.truncationCleanup();
       this.truncationCleanup = null;
