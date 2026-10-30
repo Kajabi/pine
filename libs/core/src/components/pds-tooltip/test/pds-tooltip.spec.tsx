@@ -855,6 +855,53 @@ describe('pds-tooltip', () => {
     });
   });
 
+  describe('where the open tooltip mounts', () => {
+    // The spec DOM can't evaluate :modal, so the dialog states whether it's modal.
+    const openIn = async (modal: boolean) => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `<dialog open><pds-tooltip content="Why this is disabled"><button>Review</button></pds-tooltip></dialog>`,
+      });
+      const dialog = page.body.querySelector('dialog') as HTMLDialogElement;
+      jest.spyOn(dialog, 'matches').mockImplementation((selector) => modal && selector === ':modal');
+      (page.body.querySelector('pds-tooltip') as HTMLPdsTooltipElement).opened = true;
+      await page.waitForChanges();
+      return { page, dialog, portal: page.body.querySelector('.pds-tooltip') as HTMLElement };
+    };
+
+    it('mounts in the body outside any dialog or popover', async () => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `<pds-tooltip content="Help" opened="true"><button>Trigger</button></pds-tooltip>`,
+      });
+      await page.waitForChanges();
+
+      expect(page.body.querySelector('.pds-tooltip')?.parentElement).toBe(page.body);
+    });
+
+    it('mounts in the modal dialog around it, which paints above the body', async () => {
+      const { dialog, portal } = await openIn(true);
+
+      expect(portal.parentElement).toBe(dialog);
+      expect(portal).toHaveClass('pds-tooltip--is-open');
+    });
+
+    it('stays in the body inside a dialog that is open but not modal', async () => {
+      const { page, portal } = await openIn(false);
+
+      expect(portal.parentElement).toBe(page.body);
+    });
+
+    it('is removed from the dialog when it closes', async () => {
+      const { page, dialog } = await openIn(true);
+
+      (page.body.querySelector('pds-tooltip') as HTMLPdsTooltipElement).opened = false;
+      await page.waitForChanges();
+
+      expect(dialog.querySelector('.pds-tooltip')).toBeNull();
+    });
+  });
+
   it('should handle tooltip creation and removal properly', async () => {
     const page = await newSpecPage({
       components: [PdsTooltip],
