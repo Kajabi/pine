@@ -2,7 +2,7 @@ import { Component, Element, Host, h, Prop, State } from '@stencil/core';
 
 /**
  * @slot (default) - The item's title. Long titles truncate to one line.
- * @slot leading - Content before the title, such as an icon, thumbnail, avatar or checkbox.
+ * @slot leading - Content before the title, such as an icon, thumbnail, avatar or checkbox. When `href` is set it's part of the item's link, so put interactive controls in `trailing`.
  * @slot description - Secondary text below the title, such as a date, file size or type. Truncates to one line.
  * @slot trailing - Content after the title, such as a chip, buttons or a dropdown menu. It stays clickable when `href` is set.
  * @part item - The row that lays out the leading, title, description and trailing content.
@@ -22,14 +22,14 @@ export class PdsListItem {
   @Prop() componentId: string;
 
   /**
-   * If provided, renders the title as an anchor (`<a>`) to this URL, and the whole
-   * item becomes its click target. Content in the `trailing` slot stays separately clickable.
+   * The hyperlink's destination URL. If provided, renders the title as an anchor (`<a>`)
+   * and the whole item becomes its click target. Content in the `trailing` slot stays
+   * separately clickable.
    */
   @Prop() href?: string;
 
   /**
-   * Specifies where to open the linked document when href is provided.
-   * Only applies when href is set.
+   * Specifies where to open the linked document. Only applies when href is set.
    */
   @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
 
@@ -39,7 +39,8 @@ export class PdsListItem {
   @State() private hasTrailing = false;
 
   connectedCallback() {
-    // A list item only means something inside a list. Elsewhere (in a pds-sortable-item,
+    // A list item only means something inside a list, as its direct child (a wrapper would
+    // break the list structure anyway). Elsewhere (in a pds-sortable-item,
     // say) it's just the row layout, and a stray listitem role would be invalid ARIA.
     this.inList = this.el.parentElement?.tagName === 'PDS-LIST';
   }
