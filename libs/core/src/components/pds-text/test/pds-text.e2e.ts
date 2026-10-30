@@ -156,6 +156,126 @@ describe('pds-text', () => {
   });
 });
 
+describe('pds-text inside a focusable control', () => {
+  const WRAPPERS = [
+    ['link', '<a href="#">', '</a>'],
+    ['button', '<button type="button">', '</button>'],
+    ['pds-button', '<pds-button variant="unstyled">', '</pds-button>'],
+    ['pds-link', '<pds-link href="#">', '</pds-link>'],
+  ];
+
+  const contentTabindex = (page: E2EPage) =>
+    page.$eval('pds-text', (el) => el.shadowRoot.querySelector('[part="content"]').getAttribute('tabindex'));
+
+  it.each([
+    ...WRAPPERS,
+    ['pds-dropdown-menu-item', '<pds-dropdown-menu-item>', '</pds-dropdown-menu-item>'],
+  ])('gives clipped text no tab stop of its own inside a %s', async (_name, open, close) => {
+    const page = await newE2EPage();
+    await page.setContent(`${open}${CLIPPED_TEXT}${close}`);
+
+    expect(await contentTabindex(page)).toBeNull();
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it.each(WRAPPERS)(
+    'shows the tooltip while a wrapping %s has keyboard focus, and Tab moves straight on',
+    async (_name, open, close) => {
+      const page = await newE2EPage();
+      await page.setContent(`${open}${CLIPPED_TEXT}${close}<button type="button" id="after">After</button>`);
+
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+
+      expect(await page.evaluate(() => document.activeElement === document.querySelector('pds-text').parentElement)).toBe(
+        true,
+      );
+      expect(await truncationTooltipText(page)).toBe(LONG_TEXT);
+
+      await page.keyboard.press('Tab');
+      await waitOutHideDelay();
+
+      expect(await page.evaluate(() => document.activeElement.id)).toBe('after');
+      expect(await truncationTooltipText(page)).toBeNull();
+    },
+  );
+
+  it('hides the tooltip once the pointer leaves after clicking the wrapping control', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<button type="button">${CLIPPED_TEXT}</button>`);
+
+    await page.click('pds-text');
+    await page.waitForChanges();
+    expect(await truncationTooltipText(page)).toBe(LONG_TEXT);
+
+    await page.mouse.move(0, 0);
+    await waitOutHideDelay();
+
+    expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  it('keeps its own tab stop inside a link with no href, which takes no focus', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<a>${CLIPPED_TEXT}</a>`);
+
+    expect(await contentTabindex(page)).toBe('0');
+  });
+
+  it('keeps a tab stop on each clipped text when one control holds several, so their tooltips never stack', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<a href="#">${CLIPPED_TEXT}${CLIPPED_TEXT}</a>`);
+
+    const tabindexes = await page.$$eval('pds-text', (els) =>
+      els.map((el) => el.shadowRoot.querySelector('[part="content"]').getAttribute('tabindex')),
+    );
+    expect(tabindexes).toEqual(['0', '0']);
+
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.length)).toBe(0);
+  });
+
+  it.each(['added to', 'switched on inside'])(
+    'hands the stop back when a second clipped text is %s the control later, so their tooltips never stack',
+    async (change) => {
+      const addsText = change === 'added to';
+      const page = await newE2EPage();
+      const plainText = addsText ? '' : `<pds-text style="width: 60px;">${LONG_TEXT}</pds-text>`;
+      await page.setContent(`<a href="#">${CLIPPED_TEXT}${plainText}</a>`);
+
+      await page.evaluate((shouldAdd) => {
+        const link = document.querySelector('a');
+        if (shouldAdd) {
+          const text = document.createElement('pds-text');
+          text.setAttribute('truncate', '');
+          text.style.width = '60px';
+          text.textContent = link.querySelector('pds-text').textContent;
+          link.append(text);
+        } else {
+          (link.querySelectorAll('pds-text')[1] as HTMLPdsTextElement).truncate = true;
+        }
+      }, addsText);
+      await page.waitForChanges();
+      await waitOutHideDelay();
+
+      const tabindexes = await page.$$eval('pds-text', (els) =>
+        els.map((el) => el.shadowRoot.querySelector('[part="content"]').getAttribute('tabindex')),
+      );
+      expect(tabindexes).toEqual(['0', '0']);
+
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+      await waitOutHideDelay();
+
+      expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.length)).toBe(1);
+    },
+  );
+});
+
 describe('pds-text accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();

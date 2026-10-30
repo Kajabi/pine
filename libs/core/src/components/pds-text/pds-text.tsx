@@ -1,7 +1,11 @@
 import { Component, h, Prop, Element, Watch } from '@stencil/core';
 import { setColor } from '../../utils/utils';
-import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { FOCUSABLE_WRAPPER, setupTruncationTooltip } from '../../utils/truncation-tooltip';
 import { TEXT_SIZES, TextSizeType } from '../../utils/types';
+
+// Re-runs setup for each text bound to its wrapping control, keyed by host, so a truncated
+// text that joins the same control later can take that control's focus away from it.
+const textsUsingWrapper = new WeakMap<HTMLElement, () => void>();
 
 /**
  * @part content - The text content container
@@ -78,6 +82,9 @@ export class PdsText {
    * When text overflows, a tooltip showing the full text will appear on hover/focus.
    * Note: While the text is overflowing, the element receives tabindex="0" so the
    * tooltip can be reached by keyboard. Text that fits is left out of the tab order.
+   * Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and
+   * `pds-dropdown-menu-item`) that holds no other truncated text, no tab stop is
+   * added; the tooltip appears when that control receives keyboard focus.
    */
   @Prop({ reflect: true }) truncate?: boolean;
 
@@ -137,15 +144,34 @@ export class PdsText {
     this.destroyTruncationTooltip();
 
     if (this.contentEl) {
+      const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
+      const texts = wrapper === null ? [] : wrapper.querySelectorAll<HTMLPdsTextElement>('pds-text');
+      // One focus on a shared wrapper would open every clipped text's tooltip at once, so texts sharing one each keep
+      // their own stop, and a text bound before this one joined lets go: this one's focus bubbles to the wrapper too.
+      let sharesWrapper = false;
+      for (let i = 0; i < texts.length; i++) {
+        const text = texts[i];
+        // The property counts too: setting `truncate` runs setup before the next render reflects the attribute.
+        if (text !== this.el && (text.truncate || text.hasAttribute('truncate'))) {
+          sharesWrapper = true;
+          textsUsingWrapper.get(text)?.();
+        }
+      }
+      const usesWrapper = wrapper !== null && !sharesWrapper;
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.contentEl,
         getTooltipText: () => this.el.textContent || '',
+        // A wrapping link or button already takes focus, so its focus reveals the text instead of a nested tab stop.
+        manageTabIndex: !usesWrapper,
+        focusEl: usesWrapper ? wrapper : this.el,
       });
+      if (usesWrapper) textsUsingWrapper.set(this.el, () => this.initTruncationTooltip());
     }
   }
 
   private destroyTruncationTooltip() {
+    textsUsingWrapper.delete(this.el);
     if (this.truncationCleanup) {
       this.truncationCleanup();
       this.truncationCleanup = null;
