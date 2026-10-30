@@ -167,3 +167,62 @@ describe('pds-box per-side borders', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+describe('pds-box display="contents"', () => {
+  it('renders no box, so its children lay out in the parent', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-box id="parent" display="flex" gap="md">
+        <pds-box id="wrapper" display="contents" padding="lg" border="true" size="6">
+          <pds-box id="a" min-width="40px" min-height="20px"></pds-box>
+          <pds-box id="b" min-width="40px" min-height="20px"></pds-box>
+        </pds-box>
+      </pds-box>
+    `);
+    await page.waitForChanges();
+
+    const layout = await page.evaluate(() => {
+      const wrapper = document.getElementById('wrapper')!;
+      const a = document.getElementById('a')!.getBoundingClientRect();
+      const b = document.getElementById('b')!.getBoundingClientRect();
+      const parent = document.getElementById('parent')!.getBoundingClientRect();
+      return {
+        display: getComputedStyle(wrapper).display,
+        wrapperRect: wrapper.getBoundingClientRect().width + wrapper.getBoundingClientRect().height,
+        // The parent's gap separates the wrapper's children, and the wrapper's padding adds nothing.
+        between: b.left - a.right,
+        parentGap: parseFloat(getComputedStyle(document.getElementById('parent')!).columnGap),
+        offset: a.left - parent.left,
+      };
+    });
+
+    expect(layout.display).toBe('contents');
+    expect(layout.wrapperRect).toBe(0);
+    expect(layout.parentGap).toBeGreaterThan(0);
+    expect(layout.between).toBe(layout.parentGap);
+    expect(layout.offset).toBe(0);
+  });
+
+  it('stays contents inside a pds-row with a column size', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-row><pds-box id="wrapper" display="contents" size-md="6"><span>Item</span></pds-box></pds-row>
+    `);
+    await page.waitForChanges();
+
+    expect(await page.$eval('#wrapper', (el) => getComputedStyle(el).display)).toBe('contents');
+  });
+
+  it('has no accessibility violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-box display="flex" gap="sm">
+        <pds-box display="contents"><pds-text>Item 1</pds-text><pds-text>Item 2</pds-text></pds-box>
+      </pds-box>
+    `);
+    await page.waitForChanges();
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});

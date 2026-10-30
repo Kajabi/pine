@@ -158,6 +158,12 @@ $box-border-color: var(--color-border-box, var(--pine-color-border));
   display: inline-block;
 }
 
+// Doubled class raises specificity above the single-class rules that also set display (the base
+// [class*='pds-box'] rule, column sizes), so a contents box never gets a box of its own
+.pds-box--display-contents.pds-box--display-contents {
+  display: contents;
+}
+
 // Flex helpers
 .pds-box--flex-none {
   flex: 0 0 auto;
