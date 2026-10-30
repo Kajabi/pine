@@ -1,7 +1,10 @@
 // Spacing, radius and dividers come from the parent pds-list's inherited custom properties,
 // with the same defaults here for an item rendered on its own.
+// Grows to fill a flex row, such as a pds-sortable-item, so trailing content stays at the end.
 :host {
   display: block;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 :host(:not(:last-child)) .pds-list-item {
@@ -15,7 +18,7 @@
   display: flex;
   gap: var(--pine-dimension-md);
   padding-block: var(--pds-list-item-padding-block, var(--pine-dimension-sm));
-  padding-inline: var(--pds-list-item-padding-inline, var(--pine-dimension-md));
+  padding-inline: var(--pds-list-item-padding-inline, var(--pine-dimension-sm));
   position: relative;
 }
 
@@ -63,6 +66,7 @@
 .pds-list-item__link {
   text-decoration: none;
 
+  // The focus ring is drawn on ::after below, around the whole item.
   &:focus-visible {
     outline: none;
   }
@@ -82,7 +86,7 @@
 }
 
 .pds-list-item--interactive:hover {
-  background-color: var(--pine-color-background-container-hover);
+  background-color: var(--pine-color-background-subtle);
 }
 
 // Empty slots take no space, so an item without leading or trailing content has no stray gap.
