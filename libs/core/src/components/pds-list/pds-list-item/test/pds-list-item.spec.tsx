@@ -96,4 +96,38 @@ describe('pds-list-item', () => {
     });
     expect(page.body.querySelector('pds-list-item')).not.toHaveAttribute('role');
   });
+
+  it('treats an empty href as no link', async () => {
+    const page = await newSpecPage({
+      components: [PdsListItem],
+      html: `<pds-list-item href="">About</pds-list-item>`,
+    });
+    expect(page.root.shadowRoot.querySelector('a')).toBeNull();
+    expect(page.root.shadowRoot.querySelector('.pds-list-item')).not.toHaveClass('pds-list-item--interactive');
+  });
+
+  it('adds no rel for a target other than _blank', async () => {
+    const page = await newSpecPage({
+      components: [PdsListItem],
+      html: `<pds-list-item href="/pages/about" target="_self">About</pds-list-item>`,
+    });
+    const link = page.root.shadowRoot.querySelector('a.pds-list-item__link');
+    expect(link.getAttribute('target')).toBe('_self');
+    expect(link).not.toHaveAttribute('rel');
+  });
+
+  it('hides a slot area again once its content is removed', async () => {
+    const page = await newSpecPage({
+      components: [PdsListItem],
+      html: `<pds-list-item>Onboarding worksheet<span slot="description">PDF</span></pds-list-item>`,
+    });
+    const description = page.root.shadowRoot.querySelector('.pds-list-item__description');
+    expect(description).not.toHaveAttribute('hidden');
+
+    page.root.querySelector('[slot="description"]').remove();
+    description.querySelector('slot').dispatchEvent(new Event('slotchange'));
+    await page.waitForChanges();
+
+    expect(description).toHaveAttribute('hidden');
+  });
 });
