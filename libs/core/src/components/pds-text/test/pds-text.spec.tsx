@@ -284,6 +284,25 @@ describe('pds-text', () => {
       });
     });
 
+    it('takes the control back from a bound text when a second truncated text joins it', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text></a>`,
+      });
+      const first = page.body.querySelector('pds-text');
+
+      const second = page.doc.createElement('pds-text');
+      second.setAttribute('truncate', '');
+      second.textContent = 'Subtitle';
+      page.body.querySelector('a')!.appendChild(second);
+      await page.waitForChanges();
+
+      const firstOptions = setupSpy.mock.calls.map(([options]) => options).filter((options) => options.hostEl === first);
+      expect(firstOptions[0].manageTabIndex).toBe(false);
+      expect(firstOptions[firstOptions.length - 1].manageTabIndex).toBe(true);
+      expect(firstOptions[firstOptions.length - 1].focusEl).toBe(first);
+    });
+
     it('hands focus to the control when its other text is not truncated', async () => {
       const page = await newSpecPage({
         components: [PdsText],

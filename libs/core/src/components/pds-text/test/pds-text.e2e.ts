@@ -237,6 +237,43 @@ describe('pds-text inside a focusable control', () => {
 
     expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.length)).toBe(0);
   });
+
+  it.each(['added to', 'switched on inside'])(
+    'hands the stop back when a second clipped text is %s the control later, so their tooltips never stack',
+    async (change) => {
+      const addsText = change === 'added to';
+      const page = await newE2EPage();
+      const plainText = addsText ? '' : `<pds-text style="width: 60px;">${LONG_TEXT}</pds-text>`;
+      await page.setContent(`<a href="#">${CLIPPED_TEXT}${plainText}</a>`);
+
+      await page.evaluate((shouldAdd) => {
+        const link = document.querySelector('a');
+        if (shouldAdd) {
+          const text = document.createElement('pds-text');
+          text.setAttribute('truncate', '');
+          text.style.width = '60px';
+          text.textContent = link.querySelector('pds-text').textContent;
+          link.append(text);
+        } else {
+          (link.querySelectorAll('pds-text')[1] as HTMLPdsTextElement).truncate = true;
+        }
+      }, addsText);
+      await page.waitForChanges();
+      await waitOutHideDelay();
+
+      const tabindexes = await page.$$eval('pds-text', (els) =>
+        els.map((el) => el.shadowRoot.querySelector('[part="content"]').getAttribute('tabindex')),
+      );
+      expect(tabindexes).toEqual(['0', '0']);
+
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+      await waitOutHideDelay();
+
+      expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.length)).toBe(1);
+    },
+  );
 });
 
 describe('pds-text accessibility', () => {
