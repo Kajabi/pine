@@ -76,6 +76,16 @@ describe('findPortalTarget', () => {
       expect(findPortalTarget(child, isTopLayerInDocument)).toBe(modal);
     });
 
+    it('returns an open popover inside a modal dialog, the nearer of the two', () => {
+      const modal = matching(openDialog(), ':modal');
+      const popover = matching(document.createElement('div'), ':popover-open');
+      popover.appendChild(child);
+      modal.appendChild(popover);
+      document.body.appendChild(modal);
+
+      expect(findPortalTarget(child, isTopLayerInDocument)).toBe(popover);
+    });
+
     it('stays in the body inside a dialog that is open but not modal', () => {
       const nonModal = matching(openDialog());
       nonModal.appendChild(child);
