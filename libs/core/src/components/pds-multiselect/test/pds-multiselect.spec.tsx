@@ -17,6 +17,16 @@ const floatingUI = require('@floating-ui/dom');
 // Capture original fetch for cleanup
 const originalFetch = global.fetch;
 
+// Mock-doc's focus() doesn't move focus, so the trigger reports :focus once focus() has been called.
+const spyOnTriggerFocus = (trigger: HTMLElement, takesFocus = true) => {
+  const focusSpy = jest.spyOn(trigger, 'focus');
+  const matches = trigger.matches.bind(trigger);
+  jest.spyOn(trigger, 'matches').mockImplementation((selector: string) =>
+    selector === ':focus' ? takesFocus && focusSpy.mock.calls.length > 0 : matches(selector)
+  );
+  return focusSpy;
+};
+
 describe('pds-multiselect', () => {
   afterEach(() => {
     // Restore original fetch and clean up all mocks after each test
@@ -445,6 +455,47 @@ describe('pds-multiselect', () => {
       page.rootInstance.handleSearchInputKeyDown(event);
       await page.waitForChanges();
 
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    for (const [name, takesFocus] of [
+      ['returns focus to the trigger on Tab, instead of moving on to an option that closing removes', true],
+      ['lets Tab carry on when the trigger cannot take focus', false],
+    ] as const) {
+      it(name, async () => {
+        const page = await newSpecPage({
+          components: [PdsMultiselect],
+          html: `<pds-multiselect component-id="test"><option value="1">Bestsellers</option></pds-multiselect>`,
+        });
+        const focusSpy = spyOnTriggerFocus(page.root.shadowRoot.querySelector('.pds-multiselect__trigger'), takesFocus);
+        page.rootInstance.isOpen = true;
+        await page.waitForChanges();
+
+        const tab = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+        page.rootInstance.handleSearchInputKeyDown(tab);
+        await page.waitForChanges();
+
+        expect(focusSpy).toHaveBeenCalledTimes(1);
+        expect(tab.defaultPrevented).toBe(takesFocus);
+        expect(page.rootInstance.isOpen).toBe(false);
+      });
+    }
+
+    it('leaves Shift+Tab to the browser, which reaches the trigger itself', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"><option value="1">Bestsellers</option></pds-multiselect>`,
+      });
+      const focusSpy = spyOnTriggerFocus(page.root.shadowRoot.querySelector('.pds-multiselect__trigger'));
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const shiftTab = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true });
+      page.rootInstance.handleSearchInputKeyDown(shiftTab);
+      await page.waitForChanges();
+
+      expect(focusSpy).not.toHaveBeenCalled();
+      expect(shiftTab.defaultPrevented).toBe(false);
       expect(page.rootInstance.isOpen).toBe(false);
     });
   });
@@ -2312,6 +2363,21 @@ describe('pds-multiselect', () => {
       expect(focusSpy).toHaveBeenCalledTimes(2);
     });
 
+    it('returns focus to the slotted trigger on Tab from the search input', async () => {
+      const page = await newSpecPage({ components: [PdsMultiselect], html: triggerHtml });
+      const focusSpy = spyOnTriggerFocus(page.root.querySelector('[slot="trigger"]') as HTMLElement);
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const tab = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+      page.rootInstance.handleSearchInputKeyDown(tab);
+      await page.waitForChanges();
+
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+      expect(tab.defaultPrevented).toBe(true);
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
     it('stays open when focus moves to the slotted trigger', async () => {
       const page = await newSpecPage({ components: [PdsMultiselect], html: triggerHtml });
       const dismissSpy = jest.fn();
@@ -2566,7 +2632,7 @@ describe('pds-multiselect', () => {
       expect(page.rootInstance.isOpen).toBe(false);
     });
 
-    it('closes on Tab when the footer has nothing to focus', async () => {
+    it('closes on Tab and returns focus to the trigger when the footer has nothing to focus', async () => {
       const page = await newSpecPage({
         components: [PdsMultiselect],
         html: `
@@ -2575,13 +2641,17 @@ describe('pds-multiselect', () => {
             <p slot="footer">Tags are shared across your site.</p>
           </pds-multiselect>`,
       });
+      const focusSpy = spyOnTriggerFocus(page.root.shadowRoot.querySelector('.pds-multiselect__trigger'));
       page.rootInstance.isOpen = true;
       await page.waitForChanges();
 
-      page.rootInstance.handleSearchInputKeyDown(new KeyboardEvent('keydown', { key: 'Tab' }));
+      const tab = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+      page.rootInstance.handleSearchInputKeyDown(tab);
       await page.waitForChanges();
 
       expect(page.rootInstance.isOpen).toBe(false);
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+      expect(tab.defaultPrevented).toBe(true);
     });
 
     it('returns Shift+Tab from the first footer link to the search input, and closes on Tab from the last', async () => {
