@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Element, Watch, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, Host, h, Prop, Element, Watch, Event, EventEmitter, Listen, forceUpdate } from '@stencil/core';
 import { messageId } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 import { RadioGroupChangeEventDetail } from './radio-group-interface';
@@ -138,6 +138,21 @@ export class PdsRadioGroup {
     });
   }
 
+  private hostAriaObserver?: MutationObserver;
+
+  connectedCallback() {
+    if (typeof MutationObserver === 'undefined') return;
+
+    // Consumers can name the group after render (a prop change, an i18n swap, a morph); re-render so their name wins.
+    this.hostAriaObserver = new MutationObserver(() => forceUpdate(this));
+    this.hostAriaObserver.observe(this.el, { attributeFilter: ['aria-label', 'aria-labelledby'] });
+  }
+
+  disconnectedCallback() {
+    this.hostAriaObserver?.disconnect();
+    this.hostAriaObserver = undefined;
+  }
+
   componentWillLoad() {
     // Generate stable group ID once during initialization
     // This ensures DOM stability and accessibility relationships remain consistent across re-renders
@@ -212,6 +227,19 @@ export class PdsRadioGroup {
     return `var(--pine-dimension-${this.gap})`;
   }
 
+  private get labelId(): string {
+    return `${this._groupId}__label`;
+  }
+
+  // Names the group from its visible label, unless the consumer named it with their own aria-label or aria-labelledby.
+  private getAriaLabelledBy(): string | undefined {
+    const consumerLabelledBy = this.el.getAttribute('aria-labelledby');
+    if (consumerLabelledBy && consumerLabelledBy !== this.labelId) return consumerLabelledBy;
+    if (this.el.hasAttribute('aria-label')) return undefined;
+
+    return this.groupLabel ? this.labelId : undefined;
+  }
+
   private getAriaDescribedBy(): string | undefined {
     const messageIds: string[] = [];
 
@@ -229,19 +257,21 @@ export class PdsRadioGroup {
   render() {
     const gapValue = this.getGapValue();
     const ariaDescribedBy = this.getAriaDescribedBy();
+    const ariaLabelledBy = this.getAriaLabelledBy();
 
     return (
       <Host
         class={this.classNames()}
         id={this._groupId}
-        role="group"
+        role="radiogroup"
+        aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
         style={{
           '--pds-radio-group-gap': gapValue,
         }}
       >
         {this.groupLabel && (
-          <div class="pds-radio-group__label">
+          <div class="pds-radio-group__label" id={this.labelId}>
             {this.groupLabel}
           </div>
         )}

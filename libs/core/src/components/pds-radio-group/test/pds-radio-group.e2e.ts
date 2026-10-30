@@ -341,6 +341,18 @@ describe('pds-radio-group', () => {
   });
 });
 
+type AxNode = { role?: string; name?: string; description?: string; children?: AxNode[] };
+
+const findRole = (node: AxNode | null, role: string): AxNode | undefined => {
+  if (!node) return undefined;
+  if (node.role === role) return node;
+  for (const child of node.children ?? []) {
+    const match = findRole(child, role);
+    if (match) return match;
+  }
+  return undefined;
+};
+
 describe('pds-radio-group accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
@@ -364,5 +376,34 @@ describe('pds-radio-group accessibility', () => {
     `);
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+
+  it('exposes group-label as the radiogroup name and the helper as its description', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio-group name="plan" group-label="Plan" helper-message="You can change this later">
+        <pds-radio component-id="plan-basic" label="Basic" value="basic"></pds-radio>
+        <pds-radio component-id="plan-pro" label="Pro" value="pro"></pds-radio>
+      </pds-radio-group>
+    `);
+
+    const group = findRole(await page.accessibility.snapshot({ interestingOnly: false }), 'radiogroup');
+    expect(group?.name).toBe('Plan');
+    expect(group?.description).toBe('You can change this later');
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it("uses a consumer's aria-label over group-label", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio-group name="plan" group-label="Plan" aria-label="Billing plan">
+        <pds-radio component-id="plan-basic" label="Basic" value="basic"></pds-radio>
+      </pds-radio-group>
+    `);
+
+    const group = findRole(await page.accessibility.snapshot({ interestingOnly: false }), 'radiogroup');
+    expect(group?.name).toBe('Billing plan');
   });
 });

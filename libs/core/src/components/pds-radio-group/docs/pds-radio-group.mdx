@@ -27,6 +27,8 @@ Radio Groups wrap a set of related radio inputs, displaying a single error messa
 
 ### Accessibility
 - Ensure the group label is descriptive and clearly identifies the selection group
+- The group is a `radiogroup` named by `group-label` and described by its helper and error messages, so you don't need an `aria-label` that repeats the label
+- Without a visible `group-label`, name the group with `aria-label` (or `aria-labelledby` pointing at a heading); a consumer-set name always wins over `group-label`
 - Use proper error messaging and states (e.g., `invalid`) for validation feedback
 - The `name` attribute is automatically applied to all child radios to ensure proper grouping
 
