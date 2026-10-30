@@ -26,7 +26,8 @@ const isTabStop = (el: HTMLElement) =>
   el.tabIndex >= 0 || (el.isContentEditable && !el.hasAttribute('tabindex') && !el.parentElement?.isContentEditable);
 
 function visitTabbable(el: Element, found: HTMLElement[]) {
-  if (el.hasAttribute('inert')) return;
+  // A tooltip portaled into a dialog only describes the control that has focus; it's never a stop of its own.
+  if (el.hasAttribute('inert') || el.getAttribute('role') === 'tooltip') return;
   if (el.localName === 'slot') {
     const slot = el as HTMLSlotElement;
     // Fallback content renders only when nothing at all is assigned, text included.
