@@ -51,7 +51,8 @@ const TOOLTIP_CLASS = 'pds-truncation-tooltip';
  *
  * Z-Index Strategy:
  * Uses --pine-z-index-nuclear (9999) to ensure tooltips appear above all other UI elements.
- * This is necessary because tooltips are portaled to document.body and must overlay:
+ * This is necessary because tooltips are portaled to document.body, or into the modal dialog or
+ * open popover around the host (the top layer, which no z-index reaches from the body), and must overlay:
  * - Modal dialogs
  * - Dropdown menus
  * - Other floating UI elements
