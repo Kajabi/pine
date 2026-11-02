@@ -119,6 +119,24 @@ describe('pds-list', () => {
     expect(borders).toEqual(['none', 'solid']);
   });
 
+  it('shows a hover state that stands out from the app background', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="app" style="background-color: var(--pine-color-background-app)">
+        <pds-list>${ROWS}</pds-list>
+      </div>
+    `);
+    await page.hover('#file-2');
+
+    const [hover, app] = await page.evaluate(() => [
+      getComputedStyle(document.getElementById('file-2').shadowRoot.querySelector('.pds-list-item'))
+        .backgroundColor,
+      getComputedStyle(document.getElementById('app')).backgroundColor,
+    ]);
+    expect(hover).not.toBe('rgba(0, 0, 0, 0)');
+    expect(hover).not.toBe(app);
+  });
+
   it('fills a sortable row, so trailing content stays at the end', async () => {
     const page = await newE2EPage();
     await page.setContent(`
