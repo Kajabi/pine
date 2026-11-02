@@ -37,6 +37,22 @@ export function isTopLayerInDocument(el: Element): boolean {
   return matchesSafely(el, ':modal') || matchesSafely(el, ':popover-open');
 }
 
+/**
+ * Calls `onClose` once `host` leaves the top layer (its dialog closes or its popover hides), and
+ * returns a function that stops listening.
+ */
+export function onTopLayerClose(host: HTMLElement, onClose: () => void): () => void {
+  const check = () => {
+    if (!isTopLayerInDocument(host)) onClose();
+  };
+  host.addEventListener('close', check);
+  host.addEventListener('toggle', check);
+  return () => {
+    host.removeEventListener('close', check);
+    host.removeEventListener('toggle', check);
+  };
+}
+
 function isOpenDialogOrPopover(el: Element): boolean {
   // Only an open dialog: inside a closed one, the popup would be hidden with it.
   if (el.localName === 'dialog') return (el as HTMLDialogElement).open;

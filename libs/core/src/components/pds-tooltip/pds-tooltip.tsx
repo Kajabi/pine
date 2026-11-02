@@ -1,7 +1,7 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
 import { PlacementType } from '@utils/types';
 import { classNamesOf, isStencilClass } from '@utils/keep-hydrated';
-import { findPortalTarget, isTopLayerInDocument } from '@utils/portal-target';
+import { findPortalTarget, isTopLayerInDocument, onTopLayerClose } from '@utils/portal-target';
 import {
   autoUpdate,
   computePosition,
@@ -41,6 +41,7 @@ export class PdsTooltip {
   private currentPathname: string = '';
   private pathnameCheckInterval: ReturnType<typeof setInterval> | null = null;
   private stopAutoUpdate: (() => void) | null = null;
+  private stopWatchingPortalHost: (() => void) | null = null;
 
   /**
    * Reference to the Host element
@@ -339,7 +340,10 @@ export class PdsTooltip {
 
     this.portalEl.appendChild(this.contentDiv);
     // Nothing in the body paints above a modal dialog or open popover, so the portal goes inside one.
-    findPortalTarget(this.el, isTopLayerInDocument).appendChild(this.portalEl);
+    const portalHost = findPortalTarget(this.el, isTopLayerInDocument);
+    portalHost.appendChild(this.portalEl);
+    // Closing that host moves no pointer, so a tooltip opened by touch would outlive it unseen.
+    if (portalHost !== document.body) this.stopWatchingPortalHost = onTopLayerClose(portalHost, this.handleHide);
 
     this.repositionPortal().catch(error => {
       console.warn('Failed to position tooltip on creation:', error);
@@ -487,6 +491,11 @@ export class PdsTooltip {
     if (this.stopAutoUpdate !== null) {
       this.stopAutoUpdate();
       this.stopAutoUpdate = null;
+    }
+
+    if (this.stopWatchingPortalHost !== null) {
+      this.stopWatchingPortalHost();
+      this.stopWatchingPortalHost = null;
     }
 
     // Stop pathname change detection
