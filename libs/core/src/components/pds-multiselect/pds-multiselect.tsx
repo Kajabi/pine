@@ -1148,6 +1148,11 @@ export class PdsMultiselect {
           e.preventDefault();
         } else {
           this.closeDropdown();
+          // Tab would move on to an option's checkbox, which closing removes, dropping focus to the page.
+          // Land on the trigger instead, as Escape does; Shift+Tab already reaches it.
+          const trigger = e.shiftKey ? undefined : this.activeTriggerEl;
+          trigger?.focus();
+          if (trigger?.matches(':focus')) e.preventDefault();
         }
         break;
       }
