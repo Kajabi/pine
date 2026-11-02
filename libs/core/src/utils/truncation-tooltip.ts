@@ -6,7 +6,7 @@ import {
   shift,
 } from '@floating-ui/dom';
 import type { ReferenceElement } from '@floating-ui/dom';
-import { findPortalTarget, isTopLayerInDocument } from './portal-target';
+import { findPortalTarget, isTopLayerInDocument, onTopLayerClose } from './portal-target';
 
 export interface TruncationTooltipOptions {
   /** The host element (for hover listeners and positioning anchor; focus listeners too, unless `focusEl` is set) */
@@ -142,6 +142,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   injectStyles();
 
   let portalEl: HTMLElement | null = null;
+  let stopWatchingPortalHost: (() => void) | null = null;
   let isHovering = false;
   let isHoveringPortal = false;
   let isFocused = false;
@@ -223,7 +224,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     contentDiv.textContent = text.trim();
 
     portalEl.appendChild(contentDiv);
-    findPortalTarget(hostEl, isTopLayerInDocument).appendChild(portalEl);
+    const portalHost = findPortalTarget(hostEl, isTopLayerInDocument);
+    portalHost.appendChild(portalEl);
+    // Closing that host moves no pointer, so a tooltip opened by touch would outlive it unseen.
+    if (portalHost !== document.body) stopWatchingPortalHost = onTopLayerClose(portalHost, closeWithPortalHost);
 
     // Allow the user to hover into the tooltip to select/copy text
     portalEl.addEventListener('mouseenter', handlePortalMouseEnter);
@@ -268,6 +272,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   }
 
   function removePortal(): void {
+    if (stopWatchingPortalHost !== null) {
+      stopWatchingPortalHost();
+      stopWatchingPortalHost = null;
+    }
     if (portalEl) {
       portalEl.removeEventListener('mouseenter', handlePortalMouseEnter);
       portalEl.removeEventListener('mouseleave', handlePortalMouseLeave);
@@ -299,6 +307,15 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   function hideTooltip(): void {
     if (isHovering || isHoveringPortal || isFocused) return;
+    removePortal();
+  }
+
+  // Hover and focus can't outlast a host that's no longer shown, so none of them keeps it open.
+  function closeWithPortalHost(): void {
+    isHovering = false;
+    isHoveringPortal = false;
+    isFocused = false;
+    cancelHideTimeout();
     removePortal();
   }
 
