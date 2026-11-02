@@ -1,4 +1,4 @@
-import { findPortalTarget, isTopLayerInDocument } from '../portal-target';
+import { findPortalTarget, isTopLayerInDocument, onTopLayerClose } from '../portal-target';
 
 // The spec DOM can't evaluate :modal or :popover-open, so each element states which ones it matches.
 function matching<T extends Element>(el: T, ...selectors: string[]): T {
@@ -138,5 +138,46 @@ describe('isTopLayerInDocument', () => {
     document.body.appendChild(dialog);
 
     expect(isTopLayerInDocument(dialog)).toBe(false);
+  });
+});
+
+describe('onTopLayerClose', () => {
+  let modal: boolean;
+  let dialog: HTMLDialogElement;
+
+  beforeEach(() => {
+    modal = true;
+    dialog = openDialog();
+    jest.spyOn(dialog, 'matches').mockImplementation((selector) => modal && selector === ':modal');
+    document.body.appendChild(dialog);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    document.body.innerHTML = '';
+  });
+
+  it('calls back once its dialog has left the top layer, not on a toggle while it stays', () => {
+    const onClose = jest.fn();
+    onTopLayerClose(dialog, onClose);
+
+    dialog.dispatchEvent(new Event('toggle'));
+    expect(onClose).not.toHaveBeenCalled();
+
+    modal = false;
+    dialog.dispatchEvent(new Event('close'));
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('stops listening once the function it returns runs', () => {
+    const onClose = jest.fn();
+    const stop = onTopLayerClose(dialog, onClose);
+
+    stop();
+    modal = false;
+    dialog.dispatchEvent(new Event('close'));
+    dialog.dispatchEvent(new Event('toggle'));
+
+    expect(onClose).not.toHaveBeenCalled();
   });
 });

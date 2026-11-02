@@ -723,6 +723,37 @@ describe('truncation-tooltip', () => {
       expect(dialog.querySelector('.pds-truncation-tooltip')).toBeNull();
     });
 
+    it('removes the portal when the modal dialog around the host closes, which moves no pointer', () => {
+      const dialog = hostInDialog(true);
+      const cleanup = setupTruncationTooltip({ hostEl, contentEl, getTooltipText: () => 'Full text' });
+      hostEl.dispatchEvent(new MouseEvent('mouseenter'));
+      document.querySelector('.pds-truncation-tooltip')?.dispatchEvent(new MouseEvent('mouseenter'));
+
+      jest.spyOn(dialog, 'matches').mockReturnValue(false);
+      dialog.dispatchEvent(new Event('close'));
+
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+      cleanup();
+    });
+
+    it('hides normally the next time, with no hover left over from the closed dialog', () => {
+      const dialog = hostInDialog(true);
+      const cleanup = setupTruncationTooltip({ hostEl, contentEl, getTooltipText: () => 'Full text' });
+      hostEl.dispatchEvent(new MouseEvent('mouseenter'));
+      document.querySelector('.pds-truncation-tooltip')?.dispatchEvent(new MouseEvent('mouseenter'));
+      const matches = jest.spyOn(dialog, 'matches').mockReturnValue(false);
+      dialog.dispatchEvent(new Event('close'));
+
+      matches.mockImplementation((selector) => selector === ':modal');
+      hostEl.dispatchEvent(new MouseEvent('mouseenter'));
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+      hostEl.dispatchEvent(new MouseEvent('mouseleave'));
+      advanceHideDelay();
+
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+      cleanup();
+    });
+
     it('stays in the body inside a dialog that is open but not modal', () => {
       hostInDialog(false);
       const cleanup = setupTruncationTooltip({ hostEl, contentEl, getTooltipText: () => 'Full text' });
