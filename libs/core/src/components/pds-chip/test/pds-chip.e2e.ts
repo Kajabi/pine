@@ -283,6 +283,24 @@ describe('pds-chip', () => {
       expect(position.leftOfListbox).toBe(true);
       expect(position.rowOffset).toBeLessThan(1);
     });
+
+    // pds-multiselect labels each option's checkbox with a chip, so focus on that checkbox stands for the chip.
+    it('shows the tooltip while a checkbox labelled by the chip has keyboard focus', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <ul role="listbox" aria-label="Tags">
+          <li role="option" aria-selected="false">
+            <pds-checkbox component-id="tag"><pds-chip slot="label" max-width="60px">${LONG_LABEL}</pds-chip></pds-checkbox>
+          </li>
+        </ul>
+      `);
+
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+
+      expect(await page.$eval('pds-checkbox', (el) => el.shadowRoot.activeElement?.tagName)).toBe('INPUT');
+      expect(await truncationTooltipText(page)).toBe(LONG_LABEL);
+    });
   });
 
   it('shows the tooltip while the wrapping control has focus, and Tab leaves without stopping on the label', async () => {
@@ -331,6 +349,78 @@ describe('pds-chip', () => {
 
     expect(await page.evaluate(() => document.activeElement.tagName)).toBe('PDS-BUTTON');
     expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  // A clipped text beside the chip keeps a tab stop of its own, and its focus bubbles to the control the chip listens on.
+  describe('beside a clipped text inside the wrapping control', () => {
+    const LONG_TEXT = 'A very long title that would otherwise overflow the text';
+
+    const WRAPPERS = [
+      ['link', '<a href="#">', '</a>'],
+      ['button', '<button type="button">', '</button>'],
+      ['pds-button', '<pds-button variant="unstyled">', '</pds-button>'],
+      ['pds-link', '<pds-link href="#">', '</pds-link>'],
+      [
+        'pds-tab',
+        '<pds-tabs component-id="tabs" active-tab-name="one"><pds-tab name="one" slot="tabs">',
+        '</pds-tab><pds-tabpanel name="one">Panel</pds-tabpanel></pds-tabs>',
+      ],
+      ['pds-dropdown-menu-item', '<pds-dropdown-menu-item>', '</pds-dropdown-menu-item>'],
+    ];
+
+    const truncationTooltipTexts = (page: E2EPage) =>
+      page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
+
+    const setContent = async (open: string, close: string) => {
+      const page = await newE2EPage();
+      await page.setContent(
+        `${open}<pds-text truncate style="width: 60px;">${LONG_TEXT}</pds-text><pds-chip max-width="60px">${LONG_LABEL}</pds-chip>${close}`,
+      );
+      return page;
+    };
+
+    // A menu item takes focus from the arrow keys inside its menu, never from Tab.
+    it.each(WRAPPERS.filter(([name]) => name !== 'pds-dropdown-menu-item'))(
+      'shows only the tooltip of the stop inside a %s that has focus',
+      async (_name, open, close) => {
+        const page = await setContent(open, close);
+
+        await page.keyboard.press('Tab');
+        await waitOutHideDelay();
+        expect(await truncationTooltipTexts(page)).toEqual([LONG_LABEL]);
+
+        await page.keyboard.press('Tab');
+        await waitOutHideDelay();
+        expect(await truncationTooltipTexts(page)).toEqual([LONG_TEXT]);
+
+        await page.keyboard.down('Shift');
+        await page.keyboard.press('Tab');
+        await page.keyboard.up('Shift');
+        await waitOutHideDelay();
+        expect(await truncationTooltipTexts(page)).toEqual([LONG_LABEL]);
+
+        const violations = await runAxe(page);
+        expect(formatViolations(violations)).toBe('');
+      },
+    );
+
+    it.each(WRAPPERS)(
+      'shows only the text tooltip when a key press after clicking the text inside a %s makes its focus visible',
+      async (_name, open, close) => {
+        const page = await setContent(open, close);
+
+        await page.click('pds-text');
+        await page.mouse.move(0, 0);
+        await waitOutHideDelay();
+        expect(await truncationTooltipTexts(page)).toEqual([]);
+
+        // A letter, since arrow keys move focus between tabs.
+        await page.keyboard.press('a');
+        await page.waitForChanges();
+
+        expect(await truncationTooltipTexts(page)).toEqual([LONG_TEXT]);
+      },
+    );
   });
 
   it('shows the tooltip when Tab reaches the clipped label', async () => {
