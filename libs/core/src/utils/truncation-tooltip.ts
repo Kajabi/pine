@@ -40,6 +40,10 @@ export interface TruncationTooltipOptions {
   focusEl?: HTMLElement;
 }
 
+// Controls that clipped text can sit inside that already take focus, so the text adds no tab stop of its own.
+// Not any `[tabindex]`: a focusable scroll region full of chips would show every chip's tooltip at once.
+export const FOCUSABLE_WRAPPER = 'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item, [role="option"]';
+
 /** CSS class prefix used for truncation tooltip portal elements */
 const TOOLTIP_CLASS = 'pds-truncation-tooltip';
 
