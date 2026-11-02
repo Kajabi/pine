@@ -2,7 +2,7 @@ import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
 import { HostStylingKeeper } from '@utils/attributes';
 import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
-import { setupTruncationTooltip, type TruncationTooltipOptions } from '../../utils/truncation-tooltip';
+import { FOCUSABLE_WRAPPER, setupTruncationTooltip, type TruncationTooltipOptions } from '../../utils/truncation-tooltip';
 import { normalizeColorValue } from '../../utils/utils';
 
 const SENTIMENT_DOT_COLORS: Record<string, string> = {
@@ -15,10 +15,6 @@ const SENTIMENT_DOT_COLORS: Record<string, string> = {
   success: 'var(--pine-chip-color-success-dot)',
   warning: 'var(--pine-chip-color-warning-dot)',
 };
-
-// Controls a chip can sit inside that already take focus, so a clipped label adds no tab stop of its own.
-// Not any `[tabindex]`: a focusable scroll region full of chips would show every chip's tooltip at once.
-const FOCUSABLE_WRAPPER = 'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item, [role="option"]';
 
 // Beside the listbox and level with the option, so the tooltip never covers the other options.
 function besideListbox(wrapper: HTMLElement | null): Pick<TruncationTooltipOptions, 'placement' | 'reference'> {
