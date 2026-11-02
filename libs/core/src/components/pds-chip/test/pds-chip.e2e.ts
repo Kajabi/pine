@@ -752,4 +752,24 @@ describe('pds-chip inside an open pds-modal', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('closes its truncation tooltip with the modal when no pointer move would, as after a tap', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="tags">
+        <button id="first">First</button>
+        <pds-chip max-width="80px">${LONG_LABEL}</pds-chip>
+      </pds-modal>`);
+    const modal = await page.find('pds-modal');
+    await modal.callMethod('showModal');
+    await page.waitForFunction(() => document.activeElement?.id === 'first');
+    // Opens it the way a tap does, without a hover the browser could end when the modal closes.
+    await page.$eval('pds-chip', (chip) => chip.dispatchEvent(new MouseEvent('mouseenter')));
+    await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+    await modal.callMethod('hideModal');
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    expect(await page.evaluate(() => !!document.querySelector('.pds-truncation-tooltip'))).toBe(false);
+  });
 });
