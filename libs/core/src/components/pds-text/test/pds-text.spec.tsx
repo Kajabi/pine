@@ -312,6 +312,26 @@ describe('pds-text', () => {
       expect(lastOptions().manageTabIndex).toBe(false);
       expect(lastOptions().focusEl).toBe(page.body.firstElementChild);
     });
+
+    it('keeps its own tab stop beside a chip with a max width, which binds to the control too', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text><pds-chip max-width="60px">Tag</pds-chip></a>`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(true);
+      expect(lastOptions().focusEl).toBe(page.body.querySelector('pds-text'));
+    });
+
+    it('hands focus to the control beside a chip with no max width', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text><pds-chip>Tag</pds-chip></a>`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(false);
+      expect(lastOptions().focusEl).toBe(page.body.firstElementChild);
+    });
   });
 
   describe('size validation', () => {

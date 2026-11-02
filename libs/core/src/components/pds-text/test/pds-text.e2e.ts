@@ -238,6 +238,18 @@ describe('pds-text inside a focusable control', () => {
     expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.length)).toBe(0);
   });
 
+  it('keeps its own tab stop beside a clipped chip in the same control, so their tooltips never stack', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<a href="#">${CLIPPED_TEXT}<pds-chip max-width="60px">${LONG_TEXT}</pds-chip></a>`);
+
+    expect(await contentTabindex(page)).toBe('0');
+
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.length)).toBe(1);
+  });
+
   it.each(['added to', 'switched on inside'])(
     'hands the stop back when a second clipped text is %s the control later, so their tooltips never stack',
     async (change) => {
