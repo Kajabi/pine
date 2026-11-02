@@ -35,7 +35,8 @@ export interface TruncationTooltipOptions {
    * The element whose keyboard focus shows the tooltip (default: `hostEl`).
    *
    * Pass the wrapping control when it sits outside `hostEl`, so focusing it
-   * still reveals the text once `manageTabIndex` is `false`.
+   * still reveals the text once `manageTabIndex` is `false`. Focus on another
+   * tab stop nested in it, beside `hostEl`, doesn't.
    */
   focusEl?: HTMLElement;
 }
@@ -330,10 +331,17 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     scheduleHide();
   }
 
+  // A second tab stop inside focusEl, such as another clipped text, bubbles its focus here too. Its event.target is
+  // retargeted to the stop's outermost element in focusEl's tree, which sits beside hostEl rather than around or in it.
+  function isFocusForHost(target: Node): boolean {
+    return focusEl === hostEl || target === focusEl || target.contains(hostEl) || hostEl.contains(target);
+  }
+
   // Keyboard focus only: focus from a click would pin the tooltip open after the pointer leaves.
   // Events from inside a shadow root arrive retargeted to its host, so test the innermost target.
   function showForVisibleFocus(event: Event): void {
     if (!isFocusVisible(event.composedPath()[0] as Element)) return;
+    if (!isFocusForHost(event.target as Node)) return;
     isFocused = true;
     showTooltip();
   }
