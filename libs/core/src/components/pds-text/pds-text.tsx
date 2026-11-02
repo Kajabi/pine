@@ -83,8 +83,9 @@ export class PdsText {
    * Note: While the text is overflowing, the element receives tabindex="0" so the
    * tooltip can be reached by keyboard. Text that fits is left out of the tab order.
    * Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and
-   * `pds-dropdown-menu-item`) that holds no other truncated text, no tab stop is
-   * added; the tooltip appears when that control receives keyboard focus.
+   * `pds-dropdown-menu-item`) that holds no other truncated text or `pds-chip` with a
+   * `max-width`, no tab stop is added; the tooltip appears when that control receives
+   * keyboard focus.
    */
   @Prop({ reflect: true }) truncate?: boolean;
 
@@ -145,16 +146,17 @@ export class PdsText {
 
     if (this.contentEl) {
       const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
-      const texts = wrapper === null ? [] : wrapper.querySelectorAll<HTMLPdsTextElement>('pds-text');
+      // A pds-chip with a max width binds its tooltip to the wrapper too.
+      const others = wrapper === null ? [] : wrapper.querySelectorAll<HTMLPdsTextElement & HTMLPdsChipElement>('pds-text, pds-chip');
       // One focus on a shared wrapper would open every clipped text's tooltip at once, so texts sharing one each keep
       // their own stop, and a text bound before this one joined lets go: this one's focus bubbles to the wrapper too.
       let sharesWrapper = false;
-      for (let i = 0; i < texts.length; i++) {
-        const text = texts[i];
+      for (let i = 0; i < others.length; i++) {
+        const other = others[i];
         // The property counts too: setting `truncate` runs setup before the next render reflects the attribute.
-        if (text !== this.el && (text.truncate || text.hasAttribute('truncate'))) {
+        if (other !== this.el && (other.truncate || other.maxWidth || other.hasAttribute('truncate') || other.hasAttribute('max-width'))) {
           sharesWrapper = true;
-          textsUsingWrapper.get(text)?.();
+          textsUsingWrapper.get(other)?.();
         }
       }
       const usesWrapper = wrapper !== null && !sharesWrapper;
