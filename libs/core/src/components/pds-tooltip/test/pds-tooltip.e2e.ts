@@ -220,6 +220,24 @@ describe('pds-tooltip inside an open pds-modal', () => {
     expect(await openTooltip(page)).toMatchObject({ parent: 'body', hitsTooltip: true });
   });
 
+  it('closes with the modal when no pointer move would close it, as after a tap', async () => {
+    const page = await newE2EPage();
+    await openModal(page, `
+      <pds-modal component-id="review">
+        <button id="first">First</button>
+        <pds-tooltip content="Why this is disabled" placement="top"><button id="review">Review</button></pds-tooltip>
+      </pds-modal>`);
+    // Opens it the way a tap does, without a hover the browser could end when the modal closes.
+    await page.$eval('pds-tooltip > .pds-tooltip__trigger', (trigger) => trigger.dispatchEvent(new MouseEvent('mouseenter')));
+    expect(await openTooltip(page)).toMatchObject({ parent: 'dialog' });
+
+    await (await page.find('pds-modal')).callMethod('hideModal');
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    expect(await page.evaluate(() => !!document.querySelector('.pds-tooltip.pds-tooltip--is-open'))).toBe(false);
+    expect(await page.evaluate(() => (document.querySelector('pds-tooltip') as HTMLPdsTooltipElement).opened)).toBe(false);
+  });
+
   it("keeps Tab in the modal when the tooltip's content holds a link", async () => {
     const page = await newE2EPage();
     await openModal(page, `

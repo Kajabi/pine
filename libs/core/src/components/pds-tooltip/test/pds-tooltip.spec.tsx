@@ -892,6 +892,37 @@ describe('pds-tooltip', () => {
       expect(portal.parentElement).toBe(page.body);
     });
 
+    it('closes when the modal dialog around it closes, which moves no pointer to close it', async () => {
+      const page = await newSpecPage({
+        components: [PdsTooltip],
+        html: `<dialog open><pds-tooltip content="Why this is disabled"><button>Review</button></pds-tooltip></dialog>`,
+      });
+      const dialog = page.body.querySelector('dialog') as HTMLDialogElement;
+      let modal = true;
+      jest.spyOn(dialog, 'matches').mockImplementation((selector) => modal && selector === ':modal');
+      page.body.querySelector('.pds-tooltip__trigger')?.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+      expect(dialog.querySelector('.pds-tooltip')).not.toBeNull();
+
+      modal = false;
+      dialog.dispatchEvent(new Event('close'));
+      await page.waitForChanges();
+
+      expect(dialog.querySelector('.pds-tooltip')).toBeNull();
+      expect((page.body.querySelector('pds-tooltip') as HTMLPdsTooltipElement).opened).toBe(false);
+    });
+
+    it('stays open when its dialog closes if the opened prop opened it', async () => {
+      const { page, dialog, portal } = await openIn(true);
+
+      jest.spyOn(dialog, 'matches').mockReturnValue(false);
+      dialog.dispatchEvent(new Event('close'));
+      await page.waitForChanges();
+
+      expect(portal.isConnected).toBe(true);
+      expect((page.body.querySelector('pds-tooltip') as HTMLPdsTooltipElement).opened).toBe(true);
+    });
+
     it('is removed from the dialog when it closes', async () => {
       const { page, dialog } = await openIn(true);
 
