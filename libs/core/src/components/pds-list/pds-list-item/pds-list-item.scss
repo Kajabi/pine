@@ -85,8 +85,10 @@
   }
 }
 
+// Muted, not subtle: subtle is the app background's grey, so a list without a border would show
+// no change on hover.
 .pds-list-item--interactive:hover {
-  background-color: var(--pine-color-background-subtle);
+  background-color: var(--pine-color-background-muted);
 }
 
 // Empty slots take no space, so an item without leading or trailing content has no stray gap.
