@@ -588,12 +588,17 @@ describe('pds-multiselect', () => {
   });
 
   describe('Tab out of the open panel', () => {
-    // Followed into shadow roots; a built-in trigger's id is its component-id.
+    // The innermost id on the focus path into shadow roots, so a pds-button reports its own id; a
+    // built-in trigger's id is its component-id.
     const focusedId = (page: Page) =>
       page.evaluate(() => {
         let el = document.activeElement;
-        while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
-        return el?.id || el?.localName;
+        let id = el?.id;
+        while (el?.shadowRoot?.activeElement) {
+          el = el.shadowRoot.activeElement;
+          id = el.id || id;
+        }
+        return id || el?.localName;
       });
 
     // Pauses between keys as a person does, so the closed panel has re-rendered before the next one.
@@ -623,6 +628,7 @@ describe('pds-multiselect', () => {
       ['the built-in trigger', '', '', 'tags'],
       ['the inline-pill trigger', 'selected-display="pill" pill-position="inline"', '', 'tags'],
       ['a slotted trigger', '', '<button slot="trigger" type="button" id="slotted">Add tag</button>', 'slotted'],
+      ['a slotted pds-button trigger', '', '<pds-button slot="trigger" id="slotted">Add tag</pds-button>', 'slotted'],
     ]) {
       describe(`with ${name}`, () => {
         const openFromKeyboard = async () => {
@@ -664,12 +670,18 @@ describe('pds-multiselect', () => {
     }
 
     describe('in a pds-popover', () => {
-      const popover = `
+      const footer = '<a slot="footer" href="#manage" id="manage">Manage tags</a>';
+
+      const popover = (footerOn?: 'tags' | 'location') => `
         <pds-popover component-id="filters">
           <button type="button" slot="trigger" id="trigger">Filters</button>
           <div>
-            <pds-multiselect component-id="tags" label="Tags"><option value="1">Bestsellers</option></pds-multiselect>
-            <pds-multiselect component-id="location" label="Location"><option value="1">Course</option></pds-multiselect>
+            <pds-multiselect component-id="tags" label="Tags">
+              <option value="1">Bestsellers</option>${footerOn === 'tags' ? footer : ''}
+            </pds-multiselect>
+            <pds-multiselect component-id="location" label="Location">
+              <option value="1">Course</option>${footerOn === 'location' ? footer : ''}
+            </pds-multiselect>
           </div>
         </pds-popover>
         <button type="button" id="after">After</button>
@@ -689,12 +701,12 @@ describe('pds-multiselect', () => {
         ['inside a pds-modal', true],
       ] as const) {
         describe(where, () => {
-          const setUp = async () => {
+          const setUp = async (footerOn?: 'tags' | 'location') => {
             const page = await newE2EPage();
             await page.setContent(
               inModal
-                ? `<pds-modal component-id="modal"><div slot="header">Filters</div><div>${popover}</div></pds-modal>`
-                : popover,
+                ? `<pds-modal component-id="modal"><div slot="header">Filters</div><div>${popover(footerOn)}</div></pds-modal>`
+                : popover(footerOn),
             );
             if (inModal) {
               await (await page.find('pds-modal')).callMethod('showModal');
@@ -716,6 +728,22 @@ describe('pds-multiselect', () => {
             await openInPanel(page, 'location');
 
             expect(await pressTabs(page, ['Tab', 'Tab'])).toEqual(['location', 'after']);
+            expect(await axeViolations(page)).toBe('');
+          });
+
+          it('moves on from the last footer control to the next control', async () => {
+            const page = await setUp('tags');
+            await openInPanel(page, 'tags');
+
+            expect(await pressTabs(page, ['Tab', 'Tab', 'Tab'])).toEqual(['manage', 'location', 'after']);
+            expect(await axeViolations(page)).toBe('');
+          });
+
+          it('leaves the panel from the last footer control when the open multiselect is its last control', async () => {
+            const page = await setUp('location');
+            await openInPanel(page, 'location');
+
+            expect(await pressTabs(page, ['Tab', 'Tab'])).toEqual(['manage', 'after']);
             expect(await axeViolations(page)).toBe('');
           });
         });
