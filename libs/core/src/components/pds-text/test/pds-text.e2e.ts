@@ -248,6 +248,14 @@ describe('pds-text inside a focusable control', () => {
     await page.waitForChanges();
 
     expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.length)).toBe(1);
+
+    await page.keyboard.press('Tab');
+    await waitOutHideDelay();
+
+    expect(await contentHasFocus(page)).toBe(true);
+    expect(await page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()))).toEqual([
+      LONG_TEXT,
+    ]);
   });
 
   it.each(['added to', 'switched on inside'])(
