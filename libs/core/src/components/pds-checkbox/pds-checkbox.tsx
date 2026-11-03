@@ -53,6 +53,7 @@ export class PdsCheckbox {
   /**
    * If `true`, the checkbox will visually appear as indeterminate.
    * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+   * Has no visual style when `variant` is `pill`.
    */
   @Prop({ mutable: true }) indeterminate: boolean;
 
@@ -67,7 +68,7 @@ export class PdsCheckbox {
   @Prop() label: string;
 
     /**
-   * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+   * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
    */
     @Prop() hideLabel: boolean;
 
@@ -86,6 +87,11 @@ export class PdsCheckbox {
    */
   @Prop() value: string;
 
+  /**
+   * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+   * @defaultValue default
+   */
+  @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
    * Event emitted that contains the `value` and `checked`.
@@ -129,6 +135,7 @@ export class PdsCheckbox {
     if (this.indeterminate) { classNames.push('is-indeterminate'); }
     if (this.disabled) { classNames.push('is-disabled'); }
     if (this.hasLabelSlot) { classNames.push('has-label-slot'); }
+    if (this.variant === 'pill') { classNames.push('pds-checkbox--pill'); }
 
     return classNames.join('  ');
   }
@@ -225,9 +232,10 @@ export class PdsCheckbox {
             disabled={this.disabled}
             onChange={this.handleCheckboxChange}
             onInput={this.handleInput}
+            class={this.variant === 'pill' ? 'visually-hidden' : undefined}
             {...this.inheritedAttributes}
           />
-          <span class={this.hideLabel ? 'visually-hidden' : ''}>
+          <span class={this.hideLabel && this.variant !== 'pill' ? 'visually-hidden' : ''}>
             <slot name="label" onSlotchange={this.updateHasLabelSlot} />
             {/* A text node, not slot fallback: older ChromeDriver text extraction skips fallback content. */}
             {!this.hasLabelSlot && this.label}

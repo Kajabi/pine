@@ -8,6 +8,19 @@
   --tooltip-dimension-max-width: 320px;
 }
 
+// Portaled into a modal dialog or popover instead of the body, the tooltip inherits text styles set
+// around that host, such as a centered or nowrap container; these keep it looking as it does in the body.
+:is(dialog, [popover]) > .pds-tooltip {
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  text-align: start;
+  text-indent: 0;
+  text-transform: none;
+  white-space: normal;
+  word-spacing: normal;
+}
+
 .pds-tooltip__content {
   background-color: var(--pine-color-primary);
   border-radius: calc(var(--pine-dimension-xs) * 1.25);

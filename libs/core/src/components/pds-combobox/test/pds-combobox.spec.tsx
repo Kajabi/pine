@@ -4795,3 +4795,128 @@ describe('pds-combobox validation messages', () => {
     expect(describedText(describedBy)).toContain('Required');
   });
 });
+
+describe('pds-combobox truncate', () => {
+  const LONG = 'Assessment for the quarterly onboarding cohort';
+
+  // The spec environment doesn't populate slot assignment, so the options come from the prop.
+  const render = async (attributes = '') => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="cb" label="Category" mode="select-only" ${attributes}></pds-combobox>`,
+    });
+    const root = page.root as HTMLPdsComboboxElement;
+    root.options = [
+      { id: 'long', text: LONG },
+      { id: 'icon', text: `${LONG} with an icon`, icon: 'assessment' },
+    ];
+    await page.waitForChanges();
+    if (root.value === '') root.value = 'long';
+    await page.waitForChanges();
+    const shadow = page.root!.shadowRoot!;
+    const open = async () => {
+      page.rootInstance.isOpen = true;
+      page.rootInstance.filterOptions();
+      await page.waitForChanges();
+    };
+    return { page, shadow, open };
+  };
+
+  it('defaults to false', async () => {
+    const { page } = await render();
+    expect(page.rootInstance.truncate).toBe(false);
+  });
+
+  it('renders the button trigger and the options as before without truncate', async () => {
+    const { shadow, open } = await render('trigger="button"');
+    await open();
+
+    expect(shadow.querySelector('.pds-combobox__button-trigger')!.classList.contains('pds-combobox__button-trigger--truncate')).toBe(false);
+    expect(shadow.querySelector('.pds-combobox__button-trigger-text')).toBeNull();
+    expect(shadow.querySelector('.pds-combobox__button-trigger-label')!.textContent).toBe(LONG);
+    expect(shadow.querySelector('.pds-combobox__listbox')!.classList.contains('pds-combobox__listbox--truncate')).toBe(false);
+    expect(shadow.querySelector('.pds-combobox__option-text')).toBeNull();
+  });
+
+  it('puts the button trigger text in a span that clips', async () => {
+    const { shadow } = await render('trigger="button" truncate');
+
+    expect(shadow.querySelector('.pds-combobox__button-trigger')!.classList.contains('pds-combobox__button-trigger--truncate')).toBe(true);
+    expect(shadow.querySelector('.pds-combobox__button-trigger-label > .pds-combobox__button-trigger-text')!.textContent).toBe(LONG);
+  });
+
+  it('puts the button trigger text in a span after the icon', async () => {
+    const { shadow } = await render('trigger="button" truncate value="icon"');
+
+    const label = shadow.querySelector('.pds-combobox__button-trigger-label')!;
+    expect(label.querySelector('pds-icon')!.getAttribute('name')).toBe('assessment');
+    expect(label.querySelector('.pds-combobox__button-trigger-text')!.textContent).toBe(`${LONG} with an icon`);
+  });
+
+  it('leaves the chip trigger as it is', async () => {
+    const { shadow } = await render('trigger="chip" truncate');
+
+    const label = shadow.querySelector('.pds-combobox__chip-trigger-label')!;
+    expect(label.children.length).toBe(0);
+    expect(label.textContent).toBe(LONG);
+  });
+
+  it('leaves the input trigger alone, and truncates its options', async () => {
+    const { shadow, open } = await render('truncate');
+    await open();
+
+    expect(shadow.querySelector('.pds-combobox__button-trigger-text')).toBeNull();
+    expect(shadow.querySelector('.pds-combobox__listbox')!.classList.contains('pds-combobox__listbox--truncate')).toBe(true);
+  });
+
+  it('puts each option label in a span that clips, after its icon too', async () => {
+    const { shadow, open } = await render('trigger="button" truncate');
+    await open();
+
+    const options = Array.from(shadow.querySelectorAll('[role="option"]'));
+    expect(options.map(option => option.querySelector('.pds-combobox__option-text')!.textContent)).toEqual([LONG, `${LONG} with an icon`]);
+    expect(options[1].querySelector('.pds-combobox__option-label > .pds-combobox__option-text')).not.toBeNull();
+    // The option keeps its name from its text: no aria-label, and no title on the option itself.
+    expect(options.every(option => !option.hasAttribute('aria-label') && !option.hasAttribute('title'))).toBe(true);
+  });
+
+  const measure = (el: HTMLElement, scrollWidth: number, clientWidth: number) => {
+    Object.defineProperty(el, 'scrollWidth', { configurable: true, value: scrollWidth });
+    Object.defineProperty(el, 'clientWidth', { configurable: true, value: clientWidth });
+  };
+
+  it('titles a cut option label with its full text on hover, and drops the title once it fits', async () => {
+    const { page, shadow, open } = await render('trigger="button" truncate');
+    await open();
+
+    const option = shadow.querySelector<HTMLElement>('[role="option"][data-option-index="1"]')!;
+    const text = option.querySelector<HTMLElement>('.pds-combobox__option-text')!;
+
+    measure(text, 400, 150);
+    option.dispatchEvent(new Event('mouseenter'));
+    await page.waitForChanges();
+    expect(text.getAttribute('title')).toBe(`${LONG} with an icon`);
+
+    measure(text, 150, 150);
+    option.dispatchEvent(new Event('mouseenter'));
+    await page.waitForChanges();
+    expect(text.hasAttribute('title')).toBe(false);
+  });
+
+  it('titles a cut trigger label with its full text on hover, and drops the title once it fits', async () => {
+    const { page, shadow } = await render('trigger="button" truncate');
+
+    const trigger = shadow.querySelector<HTMLElement>('.pds-combobox__button-trigger')!;
+    const text = shadow.querySelector<HTMLElement>('.pds-combobox__button-trigger-text')!;
+
+    measure(text, 400, 150);
+    trigger.dispatchEvent(new Event('mouseenter'));
+    await page.waitForChanges();
+    expect(text.getAttribute('title')).toBe(LONG);
+
+    measure(text, 150, 150);
+    trigger.dispatchEvent(new Event('mouseenter'));
+    await page.waitForChanges();
+    expect(text.hasAttribute('title')).toBe(false);
+  });
+});

@@ -296,3 +296,215 @@ describe('pds-radio after its host classes and styles are stripped', () => {
     expect(classes).toEqual(expect.arrayContaining(['hydrated', 'sc-pds-radio-h']));
   });
 });
+
+describe('pds-radio pill variant', () => {
+  const pillStyle = (page, selector: string) =>
+    page.$eval(selector, (el) => {
+      const label = el.querySelector('label');
+      const style = getComputedStyle(label);
+      const rect = label.getBoundingClientRect();
+      return {
+        boxShadow: style.boxShadow,
+        borderColor: style.borderTopColor,
+        borderWidth: style.borderTopWidth,
+        outlineStyle: style.outlineStyle,
+        width: rect.width,
+        height: rect.height,
+      };
+    });
+
+  const group = `
+    <pds-radio-group name="plan" group-label="Plan" direction="row">
+      <pds-radio component-id="free" value="free" label="Free" variant="pill"></pds-radio>
+      <pds-radio component-id="pro" value="pro" label="Pro" variant="pill"></pds-radio>
+      <pds-radio component-id="team" value="team" label="Team" variant="pill"></pds-radio>
+    </pds-radio-group>
+  `;
+
+  it('checks the radio when the pill is clicked, without resizing it', async () => {
+    const page = await newE2EPage();
+    await page.setContent(group);
+    // Measure after the web font settles, so a late font swap doesn't read as a resize.
+    await page.evaluate(() => document.fonts.ready);
+
+    const before = await pillStyle(page, 'pds-radio:first-of-type');
+    await page.click('pds-radio:first-of-type label');
+    await page.waitForChanges();
+    const after = await pillStyle(page, 'pds-radio:first-of-type');
+
+    expect(await page.$eval('#free', (el: HTMLInputElement) => el.checked)).toBe(true);
+    expect(after.boxShadow).not.toBe('none');
+    expect(after.width).toBe(before.width);
+    expect(after.height).toBe(before.height);
+  });
+
+  it('shows no focus ring on a mouse click', async () => {
+    const page = await newE2EPage();
+    await page.setContent(group);
+
+    await page.click('pds-radio:first-of-type label');
+    await page.waitForChanges();
+
+    expect((await pillStyle(page, 'pds-radio:first-of-type')).outlineStyle).toBe('none');
+  });
+
+  it('moves the checked radio with arrow keys and shows the focus ring', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<button>before</button>${group}`);
+
+    await page.focus('button');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('ArrowRight');
+    await page.waitForChanges();
+
+    expect(await page.$eval('#pro', (el: HTMLInputElement) => el.checked)).toBe(true);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('pro');
+    expect((await pillStyle(page, 'pds-radio:nth-of-type(2)')).outlineStyle).toBe('solid');
+  });
+
+  it('submits the checked value with the form', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<form>${group}</form>`);
+
+    await page.click('pds-radio:nth-of-type(3) label');
+    await page.waitForChanges();
+
+    const value = await page.$eval('form', (form: HTMLFormElement) => new FormData(form).get('plan'));
+    expect(value).toBe('team');
+  });
+
+  it('follows the theme in dark mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio id="light" component-id="light" label="Light" variant="pill" checked></pds-radio>
+      <div data-theme="dark">
+        <pds-radio id="dark" component-id="dark" label="Dark" variant="pill" checked></pds-radio>
+      </div>
+    `);
+
+    const light = await pillStyle(page, '#light');
+    const dark = await pillStyle(page, '#dark');
+    expect(dark.borderColor).not.toBe(light.borderColor);
+  });
+
+  it('has no axe violations in a group', async () => {
+    const page = await newE2EPage();
+    await page.setContent(group);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('looks disabled and ignores clicks', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio id="free" component-id="free" value="free" label="Free" variant="pill"></pds-radio>
+      <pds-radio id="pro" component-id="pro" value="pro" label="Pro" variant="pill" disabled></pds-radio>
+    `);
+
+    const enabled = await pillStyle(page, '#free');
+    const disabled = await pillStyle(page, '#pro');
+    expect(disabled.borderColor).not.toBe(enabled.borderColor);
+
+    await page.click('#pro label');
+    await page.waitForChanges();
+    expect(await page.$eval('#pro', (el: HTMLInputElement) => el.checked)).toBe(false);
+  });
+
+  // Unlike the checkbox pill, an invalid radio pill has no border rule: it shows only the
+  // error message, as pds-radio.mdx documents.
+  it('shows only the error message when invalid, with no border change', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio id="free" component-id="free" value="free" label="Free" variant="pill"></pds-radio>
+      <pds-radio
+        id="pro"
+        component-id="pro"
+        value="pro"
+        label="Pro"
+        variant="pill"
+        invalid
+        error-message="Pick a plan"
+      ></pds-radio>
+    `);
+
+    const valid = await pillStyle(page, '#free');
+    const invalid = await pillStyle(page, '#pro');
+    expect(invalid.borderColor).toBe(valid.borderColor);
+
+    const message = await page.find('#pro .pds-radio__message--error');
+    expect(message.textContent).toContain('Pick a plan');
+  });
+
+  // The CDP forced-colors emulation below only takes effect on content rendered after it's set;
+  // setting it after setContent() leaves a pill showing its normal, unremapped colors, so every
+  // forced-colors test here sets it up first.
+  async function forcedColorsPage() {
+    const page = await newE2EPage();
+    const client = await page.createCDPSession();
+    // emulateMediaFeatures only allows prefers-color-scheme/prefers-reduced-motion/color-gamut;
+    // forced-colors needs the raw CDP call.
+    await client.send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'forced-colors', value: 'active' }],
+    });
+    return page;
+  }
+
+  // Regression: the checked state's forced-colors outline used to win over the focus-visible
+  // outline (same specificity, later in the stylesheet), so a checked, keyboard-focused pill
+  // was indistinguishable from a checked, unfocused one.
+  it('keeps a visible focus ring on a checked pill in forced-colors mode', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(`<button>before</button>${group}`);
+    await page.waitForChanges();
+
+    await page.click('pds-radio:first-of-type label');
+    await page.waitForChanges();
+    const checkedOnly = await pillStyle(page, 'pds-radio:first-of-type');
+
+    await page.focus('button');
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+    const checkedAndFocused = await pillStyle(page, 'pds-radio:first-of-type');
+
+    expect(checkedOnly.outlineStyle).toBe('none');
+    expect(checkedAndFocused.outlineStyle).toBe('solid');
+  });
+
+  it('distinguishes checked, disabled and disabled-checked pills by color and border width in forced-colors mode', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(`
+      <pds-radio id="checked" component-id="checked" value="checked" label="Checked" variant="pill" checked></pds-radio>
+      <pds-radio id="disabled" component-id="disabled" value="disabled" label="Disabled" variant="pill" disabled></pds-radio>
+      <pds-radio id="disabled-checked" component-id="disabled-checked" value="disabled-checked" label="Disabled checked" variant="pill" disabled checked></pds-radio>
+    `);
+    await page.waitForChanges();
+
+    const checked = await pillStyle(page, '#checked');
+    const disabled = await pillStyle(page, '#disabled');
+    const disabledChecked = await pillStyle(page, '#disabled-checked');
+
+    // Highlight vs GrayText: checked (enabled) and disabled don't share a color.
+    expect(checked.borderColor).not.toBe(disabled.borderColor);
+    // Both disabled states share GrayText; only the checked one is distinguishable by width.
+    expect(disabledChecked.borderColor).toBe(disabled.borderColor);
+    expect(disabledChecked.borderWidth).not.toBe(disabled.borderWidth);
+    expect(checked.borderWidth).toBe(disabledChecked.borderWidth);
+  });
+
+  // Regression: the thicker forced-colors checked border grew the pill, since its label has no
+  // explicit width for box-sizing: border-box to hold steady — the same resize this pill design
+  // avoids outside forced-colors with an inset ring instead of a border change.
+  it('does not resize a pill when its thicker forced-colors checked border appears', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(group);
+    await page.evaluate(() => document.fonts.ready);
+
+    const before = await pillStyle(page, 'pds-radio:first-of-type');
+    await page.click('pds-radio:first-of-type label');
+    await page.waitForChanges();
+    const after = await pillStyle(page, 'pds-radio:first-of-type');
+
+    expect(after.width).toBe(before.width);
+    expect(after.height).toBe(before.height);
+  });
+});

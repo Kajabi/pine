@@ -93,7 +93,7 @@ WithValue.args = {
 
 export const MinAndMax = BaseTemplate.bind({});
 MinAndMax.args = {
-  componentId: 'pds-datepicker-range-example',
+  componentId: 'pds-datepicker-min-max-example',
   helperMessage: 'Pick a day between October 5 and November 20.',
   label: 'Delivery date',
   max: '2026-11-20',

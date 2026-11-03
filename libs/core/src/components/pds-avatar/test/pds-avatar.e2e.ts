@@ -114,3 +114,19 @@ describe('pds-avatar accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+describe('pds-avatar badge label', () => {
+  it('gives the badge an accessible name', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar badge="true"></pds-avatar>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('has no axe violations with initials and a badge', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar badge="true" initials="QJ"></pds-avatar>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});

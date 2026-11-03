@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import imgFile from '../assets/demi_wilkinson.jpg';
 
 
@@ -22,6 +23,7 @@ export default {
 const BaseTemplate = (args) => html`<pds-avatar
 	alt="${args.alt}"
 	badge="${args.badge}"
+	badge-label=${ifDefined(args.badgeLabel)}
 	dropdown="${args.dropdown}"
 	component-id="${args.componentId}"
 	image="${args.image}"

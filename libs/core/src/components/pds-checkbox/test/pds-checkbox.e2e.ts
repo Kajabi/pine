@@ -204,3 +204,215 @@ describe('pds-checkbox in a disabled fieldset', () => {
     expect(await disabled()).toBe(false);
   });
 });
+
+describe('pds-checkbox pill variant', () => {
+  const pillStyle = (page, selector: string) =>
+    page.$eval(selector, (el) => {
+      const label = el.shadowRoot.querySelector('label');
+      const style = getComputedStyle(label);
+      const rect = label.getBoundingClientRect();
+      return {
+        boxShadow: style.boxShadow,
+        borderColor: style.borderTopColor,
+        borderWidth: style.borderTopWidth,
+        outlineStyle: style.outlineStyle,
+        width: rect.width,
+        height: rect.height,
+      };
+    });
+
+  const pills = `
+    <form>
+      <pds-checkbox id="email" component-id="email" name="channels" value="email" label="Email" variant="pill"></pds-checkbox>
+      <pds-checkbox id="sms" component-id="sms" name="channels" value="sms" label="SMS" variant="pill"></pds-checkbox>
+    </form>
+  `;
+
+  it('toggles when the pill is clicked, without resizing it or showing a focus ring', async () => {
+    const page = await newE2EPage();
+    await page.setContent(pills);
+    // Measure after the web font settles, so a late font swap doesn't read as a resize.
+    await page.evaluate(() => document.fonts.ready);
+
+    const before = await pillStyle(page, '#email');
+    const label = await page.find('#email >>> label');
+    await label.click();
+    await page.waitForChanges();
+    const after = await pillStyle(page, '#email');
+
+    expect(await page.$eval('#email', (el: HTMLPdsCheckboxElement) => el.checked)).toBe(true);
+    expect(after.boxShadow).not.toBe('none');
+    expect(after.width).toBe(before.width);
+    expect(after.height).toBe(before.height);
+    expect(after.outlineStyle).toBe('none');
+  });
+
+  it('toggles with Space and shows the focus ring from the keyboard', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<button>before</button>${pills}`);
+
+    await page.focus('button');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+
+    expect(await page.$eval('#email', (el: HTMLPdsCheckboxElement) => el.checked)).toBe(true);
+    expect((await pillStyle(page, '#email')).outlineStyle).toBe('solid');
+
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+    expect(await page.$eval('#email', (el: HTMLPdsCheckboxElement) => el.checked)).toBe(false);
+  });
+
+  it('submits checked values with the form', async () => {
+    const page = await newE2EPage();
+    await page.setContent(pills);
+
+    await (await page.find('#email >>> label')).click();
+    await (await page.find('#sms >>> label')).click();
+    await page.waitForChanges();
+
+    const values = await page.$eval('form', (form: HTMLFormElement) => new FormData(form).getAll('channels'));
+    expect(values).toEqual(['email', 'sms']);
+  });
+
+  it('follows the theme in dark mode', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox id="light" component-id="light" label="Light" variant="pill" checked></pds-checkbox>
+      <div data-theme="dark">
+        <pds-checkbox id="dark" component-id="dark" label="Dark" variant="pill" checked></pds-checkbox>
+      </div>
+    `);
+
+    const light = await pillStyle(page, '#light');
+    const dark = await pillStyle(page, '#dark');
+    expect(dark.borderColor).not.toBe(light.borderColor);
+  });
+
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox component-id="a" label="Email" variant="pill" checked></pds-checkbox>
+      <pds-checkbox component-id="b" label="SMS" variant="pill" invalid error-message="Pick a channel"></pds-checkbox>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('looks disabled and ignores clicks', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox id="email" component-id="email" label="Email" variant="pill"></pds-checkbox>
+      <pds-checkbox id="sms" component-id="sms" label="SMS" variant="pill" disabled></pds-checkbox>
+    `);
+
+    const enabled = await pillStyle(page, '#email');
+    const disabled = await pillStyle(page, '#sms');
+    expect(disabled.borderColor).not.toBe(enabled.borderColor);
+
+    await (await page.find('#sms >>> label')).click();
+    await page.waitForChanges();
+    expect(await page.$eval('#sms', (el: HTMLPdsCheckboxElement) => el.checked)).toBe(false);
+  });
+
+  it('turns the border red when invalid', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox id="email" component-id="email" label="Email" variant="pill"></pds-checkbox>
+      <pds-checkbox id="sms" component-id="sms" label="SMS" variant="pill" invalid error-message="Pick a channel"></pds-checkbox>
+    `);
+
+    const valid = await pillStyle(page, '#email');
+    const invalid = await pillStyle(page, '#sms');
+    expect(invalid.borderColor).not.toBe(valid.borderColor);
+  });
+
+  // The CDP forced-colors emulation below only takes effect on content rendered after it's set;
+  // setting it after setContent() leaves a pill's shadow DOM showing its normal, unremapped
+  // colors, so every forced-colors test below sets it up first.
+  async function forcedColorsPage() {
+    const page = await newE2EPage();
+    const client = await page.createCDPSession();
+    // emulateMediaFeatures only allows prefers-color-scheme/prefers-reduced-motion/color-gamut;
+    // forced-colors needs the raw CDP call.
+    await client.send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'forced-colors', value: 'active' }],
+    });
+    return page;
+  }
+
+  // Regression: the checked state's forced-colors outline used to win over the focus-visible
+  // outline (same specificity, later in the stylesheet), so a checked, keyboard-focused pill
+  // was indistinguishable from a checked, unfocused one.
+  it('keeps a visible focus ring on a checked pill in forced-colors mode', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(`<button>before</button>${pills}`);
+    await page.waitForChanges();
+
+    await (await page.find('#email >>> label')).click();
+    await page.waitForChanges();
+    const checkedOnly = await pillStyle(page, '#email');
+
+    await page.focus('button');
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+    const checkedAndFocused = await pillStyle(page, '#email');
+
+    expect(checkedOnly.outlineStyle).toBe('none');
+    expect(checkedAndFocused.outlineStyle).toBe('solid');
+  });
+
+  it('distinguishes checked, disabled and disabled-checked pills by color and border width in forced-colors mode', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(`
+      <pds-checkbox id="checked" component-id="checked" label="Checked" variant="pill" checked></pds-checkbox>
+      <pds-checkbox id="disabled" component-id="disabled" label="Disabled" variant="pill" disabled></pds-checkbox>
+      <pds-checkbox id="disabled-checked" component-id="disabled-checked" label="Disabled checked" variant="pill" disabled checked></pds-checkbox>
+    `);
+    await page.waitForChanges();
+
+    const checked = await pillStyle(page, '#checked');
+    const disabled = await pillStyle(page, '#disabled');
+    const disabledChecked = await pillStyle(page, '#disabled-checked');
+
+    // Highlight vs GrayText: checked (enabled) and disabled don't share a color.
+    expect(checked.borderColor).not.toBe(disabled.borderColor);
+    // Both disabled states share GrayText; only the checked one is distinguishable by width.
+    expect(disabledChecked.borderColor).toBe(disabled.borderColor);
+    expect(disabledChecked.borderWidth).not.toBe(disabled.borderWidth);
+    expect(checked.borderWidth).toBe(disabledChecked.borderWidth);
+  });
+
+  it('distinguishes an invalid checked pill from an invalid unchecked one in forced-colors mode', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(`
+      <pds-checkbox id="checked" component-id="checked" label="Checked" variant="pill" invalid="true" checked></pds-checkbox>
+      <pds-checkbox id="unchecked" component-id="unchecked" label="Unchecked" variant="pill" invalid="true"></pds-checkbox>
+    `);
+    await page.waitForChanges();
+
+    const checked = await pillStyle(page, '#checked');
+    const unchecked = await pillStyle(page, '#unchecked');
+
+    expect(checked.borderColor).not.toBe(unchecked.borderColor);
+    expect(checked.borderWidth).not.toBe(unchecked.borderWidth);
+  });
+
+  // Regression: the thicker forced-colors checked border grew the pill, since its label has no
+  // explicit width for box-sizing: border-box to hold steady — the same resize this pill design
+  // avoids outside forced-colors with an inset ring instead of a border change.
+  it('does not resize a pill when its thicker forced-colors checked border appears', async () => {
+    const page = await forcedColorsPage();
+    await page.setContent(pills);
+    await page.evaluate(() => document.fonts.ready);
+
+    const before = await pillStyle(page, '#email');
+    await (await page.find('#email >>> label')).click();
+    await page.waitForChanges();
+    const after = await pillStyle(page, '#email');
+
+    expect(after.width).toBe(before.width);
+    expect(after.height).toBe(before.height);
+  });
+});

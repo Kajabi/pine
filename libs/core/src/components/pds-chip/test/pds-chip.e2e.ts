@@ -283,6 +283,28 @@ describe('pds-chip', () => {
       expect(position.leftOfListbox).toBe(true);
       expect(position.rowOffset).toBeLessThan(1);
     });
+
+    // pds-multiselect labels each option's checkbox with a chip, so focus on that checkbox stands for the chip.
+    it('shows the tooltip while a checkbox labelled by the chip has keyboard focus', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <ul role="listbox" aria-label="Tags">
+          <li role="option" aria-selected="false">
+            <pds-checkbox component-id="tag"><pds-chip slot="label" max-width="60px">${LONG_LABEL}</pds-chip></pds-checkbox>
+          </li>
+        </ul>
+      `);
+
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+
+      expect(await page.$eval('pds-checkbox', (el) => el.shadowRoot.activeElement?.tagName)).toBe('INPUT');
+      expect(await truncationTooltipText(page)).toBe(LONG_LABEL);
+
+      // As in pds-multiselect's own panel, the checkbox input nested in the option trips nested-interactive.
+      const violations = await runAxe(page, { rules: { 'nested-interactive': { enabled: false } } });
+      expect(formatViolations(violations)).toBe('');
+    });
   });
 
   it('shows the tooltip while the wrapping control has focus, and Tab leaves without stopping on the label', async () => {
@@ -331,6 +353,103 @@ describe('pds-chip', () => {
 
     expect(await page.evaluate(() => document.activeElement.tagName)).toBe('PDS-BUTTON');
     expect(await truncationTooltipText(page)).toBeNull();
+  });
+
+  // A clipped text beside the chip keeps a tab stop of its own, and its focus bubbles to the control the chip listens on.
+  describe('beside a clipped text inside the wrapping control', () => {
+    const LONG_TEXT = 'A very long title that would otherwise overflow the text';
+
+    const WRAPPERS = [
+      ['link', '<a href="#">', '</a>'],
+      ['button', '<button type="button">', '</button>'],
+      ['pds-button', '<pds-button variant="unstyled">', '</pds-button>'],
+      ['pds-link', '<pds-link href="#">', '</pds-link>'],
+      [
+        'pds-tab',
+        '<pds-tabs component-id="tabs" active-tab-name="one"><pds-tab name="one" slot="tabs">',
+        '</pds-tab><pds-tabpanel name="one">Panel</pds-tabpanel></pds-tabs>',
+      ],
+      ['pds-dropdown-menu-item', '<pds-dropdown-menu-item>', '</pds-dropdown-menu-item>'],
+    ];
+
+    const truncationTooltipTexts = (page: E2EPage) =>
+      page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
+
+    const setContent = async (open: string, close: string) => {
+      const page = await newE2EPage();
+      await page.setContent(
+        `${open}<pds-text truncate style="width: 60px;">${LONG_TEXT}</pds-text><pds-chip max-width="60px">${LONG_LABEL}</pds-chip>${close}`,
+      );
+      return page;
+    };
+
+    // A menu item takes focus from the arrow keys inside its menu, never from Tab.
+    it.each(WRAPPERS.filter(([name]) => name !== 'pds-dropdown-menu-item'))(
+      'shows only the tooltip of the stop inside a %s that has focus',
+      async (_name, open, close) => {
+        const page = await setContent(open, close);
+
+        await page.keyboard.press('Tab');
+        await waitOutHideDelay();
+        expect(await truncationTooltipTexts(page)).toEqual([LONG_LABEL]);
+
+        await page.keyboard.press('Tab');
+        await waitOutHideDelay();
+        expect(await truncationTooltipTexts(page)).toEqual([LONG_TEXT]);
+
+        await page.keyboard.down('Shift');
+        await page.keyboard.press('Tab');
+        await page.keyboard.up('Shift');
+        await waitOutHideDelay();
+        expect(await truncationTooltipTexts(page)).toEqual([LONG_LABEL]);
+
+        const violations = await runAxe(page);
+        expect(formatViolations(violations)).toBe('');
+      },
+    );
+
+    it.each(WRAPPERS)(
+      'shows only the text tooltip when a key press after clicking the text inside a %s makes its focus visible',
+      async (_name, open, close) => {
+        const page = await setContent(open, close);
+
+        await page.click('pds-text');
+        await page.mouse.move(0, 0);
+        await waitOutHideDelay();
+        expect(await truncationTooltipTexts(page)).toEqual([]);
+
+        // A letter, since arrow keys move focus between tabs.
+        await page.keyboard.press('a');
+        await page.waitForChanges();
+
+        expect(await truncationTooltipTexts(page)).toEqual([LONG_TEXT]);
+
+        const violations = await runAxe(page);
+        expect(formatViolations(violations)).toBe('');
+      },
+    );
+
+    it('shows only the chip tooltip when the arrow keys reach a menu item holding both', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger">Toggle Menu</button>
+          <pds-dropdown-menu-item><pds-text truncate style="width: 60px;">${LONG_TEXT}</pds-text><pds-chip max-width="60px">${LONG_LABEL}</pds-chip></pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+      await page.click('#trigger');
+      await page.waitForChanges();
+
+      await page.keyboard.press('ArrowDown');
+      await waitOutHideDelay();
+
+      expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('PDS-DROPDOWN-MENU-ITEM');
+      expect(await truncationTooltipTexts(page)).toEqual([LONG_LABEL]);
+
+      // Any open pds-dropdown-menu fails aria-required-children: its items render role="none" under role="menu".
+      const violations = await runAxe(page, { rules: { 'aria-required-children': { enabled: false } } });
+      expect(formatViolations(violations)).toBe('');
+    });
   });
 
   it('shows the tooltip when Tab reaches the clipped label', async () => {
@@ -723,5 +842,53 @@ describe('pds-chip after its host classes and styles are stripped', () => {
     await page.setContent('<pds-chip class="consumer" sentiment="success" variant="dropdown" max-width="120px">Chip</pds-chip>');
 
     await expectStylingSurvivesStrip(page, 'pds-chip');
+  });
+});
+
+describe('pds-chip inside an open pds-modal', () => {
+  it('shows its truncation tooltip above the modal', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="tags">
+        <button id="first">First</button>
+        <pds-chip max-width="80px">${LONG_LABEL}</pds-chip>
+      </pds-modal>`);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    // The modal moves focus to its first control after a short delay.
+    await page.waitForFunction(() => document.activeElement?.id === 'first');
+
+    await page.hover('pds-chip');
+    await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+    const placement = await page.evaluate(() => {
+      const portal = document.querySelector('.pds-truncation-tooltip') as HTMLElement;
+      const box = (portal.firstElementChild as HTMLElement).getBoundingClientRect();
+      const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+      return { parent: portal.parentElement?.localName, hitsTooltip: portal.contains(hit) };
+    });
+    expect(placement).toEqual({ parent: 'dialog', hitsTooltip: true });
+    expect(await truncationTooltipText(page)).toContain(LONG_LABEL);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('closes its truncation tooltip with the modal when no pointer move would, as after a tap', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="tags">
+        <button id="first">First</button>
+        <pds-chip max-width="80px">${LONG_LABEL}</pds-chip>
+      </pds-modal>`);
+    const modal = await page.find('pds-modal');
+    await modal.callMethod('showModal');
+    await page.waitForFunction(() => document.activeElement?.id === 'first');
+    // Opens it the way a tap does, without a hover the browser could end when the modal closes.
+    await page.$eval('pds-chip', (chip) => chip.dispatchEvent(new MouseEvent('mouseenter')));
+    await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+    await modal.callMethod('hideModal');
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    expect(await page.evaluate(() => !!document.querySelector('.pds-truncation-tooltip'))).toBe(false);
   });
 });

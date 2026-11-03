@@ -30,3 +30,23 @@ describe('pds-alert accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+describe('pds-alert severity', () => {
+  const text = (node) => [node.name, ...(node.children ?? []).flatMap(text)].filter(Boolean).join(' ');
+
+  it('announces its severity before the message, and not the icon name', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-alert variant="danger">Payment failed</pds-alert>');
+
+    const spoken = text(await page.accessibility.snapshot());
+    expect(spoken).toMatch(/Error.*Payment failed/);
+    expect(spoken).not.toMatch(/warning filled/);
+  });
+
+  it('announces severity when the icon is hidden', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-alert variant="warning" hide-icon>Storage almost full</pds-alert>');
+
+    expect(text(await page.accessibility.snapshot())).toMatch(/Warning.*Storage almost full/);
+  });
+});

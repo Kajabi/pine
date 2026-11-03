@@ -4,7 +4,7 @@ import { assignDescription, messageId, exposeTypeProperty } from '../../utils/fo
 import { danger } from '@pine-ds/icons/icons';
 
 /**
- * @slot image - Custom image content to display instead of the default radio input
+ * @slot image - Custom image content to display instead of the default radio input. Ignored when `variant` is `pill`.
  * @part image-container - The container for the image
  * @lightDom renders-markup
  */
@@ -49,7 +49,7 @@ export class PdsRadio {
   @Prop() helperMessage: string;
 
   /**
-   * Adds a border around the radio component for better visual separation.
+   * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
    * @defaultValue false
    */
   @Prop() hasBorder = false;
@@ -66,7 +66,7 @@ export class PdsRadio {
   @Prop() label: string;
 
   /**
-   * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+   * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
    */
   @Prop() hideLabel: boolean;
 
@@ -86,6 +86,11 @@ export class PdsRadio {
    */
   @Prop() value: string;
 
+  /**
+   * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+   * @defaultValue default
+   */
+  @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
    * Emits a boolean indicating whether the radio is currently checked or unchecked.
@@ -118,6 +123,10 @@ export class PdsRadio {
     return this._hasImage;
   }
 
+  private isPill(): boolean {
+    return this.variant === 'pill';
+  }
+
   private classNames() {
     const classNames = [];
 
@@ -127,10 +136,14 @@ export class PdsRadio {
     if (this.disabled) {
       classNames.push('is-disabled');
     }
-    if (this.hasBorder) {
+    // A pill is its own bordered shape, so has-border doesn't stack a card around it.
+    if (this.hasBorder && !this.isPill()) {
       classNames.push('has-border');
     }
-    if (this.hasImage()) {
+    if (this.isPill()) {
+      classNames.push('pds-radio--pill');
+    }
+    if (this.hasImage() && !this.isPill()) {
       classNames.push('has-image');
     }
 
@@ -180,9 +193,9 @@ export class PdsRadio {
           required={this.required}
           disabled={this.disabled}
           onChange={this.handleRadioChange}
-          class={this.hasImage() ? 'visually-hidden' : ''}
+          class={this.hasImage() || this.isPill() ? 'visually-hidden' : ''}
         />
-        <span class={this.hideLabel ? 'visually-hidden' : ''}>
+        <span class={this.hideLabel && !this.isPill() ? 'visually-hidden' : ''}>
           {this.label}
         </span>
       </label>,
@@ -211,14 +224,16 @@ export class PdsRadio {
     const hostClass = this.classNames();
     this.hostKeeper.record(hostClass);
 
+    const showImage = this.hasImage() && !this.isPill();
+
     return (
       <Host class={hostClass}>
-        {this.hasImage() && (
+        {showImage && (
           <div class="pds-radio__image-container" part="image-container">
             <slot name="image" onSlotchange={() => (this._hasImage = this.hasImageSlot())} />
           </div>
         )}
-        {this.hasImage() ? (
+        {showImage ? (
           <div class="pds-radio__content-wrapper">
             {renderLabelAndMessages()}
           </div>

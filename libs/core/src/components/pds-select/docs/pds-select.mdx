@@ -33,6 +33,10 @@ Selects present a single-choice dropdown, letting users pick one value from a pr
 
 ## Usage Notes
 
+### Options stay in sync
+
+Changing an option's text, value or disabled state, or adding, removing or reordering options (including inside an `optgroup`), is reflected in the dropdown on the next frame without re-rendering the component. The current value stays selected while an option with that value exists. When an option change leaves a non-empty value with no matching option, nothing is shown selected and the value is kept.
+
 ### Working with Labels
 
 When analyzing designs or screenshots, text that appears above a select dropdown is the select's label, not a separate `pds-text` component. The `label` prop creates text that appears above the select field and integrates properly with the component's styling and accessibility features.
@@ -390,7 +394,9 @@ The action slot allows you to add helpful content next to the select label, such
   mdxSource={{
     react: `<PdsSelect componentId="pds-select-action-tooltip" label="Country" name="country" required>
   <PdsTooltip slot="action" placement="bottom-start">
-    <PdsIcon name="question-circle"></PdsIcon>
+    <PdsButton variant="unstyled" aria-label="Help with country">
+      <PdsIcon name="question-circle" aria-hidden="true"></PdsIcon>
+    </PdsButton>
     <span slot="content">Select your country of residence for shipping purposes</span>
   </PdsTooltip>
   <option value="">Choose a country</option>
@@ -401,7 +407,9 @@ The action slot allows you to add helpful content next to the select label, such
 </PdsSelect>`,
     webComponent: `<pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
   <pds-tooltip slot="action" placement="bottom-start">
-    <pds-icon name="question-circle"></pds-icon>
+    <pds-button variant="unstyled" aria-label="Help with country">
+      <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+    </pds-button>
     <span slot="content">Select your country of residence for shipping purposes</span>
   </pds-tooltip>
   <option value="">Choose a country</option>
@@ -413,7 +421,9 @@ The action slot allows you to add helpful content next to the select label, such
 }}>
   <pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
     <pds-tooltip slot="action" placement="bottom-start">
-      <pds-icon name="question-circle"></pds-icon>
+      <pds-button variant="unstyled" aria-label="Help with country">
+        <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+      </pds-button>
       <span slot="content">Select your country of residence for shipping purposes</span>
     </pds-tooltip>
     <option value="">Choose a country</option>

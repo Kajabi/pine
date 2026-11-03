@@ -231,6 +231,14 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() triggerShape: 'pill' | 'input' = 'pill';
 
   /**
+   * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis.
+   * When a label overflows, a `title` showing the full label will appear on hover.
+   * Chip options, custom layouts and group rows aren't affected.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) truncate = false;
+
+  /**
    * The sentiment for the chip trigger. Matches Pine chip sentiments.
    * @default 'neutral'
    */
@@ -544,6 +552,18 @@ export class PdsCombobox implements BasePdsProps {
     const panelFocusEl = this.hidesPanelSearch ? this.panelTreeEl : this.panelSearchEl;
     if (this.isOpen && this.usesPanelSearch && panelFocusEl && panelFocusEl !== this.panelFocusEl) {
       this.focusPanel(panelFocusEl);
+    }
+  }
+
+  // A `title` only while the text is cut, measured on hover. On the span, not the option or trigger,
+  // so it isn't read again as their description.
+  private syncTitle(el: HTMLElement, selector: string) {
+    const text = el.querySelector<HTMLElement>(selector);
+    if (!text) return;
+    if (text.scrollWidth > text.clientWidth) {
+      text.title = text.textContent || '';
+    } else {
+      text.removeAttribute('title');
     }
   }
 
@@ -2053,10 +2073,15 @@ export class PdsCombobox implements BasePdsProps {
     if (this.usesPanelSearch) this.restoreFocusToTrigger();
   };
 
+  private onButtonTriggerMouseEnter = (event: Event) => {
+    this.syncTitle(event.currentTarget as HTMLElement, '.pds-combobox__button-trigger-text');
+  };
+
   // Event handler for mouse enter on option
   private onOptionMouseEnter = (event: Event) => {
-    const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
-    this.highlightedIndex = idx;
+    const row = event.currentTarget as HTMLElement;
+    if (this.truncate) this.syncTitle(row, '.pds-combobox__option-text');
+    this.highlightedIndex = Number(row.getAttribute('data-option-index'));
     this.keyboardNavigating = false;
   };
 
@@ -2405,6 +2430,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__listbox--drill-in': this.drillDirection === 'in',
           'pds-combobox__listbox--drill-out': this.drillDirection === 'out',
           'pds-combobox__listbox--pointer-hover': this.pointerCanHover,
+          'pds-combobox__listbox--truncate': this.truncate,
         }}
         onAnimationEnd={this.onDrillAnimationEnd}
         onPointerMove={this.onPanelPointer}
@@ -2758,12 +2784,17 @@ export class PdsCombobox implements BasePdsProps {
   /** An option's text, after its `data-icon` when it has one. */
   private renderOptionLabel(option: HTMLOptionElement) {
     const icon = optionIconOf(option);
-    if (icon === null) return this.getOptionLabel(option);
+    const label = this.truncate ? (
+      <span key={this.getOptionLabel(option)} class="pds-combobox__option-text">
+        {this.getOptionLabel(option)}
+      </span>
+    ) : this.getOptionLabel(option);
+    if (icon === null) return label;
     return (
       <span class="pds-combobox__option-label">
         {/* `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized. */}
         <pds-icon name={icon} size="regular" aria-hidden="true" class="pds-combobox__option-icon" />
-        {this.getOptionLabel(option)}
+        {label}
       </span>
     );
   }
@@ -2942,7 +2973,14 @@ export class PdsCombobox implements BasePdsProps {
           // `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized.
           <pds-icon name={icon} size="regular" aria-hidden="true" class="pds-combobox__button-trigger-icon" />
         )}
-        {this.selectedLabel || this.placeholder}
+        {this.truncate ? (
+          // Keyed so a new label drops a stale `title`.
+          <span key={this.selectedLabel || this.placeholder} class="pds-combobox__button-trigger-text">
+            {this.selectedLabel || this.placeholder}
+          </span>
+        ) : (
+          this.selectedLabel || this.placeholder
+        )}
       </span>
     );
   }
@@ -3136,6 +3174,7 @@ export class PdsCombobox implements BasePdsProps {
       'pds-combobox__button-trigger',
       `pds-combobox__button-trigger--${this.triggerVariant}`,
       this.triggerShape === 'input' && 'pds-combobox__button-trigger--input-shape',
+      this.truncate && 'pds-combobox__button-trigger--truncate',
     ]
       .filter(Boolean)
       .join(' ');
@@ -3231,6 +3270,7 @@ export class PdsCombobox implements BasePdsProps {
               data-layout={this.customTriggerContent}
               onKeyDown={this.onButtonTriggerKeyDown}
               onKeyUp={this.onButtonTriggerKeyUp}
+              onMouseEnter={this.truncate ? this.onButtonTriggerMouseEnter : undefined}
               ref={el => (this.triggerEl = el as HTMLElement)}
               part="button-trigger"
             >

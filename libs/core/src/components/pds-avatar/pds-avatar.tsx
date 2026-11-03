@@ -2,6 +2,9 @@ import { Component, Element, Host, h, Prop, Watch } from '@stencil/core';
 import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
 import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 
+// Used when `badgeLabel` is unset; an empty string hides the badge instead.
+const DEFAULT_BADGE_LABEL = 'Verified';
+
 /**
  * @part asset-wrapper
  * @part button
@@ -27,6 +30,15 @@ export class PdsAvatar {
    * @defaultValue false
    */
   @Prop() badge? = false;
+
+  /**
+   * Accessible label for the badge icon. Pass a translated string to localize
+   * it; defaults to English. Pass an empty string to make the badge
+   * decorative. Has no effect on dropdown avatars, where the trigger's
+   * `triggerLabel` owns the accessible name.
+   * @defaultValue 'Verified'
+   */
+  @Prop() badgeLabel?: string;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -155,15 +167,30 @@ export class PdsAvatar {
     )
   };
 
-  private renderBadge = () => (
+  private renderBadge = () => {
+    // Inside the dropdown trigger the button's aria-label is the name, so the
+    // badge is decorative there, as the status dot is. An empty label is
+    // decorative too, rather than an image with no name.
+    const badgeLabel = this.badgeLabel ?? DEFAULT_BADGE_LABEL;
+    const label = this.dropdown || badgeLabel === '' ? undefined : badgeLabel;
+
+    return (
     // `badge` and `status` share the bottom-end corner; `status` wins so the
     // presence dot is never painted over the badge.
     this.badge && !this.status
     // Percentage is average size of icon in relation to total avatar size
     // of all preset sizes found in Figma.
     // Used to allow icons to scale to container size
-      && <pds-icon color="var(--pine-color-purple-600)" class="pds-avatar__badge" icon={checkCircleFilled} size="33.53%"></pds-icon>
-  );
+      && <pds-icon
+        color="var(--pine-color-purple-600)"
+        class="pds-avatar__badge"
+        icon={checkCircleFilled}
+        size="33.53%"
+        aria-label={label}
+        aria-hidden={label === undefined ? 'true' : undefined}
+      ></pds-icon>
+    );
+  };
 
   private renderStatus = () => {
     if (!this.status) return null;

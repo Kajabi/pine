@@ -109,6 +109,11 @@ export namespace Components {
          */
         "hideIcon": boolean;
         /**
+          * Accessible label announcing the alert's severity, read before the heading and message. Pass a translated string to localize it; defaults to English for each variant (`Error`, `Info`, `Success`, `Warning`). The `default` variant has no severity and announces none unless this is set; pass an empty string to announce none for any variant.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -130,6 +135,11 @@ export namespace Components {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Pass an empty string to make the badge decorative. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
+          * @defaultValue 'Verified'
+         */
+        "badgeLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -853,11 +863,11 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate": boolean;
         /**
@@ -880,6 +890,11 @@ export namespace Components {
           * The value of the checkbox that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -1136,6 +1151,11 @@ export namespace Components {
           * @default 'fit-content'
          */
         "triggerWidth": string;
+        /**
+          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover. Chip options, custom layouts and group rows aren't affected.
+          * @defaultValue false
+         */
+        "truncate": boolean;
         /**
           * The value of the combobox input.
           * @default ''
@@ -1540,6 +1560,11 @@ export namespace Components {
          */
         "external": boolean;
         /**
+          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
           * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href": string | undefined;
@@ -1764,6 +1789,11 @@ export namespace Components {
           * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
          */
         "external": boolean;
+        /**
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
         /**
           * The font size of the link's text.
           * @defaultValue lg
@@ -2259,7 +2289,7 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder": boolean;
@@ -2268,7 +2298,7 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
@@ -2293,6 +2323,11 @@ export namespace Components {
           * The value of the radio that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     /**
      * @lightDom renders-markup
@@ -2785,7 +2820,7 @@ export namespace Components {
     | 'strong'
     | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order. Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`) that holds no other truncated text or `pds-chip` with a `max-width`, no tab stop is added; the tooltip appears when that control receives keyboard focus.
          */
         "truncate"?: boolean;
         /**
@@ -2908,6 +2943,11 @@ export namespace Components {
           * The name of the icon to display in the toast.
          */
         "icon"?: string;
+        /**
+          * Accessible label announcing the toast's severity, read before the message. Pass a translated string to localize it; defaults to English (`Error`) for the `danger` type. Other types announce none unless this is set; pass an empty string to announce none.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
         /**
           * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
           * @default 'default'
@@ -3959,6 +3999,11 @@ declare namespace LocalJSX {
          */
         "onPdsAlertDismissClick"?: (event: PdsAlertCustomEvent<void>) => void;
         /**
+          * Accessible label announcing the alert's severity, read before the heading and message. Pass a translated string to localize it; defaults to English for each variant (`Error`, `Info`, `Success`, `Warning`). The `default` variant has no severity and announces none unless this is set; pass an empty string to announce none for any variant.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -3980,6 +4025,11 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Pass an empty string to make the badge decorative. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
+          * @defaultValue 'Verified'
+         */
+        "badgeLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -4708,11 +4758,11 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate"?: boolean;
         /**
@@ -4740,6 +4790,11 @@ declare namespace LocalJSX {
           * The value of the checkbox that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -5004,6 +5059,11 @@ declare namespace LocalJSX {
           * @default 'fit-content'
          */
         "triggerWidth"?: string;
+        /**
+          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover. Chip options, custom layouts and group rows aren't affected.
+          * @defaultValue false
+         */
+        "truncate"?: boolean;
         /**
           * The value of the combobox input.
           * @default ''
@@ -5420,6 +5480,11 @@ declare namespace LocalJSX {
          */
         "external"?: boolean;
         /**
+          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
           * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href"?: string | undefined;
@@ -5672,6 +5737,11 @@ declare namespace LocalJSX {
           * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
          */
         "external"?: boolean;
+        /**
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
         /**
           * The font size of the link's text.
           * @defaultValue lg
@@ -6179,7 +6249,7 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder"?: boolean;
@@ -6188,7 +6258,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
@@ -6217,6 +6287,11 @@ declare namespace LocalJSX {
           * The value of the radio that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     /**
      * @lightDom renders-markup
@@ -6753,7 +6828,7 @@ declare namespace LocalJSX {
     | 'strong'
     | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order. Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`) that holds no other truncated text or `pds-chip` with a `max-width`, no tab stop is added; the tooltip appears when that control receives keyboard focus.
          */
         "truncate"?: boolean;
         /**
@@ -6900,6 +6975,11 @@ declare namespace LocalJSX {
          */
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
         /**
+          * Accessible label announcing the toast's severity, read before the message. Pass a translated string to localize it; defaults to English (`Error`) for the `danger` type. Other types announce none unless this is set; pass an empty string to announce none.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
           * @default 'default'
          */
@@ -6963,10 +7043,12 @@ declare namespace LocalJSX {
         "hideIcon": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
         "dismissLabel": string;
+        "severityLabel": string;
     }
     interface PdsAvatarAttributes {
         "alt": string | null;
         "badge": boolean;
+        "badgeLabel": string;
         "componentId": string;
         "dropdown": boolean;
         "image": string | null;
@@ -7136,6 +7218,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsChipAttributes {
         "componentId": string;
@@ -7181,6 +7264,7 @@ declare namespace LocalJSX {
         "triggerWidth": string;
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerShape": 'pill' | 'input';
+        "truncate": boolean;
         "chipSentiment": ChipSentimentType;
         "chipLarge": boolean;
         "chipIcon": string;
@@ -7279,6 +7363,7 @@ declare namespace LocalJSX {
         "href": string | undefined;
         "informational": boolean;
         "external": boolean;
+        "externalLabel": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
     }
     interface PdsDropdownMenuSeparatorAttributes {
@@ -7335,6 +7420,7 @@ declare namespace LocalJSX {
         "download": string;
         "componentId": string;
         "external": boolean;
+        "externalLabel": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
         "variant": 'inline' | 'plain';
         "fontSize": 'sm' | 'md' | 'lg';
@@ -7451,6 +7537,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsRadioGroupAttributes {
         "componentId": string;
@@ -7629,6 +7716,7 @@ declare namespace LocalJSX {
         "icon": string;
         "type": 'default' | 'danger' | 'loading';
         "dismissLabel": string;
+        "severityLabel": string;
     }
     interface PdsTooltipAttributes {
         "content": string;

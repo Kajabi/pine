@@ -30,7 +30,7 @@ Radio components allow users to select one option from a group of two or more ch
 - Group radios logically using a `name` attribute to indicate relationships.
 - Use proper error messaging and states (e.g., `invalid`) for validation feedback.
 - Avoid disabling radios unless necessary; provide context for disabled options.
-- State classes on the host (such as `is-invalid` and `has-border`) follow the component's props, and `has-image` follows the `image` slot's content. They come back if something removes them, such as a DOM morph, so change them through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
+- State classes on the host (such as `is-invalid` and `has-border`) follow the component's props, and `has-image` follows the `image` slot's content, except on a pill (`variant="pill"`), which never carries `has-border` or `has-image` — see the Pill section below. They come back if something removes them, such as a DOM morph, so change them through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ## Properties
 
@@ -102,6 +102,31 @@ Add a border around the radio component for better visual separation, useful for
   webComponent: `<pds-radio component-id="border" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>`
 }}>
   <pds-radio component-id="border" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>
+</DocCanvas>
+
+### Pill
+
+Set `variant="pill"` to render the radio as a pill-shaped choice. The radio circle is visually hidden and the label becomes the pill, so the input is still a native radio: it submits with the form, arrow keys move between pills in a group, and screen readers announce it as a radio. Checking a pill adds an inset ring instead of a thicker border, so the pill doesn't change size. The focus ring shows for keyboard focus only. A pill always shows its label, so `hideLabel` is ignored. `invalid` shows only the error message below the pill, with no border change.
+
+Use pills for short, single-line labels such as answers to an onboarding question. Group them with `pds-radio-group` and `direction="row"`, which wraps them onto new lines as needed. A pill is its own bordered shape, so `hasBorder` has no effect, and it doesn't support the `image` slot.
+
+<DocCanvas mdxSource={{
+  react: `<PdsRadioGroup name="team-size" groupLabel="How big is your team?" direction="row">
+  <PdsRadio componentId="pill-solo" label="Just me" value="solo" variant="pill" checked />
+  <PdsRadio componentId="pill-small" label="2-10 people" value="small" variant="pill" />
+  <PdsRadio componentId="pill-large" label="More than 10" value="large" variant="pill" />
+</PdsRadioGroup>`,
+  webComponent: `<pds-radio-group name="team-size" group-label="How big is your team?" direction="row">
+  <pds-radio component-id="pill-solo" label="Just me" value="solo" variant="pill" checked></pds-radio>
+  <pds-radio component-id="pill-small" label="2-10 people" value="small" variant="pill"></pds-radio>
+  <pds-radio component-id="pill-large" label="More than 10" value="large" variant="pill"></pds-radio>
+</pds-radio-group>`
+}}>
+  <pds-radio-group name="team-size" group-label="How big is your team?" direction="row">
+    <pds-radio component-id="pill-solo" label="Just me" value="solo" variant="pill" checked></pds-radio>
+    <pds-radio component-id="pill-small" label="2-10 people" value="small" variant="pill"></pds-radio>
+    <pds-radio component-id="pill-large" label="More than 10" value="large" variant="pill"></pds-radio>
+  </pds-radio-group>
 </DocCanvas>
 
 ### Group

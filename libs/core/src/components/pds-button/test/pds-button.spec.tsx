@@ -672,6 +672,90 @@ describe('pds-button', () => {
       expect(root?.shadowRoot?.querySelector('a')?.hasAttribute('aria-pressed')).toBe(false);
     });
 
+    describe.each([
+      ['aria-describedby', 'ariaDescribedByElements'],
+      ['aria-labelledby', 'ariaLabelledByElements'],
+      ['aria-controls', 'ariaControlsElements'],
+    ])('%s', (name, property) => {
+      // mock-doc has no global Document to tell the document root apart, so it gets the spec page's.
+      let hadDocument = false;
+      let originalDocument: unknown;
+
+      beforeEach(() => {
+        hadDocument = 'Document' in globalThis;
+        originalDocument = (globalThis as { Document?: unknown }).Document;
+      });
+
+      afterEach(() => {
+        if (hadDocument) {
+          (globalThis as { Document?: unknown }).Document = originalDocument;
+        } else {
+          delete (globalThis as { Document?: unknown }).Document;
+        }
+      });
+
+      const newPage = async (html: string) => {
+        const page = await newSpecPage({ components: [PdsButton], html });
+        (globalThis as { Document?: unknown }).Document = page.doc.constructor;
+        return page;
+      };
+
+      describe.each([
+        ['button', ''],
+        ['a', ' href="/settings"'],
+      ])('on the inner %s', (tag, attributes) => {
+        // mock-doc has no ARIA element reflection, so the inner element gets the property a browser would have.
+        const renderWithReflection = async (html: string) => {
+          const page = await newPage(html);
+          const inner = page.root?.shadowRoot?.querySelector(tag) as HTMLElement;
+          Object.defineProperty(inner, property, { value: null, writable: true });
+          return { page, inner };
+        };
+        const referencedIds = (inner: HTMLElement) =>
+          Array.from(((inner as unknown as Record<string, Element[] | null>)[property] ?? []), (el) => el.id);
+
+        it('gets element references, and follows changes and removal', async () => {
+          const { page, inner } = await renderWithReflection(`
+            <p id="first">First</p>
+            <p id="second">Second</p>
+            <pds-button${attributes}>Save</pds-button>
+          `);
+
+          await setHostAttribute(page, name, 'first missing');
+          expect(referencedIds(inner)).toEqual(['first']);
+
+          await setHostAttribute(page, name, 'first second');
+          expect(referencedIds(inner)).toEqual(['first', 'second']);
+
+          await setHostAttribute(page, name, null);
+          expect((inner as unknown as Record<string, unknown>)[property]).toBeNull();
+        });
+
+        it('picks up a referenced element added after the button when focus reaches it', async () => {
+          const { page, inner } = await renderWithReflection(`<pds-button${attributes} ${name}="late">Save</pds-button>`);
+          expect(referencedIds(inner)).toEqual([]);
+
+          const late = page.doc.createElement('p');
+          late.id = 'late';
+          page.body.appendChild(late);
+          page.root?.dispatchEvent(new Event('focusin'));
+          await page.waitForChanges();
+
+          expect(referencedIds(inner)).toEqual(['late']);
+        });
+
+        it('leaves the inner element alone in a browser without ARIA element reflection', async () => {
+          const page = await newPage(`<p id="first">First</p><pds-button${attributes}>Save</pds-button>`);
+
+          await setHostAttribute(page, name, 'first');
+
+          const inner = page.root?.shadowRoot?.querySelector(tag);
+          expect(inner && property in inner).toBe(false);
+          expect(inner?.hasAttribute(name)).toBe(false);
+        });
+      });
+    });
+
     it('does not re-render when a host attribute is set to the value it already has', async () => {
       const page = await newSpecPage({
         components: [PdsButton],

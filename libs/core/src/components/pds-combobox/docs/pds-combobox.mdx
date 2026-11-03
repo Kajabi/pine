@@ -517,6 +517,72 @@ The `triggerWidth` prop also works with input triggers. This example shows an in
   </pds-combobox>
 </DocCanvas>
 
+### Truncate
+By default, a long label wraps in the button trigger and in the options. Set `truncate` to keep each one on one line, with an ellipsis where it's cut. It applies to the button trigger's default label (every variant and shape, with or without an icon) and to text option labels, including those with an icon and those inside a group. The input trigger is already one line, so there `truncate` only changes the options. It doesn't change the chip trigger, custom layouts (`trigger-content`, layout and chip options), or group captions and group rows, which still wrap. `truncate` reflects, so the host can shrink below the label's width in a flex row on its own; give it a `trigger-width` for an exact width instead.
+
+The full label stays available:
+
+- The trigger's accessible name and value, and each option's name, are the full label; truncation only changes how it looks.
+- When the trigger's or an option's label is cut, hovering it with a pointer shows the full label in a `title`. A label that fits gets no `title`. A `title` doesn't show on keyboard focus or touch, so keyboard and touch users see only the cut text; keep labels that must be read in full short enough to fit. The `title` only shows while the pointer is over the label text itself — hovering an option's icon, chevron or check mark, or the surrounding padding, shows nothing. It's also the browser's own unstyled tooltip, so unlike Pine's other truncation tooltips it doesn't follow the theme.
+
+Without `truncate` (wraps):
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-truncate-off" label="Category" trigger="button" trigger-shape="input" mode="select-only" trigger-width="240px" dropdown-width="240px" value="onboarding">
+  <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-truncate-off" label="Category" trigger="button" triggerShape="input" mode="select-only" triggerWidth="240px" dropdownWidth="240px" value="onboarding">
+  <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-truncate-off" label="Category" trigger="button" trigger-shape="input" mode="select-only" trigger-width="240px" dropdown-width="240px" value="onboarding">
+    <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+    <optgroup label="Email" data-icon="mail">
+      <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+      <option value="sequence">Sequence</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
+
+With `truncate`:
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-truncate" label="Category" trigger="button" trigger-shape="input" mode="select-only" trigger-width="240px" dropdown-width="240px" value="onboarding" truncate>
+  <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-truncate" label="Category" trigger="button" triggerShape="input" mode="select-only" triggerWidth="240px" dropdownWidth="240px" value="onboarding" truncate>
+  <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+  <optgroup label="Email" data-icon="mail">
+    <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+    <option value="sequence">Sequence</option>
+  </optgroup>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-truncate" label="Category" trigger="button" trigger-shape="input" mode="select-only" trigger-width="240px" dropdown-width="240px" value="onboarding" truncate>
+    <option value="onboarding" data-icon="assessment">Assessment for the quarterly onboarding cohort</option>
+    <optgroup label="Email" data-icon="mail">
+      <option value="broadcast">Broadcast to everyone who joined the spring membership launch</option>
+      <option value="sequence">Sequence</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
+
 ### Custom Max Height
 When dealing with long lists of options, you can set a maximum height for the dropdown. This example limits the dropdown to 200px height - when there are more options than can fit, users can scroll through them.
 

@@ -83,6 +83,7 @@ export namespace Components {
         "dismissLabel": string;
         "heading": string;
         "hideIcon": boolean;
+        "severityLabel"?: string;
         "small": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
     }
@@ -90,6 +91,7 @@ export namespace Components {
     export interface PdsAvatar {
         "alt"?: string | null;
         "badge"?: boolean;
+        "badgeLabel"?: string;
         "componentId": string;
         "dropdown"?: boolean;
         "image"?: string | null;
@@ -262,6 +264,7 @@ export namespace Components {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     // (undocumented)
     export interface PdsChip {
@@ -323,6 +326,7 @@ export namespace Components {
         "triggerShape": 'pill' | 'input';
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerWidth": string;
+        "truncate": boolean;
         "value": string;
     }
     // (undocumented)
@@ -425,6 +429,7 @@ export namespace Components {
         "disabled": boolean;
         "download"?: string;
         "external": boolean;
+        "externalLabel"?: string;
         "href": string | undefined;
         "informational": boolean;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -492,6 +497,7 @@ export namespace Components {
         "download"?: string;
         // @deprecated
         "external": boolean;
+        "externalLabel"?: string;
         "fontSize": 'sm' | 'md' | 'lg';
         "href": string;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -628,6 +634,7 @@ export namespace Components {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     export interface PdsRadioGroup {
         "componentId": string;
@@ -831,6 +838,7 @@ export namespace Components {
         "dismissLabel": string;
         "duration": number;
         "icon"?: string;
+        "severityLabel"?: string;
         "type": 'default' | 'danger' | 'loading';
     }
     export interface PdsTooltip {
@@ -1052,6 +1060,7 @@ export namespace LocalJSX {
         "heading"?: string;
         "hideIcon"?: boolean;
         "onPdsAlertDismissClick"?: (event: PdsAlertCustomEvent<void>) => void;
+        "severityLabel"?: string;
         "small"?: boolean;
         "variant"?: 'default' | 'danger' | 'info' | 'success' | 'warning';
     }
@@ -1069,6 +1078,8 @@ export namespace LocalJSX {
         // (undocumented)
         "hideIcon": boolean;
         // (undocumented)
+        "severityLabel": string;
+        // (undocumented)
         "small": boolean;
         // (undocumented)
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
@@ -1078,6 +1089,7 @@ export namespace LocalJSX {
     export interface PdsAvatar {
         "alt"?: string | null;
         "badge"?: boolean;
+        "badgeLabel"?: string;
         "componentId"?: string;
         "dropdown"?: boolean;
         "image"?: string | null;
@@ -1101,6 +1113,8 @@ export namespace LocalJSX {
         "alt": string | null;
         // (undocumented)
         "badge": boolean;
+        // (undocumented)
+        "badgeLabel": string;
         // (undocumented)
         "componentId": string;
         // (undocumented)
@@ -1572,6 +1586,7 @@ export namespace LocalJSX {
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         "required"?: boolean;
         "value"?: string;
+        "variant"?: 'default' | 'pill';
     }
 
     // (undocumented)
@@ -1600,6 +1615,8 @@ export namespace LocalJSX {
         "required": boolean;
         // (undocumented)
         "value": string;
+        // (undocumented)
+        "variant": 'default' | 'pill';
     }
 
     // (undocumented)
@@ -1695,6 +1712,7 @@ export namespace LocalJSX {
         "triggerShape"?: 'pill' | 'input';
         "triggerVariant"?: 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerWidth"?: string;
+        "truncate"?: boolean;
         "value"?: string;
     }
 
@@ -1774,6 +1792,8 @@ export namespace LocalJSX {
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         // (undocumented)
         "triggerWidth": string;
+        // (undocumented)
+        "truncate": boolean;
         // (undocumented)
         "value": string;
     }
@@ -2048,6 +2068,7 @@ export namespace LocalJSX {
         "disabled"?: boolean;
         "download"?: string;
         "external"?: boolean;
+        "externalLabel"?: string;
         "href"?: string | undefined;
         "informational"?: boolean;
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
@@ -2066,6 +2087,8 @@ export namespace LocalJSX {
         "download": string;
         // (undocumented)
         "external": boolean;
+        // (undocumented)
+        "externalLabel": string;
         // (undocumented)
         "href": string | undefined;
         // (undocumented)
@@ -2244,6 +2267,7 @@ export namespace LocalJSX {
         "download"?: string;
         // @deprecated
         "external"?: boolean;
+        "externalLabel"?: string;
         "fontSize"?: 'sm' | 'md' | 'lg';
         "href": string;
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -2270,6 +2294,8 @@ export namespace LocalJSX {
         "download": string;
         // (undocumented)
         "external": boolean;
+        // (undocumented)
+        "externalLabel": string;
         // (undocumented)
         "fontSize": 'sm' | 'md' | 'lg';
         // (undocumented)
@@ -2607,6 +2633,7 @@ export namespace LocalJSX {
         "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         "required"?: boolean;
         "value"?: string;
+        "variant"?: 'default' | 'pill';
     }
 
     // (undocumented)
@@ -2635,6 +2662,8 @@ export namespace LocalJSX {
         "required": boolean;
         // (undocumented)
         "value": string;
+        // (undocumented)
+        "variant": 'default' | 'pill';
     }
 
     export interface PdsRadioGroup {
@@ -3158,6 +3187,7 @@ export namespace LocalJSX {
         "duration"?: number;
         "icon"?: string;
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
+        "severityLabel"?: string;
         "type"?: 'default' | 'danger' | 'loading';
     }
 
@@ -3173,6 +3203,8 @@ export namespace LocalJSX {
         "duration": number;
         // (undocumented)
         "icon": string;
+        // (undocumented)
+        "severityLabel": string;
         // (undocumented)
         "type": 'default' | 'danger' | 'loading';
     }

@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 export default {
   args: { href: '#some-anchor' },
@@ -12,8 +13,8 @@ export default {
   title: 'components/Link'
 }
 
-const BaseTemplate = (args) => html`<pds-link color=${args.color} ?external=${args.external} font-size=${args.fontSize} href=${args.href} component-id=${args.componentId} variant=${args.variant}></pds-link>`;
-const BaseTemplateWithSlot = (args) => html` <pds-link color=${args.color} ?external=${args.external} font-size=${args.fontSize} href=${args.href} component-id=${args.componentId} variant=${args.variant}>${args.slot}</pds-link>`;
+const BaseTemplate = (args) => html`<pds-link color=${args.color} ?external=${args.external} external-label=${ifDefined(args.externalLabel)} font-size=${args.fontSize} href=${args.href} component-id=${args.componentId} variant=${args.variant}></pds-link>`;
+const BaseTemplateWithSlot = (args) => html` <pds-link color=${args.color} ?external=${args.external} external-label=${ifDefined(args.externalLabel)} font-size=${args.fontSize} href=${args.href} component-id=${args.componentId} variant=${args.variant}>${args.slot}</pds-link>`;
 
 export const Colors = BaseTemplate.bind();
 Colors.args = {

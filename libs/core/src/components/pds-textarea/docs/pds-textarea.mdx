@@ -211,20 +211,26 @@ The action slot allows you to add helpful content next to the textarea label, su
   mdxSource={{
     react: `<PdsTextarea componentId="pds-textarea-action-tooltip" label="Bio" rows="4" maxLength="500">
   <PdsTooltip slot="action">
-    <PdsIcon name="question-circle"></PdsIcon>
+    <PdsButton variant="unstyled" aria-label="Help with bio">
+      <PdsIcon name="question-circle" aria-hidden="true"></PdsIcon>
+    </PdsButton>
     <span slot="content">Tell us about yourself in 500 characters or less</span>
   </PdsTooltip>
 </PdsTextarea>`,
     webComponent: `<pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" max-length="500">
   <pds-tooltip slot="action">
-    <pds-icon name="question-circle"></pds-icon>
+    <pds-button variant="unstyled" aria-label="Help with bio">
+      <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+    </pds-button>
     <span slot="content">Tell us about yourself in 500 characters or less</span>
   </pds-tooltip>
 </pds-textarea>`
 }}>
   <pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" max-length="500">
     <pds-tooltip slot="action">
-      <pds-icon name="question-circle"></pds-icon>
+      <pds-button variant="unstyled" aria-label="Help with bio">
+        <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+      </pds-button>
       <span slot="content">Tell us about yourself in 500 characters or less</span>
     </pds-tooltip>
   </pds-textarea>
