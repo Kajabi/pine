@@ -82,13 +82,6 @@ export const WholeRowLink = {
   render: () => html`
     <style>
       .pds-link-row {
-        align-items: center;
-        border: var(--pine-border);
-        border-radius: var(--pine-border-radius-md);
-        display: flex;
-        gap: var(--pine-dimension-xs);
-        max-width: 28rem;
-        padding: var(--pine-dimension-sm);
         position: relative;
       }
 
@@ -113,17 +106,18 @@ export const WholeRowLink = {
       }
 
       .pds-link-row__trailing {
-        margin-inline-start: auto;
         position: relative;
         z-index: 1;
       }
     </style>
-    <div class="pds-link-row">
-      <pds-icon name="file" aria-hidden="true"></pds-icon>
-      <pds-link href="#row-target" variant="plain">Quarterly report</pds-link>
-      <span class="pds-link-row__trailing">
+    <pds-box class="pds-link-row" border border-radius="md" padding="sm" align-items="center" justify-content="space-between">
+      <pds-box gap="xs" align-items="center">
+        <pds-icon name="file" aria-hidden="true"></pds-icon>
+        <pds-link href="#row-target" variant="plain">Quarterly report</pds-link>
+      </pds-box>
+      <pds-box class="pds-link-row__trailing">
         <pds-button variant="secondary" size="small">Download</pds-button>
-      </span>
-    </div>
+      </pds-box>
+    </pds-box>
   `,
 };

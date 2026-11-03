@@ -181,13 +181,6 @@ Two things to pair with it:
     react: `
     <style>{\`
       .pds-link-row {
-        align-items: center;
-        border: var(--pine-border);
-        border-radius: var(--pine-border-radius-md);
-        display: flex;
-        gap: var(--pine-dimension-xs);
-        max-width: 28rem;
-        padding: var(--pine-dimension-sm);
         position: relative;
       }
 
@@ -208,30 +201,24 @@ Two things to pair with it:
       }
 
       .pds-link-row__trailing {
-        margin-inline-start: auto;
         position: relative;
         z-index: 1;
       }
     \`}</style>
 
-    <div className="pds-link-row">
-      <PdsIcon name="file" aria-hidden="true" />
-      <PdsLink href="#row-target">Quarterly report</PdsLink>
-      <span className="pds-link-row__trailing">
+    <PdsBox className="pds-link-row" border borderRadius="md" padding="sm" alignItems="center" justifyContent="space-between">
+      <PdsBox gap="xs" alignItems="center">
+        <PdsIcon name="file" aria-hidden="true" />
+        <PdsLink href="#row-target">Quarterly report</PdsLink>
+      </PdsBox>
+      <PdsBox className="pds-link-row__trailing">
         <PdsButton variant="secondary" size="small">Download</PdsButton>
-      </span>
-    </div>
+      </PdsBox>
+    </PdsBox>
     `,
     webComponent: `
     <style>
       .pds-link-row {
-        align-items: center;
-        border: var(--pine-border);
-        border-radius: var(--pine-border-radius-md);
-        display: flex;
-        gap: var(--pine-dimension-xs);
-        max-width: 28rem;
-        padding: var(--pine-dimension-sm);
         position: relative;
       }
 
@@ -252,30 +239,24 @@ Two things to pair with it:
       }
 
       .pds-link-row__trailing {
-        margin-inline-start: auto;
         position: relative;
         z-index: 1;
       }
     </style>
 
-    <div class="pds-link-row">
-      <pds-icon name="file" aria-hidden="true"></pds-icon>
-      <pds-link href="#row-target">Quarterly report</pds-link>
-      <span class="pds-link-row__trailing">
+    <pds-box class="pds-link-row" border border-radius="md" padding="sm" align-items="center" justify-content="space-between">
+      <pds-box gap="xs" align-items="center">
+        <pds-icon name="file" aria-hidden="true"></pds-icon>
+        <pds-link href="#row-target">Quarterly report</pds-link>
+      </pds-box>
+      <pds-box class="pds-link-row__trailing">
         <pds-button variant="secondary" size="small">Download</pds-button>
-      </span>
-    </div>
+      </pds-box>
+    </pds-box>
     `
 }}>
   <style>{`
     .pds-link-row {
-      align-items: center;
-      border: var(--pine-border);
-      border-radius: var(--pine-border-radius-md);
-      display: flex;
-      gap: var(--pine-dimension-xs);
-      max-width: 28rem;
-      padding: var(--pine-dimension-sm);
       position: relative;
     }
 
@@ -296,19 +277,20 @@ Two things to pair with it:
     }
 
     .pds-link-row__trailing {
-      margin-inline-start: auto;
       position: relative;
       z-index: 1;
     }
   `}</style>
 
-  <div className="pds-link-row">
-    <pds-icon name="file" aria-hidden="true"></pds-icon>
-    <pds-link href="#row-target">Quarterly report</pds-link>
-    <span className="pds-link-row__trailing">
+  <pds-box className="pds-link-row" border border-radius="md" padding="sm" align-items="center" justify-content="space-between">
+    <pds-box gap="xs" align-items="center">
+      <pds-icon name="file" aria-hidden="true"></pds-icon>
+      <pds-link href="#row-target">Quarterly report</pds-link>
+    </pds-box>
+    <pds-box className="pds-link-row__trailing">
       <pds-button variant="secondary" size="small">Download</pds-button>
-    </span>
-  </div>
+    </pds-box>
+  </pds-box>
 </DocCanvas>
 
 ## Additional Resources
