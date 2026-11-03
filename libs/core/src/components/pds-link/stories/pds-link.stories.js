@@ -73,3 +73,52 @@ export const NavTabs = {
     </nav>
   `,
 };
+
+// A whole row that is one link. The click area is the link part's ::after stretched over
+// the positioned row, so the row activates the link without nesting anything inside it.
+// Trailing controls sit above that box so they stay separately clickable, and the focus
+// ring is drawn on the stretched box rather than on the text.
+export const WholeRowLink = {
+  render: () => html`
+    <style>
+      .pds-link-row {
+        align-items: center;
+        border: var(--pine-border);
+        border-radius: var(--pine-border-radius-md);
+        display: flex;
+        gap: var(--pine-dimension-xs);
+        max-width: 28rem;
+        padding: var(--pine-dimension-sm);
+        position: relative;
+      }
+
+      .pds-link-row:hover {
+        background-color: var(--pine-color-background-muted);
+      }
+
+      .pds-link-row pds-link::part(link)::after {
+        content: "";
+        inset: 0;
+        position: absolute;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible::after {
+        outline: var(--pine-outline-focus);
+        outline-offset: var(--pine-border-width-thick);
+      }
+
+      .pds-link-row__trailing {
+        margin-inline-start: auto;
+        position: relative;
+        z-index: 1;
+      }
+    </style>
+    <div class="pds-link-row">
+      <pds-icon name="document" aria-hidden="true"></pds-icon>
+      <pds-link href="#row-target" variant="plain">Quarterly report</pds-link>
+      <span class="pds-link-row__trailing">
+        <pds-button variant="secondary" size="sm">Download</pds-button>
+      </span>
+    </div>
+  `,
+};

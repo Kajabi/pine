@@ -144,6 +144,80 @@ When no custom text is provided, the link will use the `href` as the link text.
   <pds-link href="#some-anchor"></pds-link>
 </DocCanvas>
 
+### Whole-row link
+
+A list row where the whole row is one link. `pds-link` supports this from outside its shadow
+boundary: stretch the `link` part's `::after` over a positioned ancestor.
+
+```css
+.row { position: relative; }
+.row pds-link::part(link)::after { content: ""; position: absolute; inset: 0; }
+```
+
+The stretched box resolves its containing block against the row, not against the anchor inside the
+shadow root, so `inset: 0` covers the whole row.
+
+Two things to pair with it:
+
+- **Trailing controls need to sit above the stretched box.** Give them `position: relative` and a
+  `z-index` above it, or the row's click area swallows them.
+- **Give the row the focus ring, not the text.** Keyboard focus lands on the host, and the anchor
+  inside is only as wide as its text, so an outline on the part hugs the words. Outline the stretched
+  pseudo-element instead:
+
+  ```css
+  .row pds-link::part(link):focus-visible::after {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width-thick);
+  }
+  ```
+
+This needed a fix in `pds-link` itself: the anchor used to take `position: relative` on
+`:focus-visible`, which made it the containing block for its own `::after` and collapsed the
+stretched box to the width of the text — so the row's click area vanished for keyboard users and
+came back when focus left. The declaration was a leftover from a box-shadow focus ring and is gone.
+
+Verified in Chromium and Firefox. Not yet verified in Safari — `::part()` followed by a
+pseudo-element is the part to check there before relying on it.
+
+<DocCanvas
+  mdxSource={{
+    react: `<div className="row">
+  <PdsIcon name="document" />
+  <PdsLink href="#row-target">Quarterly report</PdsLink>
+  <PdsButton variant="secondary">Download</PdsButton>
+</div>`,
+    webComponent: `<div class="row">
+  <pds-icon name="document"></pds-icon>
+  <pds-link href="#row-target">Quarterly report</pds-link>
+  <pds-button variant="secondary">Download</pds-button>
+</div>`
+}}>
+  <div style={{
+    position: 'relative',
+    display: 'flex',
+    gap: 'var(--pine-dimension-xs)',
+    alignItems: 'center',
+    padding: 'var(--pine-dimension-sm)',
+    border: 'var(--pine-border)',
+    borderRadius: 'var(--pine-border-radius-md)',
+    maxWidth: '28rem'
+  }}>
+    <pds-icon name="document" aria-hidden="true"></pds-icon>
+    <pds-link href="#row-target">Quarterly report</pds-link>
+    <span style={{ marginLeft: 'auto', position: 'relative', zIndex: 1 }}>
+      <pds-button variant="secondary" size="sm">Download</pds-button>
+    </span>
+    <style>{`
+      pds-link::part(link)::after { content: ""; position: absolute; inset: 0; }
+      pds-link::part(link):focus-visible::after {
+        outline: var(--pine-outline-focus);
+        outline-offset: var(--pine-border-width-thick);
+      }
+    `}</style>
+  </div>
+</DocCanvas>
+
 ## Additional Resources
 
 [CSS Tricks: Buttons vs. Links](https://css-tricks.com/buttons-vs-links/)
