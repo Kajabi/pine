@@ -283,13 +283,20 @@ The `max-width` prop lets you adjust the maximum width of the tooltip content. T
   <pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>
 </DocCanvas>
 
+### Inside a modal or popover
+When the trigger sits in an open modal dialog (`pds-modal`, or `pds-drawer` with `modal`) or an open popover, the
+tooltip renders inside that dialog or popover so it shows above it. Open the modal, then hover or focus **Publish**.
+
+<Canvas of={stories.InModal} />
+
 ## Technical Notes
 
 - The trigger element receives `aria-describedby` referencing an ID that the component creates. Provide meaningful button/link labels so the tooltip content is read *after* the control name. When combining multiple tooltips on the same control, set `aria-describedby` manually to avoid duplication.
 - Tooltips do not announce themselves automatically because they use `aria-live="off"`. Reserve tooltips for purely supplemental information and display critical validation or blocking instructions inline.
 - Use the `opened` property when the tooltip should persist for longer than a hover/focus interaction (for example, guided tours). Because `opened` reflects as an attribute, you can also toggle it declaratively via frameworks or CSS selectors.
 - Call the public methods `showTooltip()` and `hideTooltip()` for advanced interactions (focus trapping, commanded display, or analytics). These methods return a promise that resolves once the visibility state changes.
-- When `html-content="true"`, avoid placing focusable elements inside the `content` slot. Tooltips are not intended for interactive elements. If you require buttons or links, switch to `<pds-popover>`, which manages focus and dismissal affordances.
+- The open tooltip renders at the end of `<body>`, or inside the open modal dialog or popover around its trigger. Where it renders is decided when it opens: a tooltip opened with `opened` before its modal opens stays behind the modal until it opens again. A tooltip in a popover inside another component's shadow root, such as a `pds-filter` panel, still renders in the body.
+- When `html-content="true"`, avoid placing focusable elements inside the `content` slot. Tooltips are not intended for interactive elements. If you require buttons or links, switch to `<pds-popover>`, which manages focus and dismissal affordances. Tooltip content is never a Tab stop: a focus trap such as `pds-modal`'s skips it.
 
 ```tsx
 // React example showing imperative control
