@@ -40,21 +40,21 @@ Radio Groups wrap a set of related radio inputs, displaying a single error messa
 
 ### Default
 
-A basic radio group with three options.
+A basic radio group with three options. Without a visible `group-label`, `aria-label` names the group.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadioGroup name="example-default">
+  react: `<PdsRadioGroup name="example-default" aria-label="Options">
   <PdsRadio componentId="default-radio1" label="Option 1" value="1" checked={true} />
   <PdsRadio componentId="default-radio2" label="Option 2" value="2" />
   <PdsRadio componentId="default-radio3" label="Option 3" value="3" />
 </PdsRadioGroup>`,
-  webComponent: `<pds-radio-group name="example-default">
+  webComponent: `<pds-radio-group name="example-default" aria-label="Options">
   <pds-radio component-id="default-radio1" label="Option 1" value="1" checked></pds-radio>
   <pds-radio component-id="default-radio2" label="Option 2" value="2"></pds-radio>
   <pds-radio component-id="default-radio3" label="Option 3" value="3"></pds-radio>
 </pds-radio-group>`
 }}>
-  <pds-radio-group name="example-default">
+  <pds-radio-group name="example-default" aria-label="Options">
     <pds-radio component-id="default-radio1" label="Option 1" value="1" checked></pds-radio>
     <pds-radio component-id="default-radio2" label="Option 2" value="2"></pds-radio>
     <pds-radio component-id="default-radio3" label="Option 3" value="3"></pds-radio>
@@ -184,14 +184,14 @@ Radio groups can be displayed horizontally using the `direction="row"` prop. The
 
 <DocCanvas mdxSource={{
   react: `<PdsBox gap="sm" display="block" fit="true">
-  <PdsRadioGroup name="example-horizontal" direction="row">
+  <PdsRadioGroup name="example-horizontal" groupLabel="Options" direction="row">
     <PdsRadio componentId="horizontal-radio1" label="Option 1" value="1" hasBorder={true} checked={true} />
     <PdsRadio componentId="horizontal-radio2" label="Option 2" value="2" hasBorder={true} />
     <PdsRadio componentId="horizontal-radio3" label="Option 3" value="3" hasBorder={true} />
   </PdsRadioGroup>
 </PdsBox>`,
   webComponent: `<pds-box gap="sm" display="block" fit="true">
-  <pds-radio-group name="example-horizontal" direction="row">
+  <pds-radio-group name="example-horizontal" group-label="Options" direction="row">
     <pds-radio component-id="horizontal-radio1" label="Option 1" value="1" has-border checked></pds-radio>
     <pds-radio component-id="horizontal-radio2" label="Option 2" value="2" has-border></pds-radio>
     <pds-radio component-id="horizontal-radio3" label="Option 3" value="3" has-border></pds-radio>
@@ -199,7 +199,7 @@ Radio groups can be displayed horizontally using the `direction="row"` prop. The
 </pds-box>`
 }}>
   <pds-box gap="sm" display="block" fit="true">
-    <pds-radio-group name="example-horizontal" direction="row">
+    <pds-radio-group name="example-horizontal" group-label="Options" direction="row">
       <pds-radio component-id="horizontal-radio1" label="Option 1" value="1" has-border checked></pds-radio>
       <pds-radio component-id="horizontal-radio2" label="Option 2" value="2" has-border></pds-radio>
       <pds-radio component-id="horizontal-radio3" label="Option 3" value="3" has-border></pds-radio>
