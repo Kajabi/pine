@@ -6,6 +6,7 @@ import {
   shift,
 } from '@floating-ui/dom';
 import type { ReferenceElement } from '@floating-ui/dom';
+import { findPortalTarget, isTopLayerInDocument, onTopLayerClose } from './portal-target';
 
 export interface TruncationTooltipOptions {
   /** The host element (for hover listeners and positioning anchor; focus listeners too, unless `focusEl` is set) */
@@ -40,6 +41,10 @@ export interface TruncationTooltipOptions {
   focusEl?: HTMLElement;
 }
 
+// Controls that clipped text can sit inside that already take focus, so the text adds no tab stop of its own.
+// Not any `[tabindex]`: a focusable scroll region full of chips would show every chip's tooltip at once.
+export const FOCUSABLE_WRAPPER = 'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item, [role="option"]';
+
 /** CSS class prefix used for truncation tooltip portal elements */
 const TOOLTIP_CLASS = 'pds-truncation-tooltip';
 
@@ -50,7 +55,8 @@ const TOOLTIP_CLASS = 'pds-truncation-tooltip';
  *
  * Z-Index Strategy:
  * Uses --pine-z-index-nuclear (9999) to ensure tooltips appear above all other UI elements.
- * This is necessary because tooltips are portaled to document.body and must overlay:
+ * This is necessary because tooltips are portaled to document.body, or into the modal dialog or
+ * open popover around the host (the top layer, which no z-index reaches from the body), and must overlay:
  * - Modal dialogs
  * - Dropdown menus
  * - Other floating UI elements
@@ -90,6 +96,15 @@ function injectStyles(): void {
       opacity: 1;
       visibility: visible;
     }
+    :is(dialog, [popover]) > .${TOOLTIP_CLASS} {
+      font-style: normal;
+      font-weight: normal;
+      text-align: start;
+      text-indent: 0;
+      text-transform: none;
+      white-space: normal;
+      word-spacing: normal;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -118,7 +133,8 @@ function isFocusVisible(el: Element): boolean {
  *
  * When the element's text overflows, hovering the host element or giving it
  * keyboard focus will display a tooltip showing the full text content. The
- * tooltip is rendered as a portal on document.body and positioned with Floating UI.
+ * tooltip is rendered as a portal on document.body, or in the modal dialog or open popover around
+ * the host, and positioned with Floating UI.
  *
  * Also owns the element's `tabindex` while it is clipped — see syncTabIndex.
  *
@@ -130,6 +146,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   injectStyles();
 
   let portalEl: HTMLElement | null = null;
+  let stopWatchingPortalHost: (() => void) | null = null;
   let isHovering = false;
   let isHoveringPortal = false;
   let isFocused = false;
@@ -211,7 +228,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     contentDiv.textContent = text.trim();
 
     portalEl.appendChild(contentDiv);
-    document.body.appendChild(portalEl);
+    const portalHost = findPortalTarget(hostEl, isTopLayerInDocument);
+    portalHost.appendChild(portalEl);
+    // Closing that host moves no pointer, so a tooltip opened by touch would outlive it unseen.
+    if (portalHost !== document.body) stopWatchingPortalHost = onTopLayerClose(portalHost, closeWithPortalHost);
 
     // Allow the user to hover into the tooltip to select/copy text
     portalEl.addEventListener('mouseenter', handlePortalMouseEnter);
@@ -256,6 +276,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   }
 
   function removePortal(): void {
+    if (stopWatchingPortalHost !== null) {
+      stopWatchingPortalHost();
+      stopWatchingPortalHost = null;
+    }
     if (portalEl) {
       portalEl.removeEventListener('mouseenter', handlePortalMouseEnter);
       portalEl.removeEventListener('mouseleave', handlePortalMouseLeave);
@@ -287,6 +311,15 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   function hideTooltip(): void {
     if (isHovering || isHoveringPortal || isFocused) return;
+    removePortal();
+  }
+
+  // Hover and focus can't outlast a host that's no longer shown, so none of them keeps it open.
+  function closeWithPortalHost(): void {
+    isHovering = false;
+    isHoveringPortal = false;
+    isFocused = false;
+    cancelHideTimeout();
     removePortal();
   }
 

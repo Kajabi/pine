@@ -20,6 +20,29 @@ const HTMLContentTemplate = (args) => html`
     <pds-button variant="secondary">Hover</pds-button>
   </pds-tooltip>`;
 
+const InModalTemplate = (args) => html`
+  <pds-button onclick="document.querySelector('#tooltip-modal').open = true">Open modal</pds-button>
+  <pds-modal id="tooltip-modal" component-id="tooltip-modal" size="sm">
+    <pds-modal-header>
+      <pds-box padding="md">
+        <pds-text tag="h2" size="h3">Publish changes</pds-text>
+      </pds-box>
+    </pds-modal-header>
+    <pds-modal-content>
+      <pds-box padding-inline-start="md" padding-inline-end="md">
+        <pds-text tag="p">Hover or focus Publish: its tooltip shows above the open modal.</pds-text>
+      </pds-box>
+    </pds-modal-content>
+    <pds-modal-footer>
+      <pds-box fit gap="sm" justify-content="end" padding="md">
+        <pds-button variant="secondary" onclick="document.querySelector('#tooltip-modal').open = false">Cancel</pds-button>
+        <pds-tooltip content=${args.content} ?has-arrow=${args.hasArrow} placement=${args.placement}>
+          <pds-button variant="primary">Publish</pds-button>
+        </pds-tooltip>
+      </pds-box>
+    </pds-modal-footer>
+  </pds-modal>`;
+
 const PositionTemplate = (args) => html`
   <div class="demo-container" style="min-height: 50vh; width: 100%; display: flex; align-items: center; justify-content: center;">
     <div class="position-demo-grid">
@@ -98,4 +121,11 @@ NoArrow.args = {
   opened: false,
   placement: "bottom-start",
   slot: "target text"
+};
+
+export const InModal = InModalTemplate.bind({});
+InModal.args = {
+  content: "Fix the errors on the page to publish",
+  hasArrow: true,
+  placement: "top",
 };
