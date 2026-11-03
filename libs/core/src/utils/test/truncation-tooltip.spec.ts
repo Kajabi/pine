@@ -351,6 +351,24 @@ describe('truncation-tooltip', () => {
     cleanup();
   });
 
+  it('shows the tooltip for focus on any tab stop inside hostEl when focusEl is not set', () => {
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+    const link = document.createElement('a');
+    hostEl.appendChild(link);
+
+    const cleanup = setupTruncationTooltip({
+      hostEl,
+      contentEl,
+      getTooltipText: () => 'Full text',
+    });
+
+    focusIn(link);
+    expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+    cleanup();
+  });
+
   it('keeps tooltip visible when hover and focus overlap', () => {
     Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
     Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
@@ -599,6 +617,91 @@ describe('truncation-tooltip', () => {
 
       expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
       expect(contentEl.hasAttribute('tabindex')).toBe(false);
+
+      cleanup();
+    });
+  });
+
+  // Focus on every tab stop inside a wrapping control bubbles to it, but only some of them stand for hostEl.
+  describe('focusEl wrapping hostEl beside another tab stop', () => {
+    let focusEl: HTMLElement;
+    let otherStop: HTMLElement;
+
+    const setup = () =>
+      setupTruncationTooltip({
+        hostEl,
+        contentEl,
+        getTooltipText: () => 'Full text',
+        manageTabIndex: false,
+        focusEl,
+      });
+
+    beforeEach(() => {
+      focusEl = document.createElement('a');
+      otherStop = document.createElement('button');
+      document.body.appendChild(focusEl);
+      focusEl.append(hostEl, otherStop);
+      Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+      Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+    });
+
+    it('shows the tooltip while focusEl itself has focus', () => {
+      const cleanup = setup();
+
+      focusIn(focusEl);
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+      cleanup();
+    });
+
+    it('ignores focus on the other tab stop', () => {
+      const cleanup = setup();
+
+      focusIn(otherStop);
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      cleanup();
+    });
+
+    it('ignores a key press that makes focus on the other tab stop visible', () => {
+      const cleanup = setup();
+
+      focusIn(otherStop, { visible: false });
+      keyUp(otherStop, 'Enter');
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      cleanup();
+    });
+
+    it('hides the tooltip when focus moves from focusEl to the other tab stop', () => {
+      const cleanup = setup();
+
+      focusIn(focusEl);
+      focusEl.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+      focusIn(otherStop);
+      advanceHideDelay();
+      expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+      cleanup();
+    });
+
+    it('shows the tooltip for focus inside hostEl', () => {
+      const cleanup = setup();
+
+      focusIn(contentEl);
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+      cleanup();
+    });
+
+    it('shows the tooltip for focus on a control between focusEl and hostEl', () => {
+      const control = document.createElement('label');
+      focusEl.prepend(control);
+      control.appendChild(hostEl);
+      const cleanup = setup();
+
+      focusIn(control);
+      expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
 
       cleanup();
     });
