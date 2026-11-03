@@ -276,6 +276,66 @@ describe('pds-radio-group', () => {
 
       expect(page.root?.getAttribute('aria-labelledby')).toBe('page-heading');
     });
+
+    it('keeps a late aria-labelledby through a later re-render', async () => {
+      const page = await render();
+      await setHostAttribute(page, 'aria-labelledby', 'page-heading');
+
+      page.root!.groupLabel = 'Replies';
+      await page.waitForChanges();
+
+      expect(page.root?.getAttribute('aria-labelledby')).toBe('page-heading');
+    });
+
+    it('picks up an aria-label set while the group was detached', async () => {
+      const page = await render();
+      const group = page.root!;
+
+      group.remove();
+      group.setAttribute('aria-label', 'Comment preference');
+      page.body.appendChild(group);
+      await page.waitForChanges();
+
+      expect(group.hasAttribute('aria-labelledby')).toBe(false);
+      expect(group.getAttribute('aria-label')).toBe('Comment preference');
+    });
+
+    it("doesn't re-render for its own aria-labelledby", async () => {
+      const page = await render();
+      const renderSpy = jest.spyOn(page.rootInstance, 'render');
+
+      HostAttributeObserver.instances.forEach((observer) => observer.notify('aria-labelledby'));
+      await page.waitForChanges();
+
+      expect(renderSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  it('names the group from group-label when aria-label is blank', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="grp" group-label="Comments" aria-label=" "></pds-radio-group>`,
+    });
+
+    expect(page.root?.getAttribute('aria-labelledby')).toBe('grp__label');
+  });
+
+  it('names and describes a restored group from its own label and message, not the ones an earlier instance left', async () => {
+    // Without component-id, each instance gets a new id, so the restored host points at the old one's label.
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `
+        <pds-radio-group id="radio-group-old" group-label="Comments" helper-message="Helper" aria-labelledby="radio-group-old__label" aria-describedby="radio-group-old__helper-message">
+          <div class="pds-radio-group__label" id="radio-group-old__label">Comments</div>
+        </pds-radio-group>
+      `,
+    });
+
+    const labelledBy = page.root?.getAttribute('aria-labelledby');
+    expect(labelledBy).not.toBe('radio-group-old__label');
+    expect(labelledBy).toBe(page.root?.querySelector('.pds-radio-group__label')?.id);
+    expect(page.root?.querySelectorAll('.pds-radio-group__label').length).toBe(1);
+    expect(page.root?.getAttribute('aria-describedby')).toBe(page.root?.querySelector('.pds-radio-group__message')?.id);
   });
 
   it('renders helper message when helperMessage prop is set', async () => {

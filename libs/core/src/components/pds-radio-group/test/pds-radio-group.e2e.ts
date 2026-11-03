@@ -395,6 +395,42 @@ describe('pds-radio-group accessibility', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  it('puts back its role, name and description when a morph strips them from the host', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio-group name="plan" group-label="Plan" helper-message="You can change this later">
+        <pds-radio component-id="plan-basic" label="Basic" value="basic"></pds-radio>
+      </pds-radio-group>
+    `);
+
+    await page.$eval('pds-radio-group', (group) => {
+      ['role', 'aria-labelledby', 'aria-describedby'].forEach((name) => group.removeAttribute(name));
+    });
+    await page.waitForChanges();
+
+    const group = findRole(await page.accessibility.snapshot({ interestingOnly: false }), 'radiogroup');
+    expect(group?.name).toBe('Plan');
+    expect(group?.description).toBe('You can change this later');
+  });
+
+  it('names a cloned group from its own label', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio-group name="plan" group-label="Plan">
+        <pds-radio component-id="plan-basic" label="Basic" value="basic"></pds-radio>
+      </pds-radio-group>
+    `);
+
+    await page.$eval('pds-radio-group', (group) => {
+      group.remove();
+      document.body.appendChild(group.cloneNode(true));
+    });
+    await page.waitForChanges();
+
+    const group = findRole(await page.accessibility.snapshot({ interestingOnly: false }), 'radiogroup');
+    expect(group?.name).toBe('Plan');
+  });
+
   it("uses a consumer's aria-label over group-label", async () => {
     const page = await newE2EPage();
     await page.setContent(`
