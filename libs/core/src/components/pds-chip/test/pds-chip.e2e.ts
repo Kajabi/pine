@@ -300,6 +300,10 @@ describe('pds-chip', () => {
 
       expect(await page.$eval('pds-checkbox', (el) => el.shadowRoot.activeElement?.tagName)).toBe('INPUT');
       expect(await truncationTooltipText(page)).toBe(LONG_LABEL);
+
+      // As in pds-multiselect's own panel, the checkbox input nested in the option trips nested-interactive.
+      const violations = await runAxe(page, { rules: { 'nested-interactive': { enabled: false } } });
+      expect(formatViolations(violations)).toBe('');
     });
   });
 
@@ -419,8 +423,33 @@ describe('pds-chip', () => {
         await page.waitForChanges();
 
         expect(await truncationTooltipTexts(page)).toEqual([LONG_TEXT]);
+
+        const violations = await runAxe(page);
+        expect(formatViolations(violations)).toBe('');
       },
     );
+
+    it('shows only the chip tooltip when the arrow keys reach a menu item holding both', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger">Toggle Menu</button>
+          <pds-dropdown-menu-item><pds-text truncate style="width: 60px;">${LONG_TEXT}</pds-text><pds-chip max-width="60px">${LONG_LABEL}</pds-chip></pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+      await page.click('#trigger');
+      await page.waitForChanges();
+
+      await page.keyboard.press('ArrowDown');
+      await waitOutHideDelay();
+
+      expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('PDS-DROPDOWN-MENU-ITEM');
+      expect(await truncationTooltipTexts(page)).toEqual([LONG_LABEL]);
+
+      // Any open pds-dropdown-menu fails aria-required-children: its items render role="none" under role="menu".
+      const violations = await runAxe(page, { rules: { 'aria-required-children': { enabled: false } } });
+      expect(formatViolations(violations)).toBe('');
+    });
   });
 
   it('shows the tooltip when Tab reaches the clipped label', async () => {
