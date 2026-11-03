@@ -97,9 +97,14 @@ export const WholeRowLink = {
       }
 
       .pds-link-row pds-link::part(link)::after {
+        border-radius: var(--pine-border-radius-md);
         content: "";
         inset: 0;
         position: absolute;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible {
+        outline: none;
       }
 
       .pds-link-row pds-link::part(link):focus-visible::after {
@@ -114,10 +119,10 @@ export const WholeRowLink = {
       }
     </style>
     <div class="pds-link-row">
-      <pds-icon name="document" aria-hidden="true"></pds-icon>
+      <pds-icon name="file" aria-hidden="true"></pds-icon>
       <pds-link href="#row-target" variant="plain">Quarterly report</pds-link>
       <span class="pds-link-row__trailing">
-        <pds-button variant="secondary" size="sm">Download</pds-button>
+        <pds-button variant="secondary" size="small">Download</pds-button>
       </span>
     </div>
   `,

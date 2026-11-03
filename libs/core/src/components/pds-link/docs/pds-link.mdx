@@ -150,71 +150,164 @@ A list row where the whole row is one link. `pds-link` supports this from outsid
 boundary: stretch the `link` part's `::after` over a positioned ancestor.
 
 ```css
-.row { position: relative; }
-.row pds-link::part(link)::after { content: ""; position: absolute; inset: 0; }
+.pds-link-row { position: relative; }
+.pds-link-row pds-link::part(link)::after { content: ""; position: absolute; inset: 0; }
 ```
 
 The stretched box resolves its containing block against the row, not against the anchor inside the
-shadow root, so `inset: 0` covers the whole row.
+shadow root, so `inset: 0` covers the whole row. Scope these rules to the row with a class, so they
+don't stretch other links on the page.
 
 Two things to pair with it:
 
 - **Trailing controls need to sit above the stretched box.** Give them `position: relative` and a
   `z-index` above it, or the row's click area swallows them.
-- **Give the row the focus ring, not the text.** Keyboard focus lands on the host, and the anchor
-  inside is only as wide as its text, so an outline on the part hugs the words. Outline the stretched
-  pseudo-element instead:
+- **Give the row the focus ring, not the text.** Keyboard focus lands on the anchor inside
+  `pds-link`, which is only as wide as its text, so an outline on the part hugs the words. Turn that
+  outline off and outline the stretched pseudo-element instead, with the row's radius:
 
   ```css
-  .row pds-link::part(link):focus-visible::after {
+  .pds-link-row pds-link::part(link)::after { border-radius: var(--pine-border-radius-md); }
+  .pds-link-row pds-link::part(link):focus-visible { outline: none; }
+  .pds-link-row pds-link::part(link):focus-visible::after {
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width-thick);
   }
   ```
 
-This needed a fix in `pds-link` itself: the anchor used to take `position: relative` on
-`:focus-visible`, which made it the containing block for its own `::after` and collapsed the
-stretched box to the width of the text — so the row's click area vanished for keyboard users and
-came back when focus left. The declaration was a leftover from a box-shadow focus ring and is gone.
-
-Verified in Chromium and Firefox. Not yet verified in Safari — `::part()` followed by a
-pseudo-element is the part to check there before relying on it.
-
 <DocCanvas
+  display="block"
   mdxSource={{
-    react: `<div className="row">
-  <PdsIcon name="document" />
-  <PdsLink href="#row-target">Quarterly report</PdsLink>
-  <PdsButton variant="secondary">Download</PdsButton>
-</div>`,
-    webComponent: `<div class="row">
-  <pds-icon name="document"></pds-icon>
-  <pds-link href="#row-target">Quarterly report</pds-link>
-  <pds-button variant="secondary">Download</pds-button>
-</div>`
-}}>
-  <div style={{
-    position: 'relative',
-    display: 'flex',
-    gap: 'var(--pine-dimension-xs)',
-    alignItems: 'center',
-    padding: 'var(--pine-dimension-sm)',
-    border: 'var(--pine-border)',
-    borderRadius: 'var(--pine-border-radius-md)',
-    maxWidth: '28rem'
-  }}>
-    <pds-icon name="document" aria-hidden="true"></pds-icon>
-    <pds-link href="#row-target">Quarterly report</pds-link>
-    <span style={{ marginLeft: 'auto', position: 'relative', zIndex: 1 }}>
-      <pds-button variant="secondary" size="sm">Download</pds-button>
-    </span>
-    <style>{`
-      pds-link::part(link)::after { content: ""; position: absolute; inset: 0; }
-      pds-link::part(link):focus-visible::after {
+    react: `
+    <style>{\`
+      .pds-link-row {
+        align-items: center;
+        border: var(--pine-border);
+        border-radius: var(--pine-border-radius-md);
+        display: flex;
+        gap: var(--pine-dimension-xs);
+        max-width: 28rem;
+        padding: var(--pine-dimension-sm);
+        position: relative;
+      }
+
+      .pds-link-row pds-link::part(link)::after {
+        border-radius: var(--pine-border-radius-md);
+        content: "";
+        inset: 0;
+        position: absolute;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible {
+        outline: none;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible::after {
         outline: var(--pine-outline-focus);
         outline-offset: var(--pine-border-width-thick);
       }
-    `}</style>
+
+      .pds-link-row__trailing {
+        margin-inline-start: auto;
+        position: relative;
+        z-index: 1;
+      }
+    \`}</style>
+
+    <div className="pds-link-row">
+      <PdsIcon name="file" aria-hidden="true" />
+      <PdsLink href="#row-target">Quarterly report</PdsLink>
+      <span className="pds-link-row__trailing">
+        <PdsButton variant="secondary" size="small">Download</PdsButton>
+      </span>
+    </div>
+    `,
+    webComponent: `
+    <style>
+      .pds-link-row {
+        align-items: center;
+        border: var(--pine-border);
+        border-radius: var(--pine-border-radius-md);
+        display: flex;
+        gap: var(--pine-dimension-xs);
+        max-width: 28rem;
+        padding: var(--pine-dimension-sm);
+        position: relative;
+      }
+
+      .pds-link-row pds-link::part(link)::after {
+        border-radius: var(--pine-border-radius-md);
+        content: "";
+        inset: 0;
+        position: absolute;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible {
+        outline: none;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible::after {
+        outline: var(--pine-outline-focus);
+        outline-offset: var(--pine-border-width-thick);
+      }
+
+      .pds-link-row__trailing {
+        margin-inline-start: auto;
+        position: relative;
+        z-index: 1;
+      }
+    </style>
+
+    <div class="pds-link-row">
+      <pds-icon name="file" aria-hidden="true"></pds-icon>
+      <pds-link href="#row-target">Quarterly report</pds-link>
+      <span class="pds-link-row__trailing">
+        <pds-button variant="secondary" size="small">Download</pds-button>
+      </span>
+    </div>
+    `
+}}>
+  <style>{`
+    .pds-link-row {
+      align-items: center;
+      border: var(--pine-border);
+      border-radius: var(--pine-border-radius-md);
+      display: flex;
+      gap: var(--pine-dimension-xs);
+      max-width: 28rem;
+      padding: var(--pine-dimension-sm);
+      position: relative;
+    }
+
+    .pds-link-row pds-link::part(link)::after {
+      border-radius: var(--pine-border-radius-md);
+      content: "";
+      inset: 0;
+      position: absolute;
+    }
+
+    .pds-link-row pds-link::part(link):focus-visible {
+      outline: none;
+    }
+
+    .pds-link-row pds-link::part(link):focus-visible::after {
+      outline: var(--pine-outline-focus);
+      outline-offset: var(--pine-border-width-thick);
+    }
+
+    .pds-link-row__trailing {
+      margin-inline-start: auto;
+      position: relative;
+      z-index: 1;
+    }
+  `}</style>
+
+  <div className="pds-link-row">
+    <pds-icon name="file" aria-hidden="true"></pds-icon>
+    <pds-link href="#row-target">Quarterly report</pds-link>
+    <span className="pds-link-row__trailing">
+      <pds-button variant="secondary" size="small">Download</pds-button>
+    </span>
   </div>
 </DocCanvas>
 
