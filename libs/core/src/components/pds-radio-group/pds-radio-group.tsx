@@ -1,4 +1,5 @@
-import { Component, Host, h, Prop, Element, Watch, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, Host, h, Prop, Element, Watch, Event, EventEmitter, Listen, forceUpdate } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import { messageId } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 import { RadioGroupChangeEventDetail } from './radio-group-interface';
@@ -138,6 +139,36 @@ export class PdsRadioGroup {
     });
   }
 
+  private hostKeeper = new HostStylingKeeper();
+  private hostAriaObserver?: MutationObserver;
+
+  // The aria-labelledby of the last render, the group's own or the consumer's.
+  private renderedLabelledBy?: string;
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+    // A name set while the group was detached never reaches the observer.
+    this.syncName();
+
+    if (typeof MutationObserver === 'undefined') return;
+
+    // Consumers can name the group after render (a prop change, an i18n swap, a morph); re-render so their name wins.
+    this.hostAriaObserver = new MutationObserver(() => this.syncName());
+    this.hostAriaObserver.observe(this.el, { attributeFilter: ['aria-label', 'aria-labelledby'] });
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+    this.hostAriaObserver?.disconnect();
+    this.hostAriaObserver = undefined;
+  }
+
+  // Re-renders only when the group's name would change, so its own aria-labelledby write doesn't loop back.
+  private syncName() {
+    if (this._groupId === undefined) return;
+    if (this.getAriaLabelledBy() !== this.renderedLabelledBy) forceUpdate(this);
+  }
+
   componentWillLoad() {
     // Generate stable group ID once during initialization
     // This ensures DOM stability and accessibility relationships remain consistent across re-renders
@@ -149,6 +180,17 @@ export class PdsRadioGroup {
         ? crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
       this._groupId = `radio-group-${uniqueId}`;
+    }
+
+    // A restored or cloned host still carries the id and ARIA references an earlier instance wrote, pointing at
+    // that instance's label and messages. Drop them so this render writes its own: on first load, Stencil keeps a
+    // host attribute that's already there.
+    const previousId = this.el.getAttribute('id');
+    if (previousId && previousId !== this._groupId) {
+      ['aria-labelledby', 'aria-describedby'].forEach((name) => {
+        const ids = this.el.getAttribute(name)?.split(/\s+/) ?? [];
+        if (ids.some((id) => id.startsWith(`${previousId}__`))) this.el.removeAttribute(name);
+      });
     }
   }
 
@@ -212,6 +254,20 @@ export class PdsRadioGroup {
     return `var(--pine-dimension-${this.gap})`;
   }
 
+  private get labelId(): string {
+    return `${this._groupId}__label`;
+  }
+
+  // Names the group from its visible label, unless the consumer named it with their own aria-label or aria-labelledby.
+  // A blank aria-label (an empty translation, say) names nothing, so it falls back to groupLabel.
+  private getAriaLabelledBy(): string | undefined {
+    const hostLabelledBy = this.el.getAttribute('aria-labelledby');
+    if (hostLabelledBy?.trim() && hostLabelledBy !== this.labelId) return hostLabelledBy;
+    if (this.el.getAttribute('aria-label')?.trim()) return undefined;
+
+    return this.groupLabel ? this.labelId : undefined;
+  }
+
   private getAriaDescribedBy(): string | undefined {
     const messageIds: string[] = [];
 
@@ -229,19 +285,30 @@ export class PdsRadioGroup {
   render() {
     const gapValue = this.getGapValue();
     const ariaDescribedBy = this.getAriaDescribedBy();
+    const ariaLabelledBy = this.getAriaLabelledBy();
+    const hostClass = this.classNames();
+    this.renderedLabelledBy = ariaLabelledBy;
+    // A DOM morph strips what the component wrote on its host; put back its role, name and description.
+    // Only its own aria-labelledby, so a consumer's that the server dropped stays dropped.
+    this.hostKeeper.record(hostClass, { '--pds-radio-group-gap': gapValue }, {
+      role: 'radiogroup',
+      'aria-describedby': ariaDescribedBy,
+      'aria-labelledby': ariaLabelledBy === this.labelId ? ariaLabelledBy : undefined,
+    });
 
     return (
       <Host
-        class={this.classNames()}
+        class={hostClass}
         id={this._groupId}
-        role="group"
+        role="radiogroup"
+        aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
         style={{
           '--pds-radio-group-gap': gapValue,
         }}
       >
         {this.groupLabel && (
-          <div class="pds-radio-group__label">
+          <div class="pds-radio-group__label" id={this.labelId}>
             {this.groupLabel}
           </div>
         )}
