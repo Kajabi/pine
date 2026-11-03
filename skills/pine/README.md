@@ -22,8 +22,13 @@ The router stays small on purpose; detail lives behind explicit reads
 **Prerequisite — the Pine MCP.** The skill gates on it; without it, the skill
 tells the agent to stop rather than guess.
 ```bash
-claude mcp add --transport http pine "https://pine-mcp.netlify.app/mcp"
+claude mcp add --transport http pine "https://pine-mcp.netlify.app/mcp" \
+  --header "x-pine-mcp-client: <your-repo-or-app-name>"
 ```
+The `x-pine-mcp-client` header names your project, so its usage and validation
+results can be told apart from other callers'. Use a stable name per repo or
+app, with no spaces. Prefix test and verification runs with `test-` to keep them
+out of the quality dashboards.
 
 **Recommended — `npx skills add`.** The docs site serves a discovery manifest at
 `/.well-known/skills/index.json` (the [vercel-labs/skills](https://github.com/vercel-labs/skills)
