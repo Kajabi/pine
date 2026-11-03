@@ -13,15 +13,12 @@
   display: inline-flex;
   font-weight: var(--pine-font-weight-medium);
 
-  // No `position` here. It was added when the focus ring was a box-shadow, which
-  // needed a positioned element to paint above its neighbours; the ring became a
-  // real outline in #413 and an outline needs nothing. Positioning the anchor on
-  // focus alone is worse than redundant: it makes the anchor the containing block
-  // for its own absolutely-positioned descendants only while focused, so a
-  // consumer stretching ::part(link)::after over a row to make the whole row
-  // clickable loses that click area the moment a keyboard reaches the link.
+  // `isolation` keeps the focus ring painted above neighbouring elements. `position: relative`
+  // did that too, but it also made the anchor the containing block for its own ::after, so a
+  // consumer stretching ::part(link)::after over a row lost the row's click area on focus.
   &:focus-visible {
     border-radius: var(--pine-dimension-2xs);
+    isolation: isolate;
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width-thick);
   }
