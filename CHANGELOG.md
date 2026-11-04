@@ -1,3 +1,25 @@
+## 4.9.1 (2026-11-04)
+
+### Bug Fixes 🐛
+
+- **core:** ignore focus on other tab stops in a truncation tooltip's control ([#930](https://github.com/Kajabi/pine/pull/930))
+- **pds-link:** stop positioning the anchor on focus, so a stretched row keeps its click area ([#932](https://github.com/Kajabi/pine/pull/932))
+- **pds-modal:** raise only nested modal backdrops to the priority tier ([#882](https://github.com/Kajabi/pine/pull/882))
+- **pds-multiselect:** keep focus on the trigger when tab closes the panel ([#927](https://github.com/Kajabi/pine/pull/927))
+- **pds-radio-group:** name the radiogroup from its group label ([#912](https://github.com/Kajabi/pine/pull/912))
+- **pds-text:** skip the truncation tab stop inside a link or button ([#926](https://github.com/Kajabi/pine/pull/926))
+- **pds-tooltip:** show tooltips above an open modal dialog or popover ([#928](https://github.com/Kajabi/pine/pull/928))
+
+### Documentation 📄
+
+- **mcp:** send the x-pine-mcp-client header in every Pine MCP setup example ([#931](https://github.com/Kajabi/pine/pull/931))
+
+### ❤️ Thank You
+
+- andrew dally
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.9.0 (2026-10-29)
 
 ### Features 🚀
