@@ -606,111 +606,84 @@ describe('pds-dropdown-menu', () => {
     expect(focusItemSpy).toHaveBeenCalledWith(0);
   });
 
-  it('handles Tab key forward navigation when a menu item is focused', async () => {
-    const page = await newSpecPage({
-      components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
-      html: `
-        <pds-dropdown-menu>
-          <button slot="trigger">Toggle Menu</button>
-          <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
-          <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
-          <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
-        </pds-dropdown-menu>
-      `,
+  describe('Tab from a menu item', () => {
+    const openWithSecondItemFocused = async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
+        html: `
+          <pds-dropdown-menu>
+            <button slot="trigger">Toggle Menu</button>
+            <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+            <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+          </pds-dropdown-menu>
+        `,
+      });
+
+      const component = page.rootInstance;
+      const items = [document.createElement('button'), document.createElement('button')];
+      component.isOpen = true;
+      component.menuItems = items;
+      component.currentFocusIndex = 1;
+      Object.defineProperty(document, 'activeElement', {
+        configurable: true,
+        get: () => items[1],
+      });
+
+      return {
+        component,
+        closeSpy: jest.spyOn(component, 'closeDropdown'),
+        focusItemSpy: jest.spyOn(component, 'focusItemByIndex'),
+      };
+    };
+
+    it('closes the menu and leaves the Tab to the browser', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithSecondItemFocused();
+      const event = new KeyboardEvent('keydown', { key: 'Tab' });
+
+      component.handleTabKeyDown(event);
+      component.handleKeyDown(event);
+
+      expect(closeSpy).toHaveBeenCalled();
+      expect(component.isOpen).toBe(false);
+      expect(event.defaultPrevented).toBe(false);
+      expect(focusItemSpy).not.toHaveBeenCalled();
     });
 
-    if (!page.root) {
-      fail('Root element not found');
-    }
+    it('closes the menu and keeps focus on the trigger on Shift+Tab', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithSecondItemFocused();
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
 
-    const component = page.rootInstance;
-    component.isOpen = true;
+      component.handleTabKeyDown(event);
+      component.handleKeyDown(event);
 
-    // Mock menu items and one is active
-    const menuItem1 = document.createElement('button');
-    const menuItem2 = document.createElement('button');
-    const menuItem3 = document.createElement('button');
-
-    component.menuItems = [
-      menuItem1 as any,
-      menuItem2 as any,
-      menuItem3 as any
-    ];
-    component.currentFocusIndex = 0; // First item is focused
-
-    // Mock document.activeElement to be the first menu item
-    Object.defineProperty(document, 'activeElement', {
-      configurable: true,
-      get: function() { return menuItem1; }
+      expect(closeSpy).toHaveBeenCalled();
+      expect(event.defaultPrevented).toBe(true);
+      expect(focusItemSpy).not.toHaveBeenCalled();
     });
 
-    // Spy on focusNextItem method
-    const focusNextSpy = jest.spyOn(component, 'focusNextItem');
+    it('leaves the menu open when another handler has already taken the Tab', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithSecondItemFocused();
+      const event = new KeyboardEvent('keydown', { key: 'Tab' });
+      event.preventDefault();
 
-    // Create Tab event (forward)
-    const preventDefault = jest.fn();
-    const tabEvent = new KeyboardEvent('keydown', { key: 'Tab' }) as any;
-    tabEvent.preventDefault = preventDefault;
+      component.handleTabKeyDown(event);
+      component.handleKeyDown(event);
 
-    // Handle Tab keydown
-    component.handleKeyDown(tabEvent);
-
-    // Should prevent default and focus next item
-    expect(preventDefault).toHaveBeenCalled();
-    expect(focusNextSpy).toHaveBeenCalled();
-  });
-
-  it('handles Shift+Tab backward navigation from menu items', async () => {
-    const page = await newSpecPage({
-      components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
-      html: `
-        <pds-dropdown-menu>
-          <button slot="trigger">Toggle Menu</button>
-          <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
-          <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
-        </pds-dropdown-menu>
-      `,
+      expect(closeSpy).not.toHaveBeenCalled();
+      expect(component.isOpen).toBe(true);
+      expect(focusItemSpy).not.toHaveBeenCalled();
     });
 
-    if (!page.root) {
-      fail('Root element not found');
-    }
+    it('ignores Tab while the menu is closed', async () => {
+      const { component, closeSpy } = await openWithSecondItemFocused();
+      component.isOpen = false;
+      const event = new KeyboardEvent('keydown', { key: 'Tab' });
 
-    const component = page.rootInstance;
-    component.isOpen = true;
+      component.handleTabKeyDown(event);
 
-    // Mock menu items
-    const menuItem1 = document.createElement('button');
-    const menuItem2 = document.createElement('button');
-
-    component.menuItems = [
-      menuItem1 as any,
-      menuItem2 as any
-    ];
-
-    // Test with the second item focused (non-first item case)
-    component.currentFocusIndex = 1;
-
-    // Mock document.activeElement to be the second menu item
-    Object.defineProperty(document, 'activeElement', {
-      configurable: true,
-      get: function() { return menuItem2; }
+      expect(closeSpy).not.toHaveBeenCalled();
+      expect(event.defaultPrevented).toBe(false);
     });
-
-    // Spy on focusPreviousItem method
-    const focusPrevSpy = jest.spyOn(component, 'focusPreviousItem');
-
-    // Create Shift+Tab event
-    const preventDefault = jest.fn();
-    const shiftTabEvent = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }) as any;
-    shiftTabEvent.preventDefault = preventDefault;
-
-    // Handle Shift+Tab keydown
-    component.handleKeyDown(shiftTabEvent);
-
-    // Should prevent default and focus previous item
-    expect(preventDefault).toHaveBeenCalled();
-    expect(focusPrevSpy).toHaveBeenCalled();
   });
 
   it('closes dropdown on outside click', async () => {
