@@ -146,6 +146,63 @@ describe('pds-checkbox checkmark color', () => {
   });
 });
 
+describe('pds-checkbox indeterminate dash', () => {
+  // The dash is the ::after's painted border sides after its transform, not the ::after box itself.
+  const dashInk = (page) =>
+    page.$eval('pds-checkbox', (el) => {
+      const input = el.shadowRoot.querySelector('input');
+      const dash = getComputedStyle(input, '::after');
+      const px = (value: string) => parseFloat(value) || 0;
+      const [top, right, bottom, left] = [
+        dash.borderTopWidth,
+        dash.borderRightWidth,
+        dash.borderBottomWidth,
+        dash.borderLeftWidth,
+      ].map(px);
+      const width = left + px(dash.width) + right;
+      const height = top + px(dash.height) + bottom;
+      const sides = [
+        [0, 0, width, top],
+        [width - right, 0, width, height],
+        [0, height - bottom, width, height],
+        [0, 0, left, height],
+      ].filter(([x0, y0, x1, y1]) => x1 > x0 && y1 > y0);
+      const matrix = new DOMMatrix(dash.transform === 'none' ? undefined : dash.transform);
+      const [originX, originY] = dash.transformOrigin.split(' ').map(px);
+      const boxX = px(dash.left) + px(dash.marginLeft) + originX;
+      const boxY = px(dash.top) + px(dash.marginTop) + originY;
+      const corners = sides
+        .flatMap(([x0, y0, x1, y1]) => [[x0, y0], [x1, y0], [x0, y1], [x1, y1]])
+        .map(([x, y]) => matrix.transformPoint(new DOMPoint(x - originX, y - originY)))
+        .map((point) => ({ x: point.x + boxX, y: point.y + boxY }));
+      const xs = corners.map((corner) => corner.x);
+      const ys = corners.map((corner) => corner.y);
+
+      return {
+        width: Math.max(...xs) - Math.min(...xs),
+        height: Math.max(...ys) - Math.min(...ys),
+        offsetX: (Math.max(...xs) + Math.min(...xs)) / 2 - input.clientWidth / 2,
+        offsetY: (Math.max(...ys) + Math.min(...ys)) / 2 - input.clientHeight / 2,
+      };
+    });
+
+  it.each([
+    ['unchecked', '<pds-checkbox component-id="dash" label="Dash" indeterminate></pds-checkbox>'],
+    ['checked', '<pds-checkbox component-id="dash" label="Dash" checked indeterminate></pds-checkbox>'],
+    ['checked in RTL', '<div dir="rtl"><pds-checkbox component-id="dash" label="Dash" checked indeterminate></pds-checkbox></div>'],
+  ])('draws a level dash in the center of the box when %s', async (_, html) => {
+    const page = await newE2EPage();
+    await page.setContent(html);
+
+    const ink = await dashInk(page);
+
+    expect(ink.width).toBeCloseTo(7);
+    expect(ink.height).toBeCloseTo(1);
+    expect(ink.offsetX).toBeCloseTo(0);
+    expect(ink.offsetY).toBeCloseTo(0);
+  });
+});
+
 describe('pds-checkbox accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
