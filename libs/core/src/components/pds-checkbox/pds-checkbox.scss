@@ -45,18 +45,16 @@
     }
 
     &::after {
-      border: 1px solid var(--pine-color-text-primary);
-      border-block-end: var(--pine-border-width-none);
-      border-block-start: var(--pine-border-width-none);
-      border-inline-start: var(--pine-border-width-none);
+      border: var(--pine-border-width-none);
+      border-block-start: 1px solid var(--pine-color-text-primary);
       content: "";
       display: block;
-      height: 7px;
-      inset-block-start: 50%;
-      inset-inline-start: 50%;
+      height: 0;
+      inset: 0;
+      margin: auto;
       position: absolute;
-      transform: translate(-50%, -50%) rotate(90deg);
-      width: 4px;
+      transform: none;
+      width: 7px;
     }
   }
 }
