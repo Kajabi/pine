@@ -13,11 +13,14 @@
   display: inline-flex;
   font-weight: var(--pine-font-weight-medium);
 
+  // `isolation` keeps the focus ring painted above neighbouring elements. `position: relative`
+  // did that too, but it also made the anchor the containing block for its own ::after, so a
+  // consumer stretching ::part(link)::after over a row lost the row's click area on focus.
   &:focus-visible {
     border-radius: var(--pine-dimension-2xs);
+    isolation: isolate;
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width-thick);
-    position: relative;
   }
 
   &:hover {
