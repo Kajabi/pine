@@ -337,6 +337,16 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.closeDropdown();
   }
 
+  // Tab from an item is taken in the capture phase too, so a modal or popover around the menu that
+  // traps Tab sees focus back on the trigger, with the items already hidden.
+  @Listen('keydown', { target: 'document', capture: true })
+  handleTabKeyDown(event: KeyboardEvent) {
+    if (!this.isOpen || event.key !== 'Tab' || event.defaultPrevented || this.getFocusedItemIndex() === -1) return;
+    // Closing moves focus to the trigger. Shift+Tab stays there; Tab carries on past it.
+    if (event.shiftKey) event.preventDefault();
+    this.closeDropdown();
+  }
+
   // Handle keyboard events for the dropdown
   @Listen('keydown', { target: 'window' })
   handleKeyDown(event: KeyboardEvent) {
@@ -382,53 +392,18 @@ export class PdsDropdownMenu implements BasePdsProps {
         break;
 
       case 'Tab':
-        if (event.shiftKey) {
-          // Let Shift+Tab navigate naturally from first item to trigger
-          // For all other items, move to previous item
-          const currentIndex = this.getFocusedItemIndex();
+        // Tab from an item closes the menu in handleTabKeyDown; from anywhere else it moves into the menu.
+        if (!event.shiftKey && this.getFocusedItemIndex() === -1 && this.menuItems.length > 0) {
+          event.preventDefault();
 
-          if (currentIndex > 0) {
-            // If not on first item, prevent default and go to previous item
-            event.preventDefault();
-            this.focusPreviousItem(); // Use our method that skips disabled items
+          // Find the first non-disabled item
+          let firstFocusableIndex = 0;
+          while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
+            firstFocusableIndex++;
           }
-          // If on first item or no item, let natural tab order move back to trigger
-        } else {
-          // Forward Tab navigation
-          const activeElement = document.activeElement;
-          const isTriggerFocused = activeElement === this.triggerEl;
-          const currentIndex = this.getFocusedItemIndex();
 
-          if (isTriggerFocused && this.menuItems.length > 0) {
-            // If trigger is focused, move to first non-disabled menu item
-            event.preventDefault();
-
-            // Find the first non-disabled item
-            let firstFocusableIndex = 0;
-            while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
-              firstFocusableIndex++;
-            }
-
-            if (firstFocusableIndex < this.menuItems.length) {
-              this.focusItemByIndex(firstFocusableIndex);
-            }
-          } else if (currentIndex === -1 && this.menuItems.length > 0) {
-            // If no menu item is focused, focus the first non-disabled one
-            event.preventDefault();
-
-            // Find the first non-disabled item
-            let firstFocusableIndex = 0;
-            while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
-              firstFocusableIndex++;
-            }
-
-            if (firstFocusableIndex < this.menuItems.length) {
-              this.focusItemByIndex(firstFocusableIndex);
-            }
-          } else if (currentIndex !== -1) {
-            // Use our method that skips disabled items
-            event.preventDefault();
-            this.focusNextItem();
+          if (firstFocusableIndex < this.menuItems.length) {
+            this.focusItemByIndex(firstFocusableIndex);
           }
         }
         break;
