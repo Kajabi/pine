@@ -343,6 +343,15 @@ export class PdsDropdownMenu implements BasePdsProps {
     return -1;
   }
 
+  // An enabled item can still refuse focus (hidden, or a link with no href), so each one is tried in turn.
+  private focusAdjacentItem(fromIndex: number, step: 1 | -1): boolean {
+    for (let index = this.adjacentEnabledIndex(fromIndex, step); index !== -1; index = this.adjacentEnabledIndex(index, step)) {
+      this.focusItemByIndex(index);
+      if (this.getFocusedItemIndex() === index) return true;
+    }
+    return false;
+  }
+
   // Escape is taken in document's capture phase, before a modal around the menu hears it on
   // document and closes too.
   @Listen('keydown', { target: 'document', capture: true })
@@ -364,10 +373,8 @@ export class PdsDropdownMenu implements BasePdsProps {
       return;
     }
 
-    const adjacentIndex = this.adjacentEnabledIndex(currentIndex, event.shiftKey ? -1 : 1);
-    if (adjacentIndex !== -1) {
+    if (this.focusAdjacentItem(currentIndex, event.shiftKey ? -1 : 1)) {
       event.preventDefault();
-      this.focusItemByIndex(adjacentIndex);
       return;
     }
 
@@ -424,13 +431,11 @@ export class PdsDropdownMenu implements BasePdsProps {
         // Tab from an item is handled in handleTabKeyDown; from anywhere else it moves into the menu.
         if (event.shiftKey || this.getFocusedItemIndex() !== -1) break;
 
-        const firstEnabledIndex = this.adjacentEnabledIndex(-1, 1);
-        if (firstEnabledIndex === -1) {
-          // With no enabled item to move to, Tab carries on past the menu, as it does past the last item.
-          this.closeDropdown();
-        } else {
+        if (this.focusAdjacentItem(-1, 1)) {
           event.preventDefault();
-          this.focusItemByIndex(firstEnabledIndex);
+        } else {
+          // With no item to move to, Tab carries on past the menu, as it does past the last item.
+          this.closeDropdown();
         }
         break;
       }
