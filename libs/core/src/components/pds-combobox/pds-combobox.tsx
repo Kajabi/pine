@@ -2744,6 +2744,7 @@ export class PdsCombobox implements BasePdsProps {
     const isChip = this.isOptionChip(option);
     const isDisabled = isOptionDisabled(option);
     const tree = level !== undefined;
+    const badge = isLayout || isChip ? null : optionBadgeOf(option);
 
     return (
       <li
@@ -2756,7 +2757,13 @@ export class PdsCombobox implements BasePdsProps {
         aria-level={level}
         aria-setsize={setsize}
         aria-posinset={posinset}
-        aria-label={isLayout || isChip ? option.getAttribute('aria-label') || this.getOptionLabel(option) : undefined}
+        // A badged row is named outright, "Example, New": its flex children each read as a block, so
+        // a hidden comma between them would come out "Example , New".
+        aria-label={
+          isLayout || isChip
+            ? option.getAttribute('aria-label') || this.getOptionLabel(option)
+            : badge && `${this.getOptionLabel(option)}, ${badge.label}`
+        }
         tabindex={this.usesBodyPortal || this.usesPanelSearch || tree ? '-1' : isHighlighted ? '0' : '-1'}
         class={{
           'pds-combobox__option': true,
@@ -2764,7 +2771,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__option--layout': isLayout,
           'pds-combobox__option--chip': isChip,
           'pds-combobox__option--disabled': isDisabled,
-          'pds-combobox__option--with-badge': !isLayout && !isChip && optionBadgeOf(option) !== null,
+          'pds-combobox__option--with-badge': badge !== null,
         }}
         data-option-index={index}
         onMouseDown={this.onOptionMouseDown}
@@ -2798,19 +2805,19 @@ export class PdsCombobox implements BasePdsProps {
   private renderOptionBadge(option: HTMLOptionElement) {
     const badge = optionBadgeOf(option);
     if (badge === null) return null;
-    return [
-      // A pause between the option's text and the badge for screen readers: "Example, New".
-      <span class="visually-hidden">, </span>,
+    return (
       <pds-chip
         size="sm"
         sentiment={badge.sentiment}
         // A Pine icon name only, checked by optionBadgeOf; pds-chip's `icon` also loads URLs.
         icon={badge.icon ?? undefined}
+        // A long label, often a translated one, truncates rather than squeezing the option's text.
+        maxWidth="50%"
         class="pds-combobox__option-badge"
       >
         {badge.label}
-      </pds-chip>,
-    ];
+      </pds-chip>
+    );
   }
 
   /**
