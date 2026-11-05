@@ -223,6 +223,8 @@ describe('pds-chip', () => {
     ['pds-link', '<pds-link href="#">', '</pds-link>'],
     ['pds-dropdown-menu-item', '<pds-dropdown-menu-item>', '</pds-dropdown-menu-item>'],
     ['listbox option', '<ul role="listbox" aria-label="Tags"><li role="option" aria-selected="false">', '</li></ul>'],
+    // pds-combobox's flyout and drill-in rows.
+    ['tree item', '<ul role="tree" aria-label="Tags"><li role="treeitem" aria-selected="false">', '</li></ul>'],
     // Its own <a> drops the href while disabled, so only the pds-tab entry catches it.
     [
       'disabled navigation pds-tab',
