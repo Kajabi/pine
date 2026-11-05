@@ -281,6 +281,46 @@ describe('pds-checkbox in a disabled fieldset', () => {
   });
 });
 
+describe('pds-checkbox disabled and indeterminate', () => {
+  const look = (page, selector: string) =>
+    page.$eval(selector, (el) => {
+      const input = el.shadowRoot.querySelector('input');
+      const box = getComputedStyle(input);
+      const mark = getComputedStyle(input, '::after');
+      return {
+        fill: box.backgroundColor,
+        border: box.borderTopColor,
+        mark: [mark.borderTopColor, mark.borderRightColor, mark.borderBottomColor, mark.borderLeftColor],
+      };
+    });
+
+  it.each([
+    ['unchecked', 'light', 'indeterminate disabled'],
+    ['checked', 'light', 'checked indeterminate disabled'],
+    ['unchecked', 'dark', 'indeterminate disabled'],
+  ])('looks like a disabled checked checkbox when %s in the %s theme', async (_, theme, attributes) => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div data-theme="${theme}">
+        <pds-checkbox id="reference" component-id="reference" label="Reference" checked disabled></pds-checkbox>
+        <pds-checkbox id="dash" component-id="dash" label="Dash" ${attributes}></pds-checkbox>
+      </div>
+    `);
+
+    expect(await look(page, '#dash')).toEqual(await look(page, '#reference'));
+  });
+
+  it('ignores hover', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="dash" label="Dash" indeterminate disabled></pds-checkbox>');
+    const resting = await look(page, 'pds-checkbox');
+
+    await (await page.find('pds-checkbox >>> input')).hover();
+
+    expect(await look(page, 'pds-checkbox')).toEqual(resting);
+  });
+});
+
 describe('pds-checkbox pill variant', () => {
   const pillStyle = (page, selector: string) =>
     page.$eval(selector, (el) => {
