@@ -63,7 +63,8 @@
       margin: auto;
       position: absolute;
       transform: none;
-      width: 7px;
+      // Even, like the 14px space inside the border, so the dash centers on whole pixels.
+      width: 8px;
     }
   }
 }
