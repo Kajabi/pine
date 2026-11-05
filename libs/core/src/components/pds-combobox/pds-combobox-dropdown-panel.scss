@@ -76,7 +76,9 @@
   // Chips and custom layouts set their own colors, so mute them as pds-multiselect does.
   .pds-combobox__option--disabled .pds-combobox__option-chip,
   .pds-combobox__option--disabled .pds-combobox__option-layout-wrapper,
-  .pds-combobox__option--disabled .pds-combobox__option-badge {
+  .pds-combobox__option--disabled .pds-combobox__option-badge,
+  .pds-combobox__group-row--disabled > .pds-combobox__group-row-trigger > .pds-combobox__group-badge,
+  .pds-combobox__group--disabled > .pds-combobox__group-label > .pds-combobox__group-badge {
     opacity: 0.5;
   }
 
@@ -110,7 +112,8 @@
     column-gap: var(--pine-dimension-xs);
   }
 
-  .pds-combobox__option-badge {
+  .pds-combobox__option-badge,
+  .pds-combobox__group-badge {
     flex-shrink: 0;
     // The brand chip raises its label; contain that here, or it draws over the sticky back row.
     isolation: isolate;
@@ -175,6 +178,25 @@
 
   .pds-combobox__group-icon {
     flex-shrink: 0;
+  }
+
+  // An inline group's badge sits at the end of its caption, as an option's does in its row.
+  .pds-combobox__group-label--with-badge {
+    align-items: center;
+    column-gap: var(--pine-dimension-xs);
+    display: flex;
+  }
+
+  .pds-combobox__group-label-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  // The caption is uppercase; the chip keeps its own case. The chip is taller than the caption's
+  // line, so it overlaps the caption's padding, centered, rather than add to its height.
+  .pds-combobox__group-label > .pds-combobox__group-badge {
+    margin-block: calc(var(--pine-dimension-xs) * -1);
+    text-transform: none;
   }
 
   // group-display="flyout": a row per group, and its options in a flyout beside the panel.
