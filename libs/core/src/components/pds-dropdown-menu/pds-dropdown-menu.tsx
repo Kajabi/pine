@@ -351,7 +351,11 @@ export class PdsDropdownMenu implements BasePdsProps {
   handleTabKeyDown(event: KeyboardEvent) {
     if (!this.isOpen || event.key !== 'Tab' || event.defaultPrevented) return;
     const currentIndex = this.getFocusedItemIndex();
-    if (currentIndex === -1) return;
+    if (currentIndex === -1) {
+      // The menu sits after the trigger, so Shift+Tab from the trigger leaves it behind.
+      if (event.shiftKey && document.activeElement === this.triggerEl) this.closeDropdown();
+      return;
+    }
 
     const adjacentIndex = this.adjacentEnabledIndex(currentIndex, event.shiftKey ? -1 : 1);
     if (adjacentIndex !== -1) {
@@ -409,22 +413,20 @@ export class PdsDropdownMenu implements BasePdsProps {
         }
         break;
 
-      case 'Tab':
+      case 'Tab': {
         // Tab from an item is handled in handleTabKeyDown; from anywhere else it moves into the menu.
-        if (!event.shiftKey && this.getFocusedItemIndex() === -1 && this.menuItems.length > 0) {
+        if (event.shiftKey || this.getFocusedItemIndex() !== -1) break;
+
+        const firstEnabledIndex = this.adjacentEnabledIndex(-1, 1);
+        if (firstEnabledIndex === -1) {
+          // With no enabled item to move to, Tab carries on past the menu, as it does past the last item.
+          this.closeDropdown();
+        } else {
           event.preventDefault();
-
-          // Find the first non-disabled item
-          let firstFocusableIndex = 0;
-          while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
-            firstFocusableIndex++;
-          }
-
-          if (firstFocusableIndex < this.menuItems.length) {
-            this.focusItemByIndex(firstFocusableIndex);
-          }
+          this.focusItemByIndex(firstEnabledIndex);
         }
         break;
+      }
     }
   }
 
