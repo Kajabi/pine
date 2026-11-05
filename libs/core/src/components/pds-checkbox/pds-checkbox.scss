@@ -44,6 +44,15 @@
       border-color: var(--pine-color-accent-hover);
     }
 
+    &:disabled {
+      background: var(--pine-color-background-container-disabled);
+      border-color: var(--pine-color-border-disabled);
+
+      &::after {
+        border-color: var(--pine-color-border);
+      }
+    }
+
     &::after {
       border: var(--pine-border-width-none);
       border-block-start: var(--pine-border-width) solid var(--pine-color-text-primary);
