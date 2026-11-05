@@ -318,10 +318,10 @@ export namespace Components {
          */
         "direction"?: `row` | `column`;
         /**
-          * Defines the display style of the box.
+          * Defines the display style of the box. `contents` renders no box of its own, so its children lay out as direct children of its parent; use it for a wrapper that must not affect layout. With `contents`, the box's own padding, margin, border width, radius, shadow, gap and sizing have no effect. Its colour and min-size props are custom properties, so they pass down to child boxes.
           * @defaultValue flex
          */
-        "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
+        "display"?: `flex` | `inline-flex` | `block` | `inline-block` | `contents`;
         /**
           * If `true`, sets the box `max-width` to `100%`.
          */
@@ -4208,10 +4208,10 @@ declare namespace LocalJSX {
          */
         "direction"?: `row` | `column`;
         /**
-          * Defines the display style of the box.
+          * Defines the display style of the box. `contents` renders no box of its own, so its children lay out as direct children of its parent; use it for a wrapper that must not affect layout. With `contents`, the box's own padding, margin, border width, radius, shadow, gap and sizing have no effect. Its colour and min-size props are custom properties, so they pass down to child boxes.
           * @defaultValue flex
          */
-        "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
+        "display"?: `flex` | `inline-flex` | `block` | `inline-block` | `contents`;
         /**
           * If `true`, sets the box `max-width` to `100%`.
          */
@@ -7093,7 +7093,7 @@ declare namespace LocalJSX {
         "borderInlineStart": boolean;
         "borderRadius": `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         "direction": `row` | `column`;
-        "display": `flex` | `inline-flex` | `block` | `inline-block`;
+        "display": `flex` | `inline-flex` | `block` | `inline-block` | `contents`;
         "fit": boolean;
         "fitXs": boolean;
         "fitSm": boolean;

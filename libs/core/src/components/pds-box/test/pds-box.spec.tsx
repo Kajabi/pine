@@ -375,6 +375,15 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box--display-inline-block');
   });
 
+  it('renders display class when prop is set to contents', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box display="contents"></pds-box>`,
+    });
+
+    expect(page.root).toHaveClass('pds-box--display-contents');
+  });
+
   it('renders fit class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
