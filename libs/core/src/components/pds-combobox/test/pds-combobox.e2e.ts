@@ -1938,6 +1938,37 @@ describe('pds-combobox', () => {
       expect(box.badgeOpacity).toBe('0.5');
     });
 
+    // The caption is hidden from assistive tech, and the group's name carries the badge; a clipped
+    // badge there must not add a tab stop, or an aria-hidden one.
+    it("gives a truncated inline group badge no tab stop, with no axe violations", async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="inline-long-badge" label="Action" trigger="button" mode="select-only"
+          placeholder="Choose an action" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        [{ id: 'fb-dm', text: 'Send a Facebook message', group: 'Facebook', groupBadge: { label: 'Disponible con el plan Premium y superiores' } }],
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+
+      const badge = await page.evaluate(() => {
+        const chip = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-badge')!;
+        const label = chip.shadowRoot!.querySelector('.pds-chip__label-text') as HTMLElement;
+        label.focus();
+        return { clipped: label.scrollWidth > label.clientWidth, focused: chip.shadowRoot!.activeElement === label };
+      });
+
+      expect(badge).toEqual({ clipped: true, focused: false });
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
     it('names an inline group by its label, then its badge, with no axe violations', async () => {
       const page = await setUp('inline');
 

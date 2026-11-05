@@ -4177,6 +4177,9 @@ describe('pds-combobox', () => {
       expect(group.classList.contains('pds-combobox__group--disabled')).toBe(true);
       const label = group.querySelector('.pds-combobox__group-label')!;
       expect(label.classList.contains('pds-combobox__group-label--with-badge')).toBe(true);
+      // Hidden from assistive tech, and out of the tab order: a clipped badge can't take focus there.
+      expect(label.getAttribute('aria-hidden')).toBe('true');
+      expect(label.hasAttribute('inert')).toBe(true);
       expect(label.lastElementChild!.className).toBe('pds-combobox__group-badge');
       expect(label.lastElementChild!.textContent).toBe('Premium');
       const email = Array.from(root.querySelectorAll('[role="group"]')).find(el => el.getAttribute('aria-label') === 'Email')!;
