@@ -33,7 +33,7 @@ Dropdown Menus reveal a list of actions from a button trigger, implementing the 
 - Supports full keyboard navigation with arrow keys, Enter, Space, Home, and End
 - Renders `header` slot content outside the menu, so screen readers read it as plain content rather than as a menu item. Keyboard navigation moves between menu items only, so keep links and actions out of the header
 - Keeps `informational` items in keyboard navigation and exposes them as menu items with `aria-disabled="true"`, so people can reach and read them but not activate them. Navigation skips `disabled` items
-- Closes when Tab or Shift+Tab moves focus out of the menu, so keyboard users don't need Escape to leave it
+- Lets Tab and Shift+Tab move through the menu items, and closes the menu when they move past the last or first item, so keyboard users don't need Escape to leave it
 - Provides high-contrast focus indicators for all interactive elements
 
 
@@ -59,11 +59,11 @@ Dropdown Menus reveal a list of actions from a button trigger, implementing the 
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Tab (on menu item)</pds-table-cell>
-        <pds-table-cell>Closes the dropdown menu and moves focus to the next focusable element after the trigger</pds-table-cell>
+        <pds-table-cell>Moves focus to the next menu item. On the last item, closes the dropdown menu and moves focus to the next focusable element after the trigger</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Shift+Tab (on menu item)</pds-table-cell>
-        <pds-table-cell>Closes the dropdown menu and returns focus to the trigger</pds-table-cell>
+        <pds-table-cell>Moves focus to the previous menu item. On the first item, closes the dropdown menu and returns focus to the trigger</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Arrow Down</pds-table-cell>
