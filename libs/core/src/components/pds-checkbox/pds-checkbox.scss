@@ -93,9 +93,10 @@ input {
       display: block;
       height: 7px;
       inset-block-start: 50%;
-      inset-inline-start: 50%;
+      inset-inline: 0;
+      margin-inline: auto;
       position: absolute;
-      transform: translate(-50%, -60%) rotate(43deg);
+      transform: translateY(-60%) rotate(43deg);
       width: 4px;
     }
   }
@@ -128,10 +129,9 @@ input {
   }
 }
 
-:host-context([dir='rtl']) {
-  input:checked::after {
-    transform: translate(-50%, -60%) rotate(-43deg);
-  }
+// :dir() rather than :host-context(), which Firefox and Safari don't support. The dash isn't mirrored.
+:host(:not(.is-indeterminate)) input:checked:dir(rtl)::after {
+  transform: translateY(-60%) rotate(-43deg);
 }
 
 label {
