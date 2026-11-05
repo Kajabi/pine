@@ -3950,12 +3950,14 @@ describe('pds-combobox', () => {
       expect(badge.getAttribute('icon')).toBe('star');
       // The text, then the badge, at the end of the row.
       const row = badge.closest('[role="option"]')!;
-      // A hidden comma gives screen readers a pause: "New thing, New".
-      expect(row.textContent).toBe('New thing, New');
-      expect(row.querySelector('.visually-hidden')?.textContent).toBe(', ');
+      // Named outright, with a pause before the badge for screen readers.
+      expect(row.getAttribute('aria-label')).toBe('New thing, New');
       expect(row.classList.contains('pds-combobox__option--with-badge')).toBe(true);
       expect(row.lastElementChild).toBe(badge);
       expect(badgeOf(root, 'Broadcast')).toBeNull();
+      // A row without a badge keeps its content as its name.
+      const plain = Array.from(root.querySelectorAll('[role="option"]')).find(option => option.textContent === 'Broadcast')!;
+      expect(plain.hasAttribute('aria-label')).toBe(false);
     });
 
     it("renders a slotted option's data-badge", async () => {

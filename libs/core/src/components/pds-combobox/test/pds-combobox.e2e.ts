@@ -1705,6 +1705,7 @@ describe('pds-combobox', () => {
         const check = row.querySelector('.pds-combobox__option-check')?.getBoundingClientRect() ?? null;
         return {
           rowHeight: rowBox.height,
+          rowWidth: rowBox.width,
           plainRowHeight: rows[0].getBoundingClientRect().height,
           rowEnd: rowBox.right,
           contentEnd: rowBox.right - parseFloat(getComputedStyle(row).paddingInlineEnd),
@@ -1750,6 +1751,26 @@ describe('pds-combobox', () => {
       const box = await layout(await setUp(), 3);
 
       expect(box.badgeOpacity).toBe('0.5');
+    });
+
+    // The docs promise "Responsive emails, New"; the chip's icon must add nothing to the name.
+    it("names an option by its text, then its badge's label", async () => {
+      const page = await setUp();
+
+      const tree = await page.accessibility.snapshot();
+      const findNames = (node) => [node.role === 'option' ? node.name : null, ...(node.children ?? []).flatMap(findNames)].filter(Boolean);
+
+      expect(findNames(tree)).toContain('Example new thing, New');
+    });
+
+    it('truncates a long badge label at half the row, keeping the text readable', async () => {
+      const box = await layout(
+        await setUp('', { label: 'Recientemente añadido a la colección de plantillas', sentiment: 'accent' }),
+        1,
+      );
+
+      expect(box.badgeEnd - box.badgeStart).toBeLessThanOrEqual(box.rowWidth / 2 + 0.5);
+      expect(box.badgeStart - box.textEnd).toBeGreaterThanOrEqual(8);
     });
 
     it('has no axe violations with a badge open', async () => {
