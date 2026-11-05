@@ -1773,6 +1773,39 @@ describe('pds-combobox', () => {
       expect(box.badgeStart - box.textEnd).toBeGreaterThanOrEqual(8);
     });
 
+    // Flyout and drill-in rows are treeitems; a clipped badge there must not add a tab stop either.
+    it('gives a truncated badge in a drill-in group no tab stop of its own', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="tree-badges" label="Category" trigger="button" mode="select-only"
+          group-display="drill-in" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        [{ id: 'long', text: 'Example', group: 'Tag', badge: { label: 'Recientemente añadido a la colección de plantillas' } }],
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+
+      const badge = await page.evaluate(() => {
+        const chip = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__option-badge')!;
+        const label = chip.shadowRoot!.querySelector('.pds-chip__label-text') as HTMLElement;
+        return {
+          row: chip.closest('.pds-combobox__option')!.getAttribute('role'),
+          clipped: label.scrollWidth > label.clientWidth,
+          tabindex: label.getAttribute('tabindex'),
+        };
+      });
+
+      expect(badge).toEqual({ row: 'treeitem', clipped: true, tabindex: null });
+    });
+
     it('has no axe violations with a badge open', async () => {
       const page = await setUp();
 
