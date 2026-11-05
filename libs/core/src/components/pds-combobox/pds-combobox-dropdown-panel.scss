@@ -112,6 +112,8 @@
 
   .pds-combobox__option-badge {
     flex-shrink: 0;
+    // The brand chip raises its label; contain that here, or it draws over the sticky back row.
+    isolation: isolate;
     // The sm chip is a couple of pixels taller than a line of option text; keep the row's height.
     margin-block: calc(var(--pine-dimension-025) * -1);
     margin-inline-start: auto;
