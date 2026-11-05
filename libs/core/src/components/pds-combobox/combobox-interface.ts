@@ -20,7 +20,7 @@ export interface ComboboxOption {
    * digits and hyphens, for example `premium`); URLs and file paths are not accepted. The first
    * option in the group that sets one wins, the same as `data-badge`, `data-badge-sentiment` and
    * `data-badge-icon` on a slotted `<optgroup>`. It isn't matched by search, and screen readers
-   * read it as part of the group's name. A drilled-in group's row back doesn't show it.
+   * read it as part of the group's name. It isn't shown on a drilled-in group's row back.
    */
   groupBadge?: { label: string; sentiment?: string; icon?: string };
   /**
