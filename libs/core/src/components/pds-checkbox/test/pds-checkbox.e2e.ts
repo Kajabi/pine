@@ -196,6 +196,7 @@ describe('pds-checkbox checkmark position', () => {
     const ltr = await markInk(page, '#ltr');
     const rtl = await markInk(page, '#rtl');
 
+    expect(ltr.offsetX).toBeCloseTo(0);
     expect(rtl.width).toBeCloseTo(ltr.width);
     expect(rtl.height).toBeCloseTo(ltr.height);
     expect(rtl.offsetX).toBeCloseTo(-ltr.offsetX);
