@@ -210,7 +210,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     // Return focus to trigger
     if (this.isFocusInMenu()) {
-      this.triggerEl.focus();
+      this.focusTrigger();
     }
   }
 
@@ -218,6 +218,13 @@ export class PdsDropdownMenu implements BasePdsProps {
   private isFocusInMenu(): boolean {
     const focused = (this.host.getRootNode() as Document | ShadowRoot).activeElement;
     return focused != null && this.host.contains(focused);
+  }
+
+  // A trigger whose host can't take focus itself, such as pds-chip, passes it to the control inside.
+  private focusTrigger() {
+    this.triggerEl.focus();
+    if ((this.host.getRootNode() as Document | ShadowRoot).activeElement === this.triggerEl) return;
+    this.triggerEl.shadowRoot?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])')?.focus();
   }
 
   // Handle click on the trigger element
