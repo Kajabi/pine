@@ -418,6 +418,53 @@ describe('pds-dropdown-menu Tab through the items', () => {
     expect(await expanded(page)).toBe('false');
   });
 
+  it('closes the menu on Shift+Tab when opening it left focus outside the menu, as a click does in Safari', async () => {
+    const page = await setUp();
+    await page.$eval('#trigger', (el: HTMLElement) => el.click());
+    await page.waitForChanges();
+    expect(await expanded(page)).toBe('true');
+    expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+
+    await press(page, ['Shift+Tab']);
+
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it('moves past enabled items that refuse focus, closing the menu after the last', async () => {
+    const page = await setUp({
+      items: `
+        <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        <pds-dropdown-menu-item style="display: none">Hidden</pds-dropdown-menu-item>
+        <pds-dropdown-menu-item>Share</pds-dropdown-menu-item>
+        <a>No link</a>
+      `,
+    });
+    await open(page);
+
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['Edit', 'Share', 'after']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it.each([
+    ['Shift+Tab from the first item', 'Home', 'Shift+Tab', 'trigger'],
+    ['Escape from an item', 'Home', 'Escape', 'trigger'],
+    ['Tab from the last item', 'End', 'Tab', 'after'],
+  ] as const)('keeps focus on the page with a pds-chip trigger on %s', async (_, jump, key, expected) => {
+    const page = await setUp({
+      trigger: '<pds-chip slot="trigger" component-id="trigger" variant="dropdown">Actions</pds-chip>',
+    });
+    await open(page);
+    await page.keyboard.press(jump);
+    await page.waitForChanges();
+
+    if (key === 'Shift+Tab') await press(page, ['Shift+Tab']);
+    else await page.keyboard.press(key);
+    await page.waitForChanges();
+
+    expect(await expanded(page)).toBe('false');
+    expect(await focused(page)).toBe(expected);
+  });
+
   it('moves past a pds-button trigger on Tab from the last item', async () => {
     const page = await setUp({ trigger: '<pds-button slot="trigger" id="trigger">Actions</pds-button>' });
     await open(page);

@@ -578,16 +578,17 @@ describe('pds-dropdown-menu', () => {
     component.triggerEl = mockTrigger;
 
     // Create menu items for testing with proper tagName property
-    component.menuItems = [
-      { tagName: 'PDS-DROPDOWN-MENU-ITEM', disabled: false, focus: jest.fn() } as any,
-      { tagName: 'PDS-DROPDOWN-MENU-ITEM', disabled: false, focus: jest.fn() } as any,
-      { tagName: 'PDS-DROPDOWN-MENU-ITEM', disabled: true, focus: jest.fn() } as any
-    ];
+    let activeElement: unknown = mockTrigger;
+    component.menuItems = [false, false, true].map((disabled) => {
+      const item = { tagName: 'PDS-DROPDOWN-MENU-ITEM', disabled } as any;
+      item.focus = jest.fn(() => { activeElement = item; });
+      return item;
+    });
 
     // Mock document.activeElement to be the trigger
     Object.defineProperty(document, 'activeElement', {
       configurable: true,
-      get: function() { return mockTrigger; }
+      get: function() { return activeElement; }
     });
 
     // Spy on focus methods
@@ -624,16 +625,23 @@ describe('pds-dropdown-menu', () => {
       const items = [true, false, true, false, true].map((disabled) =>
         Object.assign(document.createElement('button'), { disabled }),
       );
+      let active: Element = items[focusedIndex];
+      items.forEach((item) => {
+        item.focus = () => {
+          active = item;
+        };
+      });
       component.isOpen = true;
       component.menuItems = items;
       component.currentFocusIndex = focusedIndex;
       Object.defineProperty(document, 'activeElement', {
         configurable: true,
-        get: () => items[focusedIndex],
+        get: () => active,
       });
 
       return {
         component,
+        items,
         closeSpy: jest.spyOn(component, 'closeDropdown'),
         focusItemSpy: jest.spyOn(component, 'focusItemByIndex'),
       };
@@ -655,6 +663,17 @@ describe('pds-dropdown-menu', () => {
       expect(focusItemSpy).toHaveBeenCalledWith(3);
       expect(event.defaultPrevented).toBe(true);
       expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('closes the menu past an enabled item that refuses focus', async () => {
+      const { component, items, closeSpy, focusItemSpy } = await openWithItemFocused(1);
+      items[3].focus = () => undefined;
+
+      const event = pressTab(component);
+
+      expect(focusItemSpy).toHaveBeenCalledWith(3);
+      expect(closeSpy).toHaveBeenCalled();
+      expect(event.defaultPrevented).toBe(false);
     });
 
     it('closes the menu and leaves the Tab to the browser on the last enabled item', async () => {
@@ -679,7 +698,7 @@ describe('pds-dropdown-menu', () => {
       expect(closeSpy).not.toHaveBeenCalled();
     });
 
-    it('closes the menu and keeps focus on the trigger on Shift+Tab from the first enabled item', async () => {
+    it('closes the menu and takes the Shift+Tab from the first enabled item', async () => {
       const { component, closeSpy, focusItemSpy } = await openWithItemFocused(1);
 
       const event = pressTab(component, { shiftKey: true });
@@ -729,14 +748,19 @@ describe('pds-dropdown-menu', () => {
 
       const component = page.rootInstance;
       const trigger = document.createElement('button');
+      const items = disabled.map((isDisabled) => Object.assign(document.createElement('button'), { disabled: isDisabled }));
+      let active: Element = trigger;
+      items.forEach((item) => {
+        item.focus = () => {
+          active = item;
+        };
+      });
       component.isOpen = true;
       component.triggerEl = trigger;
-      component.menuItems = disabled.map((isDisabled) =>
-        Object.assign(document.createElement('button'), { disabled: isDisabled }),
-      );
+      component.menuItems = items;
       Object.defineProperty(document, 'activeElement', {
         configurable: true,
-        get: () => trigger,
+        get: () => active,
       });
 
       return {
