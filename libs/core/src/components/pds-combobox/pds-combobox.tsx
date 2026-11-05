@@ -1342,7 +1342,7 @@ export class PdsCombobox implements BasePdsProps {
     return computePosition(this.triggerEl, this.listboxEl, {
       placement: this.dropdownPlacement,
       strategy,
-      middleware: [offset(12), flip(), shift({ padding: 5 })],
+      middleware: [offset(8), flip(), shift({ padding: 5 })],
     }).then(({ x, y }) => {
       if (!this.listboxEl) {
         return;
