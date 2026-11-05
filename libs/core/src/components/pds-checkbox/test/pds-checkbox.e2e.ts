@@ -146,6 +146,82 @@ describe('pds-checkbox checkmark color', () => {
   });
 });
 
+// A mark is the ::after's painted border sides after its transform, not the ::after box itself.
+const markInk = (page, selector = 'pds-checkbox') =>
+  page.$eval(selector, (el) => {
+    const input = el.shadowRoot.querySelector('input');
+    const mark = getComputedStyle(input, '::after');
+    const px = (value: string) => parseFloat(value) || 0;
+    const [top, right, bottom, left] = [
+      mark.borderTopWidth,
+      mark.borderRightWidth,
+      mark.borderBottomWidth,
+      mark.borderLeftWidth,
+    ].map(px);
+    const width = left + px(mark.width) + right;
+    const height = top + px(mark.height) + bottom;
+    const sides = [
+      [0, 0, width, top],
+      [width - right, 0, width, height],
+      [0, height - bottom, width, height],
+      [0, 0, left, height],
+    ].filter(([x0, y0, x1, y1]) => x1 > x0 && y1 > y0);
+    const matrix = new DOMMatrix(mark.transform === 'none' ? undefined : mark.transform);
+    const [originX, originY] = mark.transformOrigin.split(' ').map(px);
+    const boxX = px(mark.left) + px(mark.marginLeft) + originX;
+    const boxY = px(mark.top) + px(mark.marginTop) + originY;
+    const corners = sides
+      .flatMap(([x0, y0, x1, y1]) => [[x0, y0], [x1, y0], [x0, y1], [x1, y1]])
+      .map(([x, y]) => matrix.transformPoint(new DOMPoint(x - originX, y - originY)))
+      .map((point) => ({ x: point.x + boxX, y: point.y + boxY }));
+    const xs = corners.map((corner) => corner.x);
+    const ys = corners.map((corner) => corner.y);
+
+    return {
+      width: Math.max(...xs) - Math.min(...xs),
+      height: Math.max(...ys) - Math.min(...ys),
+      offsetX: (Math.max(...xs) + Math.min(...xs)) / 2 - input.clientWidth / 2,
+      offsetY: (Math.max(...ys) + Math.min(...ys)) / 2 - input.clientHeight / 2,
+    };
+  });
+
+describe('pds-checkbox checkmark position', () => {
+  it('mirrors the checkmark in place in RTL', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-checkbox id="ltr" component-id="ltr" label="LTR" checked></pds-checkbox>
+      <div dir="rtl"><pds-checkbox id="rtl" component-id="rtl" label="RTL" checked></pds-checkbox></div>
+    `);
+
+    const ltr = await markInk(page, '#ltr');
+    const rtl = await markInk(page, '#rtl');
+
+    expect(ltr.offsetX).toBeCloseTo(0);
+    expect(rtl.width).toBeCloseTo(ltr.width);
+    expect(rtl.height).toBeCloseTo(ltr.height);
+    expect(rtl.offsetX).toBeCloseTo(-ltr.offsetX);
+    expect(rtl.offsetY).toBeCloseTo(ltr.offsetY);
+  });
+});
+
+describe('pds-checkbox indeterminate dash', () => {
+  it.each([
+    ['unchecked', '<pds-checkbox component-id="dash" label="Dash" indeterminate></pds-checkbox>'],
+    ['checked', '<pds-checkbox component-id="dash" label="Dash" checked indeterminate></pds-checkbox>'],
+    ['checked in RTL', '<div dir="rtl"><pds-checkbox component-id="dash" label="Dash" checked indeterminate></pds-checkbox></div>'],
+  ])('draws a level dash in the center of the box when %s', async (_, html) => {
+    const page = await newE2EPage();
+    await page.setContent(html);
+
+    const ink = await markInk(page);
+
+    expect(ink.width).toBeCloseTo(8);
+    expect(ink.height).toBeCloseTo(1);
+    expect(ink.offsetX).toBeCloseTo(0);
+    expect(ink.offsetY).toBeCloseTo(0);
+  });
+});
+
 describe('pds-checkbox accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
@@ -202,6 +278,46 @@ describe('pds-checkbox in a disabled fieldset', () => {
     await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
     await page.waitForChanges();
     expect(await disabled()).toBe(false);
+  });
+});
+
+describe('pds-checkbox disabled and indeterminate', () => {
+  const look = (page, selector: string) =>
+    page.$eval(selector, (el) => {
+      const input = el.shadowRoot.querySelector('input');
+      const box = getComputedStyle(input);
+      const mark = getComputedStyle(input, '::after');
+      return {
+        fill: box.backgroundColor,
+        border: box.borderTopColor,
+        mark: [mark.borderTopColor, mark.borderRightColor, mark.borderBottomColor, mark.borderLeftColor],
+      };
+    });
+
+  it.each([
+    ['unchecked', 'light', 'indeterminate disabled'],
+    ['checked', 'light', 'checked indeterminate disabled'],
+    ['unchecked', 'dark', 'indeterminate disabled'],
+  ])('looks like a disabled checked checkbox when %s in the %s theme', async (_, theme, attributes) => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div data-theme="${theme}">
+        <pds-checkbox id="reference" component-id="reference" label="Reference" checked disabled></pds-checkbox>
+        <pds-checkbox id="dash" component-id="dash" label="Dash" ${attributes}></pds-checkbox>
+      </div>
+    `);
+
+    expect(await look(page, '#dash')).toEqual(await look(page, '#reference'));
+  });
+
+  it('ignores hover', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="dash" label="Dash" indeterminate disabled></pds-checkbox>');
+    const resting = await look(page, 'pds-checkbox');
+
+    await (await page.find('pds-checkbox >>> input')).hover();
+
+    expect(await look(page, 'pds-checkbox')).toEqual(resting);
   });
 });
 

@@ -44,19 +44,27 @@
       border-color: var(--pine-color-accent-hover);
     }
 
+    &:disabled {
+      background: var(--pine-color-background-container-disabled);
+      border-color: var(--pine-color-border-disabled);
+
+      &::after {
+        border-color: var(--pine-color-border);
+      }
+    }
+
     &::after {
-      border: 1px solid var(--pine-color-text-primary);
-      border-block-end: var(--pine-border-width-none);
-      border-block-start: var(--pine-border-width-none);
-      border-inline-start: var(--pine-border-width-none);
+      border: var(--pine-border-width-none);
+      border-block-start: var(--pine-border-width) solid var(--pine-color-text-primary);
       content: "";
       display: block;
-      height: 7px;
-      inset-block-start: 50%;
-      inset-inline-start: 50%;
+      height: 0;
+      inset: 0;
+      margin: auto;
       position: absolute;
-      transform: translate(-50%, -50%) rotate(90deg);
-      width: 4px;
+      transform: none;
+      // Even, like the 14px space inside the border, so the dash centers on whole pixels.
+      width: 8px;
     }
   }
 }
@@ -88,16 +96,17 @@ input {
     }
 
     &::after {
-      border: 1px solid var(--pine-color-text-primary);
+      border: var(--pine-border-width) solid var(--pine-color-text-primary);
       border-block-start: var(--pine-border-width-none);
       border-inline-start: var(--pine-border-width-none);
       content: "";
       display: block;
       height: 7px;
       inset-block-start: 50%;
-      inset-inline-start: 50%;
+      inset-inline: 0;
+      margin-inline: auto;
       position: absolute;
-      transform: translate(-50%, -60%) rotate(43deg);
+      transform: translateY(-60%) rotate(43deg);
       width: 4px;
     }
   }
@@ -130,10 +139,9 @@ input {
   }
 }
 
-:host-context([dir='rtl']) {
-  input:checked::after {
-    transform: translate(-50%, -60%) rotate(-43deg);
-  }
+// :dir() rather than :host-context(), which Firefox and Safari don't support. The dash isn't mirrored.
+:host(:not(.is-indeterminate)) input:checked:dir(rtl)::after {
+  transform: translateY(-60%) rotate(-43deg);
 }
 
 label {
