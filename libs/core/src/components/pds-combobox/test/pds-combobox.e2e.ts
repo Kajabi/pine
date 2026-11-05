@@ -1665,6 +1665,154 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
   });
+
+  describe('option badges', () => {
+    const setUp = async (value = '', badge: Record<string, string> = { label: 'New', sentiment: 'accent', icon: 'star' }) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="badges" label="Category" trigger="button" mode="select-only"
+            dropdown-width="300px" value="${value}"></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        [
+          { id: 'broadcast', text: 'Broadcast' },
+          { id: 'new-thing', text: 'Example new thing', badge },
+          { id: 'long', text: 'Averyveryverylongcategorynamewithoutanyspaces', badge: { label: 'New' } },
+          { id: 'off', text: 'Unavailable', badge: { label: 'New' }, disabled: true },
+        ],
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    // A row's box, and its text, badge and check edges, by the row's position.
+    const layout = (page: Awaited<ReturnType<typeof newE2EPage>>, position: number) =>
+      page.evaluate(index => {
+        const rows = Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('[role="option"]')) as HTMLElement[];
+        const row = rows[index];
+        const rowBox = row.getBoundingClientRect();
+        const chip = row.querySelector('.pds-combobox__option-badge') as HTMLElement;
+        const badge = chip.getBoundingClientRect();
+        const text = row.querySelector('.pds-combobox__option-label')!.getBoundingClientRect();
+        const check = row.querySelector('.pds-combobox__option-check')?.getBoundingClientRect() ?? null;
+        return {
+          rowHeight: rowBox.height,
+          rowWidth: rowBox.width,
+          plainRowHeight: rows[0].getBoundingClientRect().height,
+          rowEnd: rowBox.right,
+          contentEnd: rowBox.right - parseFloat(getComputedStyle(row).paddingInlineEnd),
+          textEnd: text.right,
+          badgeStart: badge.left,
+          badgeEnd: badge.right,
+          badgePaddingStart: getComputedStyle(chip).paddingInlineStart,
+          badgeOpacity: getComputedStyle(chip).opacity,
+          checkStart: check?.left ?? null,
+          checkEnd: check?.right ?? null,
+        };
+      }, position);
+
+    it('puts the badge at the end of the row, without growing it', async () => {
+      const box = await layout(await setUp(), 1);
+
+      expect(Math.abs(box.badgeEnd - box.contentEnd)).toBeLessThan(1);
+      expect(box.rowHeight).toBe(box.plainRowHeight);
+    });
+
+    it('keeps the selected check after the badge, at its usual distance', async () => {
+      const box = await layout(await setUp('new-thing'), 1);
+
+      expect(Math.round(box.checkStart! - box.badgeEnd)).toBe(12);
+      expect(Math.abs(box.checkEnd! - box.contentEnd)).toBeLessThan(1);
+    });
+
+    it('keeps a gap between long text and the badge, inside the row', async () => {
+      const box = await layout(await setUp(), 2);
+
+      expect(box.badgeStart - box.textEnd).toBeGreaterThanOrEqual(8);
+      expect(box.badgeEnd).toBeLessThanOrEqual(box.rowEnd);
+    });
+
+    // The chip's own padding draws its border; a brand chip's is the 1px gradient ring.
+    it("leaves the chip's own padding alone", async () => {
+      const box = await layout(await setUp('', { label: 'New', sentiment: 'brand' }), 1);
+
+      expect(box.badgePaddingStart).toBe('1px');
+    });
+
+    it("mutes a disabled option's badge", async () => {
+      const box = await layout(await setUp(), 3);
+
+      expect(box.badgeOpacity).toBe('0.5');
+    });
+
+    // The docs promise "Responsive emails, New"; the chip's icon must add nothing to the name.
+    it("names an option by its text, then its badge's label", async () => {
+      const page = await setUp();
+
+      const tree = await page.accessibility.snapshot();
+      const findNames = (node) => [node.role === 'option' ? node.name : null, ...(node.children ?? []).flatMap(findNames)].filter(Boolean);
+
+      expect(findNames(tree)).toContain('Example new thing, New');
+    });
+
+    it('truncates a long badge label at half the row, keeping the text readable', async () => {
+      const box = await layout(
+        await setUp('', { label: 'Recientemente añadido a la colección de plantillas', sentiment: 'accent' }),
+        1,
+      );
+
+      expect(box.badgeEnd - box.badgeStart).toBeLessThanOrEqual(box.rowWidth / 2 + 0.5);
+      expect(box.badgeStart - box.textEnd).toBeGreaterThanOrEqual(8);
+    });
+
+    // Flyout and drill-in rows are treeitems; a clipped badge there must not add a tab stop either.
+    it('gives a truncated badge in a drill-in group no tab stop of its own', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="tree-badges" label="Category" trigger="button" mode="select-only"
+          group-display="drill-in" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        [{ id: 'long', text: 'Example', group: 'Tag', badge: { label: 'Recientemente añadido a la colección de plantillas' } }],
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+
+      const badge = await page.evaluate(() => {
+        const chip = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__option-badge')!;
+        const label = chip.shadowRoot!.querySelector('.pds-chip__label-text') as HTMLElement;
+        return {
+          row: chip.closest('.pds-combobox__option')!.getAttribute('role'),
+          clipped: label.scrollWidth > label.clientWidth,
+          tabindex: label.getAttribute('tabindex'),
+        };
+      });
+
+      expect(badge).toEqual({ row: 'treeitem', clipped: true, tabindex: null });
+    });
+
+    it('has no axe violations with a badge open', async () => {
+      const page = await setUp();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
 });
 
 describe('pds-combobox in a disabled fieldset', () => {

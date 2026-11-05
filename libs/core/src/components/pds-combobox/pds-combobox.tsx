@@ -14,6 +14,7 @@ import {
   groupLabelOf,
   isGroupDisabled,
   isOptionDisabled,
+  optionBadgeOf,
   optionIconOf,
   panelColumn,
   parentOptgroupOf,
@@ -1010,6 +1011,7 @@ export class PdsCombobox implements BasePdsProps {
       if (opt.disabled === true) optionEl.setAttribute('disabled', '');
       // Only strings group an option or name an icon; anything else from JS is ignored, not coerced.
       if (typeof opt.icon === 'string' && opt.icon !== '') optionEl.setAttribute('data-icon', opt.icon);
+      this.setBadgeAttributes(optionEl, opt.badge);
 
       if (typeof opt.group !== 'string' || opt.group === '') {
         ungrouped.push(optionEl);
@@ -2742,6 +2744,7 @@ export class PdsCombobox implements BasePdsProps {
     const isChip = this.isOptionChip(option);
     const isDisabled = isOptionDisabled(option);
     const tree = level !== undefined;
+    const badge = isLayout || isChip ? null : optionBadgeOf(option);
 
     return (
       <li
@@ -2754,7 +2757,13 @@ export class PdsCombobox implements BasePdsProps {
         aria-level={level}
         aria-setsize={setsize}
         aria-posinset={posinset}
-        aria-label={isLayout || isChip ? option.getAttribute('aria-label') || this.getOptionLabel(option) : undefined}
+        // A badged row is named outright, "Example, New": its flex children each read as a block, so
+        // a hidden comma between them would come out "Example , New".
+        aria-label={
+          isLayout || isChip
+            ? option.getAttribute('aria-label') || this.getOptionLabel(option)
+            : badge && `${this.getOptionLabel(option)}, ${badge.label}`
+        }
         tabindex={this.usesBodyPortal || this.usesPanelSearch || tree ? '-1' : isHighlighted ? '0' : '-1'}
         class={{
           'pds-combobox__option': true,
@@ -2762,6 +2771,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__option--layout': isLayout,
           'pds-combobox__option--chip': isChip,
           'pds-combobox__option--disabled': isDisabled,
+          'pds-combobox__option--with-badge': badge !== null,
         }}
         data-option-index={index}
         onMouseDown={this.onOptionMouseDown}
@@ -2774,14 +2784,46 @@ export class PdsCombobox implements BasePdsProps {
         ) : isChip ? (
           this.renderOptionChip(option)
         ) : (
-          this.renderOptionLabel(option)
+          [this.renderOptionLabel(option), this.renderOptionBadge(option)]
         )}
         {isSelected && <pds-icon icon="check" size="regular" aria-hidden="true" class="pds-combobox__option-check" />}
       </li>
     );
   }
 
-  /** An option's text, after its `data-icon` when it has one. */
+  /** Copies an `options` badge to the option's `data-badge*` attributes; only strings count. */
+  private setBadgeAttributes(optionEl: HTMLOptionElement, badge: unknown) {
+    if (typeof badge !== 'object' || badge === null) return;
+    const { label, sentiment, icon } = badge as Record<string, unknown>;
+    if (typeof label !== 'string' || label.trim() === '') return;
+    optionEl.setAttribute('data-badge', label);
+    if (typeof sentiment === 'string') optionEl.setAttribute('data-badge-sentiment', sentiment);
+    if (typeof icon === 'string') optionEl.setAttribute('data-badge-icon', icon);
+  }
+
+  /** An option's badge, after its text. */
+  private renderOptionBadge(option: HTMLOptionElement) {
+    const badge = optionBadgeOf(option);
+    if (badge === null) return null;
+    return (
+      <pds-chip
+        size="sm"
+        sentiment={badge.sentiment}
+        // A Pine icon name only, checked by optionBadgeOf; pds-chip's `icon` also loads URLs.
+        icon={badge.icon ?? undefined}
+        // A long label, often a translated one, truncates rather than squeezing the option's text.
+        maxWidth="50%"
+        class="pds-combobox__option-badge"
+      >
+        {badge.label}
+      </pds-chip>
+    );
+  }
+
+  /**
+   * An option's text, after its `data-icon` when it has one. Beside a badge the text is always
+   * wrapped, so it can shrink and wrap rather than push the badge out of the row.
+   */
   private renderOptionLabel(option: HTMLOptionElement) {
     const icon = optionIconOf(option);
     const label = this.truncate ? (
@@ -2789,7 +2831,9 @@ export class PdsCombobox implements BasePdsProps {
         {this.getOptionLabel(option)}
       </span>
     ) : this.getOptionLabel(option);
-    if (icon === null) return label;
+    if (icon === null) {
+      return optionBadgeOf(option) === null ? label : <span class="pds-combobox__option-label">{label}</span>;
+    }
     return (
       <span class="pds-combobox__option-label">
         {/* `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized. */}
