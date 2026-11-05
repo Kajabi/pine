@@ -328,6 +328,14 @@ export class PdsDropdownMenu implements BasePdsProps {
     }
   }
 
+  // Unlike the arrow keys, Tab stops at either end of the menu instead of wrapping.
+  private adjacentEnabledIndex(fromIndex: number, step: 1 | -1): number {
+    for (let index = fromIndex + step; index >= 0 && index < this.menuItems.length; index += step) {
+      if (!this.isItemDisabled(this.menuItems[index])) return index;
+    }
+    return -1;
+  }
+
   // Escape is taken in document's capture phase, before a modal around the menu hears it on
   // document and closes too.
   @Listen('keydown', { target: 'document', capture: true })
@@ -337,12 +345,22 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.closeDropdown();
   }
 
-  // Tab from an item is taken in the capture phase too, so a modal or popover around the menu that
-  // traps Tab sees focus back on the trigger, with the items already hidden.
+  // Taken in the capture phase, so a modal or popover around the menu that traps Tab finds the key
+  // already handled, or focus back on the trigger with the items hidden.
   @Listen('keydown', { target: 'document', capture: true })
   handleTabKeyDown(event: KeyboardEvent) {
-    if (!this.isOpen || event.key !== 'Tab' || event.defaultPrevented || this.getFocusedItemIndex() === -1) return;
-    // Closing moves focus to the trigger. Shift+Tab stays there; Tab carries on past it.
+    if (!this.isOpen || event.key !== 'Tab' || event.defaultPrevented) return;
+    const currentIndex = this.getFocusedItemIndex();
+    if (currentIndex === -1) return;
+
+    const adjacentIndex = this.adjacentEnabledIndex(currentIndex, event.shiftKey ? -1 : 1);
+    if (adjacentIndex !== -1) {
+      event.preventDefault();
+      this.focusItemByIndex(adjacentIndex);
+      return;
+    }
+
+    // Past either end, closing moves focus to the trigger. Shift+Tab stays there; Tab carries on past it.
     if (event.shiftKey) event.preventDefault();
     this.closeDropdown();
   }
@@ -392,7 +410,7 @@ export class PdsDropdownMenu implements BasePdsProps {
         break;
 
       case 'Tab':
-        // Tab from an item closes the menu in handleTabKeyDown; from anywhere else it moves into the menu.
+        // Tab from an item is handled in handleTabKeyDown; from anywhere else it moves into the menu.
         if (!event.shiftKey && this.getFocusedItemIndex() === -1 && this.menuItems.length > 0) {
           event.preventDefault();
 
