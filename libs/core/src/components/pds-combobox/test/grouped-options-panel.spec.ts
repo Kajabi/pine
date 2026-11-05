@@ -2,6 +2,7 @@ import {
   FlyoutController,
   buildPanelEntries,
   findGroup,
+  groupBadgeOf,
   groupIconOf,
   groupLabelOf,
   isGroupDisabled,
@@ -140,6 +141,34 @@ describe('parentOptgroupOf / groupIconOf', () => {
     expect(parentOptgroupOf(option('loose'))).toBeNull();
     expect(groupIconOf(withIcon.group)).toBe('hashtag');
     expect(groupIconOf(empty.group)).toBeNull();
+  });
+});
+
+describe('groupBadgeOf', () => {
+  it("reads an optgroup's data-badge attributes into its panel group", () => {
+    const facebook = optgroup('Facebook', undefined, 'fb-dm');
+    facebook.group.setAttribute('data-badge', ' Premium ');
+    facebook.group.setAttribute('data-badge-sentiment', 'brand');
+    facebook.group.setAttribute('data-badge-icon', 'premium');
+    const email = optgroup('Email', undefined, 'email-send');
+
+    expect(groupBadgeOf(facebook.group)).toEqual({ label: 'Premium', sentiment: 'brand', icon: 'premium' });
+    expect(groupBadgeOf(email.group)).toBeNull();
+    const [facebookEntry, emailEntry] = buildPanelEntries([facebook.group, ...facebook.options, email.group, ...email.options]);
+    expect(facebookEntry.kind === 'group' && facebookEntry.group.badge?.label).toBe('Premium');
+    expect(emailEntry.kind === 'group' && emailEntry.group.badge).toBeNull();
+  });
+
+  it('falls back to neutral and drops an icon that is not a Pine icon name, as an option badge does', () => {
+    const odd = optgroup('Odd');
+    odd.group.setAttribute('data-badge', 'Premium');
+    odd.group.setAttribute('data-badge-sentiment', 'sparkly');
+    odd.group.setAttribute('data-badge-icon', '../icons/premium.svg');
+    const blank = optgroup('Blank');
+    blank.group.setAttribute('data-badge', '   ');
+
+    expect(groupBadgeOf(odd.group)).toEqual({ label: 'Premium', sentiment: 'neutral', icon: null });
+    expect(groupBadgeOf(blank.group)).toBeNull();
   });
 });
 

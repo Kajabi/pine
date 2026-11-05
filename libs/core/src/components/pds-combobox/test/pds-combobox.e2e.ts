@@ -1813,6 +1813,142 @@ describe('pds-combobox', () => {
       expect(formatViolations(violations)).toBe('');
     });
   });
+
+  describe('group badges', () => {
+    const premium = { label: 'Premium', sentiment: 'brand', icon: 'premium' };
+
+    const setUp = async (groupDisplay: string) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="group-badges" label="Action" trigger="button" mode="select-only"
+            placeholder="Choose an action" group-display="${groupDisplay}" dropdown-width="300px"></pds-combobox>
+        </div>
+      `);
+      await page.$eval(
+        'pds-combobox',
+        (el: HTMLElement & { options?: unknown }, options) => {
+          el.options = options;
+        },
+        [
+          { id: 'email', text: 'Send an email', group: 'Email' },
+          { id: 'fb-dm', text: 'Send a Facebook message', group: 'Facebook', groupBadge: premium, disabled: true },
+          { id: 'ig-dm', text: 'Send an Instagram message', group: 'Instagram', groupBadge: premium, disabled: true },
+        ],
+      );
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    // A group row's box, and its label, badge and chevron edges, beside the unbadged first row.
+    const rowLayout = (page: Awaited<ReturnType<typeof newE2EPage>>, position: number) =>
+      page.evaluate(index => {
+        const triggers = Array.from(
+          document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('.pds-combobox__group-row > .pds-combobox__group-row-trigger'),
+        ) as HTMLElement[];
+        const trigger = triggers[index];
+        const box = trigger.getBoundingClientRect();
+        const chip = trigger.querySelector('.pds-combobox__group-badge') as HTMLElement;
+        const badge = chip.getBoundingClientRect();
+        const label = trigger.querySelector('.pds-combobox__group-row-label')!.getBoundingClientRect();
+        const caret = trigger.querySelector('.pds-combobox__group-row-caret')!.getBoundingClientRect();
+        const plainCaret = triggers[0].querySelector('.pds-combobox__group-row-caret')!.getBoundingClientRect();
+        return {
+          rowHeight: box.height,
+          plainRowHeight: triggers[0].getBoundingClientRect().height,
+          labelEnd: label.right,
+          badgeStart: badge.left,
+          badgeEnd: badge.right,
+          caretStart: caret.left,
+          caretEnd: caret.right,
+          plainCaretEnd: plainCaret.right,
+          badgeOpacity: getComputedStyle(chip).opacity,
+        };
+      }, position);
+
+    for (const display of ['drill-in', 'flyout']) {
+      it(`puts a ${display} group row's badge at the end, before the chevron, without growing the row`, async () => {
+        const box = await rowLayout(await setUp(display), 1);
+
+        expect(box.badgeStart - box.labelEnd).toBeGreaterThanOrEqual(8);
+        expect(Math.round(box.caretStart - box.badgeEnd)).toBe(8);
+        // The chevron stays where an unbadged row has it.
+        expect(Math.abs(box.caretEnd - box.plainCaretEnd)).toBeLessThan(1);
+        expect(box.rowHeight).toBe(box.plainRowHeight);
+      });
+
+      it(`mutes a disabled ${display} group's badge`, async () => {
+        const box = await rowLayout(await setUp(display), 1);
+
+        expect(box.badgeOpacity).toBe('0.5');
+      });
+
+      it(`names a ${display} group row by its label, then its badge's label, with no axe violations`, async () => {
+        const page = await setUp(display);
+
+        const tree = await page.accessibility.snapshot();
+        const findNames = node => [node.role === 'treeitem' ? node.name : null, ...(node.children ?? []).flatMap(findNames)].filter(Boolean);
+        expect(findNames(tree)).toEqual(expect.arrayContaining(['Email', 'Facebook, Premium', 'Instagram, Premium']));
+
+        const violations = await runAxe(page);
+        expect(formatViolations(violations)).toBe('');
+      });
+    }
+
+    it("leaves the badge off a drilled-in group's row back", async () => {
+      const page = await setUp('drill-in');
+      const rows = await page.findAll('pds-combobox >>> .pds-combobox__group-row-trigger');
+      await rows[1].click();
+      await page.waitForChanges();
+
+      const back = await page.find('pds-combobox >>> .pds-combobox__group-back');
+      expect(back).not.toBeNull();
+      expect(await page.find('pds-combobox >>> .pds-combobox__group-back .pds-combobox__group-badge')).toBeNull();
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it("puts an inline group's badge at the end of its caption, without growing it", async () => {
+      const page = await setUp('inline');
+
+      const box = await page.evaluate(() => {
+        const labels = Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('.pds-combobox__group-label')) as HTMLElement[];
+        const label = labels[1];
+        const chip = label.querySelector('.pds-combobox__group-badge') as HTMLElement;
+        const text = label.querySelector('.pds-combobox__group-label-text')!.getBoundingClientRect();
+        const rect = label.getBoundingClientRect();
+        return {
+          height: rect.height,
+          plainHeight: labels[0].getBoundingClientRect().height,
+          contentEnd: rect.right - parseFloat(getComputedStyle(label).paddingInlineEnd),
+          textEnd: text.right,
+          badgeStart: chip.getBoundingClientRect().left,
+          badgeEnd: chip.getBoundingClientRect().right,
+          badgeTransform: getComputedStyle(chip).textTransform,
+          badgeOpacity: getComputedStyle(chip).opacity,
+        };
+      });
+
+      expect(Math.abs(box.badgeEnd - box.contentEnd)).toBeLessThan(1);
+      expect(box.badgeStart - box.textEnd).toBeGreaterThanOrEqual(8);
+      expect(box.height).toBe(box.plainHeight);
+      expect(box.badgeTransform).toBe('none');
+      expect(box.badgeOpacity).toBe('0.5');
+    });
+
+    it('names an inline group by its label, then its badge, with no axe violations', async () => {
+      const page = await setUp('inline');
+
+      const names = await page.evaluate(() =>
+        Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('[role="group"]')).map(group => group.getAttribute('aria-label')),
+      );
+      expect(names).toEqual(['Email', 'Facebook, Premium', 'Instagram, Premium']);
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+  });
 });
 
 describe('pds-combobox in a disabled fieldset', () => {
