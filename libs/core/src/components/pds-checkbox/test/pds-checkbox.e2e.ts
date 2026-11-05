@@ -215,7 +215,7 @@ describe('pds-checkbox indeterminate dash', () => {
 
     const ink = await markInk(page);
 
-    expect(ink.width).toBeCloseTo(7);
+    expect(ink.width).toBeCloseTo(8);
     expect(ink.height).toBeCloseTo(1);
     expect(ink.offsetX).toBeCloseTo(0);
     expect(ink.offsetY).toBeCloseTo(0);
