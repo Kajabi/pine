@@ -368,8 +368,9 @@ export class PdsDropdownMenu implements BasePdsProps {
     if (!this.isOpen || event.key !== 'Tab' || event.defaultPrevented) return;
     const currentIndex = this.getFocusedItemIndex();
     if (currentIndex === -1) {
-      // The menu sits after the trigger, so Shift+Tab from the trigger leaves it behind.
-      if (event.shiftKey && document.activeElement === this.triggerEl) this.closeDropdown();
+      // The menu sits after the trigger, so Shift+Tab from the trigger leaves it behind. So does Shift+Tab
+      // from outside the menu, where focus stays after a mouse open in Safari.
+      if (event.shiftKey && (document.activeElement === this.triggerEl || !this.isFocusInMenu())) this.closeDropdown();
       return;
     }
 
