@@ -306,14 +306,17 @@ describe('pds-dropdown-menu', () => {
   });
 });
 
-describe('pds-dropdown-menu Tab from an item', () => {
+describe('pds-dropdown-menu Tab through the items', () => {
   type Page = Awaited<ReturnType<typeof newE2EPage>>;
 
   const ITEMS = `
+    <pds-dropdown-menu-item disabled>Rename</pds-dropdown-menu-item>
     <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
     <pds-dropdown-menu-item href="#share">Share</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item disabled>Duplicate</pds-dropdown-menu-item>
     <pds-dropdown-menu-item informational>Used on 2 forms</pds-dropdown-menu-item>
     <a href="#archive">Archive</a>
+    <pds-dropdown-menu-item disabled>Delete</pds-dropdown-menu-item>
   `;
 
   const focused = (page: Page) =>
@@ -321,19 +324,29 @@ describe('pds-dropdown-menu Tab from an item', () => {
 
   const expanded = (page: Page) => page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'));
 
-  const openAndFocusItem = async (page: Page, position: number) => {
+  const open = async (page: Page) => {
     await page.click('#trigger');
-    await page.waitForChanges();
-    for (let i = 0; i < position; i += 1) await page.keyboard.press('ArrowDown');
     await page.waitForChanges();
   };
 
-  const setUp = async () => {
+  const press = async (page: Page, keys: Array<'Tab' | 'Shift+Tab'>) => {
+    const visited: string[] = [];
+    for (const key of keys) {
+      if (key === 'Shift+Tab') await page.keyboard.down('Shift');
+      await page.keyboard.press('Tab');
+      if (key === 'Shift+Tab') await page.keyboard.up('Shift');
+      await page.waitForChanges();
+      visited.push(await focused(page));
+    }
+    return visited;
+  };
+
+  const setUp = async (trigger = '<button type="button" slot="trigger" id="trigger">Actions</button>') => {
     const page = await newE2EPage();
     await page.setContent(`
       <button type="button" id="before">Before</button>
       <pds-dropdown-menu>
-        <button type="button" slot="trigger" id="trigger">Actions</button>
+        ${trigger}
         ${ITEMS}
       </pds-dropdown-menu>
       <button type="button" id="after">After</button>
@@ -341,56 +354,54 @@ describe('pds-dropdown-menu Tab from an item', () => {
     return page;
   };
 
-  it.each([
-    ['a button item', 1, 'Edit'],
-    ['a link item', 2, 'Share'],
-    ['an informational item', 3, 'Used on 2 forms'],
-    ['a raw link', 4, 'Archive'],
-  ])('closes the menu and moves focus past the trigger on Tab from %s', async (_, position, item) => {
+  it('moves through the enabled items, then closes and moves past the trigger after the last', async () => {
     const page = await setUp();
-    await openAndFocusItem(page, position);
-    expect(await focused(page)).toBe(item);
+    await open(page);
 
-    await page.keyboard.press('Tab');
-    await page.waitForChanges();
+    expect(await press(page, ['Tab', 'Tab', 'Tab', 'Tab'])).toEqual(['Edit', 'Share', 'Used on 2 forms', 'Archive']);
+    expect(await expanded(page)).toBe('true');
 
+    expect(await press(page, ['Tab'])).toEqual(['after']);
     expect(await expanded(page)).toBe('false');
-    expect(await focused(page)).toBe('after');
   });
 
-  it('moves focus past a pds-button trigger on Tab from an item', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`
-      <pds-dropdown-menu>
-        <pds-button slot="trigger" id="trigger">Actions</pds-button>
-        ${ITEMS}
-      </pds-dropdown-menu>
-      <button type="button" id="after">After</button>
-    `);
-    await openAndFocusItem(page, 1);
-    expect(await focused(page)).toBe('Edit');
-
-    await page.keyboard.press('Tab');
+  it('moves back through the enabled items on Shift+Tab, then closes and returns to the trigger before the first', async () => {
+    const page = await setUp();
+    await open(page);
+    await page.keyboard.press('End');
     await page.waitForChanges();
+    expect(await focused(page)).toBe('Archive');
 
+    expect(await press(page, ['Shift+Tab', 'Shift+Tab', 'Shift+Tab'])).toEqual(['Used on 2 forms', 'Share', 'Edit']);
+    expect(await expanded(page)).toBe('true');
+
+    expect(await press(page, ['Shift+Tab'])).toEqual(['trigger']);
     expect(await expanded(page)).toBe('false');
-    expect(await focused(page)).toBe('after');
   });
 
-  it.each([
-    ['the first item', 1],
-    ['a later item', 3],
-  ])('closes the menu and returns focus to the trigger on Shift+Tab from %s', async (_, position) => {
+  it('carries on from where the arrow keys left focus', async () => {
     const page = await setUp();
-    await openAndFocusItem(page, position);
+    await open(page);
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+    expect(await focused(page)).toBe('Share');
 
-    await page.keyboard.down('Shift');
-    await page.keyboard.press('Tab');
-    await page.keyboard.up('Shift');
+    expect(await press(page, ['Tab'])).toEqual(['Used on 2 forms']);
+
+    await page.keyboard.press('ArrowUp');
+    await page.waitForChanges();
+    expect(await focused(page)).toBe('Share');
+  });
+
+  it('moves past a pds-button trigger on Tab from the last item', async () => {
+    const page = await setUp('<pds-button slot="trigger" id="trigger">Actions</pds-button>');
+    await open(page);
+    await page.keyboard.press('End');
     await page.waitForChanges();
 
+    expect(await press(page, ['Tab'])).toEqual(['after']);
     expect(await expanded(page)).toBe('false');
-    expect(await focused(page)).toBe('trigger');
   });
 
   it('keeps Tab inside a pds-modal when the trigger is its last control', async () => {
@@ -408,17 +419,13 @@ describe('pds-dropdown-menu Tab from an item', () => {
     `);
     await (await page.find('pds-modal')).callMethod('showModal');
     await page.waitForChanges();
-    await openAndFocusItem(page, 1);
-    expect(await focused(page)).toBe('Edit');
+    await open(page);
 
-    await page.keyboard.press('Tab');
-    await page.waitForChanges();
-
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['Edit', 'Share', 'modal-first']);
     expect(await expanded(page)).toBe('false');
-    expect(await focused(page)).toBe('modal-first');
   });
 
-  it("leaves a pds-popover's panel when the menu is its last control", async () => {
+  it("leaves a pds-popover's panel after the last item when the menu is its last control", async () => {
     const page = await newE2EPage();
     await page.setContent(`
       <pds-popover component-id="pop">
@@ -436,14 +443,10 @@ describe('pds-dropdown-menu Tab from an item', () => {
     `);
     await page.click('#pop-trigger');
     await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
-    await openAndFocusItem(page, 1);
-    expect(await focused(page)).toBe('Edit');
+    await open(page);
 
-    await page.keyboard.press('Tab');
-    await page.waitForChanges();
-
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['Edit', 'Share', 'after']);
     expect(await expanded(page)).toBe('false');
-    expect(await focused(page)).toBe('after');
   });
 });
 

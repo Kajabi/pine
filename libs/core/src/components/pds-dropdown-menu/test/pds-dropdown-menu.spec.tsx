@@ -607,7 +607,8 @@ describe('pds-dropdown-menu', () => {
   });
 
   describe('Tab from a menu item', () => {
-    const openWithSecondItemFocused = async () => {
+    // Enabled items at 1 and 3, with disabled ones before, between and after them.
+    const openWithItemFocused = async (focusedIndex: number) => {
       const page = await newSpecPage({
         components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
         html: `
@@ -620,13 +621,15 @@ describe('pds-dropdown-menu', () => {
       });
 
       const component = page.rootInstance;
-      const items = [document.createElement('button'), document.createElement('button')];
+      const items = [true, false, true, false, true].map((disabled) =>
+        Object.assign(document.createElement('button'), { disabled }),
+      );
       component.isOpen = true;
       component.menuItems = items;
-      component.currentFocusIndex = 1;
+      component.currentFocusIndex = focusedIndex;
       Object.defineProperty(document, 'activeElement', {
         configurable: true,
-        get: () => items[1],
+        get: () => items[focusedIndex],
       });
 
       return {
@@ -636,25 +639,50 @@ describe('pds-dropdown-menu', () => {
       };
     };
 
-    it('closes the menu and leaves the Tab to the browser', async () => {
-      const { component, closeSpy, focusItemSpy } = await openWithSecondItemFocused();
-      const event = new KeyboardEvent('keydown', { key: 'Tab' });
-
+    const pressTab = (component: PdsDropdownMenu, init: KeyboardEventInit = {}) => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', ...init });
       component.handleTabKeyDown(event);
       component.handleKeyDown(event);
+      return event;
+    };
+
+    it('moves to the next enabled item', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithItemFocused(1);
+
+      const event = pressTab(component);
+
+      expect(focusItemSpy).toHaveBeenCalledTimes(1);
+      expect(focusItemSpy).toHaveBeenCalledWith(3);
+      expect(event.defaultPrevented).toBe(true);
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('closes the menu and leaves the Tab to the browser on the last enabled item', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithItemFocused(3);
+
+      const event = pressTab(component);
 
       expect(closeSpy).toHaveBeenCalled();
-      expect(component.isOpen).toBe(false);
+      expect(component['isOpen']).toBe(false);
       expect(event.defaultPrevented).toBe(false);
       expect(focusItemSpy).not.toHaveBeenCalled();
     });
 
-    it('closes the menu and keeps focus on the trigger on Shift+Tab', async () => {
-      const { component, closeSpy, focusItemSpy } = await openWithSecondItemFocused();
-      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+    it('moves to the previous enabled item on Shift+Tab', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithItemFocused(3);
 
-      component.handleTabKeyDown(event);
-      component.handleKeyDown(event);
+      const event = pressTab(component, { shiftKey: true });
+
+      expect(focusItemSpy).toHaveBeenCalledTimes(1);
+      expect(focusItemSpy).toHaveBeenCalledWith(1);
+      expect(event.defaultPrevented).toBe(true);
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('closes the menu and keeps focus on the trigger on Shift+Tab from the first enabled item', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithItemFocused(1);
+
+      const event = pressTab(component, { shiftKey: true });
 
       expect(closeSpy).toHaveBeenCalled();
       expect(event.defaultPrevented).toBe(true);
@@ -662,7 +690,7 @@ describe('pds-dropdown-menu', () => {
     });
 
     it('leaves the menu open when another handler has already taken the Tab', async () => {
-      const { component, closeSpy, focusItemSpy } = await openWithSecondItemFocused();
+      const { component, closeSpy, focusItemSpy } = await openWithItemFocused(3);
       const event = new KeyboardEvent('keydown', { key: 'Tab' });
       event.preventDefault();
 
@@ -670,18 +698,19 @@ describe('pds-dropdown-menu', () => {
       component.handleKeyDown(event);
 
       expect(closeSpy).not.toHaveBeenCalled();
-      expect(component.isOpen).toBe(true);
+      expect(component['isOpen']).toBe(true);
       expect(focusItemSpy).not.toHaveBeenCalled();
     });
 
     it('ignores Tab while the menu is closed', async () => {
-      const { component, closeSpy } = await openWithSecondItemFocused();
-      component.isOpen = false;
+      const { component, closeSpy, focusItemSpy } = await openWithItemFocused(1);
+      component['isOpen'] = false;
       const event = new KeyboardEvent('keydown', { key: 'Tab' });
 
       component.handleTabKeyDown(event);
 
       expect(closeSpy).not.toHaveBeenCalled();
+      expect(focusItemSpy).not.toHaveBeenCalled();
       expect(event.defaultPrevented).toBe(false);
     });
   });
