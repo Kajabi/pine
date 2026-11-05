@@ -210,7 +210,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     // Return focus to trigger
     if (this.isFocusInMenu()) {
-      this.triggerEl.focus();
+      this.focusTrigger();
     }
   }
 
@@ -218,6 +218,13 @@ export class PdsDropdownMenu implements BasePdsProps {
   private isFocusInMenu(): boolean {
     const focused = (this.host.getRootNode() as Document | ShadowRoot).activeElement;
     return focused != null && this.host.contains(focused);
+  }
+
+  // A trigger whose host can't take focus itself, such as pds-chip, passes it to the control inside.
+  private focusTrigger() {
+    this.triggerEl.focus();
+    if ((this.host.getRootNode() as Document | ShadowRoot).activeElement === this.triggerEl) return;
+    this.triggerEl.shadowRoot?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])')?.focus();
   }
 
   // Handle click on the trigger element
@@ -328,12 +335,52 @@ export class PdsDropdownMenu implements BasePdsProps {
     }
   }
 
+  // Unlike the arrow keys, Tab stops at either end of the menu instead of wrapping.
+  private adjacentEnabledIndex(fromIndex: number, step: 1 | -1): number {
+    for (let index = fromIndex + step; index >= 0 && index < this.menuItems.length; index += step) {
+      if (!this.isItemDisabled(this.menuItems[index])) return index;
+    }
+    return -1;
+  }
+
+  // An enabled item can still refuse focus (hidden, or a link with no href), so each one is tried in turn.
+  private focusAdjacentItem(fromIndex: number, step: 1 | -1): boolean {
+    for (let index = this.adjacentEnabledIndex(fromIndex, step); index !== -1; index = this.adjacentEnabledIndex(index, step)) {
+      this.focusItemByIndex(index);
+      if (this.getFocusedItemIndex() === index) return true;
+    }
+    return false;
+  }
+
   // Escape is taken in document's capture phase, before a modal around the menu hears it on
   // document and closes too.
   @Listen('keydown', { target: 'document', capture: true })
   handleEscapeKeyDown(event: KeyboardEvent) {
     if (!this.isOpen || event.key !== 'Escape' || event.defaultPrevented) return;
     event.preventDefault();
+    this.closeDropdown();
+  }
+
+  // Taken in the capture phase, so a modal or popover around the menu that traps Tab finds the key
+  // already handled, or focus back on the trigger with the items hidden.
+  @Listen('keydown', { target: 'document', capture: true })
+  handleTabKeyDown(event: KeyboardEvent) {
+    if (!this.isOpen || event.key !== 'Tab' || event.defaultPrevented) return;
+    const currentIndex = this.getFocusedItemIndex();
+    if (currentIndex === -1) {
+      // The menu sits after the trigger, so Shift+Tab from the trigger leaves it behind. So does Shift+Tab
+      // from outside the menu, where focus stays after a mouse open in Safari.
+      if (event.shiftKey && (document.activeElement === this.triggerEl || !this.isFocusInMenu())) this.closeDropdown();
+      return;
+    }
+
+    if (this.focusAdjacentItem(currentIndex, event.shiftKey ? -1 : 1)) {
+      event.preventDefault();
+      return;
+    }
+
+    // Past either end, closing moves focus to the trigger. Shift+Tab stays there; Tab carries on past it.
+    if (event.shiftKey) event.preventDefault();
     this.closeDropdown();
   }
 
@@ -381,57 +428,18 @@ export class PdsDropdownMenu implements BasePdsProps {
         }
         break;
 
-      case 'Tab':
-        if (event.shiftKey) {
-          // Let Shift+Tab navigate naturally from first item to trigger
-          // For all other items, move to previous item
-          const currentIndex = this.getFocusedItemIndex();
+      case 'Tab': {
+        // Tab from an item is handled in handleTabKeyDown; from anywhere else it moves into the menu.
+        if (event.shiftKey || this.getFocusedItemIndex() !== -1) break;
 
-          if (currentIndex > 0) {
-            // If not on first item, prevent default and go to previous item
-            event.preventDefault();
-            this.focusPreviousItem(); // Use our method that skips disabled items
-          }
-          // If on first item or no item, let natural tab order move back to trigger
+        if (this.focusAdjacentItem(-1, 1)) {
+          event.preventDefault();
         } else {
-          // Forward Tab navigation
-          const activeElement = document.activeElement;
-          const isTriggerFocused = activeElement === this.triggerEl;
-          const currentIndex = this.getFocusedItemIndex();
-
-          if (isTriggerFocused && this.menuItems.length > 0) {
-            // If trigger is focused, move to first non-disabled menu item
-            event.preventDefault();
-
-            // Find the first non-disabled item
-            let firstFocusableIndex = 0;
-            while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
-              firstFocusableIndex++;
-            }
-
-            if (firstFocusableIndex < this.menuItems.length) {
-              this.focusItemByIndex(firstFocusableIndex);
-            }
-          } else if (currentIndex === -1 && this.menuItems.length > 0) {
-            // If no menu item is focused, focus the first non-disabled one
-            event.preventDefault();
-
-            // Find the first non-disabled item
-            let firstFocusableIndex = 0;
-            while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
-              firstFocusableIndex++;
-            }
-
-            if (firstFocusableIndex < this.menuItems.length) {
-              this.focusItemByIndex(firstFocusableIndex);
-            }
-          } else if (currentIndex !== -1) {
-            // Use our method that skips disabled items
-            event.preventDefault();
-            this.focusNextItem();
-          }
+          // With no item to move to, Tab carries on past the menu, as it does past the last item.
+          this.closeDropdown();
         }
         break;
+      }
     }
   }
 

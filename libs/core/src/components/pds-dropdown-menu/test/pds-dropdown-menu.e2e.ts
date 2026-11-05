@@ -306,6 +306,221 @@ describe('pds-dropdown-menu', () => {
   });
 });
 
+describe('pds-dropdown-menu Tab through the items', () => {
+  type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+  const ITEMS = `
+    <pds-dropdown-menu-item disabled>Rename</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item href="#share">Share</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item disabled>Duplicate</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational>Used on 2 forms</pds-dropdown-menu-item>
+    <a href="#archive">Archive</a>
+    <pds-dropdown-menu-item disabled>Delete</pds-dropdown-menu-item>
+  `;
+
+  const focused = (page: Page) =>
+    page.evaluate(() => document.activeElement?.id || document.activeElement?.textContent?.trim());
+
+  const expanded = (page: Page) => page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'));
+
+  const open = async (page: Page) => {
+    await page.click('#trigger');
+    await page.waitForChanges();
+  };
+
+  const press = async (page: Page, keys: Array<'Tab' | 'Shift+Tab'>) => {
+    const visited: string[] = [];
+    for (const key of keys) {
+      if (key === 'Shift+Tab') await page.keyboard.down('Shift');
+      await page.keyboard.press('Tab');
+      if (key === 'Shift+Tab') await page.keyboard.up('Shift');
+      await page.waitForChanges();
+      visited.push(await focused(page));
+    }
+    return visited;
+  };
+
+  const setUp = async ({
+    trigger = '<button type="button" slot="trigger" id="trigger">Actions</button>',
+    items = ITEMS,
+  } = {}) => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <button type="button" id="before">Before</button>
+      <pds-dropdown-menu>
+        ${trigger}
+        ${items}
+      </pds-dropdown-menu>
+      <button type="button" id="after">After</button>
+    `);
+    return page;
+  };
+
+  it('moves through the enabled items, then closes and moves past the trigger after the last', async () => {
+    const page = await setUp();
+    await open(page);
+
+    expect(await press(page, ['Tab', 'Tab', 'Tab', 'Tab'])).toEqual(['Edit', 'Share', 'Used on 2 forms', 'Archive']);
+    expect(await expanded(page)).toBe('true');
+
+    expect(await press(page, ['Tab'])).toEqual(['after']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it('moves back through the enabled items on Shift+Tab, then closes and returns to the trigger before the first', async () => {
+    const page = await setUp();
+    await open(page);
+    await page.keyboard.press('End');
+    await page.waitForChanges();
+    expect(await focused(page)).toBe('Archive');
+
+    expect(await press(page, ['Shift+Tab', 'Shift+Tab', 'Shift+Tab'])).toEqual(['Used on 2 forms', 'Share', 'Edit']);
+    expect(await expanded(page)).toBe('true');
+
+    expect(await press(page, ['Shift+Tab'])).toEqual(['trigger']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it('carries on from where the arrow keys left focus', async () => {
+    const page = await setUp();
+    await open(page);
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+    expect(await focused(page)).toBe('Share');
+
+    expect(await press(page, ['Tab'])).toEqual(['Used on 2 forms']);
+
+    await page.keyboard.press('ArrowUp');
+    await page.waitForChanges();
+    expect(await focused(page)).toBe('Share');
+  });
+
+  it('closes the menu on Shift+Tab from the trigger, moving focus before it', async () => {
+    const page = await setUp();
+    await open(page);
+
+    expect(await press(page, ['Shift+Tab'])).toEqual(['before']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it('closes the menu on Tab from the trigger when every item is disabled', async () => {
+    const page = await setUp({
+      items: `
+        <pds-dropdown-menu-item disabled>Edit</pds-dropdown-menu-item>
+        <pds-dropdown-menu-item disabled>Share</pds-dropdown-menu-item>
+      `,
+    });
+    await open(page);
+
+    expect(await press(page, ['Tab'])).toEqual(['after']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it('closes the menu on Shift+Tab when opening it left focus outside the menu, as a click does in Safari', async () => {
+    const page = await setUp();
+    await page.$eval('#trigger', (el: HTMLElement) => el.click());
+    await page.waitForChanges();
+    expect(await expanded(page)).toBe('true');
+    expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+
+    await press(page, ['Shift+Tab']);
+
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it('moves past enabled items that refuse focus, closing the menu after the last', async () => {
+    const page = await setUp({
+      items: `
+        <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        <pds-dropdown-menu-item style="display: none">Hidden</pds-dropdown-menu-item>
+        <pds-dropdown-menu-item>Share</pds-dropdown-menu-item>
+        <a>No link</a>
+      `,
+    });
+    await open(page);
+
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['Edit', 'Share', 'after']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it.each([
+    ['Shift+Tab from the first item', 'Home', 'Shift+Tab', 'trigger'],
+    ['Escape from an item', 'Home', 'Escape', 'trigger'],
+    ['Tab from the last item', 'End', 'Tab', 'after'],
+  ] as const)('keeps focus on the page with a pds-chip trigger on %s', async (_, jump, key, expected) => {
+    const page = await setUp({
+      trigger: '<pds-chip slot="trigger" component-id="trigger" variant="dropdown">Actions</pds-chip>',
+    });
+    await open(page);
+    await page.keyboard.press(jump);
+    await page.waitForChanges();
+
+    if (key === 'Shift+Tab') await press(page, ['Shift+Tab']);
+    else await page.keyboard.press(key);
+    await page.waitForChanges();
+
+    expect(await expanded(page)).toBe('false');
+    expect(await focused(page)).toBe(expected);
+  });
+
+  it('moves past a pds-button trigger on Tab from the last item', async () => {
+    const page = await setUp({ trigger: '<pds-button slot="trigger" id="trigger">Actions</pds-button>' });
+    await open(page);
+    await page.keyboard.press('End');
+    await page.waitForChanges();
+
+    expect(await press(page, ['Tab'])).toEqual(['after']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it('keeps Tab inside a pds-modal when the trigger is its last control', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-modal component-id="modal">
+        <div slot="header">Header</div>
+        <button type="button" id="modal-first">First in modal</button>
+        <pds-dropdown-menu>
+          <button type="button" slot="trigger" id="trigger">Actions</button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item>Share</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </pds-modal>
+    `);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    await page.waitForChanges();
+    await open(page);
+
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['Edit', 'Share', 'modal-first']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it("leaves a pds-popover's panel after the last item when the menu is its last control", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-popover component-id="pop">
+        <button type="button" slot="trigger" id="pop-trigger">Filters</button>
+        <div>
+          <button type="button" id="pop-first">Reset</button>
+          <pds-dropdown-menu>
+            <button type="button" slot="trigger" id="trigger">Actions</button>
+            <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+            <pds-dropdown-menu-item>Share</pds-dropdown-menu-item>
+          </pds-dropdown-menu>
+        </div>
+      </pds-popover>
+      <button type="button" id="after">After</button>
+    `);
+    await page.click('#pop-trigger');
+    await page.waitForFunction(() => document.getElementById('pop-portal')?.style.display === 'block');
+    await open(page);
+
+    expect(await press(page, ['Tab', 'Tab', 'Tab'])).toEqual(['Edit', 'Share', 'after']);
+    expect(await expanded(page)).toBe('false');
+  });
+});
+
 describe('pds-dropdown-menu accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
