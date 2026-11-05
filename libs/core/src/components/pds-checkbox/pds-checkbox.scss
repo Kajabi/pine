@@ -46,7 +46,7 @@
 
     &::after {
       border: var(--pine-border-width-none);
-      border-block-start: 1px solid var(--pine-color-text-primary);
+      border-block-start: var(--pine-border-width) solid var(--pine-color-text-primary);
       content: "";
       display: block;
       height: 0;
@@ -86,7 +86,7 @@ input {
     }
 
     &::after {
-      border: 1px solid var(--pine-color-text-primary);
+      border: var(--pine-border-width) solid var(--pine-color-text-primary);
       border-block-start: var(--pine-border-width-none);
       border-inline-start: var(--pine-border-width-none);
       content: "";
