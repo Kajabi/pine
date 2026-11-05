@@ -341,13 +341,16 @@ describe('pds-dropdown-menu Tab through the items', () => {
     return visited;
   };
 
-  const setUp = async (trigger = '<button type="button" slot="trigger" id="trigger">Actions</button>') => {
+  const setUp = async ({
+    trigger = '<button type="button" slot="trigger" id="trigger">Actions</button>',
+    items = ITEMS,
+  } = {}) => {
     const page = await newE2EPage();
     await page.setContent(`
       <button type="button" id="before">Before</button>
       <pds-dropdown-menu>
         ${trigger}
-        ${ITEMS}
+        ${items}
       </pds-dropdown-menu>
       <button type="button" id="after">After</button>
     `);
@@ -394,8 +397,29 @@ describe('pds-dropdown-menu Tab through the items', () => {
     expect(await focused(page)).toBe('Share');
   });
 
+  it('closes the menu on Shift+Tab from the trigger, moving focus before it', async () => {
+    const page = await setUp();
+    await open(page);
+
+    expect(await press(page, ['Shift+Tab'])).toEqual(['before']);
+    expect(await expanded(page)).toBe('false');
+  });
+
+  it('closes the menu on Tab from the trigger when every item is disabled', async () => {
+    const page = await setUp({
+      items: `
+        <pds-dropdown-menu-item disabled>Edit</pds-dropdown-menu-item>
+        <pds-dropdown-menu-item disabled>Share</pds-dropdown-menu-item>
+      `,
+    });
+    await open(page);
+
+    expect(await press(page, ['Tab'])).toEqual(['after']);
+    expect(await expanded(page)).toBe('false');
+  });
+
   it('moves past a pds-button trigger on Tab from the last item', async () => {
-    const page = await setUp('<pds-button slot="trigger" id="trigger">Actions</pds-button>');
+    const page = await setUp({ trigger: '<pds-button slot="trigger" id="trigger">Actions</pds-button>' });
     await open(page);
     await page.keyboard.press('End');
     await page.waitForChanges();

@@ -715,6 +715,76 @@ describe('pds-dropdown-menu', () => {
     });
   });
 
+  describe('Tab from the trigger', () => {
+    const openWithTriggerFocused = async (disabled: boolean[]) => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
+        html: `
+          <pds-dropdown-menu>
+            <button slot="trigger">Toggle Menu</button>
+            <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+          </pds-dropdown-menu>
+        `,
+      });
+
+      const component = page.rootInstance;
+      const trigger = document.createElement('button');
+      component.isOpen = true;
+      component.triggerEl = trigger;
+      component.menuItems = disabled.map((isDisabled) =>
+        Object.assign(document.createElement('button'), { disabled: isDisabled }),
+      );
+      Object.defineProperty(document, 'activeElement', {
+        configurable: true,
+        get: () => trigger,
+      });
+
+      return {
+        component,
+        closeSpy: jest.spyOn(component, 'closeDropdown'),
+        focusItemSpy: jest.spyOn(component, 'focusItemByIndex'),
+      };
+    };
+
+    const pressTab = (component: PdsDropdownMenu, init: KeyboardEventInit = {}) => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', ...init });
+      component.handleTabKeyDown(event);
+      component.handleKeyDown(event);
+      return event;
+    };
+
+    it('moves to the first enabled item on Tab', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithTriggerFocused([true, false]);
+
+      const event = pressTab(component);
+
+      expect(focusItemSpy).toHaveBeenCalledWith(1);
+      expect(event.defaultPrevented).toBe(true);
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('closes the menu and leaves Tab to the browser when every item is disabled', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithTriggerFocused([true, true]);
+
+      const event = pressTab(component);
+
+      expect(closeSpy).toHaveBeenCalled();
+      expect(event.defaultPrevented).toBe(false);
+      expect(focusItemSpy).not.toHaveBeenCalled();
+    });
+
+    it('closes the menu and leaves Shift+Tab to the browser', async () => {
+      const { component, closeSpy, focusItemSpy } = await openWithTriggerFocused([false, false]);
+
+      const event = pressTab(component, { shiftKey: true });
+
+      expect(closeSpy).toHaveBeenCalled();
+      expect(component['isOpen']).toBe(false);
+      expect(event.defaultPrevented).toBe(false);
+      expect(focusItemSpy).not.toHaveBeenCalled();
+    });
+  });
+
   it('closes dropdown on outside click', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenu, PdsBox],
