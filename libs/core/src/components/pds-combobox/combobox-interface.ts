@@ -15,6 +15,15 @@ export interface ComboboxOption {
    */
   groupIcon?: string;
   /**
+   * A small chip after the group's label, such as "Premium". `label` is its text; `sentiment` is a
+   * `pds-chip` sentiment (`neutral` when unset or unknown); `icon` is a Pine icon name (letters,
+   * digits and hyphens, for example `premium`); URLs and file paths are not accepted. The first
+   * option in the group that sets one wins, the same as `data-badge`, `data-badge-sentiment` and
+   * `data-badge-icon` on a slotted `<optgroup>`. It isn't matched by search, and screen readers
+   * read it as part of the group's name. A drilled-in group's row back doesn't show it.
+   */
+  groupBadge?: { label: string; sentiment?: string; icon?: string };
+  /**
    * Pine icon name shown before the option's text (letters, digits and hyphens, for example
    * `hashtag`); URLs and file paths are not accepted. The same as `data-icon` on a slotted `<option>`.
    * Once the option is chosen, the `button` trigger shows it too.

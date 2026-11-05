@@ -10,6 +10,7 @@ import {
   FlyoutController,
   buildPanelEntries,
   findGroup,
+  groupBadgeOf,
   groupIconOf,
   groupLabelOf,
   isGroupDisabled,
@@ -19,7 +20,7 @@ import {
   panelColumn,
   parentOptgroupOf,
 } from './grouped-options-panel';
-import type { PanelEntry, PanelGroup, PanelItem } from './grouped-options-panel';
+import type { OptionBadge, PanelEntry, PanelGroup, PanelItem } from './grouped-options-panel';
 import type {
   ComboboxOption,
   ComboboxSearchEventDetail,
@@ -1030,6 +1031,7 @@ export class PdsCombobox implements BasePdsProps {
       if (!optgroup.hasAttribute('data-icon') && typeof opt.groupIcon === 'string' && opt.groupIcon !== '') {
         optgroup.setAttribute('data-icon', opt.groupIcon);
       }
+      if (!optgroup.hasAttribute('data-badge')) this.setBadgeAttributes(optgroup, opt.groupBadge);
       optgroup.appendChild(optionEl);
     });
 
@@ -2519,6 +2521,7 @@ export class PdsCombobox implements BasePdsProps {
       if (group === null) return;
       const { optgroup, key, options, members } = group;
       const groupIcon = groupIconOf(optgroup);
+      const badge = groupBadgeOf(optgroup);
       // As in the grouped displays: disabled when there's nothing left in it to choose.
       const disabled = members.length > 0 && members.every(member => isOptionDisabled(member));
       rendered.push(
@@ -2526,18 +2529,23 @@ export class PdsCombobox implements BasePdsProps {
           key={key}
           class={{ 'pds-combobox__group': true, 'pds-combobox__group--disabled': disabled }}
           role="group"
-          aria-label={optgroup.label}
+          aria-label={badge === null ? optgroup.label : `${optgroup.label}, ${badge.label}`}
           aria-disabled={disabled ? 'true' : undefined}
         >
           <div
-            class={{ 'pds-combobox__group-label': true, 'pds-combobox__group-label--with-icon': groupIcon !== null }}
+            class={{
+              'pds-combobox__group-label': true,
+              'pds-combobox__group-label--with-icon': groupIcon !== null,
+              'pds-combobox__group-label--with-badge': badge !== null,
+            }}
             aria-hidden="true"
           >
             {groupIcon !== null && (
               // `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized.
               <pds-icon name={groupIcon} size="small" aria-hidden="true" class="pds-combobox__group-icon" />
             )}
-            {optgroup.label}
+            {badge === null ? optgroup.label : <span class="pds-combobox__group-label-text">{optgroup.label}</span>}
+            {this.renderBadge(badge, 'pds-combobox__group-badge')}
           </div>
           <ul class="pds-combobox__group-list" role="presentation">
             {options}
@@ -2791,19 +2799,23 @@ export class PdsCombobox implements BasePdsProps {
     );
   }
 
-  /** Copies an `options` badge to the option's `data-badge*` attributes; only strings count. */
-  private setBadgeAttributes(optionEl: HTMLOptionElement, badge: unknown) {
+  /** Copies an `options` badge to an option's or optgroup's `data-badge*` attributes; only strings count. */
+  private setBadgeAttributes(element: HTMLOptionElement | HTMLOptGroupElement, badge: unknown) {
     if (typeof badge !== 'object' || badge === null) return;
     const { label, sentiment, icon } = badge as Record<string, unknown>;
     if (typeof label !== 'string' || label.trim() === '') return;
-    optionEl.setAttribute('data-badge', label);
-    if (typeof sentiment === 'string') optionEl.setAttribute('data-badge-sentiment', sentiment);
-    if (typeof icon === 'string') optionEl.setAttribute('data-badge-icon', icon);
+    element.setAttribute('data-badge', label);
+    if (typeof sentiment === 'string') element.setAttribute('data-badge-sentiment', sentiment);
+    if (typeof icon === 'string') element.setAttribute('data-badge-icon', icon);
   }
 
   /** An option's badge, after its text. */
   private renderOptionBadge(option: HTMLOptionElement) {
-    const badge = optionBadgeOf(option);
+    return this.renderBadge(optionBadgeOf(option), 'pds-combobox__option-badge');
+  }
+
+  /** A badge as a `pds-chip`: after an option's text, or a group's label. */
+  private renderBadge(badge: OptionBadge | null, className: string) {
     if (badge === null) return null;
     return (
       <pds-chip
@@ -2813,7 +2825,7 @@ export class PdsCombobox implements BasePdsProps {
         icon={badge.icon ?? undefined}
         // A long label, often a translated one, truncates rather than squeezing the option's text.
         maxWidth="50%"
-        class="pds-combobox__option-badge"
+        class={className}
       >
         {badge.label}
       </pds-chip>
@@ -2883,7 +2895,8 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Drilled into a group: its treeitem, expanded. Its row reads as a way back ("Back: Tag") and
-   * leads its options.
+   * leads its options. It leaves out the group's badge: the row is a way back, not a group to
+   * choose, and the badge was on the row that opened it. An option's own badge still shows.
    */
   private renderGroupBackRow(group: PanelGroup, { posinset, setsize }: { posinset: number; setsize: number }) {
     const id = this.groupDomId(group.optgroup);
@@ -2954,7 +2967,10 @@ export class PdsCombobox implements BasePdsProps {
         aria-level={1}
         aria-posinset={posinset}
         aria-setsize={setsize}
-        aria-labelledby={`${id}-label`}
+        // A badged row is named outright, "Facebook, Premium", as a badged option is: labelling it
+        // by the label and the chip would read "Facebook Premium", with no pause between them.
+        aria-labelledby={group.badge === null ? `${id}-label` : undefined}
+        aria-label={group.badge === null ? undefined : `${group.label}, ${group.badge.label}`}
         data-group-index={groupIndex}
         onMouseEnter={flyout ? this.onGroupRowMouseEnter : undefined}
         onMouseLeave={flyout ? this.onGroupRowMouseLeave : undefined}
@@ -2974,6 +2990,7 @@ export class PdsCombobox implements BasePdsProps {
             )}
             {group.label}
           </span>
+          {this.renderBadge(group.badge, 'pds-combobox__group-badge')}
           <pds-icon name="caret-right" size="regular" aria-hidden="true" class="pds-combobox__group-row-caret" />
         </div>
         {isOpen && (
