@@ -1325,8 +1325,8 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
       const { back } = await heights(page);
 
-      // 16px above and below a line of body text: 52px where body text is 14px, as in the designs.
-      expect(searchPadding).toBe('16px');
+      // 12px above and below a line of body text, so the header is as compact as the rows below it.
+      expect(searchPadding).toBe('12px');
       expect(back).toBe(search);
     });
   });
