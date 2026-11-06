@@ -247,6 +247,26 @@ describe('pds-chip', () => {
     expect(formatViolations(violations)).toBe('');
   });
 
+  // pds-combobox's inline group caption: decorative, its group named elsewhere.
+  it('gives a clipped label no tab stop inside an aria-hidden container, and still shows it on hover', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      `<div aria-hidden="true"><pds-chip max-width="80px">A very long label that would otherwise overflow the chip</pds-chip></div>`,
+    );
+
+    const label = await page.$eval('pds-chip', (el) => {
+      const text = el.shadowRoot.querySelector('.pds-chip__label-text') as HTMLElement;
+      return { clipped: text.scrollWidth > text.clientWidth, tabindex: text.getAttribute('tabindex') };
+    });
+    expect(label).toEqual({ clipped: true, tabindex: null });
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+
+    await (await page.find('pds-chip')).hover();
+    await page.waitForSelector('.pds-truncation-tooltip--visible');
+    expect(await truncationTooltipText(page)).toContain('A very long label');
+  });
+
   describe('inside a listbox option', () => {
     const hoverClippedOption = async (listboxMargin: string) => {
       const page = await newE2EPage();
