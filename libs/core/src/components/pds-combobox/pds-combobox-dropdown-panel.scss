@@ -277,6 +277,8 @@
     display: flex;
     gap: var(--pine-dimension-xs);
     min-width: 0;
+    // A long one-word label wraps rather than run under a badge, as an option's does.
+    overflow-wrap: anywhere;
   }
 
   .pds-combobox__group-row-caret {
