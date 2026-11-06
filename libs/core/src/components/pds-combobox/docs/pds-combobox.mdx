@@ -1804,7 +1804,7 @@ When using group labels:
 
 `<optgroup>` and `<pds-text>` group labels are rendered differently in the dropdown:
 
-- **`<optgroup>` elements**: Each optgroup's options sit in a `role="group"` named by its `label`, which assistive technology announces on entering the group, helping users understand the relationship between options and their categories.
+- **`<optgroup>` elements**: Each optgroup's options sit in a `role="group"` named by its `label`, plus its badge's label when it has one, which assistive technology announces on entering the group, helping users understand the relationship between options and their categories.
 - **`<pds-text>` elements**: Serve as visual group headers but are purely presentational. They do not provide semantic grouping information to screen readers.
 
 **Recommendation**: Use `<optgroup>` for groups of options, since it groups them in the markup and works with `data-icon`. Use `<pds-text>` for a heading over options that don't belong to an optgroup.
