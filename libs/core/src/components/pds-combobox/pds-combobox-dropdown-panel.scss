@@ -292,8 +292,10 @@
   }
 
   // The keyboard's place among the rows, which share a background with hover, open and selection.
+  // Options in a grouped panel show it the same way, so every layer marks the keyboard alike.
   .pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger,
-  .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger {
+  .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger,
+  .pds-combobox__listbox--grouped .pds-combobox__option--keyboard {
     outline: var(--pine-outline-focus);
     outline-offset: calc(var(--pine-border-width) * -2);
   }
@@ -463,8 +465,10 @@
   .pds-combobox__listbox--grouped .pds-combobox__group-back--keyboard > .pds-combobox__group-back-trigger {
     outline: none;
 
+    // The same ring as the rows' (see `--keyboard` above), drawn just inside the shade.
     &::before {
       outline: var(--pine-outline-focus);
+      outline-offset: calc(var(--pine-border-width) * -2);
     }
   }
 

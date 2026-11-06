@@ -2869,6 +2869,8 @@ export class PdsCombobox implements BasePdsProps {
         class={{
           'pds-combobox__option': true,
           'pds-combobox__option--highlighted': isHighlighted,
+          // The keyboard's place, as on the group rows (`--keyboard`).
+          'pds-combobox__option--keyboard': isHighlighted && this.keyboardNavigating,
           'pds-combobox__option--layout': isLayout,
           'pds-combobox__option--chip': isChip,
           'pds-combobox__option--disabled': isDisabled,
