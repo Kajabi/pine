@@ -2800,7 +2800,14 @@ export class PdsCombobox implements BasePdsProps {
 
   private renderPanelSearch() {
     return (
-      <div key="panel-search" class="pds-combobox__panel-search">
+      <div
+        key="panel-search"
+        class={{
+          'pds-combobox__panel-search': true,
+          // Coming back from a group, the search field slides in with the groups.
+          'pds-combobox__panel-search--drill-out': this.drillDirection === 'out',
+        }}
+      >
         <pds-icon name="search" size="regular" aria-hidden="true" />
         <input
           ref={el => (this.panelSearchEl = el as HTMLInputElement)}

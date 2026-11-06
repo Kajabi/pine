@@ -242,19 +242,23 @@
 
   // Internal, not a consumer hook.
   .pds-combobox__listbox--drill-in,
-  .pds-combobox__listbox--drill-out:dir(rtl) {
+  .pds-combobox__listbox--drill-out:dir(rtl),
+  .pds-combobox__panel-search--drill-out:dir(rtl) {
     --pds-combobox-drill-from: var(--pine-dimension-sm);
   }
 
   .pds-combobox__listbox--drill-out,
-  .pds-combobox__listbox--drill-in:dir(rtl) {
+  .pds-combobox__listbox--drill-in:dir(rtl),
+  .pds-combobox__panel-search--drill-out {
     --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
   }
 
-  // The row back slides with the options; only its trigger moves, so the header stays put.
+  // The header (row back or search field) slides with the options. Only its content moves: the row
+  // and its divider stay put instead of fading out and back in.
   .pds-combobox__listbox--drill-in .pds-combobox__drill-in-options > li,
-  .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger,
-  .pds-combobox__listbox--drill-out > li {
+  .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger > *,
+  .pds-combobox__listbox--drill-out > li,
+  .pds-combobox__panel-search--drill-out > * {
     animation: pds-combobox-drill var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   }
 
