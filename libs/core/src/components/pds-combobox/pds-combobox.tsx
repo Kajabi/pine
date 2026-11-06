@@ -537,6 +537,8 @@ export class PdsCombobox implements BasePdsProps {
       void this.positionDropdown();
     }
 
+    this.glideDrillHeight();
+
     const row = this.listboxEl?.querySelector('.pds-combobox__group-row--open') as HTMLElement | null | undefined;
     const flyoutEl = row?.querySelector('.pds-combobox__flyout') as HTMLElement | null | undefined;
     if (this.isOpen && this.listboxEl && row && flyoutEl) {
@@ -630,6 +632,37 @@ export class PdsCombobox implements BasePdsProps {
     if (!this.isOpen || this.effectiveGroupDisplay !== 'drill-in' || !this.showsGroupedPanel) return;
     if (next !== null && previous === null) this.drillDirection = 'in';
     else if (next === null && previous !== null) this.drillDirection = 'out';
+    else return;
+    // The views differ in height; measured now, before the next one renders, so it can glide.
+    this.drillFromHeight = this.listboxEl?.getBoundingClientRect().height;
+  }
+
+  /** The dropdown's height before a drill, so componentDidRender can ease it to the new view's. */
+  private drillFromHeight?: number;
+
+  /**
+   * Hands the dropdown's height before and after a drill to the SCSS glide. Neither is known ahead,
+   * so they're measured: CSS can't animate to the height its content turns out to be.
+   */
+  private glideDrillHeight() {
+    const from = this.drillFromHeight;
+    this.drillFromHeight = undefined;
+    const panel = this.listboxEl;
+    if (from === undefined || !panel) return;
+    // A drill back mid-glide starts from where the last one is now, then measures the real height.
+    panel.classList.remove('pds-combobox__listbox--height-glide');
+    const to = panel.getBoundingClientRect().height;
+    if (Math.abs(to - from) < 1) return;
+    panel.style.setProperty('--pds-combobox-glide-from', `${from}px`);
+    panel.style.setProperty('--pds-combobox-glide-to', `${to}px`);
+    panel.classList.add('pds-combobox__listbox--height-glide');
+  }
+
+  private endHeightGlide() {
+    const panel = this.listboxEl;
+    panel?.classList.remove('pds-combobox__listbox--height-glide');
+    panel?.style.removeProperty('--pds-combobox-glide-from');
+    panel?.style.removeProperty('--pds-combobox-glide-to');
   }
 
   /** A flyout with no room beside the dropdown drills in, which can hide the focused search field too. */
@@ -654,6 +687,7 @@ export class PdsCombobox implements BasePdsProps {
   private onDrillAnimationEnd = (event: AnimationEvent) => {
     // Only the slide's own end: slotted consumer content can animate inside the list too.
     if (event.animationName === 'pds-combobox-drill') this.drillDirection = null;
+    if (event.animationName === 'pds-combobox-height-glide' && event.target === this.listboxEl) this.endHeightGlide();
   };
 
   @Watch('disabled')
@@ -675,6 +709,7 @@ export class PdsCombobox implements BasePdsProps {
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
     if (!isOpen) {
+      this.endHeightGlide();
       this.revealedGroupLabel = null;
       this.drillDirection = null;
       this.openGroup = null;
@@ -2541,6 +2576,7 @@ export class PdsCombobox implements BasePdsProps {
       <div
         class="pds-combobox__listbox pds-combobox__listbox--with-search"
         ref={el => (this.listboxEl = el as HTMLElement)}
+        onAnimationEnd={this.onDrillAnimationEnd}
         onMouseDown={this.onPanelMouseDown}
         // Portaled, the panel sits outside .pds-combobox, so its focusout wouldn't reach that handler.
         onFocusout={this.usesBodyPortal ? this.onComboboxFocusOut : undefined}

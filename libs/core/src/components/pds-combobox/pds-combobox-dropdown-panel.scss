@@ -265,6 +265,28 @@
     }
   }
 
+  // The dropdown's height eases between drill views; the component measures both ends.
+  // Internal, not a consumer hook.
+  .pds-combobox__listbox--height-glide {
+    animation: pds-combobox-height-glide var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  }
+
+  // The rows overflow the gliding height until it ends; hidden, no scrollbar flashes meanwhile.
+  .pds-combobox__listbox--height-glide,
+  .pds-combobox__listbox--height-glide .pds-combobox__listbox-options {
+    overflow-y: hidden;
+  }
+
+  @keyframes pds-combobox-height-glide {
+    from {
+      height: var(--pds-combobox-glide-from);
+    }
+
+    to {
+      height: var(--pds-combobox-glide-to);
+    }
+  }
+
   // The keyboard's place among the rows, which share a background with hover, open and selection.
   .pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger,
   .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger {
