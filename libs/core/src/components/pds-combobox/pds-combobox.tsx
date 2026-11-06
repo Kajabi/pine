@@ -1694,7 +1694,10 @@ export class PdsCombobox implements BasePdsProps {
     };
     const reveal = () => {
       e.preventDefault();
-      this.revealedGroupLabel = (current as HTMLOptGroupElement).label;
+      // The row's name, badge and all, as the row itself is named.
+      const optgroup = current as HTMLOptGroupElement;
+      const badge = groupBadgeOf(optgroup);
+      this.revealedGroupLabel = badge === null ? optgroup.label : `${optgroup.label}, ${badge.label}`;
       return true;
     };
 
