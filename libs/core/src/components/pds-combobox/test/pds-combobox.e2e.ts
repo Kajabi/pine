@@ -793,18 +793,23 @@ describe('pds-combobox', () => {
         );
       };
 
-      it("slides a group's options and its row back in from the right, and the groups back from the left", async () => {
+      it("slides a group's options and its row back in from the right, and the groups and search field back from the left", async () => {
         const page = await setUp('group-display="drill-in" panel-search');
         await holdAnimations(page);
 
         await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
         expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
-        // The row back moves with the options; its list item, which holds the header in place, doesn't.
-        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
+        // The row back's content moves with the options; the row, which holds the header in place and
+        // draws its divider, doesn't.
+        expect(await starts(page, '.pds-combobox__group-back-trigger > *')).toEqual(['from-right']);
+        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['still']);
         expect(await starts(page, '.pds-combobox__group-back')).toEqual(['still']);
 
         await click(page, '.pds-combobox__group-back-trigger');
         expect(await starts(page, '.pds-combobox__group-row')).toEqual(['from-left', 'from-left']);
+        // The header moves with the content both ways: the search field comes back with the groups,
+        // while its row and divider stay put.
+        expect(await starts(page, '.pds-combobox__panel-search > *')).toEqual(['from-left', 'from-left']);
         expect(await starts(page, '.pds-combobox__panel-search')).toEqual(['still']);
       });
 
@@ -826,7 +831,7 @@ describe('pds-combobox', () => {
 
         await click(page, '.pds-combobox__group-row:nth-of-type(1) .pds-combobox__group-row-trigger');
 
-        expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
+        expect(await starts(page, '.pds-combobox__group-back-trigger > *')).toEqual(['from-right']);
         expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right', 'from-right']);
       });
 
@@ -840,6 +845,7 @@ describe('pds-combobox', () => {
 
         await click(page, '.pds-combobox__group-back-trigger');
         expect(await starts(page, '.pds-combobox__group-row')).toEqual(['from-right', 'from-right']);
+        expect(await starts(page, '.pds-combobox__panel-search > *')).toEqual(['from-right', 'from-right']);
       });
 
       it("doesn't slide with reduced motion", async () => {
@@ -861,6 +867,7 @@ describe('pds-combobox', () => {
 
         await click(page, '.pds-combobox__group-back-trigger', { slides: false });
         expect(await starts(page, '.pds-combobox__group-row')).toEqual(['still', 'still']);
+        expect(await starts(page, '.pds-combobox__panel-search')).toEqual(['still']);
       });
 
       // The dropdown's height and its glide: the heights it eases between (empty once it's cleaned up),
