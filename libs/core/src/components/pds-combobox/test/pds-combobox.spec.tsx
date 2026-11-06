@@ -3297,6 +3297,20 @@ describe('pds-combobox', () => {
       expect(statuses()).toEqual(['Email', '']);
     });
 
+    it("says a badged row's badge with its label, as the row is named", async () => {
+      const { page, component, root } = await openDrillIn();
+      (page.root as HTMLPdsComboboxElement).options = [actions[0], { ...actions[2], groupBadge: { label: 'Premium' } }];
+      await page.waitForChanges();
+      component.filterOptions();
+      await page.waitForChanges();
+      root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(root.querySelectorAll('[role="status"]')[1].textContent).toBe('Email, Premium');
+    });
+
     it('clears the revealed row once the keys move on', async () => {
       const { page, component, root } = await openDrillIn();
       const status = () => root.querySelectorAll('[role="status"]')[1].textContent;
@@ -4078,6 +4092,168 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
 
       expect(badgeOf(root, 'New thing')?.textContent).toBe('New');
+    });
+  });
+
+  describe('group badges', () => {
+    const premium = { label: 'Premium', sentiment: 'brand', icon: 'premium' };
+    const social = [
+      { id: 'email', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+      { id: 'fb-dm', text: 'Send a Facebook message', group: 'Facebook', groupBadge: premium, disabled: true },
+      { id: 'fb-reply', text: 'Reply to a comment', group: 'Facebook', disabled: true },
+      { id: 'ig-dm', text: 'Send an Instagram message', group: 'Instagram', groupBadge: premium, disabled: true },
+    ];
+
+    const open = async (attrs: string, options: unknown[] = social) => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="group-badges" mode="select-only" trigger="button" ${attrs}></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      (page.root as HTMLPdsComboboxElement).options = options;
+      await page.waitForChanges();
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+      return { page, component, root: page.root!.shadowRoot! };
+    };
+
+    const groupRow = (root: ShadowRoot, label: string) =>
+      Array.from(root.querySelectorAll('.pds-combobox__group-row')).find(
+        row => row.querySelector('.pds-combobox__group-row-label')?.textContent === label,
+      ) as HTMLElement | undefined;
+
+    it("copies the first groupBadge in a group to its optgroup's data-badge attributes", async () => {
+      const { component } = await open('', [
+        { id: 'a', text: 'A', group: 'Facebook' },
+        { id: 'b', text: 'B', group: 'Facebook', groupBadge: premium },
+        { id: 'c', text: 'C', group: 'Facebook', groupBadge: { label: 'Later' } },
+      ]);
+
+      const optgroup = component.optionEls[0].parentElement as HTMLOptGroupElement;
+      expect(optgroup.getAttribute('data-badge')).toBe('Premium');
+      expect(optgroup.getAttribute('data-badge-sentiment')).toBe('brand');
+      expect(optgroup.getAttribute('data-badge-icon')).toBe('premium');
+    });
+
+    it('renders a flyout group row\'s badge after its label, before the chevron', async () => {
+      const { root } = await open('group-display="flyout"');
+
+      const row = groupRow(root, 'Facebook')!;
+      const trigger = row.querySelector('.pds-combobox__group-row-trigger')!;
+      const badge = trigger.querySelector('pds-chip.pds-combobox__group-badge')!;
+      expect(badge.textContent).toBe('Premium');
+      expect(badge.getAttribute('size')).toBe('sm');
+      expect(badge.getAttribute('sentiment')).toBe('brand');
+      expect(badge.getAttribute('icon')).toBe('premium');
+      const children = Array.from(trigger.children);
+      expect(children.map(child => child.className)).toEqual([
+        'pds-combobox__group-row-label',
+        'pds-combobox__group-badge',
+        'pds-combobox__group-row-caret',
+      ]);
+      // Named outright, with a pause before the badge.
+      expect(row.getAttribute('aria-label')).toBe('Facebook, Premium');
+      expect(row.hasAttribute('aria-labelledby')).toBe(false);
+      // A disabled group stays disabled; its badge is muted with it.
+      expect(row.classList.contains('pds-combobox__group-row--disabled')).toBe(true);
+      expect(row.getAttribute('aria-disabled')).toBe('true');
+    });
+
+    it('keeps an unbadged group row named by its label', async () => {
+      const { root } = await open('group-display="flyout"');
+
+      const row = groupRow(root, 'Email')!;
+      expect(row.querySelector('pds-chip')).toBeNull();
+      expect(row.hasAttribute('aria-label')).toBe(false);
+      expect(row.getAttribute('aria-labelledby')).toBe(`${row.id}-label`);
+    });
+
+    it('renders a drill-in group row\'s badge, and leaves it off the row back', async () => {
+      const { page, component, root } = await open('group-display="drill-in"');
+
+      const row = groupRow(root, 'Instagram')!;
+      expect(row.querySelector('.pds-combobox__group-badge')?.textContent).toBe('Premium');
+      expect(row.getAttribute('aria-label')).toBe('Instagram, Premium');
+
+      component.openGroup = component.optionEls.find((option: HTMLOptionElement) => option.value === 'ig-dm').parentElement;
+      await page.waitForChanges();
+      const back = root.querySelector('.pds-combobox__group-back')!;
+      expect(back.querySelector('.pds-combobox__group-badge')).toBeNull();
+      expect(back.getAttribute('aria-labelledby')).toBe(`${back.id}-label`);
+    });
+
+    it("renders an inline group's badge after its label, in the group's name", async () => {
+      const { root } = await open('');
+
+      const group = Array.from(root.querySelectorAll('[role="group"]')).find(el => el.getAttribute('aria-label')?.startsWith('Facebook'))!;
+      expect(group.getAttribute('aria-label')).toBe('Facebook, Premium');
+      expect(group.classList.contains('pds-combobox__group--disabled')).toBe(true);
+      const label = group.querySelector('.pds-combobox__group-label')!;
+      expect(label.classList.contains('pds-combobox__group-label--with-badge')).toBe(true);
+      expect(label.getAttribute('aria-hidden')).toBe('true');
+      expect(label.lastElementChild!.className).toBe('pds-combobox__group-badge');
+      expect(label.lastElementChild!.textContent).toBe('Premium');
+      const email = Array.from(root.querySelectorAll('[role="group"]')).find(el => el.getAttribute('aria-label') === 'Email')!;
+      expect(email.querySelector('pds-chip')).toBeNull();
+    });
+
+    it("renders a slotted optgroup's data-badge", async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="slotted-group-badge" mode="select-only" group-display="drill-in"></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      // The spec environment doesn't populate slot assignment, so the optgroup is handed over directly.
+      const optgroup = page.doc.createElement('optgroup') as HTMLOptGroupElement;
+      optgroup.label = 'Facebook';
+      optgroup.setAttribute('data-badge', 'Premium');
+      optgroup.setAttribute('data-badge-sentiment', 'brand');
+      optgroup.setAttribute('data-badge-icon', 'premium');
+      const option = page.doc.createElement('option') as HTMLOptionElement;
+      option.value = 'fb-dm';
+      option.textContent = 'Send a Facebook message';
+      optgroup.appendChild(option);
+      component.optionEls = [option];
+      component.allItems = [optgroup, option];
+      component.isOpen = true;
+      component.filterOptions();
+      await page.waitForChanges();
+
+      const badge = page.root!.shadowRoot!.querySelector('.pds-combobox__group-row pds-chip')!;
+      expect(badge.textContent).toBe('Premium');
+      expect(badge.getAttribute('sentiment')).toBe('brand');
+      expect(badge.getAttribute('icon')).toBe('premium');
+    });
+
+    it('falls back to neutral for an unknown sentiment, drops a URL icon, and ignores values that are not strings', async () => {
+      const { root } = await open('group-display="flyout"', [
+        { id: 'a', text: 'A', group: 'Odd', groupBadge: { label: 'Premium', sentiment: 'sparkly', icon: 'https://example.com/x.svg' } },
+        { id: 'b', text: 'B', group: 'Number', groupBadge: { label: 42 } },
+        { id: 'c', text: 'C', group: 'Blank', groupBadge: { label: '  ' } },
+        { id: 'd', text: 'D', group: 'String', groupBadge: 'Premium' },
+      ]);
+
+      const badge = groupRow(root, 'Odd')!.querySelector('pds-chip')!;
+      expect(badge.getAttribute('sentiment')).toBe('neutral');
+      expect(badge.hasAttribute('icon')).toBe(false);
+      for (const label of ['Number', 'Blank', 'String']) expect(groupRow(root, label)!.querySelector('pds-chip')).toBeNull();
+    });
+
+    it("doesn't match a search on the group badge's text", async () => {
+      const { component } = await open('group-display="drill-in" panel-search');
+
+      component.panelQuery = 'Premium';
+      component.filterOptions();
+      expect(component.filteredItems.filter((item: Element) => item.tagName === 'OPTION')).toHaveLength(0);
+
+      // The group's label still matches.
+      component.panelQuery = 'Facebook';
+      component.filterOptions();
+      expect(component.filteredItems.filter((item: Element) => item.tagName === 'OPTION').map((item: HTMLOptionElement) => item.value)).toEqual([
+        'fb-dm',
+        'fb-reply',
+      ]);
     });
   });
 

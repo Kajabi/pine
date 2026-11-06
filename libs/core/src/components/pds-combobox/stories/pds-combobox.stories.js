@@ -749,6 +749,53 @@ DisabledOptions.argTypes = {
   groupDisplay: { control: 'inline-radio', options: ['inline', 'flyout', 'drill-in'] },
 };
 
+// A plan-gated group: listed, disabled, with a Premium badge on its row, before the chevron.
+// The badge comes from the first option in the group that sets groupBadge.
+export const GroupBadges = (args) => html`
+<div style="min-height: 320px;">
+  <pds-combobox
+    component-id="combobox-group-badges"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    trigger="button"
+    mode="select-only"
+    group-display=${args.groupDisplay}
+    drill-in-back-label="Back"
+    trigger-width="300px"
+    dropdown-width="300px"
+    .options=${args.options}
+  ></pds-combobox>
+</div>`;
+
+GroupBadges.args = {
+  label: 'Action',
+  placeholder: 'Choose an action',
+  groupDisplay: 'drill-in',
+  options: [
+    { id: 'email_send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    {
+      id: 'facebook_message_send',
+      text: 'Send a Facebook message',
+      group: 'Facebook',
+      groupBadge: { label: 'Premium', sentiment: 'brand', icon: 'premium' },
+      disabled: true,
+    },
+    { id: 'facebook_comment_reply', text: 'Reply to a comment', group: 'Facebook', disabled: true },
+    {
+      id: 'instagram_message_send',
+      text: 'Send an Instagram message',
+      group: 'Instagram',
+      groupBadge: { label: 'Premium', sentiment: 'brand', icon: 'premium' },
+      disabled: true,
+    },
+  ],
+};
+
+GroupBadges.argTypes = {
+  groupDisplay: { control: 'inline-radio', options: ['inline', 'flyout', 'drill-in'] },
+};
+
 export const OptionGroupsPdsText = (args) => html`
 <pds-combobox
   component-id="combobox-pds-text-groups"

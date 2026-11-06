@@ -51,6 +51,11 @@ export interface ComboboxOption {
     };
     disabled?: boolean;
     group?: string;
+    groupBadge?: {
+        label: string;
+        sentiment?: string;
+        icon?: string;
+    };
     groupIcon?: string;
     icon?: string;
     // (undocumented)

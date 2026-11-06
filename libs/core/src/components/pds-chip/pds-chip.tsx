@@ -176,6 +176,8 @@ export class PdsChip {
 
     if (this.labelTextEl) {
       const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
+      // Hidden from assistive tech, a tab stop would be focusable with no name; hover still reveals it.
+      const hidden = this.el.closest('[aria-hidden="true"]') !== null;
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.labelTextEl,
@@ -184,7 +186,7 @@ export class PdsChip {
         // `<button class="pds-chip__button">`, which is already focusable and
         // bubbles focusin to the host — a tabindex on the span too would nest
         // a second tab stop inside the button.
-        manageTabIndex: this.effectiveVariant !== 'dropdown' && !wrapper,
+        manageTabIndex: this.effectiveVariant !== 'dropdown' && !wrapper && !hidden,
         // A wrapping control sits outside the host, so its focus never reaches the host's listener.
         focusEl: wrapper ?? this.el,
         ...besideListbox(wrapper),

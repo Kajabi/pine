@@ -1274,9 +1274,85 @@ Set `badge` on an option from the `options` prop to show a small `pds-chip` afte
 - **Expect long labels to truncate.** A badge takes at most half the row, so a long label, often a translated one, ends in an ellipsis rather than squeezing the option's text.
 - **Translate the label.** It's text people read, like the option's own.
 
+### Group Badges
+
+A group can show a badge too, such as "Premium" on a group of plan-gated actions. Set `groupBadge` on an option from the `options` prop, with the same `label`, `sentiment` and `icon` as `badge`; the first option in a group that sets it provides the group's badge, as with `groupIcon`. On a slotted `<optgroup>`, use `data-badge`, `data-badge-sentiment` and `data-badge-icon`. With `flyout` and `drill-in`, the badge sits at the end of the group's row, before the chevron; with `inline`, at the end of the group's label. Screen readers read it as part of the group's name ("Facebook, Premium"), and search doesn't match it. A drilled-in group's row back leaves it out: that row is the way back, and the badge was on the row that opened it. A group whose options are all disabled is disabled, and its badge is muted with the row; it still opens, so its options can be seen. See the `GroupBadges` story for each group display.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsCombobox
+  componentId="combobox-group-badges-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  groupDisplay="drill-in"
+  dropdownWidth="300px"
+  options={[
+    { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    {
+      id: 'facebook-message-send',
+      text: 'Send a Facebook message',
+      group: 'Facebook',
+      groupBadge: { label: 'Premium', sentiment: 'brand', icon: 'premium' },
+      disabled: true,
+    },
+    {
+      id: 'instagram-message-send',
+      text: 'Send an Instagram message',
+      group: 'Instagram',
+      groupBadge: { label: 'Premium', sentiment: 'brand', icon: 'premium' },
+      disabled: true,
+    },
+  ]}
+/>`,
+    webComponent: `<pds-combobox
+  component-id="combobox-group-badges-example"
+  label="Action"
+  placeholder="Choose an action"
+  trigger="button"
+  mode="select-only"
+  group-display="drill-in"
+  dropdown-width="300px">
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-send">Send an email</option>
+  </optgroup>
+  <optgroup label="Facebook" data-badge="Premium" data-badge-sentiment="brand" data-badge-icon="premium">
+    <option value="facebook-message-send" disabled>Send a Facebook message</option>
+  </optgroup>
+  <optgroup label="Instagram" data-badge="Premium" data-badge-sentiment="brand" data-badge-icon="premium">
+    <option value="instagram-message-send" disabled>Send an Instagram message</option>
+  </optgroup>
+</pds-combobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-group-badges-example"
+    label="Action"
+    placeholder="Choose an action"
+    trigger="button"
+    mode="select-only"
+    group-display="drill-in"
+    dropdown-width="300px">
+    <optgroup label="Email" data-icon="mail">
+      <option value="email-send">Send an email</option>
+    </optgroup>
+    <optgroup label="Facebook" data-badge="Premium" data-badge-sentiment="brand" data-badge-icon="premium">
+      <option value="facebook-message-send" disabled>Send a Facebook message</option>
+    </optgroup>
+    <optgroup label="Instagram" data-badge="Premium" data-badge-sentiment="brand" data-badge-icon="premium">
+      <option value="instagram-message-send" disabled>Send an Instagram message</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
+
+- **Badge the group, not every option in it.** When the reason applies to the whole group, one badge on its row says so; badge an option only when it differs from the rest.
+- **Keep the group listed.** A disabled group with a badge tells people what a plan unlocks, where a hidden one says nothing.
+- **Translate the label.** It's text people read, like the group's own.
+
 ### Grouping the `options` Prop
 
-When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. With `group-display="inline"`, options without a group are listed before every group, wherever they appear in the array, so none reads as part of the group above it. With `flyout` and `drill-in`, groups are rows of their own, so options without a group and groups keep the array's order. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
+When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`) and `groupBadge` (see Group Badges). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. With `group-display="inline"`, options without a group are listed before every group, wherever they appear in the array, so none reads as part of the group above it. With `flyout` and `drill-in`, groups are rows of their own, so options without a group and groups keep the array's order. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
 
 ```jsx
 <PdsCombobox
@@ -1728,7 +1804,7 @@ When using group labels:
 
 `<optgroup>` and `<pds-text>` group labels are rendered differently in the dropdown:
 
-- **`<optgroup>` elements**: Each optgroup's options sit in a `role="group"` named by its `label`, which assistive technology announces on entering the group, helping users understand the relationship between options and their categories.
+- **`<optgroup>` elements**: Each optgroup's options sit in a `role="group"` named by its `label`, plus its badge's label when it has one, which assistive technology announces on entering the group, helping users understand the relationship between options and their categories.
 - **`<pds-text>` elements**: Serve as visual group headers but are purely presentational. They do not provide semantic grouping information to screen readers.
 
 **Recommendation**: Use `<optgroup>` for groups of options, since it groups them in the markup and works with `data-icon`. Use `<pds-text>` for a heading over options that don't belong to an optgroup.

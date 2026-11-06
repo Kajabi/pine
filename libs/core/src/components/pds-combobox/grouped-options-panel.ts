@@ -20,6 +20,8 @@ export interface PanelGroup {
   label: string;
   /** Pine icon name from the optgroup's `data-icon`, or null. */
   icon: string | null;
+  /** The optgroup's badge from its `data-badge*` attributes, or null. */
+  badge: OptionBadge | null;
   options: PanelOption[];
 }
 
@@ -77,10 +79,19 @@ export interface OptionBadge {
  * badge is a `pds-chip`, whose `icon` also loads URLs.
  */
 export function optionBadgeOf(option: HTMLOptionElement): OptionBadge | null {
-  const label = option.getAttribute('data-badge')?.trim();
+  return badgeOf(option);
+}
+
+/** An optgroup's badge from its `data-badge*` attributes, or null; the same check as an option's. */
+export function groupBadgeOf(optgroup: HTMLOptGroupElement): OptionBadge | null {
+  return badgeOf(optgroup);
+}
+
+function badgeOf(element: Element): OptionBadge | null {
+  const label = element.getAttribute('data-badge')?.trim();
   if (label === undefined || label === '') return null;
-  const sentiment = option.getAttribute('data-badge-sentiment');
-  const icon = option.getAttribute('data-badge-icon');
+  const sentiment = element.getAttribute('data-badge-sentiment');
+  const icon = element.getAttribute('data-badge-icon');
   return {
     label,
     sentiment: isBadgeSentiment(sentiment) ? sentiment : 'neutral',
@@ -126,7 +137,7 @@ export function buildPanelEntries(items: Element[], position?: (element: Element
     if (optgroup !== null) {
       let group = groups.get(optgroup);
       if (!group) {
-        group = { optgroup, label: optgroup.label, icon: groupIconOf(optgroup), options: [] };
+        group = { optgroup, label: optgroup.label, icon: groupIconOf(optgroup), badge: groupBadgeOf(optgroup), options: [] };
         groups.set(optgroup, group);
         entries.push({ kind: 'group', group });
       }
