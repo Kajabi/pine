@@ -954,6 +954,25 @@ describe('pds-combobox', () => {
         expect(end.listScrolls).toBe('auto');
       });
 
+      it('leaves nothing behind when the dropdown closes mid-glide', async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect((await glide(page)).gliding).toBe(true);
+
+        const trigger = await page.find('pds-combobox >>> .pds-combobox__button-trigger');
+        await trigger.click();
+        await page.waitForChanges();
+        await trigger.click();
+        await page.waitForChanges();
+
+        const reopened = await glide(page);
+        expect(reopened.gliding).toBe(false);
+        expect(reopened.cleared).toBe(true);
+        expect(reopened.listScrolls).toBe('auto');
+      });
+
       it('turns a glide around from wherever it is', async () => {
         const page = await setUp('group-display="drill-in" panel-search');
         const groupsHeight = (await glide(page)).height;
