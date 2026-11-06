@@ -191,15 +191,27 @@
   text-align: start;
 }
 
-// The selection's icon, from its option or its group, before the label.
+// The selection's icon, from its option or its group, before the label. The icon moves the text over
+// when it first arrives (from the placeholder), so the value fades in there instead of jumping.
 .pds-combobox__button-trigger-label--with-icon {
   align-items: center;
+  animation: pds-combobox-value-in var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   display: flex;
   gap: var(--pine-dimension-xs);
 }
 
+@keyframes pds-combobox-value-in {
+  from {
+    opacity: 0;
+  }
+}
+
+// Sized up front, like a regular pds-icon, so the text doesn't land beside an empty icon and then
+// shift again when its image loads on the first pick.
 .pds-combobox__button-trigger-icon {
+  block-size: var(--pine-dimension-sm);
   flex-shrink: 0;
+  inline-size: var(--pine-dimension-sm);
 }
 
 .pds-combobox__button-trigger--truncate {
