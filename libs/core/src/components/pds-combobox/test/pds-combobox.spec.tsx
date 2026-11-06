@@ -3297,6 +3297,20 @@ describe('pds-combobox', () => {
       expect(statuses()).toEqual(['Email', '']);
     });
 
+    it("says a badged row's badge with its label, as the row is named", async () => {
+      const { page, component, root } = await openDrillIn();
+      (page.root as HTMLPdsComboboxElement).options = [actions[0], { ...actions[2], groupBadge: { label: 'Premium' } }];
+      await page.waitForChanges();
+      component.filterOptions();
+      await page.waitForChanges();
+      root.querySelectorAll('.pds-combobox__group-row-trigger')[1].dispatchEvent(new Event('mouseenter'));
+      await page.waitForChanges();
+
+      component.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await page.waitForChanges();
+      expect(root.querySelectorAll('[role="status"]')[1].textContent).toBe('Email, Premium');
+    });
+
     it('clears the revealed row once the keys move on', async () => {
       const { page, component, root } = await openDrillIn();
       const status = () => root.querySelectorAll('[role="status"]')[1].textContent;

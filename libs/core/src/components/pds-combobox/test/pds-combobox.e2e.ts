@@ -1897,6 +1897,43 @@ describe('pds-combobox', () => {
       });
     }
 
+    for (const display of ['drill-in', 'flyout']) {
+      // Measures the text itself, not its span: a word that can't wrap overflows the span.
+      it(`wraps a long one-word ${display} group label before the badge`, async () => {
+        const page = await newE2EPage();
+        await page.setContent(`
+          <pds-combobox component-id="long-row" label="Action" trigger="button" mode="select-only"
+            placeholder="Choose an action" group-display="${display}" dropdown-width="240px"></pds-combobox>
+        `);
+        await page.$eval(
+          'pds-combobox',
+          (el: HTMLElement & { options?: unknown }, options) => {
+            el.options = options;
+          },
+          [{ id: 'x', text: 'Send it', group: 'Supercalifragilisticexpialidocious', groupBadge: premium }],
+        );
+        await page.waitForChanges();
+        await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+        await page.waitForChanges();
+
+        const box = await page.evaluate(() => {
+          const trigger = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-row-trigger')!;
+          const label = trigger.querySelector('.pds-combobox__group-row-label')!;
+          const range = document.createRange();
+          range.selectNodeContents(label);
+          const rects = Array.from(range.getClientRects());
+          return {
+            lines: new Set(rects.map(rect => Math.round(rect.top))).size,
+            textEnd: Math.max(...rects.map(rect => rect.right)),
+            badgeStart: trigger.querySelector('.pds-combobox__group-badge')!.getBoundingClientRect().left,
+          };
+        });
+
+        expect(box.lines).toBeGreaterThan(1);
+        expect(box.textEnd).toBeLessThanOrEqual(box.badgeStart);
+      });
+    }
+
     it("leaves the badge off a drilled-in group's row back", async () => {
       const page = await setUp('drill-in');
       const rows = await page.findAll('pds-combobox >>> .pds-combobox__group-row-trigger');
@@ -1939,8 +1976,8 @@ describe('pds-combobox', () => {
     });
 
     // The caption is hidden from assistive tech, and the group's name carries the badge; a clipped
-    // badge there must not add a tab stop, or an aria-hidden one.
-    it("gives a truncated inline group badge no tab stop, with no axe violations", async () => {
+    // badge there must not add a tab stop, or an aria-hidden one. Hover still shows its full label.
+    it("gives a truncated inline group badge no tab stop, a tooltip on hover, and no axe violations", async () => {
       const page = await newE2EPage();
       await page.setContent(`
         <pds-combobox component-id="inline-long-badge" label="Action" trigger="button" mode="select-only"
@@ -1965,6 +2002,12 @@ describe('pds-combobox', () => {
       });
 
       expect(badge).toEqual({ clipped: true, focused: false });
+
+      await (await page.find('pds-combobox >>> .pds-combobox__group-badge')).hover();
+      await page.waitForChanges();
+      const tooltip = await page.evaluate(() => document.querySelector('.pds-truncation-tooltip--visible')?.textContent ?? null);
+      expect(tooltip).toBe('Disponible con el plan Premium y superiores');
+
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
