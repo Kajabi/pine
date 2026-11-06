@@ -744,6 +744,41 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__panel-search-input');
     });
 
+    // The keyboard's ring reads the same on every layer: a group row, the row back and an option.
+    it('marks the keyboard with the same ring on the groups, the row back and the options', async () => {
+      const page = await setUp('group-display="drill-in" panel-search');
+      const ring = (selector: string, pseudo?: string) =>
+        page.evaluate(
+          (sel, pse) => {
+            const el = document.querySelector('pds-combobox')!.shadowRoot!.querySelector(sel);
+            if (!el) return null;
+            const { outlineStyle, outlineWidth, outlineColor, outlineOffset } = getComputedStyle(el, pse);
+            return { outlineStyle, outlineWidth, outlineColor, outlineOffset };
+          },
+          selector,
+          pseudo,
+        );
+
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+      const groupRow = await ring('.pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger');
+      expect(groupRow?.outlineStyle).toBe('solid');
+
+      await page.keyboard.press('ArrowRight');
+      await page.waitForChanges();
+      expect(await ring('.pds-combobox__option--keyboard')).toEqual(groupRow);
+
+      await page.keyboard.press('ArrowUp');
+      await page.waitForChanges();
+      expect(await ring('.pds-combobox__group-back--keyboard > .pds-combobox__group-back-trigger', '::before')).toEqual(groupRow);
+
+      // The pointer shades a row without the ring.
+      await page.keyboard.press('ArrowDown');
+      await (await page.find('pds-combobox >>> .pds-combobox__drill-in-options .pds-combobox__option')).hover();
+      await page.waitForChanges();
+      expect(await ring('.pds-combobox__option--keyboard')).toBeNull();
+    });
+
     describe('the slide between the groups and a group', () => {
       type Page = Awaited<ReturnType<typeof newE2EPage>>;
 
