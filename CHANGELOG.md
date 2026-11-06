@@ -1,3 +1,20 @@
+## 4.10.0 (2026-11-06)
+
+### Features 🚀
+
+- **pds-combobox:** show a badge after an option's text ([#870](https://github.com/Kajabi/pine/pull/870))
+- **pds-combobox:** show a badge on a group row ([#935](https://github.com/Kajabi/pine/pull/935))
+
+### Bug Fixes 🐛
+
+- **pds-checkbox:** center the dash and rtl checkmark, and gray out disabled indeterminate ([#934](https://github.com/Kajabi/pine/pull/934))
+- **pds-dropdown-menu:** close the menu when tab moves past the last item instead of wrapping ([#933](https://github.com/Kajabi/pine/pull/933))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.9.1 (2026-11-04)
 
 ### Bug Fixes 🐛
