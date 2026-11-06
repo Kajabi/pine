@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
+import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, ModalTransition, PlacementType, PopoverPaddingType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
@@ -22,7 +22,7 @@ import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./component
 export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
+export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, ModalTransition, PlacementType, PopoverPaddingType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
@@ -1920,6 +1920,14 @@ export namespace Components {
           * @default 'md'
          */
         "size": ModalSizeType | (string & Record<never, never>);
+        /**
+          * An opt-in view transition for opening and closing the modal. `grow` grows the panel from the control that opened it and shrinks it back on close, for a modal opened over another one. `morph` turns the open panel of one `morph` modal into the next one's when one closes as the other opens in the same task, as in a chain of modals; opening the previous one again plays it backward. Plays only where the browser supports the View Transitions API and the user hasn't asked for reduced motion; otherwise the modal opens and closes as it does without it.
+         */
+        "transition"?: ModalTransition;
+        /**
+          * The `id` of the element a `grow` transition opens from. Defaults to the focused element, or the element last pressed, when the modal opens.
+         */
+        "transitionOrigin"?: string;
     }
     /**
      * @lightDom renders-markup
@@ -5868,6 +5876,14 @@ declare namespace LocalJSX {
           * @default 'md'
          */
         "size"?: ModalSizeType | (string & Record<never, never>);
+        /**
+          * An opt-in view transition for opening and closing the modal. `grow` grows the panel from the control that opened it and shrinks it back on close, for a modal opened over another one. `morph` turns the open panel of one `morph` modal into the next one's when one closes as the other opens in the same task, as in a chain of modals; opening the previous one again plays it backward. Plays only where the browser supports the View Transitions API and the user hasn't asked for reduced motion; otherwise the modal opens and closes as it does without it.
+         */
+        "transition"?: ModalTransition;
+        /**
+          * The `id` of the element a `grow` transition opens from. Defaults to the focused element, or the element last pressed, when the modal opens.
+         */
+        "transitionOrigin"?: string;
     }
     /**
      * @lightDom renders-markup
@@ -7453,6 +7469,8 @@ declare namespace LocalJSX {
         "scrollable": boolean;
         "disableTopLayer": boolean;
         "disableInitialFocus": boolean;
+        "transition": ModalTransition;
+        "transitionOrigin": string;
     }
     interface PdsModalContentAttributes {
         "border": 'none' | 'both' | 'top' | 'bottom';
