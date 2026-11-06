@@ -622,6 +622,7 @@ export class PdsCombobox implements BasePdsProps {
     this.openGroup = null;
     // The reset isn't a drill-out, so it doesn't slide either.
     this.drillDirection = null;
+    this.endHeightGlide();
   }
 
   @Watch('openGroup')
@@ -656,13 +657,26 @@ export class PdsCombobox implements BasePdsProps {
     panel.style.setProperty('--pds-combobox-glide-from', `${from}px`);
     panel.style.setProperty('--pds-combobox-glide-to', `${to}px`);
     panel.classList.add('pds-combobox__listbox--height-glide');
+    // A glide cut short without ending (the panel hidden mid-way) still cleans up. JSX has no
+    // `onAnimationCancel`; adding the same listener again is a no-op.
+    panel.addEventListener('animationcancel', this.onHeightGlideCancel);
   }
+
+  private onHeightGlideCancel = (event: AnimationEvent) => {
+    const panel = this.listboxEl;
+    if (event.animationName !== 'pds-combobox-height-glide' || event.target !== panel) return;
+    // Turning around mid-glide cancels the old glide as the new one starts; only a glide with none
+    // left running cleans up.
+    const running = panel.getAnimations().some(a => (a as CSSAnimation).animationName === 'pds-combobox-height-glide');
+    if (!running) this.endHeightGlide();
+  };
 
   private endHeightGlide() {
     const panel = this.listboxEl;
     panel?.classList.remove('pds-combobox__listbox--height-glide');
     panel?.style.removeProperty('--pds-combobox-glide-from');
     panel?.style.removeProperty('--pds-combobox-glide-to');
+    panel?.removeEventListener('animationcancel', this.onHeightGlideCancel);
   }
 
   /** A flyout with no room beside the dropdown drills in, which can hide the focused search field too. */
