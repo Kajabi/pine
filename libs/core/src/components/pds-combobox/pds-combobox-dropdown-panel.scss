@@ -259,7 +259,7 @@
   .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger > *,
   .pds-combobox__listbox--drill-out > li,
   .pds-combobox__panel-search--drill-out > * {
-    animation: pds-combobox-drill var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+    animation: pds-combobox-drill var(--pine-motion-duration-slow) var(--pine-motion-easing-out);
   }
 
   @keyframes pds-combobox-drill {
@@ -272,7 +272,7 @@
   // The dropdown's height eases between drill views; the component measures both ends.
   // Internal, not a consumer hook.
   .pds-combobox__listbox--height-glide {
-    animation: pds-combobox-height-glide var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+    animation: pds-combobox-height-glide var(--pine-motion-duration-slow) var(--pine-motion-easing-out);
   }
 
   // The rows overflow the gliding height until it ends; hidden, no scrollbar flashes meanwhile.
