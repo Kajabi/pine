@@ -407,6 +407,12 @@
     z-index: 1;
   }
 
+  // The back arrow is a narrow glyph centered in its 16px box, so it looks 4px further in than the
+  // search icon it replaces. Nudged out to line up by eye; the text after it stays put.
+  :where(.pds-combobox__listbox-options--drilled-in) .pds-combobox__group-back-trigger .pds-combobox__group-row-caret {
+    margin-inline: calc(var(--pine-dimension-2xs) * -1) var(--pine-dimension-2xs);
+  }
+
   // The header bar stays full width; its hover and highlight shade is inset and rounded like the
   // option rows below it.
   .pds-combobox__listbox-options--drilled-in .pds-combobox__group-back > .pds-combobox__group-back-trigger {
