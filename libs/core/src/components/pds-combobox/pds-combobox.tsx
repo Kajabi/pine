@@ -2539,9 +2539,6 @@ export class PdsCombobox implements BasePdsProps {
               'pds-combobox__group-label--with-badge': badge !== null,
             }}
             aria-hidden="true"
-            // The group's name carries the badge. A clipped badge would make itself a tab stop to
-            // show its tooltip, and here that's a focusable element hidden from assistive tech.
-            inert={badge !== null}
           >
             {groupIcon !== null && (
               // `name`, not `icon`: `icon` also loads URLs and data: SVGs, unsanitized.
