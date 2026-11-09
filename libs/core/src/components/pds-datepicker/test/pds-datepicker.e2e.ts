@@ -2112,6 +2112,27 @@ describe('pds-datepicker', () => {
       await press(page, 'PageDown');
       await press(page, 'PageDown');
       expect(await focused(page)).toBe('2000-02-29');
+
+      // Its row's only day; End shouldn't carry into March, which the row has no cell for.
+      await press(page, 'End');
+      expect(await focused(page)).toBe('2000-02-29');
+    });
+
+    it('stops End at the last day of a partial row, instead of carrying into the next month', async () => {
+      const page = await setup(
+        '<form><pds-datepicker component-id="birthday" name="birthday" label="Birthday" locale="en-US" month-day value="--04-01"></pds-datepicker></form>',
+      );
+      await openWithTrigger(page);
+      expect(await focused(page)).toBe('2000-04-01');
+
+      await press(page, 'ArrowDown');
+      await press(page, 'ArrowDown');
+      await press(page, 'ArrowDown');
+      await press(page, 'ArrowDown');
+      expect(await focused(page)).toBe('2000-04-29');
+
+      await press(page, 'End');
+      expect(await focused(page)).toBe('2000-04-30');
     });
 
     it('submits the picked day as --MM-DD', async () => {
