@@ -2135,6 +2135,19 @@ describe('pds-datepicker', () => {
       expect(await focused(page)).toBe('2000-04-30');
     });
 
+    it('keeps Feb 29 on Shift+PageUp and Shift+PageDown, which have no year to jump by', async () => {
+      const page = await setup(
+        '<form><pds-datepicker component-id="birthday" name="birthday" label="Birthday" locale="en-US" month-day value="--02-29"></pds-datepicker></form>',
+      );
+      await openWithTrigger(page);
+      expect(await focused(page)).toBe('2000-02-29');
+
+      await press(page, 'PageUp', 'Shift');
+      expect(await focused(page)).toBe('2000-02-29');
+      await press(page, 'PageDown', 'Shift');
+      expect(await focused(page)).toBe('2000-02-29');
+    });
+
     it('submits the picked day as --MM-DD', async () => {
       const page = await setup(BIRTHDAY);
       await openWithTrigger(page);

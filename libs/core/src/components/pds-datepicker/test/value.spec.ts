@@ -194,6 +194,7 @@ describe('pds-datepicker values', () => {
       ['7 novembre', 'fr', '2000-11-07'],
       ['7 de noviembre', 'es', '2000-11-07'],
       ['11月7日', 'ja', '2000-11-07'],
+      ['31 декабря', 'ru', '2000-12-31'],
       ['February 29', 'en-US', '2000-02-29'],
       ['--11-07', 'en-US', '2000-11-07'],
       ['2026-11-07', 'en-US', '2000-11-07'],
@@ -208,6 +209,15 @@ describe('pds-datepicker values', () => {
     it('reads a format without a year only when given one', () => {
       expect(parseWith('November 7', 'MMMM D')).toBeNull();
       expect(text(parseWith('November 7', 'MMMM D', 'en-US', 2000))).toBe('2000-11-07 -');
+    });
+
+    it('writes a month name next to a day in the form it inflects to, not its standalone form', () => {
+      const dec31 = parseMonthDayText('--12-31', 'MMMM D', 'ru') as NonNullable<ReturnType<typeof parseMonthDayText>>;
+      // Genitive "декабря", not the standalone nominative "декабрь" a bare month list would give.
+      expect(formatWith(dec31, monthDayFormat('ru'), 'ru')).toBe('31 декабря');
+      expect(text(parseWith('31 декабря', monthDayFormat('ru'), 'ru', 2000))).toBe('2000-12-31 -');
+      // A month alone, with no day in the format, still takes the standalone form.
+      expect(formatWith(dec31, 'MMMM', 'ru')).toBe('декабрь');
     });
   });
 });

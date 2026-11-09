@@ -520,6 +520,13 @@ describe('pds-datepicker', () => {
       expect(trigger(root as HTMLElement).getAttribute('aria-label')).toBe('Choose date, November 7');
     });
 
+    it('normalizes a full date to --MM-DD, so an untouched value still submits without a year', async () => {
+      const { root } = await monthDay('value="1990-11-07"');
+
+      expect((root as HTMLPdsDatepickerElement).value).toBe('--11-07');
+      expect((root?.shadowRoot?.querySelector('pds-input') as HTMLPdsInputElement).value).toBe('November 7');
+    });
+
     it('opens on a month without a year or weekdays, with February 29', async () => {
       const page = await monthDay('value="--02-29"');
       await (page.root as HTMLPdsDatepickerElement).open();
