@@ -24,12 +24,55 @@ describe('pds-image', () => {
 
     expect(await (await img)?.isIntersectingViewport()).toBeTruthy();
   });
+
+  it('crops a portrait source to the shape set by ratio', async () => {
+    const page = await newE2EPage();
+    page.setViewport({
+      width: 600,
+      height: 300,
+    });
+    // A portrait source in a landscape shape is the case the ratio exists for:
+    // the box takes the ratio and the overflow is cropped rather than squashed.
+    await page.setContent('<pds-image ratio="wide" src="/photo.jpg" alt="A scenic mountain view"></pds-image>');
+
+    const style = await page.evaluate(() => {
+      const img = document.querySelector('pds-image')?.shadowRoot?.querySelector('img');
+      const computed = window.getComputedStyle(img as Element);
+
+      return { aspectRatio: computed.aspectRatio, objectFit: computed.objectFit };
+    });
+
+    expect(style.aspectRatio).toBe('16 / 9');
+    expect(style.objectFit).toBe('cover');
+  });
+
+  it('fits the whole source inside the shape when fit is contain', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-image fit="contain" ratio="square" src="/photo.jpg" alt="A scenic mountain view"></pds-image>');
+
+    const style = await page.evaluate(() => {
+      const img = document.querySelector('pds-image')?.shadowRoot?.querySelector('img');
+      const computed = window.getComputedStyle(img as Element);
+
+      return { aspectRatio: computed.aspectRatio, objectFit: computed.objectFit };
+    });
+
+    expect(style.aspectRatio).toBe('1 / 1');
+    expect(style.objectFit).toBe('contain');
+  });
 });
 
 describe('pds-image accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-image src="/photo.jpg" alt="A scenic mountain view"></pds-image>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('has no axe violations when cropped to a ratio', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-image fit="cover" ratio="wide" src="/photo.jpg" alt="A scenic mountain view"></pds-image>');
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });

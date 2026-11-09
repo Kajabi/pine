@@ -112,4 +112,56 @@ describe('pds-image', () => {
       </pds-image>
     `);
   })
+  it('renders with a preset ratio and the default fit when ratio prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsImage],
+      html: `<pds-image class="pds-image" ratio="wide" src="//source.unsplash.com/100x100"></pds-image>`
+    })
+    expect(page.root).toEqualHtml(`
+      <pds-image class="pds-image pds-image--has-ratio" ratio="wide" src="//source.unsplash.com/100x100">
+        <mock:shadow-root>
+          <img alt="" loading="eager" src="//source.unsplash.com/100x100" style="aspect-ratio: 16 / 9; object-fit: cover;" />
+        </mock:shadow-root>
+      </pds-image>
+    `);
+  })
+  it('renders with a custom ratio when ratio prop is a css ratio value', async () => {
+    const page = await newSpecPage({
+      components: [PdsImage],
+      html: `<pds-image class="pds-image" ratio="21 / 9" src="//source.unsplash.com/100x100"></pds-image>`
+    })
+    expect(page.root).toEqualHtml(`
+      <pds-image class="pds-image pds-image--has-ratio" ratio="21 / 9" src="//source.unsplash.com/100x100">
+        <mock:shadow-root>
+          <img alt="" loading="eager" src="//source.unsplash.com/100x100" style="aspect-ratio: 21 / 9; object-fit: cover;" />
+        </mock:shadow-root>
+      </pds-image>
+    `);
+  })
+  it('renders with the given fit when fit prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsImage],
+      html: `<pds-image class="pds-image" fit="contain" ratio="tall" src="//source.unsplash.com/100x100"></pds-image>`
+    })
+    expect(page.root).toEqualHtml(`
+      <pds-image class="pds-image pds-image--has-ratio" fit="contain" ratio="tall" src="//source.unsplash.com/100x100">
+        <mock:shadow-root>
+          <img alt="" loading="eager" src="//source.unsplash.com/100x100" style="aspect-ratio: 9 / 16; object-fit: contain;" />
+        </mock:shadow-root>
+      </pds-image>
+    `);
+  })
+  it('renders without a fit when fit prop is set but ratio prop is not', async () => {
+    const page = await newSpecPage({
+      components: [PdsImage],
+      html: `<pds-image class="pds-image" fit="contain" src="//source.unsplash.com/100x100"></pds-image>`
+    })
+    expect(page.root).toEqualHtml(`
+      <pds-image class="pds-image" fit="contain" src="//source.unsplash.com/100x100">
+        <mock:shadow-root>
+          <img alt="" loading="eager" src="//source.unsplash.com/100x100" />
+        </mock:shadow-root>
+      </pds-image>
+    `);
+  })
 });
