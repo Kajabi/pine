@@ -486,10 +486,18 @@ export class PdsDatepicker {
   private refreshFromValue() {
     this.text = this.fieldText();
     this.textError = '';
+
+    const parts = this.parsedValue();
+    // A full date reads as its month and day; keep what's submitted in step with what's shown,
+    // rather than passing through whichever spelling was set until the next pick rewrites it.
+    if (this.monthDay && parts) {
+      const normalized = this.dayValue(parts[0].date);
+      if (this.value !== normalized) this.value = normalized;
+    }
+
     this.updateFormValue();
     if (!this.isOpen) return;
 
-    const parts = this.parsedValue();
     this.loadDraft(parts);
     const day = (parts && parts[parts.length - 1].date) ?? this.now;
     this.showDate(clampDate(day, this.minDate, this.maxDate), true);
@@ -501,7 +509,9 @@ export class PdsDatepicker {
   }
 
   componentWillLoad() {
-    this.text = this.fieldText();
+    // Through the same path a later value/context change takes, so an initial full date in
+    // month-day mode submits normalized too, not only after the first pick rewrites it.
+    this.refreshFromValue();
   }
 
   connectedCallback() {
