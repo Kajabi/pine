@@ -1805,8 +1805,10 @@ describe('pds-combobox', () => {
       { id: 'email-send', text: 'Send an email', group: 'Email' },
     ];
 
-    // Animations held at their first frame, so the test reads where the dropdown starts from.
-    const setUp = async (attrs: string, wrapperStyle = 'padding: 40px;') => {
+    // Animations held at their first frame, so the test reads where the dropdown starts from. The
+    // open runs for minutes here, so a slow runner can't finish it before the test looks; `hold`
+    // off keeps Pine's own duration (and its reduced-motion 0ms).
+    const setUp = async (attrs: string, wrapperStyle = 'padding: 40px;', hold = true) => {
       const page = await newE2EPage();
       await page.setViewport({ width: 1200, height: 800 });
       await page.setContent(`
@@ -1816,6 +1818,7 @@ describe('pds-combobox', () => {
         </div>
       `);
       await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }, opts) => (el.options = opts), options);
+      if (hold) await page.addStyleTag({ content: ':root { --pine-motion-duration-base: 600s; }' });
       await page.waitForChanges();
       const client = await page.target().createCDPSession();
       await client.send('Animation.enable');
@@ -1835,8 +1838,7 @@ describe('pds-combobox', () => {
         const roots = [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot];
         const el = roots.map(root => root?.querySelector('.pds-combobox__listbox')).find(Boolean) as HTMLElement | undefined;
         if (!el) return null;
-        // Read the open animation's first frame itself: a slow runner can get past it before the
-        // paused playback rate takes hold.
+        // Read the open animation's first frame itself, wherever the runner got to.
         const open = el.getAnimations().find(a => (a as CSSAnimation).animationName === 'pds-combobox-open');
         if (open) {
           open.pause();
@@ -1939,7 +1941,7 @@ describe('pds-combobox', () => {
     });
 
     it("doesn't move or fade with reduced motion, since the motion tokens drop to 0ms", async () => {
-      const page = await setUp('');
+      const page = await setUp('', undefined, false);
       await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
       await toggle(page);
       expect(await placed(page)).toMatchObject({ opacity: '1', marginTop: '0px' });
