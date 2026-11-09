@@ -212,12 +212,19 @@ describe('pds-radio image card focus', () => {
 
     const card = await page.evaluate(() => {
       const style = getComputedStyle(document.querySelector('pds-radio[component-id="plan-a"]')!);
-      return { outline: style.outlineStyle, offset: parseFloat(style.outlineOffset), shadow: style.boxShadow };
+      // Computed box-shadow reads "<color> 0px 0px 0px <spread>"; the spread is the last length.
+      const lengths = style.boxShadow.match(/-?[\d.]+px/g) ?? [];
+      return {
+        outline: style.outlineStyle,
+        offset: parseFloat(style.outlineOffset),
+        spread: lengths.length ? parseFloat(lengths[lengths.length - 1]) : NaN,
+      };
     });
     expect(card.outline).not.toBe('none');
-    expect(card.shadow).not.toBe('none');
-    // The checked ring is a 2px box-shadow outside the border; the outline starts past it.
-    expect(card.offset).toBeGreaterThan(2);
+    expect(card.spread).toBeGreaterThan(0);
+    // Both start at the border edge, so an offset equal to the spread would sit flush on the
+    // checked ring: the outline has to start strictly past it.
+    expect(card.offset).toBeGreaterThan(card.spread);
   });
 
   it('has no axe violations with an image card focused', async () => {

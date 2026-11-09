@@ -234,14 +234,15 @@ label:has(input:disabled) {
   }
 
   &:has(input:checked) {
-    box-shadow: 0 0 0 2px var(--pine-color-primary-hover);
+    box-shadow: 0 0 0 var(--pine-border-width-thick) var(--pine-color-primary-hover);
   }
 
-  // The input is visually hidden here, so its own focus ring can't show; the card carries it,
-  // offset past the 2px checked ring so the two stay apart.
+  // The input is visually hidden here, so its own focus ring can't show; the card carries it.
+  // outline-offset and the checked ring's spread both start at the border edge, so the offset
+  // clears the full spread plus a gap; built from the same token so the two can't drift into each other.
   &:has(input:focus-visible) {
     outline: var(--pine-outline-focus);
-    outline-offset: calc(2px + var(--pine-border-width));
+    outline-offset: calc(var(--pine-border-width-thick) + var(--pine-border-width));
   }
 
   label {
