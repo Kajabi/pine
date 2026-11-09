@@ -1,3 +1,13 @@
+## 4.11.0 (2026-11-09)
+
+### Features 🚀
+
+- **pds-datepicker:** add month-day mode for a month and day with no year ([#938](https://github.com/Kajabi/pine/pull/938))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 4.10.0 (2026-11-06)
 
 ### Features 🚀
