@@ -44,7 +44,7 @@
   box-sizing: border-box;
   color: var(--pine-color-text-strong);
   flex: 1;
-  font: var(--pine-typography-body-medium);
+  font: var(--pine-typography-body);
   padding: var(--pine-dimension-xs) var(--pine-dimension-450) var(--pine-dimension-xs) var(--pine-dimension-150);
   transition: border-color var(--pine-motion-duration-base) ease;
   width: 100%;
@@ -139,7 +139,7 @@
   color: var(--color-text-default, var(--pine-color-text-inverse-emphasis));
   cursor: pointer;
   display: flex;
-  font: var(--pine-typography-body-medium);
+  font: var(--pine-typography-body);
   justify-content: space-between;
   min-height: var(--pine-dimension-450);
   outline: none;
