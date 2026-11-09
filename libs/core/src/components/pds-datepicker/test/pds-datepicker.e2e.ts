@@ -2142,7 +2142,7 @@ describe('pds-datepicker', () => {
       await openWithTrigger(page);
 
       const violations = await runAxe(page);
-      if (violations.length) throw new Error(formatViolations(violations));
+      if (violations.length > 0) throw new Error(formatViolations(violations));
       expect(violations).toHaveLength(0);
     });
   });
