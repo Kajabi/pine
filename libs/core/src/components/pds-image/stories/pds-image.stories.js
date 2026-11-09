@@ -18,6 +18,21 @@ const BaseTemplate = (args) => html` <pds-image
 
 const SizesAndSrcsetTemplate = (args) => html`<pds-image alt="${args.alt}" sizes="${args.sizes}" src="${args.src}" srcset="${args.srcset}" />`;
 
+const RatioTemplate = (args) => html`<div style="width: 320px">
+  <pds-image alt="${args.alt}" fit="${args.fit}" ratio="${args.ratio}" src="${args.src}" />
+</div>`;
+
+// The source is portrait while every shape below is not, so each one shows what
+// the component does with the overflow.
+const FitTemplate = (args) => html`<div style="display: flex; gap: 1rem;">
+  ${['cover', 'contain', 'fill'].map(
+    (fit) => html`<figure style="margin: 0; width: 160px;">
+      <pds-image alt="${args.alt}" fit="${fit}" ratio="${args.ratio}" src="${args.src}" />
+      <figcaption><code>fit="${fit}"</code></figcaption>
+    </figure>`,
+  )}
+</div>`;
+
 export const Default = BaseTemplate.bind();
 Default.args = {
   alt: 'Random Bear',
@@ -32,4 +47,18 @@ SizesAndSrcset.args = {
   sizes: '(max-width: 450px) 150px, 600px',
   src: 'https://placebear.com/600/200',
   srcset: 'https://placebear.com/150/150 400w, https://placebear.com/600/200',
+}
+
+export const Ratio = RatioTemplate.bind();
+Ratio.args = {
+  alt: 'Random Bear',
+  ratio: 'wide',
+  src: 'https://placebear.com/200/300',
+}
+
+export const Fit = FitTemplate.bind();
+Fit.args = {
+  alt: 'Random Bear',
+  ratio: 'wide',
+  src: 'https://placebear.com/200/300',
 }
