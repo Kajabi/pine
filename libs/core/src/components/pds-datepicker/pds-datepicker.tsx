@@ -11,6 +11,7 @@ import {
   addMonths,
   clampDate,
   dateFormatter,
+  daysInMonth,
   formatDate,
   isOutOfRange,
   isSameDay,
@@ -1329,9 +1330,14 @@ export class PdsDatepicker {
       case 'Home':
         next = addDays(active, -column);
         break;
-      case 'End':
-        next = addDays(active, 6 - column);
+      case 'End': {
+        // Month-day mode's rows don't carry into the next month, so End stops at the month's last day.
+        const lastColumn = this.monthDay
+          ? Math.min(6, daysInMonth(active.getUTCFullYear(), active.getUTCMonth()) - active.getUTCDate() + column)
+          : 6;
+        next = addDays(active, lastColumn - column);
         break;
+      }
       case 'PageUp':
         next = addMonths(active, event.shiftKey ? -12 : -1);
         break;
