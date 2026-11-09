@@ -26,8 +26,11 @@ const TRUNCATES = /text-overflow:\s*ellipsis|-webkit-line-clamp/;
 // Truncation that predates this check, each owed a fix. These do not fail -- the point is to stop a
 // NEW one appearing, not to block everything until the backlog is clear. The list can only shrink:
 // once a component calls the util, its entry here becomes stale and the check fails until it goes.
+// Caveat this check cannot resolve: it asks whether THIS component calls the util, so it cannot see
+// recovery inherited by composing one that does. pds-alert is the case in point -- read its entry.
 const KNOWN = {
-  'pds-alert': 'a clipped description, no way to read the rest',
+  'pds-alert':
+    'clips the small description in its own styles AND renders it as <pds-text truncate>, which already calls the util. So the likely fix is deleting the duplicate host-level clipping rather than adding a second tooltip over the same text -- needs a browser check of whether pds-text\'s tooltip fires through it',
   'pds-combobox':
     "an option's text clipped by the `truncate` prop. Not a wiring job: options keep focus on the trigger and are tracked with aria-activedescendant, so the util's focus path never fires and a hover-only tooltip would leave keyboard users where they are",
   'pds-filters': "a filter trigger's text, clipped",
