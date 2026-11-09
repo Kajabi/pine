@@ -627,8 +627,8 @@ export class PdsDatepicker {
   private get resolvedFormat(): string {
     if (this.monthDay) {
       // A format with a year is the default, or one for full dates: use the locale's month and day.
-      const format = this.format?.trim();
-      return format && !/YYYY/.test(format.replace(/\[[^\]]*\]/g, '')) ? format : monthDayFormat(this.resolvedLocale);
+      const format = this.format?.trim() ?? '';
+      return format !== '' && !/YYYY/.test(format.replace(/\[[^\]]*\]/g, '')) ? format : monthDayFormat(this.resolvedLocale);
     }
     return fieldFormat(this.format, this.hasTime, this.hasTime && clockFor(this.resolvedLocale).hour12);
   }
