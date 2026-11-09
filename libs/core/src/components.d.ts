@@ -1266,7 +1266,7 @@ export namespace Components {
          */
         "firstDayOfWeek"?: number;
         /**
-          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`; `--MM-DD` with `month-day`), whatever the format. Typed ISO dates are always accepted too. With `month-day`, a format without `YYYY` is taken as a month-and-day format and used as given, rather than reordered for the locale; leave it unset to follow the locale instead.
           * @default 'YYYY-MM-DD'
          */
         "format": string;
@@ -1333,7 +1333,7 @@ export namespace Components {
          */
         "minuteLabel": string;
         /**
-          * Picks a month and day with no year, for a date that comes round every year, such as a birthday. The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes a month and day, and the calendar shows each month without a year or weekdays, with February always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`.
+          * Picks a month and day with no year, for a date that comes round every year, such as a birthday. The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes a month and day, and the calendar shows each month without a year or weekdays, with February always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`, and has no effect with `auto-apply`, `presets`, `first-day-of-week`, `min-date-message` or `max-date-message`, which all depend on them.
           * @default false
          */
         "monthDay": boolean;
@@ -1361,7 +1361,7 @@ export namespace Components {
          */
         "periodLabel": string;
         /**
-          * Specifies a short hint that describes the expected value of the field. Defaults to the format the field takes, such as `YYYY-MM-DD`.
+          * Specifies a short hint that describes the expected value of the field. Defaults to the format the field takes, such as `YYYY-MM-DD`; with `month-day`, to an example date instead, such as `December 31`.
          */
         "placeholder"?: string;
         /**
@@ -1426,7 +1426,7 @@ export namespace Components {
          */
         "triggerLabel": string;
         /**
-          * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with the time picker, each date as `YYYY-MM-DDTHH:mm`. An empty string when nothing is selected.
+          * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with the time picker, each date as `YYYY-MM-DDTHH:mm`; with `month-day`, the month and day with no year, as `--MM-DD` (a full date is read too, as that month and day, and rewritten to it). An empty string when nothing is selected.
           * @default ''
          */
         "value"?: string;
@@ -5185,7 +5185,7 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`), whatever the format. Typed ISO dates are always accepted too.
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`; `--MM-DD` with `month-day`), whatever the format. Typed ISO dates are always accepted too. With `month-day`, a format without `YYYY` is taken as a month-and-day format and used as given, rather than reordered for the locale; leave it unset to follow the locale instead.
           * @default 'YYYY-MM-DD'
          */
         "format"?: string;
@@ -5252,7 +5252,7 @@ declare namespace LocalJSX {
          */
         "minuteLabel"?: string;
         /**
-          * Picks a month and day with no year, for a date that comes round every year, such as a birthday. The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes a month and day, and the calendar shows each month without a year or weekdays, with February always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`.
+          * Picks a month and day with no year, for a date that comes round every year, such as a birthday. The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes a month and day, and the calendar shows each month without a year or weekdays, with February always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`, and has no effect with `auto-apply`, `presets`, `first-day-of-week`, `min-date-message` or `max-date-message`, which all depend on them.
           * @default false
          */
         "monthDay"?: boolean;
@@ -5288,7 +5288,7 @@ declare namespace LocalJSX {
          */
         "periodLabel"?: string;
         /**
-          * Specifies a short hint that describes the expected value of the field. Defaults to the format the field takes, such as `YYYY-MM-DD`.
+          * Specifies a short hint that describes the expected value of the field. Defaults to the format the field takes, such as `YYYY-MM-DD`; with `month-day`, to an example date instead, such as `December 31`.
          */
         "placeholder"?: string;
         /**
@@ -5349,7 +5349,7 @@ declare namespace LocalJSX {
          */
         "triggerLabel"?: string;
         /**
-          * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with the time picker, each date as `YYYY-MM-DDTHH:mm`. An empty string when nothing is selected.
+          * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with the time picker, each date as `YYYY-MM-DDTHH:mm`; with `month-day`, the month and day with no year, as `--MM-DD` (a full date is read too, as that month and day, and rewritten to it). An empty string when nothing is selected.
           * @default ''
          */
         "value"?: string;
