@@ -1875,6 +1875,8 @@ export class PdsCombobox implements BasePdsProps {
    */
   private highlightOptionAt(options: HTMLOptionElement[], index: number) {
     if (options.length === 0) return;
+    // Only the keys move it, so it shows the keyboard's ring, as in the grouped panel.
+    this.keyboardNavigating = true;
     this.highlightedIndex = Math.max(0, Math.min(options.length - 1, index));
     this.updateOptionFocus();
   }
@@ -3092,8 +3094,8 @@ export class PdsCombobox implements BasePdsProps {
   private renderGroupRow(group: PanelGroup, groupIndex: number, { posinset, setsize }: { posinset: number; setsize: number }) {
     const flyout = this.effectiveGroupDisplay === 'flyout';
     const isOpen = flyout && this.openGroup === group.optgroup;
-    // Drill-in shades a group row only for the keys: not for the group holding the selection, or the
-    // row the pointer or a click-open left highlighted, which read as picked. `:hover` covers the pointer.
+    // `--has-selection` is a state hook only (tests read it), not styled. The fill follows
+    // `--highlighted` (always in flyout, in drill-in only for the keys) and a flyout's `--open` row.
     const hasSelection = flyout && group.options.some(({ option }) => this.isOptionSelected(option));
     const isCurrent = this.highlightedGroupRow === group.optgroup;
     const disabled = isGroupDisabled(group);
