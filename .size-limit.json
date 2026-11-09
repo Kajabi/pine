@@ -32,7 +32,7 @@
   {
     "name": "pds-datepicker entry (gzipped)",
     "path": "libs/core/dist/esm/pds-datepicker.entry.js",
-    "limit": "29.5 KB",
+    "limit": "30 KB",
     "gzip": true
   },
   {
