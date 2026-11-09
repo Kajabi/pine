@@ -1835,8 +1835,15 @@ describe('pds-combobox', () => {
         const roots = [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot];
         const el = roots.map(root => root?.querySelector('.pds-combobox__listbox')).find(Boolean) as HTMLElement | undefined;
         if (!el) return null;
+        // Read the open animation's first frame itself: a slow runner can get past it before the
+        // paused playback rate takes hold.
+        const open = el.getAnimations().find(a => (a as CSSAnimation).animationName === 'pds-combobox-open');
+        if (open) {
+          open.pause();
+          open.currentTime = 0;
+        }
         const { opacity, marginTop } = getComputedStyle(el);
-        const opening = el.getAnimations().some(a => (a as CSSAnimation).animationName === 'pds-combobox-open');
+        const opening = open !== undefined;
         return { opacity, marginTop, opening, placement: el.dataset.placement ?? null };
       });
 
