@@ -219,5 +219,13 @@ describe('pds-datepicker values', () => {
       // A month alone, with no day in the format, still takes the standalone form.
       expect(formatWith(dec31, 'MMMM', 'ru')).toBe('декабрь');
     });
+
+    it('keeps a CJK month suffix that formatToParts splits out next to a day', () => {
+      const dec31 = parseMonthDayText('--12-31', 'MMMM D', 'ja') as NonNullable<ReturnType<typeof parseMonthDayText>>;
+      // `12月`, not the bare `12` a with-day formatToParts' "month" part alone would give.
+      expect(formatWith(dec31, 'MMMM D', 'ja')).toBe('12月 31');
+      expect(text(parseWith('12月 31', 'MMMM D', 'ja', 2000))).toBe('2000-12-31 -');
+      expect(formatWith(dec31, 'MMMM', 'ja')).toBe('12月');
+    });
   });
 });
