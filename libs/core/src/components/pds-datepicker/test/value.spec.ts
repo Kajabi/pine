@@ -4,8 +4,10 @@ import {
   fieldFormat,
   formatWith,
   joinTime,
+  monthDayFormat,
   parseDateTime,
   parseFieldText,
+  parseMonthDayText,
   parseRangeText,
   parseWith,
   splitTime,
@@ -168,6 +170,44 @@ describe('pds-datepicker values', () => {
       const range = parseRangeText('1 - 2 - 2026 – 3 - 4 - 2026', format);
       expect(range?.map(toValueString)).toEqual(['2026-02-01', '2026-04-03']);
       expect(parseRangeText('1 - 2 - 2026 to 3 - 4 - 2026', format)?.map(toValueString)).toEqual(['2026-02-01', '2026-04-03']);
+    });
+  });
+
+  describe('month and day', () => {
+    it.each([
+      ['en-US', 'long', 'MMMM D'],
+      ['fr', 'long', 'D MMMM'],
+      ['es', 'long', 'D[ de ]MMMM'],
+      ['ja', 'long', 'M月D日'],
+      ['en-US', 'numeric', 'M/D'],
+      ['en-GB', 'numeric', 'D/M'],
+    ] as const)('writes the %s %s month and day format', (locale, month, expected) => {
+      expect(monthDayFormat(locale, month)).toBe(expected);
+    });
+
+    it.each([
+      ['November 7', 'en-US', '2000-11-07'],
+      ['nov 7', 'en-US', '2000-11-07'],
+      ['7 November', 'en-US', '2000-11-07'],
+      ['11/07', 'en-US', '2000-11-07'],
+      ['11/07', 'en-GB', '2000-07-11'],
+      ['7 novembre', 'fr', '2000-11-07'],
+      ['7 de noviembre', 'es', '2000-11-07'],
+      ['11月7日', 'ja', '2000-11-07'],
+      ['February 29', 'en-US', '2000-02-29'],
+      ['--11-07', 'en-US', '2000-11-07'],
+      ['2026-11-07', 'en-US', '2000-11-07'],
+    ])('reads %p in %s as a month and day', (input, locale, expected) => {
+      expect(text(parseMonthDayText(input, monthDayFormat(locale), locale))).toBe(`${expected} -`);
+    });
+
+    it.each(['', 'November 31', 'Smarch 3', '13/40'])('rejects %p', (input) => {
+      expect(parseMonthDayText(input, 'MMMM D')).toBeNull();
+    });
+
+    it('reads a format without a year only when given one', () => {
+      expect(parseWith('November 7', 'MMMM D')).toBeNull();
+      expect(text(parseWith('November 7', 'MMMM D', 'en-US', 2000))).toBe('2000-11-07 -');
     });
   });
 });

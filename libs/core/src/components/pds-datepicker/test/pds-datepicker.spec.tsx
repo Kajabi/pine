@@ -503,4 +503,80 @@ describe('pds-datepicker', () => {
       expect(year?.querySelector('option[selected]')?.textContent).toBe('٢٠٢٦');
     });
   });
+
+  describe('month-day mode', () => {
+    const monthDay = (attrs = '') =>
+      newSpecPage({
+        components: [PdsDatepicker, PdsInput],
+        html: `<pds-datepicker component-id="birthday" locale="en-US" month-day ${attrs}></pds-datepicker>`,
+      });
+
+    it('shows a --MM-DD value as the locale writes a month and day, with an example placeholder', async () => {
+      const { root } = await monthDay('value="--11-07"');
+
+      const input = root?.shadowRoot?.querySelector('pds-input') as HTMLPdsInputElement;
+      expect(input.value).toBe('November 7');
+      expect(input.placeholder).toBe('December 31');
+      expect(trigger(root as HTMLElement).getAttribute('aria-label')).toBe('Choose date, November 7');
+    });
+
+    it('opens on a month without a year or weekdays, with February 29', async () => {
+      const page = await monthDay('value="--02-29"');
+      await (page.root as HTMLPdsDatepickerElement).open();
+      await page.waitForChanges();
+
+      const shadow = cal(page) as ShadowRoot;
+      expect(shadow.querySelector('.pds-datepicker__heading')?.textContent).toBe('February');
+      expect(shadow.querySelector('.pds-datepicker__weekday')).toBeNull();
+      expect(shadow.querySelector('tbody tr td')?.getAttribute('data-date')).toBe('2000-02-01');
+      const leapDay = shadow.querySelector('[data-date="2000-02-29"]');
+      expect(leapDay?.getAttribute('aria-selected')).toBe('true');
+      expect(leapDay?.getAttribute('aria-label')).toBe('February 29');
+    });
+
+    it('emits the picked day as --MM-DD', async () => {
+      const page = await monthDay('value="--11-07"');
+      const change = jest.fn();
+      page.root?.addEventListener('pdsDatepickerChange', (event) => change((event as CustomEvent).detail));
+      await (page.root as HTMLPdsDatepickerElement).open();
+      await page.waitForChanges();
+
+      (cal(page)?.querySelector('[data-date="2000-11-20"]') as HTMLElement).click();
+      await page.waitForChanges();
+
+      expect(change).toHaveBeenCalledWith({ value: '--11-20' });
+      expect((page.root as HTMLPdsDatepickerElement).value).toBe('--11-20');
+    });
+
+    it('wraps from December to January, staying without a year', async () => {
+      const page = await monthDay('value="--12-15"');
+      await (page.root as HTMLPdsDatepickerElement).open();
+      await page.waitForChanges();
+
+      (cal(page)?.querySelector('.pds-datepicker__nav--next') as HTMLButtonElement).click();
+      await page.waitForChanges();
+
+      const shadow = cal(page) as ShadowRoot;
+      expect(shadow.querySelector('.pds-datepicker__heading')?.textContent).toBe('January');
+      expect(shadow.querySelector('[data-date="2000-01-15"]')?.getAttribute('tabindex')).toBe('0');
+      expect(shadow.querySelector('.pds-datepicker__nav--next')?.hasAttribute('disabled')).toBe(false);
+    });
+
+    it('turns off range, the time picker, the dropdowns and min and max', async () => {
+      const page = await monthDay('value="--11-07" range time-picker show-dropdowns min="2026-12-01" max="2026-12-31"');
+      await (page.root as HTMLPdsDatepickerElement).open();
+      await page.waitForChanges();
+
+      const shadow = cal(page) as ShadowRoot;
+      expect(page.root?.shadowRoot?.querySelector('.pds-datepicker--range, .pds-datepicker--time')).toBeNull();
+      expect(shadow.querySelector('.pds-datepicker__heading-select, .pds-datepicker__presets')).toBeNull();
+      expect(shadow.querySelector('[data-date="2000-11-07"]')?.hasAttribute('aria-disabled')).toBe(false);
+    });
+
+    it('shows a value that is not a month and day as it is', async () => {
+      const { root } = await monthDay('value="someday"');
+
+      expect((root?.shadowRoot?.querySelector('pds-input') as HTMLPdsInputElement).value).toBe('someday');
+    });
+  });
 });
