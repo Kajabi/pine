@@ -202,6 +202,20 @@ Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days
   <pds-datepicker component-id="pds-datepicker-dropdowns-example" label="Birthday" show-dropdowns min="1901-01-01" max="2026-10-13"></pds-datepicker>
 </DocCanvas>
 
+### Month and day, without a year
+
+`month-day` picks a date that comes round every year, such as a birthday or an anniversary. The value is a month and day as ISO 8601 writes one without a year, `--MM-DD`. The field shows it as the locale writes a month and day ("November 7", "7 novembre", "11月7日"), and reads that, the locale's numeric form ("11/7" in English, "7/11" in British English), `--MM-DD`, or a full date, whose year it drops.
+
+The calendar shows each month with no year in its heading. A month without a year has no weekdays, so the days run in rows of seven from the 1st, with no weekday names; ↑ and ↓ move seven days, and Home and End go to the first and last day of the row. December is followed by January, and February always has its 29th. `range`, `time-picker`, `show-dropdowns`, `min` and `max` don't apply, and are ignored.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsDatepicker componentId="pds-datepicker-month-day-example" label="Birthday" monthDay value="--11-07"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-month-day-example" label="Birthday" month-day value="--11-07"></pds-datepicker>`
+}}>
+  <pds-datepicker component-id="pds-datepicker-month-day-example" label="Birthday" month-day value="--11-07"></pds-datepicker>
+</DocCanvas>
+
 ### Initially empty, with Clear
 
 The field starts empty when there's no `value`. `clearable` adds a button in the field that empties it while there's a value, and in range mode or with the time picker, Clear takes the place of Cancel too, as for a filter that's off until someone sets it.
@@ -269,11 +283,12 @@ The open calendar is portaled: into the `<dialog>` or open popover around the da
 ## Values, time zones and servers
 
 - Values are plain ISO strings with no time zone: `YYYY-MM-DD`, and with the time picker `YYYY-MM-DDTHH:mm`, a wall-clock time. If the time needs a zone, attach it on the server when parsing, such as the account's time zone.
+- A month and day, from `month-day`, is `--MM-DD`, with no year to attach a zone to. Ruby's `Date.parse` doesn't read it; take the month and day from the string, as `value.match(/\A--(\d{2})-(\d{2})\z/)`.
 - A range submits as one field, `start/end`. Split it on `/` on the server and parse each half as ISO 8601: a `YYYY-MM-DD` half as a calendar date, not a midnight timestamp.
 
 ## Form Integration
 
-- Set `name` and the date is submitted with its form as `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` in range mode.
+- Set `name` and the date is submitted with its form as `YYYY-MM-DD`, `YYYY-MM-DD/YYYY-MM-DD` in range mode, or `--MM-DD` in month-day mode.
 - Resetting the form clears the date.
 - With `required` and no date, typed text that isn't a date, or a date outside `min` and `max` (typed or set in code), the form won't submit and the field shows as invalid. The form reports `badInput` for text that isn't a date and `rangeUnderflow` or `rangeOverflow` for dates outside the range, with the messages set by `invalid-date-message`, `min-date-message` and `max-date-message`; `{date}` in the last two is replaced by the bound.
 

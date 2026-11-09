@@ -17,6 +17,7 @@ export default {
     max: null,
     min: null,
     minuteIncrement: 1,
+    monthDay: false,
     name: null,
     presets: null,
     range: false,
@@ -66,6 +67,7 @@ const BaseTemplate = (args) => html`<pds-datepicker
   max=${ifDefined(args.max ?? undefined)}
   min=${ifDefined(args.min ?? undefined)}
   minute-increment=${ifDefined(args.minuteIncrement ?? undefined)}
+  ?month-day=${args.monthDay}
   name=${ifDefined(args.name ?? undefined)}
   placeholder=${ifDefined(args.placeholder ?? undefined)}
   placement=${ifDefined(args.placement ?? undefined)}
@@ -159,6 +161,15 @@ MonthAndYearDropdowns.args = {
   max: '2026-10-13',
   min: '1901-01-01',
   showDropdowns: true,
+};
+
+export const MonthDay = BaseTemplate.bind({});
+MonthDay.args = {
+  componentId: 'pds-datepicker-month-day-example',
+  format: null,
+  label: 'Birthday',
+  monthDay: true,
+  value: '--11-07',
 };
 
 export const InitiallyEmptyWithClear = BaseTemplate.bind({});
