@@ -1,5 +1,10 @@
 @mixin pds-combobox-dropdown-panel {
+  // Opening only: a quick fade as it settles a few pixels away from the field. Closing is instant.
   .pds-combobox__listbox {
+    // Internal, not a consumer hook. Starts nearer the field, so it moves away from it.
+    --pds-combobox-open-from: calc(var(--pine-dimension-2xs) * -1);
+
+    animation: pds-combobox-open var(--pine-motion-duration-base) var(--pine-motion-easing-out);
     background: var(--pine-color-background-overlay);
     border: 0;
     border-radius: var(--pine-dimension-125);
@@ -12,6 +17,27 @@
     padding: var(--pine-dimension-xs);
     position: absolute;
     z-index: var(--pine-z-index-raised);
+  }
+
+  // Flipped above the field (Floating UI's placement), it rises instead. `data-placement` lands
+  // once Floating UI resolves, sometimes a frame after the animation starts, so a flipped panel can
+  // begin that frame moving the default way. It isn't visible: the fade is near 0 opacity then.
+  .pds-combobox__listbox[data-placement^="top"] {
+    --pds-combobox-open-from: var(--pine-dimension-2xs);
+  }
+
+  // A margin, not a transform: a transform would make the panel the containing block of the
+  // flyout, which is fixed to the viewport. The panel is out of flow and its size doesn't change,
+  // so animating the margin re-lays out only the panel, for the 200ms it runs.
+  @keyframes pds-combobox-open {
+    0% {
+      margin-block-start: var(--pds-combobox-open-from);
+      opacity: 0;
+    }
+
+    40% {
+      opacity: 1;
+    }
   }
 
   .pds-combobox__option {
@@ -266,8 +292,11 @@
   }
 
   // Ease-out, like the slide it moves with: ease-in-out starts slow and trails the rows.
+  // The open stays listed, so it doesn't replay when the glide ends.
   .pds-combobox__listbox--height-glide {
-    animation: pds-combobox-height-glide var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+    animation:
+      pds-combobox-open var(--pine-motion-duration-base) var(--pine-motion-easing-out),
+      pds-combobox-height-glide var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   }
 
   // The rows overflow the gliding height until it ends; hidden, no scrollbar flashes meanwhile.
