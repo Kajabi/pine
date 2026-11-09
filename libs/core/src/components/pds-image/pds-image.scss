@@ -13,3 +13,14 @@ img {
   height: auto;
   max-width: 100%;
 }
+
+// With a ratio set the host fills the width it is given and the image fills
+// the host, so the ratio decides the height and `fit` decides how the
+// overflow is cropped. Without one the image keeps its intrinsic size.
+:host(.pds-image--has-ratio) {
+  display: block;
+}
+
+:host(.pds-image--has-ratio) img {
+  width: 100%;
+}
