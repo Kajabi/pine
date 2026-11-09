@@ -1356,10 +1356,12 @@ export class PdsDatepicker {
         break;
       }
       case 'PageUp':
-        next = addMonths(active, event.shiftKey ? -12 : -1);
+        // Month-day mode has no year to jump by, so Shift+PageUp stays put rather than passing
+        // through a real, possibly non-leap year and clamping Feb 29 to the 28th.
+        next = event.shiftKey && this.monthDay ? active : addMonths(active, event.shiftKey ? -12 : -1);
         break;
       case 'PageDown':
-        next = addMonths(active, event.shiftKey ? 12 : 1);
+        next = event.shiftKey && this.monthDay ? active : addMonths(active, event.shiftKey ? 12 : 1);
         break;
       case 'Enter':
       case ' ':
