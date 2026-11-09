@@ -23,6 +23,7 @@
     "stencil.generate": "npx nx run @pine-ds/core:generate",
     "test.all": "npx nx run-many --target=test",
     "test.a11y": "npx nx run @pine-ds/core:test.a11y",
+    "truncation.check": "node scripts/check-truncation-tooltip.mjs",
     "size": "size-limit"
   },
   "devDependencies": {
