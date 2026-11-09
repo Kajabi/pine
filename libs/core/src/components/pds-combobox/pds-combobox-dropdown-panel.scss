@@ -325,6 +325,20 @@
     padding-inline: var(--pine-dimension-150);
   }
 
+  // A grouped display's search results head each group in sentence case, in the small body type.
+  // The heading's padding is the only space between groups (the group rule below drops the gap
+  // above each group), so the list's rhythm stays even.
+  .pds-combobox__listbox--grouped .pds-combobox__group-label {
+    font: var(--pine-typography-body-sm);
+    margin-block: 0;
+    padding-block: var(--pine-dimension-xs) var(--pine-dimension-2xs);
+    text-transform: none;
+  }
+
+  .pds-combobox__listbox--grouped .pds-combobox__group {
+    margin-block-start: 0;
+  }
+
   .pds-combobox__flyout {
     background: var(--pine-color-background-overlay);
     border-radius: var(--pine-dimension-125);
