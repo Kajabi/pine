@@ -80,7 +80,13 @@ function localeWords(locale: string): LocaleWords {
       return Array.from({ length: 12 }, (_, m) => {
         const date = new Date(Date.UTC(2023, m, 1));
         if (!withDay) return format.format(date);
-        return format.formatToParts(date).find((part) => part.type === 'month')?.value ?? format.format(date);
+        const parts = format.formatToParts(date);
+        const index = parts.findIndex((part) => part.type === 'month');
+        if (index === -1) return format.format(date);
+        // CJK locales split a counter word, as Japanese `月`, into its own literal right after the
+        // month; a literal with no space is that word, not the separator before the day.
+        const suffix = parts[index + 1];
+        return suffix?.type === 'literal' && !/\s/.test(suffix.value) ? parts[index].value + suffix.value : parts[index].value;
       });
     };
     const clock = clockFor(locale);
