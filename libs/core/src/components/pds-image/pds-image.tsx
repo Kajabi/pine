@@ -20,6 +20,13 @@ export class PdsImage {
   @Prop() componentId: string;
 
   /**
+   * Determines how the image fills the shape set by `ratio`.
+   * Has no effect if `ratio` is not set.
+   * @defaultValue cover
+   */
+  @Prop() fit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' = 'cover';
+
+  /**
    * The height of the image in pixels. Setting this will
    * devote space in the layout to prevent layout
    * shifts when the image is loaded.
@@ -31,6 +38,19 @@ export class PdsImage {
    * @defaultValue eager
    */
   @Prop() loading?: 'eager' | 'lazy' = 'eager';
+
+  /**
+   * The aspect ratio the image is sized to, cropping whatever
+   * overflows the shape. Value can be preset or custom. Takes
+   * precedence over the ratio implied by `height` and `width`.
+   */
+  @Prop() ratio?:
+  | 'square'    // 1 / 1
+  | 'landscape' // 4 / 3
+  | 'wide'      // 16 / 9
+  | 'portrait'  // 3 / 4
+  | 'tall'      // 9 / 16
+  | string;
 
   /**
    * Determines the intended display size of an image
@@ -57,11 +77,31 @@ export class PdsImage {
    */
   @Prop() width?: number;
 
+  private imageRatio() {
+    const ratios: { [key: string]: string } = {
+      square: '1 / 1',
+      landscape: '4 / 3',
+      wide: '16 / 9',
+      portrait: '3 / 4',
+      tall: '9 / 16',
+    };
+
+    return ratios[this.ratio] ?? this.ratio;
+  }
+
   render() {
+    const hasRatio = this.ratio !== undefined && this.ratio !== '';
+    // `fit` only means something once a ratio gives the image a shape to
+    // overflow, so neither is applied until `ratio` is set.
+    const ratioStyle = hasRatio
+      ? { aspectRatio: this.imageRatio(), objectFit: this.fit }
+      : undefined;
+
     return (
       <Host
         class={{
           'pds-image': true,
+          'pds-image--has-ratio': hasRatio,
         }}
         id={this.componentId}
       >
@@ -72,6 +112,7 @@ export class PdsImage {
           sizes={this.sizes}
           src={this.src}
           srcset={this.srcset}
+          style={ratioStyle}
           width={this.width}
         />
       </Host>

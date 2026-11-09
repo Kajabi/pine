@@ -1646,6 +1646,11 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Determines how the image fills the shape set by `ratio`. Has no effect if `ratio` is not set.
+          * @defaultValue cover
+         */
+        "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+        /**
           * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
          */
         "height"?: number;
@@ -1654,6 +1659,15 @@ export namespace Components {
           * @defaultValue eager
          */
         "loading"?: 'eager' | 'lazy';
+        /**
+          * The aspect ratio the image is sized to, cropping whatever overflows the shape. Value can be preset or custom. Takes precedence over the ratio implied by `height` and `width`.
+         */
+        "ratio"?: | 'square'    // 1 / 1
+  | 'landscape' // 4 / 3
+  | 'wide'      // 16 / 9
+  | 'portrait'  // 3 / 4
+  | 'tall'      // 9 / 16
+  | string;
         /**
           * Determines the intended display size of an image within certain breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
          */
@@ -5581,6 +5595,11 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
+          * Determines how the image fills the shape set by `ratio`. Has no effect if `ratio` is not set.
+          * @defaultValue cover
+         */
+        "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+        /**
           * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
          */
         "height"?: number;
@@ -5589,6 +5608,15 @@ declare namespace LocalJSX {
           * @defaultValue eager
          */
         "loading"?: 'eager' | 'lazy';
+        /**
+          * The aspect ratio the image is sized to, cropping whatever overflows the shape. Value can be preset or custom. Takes precedence over the ratio implied by `height` and `width`.
+         */
+        "ratio"?: | 'square'    // 1 / 1
+  | 'landscape' // 4 / 3
+  | 'wide'      // 16 / 9
+  | 'portrait'  // 3 / 4
+  | 'tall'      // 9 / 16
+  | string;
         /**
           * Determines the intended display size of an image within certain breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
          */
@@ -7396,8 +7424,15 @@ declare namespace LocalJSX {
     interface PdsImageAttributes {
         "alt": string;
         "componentId": string;
+        "fit": 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
         "height": number;
         "loading": 'eager' | 'lazy';
+        "ratio": | 'square'    // 1 / 1
+  | 'landscape' // 4 / 3
+  | 'wide'      // 16 / 9
+  | 'portrait'  // 3 / 4
+  | 'tall'      // 9 / 16
+  | string;
         "sizes": string;
         "src": string;
         "srcset": string;

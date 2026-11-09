@@ -466,8 +466,15 @@ export namespace Components {
     export interface PdsImage {
         "alt"?: string;
         "componentId": string;
+        "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
         "height"?: number;
         "loading"?: 'eager' | 'lazy';
+        "ratio"?: | 'square'    // 1 / 1
+        | 'landscape' // 4 / 3
+        | 'wide'      // 16 / 9
+        | 'portrait'  // 3 / 4
+        | 'tall'      // 9 / 16
+        | string;
         "sizes"?: string;
         "src": string;
         "srcset"?: string;
@@ -2162,8 +2169,15 @@ export namespace LocalJSX {
     export interface PdsImage {
         "alt"?: string;
         "componentId"?: string;
+        "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
         "height"?: number;
         "loading"?: 'eager' | 'lazy';
+        "ratio"?: | 'square'    // 1 / 1
+        | 'landscape' // 4 / 3
+        | 'wide'      // 16 / 9
+        | 'portrait'  // 3 / 4
+        | 'tall'      // 9 / 16
+        | string;
         "sizes"?: string;
         "src"?: string;
         "srcset"?: string;
@@ -2177,9 +2191,18 @@ export namespace LocalJSX {
         // (undocumented)
         "componentId": string;
         // (undocumented)
+        "fit": 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+        // (undocumented)
         "height": number;
         // (undocumented)
         "loading": 'eager' | 'lazy';
+        // (undocumented)
+        "ratio": | 'square'    // 1 / 1
+        | 'landscape' // 4 / 3
+        | 'wide'      // 16 / 9
+        | 'portrait'  // 3 / 4
+        | 'tall'      // 9 / 16
+        | string;
         // (undocumented)
         "sizes": string;
         // (undocumented)
