@@ -1,4 +1,4 @@
-import { parseIsoDate, toIsoDate } from './date-utils';
+import { MONTH_DAY_YEAR, dateFormatter, inMonthDayYear, parseIsoDate, parseMonthDay, toIsoDate } from './date-utils';
 
 /** A day, with a wall-clock time when the time picker is on. No time zone, so it never shifts. */
 export interface DateTimeValue {
@@ -118,9 +118,15 @@ const alternatives = (words: string[]) => `(${words.map(escapeRegExp).join('|')}
 /**
  * Reads typed text in a format of tokens, as written by `formatWith`. Leading zeros are optional,
  * spaces are loose, and month names and AM/PM are matched without regard to case, in the locale or
- * in English. Returns `null` for anything that isn't a real date and time in that format.
+ * in English. A format without `YYYY` reads into `year`, and without `year` it reads nothing.
+ * Returns `null` for anything that isn't a real date and time in that format.
  */
-export function parseWith(text: string | null | undefined, format: string, locale = 'en-US'): DateTimeValue | null {
+export function parseWith(
+  text: string | null | undefined,
+  format: string,
+  locale = 'en-US',
+  year?: number,
+): DateTimeValue | null {
   const words = localeWords(locale);
   const english = localeWords('en-US');
   const periods = [words.am, words.pm, english.am, english.pm];
@@ -183,11 +189,11 @@ export function parseWith(text: string | null | undefined, format: string, local
     return undefined;
   };
 
-  const year = Number(read.YYYY);
+  const readYear = read.YYYY ? Number(read.YYYY) : year;
   const month = monthIndex(read.MMMM, true) ?? monthIndex(read.MMM, false) ?? Number(read.MM ?? read.M);
   const day = Number(read.DD ?? read.D);
-  if (!read.YYYY || !month || !day) return null;
-  const date = parseIsoDate(`${pad(year, 4)}-${pad(month)}-${pad(day)}`);
+  if (readYear === undefined || !month || !day) return null;
+  const date = parseIsoDate(`${pad(readYear, 4)}-${pad(month)}-${pad(day)}`);
   if (!date) return null;
 
   const hourText = read.HH ?? read.H ?? read.hh ?? read.h;
@@ -211,6 +217,42 @@ export function parseFieldText(
   locale = 'en-US',
 ): DateTimeValue | null {
   return parseWith(text, format, locale) ?? parseDateTime(text);
+}
+
+/**
+ * The locale's way of writing a month and day, as a format of tokens: `MMMM D` in English, `D MMMM`
+ * in French, `M月D日` in Japanese, or with `numeric`, `M/D` and `D/M`.
+ */
+export function monthDayFormat(locale = 'en-US', month: 'long' | 'numeric' = 'long'): string {
+  const parts = dateFormatter(locale, { month, day: 'numeric' }).formatToParts(new Date(Date.UTC(MONTH_DAY_YEAR, 11, 31)));
+  return parts
+    .map((part) => {
+      // Some locales write even the long month in digits, as Japanese `12月31日`.
+      if (part.type === 'month') return /^\d+$/.test(part.value) ? 'M' : 'MMMM';
+      if (part.type === 'day') return 'D';
+      // Bracketed only when it has letters a token could be read from, as the `de` in Spanish `D [de] MMMM`.
+      return /[A-Za-z]/.test(part.value) ? `[${part.value}]` : part.value;
+    })
+    .join('');
+}
+
+/**
+ * Reads a typed month and day, into month-day mode's year: in the format, then as the locale writes
+ * it with a month name or in numbers, with the English order too, then as `--MM-DD` or a full ISO
+ * date, whose year is dropped.
+ */
+export function parseMonthDayText(
+  text: string | null | undefined,
+  format: string,
+  locale = 'en-US',
+): DateTimeValue | null {
+  const formats = [format, monthDayFormat(locale), monthDayFormat(locale, 'numeric'), 'MMMM D', 'D MMMM', 'MMM D', 'D MMM'];
+  for (const candidate of formats) {
+    const read = parseWith(text, candidate, locale, MONTH_DAY_YEAR);
+    if (read) return { date: inMonthDayYear(read.date), time: null };
+  }
+  const date = parseMonthDay(text);
+  return date ? { date, time: null } : null;
 }
 
 /**

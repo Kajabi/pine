@@ -15,10 +15,14 @@ import {
   isOutOfRange,
   isSameDay,
   localeFirstDayOfWeek,
+  inMonthDayYear,
+  monthDayRows,
   monthWeeks,
   parseIsoDate,
+  parseMonthDay,
   supportedLocale,
   toIsoDate,
+  toMonthDay,
   today,
   weekdayColumn,
   weekdayNames,
@@ -32,16 +36,21 @@ import {
   compareDateTime,
   fieldFormat,
   joinTime,
+  monthDayFormat,
   parseDateTime,
   parseFieldText,
+  parseMonthDayText,
   parseRangeText,
   splitTime,
+  formatWith,
   toFieldText,
   toValueString,
 } from './value';
 import type { DateTimeValue } from './value';
 
 const FULL_DATE: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+/** A day in month-day mode, which has no year and so no weekday. */
+const MONTH_AND_DAY: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' };
 const DEFAULT_START_TIME = '00:00';
 const DEFAULT_END_TIME = '23:59';
 /** Ids for datepickers without a `component-id`, so their calendars' ids stay unique. */
@@ -78,7 +87,8 @@ const dayNumberText = (formatter: Intl.DateTimeFormat, date: Date) =>
 /**
  * A field for one date, or in range mode a start and end date, with a calendar to pick from.
  * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
- * date carries a time, as `YYYY-MM-DDTHH:mm`.
+ * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+ * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
  *
  * @part calendar - The open calendar. It's portaled out of the datepicker, so style it with `.pds-datepicker-calendar-portal::part(calendar)`.
  * @part presets - The list of preset ranges in the calendar, styled with `.pds-datepicker-calendar-portal::part(presets)`.
@@ -263,6 +273,14 @@ export class PdsDatepicker {
   @Prop() monthLabel = 'Month';
 
   /**
+   * Picks a month and day with no year, for a date that comes round every year, such as a birthday.
+   * The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes
+   * a month and day, and the calendar shows each month without a year or weekdays, with February
+   * always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`.
+   */
+  @Prop() monthDay = false;
+
+  /**
    * Specifies the name. Submitted with the form name/value pair.
    */
   @Prop() name?: string;
@@ -444,6 +462,7 @@ export class PdsDatepicker {
   @Watch('locale')
   @Watch('timePicker')
   @Watch('range')
+  @Watch('monthDay')
   @Watch('min')
   @Watch('max')
   protected contextChanged() {
@@ -464,7 +483,7 @@ export class PdsDatepicker {
 
     const parts = this.parsedValue();
     this.loadDraft(parts);
-    const day = (parts && parts[parts.length - 1].date) ?? today();
+    const day = (parts && parts[parts.length - 1].date) ?? this.now;
     this.showDate(clampDate(day, this.minDate, this.maxDate), true);
   }
 
@@ -530,11 +549,36 @@ export class PdsDatepicker {
   }
 
   private get minDate(): Date | null {
-    return parseIsoDate(this.min);
+    return this.monthDay ? null : parseIsoDate(this.min);
   }
 
   private get maxDate(): Date | null {
-    return parseIsoDate(this.max);
+    return this.monthDay ? null : parseIsoDate(this.max);
+  }
+
+  /** Range mode, which month-day mode turns off. */
+  private get isRange(): boolean {
+    return this.range && !this.monthDay;
+  }
+
+  /** The time picker, which month-day mode turns off. */
+  private get hasTime(): boolean {
+    return this.timePicker && !this.monthDay;
+  }
+
+  /** Today, or in month-day mode today's month and day. */
+  private get now(): Date {
+    return this.monthDay ? inMonthDayYear(today()) : today();
+  }
+
+  /** In month-day mode, a date moved to the mode's year, as when the calendar wraps past December. */
+  private inView(date: Date): Date {
+    return this.monthDay ? inMonthDayYear(date) : date;
+  }
+
+  /** One day as the value holds it: `YYYY-MM-DD`, or `--MM-DD` in month-day mode. */
+  private dayValue(date: Date): string {
+    return this.monthDay ? toMonthDay(date) : toIsoDate(date);
   }
 
   private get isInteractive(): boolean {
@@ -544,26 +588,26 @@ export class PdsDatepicker {
   /** How many months the calendar shows side by side. */
   private get monthCount(): number {
     const narrow = typeof window !== 'undefined' && window.innerWidth < TWO_MONTHS_MIN_WIDTH;
-    return this.range && !narrow ? 2 : 1;
+    return this.isRange && !narrow ? 2 : 1;
   }
 
   /** Whether picks apply at once, without the footer: `auto-apply` in range mode, without times. */
   private get appliesOnPick(): boolean {
-    return this.range && this.autoApply && !this.timePicker;
+    return this.isRange && this.autoApply && !this.hasTime;
   }
 
   /** Whether picks wait for Apply: for a range, unless it auto-applies, and for a date with a time. */
   private get hasFooter(): boolean {
-    return (this.range || this.timePicker) && !this.appliesOnPick;
+    return (this.isRange || this.hasTime) && !this.appliesOnPick;
   }
 
   private get resolvedPresets(): ResolvedPreset[] {
-    return this.range ? resolvePresets(this.presets, today()) : [];
+    return this.isRange ? resolvePresets(this.presets, today()) : [];
   }
 
   /** The committed value, parsed: one date, or a range's start and end. */
   private parsedValue(value = this.value): DateTimeValue[] | null {
-    if (this.range) {
+    if (this.isRange) {
       const [start, end, extra] = (value ?? '').split('/');
       const startValue = parseDateTime(start);
       const endValue = parseDateTime(end);
@@ -571,13 +615,22 @@ export class PdsDatepicker {
         ? [startValue, endValue]
         : null;
     }
+    if (this.monthDay) {
+      const date = parseMonthDay(value);
+      return date ? [{ date, time: null }] : null;
+    }
     const single = parseDateTime(value);
     return single ? [single] : null;
   }
 
   /** The format the field shows and reads, with a time when the time picker is on. */
   private get resolvedFormat(): string {
-    return fieldFormat(this.format, this.timePicker, this.timePicker && clockFor(this.resolvedLocale).hour12);
+    if (this.monthDay) {
+      // A format with a year is the default, or one for full dates: use the locale's month and day.
+      const format = this.format?.trim();
+      return format && !/YYYY/.test(format.replace(/\[[^\]]*\]/g, '')) ? format : monthDayFormat(this.resolvedLocale);
+    }
+    return fieldFormat(this.format, this.hasTime, this.hasTime && clockFor(this.resolvedLocale).hour12);
   }
 
   /** What the field shows for the committed value. */
@@ -592,20 +645,24 @@ export class PdsDatepicker {
 
   /** Drops a time the time picker doesn't show, or adds the default one it does. */
   private withTimePicker(value: DateTimeValue, fallback = DEFAULT_START_TIME): DateTimeValue {
-    return { date: value.date, time: this.timePicker ? (value.time ?? fallback) : null };
+    return { date: value.date, time: this.hasTime ? (value.time ?? fallback) : null };
   }
 
   private get fieldPlaceholder(): string {
     if (this.placeholder) return this.placeholder;
+    // Month-day tokens, as `MMMM D`, don't read as a hint; an example date does.
+    if (this.monthDay) {
+      return formatWith({ date: parseMonthDay('--12-31')!, time: null }, this.resolvedFormat, this.resolvedLocale);
+    }
     const one = this.resolvedFormat;
-    return this.range ? `${one}${RANGE_SEPARATOR}${one}` : one;
+    return this.isRange ? `${one}${RANGE_SEPARATOR}${one}` : one;
   }
 
   /** Loads the committed value into the draft the calendar edits. */
   private loadDraft(parts: DateTimeValue[] | null) {
     const [start, end] = parts ?? [];
     this.draftStart = start ? toIsoDate(start.date) : '';
-    this.draftEnd = this.range && end ? toIsoDate(end.date) : '';
+    this.draftEnd = this.isRange && end ? toIsoDate(end.date) : '';
     this.startTime = start?.time ?? DEFAULT_START_TIME;
     this.endTime = end?.time ?? DEFAULT_END_TIME;
     this.previewDate = '';
@@ -621,7 +678,7 @@ export class PdsDatepicker {
     const parts = this.parsedValue();
     this.loadDraft(parts);
     this.valueAtOpen = this.value ?? '';
-    const start = (parts && parts[parts.length - 1].date) ?? today();
+    const start = (parts && parts[parts.length - 1].date) ?? this.now;
 
     this.showDate(clampDate(start, this.minDate, this.maxDate), true);
     this.focusActiveDay = focusDay;
@@ -644,7 +701,8 @@ export class PdsDatepicker {
    * Makes a day the active one and brings it into view. With two months, a day already on view
    * doesn't move the view; `reset` lines the view up so the day is in the last month shown.
    */
-  private showDate(date: Date, reset = false) {
+  private showDate(day: Date, reset = false) {
+    const date = this.inView(day);
     const first = firstOfMonth(date);
     const view = parseIsoDate(this.viewMonth);
     const lastView = view && addMonths(view, this.monthCount - 1);
@@ -663,13 +721,13 @@ export class PdsDatepicker {
     // as when nothing was typed.
     this.dropTypedText();
 
-    if (this.range) {
+    if (this.isRange) {
       this.pickRangeDay(date);
-    } else if (this.timePicker) {
+    } else if (this.hasTime) {
       this.draftStart = toIsoDate(date);
       this.activeDate = this.draftStart;
     } else {
-      this.commitValue(toIsoDate(date));
+      this.commitValue(this.dayValue(date));
       this.closeCalendar(true);
     }
   }
@@ -712,7 +770,11 @@ export class PdsDatepicker {
 
   /** Commits one date, or a range with its start, end and matching preset. */
   private commitParts(parts: DateTimeValue[]) {
-    if (!this.range) {
+    if (this.monthDay) {
+      this.commitValue(toMonthDay(parts[0].date));
+      return;
+    }
+    if (!this.isRange) {
       this.commitValue(toValueString(parts[0]));
       return;
     }
@@ -732,7 +794,7 @@ export class PdsDatepicker {
     if (!startDate) return null;
 
     const start = this.withTimePicker({ date: startDate, time: this.startTime });
-    if (!this.range) return [start];
+    if (!this.isRange) return [start];
 
     const end = this.withTimePicker({ date: parseIsoDate(this.draftEnd) ?? startDate, time: this.endTime });
     // An end time before the start time on the same day ends at the start.
@@ -1005,16 +1067,16 @@ export class PdsDatepicker {
     // The times before the typed text changed them, for a pick in the calendar to go back to.
     this.timesBeforeTyping ??= [startTime, endTime];
     this.loadDraft(parts);
-    if (this.timePicker) {
+    if (this.hasTime) {
       // A time picked in the calendar survives typing that doesn't change the time: text with no
       // time, as a date part-way typed, or with the time as committed.
       const format = this.resolvedFormat;
       const locale = this.resolvedLocale;
-      const typed = this.range ? parseRangeText(this.text, format, locale) : [parseFieldText(this.text, format, locale)];
+      const typed = this.isRange ? parseRangeText(this.text, format, locale) : [parseFieldText(this.text, format, locale)];
       const committed = this.parsedValue();
       const keeps = (i: number) => !typed?.[i]?.time || typed[i]?.time === committed?.[i]?.time;
       if (keeps(0)) this.startTime = startTime;
-      if (this.range && keeps(1)) this.endTime = endTime;
+      if (this.isRange && keeps(1)) this.endTime = endTime;
     }
     this.showDate(parts[parts.length - 1].date);
   };
@@ -1050,7 +1112,11 @@ export class PdsDatepicker {
   private readText(text: string): DateTimeValue[] | null {
     const format = this.resolvedFormat;
     const locale = this.resolvedLocale;
-    const parts = this.range ? parseRangeText(text, format, locale) : [parseFieldText(text, format, locale)];
+    const parts = this.monthDay
+      ? [parseMonthDayText(text, format, locale)]
+      : this.isRange
+        ? parseRangeText(text, format, locale)
+        : [parseFieldText(text, format, locale)];
     if (!parts || parts.some((part) => !part)) return null;
     return parts.map((part, i) => this.withTimePicker(part, i === 1 ? DEFAULT_END_TIME : DEFAULT_START_TIME));
   }
@@ -1158,16 +1224,16 @@ export class PdsDatepicker {
 
   /** Whether the month before (`-1`) or after (`1`) the ones on view has a day in range. */
   private canShowMonth(direction: -1 | 1): boolean {
-    const view = parseIsoDate(this.viewMonth) ?? today();
+    const view = parseIsoDate(this.viewMonth) ?? this.now;
     if (direction < 0) return !this.minDate || addDays(view, -1) >= this.minDate;
     return !this.maxDate || addMonths(view, this.monthCount) <= this.maxDate;
   }
 
   private showMonth(event: MouseEvent, direction: -1 | 1) {
-    const view = parseIsoDate(this.viewMonth) ?? today();
-    const active = parseIsoDate(this.activeDate) ?? today();
-    this.viewMonth = toIsoDate(addMonths(view, direction));
-    this.activeDate = toIsoDate(clampDate(addMonths(active, direction), this.minDate, this.maxDate));
+    const view = parseIsoDate(this.viewMonth) ?? this.now;
+    const active = parseIsoDate(this.activeDate) ?? this.now;
+    this.viewMonth = toIsoDate(this.inView(addMonths(view, direction)));
+    this.activeDate = toIsoDate(clampDate(this.inView(addMonths(active, direction)), this.minDate, this.maxDate));
 
     if (this.canShowMonth(direction)) {
       // Safari doesn't focus a clicked button; without this, focus falls to the page and Escape and
@@ -1243,7 +1309,8 @@ export class PdsDatepicker {
     if (!active) return;
 
     const rtl = getComputedStyle(this.el).direction === 'rtl';
-    const column = weekdayColumn(active, this.weekStart);
+    // Month-day mode's rows start on the 1st, not on a weekday.
+    const column = this.monthDay ? (active.getUTCDate() - 1) % 7 : weekdayColumn(active, this.weekStart);
     let next: Date | null = null;
 
     switch (event.key) {
@@ -1282,9 +1349,9 @@ export class PdsDatepicker {
     }
 
     event.preventDefault();
-    const target = clampDate(next, this.minDate, this.maxDate);
+    const target = clampDate(this.inView(next), this.minDate, this.maxDate);
     this.showDate(target);
-    if (this.range) this.previewDate = toIsoDate(target);
+    if (this.isRange) this.previewDate = toIsoDate(target);
     this.focusActiveDay = true;
   };
 
@@ -1301,7 +1368,7 @@ export class PdsDatepicker {
   };
 
   private onGridPointerOver = (event: PointerEvent) => {
-    if (!this.range || !this.draftStart || this.draftEnd) return;
+    if (!this.isRange || !this.draftStart || this.draftEnd) return;
     const date = this.dayFromEvent(event);
     const iso = date && toIsoDate(date);
     if (iso && iso !== this.previewDate) this.previewDate = iso;
@@ -1366,7 +1433,7 @@ export class PdsDatepicker {
     const parts = this.parsedValue();
     if (!parts) return this.triggerLabel;
 
-    const dates = parts.map((part) => formatDate(part.date, locale, FULL_DATE));
+    const dates = parts.map((part) => formatDate(part.date, locale, this.monthDay ? MONTH_AND_DAY : FULL_DATE));
     return `${this.triggerLabel}, ${dates.join(RANGE_SEPARATOR)}`;
   }
 
@@ -1382,15 +1449,15 @@ export class PdsDatepicker {
 
   /** The day shown as selected: the draft, which opens as the committed day and follows typing. */
   private selectedDay(): Date | null {
-    if (this.range) return null;
+    if (this.isRange) return null;
     return parseIsoDate(this.draftStart);
   }
 
   private renderMonthHeading(view: Date, index: number, locale: string, headingId: string) {
-    const heading = formatDate(view, locale, { month: 'long', year: 'numeric' });
+    const heading = formatDate(view, locale, this.monthDay ? { month: 'long' } : { month: 'long', year: 'numeric' });
     // Only the first month announces itself as it changes; two months move together.
     const live = index === 0 ? 'polite' : null;
-    if (!this.showDropdowns) {
+    if (!this.showDropdowns || this.monthDay) {
       return (
         <div class="pds-datepicker__heading" id={headingId} aria-live={live}>
           {heading}
@@ -1458,9 +1525,9 @@ export class PdsDatepicker {
     const min = this.minDate;
     const max = this.maxDate;
     const selected = this.selectedDay();
-    const [rangeStart, rangeEnd] = this.range ? this.highlightedRange() : [null, null];
-    const now = today();
-    const fullDate = dateFormatter(locale, FULL_DATE);
+    const [rangeStart, rangeEnd] = this.isRange ? this.highlightedRange() : [null, null];
+    const now = this.now;
+    const fullDate = dateFormatter(locale, this.monthDay ? MONTH_AND_DAY : FULL_DATE);
     const dayNumber = dateFormatter(locale, { day: 'numeric' });
     const headingId = `${this.baseId}-calendar-heading-${index}`;
     const isFirst = index === 0;
@@ -1502,23 +1569,25 @@ export class PdsDatepicker {
           class="pds-datepicker__grid"
           role="grid"
           aria-labelledby={headingId}
-          aria-multiselectable={this.range ? 'true' : null}
+          aria-multiselectable={this.isRange ? 'true' : null}
           onKeyDown={this.onGridKeyDown}
           onClick={this.onGridClick}
           onPointerOver={this.onGridPointerOver}
         >
-          <thead>
-            <tr>
-              {weekdayNames(locale, this.weekStart).map((name) => (
-                <th scope="col" class="pds-datepicker__weekday">
-                  <span aria-hidden="true">{name.short}</span>
-                  <span class="visually-hidden">{name.long}</span>
-                </th>
-              ))}
-            </tr>
-          </thead>
+          {!this.monthDay && (
+            <thead>
+              <tr>
+                {weekdayNames(locale, this.weekStart).map((name) => (
+                  <th scope="col" class="pds-datepicker__weekday">
+                    <span aria-hidden="true">{name.short}</span>
+                    <span class="visually-hidden">{name.long}</span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          )}
           <tbody>
-            {monthWeeks(year, month, this.weekStart).map((week) => (
+            {(this.monthDay ? monthDayRows(month) : monthWeeks(year, month, this.weekStart)).map((week) => (
               <tr>
                 {week.map((date, column) => {
                   if (!date) return <td class="pds-datepicker__day pds-datepicker__day--empty" />;
@@ -1560,7 +1629,7 @@ export class PdsDatepicker {
           </tbody>
         </table>
 
-        {this.timePicker && this.timesUnderMonth(index).map((which) => this.renderTime(which, locale))}
+        {this.hasTime && this.timesUnderMonth(index).map((which) => this.renderTime(which, locale))}
       </div>
     );
   }
@@ -1570,7 +1639,7 @@ export class PdsDatepicker {
    * second, or both under the one month a narrow range shows.
    */
   private timesUnderMonth(index: number): ('start' | 'end')[] {
-    if (!this.range) return ['start'];
+    if (!this.isRange) return ['start'];
     if (this.monthCount === 1) return ['start', 'end'];
     return [index === 0 ? 'start' : 'end'];
   }
@@ -1590,7 +1659,7 @@ export class PdsDatepicker {
       // A time chosen here after typing stays when a pick later drops the typed text.
       if (this.timesBeforeTyping) this.timesBeforeTyping[which === 'start' ? 0 : 1] = time;
     };
-    const groupLabel = !this.range ? this.timeLabel : which === 'start' ? this.startTimeLabel : this.endTimeLabel;
+    const groupLabel = !this.isRange ? this.timeLabel : which === 'start' ? this.startTimeLabel : this.endTimeLabel;
     const isPm = hours >= 12;
     const hourOptions = clock.hour12 ? Array.from({ length: 12 }, (_, i) => i + 1) : Array.from({ length: 24 }, (_, i) => i);
     const shownHour = clock.hour12 ? hours % 12 || 12 : hours;
@@ -1719,7 +1788,7 @@ export class PdsDatepicker {
     if (!parts) return '';
     const format = this.resolvedFormat;
     const locale = this.resolvedLocale;
-    if (this.range && !this.draftEnd) return `${toFieldText(parts[0], format, locale)}${RANGE_SEPARATOR}`;
+    if (this.isRange && !this.draftEnd) return `${toFieldText(parts[0], format, locale)}${RANGE_SEPARATOR}`;
     return parts.map((part) => toFieldText(part, format, locale)).join(RANGE_SEPARATOR);
   }
 
@@ -1748,26 +1817,26 @@ export class PdsDatepicker {
   }
 
   private renderCalendar(locale: string) {
-    const view = parseIsoDate(this.viewMonth) ?? today();
+    const view = parseIsoDate(this.viewMonth) ?? this.now;
     const months = Array.from({ length: this.monthCount }, (_, i) => addMonths(view, i));
 
     return (
       <div
-        class={{ 'pds-datepicker__dialog': true, 'pds-datepicker__dialog--range': this.range }}
+        class={{ 'pds-datepicker__dialog': true, 'pds-datepicker__dialog--range': this.isRange }}
         id={`${this.baseId}-calendar`}
         role="dialog"
         // A click on a part that can't take focus, as the month heading, focuses the dialog
         // rather than dropping focus to the page, which would report blur mid-selection.
         tabindex="-1"
-        aria-labelledby={this.range ? null : `${this.baseId}-calendar-heading-0`}
-        aria-label={this.range ? this.label || this.triggerLabel : null}
+        aria-labelledby={this.isRange ? null : `${this.baseId}-calendar-heading-0`}
+        aria-label={this.isRange ? this.label || this.triggerLabel : null}
         part="calendar"
         ref={(el) => (this.dialogEl = el)}
         onKeyDown={this.onDialogKeyDown}
         onFocusin={this.onCalendarFocusIn}
         onFocusout={this.onCalendarFocusOut}
       >
-        {this.range && this.renderPresets()}
+        {this.isRange && this.renderPresets()}
         <div class="pds-datepicker__panel">
           <div class="pds-datepicker__months">{months.map((month, index) => this.renderMonth(month, index, locale))}</div>
           {this.hasFooter && this.renderFooter()}
@@ -1787,7 +1856,7 @@ export class PdsDatepicker {
 
     return (
       <Host
-        class={{ 'pds-datepicker--range': this.range, 'pds-datepicker--time': this.timePicker }}
+        class={{ 'pds-datepicker--range': this.isRange, 'pds-datepicker--time': this.hasTime }}
         full-width={this.fullWidth ? 'true' : null}
         onFocusin={this.onHostFocusIn}
         onFocusout={this.onHostFocusOut}

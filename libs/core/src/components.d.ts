@@ -1206,7 +1206,8 @@ export namespace Components {
     /**
      * A field for one date, or in range mode a start and end date, with a calendar to pick from.
      * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
-     * date carries a time, as `YYYY-MM-DDTHH:mm`.
+     * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+     * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
      */
     interface PdsDatepicker {
         /**
@@ -1331,6 +1332,11 @@ export namespace Components {
           * @default 'Minute'
          */
         "minuteLabel": string;
+        /**
+          * Picks a month and day with no year, for a date that comes round every year, such as a birthday. The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes a month and day, and the calendar shows each month without a year or weekdays, with February always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`.
+          * @default false
+         */
+        "monthDay": boolean;
         /**
           * Accessible label for the month dropdown, when `show-dropdowns` is set.
           * @default 'Month'
@@ -3288,7 +3294,8 @@ declare global {
     /**
      * A field for one date, or in range mode a start and end date, with a calendar to pick from.
      * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
-     * date carries a time, as `YYYY-MM-DDTHH:mm`.
+     * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+     * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
      */
     interface HTMLPdsDatepickerElement extends Components.PdsDatepicker, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsDatepickerElementEventMap>(type: K, listener: (this: HTMLPdsDatepickerElement, ev: PdsDatepickerCustomEvent<HTMLPdsDatepickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5118,7 +5125,8 @@ declare namespace LocalJSX {
     /**
      * A field for one date, or in range mode a start and end date, with a calendar to pick from.
      * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
-     * date carries a time, as `YYYY-MM-DDTHH:mm`.
+     * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+     * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
      */
     interface PdsDatepicker {
         /**
@@ -5243,6 +5251,11 @@ declare namespace LocalJSX {
           * @default 'Minute'
          */
         "minuteLabel"?: string;
+        /**
+          * Picks a month and day with no year, for a date that comes round every year, such as a birthday. The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes a month and day, and the calendar shows each month without a year or weekdays, with February always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`.
+          * @default false
+         */
+        "monthDay"?: boolean;
         /**
           * Accessible label for the month dropdown, when `show-dropdowns` is set.
           * @default 'Month'
@@ -7316,6 +7329,7 @@ declare namespace LocalJSX {
         "minuteIncrement": number;
         "minuteLabel": string;
         "monthLabel": string;
+        "monthDay": boolean;
         "name": string;
         "nextMonthLabel": string;
         "periodLabel": string;
@@ -7810,7 +7824,8 @@ declare module "@stencil/core" {
             /**
              * A field for one date, or in range mode a start and end date, with a calendar to pick from.
              * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
-             * date carries a time, as `YYYY-MM-DDTHH:mm`.
+             * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+             * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
              */
             "pds-datepicker": LocalJSX.IntrinsicElements["pds-datepicker"] & JSXBase.HTMLAttributes<HTMLPdsDatepickerElement>;
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;

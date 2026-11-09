@@ -143,3 +143,49 @@ export function dateFormatter(locale: string, options: Intl.DateTimeFormatOption
 export function formatDate(date: Date, locale: string, options: Intl.DateTimeFormatOptions): string {
   return dateFormatter(locale, options).format(date);
 }
+
+/**
+ * Month-day mode's year. A leap year, so February has its 29th; every date the mode holds is in it,
+ * and the value drops it (`--MM-DD`).
+ */
+export const MONTH_DAY_YEAR = 2000;
+
+const MONTH_DAY = /^--(\d{2})-(\d{2})$/;
+
+/** The same month and day in month-day mode's year. */
+export function inMonthDayYear(date: Date): Date {
+  return new Date(Date.UTC(MONTH_DAY_YEAR, date.getUTCMonth(), date.getUTCDate()));
+}
+
+/**
+ * Parses a month and day, `--MM-DD` (ISO 8601 without a year), to a date in month-day mode's year.
+ * A full `YYYY-MM-DD` reads as its month and day. `null` when it isn't a real month and day.
+ */
+export function parseMonthDay(value: string | null | undefined): Date | null {
+  const text = (value ?? '').trim();
+  const match = MONTH_DAY.exec(text);
+  if (match) return parseIsoDate(`${MONTH_DAY_YEAR}-${match[1]}-${match[2]}`);
+  const date = parseIsoDate(text);
+  return date && inMonthDayYear(date);
+}
+
+/** A date's month and day as `--MM-DD`. */
+export function toMonthDay(date: Date): string {
+  return `-${toIsoDate(date).slice(4)}`;
+}
+
+/**
+ * A month's days for month-day mode, which has no weekdays: rows of seven from the 1st, with the
+ * last row filled out with `null`.
+ */
+export function monthDayRows(month: number): (Date | null)[][] {
+  const cells: (Date | null)[] = [];
+  for (let day = 1; day <= daysInMonth(MONTH_DAY_YEAR, month); day++) {
+    cells.push(new Date(Date.UTC(MONTH_DAY_YEAR, month, day)));
+  }
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  const rows: (Date | null)[][] = [];
+  for (let i = 0; i < cells.length; i += 7) rows.push(cells.slice(i, i + 7));
+  return rows;
+}
