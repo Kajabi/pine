@@ -926,6 +926,15 @@ describe('pds-combobox', () => {
         return { ...state, from: parseFloat(state.from), to: parseFloat(state.to), cleared: state.from === '' && state.to === '' };
       };
 
+      // Seeks the held glide back to its first frame before it's read: on a slow runner it can get a
+      // few frames in before the hold takes.
+      const seekGlideStart = (page: Page) =>
+        page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          const animation = root.getAnimations().find(a => (a as CSSAnimation).animationName === 'pds-combobox-height-glide');
+          if (animation) animation.currentTime = 0;
+        });
+
       // Runs the held glide to its end, as if its time had passed.
       const finishGlide = (page: Page) =>
         page.evaluate(() => {
@@ -939,6 +948,7 @@ describe('pds-combobox', () => {
         await holdAnimations(page);
 
         await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        await seekGlideStart(page);
         const start = await glide(page);
         expect(start.gliding).toBe(true);
         expect(start.from).toBeCloseTo(groupsHeight, 0);
@@ -978,6 +988,7 @@ describe('pds-combobox', () => {
         await holdAnimations(page);
 
         await click(page, '.pds-combobox__group-row:nth-of-type(1) .pds-combobox__group-row-trigger');
+        await seekGlideStart(page);
         const start = await panel();
         expect(start.gliding).toBe(true);
         // The first frame is the groups' height exactly (the padding isn't added on top), and the
@@ -1058,6 +1069,7 @@ describe('pds-combobox', () => {
         expect(halfway).toBeLessThan(Math.max(groupsHeight, groupHeight) - 1);
 
         await click(page, '.pds-combobox__group-back-trigger');
+        await seekGlideStart(page);
         const back = await glide(page);
         expect(back.gliding).toBe(true);
         expect(back.from).toBeCloseTo(halfway, 0);
