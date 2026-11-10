@@ -876,9 +876,11 @@ export interface DatepickerChangeEventDetail {
 // @public (undocumented)
 export interface DatepickerPreset {
     end?: string;
+    endOffset?: number;
     key: string;
     label?: string;
     start?: string;
+    startOffset?: number;
 }
 
 // Warning: (ae-forgotten-export) The symbol "EventDecorator" needs to be exported by the entry point index.d.ts
