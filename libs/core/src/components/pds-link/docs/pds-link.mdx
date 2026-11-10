@@ -76,6 +76,30 @@ The `plain` variant displays a standard plain hyperlink without an underline.
   <pds-link href="#some-anchor" variant="plain"></pds-link>
 </DocCanvas>
 
+### Active
+
+Set `active` on the link for the current page in a nav rail or tab strip built from links. It sets `aria-current="page"` and keeps the link underlined with strong text. Mark only one link in a set as active.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsBox direction="column" gap="sm">
+      <PdsLink href="/settings/profile" variant="plain" active>Profile</PdsLink>
+      <PdsLink href="/settings/billing" variant="plain">Billing</PdsLink>
+      <PdsLink href="/settings/notifications" variant="plain">Notifications</PdsLink>
+    </PdsBox>`,
+    webComponent: `<pds-box direction="column" gap="sm">
+      <pds-link href="/settings/profile" variant="plain" active>Profile</pds-link>
+      <pds-link href="/settings/billing" variant="plain">Billing</pds-link>
+      <pds-link href="/settings/notifications" variant="plain">Notifications</pds-link>
+    </pds-box>`
+}}>
+  <pds-box direction="column" gap="sm">
+    <pds-link href="/settings/profile" variant="plain" active>Profile</pds-link>
+    <pds-link href="/settings/billing" variant="plain">Billing</pds-link>
+    <pds-link href="/settings/notifications" variant="plain">Notifications</pds-link>
+  </pds-box>
+</DocCanvas>
+
 ### External
 
 An `external` link is styled with an icon to indicate that it will redirect users to an external website or resource in a new tab. Screen readers hear "(opens in a new tab)" after the link text; pass a translated `externalLabel` to localize it, or an empty string to leave it out. The icon only appears with `external`, so a link that sets only `target="_blank"` announces nothing extra.
@@ -108,9 +132,21 @@ The `target` prop specifies where to open the linked document and supports all s
   <pds-link href="#section" target="_self">Opens in same frame</pds-link>
 </DocCanvas>
 
+### Download
+
+Set `download` to prompt the user to save the linked file instead of opening it. Pass a filename to suggest one, or leave the value empty to keep the file's own name. Browsers ignore `download` on cross-origin URLs.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsLink href="/files/quarterly-report.pdf" download="quarterly-report.pdf">Download the quarterly report</PdsLink>',
+    webComponent: '<pds-link href="/files/quarterly-report.pdf" download="quarterly-report.pdf">Download the quarterly report</pds-link>'
+}}>
+  <pds-link href="/files/quarterly-report.pdf" download="quarterly-report.pdf">Download the quarterly report</pds-link>
+</DocCanvas>
+
 ### Font Size
 
-The `font-size` prop can be used to adjust the size of the link text. `sm` is 12px, `md` is 14px, and `lg` is 16px. `md` is the default size.
+The `font-size` prop can be used to adjust the size of the link text. `sm`, `md` and `lg` use the `body-xs`, `body-sm` and `body-md` font sizes (10px, 12px and 14px). `lg` is the default size.
 
 <DocCanvas
   mdxSource={{
@@ -179,6 +215,8 @@ Two things to pair with it:
   display="block"
   mdxSource={{
     react: `
+    import { file } from '@pine-ds/icons/icons';
+
     <style>{\`
       .pds-link-row {
         position: relative;
@@ -208,7 +246,7 @@ Two things to pair with it:
 
     <PdsBox className="pds-link-row" border borderRadius="md" padding="sm" alignItems="center" justifyContent="space-between">
       <PdsBox gap="xs" alignItems="center">
-        <PdsIcon name="file" aria-hidden="true" />
+        <PdsIcon icon={file} />
         <PdsLink href="#row-target">Quarterly report</PdsLink>
       </PdsBox>
       <PdsBox className="pds-link-row__trailing">
@@ -246,7 +284,7 @@ Two things to pair with it:
 
     <pds-box class="pds-link-row" border border-radius="md" padding="sm" align-items="center" justify-content="space-between">
       <pds-box gap="xs" align-items="center">
-        <pds-icon name="file" aria-hidden="true"></pds-icon>
+        <pds-icon name="file"></pds-icon>
         <pds-link href="#row-target">Quarterly report</pds-link>
       </pds-box>
       <pds-box class="pds-link-row__trailing">
@@ -284,7 +322,7 @@ Two things to pair with it:
 
   <pds-box className="pds-link-row" border border-radius="md" padding="sm" align-items="center" justify-content="space-between">
     <pds-box gap="xs" align-items="center">
-      <pds-icon name="file" aria-hidden="true"></pds-icon>
+      <pds-icon name="file"></pds-icon>
       <pds-link href="#row-target">Quarterly report</pds-link>
     </pds-box>
     <pds-box className="pds-link-row__trailing">
@@ -292,6 +330,21 @@ Two things to pair with it:
     </pds-box>
   </pds-box>
 </DocCanvas>
+
+## Navigation Attributes
+
+These props copy their value to a `data-*` attribute on the link's inner `<a>`, for client-side navigation libraries that read link behavior from those attributes. `pds-link` doesn't act on them itself, and an empty value leaves the attribute off.
+
+| Prop | Attribute | Values |
+| --- | --- | --- |
+| `turbo` | `data-turbo` | string |
+| `turbo-action` | `data-turbo-action` | `advance`, `replace` |
+| `turbo-confirm` | `data-turbo-confirm` | string |
+| `turbo-frame` | `data-turbo-frame` | string |
+| `turbo-method` | `data-turbo-method` | `get`, `post`, `put`, `patch`, `delete` |
+| `turbo-prefetch` | `data-turbo-prefetch` | string |
+| `turbo-preload` | `data-turbo-preload` | string |
+| `turbo-stream` | `data-turbo-stream` | string |
 
 ## Additional Resources
 
@@ -301,6 +354,6 @@ Two things to pair with it:
 
 ## Playground
 
-<Canvas of={stories.Colors} />
+<Canvas of={stories.Inline} />
 
-<Controls of={stories.Colors} />
+<Controls of={stories.Inline} />
