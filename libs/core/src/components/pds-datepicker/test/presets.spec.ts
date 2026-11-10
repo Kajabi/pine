@@ -96,6 +96,21 @@ describe('pds-datepicker presets', () => {
     expect(presets.map((p) => [p.key, p.label])).toEqual([['today', 'Today']]);
   });
 
+  it('treats a blank label as no label, so no preset renders as an empty button', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const presets = resolvePresets(
+      [
+        { key: 'yesterday', label: '' },
+        { key: 'blank-label-key', label: '   ', startOffset: -2 },
+      ],
+      NOW,
+    );
+    warn.mockRestore();
+
+    // A built-in falls back to its own label; a key of your own has none to fall back to.
+    expect(presets.map((p) => [p.key, p.label])).toEqual([['yesterday', 'Yesterday']]);
+  });
+
   describe('a preset of your own, relative to today', () => {
     const offsets = (preset: Partial<DatepickerPreset>) => {
       const result = offsetPresetRange({ key: 'mine', ...preset } as DatepickerPreset, NOW);
