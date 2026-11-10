@@ -1008,6 +1008,56 @@ describe('pds-multiselect truncation', () => {
       expect(await tooltips(page)).toEqual([firstTag]);
     });
 
+    // The rows sit between the search input and the options, whose checkboxes Tab jumps past.
+    describe('by keyboard', () => {
+      const focused = (page: Page) =>
+        page.evaluate(() => {
+          const inner = document.querySelector('pds-multiselect').shadowRoot.activeElement;
+          if (inner?.classList.contains('pds-multiselect__selected-item')) return inner.textContent;
+          if (inner?.classList.contains('pds-multiselect__search-input')) return 'search';
+          if (inner?.classList.contains('pds-multiselect__trigger')) return 'trigger';
+          return document.activeElement?.id;
+        });
+
+      const press = async (page: Page, key: 'Tab' | 'Shift+Tab') => {
+        if (key === 'Shift+Tab') await page.keyboard.down('Shift');
+        await page.keyboard.press('Tab');
+        if (key === 'Shift+Tab') await page.keyboard.up('Shift');
+        await page.waitForChanges();
+        await settle();
+        return focused(page);
+      };
+
+      it('tabs from the search input through each clipped row to the footer, and back', async () => {
+        const page = await narrow(['1', '2']);
+        await page.$eval('pds-multiselect', el => {
+          el.insertAdjacentHTML('beforeend', '<div slot="footer"><button type="button" id="manage">Manage tags</button></div>');
+        });
+        await page.waitForChanges();
+        await openBuiltInTrigger(page);
+
+        expect(await press(page, 'Tab')).toBe(firstTag);
+        await page.waitForSelector('.pds-truncation-tooltip--visible');
+        expect(await tooltips(page)).toEqual([firstTag]);
+
+        expect(await press(page, 'Tab')).toBe(secondTag);
+        expect(await press(page, 'Tab')).toBe('manage');
+        expect(await press(page, 'Shift+Tab')).toBe(secondTag);
+        expect(await press(page, 'Shift+Tab')).toBe(firstTag);
+        expect(await press(page, 'Shift+Tab')).toBe('search');
+        expect(await isPanelOpen(page)).toBe(true);
+      });
+
+      it('closes onto the trigger when Tab leaves the last row with no footer', async () => {
+        const page = await openWithSelections();
+
+        expect(await press(page, 'Tab')).toBe(firstTag);
+        expect(await press(page, 'Tab')).toBe(secondTag);
+        expect(await press(page, 'Tab')).toBe('trigger');
+        expect(await isPanelOpen(page)).toBe(false);
+      });
+    });
+
     it('has no axe violations while the rows are clipped', async () => {
       const page = await openWithSelections();
 

@@ -41,7 +41,7 @@ const TABBABLE_SELECTOR =
 export class PdsMultiselect {
   private triggerEl?: HTMLButtonElement | HTMLDivElement;
   private triggerTextTooltip = bindTruncationTooltips((textEl) => ({
-    // The `part="trigger"` surface, not the host, whose child the panel is; focus on either trigger bubbles there.
+    // Not the host, which holds the panel.
     hostEl: textEl.closest<HTMLElement>('[part="trigger"]') ?? textEl,
     contentEl: textEl,
     getTooltipText: () => this.getTriggerText(),
@@ -1167,23 +1167,41 @@ export class PdsMultiselect {
       // Escape is handled by the global @Listen('keydown') handler
 
       case 'Tab': {
-        const firstFooterTabbable = e.shiftKey ? undefined : this.getFooterTabbables()[0];
-        firstFooterTabbable?.focus();
-        if (firstFooterTabbable?.matches(':focus')) {
-          // Each option's checkbox is a tab stop, so jump past them to the footer.
+        const row = e.shiftKey ? undefined : this.getSelectedItemTabbables()[0];
+        if (row !== undefined) {
+          row.focus();
           e.preventDefault();
         } else {
-          this.closeDropdown();
-          // Tab would move on to an option's checkbox, which closing removes, dropping focus to the page.
-          // Land on the trigger instead, as Escape does; Shift+Tab already reaches it.
-          const trigger = e.shiftKey ? undefined : this.activeTriggerEl;
-          trigger?.focus();
-          if (trigger?.matches(':focus')) e.preventDefault();
+          this.tabPastOptions(e);
         }
         break;
       }
     }
   };
+
+  private handleSelectedListKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Tab' && !e.shiftKey && e.composedPath()[0] === this.getSelectedItemTabbables().pop()) this.tabPastOptions(e);
+  };
+
+  private tabPastOptions(e: KeyboardEvent) {
+    const firstFooterTabbable = e.shiftKey ? undefined : this.getFooterTabbables()[0];
+    firstFooterTabbable?.focus();
+    if (firstFooterTabbable?.matches(':focus')) {
+      // Each option's checkbox is a tab stop, so jump past them to the footer.
+      e.preventDefault();
+    } else {
+      this.closeDropdown();
+      // Tab would move on to an option's checkbox, which closing removes, dropping focus to the page.
+      // Land on the trigger instead, as Escape does; Shift+Tab already reaches it.
+      const trigger = e.shiftKey ? undefined : this.activeTriggerEl;
+      trigger?.focus();
+      if (trigger?.matches(':focus')) e.preventDefault();
+    }
+  }
+
+  private getSelectedItemTabbables(): HTMLElement[] {
+    return Array.from(this.el.shadowRoot.querySelectorAll<HTMLElement>('.pds-multiselect__selected-item[tabindex="0"]'));
+  }
 
   private handleFooterKeyDown = (e: KeyboardEvent) => {
     if (e.key !== 'Tab') return;
@@ -1192,7 +1210,7 @@ export class PdsMultiselect {
 
     if (e.shiftKey && focused === tabbables[0]) {
       e.preventDefault();
-      this.searchInputEl?.focus();
+      (this.getSelectedItemTabbables().pop() ?? this.searchInputEl)?.focus();
     } else if (!e.shiftKey && focused === tabbables[tabbables.length - 1]) {
       this.closeDropdown();
     }
@@ -1569,7 +1587,7 @@ export class PdsMultiselect {
 
     return (
       <div class="pds-multiselect__selected-section">
-        <ul class="pds-multiselect__selected-list" role="list">
+        <ul class="pds-multiselect__selected-list" role="list" onKeyDown={this.handleSelectedListKeyDown}>
           {this.selectedItems.map(item => (
             <li key={String(item.id)} class="pds-multiselect__selected-item">
               {item.text}
