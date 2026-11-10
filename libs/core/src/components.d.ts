@@ -1157,7 +1157,7 @@ export namespace Components {
          */
         "truncate": boolean;
         /**
-          * The value of the combobox input.
+          * The `value` of the selected option.
           * @default ''
          */
         "value": string;
@@ -1681,7 +1681,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Sets the number of milliseconds to wait before updating the value.
+          * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -2572,7 +2572,7 @@ export namespace Components {
          */
         "label": string;
         /**
-          * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
+          * Specifies the name. Submitted with the form name/value pair when checked.
          */
         "name": string;
         /**
@@ -2854,7 +2854,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * The amount of time, in milliseconds, to wait to trigger the event after each keystroke.
+          * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -2892,7 +2892,7 @@ export namespace Components {
          */
         "maxLength"?: number;
         /**
-          * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
+          * Specifies the name. Submitted with the form name/value pair.
           * @default this.componentId
          */
         "name": string;
@@ -5072,7 +5072,7 @@ declare namespace LocalJSX {
          */
         "truncate"?: boolean;
         /**
-          * The value of the combobox input.
+          * The `value` of the selected option.
           * @default ''
          */
         "value"?: string;
@@ -5616,7 +5616,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Sets the number of milliseconds to wait before updating the value.
+          * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -5688,7 +5688,7 @@ declare namespace LocalJSX {
          */
         "onPdsFocus"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when a keyboard input occurs.
+          * Emitted when the value changes from user input (typing, paste, autofill).
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
@@ -6040,7 +6040,7 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         /**
-          * Emitted when the dropdown is dismissed via Escape key or click outside.  This event fires only when the user explicitly dismisses the panel without making a selection: - ✅ Fires: Pressing Escape key while dropdown is open - ✅ Fires: Clicking outside the component while dropdown is open - ❌ Does NOT fire: When panel closes due to selection (including when `closePanelOnSelect` is true) - ❌ Does NOT fire: When panel closes programmatically via `closeDropdown()`  Equivalent to Sage's `onEscapeHook`. Use this to restore parent UI state or run cleanup when the user cancels their interaction.
+          * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the component, such as with a click elsewhere on the page.  It doesn't fire when the panel closes any other way: from a selection (including with `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect becoming disabled. Use it to restore parent UI state or run cleanup when the user cancels.
          */
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**
@@ -6575,7 +6575,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
+          * Specifies the name. Submitted with the form name/value pair when checked.
          */
         "name"?: string;
         /**
@@ -6869,7 +6869,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * The amount of time, in milliseconds, to wait to trigger the event after each keystroke.
+          * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -6911,7 +6911,7 @@ declare namespace LocalJSX {
          */
         "maxLength"?: number;
         /**
-          * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
+          * Specifies the name. Submitted with the form name/value pair.
           * @default this.componentId
          */
         "name"?: string;
@@ -6924,7 +6924,7 @@ declare namespace LocalJSX {
          */
         "onPdsFocus"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when a keyboard input occurs.  For elements that accept text input (`type=text`, `type=tel`, etc.), the interface is [`InputEvent`](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent); for others, the interface is [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event). If the input is cleared on edit, the type is `null`.
+          * Emitted when the value changes from user input (typing, paste, autofill).
          */
         "onPdsInput"?: (event: PdsTextareaCustomEvent<TextareaInputEventDetail>) => void;
         /**
