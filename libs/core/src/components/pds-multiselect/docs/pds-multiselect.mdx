@@ -755,7 +755,7 @@ Call the `clear()` method to programmatically reset all selections, clear the se
 
 Individual options can be disabled using the `disabled` attribute on `<option>` elements, or by setting `disabled: true` on items in the `options` prop. Disabled options are rendered as non-interactive and visually muted — they cannot be selected via click or keyboard navigation. Disabling an `<optgroup>` propagates to all its child options.
 
-**Say why an option is disabled.** A disabled option can't explain itself. When one reason covers every disabled option, put it in `helper-message`, which is read with the field; when reasons differ, add a short one to each option's label, as in "(sold out)" below.
+**Say why an option is disabled.** A disabled option can't explain itself. When one reason covers every disabled option, put it in `helper-message`, which is read with the built-in trigger (not a slotted one; see Custom Trigger); when reasons differ, add a short one to each option's label, as in "(sold out)" below.
 
 <DocCanvas
   mdxSource={{

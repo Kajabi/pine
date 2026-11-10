@@ -367,7 +367,9 @@ export class PdsMultiselect {
    *
    * It doesn't fire when the panel closes any other way: from a selection (including with
    * `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect
-   * becoming disabled. Use it to restore parent UI state or run cleanup when the user cancels.
+   * becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while
+   * the panel is open fires this event, and the panel opens again.
+   * Use it to restore parent UI state or run cleanup when the user cancels.
    */
   @Event() pdsMultiselectDismiss!: EventEmitter<void>;
 
