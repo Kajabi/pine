@@ -928,7 +928,7 @@ export namespace Components {
          */
         "maxWidth"?: string;
         /**
-          * HTTP method to use for the remove action. Adds `data-method` and `data-turbo-method` to the remove link, for frameworks that read link methods from those attributes. Only applies when removeUrl is provided.
+          * HTTP method to use for the remove action. Maps to the `data-method` and `data-turbo-method` attributes on the remove link, for frameworks that read link methods from them. Only applies when removeUrl is provided.
          */
         "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
         /**
@@ -4839,7 +4839,7 @@ declare namespace LocalJSX {
          */
         "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<void>) => void;
         /**
-          * HTTP method to use for the remove action. Adds `data-method` and `data-turbo-method` to the remove link, for frameworks that read link methods from those attributes. Only applies when removeUrl is provided.
+          * HTTP method to use for the remove action. Maps to the `data-method` and `data-turbo-method` attributes on the remove link, for frameworks that read link methods from them. Only applies when removeUrl is provided.
          */
         "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
         /**
