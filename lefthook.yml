@@ -24,6 +24,8 @@ pre-push:
       run: npx validate-branch-name
     design-tokens-drift:
       run: npm run design.tokens -- --check
+    truncation-check:
+      run: npm run truncation.check
 
 commit-msg:
   commands:

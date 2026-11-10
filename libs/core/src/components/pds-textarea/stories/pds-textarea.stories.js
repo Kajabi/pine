@@ -5,7 +5,6 @@ export default {
 
   args: {
     autocomplete: null,
-    clearOnEdit: false,
     componentId: null,
     debounce: null,
     disabled: false,
@@ -29,7 +28,6 @@ export default {
 
 const BaseTemplate = (args) => html`<pds-textarea
   autocomplete="${args.autocomplete}"
-  ?clear-on-edit=${args.clearOnEdit}
   component-id="${args.componentId}"
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
@@ -40,14 +38,11 @@ const BaseTemplate = (args) => html`<pds-textarea
   label="${args.label}"
   max-length="${args.maxLength}"
   name="${args.name}"
-  onChange="${args.onChange}"
   placeholder="${args.placeholder}"
   ?readonly=${args.readonly}
   ?required=${args.required}
   rows="${args.rows}"
   value="${args.value}"
-  data-tooltip-id="foo"
-  title="bar"
   >
   ${args.action || ''}
 </pds-textarea>`;
@@ -138,7 +133,6 @@ Autocomplete.args = {
 
 export const withActionLink = (args) => html`<pds-textarea
   autocomplete="${args.autocomplete}"
-  ?clear-on-edit=${args.clearOnEdit}
   component-id="pds-textarea-action-link"
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
@@ -148,14 +142,12 @@ export const withActionLink = (args) => html`<pds-textarea
   ?invalid=${args.invalid}
   label="Notes"
   name="${args.name}"
-  onChange="${args.onChange}"
   placeholder="${args.placeholder}"
   ?readonly=${args.readonly}
   ?required=${args.required}
   rows="3"
   value="${args.value}"
-  data-tooltip-id="foo"
-  title="bar">
+  >
   <pds-link href="#" slot="action">
     View examples
   </pds-link>
@@ -163,7 +155,6 @@ export const withActionLink = (args) => html`<pds-textarea
 
 export const withActionButton = (args) => html`<pds-textarea
   autocomplete="${args.autocomplete}"
-  ?clear-on-edit=${args.clearOnEdit}
   component-id="pds-textarea-action-button"
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
@@ -173,14 +164,12 @@ export const withActionButton = (args) => html`<pds-textarea
   ?invalid=${args.invalid}
   label="Description"
   name="${args.name}"
-  onChange="${args.onChange}"
   placeholder="${args.placeholder}"
   ?readonly=${args.readonly}
   ?required=${args.required}
   rows="4"
   value="${args.value}"
-  data-tooltip-id="foo"
-  title="bar">
+  >
   <pds-button slot="action" variant="unstyled" aria-label="Help with description">
     <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
   </pds-button>
