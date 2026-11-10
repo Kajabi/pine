@@ -47,6 +47,7 @@ export class PdsDrawer {
   private modalEl?: HTMLPdsModalElement;
 
   private handleEl?: HTMLDivElement;
+  private handleDescriptionEl?: HTMLSpanElement;
   private isDragging = false;
   private activePointerId: number | null = null;
   private dragStartClientX = 0;
@@ -78,12 +79,19 @@ export class PdsDrawer {
   // "nested pds-modal" e2e describe block), and that must not be mistaken
   // for reconnect debris and unwrapped away. Only a stale copy of the one
   // pds-modal we ourselves create carries this exact id.
+  //
+  // The stale modal carried the prior render's resize handle and description
+  // too, and unwrapping moves them in beside this render's own. Remove any
+  // that aren't this render's, or the panel ends up with two drag handles and
+  // two elements sharing the description's id.
   componentDidRender() {
-    unwrapReconnectedContent(
-      this.el.querySelector('pds-modal .pds-modal'),
-      `pds-modal[id="${this.panelId}"]`,
-      '.pds-modal',
-    );
+    const container = this.el.querySelector('pds-modal .pds-modal');
+    unwrapReconnectedContent(container, `pds-modal[id="${this.panelId}"]`, '.pds-modal');
+    Array.from(container?.children ?? [])
+      .filter((child) => child.matches('.pds-drawer__handle, .pds-drawer__handle-description'))
+      .forEach((stale) => {
+        if (stale !== this.handleEl && stale !== this.handleDescriptionEl) stale.remove();
+      });
   }
 
   componentWillLoad() {
@@ -230,6 +238,14 @@ export class PdsDrawer {
   // ticket: "Drag bounds, defaulted from the size scale"), so re-clamp it
   // against the new bounds rather than leaving `currentWidth`/aria-valuenow
   // out of sync with what the CSS clamp() would render anyway.
+  // New bounds re-clamp the width too, so currentWidth and aria-valuenow stay
+  // inside aria-valuemin/-valuemax and match what the CSS clamp() renders.
+  @Watch('minWidth')
+  @Watch('maxWidth')
+  handleBoundsChange() {
+    this.currentWidth = this.clampWidth(this.currentWidth);
+  }
+
   @Watch('size')
   handleSizeChange(newSize: 'sm' | 'md') {
     this.currentWidth = this.hasBeenManuallyResized
@@ -354,7 +370,10 @@ export class PdsDrawer {
     this.handleEl?.releasePointerCapture(e.pointerId);
     const delta = e.clientX - this.dragStartClientX;
     const width = this.clampWidth(this.dragStartWidth + this.dragDirection * delta);
-    this.commitWidth(width);
+    // A press that never changed the width, such as a click to focus the
+    // handle, isn't a resize: committing it would mark the drawer manually
+    // resized (so later `size` changes stop resetting it) and emit events.
+    if (width !== this.dragStartWidth) this.commitWidth(width);
     this.isDragging = false;
     this.activePointerId = null;
   };
@@ -440,7 +459,11 @@ export class PdsDrawer {
         onPointerCancel={this.handleHandlePointerCancel}
         onKeyDown={this.handleHandleKeyDown}
       ></div>,
-      <span id={this.handleDescriptionId} class="visually-hidden">
+      <span
+        id={this.handleDescriptionId}
+        class="pds-drawer__handle-description visually-hidden"
+        ref={(el) => (this.handleDescriptionEl = el as HTMLSpanElement)}
+      >
         {this.resizeHandleDescription}
       </span>,
     ];
