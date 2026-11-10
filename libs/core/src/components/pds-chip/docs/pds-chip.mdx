@@ -50,6 +50,9 @@ The `sentiment` property represents the named color scheme of the chip component
 
 `subtle` is a white chip with a grey border, and `solid` is a dark filled chip; both flip in dark mode. The chip's `subtle` is white, unlike Pine's grey `--pine-color-background-subtle` token.
 
+- `subtle`: a low-emphasis label, such as the option chips in `pds-multiselect`. Pair it with `dot` and `dot-color` for a status tag.
+- `solid`: a high-emphasis label that needs to stand out from neutral chips.
+
 <DocCanvas
   mdxSource={{
     react: `
@@ -89,7 +92,7 @@ The `sentiment` property represents the named color scheme of the chip component
 #### Brand
 
 > **IMPORTANT**: The `brand` sentiment is a special case where only `icon` and `size` properties are supported.
-> The `dot`, `dropdown`, and `tag` properties are not supported by design.
+> The `dot` prop and the `dropdown` and `tag` variants are not supported by design.
 
 <DocCanvas
   mdxSource={{
@@ -120,6 +123,8 @@ A small circular indicator displayed within a chip. Dot colors are determined by
     <PdsChip sentiment="danger" dot>Danger</PdsChip>
     <PdsChip sentiment="info" dot>Info</PdsChip>
     <PdsChip sentiment="neutral" dot>Neutral</PdsChip>
+    <PdsChip sentiment="solid" dot>Solid</PdsChip>
+    <PdsChip sentiment="subtle" dot>Subtle</PdsChip>
     <PdsChip sentiment="success" dot>Success</PdsChip>
     <PdsChip sentiment="warning" dot>Warning</PdsChip>
     `,
@@ -128,6 +133,8 @@ A small circular indicator displayed within a chip. Dot colors are determined by
     <pds-chip sentiment="danger" dot>Danger</pds-chip>
     <pds-chip sentiment="info" dot>Info</pds-chip>
     <pds-chip sentiment="neutral" dot>Neutral</pds-chip>
+    <pds-chip sentiment="solid" dot>Solid</pds-chip>
+    <pds-chip sentiment="subtle" dot>Subtle</pds-chip>
     <pds-chip sentiment="success" dot>Success</pds-chip>
     <pds-chip sentiment="warning" dot>Warning</pds-chip>
     `
@@ -136,6 +143,8 @@ A small circular indicator displayed within a chip. Dot colors are determined by
   <pds-chip sentiment="danger" dot>Danger</pds-chip>
   <pds-chip sentiment="info" dot>Info</pds-chip>
   <pds-chip sentiment="neutral" dot>Neutral</pds-chip>
+  <pds-chip sentiment="solid" dot>Solid</pds-chip>
+  <pds-chip sentiment="subtle" dot>Subtle</pds-chip>
   <pds-chip sentiment="success" dot>Success</pds-chip>
   <pds-chip sentiment="warning" dot>Warning</pds-chip>
 </DocCanvas>
@@ -182,7 +191,7 @@ The `icon` property can be used to display an icon within a chip.
     <PdsChip sentiment="info" icon="info-circle">Info</PdsChip>
     <PdsChip sentiment="neutral" icon="tag">Neutral</PdsChip>
     <PdsChip sentiment="success" icon="check">Success</PdsChip>
-    <PdsChip sentiment="warning" icon="check">Warning</PdsChip>
+    <PdsChip sentiment="warning" icon="warning">Warning</PdsChip>
     `,
     webComponent: `
     <pds-chip sentiment="accent" icon="archive">Accent</pds-chip>
@@ -245,6 +254,8 @@ If the `variant` property is set to `"dropdown"`, the chip will be rendered in a
     <PdsChip sentiment="danger" variant="dropdown">Danger</PdsChip>
     <PdsChip sentiment="info" variant="dropdown">Info</PdsChip>
     <PdsChip sentiment="neutral" variant="dropdown">Neutral</PdsChip>
+    <PdsChip sentiment="solid" variant="dropdown">Solid</PdsChip>
+    <PdsChip sentiment="subtle" variant="dropdown">Subtle</PdsChip>
     <PdsChip sentiment="success" variant="dropdown">Success</PdsChip>
     <PdsChip sentiment="warning" variant="dropdown">Warning</PdsChip>
     `,
@@ -253,6 +264,8 @@ If the `variant` property is set to `"dropdown"`, the chip will be rendered in a
     <pds-chip sentiment="danger" variant="dropdown">Danger</pds-chip>
     <pds-chip sentiment="info" variant="dropdown">Info</pds-chip>
     <pds-chip sentiment="neutral" variant="dropdown">Neutral</pds-chip>
+    <pds-chip sentiment="solid" variant="dropdown">Solid</pds-chip>
+    <pds-chip sentiment="subtle" variant="dropdown">Subtle</pds-chip>
     <pds-chip sentiment="success" variant="dropdown">Success</pds-chip>
     <pds-chip sentiment="warning" variant="dropdown">Warning</pds-chip>
     `
@@ -261,6 +274,8 @@ If the `variant` property is set to `"dropdown"`, the chip will be rendered in a
   <pds-chip sentiment="danger" variant="dropdown">Danger</pds-chip>
   <pds-chip sentiment="info" variant="dropdown">Info</pds-chip>
   <pds-chip sentiment="neutral" variant="dropdown">Neutral</pds-chip>
+  <pds-chip sentiment="solid" variant="dropdown">Solid</pds-chip>
+  <pds-chip sentiment="subtle" variant="dropdown">Subtle</pds-chip>
   <pds-chip sentiment="success" variant="dropdown">Success</pds-chip>
   <pds-chip sentiment="warning" variant="dropdown">Warning</pds-chip>
 </DocCanvas>
@@ -277,6 +292,8 @@ Tag is often used to represent a selected item or a removable element and includ
     <PdsChip sentiment="danger" variant="tag">Danger</PdsChip>
     <PdsChip sentiment="info" variant="tag">Info</PdsChip>
     <PdsChip sentiment="neutral" variant="tag">Neutral</PdsChip>
+    <PdsChip sentiment="solid" variant="tag">Solid</PdsChip>
+    <PdsChip sentiment="subtle" variant="tag">Subtle</PdsChip>
     <PdsChip sentiment="success" variant="tag">Success</PdsChip>
     <PdsChip sentiment="warning" variant="tag">Warning</PdsChip>
     `,
@@ -284,6 +301,8 @@ Tag is often used to represent a selected item or a removable element and includ
     <pds-chip sentiment="danger" variant="tag">Danger</pds-chip>
     <pds-chip sentiment="info" variant="tag">Info</pds-chip>
     <pds-chip sentiment="neutral" variant="tag">Neutral</pds-chip>
+    <pds-chip sentiment="solid" variant="tag">Solid</pds-chip>
+    <pds-chip sentiment="subtle" variant="tag">Subtle</pds-chip>
     <pds-chip sentiment="success" variant="tag">Success</pds-chip>
     <pds-chip sentiment="warning" variant="tag">Warning</pds-chip>
     `
@@ -291,6 +310,8 @@ Tag is often used to represent a selected item or a removable element and includ
   <pds-chip sentiment="danger" variant="tag">Danger</pds-chip>
   <pds-chip sentiment="info" variant="tag">Info</pds-chip>
   <pds-chip sentiment="neutral" variant="tag">Neutral</pds-chip>
+  <pds-chip sentiment="solid" variant="tag">Solid</pds-chip>
+  <pds-chip sentiment="subtle" variant="tag">Subtle</pds-chip>
   <pds-chip sentiment="success" variant="tag">Success</pds-chip>
   <pds-chip sentiment="warning" variant="tag">Warning</pds-chip>
 </DocCanvas>
@@ -318,7 +339,7 @@ When `remove-url` is provided, the close button is rendered as an `<a>` element 
 
 #### Tag with HTTP Method
 
-The `remove-http-method` property adds `data-method` and `data-turbo-method` attributes to the remove link, enabling Rails/Turbo framework compatibility for non-GET HTTP requests. This is useful for DELETE operations or other HTTP methods.
+The `remove-http-method` property adds `data-method` and `data-turbo-method` to the remove link, for frameworks that read link methods from those attributes. Use it when removal needs a DELETE or another non-GET request. The chip doesn't send the request itself, and any method other than `get` also adds `rel="nofollow"` to the link.
 
 > **Note**: The `remove-http-method` property only applies when `remove-url` is provided.
 
