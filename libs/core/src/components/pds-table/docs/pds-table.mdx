@@ -857,7 +857,7 @@ When the `fixed-column` prop is set to `true`, the first column of the table wil
 The `fixed-column` prop can be used in conjunction with the `selectable` prop to render an additional checkbox column. Both columns stick to the same inline-start edge, so once the table scrolls horizontally, the first column slides over the checkboxes and hides them.
 
 <DocCanvas mdxSource={{
-  react: `<PdsTable componentId="fixedcb" responsive={true} fixed-column={true} selectable={true}>
+  react: `<PdsTable componentId="fixedcb" responsive={true} fixedColumn={true} selectable={true}>
   <PdsTableHead>
     <PdsTableHeadCell>Column Title</PdsTableHeadCell>
     <PdsTableHeadCell>Column Title</PdsTableHeadCell>
@@ -1046,7 +1046,7 @@ webComponent: `<pds-table component-id="fixedcb" responsive fixed-column selecta
 When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cell will visually truncate the text and add an ellipsis when the text exceeds the max-width (100px) of the cell.
 
 <DocCanvas mdxSource={{
-  react: `<PdsTable component-id="truncate">
+  react: `<PdsTable componentId="truncate">
   <PdsTableHead>
     <PdsTableHeadCell>Column Title</PdsTableHeadCell>
     <PdsTableHeadCell>Column Title</PdsTableHeadCell>
