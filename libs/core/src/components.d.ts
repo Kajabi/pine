@@ -4712,6 +4712,9 @@ declare namespace LocalJSX {
           * Provides the button with a submittable name.
          */
         "name"?: string;
+        /**
+          * Emitted when the button is clicked, including from the keyboard, carrying the native click event. Not emitted while the button is `disabled` or `loading`. In a form, a `submit` or `reset` button's form event fires first.
+         */
         "onPdsClick"?: (event: PdsButtonCustomEvent<Event>) => void;
         /**
           * Sets the size of the button.

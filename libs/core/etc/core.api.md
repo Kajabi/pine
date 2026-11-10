@@ -1545,7 +1545,6 @@ export namespace LocalJSX {
         "iconOnly"?: boolean;
         "loading"?: boolean;
         "name"?: string;
-        // (undocumented)
         "onPdsClick"?: (event: PdsButtonCustomEvent<Event>) => void;
         "size"?: 'default' | 'small' | 'micro';
         "target"?: '_blank' | '_self' | '_parent' | '_top';
