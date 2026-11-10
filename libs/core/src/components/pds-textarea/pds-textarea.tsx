@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
-import { assignDescription, isRequired, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
+import { assignDescription, isRequired, isSpecTest, messageId, exposeTypeProperty, reportNativeValidity } from '../../utils/form';
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
 import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
@@ -103,7 +103,9 @@ export class PdsTextarea {
   @Prop() helperMessage?: string;
 
   /**
-   * Determines whether or not the textarea is invalid or throws an error.
+   * Determines whether or not the textarea is invalid or throws an error. Independent of the
+   * native/ElementInternals constraint validation `required` drives (which blocks form submission
+   * on its own) — set this to also show the error styling and `aria-invalid`.
    * @defaultValue false
    */
   @Prop({mutable: true}) invalid = false;       // eslint-disable-line @stencil-community/strict-mutable
@@ -217,15 +219,52 @@ export class PdsTextarea {
       this.setupResizeObserver();
     }
 
-    // Update ElementInternals validity when maxLength changes
-    if (!isSpecTest() && this.internals && this.internals.setValidity && this.nativeTextarea) {
-      const isTooLong = this.nativeTextarea.value.length > (this.maxLength || 0);
-      this.internals.setValidity(
-        { tooLong: isTooLong },
-        isTooLong ? 'Value exceeds maxLength' : '',
-        this.nativeTextarea
-      );
+    // Update ElementInternals validity when maxLength changes. Computed directly from the prop
+    // and the current value, not from the native textarea's own `validity.tooLong`: Stencil
+    // hasn't repainted its `maxlength` attribute yet when this watcher runs, so that would still
+    // reflect the old limit. Keeps `valueMissing` alongside it rather than overwriting the whole
+    // validity, so an empty required field doesn't look valid just because maxLength also changed.
+    // This can't delegate to the shared `reportNativeValidity` (utils/form.ts) the way
+    // `updateFormValue` and `disabledOrRequiredChanged` do, for the same reason: that helper reads
+    // the native control's live `validity`, which is exactly what's stale here. Its "disabled
+    // always reports valid" and "no flag without a message" rules are intentionally duplicated
+    // below instead.
+    if (isSpecTest() || !this.internals?.setValidity || !this.nativeTextarea) return;
+
+    if (this.disabled) {
+      this.internals.setValidity({});
+      return;
     }
+
+    const isTooLong = this.nativeTextarea.value.length > (this.maxLength || 0);
+    const isMissing = this.required && this.nativeTextarea.value.length === 0;
+    if (!isTooLong && !isMissing) {
+      this.internals.setValidity({});
+      return;
+    }
+
+    const message = isTooLong
+      ? 'Value exceeds maxLength'
+      : this.nativeTextarea.validationMessage || 'This field is required.';
+    this.internals.setValidity({ tooLong: isTooLong, valueMissing: isMissing }, message, this.nativeTextarea);
+  }
+
+  @Watch('disabled')
+  @Watch('required')
+  /**
+   * Neither prop changes the value, so nothing else recomputes validity for them: a field that
+   * renders disabled and required keeps whatever validity it had while disabled once re-enabled,
+   * and toggling required at runtime wouldn't otherwise start (or stop) blocking an empty value.
+   */
+  protected disabledOrRequiredChanged() {
+    // Eagerly synced, not left to the next render: Stencil patches the native textarea's
+    // `disabled`/`required` asynchronously, so reading its validity right here, still inside this
+    // synchronous watcher, would see the value these props had before this change.
+    if (this.nativeTextarea) {
+      this.nativeTextarea.disabled = this.disabled;
+      this.nativeTextarea.required = this.required;
+    }
+    this.updateFormValue();
   }
 
   /**
@@ -454,13 +493,7 @@ export class PdsTextarea {
       this.internals.setFormValue(value || null);
 
       // Set validity based on native textarea validation
-      if (this.nativeTextarea && this.internals && this.internals.setValidity) {
-        this.internals.setValidity(
-          this.nativeTextarea.validity,
-          this.nativeTextarea.validationMessage,
-          this.nativeTextarea
-        );
-      }
+      reportNativeValidity(this.internals, this.disabled, this.nativeTextarea, this.nativeTextarea);
     }
   }
 
