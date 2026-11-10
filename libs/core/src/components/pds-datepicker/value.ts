@@ -1,4 +1,4 @@
-import { parseIsoDate, toIsoDate } from './date-utils';
+import { MONTH_DAY_YEAR, dateFormatter, inMonthDayYear, parseIsoDate, parseMonthDay, toIsoDate } from './date-utils';
 
 /** A day, with a wall-clock time when the time picker is on. No time zone, so it never shifts. */
 export interface DateTimeValue {
@@ -57,6 +57,9 @@ const pad = (n: number, width = 2) => String(n).padStart(width, '0');
 interface LocaleWords {
   months: string[];
   shortMonths: string[];
+  /** Month names as they inflect next to a day, as Russian's genitive `декабря` (not `декабрь`). */
+  monthsWithDay: string[];
+  shortMonthsWithDay: string[];
   am: string;
   pm: string;
 }
@@ -67,32 +70,54 @@ const wordsCache = new Map<string, LocaleWords>();
 function localeWords(locale: string): LocaleWords {
   let words = wordsCache.get(locale);
   if (!words) {
-    const month = (style: 'long' | 'short') => {
+    const month = (style: 'long' | 'short', withDay: boolean) => {
       const format = new Intl.DateTimeFormat(locale, {
         month: style,
+        ...(withDay ? { day: 'numeric' } : {}),
         timeZone: 'UTC',
         calendar: 'gregory',
       } as Intl.DateTimeFormatOptions);
-      return Array.from({ length: 12 }, (_, m) => format.format(new Date(Date.UTC(2023, m, 1))));
+      return Array.from({ length: 12 }, (_, m) => {
+        const date = new Date(Date.UTC(2023, m, 1));
+        if (!withDay) return format.format(date);
+        const parts = format.formatToParts(date);
+        const index = parts.findIndex((part) => part.type === 'month');
+        if (index === -1) return format.format(date);
+        // CJK locales split a counter word, as Japanese `月`, into its own literal right after the
+        // month; a literal with no space is that word, not the separator before the day.
+        const suffix = parts[index + 1];
+        return suffix?.type === 'literal' && !/\s/.test(suffix.value) ? parts[index].value + suffix.value : parts[index].value;
+      });
     };
     const clock = clockFor(locale);
-    words = { months: month('long'), shortMonths: month('short'), am: clock.am, pm: clock.pm };
+    words = {
+      months: month('long', false),
+      shortMonths: month('short', false),
+      monthsWithDay: month('long', true),
+      shortMonthsWithDay: month('short', true),
+      am: clock.am,
+      pm: clock.pm,
+    };
     wordsCache.set(locale, words);
   }
   return words;
 }
 
+/** Whether a format's tokens (see `tokensOnly`) have a day, so a month name should inflect for one. */
+const hasDayToken = (tokens: string) => /D/.test(tokens);
+
 /** Writes a date in a format of tokens (see `FORMAT_PARTS`), with month names and AM/PM in the locale. */
 export function formatWith(value: DateTimeValue, format: string, locale = 'en-US'): string {
   const words = localeWords(locale);
+  const withDay = hasDayToken(tokensOnly(format));
   const [hours, minutes] = splitTime(value.time ?? '00:00');
   const hour12 = hours % 12 || 12;
   const month = value.date.getUTCMonth();
   const period = hours < 12 ? words.am : words.pm;
   const parts: Record<string, string> = {
     YYYY: pad(value.date.getUTCFullYear(), 4),
-    MMMM: words.months[month],
-    MMM: words.shortMonths[month],
+    MMMM: withDay ? words.monthsWithDay[month] : words.months[month],
+    MMM: withDay ? words.shortMonthsWithDay[month] : words.shortMonths[month],
     MM: pad(month + 1),
     M: String(month + 1),
     DD: pad(value.date.getUTCDate()),
@@ -118,16 +143,27 @@ const alternatives = (words: string[]) => `(${words.map(escapeRegExp).join('|')}
 /**
  * Reads typed text in a format of tokens, as written by `formatWith`. Leading zeros are optional,
  * spaces are loose, and month names and AM/PM are matched without regard to case, in the locale or
- * in English. Returns `null` for anything that isn't a real date and time in that format.
+ * in English. A format without `YYYY` reads into `year`, and without `year` it reads nothing.
+ * Returns `null` for anything that isn't a real date and time in that format.
  */
-export function parseWith(text: string | null | undefined, format: string, locale = 'en-US'): DateTimeValue | null {
+export function parseWith(
+  text: string | null | undefined,
+  format: string,
+  locale = 'en-US',
+  year?: number,
+): DateTimeValue | null {
   const words = localeWords(locale);
   const english = localeWords('en-US');
+  const withDay = hasDayToken(tokensOnly(format));
+  const months = withDay ? words.monthsWithDay : words.months;
+  const shortMonths = withDay ? words.shortMonthsWithDay : words.shortMonths;
+  const englishMonths = withDay ? english.monthsWithDay : english.months;
+  const englishShortMonths = withDay ? english.shortMonthsWithDay : english.shortMonths;
   const periods = [words.am, words.pm, english.am, english.pm];
   const patterns: Record<string, string> = {
     YYYY: '(\\d{4})',
-    MMMM: alternatives([...words.months, ...english.months]),
-    MMM: alternatives([...words.shortMonths, ...english.shortMonths]),
+    MMMM: alternatives([...months, ...englishMonths]),
+    MMM: alternatives([...shortMonths, ...englishShortMonths]),
     MM: '(\\d{1,2})',
     M: '(\\d{1,2})',
     DD: '(\\d{1,2})',
@@ -175,7 +211,7 @@ export function parseWith(text: string | null | undefined, format: string, local
 
   const monthIndex = (name: string | undefined, long: boolean) => {
     if (name === undefined) return undefined;
-    const lists = long ? [words.months, english.months] : [words.shortMonths, english.shortMonths];
+    const lists = long ? [months, englishMonths] : [shortMonths, englishShortMonths];
     for (const list of lists) {
       const index = list.findIndex((candidate) => candidate.toLowerCase() === name.toLowerCase());
       if (index >= 0) return index + 1;
@@ -183,11 +219,11 @@ export function parseWith(text: string | null | undefined, format: string, local
     return undefined;
   };
 
-  const year = Number(read.YYYY);
+  const readYear = read.YYYY ? Number(read.YYYY) : year;
   const month = monthIndex(read.MMMM, true) ?? monthIndex(read.MMM, false) ?? Number(read.MM ?? read.M);
   const day = Number(read.DD ?? read.D);
-  if (!read.YYYY || !month || !day) return null;
-  const date = parseIsoDate(`${pad(year, 4)}-${pad(month)}-${pad(day)}`);
+  if (readYear === undefined || !month || !day) return null;
+  const date = parseIsoDate(`${pad(readYear, 4)}-${pad(month)}-${pad(day)}`);
   if (!date) return null;
 
   const hourText = read.HH ?? read.H ?? read.hh ?? read.h;
@@ -211,6 +247,43 @@ export function parseFieldText(
   locale = 'en-US',
 ): DateTimeValue | null {
   return parseWith(text, format, locale) ?? parseDateTime(text);
+}
+
+/**
+ * The locale's way of writing a month and day, as a format of tokens: `MMMM D` in English, `D MMMM`
+ * in French, `M月D日` in Japanese, or with `numeric`, `M/D` and `D/M`.
+ */
+export function monthDayFormat(locale = 'en-US', month: 'long' | 'numeric' = 'long'): string {
+  const parts = dateFormatter(locale, { month, day: 'numeric' }).formatToParts(new Date(Date.UTC(MONTH_DAY_YEAR, 11, 31)));
+  return parts
+    .map((part) => {
+      // Some locales write even the long month in digits, as Japanese `12月31日`.
+      if (part.type === 'month') return /^\d+$/.test(part.value) ? 'M' : 'MMMM';
+      if (part.type === 'day') return 'D';
+      // Bracketed, spaces included, only when it has letters a token could be read from, as
+      // Spanish `D[ de ]MMMM`.
+      return /[A-Za-z]/.test(part.value) ? `[${part.value}]` : part.value;
+    })
+    .join('');
+}
+
+/**
+ * Reads a typed month and day, into month-day mode's year: in the format, then as the locale writes
+ * it with a month name or in numbers, with the English order too, then as `--MM-DD` or a full ISO
+ * date, whose year is dropped.
+ */
+export function parseMonthDayText(
+  text: string | null | undefined,
+  format: string,
+  locale = 'en-US',
+): DateTimeValue | null {
+  const formats = [format, monthDayFormat(locale), monthDayFormat(locale, 'numeric'), 'MMMM D', 'D MMMM', 'MMM D', 'D MMM'];
+  for (const candidate of formats) {
+    const read = parseWith(text, candidate, locale, MONTH_DAY_YEAR);
+    if (read) return { date: inMonthDayYear(read.date), time: null };
+  }
+  const date = parseMonthDay(text);
+  return date ? { date, time: null } : null;
 }
 
 /**

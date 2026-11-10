@@ -105,6 +105,25 @@ unions are **major** changes. See [VERSIONING.md](./VERSIONING.md#automated-enfo
 for the mapping and for what the reports deliberately don't cover (slots, `--pds-*`
 custom properties, and prop defaults).
 
+### Truncated text
+
+Text clipped with an ellipsis owes the reader a way to see the rest of it, which
+`setupTruncationTooltip` (`libs/core/src/utils/truncation-tooltip.ts`) provides. The lint
+workflow and the pre-push hook check that every selector that truncates (`text-overflow:
+ellipsis` or a numeric `-webkit-line-clamp`) is in a component that calls it. Run it locally
+with:
+
+```zsh
+npm run truncation.check
+```
+
+Pass `-- --ref <rev>` to check a revision without checking it out.
+
+When it reports a selector as `MISSING`, call `setupTruncationTooltip` from that component, as
+`pds-copytext` does. If a tooltip wouldn't help the reader, add the selector to `EXEMPT` in
+`scripts/check-truncation-tooltip.mjs` with the reason, for review like any exemption. A stale
+entry fails too: when a listed selector stops truncating, remove its entry.
+
 ### Accessibility gate
 
 Every Storybook story is rendered in headless Chromium and audited with

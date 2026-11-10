@@ -14,7 +14,7 @@
   {
     "name": "All CDN component chunks (p-*.entry.js, gzipped)",
     "path": "libs/core/dist/pine-core/p-*.entry.js",
-    "limit": "370 KB",
+    "limit": "371 KB",
     "gzip": true
   },
   {
@@ -32,7 +32,7 @@
   {
     "name": "pds-datepicker entry (gzipped)",
     "path": "libs/core/dist/esm/pds-datepicker.entry.js",
-    "limit": "28 KB",
+    "limit": "30.5 KB",
     "gzip": true
   },
   {

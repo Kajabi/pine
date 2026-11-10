@@ -11,7 +11,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Datepicker
 
-Datepicker captures a single date, or in range mode a start and an end date. For a single date, people can type it as `YYYY-MM-DD` or pick it from a calendar that opens from the button in the field. The value is always a `YYYY-MM-DD` string (`YYYY-MM-DD/YYYY-MM-DD` for a range), so it never shifts by a day with the viewer's time zone.
+Datepicker captures a single date, or in range mode a start and an end date. For a single date, people can type it as `YYYY-MM-DD` or pick it from a calendar that opens from the button in the field. The value is always a `YYYY-MM-DD` string (`YYYY-MM-DD/YYYY-MM-DD` for a range), so it never shifts by a day with the viewer's time zone. With `month-day`, for a date that comes round every year such as a birthday, it's a month and day with no year, `--MM-DD`.
 
 ## Guidelines
 
@@ -50,15 +50,15 @@ Datepicker captures a single date, or in range mode a start and an end date. For
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>↑</code> <code>↓</code></pds-table-cell>
-        <pds-table-cell>Moves one week.</pds-table-cell>
+        <pds-table-cell>Moves one week, or in <code>month-day</code> mode one row of seven days.</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>Home</code> <code>End</code></pds-table-cell>
-        <pds-table-cell>Moves to the first or last day of the week.</pds-table-cell>
+        <pds-table-cell>Moves to the first or last day of the week, or in <code>month-day</code> mode the row.</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>Page Up</code> <code>Page Down</code></pds-table-cell>
-        <pds-table-cell>Moves one month. With <code>Shift</code>, one year.</pds-table-cell>
+        <pds-table-cell>Moves one month. With <code>Shift</code>, one year; <code>month-day</code> mode has no year to jump by, so <code>Shift</code> stays put.</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>Enter</code> <code>Space</code></pds-table-cell>
@@ -120,7 +120,7 @@ Month and weekday names come from the browser's `Intl` support for `locale`, whi
 
 `format` sets how the field shows dates and reads typed ones, with the tokens `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and for times `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM). Typed dates may drop leading zeros, and a typed ISO date is always accepted too.
 
-The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`) whatever the format, so what a form submits and what the change event carries never depends on how the field reads. Backends can parse it directly as ISO 8601: a `YYYY-MM-DD` value as a calendar date, not a midnight timestamp.
+The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`; `--MM-DD` with `month-day`) whatever the format, so what a form submits and what the change event carries never depends on how the field reads. Backends can parse it directly as ISO 8601: a `YYYY-MM-DD` value as a calendar date, not a midnight timestamp.
 
 <DocCanvas
   mdxSource={{
@@ -202,6 +202,20 @@ Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days
   <pds-datepicker component-id="pds-datepicker-dropdowns-example" label="Birthday" show-dropdowns min="1901-01-01" max="2026-10-13"></pds-datepicker>
 </DocCanvas>
 
+### Month and day, without a year
+
+`month-day` picks a date that comes round every year, such as a birthday or an anniversary. The value is a month and day as ISO 8601 writes one without a year, `--MM-DD`. The field shows it as the locale writes a month and day ("November 7", "7 novembre", "11月7日"), and reads that, the locale's numeric form ("11/7" in English, "7/11" in British English), `--MM-DD`, or a full date, whose year it drops.
+
+The calendar shows each month with no year in its heading. A month without a year has no weekdays, so the days run in rows of seven from the 1st, with no weekday names; ↑ and ↓ move seven days, and Home and End go to the first and last day of the row. December is followed by January, and February always has its 29th. `range`, `time-picker`, `show-dropdowns`, `min` and `max` don't apply, and are ignored.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsDatepicker componentId="pds-datepicker-month-day-example" label="Birthday" monthDay value="--11-07"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-month-day-example" label="Birthday" month-day value="--11-07"></pds-datepicker>`
+}}>
+  <pds-datepicker component-id="pds-datepicker-month-day-example" label="Birthday" month-day value="--11-07"></pds-datepicker>
+</DocCanvas>
+
 ### Initially empty, with Clear
 
 The field starts empty when there's no `value`. `clearable` adds a button in the field that empties it while there's a value, and in range mode or with the time picker, Clear takes the place of Cancel too, as for a filter that's off until someone sets it.
@@ -250,7 +264,7 @@ The field starts empty when there's no `value`. `clearable` adds a button in the
 
 ### pdsDatepickerChange
 
-Emitted with `{ value }` when someone picks a day, or types a date and leaves the field or presses `Enter`. `value` is `YYYY-MM-DD`, or an empty string when the field is cleared. It doesn't emit when the `value` property is set programmatically, or when the typed text isn't a date that can be picked.
+Emitted with `{ value }` when someone picks a day, or types a date and leaves the field or presses `Enter`. `value` is `YYYY-MM-DD`, or `--MM-DD` with `month-day`, or an empty string when the field is cleared. It doesn't emit when the `value` property is set programmatically, or when the typed text isn't a date that can be picked.
 
 In range mode it emits on Apply, or on a typed range, with `{ value, start, end, preset }`: `value` is `YYYY-MM-DD/YYYY-MM-DD`, `start` and `end` are its two dates, and `preset` is the key of the preset the range matches, when it matches one. With the time picker, each date carries its time, as `YYYY-MM-DDTHH:mm`, and the change waits for Apply.
 
@@ -269,11 +283,12 @@ The open calendar is portaled: into the `<dialog>` or open popover around the da
 ## Values, time zones and servers
 
 - Values are plain ISO strings with no time zone: `YYYY-MM-DD`, and with the time picker `YYYY-MM-DDTHH:mm`, a wall-clock time. If the time needs a zone, attach it on the server when parsing, such as the account's time zone.
+- A month and day, from `month-day`, is `--MM-DD`, with no year to attach a zone to. Ruby's `Date.parse` does read it, filling in the current year, which is the wrong year, not a parse failure, and raises on `--02-29` outside a leap year; take the month and day from the string instead, as `value.match(/\A--(\d{2})-(\d{2})\z/)`.
 - A range submits as one field, `start/end`. Split it on `/` on the server and parse each half as ISO 8601: a `YYYY-MM-DD` half as a calendar date, not a midnight timestamp.
 
 ## Form Integration
 
-- Set `name` and the date is submitted with its form as `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` in range mode.
+- Set `name` and the date is submitted with its form as `YYYY-MM-DD`, `YYYY-MM-DD/YYYY-MM-DD` in range mode, or `--MM-DD` in month-day mode.
 - Resetting the form clears the date.
 - With `required` and no date, typed text that isn't a date, or a date outside `min` and `max` (typed or set in code), the form won't submit and the field shows as invalid. The form reports `badInput` for text that isn't a date and `rangeUnderflow` or `rangeOverflow` for dates outside the range, with the messages set by `invalid-date-message`, `min-date-message` and `max-date-message`; `{date}` in the last two is replaced by the bound.
 

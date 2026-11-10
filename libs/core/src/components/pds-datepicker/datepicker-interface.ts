@@ -1,7 +1,8 @@
 export interface DatepickerChangeEventDetail {
   /**
    * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with
-   * the time picker, each date as `YYYY-MM-DDTHH:mm`. An empty string when cleared.
+   * the time picker, each date as `YYYY-MM-DDTHH:mm`; with `month-day`, `--MM-DD`. An empty string
+   * when cleared.
    */
   value: string;
   /** Range mode: the first day of the range, `YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm` with the time picker. */
