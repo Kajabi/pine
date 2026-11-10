@@ -70,16 +70,11 @@ export function builtInPresetRange(key: string, now: Date): [Date, Date] | null 
 
 const isWholeNumber = (value: unknown): value is number => typeof value === 'number' && Number.isInteger(value);
 
-/**
- * The range a preset's own offsets cover on the given day: whole days from today, so `-6` is six
- * days ago and `0` is today. One offset alone leaves the other at today. `null` when neither offset
- * is set, when either is not a whole number, or when they would run backwards.
- */
+/** A preset's offset range: whole days from today, a missing one being today. `null` if unusable. */
 export function offsetPresetRange(preset: DatepickerPreset, now: Date): [Date, Date] | null {
   const { startOffset, endOffset } = preset;
   if (startOffset === undefined && endOffset === undefined) return null;
-  // Offsets often come from parsed JSON, so check at runtime: a fractional or non-numeric offset
-  // would otherwise reach addDays and produce an invalid date.
+  // Checked at runtime, as offsets often come from JSON.
   if (startOffset !== undefined && !isWholeNumber(startOffset)) return null;
   if (endOffset !== undefined && !isWholeNumber(endOffset)) return null;
 
@@ -88,8 +83,7 @@ export function offsetPresetRange(preset: DatepickerPreset, now: Date): [Date, D
   return start <= end ? [start, end] : null;
 }
 
-// resolvePresets runs on every read of the panel's preset list, so warning on each dropped entry
-// would repeat for the life of the page. Each distinct message is said once.
+// The list is re-resolved on every read, so each warning is said once.
 const warned = new Set<string>();
 
 function warnOnce(message: string) {
@@ -100,10 +94,7 @@ function warnOnce(message: string) {
 
 /**
  * Normalizes the `presets` prop: a comma-separated list of built-in keys, or an array of presets
- * that may relabel a built-in (for translation) or give their own range, as `startOffset` and
- * `endOffset` relative to today or as fixed `start` and `end` days. Entries that resolve to no
- * range, and entries with no label and no built-in key to take one from, are dropped with a
- * warning.
+ * that may relabel a built-in or give their own range. Unusable entries are dropped with a warning.
  */
 export function resolvePresets(presets: string | DatepickerPreset[] | undefined, now: Date): ResolvedPreset[] {
   const entries: DatepickerPreset[] =
@@ -122,25 +113,22 @@ export function resolvePresets(presets: string | DatepickerPreset[] | undefined,
     // Presets often come from parsed JSON, so check types at runtime: a non-string label would
     // otherwise reach the render as an object, which Stencil can turn into nodes.
     if (!preset || typeof preset.key !== 'string') {
-      warnOnce('a preset with no string key was left out of the list.');
+      warnOnce('a preset with no string key was left out.');
       continue;
     }
     const start = typeof preset.start === 'string' ? parseIsoDate(preset.start) : null;
     const end = typeof preset.end === 'string' ? parseIsoDate(preset.end) : null;
-    // Fixed days first, so pinning a built-in key to a range of its own keeps working; offsets next,
-    // so a key of your own can follow today; the built-in range last.
+    // Fixed days, then offsets, then the built-in range.
     const fixed: [Date, Date] | null = start !== null && end !== null && start <= end ? [start, end] : null;
     const range: [Date, Date] | null = fixed ?? offsetPresetRange(preset, now) ?? builtInPresetRange(preset.key, now);
-    // A blank label would render an empty, unnamed button, so it counts as no label.
+    // A blank label would leave the button unnamed.
     const label = typeof preset.label === 'string' && preset.label.trim() !== '' ? preset.label : DEFAULT_LABELS[preset.key];
     if (range === null) {
-      warnOnce(
-        `the preset "${preset.key}" is not a built-in key and has no usable range, so it was left out of the list. Give it whole-day startOffset and endOffset, start first, to follow today, or start and end as YYYY-MM-DD days, start first, for fixed days.`,
-      );
+      warnOnce(`preset "${preset.key}" has no usable range and was left out. Give it whole-day startOffset/endOffset or YYYY-MM-DD start/end, start first.`);
       continue;
     }
     if (label === undefined) {
-      warnOnce(`the preset "${preset.key}" is not a built-in key and has no label, so it was left out of the list.`);
+      warnOnce(`preset "${preset.key}" has no label and was left out.`);
       continue;
     }
     resolved.push({ key: preset.key, label, start: range[0], end: range[1] });
