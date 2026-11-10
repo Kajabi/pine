@@ -1258,6 +1258,40 @@ describe('pds-combobox', () => {
       return page;
     };
 
+    it("keeps the panel as wide as dropdown-width, and the row back a header, without panel search", async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="padding: 40px;">
+          <pds-combobox component-id="no-search" label="Category" hide-label trigger="button" mode="select-only"
+            placeholder="Select category" group-display="drill-in" dropdown-width="300px"></pds-combobox>
+        </div>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }, data) => (el.options = data), options);
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      const panelWidth = () =>
+        page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox')!.getBoundingClientRect().width);
+      // The width includes the panel's padding, so it's the width asked for.
+      expect(await panelWidth()).toBeCloseTo(300, 0);
+
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(resolve)));
+      const header = await page.evaluate(() => {
+        const root = document.querySelector('pds-combobox')!.shadowRoot!;
+        const back = getComputedStyle(root.querySelector('.pds-combobox__group-back-trigger')!);
+        return {
+          divider: back.borderBottomWidth,
+          sticky: back.position,
+          panelTop: getComputedStyle(root.querySelector('.pds-combobox__listbox')!).paddingTop,
+        };
+      });
+      // Like the search field's place with panel search: a divider under it, flush with the top.
+      expect(header).toEqual({ divider: '1px', sticky: 'sticky', panelTop: '0px' });
+      expect(await panelWidth()).toBeCloseTo(300, 0);
+    });
+
     it('draws the input-shaped trigger as a pds-select field', async () => {
       const page = await setUp();
 
