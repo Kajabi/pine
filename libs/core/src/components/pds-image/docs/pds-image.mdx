@@ -31,6 +31,10 @@ Uploaded images rarely arrive in the shape a layout wants, so `fit` decides what
 
 Because `ratio` sets the shape, it takes precedence over the ratio implied by `height` and `width`. `fit` has no effect unless `ratio` is set.
 
+There are three routes to a shape, and all of them crop: the `ratio` prop, the `--dimension-aspect-ratio` custom property, and a `height` and `width` whose proportions differ from the image's own. The prop wins over the custom property, which wins over `height` and `width`.
+
+**This is a behaviour change for images already sized by the custom property or by a mismatched `height` and `width`.** Until now a shape was applied with no `object-fit`, so the image stretched to fill it — the defect behind reports of distorted logos. Those images now crop instead. An image whose box already matches its own proportions is unaffected, since it has no overflow to crop. Where an image must be seen whole rather than cropped, set `fit="contain"`, or `--dimension-object-fit: contain`.
+
 ### Image Optimization
 
 While images can provide useful information to convey to the user, when not careful, they can also increase page load times, sometimes by several seconds. For users with slower internet connections, this can lead to a poor user experience. Be mindful that the images used are optimized in their file size. Unless using images with transparency, formats like `.jpg` can help naturally reduce file size. If needed, consider using a tool to further reduce the image's size.
