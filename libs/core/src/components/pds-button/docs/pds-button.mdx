@@ -206,25 +206,42 @@ Disclosure button variant, intended to be used as a trigger to show or hide cont
 
 ### Filter
 
-Filter button variant, intended to be used for filter options in menus and interfaces.
-
-> **Note:** This variant should only be used in conjunction with the `pds-filters` component.
+A borderless button with a fixed `add-circle` icon before the text. Use it for an action that adds a filter, such as an "Add filter" button placed beside a `pds-filters` bar. `pds-filters` doesn't render this button itself.
 
 > **Note:** Icon cannot be customized.
 
 <DocCanvas
   mdxSource={{
     react: `
-    <PdsButton variant="filter">Filter option</PdsButton>
+    <PdsButton variant="filter">Add filter</PdsButton>
     <PdsButton variant="filter" disabled="true">Disabled</PdsButton>
     `,
     webComponent: `
-    <pds-button variant="filter">Filter option</pds-button>
+    <pds-button variant="filter">Add filter</pds-button>
     <pds-button variant="filter" disabled="true">Disabled</pds-button>
     `
 }}>
-  <pds-button variant="filter">Filter option</pds-button>
+  <pds-button variant="filter">Add filter</pds-button>
   <pds-button variant="filter" disabled="true">Disabled</pds-button>
+</DocCanvas>
+
+### Unstyled
+
+The `unstyled` variant removes the button's background, border, padding and minimum height, and uses the default text color. Use it to wrap custom content that supplies its own styling. The focus ring stays, and the compact icon button example below shows how to style the surface through the `button` part.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsButton variant="unstyled">Unstyled</PdsButton>
+    <PdsButton variant="unstyled" disabled="true">Disabled</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="unstyled">Unstyled</pds-button>
+    <pds-button variant="unstyled" disabled="true">Disabled</pds-button>
+    `
+}}>
+  <pds-button variant="unstyled">Unstyled</pds-button>
+  <pds-button variant="unstyled" disabled="true">Disabled</pds-button>
 </DocCanvas>
 
 ### Full Width
@@ -475,21 +492,21 @@ state colors underneath.
 
 The button link variant allows a `pds-button` to function as a link. By providing an `href` attribute, the button will render as an anchor (`<a>`) element while maintaining the visual appearance of a button. This is useful for creating call-to-action buttons that navigate to external resources or different parts of your application.
 
-> ***Note:*** When using the `href` attribute, button-specific props such as `type`, `name`, and `value` will be ignored. The component will maintain the same visual appearance but function as a link.
+> ***Note:*** When using the `href` attribute, button-specific props such as `type`, `name`, and `value` will be ignored. The component will maintain the same visual appearance but function as a link. `loading` shows the spinner and blocks navigation. `disabled` removes the link's `href`, so it can't be followed or reached with the Tab key.
 
 <DocCanvas
   mdxSource={{
     react: `
-    <PdsButton variant="primary" href="#">Create a product</PdsButton>
-    <PdsButton variant="secondary" href="#">Join community</PdsButton>
+    <PdsButton variant="primary" href="/products/new">Create a product</PdsButton>
+    <PdsButton variant="secondary" href="/community">Join community</PdsButton>
     `,
     webComponent: `
-    <pds-button variant="primary" href="#">Create a product</pds-button>
-    <pds-button variant="secondary" href="#">Join community</pds-button>
+    <pds-button variant="primary" href="/products/new">Create a product</pds-button>
+    <pds-button variant="secondary" href="/community">Join community</pds-button>
     `
 }}>
-  <pds-button variant="primary" href="#">Create a product</pds-button>
-  <pds-button variant="secondary" href="#">Join community</pds-button>
+  <pds-button variant="primary" href="/products/new">Create a product</pds-button>
+  <pds-button variant="secondary" href="/community">Join community</pds-button>
 </DocCanvas>
 
 ### Type
