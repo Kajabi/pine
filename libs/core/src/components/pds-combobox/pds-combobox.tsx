@@ -540,11 +540,14 @@ export class PdsCombobox implements BasePdsProps {
     // The row back is sticky over the group's options; scrolling an option into view stops below
     // it. Set before any scroll below, and when it first applies, scroll the highlighted option
     // again: the list keeps its offset on drilling in, and an earlier scroll had no padding.
-    if (this.panelTreeEl) {
-      const header = this.hidesPanelSearch ? (this.panelTreeEl.querySelector('.pds-combobox__group-back-trigger') as HTMLElement | null) : null;
+    // With or without panel search: the scrolling list is the tree under the search field, or the panel.
+    const scrollList = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
+    if (scrollList) {
+      const drilledIn = this.showsGroupedPanel && this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null;
+      const header = drilledIn ? (scrollList.querySelector('.pds-combobox__group-back-trigger') as HTMLElement | null) : null;
       const padding = header ? `${header.offsetHeight}px` : '';
-      if (this.panelTreeEl.style.scrollPaddingBlockStart !== padding) {
-        this.panelTreeEl.style.scrollPaddingBlockStart = padding;
+      if (scrollList.style.scrollPaddingBlockStart !== padding) {
+        scrollList.style.scrollPaddingBlockStart = padding;
         if (padding !== '' && this.highlightedIndex >= 0) this.pendingOptionFocus = true;
       }
     }
