@@ -782,8 +782,13 @@ describe('pds-combobox', () => {
     describe('the slide between the groups and a group', () => {
       type Page = Awaited<ReturnType<typeof newE2EPage>>;
 
-      // Animations held at their first frame, so the test reads where each row starts from.
+      // Animations held at their first frame, so the test reads where each row starts from. The hold
+      // alone can take too late on a slow runner, so the motion tokens are stretched too, unless
+      // reduced motion is on: then they're 0ms, which those tests check.
       const holdAnimations = async (page: Page) => {
+        await page.addStyleTag({
+          content: '@media (prefers-reduced-motion: no-preference) { :root { --pine-motion-duration-base: 600s; --pine-motion-duration-slow: 600s; } }',
+        });
         const client = await page.target().createCDPSession();
         await client.send('Animation.enable');
         await client.send('Animation.setPlaybackRate', { playbackRate: 0 });
