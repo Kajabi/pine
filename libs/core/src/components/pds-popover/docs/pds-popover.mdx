@@ -12,7 +12,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 # Popover
 Popovers show contextual content, including interactive elements, from a trigger. Use a tooltip for short, non-interactive text.
 
-A popover opens when users click its trigger or activate it with the keyboard, and with `open-on="hover"` it also opens on hover.
+A popover opens when users click its trigger, or press Enter or Space on a trigger that fires a click on those keys, such as a `pds-button`. `popover-target-action` sets what that click does: `show` (the default), `toggle` or `hide`. With `open-on="hover"`, it also opens when a mouse or pen pointer rests on the trigger; a touch opens it through the click.
 
 ## Guidelines
 
