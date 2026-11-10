@@ -33,6 +33,10 @@ import type {
  * @slot trigger-content - Custom content for the button trigger when customTriggerContent is true
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
+ * @part button-trigger - Exposes the button trigger for styling. Appears only when `trigger` is `button`.
+ * @part chip-trigger - Exposes the chip trigger for styling. Appears only when `trigger` is `chip`.
+ * @part combobox - Exposes the outer container around the label, trigger and messages for styling.
+ * @part input - Exposes the native `input` element for styling. Appears only when `trigger` is `input`, the default.
  */
 @Component({
   tag: 'pds-combobox',
