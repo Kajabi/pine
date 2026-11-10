@@ -23,6 +23,18 @@ All images, regardless of use, _must_ have an appropriate alt text to describe t
 
 For more responsive images, be sure to take advantage of the `srcset` and `sizes` props. These are native attributes on the `<img>` tag that allow for greater flexbility across device sizes. A `srcset` allows the browser to choose from a set of predefined images and what sizes those images are. The `sizes` prop will tell the browser which image defined in the `srcset` would be best served at a given viewport size. For more information, please see the MDN article on [responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
 
+### Aspect Ratio and Cropping
+
+A surface that needs every image to hold the same shape should say so with `ratio` rather than sizing its own box, so the shape is stated once and the component handles the crop. `ratio` takes a preset — `square` (1 / 1), `landscape` (4 / 3), `wide` (16 / 9), `portrait` (3 / 4), `tall` (9 / 16) — or any custom CSS ratio, such as `21 / 9`.
+
+Uploaded images rarely arrive in the shape a layout wants, so `fit` decides what happens to the part that does not fit. `cover`, the default, fills the shape and crops the overflow; use it for photographic content such as a hero or a thumbnail, where losing the edges is acceptable. `contain` scales the whole image down until it fits, leaving space around it; use it for content that must be seen in full and must not be cropped, such as a logo. Avoid `fill`, which stretches the image to the shape and distorts it.
+
+`height` and `width` do not set a shape, and neither crops: once the image loads it keeps its own proportions, so a `height` and `width` that disagree with the image are not honored. Only `width` reserves that space before the image loads — `height: auto` lets the loaded image's own proportions decide the height, so `height` reserves nothing. To crop to a box of a given size, set `ratio` to that box's proportions, such as `ratio="4 / 1"`; with `ratio` set, the container decides the image's size and the `width`/`height` attributes have no effect. `fit` has no effect unless `ratio` is set.
+
+There are two routes to a shape, and both crop: the `ratio` prop and the `--dimension-aspect-ratio` custom property. The prop wins over the custom property, and when it is in effect `fit` decides the crop instead of `--dimension-object-fit`.
+
+**This is a behaviour change for images already sized by the custom property.** Until now a shape was applied with no `object-fit`, so the image stretched to fill it — the defect behind reports of distorted logos. Those images now crop instead. An image whose box already matches its own proportions is unaffected, since it has no overflow to crop. Where an image must be seen whole rather than cropped, set `--dimension-object-fit: contain`, or move it to the `ratio` prop and set `fit="contain"`.
+
 ### Image Optimization
 
 While images can provide useful information to convey to the user, when not careful, they can also increase page load times, sometimes by several seconds. For users with slower internet connections, this can lead to a poor user experience. Be mindful that the images used are optimized in their file size. Unless using images with transparency, formats like `.jpg` can help naturally reduce file size. If needed, consider using a tool to further reduce the image's size.
@@ -76,11 +88,62 @@ An image with `srcset` and `sizes` props set. Refresh the browser at `400px` and
   ></pds-image>
 </DocCanvas>
 
+### Aspect Ratio
+
+An image given a `ratio` fills the width it is given and takes its height from the shape. The source here is portrait (`200x300`) while the shape is `wide`, so the overflow is cropped instead of the image being squashed into the shape.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsImage src="https://placebear.com/200/300" alt="Random Bear" ratio="wide"></PdsImage>',
+    webComponent: '<pds-image src="https://placebear.com/200/300" alt="Random Bear" ratio="wide"></pds-image>'
+}}>
+  <div style={{ width: '320px' }}>
+    <pds-image src="https://placebear.com/200/300" alt="Random Bear" ratio="wide"></pds-image>
+  </div>
+</DocCanvas>
+
+### Fit
+
+The same portrait source in the same `wide` shape, under each `fit`. `cover` crops the overflow, `contain` scales the whole image down inside the shape, and `fill` stretches it out of shape.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+<PdsImage alt="Random Bear" fit="cover" ratio="wide" src="https://placebear.com/200/300"></PdsImage>
+<PdsImage alt="Random Bear" fit="contain" ratio="wide" src="https://placebear.com/200/300"></PdsImage>
+<PdsImage alt="Random Bear" fit="fill" ratio="wide" src="https://placebear.com/200/300"></PdsImage>
+    `,
+    webComponent: `
+<pds-image alt="Random Bear" fit="cover" ratio="wide" src="https://placebear.com/200/300"></pds-image>
+<pds-image alt="Random Bear" fit="contain" ratio="wide" src="https://placebear.com/200/300"></pds-image>
+<pds-image alt="Random Bear" fit="fill" ratio="wide" src="https://placebear.com/200/300"></pds-image>
+    `
+}}>
+  <div style={{ display: 'flex', gap: '1rem' }}>
+    <figure style={{ margin: 0, width: '160px' }}>
+      <pds-image alt="Random Bear" fit="cover" ratio="wide" src="https://placebear.com/200/300"></pds-image>
+      <figcaption><code>fit="cover"</code></figcaption>
+    </figure>
+    <figure style={{ margin: 0, width: '160px' }}>
+      <pds-image alt="Random Bear" fit="contain" ratio="wide" src="https://placebear.com/200/300"></pds-image>
+      <figcaption><code>fit="contain"</code></figcaption>
+    </figure>
+    <figure style={{ margin: 0, width: '160px' }}>
+      <pds-image alt="Random Bear" fit="fill" ratio="wide" src="https://placebear.com/200/300"></pds-image>
+      <figcaption><code>fit="fill"</code></figcaption>
+    </figure>
+  </div>
+</DocCanvas>
+
 ## Additional Resources
 
 [MDN: Image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
 
 [HTML Standard: Image](https://html.spec.whatwg.org/multipage/images.html)
+
+[MDN: aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio)
+
+[MDN: object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
 
 ## Playground
 

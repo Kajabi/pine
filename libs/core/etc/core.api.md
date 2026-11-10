@@ -466,8 +466,10 @@ export namespace Components {
     export interface PdsImage {
         "alt"?: string;
         "componentId": string;
+        "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
         "height"?: number;
         "loading"?: 'eager' | 'lazy';
+        "ratio"?: ImageRatioType | (string & Record<never, never>);
         "sizes"?: string;
         "src": string;
         "srcset"?: string;
@@ -888,6 +890,9 @@ export interface DatepickerPreset {
 // @public
 const Event_2: EventDecorator;
 export { Event_2 as Event }
+
+// @public (undocumented)
+export type ImageRatioType = 'square' | 'landscape' | 'wide' | 'portrait' | 'tall';
 
 // @public (undocumented)
 export interface InputChangeEventDetail {
@@ -2164,8 +2169,10 @@ export namespace LocalJSX {
     export interface PdsImage {
         "alt"?: string;
         "componentId"?: string;
+        "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
         "height"?: number;
         "loading"?: 'eager' | 'lazy';
+        "ratio"?: ImageRatioType | (string & Record<never, never>);
         "sizes"?: string;
         "src"?: string;
         "srcset"?: string;
@@ -2179,9 +2186,13 @@ export namespace LocalJSX {
         // (undocumented)
         "componentId": string;
         // (undocumented)
+        "fit": 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+        // (undocumented)
         "height": number;
         // (undocumented)
         "loading": 'eager' | 'lazy';
+        // (undocumented)
+        "ratio": ImageRatioType | (string & Record<never, never>);
         // (undocumented)
         "sizes": string;
         // (undocumented)
