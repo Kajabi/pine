@@ -918,6 +918,8 @@ describe('pds-combobox', () => {
             to: panel.style.getPropertyValue('--pds-combobox-glide-to'),
             height: panel.getBoundingClientRect().height,
             listScrolls: getComputedStyle(root.querySelector('.pds-combobox__listbox-options')!).overflowY,
+            // Drilled in, the group's options are what scrolls, under the row back.
+            optionsScroll: (el => (el ? getComputedStyle(el).overflowY : null))(root.querySelector('.pds-combobox__drill-in-options')),
             duration: animation?.effect?.getTiming().duration ?? null,
           };
         });
@@ -944,6 +946,7 @@ describe('pds-combobox', () => {
         // Held at its first frame, the dropdown is still the groups' height, and its rows can't scroll.
         expect(start.height).toBeCloseTo(groupsHeight, 0);
         expect(start.listScrolls).toBe('hidden');
+        expect(start.optionsScroll).toBe('hidden');
 
         await finishGlide(page);
         await page.waitForChanges();
@@ -952,6 +955,7 @@ describe('pds-combobox', () => {
         expect(end.height).toBeCloseTo(start.to, 0);
         expect(end.cleared).toBe(true);
         expect(end.listScrolls).toBe('auto');
+        expect(end.optionsScroll).toBe('auto');
       });
 
       it('glides the padded panel without a panel search, with no jump and no scroll meanwhile', async () => {
@@ -960,11 +964,13 @@ describe('pds-combobox', () => {
         const panel = () =>
           page.evaluate(() => {
             const el = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') as HTMLElement;
+            const options = el.querySelector('.pds-combobox__drill-in-options');
             return {
               height: el.getBoundingClientRect().height,
               width: el.getBoundingClientRect().width,
               gliding: el.classList.contains('pds-combobox__listbox--height-glide'),
               scrolls: getComputedStyle(el).overflowY,
+              optionsScroll: options ? getComputedStyle(options).overflowY : null,
             };
           });
         const groups = await panel();
@@ -979,6 +985,7 @@ describe('pds-combobox', () => {
         expect(start.height).toBeCloseTo(groups.height, 0);
         expect(start.width).toBeCloseTo(groups.width, 0);
         expect(start.scrolls).toBe('hidden');
+        expect(start.optionsScroll).toBe('hidden');
 
         // The last frame is the group's settled height: nothing snaps when the glide ends.
         const last = await page.evaluate(() => {
@@ -995,6 +1002,7 @@ describe('pds-combobox', () => {
         expect(end.height).toBeCloseTo(last, 0);
         expect(end.width).toBeCloseTo(groups.width, 0);
         expect(end.scrolls).toBe('auto');
+        expect(end.optionsScroll).toBe('auto');
       });
 
       it('leaves nothing behind when the dropdown closes mid-glide', async () => {
