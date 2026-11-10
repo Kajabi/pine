@@ -88,7 +88,7 @@ export class PdsTextarea {
   @Prop() disabled = false;
 
   /**
-   * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
+   * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
    */
   @Prop() debounce?: number;
 
