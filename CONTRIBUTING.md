@@ -83,6 +83,8 @@ npm run size
 
 When a budget fails, the CLI prints each tracked file with its gzipped size and limit.
 
+The per-component budgets are tight on purpose: one component growing past its budget is worth a look. The `All CDN component chunks` budget is the total of every component, so ordinary feature work grows it a little each time. It is set about 10% above the measured total, so that a new component or prop fits but a sudden jump (a dependency bundled by mistake, a chunk duplicated) fails. Don't raise it in a feature PR to make room. When the headroom drops under about 3%, re-measure on `main` and reset it to about 10% above the total in a separate `chore` PR.
+
 ### Public API reports
 
 PR CI also enforces the published packages' public TypeScript surface against committed
