@@ -4,7 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Motion
 
-Motion should reinforce hierarchy and feedback without slowing tasks or causing vestibular discomfort. Pine exposes a small **Pine-internal** motion token set covering durations and easing curves; full publication into the shared design language is a follow-up (see Tokens below).
+Motion should reinforce hierarchy and feedback without slowing tasks or causing vestibular discomfort. Pine exposes a small motion token set covering durations and easing curves (see Tokens below).
 
 ## Principles
 
@@ -22,7 +22,7 @@ Motion should reinforce hierarchy and feedback without slowing tasks or causing 
 
 ## Tokens
 
-Pine ships a Pine-internal motion token set in `libs/core/src/global/styles/_motion.scss`. Component SCSS should reference the CSS custom properties (not the raw values), so that consolidating these tokens upstream into `@kajabi-ui/styles` is a future token-swap and not a search-and-replace across every component.
+The `--pine-motion-*` tokens are set on `:root` in `pine-core.css`, so your app's CSS can use them as well as Pine's components. Reference the custom properties rather than the raw values: your transitions keep the same timing as Pine's, and they pick up the reduced-motion override below for free.
 
 ### Durations
 
@@ -48,7 +48,3 @@ The duration tokens collapse to `0ms` under `prefers-reduced-motion: reduce`, so
 
 - The override only affects duration. Easing tokens still resolve to their normal curves, which is fine for 0ms transitions but worth knowing if you compose tokens elsewhere.
 - JavaScript-driven animations (`element.animate`, `requestAnimationFrame` loops) do not read CSS custom properties; you have to check `window.matchMedia('(prefers-reduced-motion: reduce)')` yourself.
-
-### Roadmap
-
-When motion tokens are published in `@kajabi-ui/styles` alongside color, spacing, and typography, the CSS variable names above stay the same — the source of truth moves upstream. Track that work in `#ds-support`.
