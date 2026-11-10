@@ -11,7 +11,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Datepicker
 
-Datepicker captures a single date, or in range mode a start and an end date. For a single date, people can type it as `YYYY-MM-DD` or pick it from a calendar that opens from the button in the field. The value is always a `YYYY-MM-DD` string (`YYYY-MM-DD/YYYY-MM-DD` for a range), so it never shifts by a day with the viewer's time zone. With `month-day`, for a date that comes round every year such as a birthday, it's a month and day with no year, `--MM-DD`.
+Datepicker captures a date, or with `range` a start and end date, as an ISO `YYYY-MM-DD` value that never shifts by a day with the viewer's time zone. People type it or pick it from a calendar that opens from the button in the field. A range is `YYYY-MM-DD/YYYY-MM-DD`, and with `time-picker` each date carries a time, as `YYYY-MM-DDTHH:mm`. With `month-day`, for a date that comes round every year such as a birthday, it's a month and day with no year, `--MM-DD`.
 
 ## Guidelines
 
@@ -252,6 +252,8 @@ The field starts empty when there's no `value`. `clearable` adds a button in the
 
 ### Disabled
 
+For a date people can see but not change, set `readonly` instead. The date shows and is still submitted with the form, but people can't type in the field or use its clear button, and neither a click nor the keyboard opens the calendar. Resetting the form still clears it, as it does a native read-only field.
+
 <DocCanvas
   mdxSource={{
     react: '<PdsDatepicker componentId="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></PdsDatepicker>',
@@ -273,6 +275,12 @@ In range mode it emits on Apply, or on a typed range, with `{ value, start, end,
 Emitted when focus moves into the datepicker from outside, and when it leaves. Moving between the field and the calendar doesn't emit them.
 
 The inner field's own `pdsInput`, `pdsChange`, `pdsFocus`, `pdsBlur` and `pdsKeyDown` events stay inside the datepicker.
+
+## Methods
+
+- `open()` opens the calendar and moves focus to the selected day (a range's end), or today, kept within `min` and `max`. It does nothing while the datepicker is `disabled` or `readonly`.
+- `close()` closes the calendar without moving focus. Focus inside the calendar is lost with it, so call `setFocus()` first to keep focus in the field.
+- `setFocus()` moves focus to the text field.
 
 ## Inside modals, popovers and other overlays
 
