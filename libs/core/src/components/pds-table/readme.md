@@ -29,15 +29,15 @@
 
 ## Shadow Parts
 
-| Part                     | Description |
-| ------------------------ | ----------- |
-| `"responsive-container"` |             |
-| `"responsive-table"`     |             |
-| `"responsive-wrapper"`   |             |
-| `"scroll-shadow-left"`   |             |
-| `"scroll-shadow-right"`  |             |
-| `"table"`                |             |
-| `"table-inner"`          |             |
+| Part                     | Description                                                                                                                                                                            |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"responsive-container"` | Exposes the horizontal scroll container for styling. Appears only when `responsive` is set.                                                                                            |
+| `"responsive-table"`     | Set on the `pds-table` element itself when `responsive` is set, so `::part(responsive-table)` matches it only from a shadow root that contains it. Style `pds-table` directly instead. |
+| `"responsive-wrapper"`   | Exposes the wrapper inside the scroll container for styling. Appears only when `responsive` is set.                                                                                    |
+| `"scroll-shadow-left"`   | Exposes the scroll shadow at the inline-start edge for styling. Appears only when `responsive` is set.                                                                                 |
+| `"scroll-shadow-right"`  | Exposes the scroll shadow at the inline-end edge for styling. Appears only when `responsive` is set.                                                                                   |
+| `"table"`                | Set on the `pds-table` element itself, so `::part(table)` matches it only from a shadow root that contains it. Style `pds-table` directly instead.                                     |
+| `"table-inner"`          | Exposes the inner table element around the slotted head and body for styling. Appears only when `responsive` is set.                                                                   |
 
 
 ----------------------------------------------
