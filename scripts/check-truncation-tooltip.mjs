@@ -19,23 +19,27 @@ import { dirname, join } from 'node:path';
 // Reads the working tree by default, which is what CI wants: the checkout under test. Pass
 // --ref <rev> (or --ref=<rev>) to read a revision instead, so a branch can be measured without
 // checking it out.
-const refFlag = process.argv.findIndex((arg) => arg === '--ref' || arg.startsWith('--ref='));
+const refFlag = process.argv.findIndex(
+  (arg) => arg === '--ref' || arg.startsWith('--ref=')
+);
 const REF =
   refFlag === -1
     ? null
     : process.argv[refFlag].startsWith('--ref=')
-      ? process.argv[refFlag].slice('--ref='.length)
-      : process.argv[refFlag + 1];
+    ? process.argv[refFlag].slice('--ref='.length)
+    : process.argv[refFlag + 1];
 if (refFlag !== -1 && (!REF || REF.startsWith('--'))) {
   console.error('--ref needs a revision, as --ref main or --ref=main.');
   process.exit(2);
 }
-const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+const git = (...args) =>
+  execFileSync('git', args, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 
 const COMPONENTS = 'libs/core/src/components';
 const UTIL = 'setupTruncationTooltip';
 // A numeric (or variable) line-clamp, so a reset such as `-webkit-line-clamp: unset` isn't truncation.
-const TRUNCATES = /text-overflow\s*:\s*ellipsis|-webkit-line-clamp\s*:\s*(?:\d|var\()/;
+const TRUNCATES =
+  /text-overflow\s*:\s*ellipsis|-webkit-line-clamp\s*:\s*(?:\d|var\()/;
 
 // Truncation that predates this check, each owed a fix, by component directory and selector. These
 // do not fail -- the point is to stop a NEW one appearing, not to block everything until the backlog
@@ -85,26 +89,39 @@ const walk = (dir) =>
     return e.isDirectory() ? walk(path) : [path];
   });
 
-const paths = (REF ? git('ls-tree', '-r', '--name-only', REF, '--', COMPONENTS).split('\n').filter(Boolean) : walk(COMPONENTS))
+const paths = (
+  REF
+    ? git('ls-tree', '-r', '--name-only', REF, '--', COMPONENTS)
+        .split('\n')
+        .filter(Boolean)
+    : walk(COMPONENTS)
+)
   // Tests, docs and stories talk about truncation without doing it.
   .filter((p) => !/\/(test|docs|stories)\//.test(p));
-const read = (path) => (REF ? git('show', `${REF}:${path}`) : readFileSync(path, 'utf8'));
+const read = (path) =>
+  REF ? git('show', `${REF}:${path}`) : readFileSync(path, 'utf8');
 
 // Comments name things without doing them: `// text-overflow: ellipsis`, or a comment that mentions
 // the util. The `[^:]` keeps a `//` inside a url() from reading as a comment.
-const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+const stripComments = (src) =>
+  src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 
 // The selectors each truncating declaration sits under, read by tracking the block nesting: a
 // selector list split over lines, a one-line block, an element selector and `&` all resolve.
 const resolve = (parents, part) =>
-  parents.length === 0 ? [part] : parents.map((p) => (part.includes('&') ? part.replace(/&/g, p) : `${p} ${part}`));
+  parents.length === 0
+    ? [part]
+    : parents.map((p) =>
+        part.includes('&') ? part.replace(/&/g, p) : `${p} ${part}`
+      );
 
 const truncatingSelectors = (src) => {
   const stack = [];
   const found = [];
   let pending = '';
   const declaration = () => {
-    if (TRUNCATES.test(pending)) found.push(...(stack[stack.length - 1] ?? ['(top level)']));
+    if (TRUNCATES.test(pending))
+      found.push(...(stack[stack.length - 1] ?? ['(top level)']));
   };
   for (const ch of stripComments(src)) {
     if (ch === '{') {
@@ -114,7 +131,11 @@ const truncatingSelectors = (src) => {
         .filter(Boolean);
       const parents = stack[stack.length - 1] ?? [];
       // An at-rule (@media, @include ... { }) keeps its parent's selectors.
-      stack.push(parts.length && /^@/.test(parts[0]) ? parents : parts.flatMap((p) => resolve(parents, p)));
+      stack.push(
+        parts.length && /^@/.test(parts[0])
+          ? parents
+          : parts.flatMap((p) => resolve(parents, p))
+      );
       pending = '';
     } else if (ch === '}') {
       declaration();
@@ -131,19 +152,31 @@ const truncatingSelectors = (src) => {
 };
 
 const unitOf = (path) => dirname(path).slice(COMPONENTS.length + 1);
-const units = [...new Set(paths.filter((p) => p.endsWith('.scss')).map(unitOf))].filter(Boolean).sort();
+const units = [...new Set(paths.filter((p) => p.endsWith('.scss')).map(unitOf))]
+  .filter(Boolean)
+  .sort();
 
 const report = units.map((unit) => {
   const own = paths.filter((p) => unitOf(p) === unit);
-  const selectors = [...new Set(own.filter((p) => p.endsWith('.scss')).flatMap((p) => truncatingSelectors(read(p))))];
+  const selectors = [
+    ...new Set(
+      own
+        .filter((p) => p.endsWith('.scss'))
+        .flatMap((p) => truncatingSelectors(read(p)))
+    ),
+  ];
   // A call, outside comments: an import or a comment that names the util isn't adoption.
-  const adopts = own.some((p) => /\.tsx?$/.test(p) && stripComments(read(p)).includes(`${UTIL}(`));
+  const adopts = own.some(
+    (p) => /\.tsx?$/.test(p) && stripComments(read(p)).includes(`${UTIL}(`)
+  );
   return { unit, selectors, adopts };
 });
 
 const entry = (list, unit, selector) => list[unit]?.[selector];
 const reasonFor = (unit, selector) =>
-  entry(EXEMPT, unit, selector) ?? entry(UNDECIDED, unit, selector) ?? entry(KNOWN, unit, selector);
+  entry(EXEMPT, unit, selector) ??
+  entry(UNDECIDED, unit, selector) ??
+  entry(KNOWN, unit, selector);
 const stateFor = (c, selector) => {
   if (entry(EXEMPT, c.unit, selector)) return 'exempt';
   if (entry(UNDECIDED, c.unit, selector)) return 'undecided';
@@ -152,7 +185,13 @@ const stateFor = (c, selector) => {
 };
 
 const truncating = report.filter((c) => c.selectors.length);
-const rows = truncating.flatMap((c) => c.selectors.map((selector) => ({ ...c, selector, state: stateFor(c, selector) })));
+const rows = truncating.flatMap((c) =>
+  c.selectors.map((selector) => ({
+    ...c,
+    selector,
+    state: stateFor(c, selector),
+  }))
+);
 const missing = rows.filter((r) => r.state === 'MISSING');
 
 // An entry that no longer describes the source is worse than no entry: it reads as considered and
@@ -164,17 +203,31 @@ const stale = [EXEMPT, UNDECIDED, KNOWN].flatMap((list) =>
   Object.entries(list).flatMap(([unit, selectors]) =>
     Object.keys(selectors).flatMap((selector) => {
       const c = report.find((x) => x.unit === unit);
-      if (!c) return [{ unit, selector, why: 'listed here but no such component directory -- remove the entry' }];
-      if (!c.selectors.includes(selector)) return [{ unit, selector, why: 'no longer truncates -- remove the entry' }];
+      if (!c)
+        return [
+          {
+            unit,
+            selector,
+            why: 'listed here but no such component directory -- remove the entry',
+          },
+        ];
+      if (!c.selectors.includes(selector))
+        return [
+          { unit, selector, why: 'no longer truncates -- remove the entry' },
+        ];
       return [];
-    }),
-  ),
+    })
+  )
 );
 
 const pad = (s, n) => String(s).padEnd(n);
 const counts = (state) => rows.filter((r) => r.state === state);
 console.log(
-  `\n${REF ?? 'working tree'}: ${rows.length} truncating selectors in ${truncating.length} components; ${truncating.filter((c) => c.adopts).length} of those components call ${UTIL}.\n`,
+  `\n${REF ?? 'working tree'}: ${rows.length} truncating selectors in ${
+    truncating.length
+  } components; ${
+    truncating.filter((c) => c.adopts).length
+  } of those components call ${UTIL}.\n`
 );
 for (const r of rows) {
   console.log(`  ${pad(r.state, 10)} ${pad(r.unit, 24)} ${r.selector}`);
@@ -183,10 +236,16 @@ for (const r of rows) {
 }
 
 if (counts('owed').length) {
-  console.log(`\n${counts('owed').length} owed a fix, recorded so a new one stands out (not a failure).`);
+  console.log(
+    `\n${
+      counts('owed').length
+    } owed a fix, recorded so a new one stands out (not a failure).`
+  );
 }
 if (counts('undecided').length) {
-  console.log(`${counts('undecided').length} awaiting a ruling (not a failure).`);
+  console.log(
+    `${counts('undecided').length} awaiting a ruling (not a failure).`
+  );
 }
 
 if (stale.length) {
@@ -195,16 +254,23 @@ if (stale.length) {
 }
 
 if (missing.length) {
-  console.log(`\n${missing.length} selector(s) truncate in a component that doesn't call ${UTIL}:`);
+  console.log(
+    `\n${missing.length} selector(s) truncate in a component that doesn't call ${UTIL}:`
+  );
   for (const r of missing) console.log(`  ${r.unit}  ${r.selector}`);
   console.log(
-    `\nCall ${UTIL} from the component, as pds-copytext does. If a tooltip wouldn't help, add the selector to EXEMPT in ${process.argv[1].replace(process.cwd() + '/', '')} with the reason, for review like any exemption.`,
+    `\nCall ${UTIL} from the component, as pds-copytext does. If a tooltip wouldn't help, add the selector to EXEMPT in ${process.argv[1].replace(
+      process.cwd() + '/',
+      ''
+    )} with the reason, for review like any exemption.`
   );
 }
 
 const failures = missing.length + stale.length;
 if (failures === 0)
   console.log(
-    `\nNo new truncation without a way to read it. ${counts('owed').length} still owed, ${counts('undecided').length} awaiting a ruling.\n`,
+    `\nNo new truncation without a way to read it. ${
+      counts('owed').length
+    } still owed, ${counts('undecided').length} awaiting a ruling.\n`
   );
 process.exit(failures === 0 ? 0 : 1);
