@@ -1681,7 +1681,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
+          * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -2854,7 +2854,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
+          * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -5616,7 +5616,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
+          * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -6869,7 +6869,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
+          * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
