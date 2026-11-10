@@ -1310,8 +1310,10 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private filterOptions() {
-    // A new list replaces the rows a slide was animating, so its end event may never come.
+    // A new list replaces the rows a slide or height glide was animating, so their end events may
+    // never come.
     this.drillDirection = null;
+    this.endHeightGlide();
     // Ensure allItems includes optionEls if not already populated (for edge cases)
     if (this.allItems.length === 0 && this.optionEls.length > 0) {
       this.allItems = [...this.optionEls];
