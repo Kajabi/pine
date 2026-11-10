@@ -1,5 +1,6 @@
-# pds-dropdown-item
+# pds-dropdown-menu-item
 
+An item inside a `pds-dropdown-menu`. Renders a button by default, or a link when `href` is set.
 
 
 <!-- Auto Generated Below -->

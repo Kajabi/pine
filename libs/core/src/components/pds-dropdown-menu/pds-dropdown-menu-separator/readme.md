@@ -1,5 +1,6 @@
-# pds-dropdown-item
+# pds-dropdown-menu-separator
 
+A divider line between groups of items in a `pds-dropdown-menu`.
 
 
 <!-- Auto Generated Below -->
