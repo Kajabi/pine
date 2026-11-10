@@ -1,17 +1,25 @@
 :host {
   /**
    * @prop --dimension-aspect-ratio: The image's aspect ratio.
+   * @prop --dimension-object-fit: How the image fills the shape its aspect ratio gives it.
   */
 
   --dimension-aspect-ratio: auto;
+  --dimension-object-fit: cover;
   display: inline-block;
 }
 
+// An aspect ratio without a fit stretches the image to fill the shape, which is
+// the defect behind the reports of distorted logos. Cropping is the default for
+// every route to a ratio -- this custom property, a mismatched height and width,
+// or the `ratio` prop -- and it changes nothing for an image whose box already
+// matches its own proportions, since then there is no overflow to crop.
 img {
   aspect-ratio: var(--dimension-aspect-ratio);
   display: block;
   height: auto;
   max-width: 100%;
+  object-fit: var(--dimension-object-fit);
 }
 
 // With a ratio set the host fills the width it is given and the image fills

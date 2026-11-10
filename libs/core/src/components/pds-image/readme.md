@@ -23,9 +23,10 @@
 
 ## CSS Custom Properties
 
-| Name                       | Description               |
-| -------------------------- | ------------------------- |
-| `--dimension-aspect-ratio` | The image's aspect ratio. |
+| Name                       | Description                                              |
+| -------------------------- | -------------------------------------------------------- |
+| `--dimension-aspect-ratio` | The image's aspect ratio.                                |
+| `--dimension-object-fit`   | How the image fills the shape its aspect ratio gives it. |
 
 
 ----------------------------------------------
