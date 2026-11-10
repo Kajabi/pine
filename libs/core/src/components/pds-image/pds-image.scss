@@ -1,15 +1,37 @@
 :host {
   /**
    * @prop --dimension-aspect-ratio: The image's aspect ratio.
+   * @prop --dimension-object-fit: How the image fills the shape its aspect ratio gives it.
   */
 
   --dimension-aspect-ratio: auto;
+  --dimension-object-fit: cover;
   display: inline-block;
 }
 
+// An aspect ratio without a fit stretches the image to fill the shape, which is
+// the defect behind the reports of distorted logos. Cropping is the default for
+// both routes to a ratio -- this custom property or the `ratio` prop -- and it
+// changes nothing for an image whose box already matches its own proportions,
+// since then there is no overflow to crop. `height: auto` means the `height`
+// and `width` attributes only reserve space: they never set a shape to crop to.
 img {
   aspect-ratio: var(--dimension-aspect-ratio);
   display: block;
   height: auto;
   max-width: 100%;
+  object-fit: var(--dimension-object-fit);
+}
+
+// With the `ratio` prop set the host fills the width it is given and the image fills the
+// host, so the ratio decides the height and `fit` decides how the overflow is cropped. The
+// container decides the size then, not the `width`/`height` attributes. With only the
+// `--dimension-aspect-ratio` custom property set, this class isn't added: the host stays
+// `inline-block`, `fit` has no effect, and the image keeps its intrinsic size.
+:host(.pds-image--has-ratio) {
+  display: block;
+}
+
+:host(.pds-image--has-ratio) img {
+  width: 100%;
 }
