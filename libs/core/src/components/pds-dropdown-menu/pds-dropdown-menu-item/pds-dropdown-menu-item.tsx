@@ -18,13 +18,13 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop() componentId: string;
 
   /**
-   * It determines whether or not the dropdown-item is destructive.
+   * Determines whether or not the dropdown menu item is destructive.
    * @defaultValue false
    */
   @Prop() destructive: boolean = false;
 
   /**
-   * It determines whether or not the dropdown-item is disabled.
+   * Determines whether or not the dropdown menu item is disabled.
    * @defaultValue false
    */
   @Prop({ reflect: true }) disabled: boolean = false;
@@ -45,7 +45,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop() href: string | undefined;
 
   /**
-   * It determines whether or not the dropdown-item is informational: text that the arrow keys
+   * Determines whether or not the dropdown menu item is informational: text that the arrow keys
    * reach but that can't be activated. Takes precedence over `href` and `destructive`.
    * Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
    * @defaultValue false

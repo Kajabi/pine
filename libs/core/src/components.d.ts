@@ -1544,12 +1544,12 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * It determines whether or not the dropdown-item is destructive.
+          * Determines whether or not the dropdown menu item is destructive.
           * @defaultValue false
          */
         "destructive": boolean;
         /**
-          * It determines whether or not the dropdown-item is disabled.
+          * Determines whether or not the dropdown menu item is disabled.
           * @defaultValue false
          */
         "disabled": boolean;
@@ -1572,7 +1572,7 @@ export namespace Components {
          */
         "href": string | undefined;
         /**
-          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+          * Determines whether or not the dropdown menu item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
           * @defaultValue false
          */
         "informational": boolean;
@@ -1588,7 +1588,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * It determines whether or not the dropdown-item is disabled.
+          * Has no effect. A separator can't be focused or activated.
           * @defaultValue false
          */
         "disabled": boolean;
@@ -5465,12 +5465,12 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * It determines whether or not the dropdown-item is destructive.
+          * Determines whether or not the dropdown menu item is destructive.
           * @defaultValue false
          */
         "destructive"?: boolean;
         /**
-          * It determines whether or not the dropdown-item is disabled.
+          * Determines whether or not the dropdown menu item is disabled.
           * @defaultValue false
          */
         "disabled"?: boolean;
@@ -5493,7 +5493,7 @@ declare namespace LocalJSX {
          */
         "href"?: string | undefined;
         /**
-          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+          * Determines whether or not the dropdown menu item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
           * @defaultValue false
          */
         "informational"?: boolean;
@@ -5513,7 +5513,7 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * It determines whether or not the dropdown-item is disabled.
+          * Has no effect. A separator can't be focused or activated.
           * @defaultValue false
          */
         "disabled"?: boolean;
