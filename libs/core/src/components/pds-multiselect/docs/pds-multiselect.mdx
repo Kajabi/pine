@@ -696,7 +696,7 @@ The `pdsMultiselectDismiss` event fires when the dropdown is closed via the Esca
 
 ### Programmatic Clear
 
-Call the `clear()` method to programmatically reset all selections, clear the search query, and emit a change event with empty values (only when something was selected or typed). This is useful for "reset" buttons or when a parent form is cleared. In this example, the Reset button's click handler finds the multiselect by its `id` and calls `clear()` on it.
+Call the `clear()` method to programmatically reset all selections, clear the search query, and emit a change event with empty values (only when something was selected or typed). This is useful for "reset" buttons or when a parent form is cleared. The web-component snippet shows the markup only: to wire up Reset, call `clear()` on the multiselect from the button's click handler, as the React tab does.
 
 <DocCanvas
   mdxSource={{
