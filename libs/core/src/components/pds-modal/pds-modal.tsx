@@ -115,15 +115,12 @@ export class PdsModal {
   @Prop() disableTopLayer = false;
 
   /**
-   * Whether to skip moving focus into the modal when it opens — both our own
-   * `setInitialFocus()` and the browser's native "dialog focusing steps",
-   * which move focus into the dialog as soon as `show()`/`showModal()` is
-   * called regardless of application code. Focus return on close is
-   * unaffected either way. For a modal opened by something other than a
-   * direct user click — a redirect, a deep link, a background event —
-   * stealing focus on open can interrupt whatever the user was already
-   * doing. Default `false` preserves today's behavior for every existing
-   * consumer.
+   * Whether to skip moving focus into the modal when it opens. Set it for a
+   * modal that can open from a background event while the user is mid-task
+   * elsewhere on the page, where moving focus would interrupt them. Pair it
+   * with `disableTopLayer`: in the top layer the rest of the page is inert, so
+   * focus can't stay there. On close, focus moves back only if nothing outside
+   * the modal has taken it.
    * @default false
    */
   @Prop() disableInitialFocus = false;

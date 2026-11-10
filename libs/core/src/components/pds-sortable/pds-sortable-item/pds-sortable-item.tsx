@@ -3,7 +3,7 @@ import { HostStylingKeeper } from '@utils/attributes';
 
 import { handle as handleIcon } from '@pine-ds/icons/icons';
 /**
- * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`.
+ * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered when `enable-actions` is set.
  * @lightDom renders-markup
  */
 @Component({

@@ -385,6 +385,8 @@ When the `selectable` prop is set to `true`, the table will render a checkbox in
   </pds-table>
 </DocCanvas>
 
+When a row's checkbox changes, that `pds-table-row` emits `pdsTableRowSelected` with `{ rowIndex, isSelected }`. `rowIndex` is the row's position in the body, which changes when the table is sorted, so to match a selection to your data, give each row a `data-id` and read `event.target.dataset.id` in the handler. The select-all checkbox emits `pdsTableSelectAll` from `pds-table-head` with `{ isSelected }`. Select all sets every row's `isSelected` without emitting `pdsTableRowSelected`, so listen for both. A row or head that starts with `is-selected` also emits its event on load.
+
 ### Selectable without Select All
 
 When the `disable-select-all` prop is set to `true` alongside `selectable`, the select-all checkbox in the header is hidden while individual row checkboxes remain functional. This is useful when bulk selection is not appropriate but per-row selection is still needed.
@@ -468,7 +470,11 @@ When the `disable-select-all` prop is set to `true` alongside `selectable`, the 
 
 ### Responsive
 
-When the `responsive` prop is set to `true`, the table will render a horizontal scrollbar when the table width exceeds the width of the container.
+When the `responsive` prop is set to `true`, the table scrolls horizontally when it's wider than its container.
+
+- Shadows at the inline-start and inline-end edges show when there's more to scroll. With `fixed-column`, the start shadow stays hidden.
+- The table doesn't reflow: there's no stacked or card layout on small screens. For wide tables, add `fixed-column` so the first column stays in view. With `selectable`, that column slides over the checkboxes as the table scrolls (see [Fixed w/ Checkbox](#fixed-w-checkbox)).
+- The table is a Tab stop, but arrow keys don't scroll it. Keyboard users can only bring hidden columns into view by tabbing to controls inside them.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="responsive" responsive={true}>
@@ -848,10 +854,10 @@ When the `fixed-column` prop is set to `true`, the first column of the table wil
 
 ### Fixed w/ Checkbox
 
-The `fixed-column` prop can be used in conjunction with the `selectable` prop to render an additional checkbox, and they will both remain fixed in place while the rest of the table scrolls horizontally.
+The `fixed-column` prop can be used in conjunction with the `selectable` prop to render an additional checkbox column. Both columns stick to the same inline-start edge, so once the table scrolls horizontally, the first column slides over the checkboxes and hides them.
 
 <DocCanvas mdxSource={{
-  react: `<PdsTable componentId="fixedcb" responsive={true} fixed-column={true} selectable={true}>
+  react: `<PdsTable componentId="fixedcb" responsive={true} fixedColumn={true} selectable={true}>
   <PdsTableHead>
     <PdsTableHeadCell>Column Title</PdsTableHeadCell>
     <PdsTableHeadCell>Column Title</PdsTableHeadCell>
@@ -1040,7 +1046,7 @@ webComponent: `<pds-table component-id="fixedcb" responsive fixed-column selecta
 When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cell will visually truncate the text and add an ellipsis when the text exceeds the max-width (100px) of the cell.
 
 <DocCanvas mdxSource={{
-  react: `<PdsTable component-id="truncate">
+  react: `<PdsTable componentId="truncate">
   <PdsTableHead>
     <PdsTableHeadCell>Column Title</PdsTableHeadCell>
     <PdsTableHeadCell>Column Title</PdsTableHeadCell>
@@ -1369,7 +1375,7 @@ document.addEventListener('pdsTableSort', (event) => {
       <pds-table-cell>jane.smith@example.com</pds-table-cell>
       <pds-table-cell>89654</pds-table-cell>
     </pds-table-row>
-    <pds-table-row value="test3">
+    <pds-table-row>
       <pds-table-cell>Michael Johnson</pds-table-cell>
       <pds-table-cell>michael.johnson@example.com</pds-table-cell>
       <pds-table-cell>21578</pds-table-cell>

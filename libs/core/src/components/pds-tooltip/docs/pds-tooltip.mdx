@@ -121,7 +121,7 @@ Use the `placement` prop to control where the tooltip appears. It automatically 
 <DocCanvas
   mdxSource={{
     react: `
-      <div style={{display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap'}}>
+      <PdsBox gap="sm" alignItems="center" wrap>
         <PdsTooltip content="Top placement" placement="top">
           <PdsButton variant="secondary">Top</PdsButton>
         </PdsTooltip>
@@ -134,10 +134,10 @@ Use the `placement` prop to control where the tooltip appears. It automatically 
         <PdsTooltip content="Left placement" placement="left">
           <PdsButton variant="secondary">Left</PdsButton>
         </PdsTooltip>
-      </div>
+      </PdsBox>
     `,
     webComponent: `
-      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+      <pds-box gap="sm" align-items="center" wrap>
         <pds-tooltip content="Top placement" placement="top">
           <pds-button variant="secondary">Top</pds-button>
         </pds-tooltip>
@@ -150,10 +150,10 @@ Use the `placement` prop to control where the tooltip appears. It automatically 
         <pds-tooltip content="Left placement" placement="left">
           <pds-button variant="secondary">Left</pds-button>
         </pds-tooltip>
-      </div>
+      </pds-box>
     `
 }}>
-  <div style={{display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap'}}>
+  <pds-box gap="sm" align-items="center" wrap>
     <pds-tooltip content="Top placement" placement="top">
       <pds-button variant="secondary">Top</pds-button>
     </pds-tooltip>
@@ -166,7 +166,7 @@ Use the `placement` prop to control where the tooltip appears. It automatically 
     <pds-tooltip content="Left placement" placement="left">
       <pds-button variant="secondary">Left</pds-button>
     </pds-tooltip>
-  </div>
+  </pds-box>
 </DocCanvas>
 
 #### Aligned Positions
@@ -175,7 +175,7 @@ You can also specify start and end alignments for more precise positioning:
 <DocCanvas
   mdxSource={{
     react: `
-      <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
+      <PdsBox gap="sm" alignItems="center" wrap>
         <PdsTooltip content="Top start alignment" placement="top-start">
           <PdsButton variant="secondary">Top Start</PdsButton>
         </PdsTooltip>
@@ -188,10 +188,10 @@ You can also specify start and end alignments for more precise positioning:
         <PdsTooltip content="Bottom end alignment" placement="bottom-end">
           <PdsButton variant="secondary">Bottom End</PdsButton>
         </PdsTooltip>
-      </div>
+      </PdsBox>
     `,
     webComponent: `
-      <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+      <pds-box gap="sm" align-items="center" wrap>
         <pds-tooltip content="Top start alignment" placement="top-start">
           <pds-button variant="secondary">Top Start</pds-button>
         </pds-tooltip>
@@ -204,10 +204,10 @@ You can also specify start and end alignments for more precise positioning:
         <pds-tooltip content="Bottom end alignment" placement="bottom-end">
           <pds-button variant="secondary">Bottom End</pds-button>
         </pds-tooltip>
-      </div>
+      </pds-box>
     `
 }}>
-  <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
+  <pds-box gap="sm" align-items="center" wrap>
     <pds-tooltip content="Top start alignment" placement="top-start">
       <pds-button variant="secondary">Top Start</pds-button>
     </pds-tooltip>
@@ -220,7 +220,7 @@ You can also specify start and end alignments for more precise positioning:
     <pds-tooltip content="Bottom end alignment" placement="bottom-end">
       <pds-button variant="secondary">Bottom End</pds-button>
     </pds-tooltip>
-  </div>
+  </pds-box>
 </DocCanvas>
 
 #### Smart Positioning
@@ -229,34 +229,34 @@ The tooltip automatically adjusts its position when there's not enough space. Tr
 <DocCanvas
   mdxSource={{
     react: `
-      <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
+      <PdsBox gap="sm" alignItems="center" wrap>
         <PdsTooltip content="This tooltip will flip to stay visible when near screen edges" placement="right">
           <PdsButton variant="secondary">Smart Flip</PdsButton>
         </PdsTooltip>
         <PdsTooltip content="This tooltip shifts to stay within viewport bounds" placement="top">
           <PdsButton variant="secondary">Smart Shift</PdsButton>
         </PdsTooltip>
-      </div>
+      </PdsBox>
     `,
     webComponent: `
-      <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+      <pds-box gap="sm" align-items="center" wrap>
         <pds-tooltip content="This tooltip will flip to stay visible when near screen edges" placement="right">
           <pds-button variant="secondary">Smart Flip</pds-button>
         </pds-tooltip>
         <pds-tooltip content="This tooltip shifts to stay within viewport bounds" placement="top">
           <pds-button variant="secondary">Smart Shift</pds-button>
         </pds-tooltip>
-      </div>
+      </pds-box>
     `
 }}>
-  <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
+  <pds-box gap="sm" align-items="center" wrap>
     <pds-tooltip content="This tooltip will flip to stay visible when near screen edges" placement="right">
       <pds-button variant="secondary">Smart Flip</pds-button>
     </pds-tooltip>
     <pds-tooltip content="This tooltip shifts to stay within viewport bounds" placement="top">
       <pds-button variant="secondary">Smart Shift</pds-button>
     </pds-tooltip>
-  </div>
+  </pds-box>
 </DocCanvas>
 
 
@@ -293,46 +293,30 @@ tooltip renders inside that dialog or popover so it shows above it. Open the mod
 
 - The trigger element receives `aria-describedby` referencing an ID that the component creates. Provide meaningful button/link labels so the tooltip content is read *after* the control name. When combining multiple tooltips on the same control, set `aria-describedby` manually to avoid duplication.
 - Tooltips do not announce themselves automatically because they use `aria-live="off"`. Reserve tooltips for purely supplemental information and display critical validation or blocking instructions inline.
-- Use the `opened` property when the tooltip should persist for longer than a hover/focus interaction (for example, guided tours). Because `opened` reflects as an attribute, you can also toggle it declaratively via frameworks or CSS selectors.
-- Call the public methods `showTooltip()` and `hideTooltip()` for advanced interactions (focus trapping, commanded display, or analytics). These methods return a promise that resolves once the visibility state changes.
+- The tooltip already opens on hover and focus, so don't wire those events yourself. Use the `opened` property when it should stay open beyond a hover or focus, such as a guided-tour step. While `opened` is set from outside, moving the pointer or focus away doesn't close it. If hover or focus opened the tooltip first, setting `opened` to `true` changes nothing, and moving away still closes it; set `opened` to `false` and then `true` to hold it open. Set it as an attribute or a property. It reflects to the attribute, so `pds-tooltip[opened]` matches an open tooltip.
+- Call the public methods `showTooltip()` and `hideTooltip()` from your own script to open or close the tooltip, such as when a tour advances. Each sets `opened` and returns a promise that resolves once it's set.
 - The open tooltip renders at the end of `<body>`, or inside the open modal dialog or popover around its trigger. Where it renders is decided when it opens: a tooltip opened with `opened` before its modal opens stays behind the modal until it opens again. A tooltip in a popover inside another component's shadow root, such as a `pds-filter` panel, still renders in the body.
 - When `html-content="true"`, avoid placing focusable elements inside the `content` slot. Tooltips are not intended for interactive elements. If you require buttons or links, switch to `<pds-popover>`, which manages focus and dismissal affordances. Tooltip content is never a Tab stop: a focus trap such as `pds-modal`'s skips it.
 
 ```tsx
-// React example showing imperative control
-const FieldWithTooltip = () => {
-  const tooltipRef = useRef<HTMLPdsTooltipElement>(null);
-
-  return (
-    <PdsTooltip
-      ref={tooltipRef}
-      content="Passwords must be at least 16 characters."
-      placement="right"
-    >
-      <PdsButton
-        variant="secondary"
-        onFocus={() => tooltipRef.current?.showTooltip()}
-        onBlur={() => tooltipRef.current?.hideTooltip()}
-      >
-        Password help
-      </PdsButton>
-    </PdsTooltip>
-  );
-};
+// React: keep the tooltip open while a guided-tour step points at the button
+const PublishButton = ({ tourStep }: { tourStep: string }) => (
+  <PdsTooltip
+    content="Publish when you're ready to go live."
+    placement="bottom"
+    opened={tourStep === 'publish'}
+  >
+    <PdsButton variant="primary">Publish</PdsButton>
+  </PdsTooltip>
+);
 ```
 
-```html
-<!-- Vanilla JS -->
-<pds-tooltip id="status-tooltip" opened="false" content="Synced 2 minutes ago">
-  <pds-icon-button icon="info" aria-label="Sync status"></pds-icon-button>
-</pds-tooltip>
+In HTML, the tooltip below starts open. Your tour code closes it by removing `opened` or calling `hideTooltip()`.
 
-<script type="module">
-  const tooltip = document.getElementById('status-tooltip');
-  const icon = tooltip.querySelector('pds-icon-button');
-  icon.addEventListener('mouseenter', () => tooltip.showTooltip());
-  icon.addEventListener('mouseleave', () => tooltip.hideTooltip());
-</script>
+```html
+<pds-tooltip content="Publish when you're ready to go live." placement="bottom" opened>
+  <pds-button variant="primary">Publish</pds-button>
+</pds-tooltip>
 ```
 
 ## Additional Resources

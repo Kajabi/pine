@@ -18,13 +18,13 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop() componentId: string;
 
   /**
-   * It determines whether or not the dropdown-item is destructive.
+   * Determines whether or not the dropdown menu item is destructive.
    * @defaultValue false
    */
   @Prop() destructive: boolean = false;
 
   /**
-   * It determines whether or not the dropdown-item is disabled.
+   * Determines whether or not the dropdown menu item is disabled.
    * @defaultValue false
    */
   @Prop({ reflect: true }) disabled: boolean = false;
@@ -39,13 +39,13 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop() download?: string;
 
   /**
-   *  If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+   *  If provided, renders the dropdown menu item as an anchor (`<a>`) element instead of a button.
    *  Ignored when `informational` is set.
    */
   @Prop() href: string | undefined;
 
   /**
-   * It determines whether or not the dropdown-item is informational: text that the arrow keys
+   * Determines whether or not the dropdown menu item is informational: text that the arrow keys
    * reach but that can't be activated. Takes precedence over `href` and `destructive`.
    * Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
    * @defaultValue false
@@ -77,7 +77,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop({ reflect: true }) target?: '_blank' | '_self' | '_parent' | '_top';
 
   /**
-   * Emitted when the dropdown-item is clicked.
+   * Emitted when the dropdown menu item is clicked.
    *
    */
   @Event() pdsClick: EventEmitter<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>;

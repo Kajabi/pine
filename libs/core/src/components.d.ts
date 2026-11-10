@@ -1157,7 +1157,7 @@ export namespace Components {
          */
         "truncate": boolean;
         /**
-          * The value of the combobox input.
+          * The `value` of the selected option.
           * @default ''
          */
         "value": string;
@@ -1458,7 +1458,7 @@ export namespace Components {
     /**
      * A side panel composed from `pds-modal`, non-modal by default.
      * By default, unlike `pds-modal`, the page stays interactive while a drawer
-     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * is open: no dimming, no blur, no click blocking.
      * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
      * its backdrop suppressed, and adds the edge, width and dismiss behavior a
      * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
@@ -1477,7 +1477,7 @@ export namespace Components {
          */
         "initialFocus": 'auto' | 'none';
         /**
-          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Setting it to `false` also turns off Escape, so the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
           * @default true
          */
         "lightDismiss": boolean;
@@ -1497,7 +1497,7 @@ export namespace Components {
          */
         "scrollable": boolean;
         /**
-          * Which edge of the viewport the drawer is docked to. Logical, so this is free under RTL — `end` is the inline-end edge regardless of direction.
+          * Which edge of the viewport the drawer is docked to. Logical: `end` is the inline-end edge, so an `end` drawer docks on the left in right-to-left layouts.
           * @default 'end'
          */
         "side": 'start' | 'end';
@@ -1508,10 +1508,7 @@ export namespace Components {
         "size": 'sm' | 'md';
     }
     /**
-     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
-     * which caps itself against the viewport for a centered, possibly-shorter
-     * modal, a drawer panel is already edge-to-edge, so its content can simply
-     * flex to fill whatever space the header and footer leave.
+     * Fills the space between the drawer header and footer.
      * @lightDom renders-markup
      */
     interface PdsDrawerContent {
@@ -1547,12 +1544,12 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * It determines whether or not the dropdown-item is destructive.
+          * Determines whether or not the dropdown menu item is destructive.
           * @defaultValue false
          */
         "destructive": boolean;
         /**
-          * It determines whether or not the dropdown-item is disabled.
+          * Determines whether or not the dropdown menu item is disabled.
           * @defaultValue false
          */
         "disabled": boolean;
@@ -1571,11 +1568,11 @@ export namespace Components {
          */
         "externalLabel"?: string;
         /**
-          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
+          * If provided, renders the dropdown menu item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href": string | undefined;
         /**
-          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+          * Determines whether or not the dropdown menu item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
           * @defaultValue false
          */
         "informational": boolean;
@@ -1591,16 +1588,14 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * It determines whether or not the dropdown-item is disabled.
+          * Has no effect. A separator can't be focused or activated.
           * @defaultValue false
          */
         "disabled": boolean;
     }
     /**
-     * Individual filter component with cross-browser popover positioning.
-     * Uses a hybrid approach for optimal cross-browser compatibility:
-     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
-     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+     * The `clear` variant has no popover and emits `pdsFilterClear` instead.
      */
     interface PdsFilter {
         /**
@@ -1681,7 +1676,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Sets the number of milliseconds to wait before updating the value.
+          * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -1894,7 +1889,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Whether to skip moving focus into the modal when it opens — both our own `setInitialFocus()` and the browser's native "dialog focusing steps", which move focus into the dialog as soon as `show()`/`showModal()` is called regardless of application code. Focus return on close is unaffected either way. For a modal opened by something other than a direct user click — a redirect, a deep link, a background event — stealing focus on open can interrupt whatever the user was already doing. Default `false` preserves today's behavior for every existing consumer.
+          * Whether to skip moving focus into the modal when it opens. Set it for a modal that can open from a background event while the user is mid-task elsewhere on the page, where moving focus would interrupt them. Pair it with `disableTopLayer`: in the top layer the rest of the page is inert, so focus can't stay there. On close, focus moves back only if nothing outside the modal has taken it.
           * @default false
          */
         "disableInitialFocus": boolean;
@@ -2193,7 +2188,7 @@ export namespace Components {
          */
         "hide": () => Promise<void>;
         /**
-          * Sets the maximum width of the popover content
+          * Sets the maximum width of the popover content, in pixels.
           * @defaultValue 352
          */
         "maxWidth"?: number;
@@ -2572,7 +2567,7 @@ export namespace Components {
          */
         "label": string;
         /**
-          * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
+          * Specifies the name. Submitted with the form name/value pair when checked.
          */
         "name": string;
         /**
@@ -2652,7 +2647,7 @@ export namespace Components {
          */
         "disableSelectAll": boolean;
         /**
-          * Determines if the should display a fixed first column.
+          * Determines if the table displays a fixed first column.
          */
         "fixedColumn": boolean;
         /**
@@ -2697,7 +2692,7 @@ export namespace Components {
          */
         "indeterminate"?: boolean;
         /**
-          * Determines if the table row is currently selected.
+          * Determines if the select all checkbox is checked.
           * @defaultValue false
          */
         "isSelected": boolean;
@@ -2771,7 +2766,7 @@ export namespace Components {
          */
         "nav"?: boolean;
         /**
-          * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
+          * Stretches the component to fill its container's height. The active tab panel keeps the height of its content. Requires the component to have a constrained height (e.g. a flex parent).
           * @defaultValue false
          */
         "stretch"?: boolean;
@@ -2854,7 +2849,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * The amount of time, in milliseconds, to wait to trigger the event after each keystroke.
+          * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -2892,7 +2887,7 @@ export namespace Components {
          */
         "maxLength"?: number;
         /**
-          * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
+          * Specifies the name. Submitted with the form name/value pair.
           * @default this.componentId
          */
         "name": string;
@@ -3324,7 +3319,7 @@ declare global {
     /**
      * A side panel composed from `pds-modal`, non-modal by default.
      * By default, unlike `pds-modal`, the page stays interactive while a drawer
-     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * is open: no dimming, no blur, no click blocking.
      * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
      * its backdrop suppressed, and adds the edge, width and dismiss behavior a
      * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
@@ -3347,10 +3342,7 @@ declare global {
         new (): HTMLPdsDrawerElement;
     };
     /**
-     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
-     * which caps itself against the viewport for a centered, possibly-shorter
-     * modal, a drawer panel is already edge-to-edge, so its content can simply
-     * flex to fill whatever space the header and footer leave.
+     * Fills the space between the drawer header and footer.
      * @lightDom renders-markup
      */
     interface HTMLPdsDrawerContentElement extends Components.PdsDrawerContent, HTMLStencilElement {
@@ -3412,10 +3404,8 @@ declare global {
         "pdsFilterClear": PdsFilterClearEventDetail;
     }
     /**
-     * Individual filter component with cross-browser popover positioning.
-     * Uses a hybrid approach for optimal cross-browser compatibility:
-     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
-     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+     * The `clear` variant has no popover and emits `pdsFilterClear` instead.
      */
     interface HTMLPdsFilterElement extends Components.PdsFilter, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsFilterElementEventMap>(type: K, listener: (this: HTMLPdsFilterElement, ev: PdsFilterCustomEvent<HTMLPdsFilterElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5072,7 +5062,7 @@ declare namespace LocalJSX {
          */
         "truncate"?: boolean;
         /**
-          * The value of the combobox input.
+          * The `value` of the selected option.
           * @default ''
          */
         "value"?: string;
@@ -5381,7 +5371,7 @@ declare namespace LocalJSX {
     /**
      * A side panel composed from `pds-modal`, non-modal by default.
      * By default, unlike `pds-modal`, the page stays interactive while a drawer
-     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * is open: no dimming, no blur, no click blocking.
      * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
      * its backdrop suppressed, and adds the edge, width and dismiss behavior a
      * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
@@ -5400,7 +5390,7 @@ declare namespace LocalJSX {
          */
         "initialFocus"?: 'auto' | 'none';
         /**
-          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Setting it to `false` also turns off Escape, so the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
           * @default true
          */
         "lightDismiss"?: boolean;
@@ -5428,7 +5418,7 @@ declare namespace LocalJSX {
          */
         "scrollable"?: boolean;
         /**
-          * Which edge of the viewport the drawer is docked to. Logical, so this is free under RTL — `end` is the inline-end edge regardless of direction.
+          * Which edge of the viewport the drawer is docked to. Logical: `end` is the inline-end edge, so an `end` drawer docks on the left in right-to-left layouts.
           * @default 'end'
          */
         "side"?: 'start' | 'end';
@@ -5439,10 +5429,7 @@ declare namespace LocalJSX {
         "size"?: 'sm' | 'md';
     }
     /**
-     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
-     * which caps itself against the viewport for a centered, possibly-shorter
-     * modal, a drawer panel is already edge-to-edge, so its content can simply
-     * flex to fill whatever space the header and footer leave.
+     * Fills the space between the drawer header and footer.
      * @lightDom renders-markup
      */
     interface PdsDrawerContent {
@@ -5474,12 +5461,12 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * It determines whether or not the dropdown-item is destructive.
+          * Determines whether or not the dropdown menu item is destructive.
           * @defaultValue false
          */
         "destructive"?: boolean;
         /**
-          * It determines whether or not the dropdown-item is disabled.
+          * Determines whether or not the dropdown menu item is disabled.
           * @defaultValue false
          */
         "disabled"?: boolean;
@@ -5498,16 +5485,16 @@ declare namespace LocalJSX {
          */
         "externalLabel"?: string;
         /**
-          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
+          * If provided, renders the dropdown menu item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href"?: string | undefined;
         /**
-          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+          * Determines whether or not the dropdown menu item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
           * @defaultValue false
          */
         "informational"?: boolean;
         /**
-          * Emitted when the dropdown-item is clicked.
+          * Emitted when the dropdown menu item is clicked.
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
         /**
@@ -5522,16 +5509,14 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * It determines whether or not the dropdown-item is disabled.
+          * Has no effect. A separator can't be focused or activated.
           * @defaultValue false
          */
         "disabled"?: boolean;
     }
     /**
-     * Individual filter component with cross-browser popover positioning.
-     * Uses a hybrid approach for optimal cross-browser compatibility:
-     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
-     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+     * The `clear` variant has no popover and emits `pdsFilterClear` instead.
      */
     interface PdsFilter {
         /**
@@ -5616,7 +5601,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Sets the number of milliseconds to wait before updating the value.
+          * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -5688,7 +5673,7 @@ declare namespace LocalJSX {
          */
         "onPdsFocus"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when a keyboard input occurs.
+          * Emitted when the value changes from user input (typing, paste, autofill).
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
@@ -5849,7 +5834,7 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Whether to skip moving focus into the modal when it opens — both our own `setInitialFocus()` and the browser's native "dialog focusing steps", which move focus into the dialog as soon as `show()`/`showModal()` is called regardless of application code. Focus return on close is unaffected either way. For a modal opened by something other than a direct user click — a redirect, a deep link, a background event — stealing focus on open can interrupt whatever the user was already doing. Default `false` preserves today's behavior for every existing consumer.
+          * Whether to skip moving focus into the modal when it opens. Set it for a modal that can open from a background event while the user is mid-task elsewhere on the page, where moving focus would interrupt them. Pair it with `disableTopLayer`: in the top layer the rest of the page is inert, so focus can't stay there. On close, focus moves back only if nothing outside the modal has taken it.
           * @default false
          */
         "disableInitialFocus"?: boolean;
@@ -6040,7 +6025,7 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         /**
-          * Emitted when the dropdown is dismissed via Escape key or click outside.  This event fires only when the user explicitly dismisses the panel without making a selection: - ✅ Fires: Pressing Escape key while dropdown is open - ✅ Fires: Clicking outside the component while dropdown is open - ❌ Does NOT fire: When panel closes due to selection (including when `closePanelOnSelect` is true) - ❌ Does NOT fire: When panel closes programmatically via `closeDropdown()`  Equivalent to Sage's `onEscapeHook`. Use this to restore parent UI state or run cleanup when the user cancels their interaction.
+          * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the component, such as with a click elsewhere on the page.  It doesn't fire when the panel closes any other way: from a selection (including with `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while the panel is open fires this event, and the panel opens again. Use it to restore parent UI state or run cleanup when the user cancels.
          */
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**
@@ -6160,7 +6145,7 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Sets the maximum width of the popover content
+          * Sets the maximum width of the popover content, in pixels.
           * @defaultValue 352
          */
         "maxWidth"?: number;
@@ -6575,7 +6560,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
+          * Specifies the name. Submitted with the form name/value pair when checked.
          */
         "name"?: string;
         /**
@@ -6660,11 +6645,11 @@ declare namespace LocalJSX {
          */
         "disableSelectAll"?: boolean;
         /**
-          * Determines if the should display a fixed first column.
+          * Determines if the table displays a fixed first column.
          */
         "fixedColumn"?: boolean;
         /**
-          * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+          * Event that is emitted by `pds-table-head` when the select all checkbox is clicked, carrying the selected value. It bubbles through the table; the table doesn't emit it itself.
          */
         "onPdsTableSelectAll"?: (event: PdsTableCustomEvent<{ isSelected: boolean }>) => void;
         /**
@@ -6709,7 +6694,7 @@ declare namespace LocalJSX {
          */
         "indeterminate"?: boolean;
         /**
-          * Determines if the table row is currently selected.
+          * Determines if the select all checkbox is checked.
           * @defaultValue false
          */
         "isSelected"?: boolean;
@@ -6786,7 +6771,7 @@ declare namespace LocalJSX {
          */
         "nav"?: boolean;
         /**
-          * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
+          * Stretches the component to fill its container's height. The active tab panel keeps the height of its content. Requires the component to have a constrained height (e.g. a flex parent).
           * @defaultValue false
          */
         "stretch"?: boolean;
@@ -6869,7 +6854,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * The amount of time, in milliseconds, to wait to trigger the event after each keystroke.
+          * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
          */
         "debounce"?: number;
         /**
@@ -6911,7 +6896,7 @@ declare namespace LocalJSX {
          */
         "maxLength"?: number;
         /**
-          * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
+          * Specifies the name. Submitted with the form name/value pair.
           * @default this.componentId
          */
         "name"?: string;
@@ -6924,7 +6909,7 @@ declare namespace LocalJSX {
          */
         "onPdsFocus"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when a keyboard input occurs.  For elements that accept text input (`type=text`, `type=tel`, etc.), the interface is [`InputEvent`](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent); for others, the interface is [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event). If the input is cleared on edit, the type is `null`.
+          * Emitted when the value changes from user input (typing, paste, autofill).
          */
         "onPdsInput"?: (event: PdsTextareaCustomEvent<TextareaInputEventDetail>) => void;
         /**
@@ -7832,7 +7817,7 @@ declare module "@stencil/core" {
             /**
              * A side panel composed from `pds-modal`, non-modal by default.
              * By default, unlike `pds-modal`, the page stays interactive while a drawer
-             * is open: no dimming, no blur, no scroll lock, no click blocking.
+             * is open: no dimming, no blur, no click blocking.
              * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
              * its backdrop suppressed, and adds the edge, width and dismiss behavior a
              * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
@@ -7842,10 +7827,7 @@ declare module "@stencil/core" {
              */
             "pds-drawer": LocalJSX.IntrinsicElements["pds-drawer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerElement>;
             /**
-             * Fills the drawer panel's height by default — unlike `pds-modal-content`,
-             * which caps itself against the viewport for a centered, possibly-shorter
-             * modal, a drawer panel is already edge-to-edge, so its content can simply
-             * flex to fill whatever space the header and footer leave.
+             * Fills the space between the drawer header and footer.
              * @lightDom renders-markup
              */
             "pds-drawer-content": LocalJSX.IntrinsicElements["pds-drawer-content"] & JSXBase.HTMLAttributes<HTMLPdsDrawerContentElement>;
@@ -7861,10 +7843,8 @@ declare module "@stencil/core" {
             "pds-dropdown-menu-item": LocalJSX.IntrinsicElements["pds-dropdown-menu-item"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
             "pds-dropdown-menu-separator": LocalJSX.IntrinsicElements["pds-dropdown-menu-separator"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
             /**
-             * Individual filter component with cross-browser popover positioning.
-             * Uses a hybrid approach for optimal cross-browser compatibility:
-             * - Modern browsers: CSS anchor positioning + JavaScript flip classes
-             * - Fallback browsers: JavaScript positioning with viewport boundary detection
+             * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+             * The `clear` variant has no popover and emits `pdsFilterClear` instead.
              */
             "pds-filter": LocalJSX.IntrinsicElements["pds-filter"] & JSXBase.HTMLAttributes<HTMLPdsFilterElement>;
             "pds-filters": LocalJSX.IntrinsicElements["pds-filters"] & JSXBase.HTMLAttributes<HTMLPdsFiltersElement>;

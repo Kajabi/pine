@@ -1,5 +1,6 @@
-# pds-dropdown
+# pds-dropdown-menu
 
+Reveals a list of actions from a button trigger, following the WAI-ARIA Menu Button pattern.
 
 
 <!-- Auto Generated Below -->
