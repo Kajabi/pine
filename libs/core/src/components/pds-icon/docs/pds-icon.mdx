@@ -41,7 +41,7 @@ Each icon has one name, written two ways:
 - Web components use the kebab-case name: `<pds-icon name="info-circle"></pds-icon>`.
 - React imports the camelCase form of the same name from `@pine-ds/icons/icons`: `import { infoCircle } from '@pine-ds/icons/icons'`. Numbers stay in place, so `circle-1` becomes `circle1`.
 
-A name that doesn't exist renders nothing, and the only sign is a console warning. AI tools can check a name with the `list_pine_icons` tool in [Pine MCP](/docs/resources-pine-mcp--docs).
+A name that doesn't exist renders nothing. The only signs are a failed request for the SVG and a console warning. AI tools can check a name with the `list_pine_icons` tool in [Pine MCP](/docs/resources-pine-mcp--docs).
 
 - **Do:** `<pds-icon name="info-circle"></pds-icon>`. **Don't:** `<pds-icon name="infoCircle"></pds-icon>`, or a guessed name such as `name="info"`.
 - **Do:** `<PdsIcon icon={infoCircle} />`. **Don't:** `<PdsIcon name="info-circle" />`, which renders but logs a warning and fetches the SVG at runtime instead of bundling it.
