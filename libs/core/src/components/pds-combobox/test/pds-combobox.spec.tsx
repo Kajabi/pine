@@ -4313,6 +4313,36 @@ describe('pds-combobox', () => {
     });
   });
 
+  // Opening places the dropdown a tick later, which can run before it has rendered and skip it.
+  it('places a newly rendered dropdown once, without waiting for the opening tick', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="placed" trigger="button" mode="select-only" dropdown-width="300px" max-height="200px">
+        <option value="a">Add a tag</option>
+        <option value="b">Remove a tag</option>
+      </pds-combobox>`,
+    });
+    const component = page.rootInstance;
+    const place = jest.spyOn(component, 'positionDropdown').mockImplementation(() => Promise.resolve());
+
+    // Opened without the trigger's handlers, so no opening tick is scheduled: rendering alone places it.
+    component.isOpen = true;
+    await page.waitForChanges();
+    expect(place).toHaveBeenCalledTimes(1);
+
+    // Later renders of the same dropdown don't place it again.
+    component.highlightedIndex = 1;
+    await page.waitForChanges();
+    expect(place).toHaveBeenCalledTimes(1);
+
+    // Reopened, it's a new dropdown, placed again.
+    component.isOpen = false;
+    await page.waitForChanges();
+    component.isOpen = true;
+    await page.waitForChanges();
+    expect(place).toHaveBeenCalledTimes(2);
+  });
+
   describe('disabled options', () => {
     const key = (component: { handleKeyDown: (e: KeyboardEvent) => void }, k: string) => {
       const event = new KeyboardEvent('keydown', { key: k, cancelable: true });
