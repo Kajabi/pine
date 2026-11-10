@@ -813,3 +813,198 @@ describe('pds-multiselect', () => {
     });
   });
 });
+
+describe('pds-multiselect truncation', () => {
+  const longPlaceholder = 'Choose the tags that apply to this product';
+  const firstTag = `First_${'x'.repeat(60)}`;
+  const secondTag = `Second_${'x'.repeat(60)}`;
+
+  const tooltips = (page: Page) =>
+    page.$$eval('.pds-truncation-tooltip', els => els.map(el => el.textContent.trim()));
+
+  const narrow = async (value: string[] = []) => {
+    const page = await newE2EPage();
+    await pinHover(page, true);
+    await page.setContent(
+      `<pds-multiselect component-id="tags" label="Tags" style="width: 180px" placeholder="${longPlaceholder}"></pds-multiselect>`,
+    );
+    await setOptions(page, [{ id: '1', text: firstTag }, { id: '2', text: secondTag }]);
+    if (value.length > 0) {
+      await page.$eval('pds-multiselect', (el: HTMLElement & { value?: string[] }, ids) => { el.value = ids; }, value);
+      await page.waitForChanges();
+    }
+    return page;
+  };
+
+  describe('trigger text', () => {
+    // Shown while nothing is selected, and permanently when pills sit below the trigger, so it is
+    // the field's only visible description rather than filler over a field being typed into.
+    it('reveals the whole placeholder on hover while the trigger clips it', async () => {
+      const page = await narrow();
+
+      expect(
+        await page.$eval('pds-multiselect', el => {
+          const text = el.shadowRoot.querySelector('.pds-multiselect__trigger-text');
+          return text.scrollWidth > text.clientWidth;
+        }),
+      ).toBe(true);
+
+      await (await page.find('pds-multiselect >>> .pds-multiselect__trigger')).hover();
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+      expect(await tooltips(page)).toEqual([longPlaceholder]);
+    });
+
+    // The trigger button is the tab stop; a second one on the text inside it would be nameless.
+    it('reveals it on keyboard focus, adding no tab stop of its own', async () => {
+      const page = await narrow();
+
+      await page.keyboard.press('Tab');
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+      expect(await tooltips(page)).toEqual([longPlaceholder]);
+      expect(
+        await page.$eval('pds-multiselect', el =>
+          el.shadowRoot.querySelector('.pds-multiselect__trigger-text').getAttribute('tabindex'),
+        ),
+      ).toBeNull();
+    });
+
+    it('follows the text the trigger shows now, so a count that fits reveals nothing', async () => {
+      const page = await narrow(['1', '2']);
+
+      expect(
+        await page.$eval('pds-multiselect', el =>
+          el.shadowRoot.querySelector('.pds-multiselect__trigger-text').textContent,
+        ),
+      ).toBe('2 items');
+
+      await (await page.find('pds-multiselect >>> .pds-multiselect__trigger')).hover();
+      await settle(200);
+
+      expect(await tooltips(page)).toEqual([]);
+    });
+
+    // There the placeholder sits beside the chevron button rather than inside it, so the
+    // surface around both is what hover and the chevron's focus have in common.
+    it('reveals the placeholder the inline pill trigger clips, on hover and on focus', async () => {
+      const page = await newE2EPage();
+      await pinHover(page, true);
+      await page.setContent(
+        `<pds-multiselect component-id="tags" label="Tags" style="width: 180px" selected-display="pill" placeholder="${longPlaceholder}"></pds-multiselect>`,
+      );
+      await setOptions(page, [{ id: '1', text: firstTag }]);
+
+      await (await page.find('pds-multiselect >>> .pds-multiselect__trigger--pill-inline')).hover();
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
+      expect(await tooltips(page)).toEqual([longPlaceholder]);
+
+      await page.mouse.move(0, 0);
+      await settle(300);
+      await page.keyboard.press('Tab');
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+      expect(await tooltips(page)).toEqual([longPlaceholder]);
+      expect(
+        await page.$eval('pds-multiselect', el =>
+          el.shadowRoot.querySelector('.pds-multiselect__trigger-text').getAttribute('tabindex'),
+        ),
+      ).toBeNull();
+    });
+
+    it('shows nothing while the pointer is in the open panel, a child of the same host', async () => {
+      const page = await narrow();
+      await openBuiltInTrigger(page);
+
+      await (await page.find('pds-multiselect >>> .pds-multiselect__option')).hover();
+      await settle(200);
+
+      expect(await tooltips(page)).toEqual([]);
+    });
+  });
+
+  describe('selected items list', () => {
+    const openWithSelections = async () => {
+      const page = await narrow(['1', '2']);
+      await openBuiltInTrigger(page);
+      return page;
+    };
+
+    const rows = (page: Page) => page.$$('pds-multiselect >>> .pds-multiselect__selected-item');
+
+    // Nothing around them takes focus, so each clipped row carries the tab stop its tooltip needs.
+    it('gives every clipped row its own tab stop', async () => {
+      const page = await openWithSelections();
+
+      expect(
+        await page.$eval('pds-multiselect', el =>
+          Array.from(el.shadowRoot.querySelectorAll('.pds-multiselect__selected-item')).map(item => ({
+            clipped: item.scrollWidth > item.clientWidth,
+            tabindex: item.getAttribute('tabindex'),
+          })),
+        ),
+      ).toEqual([
+        { clipped: true, tabindex: '0' },
+        { clipped: true, tabindex: '0' },
+      ]);
+    });
+
+    it('reveals the hovered row beside that row, not the list', async () => {
+      const page = await openWithSelections();
+
+      await (await rows(page))[1].hover();
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+      // It opens above its anchor, so an anchor on the hovered row leaves it between the two
+      // rows; anchored to the list instead it would clear the first row's top edge as well.
+      const placement = await page.evaluate(() => {
+        const items = document
+          .querySelector('pds-multiselect')
+          .shadowRoot.querySelectorAll('.pds-multiselect__selected-item');
+        const tip = document.querySelector('.pds-truncation-tooltip').getBoundingClientRect();
+        return {
+          aboveHoveredRow: tip.bottom <= items[1].getBoundingClientRect().top,
+          belowFirstRowTop: tip.bottom > items[0].getBoundingClientRect().top,
+        };
+      });
+
+      expect(await tooltips(page)).toEqual([secondTag]);
+      expect(placement).toEqual({ aboveHoveredRow: true, belowFirstRowTop: true });
+    });
+
+    it('rebinds the rows a changed selection renders', async () => {
+      const page = await openWithSelections();
+
+      await page.$eval('pds-multiselect', (el: HTMLElement & { value?: string[] }) => { el.value = ['2']; });
+      await page.waitForChanges();
+
+      const remaining = await rows(page);
+      expect(remaining).toHaveLength(1);
+
+      await remaining[0].hover();
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+      expect(await tooltips(page)).toEqual([secondTag]);
+    });
+
+    // The panel re-renders on every keystroke, and re-binding then would tear down a tooltip the
+    // pointer is still inside.
+    it('keeps the rows bound while searching re-renders the panel', async () => {
+      const page = await openWithSelections();
+
+      await page.keyboard.type('First');
+      await page.waitForChanges();
+
+      await (await rows(page))[0].hover();
+      await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+      expect(await tooltips(page)).toEqual([firstTag]);
+    });
+
+    it('has no axe violations while the rows are clipped', async () => {
+      const page = await openWithSelections();
+
+      expect(await axeViolations(page)).toBe('');
+    });
+  });
+});
