@@ -385,6 +385,8 @@ When the `selectable` prop is set to `true`, the table will render a checkbox in
   </pds-table>
 </DocCanvas>
 
+When a row's checkbox changes, that `pds-table-row` emits `pdsTableRowSelected` with `{ rowIndex, isSelected }`. `rowIndex` is the row's position in the body, which changes when the table is sorted, so to match a selection to your data, give each row a `data-id` and read `event.target.dataset.id` in the handler. The select-all checkbox emits `pdsTableSelectAll` from `pds-table-head` with `{ isSelected }`.
+
 ### Selectable without Select All
 
 When the `disable-select-all` prop is set to `true` alongside `selectable`, the select-all checkbox in the header is hidden while individual row checkboxes remain functional. This is useful when bulk selection is not appropriate but per-row selection is still needed.
@@ -468,7 +470,11 @@ When the `disable-select-all` prop is set to `true` alongside `selectable`, the 
 
 ### Responsive
 
-When the `responsive` prop is set to `true`, the table will render a horizontal scrollbar when the table width exceeds the width of the container.
+When the `responsive` prop is set to `true`, the table scrolls horizontally when it's wider than its container.
+
+- Shadows at the inline-start and inline-end edges show when there's more to scroll.
+- The table doesn't reflow: there's no stacked or card layout on small screens. For wide tables, add `fixed-column` so the first column stays in view.
+- The table is a Tab stop, but arrow keys don't scroll it. Keyboard users can only bring hidden columns into view by tabbing to controls inside them.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="responsive" responsive={true}>
@@ -1369,7 +1375,7 @@ document.addEventListener('pdsTableSort', (event) => {
       <pds-table-cell>jane.smith@example.com</pds-table-cell>
       <pds-table-cell>89654</pds-table-cell>
     </pds-table-row>
-    <pds-table-row value="test3">
+    <pds-table-row>
       <pds-table-cell>Michael Johnson</pds-table-cell>
       <pds-table-cell>michael.johnson@example.com</pds-table-cell>
       <pds-table-cell>21578</pds-table-cell>

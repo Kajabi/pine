@@ -2646,7 +2646,7 @@ export namespace Components {
          */
         "disableSelectAll": boolean;
         /**
-          * Determines if the should display a fixed first column.
+          * Determines if the table displays a fixed first column.
          */
         "fixedColumn": boolean;
         /**
@@ -2691,7 +2691,7 @@ export namespace Components {
          */
         "indeterminate"?: boolean;
         /**
-          * Determines if the table row is currently selected.
+          * Determines if the select-all checkbox is checked.
           * @defaultValue false
          */
         "isSelected": boolean;
@@ -6642,11 +6642,11 @@ declare namespace LocalJSX {
          */
         "disableSelectAll"?: boolean;
         /**
-          * Determines if the should display a fixed first column.
+          * Determines if the table displays a fixed first column.
          */
         "fixedColumn"?: boolean;
         /**
-          * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+          * Event that is emitted by `pds-table-head` when the select all checkbox is clicked, carrying the selected value. It bubbles through the table; the table doesn't emit it itself.
          */
         "onPdsTableSelectAll"?: (event: PdsTableCustomEvent<{ isSelected: boolean }>) => void;
         /**
@@ -6691,7 +6691,7 @@ declare namespace LocalJSX {
          */
         "indeterminate"?: boolean;
         /**
-          * Determines if the table row is currently selected.
+          * Determines if the select-all checkbox is checked.
           * @defaultValue false
          */
         "isSelected"?: boolean;

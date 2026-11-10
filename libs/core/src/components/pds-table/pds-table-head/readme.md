@@ -12,7 +12,7 @@
 | `background`    | `background`    | Adds a subtle background color to the table head.                   | `boolean` | `false`     |
 | `border`        | `border`        | Adds top and bottom borders to the table head.                      | `boolean` | `false`     |
 | `indeterminate` | `indeterminate` | Determines if the select all checkbox is in an indeterminate state. | `boolean` | `undefined` |
-| `isSelected`    | `is-selected`   | Determines if the table row is currently selected.                  | `boolean` | `undefined` |
+| `isSelected`    | `is-selected`   | Determines if the select-all checkbox is checked.                   | `boolean` | `undefined` |
 
 
 ## Events

@@ -16,7 +16,7 @@ export class PdsTableHead {
    @Prop({ mutable: true }) indeterminate?: boolean;
 
    /**
-   * Determines if the table row is currently selected.
+   * Determines if the select-all checkbox is checked.
    * @defaultValue false
    */
    @Prop({mutable: true}) isSelected: boolean;
