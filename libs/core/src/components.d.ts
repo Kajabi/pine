@@ -6040,7 +6040,7 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         /**
-          * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the component, such as with a click elsewhere on the page.  It doesn't fire when the panel closes any other way: from a selection (including with `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect becoming disabled. Use it to restore parent UI state or run cleanup when the user cancels.
+          * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the component, such as with a click elsewhere on the page.  It doesn't fire when the panel closes any other way: from a selection (including with `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while the panel is open fires this event, and the panel opens again. Use it to restore parent UI state or run cleanup when the user cancels.
          */
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**
