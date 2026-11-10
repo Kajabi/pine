@@ -131,10 +131,11 @@ export function resolvePresets(presets: string | DatepickerPreset[] | undefined,
     // so a key of your own can follow today; the built-in range last.
     const fixed: [Date, Date] | null = start !== null && end !== null && start <= end ? [start, end] : null;
     const range: [Date, Date] | null = fixed ?? offsetPresetRange(preset, now) ?? builtInPresetRange(preset.key, now);
-    const label = typeof preset.label === 'string' ? preset.label : DEFAULT_LABELS[preset.key];
+    // A blank label would render an empty, unnamed button, so it counts as no label.
+    const label = typeof preset.label === 'string' && preset.label.trim() !== '' ? preset.label : DEFAULT_LABELS[preset.key];
     if (range === null) {
       warnOnce(
-        `the preset "${preset.key}" is not a built-in key and has no usable range, so it was left out of the list. Give it startOffset and endOffset to follow today, or start and end for fixed days.`,
+        `the preset "${preset.key}" is not a built-in key and has no usable range, so it was left out of the list. Give it whole-day startOffset and endOffset, start first, to follow today, or start and end as YYYY-MM-DD days, start first, for fixed days.`,
       );
       continue;
     }
