@@ -46,6 +46,25 @@ describe('pds-image', () => {
     expect(style.objectFit).toBe('cover');
   });
 
+  it('crops a ratio set through the custom property, not just through the prop', async () => {
+    const page = await newE2EPage();
+    // The custom property predates the `ratio` prop, and on its own it used to
+    // stretch the image. Anything already using it should crop now too.
+    await page.setContent(
+      '<pds-image src="/photo.jpg" alt="A scenic mountain view" style="--dimension-aspect-ratio: 16 / 9"></pds-image>',
+    );
+
+    const style = await page.evaluate(() => {
+      const img = document.querySelector('pds-image')?.shadowRoot?.querySelector('img');
+      const computed = window.getComputedStyle(img as Element);
+
+      return { aspectRatio: computed.aspectRatio, objectFit: computed.objectFit };
+    });
+
+    expect(style.aspectRatio).toBe('16 / 9');
+    expect(style.objectFit).toBe('cover');
+  });
+
   it('fits the whole source inside the shape when fit is contain', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-image fit="contain" ratio="square" src="/photo.jpg" alt="A scenic mountain view"></pds-image>');
