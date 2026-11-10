@@ -65,17 +65,17 @@ const BaseTemplate = (args) => html`
     <pds-table-head-cell>Column Title</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
-    <pds-table-row value="row1">
+    <pds-table-row>
       <pds-table-cell>Row Item Alpha</pds-table-cell>
       <pds-table-cell>Row Item Alpha</pds-table-cell>
       <pds-table-cell>Row Item Alpha</pds-table-cell>
     </pds-table-row>
-    <pds-table-row value="row2">
+    <pds-table-row>
       <pds-table-cell>Row Item Bravo</pds-table-cell>
       <pds-table-cell>Row Item Bravo</pds-table-cell>
       <pds-table-cell>Row Item Bravo</pds-table-cell>
     </pds-table-row>
-    <pds-table-row value="row3">
+    <pds-table-row>
       <pds-table-cell>Row Item Charlie</pds-table-cell>
       <pds-table-cell>Row Item Charlie</pds-table-cell>
       <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -150,7 +150,7 @@ const ResponsiveTemplate = (args) => html`
     <pds-table-head-cell>Actions</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
-    <pds-table-row value="responsive1">
+    <pds-table-row>
       <pds-table-cell>Row Item Alpha</pds-table-cell>
       <pds-table-cell>Row Item Beta</pds-table-cell>
       <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -172,7 +172,7 @@ const ResponsiveTemplate = (args) => html`
         </pds-dropdown-menu>
       </pds-table-cell>
     </pds-table-row>
-    <pds-table-row value="responsive2">
+    <pds-table-row>
       <pds-table-cell>Row Item Alpha</pds-table-cell>
       <pds-table-cell>Row Item Beta</pds-table-cell>
       <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -194,7 +194,7 @@ const ResponsiveTemplate = (args) => html`
         </pds-dropdown-menu>
       </pds-table-cell>
     </pds-table-row>
-    <pds-table-row value="responsive3">
+    <pds-table-row>
       <pds-table-cell>Row Item Alpha</pds-table-cell>
       <pds-table-cell>Row Item Beta</pds-table-cell>
       <pds-table-cell>Row Item Charlie</pds-table-cell>

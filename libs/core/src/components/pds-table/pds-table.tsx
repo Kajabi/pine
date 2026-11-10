@@ -30,7 +30,7 @@ export class PdsTable {
   @Prop() responsive: boolean;
 
   /**
-   * Determines if the should display a fixed first column.
+   * Determines if the table displays a fixed first column.
    */
   @Prop() fixedColumn: boolean;
 
@@ -79,7 +79,8 @@ export class PdsTable {
 
 
   /**
-   * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+   * Event that is emitted by `pds-table-head` when the select all checkbox is clicked, carrying the selected value.
+   * It bubbles through the table; the table doesn't emit it itself.
    */
   @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;
 
