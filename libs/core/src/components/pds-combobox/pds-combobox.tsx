@@ -537,21 +537,6 @@ export class PdsCombobox implements BasePdsProps {
       this.flyout.stopPositioning();
     }
 
-    // The row back is sticky over the group's options; scrolling an option into view stops below
-    // it. Set before any scroll below, and when it first applies, scroll the highlighted option
-    // again: the list keeps its offset on drilling in, and an earlier scroll had no padding.
-    // With or without panel search: the scrolling list is the tree under the search field, or the panel.
-    const scrollList = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
-    if (scrollList) {
-      const drilledIn = this.showsGroupedPanel && this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null;
-      const header = drilledIn ? (scrollList.querySelector('.pds-combobox__group-back-trigger') as HTMLElement | null) : null;
-      const padding = header ? `${header.offsetHeight}px` : '';
-      if (scrollList.style.scrollPaddingBlockStart !== padding) {
-        scrollList.style.scrollPaddingBlockStart = padding;
-        if (padding !== '' && this.highlightedIndex >= 0) this.pendingOptionFocus = true;
-      }
-    }
-
     if (this.pendingOptionFocus) {
       this.pendingOptionFocus = false;
       this.updateOptionFocus();
@@ -580,8 +565,7 @@ export class PdsCombobox implements BasePdsProps {
    * Scrolls just enough to show `el`, as `scrollIntoView({ block: 'nearest' })` does. In the drill-in
    * panel it scrolls the list alone, and never sideways: while a drill-in slide offsets a row past
    * the list's edge, `scrollIntoView` also scrolls the list horizontally to reach it, which eats most
-   * of the slide. There it keeps clear of the sticky row back, through the scroll padding set for it,
-   * but doesn't scroll the page or a scrolling ancestor.
+   * of the slide. It doesn't scroll the page or a scrolling ancestor.
    */
   private scrollIntoViewNearest(el: HTMLElement, smooth: boolean) {
     const behavior = smooth ? 'smooth' : 'auto';
@@ -589,15 +573,25 @@ export class PdsCombobox implements BasePdsProps {
       el.scrollIntoView({ block: 'nearest', behavior });
       return;
     }
-    const list = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
+    // The row back is the drilled-in header, above the scrolling options: always in view.
+    if (el.classList.contains('pds-combobox__group-back-trigger')) return;
+    const list = this.scrollListEl;
     if (!list) return;
     const offset = el.getBoundingClientRect().top - list.getBoundingClientRect().top - list.clientTop;
-    // The padding keeps rows clear of the sticky row back; the row back itself doesn't need it.
-    const padding = el.classList.contains('pds-combobox__group-back-trigger') ? 0 : parseFloat(list.style.scrollPaddingBlockStart) || 0;
-    const top = list.scrollTop + offset - padding;
+    const top = list.scrollTop + offset;
     const bottom = list.scrollTop + offset + el.offsetHeight - list.clientHeight;
     const target = top < list.scrollTop ? top : bottom > list.scrollTop ? bottom : null;
     if (target !== null) list.scrollTo({ top: target, behavior });
+  }
+
+  /**
+   * The element that scrolls the panel's rows. Every layer is a header (the search field, or a
+   * drilled-in group's row back) above the rows that scroll: drilled in, the group's options;
+   * otherwise the list under the search field, or the panel itself.
+   */
+  private get scrollListEl(): HTMLElement | undefined {
+    const list = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
+    return list?.querySelector<HTMLElement>('.pds-combobox__group-back > .pds-combobox__drill-in-options') ?? list;
   }
 
   private focusPanel(el: HTMLElement) {
@@ -2955,7 +2949,7 @@ export class PdsCombobox implements BasePdsProps {
             {group.label}
           </span>
         </div>
-        <ul class="pds-combobox__drill-in-options" role="group" aria-label={group.label}>
+        <ul class="pds-combobox__drill-in-options" role="group" aria-label={group.label} onScroll={this.handleScroll}>
           {this.renderGroupOptions(group)}
         </ul>
       </li>

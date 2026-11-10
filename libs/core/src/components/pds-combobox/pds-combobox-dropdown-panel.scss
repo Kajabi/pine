@@ -367,26 +367,28 @@
     }
   }
 
-  // group-display="drill-in": the open group's row, drawn as a row back, above its options and
-  // spaced like the panel's rows.
-  .pds-combobox__group-back {
+  // group-display="drill-in": every layer is a header above the rows that scroll. On the first
+  // layer the header is the search field (when there is one); drilled in, it's the open group's
+  // row, drawn as a row back. The row back stays the treeitem that holds its options, so only its
+  // options scroll, and the scrollbar starts below the header, as it does below the search field.
+  // The class twice, to outrank the grouped list's padding.
+  .pds-combobox__listbox--grouped.pds-combobox__listbox--grouped:has(> .pds-combobox__group-back) {
     display: flex;
     flex-direction: column;
-    gap: var(--pine-dimension-2xs);
+    padding: 0;
+  }
+
+  .pds-combobox__group-back {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
     list-style: none;
+    min-height: 0;
   }
 
   .pds-combobox__group-back-trigger {
+    flex-shrink: 0;
     justify-content: flex-start;
-  }
-
-  // Drilled in, with or without panel search: the row back is the panel's header, full width above
-  // the divider, and stays put while the group's options scroll. :where keeps hover and the
-  // keyboard's highlight on top.
-  // Both classes, to outrank the grouped list's padding.
-  .pds-combobox__listbox-options--drilled-in.pds-combobox__listbox--grouped,
-  .pds-combobox__listbox--grouped:has(> .pds-combobox__group-back) {
-    padding-block-start: 0;
   }
 
   // The list takes focus inside a drilled-in group; the highlighted row shows the place.
@@ -394,7 +396,8 @@
     outline: none;
   }
 
-  // It's the same size and type as the search field (where there is one).
+  // It's the same size and type as the search field (where there is one). :where keeps hover and
+  // the keyboard's highlight on top.
   :where(.pds-combobox__listbox--grouped) .pds-combobox__group-back-trigger {
     background-color: var(--pine-color-background-overlay);
     border-block-end: var(--pine-border);
@@ -402,12 +405,10 @@
     border-radius: 0;
     color: var(--pine-color-text-secondary);
     font: var(--pine-typography-body);
-    inset-block-start: 0;
     letter-spacing: var(--pine-letter-spacing);
-    margin-inline: calc(var(--pine-dimension-2xs) * -1);
     padding: var(--pine-dimension-150) var(--pine-dimension-sm);
-    position: sticky;
-    z-index: 1;
+    // Holds the inset hover shade below.
+    position: relative;
   }
 
   // The back arrow is a narrow glyph centered in its 16px box, so it looks 4px further in than the
@@ -449,12 +450,16 @@
     }
   }
 
+  // The rows that scroll under the row back, padded like the list under the search field.
   .pds-combobox__drill-in-options {
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
     list-style: none;
     margin: 0;
-    padding: 0;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--pine-dimension-2xs);
   }
 
   // In the mixin so it also applies inside the body portal.
