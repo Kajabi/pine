@@ -37,6 +37,8 @@ const git = (...args) =>
 
 const COMPONENTS = 'libs/core/src/components';
 const UTIL = 'setupTruncationTooltip';
+// The util's own wrapper for elements that come and go, which calls it for each one.
+const UTIL_CALLS = [UTIL, 'bindTruncationTooltips'];
 // A numeric (or variable) line-clamp, so a reset such as `-webkit-line-clamp: unset` isn't truncation.
 const TRUNCATES =
   /text-overflow\s*:\s*ellipsis|-webkit-line-clamp\s*:\s*(?:\d|var\()/;
@@ -47,10 +49,6 @@ const TRUNCATES =
 // of the check, so an addition needs the same review as an exemption. An entry fails as stale once
 // its selector stops truncating.
 const KNOWN = {
-  'pds-alert': {
-    '.pds-alert__description--small':
-      "the small description is clipped, and it's rendered as <pds-text truncate> around a bare <slot>. pds-text can't reveal it: its tooltip reads this.el.textContent, which doesn't include a slot's assigned nodes, so the text is empty and the tooltip never opens. Deleting this rule wouldn't help, since pds-text would still clip. Needs pds-alert to wire the util with the slotted text, or pds-text to read assigned nodes",
-  },
   'pds-combobox': {
     '.pds-combobox__button-trigger-text':
       'the trigger text, clipped. A wiring job: the trigger takes focus itself, so it can be the focusEl, with manageTabIndex: false',
@@ -60,10 +58,6 @@ const KNOWN = {
   'pds-filters/pds-filter': {
     '.pds-filter__button-content': "a filter trigger's content, clipped",
     '.pds-filter__button-text': "a filter trigger's text, clipped",
-  },
-  'pds-multiselect': {
-    '.pds-multiselect__trigger-text': 'the trigger text, clipped',
-    '.pds-multiselect__selected-item': 'each selected item, clipped',
   },
 };
 
@@ -180,7 +174,7 @@ const report = units.map((unit) => {
   ];
   // A call, outside comments: an import or a comment that names the util isn't adoption.
   const adopts = own.some(
-    (p) => /\.tsx?$/.test(p) && stripComments(read(p)).includes(`${UTIL}(`)
+    (p) => /\.tsx?$/.test(p) && UTIL_CALLS.some((call) => stripComments(read(p)).includes(`${call}(`))
   );
   return { unit, selectors, adopts };
 });
