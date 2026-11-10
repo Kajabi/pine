@@ -53,10 +53,10 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part          | Description |
-| ------------- | ----------- |
-| `"head-cell"` |             |
-| `"sort-icon"` |             |
+| Part          | Description                                                                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"head-cell"` | Set on the `pds-table-head-cell` element itself, so `::part(head-cell)` matches it only from a shadow root that contains it. Style `pds-table-head-cell` directly instead. |
+| `"sort-icon"` | Exposes the sort direction icon for styling. Appears only on a `sortable` column while it's the active sort.                                                               |
 
 
 ## Dependencies

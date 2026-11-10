@@ -3,6 +3,10 @@ import { Component, Element, Host, Prop, h, Event, EventEmitter, State, Method }
 import { downSmall, upSmall } from '@pine-ds/icons/icons';
 import { isScrolledFromInlineStart } from '../../../utils/scroll';
 
+/**
+ * @part head-cell - Set on the `pds-table-head-cell` element itself, so `::part(head-cell)` matches it only from a shadow root that contains it. Style `pds-table-head-cell` directly instead.
+ * @part sort-icon - Exposes the sort direction icon for styling. Appears only on a `sortable` column while it's the active sort.
+ */
 @Component({
   tag: 'pds-table-head-cell',
   styleUrls: ['pds-table-head-cell.scss'],
