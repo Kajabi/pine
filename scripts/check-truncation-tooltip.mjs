@@ -123,17 +123,30 @@ const truncatingSelectors = (src) => {
     if (TRUNCATES.test(pending))
       found.push(...(stack[stack.length - 1] ?? ['(top level)']));
   };
+  // SCSS interpolation (`#{$name}`) is part of the text around it, not a block: its braces are
+  // kept in `pending` so `.foo-#{$bar} { ... }` resolves to that selector.
+  let interpolation = 0;
   for (const ch of stripComments(src)) {
-    if (ch === '{') {
+    if (interpolation > 0) {
+      pending += ch;
+      if (ch === '{') interpolation += 1;
+      else if (ch === '}') interpolation -= 1;
+    } else if (ch === '{' && pending.endsWith('#')) {
+      pending += ch;
+      interpolation = 1;
+    } else if (ch === '{') {
       const parts = pending
         .split(',')
         .map((s) => s.replace(/\s+/g, ' ').trim())
         .filter(Boolean);
       const parents = stack[stack.length - 1] ?? [];
-      // An at-rule (@media, @include ... { }) keeps its parent's selectors.
+      // An at-rule (@media, @include ... { }) keeps its parent's selectors. One with none to keep,
+      // a top-level @mixin, is named itself, so truncation inside it is still reported.
       stack.push(
         parts.length && /^@/.test(parts[0])
-          ? parents
+          ? parents.length
+            ? parents
+            : [parts.join(', ')]
           : parts.flatMap((p) => resolve(parents, p))
       );
       pending = '';
