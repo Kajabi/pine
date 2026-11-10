@@ -532,7 +532,7 @@ export class PdsCombobox implements BasePdsProps {
     // Opening places the dropdown a tick later, which can run before the dropdown has rendered and
     // then skips it, leaving it without its dropdown-width and max-height. Place a newly rendered
     // dropdown here too.
-    if (this.isOpen && this.listboxEl && this.listboxEl !== this.placedListboxEl) {
+    if (this.isOpen && this.triggerEl && this.listboxEl && this.listboxEl !== this.placedListboxEl) {
       this.placedListboxEl = this.listboxEl;
       void this.positionDropdown();
     }
