@@ -48,8 +48,8 @@ With neither slot set, the accordion renders the trigger label "Details" and no 
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsAccordion></PdsAccordion>',
-    webComponent: '<pds-accordion></pds-accordion>'
+    react: `<PdsAccordion></PdsAccordion>`,
+    webComponent: `<pds-accordion></pds-accordion>`
 }}>
   <pds-accordion></pds-accordion>
 </DocCanvas>
@@ -66,7 +66,7 @@ When the slots are set, the accordion will render with the provided trigger labe
         <span slot="label">Custom Accordion Label</span>
         <div>
           <h3>Custom Panel Content</h3>
-          <p style="margin: 0;">Custom panel content</p>
+          <p style={{ margin: 0 }}>Custom panel content</p>
           <PdsButton variant="primary">Custom Button</PdsButton>
         </div>
       </PdsAccordion>
