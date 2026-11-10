@@ -845,7 +845,6 @@ export namespace Components {
     // (undocumented)
     export interface PdsToast {
         "componentId": string;
-        // (undocumented)
         "dismiss": () => Promise<void>;
         "dismissible": boolean;
         "dismissLabel": string;

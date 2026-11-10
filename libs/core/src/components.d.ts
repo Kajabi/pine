@@ -2933,6 +2933,9 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Dismisses the toast, as the dismiss button and `duration` do: plays the exit animation, then hides the toast and emits `pdsToastDismissed`. Works even when `dismissible` is `false`. The toast stays in the DOM, hidden.
+         */
         "dismiss": () => Promise<void>;
         /**
           * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
