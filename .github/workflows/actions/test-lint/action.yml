@@ -48,3 +48,7 @@ runs:
     - name: DESIGN.md token drift
       run: npm run design.tokens -- --check
       shell: bash
+
+    - name: Truncation without a way to read the full text
+      run: npm run truncation.check
+      shell: bash
