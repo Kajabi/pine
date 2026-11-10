@@ -262,6 +262,89 @@ describe('pds-textarea', () => {
   });
 });
 
+describe('pds-textarea validity', () => {
+  it('stays valid while required and disabled with no value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-textarea component-id="bio" name="bio" label="Bio" required disabled></pds-textarea></form>');
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+  });
+
+  it('goes required-invalid once re-enabled, instead of keeping the validity it had while disabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-textarea component-id="bio" name="bio" label="Bio" required disabled></pds-textarea></form>');
+    await page.waitForChanges();
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      el.removeAttribute('disabled');
+    });
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('stays valid while required and empty inside a disabled fieldset, then goes invalid once the fieldset is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-textarea component-id="bio" name="bio" label="Bio" required></pds-textarea>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('fieldset', (el: Element) => el.removeAttribute('disabled'));
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+
+  it('goes required-invalid when required is turned on at runtime with no value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio"></pds-textarea>');
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { required: boolean }).required = true;
+    });
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+
+  it('keeps a required-empty field invalid when maxLength also changes, instead of maxLengthChanged clearing it', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio" required></pds-textarea>');
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { maxLength: number }).maxLength = 100;
+    });
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+});
+
 describe('pds-textarea accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
