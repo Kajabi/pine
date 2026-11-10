@@ -55,6 +55,34 @@ export function exposeTypeProperty(element: Element, type: string | (() => strin
 }
 
 /**
+ * Mirrors a native form control's validity onto ElementInternals, as pds-input, pds-select,
+ * pds-textarea and pds-checkbox do. A disabled control takes no part in constraint validation —
+ * the browser still computes its `validity` flags but clears `validationMessage` to `''` for it,
+ * and `setValidity` throws if told a flag is true with an empty message, so a disabled control
+ * always reports valid instead of relaying that stale, message-less native state. Callers must
+ * also re-run this whenever `disabled` or `required` changes and from `formDisabledCallback`:
+ * nothing else does, so a field that renders disabled keeps whatever validity it had while
+ * disabled even after becoming enabled.
+ */
+export const reportNativeValidity = (
+  internals: ElementInternals | undefined,
+  disabled: boolean | undefined,
+  control: { validity: ValidityState; validationMessage: string } | undefined,
+  anchor?: HTMLElement,
+  fallbackMessage = 'This field is invalid.',
+) => {
+  if (!internals?.setValidity) return;
+
+  if (disabled || !control) {
+    internals.setValidity({});
+    return;
+  }
+
+  const message = control.validity.valid ? '' : control.validationMessage || fallbackMessage;
+  internals.setValidity(control.validity, message, anchor);
+};
+
+/**
  * Determines if code is running in Stencil's spec test environment.
  * Stencil's mock-doc logs console.error on any ElementInternals
  * property access during spec tests. Use this guard to skip
