@@ -41,8 +41,8 @@ export class PdsImage {
 
   /**
    * The aspect ratio the image is sized to, cropping whatever
-   * overflows the shape. Value can be preset or custom. Takes
-   * precedence over the ratio implied by `height` and `width`.
+   * overflows the shape. Value can be preset or custom. Use this,
+   * not `height` and `width`, to crop: those only reserve space.
    */
   @Prop() ratio?:
   | 'square'    // 1 / 1

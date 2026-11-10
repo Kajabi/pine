@@ -29,11 +29,11 @@ A surface that needs every image to hold the same shape should say so with `rati
 
 Uploaded images rarely arrive in the shape a layout wants, so `fit` decides what happens to the part that does not fit. `cover`, the default, fills the shape and crops the overflow; use it for photographic content such as a hero or a thumbnail, where losing the edges is acceptable. `contain` scales the whole image down until it fits, leaving space around it; use it for content that must be seen in full and must not be cropped, such as a logo. Avoid `fill`, which stretches the image to the shape and distorts it.
 
-Because `ratio` sets the shape, it takes precedence over the ratio implied by `height` and `width`. `fit` has no effect unless `ratio` is set.
+`height` and `width` do not set a shape. They reserve space while the image loads, and once it loads it keeps its own proportions, so a `height` and `width` that disagree with the image do not crop it. To crop to a box of a given size, set `ratio` to that box's proportions, such as `ratio="4 / 1"`. `fit` has no effect unless `ratio` is set.
 
-There are three routes to a shape, and all of them crop: the `ratio` prop, the `--dimension-aspect-ratio` custom property, and a `height` and `width` whose proportions differ from the image's own. The prop wins over the custom property, which wins over `height` and `width`.
+There are two routes to a shape, and both crop: the `ratio` prop and the `--dimension-aspect-ratio` custom property. The prop wins over the custom property.
 
-**This is a behaviour change for images already sized by the custom property or by a mismatched `height` and `width`.** Until now a shape was applied with no `object-fit`, so the image stretched to fill it — the defect behind reports of distorted logos. Those images now crop instead. An image whose box already matches its own proportions is unaffected, since it has no overflow to crop. Where an image must be seen whole rather than cropped, set `fit="contain"`, or `--dimension-object-fit: contain`.
+**This is a behaviour change for images already sized by the custom property.** Until now a shape was applied with no `object-fit`, so the image stretched to fill it — the defect behind reports of distorted logos. Those images now crop instead. An image whose box already matches its own proportions is unaffected, since it has no overflow to crop. Where an image must be seen whole rather than cropped, set `fit="contain"`, or `--dimension-object-fit: contain`.
 
 ### Image Optimization
 

@@ -65,6 +65,33 @@ describe('pds-image', () => {
     expect(style.objectFit).toBe('cover');
   });
 
+  it('keeps the source proportions when height and width disagree with them', async () => {
+    const page = await newE2EPage();
+    page.setViewport({ width: 600, height: 600 });
+    // `height` and `width` reserve space before the image loads; they do not
+    // set a shape to crop to. A square source given a 400 x 100 box loads square.
+    const square = 'data:image/svg+xml,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100"/></svg>',
+    );
+    await page.setContent(
+      `<pds-image height="100" width="400" src="${square}" alt="A square"></pds-image>`,
+      { waitUntil: 'load' },
+    );
+    await page.waitForFunction(() => {
+      const img = document.querySelector('pds-image')?.shadowRoot?.querySelector('img');
+      return img?.complete && img.naturalWidth > 0;
+    });
+
+    const box = await page.evaluate(() => {
+      const img = document.querySelector('pds-image')?.shadowRoot?.querySelector('img') as HTMLImageElement;
+      const rect = img.getBoundingClientRect();
+
+      return { width: Math.round(rect.width), height: Math.round(rect.height) };
+    });
+
+    expect(box).toEqual({ width: 400, height: 400 });
+  });
+
   it('fits the whole source inside the shape when fit is contain', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-image fit="contain" ratio="square" src="/photo.jpg" alt="A scenic mountain view"></pds-image>');

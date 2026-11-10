@@ -1660,7 +1660,7 @@ export namespace Components {
          */
         "loading"?: 'eager' | 'lazy';
         /**
-          * The aspect ratio the image is sized to, cropping whatever overflows the shape. Value can be preset or custom. Takes precedence over the ratio implied by `height` and `width`.
+          * The aspect ratio the image is sized to, cropping whatever overflows the shape. Value can be preset or custom. Use this, not `height` and `width`, to crop: those only reserve space.
          */
         "ratio"?: | 'square'    // 1 / 1
   | 'landscape' // 4 / 3
@@ -5609,7 +5609,7 @@ declare namespace LocalJSX {
          */
         "loading"?: 'eager' | 'lazy';
         /**
-          * The aspect ratio the image is sized to, cropping whatever overflows the shape. Value can be preset or custom. Takes precedence over the ratio implied by `height` and `width`.
+          * The aspect ratio the image is sized to, cropping whatever overflows the shape. Value can be preset or custom. Use this, not `height` and `width`, to crop: those only reserve space.
          */
         "ratio"?: | 'square'    // 1 / 1
   | 'landscape' // 4 / 3
