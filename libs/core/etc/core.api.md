@@ -1599,7 +1599,6 @@ export namespace LocalJSX {
         "label"?: string;
         "name"?: string;
         "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
-        // (undocumented)
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         "required"?: boolean;
         "value"?: string;

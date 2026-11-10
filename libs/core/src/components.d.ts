@@ -4790,6 +4790,9 @@ declare namespace LocalJSX {
           * Event emitted that contains the `value` and `checked`.
          */
         "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
+        /**
+          * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`. `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.
+         */
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
           * It determines whether or not the checkbox is required.

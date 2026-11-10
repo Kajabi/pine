@@ -98,6 +98,10 @@ export class PdsCheckbox {
    */
   @Event() pdsCheckboxChange: EventEmitter<CheckboxChangeEventDetail>;
 
+  /**
+   * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`.
+   * `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.
+   */
   @Event() pdsCheckboxInput: EventEmitter<CheckboxChangeEventDetail>;
 
   @Watch('checked')
