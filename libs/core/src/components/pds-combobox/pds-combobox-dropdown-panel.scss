@@ -117,7 +117,7 @@
   .pds-combobox__option-badge,
   .pds-combobox__group-badge {
     flex-shrink: 0;
-    // The brand chip raises its label; contain that here, or it draws over the sticky back row.
+    // The brand chip raises its label; contain that here, so it stays within its row.
     isolation: isolate;
     // The sm chip is a couple of pixels taller than a line of option text; keep the row's height.
     margin-block: calc(var(--pine-dimension-025) * -1);
@@ -252,7 +252,7 @@
     --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
   }
 
-  // The row back slides with the options; only its trigger moves, so it stays sticky.
+  // The row back slides with the options; only its trigger moves, so the header stays put.
   .pds-combobox__listbox--drill-in .pds-combobox__drill-in-options > li,
   .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger,
   .pds-combobox__listbox--drill-out > li {
@@ -450,7 +450,8 @@
     }
   }
 
-  // The rows that scroll under the row back, padded like the list under the search field.
+  // The rows that scroll under the row back, padded like the list under the search field. Never
+  // sideways: the drill-in slide offsets the rows past its edge.
   .pds-combobox__drill-in-options {
     display: flex;
     flex: 1 1 auto;
@@ -458,6 +459,7 @@
     list-style: none;
     margin: 0;
     min-height: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     padding: var(--pine-dimension-2xs);
   }
