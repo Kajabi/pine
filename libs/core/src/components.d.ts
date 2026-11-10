@@ -2691,7 +2691,7 @@ export namespace Components {
          */
         "indeterminate"?: boolean;
         /**
-          * Determines if the select-all checkbox is checked.
+          * Determines if the select all checkbox is checked.
           * @defaultValue false
          */
         "isSelected": boolean;
@@ -6691,7 +6691,7 @@ declare namespace LocalJSX {
          */
         "indeterminate"?: boolean;
         /**
-          * Determines if the select-all checkbox is checked.
+          * Determines if the select all checkbox is checked.
           * @defaultValue false
          */
         "isSelected"?: boolean;

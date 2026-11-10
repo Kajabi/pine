@@ -16,7 +16,7 @@ export class PdsTableHead {
    @Prop({ mutable: true }) indeterminate?: boolean;
 
    /**
-   * Determines if the select-all checkbox is checked.
+   * Determines if the select all checkbox is checked.
    * @defaultValue false
    */
    @Prop({mutable: true}) isSelected: boolean;
