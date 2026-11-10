@@ -4,6 +4,9 @@ import { messageId } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 import { RadioGroupChangeEventDetail } from './radio-group-interface';
 
+// The label and message ids a group without component-id generates for itself.
+const STALE_REFERENCE = /^radio-group-.+__(label|helper-message|error-message)$/;
+
 /**
  * @slot (default) - Child pds-radio components
  * @lightDom renders-markup
@@ -184,16 +187,16 @@ export class PdsRadioGroup {
       this._groupId = `radio-group-${uniqueId}`;
     }
 
-    // A restored or cloned host still carries the id and ARIA references an earlier instance wrote, pointing at
-    // that instance's label and messages. Drop them so this render writes its own: on first load, Stencil keeps a
-    // host attribute that's already there.
-    const previousId = this.el.getAttribute('id');
-    if (previousId && previousId !== this._groupId) {
-      ['aria-labelledby', 'aria-describedby'].forEach((name) => {
-        const ids = this.el.getAttribute(name)?.split(/\s+/) ?? [];
-        if (ids.some((id) => id.startsWith(`${previousId}__`))) this.el.removeAttribute(name);
-      });
-    }
+    // A restored or cloned host can still carry the ARIA references an earlier instance wrote, pointing at that
+    // instance's label and messages. Drop those tokens so this render writes its own, and keep any others.
+    ['aria-labelledby', 'aria-describedby'].forEach((name) => {
+      const ids = this.el.getAttribute(name)?.split(/\s+/).filter(Boolean);
+      if (!ids) return;
+      const kept = ids.filter((id) => !STALE_REFERENCE.test(id) || id.startsWith(`${this._groupId}__`));
+      if (kept.length === ids.length) return;
+      if (kept.length) this.el.setAttribute(name, kept.join(' '));
+      else this.el.removeAttribute(name);
+    });
   }
 
   componentDidLoad() {

@@ -354,7 +354,7 @@ describe('pds-radio-group', () => {
     const page = await newSpecPage({
       components: [PdsRadioGroup],
       html: `
-        <pds-radio-group id="radio-group-old" group-label="Comments" helper-message="Helper" aria-labelledby="radio-group-old__label" aria-describedby="radio-group-old__helper-message">
+        <pds-radio-group group-label="Comments" helper-message="Helper" aria-labelledby="radio-group-old__label" aria-describedby="radio-group-old__helper-message">
           <div class="pds-radio-group__label" id="radio-group-old__label">Comments</div>
         </pds-radio-group>
       `,
@@ -365,6 +365,19 @@ describe('pds-radio-group', () => {
     expect(labelledBy).toBe(page.root?.querySelector('.pds-radio-group__label')?.id);
     expect(page.root?.querySelectorAll('.pds-radio-group__label').length).toBe(1);
     expect(page.root?.getAttribute('aria-describedby')).toBe(page.root?.querySelector('.pds-radio-group__message')?.id);
+  });
+
+  it("drops an earlier instance's references but keeps an author id outside the group", async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `
+        <h2 id="plan-heading">Plan</h2>
+        <pds-radio-group group-label="Comments" aria-labelledby="radio-group-old__label plan-heading"></pds-radio-group>
+      `,
+    });
+
+    const group = page.body.querySelector('pds-radio-group');
+    expect(group?.getAttribute('aria-labelledby')).toBe('plan-heading');
   });
 
   it('renders helper message when helperMessage prop is set', async () => {
