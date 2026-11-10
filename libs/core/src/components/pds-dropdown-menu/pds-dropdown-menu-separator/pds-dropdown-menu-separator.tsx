@@ -13,7 +13,7 @@ export class PdsDropdownMenuSeparator implements BasePdsProps {
   @Prop() componentId: string;
 
   /**
-   * It determines whether or not the dropdown-item is disabled.
+   * Has no effect. A separator can't be focused or activated.
    * @defaultValue false
    */
   @Prop() disabled: boolean = false;

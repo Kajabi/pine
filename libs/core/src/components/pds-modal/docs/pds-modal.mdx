@@ -11,7 +11,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Modal
 
-Modals display content in a dialog that temporarily blocks interaction with the underlying page. Use them for confirmations, focused forms, or detailed information that demands attention without navigating away.
+By default, modals show content in a dialog that blocks interaction with the page until it closes. Use them for confirmations, focused forms, or details that need attention without leaving the page.
 
 ## Guidelines
 
@@ -25,7 +25,7 @@ Modals display content in a dialog that temporarily blocks interaction with the 
 ### When not to use
 
 - For non-critical information that doesn't require immediate attention
-- For complex workflows that require multiple steps
+- For complex workflows that require multiple steps; use a full page instead
 - When the content can be displayed directly on the page
 
 ## Properties
@@ -68,7 +68,7 @@ The `pds-modal-footer` component provides a consistent footer area for the modal
           if (modal) modal.open = true;
         }}>Open Modal</PdsButton>
 
-        <PdsModal id="default-modal" component-id="default-modal">
+        <PdsModal id="default-modal" componentId="default-modal">
           <PdsModalHeader>
             <PdsBox direction="column" fit padding="md">
               <PdsBox alignItems="center" fit justifyContent="space-between">
@@ -239,7 +239,7 @@ Your own controls can take Escape the same way: call `preventDefault()` on an Es
         if (modal) modal.open = true;
       }}>Open Modal</PdsButton>
 
-      <PdsModal id="default-modal-1" component-id="default-modal-1">
+      <PdsModal id="default-modal-1" componentId="default-modal-1">
         <PdsModalHeader>
           <PdsBox direction="column" fit padding="md">
             <PdsBox
@@ -1359,7 +1359,7 @@ Modals can be nested, with only the topmost modal responding to escape key and b
 
 By default a modal opens with the native `dialog.showModal()`, which promotes it to the browser [top layer](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer). Nothing outside the dialog can paint above the top layer &mdash; not even with a higher `z-index` &mdash; so an overlay mounted elsewhere in the DOM (a file picker, a rich-text editor menu, a third-party widget appended to `document.body`) renders _behind_ the modal and becomes unreachable.
 
-Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`) in the normal stacking context instead. Overlays with a higher `z-index` can then display above it. A lone `disable-top-layer` modal sits at `--pine-z-index-modal` (6000), and one nested inside another modal at `--pine-z-index-priority` (8000), so an overlay needs a `z-index` above the tier of the modal it stacks over.
+Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`) in the normal stacking context instead. Overlays with a higher `z-index` can then display above it. A lone `disable-top-layer` modal sits at `--pine-z-index-modal` (6000), and one nested inside another modal at `--pine-z-index-priority` (8000), so an overlay needs a `z-index` above the tier of the modal it stacks over, such as `calc(var(--pine-z-index-modal) + 1)` over a lone modal. In the demo below, a button appended to `document.body` stands in for that overlay.
 
 > **Note:** This mode is for letting a higher-`z-index` overlay (a file picker, an editor menu) appear _above_ the modal &mdash; not for making the modal itself non-blocking. The dimming backdrop still covers the page and an outside click still dismisses it (unless `backdrop-dismiss="false"`). What changes: the page is **not** made `inert` and **focus is not trapped**, so controls in an overlay stacked above the modal stay reachable by keyboard and assistive tech (which is why `aria-modal` is `false` in this mode). Escape closes the modal while focus is inside it; when an overlay above the modal owns focus, Escape is left to that overlay so it can close itself. A modal taller than the viewport scrolls the same way in both modes, so its footer stays reachable. One caveat: because the dialog now participates in normal stacking, a page element with its own higher stacking context can overlap it.
 
@@ -1391,20 +1391,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
         </PdsModalHeader>
         <PdsModalContent>
           <PdsBox fit direction="column" gap="sm" paddingInlineStart="md" paddingInlineEnd="md">
-            <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
-            <PdsButton variant="secondary" onClick={() => {
-              const o = document.createElement('button');
-              o.type = 'button';
-              o.textContent = 'Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';
-              o.setAttribute('style', 'position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;border-radius:8px;text-align:start;background:#111;color:#fff;z-index:2147483647;cursor:pointer');
-              const modal = document.querySelector('#top-layer-modal');
-              const remove = () => o.remove();
-              o.onclick = remove;
-              o.addEventListener('keydown', (e) => { if (e.key === 'Escape') remove(); });
-              if (modal) modal.addEventListener('pdsModalClose', remove, { once: true });
-              document.body.appendChild(o);
-              o.focus();
-            }}>Show overlay above modal</PdsButton>
+            <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> with a higher <code>z-index</code> can display above it.</p>
           </PdsBox>
         </PdsModalContent>
         <PdsModalFooter>
@@ -1441,8 +1428,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
         </pds-modal-header>
         <pds-modal-content>
           <pds-box fit direction="column" gap="sm" padding-inline-start="md" padding-inline-end="md">
-            <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
-            <pds-button variant="secondary" onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;border-radius:8px;text-align:start;background:#111;color:#fff;z-index:2147483647;cursor:pointer');var modal=document.querySelector('#top-layer-modal');var remove=function(){o.remove()};o.onclick=remove;o.addEventListener('keydown',function(e){if(e.key==='Escape')remove()});if(modal)modal.addEventListener('pdsModalClose',remove,{once:true});document.body.appendChild(o);o.focus();})()">Show overlay above modal</pds-button>
+            <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> with a higher <code>z-index</code> can display above it.</p>
           </pds-box>
         </pds-modal-content>
         <pds-modal-footer>
@@ -1480,8 +1466,18 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
       </pds-modal-header>
       <pds-modal-content>
         <pds-box fit direction="column" gap="sm" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> can display above it.</p>
-          <pds-button variant="secondary" onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;border-radius:8px;text-align:start;background:#111;color:#fff;z-index:2147483647;cursor:pointer');o.onclick=function(){o.remove()};document.body.appendChild(o);o.focus();})()">Show overlay above modal</pds-button>
+          <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> with a higher <code>z-index</code> can display above it.</p>
+          <pds-button variant="secondary" onClick={() => {
+            const o = document.createElement('button');
+            o.type = 'button';
+            o.textContent = 'Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';
+            o.setAttribute('style', 'position:fixed;inset:auto var(--pine-dimension-md) var(--pine-dimension-md) auto;max-width:20rem;padding:var(--pine-dimension-sm);border:0;border-radius:var(--pine-border-radius-md);text-align:start;background:var(--pine-color-background-inverse-container);color:var(--pine-color-text-inverse);z-index:calc(var(--pine-z-index-modal) + 1);cursor:pointer');
+            o.onclick = () => o.remove();
+            o.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); o.remove(); } });
+            document.querySelector('#top-layer-modal')?.addEventListener('pdsModalClose', () => o.remove(), { once: true });
+            document.body.appendChild(o);
+            o.focus();
+          }}>Show overlay above modal</pds-button>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -1497,7 +1493,8 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
 
 - The component renders a native `<dialog>` and automatically sets `aria-labelledby` based on the slotted heading content (`${componentId}-heading`). Ensure your modal header contains a semantic heading (`<pds-text tag="h2">`) so assistive technologies announce it. `aria-modal` is `true` by default and `false` when `disable-top-layer` is set (a non-modal dialog).
 - Focus trapping is managed internally. When `open` becomes `true`, the component stores the previously focused element, queries for focusable nodes inside the modal, and moves focus to the first match. When `hideModal()` is called (directly or indirectly), focus is restored to the element that opened the modal. If that element is gone or can't take focus (disabled or hidden), focus goes to the first control of the open modal now on top, as long as that modal is in the top layer or wraps the one that closed; otherwise the page isn't inert, so focus is left where the browser puts it. In `disable-top-layer` mode focus is still placed on open but **not** trapped, so it can move to overlays stacked above the modal.
-- Backdrop clicks and Escape close only the top-most open modal: a modal inside another before the one around it, then a top-layer modal before one outside it. In the top layer, the one opened last wins (a modal inside a top-layer modal ranks with it). Among modals in the same layer, the higher backdrop `z-index` wins, then the one later in the page. Use this when stacking wizard dialogs or confirm prompts.
+- Set `disable-initial-focus` for a modal that can open from a background event while the user is mid-task elsewhere on the page, so opening it doesn't move their focus. Pair it with `disable-top-layer`: in the top layer the rest of the page is inert, so focus can't stay there. On close, focus moves back only if nothing outside the modal has taken it.
+- Backdrop clicks and Escape close only the top-most open modal: a modal inside another before the one around it, then a top-layer modal before one outside it. In the top layer, the one opened last wins (a modal inside a top-layer modal ranks with it). Among modals in the same layer, the higher backdrop `z-index` wins, then the one later in the page. So a confirm prompt opened from a modal closes before that modal does.
 
 
 ### Opening and Closing Modals

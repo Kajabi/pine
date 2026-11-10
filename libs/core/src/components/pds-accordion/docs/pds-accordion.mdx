@@ -31,7 +31,7 @@ Both the label and panel contain slots to use for custom content.
 
 The accordion can be navigated using a keyboard. The `Enter` and `Space` keys can be used to open and close the accordion. Interactive elements within the panel can be tabbed through only when the accordion is open.
 
-**Caution**: The label slot is built with the `<summary>` HTML component. Because the `<summary>`'s default accessibility role is `button`, it will strip all child elements of their own roles. This will prevent elements such as headings from being read as such for users of assistive technology. Exercise caution to not use the label as a substitute for a heading.
+**Caution**: The label slot is built with the `<summary>` HTML component. Because the `<summary>`'s default accessibility role is `button`, it will strip all child elements of their own roles. This will prevent elements such as headings from being read as such for users of assistive technology. Exercise caution to not use the label as a substitute for a heading. If the content needs a heading, place it before the accordion, not in the label slot.
 
 ### Accordions vs Tabs
 
@@ -44,7 +44,7 @@ Though similar, tabs and accordions both offer different user experiences. Consi
 ## Examples
 ### Default
 
-With neither slot set, the accordion will render with a default trigger label and no panel content.
+With neither slot set, the accordion renders the trigger label "Details" and no panel content. Always set the `label` slot so the trigger names its content.
 
 <DocCanvas
   mdxSource={{
