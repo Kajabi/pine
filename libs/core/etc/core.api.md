@@ -544,6 +544,8 @@ export namespace Components {
         "scrollable": boolean;
         "showModal": () => Promise<void>;
         "size": ModalSizeType | (string & Record<never, never>);
+        "transition"?: ModalTransition;
+        "transitionOrigin"?: string;
     }
     export interface PdsModalContent {
         "border": 'none' | 'both' | 'top' | 'bottom';
@@ -2376,6 +2378,8 @@ export namespace LocalJSX {
         "open"?: boolean;
         "scrollable"?: boolean;
         "size"?: ModalSizeType | (string & Record<never, never>);
+        "transition"?: ModalTransition;
+        "transitionOrigin"?: string;
     }
 
     // (undocumented)
@@ -2394,6 +2398,10 @@ export namespace LocalJSX {
         "scrollable": boolean;
         // (undocumented)
         "size": ModalSizeType | (string & Record<never, never>);
+        // (undocumented)
+        "transition": ModalTransition;
+        // (undocumented)
+        "transitionOrigin": string;
     }
 
     export interface PdsModalContent {
@@ -3262,6 +3270,9 @@ export interface MockPdsModalCustomEvent<T> extends CustomEvent<T> {
 
 // @public (undocumented)
 export type ModalSizeType = 'sm' | 'md' | 'lg' | 'fullscreen';
+
+// @public
+export type ModalTransition = 'grow' | 'morph';
 
 // @public (undocumented)
 export interface MultiselectChangeEventDetail {
