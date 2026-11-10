@@ -40,8 +40,8 @@ The default switch style, which behaves like a checkbox input.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsSwitch componentId="pds-switch-default-example" label="Default Switch" name="pds-switch-default" />',
-    webComponent: '<pds-switch component-id="pds-switch-default-example" label="Default Switch" name="pds-switch-default"></pds-switch>'
+    react: `<PdsSwitch componentId="pds-switch-default-example" label="Default Switch" name="pds-switch-default" />`,
+    webComponent: `<pds-switch component-id="pds-switch-default-example" label="Default Switch" name="pds-switch-default"></pds-switch>`
   }}>
   <div>
     <pds-switch
@@ -58,12 +58,12 @@ Disables user interaction with the switch.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsSwitch componentId="pds-switch-disabled-example" disabled="true" label="Can't touch this" name="pds-switch-disabled"/>`,
-    webComponent: `<pds-switch component-id="pds-switch-disabled-example" disabled="true" label="Can't touch this" name="pds-switch-disabled"></pds-switch>`
+    react: `<PdsSwitch componentId="pds-switch-disabled-example" disabled label="Can't touch this" name="pds-switch-disabled"/>`,
+    webComponent: `<pds-switch component-id="pds-switch-disabled-example" disabled label="Can't touch this" name="pds-switch-disabled"></pds-switch>`
 }}>
   <pds-switch
     component-id="pds-switch-disabled-example"
-    disabled="true"
+    disabled
     label="Can't touch this"
     name="pds-switch-disabled"
   ></pds-switch>
@@ -75,8 +75,8 @@ Displays an additional descriptive message under the switch label.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsSwitch componentId="pds-switch-helper-example" helperMessage="Save my login details for next time." label="Remember me" name="pds-switch-helper"/>',
-    webComponent: '<pds-switch component-id="pds-switch-helper-example" helper-message="Save my login details for next time." label="Remember me" name="pds-switch-helper"></pds-switch>'
+    react: `<PdsSwitch componentId="pds-switch-helper-example" helperMessage="Save my login details for next time." label="Remember me" name="pds-switch-helper"/>`,
+    webComponent: `<pds-switch component-id="pds-switch-helper-example" helper-message="Save my login details for next time." label="Remember me" name="pds-switch-helper"></pds-switch>`
   }}>
   <>
     <pds-switch
@@ -94,16 +94,16 @@ Displays an error message with additional instructions, separate from the helper
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsSwitch componentId="pds-switch-invalid-example" errorMessage="Terms and conditions must be accepted to continue" invalid="true" label="I agree to the terms and conditions" name="pds-switch-invalid" required="true"/>',
-    webComponent: '<pds-switch component-id="pds-switch-invalid-example" error-message="Terms and conditions must be accepted to continue" invalid="true" label="I agree to the terms and conditions" name="pds-switch-invalid" required="true"></pds-switch>'
+    react: `<PdsSwitch componentId="pds-switch-invalid-example" errorMessage="Terms and conditions must be accepted to continue" invalid label="I agree to the terms and conditions" name="pds-switch-invalid" required/>`,
+    webComponent: `<pds-switch component-id="pds-switch-invalid-example" error-message="Terms and conditions must be accepted to continue" invalid label="I agree to the terms and conditions" name="pds-switch-invalid" required></pds-switch>`
 }}>
   <pds-switch
     component-id="pds-switch-invalid-example"
     error-message="Terms and conditions must be accepted to continue"
-    invalid="true"
+    invalid
     label="I agree to the terms and conditions"
     name="pds-switch-invalid"
-    required="true"
+    required
   ></pds-switch>
 </DocCanvas>
 
