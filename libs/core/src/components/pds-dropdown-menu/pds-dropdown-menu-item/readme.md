@@ -1,6 +1,6 @@
 # pds-dropdown-menu-item
 
-An item inside a `pds-dropdown-menu`. Renders a button by default, or a link when `href` is set.
+An item inside a `pds-dropdown-menu`. Renders a button by default, or a link when `href` is set. An `informational` item renders text that can't be activated, even when `href` is set.
 
 
 <!-- Auto Generated Below -->
