@@ -42,34 +42,34 @@ const BaseTemplate = (args) =>
 
 export const Default = BaseTemplate.bind();
 Default.args = {
-  componentId: 'default',
+  componentId: 'radio-default',
   label: 'Label text',
 };
 
 export const Checked = BaseTemplate.bind();
 Checked.args = {
-  componentId: 'checked',
+  componentId: 'radio-checked',
   label: 'Label text',
   checked: true,
 };
 
 export const Disabled = BaseTemplate.bind();
 Disabled.args = {
-  componentId: 'disabled',
+  componentId: 'radio-disabled',
   label: 'Label text',
   disabled: true,
 };
 
 export const withMessage = BaseTemplate.bind();
 withMessage.args = {
-  componentId: 'with-message',
+  componentId: 'radio-with-message',
   label: 'Label text',
   helperMessage: 'This is short message text',
 };
 
 export const Invalid = BaseTemplate.bind();
 Invalid.args = {
-  componentId: 'invalid',
+  componentId: 'radio-invalid',
   errorMessage: 'This is a short error message',
   label: 'Label text',
   invalid: true,
@@ -77,7 +77,7 @@ Invalid.args = {
 
 export const WithBorder = BaseTemplate.bind();
 WithBorder.args = {
-  componentId: 'with-border',
+  componentId: 'radio-with-border',
   label: 'Label text',
   hasBorder: true,
   helperMessage: 'This radio has a border for better visual separation',
@@ -105,14 +105,14 @@ const ImageTemplate = (args) =>
 
 export const WithImage = ImageTemplate.bind();
 WithImage.args = {
-  componentId: 'with-image',
+  componentId: 'radio-with-image',
   label: 'Option with image',
   helperMessage: 'This radio includes an image using the image slot',
 };
 
 export const Pill = BaseTemplate.bind();
 Pill.args = {
-  componentId: 'pill',
+  componentId: 'radio-pill',
   label: 'Label text',
   variant: 'pill',
 };
