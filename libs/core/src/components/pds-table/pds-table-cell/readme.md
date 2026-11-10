@@ -15,9 +15,9 @@
 
 ## Shadow Parts
 
-| Part     | Description |
-| -------- | ----------- |
-| `"cell"` |             |
+| Part     | Description                                                                                                                                                 |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"cell"` | Set on the `pds-table-cell` element itself, so `::part(cell)` matches it only from a shadow root that contains it. Style `pds-table-cell` directly instead. |
 
 
 ## Dependencies

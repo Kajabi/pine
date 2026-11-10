@@ -2,6 +2,9 @@ import { Component, Element, Host, Prop, State, Watch, h } from '@stencil/core';
 import { isScrolledFromInlineStart } from '../../../utils/scroll';
 import { setupTruncationTooltip } from '../../../utils/truncation-tooltip';
 
+/**
+ * @part cell - Set on the `pds-table-cell` element itself, so `::part(cell)` matches it only from a shadow root that contains it. Style `pds-table-cell` directly instead.
+ */
 @Component({
   tag: 'pds-table-cell',
   styleUrls: ['pds-table-cell.scss'],
