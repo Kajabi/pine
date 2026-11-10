@@ -366,3 +366,28 @@ describe('pds-alert', () => {
     });
   });
 });
+
+describe('pds-alert truncation', () => {
+  // One clipped message, one tooltip: the `pds-text` around the slot clips the message and
+  // reveals it, so this component neither clips it again nor binds a second tooltip over it.
+  it('leaves the small variant message to one truncating pds-text', async () => {
+    const page = await newSpecPage({
+      components: [PdsAlert],
+      html: `<pds-alert small="true">A message far too long to fit</pds-alert>`,
+    });
+
+    const truncating = page.root.shadowRoot.querySelectorAll('pds-text[truncate]');
+    expect(truncating).toHaveLength(1);
+    expect(truncating[0]).toHaveClass('pds-alert__description--small');
+    expect(truncating[0].querySelector('slot')).toBeTruthy();
+  });
+
+  it('does not truncate the message at the default size', async () => {
+    const page = await newSpecPage({
+      components: [PdsAlert],
+      html: `<pds-alert>A message far too long to fit</pds-alert>`,
+    });
+
+    expect(page.root.shadowRoot.querySelector('pds-text[truncate]')).toBeNull();
+  });
+});
