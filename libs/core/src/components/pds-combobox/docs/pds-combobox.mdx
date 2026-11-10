@@ -2069,7 +2069,7 @@ Call the `clear()` method on the element to return the combobox to its empty sta
 
 Emptying the input text does **not** clear the selection. In `mode="filter"` the text is a filter over the option list, so the committed value persists until an option is chosen or `clear()` is called. Use `clear()` whenever a "reset" affordance needs to genuinely empty the control.
 
-The web-component snippet shows the markup only: to wire up Reset, call `clear()` on the combobox from the button's click handler, as the React tab does.
+In this example, a click listener on the Reset button calls `clear()` on the combobox.
 
 <DocCanvas
   mdxSource={{
@@ -2079,7 +2079,13 @@ The web-component snippet shows the markup only: to wire up Reset, call `clear()
   <option value="panda">Panda</option>
 </pds-combobox>
 
-<pds-button variant="secondary" size="sm">Reset</pds-button>`,
+<pds-button id="combobox-clear-reset" variant="secondary" size="sm">Reset</pds-button>
+
+<script>
+  document.querySelector('#combobox-clear-reset').addEventListener('click', () => {
+    document.querySelector('#combobox-clear').clear();
+  });
+</script>`,
     react: `const comboboxRef = useRef(null);
 
 <PdsCombobox
@@ -2106,7 +2112,7 @@ The web-component snippet shows the markup only: to wire up Reset, call `clear()
       <option value="dog">Dog</option>
       <option value="panda">Panda</option>
     </pds-combobox>
-    <pds-button style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="sm" onClick={() => {
+    <pds-button id="combobox-clear-reset" style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="sm" onClick={() => {
       const el = document.querySelector('#combobox-clear');
       if (el) el.clear();
     }}>Reset</pds-button>
