@@ -4,6 +4,7 @@ import { isRtlDirection } from '@utils/scroll';
 import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClearEventDetail, PdsFilterVariant } from './filter-interface';
 
 import { enlarge, trash } from '@pine-ds/icons/icons';
+import { setupTruncationTooltip } from '../../../utils/truncation-tooltip';
 
 /**
  * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
@@ -28,6 +29,8 @@ export class PdsFilter implements BasePdsProps {
   private popoverEl: HTMLElement;
   private scrollRAF: number | null = null;
   private lastScrollTime = 0;
+  private truncationCleanup: (() => void) | null = null;
+  private tooltipTextEl: HTMLElement | null = null;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -48,6 +51,7 @@ export class PdsFilter implements BasePdsProps {
 
   /**
    * The text content displayed in the trigger button.
+   * When text overflows, a tooltip showing the full text will appear on hover/focus.
    */
   @Prop() text?: string;
 
@@ -74,10 +78,20 @@ export class PdsFilter implements BasePdsProps {
 
 
   /**
+   * Component lifecycle: Re-bind what disconnecting tore down.
+   * Moving the element doesn't re-render it, so componentDidRender won't fire here.
+   */
+  connectedCallback() {
+    this.syncTruncationTooltip();
+  }
+
+  /**
    * Component lifecycle: Clean up when disconnected from DOM.
    * Prevents memory leaks by canceling pending operations and closing popovers.
    */
   disconnectedCallback() {
+    this.destroyTruncationTooltip();
+
     // Cancel pending animation frames
     if (this.scrollRAF) {
       cancelAnimationFrame(this.scrollRAF);
@@ -107,6 +121,8 @@ export class PdsFilter implements BasePdsProps {
 
 
   componentDidRender() {
+    this.syncTruncationTooltip();
+
     // Note: popoverEl is set via ref callback in render method
     // For browsers with native popover API, we need direct element listeners
     // since the document listener may not capture native popover toggle events
@@ -119,6 +135,44 @@ export class PdsFilter implements BasePdsProps {
         // Add direct listener for native popover events
         this.popoverEl.addEventListener('toggle', this.handleNativePopoverToggle);
       }
+    }
+  }
+
+  /**
+   * Binds the trigger text to a tooltip that shows the whole of it while the
+   * button's width clips it. The text element only exists while `text` is set,
+   * and the tooltip holds listeners and an observer on it, so it is re-bound
+   * only when a different element renders in its place — re-binding on every
+   * render would tear down a tooltip the pointer is still inside, and opening
+   * the popover renders again.
+   */
+  private syncTruncationTooltip() {
+    const textEl = this.el.shadowRoot?.querySelector<HTMLElement>('.pds-filter__button-text') ?? null;
+    if (textEl === this.tooltipTextEl) return;
+
+    this.destroyTruncationTooltip();
+    this.tooltipTextEl = textEl;
+    if (textEl === null) return;
+
+    this.truncationCleanup = setupTruncationTooltip({
+      // The trigger, not the host: the popover is a child of the host, so hovering
+      // the open popover's content would reveal the trigger's text along with it.
+      hostEl: textEl.closest<HTMLElement>('button') ?? textEl,
+      // `__button-content` carries the max width, so its text child is what shrinks
+      // and overflows; measuring the content box instead always reads as fitting.
+      contentEl: textEl,
+      getTooltipText: () => this.text ?? '',
+      // The text already sits inside the trigger button, which takes focus itself —
+      // a tabindex here too would nest a second, nameless tab stop inside it.
+      manageTabIndex: false,
+    });
+  }
+
+  private destroyTruncationTooltip() {
+    this.tooltipTextEl = null;
+    if (this.truncationCleanup !== null) {
+      this.truncationCleanup();
+      this.truncationCleanup = null;
     }
   }
 
