@@ -3156,6 +3156,27 @@ describe('pds-combobox', () => {
       expect(fetchSpy).toHaveBeenLastCalledWith(expect.anything(), 2);
     });
 
+    it("keeps a drilled-in group's loading rows in its options, below the row back", async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" async-url="/api/actions"');
+      jest.spyOn(component, 'debouncedFetchAsyncOptions').mockImplementation(() => undefined);
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+
+      // More to load: the row comes after the group's last option, where it scrolls into view.
+      component.hasMore = true;
+      await page.waitForChanges();
+      const options = () => root.querySelector('.pds-combobox__drill-in-options')!;
+      expect(options().lastElementChild!.classList.contains('pds-combobox__load-more')).toBe(true);
+      expect(root.querySelectorAll('.pds-combobox__load-more')).toHaveLength(1);
+
+      // Loading: the row heads the options, under the row back, never above it.
+      component.loading = true;
+      await page.waitForChanges();
+      expect(options().firstElementChild!.classList.contains('pds-combobox__loading')).toBe(true);
+      expect(root.querySelectorAll('.pds-combobox__loading')).toHaveLength(1);
+      expect(root.querySelector('.pds-combobox__load-more')).toBeNull();
+    });
+
     it('replaces the group list with the clicked group and a row back', async () => {
       const { page, component, root } = await openDrillIn();
 
