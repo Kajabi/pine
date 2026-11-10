@@ -1,5 +1,6 @@
-# pds-tabs
+# pds-tab
 
+A tab inside `pds-tabs`. Its `name` matches the `pds-tabpanel` it shows, or set `href` to make it a navigation link.
 
 
 <!-- Auto Generated Below -->
