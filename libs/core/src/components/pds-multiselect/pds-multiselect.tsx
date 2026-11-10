@@ -362,15 +362,14 @@ export class PdsMultiselect {
   @Event() pdsMultiselectCreate!: EventEmitter<MultiselectCreateEventDetail>;
 
   /**
-   * Emitted when the dropdown is dismissed via Escape key or click outside.
+   * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the
+   * component, such as with a click elsewhere on the page.
    *
-   * This event fires only when the user explicitly dismisses the panel without making a selection:
-   * - ✅ Fires: Pressing Escape key while dropdown is open
-   * - ✅ Fires: Clicking outside the component while dropdown is open
-   * - ❌ Does NOT fire: When panel closes due to selection (including when `closePanelOnSelect` is true)
-   * - ❌ Does NOT fire: When panel closes programmatically via `closeDropdown()`
-   *
-   * Equivalent to Sage's `onEscapeHook`. Use this to restore parent UI state or run cleanup when the user cancels their interaction.
+   * It doesn't fire when the panel closes any other way: from a selection (including with
+   * `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect
+   * becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while
+   * the panel is open fires this event, and the panel opens again.
+   * Use it to restore parent UI state or run cleanup when the user cancels.
    */
   @Event() pdsMultiselectDismiss!: EventEmitter<void>;
 
