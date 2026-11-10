@@ -14,9 +14,9 @@ Pine MCP bridges the gap between AI assistants and the Pine Design System by pro
 - **Design Token Access** - Intelligent recommendations for colors, spacing, typography
 - **Code Generation** - AI generates code that follows Pine guidelines
 - **Validation** - Automatic checking of implementations against Pine rules
-- **Documentation Access** - Real-time access to Pine component docs and examples
+- **Documentation Access** - Access to Pine component docs and examples
 
-Instead of AI assistants making up component names or using incorrect properties, they can query Pine MCP to get accurate, up-to-date information about what's actually available in the Pine Design System.
+Instead of AI assistants making up component names or using incorrect properties, they can query Pine MCP to get accurate information about what's actually available in the Pine Design System.
 
 ## Available Tools
 
@@ -115,10 +115,11 @@ Ask: "Validate this Pine layout code"
 
 ## Benefits
 
-- **Accurate Information** - AI gets real, current Pine component data
+- **Accurate Information** - AI gets real Pine component data instead of guesses
 - **Consistent Code** - Generated code follows Pine patterns automatically
 - **Time Savings** - No need to manually lookup component documentation
 - **Quality Assurance** - Built-in validation prevents common mistakes
-- **Up-to-date** - Always uses latest Pine component information
+
+Pine MCP serves a snapshot of Pine taken at its last deploy, so it can trail a new Pine release. The component and design-doc tools accept `forceRefresh: true` to read live docs from GitHub instead.
 
 Pine MCP makes it easy for AI assistants to work intelligently with the Pine Design System, ensuring consistent, compliant code generation and reducing the need for manual documentation lookups.
