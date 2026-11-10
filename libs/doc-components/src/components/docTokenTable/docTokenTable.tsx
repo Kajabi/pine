@@ -5,6 +5,7 @@ import './docTokenTable.css';
 interface TokenEntry {
   value: string;
   type: string;
+  description?: string;
 }
 
 interface Token {
@@ -80,6 +81,7 @@ const formattedCategoryName = {
 
 const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) => {
   const [pineTokens, setPineTokens] = useState<Token | null>(null);
+  const [darkTokens, setDarkTokens] = useState<Token | null>(null);
 
   useEffect(() => {
     const loadTokens = async () => {
@@ -97,6 +99,13 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
         else {
           setPineTokens(tokenModule.default[category as keyof typeof tokenModule.default] as Token);
         }
+
+        let dark: Token | null = null;
+        if (tier === 'semantic') {
+          const darkModule = await import('../../../../../node_modules/@kajabi-ui/styles/dist/tokens/semantic-dark.json');
+          dark = (darkModule.default[category as keyof typeof darkModule.default] as Token | undefined) ?? null;
+        }
+        setDarkTokens(dark);
       } catch (error) {
         console.error('Error loading token JSON:', error);
       }
@@ -112,11 +121,35 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
     return filteredBoxShadowValue.join(' ');
   };
 
+  const formatValue = (token: TokenEntry): string | undefined => {
+    if (typeof token.value !== 'object') {
+      return token.value;
+    }
+
+    if ('value' in token.value) {
+      return (token.value as TokenEntry).value;
+    }
+
+    if (token.type === 'boxShadow' || token.type === 'typography' || token.type === 'border') {
+      return Array.isArray(token.value)
+        ? (token.value as string[]).map(buildValue).join(', ')
+        : buildValue(token.value);
+    }
+
+    return undefined;
+  };
+
+  const hasDescriptions = (tokens: Token): boolean => Object.values(tokens).some((token) => (
+    'value' in token ? Boolean(token.description) : hasDescriptions(token as Token)
+  ));
+
   const camelToKebab = (str: string): string => {
     return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
   };
 
-  const renderTableRows = (tokens: Token, parentKey?: string): JSX.Element[] => {
+  const showDescriptions = pineTokens ? hasDescriptions(pineTokens) : false;
+
+  const renderTableRows = (tokens: Token, parentKey?: string, dark?: Token): JSX.Element[] => {
     const entries = Object.entries(tokens);
 
     // sets and sorts data based on numerical value
@@ -143,26 +176,11 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
 
       const cssVariableName = `--pine-${camelToKebab(label as string)}-${tokenKeyName}`.replace(/-@/g, '');
 
-      if ('value' in token) {
-        let cssPropertyValue: string | undefined;
-        cssPropertyValue = token.value as string;
+      const darkToken = dark?.[key];
 
-        if (typeof token.value === 'object') {
-          if ('value' in token.value) {
-            cssPropertyValue = token.value.value as string;
-          }
-          else if (
-            token.type === 'boxShadow'
-            || token.type === 'typography'
-            || token.type === 'border'
-          ) {
-            if (Array.isArray(token.value)) {
-              cssPropertyValue = (token.value as string[]).map(buildValue).join(', ');
-            } else {
-              cssPropertyValue = buildValue(token.value);
-            }
-          }
-        }
+      if ('value' in token) {
+        const cssPropertyValue = formatValue(token as TokenEntry);
+        const darkValue = darkToken && 'value' in darkToken ? formatValue(darkToken as TokenEntry) : undefined;
 
         let style: React.CSSProperties = {};
         // Render "Aa" preview only for text-based styles
@@ -194,12 +212,14 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
             <td>{previewDiv}</td>
             <td>{cssVariableName}</td>
             <td>{cssPropertyValue}</td>
+            {darkTokens && <td>{darkValue}</td>}
+            {showDescriptions && <td>{(token as TokenEntry).description}</td>}
           </tr>
         );
       }
       else {
         return <React.Fragment key={tokenKeyName}>
-          { renderTableRows(token as Token, tokenKeyName) }
+          { renderTableRows(token as Token, tokenKeyName, darkToken as Token | undefined) }
         </React.Fragment>;
       }
     });
@@ -211,11 +231,13 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
         <tr>
           <th>Preview</th>
           <th>Token</th>
-          <th>Value</th>
+          <th>{darkTokens ? 'Light' : 'Value'}</th>
+          {darkTokens && <th>Dark</th>}
+          {showDescriptions && <th>Description</th>}
         </tr>
       </thead>
       <tbody>
-        {pineTokens && renderTableRows(pineTokens)}
+        {pineTokens && renderTableRows(pineTokens, undefined, darkTokens ?? undefined)}
       </tbody>
     </table>
   );
