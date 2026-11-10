@@ -48,7 +48,7 @@ SizesAndSrcset.args = {
   alt: 'Random Bear',
   sizes: '(max-width: 450px) 150px, 600px',
   src: 'https://placebear.com/600/200',
-  srcset: 'https://placebear.com/150/150 400w, https://placebear.com/600/200',
+  srcset: 'https://placebear.com/150/150 150w, https://placebear.com/600/200 600w',
 }
 
 export const Ratio = RatioTemplate.bind();
