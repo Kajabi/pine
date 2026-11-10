@@ -152,29 +152,26 @@ The accent variant uses Pine's accent color scheme, providing a distinctive appe
 </DocCanvas>
 
 ### Destructive
-The destructive variant uses Pine's destructive color scheme, providing a warning appearance suitable for destructive or dangerous actions like deleting items.
+The destructive variant uses Pine's destructive color scheme. Use it for a choice with destructive consequences, such as how much old data to delete.
 
 <DocCanvas
   mdxSource={{
-    webComponent: `<pds-combobox component-id="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" trigger-variant="destructive" mode="select-only">
-  <option value="file1">Document.pdf</option>
-  <option value="file2">Image.jpg</option>
-  <option value="file3">Spreadsheet.xlsx</option>
-  <option value="file4">Presentation.pptx</option>
+    webComponent: `<pds-combobox component-id="combobox-trigger-destructive" label="Delete data older than" placeholder="Select a period" trigger="button" trigger-variant="destructive" mode="select-only">
+  <option value="30-days">30 days</option>
+  <option value="90-days">90 days</option>
+  <option value="1-year">1 year</option>
 </pds-combobox>`,
-    react: `<PdsCombobox componentId="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" triggerVariant="destructive" mode="select-only">
-  <option value="file1">Document.pdf</option>
-  <option value="file2">Image.jpg</option>
-  <option value="file3">Spreadsheet.xlsx</option>
-  <option value="file4">Presentation.pptx</option>
+    react: `<PdsCombobox componentId="combobox-trigger-destructive" label="Delete data older than" placeholder="Select a period" trigger="button" triggerVariant="destructive" mode="select-only">
+  <option value="30-days">30 days</option>
+  <option value="90-days">90 days</option>
+  <option value="1-year">1 year</option>
 </PdsCombobox>`,
   }}
 >
-  <pds-combobox component-id="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" trigger-variant="destructive" mode="select-only">
-    <option value="file1">Document.pdf</option>
-    <option value="file2">Image.jpg</option>
-    <option value="file3">Spreadsheet.xlsx</option>
-    <option value="file4">Presentation.pptx</option>
+  <pds-combobox component-id="combobox-trigger-destructive" label="Delete data older than" placeholder="Select a period" trigger="button" trigger-variant="destructive" mode="select-only">
+    <option value="30-days">30 days</option>
+    <option value="90-days">90 days</option>
+    <option value="1-year">1 year</option>
   </pds-combobox>
 </DocCanvas>
 
@@ -210,13 +207,13 @@ In select-only mode, all options are always shown regardless of what you type. T
 
 <DocCanvas
   mdxSource={{
-    webComponent: `<pds-combobox component-id="combobox-selectonly" label="Favorite Animal" placeholder="Type to search..." mode="select-only">
+    webComponent: `<pds-combobox component-id="combobox-selectonly" label="Favorite Animal" placeholder="Select an animal" mode="select-only">
   <option value="cat">Cat</option>
   <option value="dog">Dog</option>
   <option value="panda">Panda</option>
   <option value="snake">Snake</option>
 </pds-combobox>`,
-    react: `<PdsCombobox componentId="combobox-selectonly" label="Favorite Animal" placeholder="Type to search..." mode="select-only">
+    react: `<PdsCombobox componentId="combobox-selectonly" label="Favorite Animal" placeholder="Select an animal" mode="select-only">
   <option value="cat">Cat</option>
   <option value="dog">Dog</option>
   <option value="panda">Panda</option>
@@ -224,7 +221,7 @@ In select-only mode, all options are always shown regardless of what you type. T
 </PdsCombobox>`,
   }}
 >
-  <pds-combobox component-id="combobox-selectonly" label="Favorite Animal" placeholder="Type to search..." mode="select-only">
+  <pds-combobox component-id="combobox-selectonly" label="Favorite Animal" placeholder="Select an animal" mode="select-only">
     <option value="cat">Cat</option>
     <option value="dog">Dog</option>
     <option value="panda">Panda</option>
@@ -292,9 +289,9 @@ The chip trigger renders as a chip component instead of a text input or button. 
 <DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only" value="draft">
-  <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
-  <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
-  <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
+  <option value="draft" chip-sentiment="neutral" chip-dot>Draft</option>
+  <option value="published" chip-sentiment="success" chip-dot>Published</option>
+  <option value="archived" chip-sentiment="warning" chip-dot>Archived</option>
 </pds-combobox>`,
     react: `<PdsCombobox componentId="chip-draft" label="Status" trigger="chip" mode="select-only" value="draft">
   <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
@@ -309,6 +306,8 @@ The chip trigger renders as a chip component instead of a text input or button. 
     <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
   </pds-combobox>
 </DocCanvas>
+
+`chip-dot` is read by presence, so plain markup can leave it bare. In JSX, give it a string (`chip-dot="true"`): React drops a valueless attribute it doesn't know from a native `<option>`.
 
 ### Chip with Icon
 Add an icon to the chip trigger for better visual context using the automatic approach:
@@ -674,7 +673,7 @@ For cases where the combobox doesn't need a visible label (such as in compact la
 
 ## Layout Support
 
-The combobox supports custom layouts for both the button trigger and dropdown options, enabling rich content like the payment method selector shown in your design.
+The combobox supports custom layouts for both the button trigger and dropdown options, enabling rich content such as a payment method picker with an icon and description per option.
 
 > **🔒 Security Warning**: Only use custom layouts with trusted, developer-controlled content. While basic XSS protection is applied (script tags, event handlers, and dangerous protocols are removed), you should never use this feature with user-generated content.
 
@@ -1149,7 +1148,7 @@ Add `data-icon` to an `<optgroup>` to show a Pine icon beside its label. Use an 
 
 Set `icon` on an option from the `options` prop, or `data-icon` on a slotted `<option>`, to show a Pine icon before its text. The rules are the same as for group icons: an icon name only, decorative, and hidden from assistive technology. Once an option is chosen, the `button` trigger shows its icon too, or its group's icon when the option has none. The `input` and `chip` triggers don't show option icons.
 
-Option icons suit a list of categories, where the ungrouped options and the groups between them all have icons. With `flyout` and `drill-in`, the groups sit between the options in the array's order. See the `OptionIconsWithGroups` story.
+Option icons suit a list of categories, where the ungrouped options and the groups between them all have icons. With `flyout` and `drill-in`, the groups sit between the options in the array's order, as in this `drill-in` example.
 
 <DocCanvas
   mdxSource={{
@@ -1227,7 +1226,7 @@ Search results, and the `inline` display, list a group's options under its label
 
 ### Option Badges
 
-Set `badge` on an option from the `options` prop to show a small `pds-chip` after its text, such as "New" on a newly added choice. `label` is the chip's text, `sentiment` a chip sentiment (`neutral` when unset or unknown), and `icon` a Pine icon name, with the same rules as option icons. On a slotted `<option>`, use `data-badge`, `data-badge-sentiment` and `data-badge-icon`. The badge sits at the end of the row, before the selected check. It isn't part of the option's label, so it doesn't show in the trigger and search doesn't match it, but screen readers read it as part of the option's name ("Responsive emails, New"). Chip and layout options don't show it, and a disabled option's badge is muted with the row.
+Set `badge` on an option from the `options` prop to show a small `pds-chip` after its text, such as "New" on a newly added choice. `label` is the chip's text, `sentiment` one of `pds-chip`'s sentiments (`accent`, `brand`, `danger`, `info`, `neutral`, `solid`, `subtle`, `success` or `warning`; `neutral` when unset or unknown), and `icon` a Pine icon name, with the same rules as option icons. On a slotted `<option>`, use `data-badge`, `data-badge-sentiment` and `data-badge-icon`. The badge sits at the end of the row, before the selected check. It isn't part of the option's label, so it doesn't show in the trigger and search doesn't match it, but screen readers read it as part of the option's name ("Responsive emails, New"). Chip and layout options don't show it, and a disabled option's badge is muted with the row.
 
 <DocCanvas
   mdxSource={{
@@ -1276,7 +1275,12 @@ Set `badge` on an option from the `options` prop to show a small `pds-chip` afte
 
 ### Group Badges
 
-A group can show a badge too, such as "Premium" on a group of plan-gated actions. Set `groupBadge` on an option from the `options` prop, with the same `label`, `sentiment` and `icon` as `badge`; the first option in a group that sets it provides the group's badge, as with `groupIcon`. On a slotted `<optgroup>`, use `data-badge`, `data-badge-sentiment` and `data-badge-icon`. With `flyout` and `drill-in`, the badge sits at the end of the group's row, before the chevron; with `inline`, at the end of the group's label. Screen readers read it as part of the group's name ("Facebook, Premium"), and search doesn't match it. A drilled-in group's row back leaves it out: that row is the way back, and the badge was on the row that opened it. A group whose options are all disabled is disabled, and its badge is muted with the row; it still opens, so its options can be seen. See the `GroupBadges` story for each group display.
+A group can show a badge too, such as "Premium" on a group of plan-gated actions. Set `groupBadge` on an option from the `options` prop, with the same `label`, `sentiment` and `icon` as `badge`; the first option in a group that sets it provides the group's badge, as with `groupIcon`. On a slotted `<optgroup>`, use `data-badge`, `data-badge-sentiment` and `data-badge-icon`. Only an `<optgroup>` takes a badge; a `<pds-text>` group label can't.
+
+- **Where it shows.** With `flyout` and `drill-in`, at the end of the group's row, before the chevron; with `inline`, at the end of the group's label. A drilled-in group's row back leaves it out: that row is the way back, and the badge was on the row that opened it. The trigger doesn't show it, even when the chosen option is in the group.
+- **Long labels.** As with option badges, the badge takes at most half the row, so a long label ends in an ellipsis.
+- **Screen readers and search.** Screen readers read it as part of the group's name ("Facebook, Premium"), and search doesn't match it.
+- **Disabled groups.** A group whose options are all disabled is disabled, and its badge is muted with the row. It still opens, so its options can be seen.
 
 <DocCanvas
   mdxSource={{
@@ -1352,7 +1356,7 @@ A group can show a badge too, such as "Premium" on a group of plan-gated actions
 
 ### Grouping the `options` Prop
 
-When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`) and `groupBadge` (see Group Badges). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. With `group-display="inline"`, options without a group are listed before every group, wherever they appear in the array, so none reads as part of the group above it. With `flyout` and `drill-in`, groups are rows of their own, so options without a group and groups keep the array's order. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. See the `OptionGroupsFromOptions` story for interleaved groups rendered together.
+When options come from the `options` prop, set `group` on each option, and optionally `groupIcon` (the same rules as `data-icon`) and `groupBadge` (see Group Badges). Options that share a group render together under one label, where the group first appears, even if the array interleaves groups. The first option in a group that sets `groupIcon` provides the icon. With `group-display="inline"`, options without a group are listed before every group, wherever they appear in the array, so none reads as part of the group above it. With `flyout` and `drill-in`, groups are rows of their own, so options without a group and groups keep the array's order. With `async-url`, each page of results is merged into the groups already shown, so a later page can add options above the end of the list. `groupIcon` is a string icon name in React too, not an imported icon object. In this example, "Remove a tag" comes after "Send an email" in the array but still renders under Tag.
 
 ```jsx
 <PdsCombobox
@@ -1362,8 +1366,8 @@ When options come from the `options` prop, set `group` on each option, and optio
   mode="select-only"
   options={[
     { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
-    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
     { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
   ]}
 />
 ```
@@ -1382,7 +1386,7 @@ When options come from the `options` prop, set `group` on each option, and optio
     <pds-table-body>
       <pds-table-row>
         <pds-table-cell><code>inline</code> (default)</pds-table-cell>
-        <pds-table-cell>A few groups, or a short list where seeing every option at once helps people compare across groups. Also server-searched lists (see below).</pds-table-cell>
+        <pds-table-cell>A few groups, or a short list where seeing every option at once helps people compare across groups. Also server-searched lists (`async-url`), whose results replace the groups as soon as people type.</pds-table-cell>
         <pds-table-cell>The full list runs much past the dropdown's height.</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
@@ -1496,36 +1500,54 @@ When options come from the `options` prop, set `group` on each option, and optio
   </div>
 </DocCanvas>
 
-#### In server-rendered templates
+#### In server-rendered markup
 
-The `options` prop is JavaScript-only. In ERB or other server-rendered markup, slot `<optgroup>` elements instead, with each group's icon in `data-icon`, and listen for `pdsComboboxChange` in a script. The `name` attribute submits the value with the form.
+The `options` prop is JavaScript-only. In server-rendered markup, slot `<optgroup>` elements instead, with each group's icon in `data-icon`, and listen for `pdsComboboxChange` in a script. The `name` attribute submits the value with the form.
 
 - `data-icon` takes a Pine icon name only; URLs and other values that aren't a name are dropped.
-- Keep labels and values in escaped output (`<%= %>`). The template is page HTML, so unescaped text becomes markup, or breaks out of an attribute, before the combobox reads it. Never pass user-supplied text through `raw` or `html_safe`.
+- Escape labels and values in your template engine. The template is page HTML, so unescaped text becomes markup, or breaks out of an attribute, before the combobox reads it. Never output user-supplied text unescaped.
 
-```erb
-<pds-combobox
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
   component-id="automation-action"
-  name="automation[action]"
-  label="<%= t(".action_label") %>"
-  placeholder="<%= t(".action_placeholder") %>"
+  name="action"
+  label="Action"
+  placeholder="Choose an action"
   trigger="button"
   mode="select-only"
   group-display="flyout"
-  panel-search
-  search-placeholder="<%= t(".search_actions") %>"
-  search-options-label="<%= t(".search_actions") %>"
-  drill-in-back-label="<%= t(".back") %>"
-  value="<%= @automation.action %>">
-  <% @action_groups.each do |group| %>
-    <optgroup label="<%= group.label %>" data-icon="<%= group.icon %>">
-      <% group.actions.each do |action| %>
-        <option value="<%= action.id %>"><%= action.label %></option>
-      <% end %>
+  drill-in-back-label="Back"
+  value="email_send">
+  <optgroup label="Contact" data-icon="contact">
+    <option value="contact_tag_add">Add a tag</option>
+    <option value="contact_tag_remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Communication" data-icon="mail">
+    <option value="email_send">Send an email</option>
+  </optgroup>
+</pds-combobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="automation-action"
+    name="action"
+    label="Action"
+    placeholder="Choose an action"
+    trigger="button"
+    mode="select-only"
+    group-display="flyout"
+    drill-in-back-label="Back"
+    value="email_send">
+    <optgroup label="Contact" data-icon="contact">
+      <option value="contact_tag_add">Add a tag</option>
+      <option value="contact_tag_remove">Remove a tag</option>
     </optgroup>
-  <% end %>
-</pds-combobox>
-```
+    <optgroup label="Communication" data-icon="mail">
+      <option value="email_send">Send an email</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
 
 ### Flyout Groups
 
@@ -1659,7 +1681,7 @@ Disable an option to keep it listed but stop it being chosen, such as an action 
 - When the combobox is searchable (the `input` trigger, or `panel-search`), search still finds disabled options.
 - A `value` that matches a disabled option still shows as the selection, and, unlike a native `<select>`, is still submitted with the form. Validate the value on the server.
 - The combobox reads `disabled` whenever it renders but doesn't watch it, so toggling it on a slotted option while the dropdown is open shows on the next change. Updating the `options` prop re-renders at once.
-- **Say why an option is disabled**, for example in `helper-message`, which is read with the field. A disabled option can't explain itself.
+- **Say why an option is disabled.** A disabled option can't explain itself. When one reason covers every disabled option, put it in `helper-message`, which is read with the field; when reasons differ, add a short one to each option's label, such as "(sold out)".
 
 <DocCanvas
   mdxSource={{
@@ -2047,6 +2069,8 @@ Call the `clear()` method on the element to return the combobox to its empty sta
 
 Emptying the input text does **not** clear the selection. In `mode="filter"` the text is a filter over the option list, so the committed value persists until an option is chosen or `clear()` is called. Use `clear()` whenever a "reset" affordance needs to genuinely empty the control.
 
+In this example, the Reset button's click handler finds the combobox by its `id` and calls `clear()` on it.
+
 <DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox id="combobox-clear" component-id="combobox-clear" name="favoriteAnimal" label="Favorite Animal" placeholder="Select an animal" value="panda">
@@ -2055,9 +2079,7 @@ Emptying the input text does **not** clear the selection. In `mode="filter"` the
   <option value="panda">Panda</option>
 </pds-combobox>
 
-<pds-button variant="secondary" size="sm" onclick="document.querySelector('#combobox-clear').clear()">
-  Reset
-</pds-button>`,
+<pds-button variant="secondary" size="sm">Reset</pds-button>`,
     react: `const comboboxRef = useRef(null);
 
 <PdsCombobox
@@ -2073,9 +2095,9 @@ Emptying the input text does **not** clear the selection. In `mode="filter"` the
   <option value="panda">Panda</option>
 </PdsCombobox>
 
-<button onClick={() => comboboxRef.current?.clear()}>
+<PdsButton variant="secondary" size="sm" onClick={() => comboboxRef.current?.clear()}>
   Reset
-</button>`,
+</PdsButton>`,
   }}
 >
   <div>
