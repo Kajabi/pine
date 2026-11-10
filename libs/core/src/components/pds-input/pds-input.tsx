@@ -77,7 +77,7 @@ export class PdsInput {
   @Event() pdsFocus!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when a keyboard input occurs.
+   * Emitted when the value changes from user input (typing, paste, autofill).
    */
   @Event() pdsInput: EventEmitter<InputInputEventDetail>;
 
@@ -109,7 +109,7 @@ export class PdsInput {
   @Prop() componentId!: string;
 
   /**
-   * Sets the number of milliseconds to wait before updating the value.
+   * Sets the number of milliseconds to wait after each input event before emitting `pdsInput`.
    */
   @Prop() debounce?: number;
 
