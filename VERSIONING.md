@@ -1,7 +1,7 @@
 # Versioning & deprecation policy
 
 Pine's published packages (`@pine-ds/core`, `@pine-ds/react`) are consumed by
-kajabi-products and other apps that upgrade on their own schedule. The component
+product apps that upgrade on their own schedule. The component
 API is a **public contract**. This document defines what counts as a breaking
 change, how we deprecate, and how releases are cut.
 
