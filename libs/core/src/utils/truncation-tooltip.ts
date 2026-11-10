@@ -47,6 +47,42 @@ export interface TruncationTooltipOptions {
 export const FOCUSABLE_WRAPPER =
   'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item, [role="option"], [role="treeitem"]';
 
+const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
+
+/**
+ * The text `el` actually shows, with every `<slot>` it holds replaced by the
+ * nodes assigned to it.
+ *
+ * `textContent` counts a slot as empty, so a component that renders a clipped
+ * text around a slot of its own — `pds-alert` renders `<pds-text truncate><slot/></pds-text>` —
+ * would leave the tooltip with nothing to show and so no tooltip at all, even
+ * though the text is clipped and holds a tab stop.
+ *
+ * Text nodes only, as `textContent` counts too: Stencil leaves comment nodes
+ * among slotted content to mark where it was relocated from, and their data is
+ * not text anyone reads.
+ */
+export function flattenedText(el: Element): string {
+  let text = '';
+
+  const add = (node: Node) => {
+    const slot = node as HTMLSlotElement;
+    // `flatten` returns the slot's own children when nothing is assigned, which is what renders then.
+    if (node.nodeName === 'SLOT' && typeof slot.assignedNodes === 'function') {
+      slot.assignedNodes({ flatten: true }).forEach(add);
+    } else if (node.nodeType === ELEMENT_NODE) {
+      text += flattenedText(node as Element);
+    } else if (node.nodeType === TEXT_NODE) {
+      text += node.textContent ?? '';
+    }
+  };
+
+  el.childNodes.forEach(add);
+
+  return text;
+}
+
 /** CSS class prefix used for truncation tooltip portal elements */
 const TOOLTIP_CLASS = 'pds-truncation-tooltip';
 

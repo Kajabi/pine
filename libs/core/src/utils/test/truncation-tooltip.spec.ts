@@ -1,4 +1,4 @@
-import { setupTruncationTooltip } from '../truncation-tooltip';
+import { flattenedText, setupTruncationTooltip } from '../truncation-tooltip';
 
 // Mock ResizeObserver
 class MockResizeObserver {
@@ -878,5 +878,78 @@ describe('truncation-tooltip', () => {
 
       cleanup();
     });
+  });
+});
+
+describe('flattenedText', () => {
+  // The invariant that keeps every caller that holds no slot reading exactly what it read before.
+  it.each([
+    ['plain text', 'A payment failed'],
+    ['nested elements', 'A <strong>payment</strong> <em>has <b>failed</b></em>'],
+    ['surrounding whitespace', '  A payment failed\n'],
+    ['nothing', ''],
+  ])('matches textContent with %s, holding no slot', (_shape, html) => {
+    const el = document.createElement('p');
+    el.innerHTML = html;
+
+    expect(flattenedText(el)).toBe(el.textContent);
+  });
+
+  it('reads text from nested elements', () => {
+    const el = document.createElement('p');
+    el.innerHTML = 'A <strong>payment</strong> failed';
+
+    expect(flattenedText(el)).toBe('A payment failed');
+  });
+
+  // The shape `pds-alert` renders: a clipped `pds-text` wrapped around a slot of its own, whose
+  // content lives in the consumer's light DOM. `textContent` reads that slot as empty.
+  it('reads text through a slot from the light DOM it projects', () => {
+    const outer = document.createElement('div');
+    const shadow = outer.attachShadow({ mode: 'open' });
+    const inner = document.createElement('span');
+    inner.appendChild(document.createElement('slot'));
+    shadow.appendChild(inner);
+    outer.textContent = 'A payment far too long to fit';
+
+    expect(inner.textContent).toBe('');
+    expect(flattenedText(inner)).toBe('A payment far too long to fit');
+  });
+
+  // `textContent` leaves comments out, and Stencil leaves them among slotted content to mark
+  // where it was relocated from, so reading them would put markup in the tooltip.
+  it('leaves comments among the content out, as textContent does', () => {
+    const el = document.createElement('p');
+    el.appendChild(document.createTextNode('A payment'));
+    el.appendChild(document.createComment('s.1.0'));
+    el.appendChild(document.createTextNode(' failed'));
+
+    expect(flattenedText(el)).toBe(el.textContent);
+    expect(flattenedText(el)).toBe('A payment failed');
+  });
+
+  it('leaves comments among slotted content out too', () => {
+    const outer = document.createElement('div');
+    const shadow = outer.attachShadow({ mode: 'open' });
+    const inner = document.createElement('span');
+    inner.appendChild(document.createElement('slot'));
+    shadow.appendChild(inner);
+    outer.appendChild(document.createTextNode('A payment'));
+    outer.appendChild(document.createComment('s.1.0'));
+    outer.appendChild(document.createTextNode(' failed'));
+
+    expect(flattenedText(inner)).toBe('A payment failed');
+  });
+
+  it('reads a slot’s own content when nothing is assigned to it, which is what renders then', () => {
+    const outer = document.createElement('div');
+    const shadow = outer.attachShadow({ mode: 'open' });
+    const inner = document.createElement('span');
+    const slot = document.createElement('slot');
+    slot.textContent = 'Nothing selected';
+    inner.appendChild(slot);
+    shadow.appendChild(inner);
+
+    expect(flattenedText(inner)).toBe('Nothing selected');
   });
 });

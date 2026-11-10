@@ -1,6 +1,6 @@
 import { Component, h, Prop, Element, Watch } from '@stencil/core';
 import { setColor } from '../../utils/utils';
-import { FOCUSABLE_WRAPPER, setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { FOCUSABLE_WRAPPER, flattenedText, setupTruncationTooltip } from '../../utils/truncation-tooltip';
 import { TEXT_SIZES, TextSizeType } from '../../utils/types';
 
 // Re-runs setup for each text bound to its wrapping control, keyed by host, so a truncated
@@ -163,7 +163,9 @@ export class PdsText {
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.contentEl,
-        getTooltipText: () => this.el.textContent || '',
+        // Not `textContent`: a consumer that wraps its own slot in this text, as `pds-alert` does, holds a
+        // `<slot>` here, which counts as empty and would leave the tooltip with nothing to show.
+        getTooltipText: () => flattenedText(this.el),
         // A wrapping link or button already takes focus, so its focus reveals the text instead of a nested tab stop.
         manageTabIndex: !usesWrapper,
         focusEl: usesWrapper ? wrapper : this.el,
