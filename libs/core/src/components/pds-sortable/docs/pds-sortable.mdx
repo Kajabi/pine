@@ -133,7 +133,7 @@ When `disabled` is set to `true`, sorting is prevented and items appear dimmed w
 
 ### Handle
 
-When `show-handle` is set on a `pds-sortable-item`, a handle icon is displayed within the item. With `handle-type="row"`, the handle is visual only and the whole row still drags; use `handle-type="handle"` to drag only by the handle.
+When `show-handle` is set on a `pds-sortable-item`, a handle icon is displayed within the item. With `handle-type="row"`, the handle is visual only and the whole row still drags (unless the list is `disabled`); use `handle-type="handle"` to drag only by the handle.
 
 <DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="handle" handleType="row">
