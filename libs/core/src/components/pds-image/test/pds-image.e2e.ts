@@ -68,8 +68,10 @@ describe('pds-image', () => {
   it('keeps the source proportions when height and width disagree with them', async () => {
     const page = await newE2EPage();
     page.setViewport({ width: 600, height: 600 });
-    // `height` and `width` reserve space before the image loads; they do not
-    // set a shape to crop to. A square source given a 400 x 100 box loads square.
+    // `height` and `width` do not set a shape to crop to: once the image loads, `height: auto`
+    // lets its own proportions decide the height. A square source given a 400 x 100 box loads
+    // square. This only verifies the loaded state; `width` (not `height`) is what the browser
+    // holds space with before load, since `height: auto` applies from the first render.
     const square = 'data:image/svg+xml,' + encodeURIComponent(
       '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100"/></svg>',
     );

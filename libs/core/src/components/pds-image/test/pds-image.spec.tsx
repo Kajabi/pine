@@ -164,4 +164,23 @@ describe('pds-image', () => {
       </pds-image>
     `);
   })
+  it('drops the ratio shape when the ratio attribute is removed, not just left unset', async () => {
+    // Removing an attribute sets its prop to `null`, not `undefined`, so a check against only
+    // `undefined` would leave `pds-image--has-ratio` (and the inline aspect-ratio/object-fit) on.
+    const page = await newSpecPage({
+      components: [PdsImage],
+      html: `<pds-image class="pds-image" ratio="wide" src="//source.unsplash.com/100x100"></pds-image>`
+    })
+
+    page.root.removeAttribute('ratio');
+    await page.waitForChanges();
+
+    expect(page.root).toEqualHtml(`
+      <pds-image class="pds-image" src="//source.unsplash.com/100x100">
+        <mock:shadow-root>
+          <img alt="" loading="eager" src="//source.unsplash.com/100x100" />
+        </mock:shadow-root>
+      </pds-image>
+    `);
+  })
 });
