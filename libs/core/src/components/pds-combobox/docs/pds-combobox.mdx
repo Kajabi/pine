@@ -2069,7 +2069,7 @@ Call the `clear()` method on the element to return the combobox to its empty sta
 
 Emptying the input text does **not** clear the selection. In `mode="filter"` the text is a filter over the option list, so the committed value persists until an option is chosen or `clear()` is called. Use `clear()` whenever a "reset" affordance needs to genuinely empty the control.
 
-In this example, the Reset button's click handler finds the combobox by its `id` and calls `clear()` on it.
+The web-component snippet shows the markup only: to wire up Reset, call `clear()` on the combobox from the button's click handler, as the React tab does.
 
 <DocCanvas
   mdxSource={{
