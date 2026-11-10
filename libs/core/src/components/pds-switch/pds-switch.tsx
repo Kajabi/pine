@@ -65,7 +65,7 @@ export class PdsSwitch {
   @Prop() label: string;
 
   /**
-   * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
+   * Specifies the name. Submitted with the form name/value pair when checked.
    */
   @Prop() name: string;
 

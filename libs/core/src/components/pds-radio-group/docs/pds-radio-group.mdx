@@ -21,9 +21,9 @@ Radio Groups wrap a set of related radio inputs, displaying a single error messa
 - For form validation where the group must have a selection
 
 ### When not to use
-- For single radio buttons; use `pds-radio` directly
+- For a single on/off choice; a lone radio can't be unchecked. Use `pds-checkbox` when the choice is submitted with a form, or `pds-switch` when it takes effect at once
 - When each radio needs its own individual error message
-- For checkboxes; use `pds-checkbox` components instead
+- When people can pick several options; use `pds-checkbox` items in a `fieldset` with a `legend` instead
 
 ### Accessibility
 - Ensure the group label is descriptive and clearly identifies the selection group
