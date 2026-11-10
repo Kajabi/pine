@@ -655,6 +655,25 @@ describe('pds-drawer', () => {
       expect(resizeEndSpy.firstEvent.detail).toEqual({ width: 560 });
     });
 
+    it('treats a click on the handle that never moves as no resize', async () => {
+      const page = await newE2EPage();
+      page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`<pds-drawer component-id="test" open resizable side="end" size="md"><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const drawer = await page.find('pds-drawer');
+      const resizeEndSpy = await drawer.spyOnEvent('pdsDrawerResizeEnd');
+
+      await dragHandleBy(page, 0);
+      await page.waitForChanges();
+      expect(resizeEndSpy).toHaveReceivedEventTimes(0);
+
+      // Still not manually resized, so a size change resets the width to the new default.
+      await drawer.setProperty('size', 'sm');
+      await page.waitForChanges();
+      expect(await getPanelWidth(page)).toBe('360px');
+    });
+
     describe('keyboard (Window Splitter pattern)', () => {
       it('ArrowRight widens by a step and ArrowLeft narrows by a step', async () => {
         const page = await newE2EPage();

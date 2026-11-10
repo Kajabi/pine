@@ -223,6 +223,24 @@ describe('pds-drawer', () => {
       expect(description?.textContent).toContain('Enter');
     });
 
+    it('re-clamps the width when minWidth or maxWidth changes after load', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer],
+        html: `<pds-drawer component-id="test" resizable size="md"></pds-drawer>`,
+      });
+      const handle = () => page.root?.querySelector('.pds-drawer__handle');
+
+      page.rootInstance.maxWidth = 400;
+      await page.waitForChanges();
+      expect(handle()?.getAttribute('aria-valuenow')).toBe('400');
+      expect(handle()?.getAttribute('aria-valuemax')).toBe('400');
+
+      page.rootInstance.maxWidth = 720;
+      page.rootInstance.minWidth = 450;
+      await page.waitForChanges();
+      expect(handle()?.getAttribute('aria-valuenow')).toBe('450');
+    });
+
     it('uses a custom resizeHandleDescription when provided', async () => {
       const page = await newSpecPage({
         components: [PdsDrawer],
@@ -302,6 +320,27 @@ describe('pds-drawer', () => {
 
       expect(page.root?.querySelectorAll('pds-modal').length).toBe(1);
       expect(page.root?.querySelector('pds-modal')?.textContent?.trim()).toBe('Body');
+    });
+
+    it('keeps one resize handle and description when the snapshot carried its own', async () => {
+      const page = await newSpecPage({
+        components: [PdsDrawer, PdsModal],
+        html: `
+          <pds-drawer component-id="test" resizable>
+            <pds-modal id="test-panel">
+              <div>Body</div>
+              <div class="pds-drawer__handle" role="separator"></div>
+              <span id="test-panel-resize-description" class="pds-drawer__handle-description visually-hidden">Old</span>
+            </pds-modal>
+          </pds-drawer>
+        `,
+      });
+
+      expect(page.root?.querySelectorAll('.pds-drawer__handle').length).toBe(1);
+      expect(page.root?.querySelectorAll('#test-panel-resize-description').length).toBe(1);
+      expect(page.root?.querySelector('#test-panel-resize-description')?.textContent).not.toBe('Old');
+      expect(page.root?.querySelectorAll('pds-modal').length).toBe(1);
+      expect(page.root?.querySelector('pds-modal')?.textContent).toContain('Body');
     });
 
     it('is reconnect-safe (generic guard)', async () => {
