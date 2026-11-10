@@ -1568,7 +1568,7 @@ export namespace Components {
          */
         "externalLabel"?: string;
         /**
-          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
+          * If provided, renders the dropdown menu item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href": string | undefined;
         /**
@@ -5485,7 +5485,7 @@ declare namespace LocalJSX {
          */
         "externalLabel"?: string;
         /**
-          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
+          * If provided, renders the dropdown menu item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href"?: string | undefined;
         /**
@@ -5494,7 +5494,7 @@ declare namespace LocalJSX {
          */
         "informational"?: boolean;
         /**
-          * Emitted when the dropdown-item is clicked.
+          * Emitted when the dropdown menu item is clicked.
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
         /**

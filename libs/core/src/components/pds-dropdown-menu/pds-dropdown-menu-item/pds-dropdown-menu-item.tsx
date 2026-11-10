@@ -39,7 +39,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop() download?: string;
 
   /**
-   *  If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+   *  If provided, renders the dropdown menu item as an anchor (`<a>`) element instead of a button.
    *  Ignored when `informational` is set.
    */
   @Prop() href: string | undefined;
@@ -77,7 +77,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop({ reflect: true }) target?: '_blank' | '_self' | '_parent' | '_top';
 
   /**
-   * Emitted when the dropdown-item is clicked.
+   * Emitted when the dropdown menu item is clicked.
    *
    */
   @Event() pdsClick: EventEmitter<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>;
