@@ -38,7 +38,8 @@ Progress bars visualize how far a task has advanced toward completion. They help
 ## Examples
 
 ### Default
-_`percent` value used in source is only for demonstration purposes, otherwise progress bar would not appear_
+Set `percent` (0–100) to fill the bar. The bar is empty at the default of 0.
+
 <DocCanvas mdxSource={{
   react: `<PdsProgress componentId="default" label="Default" percent="15"></PdsProgress>`,
   webComponent: `<pds-progress component-id="default" label="Default" percent="15"></pds-progress>`
@@ -81,13 +82,13 @@ When `animated`, progress will animate from 0 to the `percent` value.
 
 ### Fill Color
 
-Allows for `pds-progress` to be filled with a custom color. Accepts any valid color token or CSS color value.
+Allows for `pds-progress` to be filled with a custom color. Accepts any valid color token or CSS color value. Prefer a semantic token, such as `--pine-color-success`, over a hex value.
 
 <DocCanvas mdxSource={{
-  react: `<PdsProgress componentId="fillcolor" label="Fill color" percent="95" fillColor="#86D5BC"></PdsProgress>`,
-  webComponent: `<pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
+  react: `<PdsProgress componentId="fillcolor" label="Fill color" percent="95" fillColor="--pine-color-success"></PdsProgress>`,
+  webComponent: `<pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="--pine-color-success"></pds-progress>
 `}}>
-  <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
+  <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="--pine-color-success"></pds-progress>
 </DocCanvas>
 
 ### Fill Color with Gradient

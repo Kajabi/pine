@@ -880,7 +880,7 @@ Layout impact:
 - `end`: Items pack toward the end (right for row, bottom for column)
 - `space-between`: Items are evenly distributed with first at start, last at end
 - `space-around`: Items are evenly distributed with equal space around them
-- `space-evenly`: Items are evenly distributed with equal space around them
+- `space-evenly`: Items are evenly distributed with equal space between them and at both ends
 
 #### Basic Justify Content Examples
 
@@ -1264,7 +1264,7 @@ All of these properties support responsive variants with `-xs`, `-sm`, `-md`, `-
 - **fit**: `fit`, `fit-xs`, `fit-sm`, `fit-md`, `fit-lg`, `fit-xl`
 
 ### Layout Properties
-`pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page
+`pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be viewed on the [Layouts](/docs/components-layout--docs) page
 
 ## Direction Troubleshooting
 
@@ -1308,7 +1308,7 @@ All of these properties support responsive variants with `-xs`, `-sm`, `-md`, `-
 
 ### Quick Decision Tree for LLMs:
 
-> ** Direction Decision Rules:**
+> **Direction decision rules:**
 > 1. **Are you building a page/card/form?** → Use `direction="column"`
 > 2. **Are you placing buttons/badges/icons together?** → Use default (no direction needed)
 > 3. **Are children meant to stack vertically?** → Use `direction="column"`
