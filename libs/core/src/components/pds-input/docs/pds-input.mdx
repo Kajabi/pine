@@ -41,7 +41,7 @@ When analyzing designs or screenshots, text that appears above an input field is
 
 ### Character Limits
 
-`maxlength` caps how many characters people can type. It's all lowercase, as on a native `<input>`; `pds-textarea` spells the same limit `max-length` and adds a character counter.
+`maxlength` caps how many characters people can type, except with `type="number"`, where browsers ignore it; bound a number with `min` and `max` instead. It's all lowercase, as on a native `<input>`; `pds-textarea` spells the same limit `max-length` and adds a character counter.
 
 ## Properties
 
