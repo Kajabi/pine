@@ -7,11 +7,8 @@
 
 ## Overview
 
-Individual filter component with cross-browser popover positioning.
-
-Uses a hybrid approach for optimal cross-browser compatibility:
-- Modern browsers: CSS anchor positioning + JavaScript flip classes
-- Fallback browsers: JavaScript positioning with viewport boundary detection
+A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+The `clear` variant has no popover and emits `pdsFilterClear` instead.
 
 ## Properties
 

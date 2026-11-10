@@ -28,9 +28,10 @@
 
 ## Slots
 
-| Slot        | Description             |
-| ----------- | ----------------------- |
-| `"actions"` | Slot for alert actions. |
+| Slot          | Description                   |
+| ------------- | ----------------------------- |
+| `"(default)"` | The alert's description text. |
+| `"actions"`   | Slot for alert actions.       |
 
 
 ## Shadow Parts

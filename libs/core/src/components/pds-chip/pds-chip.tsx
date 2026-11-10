@@ -122,7 +122,7 @@ export class PdsChip {
 
   /**
    * HTTP method to use for the remove action.
-   * Adds data-method and data-turbo-method attributes for Rails/Turbo compatibility.
+   * Maps to the `data-method` and `data-turbo-method` attributes on the remove link, for frameworks that read link methods from them.
    * Only applies when removeUrl is provided.
    */
   @Prop() removeHttpMethod?: 'get' | 'post' | 'put' | 'patch' | 'delete';

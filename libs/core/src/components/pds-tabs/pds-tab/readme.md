@@ -1,5 +1,6 @@
-# pds-tabs
+# pds-tab
 
+A tab inside `pds-tabs`. In panel mode, its `name` matches the `pds-tabpanel` it shows. In navigation mode (`nav` set on `pds-tabs`), it renders a link to its `href` instead.
 
 
 <!-- Auto Generated Below -->

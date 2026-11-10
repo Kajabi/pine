@@ -5,10 +5,11 @@ import * as PdsDrawerStories from '../stories/pds-drawer.stories.js';
 
 # Drawer
 
-A side panel. By default it's non-modal: unlike `pds-modal`, the page stays
-interactive while a drawer is open — no dimming, no blur, no scroll lock, no
-click blocking. Add `modal` for a drawer the page should wait on (see
-[Modal](#modal)).
+Drawers are side panels that open beside the page, which stays interactive by
+default. Add `modal` for a drawer the page should wait on (see [Modal](#modal)).
+
+Unlike `pds-modal`, a default drawer doesn't dim or blur the page or block
+clicks.
 
 `pds-drawer` composes `pds-modal` internally and inherits its focus-return,
 Escape and dialog semantics unchanged. It adds the edge, width and dismiss
@@ -27,14 +28,16 @@ behavior a side panel needs.
 </pds-drawer>
 ```
 
-- `pds-drawer-content` fills the panel's height by default — no copy-pasted
-  height patch needed per consumer.
-- `side` is logical (`start` / `end`), so RTL is free.
-- `light-dismiss` (default `true`) replaces `backdrop-dismiss`. A default
-  drawer has no backdrop to click, so a pointerdown anywhere outside it closes
-  it; a `modal` drawer closes on a click on its backdrop instead. Setting it to
-  `false` also disables Escape, matching how `backdropDismiss` gates Escape on
-  `pds-modal` today.
+- `pds-drawer-content` fills the space between the header and footer.
+- `side` is logical (`start` / `end`): `end` is the inline-end edge, so an
+  `end` drawer docks on the left in right-to-left layouts.
+- `light-dismiss` (default `true`): a default drawer has no backdrop to click,
+  so a pointerdown outside it closes it, from any mouse button or a touch.
+  Pointerdowns in a `pds-modal` or in a popover, tooltip or combobox panel
+  don't count as outside, and moving focus out with the keyboard doesn't close
+  it. A `modal` drawer closes on a click on its backdrop instead.
+- `light-dismiss="false"` turns off outside clicks and Escape, so keep a close
+  button in the drawer.
 - `initial-focus="none"` opts out of moving focus into the drawer on open —
   use it for a drawer that can open from a background event while the user
   is mid-task elsewhere on the page.
