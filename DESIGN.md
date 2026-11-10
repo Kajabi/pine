@@ -130,7 +130,7 @@ typography:
     body:    "Inter"          # --pine-font-family-inter (+ system fallback stack)
     display: "FAIRE Sprig"    # expressive/marketing display only — NOT product chrome
     intl:    ["Noto Sans Arabic", "Noto Sans Hebrew", "Noto Sans Devanagari"]
-  # Size scale (tokens.font_size) is named ~rem*100; base body = 100 (14px).
+  # Size scale (tokens.font_size) is named off a 14px base, not rem: name ≈ px ÷ 14 × 100; base body = 100 (14px).
   weight_aliases: { regular: 400, medium: 500, semibold: 600, bold: 700 }
   line_height_use: { headings_dense: 125, body: 150 }   # keys into tokens.line_height
 
