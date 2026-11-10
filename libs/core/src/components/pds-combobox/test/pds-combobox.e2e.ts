@@ -1009,12 +1009,15 @@ describe('pds-combobox', () => {
       expect(await scrollTop()).toBe(settled);
     });
 
-    it("keeps the highlighted option clear of the sticky row back in a group that scrolls", async () => {
+    it.each([
+      ['with panel search', 'panel-search'],
+      ['without panel search', ''],
+    ])('keeps the highlighted option clear of the sticky row back in a group that scrolls, %s', async (_name, search) => {
       const page = await newE2EPage();
       await page.setViewport({ width: 1200, height: 800 });
       await page.setContent(`
         <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
-          group-display="drill-in" panel-search max-height="160px" dropdown-width="300px"></pds-combobox>
+          group-display="drill-in" ${search} max-height="160px" dropdown-width="300px"></pds-combobox>
       `);
       await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
         el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
