@@ -214,33 +214,32 @@ The select component is shown invalid along with an error message, providing fee
 
 ### Autocomplete
 
-With the autocomplete attribute enabled, the select component allows browsers to suggest previously entered values, improving the user's input experience. This feature helps users fill out forms more quickly and accurately by displaying potential matches based on their past selections or input history.
+`autocomplete` hints the browser to autofill the choice from the user's saved details, such as their country. Use a specific token that matches what the select asks for, such as `country`, with option values the browser can match.
 
 <DocCanvas
- 
   mdxSource={{
     react: `
-      <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name" name="name" value="paul">
-        <option value="paul">Paul McCartney</option>
-        <option value="john">John Lennon</option>
-        <option value="george">George Harrison</option>
-        <option value="ringo">Ringo Starr</option>
+      <PdsSelect autocomplete="country" componentId="pds-select-autocomplete-example" label="Country" name="country">
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="GB">United Kingdom</option>
+        <option value="AU">Australia</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" name="name" value="paul">
-        <option value="paul">Paul McCartney</option>
-        <option value="john">John Lennon</option>
-        <option value="george">George Harrison</option>
-        <option value="ringo">Ringo Starr</option>
+      <pds-select autocomplete="country" component-id="pds-select-autocomplete-example" label="Country" name="country">
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="GB">United Kingdom</option>
+        <option value="AU">Australia</option>
       </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" name="name" value="paul">
-      <option value="paul">Paul McCartney</option>
-      <option value="john">John Lennon</option>
-      <option value="george">George Harrison</option>
-      <option value="ringo">Ringo Starr</option>
+    <pds-select autocomplete="country" component-id="pds-select-autocomplete-example" label="Country" name="country">
+      <option value="US">United States</option>
+      <option value="CA">Canada</option>
+      <option value="GB">United Kingdom</option>
+      <option value="AU">Australia</option>
     </pds-select>
   </div>
 </DocCanvas>
