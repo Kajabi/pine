@@ -39,6 +39,10 @@ For accessibility, it is strongly encouraged to follow these best practices:
 
 When analyzing designs or screenshots, text that appears above an input field is the input's label, not a separate `pds-text` component. The `label` prop creates text that appears above the input field and integrates properly with the component's styling and accessibility features.
 
+### Character Limits
+
+`maxlength` caps how many characters people can type. It's all lowercase, as on a native `<input>`; `pds-textarea` spells the same limit `max-length` and adds a character counter.
+
 ## Properties
 
 <DocArgsTable componentName="pds-input" docSource={components} />
@@ -82,10 +86,10 @@ Indicates that the user must specify a value for the input before the owning for
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-required-example" label="Name" type="email" required="true" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-required-example" label="Name" type="email" required="true" value="Frank Dux"></pds-input>'
+    react: '<PdsInput componentId="pds-input-required-example" label="Name" type="text" required="true" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-required-example" label="Name" type="text" required="true" value="Frank Dux"></pds-input>'
 }}>
-  <pds-input component-id="pds-input-required-example" label="Name" type="email" required="true" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-required-example" label="Name" type="text" required="true" value="Frank Dux"></pds-input>
 </DocCanvas>
 
 ### Placeholder
@@ -94,10 +98,10 @@ Provides a short, non-essential hint about the expected input.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter a email address..." value=""></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter a email address..." value=""></pds-input>'
+    react: '<PdsInput componentId="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter an email address..." value=""></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter an email address..." value=""></pds-input>'
 }}>
-  <pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter a email address..." value=""></pds-input>
+  <pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter an email address..." value=""></pds-input>
 </DocCanvas>
 
 ### Disabled
@@ -106,10 +110,10 @@ Removes all interactive behavior from the text field and provides a visual treat
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-disabled-example" label="Name" type="email" disabled="true" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-disabled-example" label="Name" type="email" disabled="true" value="Frank Dux"></pds-input>'
+    react: '<PdsInput componentId="pds-input-disabled-example" label="Name" type="text" disabled="true" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-disabled-example" label="Name" type="text" disabled="true" value="Frank Dux"></pds-input>'
 }}>
-  <pds-input component-id="pds-input-disabled-example" label="Name" type="email" disabled="true" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-disabled-example" label="Name" type="text" disabled="true" value="Frank Dux"></pds-input>
 </DocCanvas>
 
 ### Readonly
@@ -118,10 +122,10 @@ Removes the ability to interact with the text field. If a value is present, that
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>'
+    react: '<PdsInput componentId="pds-input-readonly-example" label="Name" type="text" readonly="true" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-readonly-example" label="Name" type="text" readonly="true" value="Frank Dux"></pds-input>'
 }}>
-  <pds-input component-id="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-readonly-example" label="Name" type="text" readonly="true" value="Frank Dux"></pds-input>
 </DocCanvas>
 
 ### Highlight
@@ -164,10 +168,10 @@ A `helper-message` is used to provide additional information about how to comple
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-help-example" label="Name" type="email" helperMessage="Please use the correct format" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-help-example" label="Name" type="email" helper-message="Please use the correct format" value="Frank Dux"></pds-input>'
+    react: '<PdsInput componentId="pds-input-help-example" label="Name" type="text" helperMessage="Please use the correct format" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-help-example" label="Name" type="text" helper-message="Please use the correct format" value="Frank Dux"></pds-input>'
 }}>
-  <pds-input component-id="pds-input-help-example" label="Name" type="email" helper-message="Please use the correct format" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-help-example" label="Name" type="text" helper-message="Please use the correct format" value="Frank Dux"></pds-input>
 </DocCanvas>
 
 ### Invalid
@@ -187,16 +191,16 @@ A prefix or suffix can be added to the input field to provide additional context
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsInput componentId="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+    react: `<PdsInput componentId="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
   <PdsIcon name="mail" slot="prefix"></PdsIcon>
   <PdsButton variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</PdsButton>
 </PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+    webComponent: `<pds-input component-id="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
   <pds-icon name="mail" slot="prefix"></pds-icon>
   <pds-button variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button>
 </pds-input>`
   }}>
-  <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+  <pds-input component-id="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
     <pds-icon name="mail" slot="prefix"></pds-icon>
     <pds-button variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button>
   </pds-input>
@@ -315,14 +319,14 @@ Prepend and append elements are placed outside the input container, next to the 
 **Prefix Icon**
 <DocCanvas
   mdxSource={{
-    react: `<PdsInput componentId="pds-input-prefix-icon" label="Email" type="email" value="Frank Dux">
+    react: `<PdsInput componentId="pds-input-prefix-icon" label="Email" type="email" value="frank@example.com">
   <PdsIcon name="mail" slot="prefix"></PdsIcon>
 </PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="Frank Dux">
+    webComponent: `<pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="frank@example.com">
   <pds-icon name="mail" slot="prefix"></pds-icon>
 </pds-input>`
   }}>
-  <pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="Frank Dux">
+  <pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="frank@example.com">
     <pds-icon name="mail" slot="prefix"></pds-icon>
   </pds-input>
 </DocCanvas>
@@ -426,20 +430,20 @@ Prepend and append elements are placed outside the input container, next to the 
 **Prefix Icon and Suffix Button**
 <DocCanvas
   mdxSource={{
-    react: `<PdsInput componentId="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
+    react: `<PdsInput componentId="pds-input-prefix-suffix" label="Email" type="email" value="frank@example.com">
       <PdsIcon name="mail" slot="prefix"></PdsIcon>
       <PdsButton variant="unstyled" slot="suffix" aria-label="Clear email">
         <PdsIcon name="remove-circle" aria-hidden="true"></PdsIcon>
       </PdsButton>
     </PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
+    webComponent: `<pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="frank@example.com">
       <pds-icon name="mail" slot="prefix"></pds-icon>
       <pds-button variant="unstyled" slot="suffix" aria-label="Clear email">
         <pds-icon name="remove-circle" aria-hidden="true"></pds-icon>
       </pds-button>
     </pds-input>`
   }}>
-  <pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
+  <pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="frank@example.com">
     <pds-icon name="mail" slot="prefix"></pds-icon>
     <pds-button variant="unstyled" slot="suffix" aria-label="Clear email">
       <pds-icon name="remove-circle" aria-hidden="true"></pds-icon>
