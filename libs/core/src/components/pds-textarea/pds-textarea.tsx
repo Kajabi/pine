@@ -44,12 +44,7 @@ export class PdsTextarea {
   @Event() pdsFocus!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when a keyboard input occurs.
-   *
-   * For elements that accept text input (`type=text`, `type=tel`, etc.), the interface
-   * is [`InputEvent`](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent); for others,
-   * the interface is [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event). If
-   * the input is cleared on edit, the type is `null`.
+   * Emitted when the value changes from user input (typing, paste, autofill).
    */
   @Event() pdsInput: EventEmitter<TextareaInputEventDetail>;
 
@@ -93,7 +88,7 @@ export class PdsTextarea {
   @Prop() disabled = false;
 
   /**
-   * The amount of time, in milliseconds, to wait to trigger the event after each keystroke.
+   * Sets the number of milliseconds to wait after each keystroke before emitting `pdsInput`.
    */
   @Prop() debounce?: number;
 
@@ -125,7 +120,7 @@ export class PdsTextarea {
   @Prop() hideLabel: boolean;
 
   /**
-   * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
+   * Specifies the name. Submitted with the form name/value pair.
    */
   @Prop() name: string = this.componentId;
 
