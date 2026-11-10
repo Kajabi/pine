@@ -72,14 +72,14 @@ Text in small alerts is truncated when it becomes too long for the alert descrip
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsAlert heading="Alert heading text" small="true" variant="info">
+    react: `<PdsAlert heading="Alert heading text" small variant="info">
   Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.
 </PdsAlert>`,
-    webComponent: `<pds-alert heading="Alert heading text" small="true" variant="info">
+    webComponent: `<pds-alert heading="Alert heading text" small variant="info">
   Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.
 </pds-alert>`
 }}>
-  <pds-alert heading="Alert heading text" small="true" variant="info">Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.</pds-alert>
+  <pds-alert heading="Alert heading text" small variant="info">Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.</pds-alert>
 </DocCanvas>
 
 
@@ -115,18 +115,18 @@ When using the small variant, actions are displayed on the same line as the desc
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsAlert heading="Alert heading text" small="true" variant="warning">
+    react: `<PdsAlert heading="Alert heading text" small variant="warning">
   Alerts can also have description text that can be used to provide more information about the alert.
   <PdsLink href="#" slot="actions" variant="plain">Action link</PdsLink>
   <PdsLink href="#" slot="actions" variant="plain">Action link</PdsLink>
 </PdsAlert>`,
-    webComponent: `<pds-alert heading="Alert heading text" small="true" variant="warning">
+    webComponent: `<pds-alert heading="Alert heading text" small variant="warning">
   Alerts can also have description text that can be used to provide more information about the alert.
   <pds-link href="#" slot="actions" variant="plain">Action link</pds-link>
   <pds-link href="#" slot="actions" variant="plain">Action link</pds-link>
 </pds-alert>`
 }}>
-  <pds-alert heading="Alert heading text" small="true" variant="warning">Alerts can also have description text that can be used to provide more information about the alert.<pds-link href="#" slot="actions" variant="plain">Action link</pds-link> <pds-link href="#" slot="actions" variant="plain">Action link</pds-link></pds-alert>
+  <pds-alert heading="Alert heading text" small variant="warning">Alerts can also have description text that can be used to provide more information about the alert.<pds-link href="#" slot="actions" variant="plain">Action link</pds-link> <pds-link href="#" slot="actions" variant="plain">Action link</pds-link></pds-alert>
 </DocCanvas>
 
 
@@ -138,28 +138,28 @@ An event `pdsAlertDismissClick` is emitted when the dismiss button is clicked, w
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsAlert dismissible="true" heading="Alert heading text" variant="danger">
+    react: `<PdsAlert dismissible heading="Alert heading text" variant="danger">
   Alerts can also have description text that can be used to provide more information about the alert.
 </PdsAlert>`,
-    webComponent: `<pds-alert dismissible="true" heading="Alert heading text" variant="danger">
+    webComponent: `<pds-alert dismissible heading="Alert heading text" variant="danger">
   Alerts can also have description text that can be used to provide more information about the alert.
 </pds-alert>`
 }}>
-  <pds-alert dismissible="true" heading="Alert heading text" variant="danger">Alerts can also have description text that can be used to provide more information about the alert.</pds-alert>
+  <pds-alert dismissible heading="Alert heading text" variant="danger">Alerts can also have description text that can be used to provide more information about the alert.</pds-alert>
 </DocCanvas>
 
 ### Small dismissible
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsAlert dismissible="true" heading="Alert heading text" small="true" variant="danger">
+    react: `<PdsAlert dismissible heading="Alert heading text" small variant="danger">
   Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.
 </PdsAlert>`,
-    webComponent: `<pds-alert dismissible="true" heading="Alert heading text" small="true" variant="danger">
+    webComponent: `<pds-alert dismissible heading="Alert heading text" small variant="danger">
   Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.
 </pds-alert>`
 }}>
-  <pds-alert dismissible="true" heading="Alert heading text" small="true" variant="danger">Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.</pds-alert>
+  <pds-alert dismissible heading="Alert heading text" small variant="danger">Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.</pds-alert>
 </DocCanvas>
 
 ## Playground
