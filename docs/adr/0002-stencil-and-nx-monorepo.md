@@ -6,11 +6,11 @@
 
 ## Context
 
-Pine ships UI primitives that need to work in framework-agnostic contexts (legacy Kajabi Rails surfaces, marketing pages, third-party embeds) **and** in modern React apps. The repo also holds a React wrapper package (`libs/react/`), doc-components (`libs/doc-components/`), Figma Code Connect sources (`libs/figma/`), and Stencil build outputs under `libs/compositions/` — distinct deliverables that share workspace tooling, lint configuration, and release cadence.
+Pine ships UI primitives that need to work in framework-agnostic contexts (legacy Kajabi Rails surfaces, marketing pages, third-party embeds) **and** in modern React apps. The repo also holds a React wrapper package (`libs/react/`), doc-components (`libs/doc-components/`), and Figma Code Connect sources (`libs/figma/`) — distinct deliverables that share workspace tooling, lint configuration, and release cadence.
 
 ## Decision
 
-Component primitives are authored as **Stencil.js** web components (`libs/core/`). The repo is structured as an **Nx monorepo** so the published packages — **`@pine-ds/core`**, **`@pine-ds/react`**, and **`@pine-ds/doc-components`** — share cached `build`, `test`, and `lint` targets with dependency-graph awareness. `libs/figma/` is Code Connect source (wired via root `figma.config.json`, not an Nx project). `libs/compositions/` and `libs/compositions-react/` hold Stencil build artifacts, not versioned npm packages.
+Component primitives are authored as **Stencil.js** web components (`libs/core/`). The repo is structured as an **Nx monorepo** so the published packages — **`@pine-ds/core`**, **`@pine-ds/react`**, and **`@pine-ds/doc-components`** — share cached `build`, `test`, and `lint` targets with dependency-graph awareness. `libs/figma/` is Code Connect source (wired via root `figma.config.json`, not an Nx project).
 
 ## Consequences
 

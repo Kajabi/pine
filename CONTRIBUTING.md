@@ -152,6 +152,13 @@ To audit a Storybook you already have running, skip the static build:
 npm run test.a11y -- --url http://localhost:6006
 ```
 
+For a quicker check, open the **Accessibility** tab in Storybook's bottom panel and
+press **Run accessibility scan** to audit the story you're viewing. It scans on
+demand, so it can't collide with the gate's own axe pass. Treat it as a fast
+signal, not a preview of CI: it reports raw axe output, without the page-level
+rules the gate disables (`landmark-one-main`, `page-has-heading-one`, `region`)
+or the repeat sampling the gate uses to filter out flicker.
+
 #### The baseline
 
 Pine had pre-existing violations when the gate landed, so the gate is a ratchet,

@@ -33,7 +33,7 @@ See [`0000-template.md`](./0000-template.md).
 | [0010](./0010-api-extractor-public-api-reports.md)   | Enforce the public API contract with API Extractor reports        | Accepted                 |
 | [0011](./0011-storybook-accessibility-gate.md)       | Gate accessibility in CI against a story-level baseline           | Accepted                 |
 
-ADRs 0001–0009 were authored retrospectively to capture decisions already in the codebase. The **Maintainers** field on each names the team that owns the area today, not the original deciders.
+ADRs 0001–0009 were authored retrospectively to capture decisions already in the codebase. The **Maintainers** field on each names the code-owner group for the area, not the original deciders.
 
 ## When to write a new ADR
 

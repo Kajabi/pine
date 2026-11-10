@@ -102,5 +102,5 @@ When tokens are renamed, the old token is aliased to the new one during a deprec
 **Before upgrading a major version:**
 1. Read the full changelog section for the new major version
 2. Search your codebase for any `⚠️ Breaking Changes` listed (grep for deprecated prop/attribute names)
-3. Run `npm run lint.all` after upgrading — linting rules may surface newly invalid patterns
-4. Run `npm run test.all` to catch any visual or behavioral regressions
+3. Run your app's lint and type checks after upgrading — with `@pine-ds/react`, renamed or removed props show up as type errors
+4. Run your app's test suites to catch visual or behavioral regressions
