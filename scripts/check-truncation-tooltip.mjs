@@ -174,7 +174,9 @@ const report = units.map((unit) => {
   ];
   // A call, outside comments: an import or a comment that names the util isn't adoption.
   const adopts = own.some(
-    (p) => /\.tsx?$/.test(p) && UTIL_CALLS.some((call) => stripComments(read(p)).includes(`${call}(`))
+    (p) =>
+      /\.tsx?$/.test(p) &&
+      UTIL_CALLS.some((call) => stripComments(read(p)).includes(`${call}(`))
   );
   return { unit, selectors, adopts };
 });
