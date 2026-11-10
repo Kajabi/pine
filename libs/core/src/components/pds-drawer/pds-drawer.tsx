@@ -14,7 +14,7 @@ const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dro
  * A side panel composed from `pds-modal`, non-modal by default.
  *
  * By default, unlike `pds-modal`, the page stays interactive while a drawer
- * is open: no dimming, no blur, no scroll lock, no click blocking.
+ * is open: no dimming, no blur, no click blocking.
  * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
  * its backdrop suppressed, and adds the edge, width and dismiss behavior a
  * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
@@ -70,8 +70,8 @@ export class PdsDrawer {
   @Prop({ mutable: true }) open = false;
 
   /**
-   * Which edge of the viewport the drawer is docked to. Logical, so this is
-   * free under RTL — `end` is the inline-end edge regardless of direction.
+   * Which edge of the viewport the drawer is docked to. Logical: `end` is the
+   * inline-end edge, so an `end` drawer docks on the left in right-to-left layouts.
    * @default 'end'
    */
   @Prop() side: 'start' | 'end' = 'end';
