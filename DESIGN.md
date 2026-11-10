@@ -429,8 +429,9 @@ worth calling out:
 - All interactive components are keyboard-operable with a visible `focus-ring`
   (purple 300); never remove focus outlines.
 - Use semantic HTML and ARIA; icon-only controls need an accessible name.
-  A decorative `pds-icon` needs nothing, since it's hidden from assistive tech
-  unless named. Give it an `aria-label` only when the icon carries meaning alone.
+  A decorative `pds-icon` needs nothing: it's hidden from assistive tech unless it
+  has `aria-label`, `aria-labelledby` or `tabindex`. Give it an `aria-label` only
+  when the icon carries meaning alone.
 - Respect `prefers-reduced-motion` — motion durations auto-zero; don't
   reintroduce animation that ignores the preference.
 
