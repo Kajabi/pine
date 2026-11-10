@@ -1473,6 +1473,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
             o.textContent = 'Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';
             o.setAttribute('style', 'position:fixed;inset:auto var(--pine-dimension-md) var(--pine-dimension-md) auto;max-width:20rem;padding:var(--pine-dimension-sm);border:0;border-radius:var(--pine-border-radius-md);text-align:start;background:var(--pine-color-background-inverse-container);color:var(--pine-color-text-inverse);z-index:calc(var(--pine-z-index-modal) + 1);cursor:pointer');
             o.onclick = () => o.remove();
+            o.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); o.remove(); } });
             document.querySelector('#top-layer-modal')?.addEventListener('pdsModalClose', () => o.remove(), { once: true });
             document.body.appendChild(o);
             o.focus();
