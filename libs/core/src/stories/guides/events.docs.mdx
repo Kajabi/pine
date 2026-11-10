@@ -23,7 +23,7 @@ properties table.
 - **Composition**: All Pine custom events are composed and bubble so you can listen on ancestor elements or `document`.
 - **Detail payload**: The `detail` type varies by event: a boolean (`pdsRadioChange`), the native event (`pdsSwitchChange`, `pdsSelectChange`), an object (`pdsTableSort`), or nothing (`pdsAlertDismissClick`). Check the Events table in each component's docs for the exact payload.
 - **Preventing defaults**: Calling `event.preventDefault()` on `pdsTableSort`, `pdsTableSelectAll` or `pdsTableRowSelected` stops `pds-table` from sorting or syncing its selection, so you can handle it yourself. Other `pds` events report what happened, and `preventDefault()` has no effect on them.
-- **Handled keystrokes**: `pds-modal`, `pds-popover` and `pds-dropdown-menu` ignore an Escape or Tab `keydown` that is already `defaultPrevented` when it reaches them, and `pds-multiselect` does the same for Escape. A control that handles the key itself can keep the overlay around it open.
+- **Handled keystrokes**: `pds-modal`, `pds-popover` and `pds-dropdown-menu` ignore an Escape or Tab `keydown` that is already `defaultPrevented` when it reaches them, and `pds-multiselect` does the same for Escape. So a control inside that has already handled the key stops the overlay around it from also closing on Escape, or from moving focus on Tab.
 
 ## Examples
 
