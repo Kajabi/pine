@@ -696,7 +696,7 @@ The `pdsMultiselectDismiss` event fires when the dropdown is closed via the Esca
 
 ### Programmatic Clear
 
-Call the `clear()` method to programmatically reset all selections, clear the search query, and emit a change event with empty values (only when something was selected or typed). This is useful for "reset" buttons or when a parent form is cleared. The web-component snippet shows the markup only: to wire up Reset, call `clear()` on the multiselect from the button's click handler, as the React tab does.
+Call the `clear()` method to programmatically reset all selections, clear the search query, and emit a change event with empty values (only when something was selected or typed). This is useful for "reset" buttons or when a parent form is cleared. In this example, a click listener on the Reset button calls `clear()` on the multiselect.
 
 <DocCanvas
   mdxSource={{
@@ -712,7 +712,13 @@ Call the `clear()` method to programmatically reset all selections, clear the se
   <option value="3">Support</option>
 </pds-multiselect>
 
-<pds-button variant="secondary" size="sm">Reset</pds-button>`,
+<pds-button id="clearable-select-reset" variant="secondary" size="sm">Reset</pds-button>
+
+<script>
+  document.querySelector('#clearable-select-reset').addEventListener('click', () => {
+    document.querySelector('#clearable-select').clear();
+  });
+</script>`,
     react: `const multiselectRef = useRef(null);
 
 <PdsMultiselect
@@ -744,7 +750,7 @@ Call the `clear()` method to programmatically reset all selections, clear the se
       <option value="2">Sales</option>
       <option value="3">Support</option>
     </pds-multiselect>
-    <pds-button style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="sm" onClick={() => {
+    <pds-button id="clearable-select-reset" style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="sm" onClick={() => {
       const el = document.querySelector('#clearable-select');
       if (el) el.clear();
     }}>Reset</pds-button>
