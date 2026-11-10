@@ -20,11 +20,14 @@ export interface DatepickerPreset {
   /**
    * A built-in key (`today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`,
    * `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`,
-   * `year-to-date`, `last-12-months`), or your own key when `startOffset` and `endOffset`, or
-   * `start` and `end`, are set.
+   * `year-to-date`, `last-12-months`), or your own key when it has `startOffset` or `endOffset`,
+   * or both `start` and `end`.
    */
   key: string;
-  /** The text shown in the list. Built-in keys have English defaults; set it to translate them. */
+  /**
+   * The text shown in the list. Built-in keys have English defaults; set it to translate them. A key
+   * of your own needs one, or it is left out of the list.
+   */
   label?: string;
   /**
    * For a preset of your own that follows today: its first day, in whole days from today, so `-6`

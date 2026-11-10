@@ -152,7 +152,7 @@ Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days
 
 A range of your own can follow today as a built-in does, or sit on fixed days. `startOffset` and `endOffset` count whole days from today — `-6` is six days ago, `0` is today — and are read again every time the list is shown, so the range stays right however long the page stays open; set one and the other is today. `start` and `end` take `YYYY-MM-DD` days that never move, for a range that means one particular week.
 
-Prefer the offsets for anything meant to stay relative. Fixed days are worked out once, so by the next day they no longer cover the range they name — and because a preset is matched by its exact range, the change event stops carrying its `key` too, leaving the panel on **Custom range**. A preset with neither a usable range nor a built-in key to take one from is left out of the list, and says so once in the console.
+Prefer the offsets for anything meant to stay relative. Fixed days never move, so a "last N days" range written as fixed dates is stale by the next day — and because a preset is matched by its exact range, the change event stops carrying its `key` too, leaving the panel on **Custom range**. A key of your own needs a `label`, as only built-in keys have one to fall back to. A preset with no label, or with neither a usable range nor a built-in key to take one from, is left out of the list, and says so once in the console.
 
 <DocCanvas
   mdxSource={{
