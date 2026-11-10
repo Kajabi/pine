@@ -2422,6 +2422,35 @@ export class PdsCombobox implements BasePdsProps {
     this.pdsComboboxChange.emit({ value: option.value });
   }
 
+  /** The row shown while options load: at the top of the list, or of a drilled-in group's options. */
+  private renderLoadingRow() {
+    if (!this.loading) return null;
+    const hasSlottedLoading = !this.usesBodyPortal && !!this.el.querySelector('[slot="loading"]');
+    return (
+      <li class="pds-combobox__loading" role="presentation">
+        {hasSlottedLoading ? <slot name="loading" /> : <pds-loader size="small" />}
+      </li>
+    );
+  }
+
+  /** The row after the last option while more can load, inside whatever scrolls them. */
+  private renderLoadMoreRow() {
+    if (!this.hasMore || this.loading) return null;
+    return (
+      <li class="pds-combobox__load-more" role="presentation">
+        <pds-loader size="small" />
+      </li>
+    );
+  }
+
+  /** Drilled into a group: the group and its place among the panel's entries; otherwise null. */
+  private drilledInEntry(entries: PanelEntry[]) {
+    if (this.effectiveGroupDisplay !== 'drill-in' || this.openGroup === null) return null;
+    const position = entries.findIndex(entry => entry.kind === 'group' && entry.group.optgroup === this.openGroup);
+    const open = entries[position];
+    return open?.kind === 'group' ? { group: open.group, position } : null;
+  }
+
   private handleScroll = (e: Event) => {
     if (!this.asyncUrl || !this.hasMore || this.loading) return;
 
@@ -2444,7 +2473,8 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     const hasSlottedEmpty = !this.usesBodyPortal && !!this.el.querySelector('[slot="empty"]');
-    const hasSlottedLoading = !this.usesBodyPortal && !!this.el.querySelector('[slot="loading"]');
+    // Drilled in, the group's options scroll under the row back, so their loading rows go with them.
+    const drilledIn = this.showsGroupedPanel && this.drilledInEntry(this.panelEntries()) !== null;
 
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
 
@@ -2482,15 +2512,7 @@ export class PdsCombobox implements BasePdsProps {
         }}
         onScroll={this.handleScroll}
       >
-        {this.loading && (
-          <li class="pds-combobox__loading" role="presentation">
-            {hasSlottedLoading ? (
-              <slot name="loading" />
-            ) : (
-              <pds-loader size="small" />
-            )}
-          </li>
-        )}
+        {!drilledIn && this.renderLoadingRow()}
 
         {!this.loading && this.filteredItems.length === 0 && (
           <li class="pds-combobox__empty" role="presentation">
@@ -2504,11 +2526,7 @@ export class PdsCombobox implements BasePdsProps {
 
         {this.showsGroupedPanel ? this.renderGroupedPanel() : this.renderListboxItems(selectableOptions.length)}
 
-        {this.hasMore && !this.loading && (
-          <li class="pds-combobox__load-more" role="presentation">
-            <pds-loader size="small" />
-          </li>
-        )}
+        {!drilledIn && this.renderLoadMoreRow()}
       </ul>
     );
 
@@ -2899,11 +2917,8 @@ export class PdsCombobox implements BasePdsProps {
     const entries = this.panelEntries();
     const setsize = entries.length;
 
-    if (this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null) {
-      const position = entries.findIndex(entry => entry.kind === 'group' && entry.group.optgroup === this.openGroup);
-      const open = entries[position];
-      if (open?.kind === 'group') return this.renderGroupBackRow(open.group, { posinset: position + 1, setsize });
-    }
+    const drilled = this.drilledInEntry(entries);
+    if (drilled) return this.renderGroupBackRow(drilled.group, { posinset: drilled.position + 1, setsize });
 
     this.renderedGroups = [];
     return entries.map((entry, position) => {
@@ -2961,7 +2976,9 @@ export class PdsCombobox implements BasePdsProps {
           </span>
         </div>
         <ul class="pds-combobox__drill-in-options" role="group" aria-label={group.label} onScroll={this.handleScroll}>
+          {this.renderLoadingRow()}
           {this.renderGroupOptions(group)}
+          {this.renderLoadMoreRow()}
         </ul>
       </li>
     );
