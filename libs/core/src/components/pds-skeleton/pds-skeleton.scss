@@ -1,0 +1,64 @@
+:host {
+  --color-skeleton-fill: var(--pine-color-background-inset);
+  --number-skeleton-shimmer-duration: 1.5s;
+  --opacity-skeleton-sheen: 0.35;
+  --sizing-skeleton-height: var(--pine-dimension-sm);
+  --sizing-skeleton-width: 100%;
+
+  background-color: var(--color-skeleton-fill);
+  block-size: var(--sizing-skeleton-height);
+  border-radius: var(--pine-border-radius-sm);
+  display: block;
+  inline-size: var(--sizing-skeleton-width);
+  overflow: hidden;
+  position: relative;
+}
+
+// A placeholder needs a different *relative* step from its surface in each theme, so
+// the pair is declared rather than pulled from one token. `background-inset` resolves
+// to grey-700 in dark, heavy enough that a placeholder reads as real filled content;
+// grey-950 is the value that stays subtle against both dark surfaces.
+:host-context([data-theme="dark"]) {
+  /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens -- inverse context: no semantic token means "placeholder fill" */
+  --color-skeleton-fill: var(--pine-color-grey-950);
+  --opacity-skeleton-sheen: 0.04;
+}
+
+:host([variant="circle"]) {
+  --sizing-skeleton-height: var(--pine-dimension-xl);
+  --sizing-skeleton-width: var(--pine-dimension-xl);
+
+  border-radius: var(--pine-border-radius-full);
+  flex-shrink: 0;
+}
+
+:host([variant="rect"]) {
+  --sizing-skeleton-height: var(--pine-dimension-2xl);
+}
+
+.pds-skeleton__sheen {
+  animation: pds-skeleton-shimmer var(--number-skeleton-shimmer-duration) var(--pine-motion-easing-in-out) infinite;
+  /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens -- inverse context: no semantic token means "highlight sweeping over a placeholder" */
+  background-image: linear-gradient(90deg, transparent 0%, var(--pine-color-white) 50%, transparent 100%);
+  inset: 0;
+  opacity: var(--opacity-skeleton-sheen);
+  position: absolute;
+}
+
+@keyframes pds-skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// The fill lives on the host, not in the keyframe, so removing the sheen leaves a
+// visible static placeholder rather than an empty box.
+@media (prefers-reduced-motion: reduce) {
+  .pds-skeleton__sheen {
+    display: none;
+  }
+}

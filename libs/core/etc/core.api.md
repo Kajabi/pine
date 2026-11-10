@@ -686,6 +686,12 @@ export namespace Components {
         "required": boolean;
         "value"?: string | string[];
     }
+    // (undocumented)
+    export interface PdsSkeleton {
+        "height"?: string;
+        "variant"?: 'text' | 'rect' | 'circle';
+        "width"?: string;
+    }
     export interface PdsSortable {
         "border": boolean;
         "componentId": string;
@@ -986,6 +992,8 @@ export namespace LocalJSX {
         "pds-row": Omit<PdsRow, keyof PdsRowAttributes> & { [K in keyof PdsRow & keyof PdsRowAttributes]?: PdsRow[K] } & { [K in keyof PdsRow & keyof PdsRowAttributes as `attr:${K}`]?: PdsRowAttributes[K] } & { [K in keyof PdsRow & keyof PdsRowAttributes as `prop:${K}`]?: PdsRow[K] };
         // (undocumented)
         "pds-select": Omit<PdsSelect, keyof PdsSelectAttributes> & { [K in keyof PdsSelect & keyof PdsSelectAttributes]?: PdsSelect[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `attr:${K}`]?: PdsSelectAttributes[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `prop:${K}`]?: PdsSelect[K] } & OneOf<"componentId", PdsSelect["componentId"], PdsSelectAttributes["componentId"]> & OneOf<"name", PdsSelect["name"], PdsSelectAttributes["name"]>;
+        // (undocumented)
+        "pds-skeleton": Omit<PdsSkeleton, keyof PdsSkeletonAttributes> & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes]?: PdsSkeleton[K] } & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes as `attr:${K}`]?: PdsSkeletonAttributes[K] } & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes as `prop:${K}`]?: PdsSkeleton[K] };
         // (undocumented)
         "pds-sortable": Omit<PdsSortable, keyof PdsSortableAttributes> & { [K in keyof PdsSortable & keyof PdsSortableAttributes]?: PdsSortable[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `attr:${K}`]?: PdsSortableAttributes[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `prop:${K}`]?: PdsSortable[K] } & OneOf<"componentId", PdsSortable["componentId"], PdsSortableAttributes["componentId"]>;
         // (undocumented)
@@ -2802,6 +2810,23 @@ export namespace LocalJSX {
         "required": boolean;
         // (undocumented)
         "value": string | string[];
+    }
+
+    // (undocumented)
+    export interface PdsSkeleton {
+        "height"?: string;
+        "variant"?: 'text' | 'rect' | 'circle';
+        "width"?: string;
+    }
+
+    // (undocumented)
+    export interface PdsSkeletonAttributes {
+        // (undocumented)
+        "height": string;
+        // (undocumented)
+        "variant": 'text' | 'rect' | 'circle';
+        // (undocumented)
+        "width": string;
     }
 
     export interface PdsSortable {

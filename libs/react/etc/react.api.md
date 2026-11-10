@@ -154,6 +154,9 @@ export const PdsRow: ForwardRefExoticComponent<JSX_2.PdsRow & Omit<HTMLAttribute
 export const PdsSelect: ForwardRefExoticComponent<JSX_2.PdsSelect & Omit<HTMLAttributes<HTMLPdsSelectElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsSelectElement>>;
 
 // @public (undocumented)
+export const PdsSkeleton: ForwardRefExoticComponent<JSX_2.PdsSkeleton & Omit<HTMLAttributes<HTMLPdsSkeletonElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsSkeletonElement>>;
+
+// @public (undocumented)
 export const PdsSortable: ForwardRefExoticComponent<JSX_2.PdsSortable & Omit<HTMLAttributes<HTMLPdsSortableElement>, "style"> & StyleReactProps & RefAttributes<HTMLPdsSortableElement>>;
 
 // @public (undocumented)
