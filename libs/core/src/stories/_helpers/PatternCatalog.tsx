@@ -23,7 +23,7 @@ export const PatternCatalog: React.FC = () => {
   return (
     <>
       {patterns.map((pattern) => (
-        <section key={pattern.id} style={{ marginBlockEnd: 'var(--pine-dimension-3xl)' }}>
+        <section key={pattern.id} style={{ marginBlockEnd: 'var(--pine-dimension-2xl)' }}>
           <h2 id={pattern.id}>{pattern.name}</h2>
           <p>
             <strong>When:</strong> {pattern.when}
