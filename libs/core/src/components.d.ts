@@ -1889,7 +1889,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Whether to skip moving focus into the modal when it opens. Set it for a modal that can open from a background event while the user is mid-task elsewhere on the page, where moving focus would interrupt them. Pair it with `disableTopLayer`: in the top layer the rest of the page is inert, so focus can't stay there. Focus still returns on close.
+          * Whether to skip moving focus into the modal when it opens. Set it for a modal that can open from a background event while the user is mid-task elsewhere on the page, where moving focus would interrupt them. Pair it with `disableTopLayer`: in the top layer the rest of the page is inert, so focus can't stay there. On close, focus moves back only if nothing outside the modal has taken it.
           * @default false
          */
         "disableInitialFocus": boolean;
@@ -5834,7 +5834,7 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Whether to skip moving focus into the modal when it opens. Set it for a modal that can open from a background event while the user is mid-task elsewhere on the page, where moving focus would interrupt them. Pair it with `disableTopLayer`: in the top layer the rest of the page is inert, so focus can't stay there. Focus still returns on close.
+          * Whether to skip moving focus into the modal when it opens. Set it for a modal that can open from a background event while the user is mid-task elsewhere on the page, where moving focus would interrupt them. Pair it with `disableTopLayer`: in the top layer the rest of the page is inert, so focus can't stay there. On close, focus moves back only if nothing outside the modal has taken it.
           * @default false
          */
         "disableInitialFocus"?: boolean;

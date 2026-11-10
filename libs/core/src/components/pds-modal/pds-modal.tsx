@@ -119,7 +119,8 @@ export class PdsModal {
    * modal that can open from a background event while the user is mid-task
    * elsewhere on the page, where moving focus would interrupt them. Pair it
    * with `disableTopLayer`: in the top layer the rest of the page is inert, so
-   * focus can't stay there. Focus still returns on close.
+   * focus can't stay there. On close, focus moves back only if nothing outside
+   * the modal has taken it.
    * @default false
    */
   @Prop() disableInitialFocus = false;
