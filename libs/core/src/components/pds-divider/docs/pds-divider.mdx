@@ -22,6 +22,7 @@ A divider is used to create a clear visual separation between sections of conten
 ### When not to use
 - When the separation between sections is already visually clear due to ample spacing.
 - If the layout relies on other visual elements, such as cards or background shading, to define boundaries.
+- For an edge that belongs to a box, use the `pds-box` `border-block-end` (or another per-side border) prop instead.
 - When excessive dividers could create visual clutter or detract from content hierarchy.
 
 ### Accessibility
@@ -52,7 +53,9 @@ The default divider displays a horizontal line.
 
 To display the divider vertically, set the `vertical` prop to `true`.
 
-**Note**: Vertical dividers are not displayed on screen sizes smaller than 767px.
+A vertical divider fills its parent's height, so the parent needs a set height, such as a fixed height or a stretched flex row.
+
+**Note**: Vertical dividers are hidden below 768px.
 
 <DocCanvas
   mdxSource={{
@@ -62,7 +65,7 @@ To display the divider vertically, set the `vertical` prop to `true`.
 </div>
     `,
     webComponent: `
-<div style={{ height: '150px' }}>
+<div style="height: 150px">
   <pds-divider vertical="true"></pds-divider>
 </div>
     `
@@ -74,7 +77,7 @@ To display the divider vertically, set the `vertical` prop to `true`.
 
 ### Offsets
 
-Both horizontal and vertical dividers can be offset to create a full-width or full-height bleed appearance.
+Both horizontal and vertical dividers can be offset to create a full-width or full-height bleed appearance. To bleed to the edges of a padded parent, set `offset` to the parent's padding size, such as `offset="md"` inside a `pds-box` with `padding="md"`.
 
 Offset sizes follow the global spacing sizes: `xxs`: 4px, `xs`: 8px, `sm`: 12px, `md`: 24px, `lg`: 32px, `xl`: 48px, `xxl`: 64px.
 
@@ -98,7 +101,7 @@ Below, you will see a vertical divider using a large offset.
 </div>
     `,
     webComponent: `
-<div style={{ height: '150px' }}>
+<div style="height: 150px">
   <pds-divider offset="lg" vertical="true"></pds-divider>
 </div>
     `
