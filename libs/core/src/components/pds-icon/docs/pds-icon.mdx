@@ -37,37 +37,29 @@ Icons render scalable glyphs from Pine's icon set, representing actions, statuse
 
 ### Color
 
-The `color` property allows the icon to be displayed in a specified color. Accepted formats include:
+Icons inherit the surrounding text color (`currentColor`) by default, so most icons need no `color` at all. To set one, prefer a semantic token, which is designed for both light and dark mode:
 
-- String: `red`
-- HEX:  `#FF0000`
-- RGB:  `rgb(255, 0, 0)`
-- HSL: `hsl(0, 100%, 50%)`
-- Pine CSS variables: `var(--pine-color-red-500)`
-
-This allows for flexibility with any CSS-supported color format.
+- Semantic tokens: `var(--pine-color-icon)`, `var(--pine-color-icon-subtle)`, or a status color such as `var(--pine-color-success)`. A raw token such as `--pine-color-icon-subtle` works too.
+- Any other CSS color, such as `#FF0000`, `rgb(255, 0, 0)` or `hsl(0, 100%, 50%)`. Use these only as an escape hatch: they stay the same in light and dark mode.
 
 <DocCanvas mdxSource={{
   react: `
-<PdsIcon icon={bulb} color="red"></PdsIcon>
+<PdsIcon icon={bulb}></PdsIcon>
+<PdsIcon icon={bulb} color="var(--pine-color-icon-subtle)"></PdsIcon>
+<PdsIcon icon={bulb} color="var(--pine-color-success)"></PdsIcon>
 <PdsIcon icon={bulb} color="#FFA500"></PdsIcon>
-<PdsIcon icon={bulb} color="rgb(0, 190, 0)"></PdsIcon>
-<PdsIcon icon={bulb} color="hsl(230, 100%, 50%)"></PdsIcon>
-<PdsIcon icon={bulb} color="var(--pine-color-mercury-500)"></PdsIcon>
 `,
   webComponent: `
-<pds-icon name="bulb" color="red"></pds-icon>
-<pds-icon name="bulb" color="#FFA500"></pds-icon>
-<pds-icon name="bulb" color="rgb(0, 190, 0)"></pds-icon>
-<pds-icon name="bulb" color="hsl(230, 100%, 50%)"></pds-icon>
-<pds-icon name="bulb" color="var(--pine-color-mercury-500)"></pds-icon>`
+<pds-icon name="bulb"></pds-icon>
+<pds-icon name="bulb" color="var(--pine-color-icon-subtle)"></pds-icon>
+<pds-icon name="bulb" color="var(--pine-color-success)"></pds-icon>
+<pds-icon name="bulb" color="#FFA500"></pds-icon>`
 }}>
   <>
-    <pds-icon name="bulb" color="red"></pds-icon>
+    <pds-icon name="bulb"></pds-icon>
+    <pds-icon name="bulb" color="var(--pine-color-icon-subtle)"></pds-icon>
+    <pds-icon name="bulb" color="var(--pine-color-success)"></pds-icon>
     <pds-icon name="bulb" color="#FFA500"></pds-icon>
-    <pds-icon name="bulb" color="rgb(0, 190, 0)"></pds-icon>
-    <pds-icon name="bulb" color="hsl(230, 100%, 50%)"></pds-icon>
-    <pds-icon name="bulb" color="var(--pine-color-mercury-500)"></pds-icon>
   </>
 </DocCanvas>
 
@@ -97,11 +89,11 @@ The `size` property allows the icon to be displayed at a specified size. Accepte
   </>
 </DocCanvas>
 
-### How to Use Icons
+## Usage
 
 ### React Usage
 
-In React applications, icons must be imported from `@pine-ds/icons/icons` and passed to the `icon` property. The deprecated `name` property has no effect in React.
+In React, import the icon from `@pine-ds/icons/icons` and pass it to the `icon` property, which bundles the SVG with your app. `name` isn't deprecated, but in React it logs a console warning and fetches the SVG at runtime from the [asset path](/docs/guides-assets--docs) (jsDelivr by default).
 
 ```jsx
 import { bulb, danger, launch } from '@pine-ds/icons/icons';
@@ -109,7 +101,7 @@ import { PdsIcon } from '@pine-ds/react';
 
 // Correct usage
 <PdsIcon icon={bulb} />
-<PdsIcon icon={danger} color="red" />
+<PdsIcon icon={danger} color="var(--pine-color-danger)" />
 <PdsIcon icon={launch} size="large" />
 ```
 
@@ -119,12 +111,11 @@ For web components, use the `name` property with the icon name as a string:
 
 ```html
 <pds-icon name="bulb"></pds-icon>
-<pds-icon name="danger" color="red"></pds-icon>
+<pds-icon name="danger" color="var(--pine-color-danger)"></pds-icon>
 <pds-icon name="launch" size="large"></pds-icon>
 ```
 
-
-### Common Patterns
+## Performance
 
 ### Individual Icon Imports
 
@@ -150,20 +141,23 @@ import {
 } from '@pine-ds/icons/icons';
 ```
 
-### Performance Considerations
+### Bundle Size
 
 - **Individual imports**: Recommended for better tree-shaking and smaller bundle sizes
 - **Avoid wildcard imports**: Don't use `import * from '@pine-ds/icons/icons'` as this imports all icons
 - **Bundle size**: Each icon adds approximately 1-2KB to your bundle
+- Avoid importing icons in shared utility files unless necessary
+- Consider lazy loading for icons used in less common user flows
 
-
-### Troubleshooting
+## Troubleshooting
 
 ### Console Warning About Name Property
 
 If you see this warning in your console:
 
 > "In Pine React, you import icons from "@pine-ds/icons/icons" and set the icon you imported to the "icon" property. Setting the "name" property has no effect."
+
+The icon still renders, but it's fetched at runtime from the asset path instead of being bundled.
 
 **Solution**: Replace the `name` property with proper icon imports:
 
@@ -181,19 +175,14 @@ import { danger } from '@pine-ds/icons/icons';
 1. **Check your import**: Ensure the icon is imported from `@pine-ds/icons/icons`
 2. **Verify icon name**: Check that the icon name matches exactly (case-sensitive)
 3. **React vs Web Component**: Use `icon` property for React, `name` for web components
-
-### Bundle Size Concerns
-
-- Import only the icons you need
-- Avoid importing icons in shared utility files unless necessary
-- Consider lazy loading for icons used in less common user flows
+4. **Check the asset path**: An icon set with `name` loads from the [asset path](/docs/guides-assets--docs) at runtime, so make sure the SVG assets are served there
 
 ## Technical Notes
 
 - React uses the `icon` property while web components use `name`. This difference is intentional and optimized for each framework's strengths.
 - In React, icons are imported as objects from `@pine-ds/icons/icons` and passed to the `icon` property. This provides type safety, editor autocomplete, and tree-shaking—only imported icons are bundled.
 - In web components, the `name` property accepts string values for simpler HTML-like syntax, following standard web component attribute patterns.
-- Setting the `name` property in React has no effect and will trigger a console warning directing developers to use the `icon` property instead.
+- Setting the `name` property in React triggers a console warning directing developers to use the `icon` property instead. The icon still renders, but it's fetched at runtime from the asset path instead of being bundled.
 
 ## Playground
 
