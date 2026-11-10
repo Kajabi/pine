@@ -28,6 +28,7 @@ Radio components allow users to select one option from a group of two or more ch
 ### Accessibility
 - Ensure the label is descriptive and clearly associated with the radio button.
 - Group radios logically using a `name` attribute to indicate relationships.
+- Give each radio a `component-id` that's unique on the page. It becomes the input's `id`, which the label's `for` points at, so a repeated id labels the wrong radio.
 - Use proper error messaging and states (e.g., `invalid`) for validation feedback.
 - Avoid disabling radios unless necessary; provide context for disabled options.
 - State classes on the host (such as `is-invalid` and `has-border`) follow the component's props, and `has-image` follows the `image` slot's content, except on a pill (`variant="pill"`), which never carries `has-border` or `has-image` — see the Pill section below. They come back if something removes them, such as a DOM morph, so change them through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
@@ -41,10 +42,10 @@ Radio components allow users to select one option from a group of two or more ch
 ### Default
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="default" label="Label" />`,
-  webComponent: `<pds-radio component-id="default" label="Label"></pds-radio>`
+  react: `<PdsRadio componentId="radio-default-example" label="Label" />`,
+  webComponent: `<pds-radio component-id="radio-default-example" label="Label"></pds-radio>`
 }}>
-  <pds-radio component-id="default" label="Label"></pds-radio>
+  <pds-radio component-id="radio-default-example" label="Label"></pds-radio>
 </DocCanvas>
 
 ### Checked
@@ -52,10 +53,10 @@ Radio components allow users to select one option from a group of two or more ch
 Radios appear as checked when activated.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="checked" label="Label" checked={true} />`,
-  webComponent: `<pds-radio component-id="checked" label="Label" checked></pds-radio>`
+  react: `<PdsRadio componentId="radio-checked-example" label="Label" checked={true} />`,
+  webComponent: `<pds-radio component-id="radio-checked-example" label="Label" checked></pds-radio>`
 }}>
-  <pds-radio component-id="checked" label="Label" checked></pds-radio>
+  <pds-radio component-id="radio-checked-example" label="Label" checked></pds-radio>
 </DocCanvas>
 
 ### Disabled
@@ -63,10 +64,10 @@ Radios appear as checked when activated.
 Disabled radios visually indicate and functionally prevent user interaction.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="disabled" label="Label" disabled={true} />`,
-  webComponent: `<pds-radio component-id="disabled" label="Label" disabled></pds-radio>`
+  react: `<PdsRadio componentId="radio-disabled-example" label="Label" disabled={true} />`,
+  webComponent: `<pds-radio component-id="radio-disabled-example" label="Label" disabled></pds-radio>`
 }}>
-  <pds-radio component-id="disabled" label="Label" disabled></pds-radio>
+  <pds-radio component-id="radio-disabled-example" label="Label" disabled></pds-radio>
 </DocCanvas>
 
 ### Message
@@ -74,10 +75,10 @@ Disabled radios visually indicate and functionally prevent user interaction.
 Displays helper text below the label to provide additional context.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="message1" label="Label" helperMessage="This is short message text." />`,
-  webComponent: `<pds-radio component-id="message1" label="Label" helper-message="This is short message text."></pds-radio>`
+  react: `<PdsRadio componentId="radio-message-example" label="Label" helperMessage="This is short message text." />`,
+  webComponent: `<pds-radio component-id="radio-message-example" label="Label" helper-message="This is short message text."></pds-radio>`
 }}>
-  <pds-radio component-id="message1" label="Label" helper-message="This is short message text."></pds-radio>
+  <pds-radio component-id="radio-message-example" label="Label" helper-message="This is short message text."></pds-radio>
 </DocCanvas>
 
 ### Invalid
@@ -87,10 +88,10 @@ Displays the radio in an invalid state, such as when a required selection is mis
 An optional error message can provide further instructions, displayed independently of the helper message.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="invalid" label="Label" invalid errorMessage="This is a short error message" />`,
-  webComponent: `<pds-radio component-id="invalid" label="Label" invalid error-message="This is a short error message"></pds-radio>`
+  react: `<PdsRadio componentId="radio-invalid-example" label="Label" invalid errorMessage="This is a short error message" />`,
+  webComponent: `<pds-radio component-id="radio-invalid-example" label="Label" invalid error-message="This is a short error message"></pds-radio>`
 }}>
-  <pds-radio component-id="invalid" label="Label" invalid error-message="This is a short error message"></pds-radio>
+  <pds-radio component-id="radio-invalid-example" label="Label" invalid error-message="This is a short error message"></pds-radio>
 </DocCanvas>
 
 ### With Border
@@ -98,10 +99,10 @@ An optional error message can provide further instructions, displayed independen
 Add a border around the radio component for better visual separation, useful for card-like layouts or when radios need more visual emphasis.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="border" label="Label" hasBorder={true} helperMessage="This radio has enhanced visual separation" />`,
-  webComponent: `<pds-radio component-id="border" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>`
+  react: `<PdsRadio componentId="radio-border-example" label="Label" hasBorder={true} helperMessage="This radio has enhanced visual separation" />`,
+  webComponent: `<pds-radio component-id="radio-border-example" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>`
 }}>
-  <pds-radio component-id="border" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>
+  <pds-radio component-id="radio-border-example" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>
 </DocCanvas>
 
 ### Pill

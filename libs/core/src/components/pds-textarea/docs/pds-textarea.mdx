@@ -157,7 +157,9 @@ The `rows` property is used to pass a number of expected rows visible within the
 
 ### Max Length
 
-When the `max-length` property is set, a character counter is displayed in the bottom-right corner showing current characters / maximum allowed characters. The textarea will prevent input beyond the maximum length.
+When the `max-length` property is set, a character counter is displayed in the bottom-right corner showing current characters / maximum allowed characters. The textarea will prevent input beyond the maximum length. The attribute is hyphenated here; `pds-input` spells the same limit `maxlength`, as on a native `<input>`.
+
+The counter is a polite live region whose accessible label comes from `character-count-label`, `{current} of {max} characters` by default. Pass a translated string to localize it, keeping `{current}` and `{max}` in it.
 
 <DocCanvas
   mdxSource={{

@@ -265,7 +265,7 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() chipDot: boolean = false;
 
   /**
-   * The value of the combobox input.
+   * The `value` of the selected option.
    */
   @Prop({ mutable: true }) value: string = '';
 
