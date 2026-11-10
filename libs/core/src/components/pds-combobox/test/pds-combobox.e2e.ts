@@ -799,7 +799,7 @@ describe('pds-combobox', () => {
 
         await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
         expect(await starts(page, '.pds-combobox__drill-in-options > li')).toEqual(['from-right']);
-        // The row back moves with the options; its list item, which keeps it sticky, doesn't.
+        // The row back moves with the options; its list item, which holds the header in place, doesn't.
         expect(await starts(page, '.pds-combobox__group-back-trigger')).toEqual(['from-right']);
         expect(await starts(page, '.pds-combobox__group-back')).toEqual(['still']);
 
@@ -1056,6 +1056,65 @@ describe('pds-combobox', () => {
       const after = await measure();
       expect(after.headerTop).toBe(before.headerTop);
       expect(after.gap).toBe(0);
+    });
+
+    // The drill-in slide offsets the rows past the options' edge; they mustn't scroll sideways.
+    it.each([
+      ['with panel search', 'panel-search'],
+      ['without panel search', ''],
+    ])("doesn't let a drilled-in group's options scroll sideways while they slide in, %s", async (_name, search) => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" ${search} max-height="160px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
+      });
+      // Stretched, so the slide is still running when it's measured, however slow the runner.
+      await page.addStyleTag({ content: ':root { --pine-motion-duration-base: 600s; --pine-motion-duration-slow: 600s; }' });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+
+      const options = await page.evaluate(() => {
+        const list = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__drill-in-options') as HTMLElement;
+        return {
+          sliding: (list.firstElementChild as HTMLElement).getAnimations().length > 0,
+          sideways: getComputedStyle(list).overflowX,
+        };
+      });
+      expect(options).toEqual({ sliding: true, sideways: 'hidden' });
+    });
+
+    // Opening places the dropdown a tick later; it must still get its size if it renders after that.
+    it.each([
+      ['in the field', ''],
+      ['mounted in the body', 'dropdown-mount="body"'],
+    ])('opens at its dropdown-width and max-height, %s', async (_name, mount) => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="sized" label="Action" trigger="button" mode="select-only"
+          dropdown-width="300px" max-height="160px" ${mount}></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}` }));
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(resolve)));
+
+      const size = await page.evaluate(() => {
+        const host = document.querySelector('.pds-combobox-dropdown-portal') ?? document.querySelector('pds-combobox');
+        const rect = host!.shadowRoot!.querySelector('.pds-combobox__listbox')!.getBoundingClientRect();
+        return { width: Math.round(rect.width), height: Math.round(rect.height) };
+      });
+      expect(size).toEqual({ width: 300, height: 160 });
     });
 
     it.each([

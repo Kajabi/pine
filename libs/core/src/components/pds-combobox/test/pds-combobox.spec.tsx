@@ -3139,6 +3139,23 @@ describe('pds-combobox', () => {
     const groupNamed = (component: { optionEls: HTMLOptionElement[] }, label: string) =>
       component.optionEls.map(o => o.parentElement as HTMLOptGroupElement).find(g => g?.label === label)!;
 
+    // Drilled in, the group's options scroll under the row back, so they're what loads more.
+    it("loads more as a drilled-in group's options scroll near their end", async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" async-url="/api/actions"');
+      const fetchSpy = jest.spyOn(component, 'debouncedFetchAsyncOptions').mockImplementation(() => undefined);
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+      component.hasMore = true;
+      component.currentPage = 1;
+      await page.waitForChanges();
+
+      const options = root.querySelector('.pds-combobox__drill-in-options') as HTMLElement;
+      Object.defineProperties(options, { scrollHeight: { value: 100 }, scrollTop: { value: 90 }, clientHeight: { value: 10 } });
+      options.dispatchEvent(new Event('scroll'));
+
+      expect(fetchSpy).toHaveBeenLastCalledWith(expect.anything(), 2);
+    });
+
     it('replaces the group list with the clicked group and a row back', async () => {
       const { page, component, root } = await openDrillIn();
 
