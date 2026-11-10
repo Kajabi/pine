@@ -385,7 +385,7 @@ When the `selectable` prop is set to `true`, the table will render a checkbox in
   </pds-table>
 </DocCanvas>
 
-When a row's checkbox changes, that `pds-table-row` emits `pdsTableRowSelected` with `{ rowIndex, isSelected }`. `rowIndex` is the row's position in the body, which changes when the table is sorted, so to match a selection to your data, give each row a `data-id` and read `event.target.dataset.id` in the handler. The select-all checkbox emits `pdsTableSelectAll` from `pds-table-head` with `{ isSelected }`.
+When a row's checkbox changes, that `pds-table-row` emits `pdsTableRowSelected` with `{ rowIndex, isSelected }`. `rowIndex` is the row's position in the body, which changes when the table is sorted, so to match a selection to your data, give each row a `data-id` and read `event.target.dataset.id` in the handler. The select-all checkbox emits `pdsTableSelectAll` from `pds-table-head` with `{ isSelected }`. Select all sets every row's `isSelected` without emitting `pdsTableRowSelected`, so listen for both. A row or head that starts with `is-selected` also emits its event on load.
 
 ### Selectable without Select All
 
