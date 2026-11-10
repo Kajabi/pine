@@ -1594,10 +1594,7 @@ export namespace Components {
         "disabled": boolean;
     }
     /**
-     * Individual filter component with cross-browser popover positioning.
-     * Uses a hybrid approach for optimal cross-browser compatibility:
-     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
-     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
      */
     interface PdsFilter {
         /**
@@ -3406,10 +3403,7 @@ declare global {
         "pdsFilterClear": PdsFilterClearEventDetail;
     }
     /**
-     * Individual filter component with cross-browser popover positioning.
-     * Uses a hybrid approach for optimal cross-browser compatibility:
-     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
-     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
      */
     interface HTMLPdsFilterElement extends Components.PdsFilter, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsFilterElementEventMap>(type: K, listener: (this: HTMLPdsFilterElement, ev: PdsFilterCustomEvent<HTMLPdsFilterElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5519,10 +5513,7 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
     }
     /**
-     * Individual filter component with cross-browser popover positioning.
-     * Uses a hybrid approach for optimal cross-browser compatibility:
-     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
-     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
      */
     interface PdsFilter {
         /**
@@ -7849,10 +7840,7 @@ declare module "@stencil/core" {
             "pds-dropdown-menu-item": LocalJSX.IntrinsicElements["pds-dropdown-menu-item"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
             "pds-dropdown-menu-separator": LocalJSX.IntrinsicElements["pds-dropdown-menu-separator"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
             /**
-             * Individual filter component with cross-browser popover positioning.
-             * Uses a hybrid approach for optimal cross-browser compatibility:
-             * - Modern browsers: CSS anchor positioning + JavaScript flip classes
-             * - Fallback browsers: JavaScript positioning with viewport boundary detection
+             * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
              */
             "pds-filter": LocalJSX.IntrinsicElements["pds-filter"] & JSXBase.HTMLAttributes<HTMLPdsFilterElement>;
             "pds-filters": LocalJSX.IntrinsicElements["pds-filters"] & JSXBase.HTMLAttributes<HTMLPdsFiltersElement>;

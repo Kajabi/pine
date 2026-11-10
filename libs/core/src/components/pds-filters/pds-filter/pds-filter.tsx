@@ -6,11 +6,7 @@ import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClea
 import { enlarge, trash } from '@pine-ds/icons/icons';
 
 /**
- * Individual filter component with cross-browser popover positioning.
- *
- * Uses a hybrid approach for optimal cross-browser compatibility:
- * - Modern browsers: CSS anchor positioning + JavaScript flip classes
- * - Fallback browsers: JavaScript positioning with viewport boundary detection
+ * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
  *
  * @part button - Exposes the trigger button element for styling.
  * @part button-content - Exposes the button content container for styling.
