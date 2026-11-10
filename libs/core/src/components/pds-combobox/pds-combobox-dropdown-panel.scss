@@ -280,7 +280,8 @@
 
   // The rows overflow the gliding height until it ends; hidden, no scrollbar flashes meanwhile.
   .pds-combobox__listbox--height-glide,
-  .pds-combobox__listbox--height-glide .pds-combobox__listbox-options {
+  .pds-combobox__listbox--height-glide .pds-combobox__listbox-options,
+  .pds-combobox__listbox--height-glide .pds-combobox__drill-in-options {
     overflow-y: hidden;
   }
 
