@@ -652,11 +652,13 @@ export class PdsCombobox implements BasePdsProps {
     if (from === undefined || !panel) return;
     // A drill back mid-glide starts from where the last one is now, then measures the real height.
     panel.classList.remove('pds-combobox__listbox--height-glide');
+    this.syncPanelOverflow();
     const to = panel.getBoundingClientRect().height;
     if (Math.abs(to - from) < 1) return;
     panel.style.setProperty('--pds-combobox-glide-from', `${from}px`);
     panel.style.setProperty('--pds-combobox-glide-to', `${to}px`);
     panel.classList.add('pds-combobox__listbox--height-glide');
+    this.syncPanelOverflow();
     // A glide cut short without ending (the panel hidden mid-way) still cleans up. JSX has no
     // `onAnimationCancel`; adding the same listener again is a no-op.
     panel.addEventListener('animationcancel', this.onHeightGlideCancel);
@@ -674,9 +676,20 @@ export class PdsCombobox implements BasePdsProps {
   private endHeightGlide() {
     const panel = this.listboxEl;
     panel?.classList.remove('pds-combobox__listbox--height-glide');
+    this.syncPanelOverflow();
     panel?.style.removeProperty('--pds-combobox-glide-from');
     panel?.style.removeProperty('--pds-combobox-glide-to');
     panel?.removeEventListener('animationcancel', this.onHeightGlideCancel);
+  }
+
+  /**
+   * With `max-height`, the panel's own scroll, set inline so it outranks the stylesheet: hidden under a
+   * fixed search field, and while the height glides (so no scrollbar flashes), otherwise auto.
+   */
+  private syncPanelOverflow() {
+    if ((this.maxHeight ?? '') === '' || this.listboxEl === undefined) return;
+    const gliding = this.listboxEl.classList.contains('pds-combobox__listbox--height-glide');
+    this.listboxEl.style.overflowY = this.usesPanelSearch || gliding ? 'hidden' : 'auto';
   }
 
   /** A flyout with no room beside the dropdown drills in, which can hide the focused search field too. */
@@ -1388,7 +1401,7 @@ export class PdsCombobox implements BasePdsProps {
     if (this.maxHeight) {
       this.listboxEl.style.maxHeight = this.maxHeight;
       // With panel search, the options list scrolls under a fixed search field.
-      this.listboxEl.style.overflowY = this.usesPanelSearch ? 'hidden' : 'auto';
+      this.syncPanelOverflow();
     }
 
     this.listboxEl.offsetHeight;
