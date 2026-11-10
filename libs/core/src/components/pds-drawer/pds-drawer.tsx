@@ -101,9 +101,7 @@ export class PdsDrawer {
   /**
    * Whether the drawer can be dismissed with a pointerdown outside it (in a
    * `modal` drawer, a click on its backdrop).
-   * Replaces `pds-modal`'s `backdropDismiss`.
-   * This also gates Escape, matching how `backdropDismiss` gates Escape on
-   * `pds-modal` today: setting this to `false` means the close button is the
+   * Setting it to `false` also turns off Escape, so the close button is the
    * only way out.
    *
    * A trigger outside the drawer should only ever set `open` to `true` and

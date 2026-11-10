@@ -1477,7 +1477,7 @@ export namespace Components {
          */
         "initialFocus": 'auto' | 'none';
         /**
-          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Setting it to `false` also turns off Escape, so the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
           * @default true
          */
         "lightDismiss": boolean;
@@ -1508,10 +1508,7 @@ export namespace Components {
         "size": 'sm' | 'md';
     }
     /**
-     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
-     * which caps itself against the viewport for a centered, possibly-shorter
-     * modal, a drawer panel is already edge-to-edge, so its content can simply
-     * flex to fill whatever space the header and footer leave.
+     * Fills the space between the drawer header and footer.
      * @lightDom renders-markup
      */
     interface PdsDrawerContent {
@@ -3347,10 +3344,7 @@ declare global {
         new (): HTMLPdsDrawerElement;
     };
     /**
-     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
-     * which caps itself against the viewport for a centered, possibly-shorter
-     * modal, a drawer panel is already edge-to-edge, so its content can simply
-     * flex to fill whatever space the header and footer leave.
+     * Fills the space between the drawer header and footer.
      * @lightDom renders-markup
      */
     interface HTMLPdsDrawerContentElement extends Components.PdsDrawerContent, HTMLStencilElement {
@@ -5400,7 +5394,7 @@ declare namespace LocalJSX {
          */
         "initialFocus"?: 'auto' | 'none';
         /**
-          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Setting it to `false` also turns off Escape, so the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
           * @default true
          */
         "lightDismiss"?: boolean;
@@ -5439,10 +5433,7 @@ declare namespace LocalJSX {
         "size"?: 'sm' | 'md';
     }
     /**
-     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
-     * which caps itself against the viewport for a centered, possibly-shorter
-     * modal, a drawer panel is already edge-to-edge, so its content can simply
-     * flex to fill whatever space the header and footer leave.
+     * Fills the space between the drawer header and footer.
      * @lightDom renders-markup
      */
     interface PdsDrawerContent {
@@ -7842,10 +7833,7 @@ declare module "@stencil/core" {
              */
             "pds-drawer": LocalJSX.IntrinsicElements["pds-drawer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerElement>;
             /**
-             * Fills the drawer panel's height by default — unlike `pds-modal-content`,
-             * which caps itself against the viewport for a centered, possibly-shorter
-             * modal, a drawer panel is already edge-to-edge, so its content can simply
-             * flex to fill whatever space the header and footer leave.
+             * Fills the space between the drawer header and footer.
              * @lightDom renders-markup
              */
             "pds-drawer-content": LocalJSX.IntrinsicElements["pds-drawer-content"] & JSXBase.HTMLAttributes<HTMLPdsDrawerContentElement>;
