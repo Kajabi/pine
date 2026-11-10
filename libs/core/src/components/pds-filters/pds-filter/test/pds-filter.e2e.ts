@@ -408,7 +408,11 @@ describe('pds-filter truncation', () => {
   it('reveals the full text when the trigger takes keyboard focus, adding no tab stop of its own', async () => {
     const page = await clippedFilter();
 
-    await page.keyboard.press('Tab');
+    // Focus the way a key press does, not with one: every worker's page shares one browser, and a page
+    // another worker just opened takes window focus, so a Tab here can land nowhere.
+    await page.$eval('pds-filter', (el) =>
+      el.shadowRoot.querySelector('button').focus({ focusVisible: true } as FocusOptions),
+    );
     await page.waitForSelector('.pds-truncation-tooltip--visible');
 
     expect(await tooltips(page)).toEqual([LONG_TEXT]);

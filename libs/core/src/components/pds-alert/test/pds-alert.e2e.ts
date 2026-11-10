@@ -77,7 +77,14 @@ describe('pds-alert truncation', () => {
   it('reveals the full message on keyboard focus', async () => {
     const page = await narrowSmallAlert();
 
-    await page.keyboard.press('Tab');
+    // Focus the tab stop the clipped text takes the way a key press does, not with one: every worker's page
+    // shares one browser, and a page another worker just opened takes window focus, so a Tab here can land nowhere.
+    await page.$eval('pds-alert', (el) =>
+      el.shadowRoot
+        .querySelector('pds-text')
+        .shadowRoot.querySelector<HTMLElement>('[tabindex="0"]')
+        .focus({ focusVisible: true } as FocusOptions),
+    );
     await page.waitForSelector('.pds-truncation-tooltip--visible');
 
     expect(await tooltips(page)).toEqual([LONG_MESSAGE]);

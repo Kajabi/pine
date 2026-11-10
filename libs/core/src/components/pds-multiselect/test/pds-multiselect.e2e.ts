@@ -859,7 +859,11 @@ describe('pds-multiselect truncation', () => {
     it('reveals it on keyboard focus, adding no tab stop of its own', async () => {
       const page = await narrow();
 
-      await page.keyboard.press('Tab');
+      // Focus the way a key press does, not with one: every worker's page shares one browser, and a page
+      // another worker just opened takes window focus, so a Tab here can land nowhere.
+      await page.$eval('pds-multiselect', el =>
+        el.shadowRoot.querySelector<HTMLElement>('button.pds-multiselect__trigger').focus({ focusVisible: true } as FocusOptions),
+      );
       await page.waitForSelector('.pds-truncation-tooltip--visible');
 
       expect(await tooltips(page)).toEqual([longPlaceholder]);
@@ -901,7 +905,10 @@ describe('pds-multiselect truncation', () => {
 
       await page.mouse.move(0, 0);
       await settle(300);
-      await page.keyboard.press('Tab');
+      // The chevron is the tab stop here; focused as a key press would, for the reason given above.
+      await page.$eval('pds-multiselect', el =>
+        el.shadowRoot.querySelector<HTMLElement>('.pds-multiselect__pill-toggle').focus({ focusVisible: true } as FocusOptions),
+      );
       await page.waitForSelector('.pds-truncation-tooltip--visible');
 
       expect(await tooltips(page)).toEqual([longPlaceholder]);
