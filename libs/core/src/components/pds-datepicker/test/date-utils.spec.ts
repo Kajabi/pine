@@ -2,12 +2,16 @@ import {
   addDays,
   addMonths,
   clampDate,
+  inMonthDayYear,
   isOutOfRange,
   localeFirstDayOfWeek,
+  monthDayRows,
   monthWeeks,
   parseIsoDate,
+  parseMonthDay,
   supportedLocale,
   toIsoDate,
+  toMonthDay,
   weekdayColumn,
   weekdayNames,
 } from '../date-utils';
@@ -99,5 +103,38 @@ describe('pds-datepicker date utils', () => {
     expect(supportedLocale('fr')).toBe('fr');
     expect(supportedLocale('not a locale!')).toBe('en-US');
     expect(supportedLocale(undefined)).toBe('en-US');
+  });
+
+  describe('month and day', () => {
+    it.each([
+      ['--11-07', '2000-11-07'],
+      ['--02-29', '2000-02-29'],
+      [' --01-01 ', '2000-01-01'],
+      ['2026-11-07', '2000-11-07'],
+    ])('reads %p into the leap year 2000', (input, expected) => {
+      expect(toIsoDate(parseMonthDay(input) as Date)).toBe(expected);
+    });
+
+    it.each(['', '--13-01', '--02-30', '11-07', '--1-7', 'November 7'])('rejects %p', (input) => {
+      expect(parseMonthDay(input)).toBeNull();
+    });
+
+    it('writes a month and day as --MM-DD', () => {
+      expect(toMonthDay(d('2000-02-29'))).toBe('--02-29');
+      expect(toMonthDay(d('2026-11-07'))).toBe('--11-07');
+    });
+
+    it('moves a date into the year 2000, as the calendar wraps past December', () => {
+      expect(toIsoDate(inMonthDayYear(addDays(d('2000-12-31'), 1)))).toBe('2000-01-01');
+      expect(toIsoDate(inMonthDayYear(addMonths(d('2000-01-15'), -1)))).toBe('2000-12-15');
+    });
+
+    it('lays a month out in rows of seven from the 1st, with February always 29 days', () => {
+      const february = monthDayRows(1);
+      expect(february).toHaveLength(5);
+      expect(february[0][0] && toIsoDate(february[0][0])).toBe('2000-02-01');
+      expect(february[4].map((day) => day && toIsoDate(day))).toEqual(['2000-02-29', null, null, null, null, null, null]);
+      expect(monthDayRows(10).flat().filter(Boolean)).toHaveLength(30);
+    });
   });
 });

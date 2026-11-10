@@ -2091,4 +2091,93 @@ describe('pds-datepicker', () => {
       expect(violations).toHaveLength(0);
     });
   });
+
+  describe('month-day mode', () => {
+    const BIRTHDAY = `<form><pds-datepicker component-id="birthday" name="birthday" label="Birthday" locale="en-US" month-day value="--12-31"></pds-datepicker></form>`;
+
+    it('moves by day, row and month, wrapping round the year', async () => {
+      const page = await setup(BIRTHDAY);
+      await openWithTrigger(page);
+      expect(await focused(page)).toBe('2000-12-31');
+
+      await press(page, 'ArrowRight');
+      expect(await focused(page)).toBe('2000-01-01');
+      const heading = await page.find('.pds-datepicker-calendar-portal >>> .pds-datepicker__heading');
+      expect(heading.textContent).toBe('January');
+
+      await press(page, 'End');
+      expect(await focused(page)).toBe('2000-01-07');
+      await press(page, 'ArrowUp');
+      expect(await focused(page)).toBe('2000-12-31');
+      await press(page, 'PageDown');
+      await press(page, 'PageDown');
+      expect(await focused(page)).toBe('2000-02-29');
+
+      // Its row's only day; End shouldn't carry into March, which the row has no cell for.
+      await press(page, 'End');
+      expect(await focused(page)).toBe('2000-02-29');
+    });
+
+    it('stops End at the last day of a partial row, instead of carrying into the next month', async () => {
+      const page = await setup(
+        '<form><pds-datepicker component-id="birthday" name="birthday" label="Birthday" locale="en-US" month-day value="--04-01"></pds-datepicker></form>',
+      );
+      await openWithTrigger(page);
+      expect(await focused(page)).toBe('2000-04-01');
+
+      await press(page, 'ArrowDown');
+      await press(page, 'ArrowDown');
+      await press(page, 'ArrowDown');
+      await press(page, 'ArrowDown');
+      expect(await focused(page)).toBe('2000-04-29');
+
+      await press(page, 'End');
+      expect(await focused(page)).toBe('2000-04-30');
+    });
+
+    it('keeps Feb 29 on Shift+PageUp and Shift+PageDown, which have no year to jump by', async () => {
+      const page = await setup(
+        '<form><pds-datepicker component-id="birthday" name="birthday" label="Birthday" locale="en-US" month-day value="--02-29"></pds-datepicker></form>',
+      );
+      await openWithTrigger(page);
+      expect(await focused(page)).toBe('2000-02-29');
+
+      await press(page, 'PageUp', 'Shift');
+      expect(await focused(page)).toBe('2000-02-29');
+      await press(page, 'PageDown', 'Shift');
+      expect(await focused(page)).toBe('2000-02-29');
+    });
+
+    it('submits the picked day as --MM-DD', async () => {
+      const page = await setup(BIRTHDAY);
+      await openWithTrigger(page);
+
+      await press(page, 'ArrowLeft');
+      await press(page, 'Enter');
+
+      const submitted = await page.evaluate(() => new FormData(document.querySelector('form') as HTMLFormElement).get('birthday'));
+      expect(submitted).toBe('--12-30');
+    });
+
+    it('reads a typed month and day', async () => {
+      const page = await setup(BIRTHDAY);
+      const input = await page.find('pds-datepicker >>> pds-input >>> input');
+      await input.click({ clickCount: 3 });
+      await input.type('feb 29');
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+
+      expect(await page.$eval('pds-datepicker', (el) => (el as HTMLPdsDatepickerElement).value)).toBe('--02-29');
+      expect(await input.getProperty('value')).toBe('February 29');
+    });
+
+    it('has no axe violations with the calendar open', async () => {
+      const page = await setup(BIRTHDAY);
+      await openWithTrigger(page);
+
+      const violations = await runAxe(page);
+      if (violations.length > 0) throw new Error(formatViolations(violations));
+      expect(violations).toHaveLength(0);
+    });
+  });
 });

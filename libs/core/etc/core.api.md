@@ -381,6 +381,7 @@ export namespace Components {
         "minDateMessage": string;
         "minuteIncrement": number;
         "minuteLabel": string;
+        "monthDay": boolean;
         "monthLabel": string;
         "name"?: string;
         "nextMonthLabel": string;
@@ -1879,6 +1880,7 @@ export namespace LocalJSX {
         "minDateMessage"?: string;
         "minuteIncrement"?: number;
         "minuteLabel"?: string;
+        "monthDay"?: boolean;
         "monthLabel"?: string;
         "name"?: string;
         "nextMonthLabel"?: string;
@@ -1957,6 +1959,8 @@ export namespace LocalJSX {
         "minuteIncrement": number;
         // (undocumented)
         "minuteLabel": string;
+        // (undocumented)
+        "monthDay": boolean;
         // (undocumented)
         "monthLabel": string;
         // (undocumented)
