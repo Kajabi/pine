@@ -343,6 +343,57 @@ describe('pds-textarea validity', () => {
     invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
     expect(invalid).toBe(true);
   });
+
+  it('keeps an over-maxLength value invalid when required or disabled is toggled afterward', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio" value="abcdef"></pds-textarea>');
+    await page.waitForChanges();
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { maxLength: number }).maxLength = 3;
+    });
+    await page.waitForChanges();
+
+    const isInvalid = () => page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(await isInvalid()).toBe(true);
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { required: boolean }).required = true;
+    });
+    await page.waitForChanges();
+    expect(await isInvalid()).toBe(true);
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { disabled: boolean }).disabled = true;
+    });
+    await page.waitForChanges();
+    expect(await isInvalid()).toBe(false);
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { disabled: boolean }).disabled = false;
+    });
+    await page.waitForChanges();
+    expect(await isInvalid()).toBe(true);
+  });
+
+  it('goes valid when maxLength is removed from a field that was over it', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio" value="abcdef"></pds-textarea>');
+    await page.waitForChanges();
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { maxLength: number }).maxLength = 3;
+    });
+    await page.waitForChanges();
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { maxLength: number | undefined }).maxLength = undefined;
+    });
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+  });
 });
 
 describe('pds-textarea accessibility', () => {
