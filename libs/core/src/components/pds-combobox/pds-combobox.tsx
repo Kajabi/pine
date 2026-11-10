@@ -529,6 +529,14 @@ export class PdsCombobox implements BasePdsProps {
       this.syncBodyPortal();
     }
 
+    // Opening places the dropdown a tick later, which can run before the dropdown has rendered and
+    // then skips it, leaving it without its dropdown-width and max-height. Place a newly rendered
+    // dropdown here too.
+    if (this.isOpen && this.listboxEl && this.listboxEl !== this.placedListboxEl) {
+      this.placedListboxEl = this.listboxEl;
+      void this.positionDropdown();
+    }
+
     const row = this.listboxEl?.querySelector('.pds-combobox__group-row--open') as HTMLElement | null | undefined;
     const flyoutEl = row?.querySelector('.pds-combobox__flyout') as HTMLElement | null | undefined;
     if (this.isOpen && this.listboxEl && row && flyoutEl) {
@@ -1376,6 +1384,9 @@ export class PdsCombobox implements BasePdsProps {
     const fallback = Number.isFinite(needed) && needed > 0 && rect.width > 0 && room < needed;
     if (fallback !== this.flyoutFallback) this.flyoutFallback = fallback;
   }
+
+  /** The dropdown element last placed on rendering, so each newly rendered one is placed once. */
+  private placedListboxEl?: HTMLElement;
 
   private openDropdownPositioning() {
     if (!this.triggerEl || !this.listboxEl) {
