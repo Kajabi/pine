@@ -1,52 +1,82 @@
 #!/usr/bin/env node
 // A component that clips its text with an ellipsis owes the reader a way to see the rest of it.
 // `setupTruncationTooltip` in libs/core/src/utils/truncation-tooltip.ts is that way, so this
-// compares the components whose styles truncate against the components that call it.
+// compares the selectors whose styles truncate against the components that call it.
 //
-// The two sets are read from the source rather than listed here, so a new component that truncates
-// is caught the day it lands instead of whenever someone next thinks to look. The exceptions below
-// are the whole allowlist, each with its reason, and this fails when one of them stops being true
-// -- an allowlist nobody rechecks is how a rule quietly stops applying.
+// Both are read from the source rather than listed here, so a new truncating selector is caught in
+// the PR that adds it: this runs in the lint workflow and on pre-push. The lists below are the
+// whole allowlist, each entry with its reason, and this fails when an entry stops matching the
+// source -- an allowlist nobody rechecks is how a rule quietly stops applying.
+//
+// The unit is a component's own directory (pds-table/pds-table-cell, not pds-table) and each
+// truncating selector in it, so new truncation can't hide behind a sibling that already reveals
+// its text, or behind an entry written for a different element.
 
 import { readdirSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 
 // Reads the working tree by default, which is what CI wants: the checkout under test. Pass
-// --ref <rev> to read a revision instead, so a branch can be measured without checking it out --
-// and so a run is never silently reporting on half-finished local work.
-const refArg = process.argv.indexOf('--ref');
-const REF = refArg === -1 ? null : process.argv[refArg + 1];
+// --ref <rev> (or --ref=<rev>) to read a revision instead, so a branch can be measured without
+// checking it out.
+const refFlag = process.argv.findIndex((arg) => arg === '--ref' || arg.startsWith('--ref='));
+const REF =
+  refFlag === -1
+    ? null
+    : process.argv[refFlag].startsWith('--ref=')
+      ? process.argv[refFlag].slice('--ref='.length)
+      : process.argv[refFlag + 1];
+if (refFlag !== -1 && (!REF || REF.startsWith('--'))) {
+  console.error('--ref needs a revision, as --ref main or --ref=main.');
+  process.exit(2);
+}
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 
 const COMPONENTS = 'libs/core/src/components';
 const UTIL = 'setupTruncationTooltip';
-const TRUNCATES = /text-overflow:\s*ellipsis|-webkit-line-clamp/;
+// A numeric (or variable) line-clamp, so a reset such as `-webkit-line-clamp: unset` isn't truncation.
+const TRUNCATES = /text-overflow\s*:\s*ellipsis|-webkit-line-clamp\s*:\s*(?:\d|var\()/;
 
-// Truncation that predates this check, each owed a fix. These do not fail -- the point is to stop a
-// NEW one appearing, not to block everything until the backlog is clear. The list can only shrink:
-// once a component calls the util, its entry here becomes stale and the check fails until it goes.
-// Caveat this check cannot resolve: it asks whether THIS component calls the util, so it cannot see
-// recovery inherited by composing one that does. pds-alert is the case in point -- read its entry.
+// Truncation that predates this check, each owed a fix, by component directory and selector. These
+// do not fail -- the point is to stop a NEW one appearing, not to block everything until the backlog
+// is clear. Nothing here enforces that the lists only shrink: adding an entry takes a selector out
+// of the check, so an addition needs the same review as an exemption. An entry fails as stale once
+// its selector stops truncating.
 const KNOWN = {
-  'pds-alert':
-    'clips the small description in its own styles AND renders it as <pds-text truncate>, which already calls the util. So the likely fix is deleting the duplicate host-level clipping rather than adding a second tooltip over the same text -- needs a browser check of whether pds-text\'s tooltip fires through it',
-  'pds-combobox':
-    "an option's text clipped by the `truncate` prop. Not a wiring job: options keep focus on the trigger and are tracked with aria-activedescendant, so the util's focus path never fires and a hover-only tooltip would leave keyboard users where they are",
-  'pds-filters': "a filter trigger's text, clipped",
-  'pds-multiselect': 'the trigger text and each selected item, clipped',
+  'pds-alert': {
+    '.pds-alert__description--small':
+      "the small description is clipped, and it's rendered as <pds-text truncate> around a bare <slot>. pds-text can't reveal it: its tooltip reads this.el.textContent, which doesn't include a slot's assigned nodes, so the text is empty and the tooltip never opens. Deleting this rule wouldn't help, since pds-text would still clip. Needs pds-alert to wire the util with the slotted text, or pds-text to read assigned nodes",
+  },
+  'pds-combobox': {
+    '.pds-combobox__button-trigger-text':
+      'the trigger text, clipped. A wiring job: the trigger takes focus itself, so it can be the focusEl, with manageTabIndex: false',
+    '.pds-combobox__listbox--truncate .pds-combobox__option-text':
+      "an option's text, clipped by the `truncate` prop. Not a wiring job: options keep focus on the trigger and are tracked with aria-activedescendant, so the util's focus path never fires and a hover-only tooltip would leave keyboard users where they are",
+  },
+  'pds-filters/pds-filter': {
+    '.pds-filter__button-content': "a filter trigger's content, clipped",
+    '.pds-filter__button-text': "a filter trigger's text, clipped",
+  },
+  'pds-multiselect': {
+    '.pds-multiselect__trigger-text': 'the trigger text, clipped',
+    '.pds-multiselect__selected-item': 'each selected item, clipped',
+  },
 };
 
 // Truncation that a tooltip would not help, and why. Keep the reason specific enough to argue with.
 const EXEMPT = {
-  'pds-input':
-    'truncates the placeholder (:placeholder-shown), not a value -- there is no fuller text to reveal',
+  'pds-input': {
+    '.pds-input__field:placeholder-shown':
+      "clips the placeholder, which is a hint, not the field's value or content. A long hint belongs in helper text, not in a tooltip over an empty field",
+  },
 };
 
 // Truncation whose answer is a decision rather than a patch. Each needs an owner, not an exemption.
 const UNDECIDED = {
-  'pds-toast':
-    'a toast dismisses itself, so hover-to-read may be the wrong affordance -- needs a ruling, not a fix',
+  'pds-toast': {
+    '.pds-toast__message':
+      'a toast with the default duration dismisses itself, so hover-to-read may be the wrong affordance. One with duration={0} stays put and could take the util -- needs a ruling, not a fix',
+  },
 };
 
 const walk = (dir) =>
@@ -55,104 +85,126 @@ const walk = (dir) =>
     return e.isDirectory() ? walk(path) : [path];
   });
 
-const tree = REF ? git('ls-tree', '-r', '--name-only', REF, '--', COMPONENTS).split('\n').filter(Boolean) : null;
-
-const files = (dir) => (REF ? tree.filter((p) => p.startsWith(dir + '/')) : walk(dir));
+const paths = (REF ? git('ls-tree', '-r', '--name-only', REF, '--', COMPONENTS).split('\n').filter(Boolean) : walk(COMPONENTS))
+  // Tests, docs and stories talk about truncation without doing it.
+  .filter((p) => !/\/(test|docs|stories)\//.test(p));
 const read = (path) => (REF ? git('show', `${REF}:${path}`) : readFileSync(path, 'utf8'));
 
-const components = [
-  ...new Set(
-    (REF ? tree : walk(COMPONENTS))
-      .map((p) => p.slice(COMPONENTS.length + 1).split('/')[0])
-      .filter((name) => name && !name.startsWith('_') && !name.includes('.')),
-  ),
-].sort();
+// Comments name things without doing them: `// text-overflow: ellipsis`, or a comment that mentions
+// the util. The `[^:]` keeps a `//` inside a url() from reading as a comment.
+const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 
-// The selector a truncating declaration sits in, so a failure says what to look at.
-const selectorsIn = (path) => {
-  const lines = read(path).split('\n');
+// The selectors each truncating declaration sits under, read by tracking the block nesting: a
+// selector list split over lines, a one-line block, an element selector and `&` all resolve.
+const resolve = (parents, part) =>
+  parents.length === 0 ? [part] : parents.map((p) => (part.includes('&') ? part.replace(/&/g, p) : `${p} ${part}`));
+
+const truncatingSelectors = (src) => {
+  const stack = [];
   const found = [];
-  lines.forEach((line, i) => {
-    if (!TRUNCATES.test(line)) return;
-    for (let j = i; j >= 0; j--) {
-      const selector = lines[j].match(/^\s*([.&#:[][^{};]*?)\s*\{\s*$/);
-      if (selector) return found.push(selector[1].trim());
+  let pending = '';
+  const declaration = () => {
+    if (TRUNCATES.test(pending)) found.push(...(stack[stack.length - 1] ?? ['(top level)']));
+  };
+  for (const ch of stripComments(src)) {
+    if (ch === '{') {
+      const parts = pending
+        .split(',')
+        .map((s) => s.replace(/\s+/g, ' ').trim())
+        .filter(Boolean);
+      const parents = stack[stack.length - 1] ?? [];
+      // An at-rule (@media, @include ... { }) keeps its parent's selectors.
+      stack.push(parts.length && /^@/.test(parts[0]) ? parents : parts.flatMap((p) => resolve(parents, p)));
+      pending = '';
+    } else if (ch === '}') {
+      declaration();
+      stack.pop();
+      pending = '';
+    } else if (ch === ';') {
+      declaration();
+      pending = '';
+    } else {
+      pending += ch;
     }
-    found.push('(selector not found)');
-  });
-  return found;
+  }
+  return [...new Set(found)];
 };
 
-const report = components.map((name) => {
-  const paths = files(join(COMPONENTS, name)).filter(
-    // Tests and docs talk about truncation without doing it.
-    (p) => !/\/(test|docs|stories)\//.test(p),
-  );
-  const styles = paths.filter((p) => p.endsWith('.scss'));
-  const selectors = styles.flatMap(selectorsIn);
-  const adopts = paths.some((p) => /\.tsx?$/.test(p) && read(p).includes(UTIL));
-  return { name, truncates: selectors.length > 0, selectors: [...new Set(selectors)], adopts };
+const unitOf = (path) => dirname(path).slice(COMPONENTS.length + 1);
+const units = [...new Set(paths.filter((p) => p.endsWith('.scss')).map(unitOf))].filter(Boolean).sort();
+
+const report = units.map((unit) => {
+  const own = paths.filter((p) => unitOf(p) === unit);
+  const selectors = [...new Set(own.filter((p) => p.endsWith('.scss')).flatMap((p) => truncatingSelectors(read(p))))];
+  // A call, outside comments: an import or a comment that names the util isn't adoption.
+  const adopts = own.some((p) => /\.tsx?$/.test(p) && stripComments(read(p)).includes(`${UTIL}(`));
+  return { unit, selectors, adopts };
 });
 
-const truncating = report.filter((c) => c.truncates);
-const listed = (n) => EXEMPT[n] || UNDECIDED[n] || KNOWN[n];
-const missing = truncating.filter((c) => !c.adopts && !listed(c.name));
-const known = truncating.filter((c) => !c.adopts && KNOWN[c.name]);
-const undecided = truncating.filter((c) => !c.adopts && UNDECIDED[c.name]);
+const entry = (list, unit, selector) => list[unit]?.[selector];
+const reasonFor = (unit, selector) =>
+  entry(EXEMPT, unit, selector) ?? entry(UNDECIDED, unit, selector) ?? entry(KNOWN, unit, selector);
+const stateFor = (c, selector) => {
+  if (entry(EXEMPT, c.unit, selector)) return 'exempt';
+  if (entry(UNDECIDED, c.unit, selector)) return 'undecided';
+  if (entry(KNOWN, c.unit, selector)) return 'owed';
+  return c.adopts ? 'ok' : 'MISSING';
+};
 
-// An exemption that no longer describes the component is worse than no exemption: it reads as
-// considered and is not. Fail on both directions of drift.
-const stale = Object.keys({ ...EXEMPT, ...UNDECIDED, ...KNOWN }).flatMap((name) => {
-  const c = report.find((x) => x.name === name);
-  if (!c) return [{ name, why: 'listed here but no such component -- remove the entry' }];
-  if (!c.truncates) return [{ name, why: 'no longer truncates -- remove the entry' }];
-  if (c.adopts) return [{ name, why: `now calls ${UTIL} -- remove the entry` }];
-  return [];
-});
+const truncating = report.filter((c) => c.selectors.length);
+const rows = truncating.flatMap((c) => c.selectors.map((selector) => ({ ...c, selector, state: stateFor(c, selector) })));
+const missing = rows.filter((r) => r.state === 'MISSING');
+
+// An entry that no longer describes the source is worse than no entry: it reads as considered and
+// is not. Entries are checked per selector, so wiring one clipped element of a component leaves the
+// entries for its others in place. A component that calls the util for one element can still owe it
+// for another, so calling it doesn't make an entry stale on its own -- remove the entry for the
+// element you wired.
+const stale = [EXEMPT, UNDECIDED, KNOWN].flatMap((list) =>
+  Object.entries(list).flatMap(([unit, selectors]) =>
+    Object.keys(selectors).flatMap((selector) => {
+      const c = report.find((x) => x.unit === unit);
+      if (!c) return [{ unit, selector, why: 'listed here but no such component directory -- remove the entry' }];
+      if (!c.selectors.includes(selector)) return [{ unit, selector, why: 'no longer truncates -- remove the entry' }];
+      return [];
+    }),
+  ),
+);
 
 const pad = (s, n) => String(s).padEnd(n);
-console.log(`\n${REF ? REF : 'working tree'}: ${truncating.length} of ${report.length} components truncate; ${truncating.filter((c) => c.adopts).length} call ${UTIL}.\n`);
-for (const c of truncating) {
-  const state = c.adopts
-    ? 'ok'
-    : EXEMPT[c.name]
-      ? 'exempt'
-      : UNDECIDED[c.name]
-        ? 'undecided'
-        : KNOWN[c.name]
-          ? 'owed'
-          : 'MISSING';
-  console.log(`  ${pad(state, 10)} ${pad(c.name, 18)} ${c.selectors.join(', ')}`);
-  const reason = EXEMPT[c.name] ?? UNDECIDED[c.name] ?? KNOWN[c.name];
-  if (reason && !c.adopts) console.log(`  ${pad('', 10)} ${pad('', 18)} ${reason}`);
+const counts = (state) => rows.filter((r) => r.state === state);
+console.log(
+  `\n${REF ?? 'working tree'}: ${rows.length} truncating selectors in ${truncating.length} components; ${truncating.filter((c) => c.adopts).length} of those components call ${UTIL}.\n`,
+);
+for (const r of rows) {
+  console.log(`  ${pad(r.state, 10)} ${pad(r.unit, 24)} ${r.selector}`);
+  const reason = reasonFor(r.unit, r.selector);
+  if (reason) console.log(`  ${pad('', 10)} ${pad('', 24)} ${reason}`);
 }
 
-if (known.length) {
-  console.log(`\n${known.length} owed a fix, recorded so a new one stands out (not a failure):`);
-  for (const c of known) console.log(`  ${c.name}`);
+if (counts('owed').length) {
+  console.log(`\n${counts('owed').length} owed a fix, recorded so a new one stands out (not a failure).`);
 }
-
-if (undecided.length) {
-  console.log(`\n${undecided.length} awaiting a ruling (not a failure):`);
-  for (const c of undecided) console.log(`  ${c.name}: ${UNDECIDED[c.name]}`);
+if (counts('undecided').length) {
+  console.log(`${counts('undecided').length} awaiting a ruling (not a failure).`);
 }
 
 if (stale.length) {
   console.log(`\nAllowlist no longer matches the source:`);
-  for (const s of stale) console.log(`  ${s.name}: ${s.why}`);
+  for (const s of stale) console.log(`  ${s.unit}  ${s.selector}: ${s.why}`);
 }
 
 if (missing.length) {
-  console.log(`\n${missing.length} component(s) truncate without ${UTIL}:`);
-  for (const c of missing) console.log(`  ${c.name}  (${c.selectors.join(', ')})`);
+  console.log(`\n${missing.length} selector(s) truncate in a component that doesn't call ${UTIL}:`);
+  for (const r of missing) console.log(`  ${r.unit}  ${r.selector}`);
   console.log(
-    `\nCall ${UTIL} from the component, as pds-copytext does, or add it to EXEMPT in ${process.argv[1].replace(process.cwd() + '/', '')} with the reason it does not need one.`,
+    `\nCall ${UTIL} from the component, as pds-copytext does. If a tooltip wouldn't help, add the selector to EXEMPT in ${process.argv[1].replace(process.cwd() + '/', '')} with the reason, for review like any exemption.`,
   );
 }
 
 const failures = missing.length + stale.length;
 if (failures === 0)
   console.log(
-    `\nNo new truncation without a way to read it. ${known.length} still owed, ${Object.keys(UNDECIDED).length} awaiting a ruling.\n`,
+    `\nNo new truncation without a way to read it. ${counts('owed').length} still owed, ${counts('undecided').length} awaiting a ruling.\n`,
   );
 process.exit(failures === 0 ? 0 : 1);
