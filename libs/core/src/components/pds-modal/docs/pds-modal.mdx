@@ -1467,7 +1467,16 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
       <pds-modal-content>
         <pds-box fit direction="column" gap="sm" padding-inline-start="md" padding-inline-end="md">
           <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> with a higher <code>z-index</code> can display above it.</p>
-          <pds-button variant="secondary" onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto var(--pine-dimension-md) var(--pine-dimension-md) auto;max-width:20rem;padding:var(--pine-dimension-sm);border:0;border-radius:var(--pine-border-radius-md);text-align:start;background:var(--pine-color-background-inverse-container);color:var(--pine-color-text-inverse);z-index:calc(var(--pine-z-index-modal) + 1);cursor:pointer');o.onclick=function(){o.remove()};document.body.appendChild(o);o.focus();})()">Show overlay above modal</pds-button>
+          <pds-button variant="secondary" onClick={() => {
+            const o = document.createElement('button');
+            o.type = 'button';
+            o.textContent = 'Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';
+            o.setAttribute('style', 'position:fixed;inset:auto var(--pine-dimension-md) var(--pine-dimension-md) auto;max-width:20rem;padding:var(--pine-dimension-sm);border:0;border-radius:var(--pine-border-radius-md);text-align:start;background:var(--pine-color-background-inverse-container);color:var(--pine-color-text-inverse);z-index:calc(var(--pine-z-index-modal) + 1);cursor:pointer');
+            o.onclick = () => o.remove();
+            document.querySelector('#top-layer-modal')?.addEventListener('pdsModalClose', () => o.remove(), { once: true });
+            document.body.appendChild(o);
+            o.focus();
+          }}>Show overlay above modal</pds-button>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
