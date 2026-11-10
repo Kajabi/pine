@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop } from '@stencil/core';
+import type { ImageRatioType } from '@utils/types';
 
 @Component({
   tag: 'pds-image',
@@ -27,9 +28,9 @@ export class PdsImage {
   @Prop() fit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' = 'cover';
 
   /**
-   * The height of the image in pixels. Setting this will
-   * devote space in the layout to prevent layout
-   * shifts when the image is loaded.
+   * The height of the image in pixels. `height: auto` lets the loaded image's own
+   * proportions decide its rendered height, so unlike `width` this does not reserve
+   * space before the image loads.
    */
   @Prop() height?: number;
 
@@ -40,17 +41,12 @@ export class PdsImage {
   @Prop() loading?: 'eager' | 'lazy' = 'eager';
 
   /**
-   * The aspect ratio the image is sized to, cropping whatever
-   * overflows the shape. Value can be preset or custom. Use this,
-   * not `height` and `width`, to crop: those only reserve space.
+   * The aspect ratio the image is sized to, cropping whatever overflows the shape. A preset
+   * (`square` 1/1, `landscape` 4/3, `wide` 16/9, `portrait` 3/4, `tall` 9/16) or any custom
+   * CSS ratio, such as `21 / 9`. Use this, not `height` and `width`, to crop: those only
+   * reserve space, and only `width` reliably does even that.
    */
-  @Prop() ratio?:
-  | 'square'    // 1 / 1
-  | 'landscape' // 4 / 3
-  | 'wide'      // 16 / 9
-  | 'portrait'  // 3 / 4
-  | 'tall'      // 9 / 16
-  | string;
+  @Prop() ratio?: ImageRatioType | (string & Record<never, never>);
 
   /**
    * Determines the intended display size of an image
@@ -90,7 +86,8 @@ export class PdsImage {
   }
 
   render() {
-    const hasRatio = this.ratio !== undefined && this.ratio !== '';
+    // `!= null`, not `!== undefined`: removing the attribute sets the prop to `null`, not `undefined`.
+    const hasRatio = this.ratio != null && this.ratio !== '';
     // `fit` only means something once a ratio gives the image a shape to
     // overflow, so neither is applied until `ratio` is set.
     const ratioStyle = hasRatio

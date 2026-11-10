@@ -469,12 +469,7 @@ export namespace Components {
         "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
         "height"?: number;
         "loading"?: 'eager' | 'lazy';
-        "ratio"?: | 'square'    // 1 / 1
-        | 'landscape' // 4 / 3
-        | 'wide'      // 16 / 9
-        | 'portrait'  // 3 / 4
-        | 'tall'      // 9 / 16
-        | string;
+        "ratio"?: ImageRatioType | (string & Record<never, never>);
         "sizes"?: string;
         "src": string;
         "srcset"?: string;
@@ -893,6 +888,9 @@ export interface DatepickerPreset {
 // @public
 const Event_2: EventDecorator;
 export { Event_2 as Event }
+
+// @public (undocumented)
+export type ImageRatioType = 'square' | 'landscape' | 'wide' | 'portrait' | 'tall';
 
 // @public (undocumented)
 export interface InputChangeEventDetail {
@@ -2172,12 +2170,7 @@ export namespace LocalJSX {
         "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
         "height"?: number;
         "loading"?: 'eager' | 'lazy';
-        "ratio"?: | 'square'    // 1 / 1
-        | 'landscape' // 4 / 3
-        | 'wide'      // 16 / 9
-        | 'portrait'  // 3 / 4
-        | 'tall'      // 9 / 16
-        | string;
+        "ratio"?: ImageRatioType | (string & Record<never, never>);
         "sizes"?: string;
         "src"?: string;
         "srcset"?: string;
@@ -2197,12 +2190,7 @@ export namespace LocalJSX {
         // (undocumented)
         "loading": 'eager' | 'lazy';
         // (undocumented)
-        "ratio": | 'square'    // 1 / 1
-        | 'landscape' // 4 / 3
-        | 'wide'      // 16 / 9
-        | 'portrait'  // 3 / 4
-        | 'tall'      // 9 / 16
-        | string;
+        "ratio": ImageRatioType | (string & Record<never, never>);
         // (undocumented)
         "sizes": string;
         // (undocumented)
