@@ -279,7 +279,7 @@ The inner field's own `pdsInput`, `pdsChange`, `pdsFocus`, `pdsBlur` and `pdsKey
 ## Methods
 
 - `open()` opens the calendar and moves focus to the selected day, or today. It does nothing while the datepicker is `disabled` or `readonly`.
-- `close()` closes the calendar and leaves focus where it is.
+- `close()` closes the calendar without moving focus. Focus inside the calendar is lost with it, so call `setFocus()` first to keep focus in the field.
 - `setFocus()` moves focus to the text field.
 
 ## Inside modals, popovers and other overlays
