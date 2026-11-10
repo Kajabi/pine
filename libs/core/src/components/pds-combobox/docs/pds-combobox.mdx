@@ -1280,7 +1280,7 @@ A group can show a badge too, such as "Premium" on a group of plan-gated actions
 - **Where it shows.** With `flyout` and `drill-in`, at the end of the group's row, before the chevron; with `inline`, at the end of the group's label. A drilled-in group's row back leaves it out: that row is the way back, and the badge was on the row that opened it. The trigger doesn't show it, even when the chosen option is in the group.
 - **Long labels.** As with option badges, the badge takes at most half the row, so a long label ends in an ellipsis.
 - **Screen readers and search.** Screen readers read it as part of the group's name ("Facebook, Premium"), and search doesn't match it.
-- **Disabled groups.** A group whose options are all disabled is disabled, and its badge is muted with the row. It still opens, so its options can be seen.
+- **Disabled groups.** A group whose options are all disabled is disabled, and its badge is muted with it. Its options can still be seen: with `flyout` and `drill-in`, the group still opens; with `inline`, they stay listed under its label.
 
 <DocCanvas
   mdxSource={{
