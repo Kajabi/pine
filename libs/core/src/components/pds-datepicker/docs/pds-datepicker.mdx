@@ -148,7 +148,11 @@ In the calendar, the first pick starts the range and the second ends it; until t
 
 `presets` lists ranges beside the calendar, followed by **Custom range**, which is marked when the range matches none of them and moves focus to the calendar. The change event carries the matching preset's `key`, so a filter can keep "Last 30 days" relative to today rather than store fixed dates. Set `custom-range-label` to translate it.
 
-Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date` and `last-12-months`. "Last 7 days" is the 7 days ending today; "This month", "This quarter" and "This year" are the whole period, and "Year to date" ends today. To translate the labels or add ranges of your own, set the property to an array of `{ key, label?, start?, end? }`. A preset that falls outside `min` and `max` is disabled.
+Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date` and `last-12-months`. "Last 7 days" is the 7 days ending today; "This month", "This quarter" and "This year" are the whole period, and "Year to date" ends today. To translate the labels or add ranges of your own, set the property to an array of `{ key, label?, startOffset?, endOffset?, start?, end? }`. A preset that falls outside `min` and `max` is disabled.
+
+A range of your own can follow today as a built-in does, or sit on fixed days. `startOffset` and `endOffset` count whole days from today — `-6` is six days ago, `0` is today — and are read again every time the list is shown, so the range stays right however long the page stays open; set one and the other is today. `start` and `end` take `YYYY-MM-DD` days that never move, for a range that means one particular week.
+
+Prefer the offsets for anything meant to stay relative. Fixed days are worked out once, so by the next day they no longer cover the range they name — and because a preset is matched by its exact range, the change event stops carrying its `key` too, leaving the panel on **Custom range**. A preset with neither a usable range nor a built-in key to take one from is left out of the list, and says so once in the console.
 
 <DocCanvas
   mdxSource={{
@@ -156,9 +160,10 @@ Pass built-in keys as a comma-separated list: `today`, `yesterday`, `last-7-days
     webComponent: `<pds-datepicker component-id="pds-datepicker-range-presets-example" label="Period" hide-label range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></pds-datepicker>
 
 <script>
-  // Translated labels, and a range of your own.
+  // Translated labels, a range of your own that follows today, and one on fixed days.
   document.querySelector('pds-datepicker').presets = [
     { key: 'last-7-days', label: '7 derniers jours' },
+    { key: 'last-24-hours', label: 'Last 24 hours', startOffset: -1 },
     { key: 'launch', label: 'Launch week', start: '2026-03-02', end: '2026-03-08' },
   ];
 </script>`
