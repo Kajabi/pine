@@ -12,7 +12,7 @@ const SEVERITY_LABELS: Partial<Record<'default' | 'danger' | 'info' | 'success' 
 /**
  * @slot (default) - The alert's description text.
  * @slot actions - Slot for alert actions.
- * @part dismiss
+ * @part dismiss - Exposes the dismiss button for styling. Appears only when `dismissible` is set.
  */
 
 @Component({
