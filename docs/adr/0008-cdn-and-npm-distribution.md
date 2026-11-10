@@ -15,7 +15,7 @@ Publish `@pine-ds/core` to **npm** and serve the same artifact over the **jsDeli
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.css" />
 <script type="module" src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.esm.js"></script>
-<script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/index.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.js"></script>
 ```
 
 This is the counterpart to the token side — see ds-tokens ADR-0004.
