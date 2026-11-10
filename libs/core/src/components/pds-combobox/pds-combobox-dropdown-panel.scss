@@ -271,10 +271,11 @@
 
   // The dropdown's height eases between drill views; the component measures both ends.
   // `height` because the content's size isn't known ahead. Ease-out on purpose, like the slide it
-  // moves with: the guide's ease-in-out for height starts slow and trails the rows.
+  // moves with: the guide's ease-in-out for height starts slow and trails the rows. The base duration,
+  // quicker than the slide, so a big collapse doesn't leave an empty panel on screen for long.
   // Internal, not a consumer hook.
   .pds-combobox__listbox--height-glide {
-    animation: pds-combobox-height-glide var(--pine-motion-duration-slow) var(--pine-motion-easing-out);
+    animation: pds-combobox-height-glide var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   }
 
   // The rows overflow the gliding height until it ends; hidden, no scrollbar flashes meanwhile.
