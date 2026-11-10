@@ -4,6 +4,8 @@
     border: 0;
     border-radius: var(--pine-dimension-125);
     box-shadow: var(--pine-box-shadow);
+    // The width it's given includes its padding, so the panel is as wide as `dropdown-width` says.
+    box-sizing: border-box;
     list-style: none;
     margin: 0;
     min-width: 220px;
@@ -378,11 +380,12 @@
     justify-content: flex-start;
   }
 
-  // panel-search, drilled in: the row back takes the search field's place, full width above the
-  // divider, and stays put while the group's options scroll. :where keeps hover and the keyboard's
-  // highlight on top.
+  // Drilled in, with or without panel search: the row back is the panel's header, full width above
+  // the divider, and stays put while the group's options scroll. :where keeps hover and the
+  // keyboard's highlight on top.
   // Both classes, to outrank the grouped list's padding.
-  .pds-combobox__listbox-options--drilled-in.pds-combobox__listbox--grouped {
+  .pds-combobox__listbox-options--drilled-in.pds-combobox__listbox--grouped,
+  .pds-combobox__listbox--grouped:has(> .pds-combobox__group-back) {
     padding-block-start: 0;
   }
 
@@ -391,8 +394,8 @@
     outline: none;
   }
 
-  // It's the same size and type as the search field it replaces.
-  :where(.pds-combobox__listbox-options--drilled-in) .pds-combobox__group-back-trigger {
+  // It's the same size and type as the search field (where there is one).
+  :where(.pds-combobox__listbox--grouped) .pds-combobox__group-back-trigger {
     background-color: var(--pine-color-background-overlay);
     border-block-end: var(--pine-border);
     border-block-end-color: var(--pine-color-border-subtle);
@@ -409,13 +412,13 @@
 
   // The back arrow is a narrow glyph centered in its 16px box, so it looks 4px further in than the
   // search icon it replaces. Nudged out to line up by eye; the text after it stays put.
-  :where(.pds-combobox__listbox-options--drilled-in) .pds-combobox__group-back-trigger .pds-combobox__group-row-caret {
+  :where(.pds-combobox__listbox--grouped) .pds-combobox__group-back-trigger .pds-combobox__group-row-caret {
     margin-inline: calc(var(--pine-dimension-2xs) * -1) var(--pine-dimension-2xs);
   }
 
   // The header bar stays full width; its hover and highlight shade is inset and rounded like the
   // option rows below it.
-  .pds-combobox__listbox-options--drilled-in .pds-combobox__group-back > .pds-combobox__group-back-trigger {
+  .pds-combobox__listbox--grouped .pds-combobox__group-back > .pds-combobox__group-back-trigger {
     isolation: isolate;
 
     &::before {
@@ -429,8 +432,8 @@
     }
   }
 
-  .pds-combobox__listbox--pointer-hover.pds-combobox__listbox-options--drilled-in .pds-combobox__group-back > .pds-combobox__group-back-trigger:hover,
-  .pds-combobox__listbox-options--drilled-in .pds-combobox__group-back--highlighted > .pds-combobox__group-back-trigger {
+  .pds-combobox__listbox--pointer-hover.pds-combobox__listbox--grouped .pds-combobox__group-back > .pds-combobox__group-back-trigger:hover,
+  .pds-combobox__listbox--grouped .pds-combobox__group-back--highlighted > .pds-combobox__group-back-trigger {
     background-color: var(--pine-color-background-overlay);
 
     &::before {
@@ -438,7 +441,7 @@
     }
   }
 
-  .pds-combobox__listbox-options--drilled-in .pds-combobox__group-back--keyboard > .pds-combobox__group-back-trigger {
+  .pds-combobox__listbox--grouped .pds-combobox__group-back--keyboard > .pds-combobox__group-back-trigger {
     outline: none;
 
     &::before {
