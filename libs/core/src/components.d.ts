@@ -2766,7 +2766,7 @@ export namespace Components {
          */
         "nav"?: boolean;
         /**
-          * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
+          * Stretches the component to fill its container's height. The active tab panel keeps the height of its content. Requires the component to have a constrained height (e.g. a flex parent).
           * @defaultValue false
          */
         "stretch"?: boolean;
@@ -6771,7 +6771,7 @@ declare namespace LocalJSX {
          */
         "nav"?: boolean;
         /**
-          * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
+          * Stretches the component to fill its container's height. The active tab panel keeps the height of its content. Requires the component to have a constrained height (e.g. a flex parent).
           * @defaultValue false
          */
         "stretch"?: boolean;

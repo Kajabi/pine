@@ -32,7 +32,7 @@ Though similar, tabs and accordions both offer different user experiences to kee
 
 For best practices in accessibility, be sure to provide a `tablist-label` and a unique `component-id`. The `tablist-label` will provide context to screen readers about what kind of tablist information is being presented.
 
-Each `name` must be unique within the tab set and contain no spaces. The `component-id` and `name` build the ids that link each tab to its panel, and a space breaks that link for screen readers.
+Each tab's `name` must be unique among the tabs and contain no spaces, and each panel's `name` must match its tab's. The `component-id` and `name` build the ids that link each tab to its panel, and a space breaks that link for screen readers.
 
 ## Properties
 
@@ -275,7 +275,7 @@ The `divider` prop adds a full-width rule beneath the tab list, separating the t
 
 ### Stretch
 
-The `stretch` prop makes the component fill its container's height and sizes the active panel to the remaining space below the tab list, for tab sets inside a height-bounded region (a rail, a modal body, a split-pane column). The panel doesn't scroll on its own: if its content can overflow, add your own scroll container (`overflow: auto`) inside the panel. Give the parent a fixed height for the effect to show.
+The `stretch` prop makes the component fill its container's height, for tab sets inside a height-bounded region (a rail, a modal body, a split-pane column). The active panel doesn't grow to fill the space below the tab list, and it doesn't scroll on its own: it keeps the height of its content, so taller content overflows the region. To scroll long content, wrap it in your own container with a fixed height (such as `max-block-size`) and `overflow: auto`. Give the parent a fixed height for the effect to show.
 
 <DocCanvas mdxSource={{
   react: `
