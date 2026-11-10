@@ -966,9 +966,9 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__listbox-options');
     });
 
-    // The scroll padding keeps options clear of the sticky row back; the row back itself is always
-    // in view, so highlighting it mustn't scroll the list by that padding.
-    it("doesn't scroll the list when the keys reach the sticky row back in a group that scrolls", async () => {
+    // The row back is the header above the scrolling options, always in view, so highlighting it
+    // mustn't scroll them.
+    it("doesn't scroll the options when the keys reach the row back in a group that scrolls", async () => {
       const page = await newE2EPage();
       await page.setViewport({ width: 1200, height: 800 });
       await page.setContent(`
@@ -986,7 +986,7 @@ describe('pds-combobox', () => {
       await page.mouse.move(0, 0);
 
       const scrollTop = () =>
-        page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox-options')!.scrollTop);
+        page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__drill-in-options')!.scrollTop);
 
       // Down to the last option, then let the smooth scroll settle.
       await page.keyboard.press('End');
@@ -1000,7 +1000,7 @@ describe('pds-combobox', () => {
       }
       expect(settled).toBeGreaterThan(0);
 
-      // Home highlights the row back, which sticks in view however far the list has scrolled.
+      // Home highlights the row back, in view above the options however far they've scrolled.
       await page.keyboard.press('Home');
       await page.waitForChanges();
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -1009,10 +1009,59 @@ describe('pds-combobox', () => {
       expect(await scrollTop()).toBe(settled);
     });
 
+    // Every layer is a header above the rows that scroll: drilled in, the row back sits above the
+    // group's options, as the search field sits above the groups, so the scrollbar starts below it.
     it.each([
       ['with panel search', 'panel-search'],
       ['without panel search', ''],
-    ])('keeps the highlighted option clear of the sticky row back in a group that scrolls, %s', async (_name, search) => {
+    ])("scrolls only the group's options, below the row back, %s", async (_name, search) => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <pds-combobox component-id="long" label="Action" trigger="button" mode="select-only"
+          group-display="drill-in" ${search} max-height="160px" dropdown-width="300px"></pds-combobox>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }) => {
+        el.options = Array.from({ length: 12 }, (_, i) => ({ id: `o${i}`, text: `Option ${i}`, group: 'Many' }));
+      });
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 600)));
+
+      const measure = () =>
+        page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          const header = root.querySelector('.pds-combobox__group-back-trigger')!.getBoundingClientRect();
+          const options = root.querySelector('.pds-combobox__drill-in-options') as HTMLElement;
+          const scrolling = Array.from(root.querySelectorAll<HTMLElement>('*')).filter(
+            el => el.scrollHeight > el.clientHeight + 1 && /auto|scroll/.test(getComputedStyle(el).overflowY),
+          );
+          return {
+            scrolling: scrolling.map(el => el.classList[0]),
+            gap: Math.round(options.getBoundingClientRect().top - header.bottom),
+            headerTop: Math.round(header.top),
+          };
+        });
+
+      const before = await measure();
+      expect(before.scrolling).toEqual(['pds-combobox__drill-in-options']);
+      expect(before.gap).toBe(0);
+
+      await page.evaluate(() => {
+        (document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__drill-in-options') as HTMLElement).scrollTop = 120;
+      });
+      const after = await measure();
+      expect(after.headerTop).toBe(before.headerTop);
+      expect(after.gap).toBe(0);
+    });
+
+    it.each([
+      ['with panel search', 'panel-search'],
+      ['without panel search', ''],
+    ])('keeps the highlighted option below the row back in a group that scrolls, %s', async (_name, search) => {
       const page = await newE2EPage();
       await page.setViewport({ width: 1200, height: 800 });
       await page.setContent(`
@@ -1286,12 +1335,11 @@ describe('pds-combobox', () => {
         const back = getComputedStyle(root.querySelector('.pds-combobox__group-back-trigger')!);
         return {
           divider: back.borderBottomWidth,
-          sticky: back.position,
           panelTop: getComputedStyle(root.querySelector('.pds-combobox__listbox')!).paddingTop,
         };
       });
       // Like the search field's place with panel search: a divider under it, flush with the top.
-      expect(header).toEqual({ divider: '1px', sticky: 'sticky', panelTop: '0px' });
+      expect(header).toEqual({ divider: '1px', panelTop: '0px' });
       expect(await panelWidth()).toBeCloseTo(300, 0);
     });
 
