@@ -455,3 +455,52 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     removePortal();
   };
 }
+
+export interface TruncationTooltipBinding {
+  /**
+   * Binds a tooltip to each of `els` that has none yet, and removes the rest.
+   * Missing elements are skipped. Call it after every render.
+   */
+  sync(els: ArrayLike<HTMLElement | null | undefined>): void;
+  /** Removes every tooltip it bound. */
+  destroy(): void;
+}
+
+/**
+ * Keeps tooltips bound to the elements a component's render clips, for a component
+ * that re-renders while those elements stay in place.
+ *
+ * Each tooltip holds listeners and an observer on its element, so it is rebound
+ * only when a different set of elements renders: rebinding on every render would
+ * tear down a tooltip the pointer is still inside, and a component can render
+ * again on every keystroke or when it opens its popover.
+ *
+ * Call `sync` from `componentDidRender`, and from `connectedCallback` too, since
+ * moving an element reconnects it without rendering it again. Call `destroy` from
+ * `disconnectedCallback`.
+ *
+ * @param getOptions - The options for one element, read when it is bound.
+ */
+export function bindTruncationTooltips(
+  getOptions: (el: HTMLElement) => TruncationTooltipOptions,
+): TruncationTooltipBinding {
+  let bound: HTMLElement[] = [];
+  let cleanups: (() => void)[] = [];
+
+  const destroy = () => {
+    cleanups.forEach((cleanup) => cleanup());
+    cleanups = [];
+    bound = [];
+  };
+
+  const sync = (els: ArrayLike<HTMLElement | null | undefined>) => {
+    const next = Array.from(els).filter((el): el is HTMLElement => el != null);
+    if (next.length === bound.length && next.every((el, index) => el === bound[index])) return;
+
+    destroy();
+    bound = next;
+    cleanups = next.map((el) => setupTruncationTooltip(getOptions(el)));
+  };
+
+  return { sync, destroy };
+}

@@ -1,4 +1,4 @@
-import { flattenedText, setupTruncationTooltip } from '../truncation-tooltip';
+import { bindTruncationTooltips, flattenedText, setupTruncationTooltip } from '../truncation-tooltip';
 
 // Mock ResizeObserver
 class MockResizeObserver {
@@ -799,6 +799,99 @@ describe('truncation-tooltip', () => {
       expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
 
       cleanup();
+    });
+  });
+
+  describe('bindTruncationTooltips', () => {
+    const textEl = (text: string) => {
+      const el = document.createElement('span');
+      el.textContent = text;
+      hostEl.appendChild(el);
+      return el;
+    };
+
+    const bindingFor = () => {
+      const getOptions = jest.fn((el: HTMLElement) => ({ hostEl: el, contentEl: el, getTooltipText: () => el.textContent ?? '' }));
+      return { getOptions, binding: bindTruncationTooltips(getOptions) };
+    };
+
+    const disconnected = () => MockResizeObserver.instances.filter((observer) => observer.disconnect.mock.calls.length > 0);
+
+    it('binds each element given, skipping missing ones', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const second = textEl('Second');
+
+      binding.sync([first, null, second, undefined]);
+
+      expect(getOptions.mock.calls.map(([el]) => el)).toEqual([first, second]);
+      expect(MockResizeObserver.instances).toHaveLength(2);
+    });
+
+    // A re-render that keeps the same elements must not tear down a tooltip the pointer is inside.
+    it('keeps its tooltips while the same elements render again', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const second = textEl('Second');
+
+      binding.sync([first, second]);
+      binding.sync([first, second]);
+      binding.sync(hostEl.querySelectorAll('span'));
+
+      expect(getOptions).toHaveBeenCalledTimes(2);
+      expect(disconnected()).toHaveLength(0);
+    });
+
+    it('rebinds once a different element renders in its place', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const replacement = textEl('Replacement');
+
+      binding.sync([first]);
+      binding.sync([replacement]);
+
+      expect(getOptions.mock.calls.map(([el]) => el)).toEqual([first, replacement]);
+      expect(disconnected()).toEqual([MockResizeObserver.instances[0]]);
+    });
+
+    it('rebinds when the set of elements grows or shrinks', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const second = textEl('Second');
+
+      binding.sync([first]);
+      binding.sync([first, second]);
+      binding.sync([first]);
+
+      expect(getOptions).toHaveBeenCalledTimes(4);
+      expect(disconnected()).toHaveLength(3);
+    });
+
+    it('unbinds everything once no element renders, and binds nothing more while none does', () => {
+      const { getOptions, binding } = bindingFor();
+
+      binding.sync([textEl('First')]);
+      binding.sync([null]);
+      binding.sync([]);
+
+      expect(getOptions).toHaveBeenCalledTimes(1);
+      expect(disconnected()).toHaveLength(1);
+    });
+
+    // Reconnecting calls sync again with the same elements, which must bind them anew after destroy.
+    it('destroys every tooltip, and binds the same elements again on the next sync', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const second = textEl('Second');
+
+      binding.sync([first, second]);
+      binding.destroy();
+
+      expect(disconnected()).toHaveLength(2);
+
+      binding.sync([first, second]);
+
+      expect(getOptions).toHaveBeenCalledTimes(4);
     });
   });
 

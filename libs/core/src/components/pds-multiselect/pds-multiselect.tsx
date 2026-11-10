@@ -4,7 +4,7 @@ import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils
 import { isSpecTest, messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 import { formatMessage, pluralize } from '../../i18n';
-import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { bindTruncationTooltips } from '../../utils/truncation-tooltip';
 import type { PluralForms } from '../../i18n';
 import type {
   MultiselectOption,
@@ -40,10 +40,18 @@ const TABBABLE_SELECTOR =
 })
 export class PdsMultiselect {
   private triggerEl?: HTMLButtonElement | HTMLDivElement;
-  private triggerTextCleanup: (() => void) | null = null;
-  private boundTriggerTextEl: HTMLElement | null = null;
-  private selectedItemCleanups: (() => void)[] = [];
-  private boundSelectedItemEls: HTMLElement[] = [];
+  private triggerTextTooltip = bindTruncationTooltips((textEl) => ({
+    // The `part="trigger"` surface, not the host, whose child the panel is; focus on either trigger bubbles there.
+    hostEl: textEl.closest<HTMLElement>('[part="trigger"]') ?? textEl,
+    contentEl: textEl,
+    getTooltipText: () => this.getTriggerText(),
+    manageTabIndex: false,
+  }));
+  private selectedItemTooltips = bindTruncationTooltips((item) => ({
+    hostEl: item,
+    contentEl: item,
+    getTooltipText: () => item.textContent ?? '',
+  }));
   private pillInlineTriggerEl?: HTMLDivElement;
   private searchInputEl?: HTMLInputElement;
   private containerEl?: HTMLElement;
@@ -392,8 +400,6 @@ export class PdsMultiselect {
       this.internals = this.el.attachInternals();
     }
 
-    // Moving the element doesn't re-render it, so componentDidRender won't fire
-    // here; re-bind what disconnecting tore down.
     this.syncTruncationTooltips();
   }
 
@@ -452,80 +458,15 @@ export class PdsMultiselect {
     this.syncTruncationTooltips();
   }
 
-  /**
-   * Binds a tooltip to each place this component clips text, so the whole of it
-   * can still be read. Each tooltip holds listeners and an observer on its
-   * element, so one is re-bound only when a different element renders in its
-   * place: re-binding on every render would tear down a tooltip the pointer is
-   * still inside, and every keystroke in the search field renders again.
-   */
   private syncTruncationTooltips() {
-    this.syncTriggerTextTooltip();
-    this.syncSelectedItemTooltips();
-  }
-
-  private syncTriggerTextTooltip() {
-    const textEl = this.el.shadowRoot?.querySelector<HTMLElement>('.pds-multiselect__trigger-text') ?? null;
-    if (textEl === this.boundTriggerTextEl) return;
-
-    this.triggerTextCleanup?.();
-    this.triggerTextCleanup = null;
-    this.boundTriggerTextEl = textEl;
-    if (textEl === null) return;
-
-    this.triggerTextCleanup = setupTruncationTooltip({
-      // The trigger surface, not the host: the panel is a child of the host, so hovering an
-      // option would reveal the trigger's text along with it. Both triggers expose that surface
-      // as `part="trigger"` — the button itself, or the pill trigger holding the placeholder
-      // beside its chevron — and whichever control takes focus sits inside it, so that focus
-      // bubbles here. Resolved by part rather than by parent, which today is the same element
-      // but which any layout wrapper around the text would quietly take over.
-      hostEl: textEl.closest<HTMLElement>('[part="trigger"]') ?? textEl,
-      contentEl: textEl,
-      getTooltipText: () => this.getTriggerText(),
-      // The trigger already takes focus itself, so a tabindex here would nest a second,
-      // nameless tab stop inside it.
-      manageTabIndex: false,
-    });
-  }
-
-  private syncSelectedItemTooltips() {
-    const items = Array.from(
-      this.el.shadowRoot?.querySelectorAll<HTMLElement>('.pds-multiselect__selected-item') ?? [],
-    );
-    if (
-      items.length === this.boundSelectedItemEls.length &&
-      items.every((item, index) => item === this.boundSelectedItemEls[index])
-    ) {
-      return;
-    }
-
-    this.destroySelectedItemTooltips();
-    this.boundSelectedItemEls = items;
-    // Each item is its own hover target and its own anchor, so the tooltip opens
-    // beside the row the pointer is on rather than the list. Nothing around them
-    // takes focus, so each keeps the tab stop the tooltip adds while it is clipped.
-    this.selectedItemCleanups = items.map((item) =>
-      setupTruncationTooltip({
-        hostEl: item,
-        contentEl: item,
-        // Read when the tooltip opens, so it follows the text the row renders now.
-        getTooltipText: () => item.textContent ?? '',
-      }),
-    );
-  }
-
-  private destroySelectedItemTooltips() {
-    this.selectedItemCleanups.forEach((cleanup) => cleanup());
-    this.selectedItemCleanups = [];
-    this.boundSelectedItemEls = [];
+    const root = this.el.shadowRoot;
+    this.triggerTextTooltip.sync([root?.querySelector<HTMLElement>('.pds-multiselect__trigger-text')]);
+    this.selectedItemTooltips.sync(root?.querySelectorAll<HTMLElement>('.pds-multiselect__selected-item') ?? []);
   }
 
   disconnectedCallback() {
-    this.triggerTextCleanup?.();
-    this.triggerTextCleanup = null;
-    this.boundTriggerTextEl = null;
-    this.destroySelectedItemTooltips();
+    this.triggerTextTooltip.destroy();
+    this.selectedItemTooltips.destroy();
     cancelDebouncedEvent(this.pdsMultiselectSearch);
     this.observer?.disconnect();
     this.cleanupAutoUpdate?.();
