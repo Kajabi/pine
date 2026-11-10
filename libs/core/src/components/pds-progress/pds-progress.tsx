@@ -32,7 +32,7 @@ export class PdsProgress {
 
   /**
   * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-  * @defaultValue 'var(--pine-color-blue-300)'
+  * @defaultValue 'var(--pine-color-primary)'
   */
   @Prop() fillColor: string;
 
@@ -42,7 +42,7 @@ export class PdsProgress {
   @Prop() label!: string;
 
   /**
-  * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+  * Sets the progress fill percentage (0–100). Shown as text when `show-percent` is set.
   * @defaultValue 0
   */
   @Prop() percent = 0;
