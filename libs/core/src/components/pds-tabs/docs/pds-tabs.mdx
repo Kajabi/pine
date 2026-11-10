@@ -30,24 +30,28 @@ Though similar, tabs and accordions both offer different user experiences to kee
 
 ### Accessibility
 
-For best practices in accessibility, be sure to provide a `tablist-label` and a unique `component-id`. The `tabslist-label` will provide context to screen readers about what kind of tabslist information is being presented.
+For best practices in accessibility, be sure to provide a `tablist-label` and a unique `component-id`. The `tablist-label` will provide context to screen readers about what kind of tablist information is being presented.
+
+Each tab's `name` must be unique among the tabs and contain no spaces, and each panel's `name` must match its tab's. The `component-id` and `name` build the ids that link each tab to its panel, and a space breaks that link for screen readers.
 
 ## Properties
 
 <DocArgsTable componentName='pds-tabs' docSource={components} />
 
-### Tabs
+Without `active-tab-name`, the first enabled tab starts active. In `nav` mode, set `active` on the current tab instead.
+
+### Tab
 
 <DocArgsTable componentName='pds-tab' docSource={components} />
 
-### Tabpanel
+### Tab panel
 
 <DocArgsTable componentName='pds-tabpanel' docSource={components} />
 
 ## Examples
-### Variant
+### Variants
 
-### Primary
+#### Primary
 
 The default style of Tabs.
 
@@ -83,7 +87,7 @@ The default style of Tabs.
   </pds-tabs>
 </DocCanvas>
 
-### Pill
+#### Pill
 
 The Pill variant is to better display a list of items.
 
@@ -119,7 +123,7 @@ The Pill variant is to better display a list of items.
   </pds-tabs>
 </DocCanvas>
 
-### Availability
+#### Availability
 
 The Availability variant is to better display dates and/or times.
 
@@ -161,7 +165,7 @@ The Availability variant is to better display dates and/or times.
   </div>
 </DocCanvas>
 
-### Filter
+#### Filter
 
 The Filter variant can be used to better display filtered data.
 
@@ -271,7 +275,7 @@ The `divider` prop adds a full-width rule beneath the tab list, separating the t
 
 ### Stretch
 
-The `stretch` prop makes the component fill its container's height and lets the active panel take the remaining space below the tab list — for tab sets inside a height-bounded region (a rail, a modal body, a split-pane column) where the panel should scroll on its own rather than the page. Give the parent a fixed height for the effect to show.
+The `stretch` prop makes the component fill its container's height, for tab sets inside a height-bounded region (a rail, a modal body, a split-pane column). The active panel doesn't grow to fill the space below the tab list, and it doesn't scroll on its own: it keeps the height of its content, so taller content overflows the region. To scroll long content, wrap it in your own container with a fixed height (such as `max-block-size`) and `overflow: auto`. Give the parent a fixed height for the effect to show.
 
 <DocCanvas mdxSource={{
   react: `

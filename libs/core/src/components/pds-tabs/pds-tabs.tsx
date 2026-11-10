@@ -99,7 +99,7 @@ export class PdsTabs {
   @Prop() divider?: boolean = false;
 
   /**
-   * Stretches the component so the active tab panel fills the remaining height.
+   * Stretches the component to fill its container's height. The active tab panel keeps the height of its content.
    * Requires the component to have a constrained height (e.g. a flex parent).
    * @defaultValue false
    */

@@ -32,7 +32,7 @@ const BaseTemplate = (args) => html`
       id="${args.componentId}"
       component-id="${args.componentId}"
       size="${args.size}"
-      ?backdrop-dismiss=${args.backdropDismiss}
+      backdrop-dismiss="${args.backdropDismiss}"
       ?disable-top-layer=${args.disableTopLayer}
       scrollable="${args.scrollable}"
       ?open=${args.open}
@@ -113,7 +113,7 @@ const DestructiveTemplate = (args) => html`
       id="${args.componentId}"
       component-id="${args.componentId}"
       size="${args.size}"
-      ?backdrop-dismiss=${args.backdropDismiss}
+      backdrop-dismiss="${args.backdropDismiss}"
       ?open=${args.open}
     >
       <pds-modal-header>
@@ -179,7 +179,7 @@ const CustomContentTemplate = (args) => html`
       <pds-modal
         id="${args.componentId}"
         size="${args.size}"
-        ?backdrop-dismiss=${args.backdropDismiss}
+        backdrop-dismiss="${args.backdropDismiss}"
         ?open=${args.open}
       >
 
@@ -267,7 +267,7 @@ const ScrollableTemplate = (args) => {
       <pds-modal
         id="${args.componentId}"
         size="${args.size}"
-        ?backdrop-dismiss=${args.backdropDismiss}
+        backdrop-dismiss="${args.backdropDismiss}"
         ?open=${args.open}
       >
         <pds-modal-header>
@@ -350,7 +350,7 @@ const FullscreenTemplate = (args) => html`
     <pds-modal
       id="${args.componentId}"
       size=${args.size}
-      ?backdrop-dismiss=${args.backdropDismiss}
+      backdrop-dismiss="${args.backdropDismiss}"
       ?open=${args.open}
     >
       <pds-modal-header>
@@ -437,7 +437,7 @@ const NonScrollableTemplate = (args) => html`
       id="${args.componentId}"
       component-id="${args.componentId}"
       size="${args.size}"
-      ?backdrop-dismiss=${args.backdropDismiss}
+      backdrop-dismiss="${args.backdropDismiss}"
       scrollable="${args.scrollable}"
       ?open=${args.open}
       key="${args.scrollable ? 'scrollable' : 'non-scrollable'}"
@@ -683,7 +683,7 @@ const DisableTopLayerTemplate = (args) => html`
       id="${args.componentId}"
       component-id="${args.componentId}"
       size="${args.size}"
-      ?backdrop-dismiss=${args.backdropDismiss}
+      backdrop-dismiss="${args.backdropDismiss}"
       ?disable-top-layer=${args.disableTopLayer}
       ?open=${args.open}
     >

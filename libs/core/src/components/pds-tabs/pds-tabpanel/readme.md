@@ -1,5 +1,6 @@
-# pds-tabs
+# pds-tabpanel
 
+The content for one tab inside `pds-tabs` in panel mode, shown when the `pds-tab` with the same `name` is active.
 
 
 <!-- Auto Generated Below -->
