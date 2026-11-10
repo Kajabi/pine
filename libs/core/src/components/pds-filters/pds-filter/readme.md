@@ -8,6 +8,7 @@
 ## Overview
 
 A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+The `clear` variant has no popover and emits `pdsFilterClear` instead.
 
 ## Properties
 

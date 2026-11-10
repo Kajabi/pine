@@ -1595,6 +1595,7 @@ export namespace Components {
     }
     /**
      * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+     * The `clear` variant has no popover and emits `pdsFilterClear` instead.
      */
     interface PdsFilter {
         /**
@@ -3404,6 +3405,7 @@ declare global {
     }
     /**
      * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+     * The `clear` variant has no popover and emits `pdsFilterClear` instead.
      */
     interface HTMLPdsFilterElement extends Components.PdsFilter, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsFilterElementEventMap>(type: K, listener: (this: HTMLPdsFilterElement, ev: PdsFilterCustomEvent<HTMLPdsFilterElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5514,6 +5516,7 @@ declare namespace LocalJSX {
     }
     /**
      * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+     * The `clear` variant has no popover and emits `pdsFilterClear` instead.
      */
     interface PdsFilter {
         /**
@@ -7841,6 +7844,7 @@ declare module "@stencil/core" {
             "pds-dropdown-menu-separator": LocalJSX.IntrinsicElements["pds-dropdown-menu-separator"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
             /**
              * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+             * The `clear` variant has no popover and emits `pdsFilterClear` instead.
              */
             "pds-filter": LocalJSX.IntrinsicElements["pds-filter"] & JSXBase.HTMLAttributes<HTMLPdsFilterElement>;
             "pds-filters": LocalJSX.IntrinsicElements["pds-filters"] & JSXBase.HTMLAttributes<HTMLPdsFiltersElement>;

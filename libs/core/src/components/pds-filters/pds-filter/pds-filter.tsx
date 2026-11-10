@@ -7,6 +7,7 @@ import { enlarge, trash } from '@pine-ds/icons/icons';
 
 /**
  * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
+ * The `clear` variant has no popover and emits `pdsFilterClear` instead.
  *
  * @part button - Exposes the trigger button element for styling.
  * @part button-content - Exposes the button content container for styling.
