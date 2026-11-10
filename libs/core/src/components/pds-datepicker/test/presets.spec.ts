@@ -124,6 +124,12 @@ describe('pds-datepicker presets', () => {
       expect(offsets({ endOffset: 7 })).toBe('2026-11-17/2026-11-24');
     });
 
+    it('reads a null offset, as JSON often writes a missing one, as today', () => {
+      expect(offsets({ startOffset: -13, endOffset: null as unknown as number })).toBe('2026-11-04/2026-11-17');
+      expect(offsets({ startOffset: null as unknown as number, endOffset: 7 })).toBe('2026-11-17/2026-11-24');
+      expect(offsets({ startOffset: null as unknown as number, endOffset: null as unknown as number })).toBeNull();
+    });
+
     it('has no range when the offsets run backwards or are not whole numbers', () => {
       // A lone negative endOffset runs from today back to an earlier day, so there is no range.
       expect(offsets({ endOffset: -1 })).toBeNull();

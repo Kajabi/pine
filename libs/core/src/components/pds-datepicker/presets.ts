@@ -70,13 +70,13 @@ export function builtInPresetRange(key: string, now: Date): [Date, Date] | null 
 
 const isWholeNumber = (value: unknown): value is number => typeof value === 'number' && Number.isInteger(value);
 
-/** A preset's offset range: whole days from today, a missing one being today. `null` if unusable. */
+/** A preset's offset range: whole days from today, a missing or `null` one being today. `null` if unusable. */
 export function offsetPresetRange(preset: DatepickerPreset, now: Date): [Date, Date] | null {
   const { startOffset, endOffset } = preset;
-  if (startOffset === undefined && endOffset === undefined) return null;
-  // Checked at runtime, as offsets often come from JSON.
-  if (startOffset !== undefined && !isWholeNumber(startOffset)) return null;
-  if (endOffset !== undefined && !isWholeNumber(endOffset)) return null;
+  // Checked at runtime, as offsets often come from JSON, where a missing one is often written `null`.
+  if (startOffset == null && endOffset == null) return null;
+  if (startOffset != null && !isWholeNumber(startOffset)) return null;
+  if (endOffset != null && !isWholeNumber(endOffset)) return null;
 
   const start = addDays(now, startOffset ?? 0);
   const end = addDays(now, endOffset ?? 0);
