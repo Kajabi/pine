@@ -31,8 +31,8 @@ The default `inline` link. Visually, it maintains the underlined appearance of a
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="https://www.google.com"></PdsLink>',
-    webComponent: '<pds-link href="https://www.google.com"></pds-link>'
+    react: `<PdsLink href="https://www.google.com"></PdsLink>`,
+    webComponent: `<pds-link href="https://www.google.com"></pds-link>`
 }}>
   <pds-link href="https://www.google.com"></pds-link>
 </DocCanvas>
@@ -70,8 +70,8 @@ The `plain` variant displays a standard plain hyperlink without an underline.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor" variant="plain"></PdsLink>',
-    webComponent: '<pds-link href="#some-anchor" variant="plain"></pds-link>'
+    react: `<PdsLink href="#some-anchor" variant="plain"></PdsLink>`,
+    webComponent: `<pds-link href="#some-anchor" variant="plain"></pds-link>`
 }}>
   <pds-link href="#some-anchor" variant="plain"></pds-link>
 </DocCanvas>
@@ -106,8 +106,8 @@ An `external` link is styled with an icon to indicate that it will redirect user
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor" external="true"></PdsLink>',
-    webComponent: '<pds-link href="#some-anchor" external="true"></pds-link>'
+    react: `<PdsLink href="#some-anchor" external="true"></PdsLink>`,
+    webComponent: `<pds-link href="#some-anchor" external="true"></pds-link>`
 }}>
   <pds-link href="#some-anchor" external="true"></pds-link>
 </DocCanvas>
@@ -138,8 +138,8 @@ Set `download` to prompt the user to save the linked file instead of opening it.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="/files/quarterly-report.pdf" download="quarterly-report.pdf">Download the quarterly report</PdsLink>',
-    webComponent: '<pds-link href="/files/quarterly-report.pdf" download="quarterly-report.pdf">Download the quarterly report</pds-link>'
+    react: `<PdsLink href="/files/quarterly-report.pdf" download="quarterly-report.pdf">Download the quarterly report</PdsLink>`,
+    webComponent: `<pds-link href="/files/quarterly-report.pdf" download="quarterly-report.pdf">Download the quarterly report</pds-link>`
 }}>
   <pds-link href="/files/quarterly-report.pdf" download="quarterly-report.pdf">Download the quarterly report</pds-link>
 </DocCanvas>
@@ -150,8 +150,8 @@ The `font-size` prop can be used to adjust the size of the link text. `sm`, `md`
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor" font-size="sm"></PdsLink>',
-    webComponent: '<pds-link href="#some-anchor" font-size="sm"></pds-link>'
+    react: `<PdsLink href="#some-anchor" fontSize="sm"></PdsLink>`,
+    webComponent: `<pds-link href="#some-anchor" font-size="sm"></pds-link>`
 }}>
   <pds-link href="#some-anchor" font-size="sm"></pds-link>
 </DocCanvas>
@@ -162,8 +162,8 @@ Providing text within the open and closing tags allows the default link text to 
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor">Overrides default use of href</PdsLink>',
-    webComponent: '<pds-link href="#some-anchor">Overrides default use of href</pds-link>'
+    react: `<PdsLink href="#some-anchor">Overrides default use of href</PdsLink>`,
+    webComponent: `<pds-link href="#some-anchor">Overrides default use of href</pds-link>`
 }}>
   <pds-link href="#some-anchor">Overrides default use of href</pds-link>
 </DocCanvas>
@@ -174,8 +174,8 @@ When no custom text is provided, the link will use the `href` as the link text.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor"></PdsLink>',
-    webComponent: '<pds-link href="#some-anchor"></pds-link>'
+    react: `<PdsLink href="#some-anchor"></PdsLink>`,
+    webComponent: `<pds-link href="#some-anchor"></pds-link>`
 }}>
   <pds-link href="#some-anchor"></pds-link>
 </DocCanvas>
@@ -217,32 +217,13 @@ Two things to pair with it:
     react: `
     import { file } from '@pine-ds/icons/icons';
 
-    <style>{\`
-      .pds-link-row {
-        position: relative;
-      }
-
-      .pds-link-row pds-link::part(link)::after {
-        border-radius: var(--pine-border-radius-md);
-        content: "";
-        inset: 0;
-        position: absolute;
-      }
-
-      .pds-link-row pds-link::part(link):focus-visible {
-        outline: none;
-      }
-
-      .pds-link-row pds-link::part(link):focus-visible::after {
-        outline: var(--pine-outline-focus);
-        outline-offset: var(--pine-border-width-thick);
-      }
-
-      .pds-link-row__trailing {
-        position: relative;
-        z-index: 1;
-      }
-    \`}</style>
+    <style>{
+      '.pds-link-row { position: relative; }' +
+      '.pds-link-row pds-link::part(link)::after { border-radius: var(--pine-border-radius-md); content: ""; inset: 0; position: absolute; }' +
+      '.pds-link-row pds-link::part(link):focus-visible { outline: none; }' +
+      '.pds-link-row pds-link::part(link):focus-visible::after { outline: var(--pine-outline-focus); outline-offset: var(--pine-border-width-thick); }' +
+      '.pds-link-row__trailing { position: relative; z-index: 1; }'
+    }</style>
 
     <PdsBox className="pds-link-row" border borderRadius="md" padding="sm" alignItems="center" justifyContent="space-between">
       <PdsBox gap="xs" alignItems="center">
