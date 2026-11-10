@@ -954,6 +954,49 @@ describe('pds-combobox', () => {
         expect(end.listScrolls).toBe('auto');
       });
 
+      it('glides the padded panel without a panel search, with no jump and no scroll meanwhile', async () => {
+        const page = await setUp('group-display="drill-in" max-height="400px"');
+        // Without a panel search the panel itself is the list: its height, glide and own scroll.
+        const panel = () =>
+          page.evaluate(() => {
+            const el = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') as HTMLElement;
+            return {
+              height: el.getBoundingClientRect().height,
+              width: el.getBoundingClientRect().width,
+              gliding: el.classList.contains('pds-combobox__listbox--height-glide'),
+              scrolls: getComputedStyle(el).overflowY,
+            };
+          });
+        const groups = await panel();
+        expect(groups.scrolls).toBe('auto');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(1) .pds-combobox__group-row-trigger');
+        const start = await panel();
+        expect(start.gliding).toBe(true);
+        // The first frame is the groups' height exactly (the padding isn't added on top), and the
+        // width doesn't change while the height glides.
+        expect(start.height).toBeCloseTo(groups.height, 0);
+        expect(start.width).toBeCloseTo(groups.width, 0);
+        expect(start.scrolls).toBe('hidden');
+
+        // The last frame is the group's settled height: nothing snaps when the glide ends.
+        const last = await page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          const animation = root.getAnimations().find(a => (a as CSSAnimation).animationName === 'pds-combobox-height-glide')!;
+          animation.currentTime = (animation.effect!.getTiming().duration as number) - 1;
+          const el = root.querySelector('.pds-combobox__listbox') as HTMLElement;
+          return el.getBoundingClientRect().height;
+        });
+        await finishGlide(page);
+        await page.waitForChanges();
+        const end = await panel();
+        expect(end.gliding).toBe(false);
+        expect(end.height).toBeCloseTo(last, 0);
+        expect(end.width).toBeCloseTo(groups.width, 0);
+        expect(end.scrolls).toBe('auto');
+      });
+
       it('leaves nothing behind when the dropdown closes mid-glide', async () => {
         const page = await setUp('group-display="drill-in" panel-search');
         await holdAnimations(page);
