@@ -793,7 +793,7 @@ export namespace Components {
          */
         "fullWidth"?: boolean;
         /**
-          * If provided, renders the component as an anchor (`<a>`) element instead of a button. When using href, button-specific props (type, name, value, loading) will be ignored.
+          * If provided, renders the component as an anchor (`<a>`) element instead of a button. When using href, `type`, `name` and `value` are ignored, `loading` blocks navigation, and `disabled` removes the link's `href`.
          */
         "href"?: string;
         /**
@@ -928,7 +928,7 @@ export namespace Components {
          */
         "maxWidth"?: string;
         /**
-          * HTTP method to use for the remove action. Adds data-method and data-turbo-method attributes for Rails/Turbo compatibility. Only applies when removeUrl is provided.
+          * HTTP method to use for the remove action. Maps to the `data-method` and `data-turbo-method` attributes on the remove link, for frameworks that read link methods from them. Only applies when removeUrl is provided.
          */
         "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
         /**
@@ -2238,7 +2238,7 @@ export namespace Components {
         "componentId": string;
         /**
           * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-          * @defaultValue 'var(--pine-color-blue-300)'
+          * @defaultValue 'var(--pine-color-primary)'
          */
         "fillColor": string;
         /**
@@ -2246,7 +2246,7 @@ export namespace Components {
          */
         "label": string;
         /**
-          * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+          * Sets the progress fill percentage (0–100). Shown as text when `show-percent` is set.
           * @defaultValue 0
          */
         "percent": number;
@@ -4680,7 +4680,7 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
-          * If provided, renders the component as an anchor (`<a>`) element instead of a button. When using href, button-specific props (type, name, value, loading) will be ignored.
+          * If provided, renders the component as an anchor (`<a>`) element instead of a button. When using href, `type`, `name` and `value` are ignored, `loading` blocks navigation, and `disabled` removes the link's `href`.
          */
         "href"?: string;
         /**
@@ -4829,7 +4829,7 @@ declare namespace LocalJSX {
          */
         "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<void>) => void;
         /**
-          * HTTP method to use for the remove action. Adds data-method and data-turbo-method attributes for Rails/Turbo compatibility. Only applies when removeUrl is provided.
+          * HTTP method to use for the remove action. Maps to the `data-method` and `data-turbo-method` attributes on the remove link, for frameworks that read link methods from them. Only applies when removeUrl is provided.
          */
         "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
         /**
@@ -6195,7 +6195,7 @@ declare namespace LocalJSX {
         "componentId": string;
         /**
           * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-          * @defaultValue 'var(--pine-color-blue-300)'
+          * @defaultValue 'var(--pine-color-primary)'
          */
         "fillColor"?: string;
         /**
@@ -6203,7 +6203,7 @@ declare namespace LocalJSX {
          */
         "label": string;
         /**
-          * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+          * Sets the progress fill percentage (0–100). Shown as text when `show-percent` is set.
           * @defaultValue 0
          */
         "percent"?: number;

@@ -142,7 +142,10 @@ Text decoration can be set to underline-dotted or strikethrough.
 
 ### Font Size
 
-Font size can be set to preset body text values.
+The `size` prop changes the font size without changing the tag. It accepts two scales:
+
+- Body sizes: `2xs`, `xs`, `sm`, `md`, `lg`, `xl` and `2xl`
+- Heading sizes: `h1` through `h6`
 
 <DocCanvas
   mdxSource={{
@@ -150,6 +153,16 @@ Font size can be set to preset body text values.
     webComponent: '<pds-text size="2xl" tag="p">Hello World!</pds-text>'
 }}>
   <pds-text size="2xl" tag="p">Hello World!</pds-text>
+</DocCanvas>
+
+To make a heading bigger, keep the tag that fits the page's heading outline and raise `size` instead. This `h2` uses the `h1` font size:
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsText tag="h2" size="h1">Section title</PdsText>',
+    webComponent: '<pds-text tag="h2" size="h1">Section title</pds-text>'
+}}>
+  <pds-text tag="h2" size="h1">Section title</pds-text>
 </DocCanvas>
 
 ### Font Weight
@@ -204,12 +217,17 @@ To truncate text, add the `truncate` attribute to the component. Text truncation
 <DocCanvas
   mdxSource={{
     react: `<PdsText style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</PdsText>`,
-    webComponent: `<pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>`
+    webComponent: `<pds-text style="max-width: 40ch;" tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>`
 }}>
   <pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>
 </DocCanvas>
 
-While the text is clipped, it becomes a tab stop so keyboard users can reach the tooltip. Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`), it adds no tab stop of its own: the tooltip appears when that control receives keyboard focus, and on hover as usual. A control that holds more than one truncated text keeps a tab stop on each, so their tooltips never open at once. Text beside a `pds-chip` with a `max-width` in the same control keeps its tab stop too. Focusing that tab stop shows only the text's tooltip, and focusing the control shows only the chip's.
+While the text is clipped, a tooltip shows the full text on hover and keyboard focus:
+
+- Clipped text becomes a tab stop, so keyboard users can reach the tooltip. Text that fits stays out of the tab order.
+- Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`), it adds no tab stop of its own. The tooltip appears when that control receives keyboard focus.
+
+See Technical Notes for controls that hold more than one truncated item.
 
 <DocCanvas
   mdxSource={{
@@ -218,6 +236,11 @@ While the text is clipped, it becomes a tab stop so keyboard users can reach the
 }}>
   <a href="#"><pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</pds-text></a>
 </DocCanvas>
+
+## Technical Notes
+
+- A control that holds more than one truncated text keeps a tab stop on each, so their tooltips never open at once.
+- Truncated text beside a `pds-chip` with a `max-width` in the same control keeps its tab stop too. Focusing that tab stop shows only the text's tooltip, and focusing the control shows only the chip's.
 
 ## Additional Resources
 

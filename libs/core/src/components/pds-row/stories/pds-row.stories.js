@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 export default {
   component: 'pds-row',
@@ -7,13 +8,13 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-row
-  align-items="${args.alignItems}"
+  align-items="${ifDefined(args.alignItems)}"
   ?border=${args.border}
-  component-id="${args.componentId}"
-  col-gap="${args.colGap}"
-  justify-content="${args.justifyContent}"
-  min-height="${args.minHeight}"
-  no-wrap="${args.noWrap}"
+  component-id="${ifDefined(args.componentId)}"
+  col-gap="${ifDefined(args.colGap)}"
+  justify-content="${ifDefined(args.justifyContent)}"
+  min-height="${ifDefined(args.minHeight)}"
+  ?no-wrap=${args.noWrap}
 >
   <pds-box>
     <pds-box border>Item 1</pds-box>
@@ -31,17 +32,17 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   border: true,
   componentId: 'opt0',
-  colGap: '8px',
+  colGap: 'sm',
 };
 
 const GapTemplate = (args) => html`
 <pds-row
-  align-items="${args.alignItems}"
+  align-items="${ifDefined(args.alignItems)}"
   ?border=${args.border}
-  component-id="${args.componentId}"
-  col-gap="${args.colGap}"
-  justify-content="${args.justifyContent}"
-  min-height="${args.minHeight}"
+  component-id="${ifDefined(args.componentId)}"
+  col-gap="${ifDefined(args.colGap)}"
+  justify-content="${ifDefined(args.justifyContent)}"
+  min-height="${ifDefined(args.minHeight)}"
 >
   <pds-box size="4">
     <pds-box

@@ -47,7 +47,7 @@ When `border` is set to `false`, the component will not have a visible border.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsCopytext value="Copy that text" border="false"></PdsCopytext>',
+    react: '<PdsCopytext value="Copy that text" border={false}></PdsCopytext>',
     webComponent: '<pds-copytext value="Copy that text" border="false"></pds-copytext>'
 }}>
   <pds-copytext value="Copy that text" border="false"></pds-copytext>
@@ -69,15 +69,17 @@ When `full-width` is set to `true`, the component will occupy the full width of 
 
 ### Truncate
 
-When `truncate` is set to `true`, long value text will be truncated with an ellipsis added to the end. The full value will still be copied to the clipboard when clicked.
+When `truncate` is set, long value text will be truncated with an ellipsis added to the end. The full value will still be copied to the clipboard when clicked.
+
+`truncate` clips the value only when its container is narrower than the text. The example below gives the parent a width of 350px.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsCopytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></PdsCopytext>',
-    webComponent: '<pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>'
+    react: '<PdsCopytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate></PdsCopytext>',
+    webComponent: '<pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate></pds-copytext>'
 }}>
   <div style={{ width: '350px' }}>
-    <pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>
+    <pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate></pds-copytext>
   </div>
 </DocCanvas>
 

@@ -53,7 +53,7 @@ export class PdsButton {
 
   /**
    * If provided, renders the component as an anchor (`<a>`) element instead of a button.
-   * When using href, button-specific props (type, name, value, loading) will be ignored.
+   * When using href, `type`, `name` and `value` are ignored, `loading` blocks navigation, and `disabled` removes the link's `href`.
    */
   @Prop() href?: string;
 
