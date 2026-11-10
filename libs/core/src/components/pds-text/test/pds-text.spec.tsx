@@ -1,4 +1,4 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { newSpecPage, SpecPage } from '@stencil/core/testing';
 import { PdsText } from '../pds-text';
 
 // Mock ResizeObserver for truncation tooltip tests
@@ -206,16 +206,9 @@ describe('pds-text', () => {
     expect(tooltip).toBeNull();
   });
 
-  it('adds tabindex="0" when truncate is enabled', async () => {
-    const page = await newSpecPage({
-      components: [PdsText],
-      html: `<pds-text tag="p" truncate>Text</pds-text>`,
-    });
-
-    const contentEl = page.root!.shadowRoot!.querySelector('[part="content"]') as HTMLElement;
-    expect(contentEl.getAttribute('tabindex')).toBe('0');
-  });
-
+  // The tabindex is driven by measured overflow, which jsdom cannot report
+  // (scrollWidth and clientWidth are both 0 here, so nothing ever overflows).
+  // Its coverage lives in pds-text.e2e.ts, where layout is real.
   it('does not add tabindex when truncate is disabled', async () => {
     const page = await newSpecPage({
       components: [PdsText],
@@ -224,6 +217,121 @@ describe('pds-text', () => {
 
     const contentEl = page.root!.shadowRoot!.querySelector('[part="content"]') as HTMLElement;
     expect(contentEl.getAttribute('tabindex')).toBeNull();
+  });
+
+  describe('truncation tab stop', () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const truncationTooltip = require('../../../utils/truncation-tooltip');
+    let setupSpy: jest.SpyInstance;
+
+    const lastOptions = () => setupSpy.mock.calls[setupSpy.mock.calls.length - 1][0];
+
+    beforeEach(() => {
+      setupSpy = jest.spyOn(truncationTooltip, 'setupTruncationTooltip');
+    });
+
+    afterEach(() => {
+      setupSpy.mockRestore();
+    });
+
+    it('keeps its own tab stop and focus listener when standalone', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text truncate>Some long text</pds-text>`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(true);
+      expect(lastOptions().focusEl).toBe(page.root);
+    });
+
+    it.each([
+      ['link', '<a href="#">', '</a>'],
+      ['button', '<button type="button">', '</button>'],
+      ['pds-button', '<pds-button>', '</pds-button>'],
+      ['pds-link', '<pds-link href="#">', '</pds-link>'],
+      ['pds-dropdown-menu-item', '<pds-dropdown-menu-item>', '</pds-dropdown-menu-item>'],
+    ])('hands focus to a wrapping %s instead of adding a tab stop', async (_name, open, close) => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `${open}<pds-text truncate>Some long text</pds-text>${close}`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(false);
+      expect(lastOptions().focusEl).toBe(page.body.firstElementChild);
+    });
+
+    it('keeps its own tab stop inside a link with no href, which takes no focus', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a><pds-text truncate>Some long text</pds-text></a>`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(true);
+      expect(lastOptions().focusEl).toBe(page.body.querySelector('pds-text'));
+    });
+
+    it('keeps a tab stop on each truncated text when one control holds several', async () => {
+      await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text><pds-text truncate>Subtitle</pds-text></a>`,
+      });
+
+      const allOptions = setupSpy.mock.calls.map(([options]) => options);
+      expect(allOptions.length).toBeGreaterThanOrEqual(2);
+      allOptions.forEach((options) => {
+        expect(options.manageTabIndex).toBe(true);
+        expect(options.focusEl).toBe(options.hostEl);
+      });
+    });
+
+    it('takes the control back from a bound text when a second truncated text joins it', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text></a>`,
+      });
+      const first = page.body.querySelector('pds-text');
+
+      const second = page.doc.createElement('pds-text');
+      second.setAttribute('truncate', '');
+      second.textContent = 'Subtitle';
+      page.body.querySelector('a')!.appendChild(second);
+      await page.waitForChanges();
+
+      const firstOptions = setupSpy.mock.calls.map(([options]) => options).filter((options) => options.hostEl === first);
+      expect(firstOptions[0].manageTabIndex).toBe(false);
+      expect(firstOptions[firstOptions.length - 1].manageTabIndex).toBe(true);
+      expect(firstOptions[firstOptions.length - 1].focusEl).toBe(first);
+    });
+
+    it('hands focus to the control when its other text is not truncated', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text><pds-text>Subtitle</pds-text></a>`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(false);
+      expect(lastOptions().focusEl).toBe(page.body.firstElementChild);
+    });
+
+    it('keeps its own tab stop beside a chip with a max width, which binds to the control too', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text><pds-chip max-width="60px">Tag</pds-chip></a>`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(true);
+      expect(lastOptions().focusEl).toBe(page.body.querySelector('pds-text'));
+    });
+
+    it('hands focus to the control beside a chip with no max width', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<a href="#"><pds-text truncate>Title</pds-text><pds-chip>Tag</pds-chip></a>`,
+      });
+
+      expect(lastOptions().manageTabIndex).toBe(false);
+      expect(lastOptions().focusEl).toBe(page.body.firstElementChild);
+    });
   });
 
   describe('size validation', () => {
@@ -305,6 +413,61 @@ describe('pds-text', () => {
       const message = warnSpy.mock.calls[0][0] as string;
       expect(message).toContain('…');
       expect(message).not.toContain('x'.repeat(81));
+    });
+
+    it('does not warn or throw when the size attribute is removed', async () => {
+      const errorSpy = jest.spyOn(console, 'error').mockImplementation();
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text size="lg">Hi</pds-text>`,
+      });
+
+      page.root!.removeAttribute('size');
+      await page.waitForChanges();
+
+      expect(warnSpy).not.toHaveBeenCalled();
+      expect(errorSpy).not.toHaveBeenCalled();
+      errorSpy.mockRestore();
+    });
+  });
+
+  // Removing an attribute from a live element (as a DOM morph does) sets its
+  // string prop to `null`, not `undefined`.
+  describe('when an attribute is removed', () => {
+    let errorSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      errorSpy = jest.spyOn(console, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+      errorSpy.mockRestore();
+    });
+
+    const contentClasses = (page: SpecPage) =>
+      page.root!.shadowRoot!.querySelector('[part="content"]')!.className.split(/\s+/).filter(Boolean).sort();
+
+    it.each([
+      ['align', 'center'],
+      ['decoration', 'underline-dotted'],
+      ['gutter', 'md'],
+      ['size', 'lg'],
+      ['weight', 'bold'],
+    ])('drops its %s class without an error', async (attribute, value) => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text ${attribute}="${value}">Hi</pds-text>`,
+      });
+
+      page.root!.removeAttribute(attribute);
+      await page.waitForChanges();
+
+      const fresh = await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text>Hi</pds-text>`,
+      });
+      expect(contentClasses(page)).toEqual(contentClasses(fresh));
+      expect(errorSpy).not.toHaveBeenCalled();
     });
   });
 });

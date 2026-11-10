@@ -1,6 +1,8 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 
 import { copy as copyIcon } from '@pine-ds/icons/icons';
+import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 
 @Component({
@@ -10,6 +12,17 @@ import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 })
 export class PdsCopytext {
   @Element() el: HTMLPdsCopytextElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+    // componentDidLoad runs once, so a moved element re-binds here what disconnectedCallback tore
+    // down. Before the first render there's no valueSpanEl yet, and componentDidLoad binds it.
+    if (this.truncate && this.valueSpanEl) {
+      this.initTruncationTooltip();
+    }
+  }
+
   private truncationCleanup: (() => void) | null = null;
   private valueSpanEl: HTMLSpanElement;
 
@@ -17,7 +30,12 @@ export class PdsCopytext {
    * Determines whether `copytext` should have a visible border.
    * @defaultValue true
    */
-  @Prop({ reflect: true }) border = true;
+  @Prop({ reflect: true, mutable: true }) border = true;
+
+  @Watch('border')
+  restoreBorderDefault(newValue: typeof this.border) {
+    this.border = restoreReflectedDefault(this.el, 'border', newValue, true);
+  }
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -65,6 +83,7 @@ export class PdsCopytext {
   }
 
   disconnectedCallback() {
+    this.hostKeeper.disconnect();
     this.destroyTruncationTooltip();
   }
 
@@ -76,6 +95,10 @@ export class PdsCopytext {
         hostEl: this.el,
         contentEl: this.valueSpanEl,
         getTooltipText: () => this.value || '',
+        // valueSpanEl already sits inside the `<pds-button>` below, which is
+        // already focusable and bubbles focusin to the host — a tabindex on
+        // the span too would nest a second tab stop inside the button.
+        manageTabIndex: false,
       });
     }
   }
@@ -126,8 +149,11 @@ export class PdsCopytext {
   }
 
   render() {
+    const hostClass = this.classNames();
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host class={this.classNames()} id={this.componentId}>
+      <Host class={hostClass} id={this.componentId}>
         <pds-button type="button" variant="unstyled" onClick={this.handleClick}>
           <span ref={(el) => this.valueSpanEl = el}>{this.value}</span>
           <pds-icon aria-hidden="true" icon={copyIcon} size="16px"></pds-icon>

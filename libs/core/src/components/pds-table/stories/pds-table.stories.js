@@ -164,7 +164,7 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Lima</pds-table-cell>
       <pds-table-cell>
         <pds-dropdown-menu placement="bottom-end">
-          <pds-button slot="trigger" size="sm" variant="icon-only"><pds-icon name="dot-menu-horizontal"></pds-icon></pds-button>
+          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon></pds-button>
           <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
           <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
           <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
@@ -186,7 +186,7 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Lima</pds-table-cell>
       <pds-table-cell>
         <pds-dropdown-menu placement="bottom-end">
-          <pds-button slot="trigger" size="sm" variant="icon-only"><pds-icon name="dot-menu-horizontal"></pds-icon></pds-button>
+          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon></pds-button>
           <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
           <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
           <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
@@ -208,7 +208,7 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Lima</pds-table-cell>
       <pds-table-cell>
         <pds-dropdown-menu placement="bottom-end">
-          <pds-button slot="trigger" size="sm" variant="icon-only"><pds-icon name="dot-menu-horizontal"></pds-icon></pds-button>
+          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon></pds-button>
           <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
           <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
           <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
@@ -488,7 +488,7 @@ const TruncateTemplate = (args) => html`
     </pds-table-row>
   </pds-table-body>
 </pds-table>
-<pds-text tag="p" size="xs" color="secondary" gutter="sm">Hover over truncated cells to see the full content in a tooltip.</pds-text>`;
+<pds-text tag="p" size="xs" color="secondary" gutter="sm">Hover over or tab to a truncated cell to see the full content in a tooltip.</pds-text>`;
 
 export const Truncate = TruncateTemplate.bind();
 Truncate.args = {

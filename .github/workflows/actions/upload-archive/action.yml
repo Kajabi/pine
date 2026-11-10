@@ -8,6 +8,9 @@ inputs:
     description: 'The name of the output file'
   name:
     description: 'Zip filename'
+  retention-days:
+    description: 'How long to keep the artifact. Defaults to the repository setting.'
+    default: ''
 
 runs:
   using: 'composite'
@@ -20,3 +23,4 @@ runs:
       with:
         name: ${{ inputs.name }}
         path: ${{ inputs.output }}
+        retention-days: ${{ inputs.retention-days }}

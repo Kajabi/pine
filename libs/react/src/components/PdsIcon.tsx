@@ -5,7 +5,7 @@ import { PdsIconInner } from './inner-proxies';
 
 import { createForwardRef } from './react-component-lib/utils';
 
-interface PdsIconProps {
+export interface PdsIconProps {
   color?: string;
   flipRtl?: boolean;
   icon?: string;

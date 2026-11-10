@@ -1,7 +1,11 @@
 import { Component, h, Prop, Element, Watch } from '@stencil/core';
 import { setColor } from '../../utils/utils';
-import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { FOCUSABLE_WRAPPER, setupTruncationTooltip } from '../../utils/truncation-tooltip';
 import { TEXT_SIZES, TextSizeType } from '../../utils/types';
+
+// Re-runs setup for each text bound to its wrapping control, keyed by host, so a truncated
+// text that joins the same control later can take that control's focus away from it.
+const textsUsingWrapper = new WeakMap<HTMLElement, () => void>();
 
 /**
  * @part content - The text content container
@@ -76,7 +80,12 @@ export class PdsText {
   /**
    * If set or `true`, the text will be truncated. Must add a `width` to the element.
    * When text overflows, a tooltip showing the full text will appear on hover/focus.
-   * Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+   * Note: While the text is overflowing, the element receives tabindex="0" so the
+   * tooltip can be reached by keyboard. Text that fits is left out of the tab order.
+   * Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and
+   * `pds-dropdown-menu-item`) that holds no other truncated text or `pds-chip` with a
+   * `max-width`, no tab stop is added; the tooltip appears when that control receives
+   * keyboard focus.
    */
   @Prop({ reflect: true }) truncate?: boolean;
 
@@ -92,9 +101,10 @@ export class PdsText {
   @Watch('size')
   validateSize(newValue?: string) {
     // Skip when the prop is omitted or explicitly cleared (an empty string is a
-    // common "unset" sentinel). Any other unsupported value — including a
+    // common "unset" sentinel), or its attribute was removed (Stencil sets the
+    // prop to `null`). Any other unsupported value — including a
     // whitespace-only string — is a developer mistake worth warning about.
-    if (newValue === undefined || newValue === '') {
+    if (newValue == null || newValue === '') {
       return;
     }
 
@@ -112,6 +122,14 @@ export class PdsText {
     this.validateSize(this.size);
   }
 
+  // componentDidLoad runs once, so a moved element re-binds here what disconnectedCallback tore
+  // down. Before the first render there's no contentEl yet, and componentDidLoad binds it.
+  connectedCallback() {
+    if (this.truncate && this.contentEl) {
+      this.initTruncationTooltip();
+    }
+  }
+
   componentDidLoad() {
     if (this.truncate) {
       this.initTruncationTooltip();
@@ -127,15 +145,35 @@ export class PdsText {
     this.destroyTruncationTooltip();
 
     if (this.contentEl) {
+      const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
+      // A pds-chip with a max width binds its tooltip to the wrapper too.
+      const others = wrapper === null ? [] : wrapper.querySelectorAll<HTMLPdsTextElement & HTMLPdsChipElement>('pds-text, pds-chip');
+      // One focus on a shared wrapper would open every clipped text's tooltip at once, so texts sharing one each keep
+      // their own stop, and a text bound before this one joined lets go: this one's focus bubbles to the wrapper too.
+      let sharesWrapper = false;
+      for (let i = 0; i < others.length; i++) {
+        const other = others[i];
+        // The property counts too: setting `truncate` runs setup before the next render reflects the attribute.
+        if (other !== this.el && (other.truncate || other.maxWidth || other.hasAttribute('truncate') || other.hasAttribute('max-width'))) {
+          sharesWrapper = true;
+          textsUsingWrapper.get(other)?.();
+        }
+      }
+      const usesWrapper = wrapper !== null && !sharesWrapper;
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.contentEl,
         getTooltipText: () => this.el.textContent || '',
+        // A wrapping link or button already takes focus, so its focus reveals the text instead of a nested tab stop.
+        manageTabIndex: !usesWrapper,
+        focusEl: usesWrapper ? wrapper : this.el,
       });
+      if (usesWrapper) textsUsingWrapper.set(this.el, () => this.initTruncationTooltip());
     }
   }
 
   private destroyTruncationTooltip() {
+    textsUsingWrapper.delete(this.el);
     if (this.truncationCleanup) {
       this.truncationCleanup();
       this.truncationCleanup = null;
@@ -148,27 +186,27 @@ export class PdsText {
     const typeClasses = `
       pds-text
       ${
-        this.align !== undefined && this.align.trim() !== ''
+        this.align != null && this.align.trim() !== ''
           ? `pds-text--align-${this.align}`
           : ''
       }
       ${
-        this.gutter !== undefined && this.gutter.trim() !== ''
+        this.gutter != null && this.gutter.trim() !== ''
           ? `pds-text--gutter-${this.gutter}`
           : ''
       }
       ${
-        this.size !== undefined && this.size.trim() !== ''
+        this.size != null && this.size.trim() !== ''
           ? `pds-text--size-${this.size}`
           : ''
       }
       ${
-        this.weight !== undefined && this.weight.trim() !== ''
+        this.weight != null && this.weight.trim() !== ''
           ? `pds-text--weight-${this.weight}`
           : ''
       }
       ${
-        this.decoration !== undefined && this.decoration.trim() !== ''
+        this.decoration != null && this.decoration.trim() !== ''
           ? `pds-text--decoration-${this.decoration}`
           : ''
       }
@@ -180,7 +218,6 @@ export class PdsText {
         style={this.color && setColor(this.color)}
         class={typeClasses}
         part="content"
-        tabIndex={this.truncate ? 0 : undefined}
       >
         <slot />
       </Tag>

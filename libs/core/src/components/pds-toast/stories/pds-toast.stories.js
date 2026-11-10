@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 
 export default {
@@ -15,6 +16,7 @@ const BaseTemplate = (args) => html`
   duration="${args.duration}"
   icon="${args.icon || ''}"
   type="${args.type}"
+  severity-label=${ifDefined(args.severityLabel)}
 >
   ${args.content || ''}
 </pds-toast>`;
@@ -26,6 +28,7 @@ const WithLinkTemplate = (args) => html`
   duration="${args.duration}"
   icon="${args.icon || ''}"
   type="${args.type}"
+  severity-label=${ifDefined(args.severityLabel)}
 >
   New update available. <a href="#">Learn more</a>
 </pds-toast>`;
@@ -42,7 +45,7 @@ Default.args = {
 export const Danger = BaseTemplate.bind();
 Danger.args = {
   componentId: 'toast-danger',
-  content: 'An error occurred. Please try again.',
+  content: 'Payment failed. Please try again.',
   dismissible: true,
   duration: 0,
   type: 'danger',

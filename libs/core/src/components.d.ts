@@ -8,12 +8,13 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
+import { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
+import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PluralForms } from "./i18n";
-import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
+import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
@@ -21,12 +22,13 @@ import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./component
 export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
+export { ChipSentimentType, ChipSizeType, ChipVariantType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
+export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PluralForms } from "./i18n";
-export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
+export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 export { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 export { SortableEvent } from "sortablejs";
@@ -107,6 +109,11 @@ export namespace Components {
          */
         "hideIcon": boolean;
         /**
+          * Accessible label announcing the alert's severity, read before the heading and message. Pass a translated string to localize it; defaults to English for each variant (`Error`, `Info`, `Success`, `Warning`). The `default` variant has no severity and announces none unless this is set; pass an empty string to announce none for any variant.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -128,6 +135,11 @@ export namespace Components {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Pass an empty string to make the badge decorative. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
+          * @defaultValue 'Verified'
+         */
+        "badgeLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -183,6 +195,9 @@ export namespace Components {
          */
         "variant"?: 'customer' | 'admin';
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsBox {
         /**
           * Defines how items within the box are aligned.
@@ -848,11 +863,11 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate": boolean;
         /**
@@ -875,6 +890,11 @@ export namespace Components {
           * The value of the checkbox that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -892,9 +912,17 @@ export namespace Components {
          */
         "dot": boolean;
         /**
+          * Sets the dot color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
+         */
+        "dotColor"?: string;
+        /**
           * The name of the icon to display before the chip text.
          */
         "icon"?: string;
+        /**
+          * Sets the icon color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the chip's text color. Only applies when `icon` is set.
+         */
+        "iconColor"?: string;
         /**
           * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
@@ -957,7 +985,7 @@ export namespace Components {
          */
         "chipSentiment": ChipSentimentType;
         /**
-          * Clears the selected value and resets the component.
+          * Clears the selected value and resets the component. Works while disabled too, as setting a native control's value from script does.
          */
         "clear": () => Promise<void>;
         /**
@@ -985,7 +1013,12 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
+          * Accessible prefix for the row that returns to the group list when `group-display` is `drill-in`, read before the open group's label. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Back'
+         */
+        "drillInBackLabel": string;
+        /**
+          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus stays on the trigger, or moves to the panel's own search field, so modal focus traps keep working. The mounted dropdown renders in its own shadow root with the combobox's styles, so it needs no global CSS and page CSS can't reach it: customize it with custom properties on `pds-combobox`. Its reading direction, language, theme and custom properties are taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
           * @default 'host'
          */
         "dropdownMount": 'host' | 'body';
@@ -1009,6 +1042,16 @@ export namespace Components {
          */
         "fetchTimeout": number;
         /**
+          * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
+          * @default '380px'
+         */
+        "flyoutMaxWidth": string;
+        /**
+          * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value. The flyout is as wide as its options, between this and `flyout-max-width`.
+          * @default '280px'
+         */
+        "flyoutMinWidth": string;
+        /**
           * Function to format async results. Receives raw API response item.
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
@@ -1016,6 +1059,11 @@ export namespace Components {
           * Gets the value of the currently selected option.
          */
         "getSelectedValue": () => Promise<string | null>;
+        /**
+          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped. `drill-in` lists the groups too, but a click replaces the list with that group's options and a row back to the groups; use it where nothing can open beside the dropdown, such as a side panel. `flyout` falls back to `drill-in` when there is no room for a flyout on either side.
+          * @default 'inline'
+         */
+        "groupDisplay": 'inline' | 'flyout' | 'drill-in';
         /**
           * Helper message to display below the combobox.
          */
@@ -1052,13 +1100,33 @@ export namespace Components {
          */
         "name"?: string;
         /**
+          * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'No options found'
+         */
+        "noOptionsFoundLabel": string;
+        /**
           * Options provided externally (for consumer-managed async).
          */
         "options"?: ComboboxOption[];
         /**
+          * Shows a search field at the top of the dropdown for the `button` and `chip` triggers, which can't be typed into. Search filters the options the same way typing in the `input` trigger does; in a grouped display it also matches group labels.
+          * @default false
+         */
+        "panelSearch": boolean;
+        /**
           * Placeholder text for the input field.
          */
         "placeholder"?: string;
+        /**
+          * Accessible label for the search input inside the dropdown panel (`panel-search`). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Search options'
+         */
+        "searchOptionsLabel": string;
+        /**
+          * Placeholder text for the search input inside the dropdown panel (`panel-search`). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Find...'
+         */
+        "searchPlaceholder": string;
         /**
           * Sets focus on the native input element.
          */
@@ -1083,6 +1151,11 @@ export namespace Components {
           * @default 'fit-content'
          */
         "triggerWidth": string;
+        /**
+          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover. Chip options, custom layouts and group rows aren't affected.
+          * @defaultValue false
+         */
+        "truncate": boolean;
         /**
           * The value of the combobox input.
           * @default ''
@@ -1130,11 +1203,248 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * A field for one date, or in range mode a start and end date, with a calendar to pick from.
+     * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
+     * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+     * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
+     */
+    interface PdsDatepicker {
+        /**
+          * Accessible label for the button that applies the chosen dates.
+          * @default 'Apply'
+         */
+        "applyLabel": string;
+        /**
+          * In range mode, applies the range as soon as its end or a preset is picked, without the Apply and Cancel buttons. Has no effect with the time picker, whose times still need Apply.
+          * @default false
+         */
+        "autoApply": boolean;
+        /**
+          * Accessible label for the button that closes the calendar without changing the dates.
+          * @default 'Cancel'
+         */
+        "cancelLabel": string;
+        /**
+          * Accessible label for the button that empties the field, when `clearable` is set.
+          * @default 'Clear'
+         */
+        "clearLabel": string;
+        /**
+          * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel buttons show, Clear also takes the place of Cancel.
+          * @default false
+         */
+        "clearable": boolean;
+        /**
+          * Closes the calendar.
+         */
+        "close": () => Promise<void>;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * The label of the presets entry that stands for a range of your own. Range mode with presets only.
+          * @default 'Custom range'
+         */
+        "customRangeLabel": string;
+        /**
+          * Determines whether or not the datepicker is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * Accessible label for the end time, in range mode with the time picker.
+          * @default 'End time'
+         */
+        "endTimeLabel": string;
+        /**
+          * Specifies the error message and provides an error-themed treatment to the field.
+         */
+        "errorMessage"?: string;
+        /**
+          * The first day of the week in the calendar, from `0` (Sunday) to `6` (Saturday). Defaults to the locale's first day where the browser reports it, otherwise Sunday.
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`; `--MM-DD` with `month-day`), whatever the format. Typed ISO dates are always accepted too. With `month-day`, a format without `YYYY` is taken as a month-and-day format and used as given, rather than reordered for the locale; leave it unset to follow the locale instead.
+          * @default 'YYYY-MM-DD'
+         */
+        "format": string;
+        /**
+          * Determines whether or not the datepicker takes full width of its container.
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Displays a message or hint below the field.
+         */
+        "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the field should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel": boolean;
+        /**
+          * Accessible label for the hour in the time picker.
+          * @default 'Hour'
+         */
+        "hourLabel": string;
+        /**
+          * Determines whether or not the datepicker is invalid or throws an error.
+         */
+        "invalid"?: boolean;
+        /**
+          * The validation message the form reports when the typed text isn't a date that can be picked.
+          * @default 'Enter a date in the format shown.'
+         */
+        "invalidDateMessage": string;
+        /**
+          * Text to be displayed as the datepicker label.
+         */
+        "label"?: string;
+        /**
+          * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`. Defaults to the nearest `lang` attribute, then the page's `<html lang>`, then `en`.
+         */
+        "locale"?: string;
+        /**
+          * The latest date that can be picked, as `YYYY-MM-DD`.
+         */
+        "max"?: string;
+        /**
+          * The validation message the form reports for a date after `max`. `{date}` is replaced by the latest date, in the field's format.
+          * @default 'Choose {date} or earlier.'
+         */
+        "maxDateMessage": string;
+        /**
+          * The earliest date that can be picked, as `YYYY-MM-DD`.
+         */
+        "min"?: string;
+        /**
+          * The validation message the form reports for a date before `min`. `{date}` is replaced by the earliest date, in the field's format.
+          * @default 'Choose {date} or later.'
+         */
+        "minDateMessage": string;
+        /**
+          * The minutes the time picker steps by, such as `15` or `30`.
+          * @default 1
+         */
+        "minuteIncrement": number;
+        /**
+          * Accessible label for the minute in the time picker.
+          * @default 'Minute'
+         */
+        "minuteLabel": string;
+        /**
+          * Picks a month and day with no year, for a date that comes round every year, such as a birthday. The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes a month and day, and the calendar shows each month without a year or weekdays, with February always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`, and has no effect with `auto-apply`, `presets`, `first-day-of-week`, `min-date-message` or `max-date-message`, which all depend on them.
+          * @default false
+         */
+        "monthDay": boolean;
+        /**
+          * Accessible label for the month dropdown, when `show-dropdowns` is set.
+          * @default 'Month'
+         */
+        "monthLabel": string;
+        /**
+          * Specifies the name. Submitted with the form name/value pair.
+         */
+        "name"?: string;
+        /**
+          * Accessible label for the button that shows the next month.
+          * @default 'Next month'
+         */
+        "nextMonthLabel": string;
+        /**
+          * Opens the calendar and moves focus to the selected day, or today.
+         */
+        "open": () => Promise<void>;
+        /**
+          * Accessible label for the AM or PM choice in the time picker, in locales with a 12-hour clock.
+          * @default 'AM or PM'
+         */
+        "periodLabel": string;
+        /**
+          * Specifies a short hint that describes the expected value of the field. Defaults to the format the field takes, such as `YYYY-MM-DD`; with `month-day`, to an example date instead, such as `December 31`.
+         */
+        "placeholder"?: string;
+        /**
+          * The placement of the calendar relative to the field.
+          * @default 'bottom-start'
+         */
+        "placement": PlacementType;
+        /**
+          * Ranges listed beside the calendar in range mode. A comma-separated list of built-in keys (`today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date`, `last-12-months`), or an array of `{ key, label?, start?, end? }` to relabel built-ins or add your own.
+         */
+        "presets"?: string | DatepickerPreset[];
+        /**
+          * Accessible label for the list of presets, in range mode.
+          * @default 'Presets'
+         */
+        "presetsLabel": string;
+        /**
+          * Accessible label for the button that shows the previous month.
+          * @default 'Previous month'
+         */
+        "previousMonthLabel": string;
+        /**
+          * Picks a range: a start and an end date, from two months side by side, applied with the Apply button. The value is `YYYY-MM-DD/YYYY-MM-DD`.
+          * @default false
+         */
+        "range": boolean;
+        /**
+          * Determines whether or not the datepicker is readonly.
+         */
+        "readonly"?: boolean;
+        /**
+          * Determines whether or not the datepicker is required.
+         */
+        "required"?: boolean;
+        /**
+          * Sets focus on the datepicker's text field.
+         */
+        "setFocus": () => Promise<void>;
+        /**
+          * Shows month and year dropdowns in place of the month heading, for jumping far, as to a birth year.
+          * @default false
+         */
+        "showDropdowns": boolean;
+        /**
+          * Accessible label for the start time, in range mode with the time picker.
+          * @default 'Start time'
+         */
+        "startTimeLabel": string;
+        /**
+          * Accessible label for the time, with the time picker and a single date.
+          * @default 'Time'
+         */
+        "timeLabel": string;
+        /**
+          * Adds hour and minute pickers below the calendar, and the value carries the time as `YYYY-MM-DDTHH:mm`. The dates are applied with the Apply button.
+          * @default false
+         */
+        "timePicker": boolean;
+        /**
+          * Accessible label for the button that opens the calendar. The selected date is added to it.
+          * @default 'Choose date'
+         */
+        "triggerLabel": string;
+        /**
+          * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with the time picker, each date as `YYYY-MM-DDTHH:mm`; with `month-day`, the month and day with no year, as `--MM-DD` (a full date is read too, as that month and day, and rewritten to it). An empty string when nothing is selected.
+          * @default ''
+         */
+        "value"?: string;
+        /**
+          * Accessible label for the year dropdown, when `show-dropdowns` is set.
+          * @default 'Year'
+         */
+        "yearLabel": string;
+    }
     interface PdsDivider {
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Text to be displayed as the divider label, centered between two lines. Ignored when `vertical` is `true`.
+         */
+        "label"?: string;
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
@@ -1144,6 +1454,77 @@ export namespace Components {
           * @defaultValue false
          */
         "vertical": boolean;
+    }
+    /**
+     * A side panel composed from `pds-modal`, non-modal by default.
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
+     * those come from `pds-modal` unchanged.
+     * @lightDom renders-markup
+     */
+    interface PdsDrawer {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance. A `modal` drawer ignores `none`: the page behind it is inert, so focus starts in the drawer.
+          * @default 'auto'
+         */
+        "initialFocus": 'auto' | 'none';
+        /**
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * @default true
+         */
+        "lightDismiss": boolean;
+        /**
+          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page. Read when the drawer opens; changing it while the drawer is open is not supported.
+          * @default false
+         */
+        "modal": boolean;
+        /**
+          * Whether the drawer is open
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Whether the drawer content should be scrollable
+          * @default true
+         */
+        "scrollable": boolean;
+        /**
+          * Which edge of the viewport the drawer is docked to. Logical, so this is free under RTL — `end` is the inline-end edge regardless of direction.
+          * @default 'end'
+         */
+        "side": 'start' | 'end';
+        /**
+          * The drawer's width.
+          * @default 'md'
+         */
+        "size": 'sm' | 'md';
+    }
+    /**
+     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
+     * which caps itself against the viewport for a centered, possibly-shorter
+     * modal, a drawer panel is already edge-to-edge, so its content can simply
+     * flex to fill whatever space the header and footer leave.
+     * @lightDom renders-markup
+     */
+    interface PdsDrawerContent {
+    }
+    /**
+     * @lightDom renders-markup
+     */
+    interface PdsDrawerFooter {
+    }
+    /**
+     * @lightDom renders-markup
+     */
+    interface PdsDrawerHeader {
     }
     interface PdsDropdownMenu {
         /**
@@ -1176,20 +1557,30 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set. Ignored when `informational` is set.
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.
+          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.
           * @defaultValue false
          */
         "external": boolean;
         /**
-          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
+          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href": string | undefined;
         /**
-          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.
+          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+          * @defaultValue false
+         */
+        "informational": boolean;
+        /**
+          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -1405,6 +1796,11 @@ export namespace Components {
          */
         "external": boolean;
         /**
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
           * The font size of the link's text.
           * @defaultValue lg
          */
@@ -1484,9 +1880,12 @@ export namespace Components {
          */
         "variant": 'spinner' | 'typing';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModal {
         /**
-          * Whether the modal can be dismissed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's own close request (such as a back gesture)
           * @default true
          */
         "backdropDismiss": boolean;
@@ -1494,6 +1893,11 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Whether to skip moving focus into the modal when it opens — both our own `setInitialFocus()` and the browser's native "dialog focusing steps", which move focus into the dialog as soon as `show()`/`showModal()` is called regardless of application code. Focus return on close is unaffected either way. For a modal opened by something other than a direct user click — a redirect, a deep link, a background event — stealing focus on open can interrupt whatever the user was already doing. Default `false` preserves today's behavior for every existing consumer.
+          * @default false
+         */
+        "disableInitialFocus": boolean;
         /**
           * Whether the modal opens outside the browser top layer as a non-modal dialog. When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so overlays rendered elsewhere in the DOM (file pickers, editor menus) can display above it via `z-index`. The page is not made inert and focus is not trapped in this mode. Read when the modal opens; changing it while the modal is open is not supported.
           * @default false
@@ -1518,11 +1922,14 @@ export namespace Components {
          */
         "showModal": () => Promise<void>;
         /**
-          * The size of the modal
+          * The size of the modal. Can be a predefined value ('sm', 'md', 'lg', 'fullscreen') or a custom max-width as a CSS length (e.g., '1250px', '80vw'). A custom width stays fluid below that size. A value that is neither falls back to 'md'.
           * @default 'md'
          */
-        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size": ModalSizeType | (string & Record<never, never>);
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalContent {
         /**
           * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
@@ -1530,8 +1937,14 @@ export namespace Components {
          */
         "border": 'none' | 'both' | 'top' | 'bottom';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalFooter {
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalHeader {
     }
     interface PdsMultiselect {
@@ -1545,7 +1958,7 @@ export namespace Components {
          */
         "asyncUrl"?: string;
         /**
-          * Clears all selected values and resets the component.
+          * Clears all selected values and resets the component. Works while disabled too, as setting a native control's value from script does.
          */
         "clear": () => Promise<void>;
         /**
@@ -1664,6 +2077,26 @@ export namespace Components {
          */
         "noOptionsFoundLabel": string;
         /**
+          * Screen-reader hint on each option that has an action, naming the key that runs it. Pass a translated string to localize it; `{action}` is interpolated with the option's action label.
+          * @defaultValue 'Press Right Arrow to {action}'
+         */
+        "optionActionDescription": string;
+        /**
+          * Tooltip for an option's action icon when the option has no `actionLabel`. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Edit {text}'
+         */
+        "optionActionLabel": string;
+        /**
+          * Shows an action icon on each option that has an `actionIcon`, such as an edit pencil. The icon shows on the hovered or highlighted option; clicking it, or pressing Right Arrow on the highlighted option, emits `pdsMultiselectOptionAction`.
+          * @default false
+         */
+        "optionActions": boolean;
+        /**
+          * Display mode for options in the dropdown panel. `'text'` shows each option's text (default). `'chip'` shows each option as a pds-chip, with a dot when the option has a `dotColor`.
+          * @defaultValue 'text'
+         */
+        "optionDisplay": 'text' | 'chip';
+        /**
           * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
         "options"?: MultiselectOption[];
@@ -1691,6 +2124,10 @@ export namespace Components {
           * @defaultValue 'Select...'
          */
         "placeholder": string;
+        /**
+          * Refetches the first page of options from `asyncUrl` for the current search, such as after an option is renamed or recolored elsewhere. Selected items in that page pick up the new text and dot color without emitting a change; other selected items keep the text and dot color they were last loaded with. Does nothing without `asyncUrl`.
+         */
+        "refreshOptions": () => Promise<void>;
         /**
           * If true, the multiselect is required.
           * @default false
@@ -1761,6 +2198,16 @@ export namespace Components {
          */
         "maxWidth"?: number;
         /**
+          * Determines how the popover opens. With `hover`, it also opens when the pointer rests on the trigger and closes when the pointer leaves, until a click on the trigger keeps it open. Enter or Space on the trigger opens it either way.
+          * @defaultValue "click"
+         */
+        "openOn"?: 'click' | 'hover';
+        /**
+          * Sets the padding of the popover content
+          * @defaultValue "md"
+         */
+        "padding"?: PopoverPaddingType;
+        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -1825,6 +2272,9 @@ export namespace Components {
          */
         "icon": string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
@@ -1845,7 +2295,7 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder": boolean;
@@ -1854,7 +2304,7 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel": boolean;
         /**
@@ -1879,7 +2329,15 @@ export namespace Components {
           * The value of the radio that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant": 'default' | 'pill';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsRadioGroup {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -1927,6 +2385,9 @@ export namespace Components {
          */
         "required": boolean;
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
@@ -2041,6 +2502,9 @@ export namespace Components {
          */
         "width"?: string;
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -2067,6 +2531,9 @@ export namespace Components {
          */
         "handleType": 'handle' | 'row';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsSortableItem {
         /**
           * A unique identifier used for the sortable item `id` attribute.
@@ -2133,6 +2600,9 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTab {
         /**
           * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`. Ignored in panel mode, where the active tab is derived from the parent's `activeTabName`.
@@ -2222,7 +2692,7 @@ export namespace Components {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
         "truncate": boolean;
     }
@@ -2276,6 +2746,9 @@ export namespace Components {
          */
         "isSelected"?: boolean;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTabpanel {
         /**
           * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -2322,9 +2795,9 @@ export namespace Components {
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation
+          * Sets tabs variant styles as outlined in Figma documentation. Applies in both panel and nav mode; omitting it renders the primary style.
          */
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
     interface PdsText {
         /**
@@ -2368,7 +2841,7 @@ export namespace Components {
     | 'strong'
     | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order. Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`) that holds no other truncated text or `pds-chip` with a `max-width`, no tab stop is added; the tooltip appears when that control receives keyboard focus.
          */
         "truncate"?: boolean;
         /**
@@ -2492,11 +2965,19 @@ export namespace Components {
          */
         "icon"?: string;
         /**
+          * Accessible label announcing the toast's severity, read before the message. Pass a translated string to localize it; defaults to English (`Error`) for the `danger` type. Other types announce none unless this is set; pass an empty string to announce none.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
           * @default 'default'
          */
         "type": 'default' | 'danger' | 'loading';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTooltip {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2572,6 +3053,14 @@ export interface PdsComboboxCustomEvent<T> extends CustomEvent<T> {
 export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsCopytextElement;
+}
+export interface PdsDatepickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsDatepickerElement;
+}
+export interface PdsDrawerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsDrawerElement;
 }
 export interface PdsDropdownMenuItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2709,6 +3198,9 @@ declare global {
         prototype: HTMLPdsAvatarElement;
         new (): HTMLPdsAvatarElement;
     };
+    /**
+     * @lightDom host-only
+     */
     interface HTMLPdsBoxElement extends Components.PdsBox, HTMLStencilElement {
     }
     var HTMLPdsBoxElement: {
@@ -2809,11 +3301,96 @@ declare global {
         prototype: HTMLPdsCopytextElement;
         new (): HTMLPdsCopytextElement;
     };
+    interface HTMLPdsDatepickerElementEventMap {
+        "pdsDatepickerChange": DatepickerChangeEventDetail;
+        "pdsBlur": FocusEvent;
+        "pdsFocus": FocusEvent;
+    }
+    /**
+     * A field for one date, or in range mode a start and end date, with a calendar to pick from.
+     * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
+     * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+     * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
+     */
+    interface HTMLPdsDatepickerElement extends Components.PdsDatepicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsDatepickerElementEventMap>(type: K, listener: (this: HTMLPdsDatepickerElement, ev: PdsDatepickerCustomEvent<HTMLPdsDatepickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsDatepickerElementEventMap>(type: K, listener: (this: HTMLPdsDatepickerElement, ev: PdsDatepickerCustomEvent<HTMLPdsDatepickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsDatepickerElement: {
+        prototype: HTMLPdsDatepickerElement;
+        new (): HTMLPdsDatepickerElement;
+    };
     interface HTMLPdsDividerElement extends Components.PdsDivider, HTMLStencilElement {
     }
     var HTMLPdsDividerElement: {
         prototype: HTMLPdsDividerElement;
         new (): HTMLPdsDividerElement;
+    };
+    interface HTMLPdsDrawerElementEventMap {
+        "pdsDrawerOpen": void;
+        "pdsDrawerClose": void;
+    }
+    /**
+     * A side panel composed from `pds-modal`, non-modal by default.
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
+     * those come from `pds-modal` unchanged.
+     * @lightDom renders-markup
+     */
+    interface HTMLPdsDrawerElement extends Components.PdsDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsDrawerElementEventMap>(type: K, listener: (this: HTMLPdsDrawerElement, ev: PdsDrawerCustomEvent<HTMLPdsDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsDrawerElementEventMap>(type: K, listener: (this: HTMLPdsDrawerElement, ev: PdsDrawerCustomEvent<HTMLPdsDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsDrawerElement: {
+        prototype: HTMLPdsDrawerElement;
+        new (): HTMLPdsDrawerElement;
+    };
+    /**
+     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
+     * which caps itself against the viewport for a centered, possibly-shorter
+     * modal, a drawer panel is already edge-to-edge, so its content can simply
+     * flex to fill whatever space the header and footer leave.
+     * @lightDom renders-markup
+     */
+    interface HTMLPdsDrawerContentElement extends Components.PdsDrawerContent, HTMLStencilElement {
+    }
+    var HTMLPdsDrawerContentElement: {
+        prototype: HTMLPdsDrawerContentElement;
+        new (): HTMLPdsDrawerContentElement;
+    };
+    /**
+     * @lightDom renders-markup
+     */
+    interface HTMLPdsDrawerFooterElement extends Components.PdsDrawerFooter, HTMLStencilElement {
+    }
+    var HTMLPdsDrawerFooterElement: {
+        prototype: HTMLPdsDrawerFooterElement;
+        new (): HTMLPdsDrawerFooterElement;
+    };
+    /**
+     * @lightDom renders-markup
+     */
+    interface HTMLPdsDrawerHeaderElement extends Components.PdsDrawerHeader, HTMLStencilElement {
+    }
+    var HTMLPdsDrawerHeaderElement: {
+        prototype: HTMLPdsDrawerHeaderElement;
+        new (): HTMLPdsDrawerHeaderElement;
     };
     interface HTMLPdsDropdownMenuElement extends Components.PdsDropdownMenu, HTMLStencilElement {
     }
@@ -2918,6 +3495,9 @@ declare global {
         "pdsModalOpen": void;
         "pdsModalClose": void;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsModalElement extends Components.PdsModal, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsModalElementEventMap>(type: K, listener: (this: HTMLPdsModalElement, ev: PdsModalCustomEvent<HTMLPdsModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2932,18 +3512,27 @@ declare global {
         prototype: HTMLPdsModalElement;
         new (): HTMLPdsModalElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsModalContentElement extends Components.PdsModalContent, HTMLStencilElement {
     }
     var HTMLPdsModalContentElement: {
         prototype: HTMLPdsModalContentElement;
         new (): HTMLPdsModalContentElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsModalFooterElement extends Components.PdsModalFooter, HTMLStencilElement {
     }
     var HTMLPdsModalFooterElement: {
         prototype: HTMLPdsModalFooterElement;
         new (): HTMLPdsModalFooterElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsModalHeaderElement extends Components.PdsModalHeader, HTMLStencilElement {
     }
     var HTMLPdsModalHeaderElement: {
@@ -2956,6 +3545,7 @@ declare global {
         "pdsMultiselectLoadOptions": MultiselectLoadOptionsEventDetail;
         "pdsMultiselectCreate": MultiselectCreateEventDetail;
         "pdsMultiselectDismiss": void;
+        "pdsMultiselectOptionAction": MultiselectOptionActionEventDetail;
     }
     interface HTMLPdsMultiselectElement extends Components.PdsMultiselect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsMultiselectElementEventMap>(type: K, listener: (this: HTMLPdsMultiselectElement, ev: PdsMultiselectCustomEvent<HTMLPdsMultiselectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3004,6 +3594,9 @@ declare global {
     interface HTMLPdsRadioElementEventMap {
         "pdsRadioChange": boolean;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsRadioElement extends Components.PdsRadio, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsRadioElementEventMap>(type: K, listener: (this: HTMLPdsRadioElement, ev: PdsRadioCustomEvent<HTMLPdsRadioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3021,6 +3614,9 @@ declare global {
     interface HTMLPdsRadioGroupElementEventMap {
         "pdsRadioGroupChange": RadioGroupChangeEventDetail;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsRadioGroupElement extends Components.PdsRadioGroup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsRadioGroupElementEventMap>(type: K, listener: (this: HTMLPdsRadioGroupElement, ev: PdsRadioGroupCustomEvent<HTMLPdsRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3035,6 +3631,9 @@ declare global {
         prototype: HTMLPdsRadioGroupElement;
         new (): HTMLPdsRadioGroupElement;
     };
+    /**
+     * @lightDom host-only
+     */
     interface HTMLPdsRowElement extends Components.PdsRow, HTMLStencilElement {
     }
     var HTMLPdsRowElement: {
@@ -3070,6 +3669,9 @@ declare global {
     interface HTMLPdsSortableElementEventMap {
         "pdsSortableItemMoved": SortableEvent;
     }
+    /**
+     * @lightDom host-only
+     */
     interface HTMLPdsSortableElement extends Components.PdsSortable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsSortableElementEventMap>(type: K, listener: (this: HTMLPdsSortableElement, ev: PdsSortableCustomEvent<HTMLPdsSortableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3084,6 +3686,9 @@ declare global {
         prototype: HTMLPdsSortableElement;
         new (): HTMLPdsSortableElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsSortableItemElement extends Components.PdsSortableItem, HTMLStencilElement {
     }
     var HTMLPdsSortableItemElement: {
@@ -3110,6 +3715,9 @@ declare global {
     interface HTMLPdsTabElementEventMap {
         "pdsTabClick": object;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsTabElement extends Components.PdsTab, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsTabElementEventMap>(type: K, listener: (this: HTMLPdsTabElement, ev: PdsTabCustomEvent<HTMLPdsTabElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3204,6 +3812,9 @@ declare global {
         prototype: HTMLPdsTableRowElement;
         new (): HTMLPdsTableRowElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsTabpanelElement extends Components.PdsTabpanel, HTMLStencilElement {
     }
     var HTMLPdsTabpanelElement: {
@@ -3260,6 +3871,9 @@ declare global {
         prototype: HTMLPdsToastElement;
         new (): HTMLPdsToastElement;
     };
+    /**
+     * @lightDom renders-markup
+     */
     interface HTMLPdsTooltipElement extends Components.PdsTooltip, HTMLStencilElement {
     }
     var HTMLPdsTooltipElement: {
@@ -3278,7 +3892,12 @@ declare global {
         "pds-combobox": HTMLPdsComboboxElement;
         "pds-container": HTMLPdsContainerElement;
         "pds-copytext": HTMLPdsCopytextElement;
+        "pds-datepicker": HTMLPdsDatepickerElement;
         "pds-divider": HTMLPdsDividerElement;
+        "pds-drawer": HTMLPdsDrawerElement;
+        "pds-drawer-content": HTMLPdsDrawerContentElement;
+        "pds-drawer-footer": HTMLPdsDrawerFooterElement;
+        "pds-drawer-header": HTMLPdsDrawerHeaderElement;
         "pds-dropdown-menu": HTMLPdsDropdownMenuElement;
         "pds-dropdown-menu-item": HTMLPdsDropdownMenuItemElement;
         "pds-dropdown-menu-separator": HTMLPdsDropdownMenuSeparatorElement;
@@ -3409,6 +4028,11 @@ declare namespace LocalJSX {
          */
         "onPdsAlertDismissClick"?: (event: PdsAlertCustomEvent<void>) => void;
         /**
+          * Accessible label announcing the alert's severity, read before the heading and message. Pass a translated string to localize it; defaults to English for each variant (`Error`, `Info`, `Success`, `Warning`). The `default` variant has no severity and announces none unless this is set; pass an empty string to announce none for any variant.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -3430,6 +4054,11 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Accessible label for the badge icon. Pass a translated string to localize it; defaults to English. Pass an empty string to make the badge decorative. Has no effect on dropdown avatars, where the trigger's `triggerLabel` owns the accessible name.
+          * @defaultValue 'Verified'
+         */
+        "badgeLabel"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -3485,6 +4114,9 @@ declare namespace LocalJSX {
          */
         "variant"?: 'customer' | 'admin';
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsBox {
         /**
           * Defines how items within the box are aligned.
@@ -4155,11 +4787,11 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
          */
         "indeterminate"?: boolean;
         /**
@@ -4187,6 +4819,11 @@ declare namespace LocalJSX {
           * The value of the checkbox that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
     interface PdsChip {
         /**
@@ -4204,9 +4841,17 @@ declare namespace LocalJSX {
          */
         "dot"?: boolean;
         /**
+          * Sets the dot color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
+         */
+        "dotColor"?: string;
+        /**
           * The name of the icon to display before the chip text.
          */
         "icon"?: string;
+        /**
+          * Sets the icon color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Defaults to the chip's text color. Only applies when `icon` is set.
+         */
+        "iconColor"?: string;
         /**
           * Sets the maximum width of the chip, truncating the label with an ellipsis when it overflows. Accepts any CSS length (e.g. '200px', '20ch'). The slot is documented as label text — slotting richer markup may not truncate the way you expect.
          */
@@ -4297,7 +4942,12 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
+          * Accessible prefix for the row that returns to the group list when `group-display` is `drill-in`, read before the open group's label. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Back'
+         */
+        "drillInBackLabel"?: string;
+        /**
+          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus stays on the trigger, or moves to the panel's own search field, so modal focus traps keep working. The mounted dropdown renders in its own shadow root with the combobox's styles, so it needs no global CSS and page CSS can't reach it: customize it with custom properties on `pds-combobox`. Its reading direction, language, theme and custom properties are taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
           * @default 'host'
          */
         "dropdownMount"?: 'host' | 'body';
@@ -4321,6 +4971,16 @@ declare namespace LocalJSX {
          */
         "fetchTimeout"?: number;
         /**
+          * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
+          * @default '380px'
+         */
+        "flyoutMaxWidth"?: string;
+        /**
+          * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value. The flyout is as wide as its options, between this and `flyout-max-width`.
+          * @default '280px'
+         */
+        "flyoutMinWidth"?: string;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -4328,6 +4988,11 @@ declare namespace LocalJSX {
           * Function to format async results. Receives raw API response item.
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
+        /**
+          * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown. `inline` lists each group's label above its options. `flyout` lists the groups, and opens a group's options in a panel beside it on hover or click; while searching, the matching options are listed under their group labels, and search also matches group labels. `flyout` groups by `<optgroup>` (or `group`) only: options under a `<pds-text>` heading are listed ungrouped. `drill-in` lists the groups too, but a click replaces the list with that group's options and a row back to the groups; use it where nothing can open beside the dropdown, such as a side panel. `flyout` falls back to `drill-in` when there is no room for a flyout on either side.
+          * @default 'inline'
+         */
+        "groupDisplay"?: 'inline' | 'flyout' | 'drill-in';
         /**
           * Helper message to display below the combobox.
          */
@@ -4364,6 +5029,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
+          * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'No options found'
+         */
+        "noOptionsFoundLabel"?: string;
+        /**
           * Emitted when the value changes.
          */
         "onPdsComboboxChange"?: (event: PdsComboboxCustomEvent<{ value: string }>) => void;
@@ -4380,9 +5050,24 @@ declare namespace LocalJSX {
          */
         "options"?: ComboboxOption[];
         /**
+          * Shows a search field at the top of the dropdown for the `button` and `chip` triggers, which can't be typed into. Search filters the options the same way typing in the `input` trigger does; in a grouped display it also matches group labels.
+          * @default false
+         */
+        "panelSearch"?: boolean;
+        /**
           * Placeholder text for the input field.
          */
         "placeholder"?: string;
+        /**
+          * Accessible label for the search input inside the dropdown panel (`panel-search`). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Search options'
+         */
+        "searchOptionsLabel"?: string;
+        /**
+          * Placeholder text for the search input inside the dropdown panel (`panel-search`). Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Find...'
+         */
+        "searchPlaceholder"?: string;
         /**
           * Determines the combobox trigger: 'input' (editable input), 'button' (button-like, non-editable), or 'chip' (chip-like, non-editable).
           * @default 'input'
@@ -4403,6 +5088,11 @@ declare namespace LocalJSX {
           * @default 'fit-content'
          */
         "triggerWidth"?: string;
+        /**
+          * Determines whether the button trigger's label and the option labels should truncate and display with an ellipsis. When a label overflows, a `title` showing the full label will appear on hover. Chip options, custom layouts and group rows aren't affected.
+          * @defaultValue false
+         */
+        "truncate"?: boolean;
         /**
           * The value of the combobox input.
           * @default ''
@@ -4454,11 +5144,252 @@ declare namespace LocalJSX {
          */
         "value": string;
     }
+    /**
+     * A field for one date, or in range mode a start and end date, with a calendar to pick from.
+     * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
+     * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+     * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
+     */
+    interface PdsDatepicker {
+        /**
+          * Accessible label for the button that applies the chosen dates.
+          * @default 'Apply'
+         */
+        "applyLabel"?: string;
+        /**
+          * In range mode, applies the range as soon as its end or a preset is picked, without the Apply and Cancel buttons. Has no effect with the time picker, whose times still need Apply.
+          * @default false
+         */
+        "autoApply"?: boolean;
+        /**
+          * Accessible label for the button that closes the calendar without changing the dates.
+          * @default 'Cancel'
+         */
+        "cancelLabel"?: string;
+        /**
+          * Accessible label for the button that empties the field, when `clearable` is set.
+          * @default 'Clear'
+         */
+        "clearLabel"?: string;
+        /**
+          * Adds a button in the field that empties it, shown while there's a value. Where Apply and Cancel buttons show, Clear also takes the place of Cancel.
+          * @default false
+         */
+        "clearable"?: boolean;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * The label of the presets entry that stands for a range of your own. Range mode with presets only.
+          * @default 'Custom range'
+         */
+        "customRangeLabel"?: string;
+        /**
+          * Determines whether or not the datepicker is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * Accessible label for the end time, in range mode with the time picker.
+          * @default 'End time'
+         */
+        "endTimeLabel"?: string;
+        /**
+          * Specifies the error message and provides an error-themed treatment to the field.
+         */
+        "errorMessage"?: string;
+        /**
+          * The first day of the week in the calendar, from `0` (Sunday) to `6` (Saturday). Defaults to the locale's first day where the browser reports it, otherwise Sunday.
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * How the field shows dates and reads typed ones, as tokens: `YYYY`, `MMMM` or `MMM` (month name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and with the time picker `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM, in the locale), as `MM/DD/YYYY`, `MMM D, YYYY` or `D.M.YYYY h:mm A`. Put literal text in brackets, as `[Due] D/M/YYYY`. The value and the change event stay ISO (`YYYY-MM-DD`; `--MM-DD` with `month-day`), whatever the format. Typed ISO dates are always accepted too. With `month-day`, a format without `YYYY` is taken as a month-and-day format and used as given, rather than reordered for the locale; leave it unset to follow the locale instead.
+          * @default 'YYYY-MM-DD'
+         */
+        "format"?: string;
+        /**
+          * Determines whether or not the datepicker takes full width of its container.
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Displays a message or hint below the field.
+         */
+        "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the field should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
+          * Accessible label for the hour in the time picker.
+          * @default 'Hour'
+         */
+        "hourLabel"?: string;
+        /**
+          * Determines whether or not the datepicker is invalid or throws an error.
+         */
+        "invalid"?: boolean;
+        /**
+          * The validation message the form reports when the typed text isn't a date that can be picked.
+          * @default 'Enter a date in the format shown.'
+         */
+        "invalidDateMessage"?: string;
+        /**
+          * Text to be displayed as the datepicker label.
+         */
+        "label"?: string;
+        /**
+          * The locale used for month and weekday names, as a BCP 47 language tag such as `en-US` or `fr`. Defaults to the nearest `lang` attribute, then the page's `<html lang>`, then `en`.
+         */
+        "locale"?: string;
+        /**
+          * The latest date that can be picked, as `YYYY-MM-DD`.
+         */
+        "max"?: string;
+        /**
+          * The validation message the form reports for a date after `max`. `{date}` is replaced by the latest date, in the field's format.
+          * @default 'Choose {date} or earlier.'
+         */
+        "maxDateMessage"?: string;
+        /**
+          * The earliest date that can be picked, as `YYYY-MM-DD`.
+         */
+        "min"?: string;
+        /**
+          * The validation message the form reports for a date before `min`. `{date}` is replaced by the earliest date, in the field's format.
+          * @default 'Choose {date} or later.'
+         */
+        "minDateMessage"?: string;
+        /**
+          * The minutes the time picker steps by, such as `15` or `30`.
+          * @default 1
+         */
+        "minuteIncrement"?: number;
+        /**
+          * Accessible label for the minute in the time picker.
+          * @default 'Minute'
+         */
+        "minuteLabel"?: string;
+        /**
+          * Picks a month and day with no year, for a date that comes round every year, such as a birthday. The value is `--MM-DD` (ISO 8601 without a year), the field shows the date as the locale writes a month and day, and the calendar shows each month without a year or weekdays, with February always having its 29th. Turns off `range`, `time-picker`, `show-dropdowns`, `min` and `max`, and has no effect with `auto-apply`, `presets`, `first-day-of-week`, `min-date-message` or `max-date-message`, which all depend on them.
+          * @default false
+         */
+        "monthDay"?: boolean;
+        /**
+          * Accessible label for the month dropdown, when `show-dropdowns` is set.
+          * @default 'Month'
+         */
+        "monthLabel"?: string;
+        /**
+          * Specifies the name. Submitted with the form name/value pair.
+         */
+        "name"?: string;
+        /**
+          * Accessible label for the button that shows the next month.
+          * @default 'Next month'
+         */
+        "nextMonthLabel"?: string;
+        /**
+          * Emitted when the datepicker loses focus: when focus leaves the field and the calendar.
+         */
+        "onPdsBlur"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when the value changes.  This event will not emit when programmatically setting the `value` property.
+         */
+        "onPdsDatepickerChange"?: (event: PdsDatepickerCustomEvent<DatepickerChangeEventDetail>) => void;
+        /**
+          * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside.
+         */
+        "onPdsFocus"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
+        /**
+          * Accessible label for the AM or PM choice in the time picker, in locales with a 12-hour clock.
+          * @default 'AM or PM'
+         */
+        "periodLabel"?: string;
+        /**
+          * Specifies a short hint that describes the expected value of the field. Defaults to the format the field takes, such as `YYYY-MM-DD`; with `month-day`, to an example date instead, such as `December 31`.
+         */
+        "placeholder"?: string;
+        /**
+          * The placement of the calendar relative to the field.
+          * @default 'bottom-start'
+         */
+        "placement"?: PlacementType;
+        /**
+          * Ranges listed beside the calendar in range mode. A comma-separated list of built-in keys (`today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`, `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date`, `last-12-months`), or an array of `{ key, label?, start?, end? }` to relabel built-ins or add your own.
+         */
+        "presets"?: string | DatepickerPreset[];
+        /**
+          * Accessible label for the list of presets, in range mode.
+          * @default 'Presets'
+         */
+        "presetsLabel"?: string;
+        /**
+          * Accessible label for the button that shows the previous month.
+          * @default 'Previous month'
+         */
+        "previousMonthLabel"?: string;
+        /**
+          * Picks a range: a start and an end date, from two months side by side, applied with the Apply button. The value is `YYYY-MM-DD/YYYY-MM-DD`.
+          * @default false
+         */
+        "range"?: boolean;
+        /**
+          * Determines whether or not the datepicker is readonly.
+         */
+        "readonly"?: boolean;
+        /**
+          * Determines whether or not the datepicker is required.
+         */
+        "required"?: boolean;
+        /**
+          * Shows month and year dropdowns in place of the month heading, for jumping far, as to a birth year.
+          * @default false
+         */
+        "showDropdowns"?: boolean;
+        /**
+          * Accessible label for the start time, in range mode with the time picker.
+          * @default 'Start time'
+         */
+        "startTimeLabel"?: string;
+        /**
+          * Accessible label for the time, with the time picker and a single date.
+          * @default 'Time'
+         */
+        "timeLabel"?: string;
+        /**
+          * Adds hour and minute pickers below the calendar, and the value carries the time as `YYYY-MM-DDTHH:mm`. The dates are applied with the Apply button.
+          * @default false
+         */
+        "timePicker"?: boolean;
+        /**
+          * Accessible label for the button that opens the calendar. The selected date is added to it.
+          * @default 'Choose date'
+         */
+        "triggerLabel"?: string;
+        /**
+          * The selected date as `YYYY-MM-DD`, or in range mode the range as `YYYY-MM-DD/YYYY-MM-DD`; with the time picker, each date as `YYYY-MM-DDTHH:mm`; with `month-day`, the month and day with no year, as `--MM-DD` (a full date is read too, as that month and day, and rewritten to it). An empty string when nothing is selected.
+          * @default ''
+         */
+        "value"?: string;
+        /**
+          * Accessible label for the year dropdown, when `show-dropdowns` is set.
+          * @default 'Year'
+         */
+        "yearLabel"?: string;
+    }
     interface PdsDivider {
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Text to be displayed as the divider label, centered between two lines. Ignored when `vertical` is `true`.
+         */
+        "label"?: string;
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
@@ -4468,6 +5399,85 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "vertical"?: boolean;
+    }
+    /**
+     * A side panel composed from `pds-modal`, non-modal by default.
+     * By default, unlike `pds-modal`, the page stays interactive while a drawer
+     * is open: no dimming, no blur, no scroll lock, no click blocking.
+     * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+     * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+     * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+     * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
+     * those come from `pds-modal` unchanged.
+     * @lightDom renders-markup
+     */
+    interface PdsDrawer {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Whether to move focus into the drawer when it opens. `auto` is right for a drawer opened by a direct user action (a click, a deep link the user just navigated to). Set to `none` for a drawer that can open from a background event while the user is mid-task elsewhere on the page — moving focus there would interrupt them, and the page stays live under a non-modal drawer, so it is a genuine data-entry risk, not just an annoyance. A `modal` drawer ignores `none`: the page behind it is inert, so focus starts in the drawer.
+          * @default 'auto'
+         */
+        "initialFocus"?: 'auto' | 'none';
+        /**
+          * Whether the drawer can be dismissed with a pointerdown outside it (in a `modal` drawer, a click on its backdrop). Replaces `pds-modal`'s `backdropDismiss`. This also gates Escape, matching how `backdropDismiss` gates Escape on `pds-modal` today: setting this to `false` means the close button is the only way out.  A trigger outside the drawer should only ever set `open` to `true` and leave closing to the drawer itself. A toggle-style trigger (`open = !open`) fights light dismiss: clicking it while open closes the drawer on `pointerdown`, then the trigger's own click handler re-opens it.
+          * @default true
+         */
+        "lightDismiss"?: boolean;
+        /**
+          * Whether the drawer is modal. A modal drawer dims the page behind it with a backdrop, makes the page inert, and keeps focus inside the drawer, like `pds-modal`. Use it for a task the page should wait on. Leave it off for a panel people work alongside the page. Read when the drawer opens; changing it while the drawer is open is not supported.
+          * @default false
+         */
+        "modal"?: boolean;
+        /**
+          * Emitted when the drawer is closed
+         */
+        "onPdsDrawerClose"?: (event: PdsDrawerCustomEvent<void>) => void;
+        /**
+          * Emitted when the drawer is opened
+         */
+        "onPdsDrawerOpen"?: (event: PdsDrawerCustomEvent<void>) => void;
+        /**
+          * Whether the drawer is open
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Whether the drawer content should be scrollable
+          * @default true
+         */
+        "scrollable"?: boolean;
+        /**
+          * Which edge of the viewport the drawer is docked to. Logical, so this is free under RTL — `end` is the inline-end edge regardless of direction.
+          * @default 'end'
+         */
+        "side"?: 'start' | 'end';
+        /**
+          * The drawer's width.
+          * @default 'md'
+         */
+        "size"?: 'sm' | 'md';
+    }
+    /**
+     * Fills the drawer panel's height by default — unlike `pds-modal-content`,
+     * which caps itself against the viewport for a centered, possibly-shorter
+     * modal, a drawer panel is already edge-to-edge, so its content can simply
+     * flex to fill whatever space the header and footer leave.
+     * @lightDom renders-markup
+     */
+    interface PdsDrawerContent {
+    }
+    /**
+     * @lightDom renders-markup
+     */
+    interface PdsDrawerFooter {
+    }
+    /**
+     * @lightDom renders-markup
+     */
+    interface PdsDrawerHeader {
     }
     interface PdsDropdownMenu {
         /**
@@ -4496,24 +5506,34 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set. Ignored when `informational` is set.
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.
+          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.
           * @defaultValue false
          */
         "external"?: boolean;
         /**
-          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
+          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button. Ignored when `informational` is set.
          */
         "href"?: string | undefined;
+        /**
+          * It determines whether or not the dropdown-item is informational: text that the arrow keys reach but that can't be activated. Takes precedence over `href` and `destructive`. Screen readers announce it as dimmed or unavailable, the same way as a disabled item.
+          * @defaultValue false
+         */
+        "informational"?: boolean;
         /**
           * Emitted when the dropdown-item is clicked.
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
         /**
-          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.
+          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -4753,6 +5773,11 @@ declare namespace LocalJSX {
          */
         "external"?: boolean;
         /**
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * @defaultValue '(opens in a new tab)'
+         */
+        "externalLabel"?: string;
+        /**
           * The font size of the link's text.
           * @defaultValue lg
          */
@@ -4832,9 +5857,12 @@ declare namespace LocalJSX {
          */
         "variant"?: 'spinner' | 'typing';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModal {
         /**
-          * Whether the modal can be dismissed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop, pressing Escape, or the browser's own close request (such as a back gesture)
           * @default true
          */
         "backdropDismiss"?: boolean;
@@ -4842,6 +5870,11 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Whether to skip moving focus into the modal when it opens — both our own `setInitialFocus()` and the browser's native "dialog focusing steps", which move focus into the dialog as soon as `show()`/`showModal()` is called regardless of application code. Focus return on close is unaffected either way. For a modal opened by something other than a direct user click — a redirect, a deep link, a background event — stealing focus on open can interrupt whatever the user was already doing. Default `false` preserves today's behavior for every existing consumer.
+          * @default false
+         */
+        "disableInitialFocus"?: boolean;
         /**
           * Whether the modal opens outside the browser top layer as a non-modal dialog. When `true` it opens with `dialog.show()` instead of `dialog.showModal()`, so overlays rendered elsewhere in the DOM (file pickers, editor menus) can display above it via `z-index`. The page is not made inert and focus is not trapped in this mode. Read when the modal opens; changing it while the modal is open is not supported.
           * @default false
@@ -4866,11 +5899,14 @@ declare namespace LocalJSX {
          */
         "scrollable"?: boolean;
         /**
-          * The size of the modal
+          * The size of the modal. Can be a predefined value ('sm', 'md', 'lg', 'fullscreen') or a custom max-width as a CSS length (e.g., '1250px', '80vw'). A custom width stays fluid below that size. A value that is neither falls back to 'md'.
           * @default 'md'
          */
-        "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size"?: ModalSizeType | (string & Record<never, never>);
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalContent {
         /**
           * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
@@ -4878,8 +5914,14 @@ declare namespace LocalJSX {
          */
         "border"?: 'none' | 'both' | 'top' | 'bottom';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalFooter {
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsModalHeader {
     }
     interface PdsMultiselect {
@@ -5028,9 +6070,33 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
         /**
+          * Emitted when an option's action runs, from a click on its icon or Right Arrow on the highlighted option. The panel closes and focus returns to the trigger first, so a modal opened from the handler restores focus to the trigger.
+         */
+        "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
+        /**
           * Emitted on search input (for consumer-managed async).
          */
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
+        /**
+          * Screen-reader hint on each option that has an action, naming the key that runs it. Pass a translated string to localize it; `{action}` is interpolated with the option's action label.
+          * @defaultValue 'Press Right Arrow to {action}'
+         */
+        "optionActionDescription"?: string;
+        /**
+          * Tooltip for an option's action icon when the option has no `actionLabel`. Pass a translated string to localize it; `{text}` is interpolated.
+          * @defaultValue 'Edit {text}'
+         */
+        "optionActionLabel"?: string;
+        /**
+          * Shows an action icon on each option that has an `actionIcon`, such as an edit pencil. The icon shows on the hovered or highlighted option; clicking it, or pressing Right Arrow on the highlighted option, emits `pdsMultiselectOptionAction`.
+          * @default false
+         */
+        "optionActions"?: boolean;
+        /**
+          * Display mode for options in the dropdown panel. `'text'` shows each option's text (default). `'chip'` shows each option as a pds-chip, with a dot when the option has a `dotColor`.
+          * @defaultValue 'text'
+         */
+        "optionDisplay"?: 'text' | 'chip';
         /**
           * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
@@ -5129,6 +6195,16 @@ declare namespace LocalJSX {
          */
         "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         /**
+          * Determines how the popover opens. With `hover`, it also opens when the pointer rests on the trigger and closes when the pointer leaves, until a click on the trigger keeps it open. Enter or Space on the trigger opens it either way.
+          * @defaultValue "click"
+         */
+        "openOn"?: 'click' | 'hover';
+        /**
+          * Sets the padding of the popover content
+          * @defaultValue "md"
+         */
+        "padding"?: PopoverPaddingType;
+        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -5185,6 +6261,9 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
@@ -5205,7 +6284,7 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
-          * Adds a border around the radio component for better visual separation.
+          * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
           * @defaultValue false
          */
         "hasBorder"?: boolean;
@@ -5214,7 +6293,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
          */
         "hideLabel"?: boolean;
         /**
@@ -5243,7 +6322,15 @@ declare namespace LocalJSX {
           * The value of the radio that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+          * @defaultValue default
+         */
+        "variant"?: 'default' | 'pill';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsRadioGroup {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -5295,6 +6382,9 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
@@ -5429,6 +6519,9 @@ declare namespace LocalJSX {
          */
         "width"?: string;
     }
+    /**
+     * @lightDom host-only
+     */
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -5459,6 +6552,9 @@ declare namespace LocalJSX {
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsSortableItem {
         /**
           * A unique identifier used for the sortable item `id` attribute.
@@ -5514,7 +6610,7 @@ declare namespace LocalJSX {
         /**
           * Displays text to describe the input.
          */
-        "label": string;
+        "label"?: string;
         /**
           * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
          */
@@ -5533,6 +6629,9 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTab {
         /**
           * Marks this tab as the current one in navigation mode (`href` set). Applies the active treatment and `aria-current="page"`. Ignored in panel mode, where the active tab is derived from the parent's `activeTabName`.
@@ -5627,7 +6726,7 @@ declare namespace LocalJSX {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
         "truncate"?: boolean;
     }
@@ -5684,6 +6783,9 @@ declare namespace LocalJSX {
          */
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTabpanel {
         /**
           * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -5730,9 +6832,9 @@ declare namespace LocalJSX {
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation
+          * Sets tabs variant styles as outlined in Figma documentation. Applies in both panel and nav mode; omitting it renders the primary style.
          */
-        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "variant"?: 'primary' | 'availability' | 'filter' | 'pill';
     }
     interface PdsText {
         /**
@@ -5776,7 +6878,7 @@ declare namespace LocalJSX {
     | 'strong'
     | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the text is overflowing, the element receives tabindex="0" so the tooltip can be reached by keyboard. Text that fits is left out of the tab order. Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`) that holds no other truncated text or `pds-chip` with a `max-width`, no tab stop is added; the tooltip appears when that control receives keyboard focus.
          */
         "truncate"?: boolean;
         /**
@@ -5923,11 +7025,19 @@ declare namespace LocalJSX {
          */
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
         /**
+          * Accessible label announcing the toast's severity, read before the message. Pass a translated string to localize it; defaults to English (`Error`) for the `danger` type. Other types announce none unless this is set; pass an empty string to announce none.
+          * @defaultValue undefined
+         */
+        "severityLabel"?: string;
+        /**
           * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
           * @default 'default'
          */
         "type"?: 'default' | 'danger' | 'loading';
     }
+    /**
+     * @lightDom renders-markup
+     */
     interface PdsTooltip {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -5983,10 +7093,12 @@ declare namespace LocalJSX {
         "hideIcon": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
         "dismissLabel": string;
+        "severityLabel": string;
     }
     interface PdsAvatarAttributes {
         "alt": string | null;
         "badge": boolean;
+        "badgeLabel": string;
         "componentId": string;
         "dropdown": boolean;
         "image": string | null;
@@ -6156,11 +7268,14 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsChipAttributes {
         "componentId": string;
         "dot": boolean;
+        "dotColor": string;
         "icon": string;
+        "iconColor": string;
         "size": ChipSizeType;
         "sentiment": ChipSentimentType;
         "variant": ChipVariantType;
@@ -6180,17 +7295,26 @@ declare namespace LocalJSX {
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         "dropdownWidth": string;
         "dropdownMount": 'host' | 'body';
+        "drillInBackLabel": string;
+        "noOptionsFoundLabel": string;
+        "flyoutMaxWidth": string;
+        "flyoutMinWidth": string;
+        "groupDisplay": 'inline' | 'flyout' | 'drill-in';
         "helperMessage": string;
         "hideLabel": boolean;
         "invalid": boolean;
         "label": string;
         "maxHeight": string;
         "mode": 'filter' | 'select-only';
+        "panelSearch": boolean;
         "placeholder": string;
+        "searchOptionsLabel": string;
+        "searchPlaceholder": string;
         "trigger": 'input' | 'button' | 'chip';
         "triggerWidth": string;
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         "triggerShape": 'pill' | 'input';
+        "truncate": boolean;
         "chipSentiment": ChipSentimentType;
         "chipLarge": boolean;
         "chipIcon": string;
@@ -6214,10 +7338,69 @@ declare namespace LocalJSX {
         "truncate": boolean;
         "value": string;
     }
+    interface PdsDatepickerAttributes {
+        "applyLabel": string;
+        "autoApply": boolean;
+        "cancelLabel": string;
+        "clearable": boolean;
+        "clearLabel": string;
+        "componentId": string;
+        "customRangeLabel": string;
+        "disabled": boolean;
+        "endTimeLabel": string;
+        "errorMessage": string;
+        "firstDayOfWeek": number;
+        "format": string;
+        "fullWidth": boolean;
+        "helperMessage": string;
+        "hideLabel": boolean;
+        "hourLabel": string;
+        "invalid": boolean;
+        "invalidDateMessage": string;
+        "maxDateMessage": string;
+        "minDateMessage": string;
+        "label": string;
+        "locale": string;
+        "max": string;
+        "min": string;
+        "minuteIncrement": number;
+        "minuteLabel": string;
+        "monthLabel": string;
+        "monthDay": boolean;
+        "name": string;
+        "nextMonthLabel": string;
+        "periodLabel": string;
+        "placeholder": string;
+        "placement": PlacementType;
+        "presets": string | DatepickerPreset[];
+        "presetsLabel": string;
+        "previousMonthLabel": string;
+        "range": boolean;
+        "readonly": boolean;
+        "required": boolean;
+        "showDropdowns": boolean;
+        "startTimeLabel": string;
+        "timePicker": boolean;
+        "timeLabel": string;
+        "triggerLabel": string;
+        "value": string;
+        "yearLabel": string;
+    }
     interface PdsDividerAttributes {
         "componentId": string;
+        "label": string;
         "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
         "vertical": boolean;
+    }
+    interface PdsDrawerAttributes {
+        "componentId": string;
+        "open": boolean;
+        "side": 'start' | 'end';
+        "size": 'sm' | 'md';
+        "scrollable": boolean;
+        "modal": boolean;
+        "lightDismiss": boolean;
+        "initialFocus": 'auto' | 'none';
     }
     interface PdsDropdownMenuAttributes {
         "componentId": string;
@@ -6229,7 +7412,9 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "download": string;
         "href": string | undefined;
+        "informational": boolean;
         "external": boolean;
+        "externalLabel": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
     }
     interface PdsDropdownMenuSeparatorAttributes {
@@ -6286,6 +7471,7 @@ declare namespace LocalJSX {
         "download": string;
         "componentId": string;
         "external": boolean;
+        "externalLabel": string;
         "target": '_blank' | '_self' | '_parent' | '_top';
         "variant": 'inline' | 'plain';
         "fontSize": 'sm' | 'md' | 'lg';
@@ -6314,9 +7500,10 @@ declare namespace LocalJSX {
         "backdropDismiss": boolean;
         "componentId": string;
         "open": boolean;
-        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+        "size": ModalSizeType | (string & Record<never, never>);
         "scrollable": boolean;
         "disableTopLayer": boolean;
+        "disableInitialFocus": boolean;
     }
     interface PdsModalContentAttributes {
         "border": 'none' | 'both' | 'top' | 'bottom';
@@ -6354,6 +7541,7 @@ declare namespace LocalJSX {
         "selectedDisplay": 'count' | 'pill';
         "pillPosition": 'inline' | 'below';
         "maxInlinePills": number;
+        "optionDisplay": 'text' | 'chip';
         "errorMessage": string;
         "helperMessage": string;
         "invalid": boolean;
@@ -6362,12 +7550,17 @@ declare namespace LocalJSX {
         "createUrl": string;
         "csrfToken": string;
         "csrfHeaderName": string;
+        "optionActions": boolean;
+        "optionActionLabel": string;
+        "optionActionDescription": string;
     }
     interface PdsPopoverAttributes {
         "popoverTargetAction": 'show' | 'toggle' | 'hide';
+        "openOn": 'click' | 'hover';
         "popoverType": 'auto' | 'manual';
         "componentId": string;
         "maxWidth": number;
+        "padding": PopoverPaddingType;
         "placement": PlacementType;
     }
     interface PdsProgressAttributes {
@@ -6395,6 +7588,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "variant": 'default' | 'pill';
     }
     interface PdsRadioGroupAttributes {
         "componentId": string;
@@ -6578,6 +7772,7 @@ declare namespace LocalJSX {
         "icon": string;
         "type": 'default' | 'danger' | 'loading';
         "dismissLabel": string;
+        "severityLabel": string;
     }
     interface PdsTooltipAttributes {
         "content": string;
@@ -6601,7 +7796,12 @@ declare namespace LocalJSX {
         "pds-combobox": Omit<PdsCombobox, keyof PdsComboboxAttributes> & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes]?: PdsCombobox[K] } & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes as `attr:${K}`]?: PdsComboboxAttributes[K] } & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes as `prop:${K}`]?: PdsCombobox[K] } & OneOf<"componentId", PdsCombobox["componentId"], PdsComboboxAttributes["componentId"]>;
         "pds-container": Omit<PdsContainer, keyof PdsContainerAttributes> & { [K in keyof PdsContainer & keyof PdsContainerAttributes]?: PdsContainer[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `attr:${K}`]?: PdsContainerAttributes[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `prop:${K}`]?: PdsContainer[K] };
         "pds-copytext": Omit<PdsCopytext, keyof PdsCopytextAttributes> & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes]?: PdsCopytext[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `attr:${K}`]?: PdsCopytextAttributes[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `prop:${K}`]?: PdsCopytext[K] } & OneOf<"value", PdsCopytext["value"], PdsCopytextAttributes["value"]>;
+        "pds-datepicker": Omit<PdsDatepicker, keyof PdsDatepickerAttributes> & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes]?: PdsDatepicker[K] } & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes as `attr:${K}`]?: PdsDatepickerAttributes[K] } & { [K in keyof PdsDatepicker & keyof PdsDatepickerAttributes as `prop:${K}`]?: PdsDatepicker[K] } & OneOf<"componentId", PdsDatepicker["componentId"], PdsDatepickerAttributes["componentId"]>;
         "pds-divider": Omit<PdsDivider, keyof PdsDividerAttributes> & { [K in keyof PdsDivider & keyof PdsDividerAttributes]?: PdsDivider[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `attr:${K}`]?: PdsDividerAttributes[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `prop:${K}`]?: PdsDivider[K] };
+        "pds-drawer": Omit<PdsDrawer, keyof PdsDrawerAttributes> & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes]?: PdsDrawer[K] } & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes as `attr:${K}`]?: PdsDrawerAttributes[K] } & { [K in keyof PdsDrawer & keyof PdsDrawerAttributes as `prop:${K}`]?: PdsDrawer[K] };
+        "pds-drawer-content": PdsDrawerContent;
+        "pds-drawer-footer": PdsDrawerFooter;
+        "pds-drawer-header": PdsDrawerHeader;
         "pds-dropdown-menu": Omit<PdsDropdownMenu, keyof PdsDropdownMenuAttributes> & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes]?: PdsDropdownMenu[K] } & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes as `attr:${K}`]?: PdsDropdownMenuAttributes[K] } & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes as `prop:${K}`]?: PdsDropdownMenu[K] };
         "pds-dropdown-menu-item": Omit<PdsDropdownMenuItem, keyof PdsDropdownMenuItemAttributes> & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes]?: PdsDropdownMenuItem[K] } & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes as `attr:${K}`]?: PdsDropdownMenuItemAttributes[K] } & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes as `prop:${K}`]?: PdsDropdownMenuItem[K] };
         "pds-dropdown-menu-separator": Omit<PdsDropdownMenuSeparator, keyof PdsDropdownMenuSeparatorAttributes> & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes]?: PdsDropdownMenuSeparator[K] } & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes as `attr:${K}`]?: PdsDropdownMenuSeparatorAttributes[K] } & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes as `prop:${K}`]?: PdsDropdownMenuSeparator[K] };
@@ -6626,7 +7826,7 @@ declare namespace LocalJSX {
         "pds-skeleton": Omit<PdsSkeleton, keyof PdsSkeletonAttributes> & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes]?: PdsSkeleton[K] } & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes as `attr:${K}`]?: PdsSkeletonAttributes[K] } & { [K in keyof PdsSkeleton & keyof PdsSkeletonAttributes as `prop:${K}`]?: PdsSkeleton[K] };
         "pds-sortable": Omit<PdsSortable, keyof PdsSortableAttributes> & { [K in keyof PdsSortable & keyof PdsSortableAttributes]?: PdsSortable[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `attr:${K}`]?: PdsSortableAttributes[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `prop:${K}`]?: PdsSortable[K] } & OneOf<"componentId", PdsSortable["componentId"], PdsSortableAttributes["componentId"]>;
         "pds-sortable-item": Omit<PdsSortableItem, keyof PdsSortableItemAttributes> & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes]?: PdsSortableItem[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `attr:${K}`]?: PdsSortableItemAttributes[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `prop:${K}`]?: PdsSortableItem[K] };
-        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]> & OneOf<"label", PdsSwitch["label"], PdsSwitchAttributes["label"]>;
+        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]>;
         "pds-tab": Omit<PdsTab, keyof PdsTabAttributes> & { [K in keyof PdsTab & keyof PdsTabAttributes]?: PdsTab[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `attr:${K}`]?: PdsTabAttributes[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `prop:${K}`]?: PdsTab[K] } & OneOf<"name", PdsTab["name"], PdsTabAttributes["name"]>;
         "pds-table": Omit<PdsTable, keyof PdsTableAttributes> & { [K in keyof PdsTable & keyof PdsTableAttributes]?: PdsTable[K] } & { [K in keyof PdsTable & keyof PdsTableAttributes as `attr:${K}`]?: PdsTableAttributes[K] } & { [K in keyof PdsTable & keyof PdsTableAttributes as `prop:${K}`]?: PdsTable[K] } & OneOf<"componentId", PdsTable["componentId"], PdsTableAttributes["componentId"]>;
         "pds-table-body": PdsTableBody;
@@ -6635,7 +7835,7 @@ declare namespace LocalJSX {
         "pds-table-head-cell": Omit<PdsTableHeadCell, keyof PdsTableHeadCellAttributes> & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes]?: PdsTableHeadCell[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `attr:${K}`]?: PdsTableHeadCellAttributes[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `prop:${K}`]?: PdsTableHeadCell[K] };
         "pds-table-row": Omit<PdsTableRow, keyof PdsTableRowAttributes> & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes]?: PdsTableRow[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `attr:${K}`]?: PdsTableRowAttributes[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `prop:${K}`]?: PdsTableRow[K] };
         "pds-tabpanel": Omit<PdsTabpanel, keyof PdsTabpanelAttributes> & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes]?: PdsTabpanel[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `attr:${K}`]?: PdsTabpanelAttributes[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `prop:${K}`]?: PdsTabpanel[K] } & OneOf<"name", PdsTabpanel["name"], PdsTabpanelAttributes["name"]>;
-        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]> & OneOf<"variant", PdsTabs["variant"], PdsTabsAttributes["variant"]>;
+        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]>;
         "pds-text": Omit<PdsText, keyof PdsTextAttributes> & { [K in keyof PdsText & keyof PdsTextAttributes]?: PdsText[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `attr:${K}`]?: PdsTextAttributes[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `prop:${K}`]?: PdsText[K] };
         "pds-textarea": Omit<PdsTextarea, keyof PdsTextareaAttributes> & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes]?: PdsTextarea[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `attr:${K}`]?: PdsTextareaAttributes[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `prop:${K}`]?: PdsTextarea[K] } & OneOf<"componentId", PdsTextarea["componentId"], PdsTextareaAttributes["componentId"]>;
         "pds-toast": Omit<PdsToast, keyof PdsToastAttributes> & { [K in keyof PdsToast & keyof PdsToastAttributes]?: PdsToast[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `attr:${K}`]?: PdsToastAttributes[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `prop:${K}`]?: PdsToast[K] } & OneOf<"componentId", PdsToast["componentId"], PdsToastAttributes["componentId"]>;
@@ -6654,6 +7854,9 @@ declare module "@stencil/core" {
             "pds-accordion": LocalJSX.IntrinsicElements["pds-accordion"] & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
             "pds-alert": LocalJSX.IntrinsicElements["pds-alert"] & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
             "pds-avatar": LocalJSX.IntrinsicElements["pds-avatar"] & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
+            /**
+             * @lightDom host-only
+             */
             "pds-box": LocalJSX.IntrinsicElements["pds-box"] & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.IntrinsicElements["pds-button"] & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.IntrinsicElements["pds-checkbox"] & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
@@ -6661,7 +7864,42 @@ declare module "@stencil/core" {
             "pds-combobox": LocalJSX.IntrinsicElements["pds-combobox"] & JSXBase.HTMLAttributes<HTMLPdsComboboxElement>;
             "pds-container": LocalJSX.IntrinsicElements["pds-container"] & JSXBase.HTMLAttributes<HTMLPdsContainerElement>;
             "pds-copytext": LocalJSX.IntrinsicElements["pds-copytext"] & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
+            /**
+             * A field for one date, or in range mode a start and end date, with a calendar to pick from.
+             * The value is `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range; with the time picker, each
+             * date carries a time, as `YYYY-MM-DDTHH:mm`. In month-day mode, for a date that comes round every
+             * year such as a birthday, it's a month and day with no year, as `--MM-DD`.
+             */
+            "pds-datepicker": LocalJSX.IntrinsicElements["pds-datepicker"] & JSXBase.HTMLAttributes<HTMLPdsDatepickerElement>;
             "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
+            /**
+             * A side panel composed from `pds-modal`, non-modal by default.
+             * By default, unlike `pds-modal`, the page stays interactive while a drawer
+             * is open: no dimming, no blur, no scroll lock, no click blocking.
+             * `pds-drawer` renders a `pds-modal` internally with `disableTopLayer` on and
+             * its backdrop suppressed, and adds the edge, width and dismiss behavior a
+             * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
+             * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
+             * those come from `pds-modal` unchanged.
+             * @lightDom renders-markup
+             */
+            "pds-drawer": LocalJSX.IntrinsicElements["pds-drawer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerElement>;
+            /**
+             * Fills the drawer panel's height by default — unlike `pds-modal-content`,
+             * which caps itself against the viewport for a centered, possibly-shorter
+             * modal, a drawer panel is already edge-to-edge, so its content can simply
+             * flex to fill whatever space the header and footer leave.
+             * @lightDom renders-markup
+             */
+            "pds-drawer-content": LocalJSX.IntrinsicElements["pds-drawer-content"] & JSXBase.HTMLAttributes<HTMLPdsDrawerContentElement>;
+            /**
+             * @lightDom renders-markup
+             */
+            "pds-drawer-footer": LocalJSX.IntrinsicElements["pds-drawer-footer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerFooterElement>;
+            /**
+             * @lightDom renders-markup
+             */
+            "pds-drawer-header": LocalJSX.IntrinsicElements["pds-drawer-header"] & JSXBase.HTMLAttributes<HTMLPdsDrawerHeaderElement>;
             "pds-dropdown-menu": LocalJSX.IntrinsicElements["pds-dropdown-menu"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;
             "pds-dropdown-menu-item": LocalJSX.IntrinsicElements["pds-dropdown-menu-item"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
             "pds-dropdown-menu-separator": LocalJSX.IntrinsicElements["pds-dropdown-menu-separator"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
@@ -6677,22 +7915,52 @@ declare module "@stencil/core" {
             "pds-input": LocalJSX.IntrinsicElements["pds-input"] & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.IntrinsicElements["pds-link"] & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-loader": LocalJSX.IntrinsicElements["pds-loader"] & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-modal": LocalJSX.IntrinsicElements["pds-modal"] & JSXBase.HTMLAttributes<HTMLPdsModalElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-modal-content": LocalJSX.IntrinsicElements["pds-modal-content"] & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-modal-footer": LocalJSX.IntrinsicElements["pds-modal-footer"] & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-modal-header": LocalJSX.IntrinsicElements["pds-modal-header"] & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
             "pds-multiselect": LocalJSX.IntrinsicElements["pds-multiselect"] & JSXBase.HTMLAttributes<HTMLPdsMultiselectElement>;
             "pds-popover": LocalJSX.IntrinsicElements["pds-popover"] & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.IntrinsicElements["pds-progress"] & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-property": LocalJSX.IntrinsicElements["pds-property"] & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-radio": LocalJSX.IntrinsicElements["pds-radio"] & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-radio-group": LocalJSX.IntrinsicElements["pds-radio-group"] & JSXBase.HTMLAttributes<HTMLPdsRadioGroupElement>;
+            /**
+             * @lightDom host-only
+             */
             "pds-row": LocalJSX.IntrinsicElements["pds-row"] & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
             "pds-select": LocalJSX.IntrinsicElements["pds-select"] & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
             "pds-skeleton": LocalJSX.IntrinsicElements["pds-skeleton"] & JSXBase.HTMLAttributes<HTMLPdsSkeletonElement>;
+            /**
+             * @lightDom host-only
+             */
             "pds-sortable": LocalJSX.IntrinsicElements["pds-sortable"] & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-sortable-item": LocalJSX.IntrinsicElements["pds-sortable-item"] & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.IntrinsicElements["pds-switch"] & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-tab": LocalJSX.IntrinsicElements["pds-tab"] & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
             "pds-table": LocalJSX.IntrinsicElements["pds-table"] & JSXBase.HTMLAttributes<HTMLPdsTableElement>;
             "pds-table-body": LocalJSX.IntrinsicElements["pds-table-body"] & JSXBase.HTMLAttributes<HTMLPdsTableBodyElement>;
@@ -6700,11 +7968,17 @@ declare module "@stencil/core" {
             "pds-table-head": LocalJSX.IntrinsicElements["pds-table-head"] & JSXBase.HTMLAttributes<HTMLPdsTableHeadElement>;
             "pds-table-head-cell": LocalJSX.IntrinsicElements["pds-table-head-cell"] & JSXBase.HTMLAttributes<HTMLPdsTableHeadCellElement>;
             "pds-table-row": LocalJSX.IntrinsicElements["pds-table-row"] & JSXBase.HTMLAttributes<HTMLPdsTableRowElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-tabpanel": LocalJSX.IntrinsicElements["pds-tabpanel"] & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
             "pds-tabs": LocalJSX.IntrinsicElements["pds-tabs"] & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
             "pds-text": LocalJSX.IntrinsicElements["pds-text"] & JSXBase.HTMLAttributes<HTMLPdsTextElement>;
             "pds-textarea": LocalJSX.IntrinsicElements["pds-textarea"] & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
             "pds-toast": LocalJSX.IntrinsicElements["pds-toast"] & JSXBase.HTMLAttributes<HTMLPdsToastElement>;
+            /**
+             * @lightDom renders-markup
+             */
             "pds-tooltip": LocalJSX.IntrinsicElements["pds-tooltip"] & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
         }
     }

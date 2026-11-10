@@ -301,6 +301,45 @@ Choose the right pattern when a control should not accept input. `disabled`, `re
 
 ---
 
+## Automated Testing
+
+Accessibility is enforced in CI, not just reviewed by hand. Two axe-core layers run on every pull request:
+
+<pds-table component-id="a11y-automation" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Layer</pds-table-head-cell>
+    <pds-table-head-cell>Scope</pds-table-head-cell>
+    <pds-table-head-cell>Catches</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>Component E2E (<code>runAxe</code>)</pds-table-cell>
+      <pds-table-cell>Individual components in isolation, per <code>*.e2e.ts</code> spec</pds-table-cell>
+      <pds-table-cell>ARIA wiring, names, roles, labels</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Storybook gate (<code>test.a11y</code>)</pds-table-cell>
+      <pds-table-cell>Every story, fully themed</pds-table-cell>
+      <pds-table-cell>Everything above, plus <code>color-contrast</code></pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+Contrast can only be judged in the themed Storybook harness — the bare E2E page renders without the global stylesheet, so axe would measure incidental colors there.
+
+Run the gate locally from `libs/core`:
+
+```zsh
+npm run build.stencil && npm run build.storybook
+npm run test.a11y
+```
+
+Pre-existing violations are recorded in `.storybook/a11y-baseline.json`; the gate fails on anything new. See **CONTRIBUTING.md § Accessibility gate** for the baseline workflow and how to document a justified exception.
+
+> **Tip:** The **Accessibility** tab in Storybook's bottom panel audits the story you are looking at — press **Run accessibility scan** to check your work without a full CI run. It scans on demand rather than automatically, so it cannot collide with the gate's own axe pass. Treat it as a fast indicator rather than a preview of CI: it reports raw axe output, without the page-level rules the gate suppresses (`landmark-one-main`, `page-has-heading-one`, `region`) or the repeat-sampling it uses to filter out flicker.
+
+---
+
 ## Testing Checklist
 
 Use this checklist when reviewing a feature for accessibility:

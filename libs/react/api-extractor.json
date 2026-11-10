@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+
+  "projectFolder": ".",
+
+  /**
+   * The wrapper surface: which `Pds*` components `@pine-ds/react` exports and the shape of
+   * each generated `forwardRef` signature. The prop detail itself lives in `@pine-ds/core`
+   * and is intentionally *not* inlined here — the props referenced as `JSX_2.PdsButton`
+   * are reported in full by libs/core/etc/core.api.md. Bundling core into this report
+   * would duplicate 3k lines and make every core prop change produce two diffs.
+   *
+   * Run `npx nx run @pine-ds/react:build` before extracting.
+   */
+  "mainEntryPointFilePath": "<projectFolder>/dist/types/index.d.ts",
+
+  "apiReport": {
+    "enabled": true,
+    "reportFolder": "<projectFolder>/etc/",
+    "reportTempFolder": "<projectFolder>/temp/api-report/"
+  },
+
+  /** The doc model and .d.ts rollup are review aids we don't consume; keep the diff small. */
+  "docModel": { "enabled": false },
+  "dtsRollup": { "enabled": false },
+  "tsdocMetadata": { "enabled": false },
+
+  "messages": {
+    "compilerMessageReporting": {
+      "default": { "logLevel": "warning" }
+    },
+
+    "extractorMessageReporting": {
+      "default": { "logLevel": "warning" },
+
+      /** Pine does not use API Extractor release tags — see libs/core/api-extractor.json. */
+      "ae-missing-release-tag": { "logLevel": "none" },
+      "ae-internal-missing-underscore": { "logLevel": "none" },
+
+      /**
+       * `PdsIconProps`, `PdsReactProps`, and `StyleReactProps` are re-exported from the
+       * entry point specifically so their shapes are fully expanded in this report — a
+       * forgotten export only shows a bare type-reference name, which does NOT catch a
+       * change to the referenced type's own members. Any *new* forgotten-export warning
+       * here means a real Pine-owned type just went blind to the gate; investigate before
+       * silencing.
+       */
+      "ae-forgotten-export": { "logLevel": "none" }
+    },
+
+    "tsdocMessageReporting": {
+      "default": { "logLevel": "none" }
+    }
+  }
+}

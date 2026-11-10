@@ -60,6 +60,73 @@
     background: var(--pine-color-background-muted);
   }
 
+  // Listed but not choosable: muted, and the pointer says so. Disabled text needn't meet contrast.
+  // A disabled group's row keeps its hover background: hovering it still opens its options.
+  .pds-combobox__option--disabled,
+  .pds-combobox__group-row--disabled > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--disabled > .pds-combobox__group-back-trigger,
+  .pds-combobox__group--disabled > .pds-combobox__group-label {
+    color: var(--pine-color-text-disabled);
+  }
+
+  .pds-combobox__option--disabled {
+    cursor: not-allowed;
+  }
+
+  // Chips and custom layouts set their own colors, so mute them as pds-multiselect does.
+  .pds-combobox__option--disabled .pds-combobox__option-chip,
+  .pds-combobox__option--disabled .pds-combobox__option-layout-wrapper,
+  .pds-combobox__option--disabled .pds-combobox__option-badge,
+  .pds-combobox__group-row--disabled > .pds-combobox__group-row-trigger > .pds-combobox__group-badge,
+  .pds-combobox__group--disabled > .pds-combobox__group-label > .pds-combobox__group-badge {
+    opacity: 0.5;
+  }
+
+  // An option with a `data-icon`: the icon, then the text, kept together on the start side.
+  .pds-combobox__option-label {
+    align-items: center;
+    display: flex;
+    gap: var(--pine-dimension-xs);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .pds-combobox__option-icon {
+    flex-shrink: 0;
+  }
+
+  .pds-combobox__listbox--truncate {
+    .pds-combobox__option-label {
+      flex: 1 1 auto;
+      overflow-wrap: normal;
+    }
+
+    .pds-combobox__option-check {
+      flex-shrink: 0;
+    }
+  }
+
+  // A badge sits at the end of the row, before the selected check, at least a gap from the text.
+  // Spacing goes on the row, not the chip: the chip's own padding draws its border.
+  .pds-combobox__option--with-badge {
+    column-gap: var(--pine-dimension-xs);
+  }
+
+  .pds-combobox__option-badge,
+  .pds-combobox__group-badge {
+    flex-shrink: 0;
+    // The brand chip raises its label; contain that here, or it draws over the sticky back row.
+    isolation: isolate;
+    // The sm chip is a couple of pixels taller than a line of option text; keep the row's height.
+    margin-block: calc(var(--pine-dimension-025) * -1);
+    margin-inline-start: auto;
+  }
+
+  // The gap plus this keeps the check's usual distance from what's before it.
+  .pds-combobox__option--with-badge .pds-combobox__option-check {
+    margin-inline-start: calc(var(--pine-dimension-150) - var(--pine-dimension-xs));
+  }
+
   .pds-combobox__option-check {
     color: currentColor;
     font-size: var(--pine-dimension-150);
@@ -78,6 +145,295 @@
     &:first-child {
       margin-block-start: 0;
     }
+  }
+
+  // An optgroup's options, grouped for assistive tech under its caption.
+  .pds-combobox__group {
+    list-style: none;
+    margin-block-start: var(--pine-dimension-150);
+
+    &:first-child {
+      margin-block-start: 0;
+    }
+  }
+
+  .pds-combobox__group-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // A grouped display's search results keep the panel's 4px spacing between options.
+  .pds-combobox__listbox--grouped .pds-combobox__group-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+  }
+
+  .pds-combobox__group-label--with-icon {
+    align-items: center;
+    display: flex;
+    gap: var(--pine-dimension-xs);
+  }
+
+  .pds-combobox__group-icon {
+    flex-shrink: 0;
+  }
+
+  // An inline group's badge sits at the end of its caption, as an option's does in its row.
+  .pds-combobox__group-label--with-badge {
+    align-items: center;
+    column-gap: var(--pine-dimension-xs);
+    display: flex;
+  }
+
+  .pds-combobox__group-label-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  // The caption is uppercase; the chip keeps its own case. The chip is taller than the caption's
+  // line, so it overlaps the caption's padding, centered, rather than add to its height.
+  .pds-combobox__group-label > .pds-combobox__group-badge {
+    margin-block: calc(var(--pine-dimension-xs) * -1);
+    text-transform: none;
+  }
+
+  // group-display="flyout": a row per group, and its options in a flyout beside the panel.
+  .pds-combobox__group-row {
+    list-style: none;
+    position: relative;
+  }
+
+  .pds-combobox__group-row-trigger {
+    align-items: center;
+    border-radius: var(--pine-dimension-125);
+    color: var(--pine-color-text-secondary);
+    cursor: pointer;
+    display: flex;
+    font: var(--pine-typography-body-medium);
+    gap: var(--pine-dimension-xs);
+    justify-content: space-between;
+    padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+    /* stylelint-disable-next-line pine-design-system/no-hardcoded-motion -- matches .pds-combobox__option's 0.15s micro-transition */
+    transition: background 0.15s;
+  }
+
+  .pds-combobox__group-row--open > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-row--has-selection > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-row--highlighted > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--highlighted > .pds-combobox__group-row-trigger {
+    background: var(--pine-color-background-muted);
+  }
+
+  // Only for a pointer that can hover (`pointerCanHover`): a touch browser keeps a tapped row hovered,
+  // so tapping the row back would leave the row that takes its place shaded.
+  .pds-combobox__listbox--pointer-hover .pds-combobox__group-row-trigger:hover {
+    background: var(--pine-color-background-muted);
+  }
+
+  // One slide, mirrored: entering slides in from the end, going back from the start. Motion tokens
+  // drop it to 0ms under reduced motion.
+  // The slide's offset would otherwise widen the list's scroll area and flash a horizontal scrollbar.
+  .pds-combobox__listbox--drill-in,
+  .pds-combobox__listbox--drill-out {
+    overflow-x: hidden;
+  }
+
+  // Internal, not a consumer hook.
+  .pds-combobox__listbox--drill-in,
+  .pds-combobox__listbox--drill-out:dir(rtl) {
+    --pds-combobox-drill-from: var(--pine-dimension-sm);
+  }
+
+  .pds-combobox__listbox--drill-out,
+  .pds-combobox__listbox--drill-in:dir(rtl) {
+    --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
+  }
+
+  // The row back slides with the options; only its trigger moves, so it stays sticky.
+  .pds-combobox__listbox--drill-in .pds-combobox__drill-in-options > li,
+  .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger,
+  .pds-combobox__listbox--drill-out > li {
+    animation: pds-combobox-drill var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  }
+
+  @keyframes pds-combobox-drill {
+    from {
+      opacity: 0;
+      transform: translateX(var(--pds-combobox-drill-from));
+    }
+  }
+
+  // The keyboard's place among the rows, which share a background with hover, open and selection.
+  .pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger,
+  .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger {
+    outline: var(--pine-outline-focus);
+    outline-offset: calc(var(--pine-border-width) * -2);
+  }
+
+  .pds-combobox__group-row-label {
+    align-items: center;
+    display: flex;
+    gap: var(--pine-dimension-xs);
+    min-width: 0;
+    // A long one-word label wraps rather than run under a badge, as an option's does.
+    overflow-wrap: anywhere;
+  }
+
+  .pds-combobox__group-row-caret {
+    flex-shrink: 0;
+  }
+
+  // The Figma frames inset rows 4px and space them 4px apart in both the panel and the flyout.
+  .pds-combobox__listbox--grouped,
+  .pds-combobox__flyout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+    padding: var(--pine-dimension-2xs);
+  }
+
+  .pds-combobox__flyout {
+    background: var(--pine-color-background-overlay);
+    border-radius: var(--pine-dimension-125);
+    box-shadow: var(--pine-box-shadow);
+    list-style: none;
+    margin: 0;
+    overflow-y: auto;
+    position: fixed;
+    // Revealed once Floating UI has placed it, so it never flashes inside the row first.
+    visibility: hidden;
+    width: max-content;
+    z-index: 1;
+  }
+
+  // panel-search: the search field above the options, as in pds-multiselect.
+  .pds-combobox__listbox--with-search {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .pds-combobox__listbox-options {
+    flex: 1;
+    list-style: none;
+    margin: 0;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--pine-dimension-xs);
+  }
+
+  .pds-combobox__listbox-options.pds-combobox__listbox--grouped {
+    padding: var(--pine-dimension-2xs);
+  }
+
+  .pds-combobox__panel-search {
+    align-items: center;
+    border-block-end: var(--pine-border);
+    border-block-end-color: var(--pine-color-border-subtle);
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--pine-dimension-xs);
+    padding: var(--pine-dimension-sm);
+
+    pds-icon {
+      color: var(--pine-color-text-muted);
+      flex-shrink: 0;
+    }
+
+    // The field takes focus on open; the divider shows where it is.
+    &:focus-within {
+      border-block-end-color: var(--pine-color-border-active);
+    }
+  }
+
+  .pds-combobox__panel-search-input {
+    background: transparent;
+    border: 0;
+    color: var(--pine-color-text-strong);
+    flex: 1;
+    font: var(--pine-typography-body);
+    letter-spacing: var(--pine-letter-spacing);
+    min-width: 0;
+    outline: none;
+    // No browser padding, so the field is one line of text tall, like the drilled-in header.
+    padding: 0;
+
+    &::placeholder {
+      color: var(--pine-color-text-placeholder);
+    }
+  }
+
+  // group-display="drill-in": the open group's row, drawn as a row back, above its options and
+  // spaced like the panel's rows.
+  .pds-combobox__group-back {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+    list-style: none;
+  }
+
+  .pds-combobox__group-back-trigger {
+    justify-content: flex-start;
+  }
+
+  // panel-search, drilled in: the row back takes the search field's place, full width above the
+  // divider, and stays put while the group's options scroll. :where keeps hover and the keyboard's
+  // highlight on top.
+  // Both classes, to outrank the grouped list's padding.
+  .pds-combobox__listbox-options--drilled-in.pds-combobox__listbox--grouped {
+    padding-block-start: 0;
+  }
+
+  // The list takes focus inside a drilled-in group. Its divider turns active, as the search
+  // field's does, and the highlighted row shows the place.
+  .pds-combobox__listbox-options--drilled-in:focus {
+    outline: none;
+
+    .pds-combobox__group-back-trigger {
+      border-block-end-color: var(--pine-color-border-active);
+    }
+  }
+
+  // It's the same size and type as the search field it replaces.
+  :where(.pds-combobox__listbox-options--drilled-in) .pds-combobox__group-back-trigger {
+    background-color: var(--pine-color-background-overlay);
+    border-block-end: var(--pine-border);
+    border-block-end-color: var(--pine-color-border-subtle);
+    border-radius: 0;
+    color: var(--pine-color-text-strong);
+    font: var(--pine-typography-body);
+    inset-block-start: 0;
+    letter-spacing: var(--pine-letter-spacing);
+    margin-inline: calc(var(--pine-dimension-2xs) * -1);
+    padding: var(--pine-dimension-sm);
+    position: sticky;
+    z-index: 1;
+  }
+
+  .pds-combobox__drill-in-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pine-dimension-2xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // In the mixin so it also applies inside the body portal.
+  .visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: polygon(0 0, 0 0, 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 
   .pds-combobox__loading {

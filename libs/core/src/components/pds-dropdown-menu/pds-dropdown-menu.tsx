@@ -1,6 +1,8 @@
 import { Component, Element, Host, h, Prop, Listen, State } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 import { PlacementType } from '@utils/types';
+import { setAttributesIfChanged } from '@utils/attributes';
+import { limitRestores } from '@utils/keep-hydrated';
 import {  computePosition,
   flip,
   offset,
@@ -14,6 +16,7 @@ import {  computePosition,
 type MenuItemElement = HTMLPdsDropdownMenuItemElement | HTMLAnchorElement | HTMLButtonElement;
 
 /**
+ * @slot header - Non-interactive content displayed above the menu items inside the dropdown panel. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item.
  * @part menu-panel - Exposes the dropdown menu container for styling.
  */
 @Component({
@@ -28,10 +31,13 @@ export class PdsDropdownMenu implements BasePdsProps {
   private isOpen: boolean = false;
   private menuItems: MenuItemElement[] = [];
   private cleanupAutoUpdate: (() => void) | null = null;
+  private triggerObserver: MutationObserver | null = null;
 
   @Element() host: HTMLPdsDropdownMenuElement;
 
   @State() currentFocusIndex: number = -1;
+
+  @State() hasHeader: boolean = false;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -43,8 +49,19 @@ export class PdsDropdownMenu implements BasePdsProps {
    */
   @Prop() placement: PlacementType = 'bottom-start';
 
+  componentWillLoad() {
+    this.hasHeader = Array.from(this.host.children).some(el => el.getAttribute('slot') === 'header');
+  }
+
   componentDidRender() {
     this.panelEl = this.host.shadowRoot?.querySelector('pds-box') as HTMLPdsBoxElement;
+  }
+
+  connectedCallback() {
+    // Moved within the page, the trigger slot doesn't change, so watch the same trigger again, and
+    // fix anything changed while the menu was detached and unobserved.
+    this.observeTrigger();
+    this.syncTriggerAria();
   }
 
   disconnectedCallback() {
@@ -53,6 +70,9 @@ export class PdsDropdownMenu implements BasePdsProps {
       this.cleanupAutoUpdate();
       this.cleanupAutoUpdate = null;
     }
+
+    this.triggerObserver?.disconnect();
+    this.triggerObserver = null;
   }
 
   private handleTriggerSlotChange = (event: Event) => {
@@ -62,11 +82,43 @@ export class PdsDropdownMenu implements BasePdsProps {
     const assignedElements = this.slotEl.assignedElements();
 
     this.triggerEl = assignedElements[0] as HTMLElement;
-    this.triggerEl.onclick = this.handleClick;
+    if (this.triggerEl) {
+      this.triggerEl.onclick = this.handleClick;
+      this.syncTriggerAria();
+    }
+    this.observeTrigger();
+  }
 
-    // Add accessibility attributes to trigger
-    this.triggerEl.setAttribute('aria-haspopup', 'menu');
-    this.triggerEl.setAttribute('aria-expanded', 'false');
+  // Writes the trigger's ARIA from the menu's state, so the observer's own callback doesn't loop.
+  private syncTriggerAria = () => {
+    if (!this.triggerEl) return false;
+
+    return setAttributesIfChanged(this.triggerEl, { 'aria-haspopup': 'menu', 'aria-expanded': String(this.isOpen) });
+  }
+
+  // The trigger is the consumer's element, so anything can rewrite its attributes (a Turbo morph
+  // matches it to server HTML that has no ARIA). Put Pine's values back when that happens.
+  private observeTrigger() {
+    this.triggerObserver?.disconnect();
+    this.triggerObserver = null;
+    if (!this.triggerEl || typeof MutationObserver === 'undefined') return;
+
+    // Capped against a script that keeps undoing it; opening and closing still write it directly.
+    this.triggerObserver = new MutationObserver(
+      limitRestores(
+        this.syncTriggerAria,
+        'pds-dropdown-menu: stopped restoring its trigger ARIA, as another script keeps changing it. It may be wrong until the menu opens or closes.',
+        this.triggerEl,
+      ),
+    );
+    this.triggerObserver.observe(this.triggerEl, {
+      attributes: true,
+      attributeFilter: ['aria-haspopup', 'aria-expanded'],
+    });
+  }
+
+  private handleHeaderSlotChange = (event: Event) => {
+    this.hasHeader = (event.target as HTMLSlotElement).assignedElements().length > 0;
   }
 
   private handleSlotChange = (event: Event) => {
@@ -137,9 +189,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     this.host.shadowRoot?.querySelector('pds-box').classList.remove('is-hidden');
     this.isOpen = true;
-
-    // Update ARIA attributes
-    this.triggerEl.setAttribute('aria-expanded', 'true');
+    this.syncTriggerAria();
   }
 
   // Close the dropdown
@@ -153,14 +203,28 @@ export class PdsDropdownMenu implements BasePdsProps {
       this.cleanupAutoUpdate = null;
     }
 
-    // Update ARIA attributes
-    this.triggerEl.setAttribute('aria-expanded', 'false');
+    this.syncTriggerAria();
 
     // Reset focus index
     this.currentFocusIndex = -1;
 
     // Return focus to trigger
+    if (this.isFocusInMenu()) {
+      this.focusTrigger();
+    }
+  }
+
+  // Outside clicks and scripted closes leave focus where it is; only focus in the menu or on its trigger returns.
+  private isFocusInMenu(): boolean {
+    const focused = (this.host.getRootNode() as Document | ShadowRoot).activeElement;
+    return focused != null && this.host.contains(focused);
+  }
+
+  // A trigger whose host can't take focus itself, such as pds-chip, passes it to the control inside.
+  private focusTrigger() {
     this.triggerEl.focus();
+    if ((this.host.getRootNode() as Document | ShadowRoot).activeElement === this.triggerEl) return;
+    this.triggerEl.shadowRoot?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])')?.focus();
   }
 
   // Handle click on the trigger element
@@ -212,12 +276,12 @@ export class PdsDropdownMenu implements BasePdsProps {
       if (tagName === 'pds-dropdown-menu-item') {
         // For pds-dropdown-menu-item, focus the inner element
         const menuItem = item as HTMLPdsDropdownMenuItemElement;
-        const innerButton = menuItem.shadowRoot?.querySelector('button');
+        const innerControl = menuItem.shadowRoot?.querySelector<HTMLElement>('button, [role="menuitem"]');
         const innerLink = menuItem.shadowRoot?.querySelector('pds-link')?.shadowRoot?.querySelector('a')
           || menuItem.shadowRoot?.querySelector('a');
 
-        if (innerButton) {
-          innerButton.focus();
+        if (innerControl) {
+          innerControl.focus();
         } else if (innerLink) {
           innerLink.focus();
         } else {
@@ -271,17 +335,61 @@ export class PdsDropdownMenu implements BasePdsProps {
     }
   }
 
+  // Unlike the arrow keys, Tab stops at either end of the menu instead of wrapping.
+  private adjacentEnabledIndex(fromIndex: number, step: 1 | -1): number {
+    for (let index = fromIndex + step; index >= 0 && index < this.menuItems.length; index += step) {
+      if (!this.isItemDisabled(this.menuItems[index])) return index;
+    }
+    return -1;
+  }
+
+  // An enabled item can still refuse focus (hidden, or a link with no href), so each one is tried in turn.
+  private focusAdjacentItem(fromIndex: number, step: 1 | -1): boolean {
+    for (let index = this.adjacentEnabledIndex(fromIndex, step); index !== -1; index = this.adjacentEnabledIndex(index, step)) {
+      this.focusItemByIndex(index);
+      if (this.getFocusedItemIndex() === index) return true;
+    }
+    return false;
+  }
+
+  // Escape is taken in document's capture phase, before a modal around the menu hears it on
+  // document and closes too.
+  @Listen('keydown', { target: 'document', capture: true })
+  handleEscapeKeyDown(event: KeyboardEvent) {
+    if (!this.isOpen || event.key !== 'Escape' || event.defaultPrevented) return;
+    event.preventDefault();
+    this.closeDropdown();
+  }
+
+  // Taken in the capture phase, so a modal or popover around the menu that traps Tab finds the key
+  // already handled, or focus back on the trigger with the items hidden.
+  @Listen('keydown', { target: 'document', capture: true })
+  handleTabKeyDown(event: KeyboardEvent) {
+    if (!this.isOpen || event.key !== 'Tab' || event.defaultPrevented) return;
+    const currentIndex = this.getFocusedItemIndex();
+    if (currentIndex === -1) {
+      // The menu sits after the trigger, so Shift+Tab from the trigger leaves it behind. So does Shift+Tab
+      // from outside the menu, where focus stays after a mouse open in Safari.
+      if (event.shiftKey && (document.activeElement === this.triggerEl || !this.isFocusInMenu())) this.closeDropdown();
+      return;
+    }
+
+    if (this.focusAdjacentItem(currentIndex, event.shiftKey ? -1 : 1)) {
+      event.preventDefault();
+      return;
+    }
+
+    // Past either end, closing moves focus to the trigger. Shift+Tab stays there; Tab carries on past it.
+    if (event.shiftKey) event.preventDefault();
+    this.closeDropdown();
+  }
+
   // Handle keyboard events for the dropdown
   @Listen('keydown', { target: 'window' })
   handleKeyDown(event: KeyboardEvent) {
     if (!this.isOpen) return;
 
     switch (event.key) {
-      case 'Escape':
-        event.preventDefault();
-        this.closeDropdown();
-        break;
-
       case 'ArrowDown':
         event.preventDefault();
         this.focusNextItem();
@@ -320,57 +428,18 @@ export class PdsDropdownMenu implements BasePdsProps {
         }
         break;
 
-      case 'Tab':
-        if (event.shiftKey) {
-          // Let Shift+Tab navigate naturally from first item to trigger
-          // For all other items, move to previous item
-          const currentIndex = this.getFocusedItemIndex();
+      case 'Tab': {
+        // Tab from an item is handled in handleTabKeyDown; from anywhere else it moves into the menu.
+        if (event.shiftKey || this.getFocusedItemIndex() !== -1) break;
 
-          if (currentIndex > 0) {
-            // If not on first item, prevent default and go to previous item
-            event.preventDefault();
-            this.focusPreviousItem(); // Use our method that skips disabled items
-          }
-          // If on first item or no item, let natural tab order move back to trigger
+        if (this.focusAdjacentItem(-1, 1)) {
+          event.preventDefault();
         } else {
-          // Forward Tab navigation
-          const activeElement = document.activeElement;
-          const isTriggerFocused = activeElement === this.triggerEl;
-          const currentIndex = this.getFocusedItemIndex();
-
-          if (isTriggerFocused && this.menuItems.length > 0) {
-            // If trigger is focused, move to first non-disabled menu item
-            event.preventDefault();
-
-            // Find the first non-disabled item
-            let firstFocusableIndex = 0;
-            while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
-              firstFocusableIndex++;
-            }
-
-            if (firstFocusableIndex < this.menuItems.length) {
-              this.focusItemByIndex(firstFocusableIndex);
-            }
-          } else if (currentIndex === -1 && this.menuItems.length > 0) {
-            // If no menu item is focused, focus the first non-disabled one
-            event.preventDefault();
-
-            // Find the first non-disabled item
-            let firstFocusableIndex = 0;
-            while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
-              firstFocusableIndex++;
-            }
-
-            if (firstFocusableIndex < this.menuItems.length) {
-              this.focusItemByIndex(firstFocusableIndex);
-            }
-          } else if (currentIndex !== -1) {
-            // Use our method that skips disabled items
-            event.preventDefault();
-            this.focusNextItem();
-          }
+          // With no item to move to, Tab carries on past the menu, as it does past the last item.
+          this.closeDropdown();
         }
         break;
+      }
     }
   }
 
@@ -396,11 +465,14 @@ export class PdsDropdownMenu implements BasePdsProps {
           direction="column"
           class="pds-dropdown-menu--panel is-hidden"
           shadow="100"
-          role="menu"
-          aria-orientation="vertical"
           part="menu-panel"
         >
-          <slot onSlotchange={this.handleSlotChange}></slot>
+          <div class={{ 'pds-dropdown-menu__header': true, 'is-hidden': !this.hasHeader }}>
+            <slot name="header" onSlotchange={this.handleHeaderSlotChange}></slot>
+          </div>
+          <div class="pds-dropdown-menu__items" role="menu" aria-orientation="vertical">
+            <slot onSlotchange={this.handleSlotChange}></slot>
+          </div>
         </pds-box>
       </Host>
     );

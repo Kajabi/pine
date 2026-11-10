@@ -78,7 +78,7 @@ The `plain` variant displays a standard plain hyperlink without an underline.
 
 ### External
 
-An `external` link is styled with an icon to indicate that it will redirect users to an external website or resource in a new tab.
+An `external` link is styled with an icon to indicate that it will redirect users to an external website or resource in a new tab. Screen readers hear "(opens in a new tab)" after the link text; pass a translated `externalLabel` to localize it, or an empty string to leave it out. The icon only appears with `external`, so a link that sets only `target="_blank"` announces nothing extra.
 
 <DocCanvas
   mdxSource={{
@@ -142,6 +142,155 @@ When no custom text is provided, the link will use the `href` as the link text.
     webComponent: '<pds-link href="#some-anchor"></pds-link>'
 }}>
   <pds-link href="#some-anchor"></pds-link>
+</DocCanvas>
+
+### Whole-row link
+
+A list row where the whole row is one link. `pds-link` supports this from outside its shadow
+boundary: stretch the `link` part's `::after` over a positioned ancestor.
+
+```css
+.pds-link-row { position: relative; }
+.pds-link-row pds-link::part(link)::after { content: ""; position: absolute; inset: 0; }
+```
+
+The stretched box resolves its containing block against the row, not against the anchor inside the
+shadow root, so `inset: 0` covers the whole row. Scope these rules to the row with a class, so they
+don't stretch other links on the page.
+
+Two things to pair with it:
+
+- **Trailing controls need to sit above the stretched box.** Give them `position: relative` and a
+  `z-index` above it, or the row's click area swallows them.
+- **Give the row the focus ring, not the text.** Keyboard focus lands on the anchor inside
+  `pds-link`, which is only as wide as its text, so an outline on the part hugs the words. Turn that
+  outline off and outline the stretched pseudo-element instead, with the row's radius:
+
+  ```css
+  .pds-link-row pds-link::part(link)::after { border-radius: var(--pine-border-radius-md); }
+  .pds-link-row pds-link::part(link):focus-visible { outline: none; }
+  .pds-link-row pds-link::part(link):focus-visible::after {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width-thick);
+  }
+  ```
+
+<DocCanvas
+  display="block"
+  mdxSource={{
+    react: `
+    <style>{\`
+      .pds-link-row {
+        position: relative;
+      }
+
+      .pds-link-row pds-link::part(link)::after {
+        border-radius: var(--pine-border-radius-md);
+        content: "";
+        inset: 0;
+        position: absolute;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible {
+        outline: none;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible::after {
+        outline: var(--pine-outline-focus);
+        outline-offset: var(--pine-border-width-thick);
+      }
+
+      .pds-link-row__trailing {
+        position: relative;
+        z-index: 1;
+      }
+    \`}</style>
+
+    <PdsBox className="pds-link-row" border borderRadius="md" padding="sm" alignItems="center" justifyContent="space-between">
+      <PdsBox gap="xs" alignItems="center">
+        <PdsIcon name="file" aria-hidden="true" />
+        <PdsLink href="#row-target">Quarterly report</PdsLink>
+      </PdsBox>
+      <PdsBox className="pds-link-row__trailing">
+        <PdsButton variant="secondary" size="small">Download</PdsButton>
+      </PdsBox>
+    </PdsBox>
+    `,
+    webComponent: `
+    <style>
+      .pds-link-row {
+        position: relative;
+      }
+
+      .pds-link-row pds-link::part(link)::after {
+        border-radius: var(--pine-border-radius-md);
+        content: "";
+        inset: 0;
+        position: absolute;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible {
+        outline: none;
+      }
+
+      .pds-link-row pds-link::part(link):focus-visible::after {
+        outline: var(--pine-outline-focus);
+        outline-offset: var(--pine-border-width-thick);
+      }
+
+      .pds-link-row__trailing {
+        position: relative;
+        z-index: 1;
+      }
+    </style>
+
+    <pds-box class="pds-link-row" border border-radius="md" padding="sm" align-items="center" justify-content="space-between">
+      <pds-box gap="xs" align-items="center">
+        <pds-icon name="file" aria-hidden="true"></pds-icon>
+        <pds-link href="#row-target">Quarterly report</pds-link>
+      </pds-box>
+      <pds-box class="pds-link-row__trailing">
+        <pds-button variant="secondary" size="small">Download</pds-button>
+      </pds-box>
+    </pds-box>
+    `
+}}>
+  <style>{`
+    .pds-link-row {
+      position: relative;
+    }
+
+    .pds-link-row pds-link::part(link)::after {
+      border-radius: var(--pine-border-radius-md);
+      content: "";
+      inset: 0;
+      position: absolute;
+    }
+
+    .pds-link-row pds-link::part(link):focus-visible {
+      outline: none;
+    }
+
+    .pds-link-row pds-link::part(link):focus-visible::after {
+      outline: var(--pine-outline-focus);
+      outline-offset: var(--pine-border-width-thick);
+    }
+
+    .pds-link-row__trailing {
+      position: relative;
+      z-index: 1;
+    }
+  `}</style>
+
+  <pds-box className="pds-link-row" border border-radius="md" padding="sm" align-items="center" justify-content="space-between">
+    <pds-box gap="xs" align-items="center">
+      <pds-icon name="file" aria-hidden="true"></pds-icon>
+      <pds-link href="#row-target">Quarterly report</pds-link>
+    </pds-box>
+    <pds-box className="pds-link-row__trailing">
+      <pds-button variant="secondary" size="small">Download</pds-button>
+    </pds-box>
+  </pds-box>
 </DocCanvas>
 
 ## Additional Resources

@@ -1,7 +1,10 @@
 import { Component, Element, Event, EventEmitter, Host, h, Listen, Prop, State } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
+import { ARIA_REFERENCE_ATTRIBUTES, forwardAriaReferences } from '../../utils/aria-references';
 
 import { caretDown, addCircle } from '@pine-ds/icons/icons';
+
+const FORWARDED_ARIA_ATTRIBUTES = ['aria-current', 'aria-expanded', 'aria-haspopup', 'aria-label', 'aria-pressed'];
 
 /**
  * @part button - Exposes the underlying button (or anchor) element for styling, including custom size, shape, or surface on icon-only placements (e.g. a compact square or inverse icon button).
@@ -18,7 +21,7 @@ import { caretDown, addCircle } from '@pine-ds/icons/icons';
 @Component({
   tag: 'pds-button',
   styleUrls: ['pds-button.scss'],
-  shadow: true,
+  shadow: { delegatesFocus: true },
 })
 export class PdsButton {
   @Element() el: HTMLPdsButtonElement;
@@ -109,8 +112,34 @@ export class PdsButton {
 
   @State() hasStartContent = false;
   @State() hasEndContent = false;
+  @State() forwardedAria: Record<string, string | null> = {};
+
+  private contentEl?: HTMLButtonElement | HTMLAnchorElement;
+  private hostAriaObserver?: MutationObserver;
 
   @Event() pdsClick: EventEmitter<Event>;
+
+  connectedCallback() {
+    this.syncHostAria();
+
+    if (typeof MutationObserver === 'undefined') return;
+
+    // Consumers, popovers and menus set these on the host, often after render, but only the inner element is announced.
+    this.hostAriaObserver = new MutationObserver(this.syncHostAria);
+    this.hostAriaObserver.observe(this.el, {
+      attributeFilter: FORWARDED_ARIA_ATTRIBUTES.concat(ARIA_REFERENCE_ATTRIBUTES),
+    });
+  }
+
+  disconnectedCallback() {
+    this.hostAriaObserver?.disconnect();
+    this.hostAriaObserver = undefined;
+  }
+
+  componentDidRender() {
+    this.forwardAriaReferences();
+  }
+
 
   /**
    * Listen for Enter key presses on form inputs to trigger submit
@@ -170,6 +199,28 @@ export class PdsButton {
     }
   }
 
+
+  // Copied rather than moved: frameworks and DOM morphs put host attributes back on every update,
+  // so taking them off the host would fight each one.
+  private syncHostAria = () => {
+    const forwarded: Record<string, string | null> = {};
+    FORWARDED_ARIA_ATTRIBUTES.forEach((name) => (forwarded[name] = this.el.getAttribute(name)));
+    // A new object always re-renders, and frameworks re-set unchanged attributes on every render of their own.
+    if (FORWARDED_ARIA_ATTRIBUTES.some((name) => forwarded[name] !== this.forwardedAria[name])) {
+      this.forwardedAria = forwarded;
+    }
+    this.forwardAriaReferences();
+  };
+
+  private forwardAriaReferences() {
+    if (this.contentEl) forwardAriaReferences(this.el, this.contentEl);
+  }
+
+  // A hint added after the button, or replaced by a framework or a DOM morph, is picked up by the
+  // time focus reaches the button and it's announced.
+  private handleFocusIn = () => {
+    this.forwardAriaReferences();
+  };
 
   private handleStartSlotChange = (event: Event) => {
     this.hasStartContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
@@ -273,8 +324,10 @@ export class PdsButton {
   render() {
     // Common props for both button and anchor elements
     const commonProps = {
+      ...this.forwardedAria,
       class: this.classNames(),
       part: 'button',
+      ref: (el: HTMLButtonElement | HTMLAnchorElement) => (this.contentEl = el),
     };
 
     const attributes = () => {
@@ -282,6 +335,8 @@ export class PdsButton {
         return {
           // Anchor element props
           ...commonProps,
+          // ARIA allows aria-pressed only on buttons, so a link never gets it.
+          'aria-pressed': null,
           download: this.download,
           href: this.disabled ? null : this.href,
           target: this.target,
@@ -328,8 +383,10 @@ export class PdsButton {
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
-        id={this.componentId}
+        // Binding id to an unset componentId would strip an id the consumer set whenever the button re-renders.
+        {...(this.componentId != null ? { id: this.componentId } : {})}
         onClick={this.handleClick}
+        onFocusin={this.handleFocusIn}
         variant={this.variant}
       >
         <ContentElement {...attributes()}>

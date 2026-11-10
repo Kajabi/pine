@@ -79,7 +79,7 @@ describe('pds-loader', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-loader aria-busy="" aria-live="polite" class="pds-loader" is-loading="true" size="md" variant="spinner">
+      <pds-loader aria-busy="true" aria-live="polite" class="pds-loader" is-loading="true" size="md" variant="spinner">
         <mock:shadow-root>
           <div class="pds-loader--spinner">
             <svg fill="none" part="loader-svg" viewBox="0 0 200 200" style="height: 48px; width: 48px;">

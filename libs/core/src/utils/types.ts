@@ -71,8 +71,12 @@ export type ChipSentimentType =
   | 'danger'
   | 'info'
   | 'neutral'
+  | 'solid'
+  | 'subtle'
   | 'success'
   | 'warning';
+
+export type ModalSizeType = 'sm' | 'md' | 'lg' | 'fullscreen';
 
 export type ChipSizeType =
   'sm'
@@ -83,6 +87,8 @@ export type ChipVariantType =
   'text'
   | 'tag'
   | 'dropdown';
+
+export type PopoverPaddingType = Extract<BoxSpacingType, 'none' | 'xs' | 'sm' | 'md'>;
 
 // Single source of truth for `pds-text` `size` values. The `as const` tuple is
 // readable at runtime (for validation) and `TextSizeType` is derived from it,

@@ -48,11 +48,14 @@ Stencil.js web component library in an Nx monorepo. Core components live in `lib
 - Spec tests go in the component's `test/` folder (e.g., `pds-chip/test/pds-chip.spec.tsx`) using Stencil's `newSpecPage`
 - E2E tests also in the component's `test/` folder using Stencil's `newE2EPage`
 - Every new prop, event, or behavior needs corresponding test coverage
+- E2E specs should assert `runAxe(page)` returns no violations (`src/utils/test/axe.ts`); the themed Storybook gate covers `color-contrast` separately
+- Never add entries to `.storybook/a11y-baseline.json` by hand — it is generated, and only shrinks
 
 ## Build & Test
 
 - Build all: `npm run build.all`
 - Test all: `npm run test.all`
+- Accessibility gate: `npm run test.a11y` (axe over every story; needs `build.stencil` + `build.storybook` first — see CONTRIBUTING.md § Accessibility gate)
 - Lint all: `npm run lint.all`
 - Target core only: `npx nx run @pine-ds/core:build`, `npx nx run @pine-ds/core:test`
 - After modifying `*.tsx`, rebuild to regenerate `components.d.ts` and `readme.md`
@@ -63,4 +66,4 @@ Stencil.js web component library in an Nx monorepo. Core components live in `lib
 
 - **Always:** follow existing component patterns, run lint and tests before committing, use conventional commits with component scope, match JSDoc terminology from similar components
 - **Ask first:** adding new dependencies, creating files outside component directories, making breaking API changes (removing props/events), modifying CI/CD or build config
-- **Never:** skip lefthook hooks, edit auto-generated files (`readme.md`, `components.d.ts`) manually, commit secrets or `.env` files, modify `node_modules/` or `dist/`
+- **Never:** skip lefthook hooks, edit auto-generated files (`readme.md`, `components.d.ts`, `libs/*/etc/*.api.md` — refresh the API reports with `npm run api.update`) manually, commit secrets or `.env` files, modify `node_modules/` or `dist/`

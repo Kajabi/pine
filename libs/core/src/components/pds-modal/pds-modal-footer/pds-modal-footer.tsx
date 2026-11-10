@@ -1,6 +1,9 @@
 import { Component, Element, h } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
+/**
+ * @lightDom renders-markup
+ */
 @Component({
   tag: 'pds-modal-footer',
   styleUrl: 'pds-modal-footer.scss',

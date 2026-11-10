@@ -132,3 +132,48 @@ Horizontal.args = {
   name: 'horizontal-group',
 };
 
+
+const PillTemplate = (args) =>
+  html` <pds-radio-group
+    component-id=${args.componentId}
+    direction=${args.direction}
+    ?disabled=${args.disabled}
+    error-message=${args.errorMessage}
+    helper-message=${args.helperMessage}
+    ?invalid=${args.invalid}
+    group-label=${args.groupLabel}
+    name=${args.name}
+    ?required=${args.required}
+  >
+    <pds-radio component-id="pill-solo" label="Just me" value="solo" variant="pill" checked></pds-radio>
+    <pds-radio component-id="pill-small" label="2-10 people" value="small" variant="pill"></pds-radio>
+    <pds-radio component-id="pill-medium" label="11-50 people" value="medium" variant="pill"></pds-radio>
+    <pds-radio component-id="pill-large" label="More than 50" value="large" variant="pill"></pds-radio>
+  </pds-radio-group>`;
+
+export const Pill = PillTemplate.bind();
+Pill.args = {
+  componentId: 'pill-group',
+  direction: 'row',
+  groupLabel: 'How big is your team?',
+  name: 'pill-group',
+};
+
+export const PillDisabled = PillTemplate.bind();
+PillDisabled.args = {
+  componentId: 'pill-group-disabled',
+  direction: 'row',
+  disabled: true,
+  groupLabel: 'How big is your team?',
+  name: 'pill-group-disabled',
+};
+
+export const PillInvalid = PillTemplate.bind();
+PillInvalid.args = {
+  componentId: 'pill-group-invalid',
+  direction: 'row',
+  errorMessage: 'Choose a team size to continue',
+  groupLabel: 'How big is your team?',
+  invalid: true,
+  name: 'pill-group-invalid',
+};

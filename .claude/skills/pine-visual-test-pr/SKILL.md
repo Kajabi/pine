@@ -15,19 +15,20 @@ This skill builds Stencil, serves Storybook, discovers the stories for the
 components the PR touched, captures Playwright screenshots across **theme
 (light/dark)**, viewport, and interactive state, evaluates each against the
 rules below, and loops until every shot passes or a structural blocker
-requires human input. As of today this is the **only** pixel-level regression
-check Pine has: `@chromatic-com/storybook` is installed as a local Storybook
-panel, but the Chromatic **CI** job is not merged (it lives on an open PR). So
-a clean result here is currently the whole pixel-level signal — weigh it
-accordingly. Once Chromatic CI lands, this stays useful as the fast, local,
-agent-evaluated pass you run before pushing and before that job.
+requires human input. Pine also runs **Chromatic CI** on every PR (merged via
+#737): its PR status check is the authoritative pixel-diff against the
+published baseline, and its own review UI is where visual diffs get
+approved/denied. This skill is the fast, local, agent-evaluated pass you run
+before pushing and before that job — it catches obvious breaks early and adds
+axes (dark mode, interactive states, console errors, a11y focus rings)
+Chromatic's snapshot diffing doesn't reason about on its own.
 
 ## When to Use
 
 - After changing any `libs/core/src/components/pds-*/**` file (`.tsx`, `.scss`/`.tokens.scss`, `.stories.*`)
 - As a complement to `pine-design-review` (token/a11y code review) and `pine-run-gauntlet`
 - Before requesting human review, to pre-validate rendered output in both themes
-- To sanity-check a change locally before pushing (and, once the Chromatic CI job lands, without waiting for it)
+- To sanity-check a change locally before pushing and before waiting on the Chromatic CI job
 
 **Not the right tool when:** the PR only touches docs (`*.mdx`), build config, or non-component TypeScript with no rendered surface — there is nothing to screenshot. Say so and stop.
 
@@ -245,7 +246,7 @@ Decide, per component, whether to also capture a **baseline** (the component as 
 
 If capturing baselines, note that it requires rebuilding Stencil on the base branch — do it in one batch after the PR-branch capture (Phase 5b), not interleaved. If the working tree is dirty or the user is mid-task, ask before switching branches.
 
-Skipping baselines is always acceptable — say so in the report and rely on the rules-based evaluation. (Once Chromatic CI lands it will be the authoritative pixel-diff; until then this baseline mode is the closest thing to one, so prefer running it on token/SCSS diffs.)
+Skipping baselines is always acceptable — say so in the report and rely on the rules-based evaluation. (Chromatic CI is the authoritative pixel-diff now that it's merged; this baseline mode is still worth running on token/SCSS diffs as a faster local check before Chromatic's own review UI is available.)
 
 ---
 
@@ -336,18 +337,18 @@ mcp__playwright__browser_console_messages({ level: "error" })       # after inte
 After all PR-branch shots are approved:
 
 1. Record the current branch (you'll return to it in step 6).
-2. **Reset the two build-generated files first** — a prior `build.stencil` leaves `libs/core/src/components.d.ts` and `libs/react/src/components/react-component-lib/createComponent.tsx` dirty, and a branch switch **aborts** ("would be overwritten") while they are:
+2. **Reset build-generated files first** — a prior `build.stencil` can leave `libs/core/src/components.d.ts` and other generated files (e.g. under `libs/react/src`) dirty, and a branch switch **aborts** ("would be overwritten") while they are:
    ```bash
-   git checkout -- libs/core/src/components.d.ts libs/react/src/components/react-component-lib/createComponent.tsx
+   git checkout -- libs/core/src/components.d.ts libs/react/src
    ```
-   ⚠️ `createComponent.tsx` is **not** purely generated: it carries a hand-authored double-registration guard the stock `@stencil/react-output-target` template lacks, and `build.stencil` strips it back to the vendor version. `git checkout --` is the right move *because* it restores the **committed** (guarded) copy — never resolve this by deleting the file, keeping the built version, or `git add`-ing the stripped one.
-3. **Only now check for genuine WIP.** If `git status` still shows unrelated changes, `git stash` them and restore after — never discard the user's work. Doing the step-2 reset **first** is what stops the stash from snapshotting the vendor-stripped `createComponent.tsx` — otherwise a later `git stash pop` would silently reintroduce the guard-less version.
+   CI's "Verify generated React bindings are in sync" step (`.github/workflows/actions/build-core/action.yml`) keeps `libs/react/src` matching a real `build.stencil` on `main`, so on an up-to-date branch this is normally a no-op — but reset it anyway before switching in case the working tree has any local drift.
+3. **Only now check for genuine WIP.** If `git status` still shows unrelated changes, `git stash` them and restore after — never discard the user's work.
 4. **Stop the running Storybook first, then** `git checkout <baseRef>` → `( cd libs/core && npm run build.stencil )` → start Storybook again. You must stop first — nothing else frees port 6006, and a second `start.storybook` either errors (address in use) or the health check falls through to Phase 2's "reuse the existing server", which would screenshot the **wrong branch's** bundle (the `NoStoryMatchError` trap):
    ```bash
    lsof -ti:6006 | xargs kill 2>/dev/null      # or KillShell the Phase 2 background task
    ```
 5. Re-capture the **same** story×theme×viewport matrix into `*__baseline.png` filenames (same absolute `<REPORT_DIR>`). Note that **stories new in the PR won't exist on base** — compare only shared stories (e.g. `--default`); a new story with no baseline is validated against the rules alone.
-6. Stop Storybook again, re-run step 2's reset, `git checkout <headRef>`, rebuild Stencil, **then run step 2's reset once more** — the rebuild re-strips `createComponent.tsx`'s authored guard, so without this final reset you'd leave the tree with a real fix silently reverted. Now confirm the tree is clean of **skill-induced** changes (the two generated files match committed). **Restore any step-3 stash last** — that re-dirties the tree with the user's own WIP, which is expected and is **not** a failure of this clean check.
+6. Stop Storybook again, re-run step 2's reset, `git checkout <headRef>`, rebuild Stencil, **then run step 2's reset once more** to confirm the tree is clean of **skill-induced** changes (the generated files match committed). **Restore any step-3 stash last** — that re-dirties the tree with the user's own WIP, which is expected and is **not** a failure of this clean check.
 7. For each pair, compare before/after and note: **intended** (matches the PR's stated change) vs **regression** (unexpected delta, esp. in a theme/variant the PR didn't claim to touch). A console error present on a new story but absent from the shared `--default` on both branches is **PR-introduced and scoped to that story** — the highest-signal verdict this mode produces.
 
 ### Loop termination
@@ -442,7 +443,7 @@ gh pr comment <number> --repo Kajabi/pine --body-file "$REPORT"
 <url>
 ```
 
-If there are real findings, tell the user which components/themes regressed before they request review. If clean, note it's pre-validated locally — and that, until Chromatic CI lands, this is currently Pine's only pixel-level check, so treat it as the main signal rather than a secondary one.
+If there are real findings, tell the user which components/themes regressed before they request review. If clean, note it's pre-validated locally — and remind them Chromatic CI's own PR status check is the authoritative pixel-diff signal, so they should still confirm that check (and its review UI, if it flags changes) before merging.
 
 ---
 
@@ -468,12 +469,12 @@ If there are real findings, tell the user which components/themes regressed befo
 - Do NOT loop indefinitely — 3 retries per item, then blocker.
 - Do NOT include blank/unstyled or error screenshots in the approved set.
 - Do NOT switch branches for a baseline without confirming a clean tree.
-- Do NOT `git add` the vendor-stripped `createComponent.tsx` after a build — restore the committed (guarded) copy with `git checkout --`.
-- Do NOT describe Chromatic CI as an existing gate — only the local Storybook panel is merged today; hedge to "once Chromatic CI lands".
+- Do NOT `git add` build-generated drift under `libs/react/src` or `libs/core/src/components.d.ts` after a build — restore the committed copy with `git checkout --` (CI's drift-check step is the backstop if this slips through).
+- Do NOT treat a clean result from this skill as sufficient on its own — Chromatic CI's PR status check is the authoritative pixel-diff gate; point the user at it, don't substitute for it.
 
 ## Related Skills
 
 - `pine-design-review` — token / SCSS / a11y / Figma code review (pair with this; it reads code, this reads pixels)
 - `pine-run-gauntlet` — parallel multi-reviewer pass before a PR (code/security/design/existence)
 - `pine-existence-review` — checks whether a component/API already exists before adding new
-- Chromatic — `@chromatic-com/storybook` is installed as a local Storybook panel; the Chromatic **CI** pixel-diff job is not merged yet. Until it lands, this skill is Pine's only pixel-level regression check; after it lands, this is the fast local complement.
+- Chromatic — `@chromatic-com/storybook` is installed as a local Storybook panel, and Chromatic CI (merged via #737) runs on every PR as the authoritative pixel-diff gate. This skill is the fast local complement: it runs before pushing, covers axes (dark mode, interactive states, console errors, focus rings) Chromatic's snapshot diffing doesn't reason about, and its report should point reviewers at Chromatic's own PR status check rather than stand in for it.

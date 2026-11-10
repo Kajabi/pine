@@ -1,0 +1,15 @@
+pds-drawer-header {
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.pds-drawer__header {
+  align-items: center;
+  border-block-end: 1px solid var(--pine-color-border-subtle);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  padding: var(--pine-dimension-md);
+  width: 100%;
+}

@@ -30,6 +30,7 @@ Alerts display inline messages with distinct variants for information, success, 
 
 ### Accessibility
 - The dismiss button has an `aria-label="Dismiss alert"` to ensure screen readers announce its purpose.
+- Screen readers announce the alert's severity ("Error", "Info", "Success" or "Warning") before the heading and message, so it isn't conveyed by color and icon alone. It is still announced when `hideIcon` is set. The `default` variant has no severity. Pass a translated `severityLabel` to localize it. Because the severity is read first, don't start the heading with the same word ("Error: Payment failed" would be heard as "Error Error: Payment failed"); pass `severityLabel=""` to turn the announcement off if the heading already says it.
 - Write alert messages that are clear, concise, and actionable for the user.
 - Utilize alert variant colors to effectively convey the message's semantic meaning, importance, and type.
 

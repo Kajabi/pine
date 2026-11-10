@@ -242,20 +242,26 @@ The action slot allows you to add helpful content next to the input label, such 
   mdxSource={{
     react: `<PdsInput componentId="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
   <PdsTooltip slot="action">
-    <PdsIcon name="question-circle"></PdsIcon>
+    <PdsButton variant="unstyled" aria-label="Help with account ID">
+      <PdsIcon name="question-circle" aria-hidden="true"></PdsIcon>
+    </PdsButton>
     <span slot="content">Find your account ID in your account page</span>
   </PdsTooltip>
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
   <pds-tooltip slot="action">
-    <pds-icon name="question-circle"></pds-icon>
+    <pds-button variant="unstyled" aria-label="Help with account ID">
+      <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+    </pds-button>
     <span slot="content">Find your account ID in your account page</span>
   </pds-tooltip>
 </pds-input>`
   }}>
   <pds-input component-id="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
     <pds-tooltip slot="action">
-      <pds-icon name="question-circle"></pds-icon>
+      <pds-button variant="unstyled" aria-label="Help with account ID">
+        <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+      </pds-button>
       <span slot="content">Find your account ID in your account page</span>
     </pds-tooltip>
   </pds-input>
@@ -400,19 +406,19 @@ Prepend and append elements are placed outside the input container, next to the 
 <DocCanvas
   mdxSource={{
     react: `<PdsInput componentId="pds-input-suffix-button" label="Search" type="text" value="">
-      <PdsButton variant="unstyled" slot="suffix">
-        <PdsIcon name="search"></PdsIcon>
+      <PdsButton variant="unstyled" slot="suffix" aria-label="Submit search">
+        <PdsIcon name="search" aria-hidden="true"></PdsIcon>
       </PdsButton>
     </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-suffix-button" label="Search" type="text" value="">
-      <pds-button variant="unstyled" slot="suffix">
-        <pds-icon name="search"></pds-icon>
+      <pds-button variant="unstyled" slot="suffix" aria-label="Submit search">
+        <pds-icon name="search" aria-hidden="true"></pds-icon>
       </pds-button>
     </pds-input>`
   }}>
   <pds-input component-id="pds-input-suffix-button" label="Search" type="text" value="">
-    <pds-button variant="unstyled" slot="suffix">
-      <pds-icon name="search"></pds-icon>
+    <pds-button variant="unstyled" slot="suffix" aria-label="Submit search">
+      <pds-icon name="search" aria-hidden="true"></pds-icon>
     </pds-button>
   </pds-input>
 </DocCanvas>
@@ -422,21 +428,21 @@ Prepend and append elements are placed outside the input container, next to the 
   mdxSource={{
     react: `<PdsInput componentId="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
       <PdsIcon name="mail" slot="prefix"></PdsIcon>
-      <PdsButton variant="unstyled" slot="suffix">
-        <PdsIcon name="remove-circle"></PdsIcon>
+      <PdsButton variant="unstyled" slot="suffix" aria-label="Clear email">
+        <PdsIcon name="remove-circle" aria-hidden="true"></PdsIcon>
       </PdsButton>
     </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
       <pds-icon name="mail" slot="prefix"></pds-icon>
-      <pds-button variant="unstyled" slot="suffix">
-        <pds-icon name="remove-circle"></pds-icon>
+      <pds-button variant="unstyled" slot="suffix" aria-label="Clear email">
+        <pds-icon name="remove-circle" aria-hidden="true"></pds-icon>
       </pds-button>
     </pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
     <pds-icon name="mail" slot="prefix"></pds-icon>
-    <pds-button variant="unstyled" slot="suffix">
-      <pds-icon name="remove-circle"></pds-icon>
+    <pds-button variant="unstyled" slot="suffix" aria-label="Clear email">
+      <pds-icon name="remove-circle" aria-hidden="true"></pds-icon>
     </pds-button>
   </pds-input>
 </DocCanvas>

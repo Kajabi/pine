@@ -32,7 +32,7 @@ describe('pds-table-cell', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table-cell role="gridcell" truncate="true" class="is-truncated" part="cell" tabindex="0">
+      <pds-table-cell role="gridcell" truncate="true" class="is-truncated" part="cell">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -235,15 +235,9 @@ describe('pds-table-cell', () => {
     expect(tooltip).toBeNull();
   });
 
-  it('adds tabindex="0" when truncate is enabled', async () => {
-    const page = await newSpecPage({
-      components: [PdsTableCell],
-      html: `<pds-table-cell truncate="true">Text</pds-table-cell>`,
-    });
-
-    expect(page.root?.getAttribute('tabindex')).toBe('0');
-  });
-
+  // The tabindex is driven by measured overflow, which jsdom cannot report
+  // (scrollWidth and clientWidth are both 0 here, so nothing ever overflows).
+  // Its coverage lives in pds-table-cell.e2e.ts, where layout is real.
   it('does not add tabindex when truncate is disabled', async () => {
     const page = await newSpecPage({
       components: [PdsTableCell],

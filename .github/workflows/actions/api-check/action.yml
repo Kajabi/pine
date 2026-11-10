@@ -1,0 +1,73 @@
+name: 'API Check'
+description: 'Fails when a package public API drifts from its committed API Extractor report'
+
+inputs:
+  node-version:
+    description: 'The version of node to use'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out latest
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Set up Node.js (pinned npm)
+      uses: ./.github/workflows/actions/setup-node-with-pinned-npm
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: '.nvmrc'
+
+    - name: Get NPM cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+    - name: Cache npm
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-npm-${{ github.sha }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
+    - name: Install Dependencies
+      run: npm ci
+      shell: bash
+
+    # `api.check` depends on `build` in nx.json, so this builds core (and react) first.
+    - name: Check public API against committed reports
+      id: api-check
+      run: npm run api.check
+      shell: bash
+
+    # API Extractor reports *that* the surface moved but not *how*. Print the diff so a
+    # reviewer can judge intent straight from the log. Both configs also treat extractor and
+    # compiler warnings as failures, so a red job is not always a report diff — only claim the
+    # public API changed when we actually printed one, or the remediation advice is wrong.
+    - name: Show what changed
+      if: failure() && steps.api-check.outcome == 'failure'
+      shell: bash
+      run: |
+        printed_diff=0
+
+        for baseline in libs/*/etc/*.api.md; do
+          [ -f "$baseline" ] || continue
+          package_dir="${baseline%/etc/*}"
+          current="${package_dir}/temp/api-report/${baseline##*/}"
+          if [ -f "$current" ] && ! diff -q "$baseline" "$current" > /dev/null 2>&1; then
+            echo "::group::Public API diff for @pine-ds/${package_dir##*/}"
+            diff -u "$baseline" "$current" || true
+            echo "::endgroup::"
+            printed_diff=1
+          fi
+        done
+
+        if [ "$printed_diff" -eq 1 ]; then
+          echo "::error title=Public API changed::A package's public API no longer matches its committed report. If the change is intentional, run 'npm run api.update' and commit the updated libs/*/etc/*.api.md. Removing or renaming a prop, event, method, or exported type is a BREAKING change requiring a major bump — see VERSIONING.md."
+        else
+          echo "::error title=API Extractor failed without a report diff::The committed reports still match the generated ones, so this is not a public API change. API Extractor treats its own extractor and compiler warnings as failures — read its output above. Running 'npm run api.update' will not help."
+        fi

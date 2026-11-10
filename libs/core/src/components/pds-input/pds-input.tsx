@@ -3,7 +3,7 @@ import { assignDescription, isSpecTest, messageId } from '../../utils/form';
 import { inheritAriaAttributes } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 import { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
-import { debounceEvent } from '@utils/utils';
+import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
 import { danger } from '@pine-ds/icons/icons';
 
 /**
@@ -343,6 +343,7 @@ export class PdsInput {
   }
 
   disconnectedCallback() {
+    cancelDebouncedEvent(this.pdsInput);
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
   }
@@ -365,6 +366,8 @@ export class PdsInput {
      * debounce used to be set to a number. Otherwise, the event would stay debounced.
      */
     this.pdsInput = debounce === undefined ? originalPdsInput ?? pdsInput : debounceEvent(pdsInput, debounce);
+    // After the swap, so an emit made while flushing goes to the new emitter, not the old one.
+    flushDebouncedEvent(pdsInput);
   }
 
   @Watch('value')

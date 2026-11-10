@@ -1,0 +1,64 @@
+name: 'Test A11y'
+description: 'Enforces the accessibility baseline by running axe against every Storybook story'
+
+inputs:
+  node-version:
+    description: 'The version of node to use'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out latest
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Set up Node.js (pinned npm)
+      uses: ./.github/workflows/actions/setup-node-with-pinned-npm
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: '.nvmrc'
+
+    - name: Get NPM cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+    - name: Cache npm
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-npm-${{ github.sha }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
+    - name: Install Dependencies
+      run: npm ci
+      shell: bash
+
+    # The gate audits a static Storybook, which build-storybook has already built
+    # and Chromatic also consumes. Restores libs/core/storybook-static, which is
+    # the only build output scripts/a11y.mjs needs — core's dist no longer has to
+    # be restored separately because .storybook/main.js lists '../dist' in
+    # staticDirs, so Storybook copies it into storybook-static at build time.
+    # That copy is load-bearing: preview-head.html fetches /pine-core/*.js and
+    # .css at render time, and both the hydration wait and the colour-contrast
+    # checks depend on them being served. Dropping '../dist' from staticDirs
+    # would not fail this job — it would quietly audit unhydrated, unstyled
+    # markup.
+    - name: Download Storybook static from build-storybook
+      uses: ./.github/workflows/actions/download-archive
+      with:
+        name: pine-storybook-static-${{ github.sha }}
+        path: /tmp/pine-storybook-static
+        filename: storybook-static.zip
+
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+      shell: bash
+
+    - name: Run accessibility gate
+      run: npm run test.a11y --workspace=@pine-ds/core
+      shell: bash

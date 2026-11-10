@@ -36,6 +36,7 @@ libs/core/.storybook/static/
 /.sass-cache
 /connect.lock
 /coverage
+jest-results.json
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
@@ -51,3 +52,6 @@ testem.log
 Thumbs.db
 .nx
 tmp/
+
+# API Extractor staging + temp reports (baselines live in libs/*/etc/)
+temp/

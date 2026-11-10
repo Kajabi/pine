@@ -27,6 +27,13 @@
     },
     "lint": {
       "cache": true
+    },
+    "api.check": {
+      "dependsOn": ["build"],
+      "cache": true
+    },
+    "api.update": {
+      "dependsOn": ["build"]
     }
   },
   "release": {

@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-loader', () => {
@@ -98,6 +99,52 @@ describe('pds-loader', () => {
     expect(colors[1]).toBe('rgb(0, 0, 255)'); // blue
     expect(colors[2]).toBe('rgb(0, 128, 0)'); // green
   });
+
+  it('restores the default size when the size attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader size="xs"></pds-loader>');
+    const element = await page.find('pds-loader');
+
+    element.removeAttribute('size');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('size', 'md');
+  });
+
+  it('takes a new size after the default size attribute is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader></pds-loader>');
+    const element = await page.find('pds-loader');
+
+    // The attribute holds Pine's reflected default, the case a DOM morph hits.
+    element.removeAttribute('size');
+    await page.waitForChanges();
+
+    expect(element).toEqualAttribute('size', 'md');
+
+    element.setProperty('size', 'xs');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('xs');
+    expect(element).toEqualAttribute('size', 'xs');
+  });
+
+  it('resets a size set to null, and takes the next value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader size="xs"></pds-loader>');
+    const element = await page.find('pds-loader');
+
+    element.setProperty('size', null);
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('md');
+    expect(element).toEqualAttribute('size', 'md');
+
+    element.setProperty('size', 'lg');
+    await page.waitForChanges();
+
+    expect(await element.getProperty('size')).toBe('lg');
+  });
 });
 
 describe('pds-loader accessibility', () => {
@@ -106,5 +153,24 @@ describe('pds-loader accessibility', () => {
     await page.setContent('<pds-loader is-loading="true"></pds-loader>');
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
+// pds-loader wrote, including the ones its CSS selects on.
+describe('pds-loader after its host classes and styles are stripped', () => {
+  it('keeps its styling', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader class="consumer" is-loading="false"></pds-loader>');
+
+    await expectStylingSurvivesStrip(page, 'pds-loader', { removeAttributes: ['aria-hidden', 'aria-busy', 'aria-live'] });
+  });
+
+  it('keeps aria-busy while loading', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader class="consumer" is-loading="true"></pds-loader>');
+    expect(await page.find('pds-loader')).toEqualAttribute('aria-busy', 'true');
+
+    await expectStylingSurvivesStrip(page, 'pds-loader', { removeAttributes: ['aria-hidden', 'aria-busy', 'aria-live'] });
   });
 });

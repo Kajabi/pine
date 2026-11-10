@@ -1,10 +1,12 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import { assignDescription, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
 /**
- * @slot image - Custom image content to display instead of the default radio input
+ * @slot image - Custom image content to display instead of the default radio input. Ignored when `variant` is `pill`.
  * @part image-container - The container for the image
+ * @lightDom renders-markup
  */
 @Component({
   tag: 'pds-radio',
@@ -15,6 +17,7 @@ export class PdsRadio {
   private readonly _type = 'radio' as const;
 
   @Element() el: HTMLPdsRadioElement;
+  private hostKeeper = new HostStylingKeeper();
 
   @State() private _hasImage = false;
 
@@ -46,7 +49,7 @@ export class PdsRadio {
   @Prop() helperMessage: string;
 
   /**
-   * Adds a border around the radio component for better visual separation.
+   * Adds a border around the radio component for better visual separation. Ignored when `variant` is `pill`.
    * @defaultValue false
    */
   @Prop() hasBorder = false;
@@ -63,7 +66,7 @@ export class PdsRadio {
   @Prop() label: string;
 
   /**
-   * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+   * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
    */
   @Prop() hideLabel: boolean;
 
@@ -83,6 +86,11 @@ export class PdsRadio {
    */
   @Prop() value: string;
 
+  /**
+   * Sets the style variant of the radio. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+   * @defaultValue default
+   */
+  @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
    * Emits a boolean indicating whether the radio is currently checked or unchecked.
@@ -115,6 +123,10 @@ export class PdsRadio {
     return this._hasImage;
   }
 
+  private isPill(): boolean {
+    return this.variant === 'pill';
+  }
+
   private classNames() {
     const classNames = [];
 
@@ -124,10 +136,14 @@ export class PdsRadio {
     if (this.disabled) {
       classNames.push('is-disabled');
     }
-    if (this.hasBorder) {
+    // A pill is its own bordered shape, so has-border doesn't stack a card around it.
+    if (this.hasBorder && !this.isPill()) {
       classNames.push('has-border');
     }
-    if (this.hasImage()) {
+    if (this.isPill()) {
+      classNames.push('pds-radio--pill');
+    }
+    if (this.hasImage() && !this.isPill()) {
       classNames.push('has-image');
     }
 
@@ -139,8 +155,13 @@ export class PdsRadio {
   }
 
   connectedCallback() {
+    this.hostKeeper.connect(this.el);
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
   }
 
   // Discards stale hidden label/message/wrapper copies left by a page-cache (Turbo, bfcache) reconnect, rescuing real [slot="image"] content stranded inside a stale image-container first.
@@ -172,9 +193,9 @@ export class PdsRadio {
           required={this.required}
           disabled={this.disabled}
           onChange={this.handleRadioChange}
-          class={this.hasImage() ? 'visually-hidden' : ''}
+          class={this.hasImage() || this.isPill() ? 'visually-hidden' : ''}
         />
-        <span class={this.hideLabel ? 'visually-hidden' : ''}>
+        <span class={this.hideLabel && !this.isPill() ? 'visually-hidden' : ''}>
           {this.label}
         </span>
       </label>,
@@ -194,20 +215,25 @@ export class PdsRadio {
           id={messageId(this.componentId, 'error')}
           aria-live="assertive"
         >
-          <pds-icon icon={danger} size="small" />
+          <pds-icon aria-hidden="true" icon={danger} size="small" />
           {this.errorMessage}
         </div>
       )
     ];
 
+    const hostClass = this.classNames();
+    this.hostKeeper.record(hostClass);
+
+    const showImage = this.hasImage() && !this.isPill();
+
     return (
-      <Host class={this.classNames()}>
-        {this.hasImage() && (
+      <Host class={hostClass}>
+        {showImage && (
           <div class="pds-radio__image-container" part="image-container">
             <slot name="image" onSlotchange={() => (this._hasImage = this.hasImageSlot())} />
           </div>
         )}
-        {this.hasImage() ? (
+        {showImage ? (
           <div class="pds-radio__content-wrapper">
             {renderLabelAndMessages()}
           </div>

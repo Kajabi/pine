@@ -1,0 +1,84 @@
+{
+  "$schema": "Story ID -> axe rule IDs that already failed when the gate landed.",
+  "$docs": "See CONTRIBUTING.md § Accessibility gate. Entries may be removed, never added by hand.",
+  "generatedAt": "2026-10-28",
+  "storyCount": 25,
+  "violationCount": 25,
+  "stories": {
+    "components-filters--default": [
+      "color-contrast"
+    ],
+    "components-filters-filter--all-variants": [
+      "color-contrast"
+    ],
+    "components-filters-filter--default": [
+      "color-contrast"
+    ],
+    "components-filters-filter--more": [
+      "color-contrast"
+    ],
+    "components-input--with-append-select": [
+      "select-name"
+    ],
+    "components-input--with-prefix-and-append": [
+      "select-name"
+    ],
+    "components-input--with-prepend-and-suffix": [
+      "select-name"
+    ],
+    "components-multiselect--close-panel-on-select": [
+      "color-contrast"
+    ],
+    "components-multiselect--consumer-managed-async": [
+      "color-contrast"
+    ],
+    "components-multiselect--custom-empty-state": [
+      "color-contrast"
+    ],
+    "components-multiselect--custom-search-placeholder": [
+      "color-contrast"
+    ],
+    "components-multiselect--custom-widths": [
+      "color-contrast"
+    ],
+    "components-multiselect--default": [
+      "color-contrast"
+    ],
+    "components-multiselect--disabled-options": [
+      "color-contrast"
+    ],
+    "components-multiselect--grouped-options": [
+      "color-contrast"
+    ],
+    "components-multiselect--grouped-options-via-options": [
+      "color-contrast"
+    ],
+    "components-multiselect--hidden-label": [
+      "color-contrast"
+    ],
+    "components-multiselect--invalid": [
+      "color-contrast"
+    ],
+    "components-multiselect--long-list": [
+      "color-contrast"
+    ],
+    "components-multiselect--max-selections": [
+      "color-contrast"
+    ],
+    "components-multiselect--pill-below": [
+      "color-contrast"
+    ],
+    "components-multiselect--with-create-option": [
+      "color-contrast"
+    ],
+    "components-multiselect--with-message": [
+      "color-contrast"
+    ],
+    "components-sortable--disabled": [
+      "color-contrast"
+    ],
+    "components-tabs-tabpanel--default": [
+      "aria-valid-attr-value"
+    ]
+  }
+}

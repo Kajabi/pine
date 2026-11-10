@@ -13,7 +13,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -30,7 +30,7 @@ describe('pds-avatar', () => {
       <pds-avatar component-id="test" id="test" class="pds-avatar" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -46,7 +46,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar pds-avatar--admin" size="lg" variant="admin">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px">
-            <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -62,8 +62,8 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" badge="true" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
-            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-label="Verified" class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -79,7 +79,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="128px" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 128px; width: 128px">
-            <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -128,7 +128,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px">
             <img alt="Customer Profile" src="https://placehold.co/64x64"/>
-            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-label="Verified" class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -144,7 +144,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="xl" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 64px; width: 64px;">
-            <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -161,7 +161,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <button aria-label="Avatar dropdown trigger" class="pds-avatar__button" part="button" type="button">
             <div part="asset-wrapper" style="height: 56px; width: 56px;">
-              <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
+              <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
             </div>
           </button>
         </mock:shadow-root>
@@ -178,7 +178,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" dropdown="false" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-hidden="true" color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -231,7 +231,7 @@ describe('pds-avatar', () => {
             <svg class="pds-avatar__initials" part="initials" viewBox="0 0 32 32">
               <text x="16" y="20">KJ</text>
             </svg>
-            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+            <pds-icon aria-label="Verified" class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -350,4 +350,55 @@ describe('pds-avatar', () => {
     expect(initials.textContent).toContain('QJ');
   });
 
+  describe('badge label', () => {
+    it('labels the badge "Verified" by default', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar badge="true"></pds-avatar>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.pds-avatar__badge').getAttribute('aria-label')).toBe('Verified');
+    });
+
+    it('uses a custom badge-label in place of the default', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar badge="true" badge-label="Vérifié"></pds-avatar>`,
+      });
+      expect(page.root.shadowRoot.querySelector('.pds-avatar__badge').getAttribute('aria-label')).toBe('Vérifié');
+    });
+
+    it('makes the badge decorative when badge-label is empty', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar badge="true" badge-label=""></pds-avatar>`,
+      });
+      const badge = page.root.shadowRoot.querySelector('.pds-avatar__badge');
+      expect(badge.getAttribute('aria-hidden')).toBe('true');
+      expect(badge.hasAttribute('aria-label')).toBe(false);
+    });
+
+    it('falls back to "Verified" when badgeLabel is cleared to undefined or null', async () => {
+      for (const value of [undefined, null]) {
+        const page = await newSpecPage({
+          components: [PdsAvatar],
+          html: `<pds-avatar badge="true" badge-label="Custom"></pds-avatar>`,
+        });
+        (page.root as HTMLPdsAvatarElement).badgeLabel = value as unknown as string;
+        await page.waitForChanges();
+        const badge = page.root.shadowRoot.querySelector('.pds-avatar__badge');
+        expect(badge.getAttribute('aria-label')).toBe('Verified');
+        expect(badge.hasAttribute('aria-hidden')).toBe(false);
+      }
+    });
+
+    it('hides the badge inside a dropdown trigger, whose label owns the name', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar badge="true" dropdown="true"></pds-avatar>`,
+      });
+      const badge = page.root.shadowRoot.querySelector('.pds-avatar__badge');
+      expect(badge.getAttribute('aria-hidden')).toBe('true');
+      expect(badge.hasAttribute('aria-label')).toBe(false);
+    });
+  });
 });

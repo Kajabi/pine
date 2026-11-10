@@ -1,8 +1,10 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 
 import { handle as handleIcon } from '@pine-ds/icons/icons';
 /**
  * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`.
+ * @lightDom renders-markup
  */
 @Component({
   tag: 'pds-sortable-item',
@@ -11,6 +13,16 @@ import { handle as handleIcon } from '@pine-ds/icons/icons';
 })
 export class PdsSortableItem {
   @Element() el: HTMLPdsSortableItemElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
+
   sortableRef: HTMLPdsSortableElement;
   /**
    * Determines whether `sortable-item-actions` slot should be enabled.
@@ -57,6 +69,8 @@ export class PdsSortableItem {
   }
 
   render() {
+    this.hostKeeper.record('pds-sortable-item');
+
     return (
       <Host class="pds-sortable-item" id={this.componentId}>
         {this.showHandle && (

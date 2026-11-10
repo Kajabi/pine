@@ -20,6 +20,7 @@ Box is our primitive layout component. It is intended to be used as a building b
 - **For vertical stacking**: Use `direction="column"`
 - **Inside pds-row**: Box becomes a grid column (use `size` props)
 - **Standalone**: Box is a flexbox container (use alignment props)
+- **Host classes and styles**: The component keeps the classes and inline styles it puts on its host. If something removes them, such as a DOM morph, it puts them back, so change its layout through props. Classes and styles you add yourself are left alone. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ### Most Common Props
 - `direction`: `"row"` (default, horizontal) or `"column"` (vertical stacking)
@@ -1348,11 +1349,20 @@ See the [Responsive Breakpoints](#responsive-breakpoints) section above for deta
 
 #### When to use/avoid the base `size` prop
 
-If you want consistent sizing across all breakpoints:
+The base breakpoint is what a phone renders. A base `size` below `12` is
+therefore a narrow column **on the smallest screen**, not just on large ones —
+`size="6"` is half the viewport on a phone, and nothing overrides it.
+
+Avoid the base prop for content that should stack on small screens — use the
+full-width-then-widen pattern above (`size="12" size-md="6"`) instead.
+
+Use the base prop when the element genuinely should stay narrow at every width —
+a checkbox or icon gutter beside a body column, for example, where a full-width
+phone layout would be wrong:
 
 ```html
-<!-- Same width across all breakpoints -->
-<pds-box size="6"></pds-box>
+<!-- Deliberately narrow at every breakpoint, including mobile -->
+<pds-box size="2"></pds-box>
 ```
 
 If you need different sizes at different breakpoints:

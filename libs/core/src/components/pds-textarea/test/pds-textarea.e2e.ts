@@ -269,4 +269,11 @@ describe('pds-textarea accessibility', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('has no axe violations with an error message', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" label="Bio" invalid error-message="Bio is required"></pds-textarea>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
 });

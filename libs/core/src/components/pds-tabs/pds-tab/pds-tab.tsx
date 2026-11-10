@@ -1,6 +1,10 @@
 import { Component, Element, Fragment, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
+/**
+ * @lightDom renders-markup
+ */
 @Component({
   tag: 'pds-tab',
   styleUrl: 'pds-tab.scss',
@@ -8,6 +12,15 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 })
 export class PdsTab {
   @Element() el: HTMLPdsTabElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
 
   // Unwraps a nested <a>/<button> left by a page-cache (Turbo, bfcache) reconnect.
   componentDidRender() {
@@ -137,6 +150,10 @@ export class PdsTab {
   }
 
   render() {
+    // The docs show consumers omitting `slot`, so server HTML doesn't carry it — a DOM morph
+    // that strips it leaves this tab unslotted, and pds-tabs has no default slot. Put it back.
+    this.hostKeeper.record('', {}, { slot: 'tabs' });
+
     const availabilityTabEdgeInlineStart = (
       <span class="pds-tab-edge" role="presentation"></span>
     )

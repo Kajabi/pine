@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-progress', () => {
@@ -54,5 +55,16 @@ describe('pds-progress accessibility', () => {
     await page.setContent('<pds-progress component-id="upload" label="Upload progress" percent="25"></pds-progress>');
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
+// pds-progress wrote, including the ones its CSS selects on.
+describe('pds-progress after its host classes and styles are stripped', () => {
+  it('keeps its styling', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-progress class="consumer" component-id="progress" label="Progress" percent="50" animated></pds-progress>');
+
+    await expectStylingSurvivesStrip(page, 'pds-progress');
   });
 });

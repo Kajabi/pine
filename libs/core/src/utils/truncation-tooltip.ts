@@ -5,9 +5,11 @@ import {
   offset,
   shift,
 } from '@floating-ui/dom';
+import type { ReferenceElement } from '@floating-ui/dom';
+import { findPortalTarget, isTopLayerInDocument, onTopLayerClose } from './portal-target';
 
 export interface TruncationTooltipOptions {
-  /** The host element (for hover/focus listeners and positioning anchor) */
+  /** The host element (for hover listeners and positioning anchor; focus listeners too, unless `focusEl` is set) */
   hostEl: HTMLElement;
   /** The inner element where overflow actually occurs (inside shadow root) */
   contentEl: HTMLElement;
@@ -15,7 +17,35 @@ export interface TruncationTooltipOptions {
   getTooltipText: () => string;
   /** Tooltip placement preference (default: 'top') */
   placement?: PlacementType;
+  /**
+   * What the tooltip is positioned against (default: `hostEl`). A virtual
+   * element lets it sit beside a larger region than the host.
+   */
+  reference?: ReferenceElement;
+  /**
+   * Whether to give `contentEl` a tab stop while its text is clipped (default: true).
+   *
+   * Set to `false` when `contentEl` already sits inside its own focusable
+   * control (e.g. a wrapping `<button>` or `<pds-button>`) that already
+   * receives focus and triggers this tooltip via `focusEl`'s `focusin`
+   * listener. Managing the tabindex there too would nest a second, nameless
+   * tab stop inside an already-interactive element.
+   */
+  manageTabIndex?: boolean;
+  /**
+   * The element whose keyboard focus shows the tooltip (default: `hostEl`).
+   *
+   * Pass the wrapping control when it sits outside `hostEl`, so focusing it
+   * still reveals the text once `manageTabIndex` is `false`. Focus on another
+   * tab stop nested in it, beside `hostEl`, doesn't.
+   */
+  focusEl?: HTMLElement;
 }
+
+// Controls that clipped text can sit inside that already take focus, so the text adds no tab stop of its own.
+// Not any `[tabindex]`: a focusable scroll region full of chips would show every chip's tooltip at once.
+export const FOCUSABLE_WRAPPER =
+  'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item, [role="option"], [role="treeitem"]';
 
 /** CSS class prefix used for truncation tooltip portal elements */
 const TOOLTIP_CLASS = 'pds-truncation-tooltip';
@@ -27,7 +57,8 @@ const TOOLTIP_CLASS = 'pds-truncation-tooltip';
  *
  * Z-Index Strategy:
  * Uses --pine-z-index-nuclear (9999) to ensure tooltips appear above all other UI elements.
- * This is necessary because tooltips are portaled to document.body and must overlay:
+ * This is necessary because tooltips are portaled to document.body, or into the modal dialog or
+ * open popover around the host (the top layer, which no z-index reaches from the body), and must overlay:
  * - Modal dialogs
  * - Dropdown menus
  * - Other floating UI elements
@@ -67,6 +98,15 @@ function injectStyles(): void {
       opacity: 1;
       visibility: visible;
     }
+    :is(dialog, [popover]) > .${TOOLTIP_CLASS} {
+      font-style: normal;
+      font-weight: normal;
+      text-align: start;
+      text-indent: 0;
+      text-transform: none;
+      white-space: normal;
+      word-spacing: normal;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -79,26 +119,68 @@ function isOverflowing(el: HTMLElement): boolean {
 }
 
 /**
+ * Engines without `:focus-visible` throw on the selector, so there every
+ * focus counts as visible rather than none.
+ */
+function isFocusVisible(el: Element): boolean {
+  try {
+    return el.matches(':focus-visible');
+  } catch {
+    return true;
+  }
+}
+
+/**
  * Sets up automatic tooltip behavior for a truncated element.
  *
- * When the element's text overflows, hovering or focusing the host element
- * will display a tooltip showing the full text content. The tooltip is
- * rendered as a portal on document.body and positioned with Floating UI.
+ * When the element's text overflows, hovering the host element or giving it
+ * keyboard focus will display a tooltip showing the full text content. The
+ * tooltip is rendered as a portal on document.body, or in the modal dialog or open popover around
+ * the host, and positioned with Floating UI.
+ *
+ * Also owns the element's `tabindex` while it is clipped — see syncTabIndex.
  *
  * @returns A cleanup function that removes all listeners, observers, and DOM elements.
  */
 export function setupTruncationTooltip(options: TruncationTooltipOptions): () => void {
-  const { hostEl, contentEl, getTooltipText, placement = 'top' } = options;
+  const { hostEl, contentEl, getTooltipText, placement = 'top', reference = hostEl, manageTabIndex = true, focusEl = hostEl } = options;
 
   injectStyles();
 
   let portalEl: HTMLElement | null = null;
+  let stopWatchingPortalHost: (() => void) | null = null;
   let isHovering = false;
   let isHoveringPortal = false;
   let isFocused = false;
   let hideTimeout: ReturnType<typeof setTimeout> | null = null;
   let resizeObserver: ResizeObserver | null = null;
   let resizeDebounce: ReturnType<typeof setTimeout> | null = null;
+  let ownsTabIndex = false;
+  let disposed = false;
+
+  /**
+   * The tab stop exists only to give the tooltip a focusable anchor, so it
+   * belongs on the element while the text is actually clipped and not a moment
+   * longer. Deriving it from the caller's prop instead leaves a dead stop on
+   * every element that opted into truncation but happens to fit — in a row of
+   * chips that doubles the tab stops, half of them landing on a span with no
+   * role, no name of its own, and nothing to reveal.
+   *
+   * Ownership is tracked rather than inferred from the value: if the consumer
+   * already put a tabindex on the element (a roving -1, say), that is theirs
+   * and we never touch it.
+   */
+  function syncTabIndex(): void {
+    if (!manageTabIndex) return;
+    if (isOverflowing(contentEl)) {
+      if (!ownsTabIndex && contentEl.hasAttribute('tabindex')) return;
+      ownsTabIndex = true;
+      contentEl.setAttribute('tabindex', '0');
+    } else if (ownsTabIndex) {
+      ownsTabIndex = false;
+      contentEl.removeAttribute('tabindex');
+    }
+  }
 
   // Use ResizeObserver to re-evaluate overflow when the element resizes
   // Debounced to prevent performance issues during rapid window resizing
@@ -109,6 +191,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
       }
       resizeDebounce = setTimeout(() => {
         resizeDebounce = null;
+        syncTabIndex();
         // If tooltip is showing but text no longer overflows, hide it
         if (portalEl && portalEl.isConnected && !isOverflowing(contentEl)) {
           hideTooltip();
@@ -116,6 +199,19 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
       }, 100);
     });
     resizeObserver.observe(contentEl);
+  }
+
+  // Measure now so the common case is right on the first paint, rather than
+  // waiting out the observer's debounce.
+  syncTabIndex();
+
+  // A web font swapping in changes scrollWidth without changing the clipped
+  // box's size, so ResizeObserver never fires for it — the element would keep
+  // whatever the fallback font measured. Re-measure once the fonts settle.
+  if (typeof document !== 'undefined' && document.fonts !== undefined) {
+    document.fonts.ready.then(() => {
+      if (!disposed) syncTabIndex();
+    });
   }
 
   function createPortal(): void {
@@ -134,7 +230,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     contentDiv.textContent = text.trim();
 
     portalEl.appendChild(contentDiv);
-    document.body.appendChild(portalEl);
+    const portalHost = findPortalTarget(hostEl, isTopLayerInDocument);
+    portalHost.appendChild(portalEl);
+    // Closing that host moves no pointer, so a tooltip opened by touch would outlive it unseen.
+    if (portalHost !== document.body) stopWatchingPortalHost = onTopLayerClose(portalHost, closeWithPortalHost);
 
     // Allow the user to hover into the tooltip to select/copy text
     portalEl.addEventListener('mouseenter', handlePortalMouseEnter);
@@ -151,7 +250,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     if (!portalEl) return;
 
     try {
-      const { x, y } = await computePosition(hostEl, portalEl, {
+      const { x, y } = await computePosition(reference, portalEl, {
         placement,
         strategy: 'fixed',
         middleware: [offset(4), flip(), shift({ padding: 5 })],
@@ -164,7 +263,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     } catch {
       // Fallback: position above the element with bounds checking
       if (portalEl) {
-        const rect = hostEl.getBoundingClientRect();
+        const rect = reference.getBoundingClientRect();
         const portalRect = portalEl.getBoundingClientRect();
         const padding = 5;
 
@@ -179,6 +278,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   }
 
   function removePortal(): void {
+    if (stopWatchingPortalHost !== null) {
+      stopWatchingPortalHost();
+      stopWatchingPortalHost = null;
+    }
     if (portalEl) {
       portalEl.removeEventListener('mouseenter', handlePortalMouseEnter);
       portalEl.removeEventListener('mouseleave', handlePortalMouseLeave);
@@ -210,6 +313,15 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   function hideTooltip(): void {
     if (isHovering || isHoveringPortal || isFocused) return;
+    removePortal();
+  }
+
+  // Hover and focus can't outlast a host that's no longer shown, so none of them keeps it open.
+  function closeWithPortalHost(): void {
+    isHovering = false;
+    isHoveringPortal = false;
+    isFocused = false;
+    cancelHideTimeout();
     removePortal();
   }
 
@@ -249,9 +361,26 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     scheduleHide();
   }
 
-  function handleFocusIn(): void {
+  // A second tab stop inside focusEl, such as another clipped text, bubbles its focus here too. Its event.target is
+  // retargeted to the stop's outermost element in focusEl's tree, which sits beside hostEl rather than around or in it.
+  function isFocusForHost(target: Node): boolean {
+    return focusEl === hostEl || target === focusEl || target.contains(hostEl) || hostEl.contains(target);
+  }
+
+  // Keyboard focus only: focus from a click would pin the tooltip open after the pointer leaves.
+  // Events from inside a shadow root arrive retargeted to its host, so test the innermost target.
+  function showForVisibleFocus(event: Event): void {
+    if (!isFocusVisible(event.composedPath()[0] as Element)) return;
+    if (!isFocusForHost(event.target as Node)) return;
     isFocused = true;
     showTooltip();
+  }
+
+  // A key press after a click makes focus visible in place, with no new focusin. keyup, not
+  // keydown, so Tab's focus move lands first; Escape asks to dismiss, never to reveal.
+  function handleKeyUp(event: KeyboardEvent): void {
+    if (isFocused || event.key === 'Escape') return;
+    showForVisibleFocus(event);
   }
 
   function handleFocusOut(): void {
@@ -261,11 +390,13 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   hostEl.addEventListener('mouseenter', handleMouseEnter);
   hostEl.addEventListener('mouseleave', handleMouseLeave);
-  hostEl.addEventListener('focusin', handleFocusIn);
-  hostEl.addEventListener('focusout', handleFocusOut);
+  focusEl.addEventListener('focusin', showForVisibleFocus);
+  focusEl.addEventListener('focusout', handleFocusOut);
+  focusEl.addEventListener('keyup', handleKeyUp);
 
   // Return cleanup function
   return () => {
+    disposed = true;
     cancelHideTimeout();
     if (resizeDebounce) {
       clearTimeout(resizeDebounce);
@@ -274,10 +405,17 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     if (resizeObserver) {
       resizeObserver.disconnect();
     }
+    // Hand the element back as we found it — truncation may simply have been
+    // turned off, in which case the element outlives this teardown.
+    if (ownsTabIndex) {
+      ownsTabIndex = false;
+      contentEl.removeAttribute('tabindex');
+    }
     hostEl.removeEventListener('mouseenter', handleMouseEnter);
     hostEl.removeEventListener('mouseleave', handleMouseLeave);
-    hostEl.removeEventListener('focusin', handleFocusIn);
-    hostEl.removeEventListener('focusout', handleFocusOut);
+    focusEl.removeEventListener('focusin', showForVisibleFocus);
+    focusEl.removeEventListener('focusout', handleFocusOut);
+    focusEl.removeEventListener('keyup', handleKeyUp);
     removePortal();
   };
 }

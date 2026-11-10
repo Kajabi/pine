@@ -8,6 +8,7 @@ export default {
 const BaseTemplate = (args) => html`
   <pds-divider
     component-id=${args.componentId}
+    label=${args.label ?? ''}
     offset=${args.offset}
     vertical=${args.vertical}
   />`;
@@ -20,4 +21,10 @@ Default.args = {
 export const Vertical = BaseTemplate.bind();
 Vertical.args = {
   vertical: true,
+}
+
+export const WithLabel = BaseTemplate.bind();
+WithLabel.args = {
+  label: 'Today',
+  vertical: false,
 }

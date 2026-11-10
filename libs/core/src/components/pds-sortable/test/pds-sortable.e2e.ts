@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { expectStylingSurvivesStrip } from '../../../utils/test/host-strip';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-sortable', () => {
@@ -8,6 +9,36 @@ describe('pds-sortable', () => {
 
     const element = await page.find('pds-sortable');
     expect(element).toHaveClass('hydrated');
+  });
+
+  // A DOM morph makes the host match the server's HTML: its attributes stay, but its classes don't,
+  // including the scope class its CSS matches on.
+  it('puts its layout back after its classes are stripped', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-sortable class="consumer" border dividers></pds-sortable>');
+    const layout = (el: HTMLElement) => {
+      const style = getComputedStyle(el);
+      return {
+        display: style.display,
+        flexDirection: style.flexDirection,
+        borderStyle: style.borderTopStyle,
+        visibility: style.visibility,
+      };
+    };
+    const before = await page.$eval('pds-sortable', layout);
+
+    await page.$eval('pds-sortable', (el) => el.setAttribute('class', 'consumer'));
+    await page.waitForChanges();
+
+    expect(await page.$eval('pds-sortable', layout)).toEqual(before);
+    expect(await page.find('pds-sortable')).toHaveClasses([
+      'consumer',
+      'hydrated',
+      'sc-pds-sortable-h',
+      'pds-sortable',
+      'pds-sortable--bordered',
+      'pds-sortable--divided',
+    ]);
   });
 
   it('sets sortable item show-handle prop to true when handleType is set to "handle"', async () => {
@@ -95,5 +126,16 @@ describe('pds-sortable accessibility', () => {
     `);
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
+  });
+});
+
+// A DOM morph makes the host match the server's HTML, which has none of the classes and styles
+// pds-sortable-item wrote, including the ones its CSS selects on.
+describe('pds-sortable-item after its host classes and styles are stripped', () => {
+  it('keeps its styling', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-sortable><pds-sortable-item class="consumer">Item</pds-sortable-item></pds-sortable>');
+
+    await expectStylingSurvivesStrip(page, 'pds-sortable-item');
   });
 });

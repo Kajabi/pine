@@ -36,3 +36,42 @@ Default.args = {
   componentId: 'base-dropdown',
   placement: 'bottom-start',
 }
+
+const InformationalTemplate = (args) => html`
+<div style="height: 200px">
+  <pds-dropdown-menu
+    component-id=${args.componentId}
+    placement=${args.placement}
+  >
+    <pds-button slot="trigger" variant="secondary">Used on</pds-button>
+    <pds-dropdown-menu-item href="#products">3 products</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item href="#emails">5 emails</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational href="#pages">1 page</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>`;
+
+export const Informational = InformationalTemplate.bind();
+Informational.args = {
+  componentId: 'informational-dropdown',
+  placement: 'bottom-start',
+}
+
+const InformationalOnlyTemplate = (args) => html`
+<div style="height: 200px">
+  <pds-dropdown-menu
+    component-id=${args.componentId}
+    placement=${args.placement}
+  >
+    <pds-button slot="trigger" variant="secondary">Used on</pds-button>
+    <pds-dropdown-menu-item informational>3 products</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational>2 forms</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item informational>5 emails</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>`;
+
+export const InformationalOnly = InformationalOnlyTemplate.bind();
+InformationalOnly.args = {
+  componentId: 'informational-only-dropdown',
+  placement: 'bottom-start',
+}

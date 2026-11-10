@@ -1,8 +1,12 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import type { SortableEvent } from 'sortablejs';
 import { SortableType } from './sortable-interface';
+import { HostStylingKeeper } from '../../utils/attributes';
 import Sortable from 'sortablejs';
 
+/**
+ * @lightDom host-only
+ */
 @Component({
   tag: 'pds-sortable',
   styleUrls: ['pds-sortable.scss'],
@@ -72,6 +76,16 @@ export class PdsSortable {
     return classNames.join('  ');
   }
 
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
+
   componentDidLoad() {
 
     let sortableOptions: SortableType = {
@@ -95,8 +109,11 @@ export class PdsSortable {
   }
 
   render() {
+    const classNames = this.classNames();
+    this.hostKeeper.record(classNames);
+
     return (
-      <Host class={this.classNames()} id={this.componentId}>
+      <Host class={classNames} id={this.componentId}>
         <slot></slot>
       </Host>
     );

@@ -1,4 +1,5 @@
-import { inheritAttributes, inheritAriaAttributes } from '../attributes';
+import { inheritAttributes, inheritAriaAttributes, restoreHostStyling, setAttributesIfChanged } from '../attributes';
+import { classNamesOf } from '../keep-hydrated';
 
 describe('inheritAttributes()', () => {
   it('should create an attribute inheritance object', () => {
@@ -79,4 +80,51 @@ describe('inheritAriaAttributes()', () => {
     });
   });
 
+});
+
+describe('setAttributesIfChanged()', () => {
+  it('sets missing and different values, and skips values already in place', () => {
+    const el = document.createElement('button');
+    el.setAttribute('aria-haspopup', 'menu');
+    el.setAttribute('aria-expanded', 'true');
+    const setAttribute = jest.spyOn(el, 'setAttribute');
+
+    expect(setAttributesIfChanged(el, { 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': 'panel' })).toBe(true);
+    expect(setAttributesIfChanged(el, { 'aria-haspopup': 'menu' })).toBe(false);
+
+    expect(el.getAttribute('aria-expanded')).toBe('false');
+    expect(el.getAttribute('aria-controls')).toBe('panel');
+    expect(setAttribute).toHaveBeenCalledTimes(2);
+    expect(setAttribute).not.toHaveBeenCalledWith('aria-haspopup', 'menu');
+  });
+});
+
+describe('classNamesOf()', () => {
+  it('splits a rendered class string, dropping blanks', () => {
+    expect(classNamesOf('\n  pds-box  pds-box-gap-md\n ')).toEqual(['pds-box', 'pds-box-gap-md']);
+  });
+});
+
+describe('restoreHostStyling()', () => {
+  it('adds missing classes and style properties, and keeps the consumer\'s own', () => {
+    const el = document.createElement('div');
+    el.className = 'consumer';
+
+    expect(restoreHostStyling(el, { classes: ['pds-box', 'pds-box-gap-md'], styles: { '--color-background-box': 'red' } })).toBe(true);
+
+    expect(el.className).toBe('consumer pds-box pds-box-gap-md');
+    expect(el.style.getPropertyValue('--color-background-box')).toBe('red');
+  });
+
+  // Browsers normalize some values, so rewriting ones that differ would never settle.
+  it('leaves a style property that is present alone, and skips empty values', () => {
+    const el = document.createElement('div');
+    el.style.setProperty('min-height', '20px');
+    const setProperty = jest.spyOn(el.style, 'setProperty');
+
+    expect(restoreHostStyling(el, { classes: [], styles: { 'min-height': '40px', '--row-gap-x': '' } })).toBe(false);
+
+    expect(setProperty).not.toHaveBeenCalled();
+    expect(el.style.getPropertyValue('min-height')).toBe('20px');
+  });
 });

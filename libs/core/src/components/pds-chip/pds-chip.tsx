@@ -1,11 +1,44 @@
 import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
 import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
-import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { FOCUSABLE_WRAPPER, setupTruncationTooltip, type TruncationTooltipOptions } from '../../utils/truncation-tooltip';
+import { normalizeColorValue } from '../../utils/utils';
+
+const SENTIMENT_DOT_COLORS: Record<string, string> = {
+  accent: 'var(--pine-chip-color-accent-dot)',
+  danger: 'var(--pine-chip-color-danger-dot)',
+  info: 'var(--pine-chip-color-info-dot)',
+  neutral: 'var(--pine-chip-color-neutral-dot)',
+  solid: 'var(--pine-chip-color-solid-dot)',
+  subtle: 'var(--pine-chip-color-subtle-dot)',
+  success: 'var(--pine-chip-color-success-dot)',
+  warning: 'var(--pine-chip-color-warning-dot)',
+};
+
+// Beside the listbox and level with the option, so the tooltip never covers the other options.
+function besideListbox(wrapper: HTMLElement | null): Pick<TruncationTooltipOptions, 'placement' | 'reference'> {
+  const option = wrapper?.matches('[role="option"]') ? wrapper : null;
+  const listbox = option?.closest('[role="listbox"]');
+  if (!option || !listbox) return {};
+
+  return {
+    placement: 'right',
+    reference: {
+      getBoundingClientRect: () => {
+        const { top, bottom, height } = option.getBoundingClientRect();
+        const { left, right, width } = listbox.getBoundingClientRect();
+        return { x: left, y: top, top, left, bottom, right, width, height };
+      },
+    },
+  };
+}
 
 /**
  * @slot (default) - The chip's label text.
  * @part button
+ * @part dot - Exposes the dot for styling, such as a custom color. Appears only when `dot` is set.
+ * @part icon - Exposes the icon component for styling, such as a custom color. Appears only when `icon` is set.
  */
 
 @Component({
@@ -15,6 +48,16 @@ import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 })
 export class PdsChip {
   @Element() el: HTMLPdsChipElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+    // A moved chip reconnects without re-rendering, so componentDidRender won't re-bind what
+    // disconnectedCallback tore down. Before the first render there's no label, and it binds there.
+    if (this.maxWidth && this.labelTextEl) {
+      this.initTruncationTooltip();
+    }
+  }
 
   /** The label span that clips; the overflow anchor for the truncation tooltip. */
   private labelTextEl?: HTMLElement;
@@ -35,9 +78,21 @@ export class PdsChip {
   @Prop() dot = false;
 
   /**
+   * Sets the dot color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   * Defaults to the dot color of the chip's sentiment. Only applies when `dot` is set.
+   */
+  @Prop() dotColor?: string;
+
+  /**
    * The name of the icon to display before the chip text.
    */
   @Prop() icon?: string;
+
+  /**
+   * Sets the icon color. Accepts a sentiment name other than `brand` (e.g. `success`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   * Defaults to the chip's text color. Only applies when `icon` is set.
+   */
+  @Prop() iconColor?: string;
 
   /**
    * Sets the size of the chip.
@@ -110,6 +165,7 @@ export class PdsChip {
   }
 
   disconnectedCallback() {
+    this.hostKeeper.disconnect();
     this.destroyTruncationTooltip();
   }
 
@@ -119,10 +175,21 @@ export class PdsChip {
     this.destroyTruncationTooltip();
 
     if (this.labelTextEl) {
+      const wrapper = this.el.closest<HTMLElement>(FOCUSABLE_WRAPPER);
+      // Hidden from assistive tech, a tab stop would be focusable with no name; hover still reveals it.
+      const hidden = this.el.closest('[aria-hidden="true"]') !== null;
       this.truncationCleanup = setupTruncationTooltip({
         hostEl: this.el,
         contentEl: this.labelTextEl,
         getTooltipText: () => this.el.textContent || '',
+        // The dropdown variant's label span already sits inside
+        // `<button class="pds-chip__button">`, which is already focusable and
+        // bubbles focusin to the host — a tabindex on the span too would nest
+        // a second tab stop inside the button.
+        manageTabIndex: this.effectiveVariant !== 'dropdown' && !wrapper && !hidden,
+        // A wrapping control sits outside the host, so its focus never reaches the host's listener.
+        focusEl: wrapper ?? this.el,
+        ...besideListbox(wrapper),
       });
       this.tooltipBoundEl = this.labelTextEl;
     }
@@ -188,15 +255,19 @@ export class PdsChip {
     // node — and a plain `<pds-chip>Some text</pds-chip>` slots text with no
     // wrapping element. Wrapping the slot itself in an internal span gives
     // maxWidth something to ellipsize regardless of what's slotted.
-    // A focus-triggered tooltip needs a focusable anchor. The dropdown's own
-    // button already takes focus (focusin bubbles to the host), so only the
-    // text/tag label span needs a tabindex — and only when it can truncate.
-    const labelTabindex = this.maxWidth ? '0' : undefined;
-
+    // A focus-triggered tooltip needs a focusable anchor, but the label span
+    // only earns a tab stop while its text is actually clipped — a chip whose
+    // label fits has nothing to reveal. setupTruncationTooltip owns that
+    // tabindex off the measurement for every variant except dropdown: its
+    // label span already sits inside `<button class="pds-chip__button">`,
+    // which is already focusable and bubbles focusin to the host, so
+    // initTruncationTooltip passes `manageTabIndex: false` there to avoid
+    // nesting a second tab stop inside the button. The same goes for a chip
+    // inside a consumer's own focusable control (FOCUSABLE_WRAPPER).
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button" part="button">
-        {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
-        {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
+        {this.icon && <pds-icon class="pds-chip__icon" part="icon" icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
+        {showDot && <i class="pds-chip__dot" part="dot" aria-hidden="true"></i>}
         <span class="pds-chip__label-text" ref={(el) => (this.labelTextEl = el)}>
           <slot></slot>
         </span>
@@ -204,9 +275,9 @@ export class PdsChip {
       </button>
     ) : (
       <span class="pds-chip__label">
-        {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
-        {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
-        <span class="pds-chip__label-text" tabindex={labelTabindex} ref={(el) => (this.labelTextEl = el)}>
+        {this.icon && <pds-icon class="pds-chip__icon" part="icon" icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
+        {showDot && <i class="pds-chip__dot" part="dot" aria-hidden="true"></i>}
+        <span class="pds-chip__label-text" ref={(el) => (this.labelTextEl = el)}>
           <slot></slot>
         </span>
       </span>
@@ -221,7 +292,25 @@ export class PdsChip {
     // query) without !important — the same pattern pds-box uses for min-width.
     // The width and the min-width/box-sizing that make it work are applied in
     // pds-chip.scss under :host([max-width]).
-    return this.maxWidth ? { '--pds-chip-max-width': this.maxWidth } : {};
+    const styles: Record<string, string> = {};
+
+    if (this.maxWidth) {
+      styles['--pds-chip-max-width'] = this.maxWidth;
+    }
+
+    // Custom properties rather than inline colors on the dot/icon, so a
+    // consumer's ::part(dot) or ::part(icon) rule still wins over the prop.
+    const dotColor = normalizeColorValue(this.dotColor, { semanticMap: SENTIMENT_DOT_COLORS });
+    if (dotColor !== undefined) {
+      styles['--pds-chip-dot-color'] = dotColor;
+    }
+
+    const iconColor = normalizeColorValue(this.iconColor, { semanticMap: SENTIMENT_DOT_COLORS });
+    if (iconColor !== undefined) {
+      styles['--pds-chip-icon-color'] = iconColor;
+    }
+
+    return styles;
   }
 
   private renderCloseButton() {
@@ -278,14 +367,18 @@ export class PdsChip {
 
     return (
       <CloseElement {...closeAttributes()} onClick={this.handleCloseClick}>
-        <pds-icon icon={remove} size={this.iconSize}></pds-icon>
+        <pds-icon icon={remove} size={this.iconSize} aria-hidden="true"></pds-icon>
       </CloseElement>
     );
   }
 
   render() {
+    const hostClass = this.classNames();
+    const hostStyles = this.hostStyles;
+    this.hostKeeper.record(hostClass, hostStyles);
+
     return (
-      <Host class={this.classNames()} id={this.componentId} style={this.hostStyles}>
+      <Host class={hostClass} id={this.componentId} style={hostStyles}>
         {this.setChipContent()}
         {this.effectiveVariant === 'tag' && this.renderCloseButton()}
       </Host>

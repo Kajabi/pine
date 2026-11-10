@@ -1,5 +1,9 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Watch } from '@stencil/core';
 import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
+import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
+
+// Used when `badgeLabel` is unset; an empty string hides the badge instead.
+const DEFAULT_BADGE_LABEL = 'Verified';
 
 /**
  * @part asset-wrapper
@@ -13,6 +17,7 @@ import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
   shadow: true,
 })
 export class PdsAvatar {
+  @Element() el: HTMLPdsAvatarElement;
 
   /**
    * The alt for a custom user image.
@@ -25,6 +30,15 @@ export class PdsAvatar {
    * @defaultValue false
    */
   @Prop() badge? = false;
+
+  /**
+   * Accessible label for the badge icon. Pass a translated string to localize
+   * it; defaults to English. Pass an empty string to make the badge
+   * decorative. Has no effect on dropdown avatars, where the trigger's
+   * `triggerLabel` owns the accessible name.
+   * @defaultValue 'Verified'
+   */
+  @Prop() badgeLabel?: string;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -53,7 +67,7 @@ export class PdsAvatar {
    * Size of the avatar. Value can be preset or custom.
    * @defaultValue lg
    */
-  @Prop({ reflect: true }) size?:
+  @Prop({ reflect: true, mutable: true }) size?:
   | 'xl' // 64px
   | 'lg' // 56px
   | 'md' // 40px
@@ -91,7 +105,7 @@ export class PdsAvatar {
    * Determines the variant of avatar. Changes appearance accordingly.
    * @defaultValue customer
    */
-  @Prop({ reflect: true }) variant?: 'customer' | 'admin' = 'customer';
+  @Prop({ reflect: true, mutable: true }) variant?: 'customer' | 'admin' = 'customer';
 
   /**
    * Accessible label for the dropdown trigger button. Pass a translated string
@@ -99,6 +113,16 @@ export class PdsAvatar {
    * @defaultValue 'Avatar dropdown trigger'
    */
   @Prop() triggerLabel = 'Avatar dropdown trigger';
+
+  @Watch('size')
+  restoreSizeDefault(newValue: typeof this.size) {
+    this.size = restoreReflectedDefault(this.el, 'size', newValue, 'lg');
+  }
+
+  @Watch('variant')
+  restoreVariantDefault(newValue: typeof this.variant) {
+    this.variant = restoreReflectedDefault(this.el, 'variant', newValue, 'customer');
+  }
 
   private avatarSize() {
     const sizes: { [key: string]: any } = {
@@ -143,15 +167,30 @@ export class PdsAvatar {
     )
   };
 
-  private renderBadge = () => (
+  private renderBadge = () => {
+    // Inside the dropdown trigger the button's aria-label is the name, so the
+    // badge is decorative there, as the status dot is. An empty label is
+    // decorative too, rather than an image with no name.
+    const badgeLabel = this.badgeLabel ?? DEFAULT_BADGE_LABEL;
+    const label = this.dropdown || badgeLabel === '' ? undefined : badgeLabel;
+
+    return (
     // `badge` and `status` share the bottom-end corner; `status` wins so the
     // presence dot is never painted over the badge.
     this.badge && !this.status
     // Percentage is average size of icon in relation to total avatar size
     // of all preset sizes found in Figma.
     // Used to allow icons to scale to container size
-      && <pds-icon color="var(--pine-color-purple-600)" class="pds-avatar__badge" icon={checkCircleFilled} size="33.53%"></pds-icon>
-  );
+      && <pds-icon
+        color="var(--pine-color-purple-600)"
+        class="pds-avatar__badge"
+        icon={checkCircleFilled}
+        size="33.53%"
+        aria-label={label}
+        aria-hidden={label === undefined ? 'true' : undefined}
+      ></pds-icon>
+    );
+  };
 
   private renderStatus = () => {
     if (!this.status) return null;
@@ -189,7 +228,7 @@ export class PdsAvatar {
     // Percentage is average size of icon in relation to total avatar size
     // of all preset sizes found in Figma.
     // Used to allow icons to scale to container size
-    return <pds-icon color="var(--pine-color-brand)" icon={userFilled} size="33.53%"></pds-icon>;
+    return <pds-icon color="var(--pine-color-brand)" icon={userFilled} size="33.53%" aria-hidden="true"></pds-icon>;
   };
 
   private classNames = () => (

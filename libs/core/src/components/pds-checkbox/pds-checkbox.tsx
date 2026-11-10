@@ -1,11 +1,14 @@
-import { Component, Element, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Element, h, Prop, Host, Event, EventEmitter, State, Watch } from '@stencil/core';
 import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
 
-import { inheritAriaAttributes } from '@utils/attributes';
+import { inheritAriaAttributes, HostStylingKeeper } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 
+/**
+ * @slot label - Content displayed as the checkbox label in place of the `label` text. Clicking it toggles the checkbox.
+ */
 @Component({
   tag: 'pds-checkbox',
   styleUrls: ['../../global/styles/utils/label.scss', 'pds-checkbox.scss'],
@@ -18,6 +21,9 @@ export class PdsCheckbox {
   private readonly _type = 'checkbox' as const;
 
   @Element() el: HTMLPdsCheckboxElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  @State() private hasLabelSlot = false;
 
   /**
    * It determines whether or not the checkbox is checked.
@@ -47,6 +53,7 @@ export class PdsCheckbox {
   /**
    * If `true`, the checkbox will visually appear as indeterminate.
    * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+   * Has no visual style when `variant` is `pill`.
    */
   @Prop({ mutable: true }) indeterminate: boolean;
 
@@ -61,7 +68,7 @@ export class PdsCheckbox {
   @Prop() label: string;
 
     /**
-   * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+   * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers. Ignored when `variant` is `pill`.
    */
     @Prop() hideLabel: boolean;
 
@@ -80,6 +87,11 @@ export class PdsCheckbox {
    */
   @Prop() value: string;
 
+  /**
+   * Sets the style variant of the checkbox. `pill` renders the label as a pill-shaped choice; the native input still handles keyboard, form, and screen reader behavior.
+   * @defaultValue default
+   */
+  @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
    * Event emitted that contains the `value` and `checked`.
@@ -122,11 +134,14 @@ export class PdsCheckbox {
     if (this.invalid) { classNames.push('is-invalid'); }
     if (this.indeterminate) { classNames.push('is-indeterminate'); }
     if (this.disabled) { classNames.push('is-disabled'); }
+    if (this.hasLabelSlot) { classNames.push('has-label-slot'); }
+    if (this.variant === 'pill') { classNames.push('pds-checkbox--pill'); }
 
     return classNames.join('  ');
   }
 
   connectedCallback() {
+    this.hostKeeper.connect(this.el);
     // Initialize ElementInternals for form association (only once per element instance)
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
@@ -134,6 +149,10 @@ export class PdsCheckbox {
 
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
   }
 
   componentDidLoad() {
@@ -170,15 +189,35 @@ export class PdsCheckbox {
     }
   }
 
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    // Also fires when this element's own `disabled` attribute is merely present, even as the
+    // literal string "false" (a consumer's or React's attribute serialization can write that) —
+    // the platform treats any value as disabled, independent of fieldset state. A real disabled
+    // fieldset ancestor confirms this is genuinely that, not this element's own attribute.
+    if (disabled && !this.el.closest('fieldset[disabled]')) return;
+    this.disabled = disabled;
+  }
+
   componentWillLoad() {
     this.inheritedAttributes = {
       ...inheritAriaAttributes(this.el)
     }
+    this.updateHasLabelSlot();
   }
 
+  private updateHasLabelSlot = () => {
+    this.hasLabelSlot = Array.from(this.el.children).some((child) => child.getAttribute('slot') === 'label');
+  };
+
   render() {
+    const hostClass = this.classNames();
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host class={this.classNames()}>
+      <Host class={hostClass}>
         <label htmlFor={this.componentId}>
           <input
             type="checkbox"
@@ -193,10 +232,13 @@ export class PdsCheckbox {
             disabled={this.disabled}
             onChange={this.handleCheckboxChange}
             onInput={this.handleInput}
+            class={this.variant === 'pill' ? 'visually-hidden' : undefined}
             {...this.inheritedAttributes}
           />
-          <span class={this.hideLabel ? 'visually-hidden' : ''}>
-            {this.label}
+          <span class={this.hideLabel && this.variant !== 'pill' ? 'visually-hidden' : ''}>
+            <slot name="label" onSlotchange={this.updateHasLabelSlot} />
+            {/* A text node, not slot fallback: older ChromeDriver text extraction skips fallback content. */}
+            {!this.hasLabelSlot && this.label}
           </span>
         </label>
         {this.helperMessage &&
@@ -213,7 +255,7 @@ export class PdsCheckbox {
             id={messageId(this.componentId, 'error')}
             aria-live="assertive"
           >
-            <pds-icon icon={danger} size="small" />
+            <pds-icon aria-hidden="true" icon={danger} size="small" />
             {this.errorMessage}
           </div>
         }

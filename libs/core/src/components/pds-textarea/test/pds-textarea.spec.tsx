@@ -55,7 +55,7 @@ describe('pds-textarea', () => {
               <textarea aria-describedby="pds-textarea-error__error-message" aria-invalid="true" class="pds-textarea__field is-invalid" id="pds-textarea-error" name="pds-textarea-error"></textarea>
             </div>
             <p aria-live="assertive" class="pds-textarea__error-message" id="pds-textarea-error__error-message">
-              <pds-icon icon="${danger}" size="small"></pds-icon>
+              <pds-icon aria-hidden="true" icon="${danger}" size="small"></pds-icon>
               error
             </p>
           </div>
@@ -301,7 +301,7 @@ describe('pds-textarea', () => {
               This is a helper message
             </p>
             <p aria-live="assertive" id="textarea-with-description__error-message" class="pds-textarea__error-message">
-              <pds-icon icon="${danger}" size="small"></pds-icon>
+              <pds-icon aria-hidden="true" icon="${danger}" size="small"></pds-icon>
               This is an error message
             </p>
           </div>
@@ -1073,5 +1073,75 @@ it('should set focus on the input element when setFocus is called', async() => {
       });
       expect(counterLabelOf(page)).toBe('0 de 150 caracteres');
     });
+  });
+
+  it('sends a pending pdsInput event when the debounce changes, and drops it when removed from the DOM', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea component-id="field" debounce="300"></pds-textarea>`,
+    });
+    const emitted = jest.fn();
+    page.root!.addEventListener('pdsInput', emitted);
+    const field = page.root!.shadowRoot!.querySelector('textarea') as HTMLTextAreaElement;
+    const type = (text: string) => {
+      field.value = text;
+      field.dispatchEvent(new Event('input'));
+    };
+
+    jest.useFakeTimers();
+    try {
+      type('a');
+      (page.root as HTMLPdsTextareaElement).debounce = 100;
+      expect(emitted).toHaveBeenCalledTimes(1);
+      expect(emitted.mock.calls[0][0].detail.value).toBe('a');
+
+      (page.root as HTMLPdsTextareaElement).debounce = 50;
+      type('ab');
+      jest.advanceTimersByTime(50);
+      expect(emitted).toHaveBeenCalledTimes(2);
+      expect(emitted.mock.calls[1][0].detail.value).toBe('ab');
+
+      type('abc');
+      page.root!.remove();
+      jest.advanceTimersByTime(1000);
+      expect(emitted).toHaveBeenCalledTimes(2);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('stops debouncing pdsInput when debounce is cleared', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea component-id="field" debounce="300"></pds-textarea>`,
+    });
+    const emitted = jest.fn();
+    page.root!.addEventListener('pdsInput', emitted);
+    const textarea = page.root!.shadowRoot!.querySelector('textarea') as HTMLTextAreaElement;
+
+    (page.root as HTMLPdsTextareaElement).debounce = undefined;
+    textarea.value = 'a';
+    textarea.dispatchEvent(new Event('input'));
+    expect(emitted).toHaveBeenCalledTimes(1);
+  });
+
+  it('stops debouncing pdsInput when debounce is cleared after a reconnect', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<div><pds-textarea component-id="field" debounce="300"></pds-textarea></div>`,
+    });
+    const host = page.body.querySelector('pds-textarea') as HTMLPdsTextareaElement;
+    const parent = host.parentElement!;
+    host.remove();
+    parent.appendChild(host);
+    await page.waitForChanges();
+    const emitted = jest.fn();
+    host.addEventListener('pdsInput', emitted);
+
+    host.debounce = undefined;
+    const textarea = host.shadowRoot!.querySelector('textarea') as HTMLTextAreaElement;
+    textarea.value = 'a';
+    textarea.dispatchEvent(new Event('input'));
+    expect(emitted).toHaveBeenCalledTimes(1);
   });
 });

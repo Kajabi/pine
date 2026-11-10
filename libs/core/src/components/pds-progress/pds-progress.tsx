@@ -1,4 +1,6 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Host, h, Prop } from '@stencil/core';
+import { HostStylingKeeper } from '@utils/attributes';
+import { normalizeColorValue } from '../../utils/utils';
 
 @Component({
   tag: 'pds-progress',
@@ -6,6 +8,17 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsProgress {
+  @Element() el: HTMLPdsProgressElement;
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
+
   /**
   * Determines whether or not progress is animated.
   * @defaultValue false
@@ -41,8 +54,13 @@ export class PdsProgress {
   @Prop() showPercent = false;
 
   render() {
+    const normalizedFillColor = normalizeColorValue(this.fillColor);
+
+    const hostClass = this.animated ? { 'is-animated': this.animated } : '';
+    this.hostKeeper.record(hostClass);
+
     return (
-      <Host class={this.animated ? { 'is-animated': this.animated } : ''}>
+      <Host class={hostClass}>
         <div class="pds-progress">
           <label class="pds-progress__label" htmlFor={this.componentId}>
             {this.label}
@@ -50,7 +68,7 @@ export class PdsProgress {
           <progress
             id={this.componentId}
             max="100"
-            style={this.fillColor ? { '--color-progress-fill': this.fillColor } : {}}
+            style={normalizedFillColor ? { '--color-progress-fill': normalizedFillColor } : {}}
             value={this.percent}
           >
           </progress>

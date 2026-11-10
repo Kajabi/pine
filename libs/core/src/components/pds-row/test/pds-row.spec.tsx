@@ -97,4 +97,43 @@ describe('pds-row', () => {
 
     expect(element).toHaveClass('pds-row--no-wrap');
   });
+
+  // Removing an attribute from a live element (as a DOM morph does) sets its
+  // string prop to `null`, not `undefined`.
+  describe('when an attribute is removed', () => {
+    let errorSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      errorSpy = jest.spyOn(console, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+      errorSpy.mockRestore();
+    });
+
+    it.each([
+      ['align-items', 'center'],
+      ['col-gap', 'sm'],
+      ['col-gap-block', 'sm'],
+      ['col-gap-inline', 'sm'],
+      ['justify-content', 'center'],
+      ['min-height', '150px'],
+    ])('drops its %s styling without an error', async (attribute, value) => {
+      const page = await newSpecPage({
+        components: [PdsRow],
+        html: `<pds-row ${attribute}="${value}"></pds-row>`,
+      });
+
+      page.root!.removeAttribute(attribute);
+      await page.waitForChanges();
+
+      const fresh = await newSpecPage({
+        components: [PdsRow],
+        html: `<pds-row></pds-row>`,
+      });
+      expect(Array.from(page.root!.classList).sort()).toEqual(Array.from(fresh.root!.classList).sort());
+      expect(page.root!.getAttribute('style') ?? '').toEqual(fresh.root!.getAttribute('style') ?? '');
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
+  });
 });

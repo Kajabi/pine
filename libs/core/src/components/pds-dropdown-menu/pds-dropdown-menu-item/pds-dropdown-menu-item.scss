@@ -45,6 +45,15 @@
   }
 }
 
+:host(.is-informational) {
+  cursor: default;
+
+  .pds-dropdown-menu-item__content:hover {
+    background-color: transparent;
+    color: var(--pine-color-text);
+  }
+}
+
 :host(.destructive) {
   .pds-dropdown-menu-item__content {
     // Set context variables so pds-link's shadow DOM picks up the destructive colors

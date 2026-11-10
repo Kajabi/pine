@@ -25,8 +25,9 @@ correct value comes from a tool call, and the output is checked mechanically,
 rather than trusting the model to remember.
 
 > If the Pine MCP is **not** available in this session, say so and stop — do not
-> fall back to writing Pine from memory. Install it with:
-> `claude mcp add --transport http pine "https://pine-mcp.netlify.app/mcp"`
+> fall back to writing Pine from memory. Install it with (name your repo or app
+> in the header; prefix test runs with `test-`):
+> `claude mcp add --transport http pine "https://pine-mcp.netlify.app/mcp" --header "x-pine-mcp-client: <your-repo-or-app-name>"`
 
 ## When to engage
 

@@ -206,7 +206,7 @@ describe('pds-modal', () => {
       const show = jest.fn();
       const showModal = jest.fn();
       /* eslint-disable @typescript-eslint/no-explicit-any */
-      (instance as any).modalRef = { show, showModal, close: jest.fn(), querySelectorAll: () => [] };
+      (instance as any).modalRef = { show, showModal, close: jest.fn(), children: [] };
       (instance as any).updateFocusableElements = jest.fn();
       (instance as any).setInitialFocus = jest.fn();
       /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -258,6 +258,52 @@ describe('pds-modal', () => {
     // close otherwise) depends on document.activeElement and dialog.close(), which
     // the spec mock-doc environment does not implement — it is covered in the e2e
     // suite where a real browser exercises focus and key events.
+  });
+
+  describe('disableInitialFocus', () => {
+    const stubDialog = (instance: PdsModal) => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      (instance as any).modalRef = {
+        show: jest.fn(),
+        showModal: jest.fn(),
+        close: jest.fn(),
+        children: [],
+        contains: () => false,
+      };
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    };
+
+    it('moves initial focus by default', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal></pds-modal>`,
+      });
+      stubDialog(page.rootInstance);
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const setInitialFocus = jest.spyOn(page.rootInstance as any, 'setInitialFocus');
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      await page.rootInstance.showModal();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(setInitialFocus).toHaveBeenCalled();
+    });
+
+    it('skips moving initial focus when set', async () => {
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal disable-initial-focus="true"></pds-modal>`,
+      });
+      stubDialog(page.rootInstance);
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const setInitialFocus = jest.spyOn(page.rootInstance as any, 'setInitialFocus');
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      await page.rootInstance.showModal();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(setInitialFocus).not.toHaveBeenCalled();
+    });
   });
 
   describe('reconnecting over an already-hydrated snapshot', () => {
@@ -324,6 +370,79 @@ describe('pds-modal', () => {
 
     it('is reconnect-safe (generic guard)', async () => {
       await expectReconnectSafe([PdsModal], `<pds-modal><p>Body</p></pds-modal>`);
+    });
+  });
+
+  describe('size', () => {
+    const modalBox = (page) => page.root.querySelector('.pds-modal') as HTMLElement;
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('applies a preset size as a class, with no inline width', async () => {
+      const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size="lg"></pds-modal>` });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--lg');
+      expect(modalBox(page).style.getPropertyValue('--pds-modal-max-width')).toBe('');
+    });
+
+    it('applies a custom length as the max-width', async () => {
+      const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size="1250px"></pds-modal>` });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--custom');
+      expect(modalBox(page)).not.toHaveClass('pds-modal--1250px');
+      expect(modalBox(page).style.getPropertyValue('--pds-modal-max-width')).toBe('1250px');
+    });
+
+    it('falls back to md and warns when the size is neither a preset nor a valid length', async () => {
+      // mock-doc's CSS getter hands out a fresh object each time, so stub the getter.
+      jest.spyOn(globalThis, 'CSS', 'get').mockReturnValue({ supports: () => false } as unknown as typeof CSS);
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size="xl"></pds-modal>` });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--md');
+      expect(modalBox(page)).not.toHaveClass('pds-modal--custom');
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('size "xl"'));
+    });
+
+    it('refuses a value that would add declarations, even where CSS.supports accepts anything', async () => {
+      jest.spyOn(globalThis, 'CSS', 'get').mockReturnValue({ supports: () => true } as unknown as typeof CSS);
+      jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      const page = await newSpecPage({
+        components: [PdsModal],
+        html: `<pds-modal size="1px; position: fixed; inset: 0"></pds-modal>`,
+      });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--md');
+      expect(modalBox(page).getAttribute('style')).toBeNull();
+    });
+
+    it('treats keywords like none as invalid, not as an uncapped custom size', async () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size="none"></pds-modal>` });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--md');
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('size "none"'));
+    });
+
+    it('reads a preset padded with spaces as that preset', async () => {
+      const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size=" lg "></pds-modal>` });
+
+      expect(modalBox(page)).toHaveClass('pds-modal--lg');
+    });
+
+    it('switches between a custom length and a preset', async () => {
+      const page = await newSpecPage({ components: [PdsModal], html: `<pds-modal size="80vw"></pds-modal>` });
+
+      page.root.setAttribute('size', 'sm');
+      await page.waitForChanges();
+
+      expect(modalBox(page)).toHaveClass('pds-modal--sm');
+      expect(modalBox(page)).not.toHaveClass('pds-modal--custom');
+      expect(modalBox(page).style.getPropertyValue('--pds-modal-max-width')).toBe('');
     });
   });
 });

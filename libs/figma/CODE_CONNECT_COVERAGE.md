@@ -49,6 +49,7 @@ Use `figma.config.json` at the repo root (`documentUrlSubstitutions`) when addin
 | `pds-combobox` | |
 | `pds-container` | |
 | `pds-copytext` | |
+| `pds-datepicker` | Beta. Add `components/pds-datepicker.figma.ts` when the Figma node is ready. |
 | `pds-dropdown-menu` | |
 | `pds-icon` | Icon set lives in `@pine-ds/icons`; map if Figma documents a dedicated icon wrapper. |
 | `pds-image` | |

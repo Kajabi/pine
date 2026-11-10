@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 
 export default {
@@ -15,6 +16,7 @@ const BaseTemplate = (args) => html` <pds-alert
   ?small=${args.small}
   ?dismissible=${args.dismissible}
   ?hide-icon=${args.hideIcon}
+  severity-label=${ifDefined(args.severityLabel)}
 >${args.description}</pds-alert>`;
 
 const ActionsTemplate = (args) => html` <pds-alert
@@ -24,6 +26,7 @@ const ActionsTemplate = (args) => html` <pds-alert
   ?small=${args.small}
   ?dismissible=${args.dismissible}
   ?hide-icon=${args.hideIcon}
+  severity-label=${ifDefined(args.severityLabel)}
 >
   ${args.description}
   <pds-button slot="actions" variant="primary">Button</pds-button>
@@ -37,6 +40,7 @@ const SmallActionsTemplate = (args) => html` <pds-alert
   ?small=${args.small}
   ?dismissible=${args.dismissible}
   ?hide-icon=${args.hideIcon}
+  severity-label=${ifDefined(args.severityLabel)}
 >
   ${args.description}
   <pds-link slot="actions" variant="plain" href="#">Link</pds-link>

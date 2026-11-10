@@ -1,12 +1,28 @@
-import { Component, Prop, h, Host } from '@stencil/core';
+import { Component, Element, Prop, h, Host } from '@stencil/core';
 
 import { BoxSpacingType } from '../../utils/types';
+import { HostStylingKeeper } from '../../utils/attributes';
 
+/**
+ * @lightDom host-only
+ */
 @Component({
   tag: 'pds-row',
   styleUrl: 'pds-row.scss',
 })
 export class PdsRow {
+  @Element() el: HTMLPdsRowElement;
+
+  private hostKeeper = new HostStylingKeeper();
+
+  connectedCallback() {
+    this.hostKeeper.connect(this.el);
+  }
+
+  disconnectedCallback() {
+    this.hostKeeper.disconnect();
+  }
+
   /**
    * Defines the vertical alignment of the row items.
    * @defaultValue start
@@ -85,27 +101,29 @@ export class PdsRow {
 
   render() {
     const rowClasses = `
-    ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
+    ${this.alignItems != null && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
     ${this.border ? 'pds-row--border' : ''}
-    ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
+    ${this.justifyContent != null && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
     ${this.noWrap ? 'pds-row--no-wrap' : ''}
   `;
 
     const rowInlineStyles = {
       ...(this.colGap && {
-        '--row-gap-x': this.colGap !== undefined && this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
-        '--row-gap-y': this.colGap !== undefined && this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
+        '--row-gap-x': this.colGap != null && this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
+        '--row-gap-y': this.colGap != null && this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
       }),
       ...(this.colGapBlock && {
-        '--row-gap-y': this.colGapBlock !== undefined && this.colGapBlock.trim() !== '' ? this.colGapMap[this.colGapBlock] : '',
+        '--row-gap-y': this.colGapBlock != null && this.colGapBlock.trim() !== '' ? this.colGapMap[this.colGapBlock] : '',
       }),
       ...(this.colGapInline && {
-        '--row-gap-x': this.colGapInline !== undefined && this.colGapInline.trim() !== '' ? this.colGapMap[this.colGapInline] : '',
+        '--row-gap-x': this.colGapInline != null && this.colGapInline.trim() !== '' ? this.colGapMap[this.colGapInline] : '',
       }),
       ...(this.minHeight && {
         'min-height': this.minHeight,
       }),
     };
+
+    this.hostKeeper.record(`pds-row ${rowClasses}`, rowInlineStyles);
 
     return <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}></Host>;
   }

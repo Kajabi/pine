@@ -22,13 +22,37 @@
     backdrop-filter: blur(3px);
   }
 
-  // Increase z-index for nested modals
-  pds-modal & {
+  // Raise a modal nested inside another modal above its parent. The backdrop always has a
+  // pds-modal ancestor (its own host), so the selector needs two to mean "nested".
+  pds-modal pds-modal & {
     z-index: var(--pine-z-index-priority);
   }
 
   &::backdrop {
     background: transparent;
+  }
+
+  // Out of the top layer (disableTopLayer, the only mode that renders aria-modal="false") the dialog
+  // loses the UA's `dialog:modal { overflow: auto }`, so a modal taller than the viewport couldn't
+  // scroll. The page behind isn't inert, so keep the scroll from chaining into it.
+  &[aria-modal='false'] {
+    overflow: auto;
+    overscroll-behavior: contain;
+
+    // A backdrop-filter would make this scrolling backdrop the containing block for a nested
+    // modal's fixed backdrop, which would then scroll away with it. Blur from a fixed layer
+    // behind the modal instead.
+    @supports (backdrop-filter: blur(3px)) {
+      backdrop-filter: none;
+
+      &::before {
+        backdrop-filter: blur(3px);
+        content: '';
+        inset: 0;
+        position: fixed;
+        z-index: -1;
+      }
+    }
   }
 
   &.open {
@@ -83,6 +107,11 @@
 
 .pds-modal--lg {
   max-width: 900px;
+}
+
+// A custom size: the length is set inline from the size prop.
+.pds-modal--custom {
+  max-width: var(--pds-modal-max-width, 700px);
 }
 
 .pds-modal--fullscreen {

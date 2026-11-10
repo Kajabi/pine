@@ -1,4 +1,92 @@
+import { classNamesOf, HOST_RESTORE, limitRestores, stencilClassesOf } from './keep-hydrated';
+
 export type Attributes = { [key: string]: any };
+
+/**
+ * Sets each attribute whose current value differs, and leaves the rest alone. A `MutationObserver`
+ * that calls this to restore attributes sees its own writes once and then settles, so it can't loop.
+ * @param el - Element to write to
+ * @param attributes - Attribute names and the values they should have
+ */
+export const setAttributesIfChanged = (el: Element, attributes: Record<string, string>) => {
+  let wrote = false;
+  Object.entries(attributes).forEach(([name, value]) => {
+    if (el.getAttribute(name) !== value) {
+      el.setAttribute(name, value);
+      wrote = true;
+    }
+  });
+  return wrote;
+};
+
+/**
+ * The classes, style properties and other attributes a component renders onto its own host.
+ */
+export type HostStyling = {
+  classes: string[];
+  styles: Record<string, string>;
+  attributes?: Record<string, unknown>;
+};
+
+/**
+ * Puts back any of `expected`'s classes or style properties that are missing from `el`. It only
+ * adds what's missing, never rewrites a value that's there, because browsers normalize some style
+ * values (`flex: 1` reads back as `1 1 0%`): comparing values would rewrite them forever.
+ * @param el - Host element
+ * @param expected - Classes and style properties the component rendered
+ */
+export const restoreHostStyling = (el: HTMLElement, { classes, styles }: HostStyling) => {
+  const missing = classes.filter((name) => !el.classList.contains(name));
+  if (missing.length > 0) el.classList.add(...missing);
+
+  const missingStyles = Object.entries(styles).filter(([name, value]) => value && el.style.getPropertyValue(name) === '');
+  missingStyles.forEach(([name, value]) => el.style.setProperty(name, value));
+
+  return missing.length > 0 || missingStyles.length > 0;
+};
+
+/**
+ * Watches a component's own host and puts back what it rendered when something strips it. A DOM
+ * morph does: it makes the host match the server's HTML, which carries the component's props but not
+ * the classes, styles and attributes it wrote, and Stencil won't write them again because it diffs
+ * against its previous render, not the live DOM.
+ *
+ * It also means a script that removes one of these on purpose sees it come back: change them through
+ * the component's props instead.
+ * @param el - Host element
+ * @param expected - Reads what the component last rendered
+ * @returns The observer, to disconnect when the component is removed; `null` without MutationObserver
+ */
+const keepHostStyling = (el: HTMLElement, expected: () => HostStyling) => {
+  if (typeof MutationObserver === 'undefined') return null;
+
+  const tag = el.tagName.toLowerCase();
+  const seenStencilClasses = new Set<string>();
+  const observer = new MutationObserver(limitRestores((records: MutationRecord[]) => {
+    const styling = expected();
+    // A strip takes Stencil's own classes too: without `hydrated` Stencil hides the component, and
+    // without its scope classes a scoped component's CSS stops matching. Put back only the ones that
+    // were there, so this never runs ahead of Stencil. `keepPineHydrated` does the same for every
+    // component, but the custom-elements build only runs it if the consumer calls it, so keep this.
+    const stencilClasses = records
+      .filter((record) => record.attributeName === 'class')
+      .flatMap((record) => stencilClassesOf(seenStencilClasses, el, record.oldValue));
+    let wrote = restoreHostStyling(el, { ...styling, classes: [...styling.classes, ...stencilClasses] });
+
+    // An attribute the component still renders comes back with the value it had, which is what
+    // Stencil wrote (a boolean `true` lands as an empty value). One it stopped rendering stays
+    // removed, since that was Stencil's own write.
+    records.forEach(({ attributeName: name, oldValue }) => {
+      const rendered = styling.attributes?.[name];
+      if (oldValue == null || rendered == null || rendered === false || el.hasAttribute(name)) return;
+      el.setAttribute(name, oldValue);
+      wrote = true;
+    });
+    return wrote;
+  }, `${tag}: stopped restoring its host, as another script keeps changing it. Use props instead.`, el, HOST_RESTORE));
+  observer.observe(el, { attributes: true, attributeOldValue: true });
+  return observer;
+};
 
 /**
  * Inherit attributes from the host element
@@ -90,3 +178,29 @@ const ariaAttributes = [
 
   return inheritAttributes(el, attributesToInherit);
  }
+
+/**
+ * One component's use of `keepHostStyling`: `record` what `render()` puts on the host, `connect` in
+ * `connectedCallback` and `disconnect` in `disconnectedCallback`.
+ */
+export class HostStylingKeeper {
+  private styling: HostStyling = { classes: [], styles: {} };
+  private observer: MutationObserver | null = null;
+
+  record(
+    classes: string | Record<string, boolean>,
+    styles: Record<string, string> = {},
+    attributes: Record<string, unknown> = {},
+  ) {
+    this.styling = { classes: classNamesOf(classes), styles, attributes };
+  }
+
+  connect(el: HTMLElement) {
+    this.observer ??= keepHostStyling(el, () => this.styling);
+  }
+
+  disconnect() {
+    this.observer?.disconnect();
+    this.observer = null;
+  }
+}

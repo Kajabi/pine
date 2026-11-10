@@ -1,3 +1,346 @@
+## 4.11.0 (2026-11-09)
+
+### Features 🚀
+
+- **pds-datepicker:** add month-day mode for a month and day with no year ([#938](https://github.com/Kajabi/pine/pull/938))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.10.0 (2026-11-06)
+
+### Features 🚀
+
+- **pds-combobox:** show a badge after an option's text ([#870](https://github.com/Kajabi/pine/pull/870))
+- **pds-combobox:** show a badge on a group row ([#935](https://github.com/Kajabi/pine/pull/935))
+
+### Bug Fixes 🐛
+
+- **pds-checkbox:** center the dash and rtl checkmark, and gray out disabled indeterminate ([#934](https://github.com/Kajabi/pine/pull/934))
+- **pds-dropdown-menu:** close the menu when tab moves past the last item instead of wrapping ([#933](https://github.com/Kajabi/pine/pull/933))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.9.1 (2026-11-04)
+
+### Bug Fixes 🐛
+
+- **core:** ignore focus on other tab stops in a truncation tooltip's control ([#930](https://github.com/Kajabi/pine/pull/930))
+- **pds-link:** stop positioning the anchor on focus, so a stretched row keeps its click area ([#932](https://github.com/Kajabi/pine/pull/932))
+- **pds-modal:** raise only nested modal backdrops to the priority tier ([#882](https://github.com/Kajabi/pine/pull/882))
+- **pds-multiselect:** keep focus on the trigger when tab closes the panel ([#927](https://github.com/Kajabi/pine/pull/927))
+- **pds-radio-group:** name the radiogroup from its group label ([#912](https://github.com/Kajabi/pine/pull/912))
+- **pds-text:** skip the truncation tab stop inside a link or button ([#926](https://github.com/Kajabi/pine/pull/926))
+- **pds-tooltip:** show tooltips above an open modal dialog or popover ([#928](https://github.com/Kajabi/pine/pull/928))
+
+### Documentation 📄
+
+- **mcp:** send the x-pine-mcp-client header in every Pine MCP setup example ([#931](https://github.com/Kajabi/pine/pull/931))
+
+### ❤️ Thank You
+
+- andrew dally
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.9.0 (2026-10-29)
+
+### Features 🚀
+
+- **pds-combobox:** add an opt-in truncate for long labels ([#925](https://github.com/Kajabi/pine/pull/925))
+- **pds-radio, pds-checkbox:** add a pill variant ([#923](https://github.com/Kajabi/pine/pull/923))
+
+### Bug Fixes 🐛
+
+- label the meaningful icons in pds-alert, pds-toast, pds-avatar and pds-link ([#920](https://github.com/Kajabi/pine/pull/920))
+- **pds-button:** forward aria-describedby and aria-labelledby to the inner button ([#919](https://github.com/Kajabi/pine/pull/919))
+- **pds-popover:** put an open panel next in the tab order after its trigger ([#921](https://github.com/Kajabi/pine/pull/921))
+- **pds-popover:** flip and shift the panel to stay in the viewport ([#922](https://github.com/Kajabi/pine/pull/922))
+- **pds-select:** keep the inner select in step with changes to existing options ([#917](https://github.com/Kajabi/pine/pull/917))
+- **pds-tooltip:** keep an open tooltip in step with its slotted content ([#915](https://github.com/Kajabi/pine/pull/915))
+
+### Documentation 📄
+
+- **core:** name the icon-only buttons in input, select, textarea and table examples ([#918](https://github.com/Kajabi/pine/pull/918))
+- **pds-icon:** describe the decorative default instead of the name-derived label ([#916](https://github.com/Kajabi/pine/pull/916))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.8.0 (2026-10-27)
+
+### Features 🚀
+
+- **pds-dropdown-menu:** add informational prop to dropdown menu items ([#907](https://github.com/Kajabi/pine/pull/907))
+- **pds-popover:** add padding prop ([#909](https://github.com/Kajabi/pine/pull/909))
+- **pds-popover:** add open-on hover option ([#910](https://github.com/Kajabi/pine/pull/910))
+
+### Bug Fixes 🐛
+
+- **core:** open the truncation tooltip on keyboard focus only ([#906](https://github.com/Kajabi/pine/pull/906))
+- **core:** hide decorative icons inside components from assistive technology ([#908](https://github.com/Kajabi/pine/pull/908))
+- **pds-button:** forward aria-label, aria-pressed and aria-current to the inner element ([#905](https://github.com/Kajabi/pine/pull/905))
+- **pds-modal-content:** remove resize and scroll listeners on disconnect ([#914](https://github.com/Kajabi/pine/pull/914))
+
+### Documentation 📄
+
+- **pds-datepicker:** describe server parsing without Rails, fix the min/max example id ([#913](https://github.com/Kajabi/pine/pull/913))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.7.2 (2026-10-23)
+
+### Bug Fixes 🐛
+
+- **pds-drawer:** let overlays portaled into a non-modal drawer take clicks ([#903](https://github.com/Kajabi/pine/pull/903))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.7.1 (2026-10-22)
+
+### Bug Fixes 🐛
+
+- **core:** keep truncation tooltips after a DOM move and skip a chip's nested tab stop ([#900](https://github.com/Kajabi/pine/pull/900))
+- **pds-box:** treat a prop as unset when its attribute is removed ([8ed4239d](https://github.com/Kajabi/pine/commit/8ed4239d))
+- **pds-combobox:** take the disabled state of a disabled fieldset ([#894](https://github.com/Kajabi/pine/pull/894))
+- **pds-dropdown-menu-item:** render a button again when the href attribute is removed ([8122521c](https://github.com/Kajabi/pine/commit/8122521c))
+- **pds-modal:** return focus to the top open modal when the trigger can't take it ([#893](https://github.com/Kajabi/pine/pull/893))
+- **pds-multiselect:** truncate long option chips and keep the option action in view ([#902](https://github.com/Kajabi/pine/pull/902))
+- **pds-radio:** keep the image card a row and its text beside the image ([#899](https://github.com/Kajabi/pine/pull/899))
+- **pds-row:** treat a prop as unset when its attribute is removed ([4d32fdfc](https://github.com/Kajabi/pine/commit/4d32fdfc))
+- **pds-table-cell:** restore the fixed column scroll shadow after the table sorts ([#901](https://github.com/Kajabi/pine/pull/901))
+- **pds-text:** treat a prop as unset when its attribute is removed, without a size warning ([f66ce93f](https://github.com/Kajabi/pine/commit/f66ce93f))
+
+### ❤️ Thank You
+
+- Kelly Redding
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.7.0 (2026-10-21)
+
+### Features 🚀
+
+- **pds-drawer:** add a modal option that makes the page inert behind the drawer ([#892](https://github.com/Kajabi/pine/pull/892))
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** keep a disabled button or chip trigger from opening ([#889](https://github.com/Kajabi/pine/pull/889))
+- **pds-modal:** stay open when a control inside has already handled escape ([#888](https://github.com/Kajabi/pine/pull/888))
+- **pds-modal:** close only the innermost modal on escape when modals are nested ([#890](https://github.com/Kajabi/pine/pull/890))
+- **pds-popover:** open inside a modal and close before it on escape ([#891](https://github.com/Kajabi/pine/pull/891))
+- **pds-popover:** carry the focus ring and dark border into a shadow-root dialog ([#896](https://github.com/Kajabi/pine/pull/896))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.6.0 (2026-10-20)
+
+### Features 🚀
+
+- **pds-combobox:** show option icons and keep the data's order in grouped panels ([#869](https://github.com/Kajabi/pine/pull/869))
+- **pds-dropdown-menu:** add a header slot for non-item content ([#886](https://github.com/Kajabi/pine/pull/886))
+
+### Bug Fixes 🐛
+
+- **core:** stop restoring after a few rounds when another script keeps undoing it ([#880](https://github.com/Kajabi/pine/pull/880))
+- **pds-combobox:** shade drill-in group rows only for the keys ([#879](https://github.com/Kajabi/pine/pull/879))
+- **pds-combobox:** slide into and out of a drill-in group the same way ([#881](https://github.com/Kajabi/pine/pull/881))
+- **pds-popover:** escape componentId in the portal's focus stylesheet and selectors ([#884](https://github.com/Kajabi/pine/pull/884))
+- **pds-tab:** keep their slot attribute and classes through a Turbo morph ([#885](https://github.com/Kajabi/pine/pull/885))
+- **pds-tabs:** re-collect tabs and panels on slotchange ([#883](https://github.com/Kajabi/pine/pull/883))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.5.0 (2026-10-16)
+
+### Features 🚀
+
+- **core:** keep stencil's hydrated class on every pine component through a dom morph ([#877](https://github.com/Kajabi/pine/pull/877))
+
+### Bug Fixes 🐛
+
+- **pds-datepicker:** keep range ends and week edges in shape on hover ([#878](https://github.com/Kajabi/pine/pull/878))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.4.4 (2026-10-16)
+
+### Bug Fixes 🐛
+
+- **core:** restore a prop's default when its reflected attribute is removed ([#868](https://github.com/Kajabi/pine/pull/868))
+- **core:** put the dropdown-menu and popover trigger aria back when it's removed or changed ([#873](https://github.com/Kajabi/pine/pull/873))
+- **core:** restore host-only components' classes and styles when something strips them ([#875](https://github.com/Kajabi/pine/pull/875))
+- **core:** restore the host classes and attributes ten more components depend on ([#876](https://github.com/Kajabi/pine/pull/876))
+- **pds-combobox:** align the input-shaped trigger and panel header with designs ([#871](https://github.com/Kajabi/pine/pull/871))
+- **pds-modal:** trap focus across shadow roots and slots ([#856](https://github.com/Kajabi/pine/pull/856))
+- **pds-popover:** keep working when the popover is moved or removed and put back ([#874](https://github.com/Kajabi/pine/pull/874))
+
+### Documentation 📄
+
+- **core:** publish which shadow:false/scoped components render their own light DOM ([#867](https://github.com/Kajabi/pine/pull/867))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.4.3 (2026-10-15)
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** keep the button and chip triggers inside their trigger-width ([#866](https://github.com/Kajabi/pine/pull/866))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.4.2 (2026-10-15)
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** carry the combobox's styles into its body portal's shadow root ([#865](https://github.com/Kajabi/pine/pull/865))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.4.1 (2026-10-14)
+
+### Bug Fixes 🐛
+
+- **pds-checkbox:** render the label prop as text beside the label slot ([#864](https://github.com/Kajabi/pine/pull/864))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
+## 4.4.0 (2026-10-14)
+
+### Features 🚀
+
+- **pds-checkbox:** add a label slot to pds-checkbox and pds-switch ([#857](https://github.com/Kajabi/pine/pull/857))
+- **pds-combobox:** add option groups with icons to the options prop ([#839](https://github.com/Kajabi/pine/pull/839))
+- **pds-combobox:** add a flyout group display ([#840](https://github.com/Kajabi/pine/pull/840))
+- **pds-combobox:** add a drill-in group display and in-panel search ([#842](https://github.com/Kajabi/pine/pull/842))
+- **pds-combobox:** give grouped displays tree semantics and keyboard support ([#843](https://github.com/Kajabi/pine/pull/843))
+- **pds-combobox:** support disabled options and disabled option groups ([#845](https://github.com/Kajabi/pine/pull/845))
+- **pds-combobox:** slide drill-in groups in and out ([#850](https://github.com/Kajabi/pine/pull/850))
+- **pds-combobox:** put the row back in place of the panel search inside a drilled-in group ([#861](https://github.com/Kajabi/pine/pull/861))
+- **pds-datepicker:** add a datepicker for a single date or a date range ([#852](https://github.com/Kajabi/pine/pull/852))
+- **pds-datepicker:** add auto-apply for ranges and a clear button in the field ([#854](https://github.com/Kajabi/pine/pull/854))
+- **pds-multiselect:** add trigger and footer slots, option display and option actions ([#860](https://github.com/Kajabi/pine/pull/860))
+
+### Bug Fixes 🐛
+
+- drop pending debounced events when input, textarea or multiselect is removed ([#848](https://github.com/Kajabi/pine/pull/848))
+- **pds-button:** work as a pds-popover and pds-dropdown-menu trigger ([#858](https://github.com/Kajabi/pine/pull/858))
+- **pds-combobox:** name the button and chip triggers by their visible label ([#841](https://github.com/Kajabi/pine/pull/841))
+- **pds-combobox:** readable spec failures and drop a pending search on removal ([#847](https://github.com/Kajabi/pine/pull/847))
+- **pds-datepicker:** portal the calendar so modals, drawers and clipping ancestors don't trap it ([#853](https://github.com/Kajabi/pine/pull/853))
+- **pds-modal:** trap focus against visible elements, re-read on each Tab ([#837](https://github.com/Kajabi/pine/pull/837))
+- **pds-modal:** scroll a modal taller than the viewport when it opens outside the top layer ([#862](https://github.com/Kajabi/pine/pull/862))
+- **pds-multiselect:** use fixed positioning so scroll containers do not clip the panel ([#838](https://github.com/Kajabi/pine/pull/838))
+
+### Documentation 📄
+
+- **pds-combobox:** add a group display guide, ERB usage and an action catalog story ([#844](https://github.com/Kajabi/pine/pull/844))
+- **pds-combobox:** render the group display and keyboard tables with pds-table ([#851](https://github.com/Kajabi/pine/pull/851))
+- **pds-combobox:** narrow the flyout story's trigger and dropdown width ([#855](https://github.com/Kajabi/pine/pull/855))
+- **pds-combobox:** note Backspace steps back from a drilled-in group only with panel search ([#863](https://github.com/Kajabi/pine/pull/863))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.3.0 (2026-10-08)
+
+### Features 🚀
+
+- **pds-chip:** add dot-color and icon-color props with dot and icon parts ([#830](https://github.com/Kajabi/pine/pull/830))
+- **pds-chip:** add subtle and solid sentiments ([#836](https://github.com/Kajabi/pine/pull/836))
+- **pds-modal:** accept a custom CSS length as size ([#834](https://github.com/Kajabi/pine/pull/834))
+
+### Bug Fixes 🐛
+
+- keep accent fills readable in dark mode ([#835](https://github.com/Kajabi/pine/pull/835))
+- **pds-progress:** normalize fillColor through normalizeColorValue ([#831](https://github.com/Kajabi/pine/pull/831))
+
+### Documentation 📄
+
+- **utils:** clarify normalizeColorValue vs setColor relationship ([#832](https://github.com/Kajabi/pine/pull/832))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
+## 4.2.0 (2026-10-06)
+
+### Features 🚀
+
+- **pds-drawer:** resizable, non-modal side panel composed from pds-modal (Slice 1) ([#827](https://github.com/Kajabi/pine/pull/827))
+
+### Bug Fixes 🐛
+
+- preserve createComponent.tsx registration guard across builds ([#823](https://github.com/Kajabi/pine/pull/823))
+- **createComponent:** remove redundant double-registration guard ([#824](https://github.com/Kajabi/pine/pull/824))
+- **pds-chip:** give the truncated label a tab stop only while it is clipped ([#816](https://github.com/Kajabi/pine/pull/816))
+- **pds-switch:** route toggle transition through the motion token ([#825](https://github.com/Kajabi/pine/pull/825))
+- **pds-table-cell:** give the truncation e2e a width the table honours ([#826](https://github.com/Kajabi/pine/pull/826))
+
+### Documentation 📄
+
+- **layout:** size the guide's examples from a responsive breakpoint ([#817](https://github.com/Kajabi/pine/pull/817))
+- **pds-box:** say what the base size prop costs on a phone ([#818](https://github.com/Kajabi/pine/pull/818))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
+## 4.1.0 (2026-09-24)
+
+### Features 🚀
+
+- **pds-divider:** add label prop ([#814](https://github.com/Kajabi/pine/pull/814))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
+# 4.0.0 (2026-09-23)
+
+### Features 🚀
+
+- **pds-box:** support per-side border control ([#811](https://github.com/Kajabi/pine/pull/811))
+- **pds-chip:** add maxWidth prop to auto-truncate the slotted label ([#808](https://github.com/Kajabi/pine/pull/808))
+
+### Bug Fixes 🐛
+
+- **pds-text:** make truncate actually shrink the host, not just style its inner tag ([#809](https://github.com/Kajabi/pine/pull/809))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.31.1 (2026-09-21)
 
 ### Bug Fixes 🐛

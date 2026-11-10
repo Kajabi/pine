@@ -15,6 +15,13 @@
  *     get an autofix to the token var. Off-grid values (e.g. 0.15s) have no exact
  *     token; they must use the nearest token or carry a justified
  *     `stylelint-disable-next-line` with a comment.
+ *   - A `transition`/`transition-duration` that resolves through one level of
+ *     `var(--custom-prop)` indirection is traced back to that custom property's
+ *     own definition and checked the same way — a raw literal hidden behind a
+ *     private custom property (e.g. `--my-timing: 0.15s;` then
+ *     `transition: var(--my-timing);`) bypasses `TIME_REGEX` on the transition
+ *     declaration itself just as completely as writing it inline would, and
+ *     is just as invisible to `prefers-reduced-motion`.
  */
 const stylelint = require('stylelint');
 
@@ -48,6 +55,34 @@ function isZeroTime(raw) {
   return /^0*\.?0+(ms|s)$/.test(raw);
 }
 
+// Matches a `var(--custom-prop` reference (deliberately not capturing the
+// closing paren — call sites don't need it).
+const VAR_REF_REGEX = /var\(\s*(--[\w-]+)/g;
+
+/**
+ * Scans a custom-property's own declared value for a raw, non-zero time
+ * literal that isn't already routed through a `--pine-motion-duration-*`
+ * token. Returns the literal, or null if the value is clean (no literal, a
+ * zero value, or already token-based).
+ */
+function findLaunderedLiteral(value) {
+  // Deliberately no early return for values that already mention a motion
+  // token. A property can hold several durations, and returning "clean" as
+  // soon as one token appears made the rule blind to the rest -- including the
+  // ones --fix left behind, which is the worst version of it: the autofix
+  // created the blind spot. TIME_REGEX's `(?<![\w-])` lookbehind means a token
+  // reference cannot itself match as a literal, so scanning the whole value is
+  // safe.
+  TIME_REGEX.lastIndex = 0;
+  let match;
+  while ((match = TIME_REGEX.exec(value)) !== null) {
+    if (!isZeroTime(match[0])) {
+      return match[0];
+    }
+  }
+  return null;
+}
+
 module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOptions, context) => {
   return (root, result) => {
     const validOptions = stylelint.utils.validateOptions(result, ruleName, {
@@ -57,6 +92,58 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
 
     if (!validOptions || primaryOption === false) {
       return;
+    }
+
+    // First pass: collect custom properties whose own declared value hard-codes
+    // a non-zero, non-token time literal. A `transition` that only ever
+    // references one of these by name never shows a literal in its own value,
+    // so the second pass below has to check against this map to see through it.
+    //
+    // Scope matters here: a property declared in `:host` / `:host(...)` / `:root`
+    // is Pine's convention for a private, file-wide component custom property
+    // (declared once, consumed from any sibling rule in the same file), so those
+    // are tracked globally. A property declared in any other selector is scoped
+    // to that exact rule only — otherwise two unrelated rules that happen to
+    // reuse the same custom-property name (e.g. `--timing` in two unconnected
+    // components' styles) would leak into each other's checks.
+    const HOST_OR_ROOT_SELECTOR = /^(:host\b|:root\b)/;
+    // One custom property can be consumed by several transitions; the literal
+    // is still a single mistake in a single place, so report it once.
+    const reportedLaunderedDecls = new Set();
+    const globalLaunderedTimingProps = new Map();
+    const localLaunderedTimingProps = new Map(); // rule node -> Map(prop -> entry)
+
+    root.walkDecls(/^--/, (decl) => {
+      // The motion tokens are *defined* as time literals -- that is what a
+      // token is. Registering them here makes a file that defines a token and
+      // also uses it fail its own rule, and --fix rewrites the definition to
+      // `--pine-motion-duration-fast: var(--pine-motion-duration-fast)`, a
+      // self-reference that silently invalidates the token for every consumer.
+      if (decl.prop.startsWith('--pine-motion-duration-')) {
+        return;
+      }
+      const raw = findLaunderedLiteral(decl.value);
+      if (!raw) {
+        return;
+      }
+      const entry = { decl, raw };
+      const parentRule = decl.parent;
+      if (parentRule && parentRule.selector && HOST_OR_ROOT_SELECTOR.test(parentRule.selector.trim())) {
+        globalLaunderedTimingProps.set(decl.prop, entry);
+      } else {
+        if (!localLaunderedTimingProps.has(parentRule)) {
+          localLaunderedTimingProps.set(parentRule, new Map());
+        }
+        localLaunderedTimingProps.get(parentRule).set(decl.prop, entry);
+      }
+    });
+
+    function resolveLaundered(propName, decl) {
+      const local = decl.parent && localLaunderedTimingProps.get(decl.parent);
+      if (local && local.has(propName)) {
+        return local.get(propName);
+      }
+      return globalLaunderedTimingProps.get(propName) || null;
     }
 
     root.walkDecls((decl) => {
@@ -108,6 +195,77 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
           newValue = newValue.slice(0, index) + replacement + newValue.slice(index + length);
         }
         decl.value = newValue;
+      }
+
+      // Second check: does this transition resolve through a custom property
+      // that itself hard-codes a time literal? A direct literal on this decl
+      // was already handled above; this catches the indirected case.
+      VAR_REF_REGEX.lastIndex = 0;
+      while ((match = VAR_REF_REGEX.exec(value)) !== null) {
+        const propName = match[1];
+        const laundered = resolveLaundered(propName, decl);
+        if (!laundered) {
+          continue;
+        }
+
+        if (context && context.fix) {
+          // The referenced custom property may already have been fixed by an
+          // earlier `transition` that resolves through this same property (a
+          // component's own transition and its `::after` knob can share one).
+          if (!laundered.fixed) {
+            // Rewrite every literal that maps to an exact token, not only the
+            // first. Fixing one per run meant the rest sat in the file
+            // unreported, because a value containing a token used to read as
+            // clean.
+            TIME_REGEX.lastIndex = 0;
+            laundered.decl.value = laundered.decl.value.replace(TIME_REGEX, (literal) => {
+              if (isZeroTime(literal)) {
+                return literal;
+              }
+              const exact = DURATION_TOKENS[literal];
+              return exact ? `var(--pine-motion-duration-${exact})` : literal;
+            });
+            laundered.fixed = true;
+          }
+          // Whatever is still hard-coded has no exact token, so it needs a
+          // person. Report that rather than calling the property handled.
+          const leftover = findLaunderedLiteral(laundered.decl.value);
+          if (leftover === null) {
+            continue;
+          }
+          laundered.raw = leftover;
+        }
+
+        const token = DURATION_TOKENS[laundered.raw];
+        const tokenVar = token ? `var(--pine-motion-duration-${token})` : null;
+
+        // Report on the custom property, not the `transition` that reads it:
+        // the literal lives here, and a `stylelint-disable-next-line` is only
+        // honoured on the line the report is anchored to. One property can be
+        // consumed by several transitions; it is still one literal in one
+        // place, so it reports once.
+        if (reportedLaunderedDecls.has(laundered.decl)) {
+          continue;
+        }
+        reportedLaunderedDecls.add(laundered.decl);
+
+        const { line, column } = decl.source.start;
+        const message = tokenVar
+          ? `${propName} hard-codes "${laundered.raw}" instead of the motion token ${tokenVar}; ` +
+            `"${decl.prop}" (${line}:${column}) resolves its duration through it.`
+          : `${propName} hard-codes "${laundered.raw}" — no exact Pine motion token (fast 120ms / ` +
+            `base 200ms / slow 300ms); "${decl.prop}" (${line}:${column}) resolves its duration ` +
+            `through it. Route ${propName} through the nearest token, or add a justified ` +
+            `\`stylelint-disable-next-line ${ruleName}\` on this declaration when an off-grid ` +
+            `value is intentional.`;
+
+        stylelint.utils.report({
+          ruleName,
+          result,
+          node: laundered.decl,
+          message: messages.rejected(message),
+          word: laundered.raw,
+        });
       }
     });
   };

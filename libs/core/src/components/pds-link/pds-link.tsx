@@ -3,6 +3,9 @@ import { setColor } from '../../utils/utils';
 
 import { launch } from '@pine-ds/icons/icons';
 
+// Used when `externalLabel` is unset; an empty string hides the icon instead.
+const DEFAULT_EXTERNAL_LABEL = '(opens in a new tab)';
+
 /**
  * @part link - Link element styles.
  * @slot (default) - Text content placed between the opening and closing tags. If no text is provided, the **href** will be used as a fallback.
@@ -44,6 +47,15 @@ export class PdsLink {
    * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
    */
   @Prop() external = false;
+
+  /**
+   * Accessible label for the icon that `external` shows, appended to the
+   * link's name. It isn't announced when `target` keeps the link in the same
+   * tab. Pass a translated string to localize it; defaults to English. Pass an
+   * empty string to make the icon decorative.
+   * @defaultValue '(opens in a new tab)'
+   */
+  @Prop() externalLabel?: string;
 
   /**
    * Specifies where to open the linked document.
@@ -149,7 +161,13 @@ export class PdsLink {
   render() {
     const targetValue = this.target || (this.external ? '_blank' : undefined);
     const showExternalIcon = this.external;
-    const relValue = targetValue === '_blank' ? 'noopener noreferrer' : undefined;
+    const opensInNewTab = targetValue === '_blank';
+    const relValue = opensInNewTab ? 'noopener noreferrer' : undefined;
+    // A `target` other than _blank overrides `external`, and then the label
+    // would be false, so the icon is decorative there, as it is when the
+    // label is empty.
+    const externalLabel = this.externalLabel ?? DEFAULT_EXTERNAL_LABEL;
+    const externalIconLabel = opensInNewTab && externalLabel !== '' ? externalLabel : undefined;
 
     return (
       <a
@@ -173,7 +191,12 @@ export class PdsLink {
       >
         <slot>{this.href}</slot>
         {showExternalIcon &&
-          <pds-icon icon={launch} size={this.fontSize}></pds-icon>
+          <pds-icon
+            icon={launch}
+            size={this.fontSize}
+            aria-label={externalIconLabel}
+            aria-hidden={externalIconLabel === undefined ? 'true' : undefined}
+          ></pds-icon>
         }
       </a>
     );

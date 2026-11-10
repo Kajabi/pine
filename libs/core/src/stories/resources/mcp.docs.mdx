@@ -39,6 +39,15 @@ Pine MCP can be integrated with various AI applications that support the Model C
 
 The configuration depends on how the application handles MCP server connections:
 
+### Identify Your Project
+
+Pine MCP uses the `x-pine-mcp-client` header to tell callers apart, so usage and validation results from your project can be separated from everyone else's. Without it, your calls are grouped by the generic user agent of your tool (for example, `node` or `claude-code`).
+
+- **Use a stable name per repo or app** - for example, `kajabi-products`. Don't use spaces; an optional version can follow a slash (`my-app/1.2.0`).
+- **Prefix test and verification runs with `test-`** - for example, `test-my-app`. These calls are kept out of the quality dashboards.
+
+Replace `<your-repo-or-app-name>` in the examples below with your project's name.
+
 ### Applications with Native HTTP Support
 
 Some applications can directly connect to remote MCP servers over HTTP. For these applications, use:
@@ -47,7 +56,10 @@ Some applications can directly connect to remote MCP servers over HTTP. For thes
 {
   "mcpServers": {
     "pine-mcp": {
-      "url": "https://pine-mcp.netlify.app/mcp"
+      "url": "https://pine-mcp.netlify.app/mcp",
+      "headers": {
+        "x-pine-mcp-client": "<your-repo-or-app-name>"
+      }
     }
   }
 }
@@ -55,7 +67,7 @@ Some applications can directly connect to remote MCP servers over HTTP. For thes
 
 ### Applications Requiring a Proxy Adapter
 
-Other applications expect MCP servers to run as local processes. For these applications, use a proxy adapter to bridge the connection:
+Other applications expect MCP servers to run as local processes. For these applications, use a proxy adapter to bridge the connection. `mcp-remote` sends the header through its `--header` flag:
 
 ```json
 {
@@ -64,12 +76,16 @@ Other applications expect MCP servers to run as local processes. For these appli
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://pine-mcp.netlify.app/mcp"
+        "https://pine-mcp.netlify.app/mcp",
+        "--header",
+        "x-pine-mcp-client:<your-repo-or-app-name>"
       ]
     }
   }
 }
 ```
+
+Leave out the space after the colon in the `--header` value. Some applications, including Cursor and Claude Desktop on Windows, don't escape spaces in `args`, which breaks the header.
 
 ## How to Know Which to Use
 

@@ -10,6 +10,13 @@ export default {
     invalid: false,
     hideLabel: false,
     required: false,
+    variant: 'default',
+  },
+  argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'pill'],
+    },
   },
   component: 'pds-radio',
   parameters: {},
@@ -30,6 +37,7 @@ const BaseTemplate = (args) =>
     ?required=${args.required}
     value=${args.value}
     ?invalid=${args.invalid}
+    variant=${args.variant}
   />`;
 
 export const Default = BaseTemplate.bind();
@@ -100,4 +108,11 @@ WithImage.args = {
   componentId: 'with-image',
   label: 'Option with image',
   helperMessage: 'This radio includes an image using the image slot',
+};
+
+export const Pill = BaseTemplate.bind();
+Pill.args = {
+  componentId: 'pill',
+  label: 'Label text',
+  variant: 'pill',
 };

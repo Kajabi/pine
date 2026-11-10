@@ -26,10 +26,7 @@ export const createReactComponent = <
   defineCustomElement?: () => void
 ) => {
   if (defineCustomElement !== undefined) {
-    // Guard against double-registration when CDN and @pine-ds/react are both loaded
-    if (typeof customElements !== 'undefined' && !customElements.get(tagName)) {
-      defineCustomElement();
-    }
+    defineCustomElement();
   }
 
   const displayName = dashToPascalCase(tagName);
