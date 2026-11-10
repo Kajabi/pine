@@ -23,9 +23,11 @@ img {
   object-fit: var(--dimension-object-fit);
 }
 
-// With a ratio set the host fills the width it is given and the image fills
-// the host, so the ratio decides the height and `fit` decides how the
-// overflow is cropped. Without one the image keeps its intrinsic size.
+// With the `ratio` prop set the host fills the width it is given and the image fills the
+// host, so the ratio decides the height and `fit` decides how the overflow is cropped. The
+// container decides the size then, not the `width`/`height` attributes. With only the
+// `--dimension-aspect-ratio` custom property set, this class isn't added: the host stays
+// `inline-block`, `fit` has no effect, and the image keeps its intrinsic size.
 :host(.pds-image--has-ratio) {
   display: block;
 }

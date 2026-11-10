@@ -7,9 +7,11 @@ export default {
 
 const BaseTemplate = (args) => html` <pds-image
   alt="${args.alt}"
+  fit="${args.fit}"
   height="${args.height}"
   component-id="${args.componentId}"
   ?loading=${args.loading}
+  ratio="${args.ratio}"
   sizes="${args.sizes}"
   src="${args.src}"
   srcset="${args.srcset}"
@@ -27,7 +29,7 @@ const RatioTemplate = (args) => html`<div style="width: 320px">
 const FitTemplate = (args) => html`<div style="display: flex; gap: 1rem;">
   ${['cover', 'contain', 'fill'].map(
     (fit) => html`<figure style="margin: 0; width: 160px;">
-      <pds-image alt="${args.alt}" fit="${fit}" ratio="${args.ratio}" src="${args.src}" />
+      <pds-image alt="${args.alt}" fit="${fit}" ratio="${args.ratio}" src="${args.src}"></pds-image>
       <figcaption><code>fit="${fit}"</code></figcaption>
     </figure>`,
   )}
@@ -52,6 +54,7 @@ SizesAndSrcset.args = {
 export const Ratio = RatioTemplate.bind();
 Ratio.args = {
   alt: 'Random Bear',
+  fit: 'cover',
   ratio: 'wide',
   src: 'https://placebear.com/200/300',
 }
