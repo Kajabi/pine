@@ -125,11 +125,11 @@ The Pill variant is to better display a list of items.
 
 #### Availability
 
-The Availability variant is to better display dates and/or times.
+The Availability variant is to better display dates and/or times. The selected tab takes the container background color, so show availability tabs on an inset surface, as in this example, where the selected tab stands out.
 
 <DocCanvas mdxSource={{
   react: `
-<div style="background-color: var(--pine-color-background-inset-emphasized); padding: 20px;">
+<div style={{ backgroundColor: 'var(--pine-color-background-inset-emphasized)', padding: 'var(--pine-dimension-md)' }}>
   <PdsTabs activeTabName="tuesday" variant="availability" componentId="availability" tablistLabel="Foo">
     <PdsTab name="monday">Monday</PdsTab>
     <PdsTab name="tuesday">Tuesday</PdsTab>
@@ -141,7 +141,7 @@ The Availability variant is to better display dates and/or times.
 </div>
 `,
   webComponent:`
-<div style="background-color: var(--pine-color-background-inset-emphasized); padding: 20px;">
+<div style="background-color: var(--pine-color-background-inset-emphasized); padding: var(--pine-dimension-md);">
   <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability" tablist-label="Foo">
     <pds-tab name="monday">Monday</pds-tab>
     <pds-tab name="tuesday">Tuesday</pds-tab>
@@ -153,7 +153,7 @@ The Availability variant is to better display dates and/or times.
 </div>
 `
 }}>
-  <div style={{backgroundColor: 'var(--pine-color-background-inset-emphasized)', padding: '20px'}}>
+  <div style={{ backgroundColor: 'var(--pine-color-background-inset-emphasized)', padding: 'var(--pine-dimension-md)' }}>
     <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability" tablist-label="Foo">
       <pds-tab name="monday">Monday</pds-tab>
       <pds-tab name="tuesday">Tuesday</pds-tab>
