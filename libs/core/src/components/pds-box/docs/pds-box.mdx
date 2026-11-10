@@ -201,9 +201,9 @@ This approach ensures layouts work correctly regardless of text direction or wri
   mdxSource={{
     react: `<>
   {/* Column: Vertical stacking */}
-  <PdsBox direction="column" border="true" padding="md" margin-block-end="md">
-    <pds-text tag="h3" gutter="lg">Page Title</pds-text>
-    <pds-text gutter="sm">This is a description that appears below the title.</pds-text>
+  <PdsBox direction="column" border padding="md" marginBlockEnd="md">
+    <PdsText tag="h3" gutter="lg">Page Title</PdsText>
+    <PdsText gutter="sm">This is a description that appears below the title.</PdsText>
     <PdsBox gap="sm">
       <PdsButton>Primary Action</PdsButton>
       <PdsButton variant="secondary">Secondary</PdsButton>
@@ -211,10 +211,10 @@ This approach ensures layouts work correctly regardless of text direction or wri
   </PdsBox>
 
   {/* Row: Horizontal flow (default) */}
-  <PdsBox border="true" padding="md" align-items="center" gap="sm">
+  <PdsBox border padding="md" alignItems="center" gap="sm">
     <PdsIcon name="info" />
-    <pds-text gutter="sm">Status message</pds-text>
-    <PdsButton size="sm">Action</PdsButton>
+    <PdsText gutter="sm">Status message</PdsText>
+    <PdsButton size="small">Action</PdsButton>
   </PdsBox>
 </>`,
     webComponent: `<!-- Column: Vertical stacking -->
@@ -231,7 +231,7 @@ This approach ensures layouts work correctly regardless of text direction or wri
 <pds-box border="true" padding="md" align-items="center" gap="sm">
   <pds-icon name="info"></pds-icon>
   <pds-text gutter="sm">Status message</pds-text>
-  <pds-button size="sm">Action</pds-button>
+  <pds-button size="small">Action</pds-button>
 </pds-box>`
 }}>
   <pds-box direction="column" border="true" padding="md" margin-block-end="md">
@@ -246,7 +246,7 @@ This approach ensures layouts work correctly regardless of text direction or wri
   <pds-box border="true" padding="md" align-items="center" gap="sm">
     <pds-icon name="info"></pds-icon>
     <pds-text gutter="sm">Status message</pds-text>
-    <pds-button size="sm">Action</pds-button>
+    <pds-button size="small">Action</pds-button>
   </pds-box>
 </DocCanvas>
 
@@ -313,15 +313,15 @@ Controls how items flow within the container.
 <DocCanvas
   mdxSource={{
     react: `<>
-  <PdsBox border="true" padding="sm" margin-block-end="sm">
-    <pds-text gutter="sm">Item 1</pds-text>
-    <pds-text gutter="sm">Item 2</pds-text>
-    <pds-text gutter="sm">Item 3</pds-text>
+  <PdsBox border padding="sm" marginBlockEnd="sm">
+    <PdsText gutter="sm">Item 1</PdsText>
+    <PdsText gutter="sm">Item 2</PdsText>
+    <PdsText gutter="sm">Item 3</PdsText>
   </PdsBox>
-  <PdsBox border="true" padding="sm" direction="column">
-    <pds-text gutter="sm">Item 1</pds-text>
-    <pds-text gutter="sm">Item 2</pds-text>
-    <pds-text gutter="sm">Item 3</pds-text>
+  <PdsBox border padding="sm" direction="column">
+    <PdsText gutter="sm">Item 1</PdsText>
+    <PdsText gutter="sm">Item 2</PdsText>
+    <PdsText gutter="sm">Item 3</PdsText>
   </PdsBox>
 </>`,
     webComponent: `<pds-box border="true" padding="sm" margin-block-end="sm">
@@ -358,15 +358,15 @@ Controls whether flex items wrap to new lines when they don't fit in the contain
 <DocCanvas
   mdxSource={{
     react: `<>
-  <PdsBox wrap={false} gap="sm" min-width="300px" border="true" padding="sm" margin-block-end="sm">
-    <PdsBox border="true" padding="xs" min-width="100px">Item 1</PdsBox>
-    <PdsBox border="true" padding="xs" min-width="100px">Item 2</PdsBox>
-    <PdsBox border="true" padding="xs" min-width="100px">Item 3</PdsBox>
+  <PdsBox wrap={false} gap="sm" minWidth="300px" border padding="sm" marginBlockEnd="sm">
+    <PdsBox border padding="xs" minWidth="100px">Item 1</PdsBox>
+    <PdsBox border padding="xs" minWidth="100px">Item 2</PdsBox>
+    <PdsBox border padding="xs" minWidth="100px">Item 3</PdsBox>
   </PdsBox>
-  <PdsBox wrap={true} gap="sm" min-width="300px" border="true" padding="sm">
-    <PdsBox border="true" padding="xs" min-width="100px">Item 1</PdsBox>
-    <PdsBox border="true" padding="xs" min-width="100px">Item 2</PdsBox>
-    <PdsBox border="true" padding="xs" min-width="100px">Item 3</PdsBox>
+  <PdsBox wrap={true} gap="sm" minWidth="300px" border padding="sm">
+    <PdsBox border padding="xs" minWidth="100px">Item 1</PdsBox>
+    <PdsBox border padding="xs" minWidth="100px">Item 2</PdsBox>
+    <PdsBox border padding="xs" minWidth="100px">Item 3</PdsBox>
   </PdsBox>
 </>`,
     webComponent: `<pds-box wrap="false" gap="sm" min-width="300px" border="true" padding="sm" margin-block-end="sm">
@@ -404,15 +404,15 @@ Controls spacing between items within the container.
 <DocCanvas
   mdxSource={{
     react: `<>
-  <PdsBox gap="none" border="true" padding="sm" margin-block-end="sm">
-    <PdsBox border="true" padding="xs">No Gap</PdsBox>
-    <PdsBox border="true" padding="xs">Between</PdsBox>
-    <PdsBox border="true" padding="xs">Items</PdsBox>
+  <PdsBox gap="none" border padding="sm" marginBlockEnd="sm">
+    <PdsBox border padding="xs">No Gap</PdsBox>
+    <PdsBox border padding="xs">Between</PdsBox>
+    <PdsBox border padding="xs">Items</PdsBox>
   </PdsBox>
-  <PdsBox gap="lg" border="true" padding="sm">
-    <PdsBox border="true" padding="xs">Large Gap</PdsBox>
-    <PdsBox border="true" padding="xs">Between</PdsBox>
-    <PdsBox border="true" padding="xs">Items</PdsBox>
+  <PdsBox gap="lg" border padding="sm">
+    <PdsBox border padding="xs">Large Gap</PdsBox>
+    <PdsBox border padding="xs">Between</PdsBox>
+    <PdsBox border padding="xs">Items</PdsBox>
   </PdsBox>
 </>`,
     webComponent: `<pds-box gap="none" border="true" padding="sm" margin-block-end="sm">
@@ -466,14 +466,14 @@ Controls external spacing around the container using logical properties (accepts
 <DocCanvas
   mdxSource={{
     react: `<>
-  <PdsBox padding="xs" border="true" margin-block-end="sm">
-    <pds-text gutter="sm">Small padding</pds-text>
+  <PdsBox padding="xs" border marginBlockEnd="sm">
+    <PdsText gutter="sm">Small padding</PdsText>
   </PdsBox>
-  <PdsBox padding="lg" border="true" margin-block-end="sm">
-    <pds-text gutter="sm">Large padding</pds-text>
+  <PdsBox padding="lg" border marginBlockEnd="sm">
+    <PdsText gutter="sm">Large padding</PdsText>
   </PdsBox>
-  <PdsBox padding-block-start="lg" padding-inline-start="xs" border="true">
-    <pds-text gutter="sm">Directional padding (large top, small left)</pds-text>
+  <PdsBox paddingBlockStart="lg" paddingInlineStart="xs" border>
+    <PdsText gutter="sm">Directional padding (large top, small left)</PdsText>
   </PdsBox>
 </>`,
     webComponent: `<pds-box padding="xs" border="true" margin-block-end="sm">
@@ -508,9 +508,9 @@ These follow the same longhand-over-shorthand rules as CSS: `border` sets every 
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox border-block-end="true" padding="sm">Divider row</PdsBox>
-<PdsBox border-inline-start="true" padding="sm">Inline-start rail</PdsBox>
-<PdsBox border="true" border-block-end="false" padding="sm">All sides except block-end</PdsBox>`,
+    react: `<PdsBox borderBlockEnd padding="sm">Divider row</PdsBox>
+<PdsBox borderInlineStart padding="sm">Inline-start rail</PdsBox>
+<PdsBox border borderBlockEnd={false} padding="sm">All sides except block-end</PdsBox>`,
     webComponent: `<pds-box border-block-end="true" padding="sm">Divider row</pds-box>
 <pds-box border-inline-start="true" padding="sm">Inline-start rail</pds-box>
 <pds-box border="true" border-block-end="false" padding="sm">All sides except block-end</pds-box>`
@@ -529,10 +529,10 @@ Please refer to the color brand guidelines for the appropriate color to use. Use
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox border="true">Border Color</PdsBox>
-<PdsBox border="true" border-color="#0072EF">Border Color</PdsBox>
-<PdsBox border="true" border-color="#CF3C32">Border Color</PdsBox>
-<PdsBox border="true" border-color="#FFC505">Border Color</PdsBox>`,
+    react: `<PdsBox border>Border Color</PdsBox>
+<PdsBox border borderColor="#0072EF">Border Color</PdsBox>
+<PdsBox border borderColor="#CF3C32">Border Color</PdsBox>
+<PdsBox border borderColor="#FFC505">Border Color</PdsBox>`,
     webComponent: `<pds-box border="true">Border Color</pds-box>
 <pds-box border="true" border-color="#0072EF">Border Color</pds-box>
 <pds-box border="true" border-color="#CF3C32">Border Color</pds-box>
@@ -549,10 +549,10 @@ By default Box has no border radius. Use `border-radius` to change the rounding 
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox border="true" border-radius="xs">xs border radius</PdsBox>
-<PdsBox border="true" border-radius="sm">sm border radius</PdsBox>
-<PdsBox border="true" border-radius="md">md border radius</PdsBox>
-<PdsBox border="true" border-radius="lg">lg border radius</PdsBox>`,
+    react: `<PdsBox border borderRadius="xs">xs border radius</PdsBox>
+<PdsBox border borderRadius="sm">sm border radius</PdsBox>
+<PdsBox border borderRadius="md">md border radius</PdsBox>
+<PdsBox border borderRadius="lg">lg border radius</PdsBox>`,
     webComponent: `<pds-box border="true" border-radius="xs">xs border radius</pds-box>
 <pds-box border="true" border-radius="sm">sm border radius</pds-box>
 <pds-box border="true" border-radius="md">md border radius</pds-box>
@@ -569,20 +569,31 @@ By default Box has no shadow. Use `shadow` to add a shadow to the box.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox shadow="xs">Shadow xs</PdsBox>
-<PdsBox shadow="sm">Shadow sm</PdsBox>
-<PdsBox shadow="md">Shadow md</PdsBox>
-<PdsBox shadow="lg">Shadow lg</PdsBox>`,
-    webComponent: `<pds-box shadow="xs">Shadow xs</pds-box>
-<pds-box shadow="sm">Shadow sm</pds-box>
-<pds-box shadow="md">Shadow md</pds-box>
-<pds-box shadow="lg">Shadow lg</pds-box>`
+    react: `<PdsBox shadow="050">Shadow 050</PdsBox>
+<PdsBox shadow="100">Shadow 100</PdsBox>
+<PdsBox shadow="150">Shadow 150</PdsBox>
+<PdsBox shadow="200">Shadow 200</PdsBox>
+<PdsBox shadow="300">Shadow 300</PdsBox>
+<PdsBox shadow="400">Shadow 400</PdsBox>
+<PdsBox shadow="500">Shadow 500</PdsBox>`,
+    webComponent: `<pds-box shadow="050">Shadow 050</pds-box>
+<pds-box shadow="100">Shadow 100</pds-box>
+<pds-box shadow="150">Shadow 150</pds-box>
+<pds-box shadow="200">Shadow 200</pds-box>
+<pds-box shadow="300">Shadow 300</pds-box>
+<pds-box shadow="400">Shadow 400</pds-box>
+<pds-box shadow="500">Shadow 500</pds-box>`
 }}>
-  <pds-box shadow="xs">Shadow xs</pds-box>
-  <pds-box shadow="sm">Shadow sm</pds-box>
-  <pds-box shadow="md">Shadow md</pds-box>
-  <pds-box shadow="lg">Shadow lg</pds-box>
+  <pds-box shadow="050">Shadow 050</pds-box>
+  <pds-box shadow="100">Shadow 100</pds-box>
+  <pds-box shadow="150">Shadow 150</pds-box>
+  <pds-box shadow="200">Shadow 200</pds-box>
+  <pds-box shadow="300">Shadow 300</pds-box>
+  <pds-box shadow="400">Shadow 400</pds-box>
+  <pds-box shadow="500">Shadow 500</pds-box>
 </DocCanvas>
+
+**Legacy values:** `xs`, `sm`, `md` and `lg` still render, as `050`, `100`, `150` and `200`, but they aren't part of the prop's type. Use the numbers.
 
 ### Margin
 By default Box has no margin. Use `margin` to add margin around the box.
@@ -642,18 +653,18 @@ When you need precise pixel control that doesn't align with t-shirt sizes, use c
   mdxSource={{
     react: `<>
   {/* 12px padding - between xs (8px) and sm (16px) */}
-  <PdsBox border="true" padding="150">
-    <pds-text gutter="sm">padding="150" (12px)</pds-text>
+  <PdsBox border padding="150">
+    <PdsText gutter="sm">padding="150" (12px)</PdsText>
   </PdsBox>
   {/* 20px padding */}
-  <PdsBox border="true" padding="250">
-    <pds-text gutter="sm">padding="250" (20px)</pds-text>
+  <PdsBox border padding="250">
+    <PdsText gutter="sm">padding="250" (20px)</PdsText>
   </PdsBox>
   {/* 10px gap between items */}
-  <PdsBox border="true" padding="sm" gap="125">
-    <PdsBox border="true" padding="xs">Item 1</PdsBox>
-    <PdsBox border="true" padding="xs">Item 2</PdsBox>
-    <PdsBox border="true" padding="xs">Item 3</PdsBox>
+  <PdsBox border padding="sm" gap="125">
+    <PdsBox border padding="xs">Item 1</PdsBox>
+    <PdsBox border padding="xs">Item 2</PdsBox>
+    <PdsBox border padding="xs">Item 3</PdsBox>
   </PdsBox>
 </>`,
     webComponent: `<!-- 12px padding - between xs (8px) and sm (16px) -->
@@ -706,13 +717,13 @@ Layout behavior:
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox border="true">
-  <pds-text gutter="sm">Item 1</pds-text>
-  <pds-text gutter="sm">Item 2</pds-text>
+    react: `<PdsBox border>
+  <PdsText gutter="sm">Item 1</PdsText>
+  <PdsText gutter="sm">Item 2</PdsText>
 </PdsBox>
-<PdsBox border="true" direction="column">
-  <pds-text gutter="sm">Item 1</pds-text>
-  <pds-text gutter="sm">Item 2</pds-text>
+<PdsBox border direction="column">
+  <PdsText gutter="sm">Item 1</PdsText>
+  <PdsText gutter="sm">Item 2</PdsText>
 </PdsBox>`,
     webComponent: `<pds-box border="true">
   <pds-text gutter="sm">Item 1</pds-text>
@@ -1223,10 +1234,10 @@ Control whether flex items wrap to new lines when they don't fit in the containe
 <DocCanvas
   mdxSource={{
     react: `
-  <PdsBox wrap={false} gap="sm" min-width="250px">
-    <PdsBox border="true" padding="sm">Long Item 1</PdsBox>
-    <PdsBox border="true" padding="sm">Long Item 2</PdsBox>
-    <PdsBox border="true" padding="sm">Long Item 3</PdsBox>
+  <PdsBox wrap={false} gap="sm" minWidth="250px">
+    <PdsBox border padding="sm">Long Item 1</PdsBox>
+    <PdsBox border padding="sm">Long Item 2</PdsBox>
+    <PdsBox border padding="sm">Long Item 3</PdsBox>
   </PdsBox>
 `,
     webComponent: `<pds-box wrap="false" gap="sm" min-width="250px">
@@ -1246,12 +1257,12 @@ Control whether flex items wrap to new lines when they don't fit in the containe
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox wrap={true} gap="sm" min-width="300px">
-  <PdsBox border="true" padding="sm">Item 1</PdsBox>
-  <PdsBox border="true" padding="sm">Item 2</PdsBox>
-  <PdsBox border="true" padding="sm">Item 3</PdsBox>
-  <PdsBox border="true" padding="sm">Item 4</PdsBox>
-  <PdsBox border="true" padding="sm">Item 5</PdsBox>
+    react: `<PdsBox wrap={true} gap="sm" minWidth="300px">
+  <PdsBox border padding="sm">Item 1</PdsBox>
+  <PdsBox border padding="sm">Item 2</PdsBox>
+  <PdsBox border padding="sm">Item 3</PdsBox>
+  <PdsBox border padding="sm">Item 4</PdsBox>
+  <PdsBox border padding="sm">Item 5</PdsBox>
 </PdsBox>`,
     webComponent: `<pds-box wrap="true" gap="sm" min-width="300px">
   <pds-box border="true" padding="sm">Item 1</pds-box>
@@ -1284,10 +1295,10 @@ Control spacing between items at different breakpoints:
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox gap="xs" gap-md="lg" border="true" padding="sm">
-  <PdsBox border="true" padding="xs">Item 1</PdsBox>
-  <PdsBox border="true" padding="xs">Item 2</PdsBox>
-  <PdsBox border="true" padding="xs">Item 3</PdsBox>
+    react: `<PdsBox gap="xs" gapMd="lg" border padding="sm">
+  <PdsBox border padding="xs">Item 1</PdsBox>
+  <PdsBox border padding="xs">Item 2</PdsBox>
+  <PdsBox border padding="xs">Item 3</PdsBox>
 </PdsBox>`,
     webComponent: `<pds-box gap="xs" gap-md="lg" border="true" padding="sm">
   <pds-box border="true" padding="xs">Item 1</pds-box>
@@ -1308,7 +1319,7 @@ Control internal spacing at different breakpoints:
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox padding="xs" padding-md="lg" border="true">
+    react: `<PdsBox padding="xs" paddingMd="lg" border>
   Responsive padding content
 </PdsBox>`,
     webComponent: `<pds-box padding="xs" padding-md="lg" border="true">
@@ -1326,10 +1337,10 @@ Control flex wrap behavior at different breakpoints:
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
-  <PdsBox border="true" padding="sm" min-width="150px">Long Item 1</PdsBox>
-  <PdsBox border="true" padding="sm" min-width="150px">Long Item 2</PdsBox>
-  <PdsBox border="true" padding="sm" min-width="150px">Long Item 3</PdsBox>
+    react: `<PdsBox wrap={false} wrapMd gap="sm" minWidth="400px" border padding="sm">
+  <PdsBox border padding="sm" minWidth="150px">Long Item 1</PdsBox>
+  <PdsBox border padding="sm" minWidth="150px">Long Item 2</PdsBox>
+  <PdsBox border padding="sm" minWidth="150px">Long Item 3</PdsBox>
 </PdsBox>`,
     webComponent: `<pds-box wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
   <pds-box border="true" padding="sm" min-width="150px">Long Item 1</pds-box>
