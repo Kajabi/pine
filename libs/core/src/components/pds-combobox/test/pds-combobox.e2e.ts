@@ -1016,6 +1016,22 @@ describe('pds-combobox', () => {
         expect(reopened.listScrolls).toBe('auto');
       });
 
+      it('leaves nothing behind when typing replaces the list mid-glide', async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect((await glide(page)).gliding).toBe(true);
+
+        // Typing in a drilled-in group searches the whole list, which replaces the group's rows.
+        await page.keyboard.type('s');
+        await page.waitForChanges();
+
+        const searched = await glide(page);
+        expect(searched.gliding).toBe(false);
+        expect(searched.cleared).toBe(true);
+      });
+
       it('turns a glide around from wherever it is', async () => {
         const page = await setUp('group-display="drill-in" panel-search');
         const groupsHeight = (await glide(page)).height;
