@@ -220,6 +220,7 @@ The select component is shown invalid along with an error message, providing fee
   mdxSource={{
     react: `
       <PdsSelect autocomplete="country" componentId="pds-select-autocomplete-example" label="Country" name="country">
+        <option value="">Choose a country</option>
         <option value="US">United States</option>
         <option value="CA">Canada</option>
         <option value="GB">United Kingdom</option>
@@ -227,6 +228,7 @@ The select component is shown invalid along with an error message, providing fee
       </PdsSelect>`,
     webComponent: `
       <pds-select autocomplete="country" component-id="pds-select-autocomplete-example" label="Country" name="country">
+        <option value="">Choose a country</option>
         <option value="US">United States</option>
         <option value="CA">Canada</option>
         <option value="GB">United Kingdom</option>
@@ -236,6 +238,7 @@ The select component is shown invalid along with an error message, providing fee
 >
   <div style={{ padding: '20px', width: '100%' }}>
     <pds-select autocomplete="country" component-id="pds-select-autocomplete-example" label="Country" name="country">
+      <option value="">Choose a country</option>
       <option value="US">United States</option>
       <option value="CA">Canada</option>
       <option value="GB">United Kingdom</option>
