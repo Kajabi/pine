@@ -91,14 +91,14 @@ Use `pds-box` for Single-Column Layouts:
         justifyContent="center"
         backgroundColor="var(--pine-color-background-subtle)"
         borderRadius="lg"
-        shadow="md"
+        shadow="150"
         direction="column"
-        fit="true"
+        fit
         minHeight="300px"
       >
-        <pds-text tag="h1" gutter="lg">Explore Your Craft</pds-text>
-        <pds-text gutter="sm">Discover new ways to grow your business.</pds-text>
-        <pds-button>Get Started</pds-button>
+        <PdsText tag="h1" gutter="lg">Explore Your Craft</PdsText>
+        <PdsText gutter="sm">Discover new ways to grow your business.</PdsText>
+        <PdsButton>Get Started</PdsButton>
       </PdsBox>
     `,
     webComponent: `
@@ -107,7 +107,7 @@ Use `pds-box` for Single-Column Layouts:
         justify-content="center"
         background-color="var(--pine-color-background-subtle)"
         border-radius="lg"
-        shadow="md"
+        shadow="150"
         direction="column"
         fit="true"
         min-height="300px"
@@ -123,7 +123,7 @@ Use `pds-box` for Single-Column Layouts:
     justify-content="center"
     background-color="var(--pine-color-background-subtle)"
     border-radius="lg"
-    shadow="md"
+    shadow="150"
     direction="column"
     fit="true"
     min-height="300px"
@@ -139,8 +139,8 @@ Use `pds-row` for Multi-Column Layouts:
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsBox fit="true">
-        <PdsRow col-gap="sm">
+      <PdsBox fit>
+        <PdsRow colGap="sm">
           <PdsBox sizeMd="8">
             <PdsBox border padding="md">Column 1</PdsBox>
           </PdsBox>
@@ -150,7 +150,7 @@ Use `pds-row` for Multi-Column Layouts:
           <PdsBox sizeMd="4">
             <PdsBox border padding="md">Column 2</PdsBox>
           </PdsBox>
-        </pds-row>
+        </PdsRow>
       </PdsBox>
     `,
     webComponent: `
@@ -232,15 +232,15 @@ Add size modifiers to your child `pds-box` for responsive design
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsBox fit="true">
-        <PdsRow col-gap="sm">
+      <PdsBox fit>
+        <PdsRow colGap="sm">
           <PdsBox sizeMd="8">
-            <pds-box border padding="md">Column 1</pds-box>
-          </pds-box>
+            <PdsBox border padding="md">Column 1</PdsBox>
+          </PdsBox>
           <PdsBox sizeMd="4">
-            <pds-box border padding="md">Column 2</pds-box>
-          </pds-box>
-        </pds-row>
+            <PdsBox border padding="md">Column 2</PdsBox>
+          </PdsBox>
+        </PdsRow>
       </PdsBox>
     `,
     webComponent: `
@@ -279,7 +279,7 @@ Add size modifiers to your child `pds-box` for responsive design
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow col-gap="sm">
+        <PdsRow colGap="sm">
           {/* left side */}
           <PdsBox direction="column" sizeMd="8">
             <PdsBox class="pds-spacing-bottom-md" border direction="column" padding="md" borderRadius="lg">
@@ -290,7 +290,7 @@ Add size modifiers to your child `pds-box` for responsive design
               <p>File upload component</p>
               <label>Show notes</label>
               <p>Text editor component</p>
-              <pds-checkbox componentId="episode-explicit" label="Episode contains explicit content" />
+              <PdsCheckbox componentId="episode-explicit" label="Episode contains explicit content" />
             </PdsBox>
 
             <PdsBox border direction="column" padding="md" borderRadius="lg">
@@ -306,9 +306,9 @@ Add size modifiers to your child `pds-box` for responsive design
             {/* box 1 */}
             <PdsBox class="pds-spacing-bottom-md" border direction="column" flex="none" padding="md" borderRadius="lg">
               <h3>Publish Settings</h3>
-              <pds-chip label="Neutral" sentiment="neutral" />
+              <PdsChip label="Neutral" sentiment="neutral" />
               <PdsBox>
-                <pds-chip label="Neutral" sentiment="neutral" />
+                <PdsChip label="Neutral" sentiment="neutral" />
               </PdsBox>
               <p>Publish date</p>
               <p>Not Set</p>
@@ -317,9 +317,9 @@ Add size modifiers to your child `pds-box` for responsive design
             {/* box 2 */}
             <PdsBox class="pds-spacing-bottom-md" border display="block" flex="none" padding="md" borderRadius="lg">
               <h3>Publish Settings</h3>
-              <pds-chip label="Neutral" sentiment="neutral" />
+              <PdsChip label="Neutral" sentiment="neutral" />
               <PdsBox>
-                <pds-chip label="Neutral" sentiment="neutral" />
+                <PdsChip label="Neutral" sentiment="neutral" />
               </PdsBox>
               <p>Publish date</p>
               <p>Not Set</p>
@@ -528,11 +528,13 @@ Add size modifiers to your child `pds-box` for responsive design
 <DocCanvas client:only
   mdxSource={{
     react: `
+      import { caretRight } from '@pine-ds/icons/icons';
+
       <PdsBox display="block">
         <PdsRow colGap="md">
           <PdsBox sizeMd="4">
             <PdsBox
-              border="true"
+              border
               borderRadius="lg"
               direction="column"
               padding="sm"
@@ -543,15 +545,15 @@ Add size modifiers to your child `pds-box` for responsive design
                   <PdsText gutter="sm">0</PdsText>
                   <PdsText gutter="sm">Successful transactions</PdsText>
                 </PdsBox>
-                <PdsBox auto="true" alignItems="center">
-                  <pds-icon name="caret-right"></pds-icon>
+                <PdsBox auto alignItems="center">
+                  <PdsIcon icon={caretRight}></PdsIcon>
                 </PdsBox>
               </PdsBox>
             </PdsBox>
           </PdsBox>
           <PdsBox sizeMd="4">
             <PdsBox
-              border="true"
+              border
               borderRadius="lg"
               direction="column"
               padding="sm"
@@ -562,15 +564,15 @@ Add size modifiers to your child `pds-box` for responsive design
                   <PdsText gutter="sm">0</PdsText>
                   <PdsText gutter="sm">Successful transactions</PdsText>
                 </PdsBox>
-                <PdsBox auto="true" alignItems="center">
-                  <pds-icon name="caret-right"></pds-icon>
+                <PdsBox auto alignItems="center">
+                  <PdsIcon icon={caretRight}></PdsIcon>
                 </PdsBox>
               </PdsBox>
             </PdsBox>
           </PdsBox>
           <PdsBox sizeMd="4">
             <PdsBox
-              border="true"
+              border
               borderRadius="lg"
               direction="column"
               padding="sm"
@@ -581,8 +583,8 @@ Add size modifiers to your child `pds-box` for responsive design
                   <span>0</span>
                   <span>Successful transactions</span>
                 </PdsBox>
-                <PdsBox auto="true" alignItems="center">
-                  <pds-icon name="caret-right"></pds-icon>
+                <PdsBox auto alignItems="center">
+                  <PdsIcon icon={caretRight}></PdsIcon>
                 </PdsBox>
               </PdsBox>
             </PdsBox>
@@ -778,7 +780,7 @@ This creates a two-column layout, and you can customize the size and arrangement
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow col-gap="sm">
+        <PdsRow colGap="sm">
           <PdsBox sizeMd="4">
             <PdsBox border>
               <PdsText gutter="sm">Content for column 1</PdsText>
@@ -940,7 +942,7 @@ The layout system uses the following breakpoints for responsive sizing and prope
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow col-gap="sm">
+        <PdsRow colGap="sm">
           <PdsBox sizeXs="0" sizeSm="0" sizeLg="12">
             <PdsBox border>Larger screen content</PdsBox>
           </PdsBox>
@@ -983,7 +985,7 @@ Use the `offset` property to offset columns to the right. The `offset` property 
   mdxSource={{
     react: `
       <PdsBox direction="column" fit>
-        <PdsRow col-gap="sm">
+        <PdsRow colGap="sm">
           <PdsBox sizeMd="4">
             <PdsBox border>Item 1</PdsBox>
           </PdsBox>
@@ -991,7 +993,7 @@ Use the `offset` property to offset columns to the right. The `offset` property 
             <PdsBox border>Item 2</PdsBox>
           </PdsBox>
         </PdsRow>
-        <PdsRow col-gap="sm">
+        <PdsRow colGap="sm">
           <PdsBox sizeMd="4">
             <PdsBox border>Item 1</PdsBox>
           </PdsBox>
@@ -999,7 +1001,7 @@ Use the `offset` property to offset columns to the right. The `offset` property 
             <PdsBox border>Item 2</PdsBox>
           </PdsBox>
         </PdsRow>
-        <PdsRow col-gap="sm">
+        <PdsRow colGap="sm">
           <PdsBox offset="3" offsetXs="2" size="6" sizeXs="8">
             <PdsBox border>Item 1</PdsBox>
           </PdsBox>
@@ -1068,11 +1070,11 @@ The columns below keep a base `size` on purpose, unlike the rest of this guide. 
         <PdsRow minHeight="100px" colGap="sm">
           <PdsBox size="2">
             <PdsBox
-              align-items="start"
-              border="true"
+              alignItems="start"
+              border
               display="flex"
-              justify-content="center"
-              min-height="200px"
+              justifyContent="center"
+              minHeight="200px"
               padding="sm"
             >
             Content 1
@@ -1081,7 +1083,7 @@ The columns below keep a base `size` on purpose, unlike the rest of this guide. 
           <PdsBox>
             <PdsBox
               alignItems="center"
-              border="true"
+              border
               display="flex"
               justifyContent="center"
               padding="sm"
@@ -1092,7 +1094,7 @@ The columns below keep a base `size` on purpose, unlike the rest of this guide. 
           <PdsBox>
             <PdsBox
               alignItems="end"
-              border="true"
+              border
               display="flex"
               justifyContent="end"
               padding="sm"
@@ -1177,11 +1179,11 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow col-gap="sm">
+        <PdsRow colGap="sm">
           <PdsBox size="2">
             <PdsBox
               alignItems="start"
-              border="true"
+              border
               display="flex"
               justifyContent="start"
               padding="sm"
@@ -1191,7 +1193,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
           <PdsBox>
             <PdsBox
               alignItems="center"
-              border="true"
+              border
               display="flex"
               justifyContent="center"
               padding="sm"
@@ -1201,7 +1203,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
           <PdsBox size="2">
             <PdsBox
               alignItems="end"
-              border="true"
+              border
               display="flex"
               justifyContent="end"
               padding="sm"
@@ -1361,13 +1363,13 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
           <PdsBox
             borderRadius="sm"
             padding="sm"
-            shadow="sm"
+            shadow="100"
           >
             Item 1
           </PdsBox>
         </PdsBox>
         <PdsBox sizeSm="8">
-          <PdsBox padding="sm" shadow="sm">
+          <PdsBox padding="sm" shadow="100">
             Item 2
           </PdsBox>
         </PdsBox>
@@ -1379,13 +1381,13 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
           <pds-box
             border-radius="sm"
             padding="sm"
-            shadow="sm"
+            shadow="100"
           >
             Item 1
           </pds-box>
         </pds-box>
         <pds-box size-sm="8">
-          <pds-box padding="sm" shadow="sm">
+          <pds-box padding="sm" shadow="100">
             Item 2
           </pds-box>
         </pds-box>
@@ -1394,10 +1396,10 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
 }}>
   <pds-row col-gap="sm">
     <pds-box size-sm="4">
-      <pds-box border-radius="sm" padding="sm" shadow="sm">Item 1</pds-box>
+      <pds-box border-radius="sm" padding="sm" shadow="100">Item 1</pds-box>
     </pds-box>
     <pds-box size-sm="8">
-      <pds-box padding="sm" shadow="sm">Item 2</pds-box>
+      <pds-box padding="sm" shadow="100">Item 2</pds-box>
     </pds-box>
   </pds-row>
 </DocCanvas>

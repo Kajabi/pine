@@ -481,23 +481,12 @@ The example below demonstrates mixing a standard menu item with raw `<a>` and `<
   mdxSource={{
     react:`
 {/* Hover/focus styles for raw elements (add to your app's CSS) */}
-<style>{\`
-  pds-dropdown-menu > a:hover,
-  pds-dropdown-menu > button:hover {
-    background-color: var(--pine-color-background-muted);
-  }
-  pds-dropdown-menu > a:focus,
-  pds-dropdown-menu > button:focus {
-    outline: var(--pine-outline-focus);
-    outline-offset: var(--pine-border-width);
-  }
-  pds-dropdown-menu > a.destructive:hover {
-    background-color: var(--pine-color-danger-disabled);
-  }
-  pds-dropdown-menu > a.destructive:focus {
-    outline: var(--pine-outline-focus-danger);
-  }
-\`}</style>
+<style>{
+  'pds-dropdown-menu > a:hover, pds-dropdown-menu > button:hover { background-color: var(--pine-color-background-muted); }' +
+  'pds-dropdown-menu > a:focus, pds-dropdown-menu > button:focus { outline: var(--pine-outline-focus); outline-offset: var(--pine-border-width); }' +
+  'pds-dropdown-menu > a.destructive:hover { background-color: var(--pine-color-danger-disabled); }' +
+  'pds-dropdown-menu > a.destructive:focus { outline: var(--pine-outline-focus-danger); }'
+}</style>
 
 <PdsDropdownMenu>
   <PdsButton slot="trigger">Actions</PdsButton>
@@ -655,15 +644,7 @@ The `menu-panel` CSS part can be used to customize the menu container's dimensio
 <DocCanvas
   mdxSource={{
     react: `
-<style>
-{\`
-  .scrollable-menu::part(menu-panel) {
-    max-height: 200px;
-    overflow-y: auto;
-    min-width: 250px;
-  }
-\`}
-</style>
+<style>{'.scrollable-menu::part(menu-panel) { max-height: 200px; overflow-y: auto; min-width: 250px; }'}</style>
 <PdsDropdownMenu className="scrollable-menu">
   <PdsButton slot="trigger">Options</PdsButton>
   <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
