@@ -41,7 +41,7 @@ Each icon has one name, written two ways:
 - Web components use the kebab-case name: `<pds-icon name="info-circle"></pds-icon>`.
 - React imports the camelCase form of the same name from `@pine-ds/icons/icons`: `import { infoCircle } from '@pine-ds/icons/icons'`. Numbers stay in place, so `circle-1` becomes `circle1`.
 
-A name that doesn't exist renders nothing. The only signs are a failed request for the SVG and a console warning. AI tools can check a name with the `list_pine_icons` tool in [Pine MCP](/docs/resources-pine-mcp--docs).
+A name that doesn't exist renders nothing. If it uses only letters, numbers and hyphens, the icon requests the SVG, and the failed request and a console warning are the only signs. A name with any other character, such as `info_circle`, fails silently, with no request and no warning. AI tools can check a name with the `list_pine_icons` tool in [Pine MCP](/docs/resources-pine-mcp--docs).
 
 - **Do:** `<pds-icon name="info-circle"></pds-icon>`. **Don't:** `<pds-icon name="infoCircle"></pds-icon>`, or a guessed name such as `name="info"`.
 - **Do:** `<PdsIcon icon={infoCircle} />`. **Don't:** `<PdsIcon name="info-circle" />`, which renders but logs a warning and fetches the SVG at runtime instead of bundling it.
@@ -116,7 +116,7 @@ Use `src` only for SVG files you trust. The icon inserts the file's markup as it
 
 ### Right-to-left
 
-Directional icons, such as `arrow-left`, `arrow-right` and `caret-left`, mirror automatically when the page's `dir` is `rtl`, or when the icon has its own `dir="rtl"`. Other icons don't mirror on their own. `flip-rtl` changes that:
+Directional icons set by `name`, such as `arrow-left`, `arrow-right` and `caret-left`, mirror automatically when the page's `dir` is `rtl`, or when the icon has its own `dir="rtl"`. An icon imported in React and passed to `icon` never mirrors automatically, because it arrives as SVG data rather than a name, so set `flipRtl` on a directional one. Other icons don't mirror on their own. `flip-rtl` changes that:
 
 - Add `flip-rtl` to mirror an icon that isn't directional in right-to-left text, or a directional icon inside a `dir="rtl"` section of a left-to-right page, which doesn't mirror automatically.
 - Set `flip-rtl="false"` to keep a directional icon from mirroring, such as in a `dir="ltr"` section of a right-to-left page.
