@@ -55,10 +55,6 @@ const KNOWN = {
     '.pds-combobox__listbox--truncate .pds-combobox__option-text':
       "an option's text, clipped by the `truncate` prop. Not a wiring job: options keep focus on the trigger and are tracked with aria-activedescendant, so the util's focus path never fires and a hover-only tooltip would leave keyboard users where they are",
   },
-  'pds-filters/pds-filter': {
-    '.pds-filter__button-content': "a filter trigger's content, clipped",
-    '.pds-filter__button-text': "a filter trigger's text, clipped",
-  },
 };
 
 // Truncation that a tooltip would not help, and why. Keep the reason specific enough to argue with.
