@@ -136,6 +136,14 @@ export class PdsButton {
     this.hostAriaObserver = undefined;
   }
 
+  componentWillLoad() {
+    // slotchange only fires after the first render, and when the button is inserted inside an
+    // animation frame (a Turbo frame swap, for one) the update it triggers lands a frame later, so
+    // the first paint would hide slotted icons and draw the button narrower.
+    this.hasStartContent = this.hasSlottedElement('start');
+    this.hasEndContent = this.hasSlottedElement('end');
+  }
+
   componentDidRender() {
     this.forwardAriaReferences();
   }
@@ -221,6 +229,10 @@ export class PdsButton {
   private handleFocusIn = () => {
     this.forwardAriaReferences();
   };
+
+  private hasSlottedElement(name: string): boolean {
+    return Array.from(this.el.children).some((child) => child.getAttribute('slot') === name);
+  }
 
   private handleStartSlotChange = (event: Event) => {
     this.hasStartContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
