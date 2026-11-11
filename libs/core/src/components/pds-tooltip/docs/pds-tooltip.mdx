@@ -299,15 +299,15 @@ The `max-width` prop lets you adjust the maximum width of the tooltip content. T
 When the trigger sits in an open modal dialog (`pds-modal`, or `pds-drawer` with `modal`) or an open popover, the
 tooltip renders inside that dialog or popover so it shows above it. Open the modal, then hover or focus **Publish**.
 
-The snippets show the modal alone. Open it from your own code, as in the `pds-modal` examples.
+The snippets show the modal with its Cancel button wired to `hideModal()`. Open the modal from your own code, as in the `pds-modal` examples. The heading's `id` is the modal's `component-id` followed by `-heading`, which gives the dialog its accessible name.
 
 <DocCanvas
   mdxSource={{
     react: `
-      <PdsModal componentId="tooltip-modal-example" size="sm">
+      <PdsModal id="tooltip-modal-example" componentId="tooltip-modal-example" size="sm">
         <PdsModalHeader>
           <PdsBox padding="md">
-            <PdsText tag="h2" size="h3">Publish changes</PdsText>
+            <PdsText tag="h2" size="h3" id="tooltip-modal-example-heading">Publish changes</PdsText>
           </PdsBox>
         </PdsModalHeader>
         <PdsModalContent>
@@ -316,8 +316,9 @@ The snippets show the modal alone. Open it from your own code, as in the `pds-mo
           </PdsBox>
         </PdsModalContent>
         <PdsModalFooter>
-          <PdsBox fit justifyContent="end" padding="md">
-            <PdsTooltip content="Fix the errors on the page to publish" placement="top">
+          <PdsBox fit gap="sm" justifyContent="end" padding="md">
+            <PdsButton variant="secondary" onClick={() => document.getElementById('tooltip-modal-example')?.hideModal()}>Cancel</PdsButton>
+            <PdsTooltip content="Makes your changes visible to everyone" placement="top">
               <PdsButton variant="primary">Publish</PdsButton>
             </PdsTooltip>
           </PdsBox>
@@ -325,10 +326,10 @@ The snippets show the modal alone. Open it from your own code, as in the `pds-mo
       </PdsModal>
     `,
     webComponent: `
-      <pds-modal component-id="tooltip-modal-example" size="sm">
+      <pds-modal id="tooltip-modal-example" component-id="tooltip-modal-example" size="sm">
         <pds-modal-header>
           <pds-box padding="md">
-            <pds-text tag="h2" size="h3">Publish changes</pds-text>
+            <pds-text tag="h2" size="h3" id="tooltip-modal-example-heading">Publish changes</pds-text>
           </pds-box>
         </pds-modal-header>
         <pds-modal-content>
@@ -337,20 +338,27 @@ The snippets show the modal alone. Open it from your own code, as in the `pds-mo
           </pds-box>
         </pds-modal-content>
         <pds-modal-footer>
-          <pds-box fit justify-content="end" padding="md">
-            <pds-tooltip content="Fix the errors on the page to publish" placement="top">
+          <pds-box fit gap="sm" justify-content="end" padding="md">
+            <pds-button id="tooltip-modal-example-cancel" variant="secondary">Cancel</pds-button>
+            <pds-tooltip content="Makes your changes visible to everyone" placement="top">
               <pds-button variant="primary">Publish</pds-button>
             </pds-tooltip>
           </pds-box>
         </pds-modal-footer>
       </pds-modal>
+
+      <script>
+        document.getElementById('tooltip-modal-example-cancel').addEventListener('click', () => {
+          document.getElementById('tooltip-modal-example').hideModal();
+        });
+      </script>
     `
 }}>
   <pds-button onClick={() => document.getElementById('tooltip-modal-example').showModal()}>Open modal</pds-button>
   <pds-modal id="tooltip-modal-example" component-id="tooltip-modal-example" size="sm">
     <pds-modal-header>
       <pds-box padding="md">
-        <pds-text tag="h2" size="h3">Publish changes</pds-text>
+        <pds-text tag="h2" size="h3" id="tooltip-modal-example-heading">Publish changes</pds-text>
       </pds-box>
     </pds-modal-header>
     <pds-modal-content>
@@ -359,8 +367,9 @@ The snippets show the modal alone. Open it from your own code, as in the `pds-mo
       </pds-box>
     </pds-modal-content>
     <pds-modal-footer>
-      <pds-box fit justify-content="end" padding="md">
-        <pds-tooltip content="Fix the errors on the page to publish" placement="top">
+      <pds-box fit gap="sm" justify-content="end" padding="md">
+        <pds-button variant="secondary" onClick={() => document.getElementById('tooltip-modal-example').hideModal()}>Cancel</pds-button>
+        <pds-tooltip content="Makes your changes visible to everyone" placement="top">
           <pds-button variant="primary">Publish</pds-button>
         </pds-tooltip>
       </pds-box>
