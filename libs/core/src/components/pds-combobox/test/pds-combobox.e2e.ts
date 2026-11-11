@@ -111,6 +111,35 @@ describe('pds-combobox', () => {
     expect(widths.trigger).toBe(300);
   });
 
+  // An option chip sizes to its label, as the trigger chip does, so the selected row's check doesn't
+  // make its chip narrower than the rest.
+  it('sizes each option chip to its label', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-combobox component-id="status" label="Status" trigger="chip" mode="select-only" value="high">
+        <option value="high" chip-sentiment="danger" chip-icon="warning">High</option>
+        <option value="urgent" chip-sentiment="danger" chip-icon="warning">High</option>
+      </pds-combobox>
+    `);
+    await page.waitForChanges();
+
+    await (await page.find('pds-combobox >>> .pds-combobox__chip-trigger')).click();
+    await page.waitForChanges();
+
+    const sizes = await page.evaluate(() => {
+      const root = document.querySelector('pds-combobox')!.shadowRoot!;
+      return Array.from(root.querySelectorAll('.pds-combobox__option--chip')).map(row => {
+        const chip = row.querySelector('.pds-combobox__option-chip')!;
+        return { row: row.getBoundingClientRect().width, chip: chip.getBoundingClientRect().width };
+      });
+    });
+
+    // Same label, so the selected chip matches the other; and neither fills its row.
+    expect(sizes).toHaveLength(2);
+    expect(sizes[0].chip).toBe(sizes[1].chip);
+    sizes.forEach(({ row, chip }) => expect(chip).toBeLessThan(row / 2));
+  });
+
   // The button and chip triggers are divs, which take clicks and focus whether or not they're disabled.
   describe.each([
     ['button', 'trigger="button"', '.pds-combobox__button-trigger'],
