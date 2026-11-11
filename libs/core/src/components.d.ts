@@ -871,7 +871,7 @@ export namespace Components {
          */
         "indeterminate": boolean;
         /**
-          * It determines whether or not the checkbox is invalid.
+          * It determines whether or not the checkbox is invalid. Independent of the native/ ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid": boolean;
         /**
@@ -1713,7 +1713,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the input field is invalid or throws an error.
+          * Determines whether or not the input field is invalid or throws an error. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -2465,7 +2465,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the select is invalid.
+          * Determines whether or not the select is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -2883,7 +2883,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the textarea is invalid or throws an error.
+          * Determines whether or not the textarea is invalid or throws an error. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
           * @defaultValue false
          */
         "invalid": boolean;
@@ -4772,7 +4772,7 @@ declare namespace LocalJSX {
          */
         "indeterminate"?: boolean;
         /**
-          * It determines whether or not the checkbox is invalid.
+          * It determines whether or not the checkbox is invalid. Independent of the native/ ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -5651,7 +5651,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the input field is invalid or throws an error.
+          * Determines whether or not the input field is invalid or throws an error. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -6443,7 +6443,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the select is invalid.
+          * Determines whether or not the select is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -6901,7 +6901,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the textarea is invalid or throws an error.
+          * Determines whether or not the textarea is invalid or throws an error. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
           * @defaultValue false
          */
         "invalid"?: boolean;
