@@ -37,8 +37,9 @@
   }
 
   // Keyboard focus only, so a mouse press doesn't draw the ring. A link item's ring is drawn on
-  // the anchor inside pds-link (below), since the pds-link host never matches :focus-visible.
-  &:focus-visible {
+  // the anchor inside pds-link (below): Chrome never matches :focus-visible on the pds-link host,
+  // and skipping the host keeps a browser that does from drawing a second ring.
+  &:not(pds-link):focus-visible {
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
@@ -76,7 +77,7 @@
       color: var(--pine-color-danger-hover);
     }
 
-    &:focus-visible {
+    &:not(pds-link):focus-visible {
       background-color: var(--pine-color-danger-disabled);
       outline: var(--pine-outline-focus-danger);
       outline-offset: var(--pine-border-width);
@@ -89,7 +90,8 @@
   }
 }
 
-// The anchor fills the item, so its ring matches the one a button item draws.
+// The anchor fills the item, so its ring matches the one a button item draws. This outer
+// ::part rule overrides pds-link's own focus ring, so neither may use !important.
 pds-link::part(link):focus-visible {
   border-radius: var(--pine-dimension-xs);
   box-shadow: none;
