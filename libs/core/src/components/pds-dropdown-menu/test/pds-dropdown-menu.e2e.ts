@@ -887,6 +887,10 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
   const settle = (page: E2EPage) =>
     page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
 
+  // A close is waited for, rather than settled, so a slow run doesn't fail it.
+  const closed = (page: E2EPage) =>
+    page.waitForFunction(() => document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').classList.contains('is-hidden'));
+
   const openMenu = async (content: string) => {
     const page = await newE2EPage();
     await page.setContent(content);
@@ -925,7 +929,7 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
     const page = await openMenu(scroller);
 
     await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
-    await settle(page);
+    await closed(page);
 
     expect(await isOpen(page)).toBe(false);
     expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
@@ -961,7 +965,7 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
       return container.scrollLeft;
     });
     expect(scrolled).toBeGreaterThan(500);
-    await settle(page);
+    await closed(page);
 
     expect(await isOpen(page)).toBe(false);
   });
@@ -978,7 +982,7 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
     expect(await isOpen(page)).toBe(true);
 
     await page.evaluate(() => window.scrollTo(0, 2000));
-    await settle(page);
+    await closed(page);
 
     expect(await isOpen(page)).toBe(false);
   });
@@ -989,7 +993,7 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
     await page.waitForChanges();
 
     await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
-    await settle(page);
+    await closed(page);
 
     expect(await isOpen(page)).toBe(false);
     expect(await page.evaluate(() => document.activeElement?.id)).toBe('trigger');
@@ -1018,7 +1022,7 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
     await page.waitForChanges();
 
     await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
-    await settle(page);
+    await closed(page);
 
     expect(await isOpen(page)).toBe(false);
     expect(await page.$eval('#trigger', (el) => el.shadowRoot.activeElement?.tagName)).toBe('BUTTON');
@@ -1028,7 +1032,7 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
   it('opens again after closing, and closes again when scrolled out', async () => {
     const page = await openMenu(scroller);
     await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
-    await settle(page);
+    await closed(page);
     await page.$eval('#scroller', (el) => { el.scrollLeft = 0; });
     await page.click('#trigger');
     await page.waitForChanges();
@@ -1036,7 +1040,7 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
     expect(await isOpen(page)).toBe(true);
 
     await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
-    await settle(page);
+    await closed(page);
 
     expect(await isOpen(page)).toBe(false);
   });
