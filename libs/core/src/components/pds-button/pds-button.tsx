@@ -137,9 +137,9 @@ export class PdsButton {
   }
 
   componentWillLoad() {
-    // slotchange only fires after the first render, and when the button is inserted inside an
-    // animation frame (a Turbo frame swap, for one) the update it triggers lands a frame later, so
-    // the first paint would hide slotted icons and draw the button narrower.
+    // slotchange only fires after the first render, and when the button is inserted inside a
+    // requestAnimationFrame callback the update it triggers lands a frame later, so the first paint
+    // would hide slotted icons and draw the button narrower.
     this.hasStartContent = this.hasSlottedElement('start');
     this.hasEndContent = this.hasSlottedElement('end');
   }
@@ -230,6 +230,8 @@ export class PdsButton {
     this.forwardAriaReferences();
   };
 
+  // A first-render guess; the slotchange handlers below stay the source of truth (a forwarded,
+  // empty <slot> counts here and is corrected on slotchange).
   private hasSlottedElement(name: string): boolean {
     return Array.from(this.el.children).some((child) => child.getAttribute('slot') === name);
   }
