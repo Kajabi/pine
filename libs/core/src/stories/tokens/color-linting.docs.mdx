@@ -112,13 +112,15 @@ Semantic color tokens pass both rules:
 
 ## Choosing a replacement
 
-Each error suggests a semantic token, picked by the CSS property:
+The CSS property gives the rules a context to search for a semantic token:
 
-- `color` and `fill` get a text token
-- `background` and `background-color` get a background token
-- `border`, `border-color`, `border-*-color`, `outline`, `outline-color` and `box-shadow` get a border token
+- `color` and `fill`: text tokens
+- `background` and `background-color`: background tokens
+- `border`, `border-color`, `border-*-color`, `outline`, `outline-color` and `box-shadow`: border tokens
 
-The suggestion is the token whose light-mode value matches the core color, which isn't always the right job for the style. For example, `var(--pine-color-grey-950)` in `color` suggests `--pine-color-text-hover`, not `--pine-color-text-strong`. Check each suggestion against <pds-link href="?path=/docs/design-tokens-tokens--docs">Choosing tokens</pds-link>, which lists the text, surface, border and inverse tokens with their light and dark values.
+When that context has a token whose light-mode value matches the color, the error suggests it. When it doesn't, the error lists every token in the context. Any other property, such as `stroke`, gets the one token that matches across all three contexts, or no suggestion when the color matches more than one.
+
+A match on the light-mode value isn't always the right job for the style. For example, `var(--pine-color-grey-950)` in `color` suggests `--pine-color-text-hover`, not `--pine-color-text-strong`, and `var(--pine-color-grey-050)` in `stroke` suggests `--pine-color-background-container-hover`. Check each suggestion against <pds-link href="?path=/docs/design-tokens-tokens--docs">Choosing tokens</pds-link>, which lists the text, surface, border and inverse tokens with their light and dark values.
 
 ## Handling Inverse Context
 
@@ -154,7 +156,10 @@ npm run lint.styles -- --fix
 
 ## Auto-fix
 
-The rules auto-fix a value when its property maps to one of the contexts above and there's a single suggested token. A fix writes that suggestion, so review it against <pds-link href="?path=/docs/design-tokens-tokens--docs">Choosing tokens</pds-link> the same way.
+- `prefer-semantic-tokens` writes its suggested token whenever it has exactly one, including for a property with no context.
+- `no-hardcoded-colors` fixes a hex or color function that exactly or closely matches a Pine color. It writes the semantic suggestion when there is one, and the matching core token otherwise: `#ff3e14` in `color` becomes `var(--pine-color-mercury-500)`. `prefer-semantic-tokens` flags that core token only if it's a grey, white or black.
+
+Review each fix against <pds-link href="?path=/docs/design-tokens-tokens--docs">Choosing tokens</pds-link>.
 
 **Note:** Colors with alpha values (e.g., `rgba(0, 0, 0, 0.1)`) are NOT auto-fixed since they may need special handling (shadows, overlays, etc.). Use `stylelint-disable-next-line` to ignore these cases.
 
