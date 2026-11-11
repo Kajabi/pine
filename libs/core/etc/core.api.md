@@ -845,7 +845,6 @@ export namespace Components {
     // (undocumented)
     export interface PdsToast {
         "componentId": string;
-        // (undocumented)
         "dismiss": () => Promise<void>;
         "dismissible": boolean;
         "dismissLabel": string;
@@ -1545,7 +1544,6 @@ export namespace LocalJSX {
         "iconOnly"?: boolean;
         "loading"?: boolean;
         "name"?: string;
-        // (undocumented)
         "onPdsClick"?: (event: PdsButtonCustomEvent<Event>) => void;
         "size"?: 'default' | 'small' | 'micro';
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -1600,7 +1598,6 @@ export namespace LocalJSX {
         "label"?: string;
         "name"?: string;
         "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
-        // (undocumented)
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         "required"?: boolean;
         "value"?: string;

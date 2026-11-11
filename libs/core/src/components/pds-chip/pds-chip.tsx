@@ -36,7 +36,7 @@ function besideListbox(wrapper: HTMLElement | null): Pick<TruncationTooltipOptio
 
 /**
  * @slot (default) - The chip's label text.
- * @part button
+ * @part button - Exposes the trigger button for styling. Appears only on the dropdown variant.
  * @part dot - Exposes the dot for styling, such as a custom color. Appears only when `dot` is set.
  * @part icon - Exposes the icon component for styling, such as a custom color. Appears only when `icon` is set.
  */

@@ -26,13 +26,13 @@
 
 ## Shadow Parts
 
-| Part              | Description                                                                     |
-| ----------------- | ------------------------------------------------------------------------------- |
-| `"asset-wrapper"` |                                                                                 |
-| `"button"`        |                                                                                 |
-| `"image"`         | The main image element that represents the avatar component.                    |
-| `"initials"`      | The text element that renders the avatar's initials, for restyling their color. |
-| `"status"`        |                                                                                 |
+| Part              | Description                                                                                              |
+| ----------------- | -------------------------------------------------------------------------------------------------------- |
+| `"asset-wrapper"` | Exposes the sized wrapper around the avatar's image, initials or icon, badge and status dot for styling. |
+| `"button"`        | Exposes the dropdown trigger button for styling. Appears only when `dropdown` is set.                    |
+| `"image"`         | The main image element that represents the avatar component.                                             |
+| `"initials"`      | The text element that renders the avatar's initials, for restyling their color.                          |
+| `"status"`        | Exposes the status dot for styling, such as a custom color. Appears only when `status` is set.           |
 
 
 ## Dependencies
