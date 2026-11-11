@@ -27,7 +27,7 @@ A hyperlink is used as a navigational element to direct users to another locatio
 ### Accessibility
 
 - Write link text that says where the link goes, such as "Account settings" rather than "Click here". Screen reader users often move through a page's links on their own, away from the text around them.
-- Always give the link text. Without it, the link shows its `href`, so people see and hear a URL.
+- Always give the link text. A link with nothing between its tags shows its `href`, so people see and hear a URL. Whitespace counts as content, so `<pds-link href="/help"> </pds-link>` shows no text and has no accessible name.
 - Inside a paragraph, use the default `inline` variant. Its underline sets the link apart from the words around it, while a `plain` link in the default color differs from body text only in weight until it's hovered.
 - Set `active` on the link to the current page in a set of navigation links. It sets `aria-current="page"`.
 - Check that a custom `color` has enough contrast with the background behind it.
@@ -183,7 +183,7 @@ The text between the opening and closing tags is the link's text, and its access
 
 ### No Custom Slot Text
 
-When no text is provided, the link uses its `href` as its text. Avoid this fallback: people see and hear the URL instead of a description of where the link goes.
+When there is nothing between the tags, not even whitespace, the link uses its `href` as its text. Avoid this fallback: people see and hear the URL instead of a description of where the link goes. A link that holds only whitespace gets no fallback, so it shows no text and has no accessible name.
 
 <DocCanvas
   mdxSource={{

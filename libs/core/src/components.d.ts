@@ -1810,7 +1810,7 @@ export namespace Components {
          */
         "fontSize": 'sm' | 'md' | 'lg';
         /**
-          * The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.
+          * The hyperlink's destination URL. If the default slot is empty (whitespace counts as content), the href will be used as the link text.
          */
         "href": string;
         /**
@@ -5764,7 +5764,7 @@ declare namespace LocalJSX {
          */
         "fontSize"?: 'sm' | 'md' | 'lg';
         /**
-          * The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.
+          * The hyperlink's destination URL. If the default slot is empty (whitespace counts as content), the href will be used as the link text.
          */
         "href": string;
         /**
