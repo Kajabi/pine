@@ -406,6 +406,8 @@ describe('pds-combobox', () => {
     ];
 
     component.optionEls = mockOptions;
+    // The slotted options are read before the first render; the mocks replace them.
+    component.allItems = mockOptions;
     component.filterOptions();
 
     expect(component.filteredItems.length).toBe(3);
@@ -1228,6 +1230,7 @@ describe('pds-combobox', () => {
     ];
 
     component.optionEls = mockOptions;
+    component.allItems = mockOptions;
     component.filteredItems = mockOptions;
     component.value = 'cat'; // Set value to select the second option
     (component as any).setSelectedOption(mockOptions[1]); // Select the 'cat' option
@@ -1296,6 +1299,7 @@ describe('pds-combobox', () => {
     const filteredOptions = [allOptions[0], allOptions[2]]; // dog and bird only
 
     component.optionEls = allOptions;
+    component.allItems = allOptions;
     component.filteredItems = filteredOptions;
     (component as any).setSelectedOption(allOptions[1]); // cat is selected but filtered out
 
@@ -4041,6 +4045,50 @@ describe('pds-combobox', () => {
       component.panelQuery = 'Fresh';
       component.filterOptions();
       expect(component.filteredItems.map((item: HTMLOptionElement) => item.value)).toEqual(['fresh']);
+    });
+
+    // The spec environment has no option `value` property, so matching the value to an option is
+    // covered by the first-paint e2e tests; this checks which elements are read.
+    it("reads the host's options before the first render, leaving out its other slots' content", async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="first-paint" trigger="button" mode="select-only" placeholder="Select" value="b">
+          <option value="a">Alpha</option>
+          <option value="b">Beta</option>
+          <option slot="trigger-content" value="ignored">Not an option</option>
+        </pds-combobox>`,
+      });
+      const component = page.rootInstance;
+
+      expect(component.optionEls.map((option: HTMLOptionElement) => option.getAttribute('value'))).toEqual(['a', 'b']);
+    });
+
+    it("matches a plain option's data-search-text, which replaces its label for search", async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="search-text" trigger="button" mode="select-only" panel-search></pds-combobox>`,
+      });
+      const component = page.rootInstance;
+      const option = (value: string, text: string, searchText?: string) => {
+        const el = page.doc.createElement('option') as HTMLOptionElement;
+        el.value = value;
+        el.textContent = text;
+        if (searchText !== undefined) el.setAttribute('data-search-text', searchText);
+        return el;
+      };
+      const options = [option('automation', 'Automation', 'Automation started finished'), option('tag', 'Tag'), option('plain', 'Plain', '')];
+      component.optionEls = options;
+      component.allItems = options;
+
+      const results = (query: string) => {
+        component.panelQuery = query;
+        component.filterOptions();
+        return component.filteredItems.map((item: HTMLOptionElement) => item.value);
+      };
+      expect(results('finished')).toEqual(['automation']);
+      expect(results('tag')).toEqual(['tag']);
+      // An empty data-search-text is ignored: the label still matches.
+      expect(results('plain')).toEqual(['plain']);
     });
 
     it("doesn't show a badge on a chip option", async () => {

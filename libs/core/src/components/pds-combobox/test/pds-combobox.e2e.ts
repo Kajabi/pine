@@ -2060,3 +2060,175 @@ describe('pds-combobox in a disabled fieldset', () => {
     expect(await state()).toEqual({ disabled: false, expanded: 'true' });
   });
 });
+
+describe('pds-combobox selection on first paint', () => {
+  /**
+   * Builds a combobox with `value` and slotted options, as a form re-rendered after a pick does,
+   * and returns what its field shows at its very first render: read in a mutation observer
+   * callback, which runs before any later render (and before `slotchange`).
+   */
+  const firstPaint = (page: Awaited<ReturnType<typeof newE2EPage>>, attributes: Record<string, string>, options: string) =>
+    page.evaluate(
+      async (attrs, optionsHtml) => {
+        await customElements.whenDefined('pds-combobox');
+        const el = document.createElement('pds-combobox');
+        Object.entries(attrs).forEach(([name, value]) => el.setAttribute(name, value));
+        el.innerHTML = optionsHtml;
+        const root = el.shadowRoot!;
+        const snapshot = new Promise<{ text: string; placeholder: boolean; inputValue: string | null; chips: number; icon: string | null }>((resolve, reject) => {
+          setTimeout(() => reject(new Error('The combobox never rendered a trigger')), 5000);
+          const observer = new MutationObserver(() => {
+            const trigger = root.querySelector('.pds-combobox__button-trigger, .pds-combobox__chip-trigger, .pds-combobox__input');
+            if (!trigger) return;
+            observer.disconnect();
+            resolve({
+              text: trigger.textContent?.trim() ?? '',
+              placeholder: !!root.querySelector('.pds-combobox__button-trigger-label--placeholder'),
+              inputValue: trigger instanceof HTMLInputElement ? trigger.value : null,
+              chips: trigger.querySelectorAll('pds-chip').length,
+              icon: (trigger.querySelector('pds-icon.pds-combobox__button-trigger-icon') as HTMLElement & { name?: string } | null)?.name ?? null,
+            });
+          });
+          observer.observe(root, { childList: true, subtree: true, characterData: true });
+        });
+        document.body.appendChild(el);
+        return snapshot;
+      },
+      attributes,
+      options,
+    );
+
+  const categories = `
+    <option value="tags">Tags</option>
+    <option value="automation">Automation</option>
+  `;
+
+  it('shows the selected option in a button trigger, not the placeholder', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<main></main>');
+
+    const shown = await firstPaint(page, { 'component-id': 'first-paint-button', label: 'Category', placeholder: 'Select a category', trigger: 'button', mode: 'select-only', value: 'automation' }, categories);
+
+    expect(shown).toMatchObject({ text: 'Automation', placeholder: false });
+  });
+
+  it('shows the selected option in a chip trigger', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<main></main>');
+
+    const shown = await firstPaint(page, { 'component-id': 'first-paint-chip', label: 'Status', trigger: 'chip', mode: 'select-only', value: 'published' }, `
+      <option value="draft">Draft</option>
+      <option value="published">Published</option>
+    `);
+
+    expect(shown.text).toBe('Published');
+  });
+
+  it('shows the first option of a chip trigger without a value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<main></main>');
+
+    const shown = await firstPaint(page, { 'component-id': 'first-paint-chip-default', label: 'Status', trigger: 'chip', mode: 'select-only' }, `
+      <option value="draft">Draft</option>
+      <option value="published">Published</option>
+    `);
+
+    expect(shown.text).toBe('Draft');
+  });
+
+  it('shows the selected option in an input trigger', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<main></main>');
+
+    const shown = await firstPaint(page, { 'component-id': 'first-paint-input', label: 'Category', placeholder: 'Select a category', value: 'automation' }, categories);
+
+    expect(shown.inputValue).toBe('Automation');
+  });
+
+  it("shows a selected layout option's content", async () => {
+    const page = await newE2EPage();
+    await page.setContent('<main></main>');
+
+    const shown = await firstPaint(
+      page,
+      { 'component-id': 'first-paint-layout', label: 'Category', placeholder: 'Select a category', trigger: 'button', mode: 'select-only', 'custom-option-layouts': '', value: 'automation' },
+      `<option value="tags" label="Tags" data-layout><span>Tags</span></option>
+       <option value="automation" label="Automation" data-layout><span>Automation</span></option>`,
+    );
+
+    expect(shown).toMatchObject({ text: 'Automation', placeholder: false });
+  });
+
+  it("shows a badged option's icon and label, and leaves its badge to the list", async () => {
+    const page = await newE2EPage();
+    await page.setContent('<main></main>');
+
+    const shown = await firstPaint(
+      page,
+      { 'component-id': 'first-paint-badge', label: 'Category', placeholder: 'Select a category', trigger: 'button', mode: 'select-only', value: 'automation' },
+      `<option value="tags" data-icon="hashtag">Tags</option>
+       <option value="automation" data-icon="automations" data-badge="New" data-badge-sentiment="accent">Automation</option>`,
+    );
+
+    expect(shown).toEqual({ text: 'Automation', placeholder: false, inputValue: null, chips: 0, icon: 'automations' });
+  });
+});
+
+describe('pds-combobox selected field and option badges', () => {
+  const setUp = async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-combobox component-id="badged-categories" label="Category" trigger="button" trigger-shape="input" mode="select-only"
+        group-display="drill-in" panel-search value="automation">
+        <option value="tags" data-icon="hashtag" data-search-text="Tags has any tag">Tags</option>
+        <option value="automation" data-icon="automations" data-badge="New" data-badge-sentiment="accent"
+          data-search-text="Automation started finished">Automation</option>
+      </pds-combobox>
+    `);
+    await page.waitForChanges();
+    return page;
+  };
+
+  it('keeps the badge on the list row and out of the filled field', async () => {
+    const page = await setUp();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+
+    const shown = await page.evaluate(() => {
+      const root = document.querySelector('pds-combobox')!.shadowRoot!;
+      const trigger = root.querySelector('.pds-combobox__button-trigger')!;
+      const row = Array.from(root.querySelectorAll('.pds-combobox__option')).find(option => option.textContent?.startsWith('Automation'))!;
+      return {
+        field: trigger.textContent?.trim(),
+        fieldChips: trigger.querySelectorAll('pds-chip').length,
+        rowBadge: row.querySelector('pds-chip.pds-combobox__option-badge')?.textContent,
+      };
+    });
+
+    expect(shown).toEqual({ field: 'Automation', fieldChips: 0, rowBadge: 'New' });
+  });
+
+  it("finds an option by its data-search-text, without a custom layout", async () => {
+    const page = await setUp();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+
+    const search = await page.find('pds-combobox >>> .pds-combobox__panel-search input');
+    await search.type('finished');
+    await page.waitForChanges();
+
+    const rows = await page.evaluate(() =>
+      Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('.pds-combobox__option')).map(option => option.textContent?.replace('New', '').trim()),
+    );
+    expect(rows).toEqual(['Automation']);
+  });
+
+  it('has no axe violations', async () => {
+    const page = await setUp();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});
