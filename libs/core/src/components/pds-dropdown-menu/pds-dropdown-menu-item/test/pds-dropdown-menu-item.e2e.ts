@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { trash } from '@pine-ds/icons/icons';
 import { formatViolations, runAxe } from '../../../../utils/test/axe';
 
@@ -265,5 +265,86 @@ describe('pds-dropdown-menu-item', () => {
 
     expect(clickSpy).toHaveReceivedEventTimes(1);
     expect(await page.evaluate(() => window.location.hash)).toBe('#moved');
+  });
+
+  describe('focus ring', () => {
+    // A link item draws its ring on the anchor inside pds-link; other items draw it on their inner control.
+    const ringStyle = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
+      const item = document.querySelector(`[data-name="${itemName}"]`);
+      const content = item.shadowRoot.querySelector('.pds-dropdown-menu-item__content');
+      const ringEl = content.shadowRoot?.querySelector('a') ?? content;
+      return getComputedStyle(ringEl).outlineStyle;
+    }, name);
+
+    const isFocused = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
+      const item = document.querySelector(`[data-name="${itemName}"]`);
+      return item.shadowRoot.activeElement != null;
+    }, name);
+
+    const setUp = async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <button slot="trigger" type="button">Open</button>
+          <pds-dropdown-menu-item data-name="button">Edit</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item data-name="link" href="#details">View details</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item data-name="informational" informational>Last edited today</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item data-name="destructive" destructive>Delete</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item data-name="destructive-link" destructive href="#remove">Remove</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+      return page;
+    };
+
+    const names = ['button', 'link', 'informational', 'destructive', 'destructive-link'];
+
+    it('does not show while the mouse presses an item', async () => {
+      const page = await setUp();
+      await page.click('button[slot="trigger"]');
+      await page.waitForChanges();
+
+      for (const name of names) {
+        const box = await (await page.$(`[data-name="${name}"]`)).boundingBox();
+        await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+        await page.mouse.down();
+        await page.waitForChanges();
+
+        expect(await isFocused(page, name)).toBe(true);
+        expect(await ringStyle(page, name)).toBe('none');
+
+        await page.mouse.up();
+      }
+    });
+
+    it('shows on each item the arrow keys reach', async () => {
+      const page = await setUp();
+      await page.focus('button[slot="trigger"]');
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+
+      for (const name of names) {
+        await page.keyboard.press('ArrowDown');
+        await page.waitForChanges();
+
+        expect(await isFocused(page, name)).toBe(true);
+        expect(await ringStyle(page, name)).toBe('solid');
+      }
+    });
+
+    it('shows when Tab moves into a menu opened with the mouse', async () => {
+      const page = await setUp();
+      await page.click('button[slot="trigger"]');
+      await page.waitForChanges();
+
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+      expect(await isFocused(page, 'button')).toBe(true);
+      expect(await ringStyle(page, 'button')).toBe('solid');
+
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+      expect(await isFocused(page, 'link')).toBe(true);
+      expect(await ringStyle(page, 'link')).toBe('solid');
+    });
   });
 });
