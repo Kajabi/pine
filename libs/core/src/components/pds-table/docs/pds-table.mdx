@@ -1122,6 +1122,92 @@ When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cel
 </DocCanvas>
 
 
+### Column Widths
+
+By default, a table sizes each column from the content on the page, so a column can change width when the rows change, for example after a sort. To keep columns put, set `table-layout="fixed"` on `pds-table` and a `width` on the `pds-table-head-cell` of each column whose size you know. Columns without a `width` share the space that's left, so leave one column (usually the one with the longest content, such as a name) without a width and add `truncate` to its cells.
+
+- `width` accepts any CSS length (e.g. `148px`, `12rem`, `20%`) and includes the cell's padding.
+- In a fixed layout, content never resizes a column. Content longer than its column overflows, so add `truncate` to cells whose content may not fit.
+- In a `responsive` table, the table scrolls horizontally when the column widths add up to more than the container.
+- Without `table-layout="fixed"`, `width` sets the column's minimum width, and the column can still grow to fit its content.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="column-widths" tableLayout="fixed">
+  <PdsTableHead>
+    <PdsTableHeadCell sortable>Name</PdsTableHeadCell>
+    <PdsTableHeadCell sortable width="148px">Lifetime value</PdsTableHeadCell>
+    <PdsTableHeadCell sortable width="216px">Email marketing</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell truncate>Alexandra Christina Rodriguez-Fitzgerald</PdsTableCell>
+      <PdsTableCell>$12,480.00</PdsTableCell>
+      <PdsTableCell>Unsubscribed manually</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell truncate>Bo Li</PdsTableCell>
+      <PdsTableCell>$0.00</PdsTableCell>
+      <PdsTableCell>Subscribed</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell truncate>Jonathan Alexander Bartholomew III</PdsTableCell>
+      <PdsTableCell>$1,250,300.00</PdsTableCell>
+      <PdsTableCell>Not subscribed</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="column-widths" table-layout="fixed">
+  <pds-table-head>
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable width="148px">Lifetime value</pds-table-head-cell>
+    <pds-table-head-cell sortable width="216px">Email marketing</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+      <pds-table-cell>$12,480.00</pds-table-cell>
+      <pds-table-cell>Unsubscribed manually</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Bo Li</pds-table-cell>
+      <pds-table-cell>$0.00</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Jonathan Alexander Bartholomew III</pds-table-cell>
+      <pds-table-cell>$1,250,300.00</pds-table-cell>
+      <pds-table-cell>Not subscribed</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <pds-table component-id="column-widths" table-layout="fixed">
+    <pds-table-head>
+      <pds-table-head-cell sortable>Name</pds-table-head-cell>
+      <pds-table-head-cell sortable width="148px">Lifetime value</pds-table-head-cell>
+      <pds-table-head-cell sortable width="216px">Email marketing</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+        <pds-table-cell>$12,480.00</pds-table-cell>
+        <pds-table-cell>Unsubscribed manually</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell truncate>Bo Li</pds-table-cell>
+        <pds-table-cell>$0.00</pds-table-cell>
+        <pds-table-cell>Subscribed</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell truncate>Jonathan Alexander Bartholomew III</pds-table-cell>
+        <pds-table-cell>$1,250,300.00</pds-table-cell>
+        <pds-table-cell>Not subscribed</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
+
 ### Cell Alignment
 
 Text alignment can be controlled using the `cell-align` prop on both `pds-table-head-cell` and `pds-table-cell` elements. The available alignment options are `start`, `center`, `end`, and `justify`.

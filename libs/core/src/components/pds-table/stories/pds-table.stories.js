@@ -43,6 +43,11 @@ export default {
         category: 'Sorting',
       },
     },
+    tableLayout: {
+      control: { type: 'select' },
+      options: ['auto', 'fixed'],
+      description: 'Sets how the table sizes its columns. With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content.',
+    },
   },
 };
 
@@ -494,4 +499,54 @@ export const Truncate = TruncateTemplate.bind();
 Truncate.args = {
   border: true,
   rowDividers: true,
+};
+
+const ColumnWidthsTemplate = (args) => html`
+<pds-table
+  component-id="column-widths"
+  table-layout="${args.tableLayout}"
+  ?responsive=${args.responsive}
+  ?row-dividers=${args.rowDividers}
+>
+  <pds-table-head ?border=${args.border}>
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable width="148px">Lifetime value</pds-table-head-cell>
+    <pds-table-head-cell sortable width="134px">Added</pds-table-head-cell>
+    <pds-table-head-cell sortable width="216px">Email marketing</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+      <pds-table-cell>$12,480.00</pds-table-cell>
+      <pds-table-cell>Mar 4, 2024</pds-table-cell>
+      <pds-table-cell>Unsubscribed manually</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Bo Li</pds-table-cell>
+      <pds-table-cell>$0.00</pds-table-cell>
+      <pds-table-cell>Jan 12, 2026</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Jonathan Alexander Bartholomew III</pds-table-cell>
+      <pds-table-cell>$1,250,300.00</pds-table-cell>
+      <pds-table-cell>Sep 30, 2025</pds-table-cell>
+      <pds-table-cell>Not subscribed</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Mia Chen</pds-table-cell>
+      <pds-table-cell>$75.00</pds-table-cell>
+      <pds-table-cell>Jul 1, 2025</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+<pds-text tag="p" size="xs" color="secondary" gutter="sm">Sort any column: with a fixed table layout, the columns keep their widths whichever rows come first. Set the table layout to auto to compare.</pds-text>`;
+
+export const ColumnWidths = ColumnWidthsTemplate.bind();
+ColumnWidths.args = {
+  border: true,
+  responsive: false,
+  rowDividers: true,
+  tableLayout: 'fixed',
 };
