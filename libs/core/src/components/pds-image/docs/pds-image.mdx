@@ -51,7 +51,7 @@ To reserve the image's full box before it loads, pair `width` with `--dimension-
 
 ## Responsive images
 
-The `srcset` and `sizes` props pass through to the native `<img>`, so the browser can choose a file for the viewport and screen. `srcset` lists the available files with their widths, and `sizes` tells the browser how wide the image displays at each viewport size. When you set `sizes`, give every `srcset` candidate a width (`w`) descriptor: a list that mixes descriptor types is invalid HTML. For more information, see the MDN article on [responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
+The `srcset` and `sizes` props pass through to the native `<img>`, so the browser can choose a file for the viewport and screen. `srcset` lists the same image at several widths, all in the same aspect ratio, and `sizes` tells the browser how wide the image displays at each viewport size. A file in a different shape changes the image's height depending on which file the browser picks. When you set `sizes`, give every `srcset` candidate a width (`w`) descriptor: a list that mixes descriptor types is invalid HTML. For more information, see the MDN article on [responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
 
 ### Image Optimization
 
@@ -73,7 +73,7 @@ A default image with a `src` and `alt`.
 
 ### Sizes and Srcset
 
-An image with `srcset` and `sizes` props set. At a viewport 450px wide or narrower, `sizes` says the image displays at 150px, so a standard-density screen loads the 150px file. Wider viewports, and high-density screens, load the 600px file. To see the switch, make the viewport 450px wide or narrower and reload.
+An image with `srcset` and `sizes` props set. At a viewport 450px wide or narrower, `sizes` says the image displays at 150px, so a standard-density screen loads the 150px file. Wider viewports, and high-density screens, load the 600px file. To see the switch, make the viewport 450px wide or narrower and reload. Both files are 3:1, but the placeholder service returns a different photo at each size; in your own `srcset`, list one image at several widths.
 
 <DocCanvas
   mdxSource={{
@@ -82,7 +82,7 @@ An image with `srcset` and `sizes` props set. At a viewport 450px wide or narrow
   alt="Random Bear"
   sizes="(max-width: 450px) 150px, 600px"
   src="https://placebear.com/600/200"
-  srcset="https://placebear.com/150/150 150w, https://placebear.com/600/200 600w"
+  srcset="https://placebear.com/150/50 150w, https://placebear.com/600/200 600w"
 ></PdsImage>
     `,
     webComponent: `
@@ -90,7 +90,7 @@ An image with `srcset` and `sizes` props set. At a viewport 450px wide or narrow
   alt="Random Bear"
   sizes="(max-width: 450px) 150px, 600px"
   src="https://placebear.com/600/200"
-  srcset="https://placebear.com/150/150 150w, https://placebear.com/600/200 600w"
+  srcset="https://placebear.com/150/50 150w, https://placebear.com/600/200 600w"
 ></pds-image>
     `
 }}>
@@ -98,7 +98,7 @@ An image with `srcset` and `sizes` props set. At a viewport 450px wide or narrow
     alt="Random Bear"
     sizes="(max-width: 450px) 150px, 600px"
     src="https://placebear.com/600/200"
-    srcset="https://placebear.com/150/150 150w, https://placebear.com/600/200 600w"
+    srcset="https://placebear.com/150/50 150w, https://placebear.com/600/200 600w"
   ></pds-image>
 </DocCanvas>
 
