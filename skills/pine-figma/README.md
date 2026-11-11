@@ -50,7 +50,7 @@ adoption audit. Use both together — the generic *how*, plus the Pine *what*.
 
 Once the docs-site `/.well-known/skills/` manifest generator (added alongside the
 `pine` skill) is generalized to enumerate every `skills/*` directory, this skill
-will also be installable via `npx skills add https://<pine-docs-domain>`. Until
+will also be installable via `npx skills add https://pine-design-system.netlify.app`. Until
 then, install it manually. (Follow-up: generalize the generator in
 `libs/core/.storybook/main.js` from the single hardcoded `skills/pine` to all
 `skills/*`.)
