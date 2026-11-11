@@ -5,6 +5,7 @@ import { setAttributesIfChanged } from '@utils/attributes';
 import { limitRestores } from '@utils/keep-hydrated';
 import {  computePosition,
   flip,
+  hide,
   offset,
   shift,
   autoUpdate,
@@ -31,6 +32,8 @@ export class PdsDropdownMenu implements BasePdsProps {
   private isOpen: boolean = false;
   private menuItems: MenuItemElement[] = [];
   private cleanupAutoUpdate: (() => void) | null = null;
+  // Counts each opening, so a position worked out for an earlier opening is ignored.
+  private openCount = 0;
   private triggerObserver: MutationObserver | null = null;
 
   @Element() host: HTMLPdsDropdownMenuElement;
@@ -164,12 +167,28 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   // Open the dropdown and position it
   private openDropdown = () => {
+    const opening = ++this.openCount;
+    // Only a trigger seen in view this opening closes the menu when it leaves, so opening a menu
+    // whose trigger is already out of view (from a script) doesn't close it straight away.
+    let triggerSeen = false;
+
     const updatePosition = () => {
       computePosition(this.triggerEl, this.panelEl as HTMLElement, {
         placement: this.placement,
         strategy: 'fixed',
-        middleware: [offset(6), flip(), shift({padding: 5})],
-      }).then(({ x, y }) => {
+        middleware: [offset(6), flip(), shift({padding: 5}), hide({ strategy: 'referenceHidden' })],
+      }).then(({ x, y, middlewareData }) => {
+        if (!this.isOpen || opening !== this.openCount) return;
+
+        // Once the trigger scrolls out of view, in any scrolling container or the window, the menu
+        // closes rather than float away from it, as a native menu does.
+        if (!middlewareData.hide?.referenceHidden) {
+          triggerSeen = true;
+        } else if (triggerSeen) {
+          this.closeDropdown({ preventScroll: true });
+          return;
+        }
+
         Object.assign(this.panelEl.style, {
           left: `${x}px`,
           top: `${y}px`,
@@ -192,8 +211,9 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.syncTriggerAria();
   }
 
-  // Close the dropdown
-  private closeDropdown = () => {
+  // Close the dropdown. Closed because its trigger scrolled out of view, focus goes back to the
+  // trigger without scrolling it back into view.
+  private closeDropdown = ({ preventScroll = false }: { preventScroll?: boolean } = {}) => {
     this.host.shadowRoot?.querySelector('pds-box').classList.add('is-hidden');
     this.isOpen = false;
 
@@ -210,7 +230,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     // Return focus to trigger
     if (this.isFocusInMenu()) {
-      this.focusTrigger();
+      this.focusTrigger(preventScroll);
     }
   }
 
@@ -221,10 +241,10 @@ export class PdsDropdownMenu implements BasePdsProps {
   }
 
   // A trigger whose host can't take focus itself, such as pds-chip, passes it to the control inside.
-  private focusTrigger() {
-    this.triggerEl.focus();
+  private focusTrigger(preventScroll = false) {
+    this.triggerEl.focus({ preventScroll });
     if ((this.host.getRootNode() as Document | ShadowRoot).activeElement === this.triggerEl) return;
-    this.triggerEl.shadowRoot?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])')?.focus();
+    this.triggerEl.shadowRoot?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])')?.focus({ preventScroll });
   }
 
   // Handle click on the trigger element
