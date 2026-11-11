@@ -2076,11 +2076,11 @@ describe('pds-combobox selection on first paint', () => {
         el.innerHTML = optionsHtml;
         const root = el.shadowRoot!;
         const snapshot = new Promise<{ text: string; placeholder: boolean; inputValue: string | null; chips: number; icon: string | null }>((resolve, reject) => {
-          setTimeout(() => reject(new Error('The combobox never rendered a trigger')), 5000);
           const observer = new MutationObserver(() => {
             const trigger = root.querySelector('.pds-combobox__button-trigger, .pds-combobox__chip-trigger, .pds-combobox__input');
             if (!trigger) return;
             observer.disconnect();
+            clearTimeout(timeout);
             resolve({
               text: trigger.textContent?.trim() ?? '',
               placeholder: !!root.querySelector('.pds-combobox__button-trigger-label--placeholder'),
@@ -2089,6 +2089,10 @@ describe('pds-combobox selection on first paint', () => {
               icon: (trigger.querySelector('pds-icon.pds-combobox__button-trigger-icon') as HTMLElement & { name?: string } | null)?.name ?? null,
             });
           });
+          const timeout = setTimeout(() => {
+            observer.disconnect();
+            reject(new Error('The combobox never rendered a trigger'));
+          }, 5000);
           observer.observe(root, { childList: true, subtree: true, characterData: true });
         });
         document.body.appendChild(el);
@@ -2218,7 +2222,7 @@ describe('pds-combobox selected field and option badges', () => {
     await page.waitForChanges();
 
     const rows = await page.evaluate(() =>
-      Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('.pds-combobox__option')).map(option => option.textContent?.replace('New', '').trim()),
+      Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('.pds-combobox__option')).map(option => option.querySelector('.pds-combobox__option-label')?.textContent?.trim()),
     );
     expect(rows).toEqual(['Automation']);
   });

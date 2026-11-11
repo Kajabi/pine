@@ -4076,7 +4076,12 @@ describe('pds-combobox', () => {
         if (searchText !== undefined) el.setAttribute('data-search-text', searchText);
         return el;
       };
-      const options = [option('automation', 'Automation', 'Automation started finished'), option('tag', 'Tag'), option('plain', 'Plain', '')];
+      const options = [
+        option('automation', 'Automation', 'Automation started finished'),
+        option('tag', 'Tag'),
+        option('plain', 'Plain', ''),
+        option('keywords', 'Keywords', 'conditions only'),
+      ];
       component.optionEls = options;
       component.allItems = options;
 
@@ -4089,6 +4094,9 @@ describe('pds-combobox', () => {
       expect(results('tag')).toEqual(['tag']);
       // An empty data-search-text is ignored: the label still matches.
       expect(results('plain')).toEqual(['plain']);
+      // Search text that leaves out the label replaces it.
+      expect(results('keywords')).toEqual([]);
+      expect(results('conditions')).toEqual(['keywords']);
     });
 
     it("doesn't show a badge on a chip option", async () => {
