@@ -1250,11 +1250,11 @@ export class PdsCombobox implements BasePdsProps {
           const groupLabel = groupLabelOf(option);
           if (groupLabel !== null && groupLabel.toLowerCase().includes(val)) return true;
         }
-        // For layout options, search both text content and data-search-text attribute
-        if (this.isOptionLayout(option)) {
-          const searchText = option.getAttribute('data-search-text') || option.textContent || '';
-          return searchText.toLowerCase().includes(val);
-        }
+        // `data-search-text`, when set, is what search matches, so an option can be found by more
+        // than its label without a custom layout. A layout option otherwise matches its text.
+        const searchText = option.getAttribute('data-search-text');
+        if (searchText) return searchText.toLowerCase().includes(val);
+        if (this.isOptionLayout(option)) return (option.textContent || '').toLowerCase().includes(val);
         return this.getOptionLabel(option).toLowerCase().includes(val);
       });
 
