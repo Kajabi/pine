@@ -1088,7 +1088,7 @@ export class PdsCombobox implements BasePdsProps {
     const allElements = slot
       ? slot.assignedElements({ flatten: true })
       : Array.from(this.el.children)
-          .filter(el => !el.hasAttribute('slot'))
+          .filter(el => !el.getAttribute('slot'))
           .flatMap(el => (el.tagName === 'SLOT' ? (el as HTMLSlotElement).assignedElements({ flatten: true }) : [el]));
 
     // Separate options from group labels and flatten optgroups
