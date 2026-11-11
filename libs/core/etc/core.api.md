@@ -743,6 +743,7 @@ export namespace Components {
         "responsive": boolean;
         "rowDividers": boolean;
         "selectable": boolean;
+        "tableLayout": 'auto' | 'fixed';
     }
     // (undocumented)
     export interface PdsTableBody {
@@ -765,6 +766,7 @@ export namespace Components {
         "clearActiveSort": () => Promise<void>;
         "setActiveSort": (direction: "asc" | "desc") => Promise<void>;
         "sortable": boolean;
+        "width"?: string;
     }
     // (undocumented)
     export interface PdsTableRow {
@@ -2939,6 +2941,7 @@ export namespace LocalJSX {
         "responsive"?: boolean;
         "rowDividers"?: boolean;
         "selectable"?: boolean;
+        "tableLayout"?: 'auto' | 'fixed';
     }
 
     // (undocumented)
@@ -2961,6 +2964,8 @@ export namespace LocalJSX {
         "rowDividers": boolean;
         // (undocumented)
         "selectable": boolean;
+        // (undocumented)
+        "tableLayout": 'auto' | 'fixed';
     }
 
     // (undocumented)
@@ -3007,6 +3012,7 @@ export namespace LocalJSX {
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         "onPdsTableSort"?: (event: PdsTableHeadCellCustomEvent<{ column: string; direction: string }>) => void;
         "sortable"?: boolean;
+        "width"?: string;
     }
 
     // (undocumented)
@@ -3015,6 +3021,8 @@ export namespace LocalJSX {
         "cellAlign": 'start' | 'center' | 'end' | 'justify';
         // (undocumented)
         "sortable": boolean;
+        // (undocumented)
+        "width": string;
     }
 
     // (undocumented)

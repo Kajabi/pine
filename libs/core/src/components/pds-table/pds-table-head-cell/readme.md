@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property    | Attribute    | Description                                                         | Type                                        | Default     |
-| ----------- | ------------ | ------------------------------------------------------------------- | ------------------------------------------- | ----------- |
-| `cellAlign` | `cell-align` | Sets the text alignment within the head cell.                       | `"center" \| "end" \| "justify" \| "start"` | `undefined` |
-| `sortable`  | `sortable`   | Determines whether the table column is sortable when set to `true`. | `boolean`                                   | `undefined` |
+| Property    | Attribute    | Description                                                                                                                                                                                                                                                   | Type                                        | Default     |
+| ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----------- |
+| `cellAlign` | `cell-align` | Sets the text alignment within the head cell.                                                                                                                                                                                                                 | `"center" \| "end" \| "justify" \| "start"` | `undefined` |
+| `sortable`  | `sortable`   | Determines whether the table column is sortable when set to `true`.                                                                                                                                                                                           | `boolean`                                   | `undefined` |
+| `width`     | `width`      | Sets the width of the column. Accepts any CSS length (e.g. '148px', '12rem', '20%'). When the table's `tableLayout` is `fixed`, the column keeps this width whatever its content. Otherwise the column is at least this wide and can grow to fit its content. | `string`                                    | `undefined` |
 
 
 ## Events

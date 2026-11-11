@@ -2672,6 +2672,11 @@ export namespace Components {
           * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable": boolean;
+        /**
+          * Sets how the table sizes its columns. With `auto`, each column is sized from its content, so columns can change width when the rows change (for example after a sort). With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content; columns without a `width` share the remaining space.
+          * @defaultValue 'auto'
+         */
+        "tableLayout": 'auto' | 'fixed';
     }
     interface PdsTableBody {
     }
@@ -2724,6 +2729,10 @@ export namespace Components {
           * Determines whether the table column is sortable when set to `true`.
          */
         "sortable": boolean;
+        /**
+          * Sets the width of the column. Accepts any CSS length (e.g. '148px', '12rem', '20%'). When the table's `tableLayout` is `fixed`, the column keeps this width whatever its content. Otherwise the column is at least this wide and can grow to fit its content.
+         */
+        "width"?: string;
     }
     interface PdsTableRow {
         /**
@@ -6683,6 +6692,11 @@ declare namespace LocalJSX {
           * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable"?: boolean;
+        /**
+          * Sets how the table sizes its columns. With `auto`, each column is sized from its content, so columns can change width when the rows change (for example after a sort). With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content; columns without a `width` share the remaining space.
+          * @defaultValue 'auto'
+         */
+        "tableLayout"?: 'auto' | 'fixed';
     }
     interface PdsTableBody {
     }
@@ -6734,6 +6748,10 @@ declare namespace LocalJSX {
           * Determines whether the table column is sortable when set to `true`.
          */
         "sortable"?: boolean;
+        /**
+          * Sets the width of the column. Accepts any CSS length (e.g. '148px', '12rem', '20%'). When the table's `tableLayout` is `fixed`, the column keeps this width whatever its content. Otherwise the column is at least this wide and can grow to fit its content.
+         */
+        "width"?: string;
     }
     interface PdsTableRow {
         /**
@@ -7643,6 +7661,7 @@ declare namespace LocalJSX {
         "selectable": boolean;
         "disableSelectAll": boolean;
         "rowDividers": boolean;
+        "tableLayout": 'auto' | 'fixed';
         "defaultSortColumn": string;
         "defaultSortDirection": 'asc' | 'desc';
     }
@@ -7659,6 +7678,7 @@ declare namespace LocalJSX {
     interface PdsTableHeadCellAttributes {
         "cellAlign": 'start' | 'center' | 'end' | 'justify';
         "sortable": boolean;
+        "width": string;
     }
     interface PdsTableRowAttributes {
         "indeterminate": boolean;

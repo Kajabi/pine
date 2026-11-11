@@ -27,6 +27,13 @@ export class PdsTableHeadCell {
   @Prop() sortable: boolean;
 
   /**
+   * Sets the width of the column. Accepts any CSS length (e.g. '148px', '12rem', '20%').
+   * When the table's `tableLayout` is `fixed`, the column keeps this width whatever its content.
+   * Otherwise the column is at least this wide and can grow to fit its content.
+   */
+  @Prop({ reflect: true }) width?: string;
+
+  /**
    * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
    */
   @Event() pdsTableSort: EventEmitter<{ column: string; direction: string }>;
@@ -256,7 +263,26 @@ export class PdsTableHeadCell {
       classNames.push('has-head-border');
     }
 
+    if (this.width) {
+      classNames.push('has-width');
+    }
+
     return classNames.join(' ');
+  }
+
+  private hostStyles(): Record<string, string> {
+    const styles: Record<string, string> = {};
+
+    if (this.tableRef && this.tableRef.fixedColumn && this.tableRef.selectable) {
+      styles['--fixed-cell-position'] = '40px';
+    }
+
+    // Hand the width to the stylesheet as a custom property rather than an inline width.
+    if (this.width) {
+      styles['--pds-table-head-cell-width'] = this.width;
+    }
+
+    return styles;
   }
 
   render() {
@@ -266,13 +292,7 @@ export class PdsTableHeadCell {
         role="columnheader"
         onClick={this.toggleSort}
         part="head-cell"
-        style={
-          this.tableRef &&
-          this.tableRef.fixedColumn &&
-          this.tableRef.selectable
-            ? { '--fixed-cell-position': '40px' }
-            : {}
-        }
+        style={this.hostStyles()}
       >
         <slot></slot>
         {this.sortable && this.isActive && (

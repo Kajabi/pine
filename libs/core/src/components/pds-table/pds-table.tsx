@@ -53,6 +53,15 @@ export class PdsTable {
   @Prop({ reflect: true }) rowDividers: boolean = false;
 
   /**
+   * Sets how the table sizes its columns. With `auto`, each column is sized from its content,
+   * so columns can change width when the rows change (for example after a sort). With `fixed`,
+   * columns take the `width` set on their `pds-table-head-cell` and ignore their content;
+   * columns without a `width` share the remaining space.
+   * @defaultValue 'auto'
+   */
+  @Prop() tableLayout: 'auto' | 'fixed' = 'auto';
+
+  /**
    * The name of the column to sort by on initial load.
    * Must match the text content of a sortable column header.
    */
@@ -242,6 +251,10 @@ export class PdsTable {
 
     if (this.responsive) {
       classNames.push('is-responsive');
+    }
+
+    if (this.tableLayout === 'fixed') {
+      classNames.push('is-fixed-layout');
     }
 
     return classNames.join('  ');
