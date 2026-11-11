@@ -866,10 +866,11 @@ describe('pds-dropdown-menu in ordinary use', () => {
 // its trigger scrolls out of view rather than float away from it.
 describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
   // The trigger is given a width, as it otherwise stretches the whole scrolled width and its centre,
-  // where a click lands, is out of view.
+  // where a click lands, is out of view. Its inset keeps the panel clear of the window's edge, where
+  // the panel stops following it.
   const scroller = `
     <div id="scroller" style="width: 300px; overflow: auto;">
-      <div style="width: 1500px; padding: 8px;">
+      <div style="width: 1500px; padding: 8px 8px 8px 100px;">
         <pds-dropdown-menu>
           <button slot="trigger" id="trigger" style="width: 100px;">Actions</button>
           <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
@@ -896,19 +897,28 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
     return page;
   };
 
-  it('stays open once opened', async () => {
+  const panelLeft = (page: E2EPage) =>
+    page.evaluate(() => document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').getBoundingClientRect().left);
+
+  it('stays open once opened, beside its trigger', async () => {
     const page = await openMenu(scroller);
+    await settle(page);
 
     expect(await isOpen(page)).toBe(true);
+    const triggerLeft = await page.$eval('#trigger', (el) => el.getBoundingClientRect().left);
+    expect(Math.round(await panelLeft(page))).toBe(Math.round(triggerLeft));
   });
 
-  it('stays open while the trigger is still in view', async () => {
+  it('stays open, following the trigger, while the trigger is still in view', async () => {
     const page = await openMenu(scroller);
+    const before = await panelLeft(page);
 
     await page.$eval('#scroller', (el) => { el.scrollLeft = 40; });
     await settle(page);
 
     expect(await isOpen(page)).toBe(true);
+    // The panel moved with the trigger, so the scroll was heard and its position worked out.
+    expect(Math.round(before - (await panelLeft(page)))).toBe(40);
   });
 
   it('closes once the trigger scrolls out of its scrolling container', async () => {
@@ -995,6 +1005,24 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
     await settle(page);
 
     expect(await isOpen(page)).toBe(true);
+    // Positioned, so its position was worked out and found the trigger hidden.
+    expect(await page.evaluate(() => document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').style.left)).not.toBe('');
+  });
+
+  it('returns focus to the control inside a pds-chip trigger without scrolling it back into view', async () => {
+    const page = await openMenu(scroller.replace(
+      '<button slot="trigger" id="trigger" style="width: 100px;">Actions</button>',
+      '<pds-chip slot="trigger" id="trigger" variant="dropdown">Actions</pds-chip>',
+    ));
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await page.$eval('#trigger', (el) => el.shadowRoot.activeElement?.tagName)).toBe('BUTTON');
+    expect(await page.$eval('#scroller', (el) => el.scrollLeft)).toBe(800);
   });
 
   it('opens again after closing, and closes again when scrolled out', async () => {
