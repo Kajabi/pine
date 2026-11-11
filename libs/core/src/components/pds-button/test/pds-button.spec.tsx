@@ -123,7 +123,7 @@ describe('pds-button', () => {
         <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary pds-button--small pds-button--icon-only" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text pds-button__text--hidden" part="button-text">
                 <slot></slot>
               </span>
@@ -145,7 +145,7 @@ describe('pds-button', () => {
         <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary pds-button--micro pds-button--icon-only" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text pds-button__text--hidden" part="button-text">
                 <slot></slot>
               </span>
@@ -248,8 +248,6 @@ describe('pds-button', () => {
     expect(page.root?.getAttribute('id')).toBe('save-button');
   });
 
-  // Note: Snapshot still shows --empty on slot wrappers because newSpecPage does not
-  // fire slotchange events. The "slot empty class" suite below covers that behavior.
   it('renders a leading icon', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
@@ -260,7 +258,7 @@ describe('pds-button', () => {
         <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
@@ -273,7 +271,6 @@ describe('pds-button', () => {
     `);
   });
 
-  // Note: See above — newSpecPage doesn't fire slotchange, so --empty persists in snapshot.
   it('renders a trailing icon', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
@@ -288,7 +285,7 @@ describe('pds-button', () => {
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
-              <span class="pds-button__icon pds-button__icon--empty"><slot name="end"></slot></span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -491,7 +488,7 @@ describe('pds-button', () => {
         <mock:shadow-root shadowrootdelegatesfocus>
           <button class="pds-button pds-button--primary pds-button--icon-only" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <span class="pds-button__icon pds-button__icon--empty"><slot name="start"></slot></span>
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text pds-button__text--hidden" part="button-text">
                 <slot></slot>
               </span>
@@ -1014,6 +1011,33 @@ describe('pds-button', () => {
       iconSpans?.forEach((span) => {
         expect(span.classList.contains('pds-button__icon--empty')).toBe(true);
       });
+    });
+
+    // No slotchange is simulated here: the first render has to show slotted icons on its own.
+    it('shows slotted start and end content on the first render', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button><pds-icon slot="start" name="favorite"></pds-icon>Click me<pds-icon slot="end" name="caret-down"></pds-icon></pds-button>`,
+      });
+
+      const startWrapper = root?.shadowRoot?.querySelector('slot[name="start"]')?.parentElement;
+      const endWrapper = root?.shadowRoot?.querySelector('slot[name="end"]')?.parentElement;
+
+      expect(startWrapper?.classList.contains('pds-button__icon--empty')).toBe(false);
+      expect(endWrapper?.classList.contains('pds-button__icon--empty')).toBe(false);
+    });
+
+    it('applies --empty class on the first render only to the slot with no content', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button>All<pds-icon slot="end" name="caret-down"></pds-icon></pds-button>`,
+      });
+
+      const startWrapper = root?.shadowRoot?.querySelector('slot[name="start"]')?.parentElement;
+      const endWrapper = root?.shadowRoot?.querySelector('slot[name="end"]')?.parentElement;
+
+      expect(startWrapper?.classList.contains('pds-button__icon--empty')).toBe(true);
+      expect(endWrapper?.classList.contains('pds-button__icon--empty')).toBe(false);
     });
 
     it('does not apply --empty class to start slot wrapper when start content is slotted', async () => {
