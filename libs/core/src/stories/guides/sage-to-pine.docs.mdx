@@ -184,7 +184,7 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
 ## Tools & next steps
 
 - `get_pine_design_doc({ docName: "layout" })` — the canonical `container → row → box` layout reference.
-- `get_pine_context_for_generation` → generate → `validate_ui_generation` → `fix_layout_issues` — run this loop when converting a file.
+- `get_pine_context_for_generation` → generate → `validate_ui_generation` → apply its fixes and re-validate — run this loop when converting a file.
 - `get_pine_component({ componentName: "pds-container" | "pds-text" | "pds-input" })` — exact props for each target component.
 - Repo skills (where present): the `sage-to-pine-*` skills automate specific component conversions (e.g. Sage Alert → `pds-alert`).
 
