@@ -84,20 +84,22 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
   const [darkTokens, setDarkTokens] = useState<Token | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     const loadTokens = async () => {
       try {
         const tokenModule = await import(`../../../../../node_modules/@kajabi-ui/styles/dist/tokens/${tier}.json`);
         const categories = categoryLookup[category]?.[tier] || null;
+        let light: Token;
         if (categories) {
           const tempTokens: Token[] = [];
           categories.forEach((cat: string) => {
             tempTokens.push(tokenModule.default[cat as keyof typeof tokenModule.default]);
           });
-          const mergedTokens = tempTokens.reduce((result, tokenObj) => ({...result, ...tokenObj}), {});
-          setPineTokens(mergedTokens as Token);
+          light = tempTokens.reduce((result, tokenObj) => ({...result, ...tokenObj}), {}) as Token;
         }
         else {
-          setPineTokens(tokenModule.default[category as keyof typeof tokenModule.default] as Token);
+          light = tokenModule.default[category as keyof typeof tokenModule.default] as Token;
         }
 
         let dark: Token | null = null;
@@ -105,6 +107,9 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
           const darkModule = await import('../../../../../node_modules/@kajabi-ui/styles/dist/tokens/semantic-dark.json');
           dark = (darkModule.default[category as keyof typeof darkModule.default] as Token | undefined) ?? null;
         }
+
+        if (cancelled) return;
+        setPineTokens(light);
         setDarkTokens(dark);
       } catch (error) {
         console.error('Error loading token JSON:', error);
@@ -112,6 +117,10 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
     };
 
     loadTokens();
+
+    return () => {
+      cancelled = true;
+    };
   }, [category, tier]);
 
   const buildValue = (item: string | Record<string, unknown> | ArrayLike<unknown>): string => {
