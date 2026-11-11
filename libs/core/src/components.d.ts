@@ -1944,11 +1944,13 @@ export namespace Components {
         "border": 'none' | 'both' | 'top' | 'bottom';
     }
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalFooter {
     }
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalHeader {
@@ -3513,6 +3515,7 @@ declare global {
         new (): HTMLPdsModalContentElement;
     };
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface HTMLPdsModalFooterElement extends Components.PdsModalFooter, HTMLStencilElement {
@@ -3522,6 +3525,7 @@ declare global {
         new (): HTMLPdsModalFooterElement;
     };
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface HTMLPdsModalHeaderElement extends Components.PdsModalHeader, HTMLStencilElement {
@@ -5911,11 +5915,13 @@ declare namespace LocalJSX {
         "border"?: 'none' | 'both' | 'top' | 'bottom';
     }
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalFooter {
     }
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalHeader {
@@ -7898,10 +7904,12 @@ declare module "@stencil/core" {
              */
             "pds-modal-content": LocalJSX.IntrinsicElements["pds-modal-content"] & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
             /**
+             * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
              * @lightDom renders-markup
              */
             "pds-modal-footer": LocalJSX.IntrinsicElements["pds-modal-footer"] & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
             /**
+             * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
              * @lightDom renders-markup
              */
             "pds-modal-header": LocalJSX.IntrinsicElements["pds-modal-header"] & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
