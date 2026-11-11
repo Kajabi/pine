@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-dropdown-menu', () => {
@@ -859,5 +859,157 @@ describe('pds-dropdown-menu in ordinary use', () => {
 
     expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
     expect(warnings.filter((text) => text.includes('stopped restoring'))).toEqual([]);
+  });
+});
+
+// A menu in a scrolling container, such as a row menu in a table that scrolls sideways, closes once
+// its trigger scrolls out of view rather than float away from it.
+describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
+  // The trigger is given a width, as it otherwise stretches the whole scrolled width and its centre,
+  // where a click lands, is out of view.
+  const scroller = `
+    <div id="scroller" style="width: 300px; overflow: auto;">
+      <div style="width: 1500px; padding: 8px;">
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger" style="width: 100px;">Actions</button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item>Delete</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </div>
+    </div>
+  `;
+
+  const isOpen = (page: E2EPage) =>
+    page.evaluate(() => !document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').classList.contains('is-hidden'));
+
+  // autoUpdate hears the scroll on the next frame and works out the position after that.
+  const settle = (page: E2EPage) =>
+    page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
+
+  const openMenu = async (content: string) => {
+    const page = await newE2EPage();
+    await page.setContent(content);
+    await page.click('#trigger');
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpen(page)).toBe(true);
+    return page;
+  };
+
+  it('stays open once opened', async () => {
+    const page = await openMenu(scroller);
+
+    expect(await isOpen(page)).toBe(true);
+  });
+
+  it('stays open while the trigger is still in view', async () => {
+    const page = await openMenu(scroller);
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 40; });
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+  });
+
+  it('closes once the trigger scrolls out of its scrolling container', async () => {
+    const page = await openMenu(scroller);
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
+  });
+
+  // A row menu in a table that scrolls sideways, whose scroll container is in the table's shadow root.
+  it("closes once the trigger scrolls out of a responsive pds-table's scroll container", async () => {
+    const page = await openMenu(`
+      <div style="width: 300px;">
+        <pds-table responsive="true">
+          <pds-table-head>
+            <pds-table-head-cell>Actions</pds-table-head-cell>
+            <pds-table-head-cell><div style="width: 1500px;">Wide column</div></pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>
+                <pds-dropdown-menu>
+                  <button slot="trigger" id="trigger" style="width: 100px;">Actions</button>
+                  <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+                </pds-dropdown-menu>
+              </pds-table-cell>
+              <pds-table-cell>Wide cell</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+
+    const scrolled = await page.$eval('pds-table', (el) => {
+      const container = el.shadowRoot.querySelector('.pds-table-responsive-container');
+      container.scrollLeft = 1000;
+      return container.scrollLeft;
+    });
+    expect(scrolled).toBeGreaterThan(500);
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+
+  it('closes once the window scrolls the trigger out of view', async () => {
+    const page = await openMenu(`
+      <div style="height: 3000px; padding: 8px;">
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger">Actions</button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </div>
+    `);
+    expect(await isOpen(page)).toBe(true);
+
+    await page.evaluate(() => window.scrollTo(0, 2000));
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+
+  it('returns focus from an item to the trigger without scrolling it back into view', async () => {
+    const page = await openMenu(scroller);
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('trigger');
+    expect(await page.$eval('#scroller', (el) => el.scrollLeft)).toBe(800);
+  });
+
+  it("doesn't close straight away when a script opens it with the trigger already out of view", async () => {
+    const page = await newE2EPage();
+    await page.setContent(scroller);
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await page.$eval('#trigger', (el: HTMLElement) => el.click());
+    await page.waitForChanges();
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+  });
+
+  it('opens again after closing, and closes again when scrolled out', async () => {
+    const page = await openMenu(scroller);
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await settle(page);
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 0; });
+    await page.click('#trigger');
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpen(page)).toBe(true);
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(false);
   });
 });
