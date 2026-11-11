@@ -14,6 +14,11 @@
   outline: var(--pine-outline-focus);
 }
 
+// Columns take the widths set on their head cells, so the rows on the page can't resize them.
+:host(.is-fixed-layout) {
+  table-layout: fixed;
+}
+
 /*
  * Responsive Table Architecture
  *
@@ -65,6 +70,10 @@
   table-layout: auto !important;
   white-space: nowrap !important;
   width: 100% !important;
+}
+
+.pds-table-responsive-wrapper .pds-table.is-fixed-layout {
+  table-layout: fixed !important;
 }
 
 /* Shadows positioned relative to host (non-scrolling), covering container edges */

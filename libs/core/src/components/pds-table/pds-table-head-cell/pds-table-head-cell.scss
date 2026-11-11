@@ -18,6 +18,13 @@
   vertical-align: inherit;
 }
 
+// Column width. border-box so the width includes the cell's padding.
+:host(.has-width) {
+  box-sizing: border-box;
+  min-width: var(--pds-table-head-cell-width);
+  width: var(--pds-table-head-cell-width);
+}
+
 :host(.is-compact) {
   padding-block: var(--pine-dimension-2xs)
 }
