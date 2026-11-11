@@ -268,20 +268,30 @@ describe('pds-dropdown-menu-item', () => {
   });
 
   describe('focus ring', () => {
-    // A link item draws its ring on the anchor inside pds-link; other items draw it on their inner control.
-    const ringStyle = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
+    // A link item draws its ring on the anchor inside pds-link, never on the pds-link host;
+    // other items draw it on their inner control.
+    const ring = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
       const item = document.querySelector(`[data-name="${itemName}"]`);
       const content = item.shadowRoot.querySelector('.pds-dropdown-menu-item__content');
-      const ringEl = content.shadowRoot?.querySelector('a') ?? content;
-      return getComputedStyle(ringEl).outlineStyle;
+      const anchor = content.shadowRoot?.querySelector('a');
+      const { outlineStyle, outlineColor } = getComputedStyle(anchor ?? content);
+      return { style: outlineStyle, color: outlineColor, hostStyle: anchor ? getComputedStyle(content).outlineStyle : null };
     }, name);
 
-    const ringColor = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
-      const item = document.querySelector(`[data-name="${itemName}"]`);
-      const content = item.shadowRoot.querySelector('.pds-dropdown-menu-item__content');
-      const ringEl = content.shadowRoot?.querySelector('a') ?? content;
-      return getComputedStyle(ringEl).outlineColor;
-    }, name);
+    // Resolves an outline token to the color the browser computes for it.
+    const tokenColor = (page: E2EPage, token: string) => page.evaluate((outlineToken: string) => {
+      const probe = document.createElement('div');
+      probe.style.outline = `var(${outlineToken})`;
+      document.body.appendChild(probe);
+      const color = getComputedStyle(probe).outlineColor;
+      probe.remove();
+      return color;
+    }, token);
+
+    const isOpen = (page: E2EPage) => page.evaluate(() => {
+      const panel = document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box');
+      return !panel.classList.contains('is-hidden');
+    });
 
     const isFocused = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
       const item = document.querySelector(`[data-name="${itemName}"]`);
@@ -311,13 +321,17 @@ describe('pds-dropdown-menu-item', () => {
       await page.waitForChanges();
 
       for (const name of names) {
+        // Releasing the press activates the item; none of these items close the menu.
+        expect(await isOpen(page)).toBe(true);
         const box = await (await page.$(`[data-name="${name}"]`)).boundingBox();
         await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
         await page.mouse.down();
         await page.waitForChanges();
 
         expect(await isFocused(page, name)).toBe(true);
-        expect(await ringStyle(page, name)).toBe('none');
+        const { style, hostStyle } = await ring(page, name);
+        expect(style).toBe('none');
+        expect(hostStyle ?? 'none').toBe('none');
 
         await page.mouse.up();
       }
@@ -329,20 +343,20 @@ describe('pds-dropdown-menu-item', () => {
       await page.keyboard.press('Enter');
       await page.waitForChanges();
 
-      const colors: Record<string, string> = {};
+      const focusColor = await tokenColor(page, '--pine-outline-focus');
+      const dangerColor = await tokenColor(page, '--pine-outline-focus-danger');
+      expect(dangerColor).not.toBe(focusColor);
+
       for (const name of names) {
         await page.keyboard.press('ArrowDown');
         await page.waitForChanges();
 
         expect(await isFocused(page, name)).toBe(true);
-        expect(await ringStyle(page, name)).toBe('solid');
-        colors[name] = await ringColor(page, name);
+        const { style, color, hostStyle } = await ring(page, name);
+        expect(style).toBe('solid');
+        expect(color).toBe(name.startsWith('destructive') ? dangerColor : focusColor);
+        expect(hostStyle ?? 'none').toBe('none');
       }
-
-      // Destructive items, links included, draw the danger ring rather than the default one.
-      expect(colors['link']).toBe(colors['button']);
-      expect(colors['destructive']).not.toBe(colors['button']);
-      expect(colors['destructive-link']).toBe(colors['destructive']);
     });
 
     it('has no axe violations with keyboard focus on an item', async () => {
@@ -368,12 +382,12 @@ describe('pds-dropdown-menu-item', () => {
       await page.keyboard.press('Tab');
       await page.waitForChanges();
       expect(await isFocused(page, 'button')).toBe(true);
-      expect(await ringStyle(page, 'button')).toBe('solid');
+      expect((await ring(page, 'button')).style).toBe('solid');
 
       await page.keyboard.press('Tab');
       await page.waitForChanges();
       expect(await isFocused(page, 'link')).toBe(true);
-      expect(await ringStyle(page, 'link')).toBe('solid');
+      expect((await ring(page, 'link')).style).toBe('solid');
     });
   });
 });
