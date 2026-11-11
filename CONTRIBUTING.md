@@ -75,7 +75,7 @@ npm run test.all
 
 ### Writing component docs
 
-Each component's page is `libs/core/src/components/<name>/docs/<name>.mdx`. Storybook renders it, and the [Pine MCP](https://github.com/Kajabi/pine-mcp) parses the same file to answer AI assistants, so its structure is a contract. Start from an existing page such as `pds-button.mdx` and keep this order:
+Each component's page is `libs/core/src/components/<name>/docs/<name>.mdx`. Storybook renders it, and the [Pine MCP](https://pine-design-system.netlify.app/?path=/docs/resources-pine-mcp--docs) parses the same file to answer AI assistants, so its structure is a contract. Start from an existing page such as `pds-button.mdx` and keep this order:
 
 1. `<StatusBadge component="pds-name" />`, with the component listed in `libs/core/src/stories/resources/component-status.json`.
 2. `# Title`, then a one-paragraph summary. The MCP uses that first paragraph as the component's description.
