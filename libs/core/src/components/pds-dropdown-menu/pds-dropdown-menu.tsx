@@ -76,6 +76,9 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     this.triggerObserver?.disconnect();
     this.triggerObserver = null;
+
+    // A position still being worked out belongs to an opening that has ended, so it's ignored.
+    this.openCount++;
   }
 
   private handleTriggerSlotChange = (event: Event) => {
@@ -180,8 +183,8 @@ export class PdsDropdownMenu implements BasePdsProps {
       }).then(({ x, y, middlewareData }) => {
         if (!this.isOpen || opening !== this.openCount) return;
 
-        // Once the trigger scrolls out of view, in any scrolling container or the window, the menu
-        // closes rather than float away from it, as a native menu does.
+        // Once the trigger is out of view, scrolled or clipped by any container or the window, the
+        // menu closes rather than float away from it, much as a native select's list does.
         if (!middlewareData.hide?.referenceHidden) {
           triggerSeen = true;
         } else if (triggerSeen) {
@@ -211,8 +214,9 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.syncTriggerAria();
   }
 
-  // Close the dropdown. Closed because its trigger scrolled out of view, focus goes back to the
-  // trigger without scrolling it back into view.
+  // Close the dropdown. Closed because its trigger left the view, focus from the menu still goes back
+  // to the trigger, so it isn't lost, but without scrolling the trigger back into view. The next Tab
+  // carries on from there.
   private closeDropdown = ({ preventScroll = false }: { preventScroll?: boolean } = {}) => {
     this.host.shadowRoot?.querySelector('pds-box').classList.add('is-hidden');
     this.isOpen = false;
