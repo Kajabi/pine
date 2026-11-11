@@ -94,7 +94,7 @@ export class PdsCheckbox {
   @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
-   * Event emitted that contains the `value` and `checked`.
+   * Emitted when the user toggles the checkbox, carrying the `value` and the new `checked` state.
    */
   @Event() pdsCheckboxChange: EventEmitter<CheckboxChangeEventDetail>;
 
