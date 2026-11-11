@@ -36,10 +36,9 @@
     color: var(--pine-color-text-hover);
   }
 
-  /* Focus styles applied via class + browser focus */
-  &:focus,
-  &:focus-visible,
-  &.has-focus {
+  // Keyboard focus only, so a mouse press doesn't draw the ring. A link item's ring is drawn on
+  // the anchor inside pds-link (below), since the pds-link host never matches :focus-visible.
+  &:focus-visible {
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
@@ -77,21 +76,25 @@
       color: var(--pine-color-danger-hover);
     }
 
-    &:focus,
-    &:focus-visible,
-    &.has-focus {
+    &:focus-visible {
       background-color: var(--pine-color-danger-disabled);
       outline: var(--pine-outline-focus-danger);
       outline-offset: var(--pine-border-width);
     }
   }
+
+  pds-link::part(link):focus-visible {
+    background-color: var(--pine-color-danger-disabled);
+    outline: var(--pine-outline-focus-danger);
+  }
 }
 
-/* Remove outline on contained links using the custom property */
-pds-link::part(link):focus,
+// The anchor fills the item, so its ring matches the one a button item draws.
 pds-link::part(link):focus-visible {
+  border-radius: var(--pine-dimension-xs);
   box-shadow: none;
-  outline: none;
+  outline: var(--pine-outline-focus);
+  outline-offset: var(--pine-border-width);
 }
 
 pds-link::part(link) {
