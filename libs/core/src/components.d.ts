@@ -1514,11 +1514,13 @@ export namespace Components {
     interface PdsDrawerContent {
     }
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface PdsDrawerFooter {
     }
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface PdsDrawerHeader {
@@ -3364,6 +3366,7 @@ declare global {
         new (): HTMLPdsDrawerContentElement;
     };
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface HTMLPdsDrawerFooterElement extends Components.PdsDrawerFooter, HTMLStencilElement {
@@ -3373,6 +3376,7 @@ declare global {
         new (): HTMLPdsDrawerFooterElement;
     };
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface HTMLPdsDrawerHeaderElement extends Components.PdsDrawerHeader, HTMLStencilElement {
@@ -5453,11 +5457,13 @@ declare namespace LocalJSX {
     interface PdsDrawerContent {
     }
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface PdsDrawerFooter {
     }
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface PdsDrawerHeader {
@@ -7861,10 +7867,12 @@ declare module "@stencil/core" {
              */
             "pds-drawer-content": LocalJSX.IntrinsicElements["pds-drawer-content"] & JSXBase.HTMLAttributes<HTMLPdsDrawerContentElement>;
             /**
+             * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
              * @lightDom renders-markup
              */
             "pds-drawer-footer": LocalJSX.IntrinsicElements["pds-drawer-footer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerFooterElement>;
             /**
+             * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
              * @lightDom renders-markup
              */
             "pds-drawer-header": LocalJSX.IntrinsicElements["pds-drawer-header"] & JSXBase.HTMLAttributes<HTMLPdsDrawerHeaderElement>;
