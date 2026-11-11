@@ -517,4 +517,41 @@ describe('pds-table-head-cell', () => {
     // Should not have is-active class
     expect(tableHeadCell).not.toHaveClass('is-active');
   });
+
+  it('sets the column width from the width prop', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell],
+      html: `<pds-table-head-cell width="148px">Column</pds-table-head-cell>`,
+    });
+    const headCell = page.root as HTMLElement;
+
+    expect(headCell).toHaveClass('has-width');
+    expect(headCell.getAttribute('width')).toBe('148px');
+    expect(headCell.style.getPropertyValue('--pds-table-head-cell-width')).toBe('148px');
+  });
+
+  it('updates the column width when the width prop changes', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell],
+      html: `<pds-table-head-cell width="148px">Column</pds-table-head-cell>`,
+    });
+    const headCell = page.root as HTMLPdsTableHeadCellElement;
+
+    headCell.width = undefined;
+    await page.waitForChanges();
+
+    expect(headCell).not.toHaveClass('has-width');
+    expect(headCell.style.getPropertyValue('--pds-table-head-cell-width')).toBe('');
+  });
+
+  it('keeps the fixed-column offset alongside a width', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHeadCell],
+      html: `<pds-table fixed-column selectable><pds-table-head-cell width="200px">Column</pds-table-head-cell></pds-table>`,
+    });
+    const headCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+
+    expect(headCell.style.getPropertyValue('--fixed-cell-position')).toBe('40px');
+    expect(headCell.style.getPropertyValue('--pds-table-head-cell-width')).toBe('200px');
+  });
 });
