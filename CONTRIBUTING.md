@@ -1,12 +1,14 @@
 # Contribution
 
-The Pine Design System uses [Stencil.js](https://stenciljs.com/), which allows for building web components with TypeScript. This guide is written to outline how best to contribute to Pine and adhere to the best practices set by Kajabi's Design System team.
+The Pine Design System uses [Stencil.js](https://stenciljs.com/), which allows for building web components with TypeScript. This guide covers setting up the repository, the checks a pull request must pass, and how changes are reviewed and released.
+
+Pine is maintained by its contributors, with no assigned stewards. The `@Kajabi/dss-devs` code owners review pull requests (see [CODEOWNERS](.github/CODEOWNERS)), and there's no set response time for issues or reviews.
 
 ## Getting Started
 
 ### Dependencies
 
-Pine requires Node `>=16`.
+Pine uses Node 22 for development (see `.nvmrc`) and requires at least Node 20.
 
 ### Setting Up
 
@@ -16,12 +18,11 @@ Please run the following commands for initial setup:
 
 1. `cd pine`
 2. `npm install`
-3. `brew install mkcert`, if using Firefox run `brew install nss` instead
+3. `brew install mkcert` (Firefox users also run `brew install nss`)
 4. `mkcert -install`
-5. `npm run setup`
-6. `cd libs/core`
-7. `mkcert -cert-file pineLocalDev.pem -key-file pineLocalDev-key.pem localhost 7300`
-8. `cd ../..`
+5. `cd libs/core`
+6. `mkcert -cert-file pineLocalDev.pem -key-file pineLocalDev-key.pem localhost 7300`
+7. `cd ../..`
 
 ### Create a Branch
 
@@ -71,6 +72,33 @@ For spec and e2e testing, run:
 ```zsh
 npm run test.all
 ```
+
+### Writing component docs
+
+Each component's page is `libs/core/src/components/<name>/docs/<name>.mdx`. Storybook renders it, and the [Pine MCP](https://github.com/Kajabi/pine-mcp) parses the same file to answer AI assistants, so its structure is a contract. Start from an existing page such as `pds-button.mdx` and keep this order:
+
+1. `<StatusBadge component="pds-name" />`, with the component listed in `libs/core/src/stories/resources/component-status.json`.
+2. `# Title`, then a one-paragraph summary. The MCP uses that first paragraph as the component's description.
+3. `## Guidelines`, containing `### When to use`, `### When not to use` and `### Accessibility`, with exactly these names, in this order. The MCP matches them case-sensitively and drops any other `###` heading inside Guidelines, so give other guidance its own `##` section.
+4. `## Properties`, with `<DocArgsTable>`.
+5. `## Examples`, with one `###` heading per example.
+6. `## Playground`, with a `<Canvas>` of the main story (for example `<Canvas of={stories.Default} />`), as the last section. The MCP ignores everything from this heading on.
+
+Write each example as a `DocCanvas` with both sources, and the same markup as its live preview:
+
+```mdx
+<DocCanvas mdxSource={{
+  react: `<PdsButton variant="primary">Save</PdsButton>`,
+  webComponent: `<pds-button variant="primary">Save</pds-button>`
+}}>
+  <pds-button variant="primary">Save</pds-button>
+</DocCanvas>
+```
+
+- The MCP serves the `react` and `webComponent` strings, not the preview. Each string ends at its first backtick, so never put a backtick inside one.
+- Keep the `webComponent` snippet to markup, with no `<script>`. Use `Pds*` wrappers with camelCase props in the `react` snippet.
+- Keep the wording consumer-neutral: describe Pine's behavior, not a particular app or framework that uses it.
+- Everything below `<!-- Auto Generated Below -->` in `readme.md` is generated. To change a prop, event or method description there, edit the JSDoc in the `.tsx` and rebuild.
 
 ### Bundle size budgets
 
@@ -231,7 +259,7 @@ git checkout your/branch-name
 git rebase main
 ```
 
-The branch can now be pushed. When creating your pull request, please fill out the template with as much info as necessary, including before and after screenshots. Please tag `Kajabi/dss-devs` to notify the Design System team. Our standards require at least two accepted reviews before merging.
+The branch can now be pushed. When creating your pull request, please fill out the template with as much info as necessary, including before and after screenshots. Once the pull request is ready for review, GitHub requests a review from the `@Kajabi/dss-devs` code owners. Our standards require at least two accepted reviews before merging.
 
 ## Versioning & Deprecation
 
@@ -243,4 +271,4 @@ Significant, long-lived decisions are recorded as [Architecture Decision Records
 
 ## Troubleshooting
 
-Sometimes, the development environment will experience rendering issues while hot reloading. In most cases, this can be fixed by re-running the `npm run start` command. For any cases where this doesn't resolve the issue, please feel free to reach out to the team for support.
+Sometimes, the development environment will experience rendering issues while hot reloading. In most cases, this can be fixed by re-running the `npm run start` command. If that doesn't resolve the issue, search the [existing issues](https://github.com/Kajabi/pine/issues) or [open a new one](https://github.com/Kajabi/pine/issues/new/choose).
