@@ -16,7 +16,7 @@ Link is mainly used as navigational element and usually appear within or directl
 | `external`          | `external`       | <span style="color:red">**[DEPRECATED]**</span> Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.<br/><br/>Determines whether the link should open in a new tab.                                         | `boolean`                                         | `false`     |
 | `externalLabel`     | `external-label` | Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative. | `string`                                          | `undefined` |
 | `fontSize`          | `font-size`      | The font size of the link's text.                                                                                                                                                                                                                                  | `"lg" \| "md" \| "sm"`                            | `'lg'`      |
-| `href` _(required)_ | `href`           | The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.                                                                                                                                                                 | `string`                                          | `undefined` |
+| `href` _(required)_ | `href`           | The hyperlink's destination URL. If the default slot is empty (whitespace counts as content), the href will be used as the link text.                                                                                                                              | `string`                                          | `undefined` |
 | `target`            | `target`         | Specifies where to open the linked document.                                                                                                                                                                                                                       | `"_blank" \| "_parent" \| "_self" \| "_top"`      | `undefined` |
 | `turbo`             | `turbo`          | Enables or disables Turbo Drive for this link. Maps to the `data-turbo` attribute on the inner anchor element.                                                                                                                                                     | `string`                                          | `undefined` |
 | `turboAction`       | `turbo-action`   | Controls the Turbo visit action type. Maps to the `data-turbo-action` attribute on the inner anchor element.                                                                                                                                                       | `"advance" \| "replace"`                          | `undefined` |
@@ -31,9 +31,9 @@ Link is mainly used as navigational element and usually appear within or directl
 
 ## Slots
 
-| Slot          | Description                                                                                                                |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `"(default)"` | Text content placed between the opening and closing tags. If no text is provided, the **href** will be used as a fallback. |
+| Slot          | Description                                                                                                                                             |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"(default)"` | Text content placed between the opening and closing tags. If the slot is empty (whitespace counts as content), the **href** will be used as a fallback. |
 
 
 ## Shadow Parts

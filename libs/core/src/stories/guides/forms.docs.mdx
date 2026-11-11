@@ -43,6 +43,18 @@ The web component example utilizes vanilla JavaScript to access values directly 
   mdxSource={{
     react: `
       import React, { useState } from 'react';
+      import {
+        PdsBox,
+        PdsButton,
+        PdsCheckbox,
+        PdsCombobox,
+        PdsInput,
+        PdsMultiselect,
+        PdsRadio,
+        PdsSelect,
+        PdsSwitch,
+        PdsTextarea,
+      } from '@pine-ds/react';
 
       const FormComponent = () => {
         const [formData, setFormData] = useState({
@@ -85,79 +97,79 @@ The web component example utilizes vanilla JavaScript to access values directly 
         };
 
         return (
-          <pds-box display="block" padding="lg" margin="md" border border-radius="lg">
+          <PdsBox display="block" padding="lg" margin="md" border borderRadius="lg">
             {/* Vertical Layout for form components */}
             <form onSubmit={handleSubmit}>
               {/* Name Input */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-input
-                  component-id="name"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsInput
+                  componentId="name"
                   label="Name"
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                 />
-              </pds-box>
+              </PdsBox>
 
               {/* Email Input */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-input
-                  component-id="email"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsInput
+                  componentId="email"
                   label="Email"
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                 />
-              </pds-box>
+              </PdsBox>
 
               {/* Subscribe Checkbox */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-checkbox
-                  component-id="subscribe"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsCheckbox
+                  componentId="subscribe"
                   label="Subscribe to newsletter"
                   name="subscribe"
                   checked={formData.subscribe}
                   onChange={handleChange}
                 />
-              </pds-box>
+              </PdsBox>
 
               {/* Direction Radio Buttons */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-radio
-                  component-id="direction-up"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsRadio
+                  componentId="direction-up"
                   label="Up"
                   name="direction"
                   value="up"
                   checked={formData.direction === 'up'}
                   onChange={handleChange}
                 />
-                <pds-radio
-                  component-id="direction-down"
+                <PdsRadio
+                  componentId="direction-down"
                   label="Down"
                   name="direction"
                   value="down"
                   checked={formData.direction === 'down'}
                   onChange={handleChange}
                 />
-              </pds-box>
+              </PdsBox>
 
               {/* Notifications Switch */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-switch
-                  component-id="notifications"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsSwitch
+                  componentId="notifications"
                   label="Enable notifications"
                   name="notifications"
                   checked={formData.notifications}
                   onChange={handleChange}
                 />
-              </pds-box>
+              </PdsBox>
 
               {/* Time of Day Select */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-select
-                  component-id="timeOfDay"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsSelect
+                  componentId="timeOfDay"
                   label="Favorite Time of Day"
                   name="timeOfDay"
                   value={formData.timeOfDay}
@@ -167,20 +179,20 @@ The web component example utilizes vanilla JavaScript to access values directly 
                   <option value="morning">Morning</option>
                   <option value="noon">Noon</option>
                   <option value="night">Night</option>
-                </pds-select>
-              </pds-box>
+                </PdsSelect>
+              </PdsBox>
 
               {/* Favorite Color Combobox - Button Trigger */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-combobox
-                  component-id="favoriteColor"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsCombobox
+                  componentId="favoriteColor"
                   label="Favorite Color"
                   name="favoriteColor"
                   placeholder="Select a color..."
                   mode="select-only"
                   trigger="button"
-                  trigger-variant="secondary"
-                  trigger-width="250px"
+                  triggerVariant="secondary"
+                  triggerWidth="250px"
                   value={formData.favoriteColor}
                   onChange={handleChange}
                 >
@@ -192,13 +204,13 @@ The web component example utilizes vanilla JavaScript to access values directly 
                   <option value="orange">Orange</option>
                   <option value="pink">Pink</option>
                   <option value="black">Black</option>
-                </pds-combobox>
-              </pds-box>
+                </PdsCombobox>
+              </PdsBox>
 
               {/* Multiselect */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-multiselect
-                  component-id="favoriteTags"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsMultiselect
+                  componentId="favoriteTags"
                   label="Favorite Tags"
                   name="favoriteTags"
                   placeholder="Select tags..."
@@ -209,13 +221,13 @@ The web component example utilizes vanilla JavaScript to access values directly 
                   <option value="sales">Sales</option>
                   <option value="support">Support</option>
                   <option value="engineering">Engineering</option>
-                </pds-multiselect>
-              </pds-box>
+                </PdsMultiselect>
+              </PdsBox>
 
               {/* Status Combobox - Chip Trigger */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-combobox
-                  component-id="status"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsCombobox
+                  componentId="status"
                   label="Status"
                   name="status"
                   trigger="chip"
@@ -226,26 +238,26 @@ The web component example utilizes vanilla JavaScript to access values directly 
                   <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
                   <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
                   <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
-                </pds-combobox>
-              </pds-box>
+                </PdsCombobox>
+              </PdsBox>
 
               {/* Message Textarea */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-textarea
-                  component-id="message"
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsTextarea
+                  componentId="message"
                   label="Message"
                   name="message"
                   value={formData.message}   // Bind the textarea value to the state
                   onChange={handleChange}    // Use the same handler to update the state
                 />
-              </pds-box>
+              </PdsBox>
 
               {/* Submit Button */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-button type="submit" variant="primary">Submit Form</pds-button>
-              </pds-box>
+              <PdsBox display="block" padding="sm" margin="sm">
+                <PdsButton type="submit" variant="primary">Submit Form</PdsButton>
+              </PdsBox>
             </form>
-          </pds-box>
+          </PdsBox>
         );
       };
 
@@ -677,6 +689,7 @@ When debugging Pine forms, check for these indicators of successful form associa
 
 - Incorporating `pds-*` components ensures your forms maintain visual and functional consistency across your application.
 - Each component has documentation that outlines its usage and properties. Refer to each component in the sidebar for more information.
+- Write boolean props as bare attributes, such as `disabled`, and remove the attribute to turn one off. On form-associated controls such as `pds-input`, any value turns it on, even `disabled="false"`. In React, pass `disabled` or `disabled={isDisabled}`.
 
 ### 2. Validation
 

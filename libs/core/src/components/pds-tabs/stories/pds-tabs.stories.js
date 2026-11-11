@@ -42,7 +42,7 @@ Pill.args = {
   variant: 'pill',
 }
 const AvailabilityTemplate = (args) => html`
-<div style="background-color: #ddd; padding: 20px;">
+<div style="background-color: var(--pine-color-background-inset-emphasized); padding: var(--pine-dimension-md);">
   <pds-tabs active-tab-name=${args.activeTabName} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
     <pds-tab name="monday">Monday</pds-tab>
     <pds-tab name="tuesday">Tuesday</pds-tab>
