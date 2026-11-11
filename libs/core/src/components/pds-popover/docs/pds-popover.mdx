@@ -16,23 +16,27 @@ A popover opens when users click its trigger, or press Enter or Space on a trigg
 
 ## Guidelines
 
-#### When to use
+### When to use
 
 - Use popovers for complex information that might overwhelm the main content
 - When content needs to include interactive elements
 - For non-essential information that requires user interaction to display
 
-#### When not to use
+### When not to use
 
 - Don't use popovers for critical information that must be readily available
 - Avoid using for simple text-only tooltips
 - Don't nest popovers within other popovers
 
-## Usage Notes
+### Accessibility
 
-Keep popover content concise and ensure every trigger element is focusable so keyboard users can open and dismiss the overlay reliably.
-
-Use `open-on="hover"` for previews, where the popover adds detail about its trigger but nothing depends on it. Keep essential actions reachable by click: touch and keyboard users never hover, and a hover-opened popover closes shortly after the pointer moves away.
+- Keep popover content concise, and make every trigger focusable, such as a `pds-button`, a `pds-chip` or a `pds-avatar` with `dropdown`, so keyboard users can open the popover with Enter or Space and dismiss it reliably.
+- The trigger receives `aria-expanded` and `aria-controls` once the component is hydrated. The popover owns them: if anything removes or changes them, such as a DOM morph, it puts its values back. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
+- Use `open-on="hover"` for previews, where the popover adds detail about its trigger but nothing depends on it. Keep essential actions reachable by click: touch and keyboard users never hover, and a hover-opened popover closes shortly after the pointer moves away.
+- The content renders at the end of the page, but the Tab order still treats it as coming right after the trigger: while the popover is open, Tab from the trigger moves to the first control in the content, Tab from the last control moves on to whatever follows the popover, and Shift+Tab goes back the same way. Content with nothing to focus is skipped.
+- Escape closes an auto popover, or one that hover opened. Escape closes only the popover opened last, so if popovers are nested, the inner one closes first. Inside a modal, the first Escape closes the popover and the next closes the modal. Closing a popover moves focus from its content back to the trigger.
+- A manual popover ignores outside clicks, and Escape too unless hover opened it, so give it a close button in its content. See [Manual with a close button](#manual-with-a-close-button).
+- Because the content renders outside the component's DOM tree, associate it with the trigger via `aria-labelledby` or `aria-describedby` when the content needs more context (for example, referencing the trigger text).
 
 ## Properties
 
@@ -54,7 +58,10 @@ Use the `trigger` slot to provide the element that will open the popover. You ca
         </PdsPopover>
 
         <PdsPopover componentId="icon-trigger" placement="bottom-start" popoverTargetAction="toggle">
-          <PdsButton slot="trigger" variant="secondary" iconOnly icon="info-circle" ariaLabel="Information" />
+          <PdsButton slot="trigger" variant="secondary" iconOnly>
+            <PdsIcon slot="start" name="info-circle" aria-hidden="true" />
+            Information
+          </PdsButton>
           <p>Popover content is displayed here</p>
         </PdsPopover>
 
@@ -64,7 +71,7 @@ Use the `trigger` slot to provide the element that will open the popover. You ca
         </PdsPopover>
 
         <PdsPopover componentId="avatar-trigger" placement="bottom-start" popoverTargetAction="toggle">
-          <PdsAvatar slot="trigger" name="John Doe" size="md" dropdown={true} />
+          <PdsAvatar slot="trigger" initials="JD" size="md" dropdown={true} triggerLabel="Show profile details" />
           <p>Popover content is displayed here</p>
         </PdsPopover>
       </PdsBox>
@@ -77,7 +84,10 @@ Use the `trigger` slot to provide the element that will open the popover. You ca
         </pds-popover>
 
         <pds-popover component-id="icon-trigger" placement="bottom-start" popover-target-action="toggle">
-          <pds-button slot="trigger" variant="secondary" icon-only icon="info-circle" aria-label="Information"></pds-button>
+          <pds-button slot="trigger" variant="secondary" icon-only>
+            <pds-icon slot="start" name="info-circle" aria-hidden="true"></pds-icon>
+            Information
+          </pds-button>
           <p>Popover content is displayed here</p>
         </pds-popover>
 
@@ -87,7 +97,7 @@ Use the `trigger` slot to provide the element that will open the popover. You ca
         </pds-popover>
 
         <pds-popover component-id="avatar-trigger" placement="bottom-start" popover-target-action="toggle">
-          <pds-avatar slot="trigger" name="John Doe" size="md" dropdown="true"></pds-avatar>
+          <pds-avatar slot="trigger" initials="JD" size="md" dropdown="true" trigger-label="Show profile details"></pds-avatar>
           <p>Popover content is displayed here</p>
         </pds-popover>
       </pds-box>
@@ -100,7 +110,10 @@ Use the `trigger` slot to provide the element that will open the popover. You ca
     </pds-popover>
 
     <pds-popover component-id="icon-trigger" placement="bottom-start" popover-target-action="toggle">
-      <pds-button slot="trigger" variant="secondary" icon-only icon="info-circle" aria-label="Information"></pds-button>
+      <pds-button slot="trigger" variant="secondary" icon-only>
+        <pds-icon slot="start" name="info-circle" aria-hidden="true"></pds-icon>
+        Information
+      </pds-button>
       <p>Popover content is displayed here</p>
     </pds-popover>
 
@@ -110,7 +123,7 @@ Use the `trigger` slot to provide the element that will open the popover. You ca
     </pds-popover>
 
     <pds-popover component-id="avatar-trigger" placement="bottom-start" popover-target-action="toggle">
-      <pds-avatar slot="trigger" name="John Doe" size="md" dropdown="true"></pds-avatar>
+      <pds-avatar slot="trigger" initials="JD" size="md" dropdown="true" trigger-label="Show profile details"></pds-avatar>
       <p>Popover content is displayed here</p>
     </pds-popover>
   </pds-box>
@@ -174,6 +187,52 @@ Learn more about popover target actions in the [MDN Documentation](https://devel
   <pds-popover component-id="manual" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
     <pds-button slot="trigger">Manual Popover</pds-button>
     <p>This popover requires explicit closing</p>
+  </pds-popover>
+</DocCanvas>
+
+#### Manual with a close button
+
+Give a manual popover a close button in its content that calls `hide()`. The HTML snippet wires the button with a short script; the button's `id` and the popover's `component-id` are how the script finds them.
+
+In React, listen with `onPdsClick` on a `PdsButton` in the content, not `onClick`. While the popover is open, its content moves to the end of the page, usually outside your app's root, where React's `onClick` doesn't reach it.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="manual-close" placement="bottom-start" popoverTargetAction="toggle" popoverType="manual">
+        <PdsButton slot="trigger">Manual Popover</PdsButton>
+        <PdsBox direction="column" gap="sm">
+          <PdsText tag="p">Close this popover with the button below or the trigger.</PdsText>
+          <PdsButton variant="secondary" onPdsClick={() => document.getElementById('manual-close')?.hide()}>Close</PdsButton>
+        </PdsBox>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="manual-close" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
+        <pds-button slot="trigger">Manual Popover</pds-button>
+        <pds-box direction="column" gap="sm">
+          <pds-text tag="p">Close this popover with the button below or the trigger.</pds-text>
+          <pds-button id="manual-close-button" variant="secondary">Close</pds-button>
+        </pds-box>
+      </pds-popover>
+
+      <script>
+        document.getElementById('manual-close-button').addEventListener('click', () => {
+          document.getElementById('manual-close').hide();
+        });
+      </script>
+    `
+  }}>
+  <pds-popover component-id="manual-close" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
+    <pds-button slot="trigger">Manual Popover</pds-button>
+    <pds-box direction="column" gap="sm">
+      <pds-text tag="p">Close this popover with the button below or the trigger.</pds-text>
+      <pds-button
+        id="manual-close-button"
+        variant="secondary"
+        ref={(el) => { if (el) el.onclick = () => document.getElementById('manual-close').hide(); }}
+      >Close</pds-button>
+    </pds-box>
   </pds-popover>
 </DocCanvas>
 
@@ -363,12 +422,54 @@ The `padding` prop sets the space around the popover content. It takes `none`, `
   </pds-box>
 </DocCanvas>
 
+## Events
+
+Both events bubble, and their `detail` is `{ componentId, popoverType }`.
+
+### pdsPopoverOpen
+
+Emitted once the open popover has its first position, whether the trigger, hover or `show()` opened it.
+
+### pdsPopoverClose
+
+Emitted each time the popover closes: from its trigger, an outside click, Escape, the pointer leaving a popover that hover opened, its dialog closing, or `hide()`. A popover closed before its first position emits `pdsPopoverOpen` first. One removed from the page while open emits `pdsPopoverClose` too, but only listeners on the popover element itself hear it then.
+
+## Methods
+
+### show()
+
+Opens the popover. The promise resolves after `pdsPopoverOpen` is emitted. Does nothing when the popover is already open.
+
+### hide()
+
+Closes the popover. The promise resolves after `pdsPopoverClose` is emitted. Does nothing when the popover is already closed.
+
+### toggle()
+
+Opens the popover when it's closed, and closes it when it's open.
+
 ## Technical Notes
 
-- The trigger slot automatically receives `aria-expanded` and `aria-controls` attributes when the component is hydrated. The popover owns them: if anything removes or changes them, such as a DOM morph, it puts its values back. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning. Use focusable elements (buttons, chips, avatar with `dropdown="true"`, etc.) so that keyboard users can open the popover with Enter or Space.
-- Content is teleported to `document.body` via a portal to ensure it is correctly layered above other UI. The Tab order still treats it as coming right after the trigger: while the popover is open, Tab from the trigger moves to the first control in the content, Tab from the last control moves on to whatever follows the popover, and Shift+Tab goes back the same way. Content with nothing to focus is skipped. Inside an open dialog, such as a `pds-modal`, it goes into the dialog instead, right after the popover, so it shows above the modal and comes next in the Tab order. When the popover sits in another component's slot (such as `pds-input`'s `action` slot) or in a form inside the dialog, the content goes at the end of the dialog instead, so it renders and its buttons don't submit the form. When a form wraps the whole dialog, a submit from inside the open popover (a button, or Enter in a field) is stopped instead. Because the markup is outside the component's DOM tree, associate it with the trigger via `aria-labelledby` or `aria-describedby` when the content needs more context (for example, referencing the trigger text).
-- Auto popovers (`popover-type="auto"`) listen for outside clicks and Escape to close the overlay. Escape closes only the popover opened last, so if popovers are nested, the inner one closes first. Inside a modal, the first Escape closes the popover and the next closes the modal. Closing the dialog a popover is in closes the popover too, auto or manual. Manual popovers must expose their own dismissal affordance—include a close button in the content and wire it to `popover.hide()`.
-- `placement` sets the side the popover prefers. When that side has no room in the viewport and the opposite side does, the popover opens on the opposite side, and it shifts along its side to stay 8px inside the viewport. With no room on either side, it stays on the preferred side. It keeps doing so as the page scrolls or resizes and as its trigger or content changes size, and goes back to the preferred side once there's room again. The `placement` attribute keeps the value you set: the side the popover opened on is in the `data-pds-popover-placement` attribute of the portal that holds the content, for styles that depend on it, such as an entrance animation. It's set by the time `pdsPopoverOpen` fires, which waits for the first position, and removed when the popover closes. `-start` and `-end` follow the text direction, so in a right-to-left page `bottom-start` lines the popover up with the right edge of its trigger.
+Keyboard, focus and labelling rules are under [Accessibility](#accessibility).
+
+### Where the content renders
+
+- Content is teleported to `document.body` via a portal to ensure it is correctly layered above other UI.
+- The content nodes move into the portal while the popover is open and back when it closes, so they keep their own event listeners. Handlers that a framework attaches at its app's root, such as React's `onClick`, don't reach them while they sit outside that root.
+
+### Inside dialogs and forms
+
+- Inside an open dialog, such as a `pds-modal`, the content goes into the dialog instead, right after the popover, so it shows above the modal and comes next in the Tab order.
+- When the popover sits in another component's slot (such as `pds-input`'s `action` slot) or in a form inside the dialog, the content goes at the end of the dialog instead, so it renders and its buttons don't submit the form.
+- When a form wraps the whole dialog, a submit from inside the open popover (a button, or Enter in a field) is stopped instead.
+- Closing the dialog a popover is in closes the popover too, auto or manual.
+
+### Placement
+
+- `placement` sets the side the popover prefers. When that side has no room in the viewport and the opposite side does, the popover opens on the opposite side, and it shifts along its side to stay 8px inside the viewport. With no room on either side, it stays on the preferred side.
+- It keeps doing so as the page scrolls or resizes and as its trigger or content changes size, and goes back to the preferred side once there's room again.
+- The `placement` attribute keeps the value you set: the side the popover opened on is in the `data-pds-popover-placement` attribute of the portal that holds the content, for styles that depend on it, such as an entrance animation. It's set by the time `pdsPopoverOpen` fires, which waits for the first position, and removed when the popover closes.
+- `-start` and `-end` follow the text direction, so in a right-to-left page `bottom-start` lines the popover up with the right edge of its trigger.
 
 ## Playground
 
