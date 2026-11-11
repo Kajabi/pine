@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
-import { assignDescription, isRequired, isSpecTest, messageId, exposeTypeProperty, reportNativeValidity } from '../../utils/form';
+import { assignDescription, isRequired, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
 import { cancelDebouncedEvent, debounceEvent, flushDebouncedEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
@@ -480,12 +480,19 @@ export class PdsTextarea {
     if (isSpecTest() || !this.internals?.setValidity) return;
 
     const native = this.nativeTextarea;
-    if (!this.disabled && native && (this.maxLength ?? 0) > 0 && native.value.length > this.maxLength) {
+    if (this.disabled || !native) {
+      this.internals.setValidity({});
+      return;
+    }
+
+    if ((this.maxLength ?? 0) > 0 && native.value.length > this.maxLength) {
       this.internals.setValidity({ tooLong: true }, 'Value exceeds maxLength', native);
       return;
     }
 
-    reportNativeValidity(this.internals, this.disabled, native, native);
+    // Native `tooLong` is left out: after maxLength is raised or cleared it still reflects the old limit.
+    const { valueMissing, customError } = native.validity;
+    this.internals.setValidity({ valueMissing, customError }, native.validationMessage, native);
   }
 
 
