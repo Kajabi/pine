@@ -15,9 +15,9 @@
 
 ## Shadow Parts
 
-| Part     | Description |
-| -------- | ----------- |
-| `"cell"` |             |
+| Part     | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"cell"` | Set on the `pds-table-cell` element itself, so `::part(cell)` matches it only from a shadow root that contains it. Style `pds-table-cell` directly instead. In a `selectable` table, each row's selection cell sits in the row's shadow root: it has the `checkbox-cell` part when first rendered and `cell` after any re-render, so target both with `pds-table-row::part(checkbox-cell), pds-table-row::part(cell)`. |
 
 
 ## Dependencies
