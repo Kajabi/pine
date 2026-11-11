@@ -15,9 +15,22 @@ A hyperlink is used as a navigational element to direct users to another locatio
 
 ## Guidelines
 
-### Buttons vs Links
+### When to use
 
-In many current web design patterns, buttons and links have evolved to look visually identical. However, for best practices, the fundamental differences between the two should be considered before using. Links are used to navigate the user to another page. Buttons are used to perform an action on the current page or submit a form.
+- Navigating to another page, or to a section of the current page.
+- Downloading a file, with `download`.
+
+### When not to use
+
+- Performing an action on the current page, or submitting a form: use `pds-button`. Buttons and links can look alike, but they do different jobs: a link takes people somewhere, and a button does something where they are.
+
+### Accessibility
+
+- Write link text that says where the link goes, such as "Account settings" rather than "Click here". Screen reader users often move through a page's links on their own, away from the text around them.
+- Always give the link text. A link with nothing between its tags shows its `href`, so people see and hear a URL. Whitespace counts as content, so `<pds-link href="/help"> </pds-link>` shows no text and has no accessible name.
+- Inside a paragraph, use the default `inline` variant. Its underline sets the link apart from the words around it, while a `plain` link in the default color differs from body text only in weight until it's hovered.
+- Set `active` on the link to the current page in a set of navigation links. It sets `aria-current="page"`.
+- Check that a custom `color` has enough contrast with the background behind it.
 
 ## Properties
 
@@ -31,10 +44,10 @@ The default `inline` link. Visually, it maintains the underlined appearance of a
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="https://www.google.com"></PdsLink>',
-    webComponent: '<pds-link href="https://www.google.com"></pds-link>'
+    react: '<PdsLink href="/settings">Account settings</PdsLink>',
+    webComponent: '<pds-link href="/settings">Account settings</pds-link>'
 }}>
-  <pds-link href="https://www.google.com"></pds-link>
+  <pds-link href="/settings">Account settings</pds-link>
 </DocCanvas>
 
 ### Colors
@@ -70,10 +83,10 @@ The `plain` variant displays a standard plain hyperlink without an underline.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor" variant="plain"></PdsLink>',
-    webComponent: '<pds-link href="#some-anchor" variant="plain"></pds-link>'
+    react: '<PdsLink href="/help" variant="plain">Help center</PdsLink>',
+    webComponent: '<pds-link href="/help" variant="plain">Help center</pds-link>'
 }}>
-  <pds-link href="#some-anchor" variant="plain"></pds-link>
+  <pds-link href="/help" variant="plain">Help center</pds-link>
 </DocCanvas>
 
 ### Active
@@ -150,34 +163,34 @@ The `font-size` prop can be used to adjust the size of the link text. `sm`, `md`
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor" font-size="sm"></PdsLink>',
-    webComponent: '<pds-link href="#some-anchor" font-size="sm"></pds-link>'
+    react: '<PdsLink href="/privacy" fontSize="sm">Privacy policy</PdsLink>',
+    webComponent: '<pds-link href="/privacy" font-size="sm">Privacy policy</pds-link>'
 }}>
-  <pds-link href="#some-anchor" font-size="sm"></pds-link>
+  <pds-link href="/privacy" font-size="sm">Privacy policy</pds-link>
 </DocCanvas>
 
 ### Custom Slot Text
 
-Providing text within the open and closing tags allows the default link text to be replaced with custom text.
+The text between the opening and closing tags is the link's text, and its accessible name.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor">Overrides default use of href</PdsLink>',
-    webComponent: '<pds-link href="#some-anchor">Overrides default use of href</pds-link>'
+    react: '<PdsLink href="/billing">Billing and invoices</PdsLink>',
+    webComponent: '<pds-link href="/billing">Billing and invoices</pds-link>'
 }}>
-  <pds-link href="#some-anchor">Overrides default use of href</pds-link>
+  <pds-link href="/billing">Billing and invoices</pds-link>
 </DocCanvas>
 
 ### No Custom Slot Text
 
-When no custom text is provided, the link will use the `href` as the link text.
+When there is nothing between the tags, not even whitespace, the link uses its `href` as its text. Avoid this fallback: people see and hear the URL instead of a description of where the link goes. A link that holds only whitespace gets no fallback, so it shows no text and has no accessible name.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsLink href="#some-anchor"></PdsLink>',
-    webComponent: '<pds-link href="#some-anchor"></pds-link>'
+    react: '<PdsLink href="https://example.com/help"></PdsLink>',
+    webComponent: '<pds-link href="https://example.com/help"></pds-link>'
 }}>
-  <pds-link href="#some-anchor"></pds-link>
+  <pds-link href="https://example.com/help"></pds-link>
 </DocCanvas>
 
 ### Whole-row link
