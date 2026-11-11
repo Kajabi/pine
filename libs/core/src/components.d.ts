@@ -1632,7 +1632,7 @@ export namespace Components {
     }
     interface PdsImage {
         /**
-          * The image's alt tag. If none is provided, it will default to an empty string, which is desired for decorative images.
+          * The image's alt text. Defaults to an empty string, which marks the image as decorative and hides it from screen readers, so set it on any image that carries information.
           * @defaultValue ''
          */
         "alt"?: string;
@@ -1671,7 +1671,7 @@ export namespace Components {
          */
         "srcset"?: string;
         /**
-          * The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+          * The width of the image in pixels. This reserves the image's width before it loads, but not its height: to reserve the height too, set `--dimension-aspect-ratio` to the image's own proportions.
          */
         "width"?: number;
     }
@@ -1810,7 +1810,7 @@ export namespace Components {
          */
         "fontSize": 'sm' | 'md' | 'lg';
         /**
-          * The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.
+          * The hyperlink's destination URL. If the default slot is empty (whitespace counts as content), the href will be used as the link text.
          */
         "href": string;
         /**
@@ -2933,6 +2933,9 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Dismisses the toast, as the dismiss button and `duration` do: plays the exit animation and emits `pdsToastDismissed`, and the toast gets `hidden` on the next render, after the event. Works even when `dismissible` is `false`. The toast stays in the DOM.
+         */
         "dismiss": () => Promise<void>;
         /**
           * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
@@ -4712,6 +4715,9 @@ declare namespace LocalJSX {
           * Provides the button with a submittable name.
          */
         "name"?: string;
+        /**
+          * Emitted when the button is clicked, including from the keyboard, carrying the native click event. Not emitted while the button is `disabled` or `loading`. In a form, a `submit` or `reset` button's `submit` or `reset` event fires before this one. A form that fails validation fires no `submit` event.
+         */
         "onPdsClick"?: (event: PdsButtonCustomEvent<Event>) => void;
         /**
           * Sets the size of the button.
@@ -4784,9 +4790,12 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Event emitted that contains the `value` and `checked`.
+          * Emitted when the user toggles the checkbox, carrying the `value` and the new `checked` state.
          */
         "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
+        /**
+          * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`. `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.
+         */
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
           * It determines whether or not the checkbox is required.
@@ -5566,7 +5575,7 @@ declare namespace LocalJSX {
     }
     interface PdsImage {
         /**
-          * The image's alt tag. If none is provided, it will default to an empty string, which is desired for decorative images.
+          * The image's alt text. Defaults to an empty string, which marks the image as decorative and hides it from screen readers, so set it on any image that carries information.
           * @defaultValue ''
          */
         "alt"?: string;
@@ -5605,7 +5614,7 @@ declare namespace LocalJSX {
          */
         "srcset"?: string;
         /**
-          * The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+          * The width of the image in pixels. This reserves the image's width before it loads, but not its height: to reserve the height too, set `--dimension-aspect-ratio` to the image's own proportions.
          */
         "width"?: number;
     }
@@ -5764,7 +5773,7 @@ declare namespace LocalJSX {
          */
         "fontSize"?: 'sm' | 'md' | 'lg';
         /**
-          * The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.
+          * The hyperlink's destination URL. If the default slot is empty (whitespace counts as content), the href will be used as the link text.
          */
         "href": string;
         /**

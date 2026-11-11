@@ -4,7 +4,7 @@ import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, 
 const TOAST_DISMISS_ANIMATION_MS = 300;
 
 /**
- * @part dismiss
+ * @part dismiss - Exposes the dismiss button for styling. Appears unless `dismissible` is `false`.
  */
 @Component({
   tag: 'pds-toast',
@@ -106,6 +106,10 @@ export class PdsToast {
     }
   }
 
+  /**
+   * Dismisses the toast, as the dismiss button and `duration` do: plays the exit animation and emits `pdsToastDismissed`, and the toast
+   * gets `hidden` on the next render, after the event. Works even when `dismissible` is `false`. The toast stays in the DOM.
+   */
   @Method()
   async dismiss(): Promise<void> {
     // Start the animation out

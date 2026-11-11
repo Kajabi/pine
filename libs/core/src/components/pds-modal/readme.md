@@ -51,9 +51,9 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part      | Description |
-| --------- | ----------- |
-| `"modal"` |             |
+| Part      | Description                                                                                                                                                                         |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"modal"` | The panel inside the dialog that holds the modal's content. `pds-modal` has no shadow root, so `::part(modal)` doesn't match it; select it with `pds-modal [part="modal"]` instead. |
 
 
 ## Dependencies

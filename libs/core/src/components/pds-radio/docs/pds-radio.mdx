@@ -53,7 +53,7 @@ Radio components allow users to select one option from a group of two or more ch
 Radios appear as checked when activated.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="radio-checked-example" label="Label" checked={true} />`,
+  react: `<PdsRadio componentId="radio-checked-example" label="Label" checked />`,
   webComponent: `<pds-radio component-id="radio-checked-example" label="Label" checked></pds-radio>`
 }}>
   <pds-radio component-id="radio-checked-example" label="Label" checked></pds-radio>
@@ -64,7 +64,7 @@ Radios appear as checked when activated.
 Disabled radios visually indicate and functionally prevent user interaction.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="radio-disabled-example" label="Label" disabled={true} />`,
+  react: `<PdsRadio componentId="radio-disabled-example" label="Label" disabled />`,
   webComponent: `<pds-radio component-id="radio-disabled-example" label="Label" disabled></pds-radio>`
 }}>
   <pds-radio component-id="radio-disabled-example" label="Label" disabled></pds-radio>
@@ -99,7 +99,7 @@ An optional error message can provide further instructions, displayed independen
 Add a border around the radio component for better visual separation, useful for card-like layouts or when radios need more visual emphasis.
 
 <DocCanvas mdxSource={{
-  react: `<PdsRadio componentId="radio-border-example" label="Label" hasBorder={true} helperMessage="This radio has enhanced visual separation" />`,
+  react: `<PdsRadio componentId="radio-border-example" label="Label" hasBorder helperMessage="This radio has enhanced visual separation" />`,
   webComponent: `<pds-radio component-id="radio-border-example" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>`
 }}>
   <pds-radio component-id="radio-border-example" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>
@@ -145,7 +145,7 @@ Radio buttons can display custom images instead of the default radio input in a 
   componentId="image-radio"
   label="Profile Picture"
   helperMessage="Select your profile avatar">
-  <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+  <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="circle" padding="sm">
     <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
   </PdsBox>
 </PdsRadio>`,
@@ -153,7 +153,7 @@ Radio buttons can display custom images instead of the default radio input in a 
   component-id="image-radio"
   label="Profile Picture"
   helper-message="Select your profile avatar">
-  <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+  <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="circle" padding="sm">
     <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
   </pds-box>
 </pds-radio>`
@@ -162,7 +162,7 @@ Radio buttons can display custom images instead of the default radio input in a 
     component-id="image-radio"
     label="Profile Picture"
     helper-message="Select your profile avatar">
-    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="circle" padding="sm">
       <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
     </pds-box>
   </pds-radio>

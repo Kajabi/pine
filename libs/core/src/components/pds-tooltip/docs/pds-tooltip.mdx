@@ -15,12 +15,24 @@ Tooltips display helpful popup text when users hover over or keyboard focus on a
 
 ## Guidelines
 
-#### When to use
+### When to use
+
 - Use tooltips to provide additional context for elements like buttons or icons where extra explanation is helpful but not essential.
 - Ideal for non-essential information that enhances understanding without cluttering the interface.
 
-#### When not to use
+### When not to use
+
 - Avoid using tooltips for critical information that users need for task completion. Essential information should be visible at all times.
+- Don't put interactive content, such as buttons or links, in a tooltip. Use `pds-popover`, which manages focus and dismissal affordances.
+
+### Accessibility
+
+- Wrap a focusable trigger, such as a `pds-button` or `pds-link`. The tooltip opens when the trigger takes keyboard focus, and plain text can't take focus, so keyboard users never see a tooltip on it.
+- The tooltip opens on hover or keyboard focus of the trigger, and closes when the pointer leaves or focus moves away, unless `opened` holds it open (see [Technical Notes](#technical-notes)). Escape doesn't close it.
+- Reserve tooltips for purely supplemental information and display critical validation or blocking instructions inline.
+- The open tooltip is a polite live region. Changes to its content while it's open are announced, but opening it isn't reliably announced.
+- The tooltip sets `aria-describedby` on its own wrapper around the trigger, not on the control inside it, so screen readers don't read the tooltip text when that control takes focus. If the text must be heard, also put it in the control's accessible name.
+- When `html-content="true"`, avoid placing focusable elements inside the `content` slot. Tooltip content is never a Tab stop: a focus trap such as `pds-modal`'s skips it.
 
 ## Properties
 
@@ -65,8 +77,8 @@ tooltip content is expected to be a string.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsTooltip content="this is tooltip content" hasArrow="true" placement="right">text</PdsTooltip>',
-    webComponent: '<pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>'
+    react: `<PdsTooltip content="this is tooltip content" hasArrow="true" placement="right">text</PdsTooltip>`,
+    webComponent: `<pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>`
   }}>
   <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>
 </DocCanvas>
@@ -265,8 +277,8 @@ By default the arrow is visible but it can be hidden by disabling it when `has-a
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsTooltip content="this is tooltip content" hasArrow="false" placement="right">text</PdsTooltip>',
-    webComponent: '<pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>'
+    react: `<PdsTooltip content="this is tooltip content" hasArrow="false" placement="right">text</PdsTooltip>`,
+    webComponent: `<pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>`
 }}>
   <pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>
 </DocCanvas>
@@ -277,8 +289,8 @@ The `max-width` prop lets you adjust the maximum width of the tooltip content. T
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsTooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." maxWidth="520px" placement="right">text</PdsTooltip>',
-    webComponent: '<pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>'
+    react: `<PdsTooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." maxWidth="520px" placement="right">text</PdsTooltip>`,
+    webComponent: `<pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>`
 }}>
   <pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>
 </DocCanvas>
@@ -287,16 +299,89 @@ The `max-width` prop lets you adjust the maximum width of the tooltip content. T
 When the trigger sits in an open modal dialog (`pds-modal`, or `pds-drawer` with `modal`) or an open popover, the
 tooltip renders inside that dialog or popover so it shows above it. Open the modal, then hover or focus **Publish**.
 
-<Canvas of={stories.InModal} />
+The snippets show the modal with its Cancel button wired to `hideModal()`. Open the modal from your own code, as in the `pds-modal` examples. The heading's `id` is the modal's `component-id` followed by `-heading`, which gives the dialog its accessible name.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+      <PdsModal id="tooltip-modal-example" componentId="tooltip-modal-example" size="sm">
+        <PdsModalHeader>
+          <PdsBox padding="md">
+            <PdsText tag="h2" size="h3" id="tooltip-modal-example-heading">Publish changes</PdsText>
+          </PdsBox>
+        </PdsModalHeader>
+        <PdsModalContent>
+          <PdsBox paddingInlineStart="md" paddingInlineEnd="md">
+            <PdsText tag="p">Hover or focus Publish: its tooltip shows above the open modal.</PdsText>
+          </PdsBox>
+        </PdsModalContent>
+        <PdsModalFooter>
+          <PdsBox fit gap="sm" justifyContent="end" padding="md">
+            <PdsButton variant="secondary" onClick={() => document.getElementById('tooltip-modal-example')?.hideModal()}>Cancel</PdsButton>
+            <PdsTooltip content="Makes your changes visible to everyone" placement="top">
+              <PdsButton variant="primary">Publish</PdsButton>
+            </PdsTooltip>
+          </PdsBox>
+        </PdsModalFooter>
+      </PdsModal>
+    `,
+    webComponent: `
+      <pds-modal id="tooltip-modal-example" component-id="tooltip-modal-example" size="sm">
+        <pds-modal-header>
+          <pds-box padding="md">
+            <pds-text tag="h2" size="h3" id="tooltip-modal-example-heading">Publish changes</pds-text>
+          </pds-box>
+        </pds-modal-header>
+        <pds-modal-content>
+          <pds-box padding-inline-start="md" padding-inline-end="md">
+            <pds-text tag="p">Hover or focus Publish: its tooltip shows above the open modal.</pds-text>
+          </pds-box>
+        </pds-modal-content>
+        <pds-modal-footer>
+          <pds-box fit gap="sm" justify-content="end" padding="md">
+            <pds-button id="tooltip-modal-example-cancel" variant="secondary">Cancel</pds-button>
+            <pds-tooltip content="Makes your changes visible to everyone" placement="top">
+              <pds-button variant="primary">Publish</pds-button>
+            </pds-tooltip>
+          </pds-box>
+        </pds-modal-footer>
+      </pds-modal>
+
+      <script>
+        document.getElementById('tooltip-modal-example-cancel').addEventListener('click', () => {
+          document.getElementById('tooltip-modal-example').hideModal();
+        });
+      </script>
+    `
+}}>
+  <pds-button onClick={() => document.getElementById('tooltip-modal-example').showModal()}>Open modal</pds-button>
+  <pds-modal id="tooltip-modal-example" component-id="tooltip-modal-example" size="sm">
+    <pds-modal-header>
+      <pds-box padding="md">
+        <pds-text tag="h2" size="h3" id="tooltip-modal-example-heading">Publish changes</pds-text>
+      </pds-box>
+    </pds-modal-header>
+    <pds-modal-content>
+      <pds-box padding-inline-start="md" padding-inline-end="md">
+        <pds-text tag="p">Hover or focus Publish: its tooltip shows above the open modal.</pds-text>
+      </pds-box>
+    </pds-modal-content>
+    <pds-modal-footer>
+      <pds-box fit gap="sm" justify-content="end" padding="md">
+        <pds-button variant="secondary" onClick={() => document.getElementById('tooltip-modal-example').hideModal()}>Cancel</pds-button>
+        <pds-tooltip content="Makes your changes visible to everyone" placement="top">
+          <pds-button variant="primary">Publish</pds-button>
+        </pds-tooltip>
+      </pds-box>
+    </pds-modal-footer>
+  </pds-modal>
+</DocCanvas>
 
 ## Technical Notes
 
-- The trigger element receives `aria-describedby` referencing an ID that the component creates. Provide meaningful button/link labels so the tooltip content is read *after* the control name. When combining multiple tooltips on the same control, set `aria-describedby` manually to avoid duplication.
-- Tooltips do not announce themselves automatically because they use `aria-live="off"`. Reserve tooltips for purely supplemental information and display critical validation or blocking instructions inline.
 - The tooltip already opens on hover and focus, so don't wire those events yourself. Use the `opened` property when it should stay open beyond a hover or focus, such as a guided-tour step. While `opened` is set from outside, moving the pointer or focus away doesn't close it. If hover or focus opened the tooltip first, setting `opened` to `true` changes nothing, and moving away still closes it; set `opened` to `false` and then `true` to hold it open. Set it as an attribute or a property. It reflects to the attribute, so `pds-tooltip[opened]` matches an open tooltip.
 - Call the public methods `showTooltip()` and `hideTooltip()` from your own script to open or close the tooltip, such as when a tour advances. Each sets `opened` and returns a promise that resolves once it's set.
 - The open tooltip renders at the end of `<body>`, or inside the open modal dialog or popover around its trigger. Where it renders is decided when it opens: a tooltip opened with `opened` before its modal opens stays behind the modal until it opens again. A tooltip in a popover inside another component's shadow root, such as a `pds-filter` panel, still renders in the body.
-- When `html-content="true"`, avoid placing focusable elements inside the `content` slot. Tooltips are not intended for interactive elements. If you require buttons or links, switch to `<pds-popover>`, which manages focus and dismissal affordances. Tooltip content is never a Tab stop: a focus trap such as `pds-modal`'s skips it.
 
 ```tsx
 // React: keep the tooltip open while a guided-tour step points at the button

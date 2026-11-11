@@ -16,6 +16,8 @@ import {  computePosition,
 type MenuItemElement = HTMLPdsDropdownMenuItemElement | HTMLAnchorElement | HTMLButtonElement;
 
 /**
+ * @slot trigger - The trigger element for the dropdown menu. It receives `aria-expanded` and `aria-haspopup`, so slot the focusable control itself, such as a `pds-button`, not a wrapper around it.
+ * @slot (default) - The menu items: `pds-dropdown-menu-item` and `pds-dropdown-menu-separator` elements, or raw `<a>` and `<button>` elements.
  * @slot header - Non-interactive content displayed above the menu items inside the dropdown panel. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item.
  * @part menu-panel - Exposes the dropdown menu container for styling.
  */

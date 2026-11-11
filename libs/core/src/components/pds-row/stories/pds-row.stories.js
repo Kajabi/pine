@@ -49,7 +49,7 @@ const GapTemplate = (args) => html`
       border="true"
       border-radius="sm"
       padding="sm"
-      shadow="sm"
+      shadow="100"
     >
       Item 1
     </pds-box>
@@ -59,7 +59,7 @@ const GapTemplate = (args) => html`
       border="true"
       border-radius="sm"
       padding="sm"
-      shadow="sm"
+      shadow="100"
     >
       Item 2
     </pds-box>

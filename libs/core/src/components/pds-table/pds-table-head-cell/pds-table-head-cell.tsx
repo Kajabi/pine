@@ -3,6 +3,10 @@ import { Component, Element, Host, Prop, h, Event, EventEmitter, State, Method }
 import { downSmall, upSmall } from '@pine-ds/icons/icons';
 import { isScrolledFromInlineStart } from '../../../utils/scroll';
 
+/**
+ * @part head-cell - Set on the `pds-table-head-cell` element itself, so `::part(head-cell)` matches it only from a shadow root that contains it. Style `pds-table-head-cell` directly instead. In a `selectable` table, the select-all cell sits in `pds-table-head`'s shadow root: it has the `checkbox-cell` part when first rendered and `head-cell` after any re-render, so target both with `pds-table-head::part(checkbox-cell), pds-table-head::part(head-cell)`.
+ * @part sort-icon - Exposes the sort direction icon for styling. Appears only on a `sortable` column while it's the active sort.
+ */
 @Component({
   tag: 'pds-table-head-cell',
   styleUrls: ['pds-table-head-cell.scss'],

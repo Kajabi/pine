@@ -6,10 +6,11 @@ import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 const DEFAULT_BADGE_LABEL = 'Verified';
 
 /**
- * @part asset-wrapper
- * @part button
+ * @part asset-wrapper - Exposes the sized wrapper around the avatar's image, initials or icon, badge and status dot for styling.
+ * @part button - Exposes the dropdown trigger button for styling. Appears only when `dropdown` is set.
  * @part image - The main image element that represents the avatar component.
  * @part initials - The text element that renders the avatar's initials, for restyling their color.
+ * @part status - Exposes the status dot for styling, such as a custom color. Appears only when `status` is set.
 */
 @Component({
   tag: 'pds-avatar',
