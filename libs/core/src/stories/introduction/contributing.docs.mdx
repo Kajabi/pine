@@ -5,151 +5,18 @@ import { Meta, Story } from '@storybook/addon-docs/blocks';
 
 # Contributing
 
-We welcome and encourage contributions to the Pine Design System! Whether you're fixing a bug, improving documentation, or proposing a new component, your contributions help make Pine better for everyone. This guide will help you get started and ensure your contributions align with our standards and best practices.
+Contributions to Pine are welcome, whether you're fixing a bug, improving documentation or proposing a new component. Pine is maintained by its contributors, with no assigned stewards. The `@Kajabi/dss-devs` code owners review pull requests, and each one needs two approving reviews before it merges.
 
-Pine is built using <pds-link href="https://stenciljs.com/" external>Stencil.js</pds-link>, which allows us to create web components with TypeScript that work across all frameworks.
+The full guide is <pds-link href="https://github.com/Kajabi/pine/blob/main/CONTRIBUTING.md" external>CONTRIBUTING.md</pds-link> in the repository, so it stays in step with the code. It covers:
 
-## Prerequisites
+- Local setup: the Node version, local certificates for the dev server, and running Storybook
+- Branch names and commit messages, which git hooks check when you commit and push
+- Generating a component, and writing its docs so the Pine MCP can read them
+- The checks every pull request runs: lint, spec and end-to-end tests, bundle size budgets, public API reports, the accessibility gate and visual regression
+- How releases are cut
 
-Before contributing to the Pine Design System, ensure you have the following:
+Before you change a component's public API, read <pds-link href="https://github.com/Kajabi/pine/blob/main/VERSIONING.md" external>VERSIONING.md</pds-link>. It defines what counts as a breaking change and how to deprecate a prop, event or method. Significant, long-lived decisions are recorded as <pds-link href="https://github.com/Kajabi/pine/blob/main/docs/adr/README.md" external>Architecture Decision Records</pds-link>.
 
-### Dependencies
+Pine is built with <pds-link href="https://stenciljs.com/" external>Stencil</pds-link>, so it helps to know how web components and Stencil work before you change a component.
 
-Pine requires Node `>=16`.
-
-### Knowledge Requirements
-
-**Web Components & Stencil.js**
-Pine is built on the <pds-link href="https://stenciljs.com/" external>Stencil.js</pds-link> web component library. Contributors should have a basic understanding of how web components work and how to use Stencil.js to create them.
-
-**Pine Components**
-Familiarize yourself with the existing Pine components and how they work. Browse through the component documentation to understand our patterns and conventions.
-
-**Design Tokens**
-Understanding Pine's design token system will help you apply styling consistently across components.
-
-## Setting Up Your Development Environment
-
-### Fork and Clone
-
-<pds-link href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo" external>Fork and clone</pds-link> the <pds-link href="https://github.com/Kajabi/pine" external>Pine GitHub repository</pds-link>.
-
-### Installation
-
-Run the following commands for initial setup:
-
-1. `cd pine`
-2. `npm install`
-3. `brew install mkcert`, if using Firefox run `brew install nss` instead
-4. `mkcert -install`
-5. `npm run setup`
-6. `cd libs/core`
-7. `mkcert -cert-file pineLocalDev.pem -key-file pineLocalDev-key.pem localhost 7300`
-8. `cd ../..`
-
-### Start the Development Server
-
-To spin up a local dev server and test your changes, run:
-
-```zsh
-npm run start
-```
-
-A local instance of Storybook will be served at `http://localhost:6006`.
-
-## Making Changes
-
-### Branch Naming Convention
-
-Before you start coding, create a new branch using our conventional branch naming convention. Branches that don't adhere to this style won't be able to be pushed, so be sure your branch begins with one of the accepted prefixes.
-
-Common prefixes include:
-- `feat/` - New features
-- `fix/` - Bug fixes
-- `docs/` - Documentation changes
-- `style/` - CSS/styling changes
-- `refactor/` - Code refactoring
-- `test/` - Adding or updating tests
-
-Example:
-
-```zsh
-style/button-accent-update
-```
-
-### Creating a New Component
-
-To add new components, run the following command:
-
-```zsh
-npm run stencil.generate pds-[component name]
-```
-
-When prompted, choose `*.scss Format`, then confirm. The initial component files will be generated. Once they are, you will need them to match other components. It may be best to copy any missing folders such as `stories/` and `docs/` from other components and update any imports or text to match.
-
-### Modifying Existing Components
-
-When modifying existing components:
-1. Locate the component in `libs/core/src/components/`
-2. Make your changes to the component files
-3. Update documentation in the `docs/` folder if needed
-4. Update or add stories in the `stories/` folder
-5. Test your changes in Storybook
-
-## Quality & Standards
-
-Every component in Pine is well-tested. We ask that for any new features added to components that the corresponding documentation, end-to-end (E2E) tests, and spec tests are added for quality assurance.
-
-### Linting
-
-We use prettier for linting. To check your code:
-
-```zsh
-npm run lint.all
-```
-
-### Testing
-
-We use Stencil's built-in testing suite for testing TypeScript. To run tests:
-
-```zsh
-npm run test.all
-```
-
-This runs both spec tests and E2E tests to ensure your changes work correctly and don't break existing functionality.
-
-## Submitting Your Contribution
-
-### Commit Messages
-
-We use <pds-link href="https://www.conventionalcommits.org/en/v1.0.0/" external>Conventional Commits</pds-link>, so please ensure your commit messages adhere to these standards.
-
-### Creating a Pull Request
-
-First, ensure that the `main` branch is up to date:
-
-```zsh
-git checkout main
-git pull upstream main
-```
-
-Then, rebase your branch against `main` and resolve any conflicts:
-
-```zsh
-git checkout your/branch-name
-git rebase main
-```
-
-Once rebased, push your branch and create a pull request. When creating your pull request:
-- Fill out the template with as much detail as possible
-- Include before and after screenshots for visual changes
-- Tag `Kajabi/dss-devs` to notify the Design System team
-- Our standards require at least two accepted reviews before merging
-
-## Troubleshooting
-
-Sometimes, the development environment will experience rendering issues while hot reloading. In most cases, this can be fixed by re-running the `npm run start` command. For any cases where this doesn't resolve the issue, please feel free to reach out to the team for support.
-
-## Get Help
-
-If you have questions or need assistance, reach out to us through our support channels. We're here to help make your contribution experience as smooth as possible!
+For questions, see <pds-link href="../?path=/docs/introduction-get-support--docs">Get Support</pds-link>.
