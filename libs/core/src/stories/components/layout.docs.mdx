@@ -528,6 +528,8 @@ Add size modifiers to your child `pds-box` for responsive design
 <DocCanvas client:only
   mdxSource={{
     react: `
+      import { caretRight } from '@pine-ds/icons/icons';
+
       <PdsBox display="block">
         <PdsRow colGap="md">
           <PdsBox sizeMd="4">
@@ -544,7 +546,7 @@ Add size modifiers to your child `pds-box` for responsive design
                   <PdsText gutter="sm">Successful transactions</PdsText>
                 </PdsBox>
                 <PdsBox auto alignItems="center">
-                  <PdsIcon name="caret-right"></PdsIcon>
+                  <PdsIcon icon={caretRight}></PdsIcon>
                 </PdsBox>
               </PdsBox>
             </PdsBox>
@@ -563,7 +565,7 @@ Add size modifiers to your child `pds-box` for responsive design
                   <PdsText gutter="sm">Successful transactions</PdsText>
                 </PdsBox>
                 <PdsBox auto alignItems="center">
-                  <PdsIcon name="caret-right"></PdsIcon>
+                  <PdsIcon icon={caretRight}></PdsIcon>
                 </PdsBox>
               </PdsBox>
             </PdsBox>
@@ -582,7 +584,7 @@ Add size modifiers to your child `pds-box` for responsive design
                   <span>Successful transactions</span>
                 </PdsBox>
                 <PdsBox auto alignItems="center">
-                  <PdsIcon name="caret-right"></PdsIcon>
+                  <PdsIcon icon={caretRight}></PdsIcon>
                 </PdsBox>
               </PdsBox>
             </PdsBox>
