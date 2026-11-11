@@ -276,6 +276,13 @@ describe('pds-dropdown-menu-item', () => {
       return getComputedStyle(ringEl).outlineStyle;
     }, name);
 
+    const ringColor = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
+      const item = document.querySelector(`[data-name="${itemName}"]`);
+      const content = item.shadowRoot.querySelector('.pds-dropdown-menu-item__content');
+      const ringEl = content.shadowRoot?.querySelector('a') ?? content;
+      return getComputedStyle(ringEl).outlineColor;
+    }, name);
+
     const isFocused = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
       const item = document.querySelector(`[data-name="${itemName}"]`);
       return item.shadowRoot.activeElement != null;
@@ -322,13 +329,35 @@ describe('pds-dropdown-menu-item', () => {
       await page.keyboard.press('Enter');
       await page.waitForChanges();
 
+      const colors: Record<string, string> = {};
       for (const name of names) {
         await page.keyboard.press('ArrowDown');
         await page.waitForChanges();
 
         expect(await isFocused(page, name)).toBe(true);
         expect(await ringStyle(page, name)).toBe('solid');
+        colors[name] = await ringColor(page, name);
       }
+
+      // Destructive items, links included, draw the danger ring rather than the default one.
+      expect(colors['link']).toBe(colors['button']);
+      expect(colors['destructive']).not.toBe(colors['button']);
+      expect(colors['destructive-link']).toBe(colors['destructive']);
+    });
+
+    it('has no axe violations with keyboard focus on an item', async () => {
+      const page = await setUp();
+      await page.focus('button[slot="trigger"]');
+      await page.keyboard.press('Enter');
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+
+      // `aria-required-children` is disabled as in the pds-dropdown-menu axe test: the menu's slotted
+      // items render `role="none"` on their hosts, which axe doesn't see past.
+      const violations = await runAxe(page, {
+        rules: { 'aria-required-children': { enabled: false } },
+      });
+      expect(formatViolations(violations)).toBe('');
     });
 
     it('shows when Tab moves into a menu opened with the mouse', async () => {
