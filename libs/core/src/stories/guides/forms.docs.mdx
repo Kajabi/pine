@@ -43,6 +43,18 @@ The web component example utilizes vanilla JavaScript to access values directly 
   mdxSource={{
     react: `
       import React, { useState } from 'react';
+      import {
+        PdsBox,
+        PdsButton,
+        PdsCheckbox,
+        PdsCombobox,
+        PdsInput,
+        PdsMultiselect,
+        PdsRadio,
+        PdsSelect,
+        PdsSwitch,
+        PdsTextarea,
+      } from '@pine-ds/react';
 
       const FormComponent = () => {
         const [formData, setFormData] = useState({
