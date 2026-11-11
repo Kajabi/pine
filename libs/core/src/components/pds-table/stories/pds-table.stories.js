@@ -43,11 +43,6 @@ export default {
         category: 'Sorting',
       },
     },
-    tableLayout: {
-      control: { type: 'select' },
-      options: ['auto', 'fixed'],
-      description: 'Sets how the table sizes its columns. With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content.',
-    },
   },
 };
 
@@ -549,4 +544,11 @@ ColumnWidths.args = {
   responsive: false,
   rowDividers: true,
   tableLayout: 'fixed',
+};
+ColumnWidths.argTypes = {
+  tableLayout: {
+    control: { type: 'select' },
+    options: ['auto', 'fixed'],
+    description: 'Sets how the table sizes its columns. With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content.',
+  },
 };
