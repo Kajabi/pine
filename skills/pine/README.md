@@ -57,25 +57,15 @@ Manifest schema (per the `vercel-labs/skills` convention):
 `files` are paths relative to `/.well-known/skills/pine/`. The `description` is
 taken from this skill's `SKILL.md` frontmatter at generation time.
 
-## Relationship to `kp-pine-patterns` (in kajabi-products)
+## App-specific skills
 
-`kp-pine-patterns` is the **KP-local complement** to this skill: it covers the
-KP-specific consuming surface — importing the `@pine-ds/react` `Pds*` wrappers,
-KP import paths, KP's Sage→Pine migration, and an offline `pine-snapshot.json`
-fallback for when the MCP isn't wired into KP. Its own overview already calls
-itself "the consuming-side complement to the Pine repo's own component API" —
-this skill *is* that API surface.
+A consuming app may keep its own local skill for app-only concerns: importing the
+`@pine-ds/react` `Pds*` wrappers, the app's import paths, migrating off a legacy
+UI library, or an offline snapshot for when the MCP isn't wired in.
 
-Division of labor:
-
-| Concern | Lives in |
-|---|---|
-| Universal Pine rules — token discipline, icon/component gotchas, the resolve→validate workflow | **here** (canonical) |
-| React wrappers, app import paths, Sage→Pine, offline snapshot | `kp-pine-patterns` (KP-local) |
-
-The shared rules (the hallucinated-token table, icon/component gotchas) should
-have **one** home — this skill. A follow-up will thin `kp-pine-patterns`' copies
-down to a pointer here so they can't drift (see the PR's follow-up note).
+The universal Pine rules (token discipline, icon and component gotchas, the
+resolve→validate workflow) live **here**. App-specific skills should link here
+rather than copy these rules.
 
 ## License
 

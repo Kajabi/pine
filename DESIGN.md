@@ -130,7 +130,7 @@ typography:
     body:    "Inter"          # --pine-font-family-inter (+ system fallback stack)
     display: "FAIRE Sprig"    # expressive/marketing display only — NOT product chrome
     intl:    ["Noto Sans Arabic", "Noto Sans Hebrew", "Noto Sans Devanagari"]
-  # Size scale (tokens.font_size) is named ~rem*100; base body = 100 (14px).
+  # Size scale (tokens.font_size) is named off a 14px base, not rem: name ≈ px ÷ 14 × 100; base body = 100 (14px).
   weight_aliases: { regular: 400, medium: 500, semibold: 600, bold: 700 }
   line_height_use: { headings_dense: 125, body: 150 }   # keys into tokens.line_height
 
@@ -367,17 +367,19 @@ Body and UI text is **Inter**, falling back to the system stack. **FAIRE Sprig**
 is the expressive display face — reserve it for marketing/hero moments, not
 product chrome. International scripts route to the Noto Sans family automatically.
 
-The size scale (`tokens.font_size`) is named by roughly `rem × 100` of the pixel
-value, with **14px (`100`) as the base**. Weights run 400 / 500 / 600 / 700;
-500 is the workhorse for emphasis and labels. Pair sizes with the line-height
-scale — `150` (1.5) for body, `125` (1.25) for headings and dense UI.
+The size scale (`tokens.font_size`) is named relative to a **14px base (`100`)**,
+not in rem: a step's name is roughly its pixel value ÷ 14 × 100, so `085` is
+12px. Weights run 400 / 500 / 600 / 700; 500 is the workhorse for emphasis and
+labels. Pair sizes with the line-height scale — `150` (1.5) for body, `125`
+(1.25) for headings and dense UI.
 
 ## Layout & Spacing
 
-Spacing uses one scale (`tokens.spacing`), named by `rem × 100`, where **`100` =
-8px** — an **8px grid** with 2px/4px half-steps (`025`, `050`) for fine
-adjustment. Use the same scale for padding, margins, and `gap`; avoid hand-typed
-pixels so rhythm stays consistent.
+Spacing uses one scale (`tokens.spacing`), named relative to **`100` = 8px**,
+not in rem: a step's name is its pixel value ÷ 8 × 100, so `300` is 24px. It's
+an **8px grid** with 2px/4px half-steps (`025`, `050`) for fine adjustment. Use
+the same scale for padding, margins, and `gap`; avoid hand-typed pixels so
+rhythm stays consistent.
 
 Stacking order is governed by the semantic `z-index` scale (`tokens.z_index`),
 not ad-hoc numbers: `hide` (-1) → `raised` (1000) → `alert` (2000) → `underlay`
@@ -427,8 +429,9 @@ worth calling out:
 - All interactive components are keyboard-operable with a visible `focus-ring`
   (purple 300); never remove focus outlines.
 - Use semantic HTML and ARIA; icon-only controls need an accessible name.
-  (Known follow-up: `pds-icon` `role="img"` lacks an accessible name — supply a
-  label on icon-only usage.)
+  A decorative `pds-icon` needs nothing: it's hidden from assistive tech unless it
+  has `aria-label`, `aria-labelledby` or `tabindex`. Give it an `aria-label` only
+  when the icon carries meaning alone.
 - Respect `prefers-reduced-motion` — motion durations auto-zero; don't
   reintroduce animation that ignores the preference.
 

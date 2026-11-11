@@ -10,7 +10,7 @@ Pine authors components as framework-agnostic Stencil web components (`pds-*`), 
 
 ## Decision
 
-Generate typed **React wrappers** with `@stencil/react-output-target` (configured in `libs/core/stencil.config.ts`) and publish them as a separate package, **`@pine-ds/react`** (`libs/react/`), which depends on `@pine-ds/core` at a caret range (`^3.26.4`) and re-exports each component as an idiomatic React component with typed props and wired events.
+Generate typed **React wrappers** with `@stencil/react-output-target` (configured in `libs/core/stencil.config.ts`) and publish them as a separate package, **`@pine-ds/react`** (`libs/react/`), which depends on `@pine-ds/core` at a caret range and re-exports each component as an idiomatic React component with typed props and wired events.
 
 ## Consequences
 

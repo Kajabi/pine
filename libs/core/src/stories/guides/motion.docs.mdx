@@ -4,7 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Motion
 
-Motion should reinforce hierarchy and feedback without slowing tasks or causing vestibular discomfort. Pine exposes a small **Pine-internal** motion token set covering durations and easing curves; full publication into the shared design language is a follow-up (see Tokens below).
+Motion should reinforce hierarchy and feedback without slowing tasks or causing vestibular discomfort. Pine exposes a small motion token set covering durations and easing curves (see Tokens below).
 
 ## Principles
 
@@ -22,23 +22,61 @@ Motion should reinforce hierarchy and feedback without slowing tasks or causing 
 
 ## Tokens
 
-Pine ships a Pine-internal motion token set in `libs/core/src/global/styles/_motion.scss`. Component SCSS should reference the CSS custom properties (not the raw values), so that consolidating these tokens upstream into `@kajabi-ui/styles` is a future token-swap and not a search-and-replace across every component.
+The `--pine-motion-*` tokens are set on `:root` in `pine-core.css`, so your app's CSS can use them as well as Pine's components. Reference the custom properties rather than the raw values: your transitions keep the same timing as Pine's, and they pick up the reduced-motion override below for free.
 
 ### Durations
 
-| Token | Default | Use for |
-| --- | --- | --- |
-| `--pine-motion-duration-fast` | `120ms` | Micro-interactions (hover, focus, small toggles). |
-| `--pine-motion-duration-base` | `200ms` | Default for most state changes; the safe pick. |
-| `--pine-motion-duration-slow` | `300ms` | Overlays entering or leaving (modal, popover, drawer). |
+<pds-table component-id="motion-durations" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Default</pds-table-head-cell>
+    <pds-table-head-cell>Use for</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-motion-duration-fast</code></pds-table-cell>
+      <pds-table-cell><code>120ms</code></pds-table-cell>
+      <pds-table-cell>Micro-interactions (hover, focus, small toggles).</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-motion-duration-base</code></pds-table-cell>
+      <pds-table-cell><code>200ms</code></pds-table-cell>
+      <pds-table-cell>Default for most state changes; the safe pick.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-motion-duration-slow</code></pds-table-cell>
+      <pds-table-cell><code>300ms</code></pds-table-cell>
+      <pds-table-cell>Overlays entering or leaving (modal, popover, drawer).</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
 ### Easing
 
-| Token | Curve | Use for |
-| --- | --- | --- |
-| `--pine-motion-easing-out` | `cubic-bezier(0, 0, 0.2, 1)` | Elements **entering** the view or gaining focus. |
-| `--pine-motion-easing-in` | `cubic-bezier(0.4, 0, 1, 1)` | Elements **exiting** the view. |
-| `--pine-motion-easing-in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` | Properties that move both ways (for example expanding height). |
+<pds-table component-id="motion-easing" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Curve</pds-table-head-cell>
+    <pds-table-head-cell>Use for</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-motion-easing-out</code></pds-table-cell>
+      <pds-table-cell><code>cubic-bezier(0, 0, 0.2, 1)</code></pds-table-cell>
+      <pds-table-cell>Elements <strong>entering</strong> the view or gaining focus.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-motion-easing-in</code></pds-table-cell>
+      <pds-table-cell><code>cubic-bezier(0.4, 0, 1, 1)</code></pds-table-cell>
+      <pds-table-cell>Elements <strong>exiting</strong> the view.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-motion-easing-in-out</code></pds-table-cell>
+      <pds-table-cell><code>cubic-bezier(0.4, 0, 0.2, 1)</code></pds-table-cell>
+      <pds-table-cell>Properties that move both ways (for example expanding height).</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
 ### Reduced motion
 
@@ -48,7 +86,3 @@ The duration tokens collapse to `0ms` under `prefers-reduced-motion: reduce`, so
 
 - The override only affects duration. Easing tokens still resolve to their normal curves, which is fine for 0ms transitions but worth knowing if you compose tokens elsewhere.
 - JavaScript-driven animations (`element.animate`, `requestAnimationFrame` loops) do not read CSS custom properties; you have to check `window.matchMedia('(prefers-reduced-motion: reduce)')` yourself.
-
-### Roadmap
-
-When motion tokens are published in `@kajabi-ui/styles` alongside color, spacing, and typography, the CSS variable names above stay the same — the source of truth moves upstream. Track that work in `#ds-support`.

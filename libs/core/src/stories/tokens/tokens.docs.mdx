@@ -37,9 +37,11 @@ Semantic tokens, also known as “reference” or “alias” tokens, reference 
 These tokens are the driving force behind component styling and are intended to be used liberally.
 
 ```
-color.accent: {color.purple.500}
-font-size.default: {font-size.100}
+color.text.@: {color.grey.900}
+font-size.@: {font-size.100}
 ```
+
+The `@` key is the base value of its group, so these become `--pine-color-text` and `--pine-font-size`.
 
 ### Component
 
@@ -118,7 +120,7 @@ Let's say we'd like to add a new dimension token for 72px. We can do:
 
 …which would give us 900. Our final new token would be:
 
-`--pine-dimension-900: 72px`
+`--pine-dimension-900: 72px` (hypothetical: Pine doesn't ship this token)
 
 While this does free us from using the "t-shirt sizing" scale for core tokens and the headache that comes with adding new values, "t-shirt sizing" is still used for some of our semantic tokens. Contextually, it makes sense as we are consciously dictating what our scale will be with semantic tokens.
 

@@ -78,6 +78,8 @@ export type ChipSentimentType =
 
 export type ModalSizeType = 'sm' | 'md' | 'lg' | 'fullscreen';
 
+export type ImageRatioType = 'square' | 'landscape' | 'wide' | 'portrait' | 'tall';
+
 export type ChipSizeType =
   'sm'
   | 'md'

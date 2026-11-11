@@ -316,8 +316,9 @@ export class PdsDatepicker {
    * Ranges listed beside the calendar in range mode. A comma-separated list of built-in keys
    * (`today`, `yesterday`, `last-7-days`, `last-30-days`, `last-90-days`, `this-month`,
    * `last-month`, `this-quarter`, `last-quarter`, `this-year`, `last-year`, `year-to-date`,
-   * `last-12-months`), or an array of `{ key, label?, start?, end? }` to relabel built-ins or add
-   * your own.
+   * `last-12-months`), or an array of `{ key, label?, startOffset?, endOffset?, start?, end? }` to
+   * relabel built-ins or add your own: `startOffset` and `endOffset` follow today, `start` and `end`
+   * are fixed days.
    */
   @Prop() presets?: string | DatepickerPreset[];
 

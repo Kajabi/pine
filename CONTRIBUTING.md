@@ -83,6 +83,8 @@ npm run size
 
 When a budget fails, the CLI prints each tracked file with its gzipped size and limit.
 
+The per-component budgets are tight on purpose: one component growing past its budget is worth a look. The `All CDN component chunks` budget is the total of every component, so ordinary feature work grows it a little each time. It is set about 10% above the measured total, so that a new component or prop fits but a sudden jump (a dependency bundled by mistake, a chunk duplicated) fails. Don't raise it in a feature PR to make room. When the headroom drops under about 3%, re-measure on `main` and reset it to about 10% above the total in a separate `chore` PR.
+
 ### Public API reports
 
 PR CI also enforces the published packages' public TypeScript surface against committed
@@ -151,6 +153,13 @@ To audit a Storybook you already have running, skip the static build:
 ```zsh
 npm run test.a11y -- --url http://localhost:6006
 ```
+
+For a quicker check, open the **Accessibility** tab in Storybook's bottom panel and
+press **Run accessibility scan** to audit the story you're viewing. It scans on
+demand, so it can't collide with the gate's own axe pass. Treat it as a fast
+signal, not a preview of CI: it reports raw axe output, without the page-level
+rules the gate disables (`landmark-one-main`, `page-has-heading-one`, `region`)
+or the repeat sampling the gate uses to filter out flicker.
 
 #### The baseline
 
