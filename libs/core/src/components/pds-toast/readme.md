@@ -29,7 +29,8 @@
 
 ### `dismiss() => Promise<void>`
 
-
+Dismisses the toast, as the dismiss button and `duration` do: plays the exit animation and emits `pdsToastDismissed`, and the toast
+gets `hidden` on the next render, after the event. Works even when `dismissible` is `false`. The toast stays in the DOM.
 
 #### Returns
 
@@ -40,9 +41,9 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part        | Description |
-| ----------- | ----------- |
-| `"dismiss"` |             |
+| Part        | Description                                                                      |
+| ----------- | -------------------------------------------------------------------------------- |
+| `"dismiss"` | Exposes the dismiss button for styling. Appears unless `dismissible` is `false`. |
 
 
 ## Dependencies

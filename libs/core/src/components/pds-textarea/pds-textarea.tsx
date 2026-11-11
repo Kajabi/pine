@@ -9,6 +9,7 @@ import { formatMessage } from '../../i18n';
 
 /**
  * @slot action - Content to be displayed in the label area, typically for help icons or links
+ * @part action - Exposes the wrapper around the `action` slot for styling. Appears only when the `action` slot has content.
  */
 @Component({
   tag: 'pds-textarea',

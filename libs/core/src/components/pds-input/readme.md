@@ -72,13 +72,13 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part        | Description |
-| ----------- | ----------- |
-| `"action"`  |             |
-| `"append"`  |             |
-| `"prefix"`  |             |
-| `"prepend"` |             |
-| `"suffix"`  |             |
+| Part        | Description                                                                                                  |
+| ----------- | ------------------------------------------------------------------------------------------------------------ |
+| `"action"`  | Exposes the wrapper around the `action` slot for styling. Appears only when the `action` slot has content.   |
+| `"append"`  | Exposes the wrapper around the `append` slot for styling. Appears only when the `append` slot has content.   |
+| `"prefix"`  | Exposes the wrapper around the `prefix` slot for styling. Appears only when the `prefix` slot has content.   |
+| `"prepend"` | Exposes the wrapper around the `prepend` slot for styling. Appears only when the `prepend` slot has content. |
+| `"suffix"`  | Exposes the wrapper around the `suffix` slot for styling. Appears only when the `suffix` slot has content.   |
 
 
 ## Dependencies
