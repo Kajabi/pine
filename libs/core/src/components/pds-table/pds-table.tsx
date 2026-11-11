@@ -56,7 +56,8 @@ export class PdsTable {
    * Sets how the table sizes its columns. With `auto`, each column is sized from its content,
    * so columns can change width when the rows change (for example after a sort). With `fixed`,
    * columns take the `width` set on their `pds-table-head-cell` and ignore their content;
-   * columns without a `width` share the remaining space.
+   * columns without a `width` share the remaining space. Content longer than its column overflows,
+   * so add `truncate` to cells whose content may not fit.
    * @defaultValue 'auto'
    */
   @Prop() tableLayout: 'auto' | 'fixed' = 'auto';
