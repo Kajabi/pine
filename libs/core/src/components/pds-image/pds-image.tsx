@@ -8,9 +8,9 @@ import type { ImageRatioType } from '@utils/types';
 })
 export class PdsImage {
   /**
-   * The image's alt tag. If none is provided,
-   * it will default to an empty string, which is desired for
-   * decorative images.
+   * The image's alt text. Defaults to an empty string, which marks the image
+   * as decorative and hides it from screen readers, so set it on any image
+   * that carries information.
    * @defaultValue ''
    */
   @Prop() alt? = '';
@@ -67,9 +67,9 @@ export class PdsImage {
   @Prop() srcset?: string
 
   /**
-   * The width of the image in pixels. Setting this will
-   * devote space in the layout to prevent layout
-   * shifts when the image is loaded.
+   * The width of the image in pixels. This reserves the image's width before it
+   * loads, but not its height: to reserve the height too, set
+   * `--dimension-aspect-ratio` to the image's own proportions.
    */
   @Prop() width?: number;
 

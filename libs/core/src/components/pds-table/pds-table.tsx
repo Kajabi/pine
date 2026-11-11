@@ -1,6 +1,15 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen } from '@stencil/core';
 import { getScrollOffsetFromStart } from '../../utils/scroll';
 
+/**
+ * @part responsive-container - Exposes the horizontal scroll container for styling. Appears only when `responsive` is set.
+ * @part responsive-table - Set on the `pds-table` element itself when `responsive` is set, so `::part(responsive-table)` matches it only from a shadow root that contains it. Style `pds-table` directly instead.
+ * @part responsive-wrapper - Exposes the wrapper inside the scroll container for styling. Appears only when `responsive` is set.
+ * @part scroll-shadow-left - Exposes the scroll shadow at the inline-start edge for styling. Appears only when `responsive` is set.
+ * @part scroll-shadow-right - Exposes the scroll shadow at the inline-end edge for styling. Appears only when `responsive` is set.
+ * @part table - Set on the `pds-table` element itself, so `::part(table)` matches it only from a shadow root that contains it. Style `pds-table` directly instead.
+ * @part table-inner - Exposes the inner table element around the slotted head and body for styling. Appears only when `responsive` is set.
+ */
 @Component({
   tag: 'pds-table',
   styleUrls: ['pds-table.scss'],

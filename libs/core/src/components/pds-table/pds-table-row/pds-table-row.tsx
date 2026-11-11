@@ -3,6 +3,10 @@ import { Component, Element, Host, h, Event, EventEmitter, Prop, State } from '@
 import { CheckboxChangeEventDetail } from '../../pds-checkbox/checkbox-interface';
 import { closest } from '../../../utils/closest';
 
+/**
+ * @part row - Set on the `pds-table-row` element itself, so `::part(row)` matches it only from a shadow root that contains it. Style `pds-table-row` directly instead.
+ * @part row-checkbox - Exposes the row's selection checkbox for styling. Appears only when the table is `selectable`.
+ */
 @Component({
   tag: 'pds-table-row',
   styleUrls: ['pds-table-row.scss'],
