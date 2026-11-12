@@ -104,8 +104,12 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
 
         let dark: Token | null = null;
         if (tier === 'semantic') {
-          const darkModule = await import('../../../../../node_modules/@kajabi-ui/styles/dist/tokens/semantic-dark.json');
-          dark = (darkModule.default[category as keyof typeof darkModule.default] as Token | undefined) ?? null;
+          try {
+            const darkModule = await import('../../../../../node_modules/@kajabi-ui/styles/dist/tokens/semantic-dark.json');
+            dark = (darkModule.default[category as keyof typeof darkModule.default] as Token | undefined) ?? null;
+          } catch (error) {
+            console.error('Error loading dark token JSON:', error);
+          }
         }
 
         if (cancelled) return;
