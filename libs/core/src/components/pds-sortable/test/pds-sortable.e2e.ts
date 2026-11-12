@@ -125,10 +125,11 @@ describe('pds-sortable keyboard reordering', () => {
       </pds-sortable>`);
     // The detail holds elements, which don't serialize out of the page, so keep the indexes.
     await page.$eval('pds-sortable', (el) => {
-      (window as any).moves = [];
+      const recorded: Record<string, unknown>[] = [];
+      (window as unknown as { moves: Record<string, unknown>[] }).moves = recorded;
       el.addEventListener('pdsSortableItemMoved', (ev: CustomEvent) => {
         const { oldIndex, newIndex, oldDraggableIndex, newDraggableIndex, item, from, to } = ev.detail;
-        (window as any).moves.push({
+        recorded.push({
           oldIndex,
           newIndex,
           oldDraggableIndex,
@@ -138,7 +139,8 @@ describe('pds-sortable keyboard reordering', () => {
         });
       });
     });
-    const moved = () => page.evaluate(() => (window as any).moves);
+    const moved = () =>
+      page.evaluate(() => (window as unknown as { moves: Record<string, unknown>[] }).moves);
     const order = () => page.$$eval('pds-sortable-item', (items) => items.map((item) => item.textContent?.trim()));
     const announcement = () => page.$eval('.pds-sortable__live-region', (region) => region.textContent?.trim());
     const focusedText = () =>
