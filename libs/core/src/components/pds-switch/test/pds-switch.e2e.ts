@@ -219,6 +219,17 @@ describe('pds-switch form value', () => {
   const submitted = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
     page.$eval('form', (form: HTMLFormElement) => new FormData(form).getAll('notify'));
 
+  it('submits under a name set as a property, and as an attribute the way the React wrapper sets it', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-switch id="prop" component-id="prop" checked></pds-switch><pds-switch id="attr" component-id="attr" name="viaAttribute" checked></pds-switch></form>');
+
+    await page.$eval('#prop', (el: HTMLPdsSwitchElement) => (el.name = 'notify'));
+    await page.waitForChanges();
+
+    expect(await submitted(page)).toEqual(['on']);
+    expect(await page.$eval('form', (form: HTMLFormElement) => new FormData(form).getAll('viaAttribute'))).toEqual(['on']);
+  });
+
   it('submits nothing while unchecked without unchecked-value', async () => {
     const page = await newE2EPage();
     await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify"></pds-switch></form>');
@@ -255,6 +266,19 @@ describe('pds-switch form value', () => {
     await page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => (el.uncheckedValue = 'off'));
     await page.waitForChanges();
     expect(await submitted(page)).toEqual(['off']);
+  });
+
+  it('submits nothing while disabled through the property, as React sets it', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify" value="1" unchecked-value="0" checked></pds-switch></form>');
+
+    await page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => (el.disabled = true));
+    await page.waitForChanges();
+    expect(await submitted(page)).toEqual([]);
+
+    await page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => (el.disabled = false));
+    await page.waitForChanges();
+    expect(await submitted(page)).toEqual(['1']);
   });
 
   it('submits nothing while disabled, even with unchecked-value', async () => {

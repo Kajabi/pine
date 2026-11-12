@@ -323,7 +323,17 @@ describe('pds-switch', () => {
     expect(page.root.disabled).toBe(false);
   });
   describe('unchecked-value', () => {
+    // updateFormValue skips ElementInternals in spec tests, so these check the value it would set; the e2e checks FormData.
     const formValue = (page: SpecPage) => (page.rootInstance as unknown as { formValue: () => string | null }).formValue();
+
+    it('submits nothing while disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<pds-switch component-id="notify" name="notify" label="Notify" unchecked-value="0" checked disabled></pds-switch>`,
+      });
+
+      expect(formValue(page)).toBeNull();
+    });
 
     it('submits nothing while unchecked when unset', async () => {
       const page = await newSpecPage({
