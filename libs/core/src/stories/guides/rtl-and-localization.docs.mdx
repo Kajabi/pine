@@ -11,7 +11,7 @@ Pine targets **English-first** product surfaces today. Components are built to w
 
 - **Layout inside components.** Logical properties flip padding, margins, borders and alignment with `dir`. In a right-to-left page, `pds-alert` shows its icon on the right, and a `pds-box` offset pushes the column in from the right.
 - **Directional icons.** Pine's directional icons, such as `arrow-right`, mirror on their own when they're set by `name` and the `dir` on `<html>` is `rtl`. Inside a `dir="rtl"` section of a left-to-right page, or for an icon passed to `icon` in React, add `flip-rtl` to mirror it. See the Right-to-left section of <pds-link href="../?path=/docs/components-icon--docs">Icon</pds-link>.
-- **Overlay alignment.** A `pds-popover` placement that ends in `-start` lines the content up with the trigger's right edge in right-to-left text.
+- **Overlay alignment.** In a page whose `<html>` has `dir="rtl"`, the `pds-popover` placements `top-start` and `bottom-start` line the panel up with the trigger's right edge, and `top-end` and `bottom-end` with its left edge. The `left-*` and `right-*` placements don't change.
 
 ## What you own
 
@@ -63,6 +63,7 @@ Some components show text, or give screen readers text, that you don't write you
 
 - **Table shadows in Firefox and Safari.** `pds-table` flips the shadows on its fixed column and scroll edges with the CSS `:host-context()` selector, which only Chromium-based browsers support. In Firefox and Safari those shadows keep pointing the left-to-right way in a right-to-left table.
 - **The loading button's text.** A `pds-button` with `loading` gives screen readers the English word "Loading..." after its label, and has no prop to translate it.
+- **Popovers in a right-to-left section.** A `pds-popover` panel isn't rendered inside the popover. On a page with no open dialog it goes at the end of `<body>`, so it doesn't pick up the direction of a `dir="rtl"` section. In a left-to-right page, its placement doesn't mirror and its text runs left to right. Set `dir="rtl"` on `<html>` instead.
 - **Icons mirror once.** Automatic mirroring is decided when the icon renders, so a directional icon already on the page doesn't mirror if `dir` changes to `rtl` afterward.
 
 ## Verifying in Storybook
