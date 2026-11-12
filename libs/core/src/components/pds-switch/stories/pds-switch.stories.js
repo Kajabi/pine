@@ -128,15 +128,13 @@ const showFormData = (event) => {
   const form = event.target.closest('form');
   const output = form?.querySelector('output');
   if (!form || !output) return;
-  // The switch updates its form value after the change event, so read it once that's done.
-  requestAnimationFrame(() => {
-    const entries = Array.from(new FormData(form).entries());
-    output.textContent = entries.length > 0 ? entries.map(([key, value]) => `${key}=${value}`).join('&') : '(nothing)';
-  });
+  // The switch sets its form value before it emits pdsSwitchChange, so FormData is already current here.
+  const entries = Array.from(new FormData(form).entries());
+  output.textContent = entries.length > 0 ? entries.map(([key, value]) => `${key}=${value}`).join('&') : '(nothing)';
 };
 
 const submitted = ({ checked, name, uncheckedValue, value }) => {
-  if (checked) return `${name}=${value ?? 'on'}`;
+  if (checked) return `${name}=${value || 'on'}`;
   return uncheckedValue === undefined ? '(nothing)' : `${name}=${uncheckedValue}`;
 };
 
