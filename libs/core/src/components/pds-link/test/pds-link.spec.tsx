@@ -297,12 +297,17 @@ describe('pds-link', () => {
       }
     });
 
-    it('hides the icon when target keeps the link in the same tab', async () => {
+    it('shows a decorative icon and stays in the same tab when target is _self', async () => {
       const { root } = await newSpecPage({
         components: [PdsLink],
         html: `<pds-link href="#" external="true" target="_self">Docs</pds-link>`,
       });
+      const anchor = root?.shadowRoot?.querySelector('a');
+      expect(anchor?.getAttribute('target')).toBe('_self');
+      expect(anchor?.hasAttribute('rel')).toBe(false);
+
       const icon = root?.shadowRoot?.querySelector('pds-icon');
+      expect(icon).not.toBeNull();
       expect(icon?.hasAttribute('aria-label')).toBe(false);
       expect(icon?.getAttribute('aria-hidden')).toBe('true');
     });
