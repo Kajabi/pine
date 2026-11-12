@@ -12,6 +12,11 @@ import { danger } from '@pine-ds/icons/icons';
  * @slot prepend - Content to be displayed before the input field
  * @slot suffix - Content that is displayed visually within the input field after the input field
  * @slot action - Content to be displayed in the label area, typically for help icons or links
+ * @part action - Exposes the wrapper around the `action` slot for styling. Appears only when the `action` slot has content.
+ * @part append - Exposes the wrapper around the `append` slot for styling. Appears only when the `append` slot has content.
+ * @part prefix - Exposes the wrapper around the `prefix` slot for styling. Appears only when the `prefix` slot has content.
+ * @part prepend - Exposes the wrapper around the `prepend` slot for styling. Appears only when the `prepend` slot has content.
+ * @part suffix - Exposes the wrapper around the `suffix` slot for styling. Appears only when the `suffix` slot has content.
  */
 @Component({
   tag: 'pds-input',

@@ -15,27 +15,25 @@ Text renders content using configurable semantic HTML tags for headings or body 
 
 ## Guidelines
 
+### When to use
+
+- Headings, with `tag="h1"` through `tag="h6"`.
+- Paragraphs and other body copy, with `tag="p"` (the default).
+- Inline emphasis, with `tag="em"` or `tag="strong"`.
+- Code, with `tag="code"` for inline code or `tag="pre"` for a preformatted block.
+
+### When not to use
+
+- Form field labels: use the `label` prop on the form component, such as `pds-input` or `pds-select`.
+- Navigation to another page or location: use `pds-link`.
+- Actions such as saving or opening a dialog: use `pds-button`.
+
 ### Accessibility
 
-Correct semantic tag usage is important for SEO as well as accessibility. Be sure to use the correct tag for semantic and hierarchical purposes and *not* for styling purposes. For example, if an `h2` needs to be bigger, use the `size` property to change the font size instead of changing the tag to `h1`. For more information, see the References section below.
-
-Be sure to not skip heading levels. Users of assistive technology rely on heading levels to determine page content. Skipping these levels may cause confusion.
-
-### `em` vs `strong`
-
-It's important to be aware of the semantic differences between the `em` and `strong` tags. `em` is used to emphasize a selection of text, while `strong` is used to indicate a selection of text is of strong importance or urgency. They should not be used interchangeably.
-
-## Usage Notes
-
-### Intended Use
-
-Use this component for general text content, headings, paragraphs, and other semantic text elements. It's not intended for input field labels - use the `label` prop on input components instead.
-
-### Common Use Cases
-
-- Headings: Use with `tag="h1"` through `tag="h6"`
-- Body Text: Use with `tag="p"` for paragraphs
-- Emphasis: Use with `tag="strong"` or `tag="em"` for emphasis
+- Choose the tag for the page's structure, not for its look. Correct tags matter for search engines as well as assistive technology. If an `h2` needs to be bigger, raise `size` instead of changing the tag to `h1` (see [Font Size](#font-size)).
+- Don't skip heading levels. People using assistive technology move through a page by its headings, so a skipped level can make them think they missed a section.
+- Don't use `em` and `strong` interchangeably. `em` stresses part of a sentence, which can change its meaning. `strong` marks text as important, serious or urgent.
+- For more on semantic tags, see Additional Resources.
 
 ## Properties
 
@@ -75,8 +73,8 @@ Text can be aligned to the start, center, end, or justified.
 
   display="block"
   mdxSource={{
-    react: '<PdsText align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</PdsText>',
-    webComponent: '<pds-text align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</pds-text>'
+    react: `<PdsText align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</PdsText>`,
+    webComponent: `<pds-text align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</pds-text>`
 }}>
   <pds-text align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</pds-text>
 </DocCanvas>
@@ -149,8 +147,8 @@ The `size` prop changes the font size without changing the tag. It accepts two s
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsText size="2xl" tag="p">Hello World!</PdsText>',
-    webComponent: '<pds-text size="2xl" tag="p">Hello World!</pds-text>'
+    react: `<PdsText size="2xl" tag="p">Hello World!</PdsText>`,
+    webComponent: `<pds-text size="2xl" tag="p">Hello World!</pds-text>`
 }}>
   <pds-text size="2xl" tag="p">Hello World!</pds-text>
 </DocCanvas>
@@ -159,8 +157,8 @@ To make a heading bigger, keep the tag that fits the page's heading outline and 
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsText tag="h2" size="h1">Section title</PdsText>',
-    webComponent: '<pds-text tag="h2" size="h1">Section title</pds-text>'
+    react: `<PdsText tag="h2" size="h1">Section title</PdsText>`,
+    webComponent: `<pds-text tag="h2" size="h1">Section title</pds-text>`
 }}>
   <pds-text tag="h2" size="h1">Section title</pds-text>
 </DocCanvas>
@@ -171,8 +169,8 @@ Font weight can be set to common font weight values.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsText weight="bold" tag="p">Hello World!</PdsText>',
-    webComponent: '<pds-text weight="bold" tag="p">Hello World!</pds-text>'
+    react: `<PdsText weight="bold" tag="p">Hello World!</PdsText>`,
+    webComponent: `<pds-text weight="bold" tag="p">Hello World!</pds-text>`
 }}>
   <pds-text weight="bold" tag="p">Hello World!</pds-text>
 </DocCanvas>

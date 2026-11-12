@@ -86,8 +86,8 @@ Datepicker captures a date, or with `range` a start and end date, as an ISO `YYY
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsDatepicker componentId="pds-datepicker-default-example" label="Due date"></PdsDatepicker>',
-    webComponent: '<pds-datepicker component-id="pds-datepicker-default-example" label="Due date"></pds-datepicker>'
+    react: `<PdsDatepicker componentId="pds-datepicker-default-example" label="Due date"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-default-example" label="Due date"></pds-datepicker>`
 }}>
   <pds-datepicker component-id="pds-datepicker-default-example" label="Due date"></pds-datepicker>
 </DocCanvas>
@@ -98,8 +98,8 @@ Days outside `min` and `max` are shown but can't be picked, and the keyboard sto
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsDatepicker componentId="pds-datepicker-min-max-example" label="Delivery date" helperMessage="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></PdsDatepicker>',
-    webComponent: '<pds-datepicker component-id="pds-datepicker-min-max-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>'
+    react: `<PdsDatepicker componentId="pds-datepicker-min-max-example" label="Delivery date" helperMessage="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-min-max-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>`
 }}>
   <pds-datepicker component-id="pds-datepicker-min-max-example" label="Delivery date" helper-message="Pick a day between October 5 and November 20." min="2026-10-05" max="2026-11-20" value="2026-10-13"></pds-datepicker>
 </DocCanvas>
@@ -124,8 +124,8 @@ The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`; `--MM-DD` with `mo
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsDatepicker componentId="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></PdsDatepicker>',
-    webComponent: '<pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>'
+    react: `<PdsDatepicker componentId="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>`
 }}>
   <pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>
 </DocCanvas>
@@ -138,8 +138,8 @@ In the calendar, the first pick starts the range and the second ends it; until t
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsDatepicker componentId="pds-datepicker-range-mode-example" label="Period" range value="2026-09-13/2026-10-13"></PdsDatepicker>',
-    webComponent: '<pds-datepicker component-id="pds-datepicker-range-mode-example" label="Period" range value="2026-09-13/2026-10-13"></pds-datepicker>'
+    react: `<PdsDatepicker componentId="pds-datepicker-range-mode-example" label="Period" range value="2026-09-13/2026-10-13"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-range-mode-example" label="Period" range value="2026-09-13/2026-10-13"></pds-datepicker>`
 }}>
   <pds-datepicker component-id="pds-datepicker-range-mode-example" label="Period" range value="2026-09-13/2026-10-13"></pds-datepicker>
 </DocCanvas>
@@ -177,8 +177,8 @@ Prefer the offsets for anything meant to stay relative. Fixed days never move, s
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsDatepicker componentId="pds-datepicker-auto-apply-example" label="Period" range autoApply presets="today,last-7-days,last-30-days"></PdsDatepicker>',
-    webComponent: '<pds-datepicker component-id="pds-datepicker-auto-apply-example" label="Period" range auto-apply presets="today,last-7-days,last-30-days"></pds-datepicker>'
+    react: `<PdsDatepicker componentId="pds-datepicker-auto-apply-example" label="Period" range autoApply presets="today,last-7-days,last-30-days"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-auto-apply-example" label="Period" range auto-apply presets="today,last-7-days,last-30-days"></pds-datepicker>`
 }}>
   <pds-datepicker component-id="pds-datepicker-auto-apply-example" label="Period" range auto-apply presets="today,last-7-days,last-30-days"></pds-datepicker>
 </DocCanvas>
@@ -249,8 +249,8 @@ The field starts empty when there's no `value`. `clearable` adds a button in the
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsDatepicker componentId="pds-datepicker-invalid-example" label="Due date" invalid errorMessage="Choose a date after today." value="2026-10-13"></PdsDatepicker>',
-    webComponent: '<pds-datepicker component-id="pds-datepicker-invalid-example" label="Due date" invalid error-message="Choose a date after today." value="2026-10-13"></pds-datepicker>'
+    react: `<PdsDatepicker componentId="pds-datepicker-invalid-example" label="Due date" invalid errorMessage="Choose a date after today." value="2026-10-13"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-invalid-example" label="Due date" invalid error-message="Choose a date after today." value="2026-10-13"></pds-datepicker>`
 }}>
   <pds-datepicker component-id="pds-datepicker-invalid-example" label="Due date" invalid error-message="Choose a date after today." value="2026-10-13"></pds-datepicker>
 </DocCanvas>
@@ -261,8 +261,8 @@ For a date people can see but not change, set `readonly` instead. The date shows
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsDatepicker componentId="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></PdsDatepicker>',
-    webComponent: '<pds-datepicker component-id="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></pds-datepicker>'
+    react: `<PdsDatepicker componentId="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></pds-datepicker>`
 }}>
   <pds-datepicker component-id="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></pds-datepicker>
 </DocCanvas>

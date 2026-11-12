@@ -98,7 +98,7 @@ const ImageTemplate = (args) =>
     value=${args.value}
     ?invalid=${args.invalid}
   >
-    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="circle" padding="sm">
       <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
     </pds-box>
   </pds-radio>`;

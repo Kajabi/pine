@@ -63,9 +63,9 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part       | Description |
-| ---------- | ----------- |
-| `"action"` |             |
+| Part       | Description                                                                                                |
+| ---------- | ---------------------------------------------------------------------------------------------------------- |
+| `"action"` | Exposes the wrapper around the `action` slot for styling. Appears only when the `action` slot has content. |
 
 
 ## Dependencies
