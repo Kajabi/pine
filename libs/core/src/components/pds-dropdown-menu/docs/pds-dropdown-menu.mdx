@@ -391,7 +391,7 @@ Menu items can function as links by using the href attribute.
 
 ### With External Links
 
-Set `external` on a link item to show the launch icon and open the link in a new tab. Screen readers hear "(opens in a new tab)" after the item's text; pass a translated `externalLabel` to localize it, or an empty string to make the icon decorative.
+Set `external` on a link item to show the launch icon and open the link in a new tab. Screen readers hear "(opens in a new tab)" after the item's text; pass a translated `externalLabel` to localize it. Pass an empty string to make the icon decorative only when the item's text already says it opens in a new tab.
 
 <DocCanvas
   mdxSource={{
@@ -426,7 +426,7 @@ Set `external` on a link item to show the launch icon and open the link in a new
 </div>
 </DocCanvas>
 
->**Note:** `target` overrides the new-tab default of `external`, and the icon still shows. Pair `external` with `target="_self"` to show the icon on an item that opens in the same tab; the icon is then decorative, and screen readers don't hear "(opens in a new tab)". Use `target` alone for `_parent` or `_top`. `target="_blank"` alone opens a new tab with no icon and no label, so use `external` for new tabs.
+>**Note:** `target` overrides the new-tab default of `external`, and the icon still shows. Pair `external` with `target="_self"` to show the icon on an item that opens in the same tab; the icon is then hidden from screen readers, they don't hear "(opens in a new tab)", and `externalLabel` is ignored. Read "External in the same tab" in the <pds-link href="../?path=/docs/components-link--docs">Link docs</pds-link> before using this pattern. Use `target` alone for `_parent` or `_top`. `target="_blank"` alone opens a new tab with no icon and no label, so use `external` for new tabs.
 
 ### With Informational Items
 

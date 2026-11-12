@@ -62,7 +62,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   /**
    * Accessible label for the icon that `external` shows, passed to the inner
    * `pds-link` and appended to the item's name. It isn't announced when
-   * `target` keeps the link in the same tab. Pass a translated string to
+   * `target` is anything other than `_blank`. Pass a translated string to
    * localize it; defaults to English. Pass an empty string to make the icon
    * decorative.
    * @defaultValue '(opens in a new tab)'
