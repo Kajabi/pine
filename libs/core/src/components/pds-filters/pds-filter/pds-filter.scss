@@ -164,6 +164,7 @@
   border: 0;
   border-radius: var(--pine-dimension-100);
   box-shadow: var(--pine-box-shadow-100);
+  box-sizing: border-box;
   display: none;
   inline-size: 228px;
   inset: unset;
