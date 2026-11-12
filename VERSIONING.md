@@ -136,7 +136,6 @@ Live examples of this pattern in the codebase:
 | --- | --- | --- |
 | `pds-chip` | `large` prop | `size="lg"` |
 | `pds-button` | `icon` prop | `start` slot |
-| `pds-link` | `external` prop | `target` prop |
 
 ## Migration notes
 
