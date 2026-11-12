@@ -45,12 +45,16 @@ export class PdsTextarea {
   @Event() pdsFocus!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when the value changes from user input (typing, paste, autofill).
+   * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one.
+   * `detail` has `value`, the current text, and `event`, the native `input` event.
+   *
+   * This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsInput: EventEmitter<TextareaInputEventDetail>;
 
   /**
-   * Emitted when the user changes the value and then leaves the textarea.
+   * Emitted when the user changes the value and then leaves the textarea. `Enter` adds a new line, so it doesn't emit this event.
+   * `detail` has `value`, the text, and `event`, the native event behind it, usually `change`.
    *
    * This event will not emit when programmatically setting the `value` property.
    */

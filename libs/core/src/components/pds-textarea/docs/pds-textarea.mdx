@@ -240,42 +240,6 @@ The action slot allows you to add helpful content next to the textarea label, su
   </pds-textarea>
 </DocCanvas>
 
-## Events
-
-None of these events fire when `value` is set in code. In React, add `on` to the event name, as in `onPdsTextareaChange`.
-
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="textarea-events">
-    <pds-table-head>
-      <pds-table-head-cell>Event</pds-table-head-cell>
-      <pds-table-head-cell>Emitted when</pds-table-head-cell>
-      <pds-table-head-cell>Detail</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>pdsInput</code></pds-table-cell>
-        <pds-table-cell>After each <code>input</code> event, such as typing. With <code>debounce</code>, once that many milliseconds have passed since the last one.</pds-table-cell>
-        <pds-table-cell>An object with <code>value</code>, the current text, and <code>event</code>, the native <code>input</code> event.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsTextareaChange</code></pds-table-cell>
-        <pds-table-cell>The user changes the text and then leaves the field. <code>Enter</code> adds a new line, so it doesn't emit this event.</pds-table-cell>
-        <pds-table-cell>An object with <code>value</code>, the text, and <code>event</code>, the native event behind it, usually <code>change</code>.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsFocus</code>, <code>pdsBlur</code></pds-table-cell>
-        <pds-table-cell>The textarea gains or loses focus.</pds-table-cell>
-        <pds-table-cell>The native <code>focus</code> or <code>blur</code> event.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsKeyDown</code></pds-table-cell>
-        <pds-table-cell>A key is pressed in the textarea.</pds-table-cell>
-        <pds-table-cell>The native <code>keydown</code> event.</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
-
 ## Form Integration
 
 - Provide a `name` so the textarea's value is included in `FormData` and server submissions.
