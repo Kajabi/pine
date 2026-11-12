@@ -35,7 +35,7 @@ out of the quality dashboards.
 convention). Point the CLI at the docs domain and it installs this skill into
 whichever agent you use (Claude Code, Cursor, Copilot, …):
 ```bash
-npx skills add https://<pine-docs-domain>
+npx skills add https://pine-design-system.netlify.app
 ```
 
 **Manual install.** Copy `skills/pine/` into your repo's skills directory (e.g.
