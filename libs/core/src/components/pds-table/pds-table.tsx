@@ -203,6 +203,15 @@ export class PdsTable {
 
     if (autoCells.length === 0) return;
 
+    // A selectable table's select-all column lives in pds-table-head's shadow root, out of reach
+    // of the query above, and its width is a token rather than a px value -- so measure it.
+    if (this.selectable) {
+      const selectAllCell = this.el
+        .querySelector('pds-table-head')
+        ?.shadowRoot?.querySelector('pds-table-head-cell') as HTMLElement | null;
+      explicitWidthPx += selectAllCell?.getBoundingClientRect().width ?? 0;
+    }
+
     const measureEl = this.responsive
       ? (this.el.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement | null)
       : this.el;

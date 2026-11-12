@@ -184,6 +184,37 @@ describe('pds-table column widths', () => {
     expect(container.scrollWidth).toBe(618);
   });
 
+  it('counts the select-all column when flooring an auto column in a selectable table', async () => {
+    const page = await newE2EPage();
+    // 440px leaves the auto column 140px if the select-all column is ignored, but only 92px once
+    // its 48px is taken out -- below the 120px floor.
+    await page.setContent(`
+      <div style="width: 440px">
+        <pds-table component-id="selectable-floor" table-layout="fixed" responsive selectable>
+          <pds-table-head>
+            <pds-table-head-cell width="300px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([300, 120]);
+    const container = await page.evaluate(() => {
+      const el = document.querySelector('pds-table').shadowRoot.querySelector('.pds-table-responsive-container');
+      return { scrollWidth: el.scrollWidth, clientWidth: el.clientWidth };
+    });
+    expect(container.clientWidth).toBe(440);
+    expect(container.scrollWidth).toBe(468);
+  });
+
   it('grows the auto column back once resizing gives it room again', async () => {
     const page = await newE2EPage();
     await page.setContent(`
