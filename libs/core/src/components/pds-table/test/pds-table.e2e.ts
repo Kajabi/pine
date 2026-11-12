@@ -151,6 +151,72 @@ describe('pds-table column widths', () => {
     expect(container.scrollWidth).toBe(400);
   });
 
+  it('floors an auto column instead of squeezing it when the explicit-width columns already fill a narrow container', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="floor" table-layout="fixed" responsive>
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+            <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell>Mar 4, 2024</pds-table-cell>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
+    const container = await page.evaluate(() => {
+      const el = document.querySelector('pds-table').shadowRoot.querySelector('.pds-table-responsive-container');
+      return { scrollWidth: el.scrollWidth, clientWidth: el.clientWidth };
+    });
+    expect(container.clientWidth).toBe(343);
+    expect(container.scrollWidth).toBe(618);
+  });
+
+  it('grows the auto column back once resizing gives it room again', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="resizable" style="width: 343px">
+        <pds-table component-id="grows-back" table-layout="fixed" responsive>
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+            <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell>Mar 4, 2024</pds-table-cell>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+    expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
+
+    await page.evaluate(() => {
+      document.getElementById('resizable').style.width = '700px';
+    });
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([148, 134, 216, 202]);
+  });
+
   it('gives fixed-layout columns their widths in a right-to-left table', async () => {
     const page = await newE2EPage();
     await page.setContent(`<div dir="rtl">${table('table-layout="fixed"', [[LONG, 'Active', 'Short']])}</div>`);

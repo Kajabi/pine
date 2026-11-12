@@ -269,6 +269,8 @@ export class PdsTableHeadCell {
 
     if (this.width) {
       classNames.push('has-width');
+    } else if (this.tableRef && this.tableRef.tableLayout === 'fixed') {
+      classNames.push('has-auto-width');
     }
 
     return classNames.join(' ');

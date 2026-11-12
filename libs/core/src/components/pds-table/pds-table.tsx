@@ -1,6 +1,12 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen } from '@stencil/core';
 import { getScrollOffsetFromStart } from '../../utils/scroll';
 
+// A column with no width of its own, under table-layout: fixed, otherwise shares whatever's left
+// after the explicit-width columns -- which can go to nothing on a narrow viewport. Below this,
+// it keeps this floor instead, and the table grows wider (scrollable under `responsive`) rather
+// than squeeze it further.
+const AUTO_COLUMN_FLOOR_WIDTH_PX = 120;
+
 /**
  * @part responsive-container - Exposes the horizontal scroll container for styling. Appears only when `responsive` is set.
  * @part responsive-table - Set on the `pds-table` element itself when `responsive` is set, so `::part(responsive-table)` matches it only from a shadow root that contains it. Style `pds-table` directly instead.
@@ -22,6 +28,8 @@ export class PdsTable {
   private _responsiveHandleResize: (() => void) | null = null;
   private _responsiveResizeObserver: ResizeObserver | null = null;
   private _teardownResponsive: (() => void) | null = null;
+  private _fixedLayoutResizeObserver: ResizeObserver | null = null;
+  private _fixedLayoutHandleResize: (() => void) | null = null;
 
   /**
    * Determines if the table displays with reduced table cell padding.
@@ -65,8 +73,9 @@ export class PdsTable {
    * Sets how the table sizes its columns. With `auto`, each column is sized from its content,
    * so columns can change width when the rows change (for example after a sort). With `fixed`,
    * columns take the `width` set on their `pds-table-head-cell` and ignore their content;
-   * columns without a `width` share the remaining space. Content longer than its column overflows,
-   * so add `truncate` to cells whose content may not fit.
+   * columns without a `width` share the remaining space, down to a 120px floor on narrow
+   * viewports where the other columns' widths already fill it. Content longer than its column
+   * overflows, so add `truncate` to cells whose content may not fit.
    * @defaultValue 'auto'
    */
   @Prop() tableLayout: 'auto' | 'fixed' = 'auto';
@@ -106,6 +115,10 @@ export class PdsTable {
   componentDidLoad() {
     if (this.responsive) {
       this.setupResponsiveScrolling();
+    }
+
+    if (this.tableLayout === 'fixed') {
+      this.setupFixedLayoutWidths();
     }
 
     // Apply default sort if specified
@@ -156,6 +169,86 @@ export class PdsTable {
       this._teardownResponsive();
       this._teardownResponsive = null;
     }
+
+    this.teardownFixedLayoutWidths();
+  }
+
+  /**
+   * Measures the explicit-width columns against the available space and gives the columns with
+   * no `width` of their own (which otherwise share whatever's left) a floor so none of them
+   * squeeze below `AUTO_COLUMN_FLOOR_WIDTH_PX`. Re-run on resize, since the available space -- the
+   * responsive container's width, or the table's own width otherwise -- can change after load.
+   * @private
+   */
+  private recalcAutoColumnWidths = () => {
+    if (this.tableLayout !== 'fixed') return;
+
+    const headCells = Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[];
+    const autoCells: HTMLPdsTableHeadCellElement[] = [];
+    let explicitWidthPx = 0;
+
+    for (const cell of headCells) {
+      const width = cell.getAttribute('width');
+      if (!width) {
+        autoCells.push(cell);
+        continue;
+      }
+
+      const px = parseFloat(width);
+      // Only a plain px width is measurable here; a %, rem, or other unit opts the table out of
+      // the floor calc rather than have it guess at a pixel budget.
+      if (!width.endsWith('px') || Number.isNaN(px)) return;
+      explicitWidthPx += px;
+    }
+
+    if (autoCells.length === 0) return;
+
+    const measureEl = this.responsive
+      ? (this.el.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement | null)
+      : this.el;
+    const availableWidth = measureEl?.clientWidth ?? 0;
+    const sharePerAutoColumn = (availableWidth - explicitWidthPx) / autoCells.length;
+    const needsFloor = sharePerAutoColumn < AUTO_COLUMN_FLOOR_WIDTH_PX;
+
+    autoCells.forEach((cell) => {
+      if (needsFloor) {
+        cell.style.setProperty('--pds-table-head-cell-auto-floor-width', `${AUTO_COLUMN_FLOOR_WIDTH_PX}px`);
+      } else {
+        cell.style.removeProperty('--pds-table-head-cell-auto-floor-width');
+      }
+    });
+  };
+
+  private setupFixedLayoutWidths() {
+    this.recalcAutoColumnWidths();
+
+    if (typeof window === 'undefined') return;
+
+    this._fixedLayoutHandleResize = () => this.recalcAutoColumnWidths();
+
+    if (window.ResizeObserver) {
+      try {
+        this._fixedLayoutResizeObserver = new ResizeObserver(this._fixedLayoutHandleResize);
+        this._fixedLayoutResizeObserver.observe(this.el);
+      } catch (error) {
+        // ResizeObserver not available in some environments (e.g., tests); window resize still covers it.
+      }
+    }
+
+    window.addEventListener('resize', this._fixedLayoutHandleResize);
+  }
+
+  private teardownFixedLayoutWidths() {
+    if (this._fixedLayoutResizeObserver) {
+      this._fixedLayoutResizeObserver.disconnect();
+      this._fixedLayoutResizeObserver = null;
+    }
+
+    if (typeof window !== 'undefined' && this._fixedLayoutHandleResize) {
+      window.removeEventListener('resize', this._fixedLayoutHandleResize);
+    }
+
+    this._fixedLayoutHandleResize = null;
   }
 
   /**
@@ -357,7 +450,7 @@ export class PdsTable {
     if (this.responsive) {
       return (
         <Host
-          class="pds-table is-responsive pds-table-responsive-host"
+          class={`${this.classNames()} pds-table-responsive-host`}
           id={this.componentId}
           role="grid"
           selectable={this.selectable}
