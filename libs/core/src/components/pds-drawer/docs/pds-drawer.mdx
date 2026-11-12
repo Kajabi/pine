@@ -34,6 +34,7 @@ behavior a side panel needs.
 
 ### Accessibility
 
+- Name the drawer: its dialog is labelled by the element with the id `{component-id}-heading`, modal or not, so give the drawer's heading that id.
 - A drawer moves focus to its first control when it opens, unless it's non-modal with `initial-focus="none"`.
 - In a non-modal drawer, Tab isn't trapped, so focus moves freely between the drawer and the page. A `modal` drawer keeps focus inside it and makes the page inert.
 - Escape closes a non-modal drawer from anywhere on the page, not only from inside it. It doesn't when focus is in a dialog or overlay stacked above the drawer, or when an open control, such as a dropdown menu, closes on that Escape first.
@@ -55,7 +56,9 @@ Unlike the modal's subcomponents, these add their own padding and layout, so the
 
 ```html
 <pds-drawer open component-id="automation-settings" side="end" size="md">
-  <pds-drawer-header>…</pds-drawer-header>
+  <pds-drawer-header>
+    <pds-text tag="h2" size="h4" id="automation-settings-heading">Automation settings</pds-text>
+  </pds-drawer-header>
   <pds-drawer-content>…</pds-drawer-content>
   <pds-drawer-footer>…</pds-drawer-footer>
 </pds-drawer>
@@ -91,8 +94,6 @@ them, add `modal`. A modal drawer dims the page with a backdrop, makes the page
 inert, and keeps focus inside the drawer, like `pds-modal`. It still docks to
 its `side` at its `size`.
 
-- Name it: the dialog is labelled by the element with the id
-  `{component-id}-heading`, so give the drawer's heading that id.
 - Always include a close control. With `light-dismiss="false"`, Escape and the
   backdrop don't close it, so the close control is the only way out.
 - `modal` is read when the drawer opens. Set it before opening, not while open.
