@@ -217,13 +217,15 @@ describe('pds-table column widths', () => {
 
   it('floors an auto column against a non-px explicit width, measured from layout', async () => {
     const page = await newE2EPage();
-    // 20% of 400px is 80px, leaving the auto column 320px -- plenty of room, so this only proves
-    // the explicit column is measured rather than skipped for not being a plain px value.
+    // 20rem is 320px of a 400px container, leaving the auto column only 80px -- below the floor.
+    // If the explicit column's width went unmeasured (treated as 0 instead of being read from
+    // layout), the auto column would wrongly see the full 400px and never floor, so this actually
+    // distinguishes the fix from the bug, unlike a wide-open percentage width would.
     await page.setContent(`
       <div style="width: 400px">
-        <pds-table component-id="percent-width" table-layout="fixed" responsive>
+        <pds-table component-id="rem-width" table-layout="fixed" responsive>
           <pds-table-head>
-            <pds-table-head-cell width="20%">Status</pds-table-head-cell>
+            <pds-table-head-cell width="20rem">Status</pds-table-head-cell>
             <pds-table-head-cell>Name</pds-table-head-cell>
           </pds-table-head>
           <pds-table-body>
@@ -237,7 +239,7 @@ describe('pds-table column widths', () => {
     `);
     await page.waitForChanges();
 
-    expect(await headWidths(page)).toEqual([80, 320]);
+    expect(await headWidths(page)).toEqual([320, 120]);
   });
 
   it('clears a floor and reapplies it as table-layout switches away from and back to fixed', async () => {
@@ -315,6 +317,163 @@ describe('pds-table column widths', () => {
     await page.waitForChanges();
 
     expect(await headWidths(page)).toEqual([148, 134, 216, 202]);
+  });
+
+  it('never floors an auto column without responsive, since the table itself would be what grows', async () => {
+    const page = await newE2EPage();
+    // Without responsive there's no container the floor's own growth leaves unaffected to
+    // measure against -- applying it here would have the table measure its own effect on itself.
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="no-responsive-floor" table-layout="fixed">
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+            <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell>Mar 4, 2024</pds-table-cell>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    const nameFloorVar = await page.evaluate(() =>
+      (document.querySelectorAll('pds-table-head-cell')[3] as HTMLElement).style.getPropertyValue(
+        '--pds-table-head-cell-auto-floor-width',
+      ),
+    );
+    expect(nameFloorVar).toBe('');
+  });
+
+  it('re-floors an auto column once a new column is added, and once an existing one changes width', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="mutation-floor" table-layout="fixed" responsive>
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+    // 343 - 148 = 195px for the one auto column -- plenty of room, no floor yet.
+    expect(await headWidths(page)).toEqual([148, 195]);
+
+    await page.evaluate(() => {
+      const head = document.querySelector('pds-table-head');
+      const cell = document.createElement('pds-table-head-cell');
+      cell.setAttribute('width', '134px');
+      cell.textContent = 'Added';
+      head.appendChild(cell);
+    });
+    await page.waitForChanges();
+    // 343 - 148 - 134 = 61px left for the auto column, now below the floor.
+    expect(await headWidths(page)).toEqual([148, 120, 134]);
+
+    await page.evaluate(() => {
+      document.querySelectorAll('pds-table-head-cell')[0].setAttribute('width', '80px');
+    });
+    await page.waitForChanges();
+    // 343 - 80 - 134 = 129px, above the floor again.
+    expect(await headWidths(page)).toEqual([80, 129, 134]);
+  });
+
+  it('keeps the floor working after the table is removed and reconnected to the DOM', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="reconnect-floor" table-layout="fixed" responsive>
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+            <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell>Mar 4, 2024</pds-table-cell>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+    expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
+
+    await page.evaluate(() => {
+      const table = document.querySelector('pds-table');
+      const parent = table.parentElement;
+      parent.removeChild(table);
+      parent.appendChild(table);
+    });
+    await page.waitForChanges();
+
+    // If reconnecting hadn't re-attached the resize observer, this would leave the floor frozen
+    // at its stale 120px instead of growing back to its fair share.
+    await page.evaluate(() => {
+      (document.querySelector('div') as HTMLElement).style.width = '700px';
+    });
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([148, 134, 216, 202]);
+  });
+
+  it('updates the select-all column too when table-layout switches at runtime', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-table component-id="selectable-layout-switch" selectable>
+        <pds-table-head>
+          <pds-table-head-cell>Name</pds-table-head-cell>
+        </pds-table-head>
+        <pds-table-body>
+          <pds-table-row>
+            <pds-table-cell>Zed</pds-table-cell>
+          </pds-table-row>
+        </pds-table-body>
+      </pds-table>
+    `);
+    await page.waitForChanges();
+
+    // The checkbox's own natural size already happens to match the fixed-layout width token, so
+    // width alone can't tell the two layouts apart here -- the `has-width` class can.
+    const selectAllHasWidthClass = () =>
+      page.evaluate(() =>
+        document
+          .querySelector('pds-table-head')
+          .shadowRoot.querySelector('pds-table-head-cell')
+          .classList.contains('has-width'),
+      );
+
+    expect(await selectAllHasWidthClass()).toBe(false);
+
+    await page.evaluate(() => document.querySelector('pds-table').setAttribute('table-layout', 'fixed'));
+    await page.waitForChanges();
+
+    expect(await selectAllHasWidthClass()).toBe(true);
+
+    await page.evaluate(() => document.querySelector('pds-table').setAttribute('table-layout', 'auto'));
+    await page.waitForChanges();
+
+    expect(await selectAllHasWidthClass()).toBe(false);
   });
 
   it('gives fixed-layout columns their widths in a right-to-left table', async () => {

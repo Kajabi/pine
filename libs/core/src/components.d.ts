@@ -2677,7 +2677,7 @@ export namespace Components {
          */
         "selectable": boolean;
         /**
-          * Sets how the table sizes its columns. With `auto`, each column is sized from its content, so columns can change width when the rows change (for example after a sort). With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content; columns without a `width` share the remaining space, down to a 120px floor on narrow viewports where the other columns' widths already fill it. Content longer than its column overflows, so add `truncate` to cells whose content may not fit.
+          * Sets how the table sizes its columns. With `auto`, each column is sized from its content, so columns can change width when the rows change (for example after a sort). With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content; columns without a `width` share the remaining space. Under `responsive`, that remaining share keeps a 120px floor on narrow viewports where the other columns' widths already fill it, growing the table instead (scrollable) -- without `responsive` there's no floor, since there would be nothing to scroll the overflow it would create. Content longer than its column overflows, so add `truncate` to cells whose content may not fit.
           * @defaultValue 'auto'
          */
         "tableLayout": 'auto' | 'fixed';
@@ -6714,7 +6714,7 @@ declare namespace LocalJSX {
          */
         "selectable"?: boolean;
         /**
-          * Sets how the table sizes its columns. With `auto`, each column is sized from its content, so columns can change width when the rows change (for example after a sort). With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content; columns without a `width` share the remaining space, down to a 120px floor on narrow viewports where the other columns' widths already fill it. Content longer than its column overflows, so add `truncate` to cells whose content may not fit.
+          * Sets how the table sizes its columns. With `auto`, each column is sized from its content, so columns can change width when the rows change (for example after a sort). With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content; columns without a `width` share the remaining space. Under `responsive`, that remaining share keeps a 120px floor on narrow viewports where the other columns' widths already fill it, growing the table instead (scrollable) -- without `responsive` there's no floor, since there would be nothing to scroll the overflow it would create. Content longer than its column overflows, so add `truncate` to cells whose content may not fit.
           * @defaultValue 'auto'
          */
         "tableLayout"?: 'auto' | 'fixed';

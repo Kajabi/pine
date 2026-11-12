@@ -3,8 +3,10 @@ import { getScrollOffsetFromStart } from '../../utils/scroll';
 
 // A column with no width of its own, under table-layout: fixed, otherwise shares whatever's left
 // after the explicit-width columns -- which can go to nothing on a narrow viewport. Below this,
-// it keeps this floor instead, and the table grows wider (scrollable under `responsive`) rather
-// than squeeze it further.
+// it keeps this floor instead and the table grows wider, scrollable under `responsive` -- the
+// only mode this applies in. Without `responsive` there's no container to measure that the floor
+// itself can't grow (the table's own width would, chasing its tail) and no way to scroll the
+// overflow it would create.
 const AUTO_COLUMN_FLOOR_WIDTH_PX = 120;
 
 /**
@@ -30,6 +32,11 @@ export class PdsTable {
   private _teardownResponsive: (() => void) | null = null;
   private _fixedLayoutResizeObserver: ResizeObserver | null = null;
   private _fixedLayoutHandleResize: (() => void) | null = null;
+  private _fixedLayoutMutationObserver: MutationObserver | null = null;
+  // componentDidLoad fires once; a later connectedCallback (the table was re-parented, reordered,
+  // or moved by a DOM morph) needs this to know it's a reconnect, not the first load, so it
+  // re-attaches what disconnectedCallback tore down.
+  private hasLoaded = false;
 
   /**
    * Determines if the table displays with reduced table cell padding.
@@ -73,9 +80,11 @@ export class PdsTable {
    * Sets how the table sizes its columns. With `auto`, each column is sized from its content,
    * so columns can change width when the rows change (for example after a sort). With `fixed`,
    * columns take the `width` set on their `pds-table-head-cell` and ignore their content;
-   * columns without a `width` share the remaining space, down to a 120px floor on narrow
-   * viewports where the other columns' widths already fill it. Content longer than its column
-   * overflows, so add `truncate` to cells whose content may not fit.
+   * columns without a `width` share the remaining space. Under `responsive`, that remaining
+   * share keeps a 120px floor on narrow viewports where the other columns' widths already fill
+   * it, growing the table instead (scrollable) -- without `responsive` there's no floor, since
+   * there would be nothing to scroll the overflow it would create. Content longer than its
+   * column overflows, so add `truncate` to cells whose content may not fit.
    * @defaultValue 'auto'
    */
   @Prop() tableLayout: 'auto' | 'fixed' = 'auto';
@@ -113,13 +122,8 @@ export class PdsTable {
   @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;
 
   componentDidLoad() {
-    if (this.responsive) {
-      this.setupResponsiveScrolling();
-    }
-
-    if (this.tableLayout === 'fixed') {
-      this.setupFixedLayoutWidths();
-    }
+    this.hasLoaded = true;
+    this.attachLifecycleBoundSetup();
 
     // Apply default sort if specified
     // Use requestAnimationFrame to defer until child components are fully initialized
@@ -164,6 +168,26 @@ export class PdsTable {
     }
   }
 
+  /**
+   * Re-attaches the responsive scroll listeners and the fixed-layout width floor after the table
+   * reconnects (it was re-parented, reordered, or moved by a DOM morph) -- `disconnectedCallback`
+   * tears both down, and neither comes back on its own.
+   */
+  connectedCallback() {
+    if (!this.hasLoaded) return;
+    this.attachLifecycleBoundSetup();
+  }
+
+  private attachLifecycleBoundSetup() {
+    if (this.responsive) {
+      this.setupResponsiveScrolling();
+    }
+
+    if (this.tableLayout === 'fixed' && this.responsive) {
+      this.setupFixedLayoutWidths();
+    }
+  }
+
   disconnectedCallback() {
     if (this._teardownResponsive) {
       this._teardownResponsive();
@@ -176,28 +200,35 @@ export class PdsTable {
   /**
    * A head cell only reads `tableLayout` during its own render, and the floor this sets lives in
    * inline style, not a re-render -- so switching away from `fixed` (including live, e.g. the
-   * Storybook control) needs both cleared explicitly, not just the observer torn down.
+   * Storybook control) needs both cleared explicitly, not just the observer torn down. The
+   * select-all column reads `tableLayout` the same way, one level up in `pds-table-head`'s own
+   * render, since it owns that cell rather than letting it through a `<slot>`.
    */
   @Watch('tableLayout')
   handleTableLayoutChange(newValue: 'auto' | 'fixed') {
     this.teardownFixedLayoutWidths();
-    if (newValue === 'fixed') this.setupFixedLayoutWidths();
+    if (newValue === 'fixed' && this.responsive) this.setupFixedLayoutWidths();
 
     (Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[]).forEach((cell) => {
       if (newValue !== 'fixed') cell.style.removeProperty('--pds-table-head-cell-auto-floor-width');
       forceUpdate(cell);
     });
+
+    const head = this.el.querySelector('pds-table-head') as HTMLElement | null;
+    if (head) forceUpdate(head);
   }
 
   /**
    * Measures the explicit-width columns against the available space and gives the columns with
    * no `width` of their own (which otherwise share whatever's left) a floor so none of them
-   * squeeze below `AUTO_COLUMN_FLOOR_WIDTH_PX`. Re-run on resize, since the available space -- the
-   * responsive container's width, or the table's own width otherwise -- can change after load.
+   * squeeze below `AUTO_COLUMN_FLOOR_WIDTH_PX`. Re-run on resize, since the responsive
+   * container's available width can change after load -- and only under `responsive`: that
+   * container is the one thing in this layout the floor's own growth can't also grow, which is
+   * what keeps this from measuring its own effect and oscillating.
    * @private
    */
   private recalcAutoColumnWidths = () => {
-    if (this.tableLayout !== 'fixed') return;
+    if (this.tableLayout !== 'fixed' || !this.responsive) return;
 
     const headCells = Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[];
     const autoCells: HTMLPdsTableHeadCellElement[] = [];
@@ -225,9 +256,7 @@ export class PdsTable {
       explicitWidthPx += selectAllCell?.getBoundingClientRect().width ?? 0;
     }
 
-    const measureEl = this.responsive
-      ? (this.el.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement | null)
-      : this.el;
+    const measureEl = this.el.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement | null;
     const availableWidth = measureEl?.clientWidth ?? 0;
     const sharePerAutoColumn = (availableWidth - explicitWidthPx) / autoCells.length;
     const needsFloor = sharePerAutoColumn < AUTO_COLUMN_FLOOR_WIDTH_PX;
@@ -258,12 +287,24 @@ export class PdsTable {
     }
 
     window.addEventListener('resize', this._fixedLayoutHandleResize);
+
+    // A column added, removed, or given a different `width` changes the floor calc's inputs,
+    // and none of that is a resize of anything this observes above.
+    if (typeof MutationObserver !== 'undefined') {
+      this._fixedLayoutMutationObserver = new MutationObserver(this._fixedLayoutHandleResize);
+      this._fixedLayoutMutationObserver.observe(this.el, { childList: true, subtree: true, attributeFilter: ['width'] });
+    }
   }
 
   private teardownFixedLayoutWidths() {
     if (this._fixedLayoutResizeObserver) {
       this._fixedLayoutResizeObserver.disconnect();
       this._fixedLayoutResizeObserver = null;
+    }
+
+    if (this._fixedLayoutMutationObserver) {
+      this._fixedLayoutMutationObserver.disconnect();
+      this._fixedLayoutMutationObserver = null;
     }
 
     if (typeof window !== 'undefined' && this._fixedLayoutHandleResize) {
