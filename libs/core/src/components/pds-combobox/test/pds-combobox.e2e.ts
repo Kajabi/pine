@@ -1076,24 +1076,53 @@ describe('pds-combobox', () => {
         expect(cut.cleared).toBe(true);
       });
 
-      it('holds the dropdown at its height the moment a group opens, before the group renders', async () => {
+      it('holds the dropdown at its height from the moment a group opens until it renders', async () => {
         const page = await setUp('group-display="drill-in" panel-search');
         const groupsHeight = (await glide(page)).height;
 
-        // Read in the same task as the click, before the group's rows render.
+        // Read in the same task as the click, before the group's rows render. The hold is a pinned
+        // height, not an animation, so it lasts however long the render takes.
         const held = await page.evaluate(() => {
           const root = document.querySelector('pds-combobox')!.shadowRoot!;
           (root.querySelector('.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger') as HTMLElement).click();
+          root.getAnimations().forEach(a => a.finish());
           const panel = root.querySelector('.pds-combobox__listbox') as HTMLElement;
           return {
-            gliding: panel.classList.contains('pds-combobox__listbox--height-glide'),
-            from: parseFloat(panel.style.getPropertyValue('--pds-combobox-glide-from')),
-            to: parseFloat(panel.style.getPropertyValue('--pds-combobox-glide-to')),
+            holding: panel.classList.contains('pds-combobox__listbox--height-hold'),
+            height: panel.getBoundingClientRect().height,
+            pinned: parseFloat(panel.style.height),
           };
         });
-        expect(held.gliding).toBe(true);
-        expect(held.from).toBeCloseTo(groupsHeight, 0);
-        expect(held.to).toBeCloseTo(groupsHeight, 0);
+        expect(held.holding).toBe(true);
+        expect(held.pinned).toBeCloseTo(groupsHeight, 0);
+        expect(held.height).toBeCloseTo(groupsHeight, 0);
+
+        // Once the group renders, the hold hands over to the glide and leaves nothing behind.
+        await page.waitForChanges();
+        const after = await page.evaluate(() => {
+          const panel = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') as HTMLElement;
+          return { holding: panel.classList.contains('pds-combobox__listbox--height-hold'), pinned: panel.style.height };
+        });
+        expect(after).toEqual({ holding: false, pinned: '' });
+      });
+
+      it("doesn't glide after a drill that's cancelled before it renders", async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        // Typing in the same task as the click replaces the list, which ends the drill before it renders.
+        await page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          const field = root.querySelector('.pds-combobox__panel-search-input') as HTMLInputElement;
+          (root.querySelector('.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger') as HTMLElement).click();
+          field.value = 's';
+          field.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+        });
+        await page.waitForChanges();
+
+        const after = await glide(page);
+        expect(after.gliding).toBe(false);
+        expect(after.cleared).toBe(true);
       });
 
       it('reopens with a max-height without an error', async () => {
