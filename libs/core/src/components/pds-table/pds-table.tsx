@@ -198,19 +198,23 @@ export class PdsTable {
   }
 
   /**
-   * A head cell only reads `tableLayout` during its own render, and the floor this sets lives in
-   * inline style, not a re-render -- so switching away from `fixed` (including live, e.g. the
-   * Storybook control) needs both cleared explicitly, not just the observer torn down. The
-   * select-all column reads `tableLayout` the same way, one level up in `pds-table-head`'s own
-   * render, since it owns that cell rather than letting it through a `<slot>`.
+   * The floor only applies with `tableLayout="fixed"` and `responsive` both set, so either one
+   * changing at runtime can turn it on or off. A head cell only reads `tableLayout` during its
+   * own render, and the floor this sets lives in inline style, not a re-render -- so turning the
+   * floor off (including live, e.g. the Storybook control) needs both cleared explicitly, not
+   * just the observers torn down. The select-all column reads `tableLayout` the same way, one
+   * level up in `pds-table-head`'s own render, since it owns that cell rather than letting it
+   * through a `<slot>`.
    */
   @Watch('tableLayout')
-  handleTableLayoutChange(newValue: 'auto' | 'fixed') {
+  @Watch('responsive')
+  handleFixedLayoutInputsChange() {
     this.teardownFixedLayoutWidths();
-    if (newValue === 'fixed' && this.responsive) this.setupFixedLayoutWidths();
+    const floorActive = this.tableLayout === 'fixed' && this.responsive;
+    if (floorActive) this.setupFixedLayoutWidths();
 
     (Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[]).forEach((cell) => {
-      if (newValue !== 'fixed') cell.style.removeProperty('--pds-table-head-cell-auto-floor-width');
+      if (!floorActive) cell.style.removeProperty('--pds-table-head-cell-auto-floor-width');
       forceUpdate(cell);
     });
 

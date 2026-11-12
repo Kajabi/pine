@@ -286,6 +286,50 @@ describe('pds-table column widths', () => {
     expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
   });
 
+  it('clears a floor and reapplies it as responsive toggles off and back on, table-layout unchanged', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="responsive-switch" table-layout="fixed" responsive>
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+            <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell>Mar 4, 2024</pds-table-cell>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+    expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').removeAttribute('responsive');
+    });
+    await page.waitForChanges();
+
+    const nameWidthNonResponsive = await page.evaluate(() => {
+      const el = document.querySelectorAll('pds-table-head-cell')[3];
+      return el.style.getPropertyValue('--pds-table-head-cell-auto-floor-width');
+    });
+    expect(nameWidthNonResponsive).toBe('');
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').setAttribute('responsive', '');
+    });
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
+  });
+
   it('grows the auto column back once resizing gives it room again', async () => {
     const page = await newE2EPage();
     await page.setContent(`
