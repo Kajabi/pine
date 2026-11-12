@@ -26,6 +26,7 @@ Switches toggle a single setting between on and off, rendered as a sliding thumb
 ### Accessibility
 - The switch's helper message, or its error message while it's invalid, is announced as its description.
 - To explain why a switch is disabled, put the reason in `helper-message`. A tooltip around a disabled switch opens on hover only: a disabled switch can't take focus, so people using a keyboard never reach it, and screen readers don't get the tooltip text. See [Disabled with a reason](#disabled-with-a-reason).
+  - Tab still skips a disabled switch, as it does any disabled control. Screen readers reach it, with its helper message, when reading through the page. If the reason must be reachable by Tab, keep the switch enabled and explain the problem when it's changed.
 - `aria-describedby` on `pds-switch` describes the switch with text elsewhere on the page, such as a card's description beside it. The text it points at is announced first, then the switch's own message. See [Described by text outside it](#described-by-text-outside-it).
   - The ID reference passes to the inner input as the elements it points at, since an ID can't reach inside the shadow DOM. The element must be in the same document as `pds-switch`, or in a shadow root that contains it.
   - The element must exist when the switch renders, when it takes focus, or when the attribute is set. One added or replaced later is picked up the next time the switch is focused. A disabled switch can't take focus, so to change its description, update the referenced element's text rather than replacing the element.
@@ -171,7 +172,7 @@ Use `aria-describedby` on `pds-switch` when the text that describes it sits outs
 ## Form Integration
 
 - Provide a `name` so the switch contributes a value to `FormData` when checked. Without `unchecked-value`, an unchecked switch is omitted like a native checkbox.
-- Set `unchecked-value` when the form needs an explicit off value, such as `"0"` for a Rails boolean. An unchecked switch then submits it under `name`, so you don't need a hidden input beside it. An empty string submits a blank value. A disabled switch submits nothing either way.
+- Set `unchecked-value` when the form needs an explicit off value, such as `"0"` for a Rails boolean. An unchecked switch then submits it under `name`, so you don't need a hidden input beside it. An empty string submits a blank value. A disabled switch submits nothing, whether `disabled` is set as an attribute or a property.
 - Use `value` (default `"on"`) to differentiate multiple switches that share the same `name`.
 - Combine `checked`, `onPdsSwitchChange`, and state management for controlled React usage, and pair `required`/`invalid` to enforce acknowledgements such as terms of service.
 
