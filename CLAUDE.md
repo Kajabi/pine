@@ -28,7 +28,7 @@
 - PR title must follow conventional commits format: `type(scope): description`
 - Always use the repo PR template at `.github/pull_request_template.md` for the PR body
 - If your branch is behind `main`, rebase before pushing: `git rebase main`
-- Requires at least two approved reviews before merging
+- Requires at least one approved review before merging
 - See `CONTRIBUTING.md` for full contributor guidelines
 
 ## Testing

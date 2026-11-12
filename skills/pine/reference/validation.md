@@ -7,16 +7,21 @@ Pine UI, and loop until it's clean.
 ## The loop
 
 1. **Validate** what you wrote:
-   - `validate_pine_layout` — structural/layout correctness of the composed UI.
-   - `validate_ui_generation` — correctness of generated UI against Pine's rules.
-   - `review_generated_layout` — a review pass over the generated layout.
+   - `validate_pine_layout({ code, scope: "snippet" })` — checks the markup you
+     wrote or changed against Pine's layout rules and returns each violation
+     with a fix. Send markup, not a whole existing file: for one changed hunk
+     of an existing file use `scope: "diff"`, and for a whole file
+     `scope: "file"`, then keep only the findings on lines you changed.
+   - `validate_ui_generation({ request, generatedCode })` — the full workflow
+     for a generated UI: detects Pine usage, validates, and auto-fixes
+     mobile-first violations. `request` is the user's original ask.
 
-   Use the one(s) that fit what you produced; when in doubt, run
-   `validate_pine_layout` first.
+   When in doubt, run `validate_pine_layout` first.
 
-2. **If issues are reported** → call `fix_layout_issues`, apply the fixes it
-   returns, then **go back to step 1 and re-validate**. Fixes can surface or
-   introduce follow-on issues; only a clean re-validation counts.
+2. **If issues are reported** → apply the fix each violation gives (or use the
+   corrected code `validate_ui_generation` returns), then **go back to step 1
+   and re-validate**. Fixes can surface or introduce follow-on issues; only a
+   clean re-validation counts.
 
 3. **Repeat until validation passes.** Then, and only then, present the UI as
    done.
@@ -31,6 +36,16 @@ Pine UI, and loop until it's clean.
   with a disable comment or a raw-CSS workaround.
 - **Re-validate after every fix.** Never assume a fix is clean without a fresh
   validator run.
+
+## Deprecated tools — don't call them
+
+The MCP still lists these for older clients, but they'll be removed:
+
+- `review_generated_layout` → use `validate_pine_layout`.
+- `fix_layout_issues` → use `validate_pine_layout`. It only diagnoses a
+  described problem and doesn't rewrite code.
+- `should_engage_pine_workflow` → call `get_pine_context_for_generation` before
+  writing and `validate_ui_generation` after.
 
 ## Why a gate and not a guideline
 
