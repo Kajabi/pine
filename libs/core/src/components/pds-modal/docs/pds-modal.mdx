@@ -34,7 +34,7 @@ By default, modals show content in a dialog that blocks interaction with the pag
 - Include a close button in the header, with an `aria-label` such as "Close modal".
 - When the modal opens, focus moves to its first control. When it closes, focus returns to the control that opened it.
 - `backdrop-dismiss="false"` turns off Escape as well as backdrop clicks, so keep a clear way out, such as a Cancel or Close button.
-- `disable-top-layer` doesn't trap focus or make the page inert. Use it only when an overlay has to show above the modal (see [Overlays Above the Modal](#overlays-above-the-modal)).
+- `disable-top-layer` doesn't trap focus or make the page inert. Use it only when an overlay has to show above the modal (see [Overlays Above the Modal](#overlays-above-the-modal)), or with `disable-initial-focus` for a modal that opens from a background event (see [Technical Notes](#technical-notes)).
 
 ## Properties
 
@@ -830,7 +830,7 @@ By default a modal opens with the native `dialog.showModal()`, which promotes it
 
 Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`) in the normal stacking context instead. Overlays with a higher `z-index` can then display above it. A lone `disable-top-layer` modal sits at `--pine-z-index-modal` (6000), and one nested inside another modal at `--pine-z-index-priority` (8000), so an overlay needs a `z-index` above the tier of the modal it stacks over, such as `calc(var(--pine-z-index-modal) + 1)` over a lone modal. In the demo below, a button appended to `document.body` stands in for that overlay.
 
-> **Note:** This mode is for letting a higher-`z-index` overlay (a file picker, an editor menu) appear _above_ the modal &mdash; not for making the modal itself non-blocking. The dimming backdrop still covers the page and an outside click still dismisses it (unless `backdrop-dismiss="false"`). What changes: the page is **not** made `inert` and **focus is not trapped**, so controls in an overlay stacked above the modal stay reachable by keyboard and assistive tech (which is why `aria-modal` is `false` in this mode). Escape closes the modal while focus is inside it; when an overlay above the modal owns focus, Escape is left to that overlay so it can close itself. A modal taller than the viewport scrolls the same way in both modes, so its footer stays reachable. One caveat: because the dialog now participates in normal stacking, a page element with its own higher stacking context can overlap it.
+> **Note:** This mode is for letting a higher-`z-index` overlay (a file picker, an editor menu) appear _above_ the modal, or for pairing with `disable-initial-focus` (see [Technical Notes](#technical-notes)) &mdash; not for making the modal itself non-blocking. The dimming backdrop still covers the page and an outside click still dismisses it (unless `backdrop-dismiss="false"`). What changes: the page is **not** made `inert` and **focus is not trapped**, so controls in an overlay stacked above the modal stay reachable by keyboard and assistive tech (which is why `aria-modal` is `false` in this mode). Escape closes the modal while focus is inside it; when an overlay above the modal owns focus, Escape is left to that overlay so it can close itself. A modal taller than the viewport scrolls the same way in both modes, so its footer stays reachable. One caveat: because the dialog now participates in normal stacking, a page element with its own higher stacking context can overlap it.
 
 <DocCanvas
   mdxSource={{
