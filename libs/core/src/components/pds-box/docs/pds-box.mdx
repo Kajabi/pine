@@ -1413,7 +1413,7 @@ A box with `container` still needs its width from somewhere else, such as `flex=
   </pds-container>
 </DocCanvas>
 
-`container` doesn't apply layout or paint containment, so it doesn't clip the box's content or trap a positioned dropdown or tooltip inside it.
+`container` doesn't apply layout or paint containment, so it doesn't clip the box's content or trap a positioned dropdown or tooltip inside it. It does apply style containment, so CSS counters and quotes restart inside the box.
 
 ### Wrap
 Control whether flex items wrap to new lines when they don't fit in the container:

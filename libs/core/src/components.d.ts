@@ -313,7 +313,7 @@ export namespace Components {
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
-          * Makes the box a size container by setting `container-type`. `inline-size` stops the box's content from setting its width, so long unwrapped text truncates instead of widening it, and lets children use container query units. `size` does the same for both axes, so the box needs a height from somewhere else.
+          * Makes the box a size container by setting `container-type`. `inline-size` stops the box's content from setting its width, so long unwrapped text truncates instead of widening it, and lets children use container query units. `size` does the same for both axes, so the box needs a height from somewhere else. Either way the box still needs its width from its parent, such as the default `flex-grow`, `flex="grow"` or `fit`; with `flex="none"`, `flex="shrink"` or `auto` it collapses.
          */
         "container"?: BoxContainerType;
         /**
@@ -351,7 +351,7 @@ export namespace Components {
          */
         "fitXs"?: boolean;
         /**
-          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
+          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value or a custom flex value (e.g., '1', '0 1 auto'). The predefined values are `none` (`flex: 0 0 auto`), `grow` (`flex: 1 1 auto`) and `shrink` (`flex: 0 1 auto`).
           * @defaultValue none
          */
         "flex"?: `none` | `grow` | `shrink` | string;
@@ -4216,7 +4216,7 @@ declare namespace LocalJSX {
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
-          * Makes the box a size container by setting `container-type`. `inline-size` stops the box's content from setting its width, so long unwrapped text truncates instead of widening it, and lets children use container query units. `size` does the same for both axes, so the box needs a height from somewhere else.
+          * Makes the box a size container by setting `container-type`. `inline-size` stops the box's content from setting its width, so long unwrapped text truncates instead of widening it, and lets children use container query units. `size` does the same for both axes, so the box needs a height from somewhere else. Either way the box still needs its width from its parent, such as the default `flex-grow`, `flex="grow"` or `fit`; with `flex="none"`, `flex="shrink"` or `auto` it collapses.
          */
         "container"?: BoxContainerType;
         /**
@@ -4254,7 +4254,7 @@ declare namespace LocalJSX {
          */
         "fitXs"?: boolean;
         /**
-          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
+          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value or a custom flex value (e.g., '1', '0 1 auto'). The predefined values are `none` (`flex: 0 0 auto`), `grow` (`flex: 1 1 auto`) and `shrink` (`flex: 0 1 auto`).
           * @defaultValue none
          */
         "flex"?: `none` | `grow` | `shrink` | string;
