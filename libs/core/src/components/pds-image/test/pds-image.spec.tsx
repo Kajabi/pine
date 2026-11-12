@@ -339,6 +339,111 @@ describe('pds-image', () => {
       expect(spy).toHaveBeenCalledTimes(2);
     });
 
+    it('lets a load replace an error for the same source', async () => {
+      // `decode()` can reject an image that did load, such as a sizeless SVG in some
+      // browsers, so the native load that follows must still be emitted.
+      const page = await newSpecPage({
+        components: [PdsImage],
+        html: `<pds-image src="/sizeless.svg"></pds-image>`,
+      });
+      const loadSpy = jest.fn();
+      const errorSpy = jest.fn();
+      page.root.addEventListener('pdsImageLoad', loadSpy);
+      page.root.addEventListener('pdsImageError', errorSpy);
+      const img = page.root.shadowRoot.querySelector('img');
+      setImageState(img, {
+        complete: true,
+        currentSrc: '/sizeless.svg',
+        decode: () => Promise.reject(new Error('EncodingError')),
+        naturalHeight: 0,
+        naturalWidth: 0,
+      });
+
+      page.rootInstance.componentDidLoad();
+      await page.waitForChanges();
+      img.dispatchEvent(new Event('load'));
+      img.dispatchEvent(new Event('error'));
+
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      expect(loadSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('ignores an event for the old source that arrives before the new src renders', async () => {
+      const page = await newSpecPage({
+        components: [PdsImage],
+        html: `<pds-image src="/old.png"></pds-image>`,
+      });
+      const spy = jest.fn();
+      page.root.addEventListener('pdsImageLoad', spy);
+      const img = page.root.shadowRoot.querySelector('img');
+      setImageState(img, { currentSrc: '/old.png', naturalHeight: 1, naturalWidth: 1 });
+
+      page.root.src = '/new.png';
+      img.dispatchEvent(new Event('load'));
+      expect(spy).not.toHaveBeenCalled();
+
+      await page.waitForChanges();
+      setImageState(img, { currentSrc: '/new.png' });
+      img.dispatchEvent(new Event('load'));
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy.mock.calls[0][0].detail.currentSrc).toBe('/new.png');
+    });
+
+    it('emits pdsImageError for an empty src that already failed on first render', async () => {
+      const page = await newSpecPage({
+        components: [PdsImage],
+        html: `<pds-image src=""></pds-image>`,
+      });
+      const spy = jest.fn();
+      page.root.addEventListener('pdsImageError', spy);
+      const img = page.root.shadowRoot.querySelector('img');
+      setImageState(img, {
+        complete: true,
+        currentSrc: '',
+        decode: () => Promise.reject(new Error('EncodingError')),
+        naturalWidth: 0,
+      });
+
+      page.rootInstance.componentDidLoad();
+      await page.waitForChanges();
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy.mock.calls[0][0].detail).toEqual({ currentSrc: '' });
+    });
+
+    it('emits nothing on first render for an image with no src or srcset', async () => {
+      const page = await newSpecPage({
+        components: [PdsImage],
+        html: `<pds-image></pds-image>`,
+      });
+      const decode = jest.fn(() => Promise.reject(new Error('EncodingError')));
+      const spy = jest.fn();
+      page.root.addEventListener('pdsImageError', spy);
+      const img = page.root.shadowRoot.querySelector('img');
+      setImageState(img, { complete: true, currentSrc: '', decode, naturalWidth: 0 });
+
+      page.rootInstance.componentDidLoad();
+      await page.waitForChanges();
+
+      expect(decode).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('leaves an already-complete image to its native events when decode is unavailable', async () => {
+      const page = await newSpecPage({
+        components: [PdsImage],
+        html: `<pds-image src="/a.png"></pds-image>`,
+      });
+      const spy = jest.fn();
+      page.root.addEventListener('pdsImageError', spy);
+      const img = page.root.shadowRoot.querySelector('img');
+      setImageState(img, { complete: true, currentSrc: '/a.png', decode: undefined, naturalWidth: 0 });
+
+      expect(() => page.rootInstance.componentDidLoad()).not.toThrow();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
     it('emits nothing on first render when the image has not finished loading', async () => {
       const page = await newSpecPage({
         components: [PdsImage],
