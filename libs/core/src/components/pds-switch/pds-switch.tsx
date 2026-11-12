@@ -22,12 +22,14 @@ export class PdsSwitch {
   private inputEl?: HTMLInputElement;
   private hostDescriptionObserver?: MutationObserver;
   private forwardsDescription = false;
-  private disabledByFieldset = false;
 
   @Element() el: HTMLPdsSwitchElement;
   private hostKeeper = new HostStylingKeeper();
 
   @State() private hasLabelSlot = false;
+
+  // Kept apart from the `disabled` prop so a fieldset never overwrites what the consumer set.
+  @State() private fieldsetDisabled = false;
 
   /**
    * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
@@ -96,8 +98,12 @@ export class PdsSwitch {
    */
   @Event() pdsSwitchChange: EventEmitter<InputEvent>;
 
+  private isDisabled() {
+    return this.disabled || this.fieldsetDisabled;
+  }
+
   private onSwitchUpdate = (e: Event) => {
-    if (this.disabled) return;
+    if (this.isDisabled()) return;
 
     const input = e.target as HTMLInputElement;
     this.checked = input.checked;
@@ -158,6 +164,7 @@ export class PdsSwitch {
 
   @Watch('checked')
   @Watch('disabled')
+  @Watch('fieldsetDisabled')
   @Watch('uncheckedValue')
   @Watch('value')
   syncFormValue() {
@@ -181,7 +188,7 @@ export class PdsSwitch {
   // Unchecked sends uncheckedValue when set, even an empty string, otherwise nothing. Disabled sends nothing, like a
   // native checkbox: the platform only leaves out a host with the disabled attribute, and React sets the property.
   private formValue(): string | null {
-    if (this.disabled) return null;
+    if (this.isDisabled()) return null;
     return this.checkedValue();
   }
 
@@ -240,17 +247,7 @@ export class PdsSwitch {
     // literal string "false" (a consumer's or React's attribute serialization can write that) —
     // the platform treats any value as disabled, independent of fieldset state. A real disabled
     // fieldset ancestor confirms this is genuinely that, not this element's own attribute.
-    if (disabled) {
-      if (!this.el.closest('fieldset[disabled]') || this.disabled) return;
-      this.disabledByFieldset = true;
-      this.disabled = true;
-      return;
-    }
-
-    // Re-enabling the fieldset only undoes what it did, so a switch the consumer disabled stays disabled.
-    if (!this.disabledByFieldset) return;
-    this.disabledByFieldset = false;
-    this.disabled = false;
+    this.fieldsetDisabled = disabled && this.el.closest('fieldset[disabled]') !== null;
   }
 
   componentWillLoad() {
@@ -267,7 +264,7 @@ export class PdsSwitch {
 
   render() {
     const hostClass = this.switchClassNames();
-    const ariaDisabled = this.disabled ? 'true' : null;
+    const ariaDisabled = this.isDisabled() ? 'true' : null;
     this.hostKeeper.record(hostClass, {}, { 'aria-disabled': ariaDisabled });
 
     return (
@@ -278,7 +275,7 @@ export class PdsSwitch {
             aria-invalid={this.invalid ? "true" : undefined}
             checked={this.checked}
             class="pds-switch__input"
-            disabled={this.disabled}
+            disabled={this.isDisabled()}
             id={this.componentId}
             name={this.name ? this.name : this.componentId}
             onChange={this.onSwitchUpdate}
