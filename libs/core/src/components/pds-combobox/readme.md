@@ -107,12 +107,12 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part               | Description |
-| ------------------ | ----------- |
-| `"button-trigger"` |             |
-| `"chip-trigger"`   |             |
-| `"combobox"`       |             |
-| `"input"`          |             |
+| Part               | Description                                                                                          |
+| ------------------ | ---------------------------------------------------------------------------------------------------- |
+| `"button-trigger"` | Exposes the button trigger for styling. Appears only when `trigger` is `button`.                     |
+| `"chip-trigger"`   | Exposes the chip trigger for styling. Appears only when `trigger` is `chip`.                         |
+| `"combobox"`       | Exposes the outer container around the label, trigger and messages for styling.                      |
+| `"input"`          | Exposes the native `input` element for styling. Appears only when `trigger` is `input`, the default. |
 
 
 ## Dependencies

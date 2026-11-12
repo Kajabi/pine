@@ -42,7 +42,7 @@
 
 | Part       | Description                                                                                      |
 | ---------- | ------------------------------------------------------------------------------------------------ |
-| `"button"` |                                                                                                  |
+| `"button"` | Exposes the trigger button for styling. Appears only on the dropdown variant.                    |
 | `"dot"`    | Exposes the dot for styling, such as a custom color. Appears only when `dot` is set.             |
 | `"icon"`   | Exposes the icon component for styling, such as a custom color. Appears only when `icon` is set. |
 

@@ -166,7 +166,7 @@ export const ProgrammaticClear = (args) => html`
   </pds-combobox>
   <pds-button
     variant="secondary"
-    size="sm"
+    size="small"
     @click=${() => document.querySelector('#combobox-clear-story').clear()}
   >
     Reset

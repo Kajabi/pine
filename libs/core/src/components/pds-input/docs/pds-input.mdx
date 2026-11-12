@@ -55,8 +55,8 @@ The type of input used varies based on the type of information you look to captu
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-text-example" label="Name" type="text" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-text-example" label="Name" type="text" value="Frank Dux"></pds-input>'
+    react: `<PdsInput componentId="pds-input-text-example" label="Name" type="text" value="Frank Dux"></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-text-example" label="Name" type="text" value="Frank Dux"></pds-input>`
 }}>
   <pds-input component-id="pds-input-text-example" label="Name" type="text" value="Frank Dux"></pds-input>
 </DocCanvas>
@@ -86,10 +86,10 @@ Indicates that the user must specify a value for the input before the owning for
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-required-example" label="Name" type="text" required="true" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-required-example" label="Name" type="text" required="true" value="Frank Dux"></pds-input>'
+    react: `<PdsInput componentId="pds-input-required-example" label="Name" type="text" required value="Frank Dux"></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-required-example" label="Name" type="text" required value="Frank Dux"></pds-input>`
 }}>
-  <pds-input component-id="pds-input-required-example" label="Name" type="text" required="true" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-required-example" label="Name" type="text" required value="Frank Dux"></pds-input>
 </DocCanvas>
 
 ### Placeholder
@@ -98,8 +98,8 @@ Provides a short, non-essential hint about the expected input.
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter an email address..." value=""></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter an email address..." value=""></pds-input>'
+    react: `<PdsInput componentId="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter an email address..." value=""></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter an email address..." value=""></pds-input>`
 }}>
   <pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter an email address..." value=""></pds-input>
 </DocCanvas>
@@ -110,10 +110,10 @@ Removes all interactive behavior from the text field and provides a visual treat
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-disabled-example" label="Name" type="text" disabled="true" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-disabled-example" label="Name" type="text" disabled="true" value="Frank Dux"></pds-input>'
+    react: `<PdsInput componentId="pds-input-disabled-example" label="Name" type="text" disabled value="Frank Dux"></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-disabled-example" label="Name" type="text" disabled value="Frank Dux"></pds-input>`
 }}>
-  <pds-input component-id="pds-input-disabled-example" label="Name" type="text" disabled="true" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-disabled-example" label="Name" type="text" disabled value="Frank Dux"></pds-input>
 </DocCanvas>
 
 ### Readonly
@@ -122,10 +122,10 @@ Removes the ability to interact with the text field. If a value is present, that
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-readonly-example" label="Name" type="text" readonly="true" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-readonly-example" label="Name" type="text" readonly="true" value="Frank Dux"></pds-input>'
+    react: `<PdsInput componentId="pds-input-readonly-example" label="Name" type="text" readonly value="Frank Dux"></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-readonly-example" label="Name" type="text" readonly value="Frank Dux"></pds-input>`
 }}>
-  <pds-input component-id="pds-input-readonly-example" label="Name" type="text" readonly="true" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-readonly-example" label="Name" type="text" readonly value="Frank Dux"></pds-input>
 </DocCanvas>
 
 ### Highlight
@@ -134,10 +134,10 @@ Applies accent styling to the input field with a purple background, border, and 
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-highlight-example" label="Label" type="text" highlight="true" value="This input is highlighted"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-highlight-example" label="Label" type="text" highlight="true" value="This input is highlighted"></pds-input>'
+    react: `<PdsInput componentId="pds-input-highlight-example" label="Label" type="text" highlight value="This input is highlighted"></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-highlight-example" label="Label" type="text" highlight value="This input is highlighted"></pds-input>`
 }}>
-  <pds-input component-id="pds-input-highlight-example" label="Label" type="text" highlight="true" value="This input is highlighted"></pds-input>
+  <pds-input component-id="pds-input-highlight-example" label="Label" type="text" highlight value="This input is highlighted"></pds-input>
 </DocCanvas>
 
 ### Full Width
@@ -152,14 +152,14 @@ Layout impact:
 
 Best practice: Use for form layouts where consistent width is needed
 
-Example: `full-width="true"` for mobile-friendly forms
+Example: `full-width` for mobile-friendly forms
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-full-width-example" label="Full Width Input" type="text" fullWidth="true" placeholder="This input takes full width of its container"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width="true" placeholder="This input takes full width of its container"></pds-input>'
+    react: `<PdsInput componentId="pds-input-full-width-example" label="Full Width Input" type="text" fullWidth placeholder="This input takes full width of its container"></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width placeholder="This input takes full width of its container"></pds-input>`
 }}>
-  <pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width="true" placeholder="This input takes full width of its container"></pds-input>
+  <pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width placeholder="This input takes full width of its container"></pds-input>
 </DocCanvas>
 
 ### Helper Message
@@ -168,8 +168,8 @@ A `helper-message` is used to provide additional information about how to comple
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-help-example" label="Name" type="text" helperMessage="Please use the correct format" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-help-example" label="Name" type="text" helper-message="Please use the correct format" value="Frank Dux"></pds-input>'
+    react: `<PdsInput componentId="pds-input-help-example" label="Name" type="text" helperMessage="Please use the correct format" value="Frank Dux"></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-help-example" label="Name" type="text" helper-message="Please use the correct format" value="Frank Dux"></pds-input>`
 }}>
   <pds-input component-id="pds-input-help-example" label="Name" type="text" helper-message="Please use the correct format" value="Frank Dux"></pds-input>
 </DocCanvas>
@@ -180,8 +180,8 @@ When `invalid` is true, the input displays the error message and provides a visu
 
 <DocCanvas
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-error-example" label="Email address" type="email" errorMessage="Please provide a valid email address" value="Frank Dux" invalid></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux" invalid></pds-input>'
+    react: `<PdsInput componentId="pds-input-error-example" label="Email address" type="email" errorMessage="Please provide a valid email address" value="Frank Dux" invalid></PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux" invalid></pds-input>`
 }}>
   <pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux" invalid></pds-input>
 </DocCanvas>
@@ -193,7 +193,7 @@ A prefix or suffix can be added to the input field to provide additional context
   mdxSource={{
     react: `<PdsInput componentId="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
   <PdsIcon name="mail" slot="prefix"></PdsIcon>
-  <PdsButton variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</PdsButton>
+  <PdsButton variant="unstyled" slot="suffix" iconOnly icon="remove-circle">Remove</PdsButton>
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
   <pds-icon name="mail" slot="prefix"></pds-icon>

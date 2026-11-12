@@ -43,10 +43,10 @@
 
 ## Shadow Parts
 
-| Part       | Description |
-| ---------- | ----------- |
-| `"action"` |             |
-| `"select"` |             |
+| Part       | Description                                                                                                |
+| ---------- | ---------------------------------------------------------------------------------------------------------- |
+| `"action"` | Exposes the wrapper around the `action` slot for styling. Appears only when the `action` slot has content. |
+| `"select"` | Exposes the native `select` element for styling.                                                           |
 
 
 ## Dependencies

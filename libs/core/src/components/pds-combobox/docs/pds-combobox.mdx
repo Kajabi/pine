@@ -421,7 +421,7 @@ You can control where the dropdown appears relative to the trigger element. This
   <option value="panda">Panda</option>
   <option value="snake">Snake</option>
 </pds-combobox>`,
-    react: `<PdsCombobox componentId="combobox-placement-end" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-placement="bottom-end">
+    react: `<PdsCombobox componentId="combobox-placement-end" label="Favorite Animal" placeholder="Select an animal" trigger="button" triggerVariant="secondary" mode="select-only" dropdownPlacement="bottom-end">
   <option value="cat">Cat</option>
   <option value="dog">Dog</option>
   <option value="panda">Panda</option>
@@ -448,7 +448,7 @@ The dropdown width can be customized using any valid CSS width value. This examp
   <option value="panda">Panda</option>
   <option value="snake">Snake</option>
 </pds-combobox>`,
-    react: `<PdsCombobox componentId="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-width="300px">
+    react: `<PdsCombobox componentId="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" triggerVariant="secondary" mode="select-only" dropdownWidth="300px">
   <option value="cat">Cat</option>
   <option value="dog">Dog</option>
   <option value="panda">Panda</option>
@@ -791,8 +791,8 @@ For the most dynamic experience, combine both `customTriggerContent` and `custom
     react: `<div style={{ width: '100%' }}>
     <PdsCombobox
       componentId="combobox-combined-custom"
-      customTriggerContent="true"
-      customOptionLayouts="true"
+      customTriggerContent
+      customOptionLayouts
       label="Payment Method"
       trigger="button"
       triggerVariant="secondary"
@@ -837,8 +837,8 @@ For the most dynamic experience, combine both `customTriggerContent` and `custom
             flex="shrink"
             gap="sm"
             justifyContent="center"
-            min-height="48px"
-            min-width="48px"
+            minHeight="48px"
+            minWidth="48px"
           >
             <PdsIcon icon="ban" color="var(--pine-color-text-neutral)"></PdsIcon>
           </PdsBox>
@@ -1978,6 +1978,8 @@ const handleSearch = async (e) => {
 
 The combobox displays a loading indicator automatically when `loading` is `true`. You can customize the loading indicator using the `loading` slot:
 
+With `dropdown-mount="body"`, the `loading` and `empty` slots aren't shown; the default content is.
+
 <DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox
@@ -1986,7 +1988,7 @@ The combobox displays a loading indicator automatically when `loading` is `true`
   placeholder="Type to search..."
   async-url="/api/users">
   <div slot="loading">
-    <pds-loader size="small"></pds-loader>
+    <pds-loader size="sm"></pds-loader>
     <span>Loading results...</span>
   </div>
 </pds-combobox>`,
@@ -1996,7 +1998,7 @@ The combobox displays a loading indicator automatically when `loading` is `true`
   placeholder="Type to search..."
   asyncUrl="/api/users">
   <div slot="loading">
-    <PdsLoader size="small"></PdsLoader>
+    <PdsLoader size="sm"></PdsLoader>
     <span>Loading results...</span>
   </div>
 </PdsCombobox>`,
@@ -2008,7 +2010,7 @@ The combobox displays a loading indicator automatically when `loading` is `true`
     placeholder="Type to search..."
     async-url="/api/users">
     <div slot="loading">
-      <pds-loader size="small"></pds-loader>
+      <pds-loader size="sm"></pds-loader>
       <span>Loading results...</span>
     </div>
   </pds-combobox>
@@ -2083,7 +2085,7 @@ In this example, a click listener on the Reset button calls `clear()` on the com
   <option value="panda">Panda</option>
 </pds-combobox>
 
-<pds-button id="combobox-clear-reset" variant="secondary" size="sm">Reset</pds-button>
+<pds-button id="combobox-clear-reset" variant="secondary" size="small">Reset</pds-button>
 
 <script>
   document.querySelector('#combobox-clear-reset').addEventListener('click', () => {
@@ -2105,7 +2107,7 @@ In this example, a click listener on the Reset button calls `clear()` on the com
   <option value="panda">Panda</option>
 </PdsCombobox>
 
-<PdsButton variant="secondary" size="sm" onClick={() => comboboxRef.current?.clear()}>
+<PdsButton variant="secondary" size="small" onClick={() => comboboxRef.current?.clear()}>
   Reset
 </PdsButton>`,
   }}
@@ -2116,7 +2118,7 @@ In this example, a click listener on the Reset button calls `clear()` on the com
       <option value="dog">Dog</option>
       <option value="panda">Panda</option>
     </pds-combobox>
-    <pds-button id="combobox-clear-reset" style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="sm" onClick={() => {
+    <pds-button id="combobox-clear-reset" style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="small" onClick={() => {
       const el = document.querySelector('#combobox-clear');
       if (el) el.clear();
     }}>Reset</pds-button>
