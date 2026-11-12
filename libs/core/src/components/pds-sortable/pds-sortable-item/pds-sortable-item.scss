@@ -3,6 +3,7 @@
   display: flex;
   padding-block: var(--pine-dimension-xs);
   padding-inline: var(--pine-dimension-md);
+  transition: box-shadow var(--pine-motion-duration-fast) var(--pine-motion-easing-out);
 
   .pds-sortable-item__actions {
     margin-inline-start: auto;
@@ -10,13 +11,28 @@
   }
 
   .pds-sortable-item__handle {
-    border-radius: var(--pine-dimension-2xs);
+    border-radius: var(--pine-border-radius-sm);
     line-height: 1;
     margin-inline-end: var(--pine-dimension-md);
 
     &:focus-visible {
       outline: var(--pine-outline-focus);
       outline-offset: var(--pine-border-width);
+    }
+  }
+
+  // Without `show-handle`, the handle is still the keyboard's reorder button, just not shown.
+  .pds-sortable-item__handle--hidden {
+    clip-path: inset(50%);
+    height: 1px;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+
+    &:focus-visible {
+      outline: 0;
     }
   }
 
@@ -27,7 +43,8 @@
       border-start-start-radius: calc(var(--pine-dimension-xs) * 1.25);
     }
 
-    &:last-child {
+    // `last-of-type`, not `last-child`: the list's live region comes after the last item.
+    &:last-of-type {
       border-end-end-radius: calc(var(--pine-dimension-xs) * 1.25);
       border-end-start-radius: calc(var(--pine-dimension-xs) * 1.25);
     }
@@ -37,7 +54,8 @@
   .pds-sortable--divided & {
     border-block-end: var(--pine-border);
 
-    &:last-child {
+    // `last-of-type`, not `last-child`: the list's live region comes after the last item.
+    &:last-of-type {
       border-block-end: 0;
     }
   }
@@ -78,18 +96,19 @@
   }
 }
 
-:host(.pds-sortable-item:focus-visible) {
+// A hidden handle can't show its focus, so the row shows it.
+:host(.pds-sortable-item:has(> .pds-sortable-item__handle--hidden:focus-visible)) {
   outline: var(--pine-outline-focus);
   // Inset, so a bordered list's edge doesn't clip it.
   outline-offset: calc(var(--pine-border-width-thick) * -1);
 }
 
-// Picked up from the keyboard: lifted like an item being dragged.
+// Picked up from the keyboard: lifted like an item being dragged, with an inset border too, as the
+// shadow barely shows on a dark background.
 :host(.pds-sortable-item--grabbed) {
-  background-color: var(--pine-color-background-container);
-  box-shadow: var(--pine-box-shadow-400);
+  background-color: var(--pine-color-background-container-hover);
+  box-shadow: var(--pine-box-shadow-400), inset 0 0 0 var(--pine-border-width-thick) var(--pine-color-border-active);
   position: relative;
-  transition: box-shadow var(--pine-motion-duration-fast) var(--pine-motion-easing-out);
   z-index: 1;
 }
 
