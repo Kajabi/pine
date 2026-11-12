@@ -5702,7 +5702,7 @@ declare namespace LocalJSX {
          */
         "onPdsBlur"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the user changes the value and then presses `Enter` or leaves the field. `detail` has `value`, as a string, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value and then presses `Enter` or leaves the field. `detail` has `value`, as a string, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property, unless the field has focus at the time; then it emits when the field loses focus.
          */
         "onPdsChange"?: (event: PdsInputCustomEvent<InputChangeEventDetail>) => void;
         /**
@@ -6940,11 +6940,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when the input loses focus.
+          * Emitted when the textarea loses focus.
          */
         "onPdsBlur"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the input has focus.
+          * Emitted when the textarea has focus.
          */
         "onPdsFocus"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
@@ -6956,7 +6956,7 @@ declare namespace LocalJSX {
          */
         "onPdsKeyDown"?: (event: PdsTextareaCustomEvent<KeyboardEvent>) => void;
         /**
-          * Emitted when the user changes the value and then leaves the textarea. `Enter` adds a new line, so it doesn't emit this event. `detail` has `value`, the text, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value and then leaves the textarea. `Enter` adds a new line, so it doesn't emit this event. `detail` has `value`, the text, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property, unless the field has focus at the time; then it emits when the field loses focus.
          */
         "onPdsTextareaChange"?: (event: PdsTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
