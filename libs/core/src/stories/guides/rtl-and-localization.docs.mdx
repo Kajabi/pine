@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { DocCanvas } from '@pine-ds/doc-components';
 
 <Meta title="Guides/RTL and localization" />
 
@@ -6,11 +7,63 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 Pine targets **English-first** product surfaces today. Components are built to work in RTL when the app sets `dir="rtl"` and passes translated copy from its i18n layer. Layout styles in Pine SCSS use **CSS logical properties** (`margin-inline`, `padding-inline`, `inset-inline`, `border-*-start/end`, and similar) so mirroring does not require per-locale stylesheets.
 
-## What teams should assume today
+## What Pine mirrors for you
 
-1. **Document text direction** at the app shell (`dir="rtl"` / `lang`) when you ship RTL.
-2. **Prefer tokens and logical properties** in consuming apps for spacing and alignment that should mirror under RTL. Report gaps in Slack (`#ds-support`).
-3. **Strings live in the product**, not inside Pine primitives—pass translated `label`, `aria-label`, and slot content from your app’s i18n layer.
+- **Layout inside components.** Logical properties flip padding, margins, borders and alignment with `dir`. In a right-to-left page, `pds-alert` shows its icon on the right, and a `pds-box` offset pushes the column in from the right.
+- **Directional icons.** An icon set by `name` that points a direction, such as `arrow-right`, mirrors on its own when the page's `dir` is `rtl`. Inside a `dir="rtl"` section of a left-to-right page, or for an icon passed to `icon` in React, add `flip-rtl` to mirror it. See the Right-to-left section of <pds-link href="../?path=/docs/components-icon--docs">Icon</pds-link>.
+- **Overlay alignment.** A `pds-popover` placement that ends in `-start` lines the content up with the trigger's right edge in right-to-left text.
+
+## What you own
+
+1. **Set the text direction and language** at the app shell (`dir="rtl"` and `lang` on `<html>`) when you ship RTL.
+2. **Use logical properties** in your own CSS for spacing and alignment that should mirror under RTL. Report gaps in Slack (`#ds-support`).
+3. **Pass translated strings** from your app's i18n layer: `label`, `aria-label`, slot content, and the text props below. Apart from the datepicker's month and weekday names, Pine's built-in text is English.
+
+This right-to-left section of a left-to-right page needs `flip-rtl` on its arrow, since the page itself isn't right-to-left.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `
+<div dir="rtl" lang="ar">
+  <pds-box direction="column" gap="md">
+    <pds-input component-id="rtl-name" name="name" label="الاسم"></pds-input>
+    <pds-button variant="primary">
+      التالي
+      <pds-icon slot="end" name="arrow-right" flip-rtl aria-hidden="true"></pds-icon>
+    </pds-button>
+  </pds-box>
+</div>`,
+    react: `
+import { PdsBox, PdsButton, PdsIcon, PdsInput } from '@pine-ds/react';
+import { arrowRight } from '@pine-ds/icons/icons';
+
+<div dir="rtl" lang="ar">
+  <PdsBox direction="column" gap="md">
+    <PdsInput componentId="rtl-name" name="name" label="الاسم" />
+    <PdsButton variant="primary">
+      التالي
+      <PdsIcon slot="end" icon={arrowRight} flipRtl aria-hidden="true" />
+    </PdsButton>
+  </PdsBox>
+</div>`
+  }}>
+  <div dir="rtl" lang="ar">
+    <pds-box direction="column" gap="md">
+      <pds-input component-id="rtl-name" name="name" label="الاسم"></pds-input>
+      <pds-button variant="primary">التالي<pds-icon slot="end" name="arrow-right" flip-rtl aria-hidden="true"></pds-icon></pds-button>
+    </pds-box>
+  </div>
+</DocCanvas>
+
+## Text props to translate
+
+Some components show text, or give screen readers text, that you don't write yourself, such as a dismiss button's label or a "No options found" message. Props set that text, and left unset it's English. Look for string props whose names contain `label`, `message`, `placeholder` or `description` in each component's properties table, and pass a translated string to each one your page uses. `pds-alert`, `pds-avatar`, `pds-chip`, `pds-combobox`, `pds-datepicker`, `pds-dropdown-menu-item`, `pds-link`, `pds-multiselect`, `pds-textarea` and `pds-toast` have them. `pds-datepicker` takes its month and weekday names from its `locale` prop instead.
+
+## Known limits
+
+- **Table shadows in Firefox and Safari.** `pds-table` flips the shadows on its fixed column and scroll edges with the CSS `:host-context()` selector, which only Chromium-based browsers support. In Firefox and Safari those shadows keep pointing the left-to-right way in a right-to-left table.
+- **The loading button's text.** A `pds-button` with `loading` gives screen readers the English word "Loading..." after its label, and has no prop to translate it.
+- **Icons mirror once.** Automatic mirroring is decided when the icon renders, so a directional icon already on the page doesn't mirror if `dir` changes to `rtl` afterward.
 
 ## Verifying in Storybook
 
