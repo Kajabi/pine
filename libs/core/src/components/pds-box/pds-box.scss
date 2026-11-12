@@ -120,7 +120,7 @@ $pine-spacing-tokens: (
   width: 100%;
 }
 
-$border-sides: ('block-start', 'block-end', 'inline-start', 'inline-end');
+$logical-sides: ('block-start', 'block-end', 'inline-start', 'inline-end');
 $box-border-color: var(--color-border-box, var(--pine-color-border));
 
 .pds-box--border {
@@ -130,7 +130,7 @@ $box-border-color: var(--color-border-box, var(--pine-color-border));
 }
 
 // Per-side border helpers
-@each $side in $border-sides {
+@each $side in $logical-sides {
   .pds-box--border-#{$side} {
     border-#{$side}: var(--border-width-default) solid $box-border-color;
   }
@@ -290,9 +290,7 @@ $spacing-values: (
 }
 
 // Margin helpers. Margins also take `auto`, to push a box to the far side of its flex parent.
-$margin-sides: ('block-start', 'inline-start', 'inline-end', 'block-end');
-
-@each $side in $margin-sides {
+@each $side in $logical-sides {
   @each $name, $value in $spacing-values {
     .pds-margin-#{$side}-#{$name} {
       margin-#{$side}: $value;
@@ -504,25 +502,13 @@ $breakpoints: (
 // Responsive Margin helpers
 @each $breakpoint-name, $breakpoint-value in $breakpoints {
   @media #{$breakpoint-value} {
-    @each $name, $value in $spacing-values {
-      .pds-margin-block-start-#{$breakpoint-name}-#{$name} {
-        margin-block-start: $value;
+    @each $side in $logical-sides {
+      @each $name, $value in $spacing-values {
+        .pds-margin-#{$side}-#{$breakpoint-name}-#{$name} {
+          margin-#{$side}: $value;
+        }
       }
 
-      .pds-margin-inline-start-#{$breakpoint-name}-#{$name} {
-        margin-inline-start: $value;
-      }
-
-      .pds-margin-inline-end-#{$breakpoint-name}-#{$name} {
-        margin-inline-end: $value;
-      }
-
-      .pds-margin-block-end-#{$breakpoint-name}-#{$name} {
-        margin-block-end: $value;
-      }
-    }
-
-    @each $side in $margin-sides {
       .pds-margin-#{$side}-#{$breakpoint-name}-auto {
         margin-#{$side}: auto;
       }
