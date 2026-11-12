@@ -77,12 +77,14 @@ export class PdsImage {
   /**
    * Emitted when the image loads. Also emitted on first render for an image that
    * finished loading before the component could listen, such as a server-rendered
-   * image. Emitted again after `src` or `srcset` changes and the new image loads.
+   * image. Emitted again after `src` or `srcset` changes and the new image loads, or
+   * when the browser picks a different `srcset` candidate, such as on a resize.
    */
   @Event() pdsImageLoad: EventEmitter<ImageLoadEventDetail>;
 
   /**
-   * Emitted when the image fails to load, such as for a broken or missing `src`.
+   * Emitted when the image fails to load, such as for a broken or empty `src`. An image
+   * with no `src` or `srcset` at all emits neither event, since it has nothing to load.
    * Emitted again after `src` or `srcset` changes and the new image fails.
    */
   @Event() pdsImageError: EventEmitter<ImageErrorEventDetail>;
