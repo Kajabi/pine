@@ -327,6 +327,10 @@ In dark mode `--pine-color-text-inverse-tertiary` is 3.9 : 1 on `--pine-color-ba
 
 `--pine-border` is the whole shorthand: `1px solid` in the default border color for the current theme.
 
+### Decorative colors
+
+The mercury, forest, lime, magenta, pink, salmon, sky and teal palettes are core tokens only, such as `--pine-color-teal-500`. No semantic token points at them, no Pine component uses them, and they keep the same value in dark mode. Keep them for color that carries no meaning of its own, such as chart series, tags and illustrations, and check their contrast in both themes. For text, icons, surfaces and borders, use the semantic tokens above. For status, use the semantic status colors, such as `--pine-color-danger` and `--pine-color-success`.
+
 ### Radius, stroke width and spacing
 
 Use `--pine-border-radius-*` for corners and `--pine-border-width*` for strokes. Use `--pine-dimension-*` for spacing and sizes, and prefer the semantic `none` to `2xl` set over the numbered core scale.
@@ -364,6 +368,37 @@ Use `--pine-border-radius-*` for corners and `--pine-border-width*` for strokes.
 Stroke widths are `--pine-border-width` (1px, the default), `--pine-border-width-thin` (1px), `--pine-border-width-thick` (2px) and `--pine-border-width-none` (0).
 
 The semantic spacing set is `--pine-dimension-none` (0), `-2xs` (4px), `-xs` (8px), `-sm` (16px), `-md` (24px), `-lg` (32px), `-xl` (40px) and `-2xl` (48px). The numbered core scale, from `--pine-dimension-025` (2px) to `--pine-dimension-800` (64px), covers the sizes in between.
+
+### Shadows
+
+Shadows run from `--pine-box-shadow-050`, the faintest, through `-100`, `-150`, `-200`, `-300` and `-400` to `-500`, the deepest. `--pine-box-shadow` is the default and matches `--pine-box-shadow-100`. Give a layer the shadow Pine's components use for the same kind of layer:
+
+<pds-table component-id="choosing-shadow-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Used by</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-box-shadow-050</code></pds-table-cell>
+      <pds-table-cell>The <code>pds-filter</code> trigger.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-box-shadow</code> or <code>-100</code></pds-table-cell>
+      <pds-table-cell>Menus and option lists (<code>pds-dropdown-menu</code>, <code>pds-combobox</code>, <code>pds-multiselect</code> and the <code>pds-filter</code> panel), <code>pds-tooltip</code> and <code>pds-toast</code>.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-box-shadow-200</code></pds-table-cell>
+      <pds-table-cell><code>pds-popover</code> and the <code>pds-datepicker</code> calendar.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-box-shadow-400</code></pds-table-cell>
+      <pds-table-cell><code>pds-modal</code>, and a <code>pds-sortable-item</code> while it's dragged.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+No component uses `-150`, `-300` or `-500`. A `pds-box` takes any step through its `shadow` prop, such as `shadow="100"`. Shadows keep the same values in dark mode, where they barely show, so give a raised surface a border as well when it has to stand out in both themes.
 
 ### Stacking order
 
