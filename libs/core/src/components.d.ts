@@ -1871,7 +1871,7 @@ export namespace Components {
          */
         "showLabel"?: boolean;
         /**
-          * Sets the size of the spinner loader. Value can be preset or custom.
+          * Sets the size of the spinner loader: `xs` (24px), `sm` (32px), `md` (48px), `lg` (64px), `xl` (80px), or a custom CSS length such as `128px`. The `typing` variant ignores it.
           * @default 'md'
          */
         "size"?: | 'xs' // 24px
@@ -5842,7 +5842,7 @@ declare namespace LocalJSX {
          */
         "showLabel"?: boolean;
         /**
-          * Sets the size of the spinner loader. Value can be preset or custom.
+          * Sets the size of the spinner loader: `xs` (24px), `sm` (32px), `md` (48px), `lg` (64px), `xl` (80px), or a custom CSS length such as `128px`. The `typing` variant ignores it.
           * @default 'md'
          */
         "size"?: | 'xs' // 24px
