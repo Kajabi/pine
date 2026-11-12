@@ -93,7 +93,8 @@ export class PdsRadio {
   @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
-   * Emitted with `true` when the user checks the radio. Not emitted inside `pds-radio-group`; listen for `pdsRadioGroupChange` there.
+   * Emitted with `true` when the user checks the radio, by a click or an arrow key. The radio is `event.target`, so read its `value` there.
+   * Not emitted when picking another radio unchecks this one. Not emitted inside `pds-radio-group` either; listen for `pdsRadioGroupChange` there.
    */
   @Event() pdsRadioChange: EventEmitter<boolean>;
 

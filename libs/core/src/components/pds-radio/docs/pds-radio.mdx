@@ -170,35 +170,13 @@ Radio buttons can display custom images instead of the default radio input in a 
   </pds-radio>
 </DocCanvas>
 
-## Events
-
-In React, add `on` to the event name, as in `onPdsRadioChange`.
-
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="radio-events">
-    <pds-table-head>
-      <pds-table-head-cell>Event</pds-table-head-cell>
-      <pds-table-head-cell>Emitted when</pds-table-head-cell>
-      <pds-table-head-cell>Detail</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>pdsRadioChange</code></pds-table-cell>
-        <pds-table-cell>The user checks the radio, by a click or an arrow key. It isn't emitted when the radio is unchecked because another one was picked, or for a radio inside <code>pds-radio-group</code>, which emits <code>pdsRadioGroupChange</code> instead.</pds-table-cell>
-        <pds-table-cell><code>true</code>. The radio that was checked is <code>event.target</code>, so read its <code>value</code> there.</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
-
-The radio's `checked` property keeps the value you set and doesn't change when someone picks a radio, so use this event, not `checked`, to track the selection.
-
 ## Form Integration
 
 - Assign the same `name` to each radio in a group so only one option submits with the form.
 - Set a unique `value` on every radio to identify the selected option inside `FormData`.
 - Apply `required` (typically on the first radio in the group) plus `invalid`/`errorMessage` to surface validation feedback when no choice is selected.
 - For grouped radios with a single error message, use `pds-radio-group` which automatically handles `name` propagation and displays a single error message for the entire group.
+- The radio's `checked` property keeps the value you set and doesn't change when someone picks a radio. To track the selection, listen for `pdsRadioChange` (`onPdsRadioChange` in React) and read `event.target.value`.
 - Resetting the form unchecks every radio in it, including one that started `checked`, so no option is selected afterwards.
 - For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
 
