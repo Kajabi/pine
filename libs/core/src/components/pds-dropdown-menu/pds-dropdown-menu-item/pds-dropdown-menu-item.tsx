@@ -97,14 +97,17 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     if (this.disabled || this.informational) return;
 
     // Filter only pds-dropdown-menu-item elements and find the index of the current item
-    const menuItems = Array.from(this.host.parentNode.children).filter(
+    const menuItems = Array.from(this.host.parentElement?.children ?? []).filter(
       (child) => child.tagName.toLowerCase() === 'pds-dropdown-menu-item'
     );
     const itemIndex = menuItems.indexOf(this.host);
 
     // The label's text: default-slot content only, so start-slot content stays out of it
     const content = Array.from(this.host.childNodes)
-      .filter((node) => node.nodeType !== Node.ELEMENT_NODE || !(node as Element).hasAttribute('slot'))
+      .filter((node) =>
+        node.nodeType === Node.TEXT_NODE ||
+        (node.nodeType === Node.ELEMENT_NODE && !(node as Element).getAttribute('slot'))
+      )
       .map((node) => node.textContent)
       .join('')
       .trim();
@@ -225,15 +228,14 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   }
 
   private handleKeyDown = (event: KeyboardEvent) => {
-    // handleClick ignores a disabled item on its own; this check also leaves Enter's default alone for one.
-    if (!this.disabled && (event.key === 'Enter')) {
-      // Only prevent default for button elements or Space key
-      // For links with Enter key, we want the default navigation behavior
-      if (!this.href) {
-        event.preventDefault();
-      }
-      this.handleClick();
-    }
+    if (this.disabled || event.key !== 'Enter') return;
+
+    // Enter on a link follows it, and the anchor's click reaches the host's click handler,
+    // which emits pdsClick. Emitting here too would send it twice.
+    if (this.href != null) return;
+
+    event.preventDefault();
+    this.handleClick();
   }
 
   render() {
