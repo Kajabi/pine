@@ -26,12 +26,14 @@ Radio components allow users to select one option from a group of two or more ch
 - For dynamic options that aren't easily displayed together in a list.
 
 ### Accessibility
+
 - Ensure the label is descriptive and clearly associated with the radio button.
+- Always set `label`, even when the design shows only the circle: `hide-label` hides it visually and keeps it as the radio's name.
 - Group radios logically using a `name` attribute to indicate relationships.
+- Put related radios in a `pds-radio-group` with a `group-label`, which names the group.
 - Give each radio a `component-id` that's unique on the page. It becomes the input's `id`, which the label's `for` points at, so a repeated id labels the wrong radio.
 - Use proper error messaging and states (e.g., `invalid`) for validation feedback.
 - Avoid disabling radios unless necessary; provide context for disabled options.
-- State classes on the host (such as `is-invalid` and `has-border`) follow the component's props, and `has-image` follows the `image` slot's content, except on a pill (`variant="pill"`), which never carries `has-border` or `has-image` — see the Pill section below. They come back if something removes them, such as a DOM morph, so change them through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ## Properties
 
@@ -132,7 +134,7 @@ Use pills for short, single-line labels such as answers to an onboarding questio
 
 ### Group
 
-For grouping multiple radios together, use <pds-link href="../?path=/docs/components-radio-group--docs">pds-radio-group</pds-link> instead of manually grouping radios.
+For grouping multiple radios together, use <pds-link href="../?path=/docs/components-radio-group--docs">pds-radio-group</pds-link> instead of manually grouping radios. The group shows one label, helper message and error message for the whole group, and sets `name`, `disabled`, `invalid` and `required` on each radio in it, replacing values set on a single radio.
 
 ### With Image
 
@@ -168,32 +170,47 @@ Radio buttons can display custom images instead of the default radio input in a 
   </pds-radio>
 </DocCanvas>
 
+## Events
+
+In React, add `on` to the event name, as in `onPdsRadioChange`.
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="radio-events">
+    <pds-table-head>
+      <pds-table-head-cell>Event</pds-table-head-cell>
+      <pds-table-head-cell>Emitted when</pds-table-head-cell>
+      <pds-table-head-cell>Detail</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>pdsRadioChange</code></pds-table-cell>
+        <pds-table-cell>The user checks the radio, by a click or an arrow key. It isn't emitted when the radio is unchecked because another one was picked, or for a radio inside <code>pds-radio-group</code>, which emits <code>pdsRadioGroupChange</code> instead.</pds-table-cell>
+        <pds-table-cell><code>true</code>. The radio that was checked is <code>event.target</code>, so read its <code>value</code> there.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+
+The radio's `checked` property keeps the value you set and doesn't change when someone picks a radio, so use this event, not `checked`, to track the selection.
+
 ## Form Integration
 
 - Assign the same `name` to each radio in a group so only one option submits with the form.
 - Set a unique `value` on every radio to identify the selected option inside `FormData`.
 - Apply `required` (typically on the first radio in the group) plus `invalid`/`errorMessage` to surface validation feedback when no choice is selected.
 - For grouped radios with a single error message, use `pds-radio-group` which automatically handles `name` propagation and displays a single error message for the entire group.
+- Resetting the form unchecks every radio in it, including one that started `checked`, so no option is selected afterwards.
+- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Technical Notes
 
-### Using pds-radio-group
-
-When grouping multiple radios, the <pds-link href="../?path=/docs/components-radio-group--docs">pds-radio-group</pds-link> component provides several advantages over manually grouping radios:
-
-- **Automatic prop propagation**: The group automatically applies `name`, `disabled`, `invalid`, and `required` attributes to all child radios, ensuring consistent state across the group
-- **Group-level messaging**: Displays a single error message or helper message for the entire group instead of individual messages on each radio
-- **Group label**: Supports an optional group-level `groupLabel` prop (React) or `group-label` attribute (Web Components) that appears above all radios
-- **Layout control**: Use the `direction` prop to arrange radios horizontally (`row`) or vertically (`column`), with the label always remaining above the radios
-- **Layout support**: Works seamlessly with standard radios, bordered radios (`hasBorder`), and radios with images
-- **Event handling**: Emits `pdsRadioGroupChange` when a radio in the group is selected, providing the selected `value` and `componentId` in the event detail
-- **Group states**: Supports `disabled` and `invalid` states that automatically propagate to all radios in the group
-
-This simplifies form management by handling common group-level concerns automatically and reduces the need to manually coordinate props across multiple radio components.
+State classes on the host (such as `is-invalid` and `has-border`) follow the component's props, and `has-image` follows the `image` slot's content, except on a pill (`variant="pill"`), which never carries `has-border` or `has-image` — see the Pill section above. They come back if something removes them, such as a DOM morph, so change them through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ## Additional Resources
 
 [MDN Web Docs: Radio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
+
+[Using Pine form components](/docs/guides-forms--docs)
 
 ## Playground
 
