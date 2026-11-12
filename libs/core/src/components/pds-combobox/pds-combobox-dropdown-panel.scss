@@ -7,11 +7,12 @@
     box-sizing: border-box;
     list-style: none;
     margin: 0;
-    // border-box: 220px of options plus the 8px padding on each side.
-    min-width: 236px;
+    // border-box: the 236px wide, 220px minimum it had as content-box, plus its padding.
+    min-width: calc(220px + (var(--pine-dimension-xs) * 2));
     overflow-y: auto;
     padding: var(--pine-dimension-xs);
     position: absolute;
+    width: calc(236px + (var(--pine-dimension-xs) * 2));
     z-index: var(--pine-z-index-raised);
   }
 
@@ -311,12 +312,20 @@
     z-index: 1;
   }
 
+  // Its padding is smaller, so its widths are too.
+  .pds-combobox__listbox.pds-combobox__listbox--grouped {
+    min-width: calc(220px + (var(--pine-dimension-2xs) * 2));
+    width: calc(236px + (var(--pine-dimension-2xs) * 2));
+  }
+
   // panel-search: the search field above the options, as in pds-multiselect.
-  .pds-combobox__listbox--with-search {
+  .pds-combobox__listbox.pds-combobox__listbox--with-search {
     display: flex;
     flex-direction: column;
+    min-width: 220px;
     overflow: hidden;
     padding: 0;
+    width: 236px;
   }
 
   .pds-combobox__listbox-options {
