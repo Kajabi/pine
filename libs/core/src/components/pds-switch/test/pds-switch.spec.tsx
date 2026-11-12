@@ -293,35 +293,59 @@ describe('pds-switch', () => {
     expect(prop).not.toHaveClass('pds-switch--label-slot');
   });
 
-  it('takes its disabled state from a disabled fieldset', async () => {
-    const page = await newSpecPage({
-      components: [PdsSwitch],
-      html: `<fieldset disabled><pds-switch component-id="in-fieldset" label="Label"></pds-switch></fieldset>`,
+  describe('in a disabled fieldset', () => {
+    const fieldsetPage = () =>
+      newSpecPage({
+        components: [PdsSwitch],
+        html: `<fieldset disabled><pds-switch component-id="in-fieldset" label="Label"></pds-switch></fieldset>`,
+      });
+    const input = (page: SpecPage) => page.root.shadowRoot.querySelector('input') as HTMLInputElement;
+
+    it('is disabled while the fieldset is, without changing its disabled prop', async () => {
+      const page = await fieldsetPage();
+
+      page.rootInstance.formDisabledCallback(true);
+      await page.waitForChanges();
+      expect(input(page).disabled).toBe(true);
+      expect(page.root).toHaveAttribute('aria-disabled');
+      expect(page.root.disabled).toBe(false);
+
+      page.rootInstance.formDisabledCallback(false);
+      await page.waitForChanges();
+      expect(input(page).disabled).toBe(false);
+      expect(page.root).not.toHaveAttribute('aria-disabled');
+      expect(page.root.disabled).toBe(false);
     });
 
-    page.rootInstance.formDisabledCallback(true);
-    await page.waitForChanges();
-    expect(page.root.disabled).toBe(true);
+    it('stays disabled when the consumer disables it after the fieldset did, and the fieldset is re-enabled', async () => {
+      const page = await fieldsetPage();
 
-    page.rootInstance.formDisabledCallback(false);
-    await page.waitForChanges();
-    expect(page.root.disabled).toBe(false);
-  });
+      page.rootInstance.formDisabledCallback(true);
+      await page.waitForChanges();
 
-  it('stays disabled after its fieldset is re-enabled when the consumer disabled it', async () => {
-    const page = await newSpecPage({
-      components: [PdsSwitch],
-      html: `<fieldset disabled><pds-switch component-id="in-fieldset" label="Label"></pds-switch></fieldset>`,
+      // As React sets it: a property, with no disabled attribute on the host.
+      page.root.disabled = true;
+      await page.waitForChanges();
+
+      page.rootInstance.formDisabledCallback(false);
+      await page.waitForChanges();
+      expect(page.root.disabled).toBe(true);
+      expect(input(page).disabled).toBe(true);
     });
 
-    // As React sets it: a property, with no disabled attribute on the host.
-    page.root.disabled = true;
-    await page.waitForChanges();
+    it('stays disabled through a fieldset toggle when the consumer disabled it first', async () => {
+      const page = await fieldsetPage();
 
-    page.rootInstance.formDisabledCallback(true);
-    page.rootInstance.formDisabledCallback(false);
-    await page.waitForChanges();
-    expect(page.root.disabled).toBe(true);
+      page.root.disabled = true;
+      await page.waitForChanges();
+
+      page.rootInstance.formDisabledCallback(true);
+      await page.waitForChanges();
+      page.rootInstance.formDisabledCallback(false);
+      await page.waitForChanges();
+      expect(page.root.disabled).toBe(true);
+      expect(input(page).disabled).toBe(true);
+    });
   });
 
   // formDisabledCallback also fires when this element's own `disabled` attribute is merely

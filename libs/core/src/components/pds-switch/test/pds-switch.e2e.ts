@@ -191,27 +191,71 @@ describe('pds-switch after its host classes and styles are stripped', () => {
 });
 
 describe('pds-switch in a disabled fieldset', () => {
-  it('is disabled while the fieldset is, and comes back when it is enabled', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`
-      <form>
-        <fieldset disabled>
-          <pds-switch component-id="in-fieldset" name="notify" label="Enable notifications"></pds-switch>
-        </fieldset>
-      </form>
-    `);
-    await page.waitForChanges();
-    const disabled = () =>
-      page.evaluate(() => (document.querySelector('pds-switch') as HTMLElement & { disabled: boolean }).disabled);
+  const setFieldset = (page: Awaited<ReturnType<typeof newE2EPage>>, disabled: boolean) =>
+    page.$eval('fieldset', (fieldset: HTMLFieldSetElement, value: boolean) => (fieldset.disabled = value), disabled);
+  const inputDisabled = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => el.shadowRoot!.querySelector('input')!.disabled);
+  const disabledProp = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => el.disabled);
+  const submitted = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.$eval('form', (form: HTMLFormElement) => new FormData(form).getAll('notify'));
+  const fieldsetContent = (fieldsetDisabled: boolean) => `
+    <form>
+      <fieldset${fieldsetDisabled ? ' disabled' : ''}>
+        <pds-switch component-id="in-fieldset" name="notify" label="Enable notifications" checked></pds-switch>
+      </fieldset>
+    </form>
+  `;
 
-    expect(await disabled()).toBe(true);
+  it('is disabled while the fieldset is, and comes back when it is enabled, without changing its disabled prop', async () => {
+    const page = await newE2EPage();
+    await page.setContent(fieldsetContent(true));
+    await page.waitForChanges();
+
+    expect(await inputDisabled(page)).toBe(true);
+    expect(await disabledProp(page)).toBe(false);
+    expect(await submitted(page)).toEqual([]);
 
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
 
-    await page.evaluate(() => document.querySelector('fieldset')!.removeAttribute('disabled'));
+    await setFieldset(page, false);
     await page.waitForChanges();
-    expect(await disabled()).toBe(false);
+    expect(await inputDisabled(page)).toBe(false);
+    expect(await disabledProp(page)).toBe(false);
+    expect(await submitted(page)).toEqual(['on']);
+  });
+
+  it('stays disabled and submits nothing when the consumer disables it inside a disabled fieldset that is then re-enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(fieldsetContent(true));
+    await page.waitForChanges();
+
+    // As React sets it: a property, with no disabled attribute on the host.
+    await page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => (el.disabled = true));
+    await page.waitForChanges();
+
+    await setFieldset(page, false);
+    await page.waitForChanges();
+    expect(await disabledProp(page)).toBe(true);
+    expect(await inputDisabled(page)).toBe(true);
+    expect(await submitted(page)).toEqual([]);
+  });
+
+  it('stays disabled and submits nothing through a fieldset toggle when the consumer disabled it first', async () => {
+    const page = await newE2EPage();
+    await page.setContent(fieldsetContent(false));
+
+    await page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => (el.disabled = true));
+    await page.waitForChanges();
+
+    await setFieldset(page, true);
+    await page.waitForChanges();
+    await setFieldset(page, false);
+    await page.waitForChanges();
+    expect(await disabledProp(page)).toBe(true);
+    expect(await inputDisabled(page)).toBe(true);
+    expect(await submitted(page)).toEqual([]);
   });
 });
 
