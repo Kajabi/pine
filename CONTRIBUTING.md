@@ -75,11 +75,11 @@ npm run test.all
 
 ### Writing component docs
 
-Each component's page is `libs/core/src/components/<name>/docs/<name>.mdx`. Storybook renders it, and the [Pine MCP](https://pine-design-system.netlify.app/?path=/docs/resources-pine-mcp--docs) parses the same file to answer AI assistants, so its structure is a contract. Start from an existing page such as `pds-button.mdx` and keep this order:
+Each component's page is `libs/core/src/components/<name>/docs/<name>.mdx`. Storybook renders it, and the [Pine MCP](https://pine-design-system.netlify.app/?path=/docs/resources-pine-mcp--docs) parses the same file to answer AI assistants, so its structure is a contract. Start from a page that already follows it, such as `pds-chip.mdx`, and keep this order:
 
 1. `<StatusBadge component="pds-name" />`, with the component listed in `libs/core/src/stories/resources/component-status.json`.
 2. `# Title`, then a one-paragraph summary. The MCP uses that first paragraph as the component's description.
-3. `## Guidelines`, containing `### When to use`, `### When not to use` and `### Accessibility`, with exactly these names, in this order. The MCP matches them case-sensitively and drops any other `###` heading inside Guidelines, so give other guidance its own `##` section.
+3. `## Guidelines`, containing `### When to use`, `### When not to use` and `### Accessibility`, with exactly these names, in this order. The MCP matches them case-sensitively and drops any other `###` heading inside Guidelines, so give other guidance its own `##` section. Leave a blank line after `### Accessibility`: without one, the MCP leaves out the component's accessibility notes.
 4. `## Properties`, with `<DocArgsTable>`.
 5. `## Examples`, with one `###` heading per example.
 6. `## Playground`, with a `<Canvas>` of the main story (for example `<Canvas of={stories.Default} />`), as the last section. The MCP ignores everything from this heading on.
