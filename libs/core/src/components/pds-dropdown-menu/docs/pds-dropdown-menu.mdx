@@ -35,6 +35,7 @@ Dropdown Menus reveal a list of actions from a button trigger, based on the WAI-
 - Renders `header` slot content outside the menu, so screen readers read it as plain content rather than as a menu item. Keyboard navigation moves between menu items only, so keep links and actions out of the header
 - Keeps `informational` items in keyboard navigation and exposes them as menu items with `aria-disabled="true"`, so people can reach and read them but not activate them. Navigation skips `disabled` items
 - Lets Tab and Shift+Tab move through the enabled menu items, and closes the menu when they move past the last or first enabled item, so keyboard users don't need Escape to leave it. This differs from the APG pattern, where Tab leaves the menu from any item
+- Closes the menu once its trigger scrolls fully out of view, scrolled or clipped by a scrolling container (such as a table that scrolls sideways) or by the window. Focus in the menu returns to the trigger without scrolling it back into view. Opening the menu while its trigger is out of view, such as with Enter on that trigger after it closed this way, scrolls the trigger into view first, so the menu opens beside it. A trigger covered by something rather than clipped, such as a sticky header, keeps the menu open, and so does panning a pinch-zoomed page
 - Provides high-contrast focus indicators for all interactive elements
 
 #### Keyboard interactions
@@ -158,7 +159,7 @@ Activating a `pds-dropdown-menu-item` emits `pdsClick`: a click, Enter on a butt
 
 Raw `<a>` and `<button>` elements don't emit `pdsClick`, so listen for their `click` instead. A `pds-button` trigger emits its own `pdsClick`, which also bubbles to the menu, so a listener on the menu should check that `event.target` is a `pds-dropdown-menu-item`.
 
-The menu stays open after an item is activated. It closes on Escape, a click outside it, another click on the trigger, or Tab or Shift+Tab past the last or first enabled item. It has no method for closing it from your own code.
+The menu stays open after an item is activated. It closes on Escape, a click outside it, another click on the trigger, Tab or Shift+Tab past the last or first enabled item, or its trigger scrolling out of view. It has no method for closing it from your own code.
 
 <DocCanvas
   mdxSource={{
@@ -639,7 +640,7 @@ The dropdown menu can be positioned relative to the trigger using the placement 
 
 ### Scrollable Menu
 
-The `menu-panel` CSS part can be used to customize the menu container's dimensions and enable scrolling for long lists as needed.
+A menu taller than the room beside its trigger is capped to that room and scrolls inside itself. The `menu-panel` CSS part can be used to customize the menu container's dimensions, such as a smaller `max-height`, which the menu keeps.
 
 <DocCanvas
   mdxSource={{
