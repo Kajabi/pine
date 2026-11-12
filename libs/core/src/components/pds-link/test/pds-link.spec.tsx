@@ -297,25 +297,15 @@ describe('pds-link', () => {
       }
     });
 
-    it('shows a decorative icon and stays in the same tab when target is _self', async () => {
+    it.each([
+      ['_self', 'the default label', ''],
+      ['_self', 'a custom label', 'external-label="Custom"'],
+      ['_parent', 'a custom label', 'external-label="Custom"'],
+      ['_top', 'a custom label', 'external-label="Custom"'],
+    ])('shows a decorative icon and drops the label when target is %s with %s', async (target, _label, labelAttr) => {
       const { root } = await newSpecPage({
         components: [PdsLink],
-        html: `<pds-link href="#" external="true" target="_self">Docs</pds-link>`,
-      });
-      const anchor = root?.shadowRoot?.querySelector('a');
-      expect(anchor?.getAttribute('target')).toBe('_self');
-      expect(anchor?.hasAttribute('rel')).toBe(false);
-
-      const icon = root?.shadowRoot?.querySelector('pds-icon');
-      expect(icon).not.toBeNull();
-      expect(icon?.hasAttribute('aria-label')).toBe(false);
-      expect(icon?.getAttribute('aria-hidden')).toBe('true');
-    });
-
-    it.each(['_self', '_parent', '_top'])('ignores a custom external-label when target is %s', async (target) => {
-      const { root } = await newSpecPage({
-        components: [PdsLink],
-        html: `<pds-link href="#" external="true" external-label="Custom" target="${target}">Docs</pds-link>`,
+        html: `<pds-link href="#" external="true" ${labelAttr} target="${target}">Docs</pds-link>`,
       });
       const anchor = root?.shadowRoot?.querySelector('a');
       expect(anchor?.getAttribute('target')).toBe(target);
@@ -325,6 +315,20 @@ describe('pds-link', () => {
       expect(icon).not.toBeNull();
       expect(icon?.hasAttribute('aria-label')).toBe(false);
       expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it.each([
+      ['external alone', ''],
+      ['external with target _blank', 'target="_blank"'],
+    ])('opens a new tab with noopener and the label for %s', async (_name, targetAttr) => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="https://example.com" external ${targetAttr}>Docs</pds-link>`,
+      });
+      const anchor = root?.shadowRoot?.querySelector('a');
+      expect(anchor?.getAttribute('target')).toBe('_blank');
+      expect(anchor?.getAttribute('rel')).toBe('noopener noreferrer');
+      expect(root?.shadowRoot?.querySelector('pds-icon')?.getAttribute('aria-label')).toBe('(opens in a new tab)');
     });
   });
 });
