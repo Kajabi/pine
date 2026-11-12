@@ -338,7 +338,7 @@
   .pds-combobox__panel-search {
     align-items: center;
     border-block-end: var(--pine-border);
-    border-block-end-color: var(--pine-color-border-subtle);
+    border-block-end-color: var(--pine-color-border-active);
     display: flex;
     flex-shrink: 0;
     gap: var(--pine-dimension-xs);
@@ -401,7 +401,7 @@
   :where(.pds-combobox__listbox--grouped) .pds-combobox__group-back-trigger {
     background-color: var(--pine-color-background-overlay);
     border-block-end: var(--pine-border);
-    border-block-end-color: var(--pine-color-border-subtle);
+    border-block-end-color: var(--pine-color-border-active);
     border-radius: 0;
     color: var(--pine-color-text-secondary);
     font: var(--pine-typography-body);
