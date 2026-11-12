@@ -328,7 +328,7 @@ describe('pds-dropdown-menu-item', () => {
     it('leaves the start content out of the pdsClick content', async () => {
       const page = await newSpecPage({
         components: [PdsDropdownMenuItem],
-        html: `<div><pds-dropdown-menu-item><pds-icon slot="start" name="trash"></pds-icon>Delete</pds-dropdown-menu-item></div>`,
+        html: `<div><pds-dropdown-menu-item><span slot="start">NEW</span><pds-icon slot="start" name="trash"></pds-icon>Delete <strong>draft</strong></pds-dropdown-menu-item></div>`,
       });
       const item = page.body.querySelector('pds-dropdown-menu-item')!;
       const clickSpy = jest.fn();
@@ -336,7 +336,7 @@ describe('pds-dropdown-menu-item', () => {
 
       await item.clickItem();
 
-      expect(clickSpy.mock.calls[0][0].detail.content).toBe('Delete');
+      expect(clickSpy.mock.calls[0][0].detail.content).toBe('Delete draft');
     });
   });
 
@@ -397,7 +397,7 @@ describe('pds-dropdown-menu-item', () => {
       expect(clickSpy).not.toHaveBeenCalled();
     });
 
-    it('does not emit pdsClick from an informational item', async () => {
+    it('does not emit pdsClick from an item that is both informational and disabled', async () => {
       const page = await newSpecPage({
         components: [PdsDropdownMenuItem],
         html: `<pds-dropdown-menu-item informational disabled>2 forms</pds-dropdown-menu-item>`,

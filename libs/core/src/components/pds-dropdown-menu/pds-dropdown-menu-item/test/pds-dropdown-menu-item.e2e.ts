@@ -78,14 +78,8 @@ describe('pds-dropdown-menu-item', () => {
   describe('start slot', () => {
     type AXNode = { role: string; name?: string; children?: AXNode[] };
 
-    // The accessibility tree node of the item's inner element, as a screen reader reads it.
-    const innerAxNode = async (page: Awaited<ReturnType<typeof newE2EPage>>, selector: string) => {
-      const inner = await page.evaluateHandle(
-        (sel) => document.querySelector('pds-dropdown-menu-item')?.shadowRoot?.querySelector(sel) as HTMLElement,
-        selector,
-      );
-      return (await page.accessibility.snapshot({ root: inner })) as AXNode | null;
-    };
+    const findRole = (node: AXNode, role: string): AXNode | undefined =>
+      node.role === role ? node : node.children?.map((child) => findRole(child, role)).find(Boolean);
 
     // Horizontal layout of the icon and the label text, read from the rendered boxes.
     const layout = async (page: Awaited<ReturnType<typeof newE2EPage>>) =>
@@ -100,9 +94,9 @@ describe('pds-dropdown-menu-item', () => {
       });
 
     it.each([
-      ['button', '', 'button'],
-      ['link', 'href="#settings"', 'pds-link'],
-      ['informational', 'informational', '[role="menuitem"]'],
+      ['button', ''],
+      ['link', 'href="#settings"'],
+      ['informational', 'informational'],
     ])('lays out the icon before the label with the item gap in a %s item', async (_variant, attrs) => {
       const page = await newE2EPage();
       await page.setContent(`<pds-dropdown-menu-item ${attrs}><pds-icon slot="start" icon="${trash}"></pds-icon>Delete</pds-dropdown-menu-item>`);
@@ -113,13 +107,17 @@ describe('pds-dropdown-menu-item', () => {
       expect(labelLeft - iconRight).toBeCloseTo(parseFloat(gap), 0);
     });
 
-    it('keeps a slotted icon out of the accessible name', async () => {
+    it.each([
+      ['button', '', 'button'],
+      ['link', 'href="#settings"', 'link'],
+      ['informational', 'informational', 'menuitem'],
+    ])('keeps a slotted icon out of the accessible name of a %s item', async (_variant, attrs, role) => {
       const page = await newE2EPage();
-      await page.setContent(`<pds-dropdown-menu-item><pds-icon slot="start" icon="${trash}"></pds-icon>Delete</pds-dropdown-menu-item>`);
+      await page.setContent(`<pds-dropdown-menu-item ${attrs}><pds-icon slot="start" icon="${trash}"></pds-icon>Delete</pds-dropdown-menu-item>`);
       await page.waitForChanges();
 
-      const node = await innerAxNode(page, 'button');
-      expect(node?.role).toBe('button');
+      const tree = await page.accessibility.snapshot({ interestingOnly: true }) as AXNode;
+      const node = findRole(tree, role);
       expect(node?.name).toBe('Delete');
     });
 
