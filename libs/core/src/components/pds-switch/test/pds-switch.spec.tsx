@@ -308,6 +308,22 @@ describe('pds-switch', () => {
     expect(page.root.disabled).toBe(false);
   });
 
+  it('stays disabled after its fieldset is re-enabled when the consumer disabled it', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `<fieldset disabled><pds-switch component-id="in-fieldset" label="Label"></pds-switch></fieldset>`,
+    });
+
+    // As React sets it: a property, with no disabled attribute on the host.
+    page.root.disabled = true;
+    await page.waitForChanges();
+
+    page.rootInstance.formDisabledCallback(true);
+    page.rootInstance.formDisabledCallback(false);
+    await page.waitForChanges();
+    expect(page.root.disabled).toBe(true);
+  });
+
   // formDisabledCallback also fires when this element's own `disabled` attribute is merely
   // present (even as the literal string "false", which a consumer's or React's attribute
   // serialization can write) — the platform treats any value as disabled, independent of a real

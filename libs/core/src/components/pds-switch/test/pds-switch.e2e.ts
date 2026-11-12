@@ -230,6 +230,15 @@ describe('pds-switch form value', () => {
     expect(await page.$eval('form', (form: HTMLFormElement) => new FormData(form).getAll('viaAttribute'))).toEqual(['on']);
   });
 
+  it('submits the new value when value changes while checked', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify" value="monthly" checked></pds-switch></form>');
+
+    await page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => (el.value = 'annual'));
+    await page.waitForChanges();
+    expect(await submitted(page)).toEqual(['annual']);
+  });
+
   it('submits nothing while unchecked without unchecked-value', async () => {
     const page = await newE2EPage();
     await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify"></pds-switch></form>');
