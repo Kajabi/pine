@@ -77,7 +77,8 @@ export class PdsButton {
   @Prop() loading? = false;
 
   /**
-   * Provides the button with a submittable name.
+   * Sets the `name` attribute of the inner button. Not included in submitted form data,
+   * because the form is submitted through a hidden button that carries only the `type`.
    */
   @Prop() name?: string;
 
@@ -94,7 +95,8 @@ export class PdsButton {
   @Prop() type?: 'button' | 'reset' | 'submit' = 'button';
 
   /**
-   * Provides button with a submittable value
+   * Sets the `value` attribute of the inner button. Not included in submitted form data,
+   * because the form is submitted through a hidden button that carries only the `type`.
    */
   @Prop() value?: string;
 

@@ -813,7 +813,7 @@ export namespace Components {
          */
         "loading"?: boolean;
         /**
-          * Provides the button with a submittable name.
+          * Sets the `name` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "name"?: string;
         /**
@@ -831,7 +831,7 @@ export namespace Components {
          */
         "type"?: 'button' | 'reset' | 'submit';
         /**
-          * Provides button with a submittable value
+          * Sets the `value` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "value"?: string;
         /**
@@ -4720,7 +4720,7 @@ declare namespace LocalJSX {
          */
         "loading"?: boolean;
         /**
-          * Provides the button with a submittable name.
+          * Sets the `name` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "name"?: string;
         /**
@@ -4742,7 +4742,7 @@ declare namespace LocalJSX {
          */
         "type"?: 'button' | 'reset' | 'submit';
         /**
-          * Provides button with a submittable value
+          * Sets the `value` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "value"?: string;
         /**
