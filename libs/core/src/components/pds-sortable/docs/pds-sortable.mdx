@@ -40,25 +40,40 @@ WCAG 2.5.7 (Dragging Movements, 2.2 AA) also asks for a way to reorder with sing
 
 #### Keyboard interactions
 
-| Key | Action |
-| --- | --- |
-| `Tab` | Moves focus to the next item's handle. |
-| `Space` or `Enter` | Picks up the focused item. When it's picked up, drops it in its new place. |
-| `ArrowUp` / `ArrowDown` | Moves the picked-up item up or down one position. |
-| `Home` / `End` | Moves the picked-up item to the first or last position. |
-| `Escape` | Cancels and puts the picked-up item back where it started. |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sortable-keyboard">
+    <pds-table-head>
+      <pds-table-head-cell>Key</pds-table-head-cell>
+      <pds-table-head-cell>Action</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>Tab</code></pds-table-cell>
+        <pds-table-cell>Moves focus to the next item's handle.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Space</code> or <code>Enter</code></pds-table-cell>
+        <pds-table-cell>Picks up the focused item. When it's picked up, drops it in its new place.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>ArrowUp</code> / <code>ArrowDown</code></pds-table-cell>
+        <pds-table-cell>Moves the picked-up item up or down one position.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Home</code> / <code>End</code></pds-table-cell>
+        <pds-table-cell>Moves the picked-up item to the first or last position.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Escape</code></pds-table-cell>
+        <pds-table-cell>Cancels and puts the picked-up item back where it started.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 #### Localization
 
-The handle's label and the announcements are props on `pds-sortable`, with English defaults. Pass translated strings to localize them. `{item}`, `{position}` and `{total}` are filled in.
-
-| Prop | Default |
-| --- | --- |
-| `handle-label` | `Reorder {item}` |
-| `item-picked-up-label` | `{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.` |
-| `item-moved-label` | `{item}, moved to position {position} of {total}` |
-| `item-dropped-label` | `{item}, dropped at position {position} of {total}` |
-| `reorder-canceled-label` | `Reorder canceled. {item} returned to position {position} of {total}` |
+The handle's label and the announcements are props on `pds-sortable`, with English defaults. Pass translated strings to localize them: `handle-label`, `item-picked-up-label`, `item-moved-label`, `item-dropped-label` and `reorder-canceled-label`. `{item}`, `{position}` and `{total}` are filled in. Their English defaults are in the properties table below, and the Localized example shows them in French.
 
 ## Properties
 
