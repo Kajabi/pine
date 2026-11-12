@@ -2075,7 +2075,7 @@ describe('pds-combobox selection on first paint', () => {
         Object.entries(attrs).forEach(([name, value]) => el.setAttribute(name, value));
         el.innerHTML = optionsHtml;
         const root = el.shadowRoot!;
-        const snapshot = new Promise<{ text: string; placeholder: boolean; inputValue: string | null; chips: number; icon: string | null }>((resolve, reject) => {
+        const snapshot = new Promise<{ text: string; placeholder: boolean; inputValue: string | null; chips: number; icon: string | null; layoutRendered: boolean }>((resolve, reject) => {
           const observer = new MutationObserver(() => {
             const trigger = root.querySelector('.pds-combobox__button-trigger, .pds-combobox__chip-trigger, .pds-combobox__input');
             if (!trigger) return;
@@ -2087,6 +2087,7 @@ describe('pds-combobox selection on first paint', () => {
               inputValue: trigger instanceof HTMLInputElement ? trigger.value : null,
               chips: trigger.querySelectorAll('pds-chip').length,
               icon: (trigger.querySelector('pds-icon.pds-combobox__button-trigger-icon') as HTMLElement & { name?: string } | null)?.name ?? null,
+              layoutRendered: !!trigger.querySelector('.pds-combobox__button-trigger-layout-wrapper'),
             });
           });
           const timeout = setTimeout(() => {
@@ -2160,7 +2161,9 @@ describe('pds-combobox selection on first paint', () => {
        <option value="automation" label="Automation" data-layout><span>Automation</span></option>`,
     );
 
-    expect(shown).toMatchObject({ text: 'Automation', placeholder: false });
+    // Text alone can't tell a rendered layout from the plain-label fallback here, since the
+    // layout's own text is the same as the label -- the wrapper actually rendering is the proof.
+    expect(shown).toMatchObject({ text: 'Automation', placeholder: false, layoutRendered: true });
   });
 
   it("shows a badged option's icon and label, and leaves its badge to the list", async () => {
@@ -2174,7 +2177,7 @@ describe('pds-combobox selection on first paint', () => {
        <option value="automation" data-icon="automations" data-badge="New" data-badge-sentiment="accent">Automation</option>`,
     );
 
-    expect(shown).toEqual({ text: 'Automation', placeholder: false, inputValue: null, chips: 0, icon: 'automations' });
+    expect(shown).toEqual({ text: 'Automation', placeholder: false, inputValue: null, chips: 0, icon: 'automations', layoutRendered: false });
   });
 });
 

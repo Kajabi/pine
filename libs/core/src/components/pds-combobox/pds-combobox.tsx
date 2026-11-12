@@ -1232,6 +1232,14 @@ export class PdsCombobox implements BasePdsProps {
     } else {
       this.selectedOptionChipProps = null;
     }
+
+    // Immediately update layout content too, the same way: the @Watch('selectedOption') below
+    // isn't active yet the first time this runs, during componentWillLoad's initial selection,
+    // so a preselected layout option would otherwise show its plain label until some later change
+    // triggers the watcher.
+    this.selectedOptionLayoutContent = option && this.isOptionLayout(option)
+      ? this.getOptionLayoutContent(option)
+      : '';
   }
 
   private filterOptions() {
