@@ -28,6 +28,7 @@ Tooltips display helpful popup text when users hover over or keyboard focus on a
 ### Accessibility
 
 - Wrap a focusable trigger, such as a `pds-button` or `pds-link`. The tooltip opens when the trigger takes keyboard focus, and plain text can't take focus, so keyboard users never see a tooltip on it.
+- Don't use a tooltip to explain why a control is disabled. A disabled control can't take focus, so keyboard users never open the tooltip, and screen readers don't get its text. Show the reason as visible text with the control instead, such as a switch's `helper-message` (see [Disabled with a reason](/docs/components-switch--docs#disabled-with-a-reason)).
 - The tooltip opens on hover or keyboard focus of the trigger, and closes when the pointer leaves or focus moves away, unless `opened` holds it open (see [Technical Notes](#technical-notes)). Escape doesn't close it.
 - Reserve tooltips for purely supplemental information and display critical validation or blocking instructions inline.
 - The open tooltip is a polite live region. Changes to its content while it's open are announced, but opening it isn't reliably announced.
