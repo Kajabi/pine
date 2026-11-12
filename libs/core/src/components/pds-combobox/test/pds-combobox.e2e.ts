@@ -2383,3 +2383,38 @@ describe('pds-combobox selected field and option badges', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+describe('pds-combobox value fade', () => {
+  const setUp = async (value = '') => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-combobox component-id="fade" label="Action" trigger="button" mode="select-only" ${value ? `value="${value}"` : ''}>
+        <option value="tags" data-icon="hashtag">Tags</option>
+        <option value="automation" data-icon="automations">Automation</option>
+      </pds-combobox>
+    `);
+    await page.waitForChanges();
+    return page;
+  };
+
+  // Whether the field's value fades in: its class, and an animation running on it.
+  const fades = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.evaluate(() => {
+      const label = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger-label')!;
+      return label.classList.contains('pds-combobox__button-trigger-label--value-in') || label.getAnimations().length > 0;
+    });
+
+  it('paints a value it loads with at rest', async () => {
+    const page = await setUp('tags');
+    expect(await fades(page)).toBe(false);
+  });
+
+  it('fades in a pick from the placeholder', async () => {
+    const page = await setUp();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> [role="option"]')).click();
+    await page.waitForChanges();
+    expect(await fades(page)).toBe(true);
+  });
+});
