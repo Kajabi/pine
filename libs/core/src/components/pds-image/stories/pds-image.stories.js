@@ -39,10 +39,19 @@ const FitTemplate = (args) => html`<div style="display: flex; gap: 1rem;">
 // the placeholder for an error message on `pdsImageError`. The placeholder sits over the
 // image rather than hiding it, since a hidden image with `loading="lazy"` never loads. The
 // loading placeholder is hidden from screen readers, which already announce the image's alt.
+// The error message is written into its `role="status"` region only once the region is
+// showing, so screen readers announce the failure.
 const showState = (event, state) => {
   const frame = event.target.closest('[data-image-frame]');
+  const error = frame.querySelector('[data-image-error]');
   frame.querySelector('[data-image-placeholder]').hidden = state !== 'loading';
-  frame.querySelector('[data-image-error]').hidden = state !== 'error';
+  error.hidden = state !== 'error';
+  error.querySelector('pds-text').textContent = '';
+  if (state === 'error') {
+    requestAnimationFrame(() => {
+      error.querySelector('pds-text').textContent = "This image couldn't load";
+    });
+  }
 };
 
 const overlayStyle = 'position: absolute; inset: 0;';
@@ -56,6 +65,7 @@ const EventsTemplate = (args) => {
       url.searchParams.set('reload', Date.now());
       frame.querySelector('[data-image-placeholder]').hidden = false;
       frame.querySelector('[data-image-error]').hidden = true;
+      frame.querySelector('[data-image-error] pds-text').textContent = '';
       image.setAttribute('src', url.href);
     });
   };
@@ -88,12 +98,13 @@ const EventsTemplate = (args) => {
             <pds-box
               data-image-error
               hidden
+              role="status"
               align-items="center"
               background-color="var(--pine-color-background-inset)"
               justify-content="center"
               style="${overlayStyle}"
             >
-              <pds-text color="secondary" size="sm">This image couldn't load</pds-text>
+              <pds-text color="secondary" size="sm"></pds-text>
             </pds-box>
           </div>
           <pds-text size="sm">${label}</pds-text>
