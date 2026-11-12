@@ -2241,17 +2241,15 @@ describe('pds-combobox selected field and option badges', () => {
 });
 
 describe('pds-combobox dropdown width', () => {
-  const listboxWidth = async (attrs: string) => {
+  const OPTIONS = '<option value="cat">Cat</option><option value="dog">Dog</option>';
+  const GROUPS = '<optgroup label="Pets"><option value="cat">Cat</option></optgroup><optgroup label="Farm"><option value="cow">Cow</option></optgroup>';
+
+  const listboxWidth = async (attrs: string, options = OPTIONS, trigger = 'pds-combobox >>> input') => {
     const page = await newE2EPage();
-    await page.setContent(`
-      <pds-combobox component-id="width" label="Animal" ${attrs}>
-        <option value="cat">Cat</option>
-        <option value="dog">Dog</option>
-      </pds-combobox>
-    `);
+    await page.setContent(`<pds-combobox component-id="width" label="Animal" ${attrs}>${options}</pds-combobox>`);
     await page.waitForChanges();
 
-    await (await page.find('pds-combobox >>> input')).click();
+    await (await page.find(trigger)).click();
     await page.waitForChanges();
 
     return page.evaluate(() => {
@@ -2270,5 +2268,23 @@ describe('pds-combobox dropdown width', () => {
 
   it('renders the listbox at dropdown-width, padding included', async () => {
     expect(Math.round(await listboxWidth('dropdown-width="300px"'))).toBe(300);
+  });
+
+  // The widths each panel had as content-box, which added its own padding to 236px.
+  it('renders a grouped panel, with its smaller padding, at its earlier default width', async () => {
+    expect(Math.round(await listboxWidth('group-display="drill-in"', GROUPS))).toBe(244);
+  });
+
+  it('renders a panel with a search, which has no padding of its own, at its earlier default width', async () => {
+    const width = await listboxWidth(
+      'trigger="button" mode="select-only" panel-search',
+      OPTIONS,
+      'pds-combobox >>> .pds-combobox__button-trigger',
+    );
+    expect(Math.round(width)).toBe(236);
+  });
+
+  it('renders a grouped panel at dropdown-width too', async () => {
+    expect(Math.round(await listboxWidth('group-display="drill-in" dropdown-width="300px"', GROUPS))).toBe(300);
   });
 });
