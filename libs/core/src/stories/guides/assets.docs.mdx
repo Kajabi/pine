@@ -33,7 +33,7 @@ export default defineConfig({
     copy({
       targets: [
         {
-          src: 'node_modules/@pine-ds/core/dist/pine-core/svg/*',
+          src: 'node_modules/@pine-ds/icons/dist/svg/*',
           dest: 'public/assets/pine-ds/svg',
         },
       ],
@@ -45,7 +45,7 @@ export default defineConfig({
 })
 ```
 
-You need to "tell" Pine Design System where to find the assets. The components will look for the `__PINE_ASSET_PATH__` variable in the `window` object. The path should point to the `pine-ds/svg` folder.
+You need to "tell" Pine Design System where to find the assets. The components will look for the `__PINE_ASSET_PATH__` variable in the `window` object. The path should point to the folder that contains `svg/` (here `/assets/pine-ds/`), because Pine adds `svg/<name>.svg` to it.
 
 You have 2 options:
 

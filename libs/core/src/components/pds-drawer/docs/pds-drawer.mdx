@@ -1,7 +1,12 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { DocArgsTable } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
 import * as PdsDrawerStories from '../stories/pds-drawer.stories.js';
+import { StatusBadge } from '../../../stories/_helpers';
 
 <Meta of={PdsDrawerStories} />
+
+<StatusBadge component="pds-drawer" />
 
 # Drawer
 
@@ -18,17 +23,59 @@ behavior a side panel needs.
 <Canvas of={PdsDrawerStories.Default} />
 <Controls of={PdsDrawerStories.Default} />
 
+## Guidelines
+
+### When to use
+
+- For a panel people work in beside the page, such as settings or the details of a selected item
+- When people need to see or use the page while the panel is open
+
+### When not to use
+
+- For a short task that blocks the page, such as a confirmation or a focused form (use [Modal](/docs/components-modal--docs)). For a longer blocking task that suits a side panel, add `modal` (see [Modal](#modal)).
+- For a short explanation or a few options tied to one control (use [Popover](/docs/components-popover--docs))
+
+### Accessibility
+
+- Name the drawer: its dialog is labelled by the element with the id `{component-id}-heading`, modal or not, so give the drawer's heading that id.
+- A drawer moves focus to its first control when it opens, unless it's non-modal with `initial-focus="none"`.
+- In a non-modal drawer, Tab isn't trapped, so focus moves freely between the drawer and the page. A `modal` drawer keeps focus inside it and makes the page inert.
+- Escape closes a non-modal drawer from anywhere on the page, not only from inside it. It doesn't when focus is in a dialog or overlay stacked above the drawer, or when an open control, such as a dropdown menu, closes on that Escape first.
+- When the drawer closes with focus inside it, focus returns to the control that opened it. When it closes from the page (Escape, or a click outside), focus stays where it is.
+
+## Properties
+
+<DocArgsTable componentName="pds-drawer" docSource={components} />
+
+### Subcomponents
+
+- `pds-drawer-header` lays out its content in a padded row, with the title and close control spaced apart and a divider below.
+- `pds-drawer-content` fills the space between the header and footer, adds padding, and scrolls when `scrollable` is on.
+- `pds-drawer-footer` lays out its actions in a padded row aligned to the end, with a divider above.
+
+Unlike the modal's subcomponents, these add their own padding and layout, so their content needs no `pds-box` wrapper.
+
 ## Usage
 
 ```html
 <pds-drawer open component-id="automation-settings" side="end" size="md">
-  <pds-drawer-header>…</pds-drawer-header>
+  <pds-drawer-header>
+    <pds-text tag="h2" size="h4" id="automation-settings-heading">Automation settings</pds-text>
+  </pds-drawer-header>
   <pds-drawer-content>…</pds-drawer-content>
   <pds-drawer-footer>…</pds-drawer-footer>
 </pds-drawer>
 ```
 
-- `pds-drawer-content` fills the space between the header and footer.
+- A trigger only sets `open` to `true`. The drawer closes itself (Escape, a
+  click outside) and sets its own `open` to `false`, so listen for
+  `pdsDrawerClose` to update your state. It can fire twice for one close, so
+  keep its handler safe to run again. A toggle-style trigger
+  (`open = !open`) fights light dismiss: clicking it while the drawer is open
+  closes the drawer on `pointerdown`, then the trigger's own click handler
+  opens it again.
+- `size` sets the width: `sm` is 360px and `md` (the default) is 500px. On a
+  narrower screen, the drawer fills the width.
 - `side` is logical (`start` / `end`): `end` is the inline-end edge, so an
   `end` drawer docks on the left in right-to-left layouts.
 - `light-dismiss` (default `true`): a default drawer has no backdrop to click,
@@ -50,14 +97,13 @@ them, add `modal`. A modal drawer dims the page with a backdrop, makes the page
 inert, and keeps focus inside the drawer, like `pds-modal`. It still docks to
 its `side` at its `size`.
 
-- Name it: the dialog is labelled by the element with the id
-  `{component-id}-heading`, so give the drawer's heading that id.
 - Always include a close control. With `light-dismiss="false"`, Escape and the
   backdrop don't close it, so the close control is the only way out.
 - `modal` is read when the drawer opens. Set it before opening, not while open.
 - `initial-focus="none"` doesn't apply: focus starts in a modal drawer.
-- Tooltips open in `document.body`, behind a modal drawer, so they don't show
-  inside one. Popovers open inside the drawer and show above it.
+- Tooltips and popovers inside a modal drawer open inside it and show above
+  it. A tooltip opened with `opened` before the drawer opens stays behind the
+  drawer until the tooltip opens again.
 
 ```html
 <pds-drawer open modal component-id="contact-filters" side="end" size="md">

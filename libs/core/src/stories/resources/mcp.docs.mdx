@@ -20,37 +20,73 @@ Instead of AI assistants making up component names or using incorrect properties
 
 ## Available Tools
 
-- **Component Information** - Get details about any Pine component with examples (markup, props, events, etc.)
-- **Design Tokens** - Access colors, spacing, typography tokens with CSS examples (semantic and core tokens)
-- **Documentation** - Browse Pine design guidelines and best practices
-- **Composition patterns** - Admin screen recipes from `mcp-patterns.json` (`list_pine_patterns` / `get_pine_pattern`)
-- **Layout Validation** - Check if generated layout code follows Pine patterns
+Your assistant picks these tools itself; you don't call them by hand. Knowing them helps you read what it's doing and ask for the right one.
 
-## Integration with AI Applications
+**Discover**
 
-Pine MCP can be integrated with various AI applications that support the Model Context Protocol. Popular applications include:
+- `list_pine_components` - every Pine component, with a short description
+- `list_pine_icons` - the icon set, searchable by name, tag or category
+- `list_pine_patterns` - page-level composition recipes from the <pds-link href="../?path=/docs/resources-patterns--docs">Patterns</pds-link> page
+- `list_pine_design_docs` - Pine's design docs, such as tokens, layout and forms
 
-- **ChatGPT** - OpenAI's chatbot
-- **Claude Code** - Anthropic's code assistant
-- **Claude Desktop** - Anthropic's desktop application
-- **Cursor** - AI-powered IDE
-- **Visual Studio Code** - Microsoft's code editor
-- **Windsurf** - AI-powered IDE
+**Resolve**
 
-The configuration depends on how the application handles MCP server connections:
+- `get_pine_component` - one component's props, events, methods, slots, examples, guidelines and accessibility notes, as web components, React or both
+- `get_pine_tokens` - design tokens with their resolved values, filtered by purpose or name
+- `get_pine_pattern` - one composition recipe by id, as web components or React
+- `get_pine_design_doc` - one design doc, or one section of it
+- `ask_pine_agent` - answers a Pine question in plain language, with code examples
+
+**Generate and validate**
+
+- `get_pine_context_for_generation` - every blocking, warning and guidance rule, to read once before generating Pine code
+- `validate_pine_layout` - checks markup against Pine's layout rules and returns each violation with a fix
+- `validate_ui_generation` - runs the full validation workflow on generated UI and auto-fixes mobile-first violations
+
+**Deprecated** (still available, to be removed in a future release): `review_generated_layout` (use `validate_pine_layout`), `fix_layout_issues` (use `validate_pine_layout` or `validate_ui_generation`) and `should_engage_pine_workflow` (call `get_pine_context_for_generation` before generating and `validate_ui_generation` after).
+
+Clients that support MCP resources can also read `pine://components`, `pine://components/{componentName}`, `pine://tokens/semantic`, `pine://tokens/core` and `pine://icons`.
+
+## Connect Your Assistant
+
+Pine MCP is served over Streamable HTTP at `https://pine-mcp.netlify.app/mcp`.
 
 ### Identify Your Project
 
 Pine MCP uses the `x-pine-mcp-client` header to tell callers apart, so usage and validation results from your project can be separated from everyone else's. Without it, your calls are grouped by the generic user agent of your tool (for example, `node` or `claude-code`).
 
-- **Use a stable name per repo or app** - for example, `kajabi-products`. Don't use spaces; an optional version can follow a slash (`my-app/1.2.0`).
+- **Use a stable name per repo or app** - for example, `my-app`. Don't use spaces; an optional version can follow a slash (`my-app/1.2.0`).
 - **Prefix test and verification runs with `test-`** - for example, `test-my-app`. These calls are kept out of the quality dashboards.
 
 Replace `<your-repo-or-app-name>` in the examples below with your project's name.
 
-### Applications with Native HTTP Support
+### Claude Code
 
-Some applications can directly connect to remote MCP servers over HTTP. For these applications, use:
+Add the server from your project's directory:
+
+```bash
+claude mcp add --transport http pine-mcp https://pine-mcp.netlify.app/mcp --header "x-pine-mcp-client: <your-repo-or-app-name>"
+```
+
+To share the server with everyone who works in the repository, add `--scope project`, which writes the entry to `.mcp.json` at the repository root for you to commit. You can also write the file by hand. The entry needs `"type": "http"`:
+
+```json
+{
+  "mcpServers": {
+    "pine-mcp": {
+      "type": "http",
+      "url": "https://pine-mcp.netlify.app/mcp",
+      "headers": {
+        "x-pine-mcp-client": "<your-repo-or-app-name>"
+      }
+    }
+  }
+}
+```
+
+### Cursor and Windsurf
+
+Cursor reads `.cursor/mcp.json` in the project, or `~/.cursor/mcp.json` for every project. Windsurf reads its own `mcp_config.json` (see Windsurf's MCP documentation for its location). Both connect over HTTP directly:
 
 ```json
 {
@@ -65,9 +101,25 @@ Some applications can directly connect to remote MCP servers over HTTP. For thes
 }
 ```
 
-### Applications Requiring a Proxy Adapter
+### Visual Studio Code
 
-Other applications expect MCP servers to run as local processes. For these applications, use a proxy adapter to bridge the connection. `mcp-remote` sends the header through its `--header` flag:
+VS Code's MCP support needs `"type": "http"` on the server entry. Its config file and top-level key have changed between releases, so follow <pds-link href="https://code.visualstudio.com/docs/copilot/reference/mcp-configuration" external>VS Code's MCP configuration guide</pds-link> for where the entry goes, and use:
+
+```json
+{
+  "pine-mcp": {
+    "type": "http",
+    "url": "https://pine-mcp.netlify.app/mcp",
+    "headers": {
+      "x-pine-mcp-client": "<your-repo-or-app-name>"
+    }
+  }
+}
+```
+
+### Claude Desktop
+
+Claude Desktop's config file starts local servers, so it reaches Pine MCP through the `mcp-remote` proxy. Open the file from **Settings → Developer → Edit Config**, add the server, and restart Claude Desktop. `mcp-remote` sends the header through its `--header` flag:
 
 ```json
 {
@@ -85,15 +137,25 @@ Other applications expect MCP servers to run as local processes. For these appli
 }
 ```
 
-Leave out the space after the colon in the `--header` value. Some applications, including Cursor and Claude Desktop on Windows, don't escape spaces in `args`, which breaks the header.
+Leave out the space after the colon in the `--header` value. Some applications, including Cursor and Claude Desktop on Windows, don't escape spaces in `args`, which breaks the header. Any other client that only starts local servers can use the same `mcp-remote` entry.
 
-## How to Know Which to Use
+### Other Applications
 
-- **Try the direct HTTP configuration first** (simpler setup)
-- **If that doesn't work**, use the proxy configuration with `mcp-remote`
-- Check your application's documentation for MCP integration examples
+ChatGPT and other apps that add MCP servers from a settings screen rather than a config file take the URL `https://pine-mcp.netlify.app/mcp`. If an app can't send custom headers, its calls are grouped under its user agent.
 
-Both configurations provide the same Pine MCP functionality - they just accommodate different application architectures for MCP server communication.
+### Check the Connection
+
+Ask your assistant: "List the Pine components." It should call `list_pine_components` and answer with real `pds-*` names. If it answers without calling a Pine MCP tool, check that the server shows as connected in your app's MCP settings, then start a new chat.
+
+## Use with the Pine Agent Skill
+
+The `pine` agent skill tells a coding agent when to use these tools: it resolves every component, token and icon through Pine MCP before writing, and validates the result before calling the work done. It needs Pine MCP connected. Install it into your agent with:
+
+```bash
+npx skills add https://pine-design-system.netlify.app
+```
+
+Or copy <pds-link href="https://github.com/Kajabi/pine/tree/main/skills/pine" external>skills/pine</pds-link> from the Pine repository into your agent's skills directory.
 
 ## Example Usage
 
@@ -123,3 +185,8 @@ Ask: "Validate this Pine layout code"
 Pine MCP serves a snapshot of Pine taken at its last deploy, so it can trail a new Pine release. The component and design-doc tools accept `forceRefresh: true` to read live docs from GitHub instead.
 
 Pine MCP makes it easy for AI assistants to work intelligently with the Pine Design System, ensuring consistent, compliant code generation and reducing the need for manual documentation lookups.
+
+## Get Help
+
+- Report wrong or missing data in an answer, such as a prop, example or icon, as a <pds-link href="https://github.com/Kajabi/pine/issues/new/choose" external>Pine GitHub issue</pds-link>. Most answers come from Pine's own docs, so the fix usually lands in Pine.
+- Kajabi staff can ask in <pds-link href="https://kajabi.slack.com/archives/C0922PA4509" external>#dss-pine-mcp</pds-link> (Kajabi-internal Slack).

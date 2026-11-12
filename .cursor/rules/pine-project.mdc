@@ -23,7 +23,7 @@ Stencil.js web component library in an Nx monorepo. Core components live in `lib
 - Commit scope = component name (e.g., `feat(pds-table):`, `fix(pds-button):`), single line, no ticket numbers
 - Commit type by file: `feat:` for new component code/props, `fix:` for bug fixes, `test:` for specs/e2e, `docs:` for MDX/stories/docs, `style:` for SCSS only, `refactor:` for restructuring, `chore:` for tooling/config/deps
 - PR titles: `type(scope): description` — use the template at `.github/pull_request_template.md`
-- If your branch is behind `main`, rebase before pushing — requires at least two approved reviews before merging
+- If your branch is behind `main`, rebase before pushing — requires at least one approved review before merging
 
 ## Build & Test
 
