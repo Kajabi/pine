@@ -134,6 +134,14 @@ describe('pds-dropdown-menu-item', () => {
     // Both props are passed through, pds-link handles precedence
     expect(linkElement?.external).toBe(true);
     expect(linkElement?.target).toBe('_self');
+
+    const anchor = linkElement?.shadowRoot?.querySelector('a');
+    expect(anchor?.getAttribute('target')).toBe('_self');
+
+    const icon = linkElement?.shadowRoot?.querySelector('pds-icon');
+    expect(icon).not.toBeNull();
+    expect(icon?.hasAttribute('aria-label')).toBe(false);
+    expect(icon?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('sets href to null when link is disabled', async () => {
