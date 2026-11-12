@@ -155,7 +155,7 @@ Pine is maintained by its contributors, with no dedicated support team. See <pds
 ## Common Gotchas
 
 **Components not rendering?**
-With the CDN, check that the page loads the `<link>` and both `<script>` tags from step 1, with the same `[VERSION]` in each, and place them in `<head>`.
+With the CDN, check that the page has the `<link>` and both `<script>` tags from step 1, with the same `[VERSION]` in each, and place them in `<head>`.
 
 **Components render without Pine's colors or font?**
 The page isn't loading `pine-core.css`. `@pine-ds/react` and the custom-elements build register components but don't load the stylesheet. Load it as step 1 shows.
