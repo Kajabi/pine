@@ -54,13 +54,7 @@ Today, TypeScript checks `Pds*` props only when your `tsconfig.json` sets `"modu
 
 ## DOM morphs
 
-This package doesn't run Pine's global script. If a DOM morph on your page can remove the `hydrated` class from Pine components, call `keepPineHydrated()` once at startup to put it back:
-
-```js
-import { keepPineHydrated } from '@pine-ds/core/components/index.js';
-
-keepPineHydrated();
-```
+Components from this package stay visible when a DOM morph removes their `hydrated` class. Components that Pine's CDN build registers are hidden without it, and the CDN build puts the class back on its own. On a page that also loads the CDN build, each component follows the build that registered it first.
 
 ## Links
 
