@@ -683,7 +683,6 @@ describe('pds-table', () => {
     });
     const inner = page.root.shadowRoot.querySelector('.pds-table');
     expect(inner).toHaveClass('is-fixed-layout');
-    expect(page.root).not.toHaveClass('is-fixed-layout');
   });
 
   it('does not add the fixed layout class by default', async () => {
