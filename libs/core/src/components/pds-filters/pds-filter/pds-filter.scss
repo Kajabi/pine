@@ -166,7 +166,8 @@
   box-shadow: var(--pine-box-shadow-100);
   box-sizing: border-box;
   display: none;
-  inline-size: 228px;
+  // 228px of content plus the 8px padding on each side, now that the popover is border-box.
+  inline-size: 244px;
   inset: unset;
   padding: var(--pine-dimension-100);
   z-index: var(--pine-z-index-overlay);
