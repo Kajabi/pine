@@ -220,6 +220,28 @@ describe('pds-sortable keyboard reordering', () => {
     expect(await moved()).toHaveLength(1);
   });
 
+  it('keeps the last row without a divider once the live region is added', async () => {
+    const { page } = await setup('dividers border');
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+    expect(await page.$('.pds-sortable__live-region')).not.toBeNull();
+
+    const lastBorder = await page.$eval('pds-sortable-item:last-of-type', (el) => getComputedStyle(el).borderBottomWidth);
+    expect(lastBorder).toBe('0px');
+  });
+
+  it('marks the handle pressed while the item is picked up', async () => {
+    const { page } = await setup();
+    const pressed = () => page.evaluate(() => document.activeElement?.getAttribute('aria-pressed'));
+
+    await page.keyboard.press('Tab');
+    expect(await pressed()).toBe('false');
+    await page.keyboard.press('Space');
+    expect(await pressed()).toBe('true');
+    await page.keyboard.press('Escape');
+    expect(await pressed()).toBe('false');
+  });
+
   it('is not reachable from the keyboard when disabled', async () => {
     const { page } = await setup('disabled');
     await page.keyboard.press('Tab');
