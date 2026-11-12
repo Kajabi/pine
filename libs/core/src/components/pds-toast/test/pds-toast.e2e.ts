@@ -314,3 +314,18 @@ describe('pds-toast severity', () => {
     expect(spoken).not.toMatch(/warning filled/);
   });
 });
+
+describe('pds-toast width', () => {
+  it('keeps its padding inside max-width, leaving a gutter on a narrow screen', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 375, height: 800 });
+    await page.setContent(`<pds-toast component-id="wide" duration="0">Long content that wraps across the panel so it reaches its widest width, and keeps going past the edge of the panel to be sure.</pds-toast>`);
+    await page.waitForChanges();
+
+    const width = await page.evaluate(
+      () => document.querySelector('pds-toast')!.shadowRoot!.querySelector('.pds-toast')!.getBoundingClientRect().width,
+    );
+    // max-width on a narrow screen is the viewport less a 4px gutter on each side.
+    expect(Math.round(width)).toBe(375 - 8);
+  });
+});
