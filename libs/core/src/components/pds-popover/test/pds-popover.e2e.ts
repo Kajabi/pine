@@ -2272,10 +2272,10 @@ describe('pds-popover open-on hover', () => {
 });
 
 describe('pds-popover width', () => {
-  it('keeps its padding inside max-width', async () => {
+  it('renders at its default max-width, padding included', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-popover component-id="wide" max-width="352">
+      <pds-popover component-id="wide">
         <button slot="trigger">Show popover</button>
         <p>Long content that wraps across the panel so it reaches its widest width, and keeps going past the edge of the panel to be sure.</p>
       </pds-popover>
@@ -2285,6 +2285,6 @@ describe('pds-popover width', () => {
     await page.waitForChanges();
 
     const width = await page.evaluate(() => document.getElementById('wide-portal')!.getBoundingClientRect().width);
-    expect(Math.round(width)).toBe(352);
+    expect(Math.round(width)).toBe(400);
   });
 });
