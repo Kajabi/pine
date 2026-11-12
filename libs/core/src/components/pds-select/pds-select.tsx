@@ -24,6 +24,7 @@ const patchInPlace = (target: Element, copy: Element) => {
 };
 
 /**
+ * @slot (default) - The `option` and `optgroup` elements to choose from. Other elements are ignored.
  * @slot action - Content to be displayed in the label area, typically for help icons or links
  * @part action - Exposes the wrapper around the `action` slot for styling. Appears only when the `action` slot has content.
  * @part select - Exposes the native `select` element for styling.
@@ -64,7 +65,7 @@ export class PdsSelect {
   @Prop() disabled = false
 
   /**
-   * Displays error message text describing an invalid state.
+   * Displays an error message below the select and marks the select as invalid, with or without `invalid`.
    */
   @Prop() errorMessage: string;
 
@@ -75,7 +76,7 @@ export class PdsSelect {
   @Prop() hideLabel: boolean;
 
   /**
-   * Displays helper message text below select.
+   * Displays a message or hint below the select.
    */
   @Prop() helperMessage: string;
 
@@ -119,7 +120,8 @@ export class PdsSelect {
 
 
   /**
-   * Emitted when the select value changes.
+   * Emitted when the user changes the selection. Doesn't emit when the `value` property is set programmatically.
+   * `detail` is the native `change` event, so read the new value from the select's `value`.
    */
   @Event() pdsSelectChange: EventEmitter<InputEvent>;
 

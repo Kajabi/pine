@@ -12,8 +12,8 @@
 | `autocomplete`             | `autocomplete`   | Specifies if and how the browser provides `autocomplete` assistance for the field.                                                                                                                                                        | `string`             | `undefined` |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                                                                                                                                                     | `string`             | `undefined` |
 | `disabled`                 | `disabled`       | Indicates whether or not the select field is disabled.                                                                                                                                                                                    | `boolean`            | `false`     |
-| `errorMessage`             | `error-message`  | Displays error message text describing an invalid state.                                                                                                                                                                                  | `string`             | `undefined` |
-| `helperMessage`            | `helper-message` | Displays helper message text below select.                                                                                                                                                                                                | `string`             | `undefined` |
+| `errorMessage`             | `error-message`  | Displays an error message below the select and marks the select as invalid, with or without `invalid`.                                                                                                                                    | `string`             | `undefined` |
+| `helperMessage`            | `helper-message` | Displays a message or hint below the select.                                                                                                                                                                                              | `string`             | `undefined` |
 | `hideLabel`                | `hide-label`     | Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI. | `boolean`            | `undefined` |
 | `highlight`                | `highlight`      | Applies highlight styling to the select field.                                                                                                                                                                                            | `boolean`            | `undefined` |
 | `invalid`                  | `invalid`        | Determines whether or not the select is invalid.                                                                                                                                                                                          | `boolean`            | `undefined` |
@@ -26,19 +26,20 @@
 
 ## Events
 
-| Event             | Description                                       | Type                         |
-| ----------------- | ------------------------------------------------- | ---------------------------- |
-| `pdsBlur`         | Emitted when the select loses focus.              | `CustomEvent<FocusEvent>`    |
-| `pdsFocus`        | Emitted when the select gains focus.              | `CustomEvent<FocusEvent>`    |
-| `pdsKeyDown`      | Emitted when a key is pressed down in the select. | `CustomEvent<KeyboardEvent>` |
-| `pdsSelectChange` | Emitted when the select value changes.            | `CustomEvent<InputEvent>`    |
+| Event             | Description                                                                                                                                                                                          | Type                         |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `pdsBlur`         | Emitted when the select loses focus.                                                                                                                                                                 | `CustomEvent<FocusEvent>`    |
+| `pdsFocus`        | Emitted when the select gains focus.                                                                                                                                                                 | `CustomEvent<FocusEvent>`    |
+| `pdsKeyDown`      | Emitted when a key is pressed down in the select.                                                                                                                                                    | `CustomEvent<KeyboardEvent>` |
+| `pdsSelectChange` | Emitted when the user changes the selection. Doesn't emit when the `value` property is set programmatically. `detail` is the native `change` event, so read the new value from the select's `value`. | `CustomEvent<InputEvent>`    |
 
 
 ## Slots
 
-| Slot       | Description                                                                  |
-| ---------- | ---------------------------------------------------------------------------- |
-| `"action"` | Content to be displayed in the label area, typically for help icons or links |
+| Slot          | Description                                                                      |
+| ------------- | -------------------------------------------------------------------------------- |
+| `"(default)"` | The `option` and `optgroup` elements to choose from. Other elements are ignored. |
+| `"action"`    | Content to be displayed in the label area, typically for help icons or links     |
 
 
 ## Shadow Parts
