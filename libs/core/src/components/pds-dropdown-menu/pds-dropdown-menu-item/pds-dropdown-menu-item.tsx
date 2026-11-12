@@ -3,7 +3,7 @@ import type { BasePdsProps } from '@utils/interfaces';
 
 /**
  * @slot (default) - The item's label.
- * @slot start - Content to display before the item's label, such as a `pds-icon`. A `pds-icon` without an `aria-label` is decorative, so screen readers announce only the label.
+ * @slot start - Content to display before the item's label, such as a `pds-icon`. A `pds-icon` without an `aria-label` or `aria-labelledby` is decorative; a named one is announced before the label, so leave decorative icons unnamed.
  * @part button - Exposes the item's inner element for styling. Appears on button and informational items, not on links.
  */
 @Component({
@@ -121,29 +121,36 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
   @State() hasFocus: boolean = false;
 
-  @State() hasStartContent = false;
+  private startSlotEl?: HTMLSlotElement;
 
-  componentWillLoad() {
-    // Seeded from the light DOM so the first render has no empty gap, before slotchange fires.
-    this.hasStartContent = Array.from(this.host.children).some((child) => child.getAttribute('slot') === 'start');
-  }
+  // Checked directly against the light DOM rather than kept in @State: Stencil's JSX doesn't
+  // type a `class` prop for `<slot>`, and a ref callback only fires once, on creation, so it
+  // can't push a later @State change back onto the element either way. Called once up front
+  // (from the ref, since nothing's assigned at componentWillLoad's point) and again on every
+  // native slotchange after that, both calling classList directly.
+  private updateStartSlotEmpty = () => {
+    const hasContent = Array.from(this.host.children).some((child) => child.getAttribute('slot') === 'start');
+    this.startSlotEl?.classList.toggle('pds-dropdown-menu-item__start--empty', !hasContent);
+  };
 
-  private handleStartSlotChange = (event: Event) => {
-    this.hasStartContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
-  }
-
-  // Always render the start slot so slotted content is projected reliably.
-  // The --empty class hides the wrapper when nothing is slotted, so it adds no gap.
+  // Always render the start slot so slotted content is projected reliably, with nothing wrapping
+  // it: a wrapper would sit between the slotted content and this host, leaving it without an
+  // assignedSlot, which breaks a click-target walk that follows assignedSlot up to find a link
+  // (Turbo's link lookup works this way). The --empty class hides it when nothing is slotted, so
+  // it adds no gap.
   private renderContent() {
     return [
-      <span
-        class={{
-          'pds-dropdown-menu-item__start': true,
-          'pds-dropdown-menu-item__start--empty': !this.hasStartContent
+      <slot
+        name="start"
+        onSlotchange={this.updateStartSlotEmpty}
+        ref={(el) => {
+          this.startSlotEl = el;
+          if (el) {
+            el.classList.add('pds-dropdown-menu-item__start');
+            this.updateStartSlotEmpty();
+          }
         }}
-      >
-        <slot name="start" onSlotchange={this.handleStartSlotChange}></slot>
-      </span>,
+      ></slot>,
       <slot></slot>
     ];
   }
@@ -227,12 +234,25 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     );
   }
 
+  // pds-link's own shadow root, one level in from its host.
+  private innerAnchor(): HTMLAnchorElement | null {
+    return this.host.shadowRoot?.querySelector('pds-link')?.shadowRoot?.querySelector('a') ?? null;
+  }
+
   private handleKeyDown = (event: KeyboardEvent) => {
     if (this.disabled || event.key !== 'Enter') return;
 
-    // Enter on a link follows it, and the anchor's click reaches the host's click handler,
-    // which emits pdsClick. Emitting here too would send it twice.
-    if (this.href != null) return;
+    if (this.href != null) {
+      // Enter on the inner <a> itself follows the link, and its native click reaches the host's
+      // click handler below, which emits pdsClick -- returning early here leaves that alone.
+      // Safari leaves focus on the pds-link host after a mouse click, not its inner <a>, where
+      // Enter would otherwise do nothing: an anchor only activates on Enter when it is itself the
+      // focused element, not an ancestor of it. Forwarding the click to the real anchor instead
+      // runs the browser's own navigation (hash, download, target), and still reaches the same
+      // host click handler, so pdsClick still isn't emitted twice.
+      if (event.composedPath()[0] !== this.innerAnchor()) this.innerAnchor()?.click();
+      return;
+    }
 
     event.preventDefault();
     this.handleClick();
