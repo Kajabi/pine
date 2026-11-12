@@ -10,8 +10,14 @@
   }
 
   .pds-sortable-item__handle {
+    border-radius: var(--pine-dimension-2xs);
     line-height: 1;
     margin-inline-end: var(--pine-dimension-md);
+
+    &:focus-visible {
+      outline: var(--pine-outline-focus);
+      outline-offset: var(--pine-border-width);
+    }
   }
 
   // styles when sortable is bordered
@@ -70,6 +76,21 @@
       color: var(--pine-color-info)
     }
   }
+}
+
+:host(.pds-sortable-item:focus-visible) {
+  outline: var(--pine-outline-focus);
+  // Inset, so a bordered list's edge doesn't clip it.
+  outline-offset: calc(var(--pine-border-width-thick) * -1);
+}
+
+// Picked up from the keyboard: lifted like an item being dragged.
+:host(.pds-sortable-item--grabbed) {
+  background-color: var(--pine-color-background-container);
+  box-shadow: var(--pine-box-shadow-400);
+  position: relative;
+  transition: box-shadow var(--pine-motion-duration-fast) var(--pine-motion-easing-out);
+  z-index: 1;
 }
 
 :host(.pds-sortable-item--drag) {
