@@ -98,7 +98,11 @@ Mark a decorative icon with `aria-hidden="true"` so assistive technologies skip 
 <DocCanvas
   mdxSource={{
     webComponent: `<pds-icon name="star" aria-hidden="true"></pds-icon>`,
-    react: `<PdsIcon name="star" aria-hidden="true"></PdsIcon>`
+    react: `
+import { PdsIcon } from '@pine-ds/react';
+import { star } from '@pine-ds/icons/icons';
+
+<PdsIcon icon={star} aria-hidden="true" />`
   }}>
   <pds-icon name="star" aria-hidden="true"></pds-icon>
 </DocCanvas>
