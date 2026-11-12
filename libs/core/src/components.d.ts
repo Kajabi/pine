@@ -2576,7 +2576,7 @@ export namespace Components {
          */
         "label": string;
         /**
-          * Specifies the name. Submitted with the form name/value pair when checked.
+          * Specifies the name. Submitted with the form name/value pair when checked, or with `unchecked-value` while unchecked.
          */
         "name": string;
         /**
@@ -6591,7 +6591,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Specifies the name. Submitted with the form name/value pair when checked.
+          * Specifies the name. Submitted with the form name/value pair when checked, or with `unchecked-value` while unchecked.
          */
         "name"?: string;
         /**

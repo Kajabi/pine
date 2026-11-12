@@ -69,9 +69,10 @@ export class PdsSwitch {
   @Prop() label: string;
 
   /**
-   * Specifies the name. Submitted with the form name/value pair when checked.
+   * Specifies the name. Submitted with the form name/value pair when checked, or with `unchecked-value` while unchecked.
    */
-  @Prop() name: string;
+  // Reflected because a form-associated element submits under its name attribute, so a name set as a property posts too.
+  @Prop({ reflect: true }) name: string;
 
   /**
    * Determines the 'required' state of the input.
@@ -152,6 +153,7 @@ export class PdsSwitch {
   }
 
   @Watch('checked')
+  @Watch('disabled')
   @Watch('uncheckedValue')
   checkedChanged() {
     this.updateFormValue();
@@ -169,8 +171,10 @@ export class PdsSwitch {
     }
   }
 
-  // Unchecked sends uncheckedValue when set, even an empty string, otherwise nothing.
+  // Unchecked sends uncheckedValue when set, even an empty string, otherwise nothing. Disabled sends nothing, like a
+  // native checkbox: the platform only leaves out a host with the disabled attribute, and React sets the property.
   private formValue(): string | null {
+    if (this.disabled) return null;
     if (this.checked) return this.value || 'on';
     return this.uncheckedValue ?? null;
   }
