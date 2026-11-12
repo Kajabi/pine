@@ -26,7 +26,11 @@ Chips are used to inform users about the status of an object or to associate pro
 
 ### Accessibility
 
-The `dropdown` variant and the icon within the `tag` variant of the chip component both render as a button and will inherit all accessibility attributes of a standard HTML button.
+- The dot and the icon are decorative and hidden from assistive technology, so the label text must carry the meaning on its own.
+- The remove button of a `tag` chip is named by `dismiss-label`, "Remove" by default. When several tags appear together, name what each one removes, such as "Remove Filter 1".
+- `aria-*` attributes set on `pds-chip` aren't passed to the button inside a `dropdown` or `tag` chip.
+- A label clipped by `max-width` shows its full text in a tooltip. Whether keyboard users can reach it depends on the variant and where the chip sits (see [Truncating a long label](#truncating-a-long-label)).
+- Use the default `text` variant inside a button, link or listbox option. The `tag` and `dropdown` variants render buttons of their own, and one control can't sit inside another.
 
 ## Properties
 
@@ -245,7 +249,9 @@ For styling beyond color, target the `dot` and `icon` parts. A `::part()` rule t
 
 ### Dropdown
 
-If the `variant` property is set to `"dropdown"`, the chip will be rendered in a dropdown style, altering its appearance and behavior accordingly.
+If the `variant` property is set to `"dropdown"`, the chip renders as a button with a caret. It opens nothing on its own and has no events of its own. For choosing a value from a list, use `pds-combobox` with `trigger="chip"`, a chip-style trigger whose open state is exposed to assistive technology.
+
+As the `trigger` slot of a `pds-dropdown-menu` or `pds-popover`, the dropdown chip opens it, and the menu or popover sets `aria-expanded` on the `pds-chip` element. The chip doesn't pass it to its inner button, so the button's expanded state isn't exposed to assistive technology.
 
 <DocCanvas
   mdxSource={{
@@ -314,6 +320,44 @@ Tag is often used to represent a selected item or a removable element and includ
   <pds-chip sentiment="subtle" variant="tag">Subtle</pds-chip>
   <pds-chip sentiment="success" variant="tag">Success</pds-chip>
   <pds-chip sentiment="warning" variant="tag">Warning</pds-chip>
+</DocCanvas>
+
+#### Removing a tag
+
+Clicking the remove button emits `pdsTagCloseClick`, with no `detail`. The chip doesn't remove itself, so the chips below stay on the page. Listen for the event, remove the chip, and move focus to a related control, such as the one that adds tags. If the remove button had focus when the chip is removed, focus falls back to the page body.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+function TagList() {
+  const [tags, setTags] = useState(['Design', 'Engineering', 'Marketing']);
+  const addTagRef = useRef(null);
+
+  const removeTag = (tag) => {
+    setTags((current) => current.filter((item) => item !== tag));
+    addTagRef.current?.focus();
+  };
+
+  return (
+    <>
+      {tags.map((tag) => (
+        <PdsChip key={tag} variant="tag" dismissLabel={'Remove ' + tag} onPdsTagCloseClick={() => removeTag(tag)}>{tag}</PdsChip>
+      ))}
+      <PdsButton ref={addTagRef} variant="secondary" size="small">Add tag</PdsButton>
+    </>
+  );
+}`,
+    webComponent: `
+    <pds-chip variant="tag" dismiss-label="Remove Design">Design</pds-chip>
+    <pds-chip variant="tag" dismiss-label="Remove Engineering">Engineering</pds-chip>
+    <pds-chip variant="tag" dismiss-label="Remove Marketing">Marketing</pds-chip>
+    <pds-button variant="secondary" size="small">Add tag</pds-button>
+    `
+}}>
+  <pds-chip variant="tag" dismiss-label="Remove Design">Design</pds-chip>
+  <pds-chip variant="tag" dismiss-label="Remove Engineering">Engineering</pds-chip>
+  <pds-chip variant="tag" dismiss-label="Remove Marketing">Marketing</pds-chip>
+  <pds-button variant="secondary" size="small">Add tag</pds-button>
 </DocCanvas>
 
 #### Tag with Remove URL
@@ -459,11 +503,17 @@ The `max-width` property caps the chip and ellipsizes the label once it no longe
   <pds-chip variant="tag" max-width="200px">A very long label that would otherwise overflow the chip</pds-chip>
 </DocCanvas>
 
-Hovering a clipped label shows the full text in a tooltip. For keyboard users, the clipped label gets its own tab stop that shows the same tooltip on keyboard focus. Focus from a click doesn't hold the tooltip open once the pointer leaves.
+Hovering a clipped label shows the full text in a tooltip. What keyboard focus does depends on where the chip sits:
 
-Inside a control that already takes focus, such as a `pds-button`, a link or a listbox option, the chip adds no tab stop of its own. Focusing the control with the keyboard shows the full label instead. Focusing another tab stop inside the control, such as a truncated `pds-text` beside the chip, doesn't show the chip's tooltip. A listbox that uses `aria-activedescendant` never focuses its options, so there the full label shows on hover only. In a listbox option, the tooltip sits beside the listbox, level with the option, so it doesn't cover the other options.
+- **On its own**: the clipped label of a `text` or `tag` chip gets its own tab stop, and keyboard focus on it shows the tooltip.
+- **`dropdown` variant**: the chip's button is the tab stop, and keyboard focus on it shows the tooltip. The label adds no tab stop.
+- **Inside a control that takes focus**, such as a `pds-button`, a link or a focusable listbox option: the chip adds no tab stop, and keyboard focus on the control shows the tooltip. Focus on another tab stop inside the control, such as a truncated `pds-text` beside the chip, doesn't.
+- **In a listbox that uses `aria-activedescendant`**: the options never take focus, so the tooltip shows on hover only.
+- **Inside an `aria-hidden="true"` element**: the chip adds no tab stop, and the tooltip shows on hover only.
 
-Use the default `text` variant inside a control. The `tag` and `dropdown` variants render buttons of their own, and one control can't sit inside another.
+Focus from a click doesn't hold the tooltip open once the pointer leaves. In a listbox option, the tooltip sits beside the listbox, level with the option, so it doesn't cover the other options.
+
+Inside a control, use the default `text` variant, as in the example below.
 
 <DocCanvas
   mdxSource={{

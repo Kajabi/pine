@@ -7,6 +7,7 @@ import {  computePosition,
   flip,
   offset,
   shift,
+  size,
   autoUpdate,
 } from '@floating-ui/dom';
 
@@ -33,7 +34,10 @@ export class PdsDropdownMenu implements BasePdsProps {
   private isOpen: boolean = false;
   private menuItems: MenuItemElement[] = [];
   private cleanupAutoUpdate: (() => void) | null = null;
+  // Counts each opening, so a position worked out for an earlier opening is ignored.
+  private openCount = 0;
   private triggerObserver: MutationObserver | null = null;
+  private triggerVisibility: IntersectionObserver | null = null;
 
   @Element() host: HTMLPdsDropdownMenuElement;
 
@@ -75,6 +79,11 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     this.triggerObserver?.disconnect();
     this.triggerObserver = null;
+    this.stopWatchingTriggerVisibility();
+
+    // The menu was detached, so a position still being worked out for it is dropped. The menu
+    // itself stays open.
+    this.openCount++;
   }
 
   private handleTriggerSlotChange = (event: Event) => {
@@ -166,12 +175,21 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   // Open the dropdown and position it
   private openDropdown = () => {
+    const opening = ++this.openCount;
+
     const updatePosition = () => {
       computePosition(this.triggerEl, this.panelEl as HTMLElement, {
         placement: this.placement,
         strategy: 'fixed',
-        middleware: [offset(6), flip(), shift({padding: 5})],
+        middleware: [
+          offset(6),
+          flip(),
+          shift({padding: 5}),
+          size({ padding: 5, apply: ({ availableHeight, elements }) => this.capPanelHeight(elements.floating, availableHeight) }),
+        ],
       }).then(({ x, y }) => {
+        if (!this.isOpen || opening !== this.openCount) return;
+
         Object.assign(this.panelEl.style, {
           left: `${x}px`,
           top: `${y}px`,
@@ -188,14 +206,72 @@ export class PdsDropdownMenu implements BasePdsProps {
       this.panelEl as HTMLElement,
       updatePosition
     );
+    this.watchTriggerVisibility();
 
     this.host.shadowRoot?.querySelector('pds-box').classList.remove('is-hidden');
     this.isOpen = true;
     this.syncTriggerAria();
   }
 
-  // Close the dropdown
-  private closeDropdown = () => {
+  // The panel is fixed, so a menu taller than the room beside its trigger would run off the window
+  // with no way to reach its last items. It's capped to that room and scrolls inside itself. A
+  // smaller max-height set through the menu-panel part is kept. The cap is important, as a
+  // ::part() rule outside the shadow root otherwise beats the panel's own inline style.
+  //
+  // Removing `max-height` lifts the panel's own scroll constraint, so a layout read in between
+  // (`getComputedStyle`) can commit a frame with nothing left to scroll, and the browser resets
+  // `scrollTop` to 0. This runs on every `autoUpdate` pass, including a small ancestor scroll that
+  // leaves the trigger in view, so a menu scrolled partway down would otherwise jump back to the
+  // top on its own. Restoring `scrollTop` afterward keeps the user's place; the browser clamps it
+  // automatically if the new max-height is shorter than before.
+  private capPanelHeight(panel: HTMLElement, availableHeight: number) {
+    const { scrollTop } = panel;
+    panel.style.removeProperty('max-height');
+    const partMaxHeight = getComputedStyle(panel).maxHeight;
+    const room = `${Math.max(0, availableHeight)}px`;
+    panel.style.setProperty('max-height', partMaxHeight === 'none' ? room : `min(${partMaxHeight}, ${room})`, 'important');
+    panel.scrollTop = scrollTop;
+  }
+
+  // Once the trigger is fully out of view, scrolled or clipped by any container or the window, the
+  // menu closes rather than float away from it, much as a native select's list does. An
+  // IntersectionObserver measures against the layout viewport, so panning a pinch-zoomed page
+  // doesn't close it, as Floating UI's hide() would.
+  private watchTriggerVisibility() {
+    this.stopWatchingTriggerVisibility();
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    // Only a trigger seen in view this opening closes the menu when it leaves.
+    let triggerSeen = false;
+    let broughtIntoView = false;
+
+    this.triggerVisibility = new IntersectionObserver((entries) => {
+      if (!this.isOpen) return;
+
+      if (entries[entries.length - 1].isIntersecting) {
+        triggerSeen = true;
+      } else if (triggerSeen) {
+        this.closeDropdown({ preventScroll: true });
+      } else if (!broughtIntoView) {
+        // Opened with its trigger out of view, from the keyboard after an earlier close or from a
+        // script, the trigger is scrolled into view so the menu opens beside it. A trigger that
+        // still can't be seen leaves the menu open.
+        broughtIntoView = true;
+        this.triggerEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      }
+    });
+    this.triggerVisibility.observe(this.triggerEl);
+  }
+
+  private stopWatchingTriggerVisibility() {
+    this.triggerVisibility?.disconnect();
+    this.triggerVisibility = null;
+  }
+
+  // Close the dropdown. Closed because its trigger left the view, focus from the menu still goes back
+  // to the trigger, so it isn't lost, but without scrolling the trigger back into view. The next Tab
+  // carries on from there.
+  private closeDropdown = ({ preventScroll = false }: { preventScroll?: boolean } = {}) => {
     this.host.shadowRoot?.querySelector('pds-box').classList.add('is-hidden');
     this.isOpen = false;
 
@@ -204,6 +280,7 @@ export class PdsDropdownMenu implements BasePdsProps {
       this.cleanupAutoUpdate();
       this.cleanupAutoUpdate = null;
     }
+    this.stopWatchingTriggerVisibility();
 
     this.syncTriggerAria();
 
@@ -212,7 +289,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     // Return focus to trigger
     if (this.isFocusInMenu()) {
-      this.focusTrigger();
+      this.focusTrigger(preventScroll);
     }
   }
 
@@ -223,10 +300,10 @@ export class PdsDropdownMenu implements BasePdsProps {
   }
 
   // A trigger whose host can't take focus itself, such as pds-chip, passes it to the control inside.
-  private focusTrigger() {
-    this.triggerEl.focus();
+  private focusTrigger(preventScroll = false) {
+    this.triggerEl.focus({ preventScroll });
     if ((this.host.getRootNode() as Document | ShadowRoot).activeElement === this.triggerEl) return;
-    this.triggerEl.shadowRoot?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])')?.focus();
+    this.triggerEl.shadowRoot?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])')?.focus({ preventScroll });
   }
 
   // Handle click on the trigger element

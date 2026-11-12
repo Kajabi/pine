@@ -140,12 +140,10 @@ npm run lint.styles -- --fix
 
 ## Auto-fix
 
-The rules support auto-fix when the property context is clear:
+- `prefer-semantic-tokens` writes its suggested token whenever it has exactly one, including for a property with no context (e.g., `stroke`).
+- `no-hardcoded-colors` fixes a hex or color function that exactly or closely matches a Pine color. It writes the semantic suggestion when there is one, and the matching core token otherwise (`#ff3e14` in `color` becomes `var(--pine-color-mercury-500)`).
 
-- `color` → text tokens
-- `background-color` → background tokens
-- `border-color` → border tokens
-- `box-shadow` → border tokens
+Property contexts: `color`/`fill` → text, `background`/`background-color` → background, `border`/`border-color`/`border-*-color`/`outline`/`outline-color`/`box-shadow` → border. A suggestion matches the core color's light-mode value, not its role, so review each fix.
 
 **Note:** Colors with alpha values (e.g., `rgba(0, 0, 0, 0.1)`) are NOT auto-fixed since they may need special handling (shadows, overlays, etc.). Use `stylelint-disable-next-line` to ignore these cases.
 
