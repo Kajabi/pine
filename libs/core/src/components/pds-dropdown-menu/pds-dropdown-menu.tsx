@@ -217,11 +217,20 @@ export class PdsDropdownMenu implements BasePdsProps {
   // with no way to reach its last items. It's capped to that room and scrolls inside itself. A
   // smaller max-height set through the menu-panel part is kept. The cap is important, as a
   // ::part() rule outside the shadow root otherwise beats the panel's own inline style.
+  //
+  // Removing `max-height` lifts the panel's own scroll constraint, so a layout read in between
+  // (`getComputedStyle`) can commit a frame with nothing left to scroll, and the browser resets
+  // `scrollTop` to 0. This runs on every `autoUpdate` pass, including a small ancestor scroll that
+  // leaves the trigger in view, so a menu scrolled partway down would otherwise jump back to the
+  // top on its own. Restoring `scrollTop` afterward keeps the user's place; the browser clamps it
+  // automatically if the new max-height is shorter than before.
   private capPanelHeight(panel: HTMLElement, availableHeight: number) {
+    const { scrollTop } = panel;
     panel.style.removeProperty('max-height');
     const partMaxHeight = getComputedStyle(panel).maxHeight;
     const room = `${Math.max(0, availableHeight)}px`;
     panel.style.setProperty('max-height', partMaxHeight === 'none' ? room : `min(${partMaxHeight}, ${room})`, 'important');
+    panel.scrollTop = scrollTop;
   }
 
   // Once the trigger is fully out of view, scrolled or clipped by any container or the window, the
