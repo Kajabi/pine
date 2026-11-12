@@ -950,4 +950,53 @@ describe('pds-button', () => {
       expect(await page.$('aria/Expand chat[role="button"]')).toBeNull();
     });
   });
+
+  describe('first paint', () => {
+    // A framework or DOM morph can insert the button from inside an animation frame. A slot shown
+    // only after slotchange would paint hidden for that frame, so the button would be drawn narrower
+    // and then widen.
+    it('keeps its width from the first paint when inserted inside an animation frame', async () => {
+      const page = await newE2EPage();
+      // A button with a slotted icon loads both components first, as on a page that's already running.
+      await page.setContent(`<pds-button>Warm up<pds-icon slot="end" aria-hidden="true" icon="${caretDown}"></pds-icon></pds-button><div id="host"></div>`);
+
+      const widths = await page.evaluate((icon) => new Promise<number[]>((resolve) => {
+        requestAnimationFrame(() => {
+          const host = document.getElementById('host') as HTMLElement;
+          host.innerHTML = `<pds-button variant="secondary">All<pds-icon slot="end" aria-hidden="true" icon="${icon}"></pds-icon></pds-button>`;
+          const button = host.querySelector('pds-button') as HTMLElement;
+          const seen: number[] = [];
+          // ResizeObserver reports the first size and then each change, so this records every width
+          // the button takes, each one before it paints.
+          const observer = new ResizeObserver(() => seen.push(button.getBoundingClientRect().width));
+          observer.observe(button);
+          setTimeout(() => {
+            observer.disconnect();
+            resolve(seen);
+          }, 300);
+        });
+      }), caretDown);
+
+      expect(widths.length).toBeGreaterThan(0);
+      expect(widths[0]).toBeGreaterThan(0);
+      // Sub-pixel settling is fine; a hidden slot would change the width by the icon plus its gap.
+      const finalWidth = widths[widths.length - 1];
+      expect(widths.every((width) => Math.abs(width - finalWidth) < 1)).toBe(true);
+    });
+
+    it('hides the end slot wrapper once its content is removed', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`<pds-button>All<pds-icon slot="end" aria-hidden="true" icon="${caretDown}"></pds-icon></pds-button>`);
+
+      const isEndEmpty = () => page.$eval('pds-button', (el) =>
+        el.shadowRoot?.querySelector('slot[name="end"]')?.parentElement?.classList.contains('pds-button__icon--empty'));
+
+      expect(await isEndEmpty()).toBe(false);
+
+      await page.$eval('pds-button pds-icon', (el) => el.remove());
+      await page.waitForChanges();
+
+      expect(await isEndEmpty()).toBe(true);
+    });
+  });
 });

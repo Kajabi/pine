@@ -397,6 +397,7 @@ Preselection also works with input triggers, showing the selected option's text 
 - **Value vs. Display Text**: When using the `value` property, provide the option's `value` attribute (e.g., `value="panda"`), not the display text. The combobox will automatically show the corresponding option's text content (e.g., "Panda").
 - **Form Integration**: Preselected options work seamlessly with forms and will be included in form submissions.
 - **Dynamic Updates**: The `value` property can be updated programmatically to change the selection at runtime.
+- **First Paint**: A combobox created with a `value` and its options already in its markup, such as a form re-rendered after a pick, shows the selected option from its first paint, not its placeholder first. Options added after it connects, or loaded from `async-url`, show once they arrive.
 
 ## Sizing and Positioning
 
@@ -1004,10 +1005,11 @@ For the most dynamic experience, combine both `customTriggerContent` and `custom
 When using custom layouts:
 
 1. **Use semantic HTML**: Structure your layout with proper headings and content hierarchy
-2. **Include search text**: Add `data-search-text` attribute to layout options for filtering
-3. **Maintain accessibility**: Ensure custom content is screen reader accessible
-4. **Keep it simple**: Don't overcomplicate layouts - focus on essential information
-5. **Test thoroughly**: Verify keyboard navigation and screen reader compatibility
+2. **Include search text**: Add a `data-search-text` attribute so search matches more than the option's text (it works on any slotted option)
+3. **Keep list-only decorations out of the layout**: A selected layout option's whole layout shows in the button trigger, including any chip in it. For a pill such as "New" that belongs on the list row only, use a plain option with `data-icon` and `data-badge` (and `data-search-text`) instead; see [Option Badges](#option-badges)
+4. **Maintain accessibility**: Ensure custom content is screen reader accessible
+5. **Keep it simple**: Don't overcomplicate layouts - focus on essential information
+6. **Test thoroughly**: Verify keyboard navigation and screen reader compatibility
 
 ## Group Labels
 
@@ -1268,6 +1270,8 @@ Set `badge` on an option from the `options` prop to show a small `pds-chip` afte
     <option value="responsive" data-badge="New" data-badge-sentiment="accent" data-badge-icon="star">Responsive emails</option>
   </pds-combobox>
 </DocCanvas>
+
+Once picked, the option shows in the filled field without its badge: the `button` trigger shows the option's icon and label only, and the `input` trigger its label. A badge calls out a choice in the list; in the field it would read as part of the value. This is why a badge belongs in `data-badge` (or `badge`) rather than as a `pds-chip` inside a [layout option](#layout-support), whose whole layout shows in the trigger. To show an icon too, add `data-icon`; to let search find the option by more than its label, add `data-search-text`, which works on any slotted option, not only layout options. It replaces the label for matching, so include the label in it, and keep it to words someone would expect to find the option by: a row that appears for a word it doesn't show can be confusing.
 
 - **Keep badges short and rare.** One word, on the few options that need calling out; a badge on most rows stops meaning anything.
 - **Expect long labels to truncate.** A badge takes at most half the row, so a long label, often a translated one, ends in an ellipsis rather than squeezing the option's text.

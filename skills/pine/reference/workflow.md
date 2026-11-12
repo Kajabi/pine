@@ -6,40 +6,45 @@ trash icon to the settings card."*
 
 ## 1. Orient
 ```
-get_pine_context_for_generation({ task: "destructive confirm button with an icon in a settings card" })
-# (or) should_engage_pine_workflow({ task: "..." })  → confirms Pine applies
+get_pine_context_for_generation()
+#   → every blocking, warning, and guidance rule. Takes no arguments.
 ```
 
 ## 2. Resolve every Pine-specific value (never from memory)
 ```
-get_pine_component({ name: "pds-button" })
-#   → confirms: variant enum includes "destructive"; icon prop; icon-only flag;
-#     which slot the label goes in. Use ONLY these.
+get_pine_component({ componentName: "pds-button" })
+#   → confirms: variant enum includes "destructive"; the default slot holds the
+#     label and the start/end slots hold icons; the icon-only flag.
+#     Use ONLY these.
 
 list_pine_icons({ search: "trash" })
-#   → returns the actual name (e.g. "delete" or "trash") — do not assume "trash".
+#   → returns the actual name — do not assume it matches the concept.
 
 get_pine_tokens({ purpose: "spacing" })
 #   → resolve any --pine-dimension-* you need for layout, if not using a pattern.
 
-# Composed card? start from a pattern instead of hand-assembling:
-get_pine_pattern({ name: "card" })   # or list_pine_patterns() to discover
+# Composed settings screen? start from a pattern instead of hand-assembling:
+get_pine_pattern({ patternId: "settings-page" })   # or list_pine_patterns() to discover
 ```
 Reach for `reference/tokens.md`, `reference/components.md`, `reference/icons.md`
 for the common traps — but the tool output wins over any cheat-sheet.
 
 ## 3. Write
-Compose from the resolved values — real props, a real icon name, real tokens:
+Compose from the resolved values — real props, a real icon name, real tokens.
+Icons go in the component's slots; `pds-button`'s `icon` prop is deprecated:
 ```html
-<pds-button variant="destructive" icon="<resolved-icon-name>">Delete account</pds-button>
+<pds-button variant="destructive">
+  <pds-icon slot="start" name="trash"></pds-icon>
+  Delete account
+</pds-button>
 ```
-If no component/pattern fits, say so — don't approximate one with divs + tokens.
+(`trash` is the name `list_pine_icons` returned.) If no component/pattern fits,
+say so — don't approximate one with divs + tokens.
 
 ## 4. Validate (gate — loop until clean)
 ```
-validate_pine_layout({ markup: "<the composed UI>" })
-#   issues? →
-fix_layout_issues({ ... })   # apply, then re-run validate_pine_layout
+validate_pine_layout({ code: "<the composed UI>", scope: "snippet" })
+#   issues? → apply the fix each violation gives, then re-run validate_pine_layout
 #   → repeat until it passes. Only then is it done.
 ```
 Details and failure handling: `reference/validation.md`.

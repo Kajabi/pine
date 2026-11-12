@@ -333,7 +333,7 @@ and ships light and dark themes from the same token set.
 
 Tokens are owned upstream in `@kajabi-ui/styles` and consumed as `--pine-*` CSS
 custom properties. Prefer **semantic tokens** (`--pine-color-accent`,
-`--pine-color-text-default`) over raw palette values — they carry the dark-mode
+`--pine-color-text`) over raw palette values — they carry the dark-mode
 and state behavior for free.
 
 ## Colors
