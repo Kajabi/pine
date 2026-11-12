@@ -108,12 +108,13 @@ describe('pds-dropdown-menu-item', () => {
     });
 
     it.each([
-      ['button', '', 'button'],
-      ['link', 'href="#settings"', 'link'],
-      ['informational', 'informational', 'menuitem'],
-    ])('keeps a slotted icon out of the accessible name of a %s item', async (_variant, attrs, role) => {
+      ['button', '', 'button', `icon="${trash}"`],
+      ['link', 'href="#settings"', 'link', `icon="${trash}"`],
+      ['informational', 'informational', 'menuitem', `icon="${trash}"`],
+      ['button, with an icon set by name,', '', 'button', 'name="trash"'],
+    ])('keeps a slotted icon out of the accessible name of a %s item', async (_variant, attrs, role, iconAttr) => {
       const page = await newE2EPage();
-      await page.setContent(`<pds-dropdown-menu-item ${attrs}><pds-icon slot="start" icon="${trash}"></pds-icon>Delete</pds-dropdown-menu-item>`);
+      await page.setContent(`<pds-dropdown-menu-item ${attrs}><pds-icon slot="start" ${iconAttr}></pds-icon>Delete</pds-dropdown-menu-item>`);
       await page.waitForChanges();
 
       const tree = await page.accessibility.snapshot({ interestingOnly: true }) as AXNode;
@@ -156,7 +157,6 @@ describe('pds-dropdown-menu-item', () => {
       await page.setContent('<pds-dropdown-menu-item disabled href="#moved">Open</pds-dropdown-menu-item>');
       const clickSpy = await page.spyOnEvent('pdsClick');
 
-      await page.$eval('pds-dropdown-menu-item', (el: HTMLPdsDropdownMenuItemElement) => el.clickItem());
       const link = await page.find('pds-dropdown-menu-item >>> pds-link');
       await link.click();
       await page.waitForChanges();
@@ -164,5 +164,20 @@ describe('pds-dropdown-menu-item', () => {
       expect(clickSpy).not.toHaveReceivedEvent();
       expect(await page.evaluate(() => window.location.hash)).toBe('');
     });
+  });
+
+  it('emits pdsClick once when Enter activates a link item', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-dropdown-menu-item href="#moved">Open</pds-dropdown-menu-item>');
+    const clickSpy = await page.spyOnEvent('pdsClick');
+
+    await page.$eval('pds-dropdown-menu-item', (el) => {
+      (el.shadowRoot!.querySelector('pds-link')!.shadowRoot!.querySelector('a') as HTMLElement).focus();
+    });
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+
+    expect(clickSpy).toHaveReceivedEventTimes(1);
+    expect(await page.evaluate(() => window.location.hash)).toBe('#moved');
   });
 });

@@ -328,7 +328,7 @@ describe('pds-dropdown-menu-item', () => {
     it('leaves the start content out of the pdsClick content', async () => {
       const page = await newSpecPage({
         components: [PdsDropdownMenuItem],
-        html: `<div><pds-dropdown-menu-item><span slot="start">NEW</span><pds-icon slot="start" name="trash"></pds-icon>Delete <strong>draft</strong></pds-dropdown-menu-item></div>`,
+        html: `<div><pds-dropdown-menu-item><span slot="start">NEW</span><pds-icon slot="start" name="trash"></pds-icon><!--marker-->Delete <strong>draft</strong><span slot=""> now</span></pds-dropdown-menu-item></div>`,
       });
       const item = page.body.querySelector('pds-dropdown-menu-item')!;
       const clickSpy = jest.fn();
@@ -336,8 +336,23 @@ describe('pds-dropdown-menu-item', () => {
 
       await item.clickItem();
 
-      expect(clickSpy.mock.calls[0][0].detail.content).toBe('Delete draft');
+      expect(clickSpy.mock.calls[0][0].detail.content).toBe('Delete draft now');
     });
+  });
+
+  it('emits pdsClick from clickItem() on an item that is no longer in the document', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuItem],
+      html: `<div><pds-dropdown-menu-item>Delete</pds-dropdown-menu-item></div>`,
+    });
+    const item = page.body.querySelector('pds-dropdown-menu-item')!;
+    const clickSpy = jest.fn();
+    item.addEventListener('pdsClick', clickSpy);
+
+    item.remove();
+    await item.clickItem();
+
+    expect(clickSpy.mock.calls[0][0].detail).toEqual(expect.objectContaining({ itemIndex: -1, content: 'Delete' }));
   });
 
   describe('when disabled', () => {
