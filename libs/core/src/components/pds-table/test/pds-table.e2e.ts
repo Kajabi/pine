@@ -671,6 +671,48 @@ describe('pds-table column widths', () => {
     expect(await headWidths(page)).toEqual([148, 134, 216, 202]);
   });
 
+  it('still applies a pending layout change after the table is moved in the same turn', async () => {
+    const page = await newE2EPage();
+    // Starts as a plain auto-layout table (no pending sync, nothing to lose by moving it) so the
+    // only thing under test is the responsive+fixed change made right before the synchronous
+    // move, not the plain reconnect case the previous test already covers.
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="moved-during-pending-sync">
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+            <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell>Mar 4, 2024</pds-table-cell>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    await page.evaluate(() => {
+      const table = document.querySelector('pds-table');
+      // Turning both on queues the pending sync (deferred to componentDidRender); moving the
+      // table in the same turn, before that render flushes, is the race the fix has to survive.
+      table.setAttribute('table-layout', 'fixed');
+      table.setAttribute('responsive', '');
+      const parent = table.parentElement;
+      parent.removeChild(table);
+      parent.appendChild(table);
+    });
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
+  });
+
   it('updates the select-all column too when table-layout switches at runtime', async () => {
     const page = await newE2EPage();
     await page.setContent(`

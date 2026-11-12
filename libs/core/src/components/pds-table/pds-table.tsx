@@ -195,9 +195,18 @@ export class PdsTable {
     }
 
     this.teardownFixedLayoutWidths();
-    // A sync requested just before unmount would otherwise still flush in componentDidRender
-    // (Stencil's render queue is async) and reattach listeners nothing will ever tear down again.
-    this._pendingFixedLayoutInputsSync = false;
+
+    // A disconnect in the same turn as a pending tableLayout/responsive change could be the
+    // table being moved rather than removed for good -- there's no way to tell them apart yet
+    // here, and dropping the pending sync unconditionally would lose a change that's still
+    // coming once a same-turn reconnect's own render flushes. Checked on a microtask instead, by
+    // which point a same-turn reconnect has already happened; a disconnect that sticks still
+    // won't leave anything queued to leak a listener later.
+    if (this._pendingFixedLayoutInputsSync) {
+      queueMicrotask(() => {
+        if (!this.el.isConnected) this._pendingFixedLayoutInputsSync = false;
+      });
+    }
   }
 
   /**
