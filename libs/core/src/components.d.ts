@@ -2515,7 +2515,7 @@ export namespace Components {
          */
         "dividers": boolean;
         /**
-          * Accessible label for each item's reorder handle when `handle-type` is `handle`. Pass a translated string to localize it; `{item}` is interpolated.
+          * Accessible label for each item's reorder handle, the button the keyboard reorders with. Pass a translated string to localize it; `{item}` is interpolated.
           * @defaultValue 'Reorder {item}'
          */
         "handleLabel": string;
@@ -2543,12 +2543,7 @@ export namespace Components {
           * Screen-reader announcement when a keyboard reorder is canceled and the item goes back. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
           * @defaultValue 'Reorder canceled. {item} returned to position {position} of {total}'
          */
-        "itemReorderCanceledLabel": string;
-        /**
-          * Screen-reader hint on each item's reorder control, naming the keys that pick it up. Pass a translated string to localize it; defaults to English.
-          * @defaultValue 'Press Space or Enter to reorder'
-         */
-        "reorderDescription": string;
+        "reorderCanceledLabel": string;
     }
     /**
      * @lightDom renders-markup
@@ -6552,7 +6547,7 @@ declare namespace LocalJSX {
          */
         "dividers"?: boolean;
         /**
-          * Accessible label for each item's reorder handle when `handle-type` is `handle`. Pass a translated string to localize it; `{item}` is interpolated.
+          * Accessible label for each item's reorder handle, the button the keyboard reorders with. Pass a translated string to localize it; `{item}` is interpolated.
           * @defaultValue 'Reorder {item}'
          */
         "handleLabel"?: string;
@@ -6577,19 +6572,14 @@ declare namespace LocalJSX {
          */
         "itemPickedUpLabel"?: string;
         /**
-          * Screen-reader announcement when a keyboard reorder is canceled and the item goes back. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
-          * @defaultValue 'Reorder canceled. {item} returned to position {position} of {total}'
-         */
-        "itemReorderCanceledLabel"?: string;
-        /**
           * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the `KeyboardEvent` as `originalEvent`.
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
         /**
-          * Screen-reader hint on each item's reorder control, naming the keys that pick it up. Pass a translated string to localize it; defaults to English.
-          * @defaultValue 'Press Space or Enter to reorder'
+          * Screen-reader announcement when a keyboard reorder is canceled and the item goes back. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue 'Reorder canceled. {item} returned to position {position} of {total}'
          */
-        "reorderDescription"?: string;
+        "reorderCanceledLabel"?: string;
     }
     /**
      * @lightDom renders-markup
@@ -7680,11 +7670,10 @@ declare namespace LocalJSX {
         "dividers": boolean;
         "handleType": 'handle' | 'row';
         "handleLabel": string;
-        "reorderDescription": string;
         "itemPickedUpLabel": string;
         "itemMovedLabel": string;
         "itemDroppedLabel": string;
-        "itemReorderCanceledLabel": string;
+        "reorderCanceledLabel": string;
     }
     interface PdsSortableItemAttributes {
         "enableActions": boolean;

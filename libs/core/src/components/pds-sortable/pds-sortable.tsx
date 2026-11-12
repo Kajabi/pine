@@ -8,6 +8,7 @@ import Sortable from 'sortablejs';
 
 const LIVE_REGION_CLASS = 'pds-sortable__live-region';
 const GRABBED_CLASS = 'pds-sortable-item--grabbed';
+const HANDLE_SELECTOR = '.pds-sortable-item__handle';
 
 /**
  * @lightDom host-only
@@ -55,16 +56,10 @@ export class PdsSortable {
   @Prop() handleType: 'handle' | 'row' = 'row';
 
   /**
-   * Accessible label for each item's reorder handle when `handle-type` is `handle`. Pass a translated string to localize it; `{item}` is interpolated.
+   * Accessible label for each item's reorder handle, the button the keyboard reorders with. Pass a translated string to localize it; `{item}` is interpolated.
    * @defaultValue 'Reorder {item}'
    */
   @Prop() handleLabel = 'Reorder {item}';
-
-  /**
-   * Screen-reader hint on each item's reorder control, naming the keys that pick it up. Pass a translated string to localize it; defaults to English.
-   * @defaultValue 'Press Space or Enter to reorder'
-   */
-  @Prop() reorderDescription = 'Press Space or Enter to reorder';
 
   /**
    * Screen-reader announcement when an item is picked up from the keyboard. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
@@ -89,7 +84,7 @@ export class PdsSortable {
    * Screen-reader announcement when a keyboard reorder is canceled and the item goes back. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
    * @defaultValue 'Reorder canceled. {item} returned to position {position} of {total}'
    */
-  @Prop() itemReorderCanceledLabel = 'Reorder canceled. {item} returned to position {position} of {total}';
+  @Prop() reorderCanceledLabel = 'Reorder canceled. {item} returned to position {position} of {total}';
 
   private sortableInstance: InstanceType<typeof Sortable>;
 
@@ -106,8 +101,13 @@ export class PdsSortable {
   }
 
   @Watch('handleType')
+  handleHandleTypeChange() {
+    if (this.grabbed) this.cancel();
+    this.sortableInstance?.option('handle', this.handleType === 'handle' ? HANDLE_SELECTOR : undefined);
+    this.updateItems();
+  }
+
   @Watch('handleLabel')
-  @Watch('reorderDescription')
   updateItems() {
     this.items().forEach((item) => {
       if (item.tagName === 'PDS-SORTABLE-ITEM') forceUpdate(item);
@@ -168,7 +168,7 @@ export class PdsSortable {
     if (this.handleType === 'handle') {
       sortableOptions = {
         ...sortableOptions,
-        handle: '.pds-sortable-item__handle',
+        handle: HANDLE_SELECTOR,
       };
     }
 
@@ -178,7 +178,7 @@ export class PdsSortable {
   /** The children that can be reordered: every element but the live region. */
   private items(): HTMLElement[] {
     return Array.from(this.el.children).filter(
-      (child) => !child.classList.contains(LIVE_REGION_CLASS),
+      (child) => child.tagName !== 'TEMPLATE' && !child.classList.contains(LIVE_REGION_CLASS),
     ) as HTMLElement[];
   }
 
@@ -215,7 +215,7 @@ export class PdsSortable {
   }
 
   private announce(template: string, item: HTMLElement) {
-    this.ensureLiveRegion();
+    if (this.liveRegion?.parentElement !== this.el) this.ensureLiveRegion();
     const items = this.items();
     const message = formatMessage(template, {
       item: sortableItemLabel(item),
@@ -227,7 +227,9 @@ export class PdsSortable {
   }
 
   @Listen('pointerdown', { capture: true })
-  handlePointerDown() {
+  handlePointerDown(ev: PointerEvent) {
+    // A drag takes over from a keyboard reorder: keep the moves so far, so the drag starts from them.
+    if (this.grabbed) this.drop(ev);
     if (this.liveRegion?.nextElementSibling) this.ensureLiveRegion();
   }
 
@@ -241,12 +243,33 @@ export class PdsSortable {
     if (this.grabbed && ev.target === this.focusTarget(this.grabbed.item)) this.drop(ev);
   };
 
+  /**
+   * Screen readers in browse mode turn Enter and Space on a button into a click with no key events,
+   * so a click that isn't from a pointer (`detail` is 0) picks up or drops too.
+   */
+  private handleClick = (ev: MouseEvent) => {
+    if (this.disabled || ev.detail !== 0) return;
+    const item = this.targetItem(ev.target as HTMLElement);
+    if (!item) return;
+
+    if (!this.grabbed) {
+      this.pickUp(item);
+    } else if (this.grabbed.item === item) {
+      this.drop(ev);
+    }
+  };
+
+  /** The item whose handle `target` is, if it is one. */
+  private targetItem(target: HTMLElement): HTMLElement | undefined {
+    const item = this.items().find((candidate) => candidate.contains(target));
+    return item && this.focusTarget(item) === target ? item : undefined;
+  }
+
   private handleKeyDown = (ev: KeyboardEvent) => {
     if (this.disabled || ev.altKey || ev.ctrlKey || ev.metaKey) return;
 
-    const target = ev.target as HTMLElement;
-    const item = this.items().find((candidate) => candidate.contains(target));
-    if (!item || this.focusTarget(item) !== target) return;
+    const item = this.targetItem(ev.target as HTMLElement);
+    if (!item) return;
 
     if (!this.grabbed) {
       if ((ev.key === ' ' || ev.key === 'Enter') && !ev.repeat) {
@@ -292,11 +315,9 @@ export class PdsSortable {
     }
   };
 
-  /** The handle with `handle-type="handle"`, the item itself otherwise. */
+  /** The item's handle, the button the keyboard reorders with. */
   private focusTarget(item: HTMLElement): HTMLElement | null {
-    if (this.handleType !== 'handle') return item;
-    return (Array.from(item.children).find((child) => child.classList.contains('pds-sortable-item__handle')) ??
-      null) as HTMLElement | null;
+    return (Array.from(item.children).find((child) => child.matches(HANDLE_SELECTOR)) ?? null) as HTMLElement | null;
   }
 
   /** Where an item sits among all the children, then among the items, as SortableJS counts them. */
@@ -306,9 +327,12 @@ export class PdsSortable {
   }
 
   private pickUp(item: HTMLElement) {
+    // Put the region back last first, so it isn't counted in `oldIndex`.
+    this.ensureLiveRegion();
     const { index, draggableIndex } = this.indexes(item);
     this.grabbed = { item, oldIndex: index, oldDraggableIndex: draggableIndex };
     item.classList.add(GRABBED_CLASS);
+    this.focusTarget(item)?.setAttribute('aria-pressed', 'true');
     this.announce(this.itemPickedUpLabel, item);
   }
 
@@ -356,11 +380,12 @@ export class PdsSortable {
     const { item, oldDraggableIndex } = this.grabbed;
     this.release();
     this.moveTo(item, oldDraggableIndex, false);
-    this.announce(this.itemReorderCanceledLabel, item);
+    this.announce(this.reorderCanceledLabel, item);
   }
 
   private release() {
     this.grabbed.item.classList.remove(GRABBED_CLASS);
+    this.focusTarget(this.grabbed.item)?.setAttribute('aria-pressed', 'false');
     this.grabbed = null;
   }
 
@@ -375,6 +400,7 @@ export class PdsSortable {
         onFocusin={this.handleFocusIn}
         onFocusout={this.handleFocusOut}
         onKeyDown={this.handleKeyDown}
+        onClick={this.handleClick}
       >
         <slot></slot>
       </Host>

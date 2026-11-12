@@ -698,8 +698,7 @@ export namespace Components {
         "itemDroppedLabel": string;
         "itemMovedLabel": string;
         "itemPickedUpLabel": string;
-        "itemReorderCanceledLabel": string;
-        "reorderDescription": string;
+        "reorderCanceledLabel": string;
     }
     export interface PdsSortableItem {
         "componentId": string;
@@ -2831,9 +2830,8 @@ export namespace LocalJSX {
         "itemDroppedLabel"?: string;
         "itemMovedLabel"?: string;
         "itemPickedUpLabel"?: string;
-        "itemReorderCanceledLabel"?: string;
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
-        "reorderDescription"?: string;
+        "reorderCanceledLabel"?: string;
     }
 
     // (undocumented)
@@ -2857,9 +2855,7 @@ export namespace LocalJSX {
         // (undocumented)
         "itemPickedUpLabel": string;
         // (undocumented)
-        "itemReorderCanceledLabel": string;
-        // (undocumented)
-        "reorderDescription": string;
+        "reorderCanceledLabel": string;
     }
 
     export interface PdsSortableItem {

@@ -77,26 +77,23 @@ export class PdsSortableItem {
 
   render() {
     const sortable = this.sortableRef;
-    // Reorderable from the keyboard: the row by default, the handle with `handle-type="handle"`.
-    const reorderable = !!sortable && !sortable.disabled;
-    const handleIsTarget = reorderable && sortable.handleType === 'handle';
-    const rowIsTarget = reorderable && !handleIsTarget;
-
-    const hostAttributes = {
-      tabindex: rowIsTarget ? '0' : undefined,
-      'aria-description': rowIsTarget ? sortable.reorderDescription : undefined,
-    };
-    this.hostKeeper.record('pds-sortable-item', {}, hostAttributes);
+    // In a list that can be reordered, the handle is what the keyboard reorders with. It's always
+    // rendered, and only hidden visually when `show-handle` is off, so every row has a named button.
+    const reorderable = typeof sortable?.handleLabel === 'string' && !sortable.disabled;
+    this.hostKeeper.record('pds-sortable-item');
 
     return (
-      <Host class="pds-sortable-item" id={this.componentId} {...hostAttributes}>
-        {this.showHandle && (
+      <Host class="pds-sortable-item" id={this.componentId}>
+        {(this.showHandle || reorderable) && (
           <div
-            class="pds-sortable-item__handle"
-            role={handleIsTarget ? 'button' : undefined}
-            tabindex={handleIsTarget ? '0' : undefined}
-            aria-label={handleIsTarget ? formatMessage(sortable.handleLabel, { item: sortableItemLabel(this.el) }) : undefined}
-            aria-description={handleIsTarget ? sortable.reorderDescription : undefined}
+            class={{
+              'pds-sortable-item__handle': true,
+              'pds-sortable-item__handle--hidden': !this.showHandle,
+            }}
+            role={reorderable ? 'button' : undefined}
+            tabindex={reorderable ? '0' : undefined}
+            aria-label={reorderable ? formatMessage(sortable.handleLabel, { item: sortableItemLabel(this.el) }) : undefined}
+            aria-pressed={reorderable ? 'false' : undefined}
           >
             <pds-icon aria-hidden="true" icon={handleIcon}></pds-icon>
           </div>
