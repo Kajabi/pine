@@ -91,9 +91,9 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Width of the dropdown, including its padding. Any valid CSS width value.
-   * @default '252px'
+   * Without it, the dropdown is 252px wide, 244px with grouped options and 236px with a panel search.
    */
-  @Prop() dropdownWidth: string = '252px';
+  @Prop() dropdownWidth?: string;
 
   /**
    * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”).
@@ -1329,7 +1329,8 @@ export class PdsCombobox implements BasePdsProps {
       ? 'var(--pine-z-index-priority)'
       : 'var(--pine-z-index-raised)';
 
-    this.listboxEl.style.width = this.dropdownWidth;
+    // Unset, the panel's own width applies, which differs with its padding (see the dropdown panel styles).
+    this.listboxEl.style.width = this.dropdownWidth ?? '';
 
     if (this.maxHeight) {
       this.listboxEl.style.maxHeight = this.maxHeight;

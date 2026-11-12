@@ -1028,10 +1028,9 @@ export namespace Components {
          */
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         /**
-          * Width of the dropdown, including its padding. Any valid CSS width value.
-          * @default '252px'
+          * Width of the dropdown, including its padding. Any valid CSS width value. Without it, the dropdown is 252px wide, 244px with grouped options and 236px with a panel search.
          */
-        "dropdownWidth": string;
+        "dropdownWidth"?: string;
         /**
           * Error message to display.
          */
@@ -4951,8 +4950,7 @@ declare namespace LocalJSX {
          */
         "dropdownPlacement"?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         /**
-          * Width of the dropdown, including its padding. Any valid CSS width value.
-          * @default '252px'
+          * Width of the dropdown, including its padding. Any valid CSS width value. Without it, the dropdown is 252px wide, 244px with grouped options and 236px with a panel search.
          */
         "dropdownWidth"?: string;
         /**
