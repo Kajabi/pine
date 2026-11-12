@@ -27,9 +27,9 @@
 
 ## Events
 
-| Event      | Description | Type                 |
-| ---------- | ----------- | -------------------- |
-| `pdsClick` |             | `CustomEvent<Event>` |
+| Event      | Description                                                                                                                                                                                                                                                                                                 | Type                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `pdsClick` | Emitted when the button is clicked, including from the keyboard, carrying the native click event. Not emitted while the button is `disabled` or `loading`. In a form, a `submit` or `reset` button's `submit` or `reset` event fires before this one. A form that fails validation fires no `submit` event. | `CustomEvent<Event>` |
 
 
 ## Slots

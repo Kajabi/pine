@@ -1,6 +1,6 @@
 # pds-dropdown-menu
 
-Reveals a list of actions from a button trigger, following the WAI-ARIA Menu Button pattern.
+Reveals a list of actions from a button trigger, based on the WAI-ARIA Menu Button pattern.
 
 
 <!-- Auto Generated Below -->
@@ -16,9 +16,11 @@ Reveals a list of actions from a button trigger, following the WAI-ARIA Menu But
 
 ## Slots
 
-| Slot       | Description                                                                                                                                                                                 |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"header"` | Non-interactive content displayed above the menu items inside the dropdown panel. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item. |
+| Slot          | Description                                                                                                                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"(default)"` | The menu items: `pds-dropdown-menu-item` and `pds-dropdown-menu-separator` elements, or raw `<a>` and `<button>` elements.                                                                  |
+| `"header"`    | Non-interactive content displayed above the menu items inside the dropdown panel. It renders outside the menu role, so assistive tech reads it as plain content rather than as a menu item. |
+| `"trigger"`   | The trigger element for the dropdown menu. It receives `aria-expanded` and `aria-haspopup`, so slot the focusable control itself, such as a `pds-button`, not a wrapper around it.          |
 
 
 ## Shadow Parts

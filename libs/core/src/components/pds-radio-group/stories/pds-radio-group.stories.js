@@ -101,17 +101,17 @@ const ImageTemplate = (args) =>
     ?required=${args.required}
   >
     <pds-radio component-id="radio1" label="John Doe" value="john" helper-message="Senior Developer">
-      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="circle" padding="sm">
         <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
       </pds-box>
     </pds-radio>
     <pds-radio component-id="radio2" label="Jane Smith" value="jane" helper-message="Product Manager">
-      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="circle" padding="sm">
         <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
       </pds-box>
     </pds-radio>
     <pds-radio component-id="radio3" label="Mike Johnson" value="mike" helper-message="UX Designer">
-      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="circle" padding="sm">
         <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
       </pds-box>
     </pds-radio>

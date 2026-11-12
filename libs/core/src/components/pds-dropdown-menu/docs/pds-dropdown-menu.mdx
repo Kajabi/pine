@@ -11,7 +11,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Dropdown Menu
 
-Dropdown Menus reveal a list of actions from a button trigger, implementing the WAI-ARIA Menu Button pattern. Use them to conserve space when options do not need to be visible at all times.
+Dropdown Menus reveal a list of actions from a button trigger, based on the WAI-ARIA Menu Button pattern. Use them to conserve space when options do not need to be visible at all times.
 
 ## Guidelines
 
@@ -28,16 +28,17 @@ Dropdown Menus reveal a list of actions from a button trigger, implementing the 
 
 ### Accessibility
 
-- Implements the WAI-ARIA Menu Button Pattern for screen reader compatibility
+- Follows the WAI-ARIA Menu Button pattern for the trigger and for keyboard navigation. The panel has `role="menu"`, but button and link items, raw `<a>` and `<button>` elements included, are exposed to assistive tech as buttons and links rather than menu items. Only `informational` items have `role="menuitem"`
 - Sets `aria-haspopup="menu"` and `aria-expanded` on the trigger and keeps them in step with the menu. If anything removes or changes them, such as a DOM morph, the menu puts its values back, so don't set your own. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning
-- Supports full keyboard navigation with arrow keys, Enter, Space, Home, and End
+- Supports keyboard navigation with the arrow keys, Home, End, Enter and Space. The arrow keys skip disabled items and wrap from the last item to the first and back
+- Closes on Escape and moves focus from the menu back to the trigger
 - Renders `header` slot content outside the menu, so screen readers read it as plain content rather than as a menu item. Keyboard navigation moves between menu items only, so keep links and actions out of the header
 - Keeps `informational` items in keyboard navigation and exposes them as menu items with `aria-disabled="true"`, so people can reach and read them but not activate them. Navigation skips `disabled` items
 - Lets Tab and Shift+Tab move through the enabled menu items, and closes the menu when they move past the last or first enabled item, so keyboard users don't need Escape to leave it. This differs from the APG pattern, where Tab leaves the menu from any item
 - Provides high-contrast focus indicators for all interactive elements
 
+#### Keyboard interactions
 
-### Keyboard Interactions
 <pds-box border border-radius="sm" fit>
   <pds-table component-id="keyboard-shortcuts" >
     <pds-table-head>
@@ -51,7 +52,7 @@ Dropdown Menus reveal a list of actions from a button trigger, implementing the 
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Escape</pds-table-cell>
-        <pds-table-cell>Closes the dropdown menu</pds-table-cell>
+        <pds-table-cell>Closes the dropdown menu. Focus in the menu returns to the trigger</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Tab (on trigger)</pds-table-cell>
@@ -71,27 +72,32 @@ Dropdown Menus reveal a list of actions from a button trigger, implementing the 
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Arrow Down</pds-table-cell>
-        <pds-table-cell>Moves focus to the next menu item</pds-table-cell>
+        <pds-table-cell>Moves focus to the next enabled menu item. From the last one, wraps to the first</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Arrow Up</pds-table-cell>
-        <pds-table-cell>Moves focus to the previous menu item</pds-table-cell>
+        <pds-table-cell>Moves focus to the previous enabled menu item. From the first one, wraps to the last</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Home</pds-table-cell>
-        <pds-table-cell>Moves focus to the first menu item</pds-table-cell>
+        <pds-table-cell>Moves focus to the first enabled menu item</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>End</pds-table-cell>
-        <pds-table-cell>Moves focus to the last menu item</pds-table-cell>
+        <pds-table-cell>Moves focus to the last enabled menu item</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
-        <pds-table-cell>Enter / Space (on menu item)</pds-table-cell>
+        <pds-table-cell>Enter (on menu item)</pds-table-cell>
         <pds-table-cell>Activates the item. Does nothing on an informational item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Space (on menu item)</pds-table-cell>
+        <pds-table-cell>Activates a button item. Does nothing on a link or informational item</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
 </pds-box>
+
 ## Properties
 
 <DocArgsTable componentName="pds-dropdown-menu" docSource={components} />
@@ -141,6 +147,61 @@ The default dropdown menu displays a list of options that can be selected by the
   </pds-dropdown-menu>
 </div>
 </DocCanvas>
+
+### Handling Selection
+
+Activating a `pds-dropdown-menu-item` emits `pdsClick`: a click, Enter on a button or link item, or Space on a button item. Disabled and `informational` items can't be activated, so they emit nothing. The event bubbles, so one listener on the menu hears every item. Its `detail` holds:
+
+- `itemIndex`: the item's position among the menu's `pds-dropdown-menu-item` elements, counting from 0. Separators and raw `<a>` and `<button>` elements aren't counted.
+- `item`: the `pds-dropdown-menu-item` element.
+- `content`: the item's text, trimmed.
+
+Raw `<a>` and `<button>` elements don't emit `pdsClick`, so listen for their `click` instead. A `pds-button` trigger emits its own `pdsClick`, which also bubbles to the menu, so a listener on the menu should check that `event.target` is a `pds-dropdown-menu-item`.
+
+The menu stays open after an item is activated. It closes on Escape, a click outside it, another click on the trigger, or Tab or Shift+Tab past the last or first enabled item. It has no method for closing it from your own code.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Actions</PdsButton>
+  <PdsDropdownMenuItem onPdsClick={() => duplicate()}>Duplicate</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem onPdsClick={() => archive()}>Archive</PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <PdsDropdownMenuItem destructive onPdsClick={() => confirmDelete()}>Delete</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu component-id="row-actions">
+  <pds-button slot="trigger">Actions</pds-button>
+  <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Archive</pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+  <pds-dropdown-menu-item destructive>Delete</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu component-id="row-actions">
+    <pds-button slot="trigger">Actions</pds-button>
+    <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Archive</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+    <pds-dropdown-menu-item destructive>Delete</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+In HTML, add the listener to the menu from your own script. Choosing **Delete** logs `2 Delete`:
+
+```javascript
+document.getElementById('row-actions').addEventListener('pdsClick', (event) => {
+  if (event.target.localName !== 'pds-dropdown-menu-item') return;
+  const { itemIndex, content } = event.detail;
+  console.log(itemIndex, content);
+});
+```
 
 ### With Separator
 
@@ -420,23 +481,12 @@ The example below demonstrates mixing a standard menu item with raw `<a>` and `<
   mdxSource={{
     react:`
 {/* Hover/focus styles for raw elements (add to your app's CSS) */}
-<style>{\`
-  pds-dropdown-menu > a:hover,
-  pds-dropdown-menu > button:hover {
-    background-color: var(--pine-color-background-muted);
-  }
-  pds-dropdown-menu > a:focus,
-  pds-dropdown-menu > button:focus {
-    outline: var(--pine-outline-focus);
-    outline-offset: var(--pine-border-width);
-  }
-  pds-dropdown-menu > a.destructive:hover {
-    background-color: var(--pine-color-danger-disabled);
-  }
-  pds-dropdown-menu > a.destructive:focus {
-    outline: var(--pine-outline-focus-danger);
-  }
-\`}</style>
+<style>{
+  'pds-dropdown-menu > a:hover, pds-dropdown-menu > button:hover { background-color: var(--pine-color-background-muted); }' +
+  'pds-dropdown-menu > a:focus, pds-dropdown-menu > button:focus { outline: var(--pine-outline-focus); outline-offset: var(--pine-border-width); }' +
+  'pds-dropdown-menu > a.destructive:hover { background-color: var(--pine-color-danger-disabled); }' +
+  'pds-dropdown-menu > a.destructive:focus { outline: var(--pine-outline-focus-danger); }'
+}</style>
 
 <PdsDropdownMenu>
   <PdsButton slot="trigger">Actions</PdsButton>
@@ -517,7 +567,7 @@ The example below demonstrates mixing a standard menu item with raw `<a>` and `<
 
 **Raw element attributes:**
 - Add `class="destructive"` for danger/destructive text color
-- Add `aria-disabled="true"` to visually disable an anchor element
+- Add `aria-disabled="true"` to disable an anchor element: it's dimmed, ignores pointer clicks and is skipped by keyboard navigation. Assistive tech or a script can still activate it, so also remove its `href` when it must not navigate
 - Add `disabled` attribute to visually disable a button element
 
 >**Note:** Use `pds-dropdown-menu-item` for most cases. Raw elements should only be used when you need native browser behavior that cannot work through the component's Shadow DOM (e.g., framework-specific data attributes for form submissions). Due to Shadow DOM limitations, hover and focus states for raw elements must be styled by the consuming application's CSS.
@@ -594,15 +644,7 @@ The `menu-panel` CSS part can be used to customize the menu container's dimensio
 <DocCanvas
   mdxSource={{
     react: `
-<style>
-{\`
-  .scrollable-menu::part(menu-panel) {
-    max-height: 200px;
-    overflow-y: auto;
-    min-width: 250px;
-  }
-\`}
-</style>
+<style>{'.scrollable-menu::part(menu-panel) { max-height: 200px; overflow-y: auto; min-width: 250px; }'}</style>
 <PdsDropdownMenu className="scrollable-menu">
   <PdsButton slot="trigger">Options</PdsButton>
   <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>

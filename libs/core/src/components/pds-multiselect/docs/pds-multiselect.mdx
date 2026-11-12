@@ -712,7 +712,7 @@ Call the `clear()` method to programmatically reset all selections, clear the se
   <option value="3">Support</option>
 </pds-multiselect>
 
-<pds-button id="clearable-select-reset" variant="secondary" size="sm">Reset</pds-button>
+<pds-button id="clearable-select-reset" variant="secondary" size="small">Reset</pds-button>
 
 <script>
   document.querySelector('#clearable-select-reset').addEventListener('click', () => {
@@ -733,7 +733,7 @@ Call the `clear()` method to programmatically reset all selections, clear the se
   <option value="3">Support</option>
 </PdsMultiselect>
 
-<PdsButton variant="secondary" size="sm" onClick={() => multiselectRef.current?.clear()}>
+<PdsButton variant="secondary" size="small" onClick={() => multiselectRef.current?.clear()}>
   Reset
 </PdsButton>`,
   }}
@@ -750,7 +750,7 @@ Call the `clear()` method to programmatically reset all selections, clear the se
       <option value="2">Sales</option>
       <option value="3">Support</option>
     </pds-multiselect>
-    <pds-button id="clearable-select-reset" style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="sm" onClick={() => {
+    <pds-button id="clearable-select-reset" style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="small" onClick={() => {
       const el = document.querySelector('#clearable-select');
       if (el) el.clear();
     }}>Reset</pds-button>

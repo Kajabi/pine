@@ -25,6 +25,8 @@ const patchInPlace = (target: Element, copy: Element) => {
 
 /**
  * @slot action - Content to be displayed in the label area, typically for help icons or links
+ * @part action - Exposes the wrapper around the `action` slot for styling. Appears only when the `action` slot has content.
+ * @part select - Exposes the native `select` element for styling.
  */
 @Component({
   tag: 'pds-select',

@@ -58,6 +58,7 @@ function deepActiveElement(): Element | null {
 
 /**
  * @lightDom renders-markup
+ * @part modal - The panel inside the dialog that holds the modal's content. `pds-modal` has no shadow root, so `::part(modal)` doesn't match it; select it with `pds-modal [part="modal"]` instead.
  */
 @Component({
   tag: 'pds-modal',

@@ -8,7 +8,7 @@ const DEFAULT_EXTERNAL_LABEL = '(opens in a new tab)';
 
 /**
  * @part link - Link element styles.
- * @slot (default) - Text content placed between the opening and closing tags. If no text is provided, the **href** will be used as a fallback.
+ * @slot (default) - Text content placed between the opening and closing tags. If the slot is empty (whitespace counts as content), the **href** will be used as a fallback.
  */
 @Component({
   tag: 'pds-link',
@@ -78,7 +78,7 @@ export class PdsLink {
   @Prop() fontSize: 'sm' | 'md' | 'lg' = 'lg';
 
   /**
-   * The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.
+   * The hyperlink's destination URL. If the default slot is empty (whitespace counts as content), the href will be used as the link text.
    */
   @Prop() href!: string;
 
