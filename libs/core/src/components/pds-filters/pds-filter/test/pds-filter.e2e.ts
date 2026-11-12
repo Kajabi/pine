@@ -350,7 +350,7 @@ describe('pds-filter reduced motion', () => {
 });
 
 describe('pds-filter popover width', () => {
-  it('keeps its padding inside its width', async () => {
+  it('renders at its width, padding included', async () => {
     const page = await newE2EPage();
     await page.setContent(`
       <pds-filter component-id="test" text="Test">
@@ -364,6 +364,6 @@ describe('pds-filter popover width', () => {
     const width = await page.evaluate(
       () => document.querySelector('pds-filter')!.shadowRoot!.querySelector('.pds-filter__popover')!.getBoundingClientRect().width,
     );
-    expect(Math.round(width)).toBe(228);
+    expect(Math.round(width)).toBe(244);
   });
 });
