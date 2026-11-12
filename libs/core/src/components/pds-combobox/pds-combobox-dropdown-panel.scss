@@ -242,20 +242,24 @@
 
   // Internal, not a consumer hook.
   .pds-combobox__listbox--drill-in,
-  .pds-combobox__listbox--drill-out:dir(rtl) {
+  .pds-combobox__listbox--drill-out:dir(rtl),
+  .pds-combobox__panel-search--drill-out:dir(rtl) {
     --pds-combobox-drill-from: var(--pine-dimension-sm);
   }
 
   .pds-combobox__listbox--drill-out,
-  .pds-combobox__listbox--drill-in:dir(rtl) {
+  .pds-combobox__listbox--drill-in:dir(rtl),
+  .pds-combobox__panel-search--drill-out {
     --pds-combobox-drill-from: calc(var(--pine-dimension-sm) * -1);
   }
 
-  // The row back slides with the options; only its trigger moves, so the header stays put.
+  // The header (row back or search field) slides with the options. Only its content moves: the row
+  // and its divider stay put instead of fading out and back in.
   .pds-combobox__listbox--drill-in .pds-combobox__drill-in-options > li,
-  .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger,
-  .pds-combobox__listbox--drill-out > li {
-    animation: pds-combobox-drill var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  .pds-combobox__listbox--drill-in .pds-combobox__group-back-trigger > *,
+  .pds-combobox__listbox--drill-out > li,
+  .pds-combobox__panel-search--drill-out > * {
+    animation: pds-combobox-drill var(--pine-motion-duration-slow) var(--pine-motion-easing-out);
   }
 
   @keyframes pds-combobox-drill {
@@ -265,9 +269,36 @@
     }
   }
 
+  // Ease-out, like the slide it moves with: ease-in-out starts slow and trails the rows.
+  .pds-combobox__listbox--height-glide {
+    animation: pds-combobox-height-glide var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+  }
+
+  // The rows overflow the gliding height until it ends; hidden, no scrollbar flashes meanwhile.
+  .pds-combobox__listbox--height-glide,
+  .pds-combobox__listbox--height-glide .pds-combobox__listbox-options,
+  .pds-combobox__listbox--height-glide .pds-combobox__drill-in-options,
+  .pds-combobox__listbox--height-hold,
+  .pds-combobox__listbox--height-hold .pds-combobox__listbox-options,
+  .pds-combobox__listbox--height-hold .pds-combobox__drill-in-options {
+    overflow-y: hidden;
+  }
+
+  @keyframes pds-combobox-height-glide {
+    from {
+      height: var(--pds-combobox-glide-from);
+    }
+
+    to {
+      height: var(--pds-combobox-glide-to);
+    }
+  }
+
   // The keyboard's place among the rows, which share a background with hover, open and selection.
+  // Options in a grouped panel show it the same way, so every layer marks the keyboard alike.
   .pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger,
-  .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger {
+  .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger,
+  .pds-combobox__listbox--grouped .pds-combobox__option--keyboard {
     outline: var(--pine-outline-focus);
     outline-offset: calc(var(--pine-border-width) * -2);
   }
@@ -437,8 +468,10 @@
   .pds-combobox__listbox--grouped .pds-combobox__group-back--keyboard > .pds-combobox__group-back-trigger {
     outline: none;
 
+    // The same ring as the rows' (see `--keyboard` above), drawn just inside the shade.
     &::before {
       outline: var(--pine-outline-focus);
+      outline-offset: calc(var(--pine-border-width) * -2);
     }
   }
 
