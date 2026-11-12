@@ -21,9 +21,20 @@ Users who rely on keyboard navigation must be able to reach and operate every in
 - Interactive elements must be reachable via `Tab` and `Shift+Tab`
 - Do not remove or override `tabIndex` unless you have a deliberate focus management strategy
 - Custom interactive elements (e.g. `pds-button`, `pds-checkbox`, `pds-switch`) manage keyboard interaction internally — do not suppress their default behavior
-- Avoid using `disabled` solely to prevent keyboard access; prefer `aria-disabled` when the element should remain discoverable
+- Keep a control enabled when people need to find it, and explain why its action can't run when they use it. `pds-button` doesn't support `aria-disabled`: one set on it isn't passed to its inner `<button>`, and the button still clicks and submits.
 
-**Trap focus in overlays.** When `pds-modal` is open, focus must remain within it until it is dismissed. Pine handles this automatically — do not break this behavior by rendering focusable elements outside the modal while it is open.
+### Overlay focus
+
+Each Pine overlay handles focus on its own. Don't move focus out of an open modal or a `modal` drawer from your code, because the page behind it is inert. The component docs describe each one in full: <pds-link href="../?path=/docs/components-modal--docs">Modal</pds-link>, <pds-link href="../?path=/docs/components-drawer--docs">Drawer</pds-link>, <pds-link href="../?path=/docs/components-popover--docs">Popover</pds-link>, <pds-link href="../?path=/docs/components-dropdown-menu--docs">Dropdown Menu</pds-link>, <pds-link href="../?path=/docs/components-tooltip--docs">Tooltip</pds-link> and <pds-link href="../?path=/docs/components-toast--docs">Toast</pds-link>.
+
+- **`pds-modal`** moves focus to its first control when it opens and keeps Tab inside. Escape closes it, and focus returns to the control that had it before the modal opened.
+- **`pds-modal` with `disable-top-layer`** moves focus to its first control unless `disable-initial-focus` is set, and lets Tab move between the modal and the page. Escape closes it. Focus returns to the control that opened it only if focus was inside the modal.
+- **`pds-drawer` with `modal`** moves focus to its first control and keeps Tab inside. Escape closes it, and focus returns to the control that had it before the drawer opened.
+- **`pds-drawer`** moves focus to its first control unless `initial-focus="none"` is set, and lets Tab move between the drawer and the page. Escape closes it from anywhere on the page. Focus returns to the control that opened it only if focus was inside the drawer.
+- **`pds-popover`** leaves focus on the trigger. Tab from the trigger moves into the content, and Tab from its last control moves on to whatever follows the popover. Escape closes it unless `popover-type="manual"` is set, and moves focus from the content back to the trigger.
+- **`pds-dropdown-menu`** leaves focus on the trigger. Tab or Down Arrow moves to the first item, and Tab past the last item closes the menu. Escape closes it and returns focus to the trigger.
+- **`pds-tooltip`** opens when its trigger takes focus and never takes focus itself. It closes when focus leaves the trigger. Escape doesn't close it.
+- **`pds-toast`** never takes focus, and Escape doesn't close it. Its message is in a `role="alert"` region.
 
 ---
 
@@ -31,57 +42,58 @@ Users who rely on keyboard navigation must be able to reach and operate every in
 
 ### Labels
 
-Prefer visible labels. When a visible label is not possible, use `aria-label` or `aria-labelledby`.
-
-**Preferred: visible label via the `label` prop**
+Prefer visible labels. Give a form control a `label` and a `component-id`: the `component-id` connects the label to the field, and without it the field has no accessible name.
 
 <DocCanvas
   mdxSource={{
-    webComponent: `<pds-input label="Email address" name="email"></pds-input>`,
-    react: `<PdsInput label="Email address" name="email"></PdsInput>`
+    webComponent: `<pds-input component-id="email-address" label="Email address" name="email"></pds-input>`,
+    react: `
+import { PdsInput } from '@pine-ds/react';
+
+<PdsInput componentId="email-address" label="Email address" name="email" />`
   }}>
-  <pds-input label="Email address" name="email"></pds-input>
+  <pds-input component-id="email-address" label="Email address" name="email"></pds-input>
 </DocCanvas>
 
-**`aria-label` for icon-only buttons**
+When the design has no room for a visible label, keep `label` and add `hide-label`. The label is hidden on screen, and screen readers still read it as the field's name.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-input component-id="order-search" label="Search orders" hide-label name="q"></pds-input>`,
+    react: `
+import { PdsInput } from '@pine-ds/react';
+
+<PdsInput componentId="order-search" label="Search orders" hideLabel name="q" />`
+  }}>
+  <pds-input component-id="order-search" label="Search orders" hide-label name="q"></pds-input>
+</DocCanvas>
+
+Don't name a `pds-input`, `pds-textarea` or `pds-select` with `aria-labelledby`. The ID it points to is outside the component's shadow root, so the field ends up with no name.
+
+Name an icon-only button with `aria-label` on `pds-button`, which passes it to its inner `<button>`. Text in the default slot also names it, because `icon-only` hides the text on screen but not from screen readers.
 
 <DocCanvas
   mdxSource={{
     webComponent: `
-<pds-button icon-only>
+<pds-button icon-only aria-label="Close dialog">
   <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
-  Close dialog
 </pds-button>`,
     react: `
-<PdsButton iconOnly>
-  <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
-  Close dialog
+import { PdsButton, PdsIcon } from '@pine-ds/react';
+import { remove } from '@pine-ds/icons/icons';
+
+<PdsButton iconOnly aria-label="Close dialog">
+  <PdsIcon slot="start" icon={remove} aria-hidden="true" />
 </PdsButton>`
   }}>
-  <pds-button icon-only>
+  <pds-button icon-only aria-label="Close dialog">
     <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
-    Close dialog
   </pds-button>
-</DocCanvas>
-
-**`aria-labelledby` pointing to an existing visible element**
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `
-<h2 id="section-heading">Billing details</h2>
-<pds-input aria-labelledby="section-heading" name="billing-name"></pds-input>`,
-    react: `
-<h2 id="section-heading">Billing details</h2>
-<PdsInput aria-labelledby="section-heading" name="billing-name"></PdsInput>`
-  }}>
-  <h2 id="section-heading">Billing details</h2>
-  <pds-input aria-labelledby="section-heading" name="billing-name"></pds-input>
 </DocCanvas>
 
 ### Decorative Icons
 
-Always mark decorative icons as hidden from assistive technologies:
+Mark a decorative icon with `aria-hidden="true"` so assistive technologies skip it.
 
 <DocCanvas
   mdxSource={{
@@ -95,18 +107,18 @@ When an icon conveys meaning with no adjacent label, provide an `aria-label` on 
 
 ### Landmark Roles
 
-Structure page regions with landmark roles so screen reader users can navigate quickly:
+Give each page one `<header>`, one `<main>` and one `<footer>`, and a `<nav>` with an `aria-label` for each navigation area, so screen reader users can jump between regions. These elements carry their landmark roles already, so they don't need `role` attributes.
 
 ```html
-<header role="banner">…</header>
-<nav role="navigation" aria-label="Main">…</nav>
-<main role="main">…</main>
-<footer role="contentinfo">…</footer>
+<header>…</header>
+<nav aria-label="Main">…</nav>
+<main>…</main>
+<footer>…</footer>
 ```
 
 ### Live Regions
 
-Use live regions to announce dynamic content changes (e.g. loading results, validation summaries) without moving focus:
+Use a live region to announce content that changes without moving focus, such as loaded results or a validation summary. Screen readers read what you put inside an `aria-live` element.
 
 ```html
 <div aria-live="polite" aria-atomic="true">
@@ -120,7 +132,7 @@ Use `aria-live="assertive"` only for critical errors that must interrupt the use
 
 ## Color and Contrast
 
-Pine enforces semantic token usage to maintain contrast ratios:
+WCAG 2.1 AA sets these minimum contrast ratios.
 
 <pds-table component-id="contrast-ratios" compact row-dividers>
   <pds-table-head>
@@ -147,11 +159,17 @@ Do not use raw hex values or core tokens for text and UI colors in application c
 
 See <pds-link href="../?path=/docs/design-tokens-tokens--docs">Tokens</pds-link> for each text token's contrast and when to use it. Pine's <pds-link href="../?path=/docs/design-tokens-color-linting--docs">Color Linting</pds-link> rules check only Pine's own component styles; they don't run on your app.
 
+### Dark mode
+
+Set `data-theme="dark"` on `<html>` to turn on dark mode. Semantic color tokens switch with the theme, but core tokens such as `--pine-color-grey-900` and literal colors such as hex values keep their light-mode value, so check contrast in both themes. The Dark mode section of <pds-link href="../?path=/docs/design-tokens-tokens--docs">Tokens</pds-link> lists which tokens switch.
+
+A few component dark-mode styles use the CSS `:host-context()` selector, which only Chromium-based browsers support. In Firefox and Safari, these keep their light-mode look in dark mode: `pds-alert` and `pds-chip` colors, the error-state colors of `pds-input`, `pds-select`, `pds-textarea` and `pds-combobox`, the panel border of `pds-dropdown-menu` and of the `pds-datepicker` calendar, and the calendar's month, year and time menus. `pds-select` keeps its light error fill in every browser when `invalid` is set without an `error-message`.
+
 ---
 
 ## Focus Management
 
-Move focus programmatically when the user's context changes:
+Move focus programmatically when the user's context changes. Pine's overlays move focus on their own (see Overlay focus above), so these cases are yours.
 
 <pds-table component-id="focus-management" compact row-dividers>
   <pds-table-head>
@@ -160,20 +178,8 @@ Move focus programmatically when the user's context changes:
   </pds-table-head>
   <pds-table-body>
     <pds-table-row>
-      <pds-table-cell>Modal opens</pds-table-cell>
-      <pds-table-cell>First focusable element inside the modal</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Modal closes</pds-table-cell>
-      <pds-table-cell>The element that triggered the modal</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Toast appears</pds-table-cell>
-      <pds-table-cell>Toast does not receive focus — use <code>aria-live</code> instead</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Page-level error summary displayed</pds-table-cell>
-      <pds-table-cell>The summary container or its heading</pds-table-cell>
+      <pds-table-cell>A submit fails</pds-table-cell>
+      <pds-table-cell>The error summary: a <code>pds-alert</code> with <code>tabindex="-1"</code> above the form</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Route / page change (SPA)</pds-table-cell>
@@ -182,7 +188,7 @@ Move focus programmatically when the user's context changes:
   </pds-table-body>
 </pds-table>
 
-Pine's `pds-modal` handles open/close focus management internally. For custom focus movement:
+For custom focus movement, call `focus()` on the target. An element that isn't focusable on its own, such as a heading, needs `tabindex="-1"` first.
 
 ```js
 document.querySelector('#my-target').focus();
@@ -192,57 +198,54 @@ document.querySelector('#my-target').focus();
 
 ## Forms
 
-Form accessibility patterns in Pine:
+These patterns cover form accessibility. See <pds-link href="../?path=/docs/guides-forms--docs">Using Pine Form Components</pds-link> for full form examples and the validation rules.
 
-**Always pair inputs with labels** using the `label` prop — never use `placeholder` as a substitute:
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-input label="Password" type="password" name="password"></pds-input>`,
-    react: `<PdsInput label="Password" type="password" name="password"></PdsInput>`
-  }}>
-  <pds-input label="Password" type="password" name="password"></pds-input>
-</DocCanvas>
-
-**Inline validation:** set `invalid` and `error` on the component in response to user input:
+**Always pair inputs with labels** using the `label` prop and a `component-id`. Never use `placeholder` as a substitute.
 
 <DocCanvas
   mdxSource={{
-    webComponent: `<pds-input label="Email" invalid error="Please enter a valid email address." name="email"></pds-input>`,
-    react: `<PdsInput label="Email" invalid="true" error="Please enter a valid email address." name="email"></PdsInput>`
+    webComponent: `<pds-input component-id="password" label="Password" type="password" name="password"></pds-input>`,
+    react: `
+import { PdsInput } from '@pine-ds/react';
+
+<PdsInput componentId="password" label="Password" type="password" name="password" />`
   }}>
-  <pds-input label="Email" invalid error="Please enter a valid email address." name="email"></pds-input>
+  <pds-input component-id="password" label="Password" type="password" name="password"></pds-input>
 </DocCanvas>
 
-**Summary validation:** after a failed submission, render a `pds-alert` listing all errors and move focus to it:
-
-```html
-<pds-alert variant="error" id="form-errors">
-  Please correct the following errors before submitting.
-</pds-alert>
-```
-
-```js
-document.querySelector('#form-errors').focus();
-```
-
-**Async validation:** indicate loading state and signal pending updates to assistive technologies:
+**Inline validation:** set `invalid` and `error-message` on the field in response to user input, and leave focus where it is.
 
 <DocCanvas
   mdxSource={{
-    webComponent: `<pds-button loading aria-busy="true">Checking availability…</pds-button>`,
-    react: `<PdsButton loading="true" aria-busy="true">Checking availability…</PdsButton>`
+    webComponent: `<pds-input component-id="signup-email" label="Email" invalid error-message="Enter an email address, like name@example.com." name="email"></pds-input>`,
+    react: `
+import { PdsInput } from '@pine-ds/react';
+
+<PdsInput componentId="signup-email" label="Email" invalid errorMessage="Enter an email address, like name@example.com." name="email" />`
   }}>
-  <pds-button loading aria-busy="true">Checking availability…</pds-button>
+  <pds-input component-id="signup-email" label="Email" invalid error-message="Enter an email address, like name@example.com." name="email"></pds-input>
 </DocCanvas>
 
-See <pds-link href="../?path=/docs/guides-forms--docs">Using Pine Form Components</pds-link> for full form examples.
+**After a failed submit:** mark each failed field, render a `pds-alert` with `variant="danger"` above the form that lists the errors, and move focus to it. Give the alert `tabindex="-1"` so it can take focus, then call `focus()` on it. The forms guide shows the full example.
+
+**Async validation:** set `loading` on the `pds-button` while you wait. A loading button sets `aria-busy="true"` on its inner `<button>` itself, so don't add `aria-busy` to it.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-button loading>Checking availability…</pds-button>`,
+    react: `
+import { PdsButton } from '@pine-ds/react';
+
+<PdsButton loading>Checking availability…</PdsButton>`
+  }}>
+  <pds-button loading>Checking availability…</pds-button>
+</DocCanvas>
 
 ---
 
 ## Disabled vs Read-only
 
-Choose the right pattern when a control should not accept input. `disabled`, `readonly`, and `aria-disabled` are not interchangeable — each has different keyboard, screen-reader, and form-submission behavior.
+Choose the right pattern when a control should not accept input. `disabled` and `readonly` are not interchangeable: each has different keyboard, screen-reader, and form-submission behavior. `pds-input`, `pds-textarea` and `pds-datepicker` have `readonly`.
 
 <pds-table component-id="disabled-vs-readonly" compact row-dividers>
   <pds-table-head>
@@ -253,13 +256,13 @@ Choose the right pattern when a control should not accept input. `disabled`, `re
   <pds-table-body>
     <pds-table-row>
       <pds-table-cell>Keyboard focusable</pds-table-cell>
-      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>No: Tab skips it</pds-table-cell>
       <pds-table-cell>Yes</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell>Screen reader readable</pds-table-cell>
-      <pds-table-cell>No</pds-table-cell>
-      <pds-table-cell>Yes</pds-table-cell>
+      <pds-table-cell>Screen readers</pds-table-cell>
+      <pds-table-cell>Read it, as unavailable, when browsing the page</pds-table-cell>
+      <pds-table-cell>Read it, as read-only</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Form submitted</pds-table-cell>
@@ -274,7 +277,7 @@ Choose the right pattern when a control should not accept input. `disabled`, `re
   </pds-table-body>
 </pds-table>
 
-> **Accessibility note:** Disabled buttons are not read by all screen readers. If the action is important, keep the button enabled and surface an error when clicked, or use `aria-disabled="true"` to keep it discoverable while preventing activation.
+> **Accessibility note:** People moving through the page with Tab never land on a disabled button, so they don't hear it or why it's disabled. If the action is important, keep the button enabled and show an error when it's pressed. Don't rely on `aria-disabled` on `pds-button`, which doesn't stop the click.
 
 ---
 
@@ -283,7 +286,7 @@ Choose the right pattern when a control should not accept input. `disabled`, `re
 - Test with **VoiceOver** (macOS/iOS) and **NVDA** (Windows) as a smoke test
 - Announce status changes via `aria-live` regions rather than moving focus unexpectedly
 - Use `role="status"` for non-critical updates (equivalent to `aria-live="polite"`)
-- Avoid `display: none` or `visibility: hidden` on elements that should be visually hidden but accessible — use the `.visually-hidden` CSS pattern instead:
+- Avoid `display: none` or `visibility: hidden` on elements that should be visually hidden but accessible. Use the `.visually-hidden` CSS pattern instead.
 
 ```css
 .visually-hidden {
@@ -316,7 +319,7 @@ Use this checklist when reviewing a feature for accessibility:
 - [ ] All interactive elements are reachable by `Tab` key
 - [ ] Focus order matches visual reading order
 - [ ] All inputs have visible, programmatically associated labels
-- [ ] Error messages are associated with their inputs (`error` prop sets `aria-describedby` internally)
+- [ ] Error messages are associated with their inputs (`invalid` with `error-message` sets `aria-describedby` internally)
 - [ ] Focus is trapped inside open modals
 - [ ] Focus is restored when modals close
 - [ ] Decorative images and icons have `aria-hidden="true"`
