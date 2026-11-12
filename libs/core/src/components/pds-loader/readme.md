@@ -7,19 +7,19 @@
 
 ## Properties
 
-| Property    | Attribute    | Description                                                         | Type                    | Default     |
-| ----------- | ------------ | ------------------------------------------------------------------- | ----------------------- | ----------- |
-| `isLoading` | `is-loading` | If false, the loader will be hidden.                                | `boolean`               | `true`      |
-| `showLabel` | `show-label` | Determines whether the loader should display a label.               | `boolean`               | `false`     |
-| `size`      | `size`       | Sets the size of the spinner loader. Value can be preset or custom. | `string`                | `'md'`      |
-| `variant`   | `variant`    | Determines the type of loader.                                      | `"spinner" \| "typing"` | `'spinner'` |
+| Property    | Attribute    | Description                                                                                                                                                                    | Type                    | Default     |
+| ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- | ----------- |
+| `isLoading` | `is-loading` | If false, the loader will be hidden.                                                                                                                                           | `boolean`               | `true`      |
+| `showLabel` | `show-label` | Determines whether the loader should display a label.                                                                                                                          | `boolean`               | `false`     |
+| `size`      | `size`       | Sets the size of the spinner loader: `xs` (24px), `sm` (32px), `md` (48px), `lg` (64px), `xl` (80px), or a custom CSS length such as `128px`. The `typing` variant ignores it. | `string`                | `'md'`      |
+| `variant`   | `variant`    | Determines the type of loader.                                                                                                                                                 | `"spinner" \| "typing"` | `'spinner'` |
 
 
 ## Slots
 
-| Slot      | Description                         |
-| --------- | ----------------------------------- |
-| `"label"` | Default slot for Loader label text. |
+| Slot      | Description                                                                       |
+| --------- | --------------------------------------------------------------------------------- |
+| `"label"` | Label text. Defaults to "Loading...". Text outside this slot isn't shown or read. |
 
 
 ## Shadow Parts
