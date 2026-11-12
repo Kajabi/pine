@@ -316,16 +316,26 @@ describe('pds-toast severity', () => {
 });
 
 describe('pds-toast width', () => {
-  it('keeps its padding inside max-width, leaving a gutter on a narrow screen', async () => {
+  const LONG = 'Long content that wraps across the toast so it reaches its widest width, and keeps going past the edge of the screen to be sure.';
+  const toastWidth = async (width: number, message: string) => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 375, height: 800 });
-    await page.setContent(`<pds-toast component-id="wide" duration="0">Long content that wraps across the panel so it reaches its widest width, and keeps going past the edge of the panel to be sure.</pds-toast>`);
+    await page.setViewport({ width, height: 800 });
+    await page.setContent(`<pds-toast component-id="toast" duration="0">${message}</pds-toast>`);
     await page.waitForChanges();
-
-    const width = await page.evaluate(
+    return page.evaluate(
       () => document.querySelector('pds-toast')!.shadowRoot!.querySelector('.pds-toast')!.getBoundingClientRect().width,
     );
-    // max-width on a narrow screen is the viewport less a 4px gutter on each side.
-    expect(Math.round(width)).toBe(375 - 8);
+  };
+
+  it('is at most 90vw plus its padding on a wide screen', async () => {
+    expect(Math.round(await toastWidth(1280, LONG.repeat(3)))).toBe(1280 * 0.9 + 48);
+  });
+
+  it('is at least 350px wide on a wide screen', async () => {
+    expect(Math.round(await toastWidth(1280, 'Saved'))).toBe(350);
+  });
+
+  it('spans the screen on a narrow screen', async () => {
+    expect(Math.round(await toastWidth(375, LONG))).toBe(375);
   });
 });
