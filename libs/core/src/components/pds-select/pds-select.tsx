@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import { HostStylingKeeper } from '@utils/attributes';
-import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
+import { assignDescription, isSpecTest, messageId, exposeTypeProperty, reportNativeValidity } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
 /** The tags of an option list in order, optgroup contents included: equal shapes can be patched in place. */
@@ -80,7 +80,9 @@ export class PdsSelect {
   @Prop() helperMessage: string;
 
   /**
-   * Determines whether or not the select is invalid.
+   * Determines whether or not the select is invalid. Independent of the native/ElementInternals
+   * constraint validation `required` drives (which blocks form submission on its own) — set this
+   * to also show the error styling and `aria-invalid`.
    */
   @Prop() invalid?: boolean;
 
@@ -155,6 +157,24 @@ export class PdsSelect {
    */
   multipleChanged() {
     this.updateType();
+  }
+
+  @Watch('disabled')
+  @Watch('required')
+  /**
+   * Neither prop changes the value, so nothing else recomputes validity for them: a field that
+   * renders disabled and required keeps whatever validity it had while disabled once re-enabled,
+   * and toggling required at runtime wouldn't otherwise start (or stop) blocking an empty value.
+   */
+  disabledOrRequiredChanged() {
+    // Eagerly synced, not left to the next render: Stencil patches the native select's
+    // `disabled`/`required` asynchronously, so reading its validity right here, still inside this
+    // synchronous watcher, would see the value these props had before this change.
+    if (this.selectEl) {
+      this.selectEl.disabled = this.disabled;
+      this.selectEl.required = this.required;
+    }
+    this.updateFormValue();
   }
 
   private updateType() {
@@ -436,13 +456,7 @@ export class PdsSelect {
       }
 
       // Set validity based on native select validation
-      if (this.selectEl && this.internals && this.internals.setValidity) {
-        this.internals.setValidity(
-          this.selectEl.validity,
-          this.selectEl.validationMessage,
-          this.selectEl
-        );
-      }
+      reportNativeValidity(this.internals, this.disabled, this.selectEl, this.selectEl);
     }
   }
 

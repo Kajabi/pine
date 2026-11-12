@@ -225,6 +225,98 @@ describe('pds-select option sync', () => {
   });
 });
 
+describe('pds-select validity', () => {
+  it('stays valid, without throwing, while required and disabled with no value', async () => {
+    const page = await newE2EPage();
+    const errors: string[] = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+
+    await page.setContent(`
+      <form>
+        <pds-select component-id="s" name="s" label="Pick" required disabled>
+          <option value="">Pick</option>
+          <option value="a">A</option>
+        </pds-select>
+      </form>
+    `);
+    await page.waitForChanges();
+
+    expect(errors).toEqual([]);
+    const invalid = await page.$eval('pds-select', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+  });
+
+  it('goes required-invalid once re-enabled, instead of keeping the validity it had while disabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <pds-select component-id="s" name="s" label="Pick" required disabled>
+          <option value="">Pick</option>
+          <option value="a">A</option>
+        </pds-select>
+      </form>
+    `);
+    await page.waitForChanges();
+
+    await page.$eval('pds-select', (el: Element) => {
+      el.removeAttribute('disabled');
+    });
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-select', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('stays valid while required and empty inside a disabled fieldset, then goes invalid once the fieldset is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-select component-id="s" name="s" label="Pick" required>
+            <option value="">Pick</option>
+            <option value="a">A</option>
+          </pds-select>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-select', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('fieldset', (el: Element) => el.removeAttribute('disabled'));
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-select', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+
+  it('goes required-invalid when required is turned on at runtime with no value', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-select component-id="s" name="s" label="Pick">
+        <option value="">Pick</option>
+        <option value="a">A</option>
+      </pds-select>
+    `);
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-select', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('pds-select', (el: HTMLSelectElement & Element) => {
+      (el as unknown as { required: boolean }).required = true;
+    });
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-select', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+});
+
 describe('pds-select accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();

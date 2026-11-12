@@ -298,6 +298,72 @@ describe('pds-input', () => {
   });
 });
 
+describe('pds-input validity', () => {
+  it('stays valid while required and disabled with no value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-input component-id="i" name="i" label="Name" required disabled></pds-input></form>');
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+  });
+
+  it('goes required-invalid once re-enabled, instead of keeping the validity it had while disabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-input component-id="i" name="i" label="Name" required disabled></pds-input></form>');
+    await page.waitForChanges();
+
+    await page.$eval('pds-input', (el: Element) => {
+      el.removeAttribute('disabled');
+    });
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('stays valid while required and empty inside a disabled fieldset, then goes invalid once the fieldset is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-input component-id="i" name="i" label="Name" required></pds-input>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('fieldset', (el: Element) => el.removeAttribute('disabled'));
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+
+  it('goes required-invalid when required is turned on at runtime with no value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-input component-id="i" name="i" label="Name"></pds-input>');
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('pds-input', (el: Element) => {
+      (el as unknown as { required: boolean }).required = true;
+    });
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+});
+
 describe('pds-input reduced motion', () => {
   it('zeroes out the field border-color transition under prefers-reduced-motion', async () => {
     const page = await newE2EPage();

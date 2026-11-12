@@ -104,7 +104,9 @@ export class PdsTextarea {
   @Prop() helperMessage?: string;
 
   /**
-   * Determines whether or not the textarea is invalid or throws an error.
+   * Determines whether or not the textarea is invalid or throws an error. Independent of the
+   * native/ElementInternals constraint validation `required` drives (which blocks form submission
+   * on its own) — set this to also show the error styling and `aria-invalid`.
    * @defaultValue false
    */
   @Prop({mutable: true}) invalid = false;       // eslint-disable-line @stencil-community/strict-mutable
@@ -218,15 +220,25 @@ export class PdsTextarea {
       this.setupResizeObserver();
     }
 
-    // Update ElementInternals validity when maxLength changes
-    if (!isSpecTest() && this.internals && this.internals.setValidity && this.nativeTextarea) {
-      const isTooLong = this.nativeTextarea.value.length > (this.maxLength || 0);
-      this.internals.setValidity(
-        { tooLong: isTooLong },
-        isTooLong ? 'Value exceeds maxLength' : '',
-        this.nativeTextarea
-      );
+    this.updateValidity();
+  }
+
+  @Watch('disabled')
+  @Watch('required')
+  /**
+   * Neither prop changes the value, so nothing else recomputes validity for them: a field that
+   * renders disabled and required keeps whatever validity it had while disabled once re-enabled,
+   * and toggling required at runtime wouldn't otherwise start (or stop) blocking an empty value.
+   */
+  protected disabledOrRequiredChanged() {
+    // Eagerly synced, not left to the next render: Stencil patches the native textarea's
+    // `disabled`/`required` asynchronously, so reading its validity right here, still inside this
+    // synchronous watcher, would see the value these props had before this change.
+    if (this.nativeTextarea) {
+      this.nativeTextarea.disabled = this.disabled;
+      this.nativeTextarea.required = this.required;
     }
+    this.updateFormValue();
   }
 
   /**
@@ -454,15 +466,34 @@ export class PdsTextarea {
       const value = this.getValue();
       this.internals.setFormValue(value || null);
 
-      // Set validity based on native textarea validation
-      if (this.nativeTextarea && this.internals && this.internals.setValidity) {
-        this.internals.setValidity(
-          this.nativeTextarea.validity,
-          this.nativeTextarea.validationMessage,
-          this.nativeTextarea
-        );
-      }
+      this.updateValidity();
     }
+  }
+
+  /**
+   * Reports the textarea's validity to ElementInternals. `tooLong` is computed from the
+   * `maxLength` prop and the value rather than read from the native textarea: native
+   * `validity.tooLong` is only ever set for user edits (never for a programmatic value), and its
+   * `maxlength` attribute is still stale inside the `maxLength` watcher. Every path that reports
+   * validity goes through here so a later `disabled`/`required`/value change can't drop it.
+   */
+  private updateValidity() {
+    if (isSpecTest() || !this.internals?.setValidity) return;
+
+    const native = this.nativeTextarea;
+    if (this.disabled || !native) {
+      this.internals.setValidity({});
+      return;
+    }
+
+    if ((this.maxLength ?? 0) > 0 && native.value.length > this.maxLength) {
+      this.internals.setValidity({ tooLong: true }, 'Value exceeds maxLength', native);
+      return;
+    }
+
+    // Native `tooLong` is left out: after maxLength is raised or cleared it still reflects the old limit.
+    const { valueMissing, customError } = native.validity;
+    this.internals.setValidity({ valueMissing, customError }, native.validationMessage, native);
   }
 
 

@@ -1,5 +1,5 @@
 import { Component, Element, h, Prop, Host, Event, EventEmitter, State, Watch } from '@stencil/core';
-import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
+import { assignDescription, isSpecTest, messageId, exposeTypeProperty, reportNativeValidity } from '../../utils/form';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -18,6 +18,7 @@ import type { Attributes } from '@utils/attributes';
 export class PdsCheckbox {
   private inheritedAttributes: Attributes = {};
   private internals?: ElementInternals;
+  private nativeInput?: HTMLInputElement;
   private readonly _type = 'checkbox' as const;
 
   @Element() el: HTMLPdsCheckboxElement;
@@ -58,7 +59,9 @@ export class PdsCheckbox {
   @Prop({ mutable: true }) indeterminate: boolean;
 
   /**
-   * It determines whether or not the checkbox is invalid.
+   * It determines whether or not the checkbox is invalid. Independent of the native/
+   * ElementInternals constraint validation `required` drives (which blocks form submission on its
+   * own) — set this to also show the error styling and `aria-invalid`.
    */
   @Prop() invalid: boolean;
 
@@ -165,6 +168,28 @@ export class PdsCheckbox {
 
   @Watch('checked')
   checkedChanged() {
+    // Eagerly synced, not left to the next render: Stencil patches the native input's `checked`
+    // asynchronously, so reading its validity right here, still inside this synchronous watcher,
+    // would see the value it had before this change.
+    if (this.nativeInput) this.nativeInput.checked = !!this.checked;
+    this.updateFormValue();
+  }
+
+  @Watch('disabled')
+  @Watch('required')
+  /**
+   * Neither prop changes checked, so nothing else recomputes validity for them: a checkbox that
+   * renders disabled and required keeps whatever validity it had while disabled once re-enabled,
+   * and toggling required at runtime wouldn't otherwise start (or stop) blocking an unchecked box.
+   */
+  disabledOrRequiredChanged() {
+    // Eagerly synced, not left to the next render: Stencil patches the native input's
+    // `disabled`/`required` asynchronously, so reading its validity right here, still inside this
+    // synchronous watcher, would see the value these props had before this change.
+    if (this.nativeInput) {
+      this.nativeInput.disabled = !!this.disabled;
+      this.nativeInput.required = !!this.required;
+    }
     this.updateFormValue();
   }
 
@@ -177,9 +202,8 @@ export class PdsCheckbox {
       this.internals.setFormValue(formValue);
     }
 
-    if (this.internals && this.internals.setValidity) {
-      this.internals.setValidity({});
-    }
+    // Set validity based on native checkbox validation (required + unchecked)
+    reportNativeValidity(this.internals, this.disabled, this.nativeInput, this.nativeInput);
   }
 
   formStateRestoreCallback(state: string | FormData | null) {
@@ -224,6 +248,7 @@ export class PdsCheckbox {
       <Host class={hostClass}>
         <label htmlFor={this.componentId}>
           <input
+            ref={(el) => (this.nativeInput = el as HTMLInputElement)}
             type="checkbox"
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage, this.errorMessage)}
             aria-invalid={this.invalid ? "true" : undefined}

@@ -114,6 +114,78 @@ describe('pds-checkbox', () => {
   });
 });
 
+describe('pds-checkbox validity', () => {
+  it('is invalid while required and unchecked', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="tos" name="tos" label="Agree" required></pds-checkbox>');
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+
+  it('goes valid once checked', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="tos" name="tos" label="Agree" required></pds-checkbox>');
+    await page.waitForChanges();
+
+    await page.$eval('pds-checkbox', (el: Element) => {
+      (el as unknown as { checked: boolean }).checked = true;
+    });
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+  });
+
+  it('stays valid while required, unchecked and disabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="tos" name="tos" label="Agree" required disabled></pds-checkbox>');
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+  });
+
+  it('goes required-invalid once re-enabled, instead of keeping the validity it had while disabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="tos" name="tos" label="Agree" required disabled></pds-checkbox>');
+    await page.waitForChanges();
+
+    await page.$eval('pds-checkbox', (el: Element) => {
+      el.removeAttribute('disabled');
+    });
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('stays valid while required and unchecked inside a disabled fieldset, then goes invalid once the fieldset is enabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form>
+        <fieldset disabled>
+          <pds-checkbox component-id="tos" name="tos" label="Agree" required></pds-checkbox>
+        </fieldset>
+      </form>
+    `);
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('fieldset', (el: Element) => el.removeAttribute('disabled'));
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+});
+
 describe('pds-checkbox checkmark color', () => {
   const markColor = (page, selector: string) =>
     page.$eval(selector, (el) => {
