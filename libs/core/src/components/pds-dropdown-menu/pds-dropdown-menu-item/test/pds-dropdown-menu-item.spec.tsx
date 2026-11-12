@@ -278,6 +278,93 @@ describe('pds-dropdown-menu-item', () => {
     expect(clickSpy).not.toHaveBeenCalled();
   });
   
+  describe('when disabled', () => {
+    it('does not emit pdsClick from clickItem() on a button item', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item disabled>Delete</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      await page.root!.clickItem();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not emit pdsClick from clickItem() on a link item', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item disabled href="https://example.com">Open</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      await page.root!.clickItem();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not emit pdsClick or navigate when the link is clicked', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item disabled href="https://example.com">Open</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+      const anchor = page.root!.shadowRoot!.querySelector('pds-link')!.shadowRoot!.querySelector('a')!;
+
+      anchor.click();
+      await page.waitForChanges();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+      expect(anchor.hasAttribute('href')).toBe(false);
+    });
+
+    it('does not emit pdsClick when the button is clicked', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item disabled>Delete</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      page.root!.shadowRoot!.querySelector('button')!.click();
+      await page.waitForChanges();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not emit pdsClick from an informational item', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item informational disabled>2 forms</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      page.root!.click();
+      await page.root!.clickItem();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('emits pdsClick from clickItem() again once re-enabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item disabled>Delete</pds-dropdown-menu-item>`,
+      });
+      const clickSpy = jest.fn();
+      page.root!.addEventListener('pdsClick', clickSpy);
+
+      page.root!.disabled = false;
+      await page.waitForChanges();
+      await page.root!.clickItem();
+
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   it('handles keyboard events through button element', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuItem],
