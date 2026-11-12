@@ -602,7 +602,7 @@ With the release of Tokens Studio version 2.0, the Tokens Studio team has decide
 - Background Blur
 - X and Y position
 
-`dimension` is a token-authoring category: in the token source, radius and border width values are dimension tokens. In CSS, use the radius, stroke width and spacing tokens described under Choosing tokens.
+In Pine's token source, spacing and sizes are `dimension` tokens. Radius and border width tokens have types of their own: `--pine-border-radius-sm`, `-md` and `-lg` point at the core dimension tokens `050`, `125` and `200`, and the border widths don't point at dimension tokens. In CSS, use the radius, stroke width and spacing tokens described under Choosing tokens.
 
 ### Adding tokens
 

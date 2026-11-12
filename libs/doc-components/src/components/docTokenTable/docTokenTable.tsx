@@ -17,11 +17,6 @@ interface DocTokenTableProps {
   tier: string;
   use: string;
 }
-interface CategoryLookup {
-  [key: string]: {
-    [key: string]: string[];
-  }
-}
 
 const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
   color: { width: "75%", height: "60px", border: "1px solid #d3d5d9", borderRadius: "4px"},
@@ -65,13 +60,6 @@ const applyStyle = (category: string, value: string, use?: string): React.CSSPro
   return style;
 }
 
-const categoryLookup: CategoryLookup = {
-  "border-radius": {
-    "core": ['dimension'],
-    "semantic": ['border-radius', 'dimension'],
-  },
-};
-
 const formattedCategoryName = {
   "fontFamilies": "font-family",
   "fontSizes": "font-size",
@@ -89,18 +77,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
     const loadTokens = async () => {
       try {
         const tokenModule = await import(`../../../../../node_modules/@kajabi-ui/styles/dist/tokens/${tier}.json`);
-        const categories = categoryLookup[category]?.[tier] || null;
-        let light: Token;
-        if (categories) {
-          const tempTokens: Token[] = [];
-          categories.forEach((cat: string) => {
-            tempTokens.push(tokenModule.default[cat as keyof typeof tokenModule.default]);
-          });
-          light = tempTokens.reduce((result, tokenObj) => ({...result, ...tokenObj}), {}) as Token;
-        }
-        else {
-          light = tokenModule.default[category as keyof typeof tokenModule.default] as Token;
-        }
+        const light = tokenModule.default[category as keyof typeof tokenModule.default] as Token;
 
         let dark: Token | null = null;
         if (tier === 'semantic') {
