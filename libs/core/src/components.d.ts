@@ -1028,8 +1028,8 @@ export namespace Components {
          */
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         /**
-          * Width of the dropdown. Any valid CSS width value.
-          * @default '236px'
+          * Width of the dropdown, including its padding. Any valid CSS width value.
+          * @default '252px'
          */
         "dropdownWidth": string;
         /**
@@ -1043,12 +1043,12 @@ export namespace Components {
         "fetchTimeout": number;
         /**
           * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
-          * @default '380px'
+          * @default '388px'
          */
         "flyoutMaxWidth": string;
         /**
           * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value. The flyout is as wide as its options, between this and `flyout-max-width`.
-          * @default '280px'
+          * @default '288px'
          */
         "flyoutMinWidth": string;
         /**
@@ -2201,8 +2201,8 @@ export namespace Components {
          */
         "hide": () => Promise<void>;
         /**
-          * Sets the maximum width of the popover content, in pixels.
-          * @defaultValue 352
+          * Sets the maximum width of the popover, in pixels, including its padding.
+          * @defaultValue 400
          */
         "maxWidth"?: number;
         /**
@@ -4951,8 +4951,8 @@ declare namespace LocalJSX {
          */
         "dropdownPlacement"?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         /**
-          * Width of the dropdown. Any valid CSS width value.
-          * @default '236px'
+          * Width of the dropdown, including its padding. Any valid CSS width value.
+          * @default '252px'
          */
         "dropdownWidth"?: string;
         /**
@@ -4966,12 +4966,12 @@ declare namespace LocalJSX {
         "fetchTimeout"?: number;
         /**
           * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
-          * @default '380px'
+          * @default '388px'
          */
         "flyoutMaxWidth"?: string;
         /**
           * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value. The flyout is as wide as its options, between this and `flyout-max-width`.
-          * @default '280px'
+          * @default '288px'
          */
         "flyoutMinWidth"?: string;
         /**
@@ -6184,8 +6184,8 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Sets the maximum width of the popover content, in pixels.
-          * @defaultValue 352
+          * Sets the maximum width of the popover, in pixels, including its padding.
+          * @defaultValue 400
          */
         "maxWidth"?: number;
         /**

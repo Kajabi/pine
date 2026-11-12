@@ -240,10 +240,10 @@ export class PdsPopover {
   @Prop() componentId: string;
 
   /**
-   * Sets the maximum width of the popover content, in pixels.
-   * @defaultValue 352
+   * Sets the maximum width of the popover, in pixels, including its padding.
+   * @defaultValue 400
    */
-  @Prop() maxWidth?: number = 352;
+  @Prop() maxWidth?: number = 400;
 
   /**
    * Sets the padding of the popover content

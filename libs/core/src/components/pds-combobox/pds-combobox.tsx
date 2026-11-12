@@ -90,10 +90,10 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() dropdownPlacement: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' = 'bottom-start';
 
   /**
-   * Width of the dropdown. Any valid CSS width value.
-   * @default '236px'
+   * Width of the dropdown, including its padding. Any valid CSS width value.
+   * @default '252px'
    */
-  @Prop() dropdownWidth: string = '236px';
+  @Prop() dropdownWidth: string = '252px';
 
   /**
    * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”).
@@ -126,16 +126,16 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
-   * @default '380px'
+   * @default '388px'
    */
-  @Prop() flyoutMaxWidth: string = '380px';
+  @Prop() flyoutMaxWidth: string = '388px';
 
   /**
    * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
    * The flyout is as wide as its options, between this and `flyout-max-width`.
-   * @default '280px'
+   * @default '288px'
    */
-  @Prop() flyoutMinWidth: string = '280px';
+  @Prop() flyoutMinWidth: string = '288px';
 
   /**
    * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown.
