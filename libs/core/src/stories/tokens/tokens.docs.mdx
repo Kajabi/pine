@@ -435,6 +435,16 @@ Give positioned elements a z-index token. From lowest to highest:
 
 Pine switches to dark mode on any element with `data-theme="dark"` and everything inside it. Set it on `<html>` to theme the whole page. Pine doesn't follow the operating system's setting (`prefers-color-scheme`) on its own.
 
+Pine doesn't set `color-scheme` either, so the browser keeps its light scheme for the parts it draws itself, such as scrollbars and the option list of `pds-select`. Set `color-scheme: dark` on the same elements:
+
+```css
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+```
+
+`color-scheme` is inherited, including into shadow roots. Matching the attribute also covers the datepicker's calendar, which moves into `<body>` or the nearest `<dialog>` and copies the nearest `data-theme`.
+
 These tokens switch:
 
 - Semantic color tokens, such as `--pine-color-text`, `--pine-color-background-container` and `--pine-color-border`
@@ -486,7 +496,7 @@ Pine components that style themselves with semantic tokens follow the theme in e
 
 - `pds-alert` and `pds-chip` colors
 - The error-state fill of `pds-input`, `pds-select`, `pds-textarea` and `pds-combobox`
-- The panel border of `pds-dropdown-menu` and `pds-datepicker`, and the datepicker's native select menus
+- The panel border of `pds-dropdown-menu` and `pds-datepicker`, and the datepicker's native select menus when `color-scheme` isn't set
 
 The semantic Color and Borders pages list each token's light and dark values.
 
