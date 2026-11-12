@@ -2239,3 +2239,29 @@ describe('pds-combobox selected field and option badges', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+describe('pds-combobox dropdown width', () => {
+  it('renders the listbox at dropdown-width, its padding included', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-combobox component-id="width" label="Animal" dropdown-width="300px">
+        <option value="cat">Cat</option>
+        <option value="dog">Dog</option>
+      </pds-combobox>
+    `);
+    await page.waitForChanges();
+
+    await (await page.find('pds-combobox >>> input')).click();
+    await page.waitForChanges();
+
+    const width = await page.evaluate(() => {
+      const roots = [
+        document.querySelector('pds-combobox')!.shadowRoot,
+        document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot,
+      ];
+      const listbox = roots.map((root) => root?.querySelector('.pds-combobox__listbox')).find(Boolean)!;
+      return listbox.getBoundingClientRect().width;
+    });
+    expect(Math.round(width)).toBe(300);
+  });
+});
