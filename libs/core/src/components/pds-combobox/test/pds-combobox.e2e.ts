@@ -171,6 +171,7 @@ describe('pds-combobox', () => {
     it.each([
       ['words', LONG],
       ['one long word', 'https://example.com/onboarding/quarterly-cohort-assessment-for-new-members'],
+      ['one unbreakable token with no spaces or hyphens', 'Supercalifragilisticexpialidocioussupercalifragilisticexpialidocious'],
     ])('wraps a long option chip of %s, keeping the check in the row', async (_kind, label) => {
       const page = await openChips(`
         <option value="long" chip-sentiment="info">${label}</option>

@@ -88,6 +88,7 @@
   // An option chip sizes to its label. Like option text, a word too long for the row breaks
   // rather than push the check out; overflow-wrap inherits into the chip's label.
   .pds-combobox__option-chip {
+    min-width: 0;
     overflow-wrap: anywhere;
   }
 
