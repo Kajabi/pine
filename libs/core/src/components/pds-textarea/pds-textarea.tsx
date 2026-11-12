@@ -50,7 +50,7 @@ export class PdsTextarea {
   @Event() pdsInput: EventEmitter<TextareaInputEventDetail>;
 
   /**
-   * Event emitted whenever the value of the textarea changes.
+   * Emitted when the user changes the value and then leaves the textarea.
    *
    * This event will not emit when programmatically setting the `value` property.
    */
@@ -94,7 +94,7 @@ export class PdsTextarea {
   @Prop() debounce?: number;
 
   /**
-   * Displays an error message below the textarea field.
+   * Displays an error message below the textarea while `invalid` is set.
    */
   @Prop() errorMessage?: string;
 
@@ -104,7 +104,8 @@ export class PdsTextarea {
   @Prop() helperMessage?: string;
 
   /**
-   * Determines whether or not the textarea is invalid or throws an error.
+   * Determines whether or not the textarea is invalid. When `required` is set, the textarea sets it
+   * itself each time `pdsTextareaChange` fires, replacing a value you set.
    * @defaultValue false
    */
   @Prop({mutable: true}) invalid = false;       // eslint-disable-line @stencil-community/strict-mutable
