@@ -5125,7 +5125,7 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
-          * Event fired when copyText button is clicked.
+          * Emitted after a click, once the copy to the clipboard succeeds or fails. `detail` is `Copied to clipboard` on success, or `Error writing text to clipboard: ` followed by the error on failure. Not emitted when `navigator.clipboard` is undefined, as it is outside a secure context.
          */
         "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<string>) => void;
         /**
