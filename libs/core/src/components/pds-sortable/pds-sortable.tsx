@@ -247,14 +247,16 @@ export class PdsSortable {
 
   /**
    * Focus leaving a picked-up item drops it where it is, unless the whole window lost focus (the user
-   * switched apps), when the item stays picked up for their return. Focus moving into an iframe or
-   * another embedded document reports the same `relatedTarget: null` and `document.hasFocus(): false`
-   * as a window switch, so it's told apart by `document.activeElement`: a real window switch leaves
-   * nothing newly focused in this document, while an iframe becomes the active element.
+   * switched apps), when the item stays picked up for their return. A real window blur does not move
+   * `document.activeElement` away from the handle that's losing focus (some browsers reset it to `body`
+   * instead, but never to a different element), so it's told apart from focus moving into an iframe or
+   * another embedded document that way: an iframe becomes a genuinely different active element, while a
+   * window blur leaves `activeElement` as the handle itself, `null`, or `body`.
    */
   private handleFocusOut = (ev: FocusEvent) => {
     if (!this.isGrabbing() || ev.target !== this.focusTarget(this.grabbed.item)) return;
-    const nothingElseFocused = document.activeElement === null || document.activeElement === document.body;
+    const nothingElseFocused =
+      document.activeElement === null || document.activeElement === document.body || document.activeElement === ev.target;
     if (ev.relatedTarget === null && document.hasFocus?.() === false && nothingElseFocused) return;
     this.drop(ev);
   };

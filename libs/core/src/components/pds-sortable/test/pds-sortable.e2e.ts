@@ -313,12 +313,13 @@ describe('pds-sortable keyboard reordering', () => {
     await page.waitForChanges();
     expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).not.toBeNull();
 
-    // A real window/app switch: the handle loses focus with nothing else taking it, and
-    // `document.hasFocus()` goes false, which is what distinguishes it from the iframe case above.
+    // A real window/app switch: `document.hasFocus()` goes false, but unlike `.blur()`, the browser
+    // does not move `document.activeElement` away from the handle — dispatching a synthetic `focusout`
+    // without actually blurring the handle reproduces that faithfully.
     await page.evaluate(() => {
       const original = document.hasFocus;
       document.hasFocus = () => false;
-      (document.activeElement as HTMLElement)?.blur();
+      document.activeElement?.dispatchEvent(new FocusEvent('focusout', { relatedTarget: null, bubbles: true, composed: true }));
       document.hasFocus = original;
     });
     await page.waitForChanges();
