@@ -1084,65 +1084,70 @@ export class PdsCombobox implements BasePdsProps {
       return;
     }
 
-    // Get all elements from the slot
-    const slot = this.el.shadowRoot?.querySelector('slot[name="option"], slot:not([name])');
-    if (slot) {
-      const allElements = (slot as HTMLSlotElement).assignedElements({ flatten: true });
+    // Get all elements from the slot. Before the first render there's no slot yet, so read the
+    // host's own children that it will hold (through any slot passing options on): otherwise a
+    // combobox created with a `value`, such as a form re-rendered after a pick, paints its
+    // placeholder for a frame, until `slotchange` finds the selected option.
+    const slot = this.el.shadowRoot?.querySelector('slot[name="option"], slot:not([name])') as HTMLSlotElement | null | undefined;
+    const allElements = slot
+      ? slot.assignedElements({ flatten: true })
+      : Array.from(this.el.children)
+          .filter(el => !el.getAttribute('slot'))
+          .flatMap(el => (el.tagName === 'SLOT' ? (el as HTMLSlotElement).assignedElements({ flatten: true }) : [el]));
 
-      // Separate options from group labels and flatten optgroups
-      this.allItems = [];
-      this.optionEls = [];
+    // Separate options from group labels and flatten optgroups
+    this.allItems = [];
+    this.optionEls = [];
 
-      allElements.forEach(el => {
-        if (el.tagName === 'OPTION') {
-          this.optionEls.push(el as HTMLOptionElement);
-          this.allItems.push(el as HTMLOptionElement);
-        } else if (el.tagName === 'OPTGROUP') {
-          const optgroup = el as HTMLOptGroupElement;
-          this.allItems.push(optgroup);
-          // Add optgroup children (options)
-          Array.from(optgroup.children).forEach(child => {
-            if (child.tagName === 'OPTION') {
-              this.optionEls.push(child as HTMLOptionElement);
-              this.allItems.push(child as HTMLOptionElement);
-            }
-          });
-        } else if (el.tagName === 'PDS-TEXT') {
-          this.allItems.push(el as HTMLPdsTextElement);
-        }
-      });
-
-      // Set initial selected option based on value property
-      let initialSelected: HTMLOptionElement | null = null;
-
-      // Check if value property matches any option
-      if (this.value) {
-        initialSelected = this.optionEls.find(opt => opt.value === this.value) || null;
-        if (initialSelected) {
-          // Update the display text to show the option's text content
-          this.displayText = this.getOptionLabel(initialSelected);
-          // Keep this.value as the actual option value (already correct)
-        }
+    allElements.forEach(el => {
+      if (el.tagName === 'OPTION') {
+        this.optionEls.push(el as HTMLOptionElement);
+        this.allItems.push(el as HTMLOptionElement);
+      } else if (el.tagName === 'OPTGROUP') {
+        const optgroup = el as HTMLOptGroupElement;
+        this.allItems.push(optgroup);
+        // Add optgroup children (options)
+        Array.from(optgroup.children).forEach(child => {
+          if (child.tagName === 'OPTION') {
+            this.optionEls.push(child as HTMLOptionElement);
+            this.allItems.push(child as HTMLOptionElement);
+          }
+        });
+      } else if (el.tagName === 'PDS-TEXT') {
+        this.allItems.push(el as HTMLPdsTextElement);
       }
+    });
 
-      // For chip triggers, ensure we always have a selected option
-      const firstEnabled = this.optionEls.find(opt => !isOptionDisabled(opt));
-      if (initialSelected === null && this.trigger === 'chip' && firstEnabled !== undefined) {
-        initialSelected = firstEnabled;
-        this.value = initialSelected.value;
+    // Set initial selected option based on value property
+    let initialSelected: HTMLOptionElement | null = null;
+
+    // Check if value property matches any option
+    if (this.value) {
+      initialSelected = this.optionEls.find(opt => opt.value === this.value) || null;
+      if (initialSelected) {
+        // Update the display text to show the option's text content
         this.displayText = this.getOptionLabel(initialSelected);
-        console.warn('PDS Combobox: Chip triggers should always have a selected option. Automatically selected the first enabled option.');
+        // Keep this.value as the actual option value (already correct)
       }
-
-      // Update selection if we found a different selected option or if we don't have one
-      if (initialSelected && initialSelected !== this.selectedOption) {
-        this.setSelectedOption(initialSelected);
-      } else if (!this.selectedOption && initialSelected) {
-        this.setSelectedOption(initialSelected);
-      }
-
-      this.filterOptions();
     }
+
+    // For chip triggers, ensure we always have a selected option
+    const firstEnabled = this.optionEls.find(opt => !isOptionDisabled(opt));
+    if (initialSelected === null && this.trigger === 'chip' && firstEnabled !== undefined) {
+      initialSelected = firstEnabled;
+      this.value = initialSelected.value;
+      this.displayText = this.getOptionLabel(initialSelected);
+      console.warn('PDS Combobox: Chip triggers should always have a selected option. Automatically selected the first enabled option.');
+    }
+
+    // Update selection if we found a different selected option or if we don't have one
+    if (initialSelected && initialSelected !== this.selectedOption) {
+      this.setSelectedOption(initialSelected);
+    } else if (!this.selectedOption && initialSelected) {
+      this.setSelectedOption(initialSelected);
+    }
+
+    this.filterOptions();
   }
 
   // Helper method to get option label, falling back to text content if no label attribute
@@ -1227,6 +1232,14 @@ export class PdsCombobox implements BasePdsProps {
     } else {
       this.selectedOptionChipProps = null;
     }
+
+    // Immediately update layout content too, the same way: the @Watch('selectedOption') below
+    // isn't active yet the first time this runs, during componentWillLoad's initial selection,
+    // so a preselected layout option would otherwise show its plain label until some later change
+    // triggers the watcher.
+    this.selectedOptionLayoutContent = option && this.isOptionLayout(option)
+      ? this.getOptionLayoutContent(option)
+      : '';
   }
 
   private filterOptions() {
@@ -1249,11 +1262,11 @@ export class PdsCombobox implements BasePdsProps {
           const groupLabel = groupLabelOf(option);
           if (groupLabel !== null && groupLabel.toLowerCase().includes(val)) return true;
         }
-        // For layout options, search both text content and data-search-text attribute
-        if (this.isOptionLayout(option)) {
-          const searchText = option.getAttribute('data-search-text') || option.textContent || '';
-          return searchText.toLowerCase().includes(val);
-        }
+        // `data-search-text`, when set, is what search matches, so an option can be found by more
+        // than its label without a custom layout. A layout option otherwise matches its text.
+        const searchText = option.getAttribute('data-search-text');
+        if (searchText) return searchText.toLowerCase().includes(val);
+        if (this.isOptionLayout(option)) return (option.textContent || '').toLowerCase().includes(val);
         return this.getOptionLabel(option).toLowerCase().includes(val);
       });
 

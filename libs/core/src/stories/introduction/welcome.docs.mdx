@@ -4,39 +4,17 @@ import introImage from '../assets/pine-intro-img.jpg';
 <Meta title="Introduction/Welcome" />
 
 # Building with Pine
-Our design system is the ultimate source of truth, offering a comprehensive and well-structured set of guidelines, components, and resources that empower designers and developers to create exceptional experiences for all Kajabi entrepreneurs. By adhering to our system, we can ensure a consistent, unified, and high-quality user experience across all touchpoints within the Kajabi platform.
+Pine is a design system of web components, React wrappers and design tokens for building accessible interfaces. Each `pds-*` component works as a plain HTML tag in any page or framework, and through `@pine-ds/react` in React apps. The `--pine-*` tokens let your own markup match the components.
+
+These docs explain when to use each component and show live examples in both formats, along with every property, event and method.
 
 <img src={introImage} alt="Pine Design System" width="1000" height="250" style={{ maxWidth: '100%', height: 'auto', margin: '1rem 0', borderRadius: '8px'}} />
 
-## Foundations
-Our design system is built upon a foundation of three core visual elements: Typography, Color, and Icons. These fundamental components work harmoniously to create a consistent and cohesive visual language throughout our designs.
+## Where to start
 
-## Components
-Components are the backbone of our design system, acting as the building blocks for crafting seamless and cohesive user interfaces. Our components are available as web and React components, maximizing usability and ensuring compatibility with different development environments.
-
-Our extensive documentation provides code examples, property options, and best practices for each component, making it easy for designers and developers to understand and implement them effectively. This thorough documentation empowers teams to create consistent", high-quality experiences while reducing the learning curve and boosting productivity.
-
-## Contributing
-We firmly believe in fostering an inclusive and collaborative environment where everyone feels empowered to participate in the evolution of our design system. The success and longevity of the system depend on the collective efforts and insights of our diverse team, as well as the users who interact with it daily.
-
-We continuously refine and expand our design system to meet evolving needs and expectations by encouraging open communication, feedback, and contributions from all stakeholders. This collaborative approach helps identify potential improvements and new ideas while promoting a shared sense of ownership and investment in the system's success.
-
-To facilitate this process, we provide <pds-link href="../?path=/docs/introduction-contributing--docs">resources and guidelines</pds-link> for understanding, using, and contributing to the design system. By offering a clear path for participation, we aim to foster a thriving community of designers, developers, and users who work together to ensure the system remains relevant, effective, and resilient over time.
-
-## How to Use
-
-Using Pine's components involves two essential parts: the web components themselves and the design tokens for styling. The quickest way to start is by including the required files directly in your project using `<script>` and `<link>` tags.
-
-> **Note**: Replace `[VERSION]` with the desired version number.
-
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.css" />
-<script type="module" src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.esm.js"></script>
-<script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.js"></script>
-```
-
-To use the components within React projects, they must also be installed via npm:
-
-```
-npm install @pine-ds/react
-```
+- <pds-link href="../?path=/docs/introduction-getting-started--docs">Getting Started</pds-link>: install Pine from the CDN or npm and render your first component.
+- <pds-link href="../?path=/docs/resources-component-status--docs">Component status</pds-link>: every component and its lifecycle label. Each component has its own page under **Components** in the sidebar.
+- <pds-link href="../?path=/docs/design-tokens-tokens--docs">Design Tokens</pds-link>: the color, spacing and typography values behind the components.
+- <pds-link href="../?path=/docs/resources-pine-mcp--docs">Pine MCP</pds-link>: connect an AI coding assistant to Pine's components, tokens and icons.
+- <pds-link href="../?path=/docs/introduction-contributing--docs">Contributing</pds-link>: set up the repository and open a pull request.
+- <pds-link href="../?path=/docs/introduction-get-support--docs">Get Support</pds-link>: report a bug, request a feature or ask a question.
