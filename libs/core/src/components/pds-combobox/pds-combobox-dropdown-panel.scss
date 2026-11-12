@@ -28,7 +28,7 @@
 
   // A margin, not a transform: a transform would make the panel the containing block of the
   // flyout, which is fixed to the viewport. The panel is out of flow and its size doesn't change,
-  // so animating the margin re-lays out only the panel, for the 200ms it runs.
+  // so animating the margin re-lays out only the panel, for the base duration it runs.
   @keyframes pds-combobox-open {
     0% {
       margin-block-start: var(--pds-combobox-open-from);
