@@ -65,7 +65,7 @@ DropdownTrigger.args = {
 
 export const Image = BaseTemplate.bind();
 Image.args = {
-	alt: 'Customer Profile',
+	alt: 'Demi Wilkinson',
 	image: imgFile,
 	size: 'xl'
 }

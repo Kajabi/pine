@@ -29,12 +29,8 @@ Loaders signal that an operation is in progress via an animated spinner or typin
 
 ### Accessibility
 
-Dynamic content on a page that does not require a page load is considered a live region. A loader can be used to convey to the user that the live region will be updated. The appropriate aria role, `aria-live`, is already set on the loader component when `is-loading` is set to `true`. When `is-loading` is set to `false`, `aria-hidden` is added to the component to hide it from the accessibility tree. For more information about live regions, please refer to [MDN's article.](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
-
-### Technical Details
-
-- `<pds-loader>` toggles `aria-live="polite"`, `aria-hidden`, and `aria-busy` as `is-loading` changes. Add `role="status"` yourself when you want the loader to be announced as the primary status region. Provide specific copy (“Saving profile…”) instead of generic text when possible.
-- The default “Loading…” string is injected through the unnamed slot even when `show-label="false"`. This keeps the label available to screen readers. Supply a `<span slot="label">` to customise the announcement.
+- Put specific text in the `label` slot, such as `<span slot="label">Saving profile…</span>`. It replaces the default "Loading..." and stays available to screen readers when `show-label` is off. Text outside the `label` slot isn't shown or read.
+- `pds-loader` sets no `role`. If your target screen readers don't announce the loader, announce the start and the end of the task yourself in a `role="status"` region that stays on the page. For more about live regions, see [MDN's article](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions).
 
 ## Properties
 
@@ -66,18 +62,44 @@ The loader label is visually hidden by default, but still read by screenreaders.
   <pds-loader is-loading show-label variant="spinner"></pds-loader>
 </DocCanvas>
 
+"Loading..." is the fallback content of the `label` slot. To show your own text, put it in a `<span slot="label">`.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsLoader isLoading showLabel variant="spinner"><span slot="label">Saving profile…</span></PdsLoader>`,
+    webComponent: `<pds-loader is-loading show-label variant="spinner"><span slot="label">Saving profile…</span></pds-loader>`
+}}>
+  <pds-loader is-loading show-label variant="spinner"><span slot="label">Saving profile…</span></pds-loader>
+</DocCanvas>
+
 ### Loader Size
 
-The default loader's size can be changed to a either a preset value or a custom pixel value. This will not affect the `typing` variant.
+Set `size` to a preset, `xs` (24px), `sm` (32px), `md` (48px, the default), `lg` (64px) or `xl` (80px), or to a custom CSS length. The `typing` variant ignores `size`.
 
 #### Preset
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsLoader isLoading size="xs" variant="spinner"></PdsLoader>`,
-    webComponent: `<pds-loader is-loading size="xs" variant="spinner"></pds-loader>`
+    react: `
+    <PdsLoader isLoading size="xs" variant="spinner"></PdsLoader>
+    <PdsLoader isLoading size="sm" variant="spinner"></PdsLoader>
+    <PdsLoader isLoading size="md" variant="spinner"></PdsLoader>
+    <PdsLoader isLoading size="lg" variant="spinner"></PdsLoader>
+    <PdsLoader isLoading size="xl" variant="spinner"></PdsLoader>
+    `,
+    webComponent: `
+    <pds-loader is-loading size="xs" variant="spinner"></pds-loader>
+    <pds-loader is-loading size="sm" variant="spinner"></pds-loader>
+    <pds-loader is-loading size="md" variant="spinner"></pds-loader>
+    <pds-loader is-loading size="lg" variant="spinner"></pds-loader>
+    <pds-loader is-loading size="xl" variant="spinner"></pds-loader>
+    `
 }}>
   <pds-loader is-loading size="xs" variant="spinner"></pds-loader>
+  <pds-loader is-loading size="sm" variant="spinner"></pds-loader>
+  <pds-loader is-loading size="md" variant="spinner"></pds-loader>
+  <pds-loader is-loading size="lg" variant="spinner"></pds-loader>
+  <pds-loader is-loading size="xl" variant="spinner"></pds-loader>
 </DocCanvas>
 
 #### Custom
@@ -93,7 +115,7 @@ The default loader's size can be changed to a either a preset value or a custom 
 
 ### Typing
 
-Setting the `variant` prop to `typing` will display a typing loader. This loader is not affected by any changes to the `size` prop.
+Setting the `variant` prop to `typing` will display a typing loader. This loader is not affected by any changes to the `size` prop. Use it to show that someone, or something such as an assistant, is writing a reply.
 
 <DocCanvas
   mdxSource={{
@@ -102,6 +124,14 @@ Setting the `variant` prop to `typing` will display a typing loader. This loader
 }}>
   <pds-loader is-loading variant="typing"></pds-loader>
 </DocCanvas>
+
+## Technical notes
+
+`pds-loader` sets its ARIA attributes on its own element as `is-loading` changes:
+
+- `aria-live="polite"` is always set.
+- While `is-loading` is true, `aria-busy="true"` is set.
+- When `is-loading` is false, `aria-busy` is removed, `aria-hidden="true"` is set, and the loader is visually hidden.
 
 ## Additional Resources
 

@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-dropdown-menu', () => {
@@ -859,5 +859,363 @@ describe('pds-dropdown-menu in ordinary use', () => {
 
     expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
     expect(warnings.filter((text) => text.includes('stopped restoring'))).toEqual([]);
+  });
+});
+
+// A menu in a scrolling container, such as a row menu in a table that scrolls sideways, closes once
+// its trigger scrolls out of view rather than float away from it.
+describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
+  // The trigger is given a width, as it otherwise stretches the whole scrolled width and its centre,
+  // where a click lands, is out of view. Its inset keeps the panel clear of the window's edge, where
+  // the panel stops following it.
+  const scroller = `
+    <div id="scroller" style="width: 300px; overflow: auto;">
+      <div style="width: 1500px; padding: 8px 8px 8px 100px;">
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger" style="width: 100px;">Actions</button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item>Delete</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </div>
+    </div>
+  `;
+
+  const isOpen = (page: E2EPage) =>
+    page.evaluate(() => !document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').classList.contains('is-hidden'));
+
+  // autoUpdate hears the scroll on the next frame and works out the position after that.
+  const settle = (page: E2EPage) =>
+    page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
+
+  // A close is waited for, rather than settled, so a slow run doesn't fail it.
+  const closed = (page: E2EPage) =>
+    page.waitForFunction(() => document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').classList.contains('is-hidden'));
+
+  const openMenu = async (content: string) => {
+    const page = await newE2EPage();
+    await page.setContent(content);
+    await page.click('#trigger');
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpen(page)).toBe(true);
+    return page;
+  };
+
+  const panelLeft = (page: E2EPage) =>
+    page.evaluate(() => document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').getBoundingClientRect().left);
+
+  it('stays open once opened, beside its trigger', async () => {
+    const page = await openMenu(scroller);
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+    const triggerLeft = await page.$eval('#trigger', (el) => el.getBoundingClientRect().left);
+    expect(Math.round(await panelLeft(page))).toBe(Math.round(triggerLeft));
+  });
+
+  it('stays open, following the trigger, while the trigger is still in view', async () => {
+    const page = await openMenu(scroller);
+    const before = await panelLeft(page);
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 40; });
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+    // The panel moved with the trigger, so the scroll was heard and its position worked out.
+    expect(Math.round(before - (await panelLeft(page)))).toBe(40);
+  });
+
+  it('closes once the trigger scrolls out of its scrolling container', async () => {
+    const page = await openMenu(scroller);
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('false');
+  });
+
+  // A row menu in a table that scrolls sideways, whose scroll container is in the table's shadow root.
+  it("closes once the trigger scrolls out of a responsive pds-table's scroll container", async () => {
+    const page = await openMenu(`
+      <div style="width: 300px;">
+        <pds-table responsive="true">
+          <pds-table-head>
+            <pds-table-head-cell>Actions</pds-table-head-cell>
+            <pds-table-head-cell><div style="width: 1500px;">Wide column</div></pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>
+                <pds-dropdown-menu>
+                  <button slot="trigger" id="trigger" style="width: 100px;">Actions</button>
+                  <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+                </pds-dropdown-menu>
+              </pds-table-cell>
+              <pds-table-cell>Wide cell</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+
+    const scrolled = await page.$eval('pds-table', (el) => {
+      const container = el.shadowRoot.querySelector('.pds-table-responsive-container');
+      container.scrollLeft = 1000;
+      return container.scrollLeft;
+    });
+    expect(scrolled).toBeGreaterThan(500);
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+
+  it('closes once the window scrolls the trigger out of view', async () => {
+    const page = await openMenu(`
+      <div style="height: 3000px; padding: 8px;">
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger">Actions</button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </div>
+    `);
+    expect(await isOpen(page)).toBe(true);
+
+    await page.evaluate(() => window.scrollTo(0, 2000));
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+
+  it('returns focus from an item to the trigger without scrolling it back into view', async () => {
+    const page = await openMenu(scroller);
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('trigger');
+    expect(await page.$eval('#scroller', (el) => el.scrollLeft)).toBe(800);
+  });
+
+  // Waits for the trigger to be scrolled back into its scrolling container.
+  const triggerInView = (page: E2EPage) =>
+    page.waitForFunction(() => {
+      const scroller = document.querySelector('#scroller').getBoundingClientRect();
+      const trigger = document.querySelector('#trigger').getBoundingClientRect();
+      return trigger.left >= scroller.left && trigger.right <= scroller.right;
+    });
+
+  it('scrolls the trigger into view when a script opens it with the trigger out of view, then closes when it leaves', async () => {
+    const page = await newE2EPage();
+    await page.setContent(scroller);
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await page.$eval('#trigger', (el: HTMLElement) => el.click());
+    await page.waitForChanges();
+    await triggerInView(page);
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+    const triggerLeft = await page.$eval('#trigger', (el) => el.getBoundingClientRect().left);
+    expect(Math.round(await panelLeft(page))).toBe(Math.round(triggerLeft));
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+
+  it('scrolls the trigger back into view when reopened from the keyboard after it scrolled away', async () => {
+    const page = await openMenu(scroller);
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await closed(page);
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('trigger');
+
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    await triggerInView(page);
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+    expect(await page.$eval('#trigger', (el) => el.getAttribute('aria-expanded'))).toBe('true');
+    const triggerLeft = await page.$eval('#trigger', (el) => el.getBoundingClientRect().left);
+    expect(Math.round(await panelLeft(page))).toBe(Math.round(triggerLeft));
+  });
+
+  // Pinch-zoom shrinks the visual viewport but not the layout viewport the menu measures against.
+  it('stays open while a pinch-zoomed page is panned away from its trigger', async () => {
+    const page = await openMenu(`
+      <div style="padding: 8px;">
+        <pds-dropdown-menu>
+          <button slot="trigger" id="trigger">Actions</button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </div>
+    `);
+    const cdp = await page.createCDPSession();
+    await cdp.send('Emulation.setPageScaleFactor', { pageScaleFactor: 4 });
+    // A gesture over the panel is a real scroll the panel (now `overscroll-behavior: contain`)
+    // legitimately consumes, rather than the visual-viewport pan this test means to simulate, so
+    // (195, 145) is chosen clear of it — CDP validates gesture coordinates against the already
+    // zoomed viewport (800 / 4, 600 / 4), not the unzoomed one.
+    await cdp.send('Input.synthesizeScrollGesture', { x: 195, y: 145, xDistance: -2000, yDistance: -2000, speed: 4000 });
+    await settle(page);
+
+    // The visual viewport has panned clear of the trigger, which is still in the layout viewport.
+    const { triggerRight, triggerBottom, offsetLeft, offsetTop } = await page.evaluate(() => {
+      const rect = document.querySelector('#trigger').getBoundingClientRect();
+      return { triggerRight: rect.right, triggerBottom: rect.bottom, offsetLeft: window.visualViewport.offsetLeft, offsetTop: window.visualViewport.offsetTop };
+    });
+    expect(offsetLeft > triggerRight || offsetTop > triggerBottom).toBe(true);
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+  });
+
+  it('returns focus to the control inside a pds-chip trigger without scrolling it back into view', async () => {
+    const page = await openMenu(scroller.replace(
+      '<button slot="trigger" id="trigger" style="width: 100px;">Actions</button>',
+      '<pds-chip slot="trigger" id="trigger" variant="dropdown">Actions</pds-chip>',
+    ));
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await page.$eval('#trigger', (el) => el.shadowRoot.activeElement?.tagName)).toBe('BUTTON');
+    expect(await page.$eval('#scroller', (el) => el.scrollLeft)).toBe(800);
+  });
+
+  it('opens again after closing, and closes again when scrolled out', async () => {
+    const page = await openMenu(scroller);
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await closed(page);
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 0; });
+    await page.click('#trigger');
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpen(page)).toBe(true);
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 800; });
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+});
+
+// A fixed panel taller than the room beside its trigger is capped to that room and scrolls inside
+// itself, so its last items can still be reached without scrolling the page.
+describe('pds-dropdown-menu taller than the room beside its trigger', () => {
+  const longMenu = (style = '') => `
+    <style>${style}</style>
+    <div style="padding: 8px;">
+      <pds-dropdown-menu>
+        <button slot="trigger" id="trigger">Actions</button>
+        ${Array.from({ length: 30 }, (_, i) => `<pds-dropdown-menu-item>Item ${i + 1}</pds-dropdown-menu-item>`).join('')}
+      </pds-dropdown-menu>
+    </div>
+  `;
+
+  const panelRect = (page: E2EPage) =>
+    page.evaluate(() => {
+      const rect = document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').getBoundingClientRect();
+      return { top: rect.top, bottom: rect.bottom, height: rect.height };
+    });
+
+  const openLongMenu = async (style = '') => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 800, height: 400 });
+    await page.setContent(longMenu(style));
+    await page.click('#trigger');
+    await page.waitForChanges();
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
+    return page;
+  };
+
+  it('caps the panel to the window and scrolls inside it', async () => {
+    const page = await openLongMenu();
+
+    expect((await panelRect(page)).bottom).toBeLessThanOrEqual(400);
+    const scrolls = await page.evaluate(() => {
+      const panel = document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box');
+      return panel.scrollHeight > panel.clientHeight;
+    });
+    expect(scrolls).toBe(true);
+  });
+
+  it('scrolls the panel to the item that keyboard navigation focuses', async () => {
+    const page = await openLongMenu();
+    await page.keyboard.press('End');
+    await page.waitForChanges();
+
+    const { panel, item } = await page.evaluate(() => {
+      const items = document.querySelectorAll('pds-dropdown-menu-item');
+      const panelEl = document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box');
+      return { panel: panelEl.getBoundingClientRect().toJSON(), item: items[items.length - 1].getBoundingClientRect().toJSON() };
+    });
+    expect(item.top).toBeGreaterThanOrEqual(panel.top);
+    expect(item.bottom).toBeLessThanOrEqual(panel.bottom);
+  });
+
+  it('keeps a smaller max-height set through the menu-panel part', async () => {
+    const page = await openLongMenu('pds-dropdown-menu::part(menu-panel) { max-height: 120px; }');
+
+    expect(Math.round((await panelRect(page)).height)).toBe(120);
+  });
+
+  it('caps a larger max-height set through the menu-panel part to the window', async () => {
+    const page = await openLongMenu('pds-dropdown-menu::part(menu-panel) { max-height: 500px; }');
+
+    expect((await panelRect(page)).bottom).toBeLessThanOrEqual(400);
+  });
+
+  it('contains scroll chaining, so overscrolling the panel does not scroll the page', async () => {
+    const page = await openLongMenu();
+
+    const overscrollBehavior = await page.evaluate(() => {
+      const panel = document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box');
+      return getComputedStyle(panel).overscrollBehaviorBlock;
+    });
+    expect(overscrollBehavior).toBe('contain');
+  });
+
+  it('keeps the panel scrolled where the user left it across a reposition', async () => {
+    // A small scroll of an ancestor that leaves the trigger in view still triggers `autoUpdate`'s
+    // reposition, which re-measures and reapplies `max-height` — this must not reset `scrollTop`.
+    // The trigger is given a width, as it otherwise stretches the scrolled width and its centre,
+    // where a click lands, is out of view.
+    const page = await newE2EPage();
+    await page.setViewport({ width: 800, height: 400 });
+    await page.setContent(`
+      <div id="scroller" style="width: 300px; overflow: auto;">
+        <div style="width: 1500px; padding: 8px 8px 8px 100px;">
+          <pds-dropdown-menu>
+            <button slot="trigger" id="trigger" style="width: 100px;">Actions</button>
+            ${Array.from({ length: 30 }, (_, i) => `<pds-dropdown-menu-item>Item ${i + 1}</pds-dropdown-menu-item>`).join('')}
+          </pds-dropdown-menu>
+        </div>
+      </div>
+    `);
+    await page.click('#trigger');
+    await page.waitForChanges();
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
+
+    await page.evaluate(() => {
+      (document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box') as HTMLElement).scrollTop = 200;
+    });
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 10; });
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
+
+    const scrollTop = await page.evaluate(
+      () => document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').scrollTop,
+    );
+    expect(scrollTop).toBe(200);
   });
 });
