@@ -96,13 +96,13 @@ export class PdsSortable {
   @Watch('disabled')
   handleDisabledChange() {
     this.sortableInstance?.option('disabled', this.disabled);
-    if (this.disabled && this.grabbed) this.cancel();
+    if (this.disabled && this.isGrabbing()) this.cancel();
     this.updateItems();
   }
 
   @Watch('handleType')
   handleHandleTypeChange() {
-    if (this.grabbed) this.cancel();
+    if (this.isGrabbing()) this.cancel();
     this.sortableInstance?.option('handle', this.handleType === 'handle' ? HANDLE_SELECTOR : undefined);
     this.updateItems();
   }
@@ -144,7 +144,8 @@ export class PdsSortable {
 
   disconnectedCallback() {
     this.hostKeeper.disconnect();
-    if (this.grabbed) this.release();
+    // Put the order back: a move that was never dropped was never emitted.
+    if (this.isGrabbing()) this.cancel(false);
     this.liveRegion?.remove();
     this.liveRegion = null;
   }
@@ -156,8 +157,6 @@ export class PdsSortable {
     let sortableOptions: SortableType = {
       animation: reduceMotion ? 0 : 150,
       disabled: this.disabled,
-      // Everything but the live region, which isn't an item.
-      draggable: `>:not(.${LIVE_REGION_CLASS})`,
       ghostClass: 'pds-sortable-item--ghost',
       dragClass: 'pds-sortable-item--drag',
       onEnd: (evt) => {
@@ -173,19 +172,21 @@ export class PdsSortable {
     }
 
     this.sortableInstance = Sortable.create(this.el as HTMLElement, sortableOptions);
+    // In place before the first announcement, as a region that's created with its text isn't read.
+    this.ensureLiveRegion();
+    // Items that rendered before this list was defined have no handle yet.
+    this.updateItems();
   }
 
-  /** The children that can be reordered: every element but the live region. */
+  /** The children that can be reordered, counted as SortableJS counts them. */
   private items(): HTMLElement[] {
-    return Array.from(this.el.children).filter(
-      (child) => child.tagName !== 'TEMPLATE' && !child.classList.contains(LIVE_REGION_CLASS),
-    ) as HTMLElement[];
+    return Array.from(this.el.children).filter((child) => child.tagName !== 'TEMPLATE') as HTMLElement[];
   }
 
   /**
-   * The live region is a child of the host, so it's in the same modal or `lang` scope as the items.
-   * SortableJS counts every child before an item in `oldIndex`, so the region has to stay last: it's
-   * put back at the end before each drag and each keyboard reorder.
+   * The live region sits right after the list, not in it, so it's never counted as an item, by
+   * SortableJS or by a consumer reading the list's children, and it's still in the same modal. A
+   * morph that removes it gets it put back on the next focus.
    */
   private ensureLiveRegion() {
     if (!this.liveRegion) {
@@ -209,13 +210,13 @@ export class PdsSortable {
       this.liveRegion = region;
     }
 
-    if (this.liveRegion.parentElement !== this.el || this.liveRegion.nextElementSibling) {
-      this.el.appendChild(this.liveRegion);
+    if (!this.liveRegion.isConnected && this.el.parentNode) {
+      this.el.parentNode.insertBefore(this.liveRegion, this.el.nextSibling);
     }
   }
 
   private announce(template: string, item: HTMLElement) {
-    if (this.liveRegion?.parentElement !== this.el) this.ensureLiveRegion();
+    this.ensureLiveRegion();
     const items = this.items();
     const message = formatMessage(template, {
       item: sortableItemLabel(item),
@@ -229,19 +230,31 @@ export class PdsSortable {
   @Listen('pointerdown', { capture: true })
   handlePointerDown(ev: PointerEvent) {
     // A drag takes over from a keyboard reorder: keep the moves so far, so the drag starts from them.
-    if (this.grabbed) this.drop(ev);
-    if (this.liveRegion?.nextElementSibling) this.ensureLiveRegion();
+    if (this.isGrabbing()) this.drop(ev);
   }
 
   private handleFocusIn = () => {
-    // Before the first announcement, so the region is in place when its text changes.
     this.ensureLiveRegion();
   };
 
-  /** Focus leaving a picked-up item drops it where it is. */
+  /**
+   * Focus leaving a picked-up item drops it where it is, unless the whole window lost focus (the user
+   * switched apps), when the item stays picked up for their return.
+   */
   private handleFocusOut = (ev: FocusEvent) => {
-    if (this.grabbed && ev.target === this.focusTarget(this.grabbed.item)) this.drop(ev);
+    if (!this.isGrabbing() || ev.target !== this.focusTarget(this.grabbed.item)) return;
+    if (ev.relatedTarget === null && document.hasFocus?.() === false) return;
+    this.drop(ev);
   };
+
+  /**
+   * Whether an item is picked up. One that's been taken out of the list meanwhile (a re-render, a
+   * stream update) is let go, as there's nothing left to move.
+   */
+  private isGrabbing(): boolean {
+    if (this.grabbed && this.grabbed.item.parentElement !== this.el) this.release();
+    return this.grabbed !== null;
+  }
 
   /**
    * Screen readers in browse mode turn Enter and Space on a button into a click with no key events,
@@ -252,7 +265,7 @@ export class PdsSortable {
     const item = this.targetItem(ev.target as HTMLElement);
     if (!item) return;
 
-    if (!this.grabbed) {
+    if (!this.isGrabbing()) {
       this.pickUp(item);
     } else if (this.grabbed.item === item) {
       this.drop(ev);
@@ -271,7 +284,7 @@ export class PdsSortable {
     const item = this.targetItem(ev.target as HTMLElement);
     if (!item) return;
 
-    if (!this.grabbed) {
+    if (!this.isGrabbing()) {
       if ((ev.key === ' ' || ev.key === 'Enter') && !ev.repeat) {
         ev.preventDefault();
         this.pickUp(item);
@@ -327,8 +340,6 @@ export class PdsSortable {
   }
 
   private pickUp(item: HTMLElement) {
-    // Put the region back last first, so it isn't counted in `oldIndex`.
-    this.ensureLiveRegion();
     const { index, draggableIndex } = this.indexes(item);
     this.grabbed = { item, oldIndex: index, oldDraggableIndex: draggableIndex };
     item.classList.add(GRABBED_CLASS);
@@ -351,6 +362,8 @@ export class PdsSortable {
     } else {
       items.slice(from + 1, to + 1).forEach((sibling) => this.el.insertBefore(sibling, item));
     }
+    // Focus doesn't move, so the browser won't scroll the item into view itself.
+    item.scrollIntoView?.({ block: 'nearest' });
 
     if (announce) this.announce(this.itemMovedLabel, item);
   }
@@ -376,11 +389,12 @@ export class PdsSortable {
     this.pdsSortableItemMoved.emit(detail);
   }
 
-  private cancel() {
+  private cancel(announce = true) {
     const { item, oldDraggableIndex } = this.grabbed;
     this.release();
-    this.moveTo(item, oldDraggableIndex, false);
-    this.announce(this.reorderCanceledLabel, item);
+    // Items may have come or gone meanwhile, so go back as near the start as the list allows.
+    this.moveTo(item, Math.min(oldDraggableIndex, this.items().length - 1), false);
+    if (announce) this.announce(this.reorderCanceledLabel, item);
   }
 
   private release() {
