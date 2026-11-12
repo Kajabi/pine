@@ -1,6 +1,10 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { closest } from '@utils/closest';
 
+/**
+ * @part head - Set on the `pds-table-head` element itself, so `::part(head)` matches it only from a shadow root that contains it. Style `pds-table-head` directly instead.
+ * @part select-all-checkbox - Exposes the select-all checkbox for styling. Appears only when the table is `selectable` and `disableSelectAll` isn't set.
+ */
 @Component({
   tag: 'pds-table-head',
   styleUrls: ['pds-table-head.scss'],

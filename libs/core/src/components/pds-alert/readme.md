@@ -36,9 +36,9 @@
 
 ## Shadow Parts
 
-| Part        | Description |
-| ----------- | ----------- |
-| `"dismiss"` |             |
+| Part        | Description                                                                     |
+| ----------- | ------------------------------------------------------------------------------- |
+| `"dismiss"` | Exposes the dismiss button for styling. Appears only when `dismissible` is set. |
 
 
 ## Dependencies

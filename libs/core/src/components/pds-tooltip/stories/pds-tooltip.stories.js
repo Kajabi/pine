@@ -25,7 +25,7 @@ const InModalTemplate = (args) => html`
   <pds-modal id="tooltip-modal" component-id="tooltip-modal" size="sm">
     <pds-modal-header>
       <pds-box padding="md">
-        <pds-text tag="h2" size="h3">Publish changes</pds-text>
+        <pds-text tag="h2" size="h3" id="tooltip-modal-heading">Publish changes</pds-text>
       </pds-box>
     </pds-modal-header>
     <pds-modal-content>
@@ -125,7 +125,7 @@ NoArrow.args = {
 
 export const InModal = InModalTemplate.bind({});
 InModal.args = {
-  content: "Fix the errors on the page to publish",
+  content: "Makes your changes visible to everyone",
   hasArrow: true,
   placement: "top",
 };
