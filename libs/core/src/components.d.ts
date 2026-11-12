@@ -1560,12 +1560,12 @@ export namespace Components {
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.
+          * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue false
          */
         "external": boolean;
         /**
-          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, passed to the inner `pds-link` and appended to the item's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -1579,7 +1579,7 @@ export namespace Components {
          */
         "informational": boolean;
         /**
-          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.
+          * Specifies where to open the linked document when href is provided. Overrides the new-tab default of `external`; the icon still shows. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -1796,13 +1796,12 @@ export namespace Components {
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab.
+          * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise.
           * @defaultValue false
-          * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
          */
         "external": boolean;
         /**
-          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -1816,9 +1815,9 @@ export namespace Components {
          */
         "href": string;
         /**
-          * Specifies where to open the linked document.
+          * Specifies where to open the linked document. Overrides the new-tab default of `external`; the icon still shows.
           * @defaultValue undefined
-          * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+          * @example <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
@@ -5503,12 +5502,12 @@ declare namespace LocalJSX {
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.
+          * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue false
          */
         "external"?: boolean;
         /**
-          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, passed to the inner `pds-link` and appended to the item's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -5526,7 +5525,7 @@ declare namespace LocalJSX {
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
         /**
-          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.
+          * Specifies where to open the linked document when href is provided. Overrides the new-tab default of `external`; the icon still shows. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -5767,13 +5766,12 @@ declare namespace LocalJSX {
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab.
+          * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise.
           * @defaultValue false
-          * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
          */
         "external"?: boolean;
         /**
-          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -5787,9 +5785,9 @@ declare namespace LocalJSX {
          */
         "href": string;
         /**
-          * Specifies where to open the linked document.
+          * Specifies where to open the linked document. Overrides the new-tab default of `external`; the icon still shows.
           * @defaultValue undefined
-          * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+          * @example <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**

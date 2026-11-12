@@ -529,24 +529,20 @@ export class PdsCombobox implements BasePdsProps {
       this.syncBodyPortal();
     }
 
+    // Opening places the dropdown a tick later, which can run before the dropdown has rendered and
+    // then skips it, leaving it without its dropdown-width and max-height. Place a newly rendered
+    // dropdown here too.
+    if (this.isOpen && this.triggerEl && this.listboxEl && this.listboxEl !== this.placedListboxEl) {
+      this.placedListboxEl = this.listboxEl;
+      void this.positionDropdown();
+    }
+
     const row = this.listboxEl?.querySelector('.pds-combobox__group-row--open') as HTMLElement | null | undefined;
     const flyoutEl = row?.querySelector('.pds-combobox__flyout') as HTMLElement | null | undefined;
     if (this.isOpen && this.listboxEl && row && flyoutEl) {
       this.flyout.position(row, this.listboxEl, flyoutEl);
     } else {
       this.flyout.stopPositioning();
-    }
-
-    // The row back is sticky over the group's options; scrolling an option into view stops below
-    // it. Set before any scroll below, and when it first applies, scroll the highlighted option
-    // again: the list keeps its offset on drilling in, and an earlier scroll had no padding.
-    if (this.panelTreeEl) {
-      const header = this.hidesPanelSearch ? (this.panelTreeEl.querySelector('.pds-combobox__group-back-trigger') as HTMLElement | null) : null;
-      const padding = header ? `${header.offsetHeight}px` : '';
-      if (this.panelTreeEl.style.scrollPaddingBlockStart !== padding) {
-        this.panelTreeEl.style.scrollPaddingBlockStart = padding;
-        if (padding !== '' && this.highlightedIndex >= 0) this.pendingOptionFocus = true;
-      }
     }
 
     if (this.pendingOptionFocus) {
@@ -577,8 +573,7 @@ export class PdsCombobox implements BasePdsProps {
    * Scrolls just enough to show `el`, as `scrollIntoView({ block: 'nearest' })` does. In the drill-in
    * panel it scrolls the list alone, and never sideways: while a drill-in slide offsets a row past
    * the list's edge, `scrollIntoView` also scrolls the list horizontally to reach it, which eats most
-   * of the slide. There it keeps clear of the sticky row back, through the scroll padding set for it,
-   * but doesn't scroll the page or a scrolling ancestor.
+   * of the slide. It doesn't scroll the page or a scrolling ancestor.
    */
   private scrollIntoViewNearest(el: HTMLElement, smooth: boolean) {
     const behavior = smooth ? 'smooth' : 'auto';
@@ -586,15 +581,25 @@ export class PdsCombobox implements BasePdsProps {
       el.scrollIntoView({ block: 'nearest', behavior });
       return;
     }
-    const list = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
+    // The row back is the drilled-in header, above the scrolling options: always in view.
+    if (el.classList.contains('pds-combobox__group-back-trigger')) return;
+    const list = this.scrollListEl;
     if (!list) return;
     const offset = el.getBoundingClientRect().top - list.getBoundingClientRect().top - list.clientTop;
-    // The padding keeps rows clear of the sticky row back; the row back itself doesn't need it.
-    const padding = el.classList.contains('pds-combobox__group-back-trigger') ? 0 : parseFloat(list.style.scrollPaddingBlockStart) || 0;
-    const top = list.scrollTop + offset - padding;
+    const top = list.scrollTop + offset;
     const bottom = list.scrollTop + offset + el.offsetHeight - list.clientHeight;
     const target = top < list.scrollTop ? top : bottom > list.scrollTop ? bottom : null;
     if (target !== null) list.scrollTo({ top: target, behavior });
+  }
+
+  /**
+   * The element that scrolls the panel's rows. Every layer is a header (the search field, or a
+   * drilled-in group's row back) above the rows that scroll: drilled in, the group's options;
+   * otherwise the list under the search field, or the panel itself.
+   */
+  private get scrollListEl(): HTMLElement | undefined {
+    const list = this.usesPanelSearch ? this.panelTreeEl : this.listboxEl;
+    return list?.querySelector<HTMLElement>('.pds-combobox__group-back > .pds-combobox__drill-in-options') ?? list;
   }
 
   private focusPanel(el: HTMLElement) {
@@ -1342,7 +1347,7 @@ export class PdsCombobox implements BasePdsProps {
     return computePosition(this.triggerEl, this.listboxEl, {
       placement: this.dropdownPlacement,
       strategy,
-      middleware: [offset(12), flip(), shift({ padding: 5 })],
+      middleware: [offset(8), flip(), shift({ padding: 5 })],
     }).then(({ x, y }) => {
       if (!this.listboxEl) {
         return;
@@ -1379,6 +1384,9 @@ export class PdsCombobox implements BasePdsProps {
     const fallback = Number.isFinite(needed) && needed > 0 && rect.width > 0 && room < needed;
     if (fallback !== this.flyoutFallback) this.flyoutFallback = fallback;
   }
+
+  /** The dropdown element last placed on rendering, so each newly rendered one is placed once. */
+  private placedListboxEl?: HTMLElement;
 
   private openDropdownPositioning() {
     if (!this.triggerEl || !this.listboxEl) {
@@ -2403,8 +2411,12 @@ export class PdsCombobox implements BasePdsProps {
     }
   };
 
+  /** A pick that fills the field from its placeholder fades in; a value it loads with doesn't. */
+  private fadesValueIn = false;
+
   private handleOptionClick(option: HTMLOptionElement) {
     if (isOptionDisabled(option)) return;
+    if (this.selectedIcon === null) this.fadesValueIn = true;
     // Update reactive state - single source of truth
     // The @Watch('selectedOption') will handle displayText, value, and form internals
     this.setSelectedOption(option);
@@ -2412,6 +2424,35 @@ export class PdsCombobox implements BasePdsProps {
     this.isOpen = false;
     this.clearExpandFilterList();
     this.pdsComboboxChange.emit({ value: option.value });
+  }
+
+  /** The row shown while options load: at the top of the list, or of a drilled-in group's options. */
+  private renderLoadingRow() {
+    if (!this.loading) return null;
+    const hasSlottedLoading = !this.usesBodyPortal && !!this.el.querySelector('[slot="loading"]');
+    return (
+      <li class="pds-combobox__loading" role="presentation">
+        {hasSlottedLoading ? <slot name="loading" /> : <pds-loader size="small" />}
+      </li>
+    );
+  }
+
+  /** The row after the last option while more can load, inside whatever scrolls them. */
+  private renderLoadMoreRow() {
+    if (!this.hasMore || this.loading) return null;
+    return (
+      <li class="pds-combobox__load-more" role="presentation">
+        <pds-loader size="small" />
+      </li>
+    );
+  }
+
+  /** Drilled into a group: the group and its place among the panel's entries; otherwise null. */
+  private drilledInEntry(entries: PanelEntry[]) {
+    if (this.effectiveGroupDisplay !== 'drill-in' || this.openGroup === null) return null;
+    const position = entries.findIndex(entry => entry.kind === 'group' && entry.group.optgroup === this.openGroup);
+    const open = entries[position];
+    return open?.kind === 'group' ? { group: open.group, position } : null;
   }
 
   private handleScroll = (e: Event) => {
@@ -2436,7 +2477,8 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     const hasSlottedEmpty = !this.usesBodyPortal && !!this.el.querySelector('[slot="empty"]');
-    const hasSlottedLoading = !this.usesBodyPortal && !!this.el.querySelector('[slot="loading"]');
+    // Drilled in, the group's options scroll under the row back, so their loading rows go with them.
+    const drilledIn = this.showsGroupedPanel && this.drilledInEntry(this.panelEntries()) !== null;
 
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
 
@@ -2474,15 +2516,7 @@ export class PdsCombobox implements BasePdsProps {
         }}
         onScroll={this.handleScroll}
       >
-        {this.loading && (
-          <li class="pds-combobox__loading" role="presentation">
-            {hasSlottedLoading ? (
-              <slot name="loading" />
-            ) : (
-              <pds-loader size="small" />
-            )}
-          </li>
-        )}
+        {!drilledIn && this.renderLoadingRow()}
 
         {!this.loading && this.filteredItems.length === 0 && (
           <li class="pds-combobox__empty" role="presentation">
@@ -2496,11 +2530,7 @@ export class PdsCombobox implements BasePdsProps {
 
         {this.showsGroupedPanel ? this.renderGroupedPanel() : this.renderListboxItems(selectableOptions.length)}
 
-        {this.hasMore && !this.loading && (
-          <li class="pds-combobox__load-more" role="presentation">
-            <pds-loader size="small" />
-          </li>
-        )}
+        {!drilledIn && this.renderLoadMoreRow()}
       </ul>
     );
 
@@ -2891,11 +2921,8 @@ export class PdsCombobox implements BasePdsProps {
     const entries = this.panelEntries();
     const setsize = entries.length;
 
-    if (this.effectiveGroupDisplay === 'drill-in' && this.openGroup !== null) {
-      const position = entries.findIndex(entry => entry.kind === 'group' && entry.group.optgroup === this.openGroup);
-      const open = entries[position];
-      if (open?.kind === 'group') return this.renderGroupBackRow(open.group, { posinset: position + 1, setsize });
-    }
+    const drilled = this.drilledInEntry(entries);
+    if (drilled) return this.renderGroupBackRow(drilled.group, { posinset: drilled.position + 1, setsize });
 
     this.renderedGroups = [];
     return entries.map((entry, position) => {
@@ -2952,8 +2979,10 @@ export class PdsCombobox implements BasePdsProps {
             {group.label}
           </span>
         </div>
-        <ul class="pds-combobox__drill-in-options" role="group" aria-label={group.label}>
+        <ul class="pds-combobox__drill-in-options" role="group" aria-label={group.label} onScroll={this.handleScroll}>
+          {this.renderLoadingRow()}
           {this.renderGroupOptions(group)}
+          {this.renderLoadMoreRow()}
         </ul>
       </li>
     );
@@ -3048,6 +3077,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__button-trigger-label': true,
           'pds-combobox__button-trigger-label--placeholder': !this.selectedLabel,
           'pds-combobox__button-trigger-label--with-icon': icon !== null,
+          'pds-combobox__button-trigger-label--value-in': icon !== null && this.fadesValueIn,
         }}
       >
         {icon !== null && (

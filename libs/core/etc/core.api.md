@@ -508,7 +508,6 @@ export namespace Components {
         "color"?: string;
         "componentId": string;
         "download"?: string;
-        // @deprecated
         "external": boolean;
         "externalLabel"?: string;
         "fontSize": 'sm' | 'md' | 'lg';
@@ -2289,7 +2288,6 @@ export namespace LocalJSX {
         "color"?: string;
         "componentId"?: string;
         "download"?: string;
-        // @deprecated
         "external"?: boolean;
         "externalLabel"?: string;
         "fontSize"?: 'sm' | 'md' | 'lg';
