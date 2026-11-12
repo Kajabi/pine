@@ -7,697 +7,286 @@ import { DocCanvas } from '@pine-ds/doc-components';
 
 ## Overview
 
-Pine Design System (PDS) form components such as `pds-input`, `pds-checkbox`, `pds-button`, `pds-radio`, `pds-switch`, `pds-combobox`, `pds-multiselect`, and `pds-textarea` are designed to work seamlessly within standard HTML `<form>` elements. These components ensure accessibility and consistency while providing enhanced styling and behavior.
+Pine form controls work inside a native `<form>`. `pds-input`, `pds-textarea`, `pds-select`, `pds-checkbox`, `pds-switch`, `pds-combobox`, `pds-multiselect` and `pds-datepicker` are form-associated custom elements, so the form submits their values the way it submits native controls. `pds-radio` renders a native radio input in the page, outside any shadow root, and `pds-radio-group` gives a set of radios one name and one label. A `pds-button` with `type="submit"` submits the form it's in.
 
-## Examples for Demo Purposes
+Each component's docs cover its own props and events. This guide covers what they share.
 
-> ***The examples provided on this page demonstrate how to integrate Pine components into a form. These are for demonstration purposes only and are not intended for production use.***
+## Example
 
-Specifically:
-
-- The examples log form data to the browser's console using `console.log()`.
-- Default values are displayed if the fields are not modified.
-- In production, replace the logging mechanism with proper form handling logic, such as API calls or state management integration.
-
-## Form Example Walkthrough
-
-### React Example
-
-The React implementation demonstrates a controlled form with state management using the `useState` hook. It highlights how to manage form data and handle validation for required fields like `name` and `email`.
-
-### Web Component Example
-
-The web component example utilizes vanilla JavaScript to access values directly from DOM elements. This implementation shows how Pine components can be integrated with native JavaScript without relying on a framework.
-
-> **Note:** Be mindful of best practices for validation and form submission when using these examples as a reference.
-
-> **💡 Open your browser's developer console before submitting the form to see detailed debugging output!**
-
-## Validation Patterns
-
-- **Inline validation**: Most Pine inputs support the `invalid` attribute and an `error` message prop. Toggle these in response to the component's event and display contextual feedback beneath the field.
-- **Summary validation**: Combine multiple messages into a `<pds-alert>` after form submission fails. Remember to move focus to the first invalid control.
-- **Async validation**: Use the `loading` state (e.g., `pds-button` with a loader) while waiting for server-side responses and apply `aria-busy="true"` to the container so assistive technologies know updates are pending.
+One `pds-box` with `direction="column"` and `gap="md"` spaces the fields, so the controls need no wrapper boxes. The live example doesn't send anything when you submit it, and the copied code is the form alone, so add your own submit handler.
 
 <DocCanvas client:only
   mdxSource={{
     react: `
-      import React, { useState } from 'react';
-      import {
-        PdsBox,
-        PdsButton,
-        PdsCheckbox,
-        PdsCombobox,
-        PdsInput,
-        PdsMultiselect,
-        PdsRadio,
-        PdsSelect,
-        PdsSwitch,
-        PdsTextarea,
-      } from '@pine-ds/react';
+import {
+  PdsBox,
+  PdsButton,
+  PdsCheckbox,
+  PdsCombobox,
+  PdsDatepicker,
+  PdsInput,
+  PdsMultiselect,
+  PdsRadio,
+  PdsRadioGroup,
+  PdsSelect,
+  PdsSwitch,
+  PdsTextarea,
+} from '@pine-ds/react';
 
-      const FormComponent = () => {
-        const [formData, setFormData] = useState({
-          name: '',
-          email: '',
-          subscribe: false,
-          direction: '',
-          notifications: false,
-          message: '',
-          timeOfDay: '',
-          favoriteColor: 'blue',
-          status: 'published',
-          favoriteTags: [],
-        });
+const ProfileForm = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    // Send data to your API here.
+  };
 
-        const handleSubmit = (e) => {
-          e.preventDefault();
-          // Validate required fields
-          const { name, email, subscribe, direction, notifications, message, timeOfDay, favoriteColor, status, favoriteTags } = formData;
-          if (!name || !email) {
-            alert('Please fill out all required fields');
-            return;
-          }
-          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message, timeOfDay, favoriteColor, status, favoriteTags }));
-        };
+  return (
+    <form onSubmit={handleSubmit}>
+      <PdsBox direction="column" gap="md">
+        <PdsInput componentId="name" name="name" label="Name" />
+        <PdsInput componentId="email" name="email" label="Email" type="email" />
+        <PdsCheckbox componentId="subscribe" name="subscribe" label="Subscribe to newsletter" />
+        <PdsRadioGroup componentId="direction" name="direction" groupLabel="Favorite direction" direction="row">
+          <PdsRadio componentId="direction-up" label="Up" value="up" />
+          <PdsRadio componentId="direction-down" label="Down" value="down" />
+        </PdsRadioGroup>
+        <PdsSwitch componentId="notifications" name="notifications" label="Enable notifications" />
+        <PdsSelect componentId="timeOfDay" name="timeOfDay" label="Favorite time of day">
+          <option value="">Select...</option>
+          <option value="morning">Morning</option>
+          <option value="noon">Noon</option>
+          <option value="night">Night</option>
+        </PdsSelect>
+        <PdsCombobox componentId="favoriteColor" name="favoriteColor" label="Favorite color" mode="select-only" trigger="button" triggerVariant="secondary" value="blue">
+          <option value="red">Red</option>
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+        </PdsCombobox>
+        <PdsMultiselect componentId="favoriteTags" name="favoriteTags" label="Favorite tags" placeholder="Select tags...">
+          <option value="marketing">Marketing</option>
+          <option value="sales">Sales</option>
+          <option value="support">Support</option>
+        </PdsMultiselect>
+        <PdsDatepicker componentId="startDate" name="startDate" label="Start date" />
+        <PdsTextarea componentId="message" name="message" label="Message" />
+        <PdsButton type="submit" variant="primary">Submit form</PdsButton>
+      </PdsBox>
+    </form>
+  );
+};
 
-        const handleChange = (e) => {
-          const { name, value, type, checked } = e.target;
-          setFormData((prevData) => ({
-            ...prevData,
-            [name]: type === 'checkbox' || type === 'radio' ? checked : value,
-          }));
-        };
-
-        const handleTagsChange = (e) => {
-          setFormData((prevData) => ({
-            ...prevData,
-            favoriteTags: e.detail.values,
-          }));
-        };
-
-        return (
-          <PdsBox display="block" padding="lg" margin="md" border borderRadius="lg">
-            {/* Vertical Layout for form components */}
-            <form onSubmit={handleSubmit}>
-              {/* Name Input */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsInput
-                  componentId="name"
-                  label="Name"
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-              </PdsBox>
-
-              {/* Email Input */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsInput
-                  componentId="email"
-                  label="Email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </PdsBox>
-
-              {/* Subscribe Checkbox */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsCheckbox
-                  componentId="subscribe"
-                  label="Subscribe to newsletter"
-                  name="subscribe"
-                  checked={formData.subscribe}
-                  onChange={handleChange}
-                />
-              </PdsBox>
-
-              {/* Direction Radio Buttons */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsRadio
-                  componentId="direction-up"
-                  label="Up"
-                  name="direction"
-                  value="up"
-                  checked={formData.direction === 'up'}
-                  onChange={handleChange}
-                />
-                <PdsRadio
-                  componentId="direction-down"
-                  label="Down"
-                  name="direction"
-                  value="down"
-                  checked={formData.direction === 'down'}
-                  onChange={handleChange}
-                />
-              </PdsBox>
-
-              {/* Notifications Switch */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsSwitch
-                  componentId="notifications"
-                  label="Enable notifications"
-                  name="notifications"
-                  checked={formData.notifications}
-                  onChange={handleChange}
-                />
-              </PdsBox>
-
-              {/* Time of Day Select */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsSelect
-                  componentId="timeOfDay"
-                  label="Favorite Time of Day"
-                  name="timeOfDay"
-                  value={formData.timeOfDay}
-                  onChange={handleChange}
-                >
-                  <option value="">Select...</option>
-                  <option value="morning">Morning</option>
-                  <option value="noon">Noon</option>
-                  <option value="night">Night</option>
-                </PdsSelect>
-              </PdsBox>
-
-              {/* Favorite Color Combobox - Button Trigger */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsCombobox
-                  componentId="favoriteColor"
-                  label="Favorite Color"
-                  name="favoriteColor"
-                  placeholder="Select a color..."
-                  mode="select-only"
-                  trigger="button"
-                  triggerVariant="secondary"
-                  triggerWidth="250px"
-                  value={formData.favoriteColor}
-                  onChange={handleChange}
-                >
-                  <option value="red">Red</option>
-                  <option value="blue">Blue</option>
-                  <option value="green">Green</option>
-                  <option value="yellow">Yellow</option>
-                  <option value="purple">Purple</option>
-                  <option value="orange">Orange</option>
-                  <option value="pink">Pink</option>
-                  <option value="black">Black</option>
-                </PdsCombobox>
-              </PdsBox>
-
-              {/* Multiselect */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsMultiselect
-                  componentId="favoriteTags"
-                  label="Favorite Tags"
-                  name="favoriteTags"
-                  placeholder="Select tags..."
-                  value={formData.favoriteTags}
-                  onPdsMultiselectChange={handleTagsChange}
-                >
-                  <option value="marketing">Marketing</option>
-                  <option value="sales">Sales</option>
-                  <option value="support">Support</option>
-                  <option value="engineering">Engineering</option>
-                </PdsMultiselect>
-              </PdsBox>
-
-              {/* Status Combobox - Chip Trigger */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsCombobox
-                  componentId="status"
-                  label="Status"
-                  name="status"
-                  trigger="chip"
-                  mode="select-only"
-                  value={formData.status}
-                  onChange={handleChange}
-                >
-                  <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
-                  <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
-                  <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
-                </PdsCombobox>
-              </PdsBox>
-
-              {/* Message Textarea */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsTextarea
-                  componentId="message"
-                  label="Message"
-                  name="message"
-                  value={formData.message}   // Bind the textarea value to the state
-                  onChange={handleChange}    // Use the same handler to update the state
-                />
-              </PdsBox>
-
-              {/* Submit Button */}
-              <PdsBox display="block" padding="sm" margin="sm">
-                <PdsButton type="submit" variant="primary">Submit Form</PdsButton>
-              </PdsBox>
-            </form>
-          </PdsBox>
-        );
-      };
-
-      export default FormComponent;
-    `,
+export default ProfileForm;
+`,
     webComponent: `
-      <pds-box display="block" padding="lg" margin="md" border border-radius="lg">
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const form = e.target;
-          console.log('Form Data:', {
-            name: form.querySelector('[component-id="name"]').value,
-            email: form.querySelector('[component-id="email"]').value,
-            subscribe: form.querySelector('[component-id="subscribe"]').checked,
-            direction: form.querySelector('input[name="direction"]:checked')?.value,
-            notifications: form.querySelector('[component-id="notifications"]').checked,
-            message: form.querySelector('[component-id="message"]').value,
-            timeOfDay: form.querySelector('[component-id="timeOfDay"]').value,
-            favoriteColor: form.querySelector('[component-id="favoriteColor"]').value,
-            status: form.querySelector('[component-id="status"]').value,
-            favoriteTags: form.querySelector('[component-id="favoriteTags"]').value
-          });
-        }}>
-          <pds-box display="block" padding="sm">
-            <pds-input component-id="name" label="Name" type="text"></pds-input>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-input component-id="email" label="Email" type="email"></pds-input>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-checkbox component-id="subscribe" label="Subscribe to newsletter"></pds-checkbox>
-          </pds-box>
-
-          <pds-box display="flex" padding="sm" gap="sm">
-            <p><strong>Favorite direction:</strong></p>
-            <pds-radio component-id="direction-up" label="Up" name="direction" value="up"></pds-radio>
-            <pds-radio component-id="direction-down" label="Down" name="direction" value="down"></pds-radio>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-switch component-id="notifications" label="Enable notifications"></pds-switch>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-select component-id="timeOfDay" label="Favorite Time of Day" name="timeOfDay">
-              <option value="">Select...</option>
-              <option value="morning">Morning</option>
-              <option value="noon">Noon</option>
-              <option value="night">Night</option>
-            </pds-select>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-combobox component-id="favoriteColor" label="Favorite Color" name="favoriteColor" placeholder="Select a color..." mode="select-only" trigger="button" trigger-variant="secondary" trigger-width="250px" value="blue">
-              <option value="red">Red</option>
-              <option value="blue">Blue</option>
-              <option value="green">Green</option>
-              <option value="yellow">Yellow</option>
-              <option value="purple">Purple</option>
-              <option value="orange">Orange</option>
-              <option value="pink">Pink</option>
-              <option value="black">Black</option>
-            </pds-combobox>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-multiselect component-id="favoriteTags" label="Favorite Tags" name="favoriteTags" placeholder="Select tags...">
-              <option value="marketing">Marketing</option>
-              <option value="sales">Sales</option>
-              <option value="support">Support</option>
-              <option value="engineering">Engineering</option>
-            </pds-multiselect>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-combobox component-id="status" label="Status" name="status" trigger="chip" mode="select-only" value="published">
-              <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
-              <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
-              <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
-            </pds-combobox>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-textarea component-id="message" label="Message"></pds-textarea>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-button type="submit" variant="primary">Submit Form</pds-button>
-          </pds-box>
-        </form>
-      </pds-box>
-    `
+<form>
+  <pds-box direction="column" gap="md">
+    <pds-input component-id="name" name="name" label="Name"></pds-input>
+    <pds-input component-id="email" name="email" label="Email" type="email"></pds-input>
+    <pds-checkbox component-id="subscribe" name="subscribe" label="Subscribe to newsletter"></pds-checkbox>
+    <pds-radio-group component-id="direction" name="direction" group-label="Favorite direction" direction="row">
+      <pds-radio component-id="direction-up" label="Up" value="up"></pds-radio>
+      <pds-radio component-id="direction-down" label="Down" value="down"></pds-radio>
+    </pds-radio-group>
+    <pds-switch component-id="notifications" name="notifications" label="Enable notifications"></pds-switch>
+    <pds-select component-id="timeOfDay" name="timeOfDay" label="Favorite time of day">
+      <option value="">Select...</option>
+      <option value="morning">Morning</option>
+      <option value="noon">Noon</option>
+      <option value="night">Night</option>
+    </pds-select>
+    <pds-combobox component-id="favoriteColor" name="favoriteColor" label="Favorite color" mode="select-only" trigger="button" trigger-variant="secondary" value="blue">
+      <option value="red">Red</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+    </pds-combobox>
+    <pds-multiselect component-id="favoriteTags" name="favoriteTags" label="Favorite tags" placeholder="Select tags...">
+      <option value="marketing">Marketing</option>
+      <option value="sales">Sales</option>
+      <option value="support">Support</option>
+    </pds-multiselect>
+    <pds-datepicker component-id="startDate" name="startDate" label="Start date"></pds-datepicker>
+    <pds-textarea component-id="message" name="message" label="Message"></pds-textarea>
+    <pds-button type="submit" variant="primary">Submit form</pds-button>
+  </pds-box>
+</form>
+`
 }}>
 
-<pds-box display="block" padding="lg" margin="md" border border-radius="lg">
-  <form onSubmit={(e) => {
-    e.preventDefault();
-    const form = e.target;
-
-    console.log('🚀 Form submitted! Check console for detailed debugging info...');
-    console.log('═══════════════════════════════════════════════════');
-
-    // Log FormData (includes form-associated custom elements)
-    const formData = new FormData(form);
-    console.log('📝 FormData entries:');
-    for (let [key, value] of formData.entries()) {
-      console.log(`  ${key}: ${value}`);
-    }
-
-    // Log component values directly
-    console.log('🎯 Component values:', {
-      name: form.querySelector('[component-id="name"]')?.value,
-      email: form.querySelector('[component-id="email"]')?.value,
-      subscribe: form.querySelector('[component-id="subscribe"]')?.checked,
-      direction: form.querySelector('input[name="direction"]:checked')?.value,
-      notifications: form.querySelector('[component-id="notifications"]')?.checked,
-      message: form.querySelector('[component-id="message"]')?.value,
-      timeOfDay: form.querySelector('[component-id="timeOfDay"]')?.value,
-      favoriteColor: form.querySelector('[component-id="favoriteColor"]')?.value,
-      status: form.querySelector('[component-id="status"]')?.value,
-      favoriteTags: form.querySelector('[component-id="favoriteTags"]')?.value
-    });
-
-    // Log native form elements
-    console.log('🔍 Native form elements:', {
-      elements: Array.from(form.elements).map(el => ({
-        name: el.name,
-        value: el.value,
-        type: el.type,
-        tagName: el.tagName.toLowerCase()
-      }))
-    });
-
-    console.log('═══════════════════════════════════════════════════');
-
-    // Also check form association status
-    console.log('🔍 Form association diagnostic:');
-
-    // Check custom element definitions
-    console.log('📦 Custom element definitions:', {
-      'pds-input': customElements.get('pds-input') ? '✅ Defined' : '❌ Not defined',
-      'pds-select': customElements.get('pds-select') ? '✅ Defined' : '❌ Not defined',
-      'pds-combobox': customElements.get('pds-combobox') ? '✅ Defined' : '❌ Not defined',
-      'pds-multiselect': customElements.get('pds-multiselect') ? '✅ Defined' : '❌ Not defined',
-      'pds-textarea': customElements.get('pds-textarea') ? '✅ Defined' : '❌ Not defined',
-      'pds-checkbox': customElements.get('pds-checkbox') ? '✅ Defined' : '❌ Not defined',
-      'pds-radio': customElements.get('pds-radio') ? '✅ Defined' : '❌ Not defined',
-      'pds-switch': customElements.get('pds-switch') ? '✅ Defined' : '❌ Not defined'
-    });
-
-    // Check if Pine components have form association
-    const formComponents = {
-      input: form.querySelector('pds-input[component-id="name"]'),
-      email: form.querySelector('pds-input[component-id="email"]'),
-      subscribe: form.querySelector('pds-checkbox[component-id="subscribe"]'),
-      direction: form.querySelector('pds-radio[component-id="direction-up"]'),
-      notifications: form.querySelector('pds-switch[component-id="notifications"]'),
-      select: form.querySelector('pds-select[component-id="timeOfDay"]'),
-      comboboxColor: form.querySelector('pds-combobox[component-id="favoriteColor"]'),
-      comboboxStatus: form.querySelector('pds-combobox[component-id="status"]'),
-      multiselect: form.querySelector('pds-multiselect[component-id="favoriteTags"]'),
-      textarea: form.querySelector('pds-textarea[component-id="message"]')
-    };
-
-    console.log('🌲 Pine components in form:', Object.keys(formComponents).reduce((acc, key) => {
-      acc[key] = formComponents[key] ? '✅ Found' : '❌ Not found';
-      return acc;
-    }, {}));
-
-    // Check form association status
-    console.log('✅ Form association status:', Object.keys(formComponents).reduce((acc, key) => {
-      const component = formComponents[key];
-      if (component) {
-        acc[key] = component.constructor?.formAssociated ? '✅ Associated' : '❌ Not associated';
-      }
-      return acc;
-    }, {}));
-
-  }}>
-    <pds-box display="block" padding="sm">
-      <pds-input component-id="name" name="name" label="Name" type="text"></pds-input>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-input component-id="email" name="email" label="Email" type="email"></pds-input>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-checkbox component-id="subscribe" name="subscribe" label="Subscribe to newsletter"></pds-checkbox>
-    </pds-box>
-
-    <pds-box display="flex" padding="sm" gap="sm">
-      <p><strong>Favorite direction:</strong></p>
-      <pds-radio component-id="direction-up" label="Up" name="direction" value="up"></pds-radio>
-      <pds-radio component-id="direction-down" label="Down" name="direction" value="down"></pds-radio>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-switch component-id="notifications" name="notifications" label="Enable notifications"></pds-switch>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-select component-id="timeOfDay" label="Favorite Time of Day" name="timeOfDay">
-        <option value="">Select an option...</option>
-        <option value="morning">Morning</option>
-        <option value="noon">Noon</option>
-        <option value="night">Night</option>
-      </pds-select>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-combobox component-id="favoriteColor" label="Favorite Color" name="favoriteColor" placeholder="Select a color..." mode="select-only" trigger="button" trigger-variant="secondary" trigger-width="250px" value="blue">
-        <option value="red">Red</option>
-        <option value="blue">Blue</option>
-        <option value="green">Green</option>
-        <option value="yellow">Yellow</option>
-        <option value="purple">Purple</option>
-        <option value="orange">Orange</option>
-        <option value="pink">Pink</option>
-        <option value="black">Black</option>
-      </pds-combobox>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-multiselect component-id="favoriteTags" label="Favorite Tags" name="favoriteTags" placeholder="Select tags...">
-        <option value="marketing">Marketing</option>
-        <option value="sales">Sales</option>
-        <option value="support">Support</option>
-        <option value="engineering">Engineering</option>
-      </pds-multiselect>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-combobox component-id="status" label="Status" name="status" trigger="chip" mode="select-only" value="published">
-        <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
-        <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
-        <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
-      </pds-combobox>
-    </pds-box>
-
-
-    <pds-box display="block" padding="sm">
-      <pds-textarea component-id="message" name="message" label="Message"></pds-textarea>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-button type="submit" variant="primary">Submit Form</pds-button>
-    </pds-box>
-  </form>
-</pds-box>
+<form onSubmit={(event) => event.preventDefault()}>
+  <pds-box direction="column" gap="md">
+    <pds-input component-id="name" name="name" label="Name"></pds-input>
+    <pds-input component-id="email" name="email" label="Email" type="email"></pds-input>
+    <pds-checkbox component-id="subscribe" name="subscribe" label="Subscribe to newsletter"></pds-checkbox>
+    <pds-radio-group component-id="direction" name="direction" group-label="Favorite direction" direction="row">
+      <pds-radio component-id="direction-up" label="Up" value="up"></pds-radio>
+      <pds-radio component-id="direction-down" label="Down" value="down"></pds-radio>
+    </pds-radio-group>
+    <pds-switch component-id="notifications" name="notifications" label="Enable notifications"></pds-switch>
+    <pds-select component-id="timeOfDay" name="timeOfDay" label="Favorite time of day">
+      <option value="">Select...</option>
+      <option value="morning">Morning</option>
+      <option value="noon">Noon</option>
+      <option value="night">Night</option>
+    </pds-select>
+    <pds-combobox component-id="favoriteColor" name="favoriteColor" label="Favorite color" mode="select-only" trigger="button" trigger-variant="secondary" value="blue">
+      <option value="red">Red</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+    </pds-combobox>
+    <pds-multiselect component-id="favoriteTags" name="favoriteTags" label="Favorite tags" placeholder="Select tags...">
+      <option value="marketing">Marketing</option>
+      <option value="sales">Sales</option>
+      <option value="support">Support</option>
+    </pds-multiselect>
+    <pds-datepicker component-id="startDate" name="startDate" label="Start date"></pds-datepicker>
+    <pds-textarea component-id="message" name="message" label="Message"></pds-textarea>
+    <pds-button type="submit" variant="primary">Submit form</pds-button>
+  </pds-box>
+</form>
 
 </DocCanvas>
 
-## Debugging and Testing Form Association
+## What each control submits
 
-Pine components use the **Form Associated Custom Elements API** to properly integrate with native HTML forms. This ensures that Pine form components participate in form submission, validation, and reset operations.
+Read `new FormData(form)` in a submit handler to see what a form sends. Each control's `name` is a key.
 
-### Comprehensive Form Debugging Example
+```js
+const form = document.querySelector('form');
 
-Here's a comprehensive debugging setup that helps verify form association is working correctly:
-
-```html
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('form');
-
-  if (form) {
-    // Check custom element definitions on page load
-    setTimeout(() => {
-      console.log('🔍 Checking if custom elements are defined...');
-      console.log('pds-input defined:', customElements.get('pds-input'));
-      console.log('pds-select defined:', customElements.get('pds-select'));
-      console.log('pds-combobox defined:', customElements.get('pds-combobox'));
-      console.log('pds-multiselect defined:', customElements.get('pds-multiselect'));
-      console.log('pds-textarea defined:', customElements.get('pds-textarea'));
-      console.log('pds-checkbox defined:', customElements.get('pds-checkbox'));
-      console.log('pds-radio defined:', customElements.get('pds-radio'));
-      console.log('pds-switch defined:', customElements.get('pds-switch'));
-
-      console.log('📊 Testing form elements access:');
-      console.log('Form elements:', form.elements);
-      console.log('Form elements length:', form.elements.length);
-      console.log('Named elements:', {
-        name: form.elements.namedItem('name'),
-        email: form.elements.namedItem('email'),
-        subscribe: form.elements.namedItem('subscribe'),
-        direction: form.elements.namedItem('direction'),
-        notifications: form.elements.namedItem('notifications'),
-        favoriteColor: form.elements.namedItem('favoriteColor'),
-        status: form.elements.namedItem('status'),
-        favoriteTags: form.elements.namedItem('favoriteTags'),
-        message: form.elements.namedItem('message')
-      });
-
-      // Check if Pine components have form association
-      const pdsInput = document.querySelector('pds-input');
-      const pdsSelect = document.querySelector('pds-select');
-      const pdsComboboxColor = document.querySelector('pds-combobox[component-id="favoriteColor"]');
-      const pdsComboboxStatus = document.querySelector('pds-combobox[component-id="status"]');
-      const pdsMultiselect = document.querySelector('pds-multiselect[component-id="favoriteTags"]');
-      const pdsTextarea = document.querySelector('pds-textarea');
-      const pdsCheckbox = document.querySelector('pds-checkbox');
-      const pdsRadio = document.querySelector('pds-radio');
-      const pdsSwitch = document.querySelector('pds-switch');
-
-      console.log('🌲 Pine components in DOM:', {
-        input: pdsInput,
-        select: pdsSelect,
-        comboboxColor: pdsComboboxColor,
-        comboboxStatus: pdsComboboxStatus,
-        multiselect: pdsMultiselect,
-        textarea: pdsTextarea,
-        checkbox: pdsCheckbox,
-        radio: pdsRadio,
-        switch: pdsSwitch
-      });
-
-      if (pdsInput || pdsSelect || pdsComboboxColor || pdsMultiselect || pdsTextarea) {
-        console.log('🔧 Component internals:', {
-          inputInternals: pdsInput?.internals,
-          selectInternals: pdsSelect?.internals,
-          comboboxColorInternals: pdsComboboxColor?.internals,
-          comboboxStatusInternals: pdsComboboxStatus?.internals,
-          multiselectInternals: pdsMultiselect?.internals,
-          textareaInternals: pdsTextarea?.internals,
-          checkboxInternals: pdsCheckbox?.internals,
-          radioInternals: pdsRadio?.internals,
-          switchInternals: pdsSwitch?.internals
-        });
-
-        // Check if components are form-associated
-        console.log('✅ Form association check:', {
-          inputFormAssociated: pdsInput?.constructor?.formAssociated,
-          selectFormAssociated: pdsSelect?.constructor?.formAssociated,
-          comboboxColorFormAssociated: pdsComboboxColor?.constructor?.formAssociated,
-          comboboxStatusFormAssociated: pdsComboboxStatus?.constructor?.formAssociated,
-          multiselectFormAssociated: pdsMultiselect?.constructor?.formAssociated,
-          textareaFormAssociated: pdsTextarea?.constructor?.formAssociated,
-          checkboxFormAssociated: pdsCheckbox?.constructor?.formAssociated,
-          radioFormAssociated: pdsRadio?.constructor?.formAssociated,
-          switchFormAssociated: pdsSwitch?.constructor?.formAssociated
-        });
-      } else {
-        console.error('❌ No Pine components found in DOM! Check if components are loading properly.');
-      }
-    }, 2000); // Wait for components to load
-
-    // Enhanced form submission debugging
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      console.log('🚀 Form submitted!');
-
-      // Log FormData (includes form-associated custom elements)
-      const formData = new FormData(form);
-      console.log('📝 FormData entries:');
-      for (let [key, value] of formData.entries()) {
-        console.log(`  ${key}: ${value}`);
-      }
-
-      // Log component values directly
-      console.log('🎯 Component values:', {
-        name: form.querySelector('[name="name"]')?.value,
-        email: form.querySelector('[name="email"]')?.value,
-        subscribe: form.querySelector('[name="subscribe"]')?.checked,
-        direction: form.querySelector('input[name="direction"]:checked')?.value,
-        notifications: form.querySelector('[name="notifications"]')?.checked,
-        message: form.querySelector('[name="message"]')?.value,
-        timeOfDay: form.querySelector('[name="timeOfDay"]')?.value,
-        favoriteColor: form.querySelector('[name="favoriteColor"]')?.value,
-        status: form.querySelector('[name="status"]')?.value,
-        favoriteTags: form.querySelector('[name="favoriteTags"]')?.value,
-        favoriteAnimal: form.querySelector('[name="favoriteAnimal"]')?.value
-      });
-
-      // Log native form elements
-      console.log('🔍 Native form elements:', {
-        elements: Array.from(form.elements).map(el => ({
-          name: el.name,
-          value: el.value,
-          type: el.type,
-          tagName: el.tagName.toLowerCase()
-        }))
-      });
-    });
-  }
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  console.log([...new FormData(form)]);
 });
-</script>
 ```
 
-### What to Look For
+<pds-table component-id="forms-submitted-values" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Control</pds-table-head-cell>
+    <pds-table-head-cell>What the form gets</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>pds-input</code>, <code>pds-textarea</code>, <code>pds-select</code>, <code>pds-combobox</code>, <code>pds-datepicker</code></pds-table-cell>
+      <pds-table-cell>Its <code>value</code></pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>pds-checkbox</code>, <code>pds-switch</code></pds-table-cell>
+      <pds-table-cell>Its <code>value</code> while checked, or <code>on</code> when it has no <code>value</code>. Nothing while unchecked.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>pds-multiselect</code></pds-table-cell>
+      <pds-table-cell>One entry for each selected value</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>pds-radio</code> in a <code>pds-radio-group</code></pds-table-cell>
+      <pds-table-cell>The checked radio's <code>value</code>, under the group's <code>name</code></pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
-When debugging Pine forms, check for these indicators of successful form association:
+## Rules
 
-1. **Custom Elements Defined**: All Pine components should be registered
-   ```javascript
-   console.log('pds-input defined:', customElements.get('pds-input')); // Should return constructor
-   ```
+**Do:**
 
-2. **Form Association Active**: Components should have `formAssociated: true`
-   ```javascript
-   console.log('Form associated:', pdsInput?.constructor?.formAssociated); // Should be true
-   ```
-
-3. **Form Elements Collection**: Pine components should appear in `form.elements`
-   ```javascript
-   console.log('Form elements count:', form.elements.length); // Should include Pine components
-   ```
-
-4. **FormData Inclusion**: Pine component values should appear in FormData
-   ```javascript
-   const formData = new FormData(form);
-   for (let [key, value] of formData.entries()) {
-     console.log(`${key}: ${value}`); // Should include Pine component values
-   }
-   ```
-
-### Common Issues and Solutions
-
-- **Components not in FormData**: Ensure components have `name` attributes
-- **Form association not working**: Check that Pine components are fully loaded before form submission
-- **Missing values**: Verify that component values are being set properly and internals are initialized
-
-## Guidelines and Recommendations
-
-### 1. Use Pine Components for Consistency
-
-- Incorporating `pds-*` components ensures your forms maintain visual and functional consistency across your application.
-- Each component has documentation that outlines its usage and properties. Refer to each component in the sidebar for more information.
+- Give every control a `component-id`. It connects the visible label to the field. A `pds-input` without one has no accessible name.
+- Give every control you want submitted a `name`, set as an HTML attribute. The form leaves out a control without one. `pds-input`, `pds-textarea`, `pds-select`, `pds-checkbox`, `pds-switch` and `pds-datepicker` submit under their `name` attribute only, so a `name` set only as a property, as React 19 does for custom elements, leaves them out too. The `@pine-ds/react` components set the attribute for you.
+- Group related radios in a `pds-radio-group` with a `group-label` and a `name`. Screen readers read the `group-label` as the group's name, every radio in it gets the `name`, and the group shows one `error-message` for all of them.
+- Use `readonly` for a value people should see but not change, when the form should still send it. A `disabled` control isn't submitted. `pds-input`, `pds-textarea` and `pds-datepicker` have `readonly`.
 - Write boolean props as bare attributes, such as `disabled`, and remove the attribute to turn one off. On form-associated controls such as `pds-input`, any value turns it on, even `disabled="false"`. In React, pass `disabled` or `disabled={isDisabled}`.
 
-### 2. Validation
+**Don't:**
 
-- Implement robust validation to meet user expectations.
-- Use the `required` attribute for mandatory fields.
+- Use `placeholder` as the label. It disappears once someone types.
+- Log submitted values in production. Forms often hold personal details.
 
-### 3. Production-Ready Practices
+## Validation
 
-- Avoid logging sensitive user data to the console.
-- Replace placeholder code with API integrations or backend logic.
-- Ensure error handling is user-friendly and complies with accessibility standards.
+Set `invalid` and `error-message` together when a field fails. `pds-select`, `pds-combobox` and `pds-multiselect` treat an `error-message` alone as invalid. On `pds-input`, `pds-checkbox`, `pds-switch`, `pds-radio` and `pds-datepicker`, an `error-message` alone shows the message but doesn't mark the field invalid for screen readers or connect the message to it. `pds-textarea` shows no `error-message` until `invalid` is set.
+
+While a field is invalid, screen readers read its `error-message` as the field's description instead of its `helper-message`. Both messages stay on screen.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `
+<pds-input
+  component-id="billing-email"
+  name="billingEmail"
+  label="Billing email"
+  type="email"
+  value="ada@"
+  helper-message="We send receipts here."
+  error-message="Enter an email address, like name@example.com."
+  invalid
+></pds-input>`,
+    react: `
+import { PdsInput } from '@pine-ds/react';
+
+<PdsInput
+  componentId="billing-email"
+  name="billingEmail"
+  label="Billing email"
+  type="email"
+  value="ada@"
+  helperMessage="We send receipts here."
+  errorMessage="Enter an email address, like name@example.com."
+  invalid
+/>`
+  }}>
+  <pds-input
+    component-id="billing-email"
+    name="billingEmail"
+    label="Billing email"
+    type="email"
+    value="ada@"
+    helper-message="We send receipts here."
+    error-message="Enter an email address, like name@example.com."
+    invalid
+  ></pds-input>
+</DocCanvas>
+
+With `required`, `pds-input` shows an asterisk after its label, and the browser won't submit the form while the field is empty.
+
+### After a failed submit
+
+When a submit fails, mark each field that failed with `invalid` and `error-message`. Above the form, show a `pds-alert` with `variant="danger"` that lists the errors, and move focus to it so keyboard and screen reader users start there. Give the alert `tabindex="-1"` so it can take focus, then call `focus()` on it. The <pds-link href="../?path=/docs/guides-accessibility--docs">Accessibility</pds-link> guide follows the same rule.
+
+Don't move focus while validating a single field as someone types or leaves it. Show its `error-message` and leave focus where it is.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `
+<pds-alert id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
+  <ul>
+    <li>Name: enter your name.</li>
+    <li>Billing email: enter an email address, like name@example.com.</li>
+  </ul>
+</pds-alert>`,
+    react: `
+import { PdsAlert } from '@pine-ds/react';
+
+<PdsAlert id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabIndex={-1}>
+  <ul>
+    <li>Name: enter your name.</li>
+    <li>Billing email: enter an email address, like name@example.com.</li>
+  </ul>
+</PdsAlert>`
+  }}>
+  <pds-alert id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
+    <ul>
+      <li>Name: enter your name.</li>
+      <li>Billing email: enter an email address, like name@example.com.</li>
+    </ul>
+  </pds-alert>
+</DocCanvas>
+
+```js
+document.getElementById('form-errors').focus();
+```
+
+### Waiting on the server
+
+Set `loading` on the submit `pds-button` while a server check runs. A loading button sets `aria-busy="true"` on its own inner `<button>`, so don't add `aria-busy` to it. Put `aria-busy="true"` on a region only while your code replaces its content.
+
+## Events
+
+Each control reports changes with its own event, such as `pdsInput` on `pds-input` and `pdsCheckboxChange` on `pds-checkbox`. Setting `value` or `checked` from your code doesn't fire them. Each component's properties table lists its events, and the <pds-link href="../?path=/docs/guides-events--docs">Events</pds-link> guide covers how to listen to them, including in React.
