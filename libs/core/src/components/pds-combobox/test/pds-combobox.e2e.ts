@@ -907,7 +907,7 @@ describe('pds-combobox', () => {
 
         await click(page, '.pds-combobox__group-back-trigger', { slides: false });
         expect(await starts(page, '.pds-combobox__group-row')).toEqual(['still', 'still']);
-        expect(await starts(page, '.pds-combobox__panel-search')).toEqual(['still']);
+        expect(await starts(page, '.pds-combobox__panel-search > *')).toEqual(['still', 'still']);
       });
 
       // The dropdown's height and its glide: the heights it eases between (empty once it's cleaned up),
@@ -1027,10 +1027,25 @@ describe('pds-combobox', () => {
 
         await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
         expect((await glide(page)).gliding).toBe(true);
+        // Kept, so the closed panel itself is checked, not only the new one the reopen renders.
+        await page.evaluate(() => {
+          (window as unknown as { closedPanel: Element }).closedPanel = document
+            .querySelector('pds-combobox')!
+            .shadowRoot!.querySelector('.pds-combobox__listbox')!;
+        });
 
         const trigger = await page.find('pds-combobox >>> .pds-combobox__button-trigger');
         await trigger.click();
         await page.waitForChanges();
+        const closed = await page.evaluate(() => {
+          const el = (window as unknown as { closedPanel: HTMLElement }).closedPanel;
+          return {
+            gliding: el.classList.contains('pds-combobox__listbox--height-glide'),
+            from: el.style.getPropertyValue('--pds-combobox-glide-from'),
+            to: el.style.getPropertyValue('--pds-combobox-glide-to'),
+          };
+        });
+        expect(closed).toEqual({ gliding: false, from: '', to: '' });
         await trigger.click();
         await page.waitForChanges();
 
@@ -1038,6 +1053,63 @@ describe('pds-combobox', () => {
         expect(reopened.gliding).toBe(false);
         expect(reopened.cleared).toBe(true);
         expect(reopened.listScrolls).toBe('auto');
+      });
+
+      it('leaves nothing behind when the glide is cut short mid-way', async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        await holdAnimations(page);
+
+        await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
+        expect((await glide(page)).gliding).toBe(true);
+
+        // Hiding the panel cancels its animations without ending them.
+        await page.evaluate(() => {
+          (document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') as HTMLElement).style.display = 'none';
+        });
+        await page.waitForFunction(
+          () => !document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox')!.classList.contains('pds-combobox__listbox--height-glide'),
+        );
+        const cut = await glide(page);
+        expect(cut.gliding).toBe(false);
+        expect(cut.cleared).toBe(true);
+      });
+
+      it('holds the dropdown at its height the moment a group opens, before the group renders', async () => {
+        const page = await setUp('group-display="drill-in" panel-search');
+        const groupsHeight = (await glide(page)).height;
+
+        // Read in the same task as the click, before the group's rows render.
+        const held = await page.evaluate(() => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          (root.querySelector('.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger') as HTMLElement).click();
+          const panel = root.querySelector('.pds-combobox__listbox') as HTMLElement;
+          return {
+            gliding: panel.classList.contains('pds-combobox__listbox--height-glide'),
+            from: parseFloat(panel.style.getPropertyValue('--pds-combobox-glide-from')),
+            to: parseFloat(panel.style.getPropertyValue('--pds-combobox-glide-to')),
+          };
+        });
+        expect(held.gliding).toBe(true);
+        expect(held.from).toBeCloseTo(groupsHeight, 0);
+        expect(held.to).toBeCloseTo(groupsHeight, 0);
+      });
+
+      it('reopens with a max-height without an error', async () => {
+        const page = await setUp('group-display="drill-in" max-height="400px"');
+        const errors: string[] = [];
+        page.on('pageerror', error => errors.push(String(error)));
+
+        const trigger = await page.find('pds-combobox >>> .pds-combobox__button-trigger');
+        await trigger.click();
+        await page.waitForChanges();
+        await trigger.click();
+        await page.waitForChanges();
+
+        expect(errors).toEqual([]);
+        const scrolls = await page.evaluate(
+          () => (document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') as HTMLElement).style.overflowY,
+        );
+        expect(scrolls).toBe('auto');
       });
 
       it('leaves nothing behind when typing replaces the list mid-glide', async () => {
