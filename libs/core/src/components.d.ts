@@ -1514,11 +1514,13 @@ export namespace Components {
     interface PdsDrawerContent {
     }
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface PdsDrawerFooter {
     }
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface PdsDrawerHeader {
@@ -1942,11 +1944,13 @@ export namespace Components {
         "border": 'none' | 'both' | 'top' | 'bottom';
     }
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalFooter {
     }
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalHeader {
@@ -3368,6 +3372,7 @@ declare global {
         new (): HTMLPdsDrawerContentElement;
     };
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface HTMLPdsDrawerFooterElement extends Components.PdsDrawerFooter, HTMLStencilElement {
@@ -3377,6 +3382,7 @@ declare global {
         new (): HTMLPdsDrawerFooterElement;
     };
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface HTMLPdsDrawerHeaderElement extends Components.PdsDrawerHeader, HTMLStencilElement {
@@ -3513,6 +3519,7 @@ declare global {
         new (): HTMLPdsModalContentElement;
     };
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface HTMLPdsModalFooterElement extends Components.PdsModalFooter, HTMLStencilElement {
@@ -3522,6 +3529,7 @@ declare global {
         new (): HTMLPdsModalFooterElement;
     };
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface HTMLPdsModalHeaderElement extends Components.PdsModalHeader, HTMLStencilElement {
@@ -5457,11 +5465,13 @@ declare namespace LocalJSX {
     interface PdsDrawerContent {
     }
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface PdsDrawerFooter {
     }
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface PdsDrawerHeader {
@@ -5909,11 +5919,13 @@ declare namespace LocalJSX {
         "border"?: 'none' | 'both' | 'top' | 'bottom';
     }
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalFooter {
     }
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalHeader {
@@ -7870,10 +7882,12 @@ declare module "@stencil/core" {
              */
             "pds-drawer-content": LocalJSX.IntrinsicElements["pds-drawer-content"] & JSXBase.HTMLAttributes<HTMLPdsDrawerContentElement>;
             /**
+             * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
              * @lightDom renders-markup
              */
             "pds-drawer-footer": LocalJSX.IntrinsicElements["pds-drawer-footer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerFooterElement>;
             /**
+             * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
              * @lightDom renders-markup
              */
             "pds-drawer-header": LocalJSX.IntrinsicElements["pds-drawer-header"] & JSXBase.HTMLAttributes<HTMLPdsDrawerHeaderElement>;
@@ -7899,10 +7913,12 @@ declare module "@stencil/core" {
              */
             "pds-modal-content": LocalJSX.IntrinsicElements["pds-modal-content"] & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
             /**
+             * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
              * @lightDom renders-markup
              */
             "pds-modal-footer": LocalJSX.IntrinsicElements["pds-modal-footer"] & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
             /**
+             * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
              * @lightDom renders-markup
              */
             "pds-modal-header": LocalJSX.IntrinsicElements["pds-modal-header"] & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;

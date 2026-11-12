@@ -796,6 +796,37 @@ GroupBadges.argTypes = {
   groupDisplay: { control: 'inline-radio', options: ['inline', 'flyout', 'drill-in'] },
 };
 
+// A selected option with a badge: the list row shows its "New" badge, and the filled field shows
+// the option's icon and label only. data-search-text lets search find it by more than its label.
+export const SelectedOptionWithBadge = (args) => html`
+<div style="min-height: 320px;">
+  <pds-combobox
+    component-id="combobox-selected-badge"
+    label=${args.label}
+    placeholder=${args.placeholder}
+    trigger="button"
+    trigger-shape="input"
+    mode="select-only"
+    panel-search
+    search-placeholder="Search categories"
+    search-options-label="Search categories"
+    trigger-width="300px"
+    dropdown-width="300px"
+    value=${args.value}
+  >
+    <option value="assessment" data-icon="assessment">Assessment</option>
+    <option value="automation" data-icon="automations" data-badge="New" data-badge-sentiment="accent"
+      data-search-text="Automation started finished">Automation</option>
+    <option value="tag" data-icon="hashtag" data-search-text="Tag has any tag">Tag</option>
+  </pds-combobox>
+</div>`;
+
+SelectedOptionWithBadge.args = {
+  label: 'Category',
+  placeholder: 'Select a category',
+  value: 'automation',
+};
+
 export const OptionGroupsPdsText = (args) => html`
 <pds-combobox
   component-id="combobox-pds-text-groups"

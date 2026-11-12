@@ -33,16 +33,17 @@ rather than trusting the model to remember.
 
 Engage for any task that **renders or edits UI** in a Pine-consuming app: new
 components/pages, restyling, adding a `pds-*` element, touching `--pine-*`
-tokens, or picking an icon. When unsure whether Pine applies, ask the MCP:
-`should_engage_pine_workflow`. Skip only for work with no rendered surface
-(pure logic, config, tests without UI assertions).
+tokens, or picking an icon. When unsure whether Pine applies, engage anyway:
+`validate_ui_generation` in step 4 returns a `null` outcome when the code has
+no Pine usage. Skip only for work with no rendered surface (pure logic, config,
+tests without UI assertions).
 
 ## Workflow (four steps — do them in order)
 
 ### 1. Orient
-Bootstrap context for the task before writing anything:
-- `get_pine_context_for_generation` — task-scoped starting context, **or**
-- `should_engage_pine_workflow` if you're unsure Pine is even involved.
+Before writing anything, call `get_pine_context_for_generation` once. It takes
+no arguments and returns every blocking, warning, and guidance rule the
+validators check.
 
 ### 2. Resolve every Pine-specific value through a tool — never from memory
 Match the need to the tool, and **read the tool result, don't guess**:
@@ -67,8 +68,9 @@ explicitly rather than approximating one with divs + tokens.
 ### 4. Validate — this is a gate, not a suggestion
 After writing UI, run Pine's own validators and **loop until clean** — do not
 present the UI as done while issues remain:
-1. `validate_pine_layout` (and/or `validate_ui_generation` / `review_generated_layout`)
-2. If it reports issues → `fix_layout_issues`, apply, then **re-validate**.
+1. `validate_pine_layout` on the markup you wrote, or `validate_ui_generation`
+   for a whole generated UI.
+2. If it reports issues → apply the fix each violation gives, then **re-validate**.
 3. Repeat until validation passes. If it can't pass, surface the specific
    blocker to the user; never suppress it.
 
@@ -82,6 +84,8 @@ Full loop details and how to read validator output: `reference/validation.md`.
   are silently dropped) — see `reference/components.md`.
 - **Never** guess an icon name (it's `remove`, not `x`) — see `reference/icons.md`.
 - **Never** skip step 4. Unvalidated Pine is not done Pine.
+- **Never** call the deprecated tools `should_engage_pine_workflow`,
+  `review_generated_layout`, or `fix_layout_issues` — see `reference/validation.md`.
 - **Never** fall back to trained memory when the MCP is unavailable — stop instead.
 
 ## Reference files (load lazily, only when the step applies)
@@ -90,4 +94,4 @@ Full loop details and how to read validator output: `reference/validation.md`.
 - `reference/tokens.md` — token discipline + the hallucinated-token table
 - `reference/components.md` — resolving components; `pds-text`/`pds-button` gotchas
 - `reference/icons.md` — icon resolution and icon-only controls
-- `reference/validation.md` — the validate → fix → re-validate gate
+- `reference/validation.md` — the validate → fix → re-validate gate, and the deprecated tools
