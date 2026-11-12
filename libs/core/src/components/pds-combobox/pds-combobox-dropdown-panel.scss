@@ -7,7 +7,8 @@
     box-sizing: border-box;
     list-style: none;
     margin: 0;
-    min-width: 220px;
+    // border-box: 220px of options plus the 8px padding on each side.
+    min-width: 236px;
     overflow-y: auto;
     padding: var(--pine-dimension-xs);
     position: absolute;
