@@ -22,6 +22,7 @@ export class PdsSwitch {
   private inputEl?: HTMLInputElement;
   private hostDescriptionObserver?: MutationObserver;
   private forwardsDescription = false;
+  private disabledByFieldset = false;
 
   @Element() el: HTMLPdsSwitchElement;
   private hostKeeper = new HostStylingKeeper();
@@ -131,6 +132,9 @@ export class PdsSwitch {
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
 
+    // A reconnected switch may sit in a different tree, where its description IDs name other elements.
+    this.forwardDescription();
+
     if (typeof MutationObserver === 'undefined') return;
 
     // Consumers set aria-describedby on the host, sometimes after render, but only the inner input is announced.
@@ -155,7 +159,8 @@ export class PdsSwitch {
   @Watch('checked')
   @Watch('disabled')
   @Watch('uncheckedValue')
-  checkedChanged() {
+  @Watch('value')
+  syncFormValue() {
     this.updateFormValue();
   }
 
@@ -229,8 +234,17 @@ export class PdsSwitch {
     // literal string "false" (a consumer's or React's attribute serialization can write that) —
     // the platform treats any value as disabled, independent of fieldset state. A real disabled
     // fieldset ancestor confirms this is genuinely that, not this element's own attribute.
-    if (disabled && !this.el.closest('fieldset[disabled]')) return;
-    this.disabled = disabled;
+    if (disabled) {
+      if (!this.el.closest('fieldset[disabled]') || this.disabled) return;
+      this.disabledByFieldset = true;
+      this.disabled = true;
+      return;
+    }
+
+    // Re-enabling the fieldset only undoes what it did, so a switch the consumer disabled stays disabled.
+    if (!this.disabledByFieldset) return;
+    this.disabledByFieldset = false;
+    this.disabled = false;
   }
 
   componentWillLoad() {
