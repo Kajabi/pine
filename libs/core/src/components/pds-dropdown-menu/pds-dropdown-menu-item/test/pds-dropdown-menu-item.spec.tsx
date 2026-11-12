@@ -278,6 +278,68 @@ describe('pds-dropdown-menu-item', () => {
     expect(clickSpy).not.toHaveBeenCalled();
   });
   
+  describe('start slot', () => {
+    const startWrapper = (root: HTMLElement) =>
+      root.shadowRoot!.querySelector('.pds-dropdown-menu-item__start');
+
+    it.each([
+      ['button', '', 'button'],
+      ['link', 'href="https://example.com"', 'pds-link'],
+      ['informational', 'informational', '[role="menuitem"]'],
+    ])('renders the start slot before the label in a %s item', async (_variant, attrs, contentSelector) => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem, PdsLink],
+        html: `<pds-dropdown-menu-item ${attrs}><pds-icon slot="start" name="trash"></pds-icon>Delete</pds-dropdown-menu-item>`,
+      });
+
+      const content = page.root!.shadowRoot!.querySelector(contentSelector)!;
+      const slots = Array.from(content.querySelectorAll('slot'));
+      expect(slots.map((slot) => slot.getAttribute('name'))).toEqual(['start', null]);
+      expect(startWrapper(page.root!)).not.toHaveClass('pds-dropdown-menu-item__start--empty');
+    });
+
+    it('hides the start wrapper when nothing is slotted, so it adds no gap', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item>Delete</pds-dropdown-menu-item>`,
+      });
+
+      expect(startWrapper(page.root!)).toHaveClass('pds-dropdown-menu-item__start--empty');
+    });
+
+    it('updates the wrapper when start content is added or removed', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item>Delete</pds-dropdown-menu-item>`,
+      });
+      const slot = page.root!.shadowRoot!.querySelector('slot[name="start"]') as HTMLSlotElement;
+
+      slot.assignedElements = () => [document.createElement('pds-icon')];
+      slot.dispatchEvent(new Event('slotchange'));
+      await page.waitForChanges();
+      expect(startWrapper(page.root!)).not.toHaveClass('pds-dropdown-menu-item__start--empty');
+
+      slot.assignedElements = () => [];
+      slot.dispatchEvent(new Event('slotchange'));
+      await page.waitForChanges();
+      expect(startWrapper(page.root!)).toHaveClass('pds-dropdown-menu-item__start--empty');
+    });
+
+    it('leaves the start content out of the pdsClick content', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<div><pds-dropdown-menu-item><pds-icon slot="start" name="trash"></pds-icon>Delete</pds-dropdown-menu-item></div>`,
+      });
+      const item = page.body.querySelector('pds-dropdown-menu-item')!;
+      const clickSpy = jest.fn();
+      item.addEventListener('pdsClick', clickSpy);
+
+      await item.clickItem();
+
+      expect(clickSpy.mock.calls[0][0].detail.content).toBe('Delete');
+    });
+  });
+
   describe('when disabled', () => {
     it('does not emit pdsClick from clickItem() on a button item', async () => {
       const page = await newSpecPage({
