@@ -2585,6 +2585,10 @@ export namespace Components {
          */
         "required"?: boolean;
         /**
+          * Provides a string submitted in form data under `name` while the switch is unchecked. When unset, an unchecked switch submits nothing, like a native checkbox.
+         */
+        "uncheckedValue"?: string;
+        /**
           * Provides input with a string submitted in form data.
          */
         "value": string;
@@ -6600,6 +6604,10 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
+          * Provides a string submitted in form data under `name` while the switch is unchecked. When unset, an unchecked switch submits nothing, like a native checkbox.
+         */
+        "uncheckedValue"?: string;
+        /**
           * Provides input with a string submitted in form data.
          */
         "value"?: string;
@@ -7629,6 +7637,7 @@ declare namespace LocalJSX {
         "name": string;
         "required": boolean;
         "value": string;
+        "uncheckedValue": string;
     }
     interface PdsTabAttributes {
         "disabled": boolean;
