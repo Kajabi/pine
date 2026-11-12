@@ -81,7 +81,7 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
     <pds-table-body>
       <pds-table-row>
         <pds-table-cell><code>&lt;div class="page-wrapper" style="max-width: 960px; margin: 0 auto;"&gt;</code> … <code>&lt;/div&gt;</code></pds-table-cell>
-        <pds-table-cell><code>&lt;pds-container size="lg"&gt;</code> … <code>&lt;/pds-container&gt;</code></pds-table-cell>
+        <pds-table-cell><code>&lt;pds-container size="xl"&gt;</code> … <code>&lt;/pds-container&gt;</code> (1064px), or <code>size="960px"</code> to keep the exact width</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
@@ -176,7 +176,7 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
 
 - **Don't reintroduce `style="…"`** — there is almost always a Pine prop (`padding`, `gap`, `display`, `background-color`, `min-width`). Inline styles are a blocking violation.
 - **Don't keep utility classes** — `mt-3`, `col-md-6`, `d-flex` have no effect on Pine web components. Translate them to props.
-- **Don't wrap content in a bare `<div>`** inside a Pine layout — use `pds-box`. Use Pine components instead of raw controls, text and layout divs. A native `<form>`, landmarks such as `<main>` and `<nav>`, `<img>` with `alt`, and lists stay as HTML.
+- **Don't wrap content in a bare `<div>`** inside a Pine layout — use `pds-box`. Use Pine components instead of raw controls, text and layout divs. A native `<form>`, landmarks such as `<main>` and `<nav>`, and lists stay as HTML. Use `pds-image` for images.
 - **Size columns from the breakpoint where they split** — inside `pds-row`, use a breakpoint size such as `size-md="8"`, and the columns stack full width below that breakpoint. Use the base `size` only when a column should keep its width at every viewport. `size-xs` applies only below 576px.
 - **`pds-container` ≠ grid** — it caps width; nest a `pds-row` inside it when you also need columns.
 - **Colors are tokens** — replace hex values with semantic tokens (`get_pine_tokens`).
