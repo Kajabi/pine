@@ -1058,7 +1058,11 @@ describe('pds-dropdown-menu when its trigger scrolls out of view', () => {
     `);
     const cdp = await page.createCDPSession();
     await cdp.send('Emulation.setPageScaleFactor', { pageScaleFactor: 4 });
-    await cdp.send('Input.synthesizeScrollGesture', { x: 100, y: 100, xDistance: -2000, yDistance: -2000, speed: 4000 });
+    // A gesture over the panel is a real scroll the panel (now `overscroll-behavior: contain`)
+    // legitimately consumes, rather than the visual-viewport pan this test means to simulate, so
+    // (195, 145) is chosen clear of it — CDP validates gesture coordinates against the already
+    // zoomed viewport (800 / 4, 600 / 4), not the unzoomed one.
+    await cdp.send('Input.synthesizeScrollGesture', { x: 195, y: 145, xDistance: -2000, yDistance: -2000, speed: 4000 });
     await settle(page);
 
     // The visual viewport has panned clear of the trigger, which is still in the layout viewport.
@@ -1169,5 +1173,49 @@ describe('pds-dropdown-menu taller than the room beside its trigger', () => {
     const page = await openLongMenu('pds-dropdown-menu::part(menu-panel) { max-height: 500px; }');
 
     expect((await panelRect(page)).bottom).toBeLessThanOrEqual(400);
+  });
+
+  it('contains scroll chaining, so overscrolling the panel does not scroll the page', async () => {
+    const page = await openLongMenu();
+
+    const overscrollBehavior = await page.evaluate(() => {
+      const panel = document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box');
+      return getComputedStyle(panel).overscrollBehaviorBlock;
+    });
+    expect(overscrollBehavior).toBe('contain');
+  });
+
+  it('keeps the panel scrolled where the user left it across a reposition', async () => {
+    // A small scroll of an ancestor that leaves the trigger in view still triggers `autoUpdate`'s
+    // reposition, which re-measures and reapplies `max-height` — this must not reset `scrollTop`.
+    // The trigger is given a width, as it otherwise stretches the scrolled width and its centre,
+    // where a click lands, is out of view.
+    const page = await newE2EPage();
+    await page.setViewport({ width: 800, height: 400 });
+    await page.setContent(`
+      <div id="scroller" style="width: 300px; overflow: auto;">
+        <div style="width: 1500px; padding: 8px 8px 8px 100px;">
+          <pds-dropdown-menu>
+            <button slot="trigger" id="trigger" style="width: 100px;">Actions</button>
+            ${Array.from({ length: 30 }, (_, i) => `<pds-dropdown-menu-item>Item ${i + 1}</pds-dropdown-menu-item>`).join('')}
+          </pds-dropdown-menu>
+        </div>
+      </div>
+    `);
+    await page.click('#trigger');
+    await page.waitForChanges();
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
+
+    await page.evaluate(() => {
+      (document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box') as HTMLElement).scrollTop = 200;
+    });
+
+    await page.$eval('#scroller', (el) => { el.scrollLeft = 10; });
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
+
+    const scrollTop = await page.evaluate(
+      () => document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box').scrollTop,
+    );
+    expect(scrollTop).toBe(200);
   });
 });
