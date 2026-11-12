@@ -222,7 +222,7 @@ describe('pds-sortable keyboard reordering', () => {
     expect(await moved()).toHaveLength(1);
   });
 
-  it('keeps the last row without a divider once the live region is added', async () => {
+  it('keeps the last row without a divider after a keyboard reorder starts', async () => {
     const { page } = await setup('dividers border');
     await page.keyboard.press('Tab');
     await page.waitForChanges();
@@ -242,6 +242,24 @@ describe('pds-sortable keyboard reordering', () => {
     expect(await pressed()).toBe('true');
     await page.keyboard.press('Escape');
     expect(await pressed()).toBe('false');
+  });
+
+  it('scrolls the picked-up item into view as it moves', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 600, height: 300 });
+    const rows = Array.from({ length: 30 }, (_, i) => `<pds-sortable-item>Row ${i + 1}</pds-sortable-item>`).join('');
+    await page.setContent(`<pds-sortable component-id="long">${rows}</pds-sortable>`);
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.keyboard.press('End');
+    await page.waitForChanges();
+
+    const inView = await page.evaluate(() => {
+      const rect = document.activeElement?.closest('pds-sortable-item')?.getBoundingClientRect();
+      return !!rect && rect.top >= 0 && rect.bottom <= window.innerHeight;
+    });
+    expect(inView).toBe(true);
   });
 
   it('is not reachable from the keyboard when disabled', async () => {

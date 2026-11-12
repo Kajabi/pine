@@ -109,7 +109,7 @@ describe('pds-sortable', () => {
         await page.waitForChanges();
         return ev;
       };
-      const announcement = () => sortable.querySelector('.pds-sortable__live-region')?.textContent?.trim();
+      const announcement = () => page.body.querySelector('.pds-sortable__live-region')?.textContent?.trim();
       return { page, sortable, moved, order, itemAt, handleOf, press, announcement };
     };
 
@@ -323,21 +323,71 @@ describe('pds-sortable', () => {
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
       await page.waitForChanges();
 
-      expect(page.root?.querySelector('.pds-sortable__live-region')?.textContent).toBe('Premier : position 2 sur 2');
+      expect(page.body.querySelector('.pds-sortable__live-region')?.textContent).toBe('Premier : position 2 sur 2');
 
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       await page.waitForChanges();
-      expect(page.root?.querySelector('.pds-sortable__live-region')?.textContent).toBe('Annulé : Premier');
+      expect(page.body.querySelector('.pds-sortable__live-region')?.textContent).toBe('Annulé : Premier');
     });
 
-    it('keeps the live region after the items', async () => {
-      const { sortable, itemAt, press } = await setup();
-      await press(itemAt(0), ' ');
-      const region = sortable.querySelector('.pds-sortable__live-region');
+    it('puts the live region right after the list, not among the items', async () => {
+      const { sortable } = await setup();
+      const region = sortable.nextElementSibling;
 
+      expect(region).toHaveClass('pds-sortable__live-region');
       expect(region?.getAttribute('role')).toBe('status');
       expect(region?.getAttribute('aria-live')).toBe('polite');
-      expect(sortable.lastElementChild).toBe(region);
+      expect(sortable.querySelector('.pds-sortable__live-region')).toBeNull();
+    });
+
+    it('lets go of a picked-up item that is taken out of the list', async () => {
+      const { sortable, moved, order, itemAt, press } = await setup();
+      const alpha = itemAt(0);
+      await press(alpha, ' ');
+      alpha.remove();
+
+      const bravo = itemAt(0);
+      await press(bravo, ' ');
+      expect(bravo).toHaveClass('pds-sortable-item--grabbed');
+      await press(bravo, 'ArrowDown');
+      await press(bravo, 'Enter');
+
+      expect(order()).toEqual(['Charlie', 'Bravo']);
+      expect(moved).toHaveBeenCalledTimes(1);
+      expect(moved.mock.calls[0][0].detail.item).toBe(bravo);
+      expect(sortable.contains(alpha)).toBe(false);
+    });
+
+    it('cancels to the nearest place left when items were removed meanwhile', async () => {
+      const { order, itemAt, press } = await setup();
+      const charlie = itemAt(2);
+      await press(charlie, ' ');
+      await press(charlie, 'Home');
+      itemAt(2).remove();
+      await press(charlie, 'Escape');
+
+      expect(order()).toEqual(['Alpha', 'Charlie']);
+    });
+
+    it('puts the order back when the list is removed mid-move', async () => {
+      const { sortable, moved, order, itemAt, press } = await setup();
+      const alpha = itemAt(0);
+      await press(alpha, ' ');
+      await press(alpha, 'End');
+      sortable.remove();
+
+      expect(order()).toEqual(['Alpha', 'Bravo', 'Charlie']);
+      expect(alpha).not.toHaveClass('pds-sortable-item--grabbed');
+      expect(moved).not.toHaveBeenCalled();
+    });
+
+    it('leaves comments and scripts out of the item name', async () => {
+      const page = await newSpecPage({
+        components: [PdsSortable, PdsSortableItem],
+        html: `<pds-sortable><pds-sortable-item><!-- BEGIN _row.html.erb -->Alpha<script>var x = 1;</script></pds-sortable-item></pds-sortable>`,
+      });
+
+      expect(page.root?.querySelector('.pds-sortable-item__handle')?.getAttribute('aria-label')).toBe('Reorder Alpha');
     });
 
     it('drops the item where it is when focus leaves it', async () => {
