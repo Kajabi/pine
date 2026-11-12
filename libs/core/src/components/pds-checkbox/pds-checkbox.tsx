@@ -41,29 +41,28 @@ export class PdsCheckbox {
   @Prop() disabled: boolean;
 
   /**
-   * Displays message text describing an invalid state.
+   * Displays an error message below the checkbox. It becomes the checkbox's accessible description only while `invalid` is set.
    */
   @Prop() errorMessage: string;
 
   /**
-   * String used for helper message below checkbox.
+   * Displays a message or hint below the checkbox.
    */
   @Prop() helperMessage: string;
 
   /**
-   * If `true`, the checkbox will visually appear as indeterminate.
-   * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
-   * Has no visual style when `variant` is `pill`.
+   * Shows the checkbox as indeterminate, for a checkbox whose group is only partly selected. It's exposed to screen readers as mixed.
+   * Changing `checked` clears it. Has no visual style when `variant` is `pill`.
    */
   @Prop({ mutable: true }) indeterminate: boolean;
 
   /**
-   * It determines whether or not the checkbox is invalid.
+   * Determines whether or not the checkbox is invalid.
    */
   @Prop() invalid: boolean;
 
   /**
-   * String used for label text next to checkbox.
+   * Text to be displayed as the checkbox label.
    */
   @Prop() label: string;
 
@@ -95,6 +94,7 @@ export class PdsCheckbox {
 
   /**
    * Emitted when the user toggles the checkbox, carrying the `value` and the new `checked` state.
+   * Doesn't emit when `checked` is set programmatically.
    */
   @Event() pdsCheckboxChange: EventEmitter<CheckboxChangeEventDetail>;
 

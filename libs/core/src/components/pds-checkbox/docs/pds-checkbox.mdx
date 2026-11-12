@@ -23,10 +23,12 @@ Checkboxes provide users with selectable options like toggling a single setting 
 - Avoid using checkboxes for single-choice selections, such as in forms where only one option should be selected. In such cases, consider using radios or a switch.
 
 ### Accessibility
+
 - Provide a clear, descriptive label for each checkbox to ensure that screen readers can identify the option effectively.
-- The `aria-describedby` attribute is used to associate the checkbox with an error message or helper message but may not be read out by all screen readers.
+- Always set `label` or fill the `label` slot, even when the design shows only the box: `hide-label` hides the text visually and keeps it as the checkbox's name. Without either, the checkbox has no name.
+- The helper message, or the error message while `invalid` is set, becomes the checkbox's accessible description. Keep both short.
 - Put only non-interactive content in the `label` slot. Buttons and links inside a label are invalid HTML.
-- State classes on the host (such as `is-invalid` and `is-disabled`) follow the component's props, and `has-label-slot` follows the `label` slot's content. They come back if something removes them, such as a DOM morph, so change them through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
+- Wrap related checkboxes in a `fieldset` with a `legend`, which names the group.
 
 ## Properties
 
@@ -58,9 +60,7 @@ Checkboxes appear as checked when activated.
 
 ### Indeterminate
 
-Component `indeterminate` prop is for visual styling only.
-
-Only JavaScript can set the object's `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+Set `indeterminate` on a checkbox that stands for a group whose items are only partly selected, such as a "Select all" checkbox. It's exposed to screen readers as mixed. Changing `checked`, by a click or in code, clears `indeterminate`, so set it again if the group is still partly selected. The mixed state isn't submitted with the form: a checked box submits its `value` as usual.
 
 <DocCanvas
   mdxSource={{
@@ -157,20 +157,49 @@ Wrap related pills in a `fieldset` with a `legend` so the group has a name, and 
 
 ## Events
 
-### pdsCheckboxChange
-Used when you want to perform an action when the checkbox state changes. The returned structure is a `CheckboxChangeEventDetail` that contains `checked` and `value`.
+Neither event fires when `checked` is set in code. In React, add `on` to the event name, as in `onPdsCheckboxChange`.
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="checkbox-events">
+    <pds-table-head>
+      <pds-table-head-cell>Event</pds-table-head-cell>
+      <pds-table-head-cell>Emitted when</pds-table-head-cell>
+      <pds-table-head-cell>Detail</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>pdsCheckboxChange</code></pds-table-cell>
+        <pds-table-cell>The user checks or unchecks the box, by a click or <code>Space</code>.</pds-table-cell>
+        <pds-table-cell>An object with <code>checked</code>, the new state, and the checkbox's <code>value</code>.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pdsCheckboxInput</code></pds-table-cell>
+        <pds-table-cell>Just before <code>pdsCheckboxChange</code>, for the same toggle.</pds-table-cell>
+        <pds-table-cell>The same object, but <code>checked</code> is still the state from before the toggle. Read the new state from <code>pdsCheckboxChange</code>.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ## Form Integration
 
 - Set the `name` attribute so each checked box contributes its `value` to `FormData`; unchecked boxes are omitted automatically.
 - Give every checkbox in a group a distinct `value` so the server can differentiate selections.
-- Pair `required`, `invalid`, and `errorMessage` when you need inline validation.
+- `required` doesn't stop the form from submitting while the box is unchecked. Check it yourself before submitting, and set `invalid` and `error-message` to show the error.
+- Resetting the form doesn't change the checkbox: it stays checked or unchecked, as it was before the reset.
+- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
+
+## Technical Notes
+
+State classes on the host (such as `is-invalid` and `is-disabled`) follow the component's props, and `has-label-slot` follows the `label` slot's content. They come back if something removes them, such as a DOM morph, so change them through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ## Additional Resources
 
 [MDN Web Docs: Checkboxes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox)
 
 [MDN Web Docs: Indeterminate State](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+
+[Using Pine form components](/docs/guides-forms--docs)
 
 ## Playground
 
