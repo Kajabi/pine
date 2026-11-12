@@ -251,7 +251,9 @@ describe('pds-box layout', () => {
     `);
 
     expect(await page.$eval('#loose', (el) => el.getBoundingClientRect().width)).toBeGreaterThan(300);
-    expect(await page.$eval('#contained', (el) => el.getBoundingClientRect().width)).toBeLessThanOrEqual(300);
+    // It fills the row from the default flex-grow rather than collapsing, and the text overflows it.
+    expect(await page.$eval('#contained', (el) => el.getBoundingClientRect().width)).toBe(300);
+    expect(await page.$eval('#contained span', (el) => el.getBoundingClientRect().width)).toBeGreaterThan(300);
   });
 
   // A column parent stretches its children unless it sets `align-items`; then a child shrinks to its
