@@ -198,17 +198,44 @@ export class PdsTable {
   }
 
   /**
-   * The floor only applies with `tableLayout="fixed"` and `responsive` both set, so either one
-   * changing at runtime can turn it on or off. A head cell only reads `tableLayout` during its
-   * own render, and the floor this sets lives in inline style, not a re-render -- so turning the
-   * floor off (including live, e.g. the Storybook control) needs both cleared explicitly, not
-   * just the observers torn down. The select-all column reads `tableLayout` the same way, one
-   * level up in `pds-table-head`'s own render, since it owns that cell rather than letting it
-   * through a `<slot>`.
+   * `tableLayout` or `responsive` changing at runtime is handled here, deferred to
+   * `componentDidRender` rather than done directly -- a `@Watch` runs before this component's
+   * own re-render, and both the floor's measurement and the responsive scroll setup query
+   * `.pds-table-responsive-container`, which that re-render is what creates or removes. Reading
+   * it any earlier would still see the old tree.
    */
+  private _pendingFixedLayoutInputsSync = false;
+
   @Watch('tableLayout')
   @Watch('responsive')
   handleFixedLayoutInputsChange() {
+    this._pendingFixedLayoutInputsSync = true;
+  }
+
+  componentDidRender() {
+    if (!this._pendingFixedLayoutInputsSync) return;
+    this._pendingFixedLayoutInputsSync = false;
+    this.syncFixedLayoutInputs();
+  }
+
+  /**
+   * The floor only applies with `tableLayout="fixed"` and `responsive` both set, so either one
+   * changing at runtime can turn it on or off -- and `responsive` on its own also starts or stops
+   * the (separate) scroll listeners, same as it does on first load. A head cell only reads
+   * `tableLayout` during its own render, and the floor this sets lives in inline style, not a
+   * re-render -- so turning the floor off (including live, e.g. the Storybook control) needs
+   * both cleared explicitly, not just the observers torn down. The select-all column reads
+   * `tableLayout` the same way, one level up in `pds-table-head`'s own render, since it owns that
+   * cell rather than letting it through a `<slot>`.
+   * @private
+   */
+  private syncFixedLayoutInputs() {
+    if (this._teardownResponsive) {
+      this._teardownResponsive();
+      this._teardownResponsive = null;
+    }
+    if (this.responsive) this.setupResponsiveScrolling();
+
     this.teardownFixedLayoutWidths();
     const floorActive = this.tableLayout === 'fixed' && this.responsive;
     if (floorActive) this.setupFixedLayoutWidths();

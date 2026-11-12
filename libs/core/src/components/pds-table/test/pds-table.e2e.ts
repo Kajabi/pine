@@ -330,6 +330,99 @@ describe('pds-table column widths', () => {
     expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
   });
 
+  it('measures the real container when responsive turns on, not the pre-render tree', async () => {
+    const page = await newE2EPage();
+    // Plenty of room (700 - 148 - 134 - 216 = 202px for the auto column) -- the opposite of the
+    // other toggle tests, which all start already needing the floor. A `@Watch` that measured
+    // before this component's own re-render created `.pds-table-responsive-container` would read
+    // an empty/zero width there and wrongly floor the auto column anyway.
+    await page.setContent(`
+      <div style="width: 700px">
+        <pds-table component-id="responsive-on-measures-live" table-layout="fixed">
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+            <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell>Mar 4, 2024</pds-table-cell>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').setAttribute('responsive', '');
+    });
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([148, 134, 216, 202]);
+  });
+
+  it('wires up responsive scrolling when responsive turns on at runtime, and tears it down when it turns off', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 300px">
+        <pds-table component-id="responsive-scroll-toggle" table-layout="fixed">
+          <pds-table-head>
+            <pds-table-head-cell width="200px">Name</pds-table-head-cell>
+            <pds-table-head-cell width="200px">Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Jane Doe</pds-table-cell>
+              <pds-table-cell>jane@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    const scrollContainer = () =>
+      page.evaluate(() => {
+        const el = document.querySelector('pds-table').shadowRoot.querySelector('.pds-table-responsive-container');
+        return el ? { scrollWidth: el.scrollWidth, clientWidth: el.clientWidth } : null;
+      });
+
+    // Without responsive, there's no scroll container at all yet.
+    expect(await scrollContainer()).toBeNull();
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').setAttribute('responsive', '');
+    });
+    await page.waitForChanges();
+
+    const afterOn = await scrollContainer();
+    expect(afterOn.clientWidth).toBe(300);
+    expect(afterOn.scrollWidth).toBe(400);
+
+    // Scrolling it proves the listener actually got attached, not just that the markup exists.
+    const rightShadowOpacity = await page.evaluate(async () => {
+      const table = document.querySelector('pds-table');
+      const container = table.shadowRoot.querySelector('.pds-table-responsive-container');
+      container.scrollLeft = 50;
+      container.dispatchEvent(new Event('scroll'));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      return getComputedStyle(table.shadowRoot.querySelector('.scroll-shadow-right')).opacity;
+    });
+    expect(rightShadowOpacity).toBe('1');
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').removeAttribute('responsive');
+    });
+    await page.waitForChanges();
+
+    expect(await scrollContainer()).toBeNull();
+  });
+
   it('grows the auto column back once resizing gives it room again', async () => {
     const page = await newE2EPage();
     await page.setContent(`
