@@ -7,7 +7,7 @@ wrong. Use only what the tool returns.
 ## Discovering vs. resolving
 
 - `list_pine_components` — when you don't yet know which component fits.
-- `get_pine_component({ name: "pds-button" })` — the authoritative API for one
+- `get_pine_component({ componentName: "pds-button" })` — the authoritative API for one
   component: props, slots, events, allowed enum values, examples.
 - `get_pine_pattern` / `list_pine_patterns` — for composed UI (forms, cards,
   nav, tables). Prefer a pattern over hand-assembling primitives.
@@ -36,7 +36,9 @@ back to the size implied by its `tag` — a bug you won't see in the source.
   the enum on the component, the token in CSS.
 
 ### Icons on components
-Icon props take a **name from `list_pine_icons`** — see `reference/icons.md`.
+Put icons in a component's slots, such as `<pds-icon slot="start">` in
+`pds-button`, not its deprecated `icon` prop. The icon's `name` still comes
+from **`list_pine_icons`** — see `reference/icons.md`.
 Icon-only controls usually need an explicit accessible-label prop and an
 `icon-only`/`hide-label` flag; confirm the exact prop names via
 `get_pine_component`.

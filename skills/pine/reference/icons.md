@@ -8,7 +8,7 @@ tool returns.
 ## Resolving
 ```
 list_pine_icons()                 // the full set — grep it for the concept you want
-list_pine_icons({ search: "…" })  // if the tool supports filtering
+list_pine_icons({ search: "…" })  // filter by name or tag
 ```
 Map the *concept* (close, delete, expand, success) to a listed *name* — never
 assume the concept and the name match.
@@ -16,8 +16,9 @@ assume the concept and the name match.
 ## Using an icon
 - **Standalone:** `pds-icon` with `name="<listed-name>"`. Its color usually
   expects a `var(...)` wrapper (see `reference/components.md`).
-- **On a component:** an `icon` prop (e.g. on `pds-button`) — the value is still
-  a listed name. Confirm the prop exists via `get_pine_component`.
+- **On a component:** a `pds-icon` in the component's icon slot (on `pds-button`,
+  `slot="start"` or `slot="end"`), with a listed name. `pds-button`'s `icon`
+  prop is deprecated. Confirm the slot names via `get_pine_component`.
 - **Icon-only controls:** provide an accessible label and set the component's
   icon-only flag — get the exact prop names from `get_pine_component`, don't
   assume `aria-label` alone is wired.
