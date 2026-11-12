@@ -259,7 +259,7 @@ git checkout your/branch-name
 git rebase main
 ```
 
-The branch can now be pushed. When creating your pull request, please fill out the template with as much info as necessary, including before and after screenshots. Once the pull request is ready for review, GitHub requests a review from the `@Kajabi/dss-devs` code owners. Our standards require at least two accepted reviews before merging.
+The branch can now be pushed. When creating your pull request, please fill out the template with as much info as necessary, including before and after screenshots. Once the pull request is ready for review, GitHub requests a review from the `@Kajabi/dss-devs` code owners. Our standards require at least one accepted review before merging.
 
 ## Versioning & Deprecation
 
