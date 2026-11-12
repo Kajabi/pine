@@ -23,9 +23,9 @@
 
 ## Events
 
-| Event                 | Description                                                                                     | Type                                       |
-| --------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `pdsRadioGroupChange` | Emitted when the user checks a radio in the group, with that radio's `value` and `componentId`. | `CustomEvent<RadioGroupChangeEventDetail>` |
+| Event                 | Description                                                                                                                                                                | Type                                       |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `pdsRadioGroupChange` | Emitted when the user checks a radio in the group, by a click or an arrow key. `detail` has that radio's `value` and `componentId`, and `checked`, which is always `true`. | `CustomEvent<RadioGroupChangeEventDetail>` |
 
 
 ## Slots

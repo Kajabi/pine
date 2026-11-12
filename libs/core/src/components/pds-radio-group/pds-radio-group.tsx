@@ -79,7 +79,8 @@ export class PdsRadioGroup {
   @Prop() required = false;
 
   /**
-   * Emitted when the user checks a radio in the group, with that radio's `value` and `componentId`.
+   * Emitted when the user checks a radio in the group, by a click or an arrow key. `detail` has that radio's `value`
+   * and `componentId`, and `checked`, which is always `true`.
    */
   @Event() pdsRadioGroupChange: EventEmitter<RadioGroupChangeEventDetail>;
 
