@@ -168,7 +168,9 @@ export class PdsSwitch {
     if (isSpecTest()) return;
 
     if (this.internals && this.internals.setFormValue) {
-      this.internals.setFormValue(this.formValue());
+      // The restoration state always carries the checked value, even while disabled, so a bfcache or
+      // back-forward restore can bring back a checked-then-disabled switch instead of losing it to a null state.
+      this.internals.setFormValue(this.formValue(), this.checkedValue());
     }
 
     if (this.internals && this.internals.setValidity) {
@@ -180,6 +182,10 @@ export class PdsSwitch {
   // native checkbox: the platform only leaves out a host with the disabled attribute, and React sets the property.
   private formValue(): string | null {
     if (this.disabled) return null;
+    return this.checkedValue();
+  }
+
+  private checkedValue(): string | null {
     if (this.checked) return this.value || 'on';
     return this.uncheckedValue ?? null;
   }

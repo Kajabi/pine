@@ -390,6 +390,38 @@ describe('pds-switch', () => {
 
       expect(page.root.shadowRoot.querySelector('input').getAttribute('value')).toBe('1');
     });
+
+    // updateFormValue() no-ops while isSpecTest() is true, so form association has to be re-enabled
+    // for a test to observe what reaches ElementInternals.setFormValue().
+    const withFormAssociationEnabled = async (run: () => void | Promise<void>) => {
+      const previous = process.env.__STENCIL_SPEC_TESTS__;
+      process.env.__STENCIL_SPEC_TESTS__ = 'false';
+      try {
+        await run();
+      } finally {
+        if (previous === undefined) {
+          delete process.env.__STENCIL_SPEC_TESTS__;
+        } else {
+          process.env.__STENCIL_SPEC_TESTS__ = previous;
+        }
+      }
+    };
+
+    it('keeps the checked value as restoration state while disabled, even though nothing submits', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<pds-switch component-id="notify" name="notify" label="Notify" value="1" checked disabled></pds-switch>`,
+      });
+
+      const setFormValue = jest.fn();
+      (page.rootInstance as any).internals = { setFormValue };
+
+      await withFormAssociationEnabled(() => {
+        (page.rootInstance as unknown as { updateFormValue: () => void }).updateFormValue();
+      });
+
+      expect(setFormValue).toHaveBeenCalledWith(null, '1');
+    });
   });
 
   it('describes a disabled switch with its helper message', async () => {
