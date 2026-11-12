@@ -35,12 +35,12 @@ export class PdsTextarea {
   @Element() el: HTMLPdsTextareaElement;
 
   /**
-   * Emitted when the input loses focus.
+   * Emitted when the textarea loses focus.
    */
   @Event() pdsBlur!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when the input has focus.
+   * Emitted when the textarea has focus.
    */
   @Event() pdsFocus!: EventEmitter<FocusEvent>;
 
@@ -56,7 +56,8 @@ export class PdsTextarea {
    * Emitted when the user changes the value and then leaves the textarea. `Enter` adds a new line, so it doesn't emit this event.
    * `detail` has `value`, the text, and `event`, the native event behind it, usually `change`.
    *
-   * This event will not emit when programmatically setting the `value` property.
+   * This event will not emit when programmatically setting the `value` property, unless the field has focus at the time;
+   * then it emits when the field loses focus.
    */
   @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
