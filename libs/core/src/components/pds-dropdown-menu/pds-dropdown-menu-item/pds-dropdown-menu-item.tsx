@@ -102,8 +102,12 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     );
     const itemIndex = menuItems.indexOf(this.host);
 
-    // Get the text content from the slotted content
-    const content = this.host.textContent?.trim() || '';
+    // The label's text: default-slot content only, so start-slot content stays out of it
+    const content = Array.from(this.host.childNodes)
+      .filter((node) => node.nodeType !== Node.ELEMENT_NODE || !(node as Element).hasAttribute('slot'))
+      .map((node) => node.textContent)
+      .join('')
+      .trim();
 
     this.pdsClick.emit({
       itemIndex,
@@ -221,7 +225,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   }
 
   private handleKeyDown = (event: KeyboardEvent) => {
-    // Handle keyboard events
+    // handleClick ignores a disabled item on its own; this check also leaves Enter's default alone for one.
     if (!this.disabled && (event.key === 'Enter')) {
       // Only prevent default for button elements or Space key
       // For links with Enter key, we want the default navigation behavior
