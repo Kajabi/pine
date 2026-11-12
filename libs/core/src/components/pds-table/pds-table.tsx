@@ -33,6 +33,7 @@ export class PdsTable {
   private _fixedLayoutResizeObserver: ResizeObserver | null = null;
   private _fixedLayoutHandleResize: (() => void) | null = null;
   private _fixedLayoutMutationObserver: MutationObserver | null = null;
+  private _pendingColumnWidthsRecalc = false;
   // componentDidLoad fires once; a later connectedCallback (the table was re-parented, reordered,
   // or moved by a DOM morph) needs this to know it's a reconnect, not the first load, so it
   // re-attaches what disconnectedCallback tore down.
@@ -342,10 +343,28 @@ export class PdsTable {
     // A column added, removed, or given a different `width` changes the floor calc's inputs,
     // and none of that is a resize of anything this observes above.
     if (typeof MutationObserver !== 'undefined') {
-      this._fixedLayoutMutationObserver = new MutationObserver(this._fixedLayoutHandleResize);
+      this._fixedLayoutMutationObserver = new MutationObserver(this.scheduleColumnWidthsRecalc);
       this._fixedLayoutMutationObserver.observe(this.el, { childList: true, subtree: true, attributeFilter: ['width'] });
     }
   }
+
+  // A `width` attribute change or a new head cell fires this in the same turn as that cell's
+  // own re-render, which is what applies `--pds-table-head-cell-width` -- measuring right away
+  // would still see the previous layout. Deferred one frame, by which point Stencil's own (also
+  // rAF-scheduled) write for that cell has flushed. Resize and window-resize don't need this:
+  // both fire only once layout has already settled.
+  private scheduleColumnWidthsRecalc = () => {
+    if (this._pendingColumnWidthsRecalc) return;
+    this._pendingColumnWidthsRecalc = true;
+    requestAnimationFrame(() => {
+      // A teardown in the meantime (disconnect, or the floor turning off) leaves this flag
+      // cleared but can't cancel an already-scheduled frame -- checked here so it's a no-op
+      // rather than measuring and writing styles on a table that's no longer set up for it.
+      if (!this._pendingColumnWidthsRecalc) return;
+      this._pendingColumnWidthsRecalc = false;
+      if (this.el.isConnected) this.recalcAutoColumnWidths();
+    });
+  };
 
   private teardownFixedLayoutWidths() {
     if (this._fixedLayoutResizeObserver) {
@@ -363,6 +382,7 @@ export class PdsTable {
     }
 
     this._fixedLayoutHandleResize = null;
+    this._pendingColumnWidthsRecalc = false;
   }
 
   /**

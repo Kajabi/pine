@@ -100,6 +100,10 @@ export class PdsTableCell {
     }
 
     this.setupRetries = 0; // Reset retry counter
+    // Without a listener there's no way to know the scroll position any more, so the shadow
+    // this drove shouldn't linger -- matters when a rebind tears this down without setting it
+    // back up (responsive turned off while scrolled), not just on disconnect.
+    this.tableScrolling = false;
   }
 
   /**
