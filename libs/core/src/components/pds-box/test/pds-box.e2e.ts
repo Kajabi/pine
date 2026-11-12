@@ -188,4 +188,95 @@ describe('pds-box layout', () => {
     expect(await page.$eval('#shrink', (el) => el.getBoundingClientRect().width)).toBeLessThan(300);
     expect(await page.$eval('#none', (el) => el.getBoundingClientRect().width)).toBe(300);
   });
+
+  it('pushes a box to the far side with margin-inline-start="auto"', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="wrap" style="width: 400px">
+        <pds-box id="footer" fit>
+          <pds-box id="delete" flex="none" style="width: 50px">Delete</pds-box>
+          <pds-box id="actions" flex="none" margin-inline-start="auto" style="width: 100px">Save</pds-box>
+        </pds-box>
+      </div>
+    `);
+
+    const footer = await page.$eval('#footer', (el) => el.getBoundingClientRect().right);
+    const actions = await page.$eval('#actions', (el) => el.getBoundingClientRect().right);
+
+    expect(footer).toBe(await page.$eval('#wrap', (el) => el.getBoundingClientRect().right));
+    expect(actions).toBe(footer);
+    expect(await page.$eval('#actions', (el) => getComputedStyle(el).marginInlineStart)).not.toBe('0px');
+  });
+
+  it('pushes a box to the bottom with margin-block-start="auto"', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-box id="column" direction="column" style="height: 200px">
+        <pds-box flex="none">Top</pds-box>
+        <pds-box id="bottom" flex="none" margin-block-start="auto">Bottom</pds-box>
+      </pds-box>
+    `);
+
+    const column = await page.$eval('#column', (el) => el.getBoundingClientRect().bottom);
+    const bottom = await page.$eval('#bottom', (el) => el.getBoundingClientRect().bottom);
+
+    expect(bottom).toBe(column);
+  });
+
+  it('sets container-type from the container prop', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-box id="inline" container="inline-size"></pds-box>
+      <pds-box id="size" container="size" style="height: 40px"></pds-box>
+      <pds-box id="unset"></pds-box>
+    `);
+
+    expect(await page.$eval('#inline', (el) => getComputedStyle(el).containerType)).toBe('inline-size');
+    expect(await page.$eval('#size', (el) => getComputedStyle(el).containerType)).toBe('size');
+    expect(await page.$eval('#unset', (el) => getComputedStyle(el).containerType)).toBe('normal');
+  });
+
+  it('keeps unwrapped text from widening a box with container="inline-size"', async () => {
+    const text = 'A long single line of text that is much wider than the row it sits in';
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 300px">
+        <pds-box fit>
+          <pds-box id="loose"><span style="white-space: nowrap">${text}</span></pds-box>
+        </pds-box>
+        <pds-box fit>
+          <pds-box id="contained" container="inline-size"><span style="white-space: nowrap">${text}</span></pds-box>
+        </pds-box>
+      </div>
+    `);
+
+    expect(await page.$eval('#loose', (el) => el.getBoundingClientRect().width)).toBeGreaterThan(300);
+    expect(await page.$eval('#contained', (el) => el.getBoundingClientRect().width)).toBeLessThanOrEqual(300);
+  });
+
+  // A column parent stretches its children unless it sets `align-items`; then a child shrinks to its
+  // content unless it has `fit`.
+  it('fills a column parent that sets align-items only with fit', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 400px">
+        <pds-box direction="column" align-items="start" fit>
+          <pds-box id="loose" justify-content="space-between"><span>Delete</span><span>Save</span></pds-box>
+          <pds-box id="fit" fit justify-content="space-between"><span>Delete</span><span>Save</span></pds-box>
+        </pds-box>
+      </div>
+    `);
+
+    expect(await page.$eval('#loose', (el) => el.getBoundingClientRect().width)).toBeLessThan(400);
+    expect(await page.$eval('#fit', (el) => el.getBoundingClientRect().width)).toBe(400);
+  });
+
+  it('keeps margin auto and container after its classes are stripped', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-box class="consumer" margin-inline-start="auto" margin-block-end-md="auto" container="inline-size"></pds-box>
+    `);
+
+    await expectStylingSurvivesStrip(page, 'pds-box');
+  });
 });

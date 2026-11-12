@@ -22,6 +22,7 @@ const BaseTemplate = (args) => html`
   border-inline-end="${ifDefined(args.borderInlineEnd)}"
   border-color="${ifDefined(args.borderColor)}"
 	border-radius="${ifDefined(args.borderRadius)}"
+  container="${ifDefined(args.container)}"
   direction="${ifDefined(args.direction)}"
 	display="${ifDefined(args.display)}"
   ?fit=${args.fit}
@@ -60,4 +61,46 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   border: true,
   minHeight: '100px',
+};
+
+const footerTemplate = (args) => html`
+<pds-box fit border="true" padding="sm" gap="sm" align-items="center">
+  <pds-button variant="destructive">Delete</pds-button>
+  <pds-box flex="none" gap="sm" margin-inline-start="${ifDefined(args.marginInlineStart)}">
+    <pds-button variant="secondary">Cancel</pds-button>
+    <pds-button>Save</pds-button>
+  </pds-box>
+</pds-box>`;
+
+export const MarginAuto = footerTemplate.bind();
+MarginAuto.args = {
+  marginInlineStart: 'auto',
+};
+
+const flexTemplate = (args) => html`
+<pds-container size="sm">
+  <pds-box fit border="true" padding="xs" gap="xs">
+    <pds-box flex="${ifDefined(args.flex)}" border="true" padding="xs">A box with long text that needs more room than the row has to give it.</pds-box>
+    <pds-box flex="${ifDefined(args.flex)}" border="true" padding="xs">A second box with long text that also needs more room than the row has.</pds-box>
+  </pds-box>
+</pds-container>`;
+
+export const FlexShrink = flexTemplate.bind();
+FlexShrink.args = {
+  flex: 'shrink',
+};
+
+const containerTemplate = (args) => html`
+<pds-container size="sm">
+  <pds-box fit border="true" padding="sm" gap="sm" align-items="center">
+    <pds-box container="${ifDefined(args.container)}" direction="column">
+      <pds-text truncate>A long file name that should truncate rather than push the action out of the card.pdf</pds-text>
+    </pds-box>
+    <pds-button variant="secondary">Replace</pds-button>
+  </pds-box>
+</pds-container>`;
+
+export const Container = containerTemplate.bind();
+Container.args = {
+  container: 'inline-size',
 };
