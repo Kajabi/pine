@@ -4798,11 +4798,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when the user toggles the checkbox, carrying the `value` and the new `checked` state. Doesn't emit when `checked` is set programmatically.
+          * Emitted when the user toggles the checkbox, by a click or `Space`, carrying the `value` and the new `checked` state.  This event will not emit when programmatically setting the `checked` property.
          */
         "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
-          * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`. `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.
+          * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`. `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.  This event will not emit when programmatically setting the `checked` property.
          */
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
@@ -5702,7 +5702,7 @@ declare namespace LocalJSX {
          */
         "onPdsBlur"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the user changes the value and then presses `Enter` or leaves the field.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value and then presses `Enter` or leaves the field. `detail` has `value`, as a string, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsChange"?: (event: PdsInputCustomEvent<InputChangeEventDetail>) => void;
         /**
@@ -5710,7 +5710,7 @@ declare namespace LocalJSX {
          */
         "onPdsFocus"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value changes from user input (typing, paste, autofill).
+          * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one. `detail` has `value`, the current value as a string, and `event`, the native `input` event.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
@@ -6312,7 +6312,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted with `true` when the user checks the radio. Not emitted inside `pds-radio-group`; listen for `pdsRadioGroupChange` there.
+          * Emitted with `true` when the user checks the radio, by a click or an arrow key. The radio is `event.target`, so read its `value` there. Not emitted when picking another radio unchecks this one. Not emitted inside `pds-radio-group` either; listen for `pdsRadioGroupChange` there.
          */
         "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         /**
@@ -6375,7 +6375,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when the user checks a radio in the group, with that radio's `value` and `componentId`.
+          * Emitted when the user checks a radio in the group, by a click or an arrow key. `detail` has that radio's `value` and `componentId`, and `checked`, which is always `true`.
          */
         "onPdsRadioGroupChange"?: (event: PdsRadioGroupCustomEvent<RadioGroupChangeEventDetail>) => void;
         /**
@@ -6493,7 +6493,7 @@ declare namespace LocalJSX {
          */
         "onPdsKeyDown"?: (event: PdsSelectCustomEvent<KeyboardEvent>) => void;
         /**
-          * Emitted when the user changes the selection. Doesn't emit when the `value` property is set programmatically. `detail` is the native `change` event, so read the new value from the select's `value`.
+          * Emitted when the user changes the selection. `detail` is the native `change` event, so read the new value from the select's `value`: a string, or an array with `multiple`.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
         /**
@@ -6948,7 +6948,7 @@ declare namespace LocalJSX {
          */
         "onPdsFocus"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value changes from user input (typing, paste, autofill).
+          * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one. `detail` has `value`, the current text, and `event`, the native `input` event.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsInput"?: (event: PdsTextareaCustomEvent<TextareaInputEventDetail>) => void;
         /**
@@ -6956,7 +6956,7 @@ declare namespace LocalJSX {
          */
         "onPdsKeyDown"?: (event: PdsTextareaCustomEvent<KeyboardEvent>) => void;
         /**
-          * Emitted when the user changes the value and then leaves the textarea.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value and then leaves the textarea. `Enter` adds a new line, so it doesn't emit this event. `detail` has `value`, the text, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsTextareaChange"?: (event: PdsTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
