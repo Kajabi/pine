@@ -279,8 +279,7 @@ describe('pds-dropdown-menu-item', () => {
   });
   
   describe('start slot', () => {
-    const startWrapper = (root: HTMLElement) =>
-      root.shadowRoot!.querySelector('.pds-dropdown-menu-item__start');
+    const startSlot = (root: HTMLElement) => root.shadowRoot!.querySelector('slot[name="start"]');
 
     it.each([
       ['button', '', 'button'],
@@ -295,34 +294,36 @@ describe('pds-dropdown-menu-item', () => {
       const content = page.root!.shadowRoot!.querySelector(contentSelector)!;
       const slots = Array.from(content.querySelectorAll('slot'));
       expect(slots.map((slot) => slot.getAttribute('name'))).toEqual(['start', null]);
-      expect(startWrapper(page.root!)).not.toHaveClass('pds-dropdown-menu-item__start--empty');
+      expect(startSlot(page.root!)).not.toHaveClass('pds-dropdown-menu-item__start--empty');
     });
 
-    it('hides the start wrapper when nothing is slotted, so it adds no gap', async () => {
+    it('hides the start slot when nothing is slotted, so it adds no gap', async () => {
       const page = await newSpecPage({
         components: [PdsDropdownMenuItem],
         html: `<pds-dropdown-menu-item>Delete</pds-dropdown-menu-item>`,
       });
 
-      expect(startWrapper(page.root!)).toHaveClass('pds-dropdown-menu-item__start--empty');
+      expect(startSlot(page.root!)).toHaveClass('pds-dropdown-menu-item__start--empty');
     });
 
-    it('updates the wrapper when start content is added or removed', async () => {
+    // The ref that sets this up fires once, on creation, so updates past that point go through
+    // classList directly from the native slotchange event, not through a reactive re-render.
+    it('updates the slot class when start content is added or removed', async () => {
       const page = await newSpecPage({
         components: [PdsDropdownMenuItem],
         html: `<pds-dropdown-menu-item>Delete</pds-dropdown-menu-item>`,
       });
-      const slot = page.root!.shadowRoot!.querySelector('slot[name="start"]') as HTMLSlotElement;
+      const slot = startSlot(page.root!) as HTMLSlotElement;
 
-      slot.assignedElements = () => [document.createElement('pds-icon')];
+      const icon = document.createElement('pds-icon');
+      icon.setAttribute('slot', 'start');
+      page.root!.appendChild(icon);
       slot.dispatchEvent(new Event('slotchange'));
-      await page.waitForChanges();
-      expect(startWrapper(page.root!)).not.toHaveClass('pds-dropdown-menu-item__start--empty');
+      expect(slot).not.toHaveClass('pds-dropdown-menu-item__start--empty');
 
-      slot.assignedElements = () => [];
+      icon.remove();
       slot.dispatchEvent(new Event('slotchange'));
-      await page.waitForChanges();
-      expect(startWrapper(page.root!)).toHaveClass('pds-dropdown-menu-item__start--empty');
+      expect(slot).toHaveClass('pds-dropdown-menu-item__start--empty');
     });
 
     it('leaves the start content out of the pdsClick content', async () => {
