@@ -8,6 +8,7 @@ import {  computePosition,
   hide,
   offset,
   shift,
+  size,
   autoUpdate,
 } from '@floating-ui/dom';
 
@@ -181,7 +182,13 @@ export class PdsDropdownMenu implements BasePdsProps {
       computePosition(this.triggerEl, this.panelEl as HTMLElement, {
         placement: this.placement,
         strategy: 'fixed',
-        middleware: [offset(6), flip(), shift({padding: 5}), hide({ strategy: 'referenceHidden' })],
+        middleware: [
+          offset(6),
+          flip(),
+          shift({padding: 5}),
+          hide({ strategy: 'referenceHidden' }),
+          size({ padding: 5, apply: ({ availableHeight, elements }) => this.capPanelHeight(elements.floating, availableHeight) }),
+        ],
       }).then(({ x, y, middlewareData }) => {
         if (!this.isOpen || opening !== this.openCount) return;
 
@@ -214,6 +221,17 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.host.shadowRoot?.querySelector('pds-box').classList.remove('is-hidden');
     this.isOpen = true;
     this.syncTriggerAria();
+  }
+
+  // The panel is fixed, so a menu taller than the room beside its trigger would run off the window
+  // with no way to reach its last items. It's capped to that room and scrolls inside itself. A
+  // smaller max-height set through the menu-panel part is kept. The cap is important, as a
+  // ::part() rule outside the shadow root otherwise beats the panel's own inline style.
+  private capPanelHeight(panel: HTMLElement, availableHeight: number) {
+    panel.style.removeProperty('max-height');
+    const partMaxHeight = getComputedStyle(panel).maxHeight;
+    const room = `${Math.max(0, availableHeight)}px`;
+    panel.style.setProperty('max-height', partMaxHeight === 'none' ? room : `min(${partMaxHeight}, ${room})`, 'important');
   }
 
   // Close the dropdown. Closed because its trigger left the view, focus from the menu still goes back
