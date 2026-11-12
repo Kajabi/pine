@@ -53,24 +53,25 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop({ reflect: true }) informational: boolean = false;
 
   /**
-   * Determines whether the link should open in a new tab and display an external icon.
-   * This is a simpler alternative to using `target="_blank"` for the common case.
-   * Ignored when `informational` is set.
+   * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise.
+   * Only applies when href is set. Ignored when `informational` is set.
    * @defaultValue false
    */
   @Prop({ reflect: true }) external: boolean = false;
 
   /**
-   * Accessible label for the external-link icon, passed to the inner
-   * `pds-link`. Pass a translated string to localize it; defaults to English.
-   * Pass an empty string to make the icon decorative.
+   * Accessible label for the icon that `external` shows, passed to the inner
+   * `pds-link` and appended to the item's name. It isn't announced when
+   * `target` keeps the link in the same tab. Pass a translated string to
+   * localize it; defaults to English. Pass an empty string to make the icon
+   * decorative.
    * @defaultValue '(opens in a new tab)'
    */
   @Prop() externalLabel?: string;
 
   /**
    * Specifies where to open the linked document when href is provided.
-   * Takes precedence over the `external` prop if both are set.
+   * Overrides the new-tab default of `external`; the icon still shows.
    * Only applies when href is set. Ignored when `informational` is set.
    * @defaultValue undefined
    */

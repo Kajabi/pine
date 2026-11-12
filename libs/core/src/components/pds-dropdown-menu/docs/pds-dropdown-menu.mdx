@@ -391,7 +391,7 @@ Menu items can function as links by using the href attribute.
 
 ### With External Links
 
-Menu items can open links in a new tab using the `external` boolean prop. This displays an external icon and opens the link in a new tab.
+Set `external` on a link item to show the launch icon and open the link in a new tab. Screen readers hear "(opens in a new tab)" after the item's text; pass a translated `externalLabel` to localize it, or an empty string to make the icon decorative.
 
 <DocCanvas
   mdxSource={{
@@ -426,7 +426,7 @@ Menu items can open links in a new tab using the `external` boolean prop. This d
 </div>
 </DocCanvas>
 
->**Note:** You can also use the `target` prop for more control (e.g., `target="_blank"`, `target="_parent"`). The `target` prop takes precedence over `external` if both are set.
+>**Note:** `target` overrides the new-tab default of `external`, and the icon still shows. Pair `external` with `target="_self"` to show the icon on an item that opens in the same tab; the icon is then decorative, and screen readers don't hear "(opens in a new tab)". Use `target` alone for `_parent` or `_top`. `target="_blank"` alone opens a new tab with no icon and no label, so use `external` for new tabs.
 
 ### With Informational Items
 
