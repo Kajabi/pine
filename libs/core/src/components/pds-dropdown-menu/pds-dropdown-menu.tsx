@@ -5,7 +5,6 @@ import { setAttributesIfChanged } from '@utils/attributes';
 import { limitRestores } from '@utils/keep-hydrated';
 import {  computePosition,
   flip,
-  hide,
   offset,
   shift,
   size,
@@ -38,6 +37,7 @@ export class PdsDropdownMenu implements BasePdsProps {
   // Counts each opening, so a position worked out for an earlier opening is ignored.
   private openCount = 0;
   private triggerObserver: MutationObserver | null = null;
+  private triggerVisibility: IntersectionObserver | null = null;
 
   @Element() host: HTMLPdsDropdownMenuElement;
 
@@ -79,8 +79,10 @@ export class PdsDropdownMenu implements BasePdsProps {
 
     this.triggerObserver?.disconnect();
     this.triggerObserver = null;
+    this.stopWatchingTriggerVisibility();
 
-    // A position still being worked out belongs to an opening that has ended, so it's ignored.
+    // The menu was detached, so a position still being worked out for it is dropped. The menu
+    // itself stays open.
     this.openCount++;
   }
 
@@ -174,9 +176,6 @@ export class PdsDropdownMenu implements BasePdsProps {
   // Open the dropdown and position it
   private openDropdown = () => {
     const opening = ++this.openCount;
-    // Only a trigger seen in view this opening closes the menu when it leaves, so opening a menu
-    // whose trigger is already out of view (from a script) doesn't close it straight away.
-    let triggerSeen = false;
 
     const updatePosition = () => {
       computePosition(this.triggerEl, this.panelEl as HTMLElement, {
@@ -186,20 +185,10 @@ export class PdsDropdownMenu implements BasePdsProps {
           offset(6),
           flip(),
           shift({padding: 5}),
-          hide({ strategy: 'referenceHidden' }),
           size({ padding: 5, apply: ({ availableHeight, elements }) => this.capPanelHeight(elements.floating, availableHeight) }),
         ],
-      }).then(({ x, y, middlewareData }) => {
+      }).then(({ x, y }) => {
         if (!this.isOpen || opening !== this.openCount) return;
-
-        // Once the trigger is out of view, scrolled or clipped by any container or the window, the
-        // menu closes rather than float away from it, much as a native select's list does.
-        if (!middlewareData.hide?.referenceHidden) {
-          triggerSeen = true;
-        } else if (triggerSeen) {
-          this.closeDropdown({ preventScroll: true });
-          return;
-        }
 
         Object.assign(this.panelEl.style, {
           left: `${x}px`,
@@ -217,6 +206,7 @@ export class PdsDropdownMenu implements BasePdsProps {
       this.panelEl as HTMLElement,
       updatePosition
     );
+    this.watchTriggerVisibility();
 
     this.host.shadowRoot?.querySelector('pds-box').classList.remove('is-hidden');
     this.isOpen = true;
@@ -234,6 +224,41 @@ export class PdsDropdownMenu implements BasePdsProps {
     panel.style.setProperty('max-height', partMaxHeight === 'none' ? room : `min(${partMaxHeight}, ${room})`, 'important');
   }
 
+  // Once the trigger is fully out of view, scrolled or clipped by any container or the window, the
+  // menu closes rather than float away from it, much as a native select's list does. An
+  // IntersectionObserver measures against the layout viewport, so panning a pinch-zoomed page
+  // doesn't close it, as Floating UI's hide() would.
+  private watchTriggerVisibility() {
+    this.stopWatchingTriggerVisibility();
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    // Only a trigger seen in view this opening closes the menu when it leaves.
+    let triggerSeen = false;
+    let broughtIntoView = false;
+
+    this.triggerVisibility = new IntersectionObserver((entries) => {
+      if (!this.isOpen) return;
+
+      if (entries[entries.length - 1].isIntersecting) {
+        triggerSeen = true;
+      } else if (triggerSeen) {
+        this.closeDropdown({ preventScroll: true });
+      } else if (!broughtIntoView) {
+        // Opened with its trigger out of view, from the keyboard after an earlier close or from a
+        // script, the trigger is scrolled into view so the menu opens beside it. A trigger that
+        // still can't be seen leaves the menu open.
+        broughtIntoView = true;
+        this.triggerEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      }
+    });
+    this.triggerVisibility.observe(this.triggerEl);
+  }
+
+  private stopWatchingTriggerVisibility() {
+    this.triggerVisibility?.disconnect();
+    this.triggerVisibility = null;
+  }
+
   // Close the dropdown. Closed because its trigger left the view, focus from the menu still goes back
   // to the trigger, so it isn't lost, but without scrolling the trigger back into view. The next Tab
   // carries on from there.
@@ -246,6 +271,7 @@ export class PdsDropdownMenu implements BasePdsProps {
       this.cleanupAutoUpdate();
       this.cleanupAutoUpdate = null;
     }
+    this.stopWatchingTriggerVisibility();
 
     this.syncTriggerAria();
 
