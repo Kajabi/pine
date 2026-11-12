@@ -50,7 +50,7 @@ import { PdsButton, PdsIcon } from '@pine-ds/react';
 
 ## TypeScript
 
-TypeScript checks `Pds*` props only when your `tsconfig.json` sets `"moduleResolution": "node"`. With other settings today, TypeScript either skips the prop types or can't find the components' exports.
+Today, TypeScript checks `Pds*` props only when your `tsconfig.json` sets `"moduleResolution": "node"`. With `"bundler"`, the prop types don't resolve, so TypeScript can't check the props. With `"node16"` or `"nodenext"`, TypeScript reports that `@pine-ds/react` has no exported `Pds*` components.
 
 ## DOM morphs
 
