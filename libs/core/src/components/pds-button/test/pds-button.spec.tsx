@@ -1079,5 +1079,67 @@ describe('pds-button', () => {
 
       expect(endWrapper?.classList.contains('pds-button__icon--empty')).toBe(false);
     });
+
+    // The first render seeds the state, so these start empty and check that slotchange alone fills it.
+    it.each(['start', 'end'])('shows %s content slotted after the first render once slotchange fires', async (name) => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button>Click me</pds-button>`,
+      });
+
+      const slot = page.root?.shadowRoot?.querySelector(`slot[name="${name}"]`);
+      const wrapper = slot?.parentElement;
+      expect(wrapper?.classList.contains('pds-button__icon--empty')).toBe(true);
+
+      const icon = document.createElement('pds-icon');
+      icon.setAttribute('slot', name);
+      page.root?.appendChild(icon);
+      const slotchangeEvent = new Event('slotchange');
+      Object.defineProperty(slotchangeEvent, 'target', {
+        value: { assignedElements: () => [icon] },
+      });
+      slot?.dispatchEvent(slotchangeEvent);
+      await page.waitForChanges();
+
+      expect(wrapper?.classList.contains('pds-button__icon--empty')).toBe(false);
+    });
+
+    // A slot the first render doesn't create isn't seeded. Inserted later with nothing assigned, it
+    // fires no slotchange, so a seeded true would leave an empty gap.
+    it('does not seed the end slot an icon-only button leaves out', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button icon-only>Settings<pds-icon slot="end" name="caret-down"></pds-icon></pds-button>`,
+      });
+
+      expect(page.root?.shadowRoot?.querySelector('slot[name="end"]')).toBeNull();
+
+      page.root?.querySelector('pds-icon[slot="end"]')?.remove();
+      (page.root as HTMLPdsButtonElement).iconOnly = false;
+      await page.waitForChanges();
+
+      const endWrapper = page.root?.shadowRoot?.querySelector('slot[name="end"]')?.parentElement;
+      expect(endWrapper?.classList.contains('pds-button__icon--empty')).toBe(true);
+    });
+
+    it.each([
+      ['filter', '<pds-button variant="filter">Filter<pds-icon slot="start" name="favorite"></pds-icon></pds-button>'],
+      ['the deprecated icon prop', '<pds-button icon="favorite">Like<pds-icon slot="start" name="favorite"></pds-icon></pds-button>'],
+    ])('does not seed the start slot that %s replaces', async (_case, html) => {
+      const page = await newSpecPage({ components: [PdsButton], html });
+
+      expect(page.root?.shadowRoot?.querySelector('slot[name="start"]')).toBeNull();
+      expect((page.rootInstance as PdsButton).hasStartContent).toBe(false);
+    });
+
+    it('does not seed the end slot a disclosure button replaces with its caret', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="disclosure">More<pds-icon slot="end" name="favorite"></pds-icon></pds-button>`,
+      });
+
+      expect(page.root?.shadowRoot?.querySelector('slot[name="end"]')).toBeNull();
+      expect((page.rootInstance as PdsButton).hasEndContent).toBe(false);
+    });
   });
 });

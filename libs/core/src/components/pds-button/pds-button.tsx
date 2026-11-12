@@ -145,8 +145,10 @@ export class PdsButton {
     // slotchange only fires after the first render, and when the button is inserted inside a
     // requestAnimationFrame callback the update it triggers lands a frame later, so the first paint
     // would hide slotted icons and draw the button narrower.
-    this.hasStartContent = this.hasSlottedElement('start');
-    this.hasEndContent = this.hasSlottedElement('end');
+    // Only a slot the first render creates is seeded: a slot inserted later with no assigned
+    // nodes fires no slotchange, so a seeded true there would keep an empty gap.
+    this.hasStartContent = this.rendersStartSlot() && this.hasSlottedElement('start');
+    this.hasEndContent = this.rendersEndSlot() && this.hasSlottedElement('end');
   }
 
   componentDidRender() {
@@ -239,6 +241,16 @@ export class PdsButton {
   // empty <slot> counts here and is corrected on slotchange).
   private hasSlottedElement(name: string): boolean {
     return Array.from(this.el.children).some((child) => child.getAttribute('slot') === name);
+  }
+
+  // The filter variant and the deprecated icon prop draw their own start icon instead of the slot.
+  private rendersStartSlot(): boolean {
+    return this.variant !== 'filter' && !(this.icon && this.variant !== 'disclosure');
+  }
+
+  // Icon-only and disclosure buttons draw no end slot.
+  private rendersEndSlot(): boolean {
+    return !this.iconOnly && this.variant !== 'disclosure';
   }
 
   private handleStartSlotChange = (event: Event) => {
