@@ -76,7 +76,7 @@ import { defineCustomElement as definePdsButton } from '@pine-ds/core/components
 definePdsButton();
 ```
 
-Load the stylesheet the same way as in a React project. This build also skips Pine's global script, so read **Components vanish after a DOM morph?** under Common Gotchas.
+Load the stylesheet the same way as in a React project.
 
 ### 2. Render your first component
 
@@ -160,14 +160,8 @@ With the CDN, check that the page has the `<link>` and both `<script>` tags from
 **Components render without Pine's colors or font?**
 The page isn't loading `pine-core.css`. `@pine-ds/react` and the custom-elements build register components but don't load the stylesheet. Load it as step 1 shows.
 
-**Components vanish after a DOM morph?**
-Pine components stay hidden until they have the `hydrated` class, and a morph that makes a host match the server's HTML removes it. The CDN build puts it back on its own. If you load components from `@pine-ds/react` or the custom-elements build (`@pine-ds/core/components/*`), which don't run Pine's global script, call `keepPineHydrated()` once at startup. Import it from `@pine-ds/core/components/index.js`: bundlers can't resolve a plain `@pine-ds/core` import today.
-
-```js
-import { keepPineHydrated } from '@pine-ds/core/components/index.js';
-
-keepPineHydrated();
-```
+**Components hidden after a DOM morph?**
+A morph that makes a host match the server's HTML removes the host's `hydrated` class. Components the CDN build registers are hidden without that class, and the CDN build puts the class back on its own. Components registered by `@pine-ds/react` or the custom-elements build stay visible without it. On a page that loads both, each component follows the build that registered it first, and the CDN build puts the class back on all of them.
 
 **Storybook hot reload breaks rendering?**
 Re-run `npm run start`. Hot reload in Stencil dev mode can occasionally lose component registration.
