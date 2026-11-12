@@ -125,14 +125,16 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() noOptionsFoundLabel = 'No options found';
 
   /**
-   * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
+   * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width
+   * value, including its padding.
    * @default '388px'
    */
   @Prop() flyoutMaxWidth: string = '388px';
 
   /**
-   * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
-   * The flyout is as wide as its options, between this and `flyout-max-width`.
+   * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width
+   * value, including its padding. The flyout is as wide as its options, between this and
+   * `flyout-max-width`.
    * @default '288px'
    */
   @Prop() flyoutMinWidth: string = '288px';
