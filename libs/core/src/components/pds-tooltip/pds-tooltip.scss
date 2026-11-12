@@ -5,7 +5,8 @@
   --tooltip-border-width-arrow-up: 0 var(--tooltip-sizing-arrow) var(--tooltip-sizing-arrow);
   --tooltip-sizing-arrow: 6px;
   --tooltip-sizing-arrow-offset: 14px;
-  --tooltip-dimension-max-width: 320px;
+  // The content is border-box, so this includes its padding: 320px of text plus 12px each side.
+  --tooltip-dimension-max-width: 344px;
 }
 
 // Portaled into a modal dialog or popover instead of the body, the tooltip inherits text styles set
