@@ -274,8 +274,15 @@ describe('pds-dropdown-menu-item', () => {
       const item = document.querySelector(`[data-name="${itemName}"]`);
       const content = item.shadowRoot.querySelector('.pds-dropdown-menu-item__content');
       const anchor = content.shadowRoot?.querySelector('a');
-      const { outlineStyle, outlineColor } = getComputedStyle(anchor ?? content);
-      return { style: outlineStyle, color: outlineColor, hostStyle: anchor ? getComputedStyle(content).outlineStyle : null };
+      const { outlineStyle, outlineColor, outlineOffset, borderRadius, backgroundColor } = getComputedStyle(anchor ?? content);
+      return {
+        style: outlineStyle,
+        color: outlineColor,
+        offset: outlineOffset,
+        radius: borderRadius,
+        background: backgroundColor,
+        hostStyle: anchor ? getComputedStyle(content).outlineStyle : null,
+      };
     }, name);
 
     // Resolves an outline token to the color the browser computes for it.
@@ -288,14 +295,28 @@ describe('pds-dropdown-menu-item', () => {
       return color;
     }, token);
 
+    // Resolves a color token to the background color the browser computes for it.
+    const backgroundTokenColor = (page: E2EPage, token: string) => page.evaluate((colorToken: string) => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = `var(${colorToken})`;
+      document.body.appendChild(probe);
+      const color = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return color;
+    }, token);
+
     const isOpen = (page: E2EPage) => page.evaluate(() => {
       const panel = document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box');
       return !panel.classList.contains('is-hidden');
     });
 
+    // For a link item, focus must reach the anchor inside pds-link (the element the ::part(link)
+    // rule styles), not stop on the pds-link host.
     const isFocused = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
       const item = document.querySelector(`[data-name="${itemName}"]`);
-      return item.shadowRoot.activeElement != null;
+      const active = item.shadowRoot.activeElement;
+      if (active?.tagName === 'PDS-LINK') return active.shadowRoot.activeElement?.tagName === 'A';
+      return active != null;
     }, name);
 
     const setUp = async () => {
@@ -346,16 +367,27 @@ describe('pds-dropdown-menu-item', () => {
       const focusColor = await tokenColor(page, '--pine-outline-focus');
       const dangerColor = await tokenColor(page, '--pine-outline-focus-danger');
       expect(dangerColor).not.toBe(focusColor);
+      const dangerBackground = await backgroundTokenColor(page, '--pine-color-danger-disabled');
 
+      const rings: Record<string, Awaited<ReturnType<typeof ring>>> = {};
       for (const name of names) {
         await page.keyboard.press('ArrowDown');
         await page.waitForChanges();
 
         expect(await isFocused(page, name)).toBe(true);
-        const { style, color, hostStyle } = await ring(page, name);
+        rings[name] = await ring(page, name);
+        const { style, color, background, hostStyle } = rings[name];
         expect(style).toBe('solid');
         expect(color).toBe(name.startsWith('destructive') ? dangerColor : focusColor);
+        if (name.startsWith('destructive')) expect(background).toBe(dangerBackground);
         expect(hostStyle ?? 'none').toBe('none');
+      }
+
+      // A link item's ring sits where a button item's does. pds-link's own ring has a larger
+      // offset and smaller radius, so this fails if the item's ::part(link) override stops applying.
+      for (const name of ['link', 'destructive-link']) {
+        expect(rings[name].offset).toBe(rings['button'].offset);
+        expect(rings[name].radius).toBe(rings['button'].radius);
       }
     });
 
