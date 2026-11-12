@@ -403,42 +403,6 @@ Prepend and append elements are placed outside the input container, next to the 
   </pds-input>
 </DocCanvas>
 
-## Events
-
-None of these events fire when `value` is set in code. In React, add `on` to the event name, as in `onPdsChange`.
-
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="input-events">
-    <pds-table-head>
-      <pds-table-head-cell>Event</pds-table-head-cell>
-      <pds-table-head-cell>Emitted when</pds-table-head-cell>
-      <pds-table-head-cell>Detail</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>pdsInput</code></pds-table-cell>
-        <pds-table-cell>After each <code>input</code> event, such as typing. With <code>debounce</code>, once that many milliseconds have passed since the last one.</pds-table-cell>
-        <pds-table-cell>An object with <code>value</code>, the current value as a string, and <code>event</code>, the native <code>input</code> event.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsChange</code></pds-table-cell>
-        <pds-table-cell>The user changes the value and then presses <code>Enter</code> or leaves the field.</pds-table-cell>
-        <pds-table-cell>An object with <code>value</code>, as a string, and <code>event</code>, the native event behind it, usually <code>change</code>.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsFocus</code>, <code>pdsBlur</code></pds-table-cell>
-        <pds-table-cell>The field gains or loses focus.</pds-table-cell>
-        <pds-table-cell>The native <code>focus</code> or <code>blur</code> event.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsKeyDown</code></pds-table-cell>
-        <pds-table-cell>A key is pressed in the field.</pds-table-cell>
-        <pds-table-cell>The native <code>keydown</code> event.</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
-
 ## Form Integration
 
 - Provide a `name` so the value is submitted with the form. An empty field is left out of `FormData`, where a native input would submit an empty string.

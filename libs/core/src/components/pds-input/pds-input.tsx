@@ -71,6 +71,7 @@ export class PdsInput {
 
   /**
    * Emitted when the user changes the value and then presses `Enter` or leaves the field.
+   * `detail` has `value`, as a string, and `event`, the native event behind it, usually `change`.
    *
    * This event will not emit when programmatically setting the `value` property.
    */
@@ -82,7 +83,10 @@ export class PdsInput {
   @Event() pdsFocus!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when the value changes from user input (typing, paste, autofill).
+   * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one.
+   * `detail` has `value`, the current value as a string, and `event`, the native `input` event.
+   *
+   * This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsInput: EventEmitter<InputInputEventDetail>;
 
