@@ -51,7 +51,7 @@
     margin-block-end: 0;
   }
 
-  // Selection is shown by the check alone; the fill is for hover and the keyboard's place.
+  // The check marks the selection; the fill marks the highlighted row (hover, the keys, or the start on open).
   .pds-combobox__option--highlighted {
     background: var(--pine-color-background-muted);
   }
@@ -290,10 +290,7 @@
     }
   }
 
-  // The keyboard's place among the rows, which share a background with hover.
-  // Options in every display show it the same way, so every layer marks the keyboard alike. Both
-  // classes tie the option's own `:focus-visible { outline: 0 }` at (0,2,0); this rule wins by
-  // coming later in the file, so keep it below that one.
+  // Ties the option's `:focus-visible { outline: 0 }` at (0,2,0) and wins by order: keep it below.
   .pds-combobox__group-row--keyboard > .pds-combobox__group-row-trigger,
   .pds-combobox__group-back--keyboard > .pds-combobox__group-row-trigger,
   .pds-combobox__option.pds-combobox__option--keyboard {
