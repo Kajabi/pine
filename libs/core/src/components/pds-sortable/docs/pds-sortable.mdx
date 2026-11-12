@@ -11,12 +11,12 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Sortable
 
-Sortable is for creating containers of items that can be sorted via drag and drop functionality.
+Sortable is for creating containers of items that can be sorted by dragging or from the keyboard.
 
 ## Guidelines
 
 ### When to use
-- Use the `sortable` component when you need to create an interface for reordering items through drag and drop.
+- Use the `sortable` component when you need to create an interface for reordering items, by dragging or from the keyboard.
 - Ideal for situations where users need to arrange content dynamically.
 
 ### When not to use
@@ -24,7 +24,39 @@ Sortable is for creating containers of items that can be sorted via drag and dro
 - Not suitable for forms or content that does not require item reordering.
 
 ### Accessibility
-- Ensure that drag-and-drop interactions are accessible by providing clear visual handles for reordering.
+
+Every item can be reordered from the keyboard as well as by dragging, so the list meets WCAG 2.1.1 (Keyboard) and 2.5.7 (Dragging Movements).
+
+- **What gets focus:** with `handle-type="row"`, each row is a tab stop. With `handle-type="handle"`, each handle is a tab stop: a button labelled "Reorder" plus the item's name. Controls inside a row, such as its actions, keep their own keys.
+- **The item's name:** the handle's label and the announcements use the item's text, leaving out the handle and the actions. Set `item-label` on a `pds-sortable-item` when that text is long or isn't a good name.
+- **Announcements:** a polite live region announces when an item is picked up, each move ("Item 2, moved to position 3 of 7"), and the drop or cancel. The live region sits inside the list, so it's announced inside a modal too.
+- **Events:** a keyboard drop emits `pdsSortableItemMoved` with the same detail fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), so a save handler works for both. Escape emits nothing.
+- **Focus:** focus stays on the moved item the whole time. Moving focus away from a picked-up item drops it where it is.
+- **Disabled:** a `disabled` list has no tab stops, and disabling it puts a picked-up item back.
+- **Direction and motion:** only the Up and Down arrows move an item, so right-to-left layouts work the same way. With `prefers-reduced-motion: reduce`, dragged items don't animate into place and the picked-up state doesn't fade in.
+
+#### Keyboard interactions
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Moves focus to the next row, or to the next handle with `handle-type="handle"`. |
+| `Space` or `Enter` | Picks up the focused item. When it's picked up, drops it in its new place. |
+| `ArrowUp` / `ArrowDown` | Moves the picked-up item up or down one position. |
+| `Home` / `End` | Moves the picked-up item to the first or last position. |
+| `Escape` | Cancels and puts the picked-up item back where it started. |
+
+#### Localization
+
+The handle's label, the hint and the announcements are props on `pds-sortable`, with English defaults. Pass translated strings to localize them. `{item}`, `{position}` and `{total}` are filled in.
+
+| Prop | Default |
+| --- | --- |
+| `handle-label` | `Reorder {item}` |
+| `reorder-description` | `Press Space or Enter to reorder` |
+| `item-picked-up-label` | `{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.` |
+| `item-moved-label` | `{item}, moved to position {position} of {total}` |
+| `item-dropped-label` | `{item}, dropped at position {position} of {total}` |
+| `item-reorder-canceled-label` | `Reorder canceled. {item} returned to position {position} of {total}` |
 
 ## Properties
 
@@ -246,6 +278,56 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
+  </pds-sortable>
+</DocCanvas>
+
+### Localized
+
+Pass translated strings for the handle's label, the hint and the announcements. Here the handles and announcements are in French, and `item-label` gives each item a short name.
+
+<DocCanvas display="block" mdxSource={{
+  react: `<PdsSortable
+  componentId="localized"
+  handleType="handle"
+  handleLabel="Réorganiser {item}"
+  reorderDescription="Appuyez sur Espace ou Entrée pour réorganiser"
+  itemPickedUpLabel="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
+  itemMovedLabel="{item} déplacé en position {position} sur {total}"
+  itemDroppedLabel="{item} déposé en position {position} sur {total}"
+  itemReorderCanceledLabel="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+>
+  <PdsSortableItem itemLabel="Introduction">Introduction · 3 leçons</PdsSortableItem>
+  <PdsSortableItem itemLabel="Module 1">Module 1 · 5 leçons</PdsSortableItem>
+  <PdsSortableItem itemLabel="Module 2">Module 2 · 4 leçons</PdsSortableItem>
+</PdsSortable>`,
+  webComponent: `<pds-sortable
+  component-id="localized"
+  handle-type="handle"
+  handle-label="Réorganiser {item}"
+  reorder-description="Appuyez sur Espace ou Entrée pour réorganiser"
+  item-picked-up-label="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
+  item-moved-label="{item} déplacé en position {position} sur {total}"
+  item-dropped-label="{item} déposé en position {position} sur {total}"
+  item-reorder-canceled-label="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+>
+  <pds-sortable-item item-label="Introduction">Introduction · 3 leçons</pds-sortable-item>
+  <pds-sortable-item item-label="Module 1">Module 1 · 5 leçons</pds-sortable-item>
+  <pds-sortable-item item-label="Module 2">Module 2 · 4 leçons</pds-sortable-item>
+</pds-sortable>
+`}}>
+  <pds-sortable
+    component-id="localized"
+    handle-type="handle"
+    handle-label="Réorganiser {item}"
+    reorder-description="Appuyez sur Espace ou Entrée pour réorganiser"
+    item-picked-up-label="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
+    item-moved-label="{item} déplacé en position {position} sur {total}"
+    item-dropped-label="{item} déposé en position {position} sur {total}"
+    item-reorder-canceled-label="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+  >
+    <pds-sortable-item item-label="Introduction">Introduction · 3 leçons</pds-sortable-item>
+    <pds-sortable-item item-label="Module 1">Module 1 · 5 leçons</pds-sortable-item>
+    <pds-sortable-item item-label="Module 2">Module 2 · 4 leçons</pds-sortable-item>
   </pds-sortable>
 </DocCanvas>
 
