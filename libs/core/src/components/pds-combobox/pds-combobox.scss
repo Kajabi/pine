@@ -206,8 +206,6 @@
   }
 }
 
-// Sized up front, like a regular pds-icon, so the text doesn't land beside an empty icon and then
-// shift again when its image loads on the first pick.
 .pds-combobox__button-trigger-icon {
   block-size: var(--pine-dimension-sm);
   flex-shrink: 0;
