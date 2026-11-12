@@ -151,12 +151,13 @@ The same portrait source in the same `wide` shape, under each `fit`. `cover` cro
 
 ### Load and error events
 
-`pdsImageLoad` is emitted when the image loads, with the loaded file's `naturalWidth`, `naturalHeight` and `currentSrc` in its detail. `pdsImageError` is emitted when it fails to load, such as for a broken or missing `src`, with the failed `currentSrc`. Use them to swap a placeholder for the image once it arrives, or to show a broken-image state.
+`pdsImageLoad` is emitted when the image loads, with the loaded file's `naturalWidth`, `naturalHeight` and `currentSrc` in its detail. `pdsImageError` is emitted when it fails to load, such as for a broken or empty `src`, with the failed `currentSrc`. An image with no `src` or `srcset` at all emits neither event, so don't show a placeholder that waits on one until there is a source to load. Use them to swap a placeholder for the image once it arrives, or to show a broken-image state.
 
 - `pdsImageLoad` is also emitted for an image that finished loading before the component could listen, such as a server-rendered image, so a placeholder never waits on an event that already passed.
-- Each source emits one event. Changing `src` or `srcset` emits again for the new image.
+- Each source emits one event. Changing `src` or `srcset` emits again for the new image, and so does the browser picking a different `srcset` candidate, such as after a resize.
 - `currentSrc` is the file the browser chose, which can be a `srcset` candidate rather than `src`.
 - Cover the image with the placeholder rather than hiding the image: an image with `loading="lazy"` that is hidden never loads, so it never emits either event.
+- Hide a loading placeholder from screen readers with `aria-hidden="true"`, since they already announce the image's `alt`. When the image is essential content, put the error message in a `role="status"` region so its failure is announced.
 
 In the example below, each image is covered by a placeholder until it loads. The second `src` does not exist, so its placeholder is replaced by an error message. Reloading changes both `src` values, which shows the placeholders again until the new events arrive.
 

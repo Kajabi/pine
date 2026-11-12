@@ -37,7 +37,8 @@ const FitTemplate = (args) => html`<div style="display: flex; gap: 1rem;">
 
 // Each frame covers its image with a placeholder until `pdsImageLoad` removes it, or swaps
 // the placeholder for an error message on `pdsImageError`. The placeholder sits over the
-// image rather than hiding it, since a hidden image with `loading="lazy"` never loads.
+// image rather than hiding it, since a hidden image with `loading="lazy"` never loads. The
+// loading placeholder is hidden from screen readers, which already announce the image's alt.
 const showState = (event, state) => {
   const frame = event.target.closest('[data-image-frame]');
   frame.querySelector('[data-image-placeholder]').hidden = state !== 'loading';
@@ -62,10 +63,10 @@ const EventsTemplate = (args) => {
   return html`<pds-box data-image-events direction="column" gap="md">
     <pds-box gap="md" wrap>
       ${[
-        { caption: 'Loads', src: args.src },
-        { caption: 'Fails to load', src: args.brokenSrc },
+        { label: 'Loads', src: args.src },
+        { label: 'Fails to load', src: args.brokenSrc },
       ].map(
-        ({ caption, src }) => html`<figure data-image-frame style="margin: 0; width: 240px;">
+        ({ label, src }) => html`<div data-image-frame style="width: 240px;">
           <div style="position: relative;">
             <pds-image
               alt="${args.alt}"
@@ -76,6 +77,7 @@ const EventsTemplate = (args) => {
             ></pds-image>
             <pds-box
               data-image-placeholder
+              aria-hidden="true"
               align-items="center"
               background-color="var(--pine-color-background-muted)"
               justify-content="center"
@@ -94,8 +96,8 @@ const EventsTemplate = (args) => {
               <pds-text color="secondary" size="sm">This image couldn't load</pds-text>
             </pds-box>
           </div>
-          <figcaption><pds-text size="sm">${caption}</pds-text></figcaption>
-        </figure>`,
+          <pds-text size="sm">${label}</pds-text>
+        </div>`,
       )}
     </pds-box>
     <div>
