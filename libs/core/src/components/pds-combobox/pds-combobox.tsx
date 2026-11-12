@@ -2411,8 +2411,12 @@ export class PdsCombobox implements BasePdsProps {
     }
   };
 
+  /** A pick that fills the field from its placeholder fades in; a value it loads with doesn't. */
+  private fadesValueIn = false;
+
   private handleOptionClick(option: HTMLOptionElement) {
     if (isOptionDisabled(option)) return;
+    if (this.selectedIcon === null) this.fadesValueIn = true;
     // Update reactive state - single source of truth
     // The @Watch('selectedOption') will handle displayText, value, and form internals
     this.setSelectedOption(option);
@@ -3073,6 +3077,7 @@ export class PdsCombobox implements BasePdsProps {
           'pds-combobox__button-trigger-label': true,
           'pds-combobox__button-trigger-label--placeholder': !this.selectedLabel,
           'pds-combobox__button-trigger-label--with-icon': icon !== null,
+          'pds-combobox__button-trigger-label--value-in': icon !== null && this.fadesValueIn,
         }}
       >
         {icon !== null && (

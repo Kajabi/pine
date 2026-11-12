@@ -191,13 +191,17 @@
   text-align: start;
 }
 
-// The selection's icon, from its option or its group, before the label. The icon moves the text over
-// when it first arrives (from the placeholder), so the value fades in there instead of jumping.
+// The selection's icon, from its option or its group, before the label.
 .pds-combobox__button-trigger-label--with-icon {
   align-items: center;
-  animation: pds-combobox-value-in var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   display: flex;
   gap: var(--pine-dimension-xs);
+}
+
+// A pick from the placeholder moves the text over for the icon, so it fades in instead of jumping.
+// A value the field loads with paints at rest.
+.pds-combobox__button-trigger-label--value-in {
+  animation: pds-combobox-value-in var(--pine-motion-duration-base) var(--pine-motion-easing-out);
 }
 
 @keyframes pds-combobox-value-in {
