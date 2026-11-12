@@ -92,21 +92,24 @@ export class PdsImage {
   private imageEl?: HTMLImageElement;
 
   /**
-   * The source the last event was emitted for. A cached image can report `complete`
-   * on first render and still fire its own `load` event afterwards, so this keeps
-   * one source from emitting twice.
+   * The source and event last emitted. A cached image can report `complete` on first
+   * render and still fire its own `load` event afterwards, so this keeps one source
+   * from emitting twice. A `load` still replaces an `error` for the same source, in
+   * case `decode()` misjudged an image that did load.
    */
-  private settledSrc: string | null = null;
+  private settled: { src: string; type: 'load' | 'error' } | null = null;
 
   @Watch('src')
   @Watch('srcset')
   handleSourceChange() {
-    this.settledSrc = null;
+    this.settled = null;
   }
 
   componentDidLoad() {
     const img = this.imageEl;
-    if (!img?.complete || img.currentSrc === '') return;
+    // With no `src` or `srcset` there is nothing to load and no event to emit. An empty
+    // `src` still counts: the browser treats it as a failed load.
+    if (!img?.complete || !(img.hasAttribute('src') || img.hasAttribute('srcset'))) return;
 
     if (img.naturalWidth > 0) {
       this.emitLoad();
@@ -114,7 +117,10 @@ export class PdsImage {
     }
 
     // `complete` with no intrinsic width is either a broken image or an SVG with no
-    // intrinsic size, and only decoding tells them apart.
+    // intrinsic size, and only decoding tells them apart. Without `decode()`, leave it
+    // to the native events.
+    if (typeof img.decode !== 'function') return;
+
     const src = img.currentSrc;
     img.decode().then(
       () => img.currentSrc === src && this.emitLoad(),
@@ -122,19 +128,35 @@ export class PdsImage {
     );
   }
 
+  /**
+   * Whether the inner image is showing the current `src` and `srcset`. Right after
+   * either changes, and before the next render applies it, an event can still arrive
+   * for the old source, and it shouldn't be emitted for the new one.
+   */
+  private showsCurrentSource() {
+    const img = this.imageEl;
+
+    return (
+      (img.getAttribute('src') ?? undefined) === (this.src ?? undefined) &&
+      (img.getAttribute('srcset') ?? undefined) === (this.srcset ?? undefined)
+    );
+  }
+
   private emitLoad = () => {
     const { currentSrc, naturalHeight, naturalWidth } = this.imageEl;
-    if (currentSrc === this.settledSrc) return;
+    if (!this.showsCurrentSource()) return;
+    if (this.settled?.src === currentSrc && this.settled.type === 'load') return;
 
-    this.settledSrc = currentSrc;
+    this.settled = { src: currentSrc, type: 'load' };
     this.pdsImageLoad.emit({ currentSrc, naturalHeight, naturalWidth });
   };
 
   private emitError = () => {
     const { currentSrc } = this.imageEl;
-    if (currentSrc === this.settledSrc) return;
+    if (!this.showsCurrentSource()) return;
+    if (this.settled?.src === currentSrc) return;
 
-    this.settledSrc = currentSrc;
+    this.settled = { src: currentSrc, type: 'error' };
     this.pdsImageError.emit({ currentSrc });
   };
 
