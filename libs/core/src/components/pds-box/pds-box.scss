@@ -168,7 +168,7 @@ $box-border-color: var(--color-border-box, var(--pine-color-border));
 }
 
 .pds-box--flex-shrink {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
 }
 
 // Border radius helpers

@@ -167,3 +167,25 @@ describe('pds-box per-side borders', () => {
     expect(formatViolations(violations)).toBe('');
   });
 });
+
+describe('pds-box layout', () => {
+  it('shrinks with flex="shrink" and holds its size with flex="none"', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-box id="row" style="width: 200px">
+        <pds-box id="shrink" flex="shrink" style="width: 300px">Shrink</pds-box>
+        <pds-box id="none" flex="none" style="width: 300px">None</pds-box>
+      </pds-box>
+    `);
+
+    const shrink = await (await page.find('#shrink')).getComputedStyle();
+    const none = await (await page.find('#none')).getComputedStyle();
+
+    expect(shrink.getPropertyValue('flex-shrink')).toBe('1');
+    expect(shrink.getPropertyValue('flex-grow')).toBe('0');
+    expect(none.getPropertyValue('flex-shrink')).toBe('0');
+    expect(none.getPropertyValue('flex-grow')).toBe('0');
+    expect(await page.$eval('#shrink', (el) => el.getBoundingClientRect().width)).toBeLessThan(300);
+    expect(await page.$eval('#none', (el) => el.getBoundingClientRect().width)).toBe(300);
+  });
+});
