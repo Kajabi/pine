@@ -181,16 +181,12 @@ export class PdsTable {
   @Watch('tableLayout')
   handleTableLayoutChange(newValue: 'auto' | 'fixed') {
     this.teardownFixedLayoutWidths();
+    if (newValue === 'fixed') this.setupFixedLayoutWidths();
 
-    const headCells = Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[];
-
-    if (newValue === 'fixed') {
-      this.setupFixedLayoutWidths();
-    } else {
-      headCells.forEach((cell) => cell.style.removeProperty('--pds-table-head-cell-auto-floor-width'));
-    }
-
-    headCells.forEach((cell) => forceUpdate(cell));
+    (Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[]).forEach((cell) => {
+      if (newValue !== 'fixed') cell.style.removeProperty('--pds-table-head-cell-auto-floor-width');
+      forceUpdate(cell);
+    });
   }
 
   /**
