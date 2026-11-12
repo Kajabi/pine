@@ -273,6 +273,27 @@ describe('pds-box layout', () => {
     expect(await page.$eval('#fit', (el) => el.getBoundingClientRect().width)).toBe(400);
   });
 
+  it('has no accessibility violations in an auto-margin footer and a container box', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-box fit gap="sm" align-items="center">
+        <pds-button variant="destructive">Delete</pds-button>
+        <pds-box flex="none" gap="sm" margin-inline-start="auto">
+          <pds-button variant="secondary">Cancel</pds-button>
+          <pds-button>Save</pds-button>
+        </pds-box>
+      </pds-box>
+      <pds-box fit gap="sm">
+        <pds-box container="inline-size" direction="column">
+          <pds-text truncate>A long file name that should truncate rather than widen the row.pdf</pds-text>
+        </pds-box>
+      </pds-box>
+    `);
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
   it('keeps margin auto and container after its classes are stripped', async () => {
     const page = await newE2EPage();
     await page.setContent(`
