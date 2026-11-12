@@ -1563,7 +1563,7 @@ export namespace Components {
          */
         "external": boolean;
         /**
-          * Accessible label for the icon that `external` shows, passed to the inner `pds-link` and appended to the item's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, passed to the inner `pds-link` and appended to the item's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -1799,7 +1799,7 @@ export namespace Components {
          */
         "external": boolean;
         /**
-          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -1815,7 +1815,7 @@ export namespace Components {
         /**
           * Specifies where to open the linked document. Overrides the new-tab default of `external`; the icon still shows.
           * @defaultValue undefined
-          * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+          * @example <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
@@ -5497,7 +5497,7 @@ declare namespace LocalJSX {
          */
         "external"?: boolean;
         /**
-          * Accessible label for the icon that `external` shows, passed to the inner `pds-link` and appended to the item's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, passed to the inner `pds-link` and appended to the item's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -5761,7 +5761,7 @@ declare namespace LocalJSX {
          */
         "external"?: boolean;
         /**
-          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -5777,7 +5777,7 @@ declare namespace LocalJSX {
         /**
           * Specifies where to open the linked document. Overrides the new-tab default of `external`; the icon still shows.
           * @defaultValue undefined
-          * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+          * @example <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**

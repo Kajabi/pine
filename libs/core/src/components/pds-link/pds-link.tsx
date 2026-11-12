@@ -49,8 +49,8 @@ export class PdsLink {
 
   /**
    * Accessible label for the icon that `external` shows, appended to the
-   * link's name. It isn't announced when `target` keeps the link in the same
-   * tab. Pass a translated string to localize it; defaults to English. Pass an
+   * link's name. It isn't announced when `target` is anything other than
+   * `_blank`. Pass a translated string to localize it; defaults to English. Pass an
    * empty string to make the icon decorative.
    * @defaultValue '(opens in a new tab)'
    */
@@ -61,7 +61,7 @@ export class PdsLink {
    * default of `external`; the icon still shows.
    * @defaultValue undefined
    * @example
-   * <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+   * <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
    */
   @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
 
