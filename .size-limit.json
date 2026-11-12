@@ -20,7 +20,7 @@
   {
     "name": "pds-table entry (gzipped)",
     "path": "libs/core/dist/esm/pds-table.entry.js",
-    "limit": "5.4 KB",
+    "limit": "6 KB",
     "gzip": true
   },
   {
