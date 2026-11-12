@@ -192,7 +192,7 @@ A box is `inline-flex` unless you change `display`, so on its own it's only as w
 
 ### Pushing a box to the far side
 
-Set `margin-inline-start="auto"` on a box to push it, and everything after it, to the end of a row, such as Cancel and Save on one side of a footer and Delete on the other. `margin-inline-end="auto"` pushes what follows it away. In a column, `margin-block-start="auto"` pushes a box to the bottom of a column that has a height. The row needs to be wider than its content for the margin to do anything, so give it `fit` too. The box you push needs `flex="none"` (or `shrink` or `auto`): a box with the default `flex-grow` takes the free space itself, which leaves the margin nothing to take.
+Set `margin-inline-start="auto"` on a box to push it, and everything after it, to the end of a row, such as Cancel and Save on one side of a footer and Delete on the other. `margin-inline-end="auto"` pushes what follows it away. In a column, `margin-block-start="auto"` pushes a box to the bottom of a column that has a height. The row needs to be wider than its content for the margin to do anything, so give it `fit` too. Every pds-box in the row needs `flex="none"` (or `shrink` or `auto`), the pushed box and its siblings alike: a box with the default `flex-grow` takes the free space itself, which leaves the margin nothing to take. Buttons, text and other non-box children don't grow, so they're fine as they are.
 
 Use `justify-content="space-between"` when every child should spread out evenly, and an `auto` margin when only one should move.
 
@@ -646,7 +646,7 @@ By default Box has no margin. Use `margin` to add margin around the box.
 > Note: Use `gap` in favor of `margin-*` whenever possible.
 
 ### Margin auto
-Every `margin-*` prop and its breakpoint variants also take `auto`. An `auto` margin takes up the free space on its side, so `margin-inline-start="auto"` pushes a box, and everything after it, to the end of its row. The row needs room to spare, so give it `fit`. The box you push needs `flex="none"` (or `shrink` or `auto`): a box with the default `flex-grow` takes the free space itself, which leaves the margin nothing to take.
+Every `margin-*` prop and its breakpoint variants also take `auto`. An `auto` margin takes up the free space on its side, so `margin-inline-start="auto"` pushes a box, and everything after it, to the end of its row. The row needs room to spare, so give it `fit`. Every pds-box in the row needs `flex="none"` (or `shrink` or `auto`), the pushed box and its siblings alike: a box with the default `flex-grow` takes the free space itself, which leaves the margin nothing to take.
 
 <DocCanvas
   mdxSource={{
@@ -1413,7 +1413,7 @@ A box with `container` still needs its width from somewhere else, such as `flex=
   </pds-container>
 </DocCanvas>
 
-`container` doesn't apply layout or paint containment, so it doesn't clip the box's content or trap a positioned dropdown or tooltip inside it. It does apply style containment, so CSS counters and quotes restart inside the box.
+In current browsers, `container` doesn't apply layout or paint containment (some of the first browser versions with container queries applied layout containment too), so it doesn't clip the box's content or trap a positioned dropdown or tooltip inside it. It does apply style containment, so CSS counters and quotes restart inside the box.
 
 ### Wrap
 Control whether flex items wrap to new lines when they don't fit in the container:

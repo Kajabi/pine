@@ -299,7 +299,7 @@ export class PdsBox {
    * Defines how a box will grow or shrink to fit the space available in its container.
    * Can be a predefined value or a custom flex value (e.g., '1', '0 1 auto'). The predefined values are
    * `none` (`flex: 0 0 auto`), `grow` (`flex: 1 1 auto`) and `shrink` (`flex: 0 1 auto`).
-   * @defaultValue none
+   * Without it, a box grows to share its row with its siblings (`flex-grow: 1; flex-basis: 0`).
    */
   @Prop() flex?: `none` | `grow` | `shrink` | string;
 
