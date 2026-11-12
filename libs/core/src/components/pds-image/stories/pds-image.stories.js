@@ -35,23 +35,19 @@ const FitTemplate = (args) => html`<div style="display: flex; gap: 1rem;">
   )}
 </div>`;
 
-// Each frame covers its image with a placeholder until `pdsImageLoad` removes it, or swaps
-// the placeholder for an error message on `pdsImageError`. The placeholder sits over the
-// image rather than hiding it, since a hidden image with `loading="lazy"` never loads. The
-// loading placeholder is hidden from screen readers, which already announce the image's alt.
-// The error message is written into its `role="status"` region only once the region is
-// showing, so screen readers announce the failure.
+// Each frame covers its image with a placeholder until `pdsImageLoad` removes it, or shows
+// an error message on `pdsImageError`. The placeholder sits over the image rather than
+// hiding it, since a hidden image with `loading="lazy"` never loads. The loading placeholder
+// is hidden from screen readers, which already announce the image's alt. The error message's
+// `role="status"` region stays rendered the whole time, faded out by opacity rather than
+// `hidden`, so only its text changes when the error arrives — a region that goes from hidden
+// to visible with its text already set often isn't announced.
 const showState = (event, state) => {
   const frame = event.target.closest('[data-image-frame]');
   const error = frame.querySelector('[data-image-error]');
   frame.querySelector('[data-image-placeholder]').hidden = state !== 'loading';
-  error.hidden = state !== 'error';
-  error.querySelector('pds-text').textContent = '';
-  if (state === 'error') {
-    requestAnimationFrame(() => {
-      error.querySelector('pds-text').textContent = "This image couldn't load";
-    });
-  }
+  error.style.opacity = state === 'error' ? '1' : '0';
+  error.querySelector('pds-text').textContent = state === 'error' ? "This image couldn't load" : '';
 };
 
 const overlayStyle = 'position: absolute; inset: 0;';
@@ -64,7 +60,7 @@ const EventsTemplate = (args) => {
       const url = new URL(image.getAttribute('src'), window.location.href);
       url.searchParams.set('reload', Date.now());
       frame.querySelector('[data-image-placeholder]').hidden = false;
-      frame.querySelector('[data-image-error]').hidden = true;
+      frame.querySelector('[data-image-error]').style.opacity = '0';
       frame.querySelector('[data-image-error] pds-text').textContent = '';
       image.setAttribute('src', url.href);
     });
@@ -97,12 +93,11 @@ const EventsTemplate = (args) => {
             </pds-box>
             <pds-box
               data-image-error
-              hidden
               role="status"
               align-items="center"
               background-color="var(--pine-color-background-inset)"
               justify-content="center"
-              style="${overlayStyle}"
+              style="${overlayStyle} opacity: 0; pointer-events: none;"
             >
               <pds-text color="secondary" size="sm"></pds-text>
             </pds-box>

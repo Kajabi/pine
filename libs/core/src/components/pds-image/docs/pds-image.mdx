@@ -165,17 +165,31 @@ In the example below, each image is covered by a placeholder until it loads. The
 
 ```jsx
 // React
+const [loaded, setLoaded] = useState(false);
+const [errorMessage, setErrorMessage] = useState('');
+
 <PdsImage
   alt="Product photo"
   src={product.imageUrl}
-  onPdsImageLoad={() => setStatus('loaded')}
-  onPdsImageError={() => setStatus('error')}
+  onPdsImageLoad={() => setLoaded(true)}
+  onPdsImageError={() => setErrorMessage('The image failed to load.')}
 />
+{!loaded && <div aria-hidden="true">Loading…</div>}
+<p role="status">{errorMessage}</p>
+```
+
+```html
+<!-- Web component -->
+<pds-image alt="Product photo" src="..."></pds-image>
+<div class="placeholder" aria-hidden="true">Loading…</div>
+<p role="status"></p>
 ```
 
 ```js
 // Web component
 const image = document.querySelector('pds-image');
+const placeholder = document.querySelector('.placeholder');
+const status = document.querySelector('[role="status"]');
 
 image.addEventListener('pdsImageLoad', (event) => {
   placeholder.hidden = true;
@@ -184,7 +198,9 @@ image.addEventListener('pdsImageLoad', (event) => {
 
 image.addEventListener('pdsImageError', () => {
   placeholder.hidden = true;
-  errorMessage.hidden = false;
+  // The status region stays rendered the whole time; only its text changes. A region
+  // that goes from hidden to visible with its text already set often isn't announced.
+  status.textContent = 'The image failed to load.';
 });
 ```
 
