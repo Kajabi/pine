@@ -149,6 +149,44 @@ The same portrait source in the same `wide` shape, under each `fit`. `cover` cro
   </div>
 </DocCanvas>
 
+### Load and error events
+
+`pdsImageLoad` is emitted when the image loads, with the loaded file's `naturalWidth`, `naturalHeight` and `currentSrc` in its detail. `pdsImageError` is emitted when it fails to load, such as for a broken or missing `src`, with the failed `currentSrc`. Use them to swap a placeholder for the image once it arrives, or to show a broken-image state.
+
+- `pdsImageLoad` is also emitted for an image that finished loading before the component could listen, such as a server-rendered image, so a placeholder never waits on an event that already passed.
+- Each source emits one event. Changing `src` or `srcset` emits again for the new image.
+- `currentSrc` is the file the browser chose, which can be a `srcset` candidate rather than `src`.
+- Cover the image with the placeholder rather than hiding the image: an image with `loading="lazy"` that is hidden never loads, so it never emits either event.
+
+In the example below, each image is covered by a placeholder until it loads. The second `src` does not exist, so its placeholder is replaced by an error message. Reloading changes both `src` values, which shows the placeholders again until the new events arrive.
+
+<Canvas of={stories.Events} />
+
+```jsx
+// React
+<PdsImage
+  alt="Product photo"
+  src={product.imageUrl}
+  onPdsImageLoad={() => setStatus('loaded')}
+  onPdsImageError={() => setStatus('error')}
+/>
+```
+
+```js
+// Web component
+const image = document.querySelector('pds-image');
+
+image.addEventListener('pdsImageLoad', (event) => {
+  placeholder.hidden = true;
+  console.log(event.detail.naturalWidth, event.detail.naturalHeight);
+});
+
+image.addEventListener('pdsImageError', () => {
+  placeholder.hidden = true;
+  errorMessage.hidden = false;
+});
+```
+
 ## Additional Resources
 
 [MDN: Image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
