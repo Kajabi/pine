@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-image', () => {
@@ -107,6 +107,115 @@ describe('pds-image', () => {
 
     expect(style.aspectRatio).toBe('1 / 1');
     expect(style.objectFit).toBe('contain');
+  });
+});
+
+describe('pds-image events', () => {
+  type ImageEvent = { type: string; detail: unknown };
+
+  const svg = (width: number, height: number) =>
+    'data:image/svg+xml,' +
+    encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}"/></svg>`,
+    );
+  // A data URL that is not an image, so it fails to decode without a network request.
+  const broken = 'data:image/png;base64,bm90LWFuLWltYWdl';
+
+  // `setContent` navigates, which drops any listener added before it, and the image can
+  // settle before a listener added after it. So the image is created here, with its
+  // listeners already attached, and every event it emits is recorded on `window`.
+  // With `preload`, the source is loaded first, so the browser has it in its memory
+  // cache and the component's image reports `complete` as soon as it renders.
+  const renderImage = async (page: E2EPage, src: string, { preload = false } = {}) => {
+    await page.setContent('<div></div>');
+    await page.evaluate(
+      async (imageSrc, shouldPreload) => {
+        if (shouldPreload) {
+          await new Promise<void>((resolve) => {
+            const preloaded = new Image();
+            preloaded.onload = () => resolve();
+            preloaded.src = imageSrc;
+          });
+        }
+
+        const events: ImageEvent[] = [];
+        (window as unknown as { imageEvents: ImageEvent[] }).imageEvents = events;
+        const image = document.createElement('pds-image');
+        const record = (event: CustomEvent) => events.push({ type: event.type, detail: event.detail });
+        image.addEventListener('pdsImageLoad', record);
+        image.addEventListener('pdsImageError', record);
+        image.setAttribute('alt', 'A shape');
+        image.setAttribute('src', imageSrc);
+        document.body.appendChild(image);
+      },
+      src,
+      preload,
+    );
+  };
+
+  // Waits for `count` events, then a little longer so a duplicate has the chance to arrive.
+  const imageEvents = async (page: E2EPage, count: number): Promise<ImageEvent[]> => {
+    await page.waitForFunction(
+      (expected) => (window as unknown as { imageEvents: ImageEvent[] }).imageEvents.length >= expected,
+      {},
+      count,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    return page.evaluate(() => (window as unknown as { imageEvents: ImageEvent[] }).imageEvents);
+  };
+
+  const setSrc = (page: E2EPage, src: string) =>
+    page.evaluate((imageSrc) => document.querySelector('pds-image').setAttribute('src', imageSrc), src);
+
+  it('emits pdsImageLoad with the natural size and source once the image loads', async () => {
+    const page = await newE2EPage();
+    const src = svg(120, 80);
+
+    await renderImage(page, src);
+
+    expect(await imageEvents(page, 1)).toEqual([
+      { type: 'pdsImageLoad', detail: { currentSrc: src, naturalHeight: 80, naturalWidth: 120 } },
+    ]);
+  });
+
+  it('emits pdsImageError when the src fails to load', async () => {
+    const page = await newE2EPage();
+
+    await renderImage(page, broken);
+
+    expect(await imageEvents(page, 1)).toEqual([{ type: 'pdsImageError', detail: { currentSrc: broken } }]);
+  });
+
+  it('emits pdsImageLoad only once for a cached image that is complete on first render', async () => {
+    // A memory-cached image reports `complete` on first render, which emits the event,
+    // and then still fires its own native `load` event, which must not emit it again.
+    const page = await newE2EPage();
+    const src = svg(40, 20);
+
+    await renderImage(page, src, { preload: true });
+
+    expect(await imageEvents(page, 1)).toEqual([
+      { type: 'pdsImageLoad', detail: { currentSrc: src, naturalHeight: 20, naturalWidth: 40 } },
+    ]);
+  });
+
+  it('emits again after src changes', async () => {
+    const page = await newE2EPage();
+    const first = svg(10, 10);
+    const second = svg(30, 10);
+
+    await renderImage(page, first);
+    await imageEvents(page, 1);
+    await setSrc(page, broken);
+    await imageEvents(page, 2);
+    await setSrc(page, second);
+
+    expect(await imageEvents(page, 3)).toEqual([
+      { type: 'pdsImageLoad', detail: { currentSrc: first, naturalHeight: 10, naturalWidth: 10 } },
+      { type: 'pdsImageError', detail: { currentSrc: broken } },
+      { type: 'pdsImageLoad', detail: { currentSrc: second, naturalHeight: 10, naturalWidth: 30 } },
+    ]);
   });
 });
 

@@ -12,6 +12,7 @@ import { ChipSentimentType, ChipSizeType, ChipVariantType, ImageRatioType, Modal
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
+import { ImageErrorEventDetail, ImageLoadEventDetail } from "./components/pds-image/image-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PluralForms } from "./i18n";
 import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
@@ -26,6 +27,7 @@ export { ChipSentimentType, ChipSizeType, ChipVariantType, ImageRatioType, Modal
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
+export { ImageErrorEventDetail, ImageLoadEventDetail } from "./components/pds-image/image-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PluralForms } from "./i18n";
 export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
@@ -3062,6 +3064,10 @@ export interface PdsFilterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsFilterElement;
 }
+export interface PdsImageCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsImageElement;
+}
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
@@ -3439,7 +3445,19 @@ declare global {
         prototype: HTMLPdsFiltersElement;
         new (): HTMLPdsFiltersElement;
     };
+    interface HTMLPdsImageElementEventMap {
+        "pdsImageLoad": ImageLoadEventDetail;
+        "pdsImageError": ImageErrorEventDetail;
+    }
     interface HTMLPdsImageElement extends Components.PdsImage, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsImageElementEventMap>(type: K, listener: (this: HTMLPdsImageElement, ev: PdsImageCustomEvent<HTMLPdsImageElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsImageElementEventMap>(type: K, listener: (this: HTMLPdsImageElement, ev: PdsImageCustomEvent<HTMLPdsImageElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsImageElement: {
         prototype: HTMLPdsImageElement;
@@ -5597,6 +5615,14 @@ declare namespace LocalJSX {
           * @defaultValue eager
          */
         "loading"?: 'eager' | 'lazy';
+        /**
+          * Emitted when the image fails to load, such as for a broken or missing `src`. Emitted again after `src` or `srcset` changes and the new image fails.
+         */
+        "onPdsImageError"?: (event: PdsImageCustomEvent<ImageErrorEventDetail>) => void;
+        /**
+          * Emitted when the image loads. Also emitted on first render for an image that finished loading before the component could listen, such as a server-rendered image. Emitted again after `src` or `srcset` changes and the new image loads.
+         */
+        "onPdsImageLoad"?: (event: PdsImageCustomEvent<ImageLoadEventDetail>) => void;
         /**
           * The aspect ratio the image is sized to, cropping whatever overflows the shape. A preset (`square` 1/1, `landscape` 4/3, `wide` 16/9, `portrait` 3/4, `tall` 9/16) or any custom CSS ratio, such as `21 / 9`. Use this, not `height` and `width`, to crop: those only reserve space, and only `width` reliably does even that.
          */

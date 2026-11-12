@@ -21,6 +21,14 @@
 | `width`       | `width`        | The width of the image in pixels. This reserves the image's width before it loads, but not its height: to reserve the height too, set `--dimension-aspect-ratio` to the image's own proportions.                                                                                                                              | `number`                                                                                     | `undefined` |
 
 
+## Events
+
+| Event           | Description                                                                                                                                                                                                                              | Type                                 |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `pdsImageError` | Emitted when the image fails to load, such as for a broken or missing `src`. Emitted again after `src` or `srcset` changes and the new image fails.                                                                                      | `CustomEvent<ImageErrorEventDetail>` |
+| `pdsImageLoad`  | Emitted when the image loads. Also emitted on first render for an image that finished loading before the component could listen, such as a server-rendered image. Emitted again after `src` or `srcset` changes and the new image loads. | `CustomEvent<ImageLoadEventDetail>`  |
+
+
 ## CSS Custom Properties
 
 | Name                       | Description                                              |

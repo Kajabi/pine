@@ -1,5 +1,6 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import type { ImageRatioType } from '@utils/types';
+import type { ImageErrorEventDetail, ImageLoadEventDetail } from './image-interface';
 
 @Component({
   tag: 'pds-image',
@@ -73,6 +74,68 @@ export class PdsImage {
    */
   @Prop() width?: number;
 
+  /**
+   * Emitted when the image loads. Also emitted on first render for an image that
+   * finished loading before the component could listen, such as a server-rendered
+   * image. Emitted again after `src` or `srcset` changes and the new image loads.
+   */
+  @Event() pdsImageLoad: EventEmitter<ImageLoadEventDetail>;
+
+  /**
+   * Emitted when the image fails to load, such as for a broken or missing `src`.
+   * Emitted again after `src` or `srcset` changes and the new image fails.
+   */
+  @Event() pdsImageError: EventEmitter<ImageErrorEventDetail>;
+
+  private imageEl?: HTMLImageElement;
+
+  /**
+   * The source the last event was emitted for. A cached image can report `complete`
+   * on first render and still fire its own `load` event afterwards, so this keeps
+   * one source from emitting twice.
+   */
+  private settledSrc: string | null = null;
+
+  @Watch('src')
+  @Watch('srcset')
+  handleSourceChange() {
+    this.settledSrc = null;
+  }
+
+  componentDidLoad() {
+    const img = this.imageEl;
+    if (!img?.complete || img.currentSrc === '') return;
+
+    if (img.naturalWidth > 0) {
+      this.emitLoad();
+      return;
+    }
+
+    // `complete` with no intrinsic width is either a broken image or an SVG with no
+    // intrinsic size, and only decoding tells them apart.
+    const src = img.currentSrc;
+    img.decode().then(
+      () => img.currentSrc === src && this.emitLoad(),
+      () => img.currentSrc === src && this.emitError(),
+    );
+  }
+
+  private emitLoad = () => {
+    const { currentSrc, naturalHeight, naturalWidth } = this.imageEl;
+    if (currentSrc === this.settledSrc) return;
+
+    this.settledSrc = currentSrc;
+    this.pdsImageLoad.emit({ currentSrc, naturalHeight, naturalWidth });
+  };
+
+  private emitError = () => {
+    const { currentSrc } = this.imageEl;
+    if (currentSrc === this.settledSrc) return;
+
+    this.settledSrc = currentSrc;
+    this.pdsImageError.emit({ currentSrc });
+  };
+
   private imageRatio() {
     const ratios: { [key: string]: string } = {
       square: '1 / 1',
@@ -111,6 +174,9 @@ export class PdsImage {
           srcset={this.srcset}
           style={ratioStyle}
           width={this.width}
+          onLoad={this.emitLoad}
+          onError={this.emitError}
+          ref={(el) => (this.imageEl = el)}
         />
       </Host>
     );
