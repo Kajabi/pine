@@ -198,8 +198,22 @@
   gap: var(--pine-dimension-xs);
 }
 
+// A pick from the placeholder moves the text over for the icon, so it fades in instead of jumping.
+// A value the field loads with paints at rest.
+.pds-combobox__button-trigger-label--value-in {
+  animation: pds-combobox-value-in var(--pine-motion-duration-base) var(--pine-motion-easing-out);
+}
+
+@keyframes pds-combobox-value-in {
+  from {
+    opacity: 0;
+  }
+}
+
 .pds-combobox__button-trigger-icon {
+  block-size: var(--pine-dimension-sm);
   flex-shrink: 0;
+  inline-size: var(--pine-dimension-sm);
 }
 
 .pds-combobox__button-trigger--truncate {
@@ -231,6 +245,11 @@
   letter-spacing: var(--pine-letter-spacing);
   min-height: var(--pine-dimension-450);
   padding: calc(var(--pine-dimension-xs) - var(--pine-border-width)) var(--pine-dimension-150);
+}
+
+// Like pds-select, the field-like trigger keeps its background on hover; only the border changes.
+.pds-combobox__button-trigger--secondary.pds-combobox__button-trigger--input-shape {
+  --color-background-hover: var(--pine-color-secondary);
 }
 
 // The placeholder of the default, field-like trigger, lighter than a chosen value. The other
