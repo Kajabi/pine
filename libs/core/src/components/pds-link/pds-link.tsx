@@ -3,7 +3,7 @@ import { setColor } from '../../utils/utils';
 
 import { launch } from '@pine-ds/icons/icons';
 
-// Used when `externalLabel` is unset; an empty string hides the icon instead.
+// Used when `externalLabel` is unset; an empty string makes the icon decorative instead.
 const DEFAULT_EXTERNAL_LABEL = '(opens in a new tab)';
 
 /**
@@ -42,9 +42,8 @@ export class PdsLink {
   @Prop() componentId: string;
 
   /**
-   * Determines whether the link should open in a new tab.
+   * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise.
    * @defaultValue false
-   * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
    */
   @Prop() external = false;
 
@@ -58,7 +57,8 @@ export class PdsLink {
   @Prop() externalLabel?: string;
 
   /**
-   * Specifies where to open the linked document.
+   * Specifies where to open the linked document. Overrides the new-tab
+   * default of `external`; the icon still shows.
    * @defaultValue undefined
    * @example
    * <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>

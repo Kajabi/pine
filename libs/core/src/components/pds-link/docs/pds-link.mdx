@@ -31,6 +31,7 @@ A hyperlink is used as a navigational element to direct users to another locatio
 - Inside a paragraph, use the default `inline` variant. Its underline sets the link apart from the words around it, while a `plain` link in the default color differs from body text only in weight until it's hovered.
 - Set `active` on the link to the current page in a set of navigation links. It sets `aria-current="page"`.
 - Check that a custom `color` has enough contrast with the background behind it.
+- Tell people when a link opens a new tab. Use `external`: it shows the launch icon, and screen readers hear "(opens in a new tab)" after the link text. A link with only `target="_blank"` opens a new tab without any warning.
 
 ## Properties
 
@@ -115,33 +116,45 @@ Set `active` on the link for the current page in a nav rail or tab strip built f
 
 ### External
 
-An `external` link is styled with an icon to indicate that it will redirect users to an external website or resource in a new tab. Screen readers hear "(opens in a new tab)" after the link text; pass a translated `externalLabel` to localize it, or an empty string to leave it out. The icon only appears with `external`, so a link that sets only `target="_blank"` announces nothing extra.
+`external` shows the launch icon after the link text and opens the link in a new tab. Use it for links that leave the app or open a separate resource. Screen readers hear "(opens in a new tab)" after the link text; pass a translated `externalLabel` to localize it, or an empty string to make the icon decorative.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsLink href="#some-anchor" external="true"></PdsLink>`,
-    webComponent: `<pds-link href="#some-anchor" external="true"></pds-link>`
+    react: `<PdsLink href="https://example.com/docs" external>Developer docs</PdsLink>`,
+    webComponent: `<pds-link href="https://example.com/docs" external>Developer docs</pds-link>`
 }}>
-  <pds-link href="#some-anchor" external="true"></pds-link>
+  <pds-link href="https://example.com/docs" external>Developer docs</pds-link>
+</DocCanvas>
+
+### External in the same tab
+
+`target` overrides the new-tab default of `external`. Pair `external` with `target="_self"` to show the launch icon on a link that opens in the same tab, such as a link to another product area. The icon still shows, but it becomes decorative: the link doesn't open a new tab, so screen readers don't hear "(opens in a new tab)", and `externalLabel` is ignored.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsLink href="/admin/payments" external target="_self">Payment settings</PdsLink>`,
+    webComponent: `<pds-link href="/admin/payments" external target="_self">Payment settings</pds-link>`
+}}>
+  <pds-link href="/admin/payments" external target="_self">Payment settings</pds-link>
 </DocCanvas>
 
 ### Target
 
-The `target` prop specifies where to open the linked document and supports all standard target values (`_blank`, `_self`, `_parent`, `_top`). This controls link behavior independently from the `external` prop, which controls icon display.
+The `target` prop sets where the link opens and supports all standard target values (`_blank`, `_self`, `_parent`, `_top`). It controls only where the link opens; `external` controls the icon. Use `target` alone to open a link in a parent or top-level frame, or in the same tab.
 
->Note: Use `external` to show the external icon. The `target` prop only controls where the link opens.
+>Note: `target="_blank"` alone opens a new tab with no icon and no "(opens in a new tab)" label. To open a new tab, use `external`, with or without `target="_blank"`.
 
 <DocCanvas
   mdxSource={{
     react: `<PdsLink href="https://example.com" target="_blank" external>External link in new tab</PdsLink>
-    <PdsLink href="/internal" target="_blank">Internal link in new tab</PdsLink>
+    <PdsLink href="/dashboard" target="_top">Opens in the top-level frame</PdsLink>
     <PdsLink href="#section" target="_self">Opens in same frame</PdsLink>`,
     webComponent: `<pds-link href="https://example.com" target="_blank" external>External link in new tab</pds-link>
-    <pds-link href="/internal" target="_blank">Internal link in new tab</pds-link>
+    <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
     <pds-link href="#section" target="_self">Opens in same frame</pds-link>`
 }}>
   <pds-link href="https://example.com" target="_blank" external>External link in new tab</pds-link>
-  <pds-link href="/internal" target="_blank">Internal link in new tab</pds-link>
+  <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
   <pds-link href="#section" target="_self">Opens in same frame</pds-link>
 </DocCanvas>
 
