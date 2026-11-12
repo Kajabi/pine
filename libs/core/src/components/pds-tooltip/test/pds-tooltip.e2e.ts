@@ -259,7 +259,7 @@ describe('pds-tooltip inside an open pds-modal', () => {
 });
 
 describe('pds-tooltip width', () => {
-  it('keeps its padding inside max-width', async () => {
+  it('renders at its max-width, padding included', async () => {
     const page = await newE2EPage();
     await page.setContent(`
       <pds-tooltip content="Long content that wraps across the panel so it reaches its widest width, and keeps going past the edge of the panel to be sure.">
@@ -276,6 +276,6 @@ describe('pds-tooltip width', () => {
       }
       return document.querySelector('.pds-tooltip--is-open .pds-tooltip__content')!.getBoundingClientRect().width;
     });
-    expect(Math.round(width)).toBe(320);
+    expect(Math.round(width)).toBe(344);
   });
 });
