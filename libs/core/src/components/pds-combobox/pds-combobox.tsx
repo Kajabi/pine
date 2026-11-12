@@ -635,7 +635,16 @@ export class PdsCombobox implements BasePdsProps {
     else if (next === null && previous !== null) this.drillDirection = 'out';
     else return;
     // The views differ in height; measured now, before the next one renders, so it can glide.
-    this.drillFromHeight = this.listboxEl?.getBoundingClientRect().height;
+    const panel = this.listboxEl;
+    if (!panel) return;
+    const from = panel.getBoundingClientRect().height;
+    this.drillFromHeight = from;
+    // Held there until componentDidRender measures the new view: a child component that renders late
+    // can otherwise let the browser paint the new view at its full height first.
+    panel.style.setProperty('--pds-combobox-glide-from', `${from}px`);
+    panel.style.setProperty('--pds-combobox-glide-to', `${from}px`);
+    panel.classList.add('pds-combobox__listbox--height-glide');
+    this.syncPanelOverflow();
   }
 
   /** The dropdown's height before a drill, so componentDidRender can ease it to the new view's. */
@@ -654,7 +663,10 @@ export class PdsCombobox implements BasePdsProps {
     panel.classList.remove('pds-combobox__listbox--height-glide');
     this.syncPanelOverflow();
     const to = panel.getBoundingClientRect().height;
-    if (Math.abs(to - from) < 1) return;
+    if (Math.abs(to - from) < 1) {
+      this.endHeightGlide();
+      return;
+    }
     panel.style.setProperty('--pds-combobox-glide-from', `${from}px`);
     panel.style.setProperty('--pds-combobox-glide-to', `${to}px`);
     panel.classList.add('pds-combobox__listbox--height-glide');
@@ -687,7 +699,7 @@ export class PdsCombobox implements BasePdsProps {
    * fixed search field, and while the height glides (so no scrollbar flashes), otherwise auto.
    */
   private syncPanelOverflow() {
-    if ((this.maxHeight ?? '') === '' || this.listboxEl === undefined) return;
+    if ((this.maxHeight ?? '') === '' || !this.listboxEl) return;
     const gliding = this.listboxEl.classList.contains('pds-combobox__listbox--height-glide');
     this.listboxEl.style.overflowY = this.usesPanelSearch || gliding ? 'hidden' : 'auto';
   }
@@ -712,7 +724,8 @@ export class PdsCombobox implements BasePdsProps {
   };
 
   private onDrillAnimationEnd = (event: AnimationEvent) => {
-    // Only the slide's own end: slotted consumer content can animate inside the list too.
+    // Only the component's own ends (the slide by name, the glide by its target): slotted consumer
+    // content can animate inside the list too.
     if (event.animationName === 'pds-combobox-drill') this.drillDirection = null;
     if (event.animationName === 'pds-combobox-height-glide' && event.target === this.listboxEl) this.endHeightGlide();
   };
