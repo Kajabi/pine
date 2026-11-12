@@ -2241,10 +2241,10 @@ describe('pds-combobox selected field and option badges', () => {
 });
 
 describe('pds-combobox dropdown width', () => {
-  it('renders the listbox at dropdown-width, its padding included', async () => {
+  const listboxWidth = async (attrs: string) => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-combobox component-id="width" label="Animal" dropdown-width="300px">
+      <pds-combobox component-id="width" label="Animal" ${attrs}>
         <option value="cat">Cat</option>
         <option value="dog">Dog</option>
       </pds-combobox>
@@ -2254,7 +2254,7 @@ describe('pds-combobox dropdown width', () => {
     await (await page.find('pds-combobox >>> input')).click();
     await page.waitForChanges();
 
-    const width = await page.evaluate(() => {
+    return page.evaluate(() => {
       const roots = [
         document.querySelector('pds-combobox')!.shadowRoot,
         document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot,
@@ -2262,6 +2262,13 @@ describe('pds-combobox dropdown width', () => {
       const listbox = roots.map((root) => root?.querySelector('.pds-combobox__listbox')).find(Boolean)!;
       return listbox.getBoundingClientRect().width;
     });
-    expect(Math.round(width)).toBe(300);
+  };
+
+  it('renders the listbox at its default width, padding included', async () => {
+    expect(Math.round(await listboxWidth(''))).toBe(252);
+  });
+
+  it('renders the listbox at dropdown-width, padding included', async () => {
+    expect(Math.round(await listboxWidth('dropdown-width="300px"'))).toBe(300);
   });
 });
