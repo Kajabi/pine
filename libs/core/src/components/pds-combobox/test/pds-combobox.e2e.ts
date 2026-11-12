@@ -334,6 +334,105 @@ describe('pds-combobox', () => {
     });
   });
 
+  // The check marks the selection; the fill and the keyboard's ring mark only the current row.
+  describe('the selected option and the current row', () => {
+    const setUp = async (attrs = '') => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="fruit" label="Fruit" trigger="button" mode="select-only" value="banana" ${attrs}>
+          <optgroup label="Fruits">
+            <option value="apple">Apple</option>
+            <option value="banana">Banana</option>
+            <option value="cherry">Cherry</option>
+          </optgroup>
+        </pds-combobox>
+      `);
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+      // The click leaves the pointer over the trigger; park it away from the panel so a stray
+      // mouseenter can't move the highlight or end keyboard navigation.
+      await page.mouse.move(0, 0);
+      await page.waitForChanges();
+      return page;
+    };
+
+    // Waits for every fill transition (and any open/drill animation) to finish, so a mid-fade row
+    // isn't read as filled. getAnimations() flushes style first, so a transition about to start counts.
+    const settle = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.waitForFunction(() => document.querySelector('pds-combobox')!.shadowRoot!.getAnimations().length === 0, {
+        timeout: 3000,
+      });
+
+    // Each visible option's text, fill and outline style, once the fill's transition has run.
+    const rows = async (page: Awaited<ReturnType<typeof newE2EPage>>) => {
+      await settle(page);
+      return page.evaluate(() =>
+        Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll('.pds-combobox__option'))
+          .filter(el => el.getClientRects().length > 0)
+          .map(el => {
+            const { backgroundColor, outlineStyle } = getComputedStyle(el);
+            return { text: el.textContent, filled: backgroundColor !== 'rgba(0, 0, 0, 0)', outlineStyle };
+          }),
+      );
+    };
+
+    it.each([['inline', ''], ['flyout', 'group-display="flyout"'], ['drill-in', 'group-display="drill-in"']])(
+      'opens on the selection, and leaves it unfilled while another row is hovered (%s)',
+      async (_display, attrs) => {
+        const page = await setUp(attrs);
+
+        expect((await rows(page)).filter(row => row.filled).map(row => row.text)).toEqual(['Banana']);
+
+        await (await page.find('pds-combobox >>> .pds-combobox__option[data-option-index="2"]')).hover();
+        await page.waitForChanges();
+
+        expect((await rows(page)).filter(row => row.filled).map(row => row.text)).toEqual(['Cherry']);
+      },
+    );
+
+    it('rings an inline option the arrow keys reach, and not one the pointer hovers', async () => {
+      const page = await setUp();
+
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+      expect((await rows(page)).find(row => row.text === 'Cherry')?.outlineStyle).toBe('solid');
+
+      await (await page.find('pds-combobox >>> .pds-combobox__option[data-option-index="0"]')).hover();
+      await page.waitForChanges();
+      expect((await rows(page)).map(row => row.outlineStyle)).toEqual(['none', 'none', 'none']);
+    });
+
+    it("keeps a flyout's open group row filled while an option in its flyout is hovered", async () => {
+      const page = await setUp('group-display="flyout"');
+      expect(await page.find('pds-combobox >>> .pds-combobox__flyout')).not.toBeNull();
+
+      await (await page.find('pds-combobox >>> .pds-combobox__option[data-option-index="2"]')).hover();
+      await page.waitForChanges();
+      await settle(page);
+
+      const groupRowFill = await page.evaluate(() => {
+        const trigger = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-row--open > .pds-combobox__group-row-trigger')!;
+        return getComputedStyle(trigger).backgroundColor;
+      });
+      expect(groupRowFill).not.toBe('rgba(0, 0, 0, 0)');
+    });
+
+    it.each([['flyout', 'group-display="flyout"'], ['drill-in', 'group-display="drill-in"']])(
+      'rings an option the arrow keys reach (%s)',
+      async (_display, attrs) => {
+        const page = await setUp(attrs);
+
+        await page.keyboard.press('ArrowDown');
+        await page.waitForChanges();
+
+        const cherry = (await rows(page)).find(row => row.text === 'Cherry');
+        expect(cherry?.outlineStyle).toBe('solid');
+        expect(await page.find('pds-combobox >>> .pds-combobox__option--keyboard')).not.toBeNull();
+      },
+    );
+  });
+
   describe('group-display="flyout"', () => {
     const actions = [
       { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
