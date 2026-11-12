@@ -120,8 +120,10 @@ export class PdsSelect {
 
 
   /**
-   * Emitted when the user changes the selection. Doesn't emit when the `value` property is set programmatically.
-   * `detail` is the native `change` event, so read the new value from the select's `value`.
+   * Emitted when the user changes the selection. `detail` is the native `change` event, so read the new value
+   * from the select's `value`: a string, or an array with `multiple`.
+   *
+   * This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsSelectChange: EventEmitter<InputEvent>;
 

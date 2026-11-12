@@ -26,12 +26,12 @@
 
 ## Events
 
-| Event             | Description                                                                                                                                                                                          | Type                         |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `pdsBlur`         | Emitted when the select loses focus.                                                                                                                                                                 | `CustomEvent<FocusEvent>`    |
-| `pdsFocus`        | Emitted when the select gains focus.                                                                                                                                                                 | `CustomEvent<FocusEvent>`    |
-| `pdsKeyDown`      | Emitted when a key is pressed down in the select.                                                                                                                                                    | `CustomEvent<KeyboardEvent>` |
-| `pdsSelectChange` | Emitted when the user changes the selection. Doesn't emit when the `value` property is set programmatically. `detail` is the native `change` event, so read the new value from the select's `value`. | `CustomEvent<InputEvent>`    |
+| Event             | Description                                                                                                                                                                                                                                               | Type                         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `pdsBlur`         | Emitted when the select loses focus.                                                                                                                                                                                                                      | `CustomEvent<FocusEvent>`    |
+| `pdsFocus`        | Emitted when the select gains focus.                                                                                                                                                                                                                      | `CustomEvent<FocusEvent>`    |
+| `pdsKeyDown`      | Emitted when a key is pressed down in the select.                                                                                                                                                                                                         | `CustomEvent<KeyboardEvent>` |
+| `pdsSelectChange` | Emitted when the user changes the selection. `detail` is the native `change` event, so read the new value from the select's `value`: a string, or an array with `multiple`.  This event will not emit when programmatically setting the `value` property. | `CustomEvent<InputEvent>`    |
 
 
 ## Slots

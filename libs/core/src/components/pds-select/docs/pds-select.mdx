@@ -29,7 +29,7 @@ Selects present a single-choice dropdown, letting users pick one value from a pr
 ### Accessibility
 
 - Use meaningful labels and associate them clearly with the select element.
-- Always set `label`, even when the design shows no label. With `hide-label`, the select renders no visible label and takes its name from `label` through `aria-label`; the `action` slot is hidden too. Without `label`, the select has no name.
+- Always set `label`, even when the design shows no label. With `hide-label`, the select renders no visible label and takes its name from `label` through `aria-label`; the `action` slot is hidden too. Without `label`, the select has no name: an `aria-label` on `pds-select` doesn't name it.
 - Provide helper text or error messages for guidance and validation.
 - The helper message becomes the select's accessible description. An `error-message` replaces it as the description and marks the select invalid, with or without `invalid`.
 - Avoid overloading dropdowns with excessive options to prevent overwhelm.
@@ -439,42 +439,11 @@ The action slot allows you to add helpful content next to the select label, such
   </pds-select>
 </DocCanvas>
 
-## Events
-
-None of these events fire when `value` is set in code. In React, add `on` to the event name, as in `onPdsSelectChange`.
-
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="select-events">
-    <pds-table-head>
-      <pds-table-head-cell>Event</pds-table-head-cell>
-      <pds-table-head-cell>Emitted when</pds-table-head-cell>
-      <pds-table-head-cell>Detail</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>pdsSelectChange</code></pds-table-cell>
-        <pds-table-cell>The user changes the selection.</pds-table-cell>
-        <pds-table-cell>The native <code>change</code> event. Read the new value from the select itself, <code>event.target.value</code>: a string, or an array with <code>multiple</code>.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsFocus</code>, <code>pdsBlur</code></pds-table-cell>
-        <pds-table-cell>The select gains or loses focus.</pds-table-cell>
-        <pds-table-cell>The native <code>focus</code> or <code>blur</code> event.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsKeyDown</code></pds-table-cell>
-        <pds-table-cell>A key is pressed in the select.</pds-table-cell>
-        <pds-table-cell>The native <code>keydown</code> event.</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
-
 ## Form Integration
 
 - Provide a `name` so the chosen option is included in `FormData`. A select with the `disabled` attribute, or inside a disabled `fieldset`, is left out.
-- Set `value` to the option that should start selected. Without `value`, the select shows its first enabled option but submits nothing until someone picks one. A `selected` attribute on an `<option>` is ignored.
-- Manage selection via the `value` prop plus `onPdsSelectChange` for controlled React usage.
+- Set `value` to the option that should start selected. Without `value`, the select shows its first enabled option but submits nothing until someone picks a different option; choosing the option already shown doesn't count. A `selected` attribute on an `<option>` is ignored.
+- Manage selection via the `value` prop plus `onPdsSelectChange` for controlled React usage. The event's `detail` is the native `change` event, so read the new value from `event.target.value`.
 - With `required`, start the list with an empty-value placeholder, such as `<option value="">Choose a country</option>`, and the form won't submit until someone picks another option. If you disable the placeholder, also set `value=""`; otherwise the select shows the first enabled option instead and `required` doesn't stop the form. The select doesn't set `invalid` itself, so set `invalid` and `error-message` when you show an error.
 - Labels are wired automatically through the native `<label>` element, and helper/error props render standardized messaging so you don’t need duplicate markup.
 - Only `<option>` and `<optgroup>` elements in the default slot become options. Anything else there is ignored.
