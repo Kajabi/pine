@@ -12,10 +12,10 @@
 | `componentId`   | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                                                                   | `string`            | `undefined` |
 | `direction`     | `direction`      | Layout direction for the radio group.                                                                                                                   | `"column" \| "row"` | `'column'`  |
 | `disabled`      | `disabled`       | Determines whether or not the radio group is disabled.                                                                                                  | `boolean`           | `false`     |
-| `errorMessage`  | `error-message`  | Displays error message text describing an invalid state for the entire group.                                                                           | `string`            | `undefined` |
+| `errorMessage`  | `error-message`  | Displays an error message below the radio group. It's part of the group's accessible description, with or without `invalid`.                            | `string`            | `undefined` |
 | `gap`           | `gap`            | Spacing between radio items. Accepts t-shirt sizes (none, xxs, xs, sm, md, lg, xl, xxl) or core spacing tokens (025, 050, 100, etc.).                   | `string`            | `'xs'`      |
-| `groupLabel`    | `group-label`    | String used for group label/heading.                                                                                                                    | `string`            | `undefined` |
-| `helperMessage` | `helper-message` | Displays helper message text below the radio group.                                                                                                     | `string`            | `undefined` |
+| `groupLabel`    | `group-label`    | Text to be displayed as the radio group label. It also names the group, unless you set `aria-label` or `aria-labelledby` on it.                         | `string`            | `undefined` |
+| `helperMessage` | `helper-message` | Displays a message or hint below the radio group.                                                                                                       | `string`            | `undefined` |
 | `invalid`       | `invalid`        | Determines whether or not the radio group is invalid.                                                                                                   | `boolean`           | `false`     |
 | `name`          | `name`           | String used for radio `name` attribute. Applied to all child radios. Required for proper radio group behavior (mutual exclusivity and form submission). | `string`            | `undefined` |
 | `required`      | `required`       | Determines whether or not the radio group is required.                                                                                                  | `boolean`           | `false`     |
@@ -23,9 +23,9 @@
 
 ## Events
 
-| Event                 | Description                                                                                 | Type                                       |
-| --------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `pdsRadioGroupChange` | Emits when a radio in the group is selected, providing the selected value and component ID. | `CustomEvent<RadioGroupChangeEventDetail>` |
+| Event                 | Description                                                                                     | Type                                       |
+| --------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `pdsRadioGroupChange` | Emitted when the user checks a radio in the group, with that radio's `value` and `componentId`. | `CustomEvent<RadioGroupChangeEventDetail>` |
 
 
 ## Slots
