@@ -41,6 +41,14 @@ Type: `Promise<void>`
 
 
 
+## Slots
+
+| Slot          | Description                                                                                                                                                      |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"(default)"` | The item's label.                                                                                                                                                |
+| `"start"`     | Content to display before the item's label, such as a `pds-icon`. A `pds-icon` without an `aria-label` is decorative, so screen readers announce only the label. |
+
+
 ## Shadow Parts
 
 | Part       | Description                                                                                            |

@@ -2,6 +2,8 @@ import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State }
 import type { BasePdsProps } from '@utils/interfaces';
 
 /**
+ * @slot (default) - The item's label.
+ * @slot start - Content to display before the item's label, such as a `pds-icon`. A `pds-icon` without an `aria-label` is decorative, so screen readers announce only the label.
  * @part button - Exposes the item's inner element for styling. Appears on button and informational items, not on links.
  */
 @Component({
@@ -91,7 +93,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   };
 
 
-  private handleClick() {
+  private handleClick = () => {
     if (this.disabled || this.informational) return;
 
     // Filter only pds-dropdown-menu-item elements and find the index of the current item
@@ -108,9 +110,36 @@ export class PdsDropdownMenuItem implements BasePdsProps {
       item: this.host,
       content
     });
-  }
+  };
 
   @State() hasFocus: boolean = false;
+
+  @State() hasStartContent = false;
+
+  componentWillLoad() {
+    // Seeded from the light DOM so the first render has no empty gap, before slotchange fires.
+    this.hasStartContent = Array.from(this.host.children).some((child) => child.getAttribute('slot') === 'start');
+  }
+
+  private handleStartSlotChange = (event: Event) => {
+    this.hasStartContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
+  }
+
+  // Always render the start slot so slotted content is projected reliably.
+  // The --empty class hides the wrapper when nothing is slotted, so it adds no gap.
+  private renderContent() {
+    return [
+      <span
+        class={{
+          'pds-dropdown-menu-item__start': true,
+          'pds-dropdown-menu-item__start--empty': !this.hasStartContent
+        }}
+      >
+        <slot name="start" onSlotchange={this.handleStartSlotChange}></slot>
+      </span>,
+      <slot></slot>
+    ];
+  }
 
   private handleFocus = () => {
     this.hasFocus = true;
@@ -143,7 +172,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
         >
-          <slot></slot>
+          {this.renderContent()}
         </div>
       );
     }
@@ -166,7 +195,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
           onBlur={this.handleBlur}
           aria-disabled={this.disabled ? 'true' : null}
         >
-          <slot></slot>
+          {this.renderContent()}
         </pds-link>
       );
     }
@@ -186,7 +215,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
         disabled={this.disabled}
         aria-disabled={this.disabled ? 'true' : null}
       >
-        <slot></slot>
+        {this.renderContent()}
       </button>
     );
   }
@@ -211,7 +240,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
           'is-informational': this.informational,
           'destructive': !this.disabled && !this.informational && this.destructive
         }}
-        onClick={() => this.handleClick()}
+        onClick={this.handleClick}
         role="none"
         // ARIA ignores role="none" on focusable elements, so a focusable host would sit between
         // the menu and the informational menuitem as an unexpected child.
