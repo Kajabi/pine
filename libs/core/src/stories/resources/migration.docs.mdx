@@ -34,7 +34,7 @@ The changelog marks breaking changes with `⚠️` and groups them under `### �
 - ⚠️  **chip:** move value to slot (#364)
 ```
 
-The changelog leaves out some commit types, such as `refactor`, even when the commit is a breaking change. That's why 4.0.0's changelog has no Breaking Changes section, although 4.0.0 removed `pds-chip`'s `large` prop. Version Migration Examples below covers that removal.
+The changelog marks a change as breaking only when its commit message does, and it leaves out some commit types, such as `refactor`, entirely. So 4.0.0's changelog has no Breaking Changes section, although 4.0.0 removed `pds-chip`'s `large` prop, and 3.0.0's lists the `hide-label` rename as a bug fix. Version Migration Examples below covers both.
 
 A major version bump (`2.x → 3.x`) always signals that breaking changes are present. Pine's policy is that minor and patch releases are non-breaking, but two 3.x minor releases removed APIs. Version Migration Examples below lists them too.
 
