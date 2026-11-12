@@ -135,7 +135,6 @@ Live examples of this pattern in the codebase:
 | Component | Deprecated | Replacement |
 | --- | --- | --- |
 | `pds-button` | `icon` prop | `start` slot |
-| `pds-link` | `external` prop | `target` prop |
 
 ## Migration notes
 
