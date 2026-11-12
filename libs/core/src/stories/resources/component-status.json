@@ -1,6 +1,5 @@
 {
-  "$schema": "./component-status.schema.json",
-  "description": "Lifecycle status for every Pine component. Source of truth for StatusBadge and the central Component status table. Update both when a component is promoted to Beta or Deprecated.",
+  "description": "Lifecycle status for every Pine component. Source of truth for StatusBadge, the Component status table and the status Pine MCP reports. Edit only this file when a component is promoted to Beta or Deprecated.",
   "statuses": {
     "stable": {
       "label": "Stable",
@@ -28,6 +27,7 @@
     "pds-copytext": { "status": "stable" },
     "pds-datepicker": { "status": "beta", "note": "A single date typed as YYYY-MM-DD or picked from the calendar, or a range with presets." },
     "pds-divider": { "status": "stable" },
+    "pds-drawer": { "status": "beta", "note": "Resizing isn't available yet, and the size widths may still change." },
     "pds-dropdown-menu": { "status": "stable" },
     "pds-filters": { "status": "stable" },
     "pds-filter": { "status": "stable", "note": "Subcomponent of pds-filters." },
