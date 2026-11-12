@@ -18,7 +18,7 @@ Pine can be added to any project via CDN. Add the following link and script tags
 <script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.js"></script>
 ```
 
-Replace `[VERSION]` with an exact version from [Releases](https://github.com/Kajabi/pine/releases), such as `core@4.11.0`. Don't use `core@latest`: it serves each new release as soon as it's published. See [Consumer guidance](./VERSIONING.md#consumer-guidance) for how to pin npm and CDN versions.
+Replace `[VERSION]` with an exact version from [Releases](https://github.com/Kajabi/pine/releases), such as `4.11.0`. Don't use `latest`: it serves each new release as soon as it's published. See [Consumer guidance](./VERSIONING.md#consumer-guidance) for how to pin npm and CDN versions.
 
 To use the components within React projects, they must also be installed via npm:
 
