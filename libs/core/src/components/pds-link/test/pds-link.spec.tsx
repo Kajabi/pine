@@ -311,5 +311,20 @@ describe('pds-link', () => {
       expect(icon?.hasAttribute('aria-label')).toBe(false);
       expect(icon?.getAttribute('aria-hidden')).toBe('true');
     });
+
+    it.each(['_self', '_parent', '_top'])('ignores a custom external-label when target is %s', async (target) => {
+      const { root } = await newSpecPage({
+        components: [PdsLink],
+        html: `<pds-link href="#" external="true" external-label="Custom" target="${target}">Docs</pds-link>`,
+      });
+      const anchor = root?.shadowRoot?.querySelector('a');
+      expect(anchor?.getAttribute('target')).toBe(target);
+      expect(anchor?.hasAttribute('rel')).toBe(false);
+
+      const icon = root?.shadowRoot?.querySelector('pds-icon');
+      expect(icon).not.toBeNull();
+      expect(icon?.hasAttribute('aria-label')).toBe(false);
+      expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    });
   });
 });
