@@ -214,3 +214,141 @@ describe('pds-switch in a disabled fieldset', () => {
     expect(await disabled()).toBe(false);
   });
 });
+
+describe('pds-switch form value', () => {
+  const submitted = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+    page.$eval('form', (form: HTMLFormElement) => new FormData(form).getAll('notify'));
+
+  it('submits nothing while unchecked without unchecked-value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify"></pds-switch></form>');
+
+    expect(await submitted(page)).toEqual([]);
+  });
+
+  it('submits unchecked-value while unchecked, and the value once toggled on and back off', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify" value="1" unchecked-value="0"></pds-switch></form>');
+
+    expect(await submitted(page)).toEqual(['0']);
+
+    await (await page.find('pds-switch >>> input')).click();
+    await page.waitForChanges();
+    expect(await submitted(page)).toEqual(['1']);
+
+    await (await page.find('pds-switch >>> input')).click();
+    await page.waitForChanges();
+    expect(await submitted(page)).toEqual(['0']);
+  });
+
+  it('submits a blank unchecked-value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify" unchecked-value=""></pds-switch></form>');
+
+    expect(await submitted(page)).toEqual(['']);
+  });
+
+  it('follows a change to unchecked-value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify"></pds-switch></form>');
+
+    await page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => (el.uncheckedValue = 'off'));
+    await page.waitForChanges();
+    expect(await submitted(page)).toEqual(['off']);
+  });
+
+  it('submits nothing while disabled, even with unchecked-value', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-switch component-id="notify" name="notify" label="Notify" unchecked-value="0" disabled></pds-switch></form>');
+
+    expect(await submitted(page)).toEqual([]);
+  });
+});
+
+describe('pds-switch description', () => {
+  // The accessibility tree node of the inner input, as a screen reader reads it.
+  const inputAxNode = async (page: Awaited<ReturnType<typeof newE2EPage>>, selector = 'pds-switch') => {
+    const input = await page.evaluateHandle(
+      (hostSelector) => document.querySelector(hostSelector)?.shadowRoot?.querySelector('input') as HTMLElement,
+      selector,
+    );
+    return page.accessibility.snapshot({ root: input, interestingOnly: false });
+  };
+
+  it('describes a disabled switch with its helper message, which a tooltip around it cannot do for keyboard users', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-switch component-id="commissions" label="Affiliate commissions" disabled helper-message="Free offers can't have affiliate commissions."></pds-switch>
+    `);
+
+    const node = await inputAxNode(page);
+    expect(node?.disabled).toBe(true);
+    expect(node?.description).toBe("Free offers can't have affiliate commissions.");
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+
+  it('describes the input with the text aria-describedby points at, then its own message, and follows changes', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <p id="card-description">Send a receipt after each purchase.</p>
+      <p id="other">Something else.</p>
+      <pds-switch component-id="receipts" label="Receipts" helper-message="Applies to new orders." aria-describedby="card-description"></pds-switch>
+    `);
+
+    expect((await inputAxNode(page))?.description).toBe('Send a receipt after each purchase. Applies to new orders.');
+
+    await page.$eval('pds-switch', (el) => el.setAttribute('aria-describedby', 'other'));
+    await page.waitForChanges();
+    expect((await inputAxNode(page))?.description).toBe('Something else. Applies to new orders.');
+
+    await page.$eval('pds-switch', (el) => el.removeAttribute('aria-describedby'));
+    await page.waitForChanges();
+    expect((await inputAxNode(page))?.description).toBe('Applies to new orders.');
+  });
+
+  it('keeps the error message in the description while invalid', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <p id="card-description">Send a receipt after each purchase.</p>
+      <pds-switch component-id="receipts" label="Receipts" aria-describedby="card-description"></pds-switch>
+    `);
+
+    await page.$eval('pds-switch', (el: HTMLPdsSwitchElement) => {
+      el.errorMessage = 'Turn on receipts to continue';
+      el.invalid = true;
+    });
+    await page.waitForChanges();
+
+    expect((await inputAxNode(page))?.description).toBe('Send a receipt after each purchase. Turn on receipts to continue');
+  });
+
+  it('picks up a description added after the switch once it is focused', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch component-id="receipts" label="Receipts" aria-describedby="late"></pds-switch>');
+
+    await page.evaluate(() => {
+      const late = document.createElement('p');
+      late.id = 'late';
+      late.textContent = 'Added later.';
+      document.body.appendChild(late);
+    });
+    await (await page.find('pds-switch >>> input')).focus();
+    await page.waitForChanges();
+
+    expect((await inputAxNode(page))?.description).toBe('Added later.');
+  });
+
+  it('has no axe violations when described by a pds-text outside it', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-text id="card-description" tag="p">Send a receipt after each purchase.</pds-text>
+      <pds-switch component-id="receipts" label="Receipts" aria-describedby="card-description"></pds-switch>
+    `);
+    expect((await inputAxNode(page))?.description).toBe('Send a receipt after each purchase.');
+
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});
