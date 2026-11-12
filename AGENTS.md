@@ -40,7 +40,7 @@ Stencil.js web component library in an Nx monorepo. Core components live in `lib
   - `refactor(component):` — code restructuring with no behavior change
   - `chore:` — tooling, config, dependencies
 - PR titles: `type(scope): description` — use the template at `.github/pull_request_template.md`
-- If your branch is behind `main`, rebase before pushing — requires at least two approved reviews before merging
+- If your branch is behind `main`, rebase before pushing — requires at least one approved review before merging
 - See `CONTRIBUTING.md` for full contributor guidelines
 
 ## Testing

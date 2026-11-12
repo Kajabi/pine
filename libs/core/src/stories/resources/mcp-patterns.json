@@ -4,11 +4,11 @@
       "id": "page-heading-actions",
       "name": "Page heading with actions",
       "category": "admin",
-      "description": "Page title with a primary action aligned to the right — the Pine equivalent of Sage PageHeading during Kajabi admin migration.",
+      "description": "Page title with a primary action aligned to the right — the Pine equivalent of Sage PageHeading.",
       "when": "Top of any admin index or detail screen that needs a title plus one or more header actions (create, save, export).",
       "code": "<pds-box fit direction=\"row\" align-items=\"center\" margin-block-end=\"md\">\n  <pds-text tag=\"h1\">Agents</pds-text>\n  <pds-box direction=\"row\" gap=\"sm\" justify-content=\"end\" flex=\"grow\">\n    <pds-button variant=\"primary\">\n      <pds-icon slot=\"start\" name=\"add\" aria-hidden=\"true\"></pds-icon>\n      New chatbot\n    </pds-button>\n  </pds-box>\n</pds-box>",
       "notes": [
-        "Matches kajabi-products list/detail screens that still use Sage PageHeading with a PdsButton in actions — compose this pds-box row in new Pine-only UI.",
+        "Replaces a Sage PageHeading with a PdsButton in its actions — compose this pds-box row in new Pine-only UI.",
         "Actions live in a trailing pds-box with direction=\"row\" gap=\"sm\" justify-content=\"end\" flex=\"grow\" so buttons sit on the page end.",
         "Icon-in-button uses slot=\"start\" with a valid icon name (add), not the deprecated icon prop.",
         "Pair with table-in-card below the heading on index pages."
@@ -18,12 +18,12 @@
       "id": "table-in-card",
       "name": "Table in card",
       "category": "admin",
-      "description": "A responsive pds-table inside a bordered, shadowed pds-box — how kajabi-products wraps list tables (expert agents, referrals, commerce).",
+      "description": "A responsive pds-table inside a bordered, shadowed pds-box — the standard wrapper for admin list tables.",
       "when": "Any admin data table that should read as a card on the page background rather than a bare grid.",
       "code": "<pds-box border-radius=\"lg\" shadow=\"100\" display=\"block\" fit>\n  <pds-table component-id=\"expert-agents-table\" responsive row-dividers>\n    <pds-table-head background>\n      <pds-table-row>\n        <pds-table-head-cell>Name</pds-table-head-cell>\n        <pds-table-head-cell>Status</pds-table-head-cell>\n        <pds-table-head-cell>Created</pds-table-head-cell>\n        <pds-table-head-cell>Actions</pds-table-head-cell>\n      </pds-table-row>\n    </pds-table-head>\n    <pds-table-body>\n      <pds-table-row>\n        <pds-table-cell>Teaching Assistant</pds-table-cell>\n        <pds-table-cell>Active</pds-table-cell>\n        <pds-table-cell>Mar 3, 2026</pds-table-cell>\n        <pds-table-cell>⋯</pds-table-cell>\n      </pds-table-row>\n    </pds-table-body>\n  </pds-table>\n</pds-box>",
       "notes": [
-        "Matches ExpertAgentsList: PdsBox borderRadius=\"lg\" shadow=\"100\" display=\"block\" fit wrapping PdsTable responsive.",
-        "Use pds-table-head background and optional border; kajabi-products wraps head cells in pds-table-row (both this and head-cell-only layouts work).",
+        "In React: PdsBox borderRadius=\"lg\" shadow=\"100\" display=\"block\" fit wrapping PdsTable responsive.",
+        "Use pds-table-head background and optional border; this recipe wraps the head cells in a pds-table-row, and head cells placed directly in pds-table-head also work.",
         "responsive enables horizontal scroll for wide column sets; row-dividers adds row separators.",
         "Sits directly under page-heading-actions — no pds-container wrapper on typical full-width admin lists."
       ]
@@ -32,11 +32,11 @@
       "id": "list-page",
       "name": "List page (heading + table)",
       "category": "admin",
-      "description": "Full kajabi-products-style index page: page heading with primary action, then a card-wrapped responsive table.",
+      "description": "Full admin index page: page heading with primary action, then a card-wrapped responsive table.",
       "when": "Resource index screens (agents, products, orders) with a create action and a data table.",
       "code": "<pds-box direction=\"column\" gap=\"md\" fit>\n  <pds-box fit direction=\"row\" align-items=\"center\">\n    <pds-text tag=\"h1\">Agents</pds-text>\n    <pds-box direction=\"row\" gap=\"sm\" justify-content=\"end\" flex=\"grow\">\n      <pds-button variant=\"primary\">\n        <pds-icon slot=\"start\" name=\"add\" aria-hidden=\"true\"></pds-icon>\n        New chatbot\n      </pds-button>\n    </pds-box>\n  </pds-box>\n\n  <pds-box border-radius=\"lg\" shadow=\"100\" display=\"block\" fit>\n    <pds-table component-id=\"agents\" responsive row-dividers>\n      <pds-table-head background>\n        <pds-table-row>\n          <pds-table-head-cell>Name</pds-table-head-cell>\n          <pds-table-head-cell>Status</pds-table-head-cell>\n          <pds-table-head-cell>Created</pds-table-head-cell>\n        </pds-table-row>\n      </pds-table-head>\n      <pds-table-body>\n        <pds-table-row>\n          <pds-table-cell>Teaching Assistant</pds-table-cell>\n          <pds-table-cell>Active</pds-table-cell>\n          <pds-table-cell>Mar 3, 2026</pds-table-cell>\n        </pds-table-row>\n      </pds-table-body>\n    </pds-table>\n  </pds-box>\n</pds-box>",
       "notes": [
-        "Composes page-heading-actions + table-in-card — the target Pine layout for kajabi-products list screens.",
+        "Composes page-heading-actions + table-in-card — the target Pine layout for admin list screens.",
         "While migrating, teams may still use Sage PageHeading for the title row; replace it with the heading pds-box when touching the file.",
         "Loading state: return <pds-loader is-loading size=\"md\"></pds-loader> alone (see empty-and-loading). Zero rows: use empty-state-pine."
       ]
@@ -45,11 +45,11 @@
       "id": "list-with-filters",
       "name": "List page with filters",
       "category": "admin",
-      "description": "Index page with page heading, pds-filters bar, and card-wrapped table — matches workflows AutomationFilters + table layouts.",
+      "description": "Index page with page heading, pds-filters bar, and card-wrapped table.",
       "when": "Index screens that need filtering before the table (automations, orders, contacts).",
       "code": "<pds-box direction=\"column\" gap=\"md\" fit>\n  <pds-text tag=\"h1\">Automations</pds-text>\n\n  <pds-filters>\n    <pds-filter component-id=\"trigger\" variant=\"default\" text=\"Trigger\" icon=\"flash\"></pds-filter>\n    <pds-filter component-id=\"action\" variant=\"default\" text=\"Action\" icon=\"activity\"></pds-filter>\n    <pds-filter component-id=\"more\" variant=\"more\" text=\"More filters\" icon=\"add-circle\"></pds-filter>\n    <pds-filter component-id=\"clear\" variant=\"clear\" text=\"Clear filters\"></pds-filter>\n  </pds-filters>\n\n  <pds-box border-radius=\"lg\" shadow=\"100\" display=\"block\" fit>\n    <pds-table component-id=\"automations\" responsive row-dividers>\n      <pds-table-head background>\n        <pds-table-row>\n          <pds-table-head-cell>Name</pds-table-head-cell>\n          <pds-table-head-cell>Trigger</pds-table-head-cell>\n          <pds-table-head-cell>Status</pds-table-head-cell>\n        </pds-table-row>\n      </pds-table-head>\n      <pds-table-body>\n        <pds-table-row>\n          <pds-table-cell>Welcome sequence</pds-table-cell>\n          <pds-table-cell>Form submit</pds-table-cell>\n          <pds-table-cell>Active</pds-table-cell>\n        </pds-table-row>\n      </pds-table-body>\n    </pds-table>\n  </pds-box>\n</pds-box>",
       "notes": [
-        "Real kajabi-products filters (AutomationFilters) slot dropdown panels inside pds-filter and toggle variant=\"selected\" on applied chips — this recipe shows the static trigger row.",
+        "In a working filter bar, each pds-filter slots its panel content and switches to variant=\"selected\" once applied — this recipe shows the static trigger row.",
         "Use variant=\"more\" for overflow and variant=\"clear\" for reset; icons should match filter semantics (flash, activity, add-circle).",
         "Filters sit in the column flow between heading and table-in-card, separated by the parent gap.",
         "Compose with page-heading-actions when the index also needs a header CTA."
@@ -59,11 +59,11 @@
       "id": "settings-page",
       "name": "Settings / edit form page",
       "category": "admin",
-      "description": "Kajabi admin edit form: page heading row with Save/Cancel, 60/30 body, field sections in card boxes — matches commerce coupon forms.",
+      "description": "Admin edit form: page heading row with Save/Cancel, 60/30 body, field sections in card boxes.",
       "when": "Create/edit flows (coupons, offers, configuration) with header actions, stacked field sections, and an optional sidebar.",
       "code": "<pds-box direction=\"column\" gap=\"md\" fit>\n  <pds-box fit direction=\"row\" align-items=\"center\">\n    <pds-text tag=\"h1\">Edit coupon</pds-text>\n    <pds-box direction=\"row\" gap=\"sm\" justify-content=\"end\" flex=\"grow\">\n      <pds-button variant=\"secondary\">Cancel</pds-button>\n      <pds-button variant=\"primary\">Save</pds-button>\n    </pds-box>\n  </pds-box>\n\n  <pds-box direction=\"row\" align-items=\"start\" gap=\"lg\" fit>\n    <pds-box flex=\"1\">\n      <pds-box direction=\"column\" gap=\"md\">\n        <pds-box direction=\"column\" gap=\"sm\" padding=\"md\" shadow=\"100\" border-radius=\"md\" background-color=\"var(--pine-color-background-container)\">\n          <pds-text tag=\"h6\" size=\"lg\" weight=\"semibold\">Details</pds-text>\n          <pds-input label=\"Coupon code\" value=\"SUMMER20\"></pds-input>\n          <pds-input label=\"Name\" value=\"Summer sale\"></pds-input>\n        </pds-box>\n        <pds-box direction=\"column\" gap=\"sm\" padding=\"md\" shadow=\"100\" border-radius=\"md\" background-color=\"var(--pine-color-background-container)\">\n          <pds-text tag=\"h6\" size=\"lg\" weight=\"semibold\">Discount</pds-text>\n          <pds-input label=\"Percent off\" value=\"20\"></pds-input>\n        </pds-box>\n      </pds-box>\n    </pds-box>\n    <pds-box flex=\"0 0 30%\">\n      <pds-box direction=\"column\" gap=\"sm\" padding=\"md\" shadow=\"100\" border-radius=\"md\" background-color=\"var(--pine-color-background-container)\">\n        <pds-text tag=\"h6\" size=\"lg\" weight=\"semibold\">Summary</pds-text>\n        <pds-text color=\"var(--pine-color-text-secondary)\">Review discount details before saving.</pds-text>\n      </pds-box>\n    </pds-box>\n  </pds-box>\n</pds-box>",
       "notes": [
-        "Heading row matches CouponFormLayout actions: pds-box direction=\"row\" gap=\"sm\" justify-content=\"end\" flex=\"grow\" wraps Cancel + Save.",
+        "Heading row actions: pds-box direction=\"row\" gap=\"sm\" justify-content=\"end\" flex=\"grow\" wraps Cancel + Save.",
         "Body row uses gap=\"lg\" between main flex=\"1\" and sidebar flex=\"0 0 30%\".",
         "Stack field groups in card boxes (padding=\"md\" shadow=\"100\" border-radius=\"md\" background-color=\"var(--pine-color-background-container)\") with an h6 section title.",
         "For narrow single-column settings, drop the split and use one stacked column of section cards instead."
@@ -73,11 +73,11 @@
       "id": "empty-and-loading",
       "name": "Loading state (default)",
       "category": "admin",
-      "description": "Standalone pds-loader while async admin data loads — the kajabi-products default (ExpertAgentsList, ExpertAgentShow).",
+      "description": "Standalone pds-loader while async admin data loads — the default loading state for a list or detail screen.",
       "when": "Initial page load or refetch while a list/detail region is empty.",
       "code": "<pds-loader is-loading size=\"md\"></pds-loader>",
       "notes": [
-        "kajabi-products default: return <pds-loader is-loading size=\"md\"></pds-loader> while the query is loading — no extra wrapper.",
+        "Return <pds-loader is-loading size=\"md\"></pds-loader> on its own while the query is loading — no extra wrapper.",
         "For a labeled loader inside a panel or modal body, use the loading-inline-centered pattern instead.",
         "Pair with empty-state-pine when data resolves to zero rows."
       ]
@@ -90,7 +90,7 @@
       "when": "Loading a bounded region that should show a short status message with the spinner.",
       "code": "<pds-box direction=\"column\" align-items=\"center\" gap=\"sm\" padding=\"xl\">\n  <pds-loader is-loading size=\"md\"></pds-loader>\n  <pds-text>Loading agents…</pds-text>\n</pds-box>",
       "notes": [
-        "Do not combine with loading-default on the same screen — pick one recipe per loading state.",
+        "Do not combine with empty-and-loading on the same screen — pick one recipe per loading state.",
         "Pair with empty-state-pine when data resolves to zero rows."
       ]
     },
@@ -103,7 +103,7 @@
       "code": "<pds-box padding=\"xl\" background-color=\"var(--pine-color-background-container)\" border-radius=\"lg\" direction=\"column\" align-items=\"center\" justify-content=\"center\" gap=\"md\" fit>\n  <pds-box flex=\"none\" border-radius=\"md\" background-color=\"var(--pine-color-background-inset)\" min-width=\"48px\" min-height=\"48px\" align-items=\"center\" justify-content=\"center\">\n    <pds-icon name=\"file\" size=\"24px\" color=\"var(--pine-color-icon)\"></pds-icon>\n  </pds-box>\n  <pds-box flex=\"none\" direction=\"column\" align-items=\"center\" gap=\"xs\">\n    <pds-text weight=\"semibold\" align=\"center\" size=\"2xl\">No documents</pds-text>\n    <pds-text align=\"center\" size=\"md\" color=\"var(--pine-color-text-secondary)\">Documents will display here once you add them.</pds-text>\n  </pds-box>\n  <pds-box flex=\"none\" direction=\"column\" gap=\"sm\" align-items=\"stretch\">\n    <pds-button variant=\"primary\">Upload documents</pds-button>\n    <pds-button variant=\"secondary\">Learn more</pds-button>\n  </pds-box>\n</pds-box>",
       "notes": [
         "Layout: neutral-gray 48x48 icon square (no border) with a 24px icon, semibold 2xl title, md body copy, primary action stacked above a secondary Learn more button.",
-        "Many kajabi-products screens still use Sage EmptyState (e.g. ExpertAgentsList) — migrate to this layout when converting the file.",
+        "Screens that still use Sage EmptyState should move to this layout when the file is converted.",
         "Pick a semantic icon (file, users, folder, add) and keep the badge as a neutral-gray square using --pine-color-background-inset so it stays theme-safe.",
         "Use fit on the outer box so the empty panel spans the content area width.",
         "Keep flex=\"none\" on the badge, text, and actions boxes — the base .pds-box class sets flex-grow:1, so without it the 48x48 badge stretches (stops being square) and the sections spread apart in a tall panel."
