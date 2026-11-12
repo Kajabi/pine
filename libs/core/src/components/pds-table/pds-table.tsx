@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen, Watch, forceUpdate } from '@stencil/core';
 import { getScrollOffsetFromStart } from '../../utils/scroll';
 
 // A column with no width of its own, under table-layout: fixed, otherwise shares whatever's left
@@ -174,6 +174,26 @@ export class PdsTable {
   }
 
   /**
+   * A head cell only reads `tableLayout` during its own render, and the floor this sets lives in
+   * inline style, not a re-render -- so switching away from `fixed` (including live, e.g. the
+   * Storybook control) needs both cleared explicitly, not just the observer torn down.
+   */
+  @Watch('tableLayout')
+  handleTableLayoutChange(newValue: 'auto' | 'fixed') {
+    this.teardownFixedLayoutWidths();
+
+    const headCells = Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[];
+
+    if (newValue === 'fixed') {
+      this.setupFixedLayoutWidths();
+    } else {
+      headCells.forEach((cell) => cell.style.removeProperty('--pds-table-head-cell-auto-floor-width'));
+    }
+
+    headCells.forEach((cell) => forceUpdate(cell));
+  }
+
+  /**
    * Measures the explicit-width columns against the available space and gives the columns with
    * no `width` of their own (which otherwise share whatever's left) a floor so none of them
    * squeeze below `AUTO_COLUMN_FLOOR_WIDTH_PX`. Re-run on resize, since the available space -- the
@@ -188,17 +208,14 @@ export class PdsTable {
     let explicitWidthPx = 0;
 
     for (const cell of headCells) {
-      const width = cell.getAttribute('width');
-      if (!width) {
+      if (!cell.getAttribute('width')) {
         autoCells.push(cell);
         continue;
       }
 
-      const px = parseFloat(width);
-      // Only a plain px width is measurable here; a %, rem, or other unit opts the table out of
-      // the floor calc rather than have it guess at a pixel budget.
-      if (!width.endsWith('px') || Number.isNaN(px)) return;
-      explicitWidthPx += px;
+      // Measured from layout rather than parsed from the attribute, so any CSS length -- px,
+      // rem, %, a token -- counts correctly, the same as the select-all column below.
+      explicitWidthPx += cell.getBoundingClientRect().width;
     }
 
     if (autoCells.length === 0) return;

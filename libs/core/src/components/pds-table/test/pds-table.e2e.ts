@@ -215,6 +215,75 @@ describe('pds-table column widths', () => {
     expect(container.scrollWidth).toBe(468);
   });
 
+  it('floors an auto column against a non-px explicit width, measured from layout', async () => {
+    const page = await newE2EPage();
+    // 20% of 400px is 80px, leaving the auto column 320px -- plenty of room, so this only proves
+    // the explicit column is measured rather than skipped for not being a plain px value.
+    await page.setContent(`
+      <div style="width: 400px">
+        <pds-table component-id="percent-width" table-layout="fixed" responsive>
+          <pds-table-head>
+            <pds-table-head-cell width="20%">Status</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Active</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([80, 320]);
+  });
+
+  it('clears a floor and reapplies it as table-layout switches away from and back to fixed', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="layout-switch" table-layout="fixed" responsive>
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+            <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell>Mar 4, 2024</pds-table-cell>
+              <pds-table-cell>Unsubscribed manually</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+    expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').setAttribute('table-layout', 'auto');
+    });
+    await page.waitForChanges();
+
+    const nameWidthAuto = await page.evaluate(() => {
+      const el = document.querySelectorAll('pds-table-head-cell')[3];
+      return el.style.getPropertyValue('--pds-table-head-cell-auto-floor-width');
+    });
+    expect(nameWidthAuto).toBe('');
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').setAttribute('table-layout', 'fixed');
+    });
+    await page.waitForChanges();
+
+    expect(await headWidths(page)).toEqual([148, 134, 216, 120]);
+  });
+
   it('grows the auto column back once resizing gives it room again', async () => {
     const page = await newE2EPage();
     await page.setContent(`
