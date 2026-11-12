@@ -639,12 +639,17 @@ export class PdsCombobox implements BasePdsProps {
     if (!panel) return;
     const from = panel.getBoundingClientRect().height;
     this.drillFromHeight = from;
-    // Held there until componentDidRender measures the new view: a child component that renders late
-    // can otherwise let the browser paint the new view at its full height first.
-    panel.style.setProperty('--pds-combobox-glide-from', `${from}px`);
-    panel.style.setProperty('--pds-combobox-glide-to', `${from}px`);
-    panel.classList.add('pds-combobox__listbox--height-glide');
+    // Pinned there until componentDidRender measures the new view, however late: a child component
+    // that renders late could otherwise let the browser paint the new view at its full height first.
+    panel.style.height = `${from}px`;
+    panel.classList.add('pds-combobox__listbox--height-hold');
     this.syncPanelOverflow();
+  }
+
+  private releaseHeightHold() {
+    const panel = this.listboxEl;
+    panel?.style.removeProperty('height');
+    panel?.classList.remove('pds-combobox__listbox--height-hold');
   }
 
   /** The dropdown's height before a drill, so componentDidRender can ease it to the new view's. */
@@ -660,6 +665,7 @@ export class PdsCombobox implements BasePdsProps {
     const panel = this.listboxEl;
     if (from === undefined || !panel) return;
     // A drill back mid-glide starts from where the last one is now, then measures the real height.
+    this.releaseHeightHold();
     panel.classList.remove('pds-combobox__listbox--height-glide');
     this.syncPanelOverflow();
     const to = panel.getBoundingClientRect().height;
@@ -682,10 +688,14 @@ export class PdsCombobox implements BasePdsProps {
     // Turning around mid-glide cancels the old glide as the new one starts; only a glide with none
     // left running cleans up.
     const running = panel.getAnimations().some(a => (a as CSSAnimation).animationName === 'pds-combobox-height-glide');
-    if (!running) this.endHeightGlide();
+    // A drill waiting to render glides from here next; it cleans up then.
+    if (!running && this.drillFromHeight === undefined) this.endHeightGlide();
   };
 
+  /** Ends a glide, and a drill still waiting to glide, so nothing starts once it renders. */
   private endHeightGlide() {
+    this.drillFromHeight = undefined;
+    this.releaseHeightHold();
     const panel = this.listboxEl;
     panel?.classList.remove('pds-combobox__listbox--height-glide');
     this.syncPanelOverflow();
@@ -700,7 +710,9 @@ export class PdsCombobox implements BasePdsProps {
    */
   private syncPanelOverflow() {
     if ((this.maxHeight ?? '') === '' || !this.listboxEl) return;
-    const gliding = this.listboxEl.classList.contains('pds-combobox__listbox--height-glide');
+    const gliding =
+      this.listboxEl.classList.contains('pds-combobox__listbox--height-glide') ||
+      this.listboxEl.classList.contains('pds-combobox__listbox--height-hold');
     this.listboxEl.style.overflowY = this.usesPanelSearch || gliding ? 'hidden' : 'auto';
   }
 
@@ -727,7 +739,9 @@ export class PdsCombobox implements BasePdsProps {
     // Only the component's own ends (the slide by name, the glide by its target): slotted consumer
     // content can animate inside the list too.
     if (event.animationName === 'pds-combobox-drill') this.drillDirection = null;
-    if (event.animationName === 'pds-combobox-height-glide' && event.target === this.listboxEl) this.endHeightGlide();
+    if (event.animationName === 'pds-combobox-height-glide' && event.target === this.listboxEl && this.drillFromHeight === undefined) {
+      this.endHeightGlide();
+    }
   };
 
   @Watch('disabled')
