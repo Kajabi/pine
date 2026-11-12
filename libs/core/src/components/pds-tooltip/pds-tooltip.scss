@@ -25,6 +25,7 @@
   background-color: var(--pine-color-primary);
   border-radius: calc(var(--pine-dimension-xs) * 1.25);
   box-shadow: var(--pine-box-shadow);
+  box-sizing: border-box;
   color: var(--pine-color-text-primary);
   // TODO: need to use block / none but the tooltip content width and height are needed for calculations
   max-width: var(--tooltip-dimension-max-width);
