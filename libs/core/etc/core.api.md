@@ -751,6 +751,7 @@ export namespace Components {
     // (undocumented)
     export interface PdsTableCell {
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
+        "rebindScrollListener": () => Promise<void>;
         "truncate": boolean;
     }
     // (undocumented)
@@ -764,6 +765,7 @@ export namespace Components {
     export interface PdsTableHeadCell {
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         "clearActiveSort": () => Promise<void>;
+        "rebindScrollListener": () => Promise<void>;
         "setActiveSort": (direction: "asc" | "desc") => Promise<void>;
         "sortable": boolean;
         "width"?: string;
