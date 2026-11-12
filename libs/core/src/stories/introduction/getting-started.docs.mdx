@@ -41,13 +41,7 @@ Designers can contribute to Pine too. See <pds-link href="../?path=/docs/introdu
 
 ### 1. Install Pine
 
-**React projects:**
-
-```bash
-npm install @pine-ds/react
-```
-
-**Non-React / HTML projects (CDN):**
+**CDN (any page, no build step):** add these tags to `<head>`.
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.css" />
@@ -57,17 +51,63 @@ npm install @pine-ds/react
 
 Replace `[VERSION]` with an exact version from <pds-link href="https://github.com/Kajabi/pine/releases" external>GitHub Releases</pds-link>, not `latest`. See <pds-link href="https://github.com/Kajabi/pine/blob/main/VERSIONING.md#consumer-guidance" external>Consumer guidance</pds-link> for how to pin npm and CDN versions.
 
+**React projects:**
+
+```bash
+npm install @pine-ds/react
+```
+
+`@pine-ds/react` registers each component you import, but it doesn't load Pine's stylesheet, `pine-core.css`, which defines the design tokens and loads the Inter font. Without it, components render with no Pine colors, in the browser's default font. The stylesheet can't be imported from the package, because the package's `exports` field doesn't list it. Load it one of these ways:
+
+- Add the `<link>` tag from the CDN snippet above, with `[VERSION]` set to the `@pine-ds/core` version in your lockfile. `npm ls @pine-ds/core` prints it. You don't need the two `<script>` tags.
+- Have your build copy `node_modules/@pine-ds/core/dist/pine-core/pine-core.css` into the files your app serves, and link to that copy.
+
+**Other frameworks and bundlers:**
+
+```bash
+npm install @pine-ds/core
+```
+
+Import each component you use from the custom-elements build, and register it. Keep the `.js` at the end of the path. Registering a component also registers the components it renders, such as the `pds-icon` inside `pds-button`.
+
+```js
+import { defineCustomElement as definePdsButton } from '@pine-ds/core/components/pds-button.js';
+
+definePdsButton();
+```
+
+Load the stylesheet the same way as in a React project. This build also skips Pine's global script, so read **Components vanish after a DOM morph?** under Common Gotchas.
+
 ### 2. Render your first component
 
 <DocCanvas
   mdxSource={{
     webComponent: `<pds-button>Get started</pds-button>`,
-    react: `<PdsButton>Get started</PdsButton>`
+    react: `import { PdsButton } from '@pine-ds/react';
+
+<PdsButton>Get started</PdsButton>`
   }}>
   <pds-button>Get started</pds-button>
 </DocCanvas>
 
-### 3. Style with tokens
+### 3. Add an icon
+
+`pds-icon` shows icons from `@pine-ds/icons`. In HTML, set the icon's `name`. In React, import the icon from `@pine-ds/icons/icons` and pass it to `icon`.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-button><pds-icon slot="start" name="add"></pds-icon>Add item</pds-button>`,
+    react: `import { add } from '@pine-ds/icons/icons';
+import { PdsButton, PdsIcon } from '@pine-ds/react';
+
+<PdsButton><PdsIcon slot="start" icon={add} />Add item</PdsButton>`
+  }}>
+  <pds-button><pds-icon slot="start" name="add"></pds-icon>Add item</pds-button>
+</DocCanvas>
+
+Find an icon's name in the `name` control on the <pds-link href="../?path=/docs/components-icon--docs">Icon</pds-link> page. A named icon loads its SVG at runtime, from jsDelivr unless you set an asset path. <pds-link href="../?path=/docs/resources-icon-management--docs">Icon Management</pds-link> explains where icons load from and how to pin them.
+
+### 4. Style with tokens
 
 Pine components use CSS custom properties (design tokens) internally. You can reference the same tokens in your own styles:
 
@@ -81,7 +121,17 @@ Pine components use CSS custom properties (design tokens) internally. You can re
 
 Tokens are available after the Pine CSS file is loaded. See <pds-link href="../?path=/docs/design-tokens-tokens--docs">Design Tokens</pds-link> for the full list.
 
-### 4. Run Storybook locally
+### 5. Turn on dark mode
+
+Set `data-theme="dark"` on `<html>` to switch the page to Pine's dark tokens:
+
+```html
+<html data-theme="dark">
+```
+
+Pine doesn't follow the operating system's setting on its own, and dark-mode support is still rolling out one component at a time. See <pds-link href="../?path=/docs/design-tokens-tokens--docs#dark-mode">Dark mode</pds-link> for what switches, the `color-scheme` setting to add, and the components whose dark styles depend on the browser.
+
+### 6. Run Storybook locally
 
 To browse components with live examples, run the Pine dev server:
 
@@ -91,7 +141,7 @@ npm run start
 
 Storybook will open at `http://localhost:6006`. See <pds-link href="../?path=/docs/introduction-contributing--docs">Contributing</pds-link> for the full local setup steps.
 
-### 5. Get help
+### 7. Get help
 
 - <pds-link href="https://github.com/Kajabi/pine/issues/new/choose" external>GitHub issues</pds-link> — report a bug or request a feature
 - <pds-link href="https://github.com/Kajabi/pine" external>GitHub</pds-link> — source code and releases
@@ -105,13 +155,16 @@ Pine is maintained by its contributors, with no dedicated support team. See <pds
 ## Common Gotchas
 
 **Components not rendering?**
-Ensure the Pine CSS and JS are loaded before any `<pds-*>` elements are used. In React, the npm package handles this; in HTML/CDN setups, place the `<link>` and `<script>` tags in `<head>`.
+With the CDN, check that the page loads the `<link>` and both `<script>` tags from step 1, with the same `[VERSION]` in each, and place them in `<head>`.
+
+**Components render without Pine's colors or font?**
+The page isn't loading `pine-core.css`. `@pine-ds/react` and the custom-elements build register components but don't load the stylesheet. Load it as step 1 shows.
 
 **Components vanish after a DOM morph?**
-Pine components stay hidden until they have the `hydrated` class, and a morph that makes a host match the server's HTML removes it. The CDN build puts it back on its own. If you load components from `@pine-ds/react` or the custom-elements build (`@pine-ds/core/components/*`), which don't run Pine's global script, call `keepPineHydrated()` once at startup:
+Pine components stay hidden until they have the `hydrated` class, and a morph that makes a host match the server's HTML removes it. The CDN build puts it back on its own. If you load components from `@pine-ds/react` or the custom-elements build (`@pine-ds/core/components/*`), which don't run Pine's global script, call `keepPineHydrated()` once at startup. Import it from `@pine-ds/core/components/index.js`: bundlers can't resolve a plain `@pine-ds/core` import today.
 
 ```js
-import { keepPineHydrated } from '@pine-ds/core';
+import { keepPineHydrated } from '@pine-ds/core/components/index.js';
 
 keepPineHydrated();
 ```
@@ -120,7 +173,7 @@ keepPineHydrated();
 Re-run `npm run start`. Hot reload in Stencil dev mode can occasionally lose component registration.
 
 **Tokens not resolving?**
-Custom properties require the Pine stylesheet to be loaded in scope. Confirm `pine-core.css` is imported at the root of your app.
+Custom properties require the Pine stylesheet to be loaded in scope. Confirm your page loads `pine-core.css`, as step 1 shows.
 
 **React prop names differ from web component attribute names?**
 React wrappers use camelCase props (e.g. `hideLabel`) while web component attributes are kebab-case (e.g. `hide-label`). Refer to each component's **Properties** table for both.
