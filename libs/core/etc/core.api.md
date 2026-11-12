@@ -693,11 +693,18 @@ export namespace Components {
         "componentId": string;
         "disabled": boolean;
         "dividers": boolean;
+        "handleLabel": string;
         "handleType": 'handle' | 'row';
+        "itemDroppedLabel": string;
+        "itemMovedLabel": string;
+        "itemPickedUpLabel": string;
+        "itemReorderCanceledLabel": string;
+        "reorderDescription": string;
     }
     export interface PdsSortableItem {
         "componentId": string;
         "enableActions": boolean;
+        "itemLabel"?: string;
         "showHandle": boolean;
     }
     // (undocumented)
@@ -2819,8 +2826,14 @@ export namespace LocalJSX {
         "componentId": string;
         "disabled"?: boolean;
         "dividers"?: boolean;
+        "handleLabel"?: string;
         "handleType"?: 'handle' | 'row';
+        "itemDroppedLabel"?: string;
+        "itemMovedLabel"?: string;
+        "itemPickedUpLabel"?: string;
+        "itemReorderCanceledLabel"?: string;
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
+        "reorderDescription"?: string;
     }
 
     // (undocumented)
@@ -2834,12 +2847,25 @@ export namespace LocalJSX {
         // (undocumented)
         "dividers": boolean;
         // (undocumented)
+        "handleLabel": string;
+        // (undocumented)
         "handleType": 'handle' | 'row';
+        // (undocumented)
+        "itemDroppedLabel": string;
+        // (undocumented)
+        "itemMovedLabel": string;
+        // (undocumented)
+        "itemPickedUpLabel": string;
+        // (undocumented)
+        "itemReorderCanceledLabel": string;
+        // (undocumented)
+        "reorderDescription": string;
     }
 
     export interface PdsSortableItem {
         "componentId"?: string;
         "enableActions"?: boolean;
+        "itemLabel"?: string;
         "showHandle"?: boolean;
     }
 
@@ -2849,6 +2875,8 @@ export namespace LocalJSX {
         "componentId": string;
         // (undocumented)
         "enableActions": boolean;
+        // (undocumented)
+        "itemLabel": string;
         // (undocumented)
         "showHandle": boolean;
     }

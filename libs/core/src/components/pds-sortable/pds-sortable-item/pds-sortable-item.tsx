@@ -1,5 +1,7 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
 import { HostStylingKeeper } from '@utils/attributes';
+import { formatMessage } from '../../../i18n';
+import { sortableItemLabel } from '../sortable-label';
 
 import { handle as handleIcon } from '@pine-ds/icons/icons';
 /**
@@ -41,6 +43,11 @@ export class PdsSortableItem {
    */
   @Prop({ mutable: true }) showHandle = false;
 
+  /**
+   * Name of the item in its reorder handle's label and in the reorder announcements. Pass a translated string to localize it; defaults to the item's text content.
+   */
+  @Prop() itemLabel?: string;
+
   // Discards stale handle/actions siblings left by a page-cache (Turbo, bfcache) reconnect; the fresh handle is always first, the fresh actions wrapper always last.
   componentDidRender() {
     const handles = Array.from(this.el.children).filter((child) => child.matches('.pds-sortable-item__handle'));
@@ -61,7 +68,7 @@ export class PdsSortableItem {
   componentWillRender() {
     // When the parent sortable has a type of 'handle', the sortable items
     // will automatically set showHandle to 'true'.
-    this.sortableRef = this.el.closest('pds-sortable') as HTMLPdsSortableElement;
+    this.sortableRef = this.el.closest('pds-sortable');
 
     if (this.sortableRef && this.sortableRef.handleType === 'handle') {
       this.showHandle = true;
@@ -69,12 +76,28 @@ export class PdsSortableItem {
   }
 
   render() {
-    this.hostKeeper.record('pds-sortable-item');
+    const sortable = this.sortableRef;
+    // Reorderable from the keyboard: the row by default, the handle with `handle-type="handle"`.
+    const reorderable = !!sortable && !sortable.disabled;
+    const handleIsTarget = reorderable && sortable.handleType === 'handle';
+    const rowIsTarget = reorderable && !handleIsTarget;
+
+    const hostAttributes = {
+      tabindex: rowIsTarget ? '0' : undefined,
+      'aria-description': rowIsTarget ? sortable.reorderDescription : undefined,
+    };
+    this.hostKeeper.record('pds-sortable-item', {}, hostAttributes);
 
     return (
-      <Host class="pds-sortable-item" id={this.componentId}>
+      <Host class="pds-sortable-item" id={this.componentId} {...hostAttributes}>
         {this.showHandle && (
-          <div class="pds-sortable-item__handle">
+          <div
+            class="pds-sortable-item__handle"
+            role={handleIsTarget ? 'button' : undefined}
+            tabindex={handleIsTarget ? '0' : undefined}
+            aria-label={handleIsTarget ? formatMessage(sortable.handleLabel, { item: sortableItemLabel(this.el) }) : undefined}
+            aria-description={handleIsTarget ? sortable.reorderDescription : undefined}
+          >
             <pds-icon aria-hidden="true" icon={handleIcon}></pds-icon>
           </div>
         )}

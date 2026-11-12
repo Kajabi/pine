@@ -1,8 +1,13 @@
-import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, forceUpdate, Host, h, Listen, Prop, Watch } from '@stencil/core';
 import type { SortableEvent } from 'sortablejs';
 import { SortableType } from './sortable-interface';
+import { sortableItemLabel } from './sortable-label';
 import { HostStylingKeeper } from '../../utils/attributes';
+import { formatMessage } from '../../i18n';
 import Sortable from 'sortablejs';
+
+const LIVE_REGION_CLASS = 'pds-sortable__live-region';
+const GRABBED_CLASS = 'pds-sortable-item--grabbed';
 
 /**
  * @lightDom host-only
@@ -16,7 +21,9 @@ export class PdsSortable {
   @Element() el: HTMLPdsSortableElement;
 
   /**
-   * Event emitted when a sortable item is moved.
+   * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move
+   * carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`,
+   * `oldDraggableIndex`, `newDraggableIndex`), with the `KeyboardEvent` as `originalEvent`.
    */
   @Event() pdsSortableItemMoved: EventEmitter<SortableEvent>;
 
@@ -47,11 +54,64 @@ export class PdsSortable {
    */
   @Prop() handleType: 'handle' | 'row' = 'row';
 
+  /**
+   * Accessible label for each item's reorder handle when `handle-type` is `handle`. Pass a translated string to localize it; `{item}` is interpolated.
+   * @defaultValue 'Reorder {item}'
+   */
+  @Prop() handleLabel = 'Reorder {item}';
+
+  /**
+   * Screen-reader hint on each item's reorder control, naming the keys that pick it up. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Press Space or Enter to reorder'
+   */
+  @Prop() reorderDescription = 'Press Space or Enter to reorder';
+
+  /**
+   * Screen-reader announcement when an item is picked up from the keyboard. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+   * @defaultValue '{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.'
+   */
+  @Prop() itemPickedUpLabel =
+    '{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.';
+
+  /**
+   * Screen-reader announcement when a picked-up item is moved. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+   * @defaultValue '{item}, moved to position {position} of {total}'
+   */
+  @Prop() itemMovedLabel = '{item}, moved to position {position} of {total}';
+
+  /**
+   * Screen-reader announcement when a picked-up item is dropped. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+   * @defaultValue '{item}, dropped at position {position} of {total}'
+   */
+  @Prop() itemDroppedLabel = '{item}, dropped at position {position} of {total}';
+
+  /**
+   * Screen-reader announcement when a keyboard reorder is canceled and the item goes back. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+   * @defaultValue 'Reorder canceled. {item} returned to position {position} of {total}'
+   */
+  @Prop() itemReorderCanceledLabel = 'Reorder canceled. {item} returned to position {position} of {total}';
+
   private sortableInstance: InstanceType<typeof Sortable>;
+
+  /** The item picked up from the keyboard, and where it started. */
+  private grabbed: { item: HTMLElement; oldIndex: number; oldDraggableIndex: number } | null = null;
+
+  private liveRegion: HTMLElement | null = null;
 
   @Watch('disabled')
   handleDisabledChange() {
     this.sortableInstance?.option('disabled', this.disabled);
+    if (this.disabled && this.grabbed) this.cancel();
+    this.updateItems();
+  }
+
+  @Watch('handleType')
+  @Watch('handleLabel')
+  @Watch('reorderDescription')
+  updateItems() {
+    this.items().forEach((item) => {
+      if (item.tagName === 'PDS-SORTABLE-ITEM') forceUpdate(item);
+    });
   }
 
   private classNames() {
@@ -84,13 +144,20 @@ export class PdsSortable {
 
   disconnectedCallback() {
     this.hostKeeper.disconnect();
+    if (this.grabbed) this.release();
+    this.liveRegion?.remove();
+    this.liveRegion = null;
   }
 
   componentDidLoad() {
+    const reduceMotion =
+      typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
     let sortableOptions: SortableType = {
-      animation: 150,
+      animation: reduceMotion ? 0 : 150,
       disabled: this.disabled,
+      // Everything but the live region, which isn't an item.
+      draggable: `>:not(.${LIVE_REGION_CLASS})`,
       ghostClass: 'pds-sortable-item--ghost',
       dragClass: 'pds-sortable-item--drag',
       onEnd: (evt) => {
@@ -108,12 +175,207 @@ export class PdsSortable {
     this.sortableInstance = Sortable.create(this.el as HTMLElement, sortableOptions);
   }
 
+  /** The children that can be reordered: every element but the live region. */
+  private items(): HTMLElement[] {
+    return Array.from(this.el.children).filter(
+      (child) => !child.classList.contains(LIVE_REGION_CLASS),
+    ) as HTMLElement[];
+  }
+
+  /**
+   * The live region is a child of the host, so it's in the same modal or `lang` scope as the items.
+   * SortableJS counts every child before an item in `oldIndex`, so the region has to stay last: it's
+   * put back at the end before each drag and each keyboard reorder.
+   */
+  private ensureLiveRegion() {
+    if (!this.liveRegion) {
+      const region = document.createElement('span');
+      region.className = LIVE_REGION_CLASS;
+      region.setAttribute('role', 'status');
+      region.setAttribute('aria-live', 'polite');
+      region.setAttribute('aria-atomic', 'true');
+      // Created here, not rendered, so the scoped stylesheet can't reach it.
+      Object.assign(region.style, {
+        position: 'absolute',
+        width: '1px',
+        height: '1px',
+        margin: '-1px',
+        padding: '0',
+        overflow: 'hidden',
+        clip: 'rect(0 0 0 0)',
+        whiteSpace: 'nowrap',
+        border: '0',
+      });
+      this.liveRegion = region;
+    }
+
+    if (this.liveRegion.parentElement !== this.el || this.liveRegion.nextElementSibling) {
+      this.el.appendChild(this.liveRegion);
+    }
+  }
+
+  private announce(template: string, item: HTMLElement) {
+    this.ensureLiveRegion();
+    const items = this.items();
+    const message = formatMessage(template, {
+      item: sortableItemLabel(item),
+      position: items.indexOf(item) + 1,
+      total: items.length,
+    });
+    // A repeat of the same text isn't announced again, so tell the two apart.
+    this.liveRegion.textContent = message === this.liveRegion.textContent ? `${message} ` : message;
+  }
+
+  @Listen('pointerdown', { capture: true })
+  handlePointerDown() {
+    if (this.liveRegion?.nextElementSibling) this.ensureLiveRegion();
+  }
+
+  private handleFocusIn = () => {
+    // Before the first announcement, so the region is in place when its text changes.
+    this.ensureLiveRegion();
+  };
+
+  /** Focus leaving a picked-up item drops it where it is. */
+  private handleFocusOut = (ev: FocusEvent) => {
+    if (this.grabbed && ev.target === this.focusTarget(this.grabbed.item)) this.drop(ev);
+  };
+
+  private handleKeyDown = (ev: KeyboardEvent) => {
+    if (this.disabled || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+
+    const target = ev.target as HTMLElement;
+    const item = this.items().find((candidate) => candidate.contains(target));
+    if (!item || this.focusTarget(item) !== target) return;
+
+    if (!this.grabbed) {
+      if ((ev.key === ' ' || ev.key === 'Enter') && !ev.repeat) {
+        ev.preventDefault();
+        this.pickUp(item);
+      }
+      return;
+    }
+
+    if (this.grabbed.item !== item) return;
+
+    const items = this.items();
+    const index = items.indexOf(item);
+
+    switch (ev.key) {
+      case 'ArrowUp':
+        ev.preventDefault();
+        this.moveTo(item, index - 1);
+        break;
+      case 'ArrowDown':
+        ev.preventDefault();
+        this.moveTo(item, index + 1);
+        break;
+      case 'Home':
+        ev.preventDefault();
+        this.moveTo(item, 0);
+        break;
+      case 'End':
+        ev.preventDefault();
+        this.moveTo(item, items.length - 1);
+        break;
+      case ' ':
+      case 'Enter':
+        ev.preventDefault();
+        if (!ev.repeat) this.drop(ev);
+        break;
+      case 'Escape':
+        // Keep an enclosing modal or drawer from closing too.
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.cancel();
+        break;
+    }
+  };
+
+  /** The handle with `handle-type="handle"`, the item itself otherwise. */
+  private focusTarget(item: HTMLElement): HTMLElement | null {
+    if (this.handleType !== 'handle') return item;
+    return (Array.from(item.children).find((child) => child.classList.contains('pds-sortable-item__handle')) ??
+      null) as HTMLElement | null;
+  }
+
+  /** Where an item sits among all the children, then among the items, as SortableJS counts them. */
+  private indexes(item: HTMLElement) {
+    const children = Array.from(this.el.children).filter((child) => child.tagName !== 'TEMPLATE');
+    return { index: children.indexOf(item), draggableIndex: this.items().indexOf(item) };
+  }
+
+  private pickUp(item: HTMLElement) {
+    const { index, draggableIndex } = this.indexes(item);
+    this.grabbed = { item, oldIndex: index, oldDraggableIndex: draggableIndex };
+    item.classList.add(GRABBED_CLASS);
+    this.announce(this.itemPickedUpLabel, item);
+  }
+
+  /**
+   * Moves the other items around `item` rather than `item` itself, so it never leaves the DOM and
+   * keeps focus.
+   */
+  private moveTo(item: HTMLElement, to: number, announce = true) {
+    const items = this.items();
+    const from = items.indexOf(item);
+    if (to < 0 || to >= items.length || to === from) return;
+
+    if (to < from) {
+      const next = item.nextSibling;
+      items.slice(to, from).forEach((sibling) => this.el.insertBefore(sibling, next));
+    } else {
+      items.slice(from + 1, to + 1).forEach((sibling) => this.el.insertBefore(sibling, item));
+    }
+
+    if (announce) this.announce(this.itemMovedLabel, item);
+  }
+
+  private drop(originalEvent: Event) {
+    const { item, oldIndex, oldDraggableIndex } = this.grabbed;
+    this.release();
+    this.announce(this.itemDroppedLabel, item);
+
+    const { index, draggableIndex } = this.indexes(item);
+    // The same shape SortableJS gives `onEnd`, so a listener can't tell a keyboard move from a drag.
+    const detail = Object.assign(new CustomEvent('end', { bubbles: true, cancelable: true }), {
+      item,
+      from: this.el,
+      to: this.el,
+      oldIndex,
+      newIndex: index,
+      oldDraggableIndex,
+      newDraggableIndex: draggableIndex,
+      originalEvent,
+      pullMode: undefined,
+    }) as unknown as SortableEvent;
+    this.pdsSortableItemMoved.emit(detail);
+  }
+
+  private cancel() {
+    const { item, oldDraggableIndex } = this.grabbed;
+    this.release();
+    this.moveTo(item, oldDraggableIndex, false);
+    this.announce(this.itemReorderCanceledLabel, item);
+  }
+
+  private release() {
+    this.grabbed.item.classList.remove(GRABBED_CLASS);
+    this.grabbed = null;
+  }
+
   render() {
     const classNames = this.classNames();
     this.hostKeeper.record(classNames);
 
     return (
-      <Host class={classNames} id={this.componentId}>
+      <Host
+        class={classNames}
+        id={this.componentId}
+        onFocusin={this.handleFocusIn}
+        onFocusout={this.handleFocusOut}
+        onKeyDown={this.handleKeyDown}
+      >
         <slot></slot>
       </Host>
     );

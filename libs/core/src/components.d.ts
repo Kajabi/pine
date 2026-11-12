@@ -2515,10 +2515,40 @@ export namespace Components {
          */
         "dividers": boolean;
         /**
+          * Accessible label for each item's reorder handle when `handle-type` is `handle`. Pass a translated string to localize it; `{item}` is interpolated.
+          * @defaultValue 'Reorder {item}'
+         */
+        "handleLabel": string;
+        /**
           * Determines the grabbable area for the `pds-sortable-item`.
           * @default 'row'
          */
         "handleType": 'handle' | 'row';
+        /**
+          * Screen-reader announcement when a picked-up item is dropped. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue '{item}, dropped at position {position} of {total}'
+         */
+        "itemDroppedLabel": string;
+        /**
+          * Screen-reader announcement when a picked-up item is moved. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue '{item}, moved to position {position} of {total}'
+         */
+        "itemMovedLabel": string;
+        /**
+          * Screen-reader announcement when an item is picked up from the keyboard. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue '{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.'
+         */
+        "itemPickedUpLabel": string;
+        /**
+          * Screen-reader announcement when a keyboard reorder is canceled and the item goes back. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue 'Reorder canceled. {item} returned to position {position} of {total}'
+         */
+        "itemReorderCanceledLabel": string;
+        /**
+          * Screen-reader hint on each item's reorder control, naming the keys that pick it up. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Press Space or Enter to reorder'
+         */
+        "reorderDescription": string;
     }
     /**
      * @lightDom renders-markup
@@ -2533,6 +2563,10 @@ export namespace Components {
           * @defaultValue false
          */
         "enableActions": boolean;
+        /**
+          * Name of the item in its reorder handle's label and in the reorder announcements. Pass a translated string to localize it; defaults to the item's text content.
+         */
+        "itemLabel"?: string;
         /**
           * Determines whether `sortable-item` should have a handle.
           * @defaultValue false
@@ -6518,14 +6552,44 @@ declare namespace LocalJSX {
          */
         "dividers"?: boolean;
         /**
+          * Accessible label for each item's reorder handle when `handle-type` is `handle`. Pass a translated string to localize it; `{item}` is interpolated.
+          * @defaultValue 'Reorder {item}'
+         */
+        "handleLabel"?: string;
+        /**
           * Determines the grabbable area for the `pds-sortable-item`.
           * @default 'row'
          */
         "handleType"?: 'handle' | 'row';
         /**
-          * Event emitted when a sortable item is moved.
+          * Screen-reader announcement when a picked-up item is dropped. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue '{item}, dropped at position {position} of {total}'
+         */
+        "itemDroppedLabel"?: string;
+        /**
+          * Screen-reader announcement when a picked-up item is moved. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue '{item}, moved to position {position} of {total}'
+         */
+        "itemMovedLabel"?: string;
+        /**
+          * Screen-reader announcement when an item is picked up from the keyboard. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue '{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.'
+         */
+        "itemPickedUpLabel"?: string;
+        /**
+          * Screen-reader announcement when a keyboard reorder is canceled and the item goes back. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+          * @defaultValue 'Reorder canceled. {item} returned to position {position} of {total}'
+         */
+        "itemReorderCanceledLabel"?: string;
+        /**
+          * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the `KeyboardEvent` as `originalEvent`.
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
+        /**
+          * Screen-reader hint on each item's reorder control, naming the keys that pick it up. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Press Space or Enter to reorder'
+         */
+        "reorderDescription"?: string;
     }
     /**
      * @lightDom renders-markup
@@ -6540,6 +6604,10 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "enableActions"?: boolean;
+        /**
+          * Name of the item in its reorder handle's label and in the reorder announcements. Pass a translated string to localize it; defaults to the item's text content.
+         */
+        "itemLabel"?: string;
         /**
           * Determines whether `sortable-item` should have a handle.
           * @defaultValue false
@@ -7611,11 +7679,18 @@ declare namespace LocalJSX {
         "componentId": string;
         "dividers": boolean;
         "handleType": 'handle' | 'row';
+        "handleLabel": string;
+        "reorderDescription": string;
+        "itemPickedUpLabel": string;
+        "itemMovedLabel": string;
+        "itemDroppedLabel": string;
+        "itemReorderCanceledLabel": string;
     }
     interface PdsSortableItemAttributes {
         "enableActions": boolean;
         "componentId": string;
         "showHandle": boolean;
+        "itemLabel": string;
     }
     interface PdsSwitchAttributes {
         "componentId": string;

@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property        | Attribute        | Description                                                        | Type      | Default     |
-| --------------- | ---------------- | ------------------------------------------------------------------ | --------- | ----------- |
-| `componentId`   | `component-id`   | A unique identifier used for the sortable item `id` attribute.     | `string`  | `undefined` |
-| `enableActions` | `enable-actions` | Determines whether `sortable-item-actions` slot should be enabled. | `boolean` | `false`     |
-| `showHandle`    | `show-handle`    | Determines whether `sortable-item` should have a handle.           | `boolean` | `false`     |
+| Property        | Attribute        | Description                                                                                                                                                    | Type      | Default     |
+| --------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `componentId`   | `component-id`   | A unique identifier used for the sortable item `id` attribute.                                                                                                 | `string`  | `undefined` |
+| `enableActions` | `enable-actions` | Determines whether `sortable-item-actions` slot should be enabled.                                                                                             | `boolean` | `false`     |
+| `itemLabel`     | `item-label`     | Name of the item in its reorder handle's label and in the reorder announcements. Pass a translated string to localize it; defaults to the item's text content. | `string`  | `undefined` |
+| `showHandle`    | `show-handle`    | Determines whether `sortable-item` should have a handle.                                                                                                       | `boolean` | `false`     |
 
 
 ## Slots
