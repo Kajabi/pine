@@ -73,7 +73,8 @@ export class PdsInput {
    * Emitted when the user changes the value and then presses `Enter` or leaves the field.
    * `detail` has `value`, as a string, and `event`, the native event behind it, usually `change`.
    *
-   * This event will not emit when programmatically setting the `value` property.
+   * This event will not emit when programmatically setting the `value` property, unless the field has focus at the time;
+   * then it emits when the field loses focus.
    */
   @Event() pdsChange!: EventEmitter<InputChangeEventDetail>;
 
