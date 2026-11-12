@@ -192,7 +192,7 @@ form.addEventListener('submit', (event) => {
 - Give every control you want submitted a `name`, set as an HTML attribute. The form leaves out a control without one. `pds-input`, `pds-textarea`, `pds-select`, `pds-checkbox`, `pds-switch` and `pds-datepicker` submit under their `name` attribute only, so a `name` set only as a property, as React 19 does for custom elements, leaves them out too. The `@pine-ds/react` components set the attribute for you.
 - Group related radios in a `pds-radio-group` with a `group-label` and a `name`. Screen readers read the `group-label` as the group's name, every radio in it gets the `name`, and the group shows one `error-message` for all of them.
 - Use `readonly` for a value people should see but not change, when the form should still send it. A `disabled` control isn't submitted. `pds-input`, `pds-textarea` and `pds-datepicker` have `readonly`.
-- Write boolean props as bare attributes, such as `disabled`, and remove the attribute to turn one off. On form-associated controls such as `pds-input`, any value turns it on, even `disabled="false"`. In React, pass `disabled` or `disabled={isDisabled}`.
+- Write boolean props as bare attributes, such as `disabled`, and remove the attribute to turn one off. On form-associated controls such as `pds-input`, any value turns it on, even `disabled="false"`. In React, pass `disabled`, or `disabled={isDisabled || undefined}`: React 18 writes `disabled={false}` on a custom element as `disabled="false"`, which disables the control and leaves it out of the form.
 
 **Don't:**
 
@@ -203,7 +203,7 @@ form.addEventListener('submit', (event) => {
 
 Set `invalid` and `error-message` together when a field fails. `pds-select`, `pds-combobox` and `pds-multiselect` treat an `error-message` alone as invalid. On `pds-input`, `pds-checkbox`, `pds-switch`, `pds-radio` and `pds-datepicker`, an `error-message` alone shows the message but doesn't mark the field invalid for screen readers or connect the message to it. `pds-textarea` shows no `error-message` until `invalid` is set.
 
-While a field is invalid, screen readers read its `error-message` as the field's description instead of its `helper-message`. Both messages stay on screen.
+While a field is invalid, screen readers read its `error-message` as the field's description instead of its `helper-message`. Both messages stay on screen, except on `pds-combobox` and `pds-multiselect`, which hide the `helper-message` while an `error-message` is set.
 
 <DocCanvas
   mdxSource={{
@@ -248,14 +248,14 @@ With `required`, `pds-input` shows an asterisk after its label, and the browser 
 
 ### After a failed submit
 
-When a submit fails, mark each field that failed with `invalid` and `error-message`. Above the form, show a `pds-alert` with `variant="danger"` that lists the errors, and move focus to it so keyboard and screen reader users start there. Give the alert `tabindex="-1"` so it can take focus, then call `focus()` on it. The <pds-link href="../?path=/docs/guides-accessibility--docs">Accessibility</pds-link> guide follows the same rule.
+When a submit fails, mark each field that failed with `invalid` and `error-message`. Above the form, show a `pds-alert` with `variant="danger"` that lists the errors, and move focus to it so keyboard and screen reader users start there. Give the alert `tabindex="-1"` so it can take focus, then call `focus()` on it. Identify it with `component-id`, not `id`: `pds-alert` sets its `id` from `component-id` each time it renders, so an `id` you set is gone after the next change, such as a new `heading`. The <pds-link href="../?path=/docs/guides-accessibility--docs">Accessibility</pds-link> guide follows the same rule.
 
 Don't move focus while validating a single field as someone types or leaves it. Show its `error-message` and leave focus where it is.
 
 <DocCanvas
   mdxSource={{
     webComponent: `
-<pds-alert id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
+<pds-alert component-id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
   <ul>
     <li>Name: enter your name.</li>
     <li>Billing email: enter an email address, like name@example.com.</li>
@@ -264,14 +264,14 @@ Don't move focus while validating a single field as someone types or leaves it. 
     react: `
 import { PdsAlert } from '@pine-ds/react';
 
-<PdsAlert id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabIndex={-1}>
+<PdsAlert componentId="form-errors" variant="danger" heading="Fix 2 fields to continue" tabIndex={-1}>
   <ul>
     <li>Name: enter your name.</li>
     <li>Billing email: enter an email address, like name@example.com.</li>
   </ul>
 </PdsAlert>`
   }}>
-  <pds-alert id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
+  <pds-alert component-id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
     <ul>
       <li>Name: enter your name.</li>
       <li>Billing email: enter an email address, like name@example.com.</li>
