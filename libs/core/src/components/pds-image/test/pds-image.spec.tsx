@@ -267,6 +267,78 @@ describe('pds-image', () => {
       expect(errorSpy.mock.calls[0][0].detail).toEqual({ currentSrc: '/broken.png' });
     });
 
+    it('decodes an already-complete image with no natural width and emits pdsImageLoad when it decodes', async () => {
+      // An SVG with no intrinsic size reports no natural width but still decodes.
+      const page = await newSpecPage({
+        components: [PdsImage],
+        html: `<pds-image src="/sizeless.svg"></pds-image>`,
+      });
+      const loadSpy = jest.fn();
+      const errorSpy = jest.fn();
+      page.root.addEventListener('pdsImageLoad', loadSpy);
+      page.root.addEventListener('pdsImageError', errorSpy);
+      const img = page.root.shadowRoot.querySelector('img');
+      setImageState(img, {
+        complete: true,
+        currentSrc: '/sizeless.svg',
+        decode: () => Promise.resolve(),
+        naturalHeight: 0,
+        naturalWidth: 0,
+      });
+
+      page.rootInstance.componentDidLoad();
+      await page.waitForChanges();
+
+      expect(errorSpy).not.toHaveBeenCalled();
+      expect(loadSpy).toHaveBeenCalledTimes(1);
+      expect(loadSpy.mock.calls[0][0].detail).toEqual({ currentSrc: '/sizeless.svg', naturalHeight: 0, naturalWidth: 0 });
+    });
+
+    it('drops a decode result once the source has changed', async () => {
+      const page = await newSpecPage({
+        components: [PdsImage],
+        html: `<pds-image src="/old.png"></pds-image>`,
+      });
+      const loadSpy = jest.fn();
+      const errorSpy = jest.fn();
+      page.root.addEventListener('pdsImageLoad', loadSpy);
+      page.root.addEventListener('pdsImageError', errorSpy);
+      const img = page.root.shadowRoot.querySelector('img');
+      let rejectDecode: () => void;
+      setImageState(img, {
+        complete: true,
+        currentSrc: '/old.png',
+        decode: () => new Promise<void>((_, reject) => (rejectDecode = () => reject(new Error('EncodingError')))),
+        naturalWidth: 0,
+      });
+
+      page.rootInstance.componentDidLoad();
+      setImageState(img, { currentSrc: '/new.png' });
+      rejectDecode();
+      await page.waitForChanges();
+
+      expect(loadSpy).not.toHaveBeenCalled();
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
+
+    it('emits again after srcset changes, even for the same chosen file', async () => {
+      const page = await newSpecPage({
+        components: [PdsImage],
+        html: `<pds-image src="/a.png" srcset="/a.png 1x"></pds-image>`,
+      });
+      const spy = jest.fn();
+      page.root.addEventListener('pdsImageLoad', spy);
+      const img = page.root.shadowRoot.querySelector('img');
+      setImageState(img, { currentSrc: '/a.png', naturalHeight: 1, naturalWidth: 1 });
+      img.dispatchEvent(new Event('load'));
+
+      page.root.setAttribute('srcset', '/a.png 1x, /a-2x.png 2x');
+      await page.waitForChanges();
+      img.dispatchEvent(new Event('load'));
+
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
     it('emits nothing on first render when the image has not finished loading', async () => {
       const page = await newSpecPage({
         components: [PdsImage],

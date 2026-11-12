@@ -126,7 +126,7 @@ describe('pds-image events', () => {
   // listeners already attached, and every event it emits is recorded on `window`.
   // With `preload`, the source is loaded first, so the browser has it in its memory
   // cache and the component's image reports `complete` as soon as it renders.
-  const renderImage = async (page: E2EPage, src: string, { preload = false } = {}) => {
+  const renderImage = async (page: E2EPage, src: string | null, { preload = false } = {}) => {
     await page.setContent('<div></div>');
     await page.evaluate(
       async (imageSrc, shouldPreload) => {
@@ -145,7 +145,7 @@ describe('pds-image events', () => {
         image.addEventListener('pdsImageLoad', record);
         image.addEventListener('pdsImageError', record);
         image.setAttribute('alt', 'A shape');
-        image.setAttribute('src', imageSrc);
+        if (imageSrc !== null) image.setAttribute('src', imageSrc);
         document.body.appendChild(image);
       },
       src,
@@ -185,6 +185,24 @@ describe('pds-image events', () => {
     await renderImage(page, broken);
 
     expect(await imageEvents(page, 1)).toEqual([{ type: 'pdsImageError', detail: { currentSrc: broken } }]);
+  });
+
+  it('emits pdsImageError for an empty src', async () => {
+    const page = await newE2EPage();
+
+    await renderImage(page, '');
+
+    expect(await imageEvents(page, 1)).toEqual([{ type: 'pdsImageError', detail: { currentSrc: '' } }]);
+  });
+
+  it('emits neither event when there is no src or srcset', async () => {
+    const page = await newE2EPage();
+
+    await renderImage(page, null);
+    // Give the component time to render and any event the chance to arrive.
+    await page.evaluate(() => (document.querySelector('pds-image') as HTMLPdsImageElement).componentOnReady());
+
+    expect(await imageEvents(page, 0)).toEqual([]);
   });
 
   it('emits pdsImageLoad only once for a cached image that is complete on first render', async () => {
