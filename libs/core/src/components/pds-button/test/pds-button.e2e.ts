@@ -952,8 +952,9 @@ describe('pds-button', () => {
   });
 
   describe('first paint', () => {
-    // Turbo swaps a frame from inside an animation frame. A slot shown only after slotchange would
-    // paint hidden for that frame, so the button would be drawn narrower and then widen.
+    // A framework or DOM morph can insert the button from inside an animation frame. A slot shown
+    // only after slotchange would paint hidden for that frame, so the button would be drawn narrower
+    // and then widen.
     it('keeps its width from the first paint when inserted inside an animation frame', async () => {
       const page = await newE2EPage();
       // A button with a slotted icon loads both components first, as on a page that's already running.
@@ -965,7 +966,8 @@ describe('pds-button', () => {
           host.innerHTML = `<pds-button variant="secondary">All<pds-icon slot="end" aria-hidden="true" icon="${icon}"></pds-icon></pds-button>`;
           const button = host.querySelector('pds-button') as HTMLElement;
           const seen: number[] = [];
-          // Resize observations are delivered just before each paint, so this records every painted width.
+          // ResizeObserver reports the first size and then each change, so this records every width
+          // the button takes, each one before it paints.
           const observer = new ResizeObserver(() => seen.push(button.getBoundingClientRect().width));
           observer.observe(button);
           setTimeout(() => {
