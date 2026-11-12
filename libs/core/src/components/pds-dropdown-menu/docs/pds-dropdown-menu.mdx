@@ -36,7 +36,7 @@ Dropdown Menus reveal a list of actions from a button trigger, based on the WAI-
 - Keeps `informational` items in keyboard navigation and exposes them as menu items with `aria-disabled="true"`, so people can reach and read them but not activate them. Navigation skips `disabled` items
 - Lets Tab and Shift+Tab move through the enabled menu items, and closes the menu when they move past the last or first enabled item, so keyboard users don't need Escape to leave it. This differs from the APG pattern, where Tab leaves the menu from any item
 - Closes the menu once its trigger scrolls fully out of view, scrolled or clipped by a scrolling container (such as a table that scrolls sideways) or by the window. Focus in the menu returns to the trigger without scrolling it back into view. Opening the menu while its trigger is out of view, such as with Enter on that trigger after it closed this way, scrolls the trigger into view first, so the menu opens beside it. A trigger covered by something rather than clipped, such as a sticky header, keeps the menu open, and so does panning a pinch-zoomed page
-- Treats a `pds-icon` in an item's `start` slot as decorative unless it has an `aria-label`, so the item's accessible name is its label alone
+- Treats a `pds-icon` in an item's `start` slot as decorative unless it has an `aria-label` or `aria-labelledby`. A named icon is announced before the label, so leave decorative icons unnamed
 - Provides high-contrast focus indicators for all interactive elements
 
 #### Keyboard interactions
@@ -156,7 +156,7 @@ Activating a `pds-dropdown-menu-item` emits `pdsClick`: a click, Enter on a butt
 
 - `itemIndex`: the item's position among the menu's `pds-dropdown-menu-item` elements, counting from 0. Separators and raw `<a>` and `<button>` elements aren't counted.
 - `item`: the `pds-dropdown-menu-item` element.
-- `content`: the item's text, trimmed.
+- `content`: the item's label text, trimmed. Content in the `start` slot is left out.
 
 Raw `<a>` and `<button>` elements don't emit `pdsClick`, so listen for their `click` instead. A `pds-button` trigger emits its own `pdsClick`, which also bubbles to the menu, so a listener on the menu should check that `event.target` is a `pds-dropdown-menu-item`.
 
@@ -247,28 +247,30 @@ The dropdown menu can also display a separator between items.
 
 ### With Icons
 
-Put a `pds-icon` in an item's `start` slot to show it before the label. The slot lays the icon out with the item's gap, so don't add spaces or wrappers. It works in button, link and informational items, and a destructive item colors the icon to match. An icon without an `aria-label` is decorative, so screen readers read only the label.
+Put a `pds-icon` in an item's `start` slot to show it before the label. The slot lays the icon out with the item's gap, so don't add spaces or wrappers. It works in button, link and informational items, and a destructive item colors the icon to match. An icon without an `aria-label` or `aria-labelledby` is decorative; a named one is announced before the label, so leave decorative icons unnamed.
 
 <DocCanvas
   mdxSource={{
     react: `
+import { pen, duplicate, download, trash } from '@pine-ds/icons/icons';
+
 <PdsDropdownMenu>
   <PdsButton slot="trigger">Actions</PdsButton>
   <PdsDropdownMenuItem>
-    <PdsIcon slot="start" name="pen" />
+    <PdsIcon slot="start" icon={pen} />
     Edit
   </PdsDropdownMenuItem>
   <PdsDropdownMenuItem>
-    <PdsIcon slot="start" name="duplicate" />
+    <PdsIcon slot="start" icon={duplicate} />
     Duplicate
   </PdsDropdownMenuItem>
   <PdsDropdownMenuItem href="/export">
-    <PdsIcon slot="start" name="download" />
+    <PdsIcon slot="start" icon={download} />
     Download
   </PdsDropdownMenuItem>
   <PdsDropdownMenuSeparator />
   <PdsDropdownMenuItem destructive>
-    <PdsIcon slot="start" name="trash" />
+    <PdsIcon slot="start" icon={trash} />
     Delete
   </PdsDropdownMenuItem>
 </PdsDropdownMenu>
