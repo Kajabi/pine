@@ -43,8 +43,7 @@
       border-start-start-radius: calc(var(--pine-dimension-xs) * 1.25);
     }
 
-    // `last-of-type`, not `last-child`: the list's live region comes after the last item.
-    &:last-of-type {
+    &:last-child {
       border-end-end-radius: calc(var(--pine-dimension-xs) * 1.25);
       border-end-start-radius: calc(var(--pine-dimension-xs) * 1.25);
     }
@@ -54,8 +53,7 @@
   .pds-sortable--divided & {
     border-block-end: var(--pine-border);
 
-    // `last-of-type`, not `last-child`: the list's live region comes after the last item.
-    &:last-of-type {
+    &:last-child {
       border-block-end: 0;
     }
   }
