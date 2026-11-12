@@ -1062,12 +1062,14 @@ describe('pds-combobox', () => {
         await click(page, '.pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger');
         expect((await glide(page)).gliding).toBe(true);
 
-        // Hiding the panel cancels its animations without ending them.
+        // Cancelled without ending, as when the panel is hidden mid-way. Cancelled directly: hiding the
+        // panel can take focus from the search field and close the dropdown first.
         await page.evaluate(() => {
-          (document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') as HTMLElement).style.display = 'none';
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          root.getAnimations().find(a => (a as CSSAnimation).animationName === 'pds-combobox-height-glide')!.cancel();
         });
         await page.waitForFunction(
-          () => !document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox')!.classList.contains('pds-combobox__listbox--height-glide'),
+          () => !document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox')?.classList.contains('pds-combobox__listbox--height-glide'),
         );
         const cut = await glide(page);
         expect(cut.gliding).toBe(false);
