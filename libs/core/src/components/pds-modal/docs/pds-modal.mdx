@@ -172,7 +172,7 @@ Set `open` to `true` to open a modal and to `false` to close it, or call `showMo
 
 #### Using Events
 
-The modal closes itself on Escape, a backdrop click and the browser's own close request, and sets its own `open` to `false` when it does. `pdsModalClose` fires whenever the modal closes, whether it closed itself, you set `open` to `false`, or you called `hideModal()`. It can fire twice for one close, so keep its handler safe to run again. `pdsModalOpen` fires once the modal has opened and set its initial focus.
+The modal closes itself on Escape, a backdrop click and the browser's own close request, and sets its own `open` to `false` when it does. `pdsModalClose` fires whenever the modal closes, whether it closed itself, you set `open` to `false`, or you called `hideModal()`. It can fire twice for one close, so keep its handler safe to run again. `pdsModalOpen` fires about 100 ms after the modal opens, once it has set its initial focus. It fires even if the modal closed in the meantime, after `pdsModalClose`, so check `open` in its handler when that matters.
 
 If you keep `open` in state, update that state in `pdsModalClose` (`onPdsModalClose` in React). Otherwise your state stays `true` after the modal closes itself, so setting it to `true` again doesn't reopen the modal, and your component's next re-render does. The event bubbles, so a modal nested inside another modal's markup also reaches the outer modal's listener; check `event.target` there.
 
