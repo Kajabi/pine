@@ -25,7 +25,7 @@ Checkboxes provide users with selectable options like toggling a single setting 
 ### Accessibility
 
 - Provide a clear, descriptive label for each checkbox to ensure that screen readers can identify the option effectively.
-- Always set `label` or fill the `label` slot, even when the design shows only the box: `hide-label` hides the text visually and keeps it as the checkbox's name. Without either, the checkbox has no name.
+- Always set `label` or fill the `label` slot, even when the design shows only the box: `hide-label` hides the text visually and keeps it as the checkbox's name. Without either, or an `aria-label` on the checkbox when it loads, the checkbox has no name. An `aria-label` added after it loads isn't passed on.
 - The helper message, or the error message while `invalid` is set, becomes the checkbox's accessible description. Keep both short.
 - Put only non-interactive content in the `label` slot. Buttons and links inside a label are invalid HTML.
 - Wrap related checkboxes in a `fieldset` with a `legend`, which names the group.
@@ -155,36 +155,11 @@ Wrap related pills in a `fieldset` with a `legend` so the group has a name, and 
   </fieldset>
 </DocCanvas>
 
-## Events
-
-Neither event fires when `checked` is set in code. In React, add `on` to the event name, as in `onPdsCheckboxChange`.
-
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="checkbox-events">
-    <pds-table-head>
-      <pds-table-head-cell>Event</pds-table-head-cell>
-      <pds-table-head-cell>Emitted when</pds-table-head-cell>
-      <pds-table-head-cell>Detail</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>pdsCheckboxChange</code></pds-table-cell>
-        <pds-table-cell>The user checks or unchecks the box, by a click or <code>Space</code>.</pds-table-cell>
-        <pds-table-cell>An object with <code>checked</code>, the new state, and the checkbox's <code>value</code>.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>pdsCheckboxInput</code></pds-table-cell>
-        <pds-table-cell>Just before <code>pdsCheckboxChange</code>, for the same toggle.</pds-table-cell>
-        <pds-table-cell>The same object, but <code>checked</code> is still the state from before the toggle. Read the new state from <code>pdsCheckboxChange</code>.</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
-
 ## Form Integration
 
 - Set the `name` attribute so each checked box contributes its `value` to `FormData`; unchecked boxes are omitted automatically.
 - Give every checkbox in a group a distinct `value` so the server can differentiate selections.
+- To react to a toggle, listen for `pdsCheckboxChange` (`onPdsCheckboxChange` in React) and read the new state from `event.detail.checked`.
 - `required` doesn't stop the form from submitting while the box is unchecked. Check it yourself before submitting, and set `invalid` and `error-message` to show the error.
 - Resetting the form doesn't change the checkbox: it stays checked or unchecked, as it was before the reset.
 - For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
