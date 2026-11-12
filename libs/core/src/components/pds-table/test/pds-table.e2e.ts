@@ -465,6 +465,56 @@ describe('pds-table column widths', () => {
     expect(firstCellScrolled).toBe(true);
   });
 
+  it('drops a fixed-column scroll shadow once responsive turns off, not just its listener', async () => {
+    // Turning `responsive` off tears the scroll listener down without setting it back up, which
+    // must not leave the shadow it was driving stuck on with nothing left to ever clear it.
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 150px">
+        <pds-table component-id="fixed-column-unbind" fixed-column responsive>
+          <pds-table-head>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+            <pds-table-head-cell>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Jane Doe</pds-table-cell>
+              <pds-table-cell>jane@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    await page.evaluate(async () => {
+      const table = document.querySelector('pds-table');
+      const container = table.shadowRoot.querySelector('.pds-table-responsive-container');
+      container.scrollLeft = 20;
+      container.dispatchEvent(new Event('scroll'));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    });
+
+    expect(
+      await page.evaluate(() => document.querySelectorAll('pds-table-cell')[0].classList.contains('has-scrolled')),
+    ).toBe(true);
+    expect(
+      await page.evaluate(() => document.querySelectorAll('pds-table-head-cell')[0].classList.contains('has-scrolled')),
+    ).toBe(true);
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').removeAttribute('responsive');
+    });
+    await page.waitForChanges();
+
+    expect(
+      await page.evaluate(() => document.querySelectorAll('pds-table-cell')[0].classList.contains('has-scrolled')),
+    ).toBe(false);
+    expect(
+      await page.evaluate(() => document.querySelectorAll('pds-table-head-cell')[0].classList.contains('has-scrolled')),
+    ).toBe(false);
+  });
+
   it('does not leak a window resize listener when the table unmounts right after a layout change', async () => {
     const page = await newE2EPage();
     // Starts with neither responsive nor fixed layout, so no listener exists yet -- the spy
