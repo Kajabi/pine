@@ -160,7 +160,7 @@ export namespace Components {
          */
         "initials"?: string | null;
         /**
-          * Size of the avatar. Value can be preset or custom.
+          * Sets the size of the avatar: `xs` (24px), `sm` (32px), `md` (40px), `lg` (56px), `xl` (64px), or a custom CSS length such as `128px`.
           * @defaultValue lg
          */
         "size"?: | 'xl' // 64px
@@ -813,7 +813,7 @@ export namespace Components {
          */
         "loading"?: boolean;
         /**
-          * Provides the button with a submittable name.
+          * Sets the `name` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "name"?: string;
         /**
@@ -831,7 +831,7 @@ export namespace Components {
          */
         "type"?: 'button' | 'reset' | 'submit';
         /**
-          * Provides button with a submittable value
+          * Sets the `value` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "value"?: string;
         /**
@@ -1870,7 +1870,7 @@ export namespace Components {
          */
         "showLabel"?: boolean;
         /**
-          * Sets the size of the spinner loader. Value can be preset or custom.
+          * Sets the size of the spinner loader: `xs` (24px), `sm` (32px), `md` (48px), `lg` (64px), `xl` (80px), or a custom CSS length such as `128px`. The `typing` variant ignores it.
           * @default 'md'
          */
         "size"?: | 'xs' // 24px
@@ -4066,7 +4066,7 @@ declare namespace LocalJSX {
          */
         "initials"?: string | null;
         /**
-          * Size of the avatar. Value can be preset or custom.
+          * Sets the size of the avatar: `xs` (24px), `sm` (32px), `md` (40px), `lg` (56px), `xl` (64px), or a custom CSS length such as `128px`.
           * @defaultValue lg
          */
         "size"?: | 'xl' // 64px
@@ -4719,7 +4719,7 @@ declare namespace LocalJSX {
          */
         "loading"?: boolean;
         /**
-          * Provides the button with a submittable name.
+          * Sets the `name` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "name"?: string;
         /**
@@ -4741,7 +4741,7 @@ declare namespace LocalJSX {
          */
         "type"?: 'button' | 'reset' | 'submit';
         /**
-          * Provides button with a submittable value
+          * Sets the `value` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "value"?: string;
         /**
@@ -5124,7 +5124,7 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
-          * Event fired when copyText button is clicked.
+          * Emitted after a click, once the copy to the clipboard succeeds or fails. `detail` is `Copied to clipboard` on success, or `Error writing text to clipboard: ` followed by the error on failure. Not emitted when `navigator.clipboard` is undefined, as it is outside a secure context.
          */
         "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<string>) => void;
         /**
@@ -5840,7 +5840,7 @@ declare namespace LocalJSX {
          */
         "showLabel"?: boolean;
         /**
-          * Sets the size of the spinner loader. Value can be preset or custom.
+          * Sets the size of the spinner loader: `xs` (24px), `sm` (32px), `md` (48px), `lg` (64px), `xl` (80px), or a custom CSS length such as `128px`. The `typing` variant ignores it.
           * @default 'md'
          */
         "size"?: | 'xs' // 24px
