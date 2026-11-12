@@ -78,14 +78,18 @@ export class PdsImage {
    * Emitted when the image loads. Also emitted on first render for an image that
    * finished loading before the component could listen, such as a server-rendered
    * image. Emitted again after `src` or `srcset` changes and the new image loads, or
-   * when the browser picks a different `srcset` candidate, such as on a resize.
+   * when the browser picks a different `srcset` candidate, such as on a resize. Bubbles
+   * and is composed, so a listener on an ancestor gets every `pds-image`'s events —
+   * check `event.target` when more than one is in scope.
    */
   @Event() pdsImageLoad: EventEmitter<ImageLoadEventDetail>;
 
   /**
    * Emitted when the image fails to load, such as for a broken or empty `src`. An image
    * with no `src` or `srcset` at all emits neither event, since it has nothing to load.
-   * Emitted again after `src` or `srcset` changes and the new image fails.
+   * Emitted again after `src` or `srcset` changes and the new image fails. Bubbles and is
+   * composed, so a listener on an ancestor gets every `pds-image`'s events — check
+   * `event.target` when more than one is in scope.
    */
   @Event() pdsImageError: EventEmitter<ImageErrorEventDetail>;
 
@@ -109,7 +113,7 @@ export class PdsImage {
     const img = this.imageEl;
     // With no `src` or `srcset` there is nothing to load and no event to emit. An empty
     // `src` still counts: the browser treats it as a failed load.
-    if (!img?.complete || !(img.hasAttribute('src') || img.hasAttribute('srcset'))) return;
+    if (!img?.complete || !this.hasSource()) return;
 
     if (img.naturalWidth > 0) {
       this.emitLoad();
@@ -128,6 +132,30 @@ export class PdsImage {
     );
   }
 
+  // With no `src` or `srcset` attribute at all there is nothing to load and no event to
+  // emit. Clearing `src` can leave a brief window where Stencil has removed the attribute
+  // but a native `error` for the old, momentarily-empty `src` is still in flight (Firefox,
+  // Safari) — this check, read live at emit time, is what catches that window.
+  private hasSource() {
+    const img = this.imageEl;
+    return img.hasAttribute('src') || img.hasAttribute('srcset');
+  }
+
+  /**
+   * The resolved absolute URL `src` would become once applied, or `undefined` for no
+   * `src`. Resolving it (rather than comparing raw attribute text) matches `img.src`
+   * even when Stencil skipped writing the attribute because the resolved value already
+   * equaled it, such as a `src` change from a relative to an equivalent absolute URL.
+   */
+  private resolvedSrc(): string | undefined {
+    if (this.src == null) return undefined;
+    try {
+      return new URL(this.src, document.baseURI).href;
+    } catch {
+      return this.src;
+    }
+  }
+
   /**
    * Whether the inner image is showing the current `src` and `srcset`. Right after
    * either changes, and before the next render applies it, an event can still arrive
@@ -136,13 +164,25 @@ export class PdsImage {
   private showsCurrentSource() {
     const img = this.imageEl;
 
-    return (
-      (img.getAttribute('src') ?? undefined) === (this.src ?? undefined) &&
-      (img.getAttribute('srcset') ?? undefined) === (this.srcset ?? undefined)
-    );
+    if ((img.getAttribute('srcset') ?? undefined) !== (this.srcset ?? undefined)) return false;
+
+    const expectedSrc = this.resolvedSrc();
+    const srcMatches = expectedSrc === undefined ? !img.hasAttribute('src') : img.src === expectedSrc;
+    if (!srcMatches) return false;
+
+    // Without `srcset`, a `load`/`error` for the right `src` should already be reflected in
+    // `currentSrc`. If it isn't yet, a stale native event from the previous source is still in
+    // flight — such as a cached image's `load` arriving just after a same-tick re-render
+    // already applied the new `src`. Skipped for an empty `src`: an empty attribute resolves
+    // `img.src` to the document's own URL, which `currentSrc` never settles to.
+    if (!this.srcset && this.src) return img.currentSrc === img.src;
+
+    return true;
   }
 
   private emitLoad = () => {
+    if (!this.hasSource()) return;
+
     const { currentSrc, naturalHeight, naturalWidth } = this.imageEl;
     if (!this.showsCurrentSource()) return;
     if (this.settled?.src === currentSrc && this.settled.type === 'load') return;
@@ -152,6 +192,8 @@ export class PdsImage {
   };
 
   private emitError = () => {
+    if (!this.hasSource()) return;
+
     const { currentSrc } = this.imageEl;
     if (!this.showsCurrentSource()) return;
     if (this.settled?.src === currentSrc) return;

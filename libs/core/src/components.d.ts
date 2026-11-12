@@ -5616,11 +5616,11 @@ declare namespace LocalJSX {
          */
         "loading"?: 'eager' | 'lazy';
         /**
-          * Emitted when the image fails to load, such as for a broken or empty `src`. An image with no `src` or `srcset` at all emits neither event, since it has nothing to load. Emitted again after `src` or `srcset` changes and the new image fails.
+          * Emitted when the image fails to load, such as for a broken or empty `src`. An image with no `src` or `srcset` at all emits neither event, since it has nothing to load. Emitted again after `src` or `srcset` changes and the new image fails. Bubbles and is composed, so a listener on an ancestor gets every `pds-image`'s events — check `event.target` when more than one is in scope.
          */
         "onPdsImageError"?: (event: PdsImageCustomEvent<ImageErrorEventDetail>) => void;
         /**
-          * Emitted when the image loads. Also emitted on first render for an image that finished loading before the component could listen, such as a server-rendered image. Emitted again after `src` or `srcset` changes and the new image loads, or when the browser picks a different `srcset` candidate, such as on a resize.
+          * Emitted when the image loads. Also emitted on first render for an image that finished loading before the component could listen, such as a server-rendered image. Emitted again after `src` or `srcset` changes and the new image loads, or when the browser picks a different `srcset` candidate, such as on a resize. Bubbles and is composed, so a listener on an ancestor gets every `pds-image`'s events — check `event.target` when more than one is in scope.
          */
         "onPdsImageLoad"?: (event: PdsImageCustomEvent<ImageLoadEventDetail>) => void;
         /**
