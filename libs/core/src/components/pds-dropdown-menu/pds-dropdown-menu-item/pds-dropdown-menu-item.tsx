@@ -127,10 +127,17 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   // type a `class` prop for `<slot>`, and a ref callback only fires once, on creation, so it
   // can't push a later @State change back onto the element either way. Called once up front
   // (from the ref, since nothing's assigned at componentWillLoad's point) and again on every
-  // native slotchange after that, both calling classList directly.
+  // native slotchange after that, both calling classList directly. add/remove, not the two-argument
+  // form of toggle(): Stencil's mock-doc (used by spec tests) implements toggle() as a plain flip
+  // and silently ignores a force argument, so a toggle() call that'd be correct against a real
+  // DOM can still fail there.
   private updateStartSlotEmpty = () => {
     const hasContent = Array.from(this.host.children).some((child) => child.getAttribute('slot') === 'start');
-    this.startSlotEl?.classList.toggle('pds-dropdown-menu-item__start--empty', !hasContent);
+    if (hasContent) {
+      this.startSlotEl?.classList.remove('pds-dropdown-menu-item__start--empty');
+    } else {
+      this.startSlotEl?.classList.add('pds-dropdown-menu-item__start--empty');
+    }
   };
 
   // Always render the start slot so slotted content is projected reliably, with nothing wrapping
