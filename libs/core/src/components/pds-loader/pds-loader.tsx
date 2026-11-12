@@ -4,7 +4,7 @@ import { restoreReflectedDefault } from '@utils/reflected-attribute-default';
 
 /**
  * @part loader-svg - Exposes the spinner SVG element for color customization.
- * @slot label - Default slot for Loader label text.
+ * @slot label - Label text. Defaults to "Loading...". Text outside this slot isn't shown or read.
  */
 
 @Component({
@@ -35,7 +35,8 @@ export class PdsLoader {
   @Prop() showLabel?: boolean = false;
 
   /**
-   * Sets the size of the spinner loader. Value can be preset or custom.
+   * Sets the size of the spinner loader: `xs` (24px), `sm` (32px), `md` (48px), `lg` (64px), `xl` (80px),
+   * or a custom CSS length such as `128px`. The `typing` variant ignores it.
    */
   @Prop({ reflect: true, mutable: true }) size?:
   | 'xs' // 24px
