@@ -19,6 +19,7 @@
   background-color: var(--pine-color-primary);
   border-radius: var(--pine-dimension-xs);
   box-shadow: var(--pine-box-shadow);
+  box-sizing: border-box;
   color: var(--pine-color-text-primary);
   display: flex;
   height: var(--sizing-height-default);
