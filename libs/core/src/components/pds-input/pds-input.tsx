@@ -70,7 +70,7 @@ export class PdsInput {
   @Event() pdsBlur!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when the value has changed.
+   * Emitted when the user changes the value and then presses `Enter` or leaves the field.
    *
    * This event will not emit when programmatically setting the `value` property.
    */
@@ -124,7 +124,7 @@ export class PdsInput {
   @Prop() disabled?: boolean;
 
   /**
-   * Specifies the error message and provides an error-themed treatment to the field.
+   * Displays an error message below the input and gives the field error styling. It becomes the input's accessible description only while `invalid` is set.
    */
   @Prop() errorMessage?: string;
 
@@ -134,7 +134,7 @@ export class PdsInput {
   @Prop() helperMessage?: string;
 
   /**
-   * Determines whether or not the input field is invalid or throws an error.
+   * Determines whether or not the input is invalid.
    */
   @Prop() invalid?: boolean;
 
@@ -201,7 +201,7 @@ export class PdsInput {
 
   /**
    * Determines the type of control that will be displayed
-   * `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+   * `'email'`, `'number'`, `'password'`, `'search'`, `'tel'`, `'text'`, `'url'`
    * @defaultValue "text"
    */
   @Prop() type = 'text';
