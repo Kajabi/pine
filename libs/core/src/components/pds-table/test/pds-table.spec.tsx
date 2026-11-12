@@ -700,7 +700,7 @@ describe('pds-table', () => {
       html: `<pds-table table-layout="fixed" selectable><pds-table-head><pds-table-head-cell>Name</pds-table-head-cell></pds-table-head></pds-table>`,
     });
     const selectAllCell = page.body.querySelector('pds-table-head').shadowRoot.querySelector('pds-table-head-cell');
-    expect(selectAllCell.getAttribute('width')).toBe('40px');
+    expect(selectAllCell.getAttribute('width')).toBe('var(--pine-dimension-2xl)');
   });
 
   it('leaves the select-all head cell width unset in the default layout', async () => {

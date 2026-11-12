@@ -187,8 +187,8 @@ describe('pds-table column widths', () => {
           .getBoundingClientRect().width,
       ),
     );
-    expect(checkboxWidth).toBe(40);
-    expect(await headWidths(page)).toEqual([100, 150, 310]);
+    expect(checkboxWidth).toBe(48);
+    expect(await headWidths(page)).toEqual([100, 150, 302]);
   });
 
   it('truncates a cell to its fixed-layout column', async () => {
