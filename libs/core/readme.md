@@ -36,7 +36,7 @@ definePdsButton();
 
 The package doesn't export `pine-core.css`, so you can't import it. Add the stylesheet `<link>` tag above, with `[VERSION]` set to the installed version (`npm ls @pine-ds/core` prints it), or serve a copy of `node_modules/@pine-ds/core/dist/pine-core/pine-core.css`.
 
-[Getting Started](https://pine-design-system.netlify.app/?path=/docs/introduction-getting-started--docs) covers icons, dark mode and keeping components visible through a DOM morph.
+[Getting Started](https://pine-design-system.netlify.app/?path=/docs/introduction-getting-started--docs) covers icons, dark mode and what a DOM morph does to components.
 
 ## Links
 
