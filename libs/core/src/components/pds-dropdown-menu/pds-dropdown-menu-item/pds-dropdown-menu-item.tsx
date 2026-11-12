@@ -83,7 +83,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Event() pdsClick: EventEmitter<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>;
 
   /**
-   * Trigger the click event
+   * Trigger the click event. Does nothing when the item is disabled or informational.
    */
   @Method()
   async clickItem() {
@@ -92,7 +92,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
 
   private handleClick() {
-    if (this.informational) return;
+    if (this.disabled || this.informational) return;
 
     // Filter only pds-dropdown-menu-item elements and find the index of the current item
     const menuItems = Array.from(this.host.parentNode.children).filter(
@@ -211,7 +211,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
           'is-informational': this.informational,
           'destructive': !this.disabled && !this.informational && this.destructive
         }}
-        onClick={() => !this.disabled && this.handleClick()}
+        onClick={() => this.handleClick()}
         role="none"
         // ARIA ignores role="none" on focusable elements, so a focusable host would sit between
         // the menu and the informational menuitem as an unexpected child.

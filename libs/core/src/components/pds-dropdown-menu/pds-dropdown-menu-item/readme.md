@@ -32,7 +32,7 @@ An item inside a `pds-dropdown-menu`. Renders a button by default, or a link whe
 
 ### `clickItem() => Promise<void>`
 
-Trigger the click event
+Trigger the click event. Does nothing when the item is disabled or informational.
 
 #### Returns
 
