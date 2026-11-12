@@ -11,7 +11,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Property
 
-Properties pair an icon with a short label to present key-value pairs, status indicators, or tagged information in a compact horizontal layout. An icon is always shown; unspecified icons default to a star.
+Properties pair an icon with a short text value to present metadata, status indicators, or tagged information in a compact horizontal layout. An icon is always shown; unspecified icons default to a star.
 
 ## Guidelines
 
@@ -31,9 +31,7 @@ Properties pair an icon with a short label to present key-value pairs, status in
 
 ### Accessibility
 
-The Property component is designed with accessibility in mind:
-
-- Icons are marked with `aria-hidden="true"` as they are decorative and provide visual context rather than essential information.
+- The icon is decorative and hidden from assistive technology. The slotted text must make sense on its own, so when the icon is the only clue to what a value means, add the key to the text, visible or visually hidden, such as "Location: Newport Beach, CA".
 
 ## Properties
 
