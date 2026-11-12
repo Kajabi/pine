@@ -211,6 +211,14 @@ export class PdsSortable {
     }
 
     if (!this.liveRegion.isConnected && this.el.parentNode) {
+      // The host may itself be slotted into a named slot (e.g. inside a modal); stay in it rather
+      // than falling back to the default slot, which a consumer's template may not render.
+      const hostSlot = this.el.getAttribute('slot');
+      if (hostSlot !== null) {
+        this.liveRegion.setAttribute('slot', hostSlot);
+      } else {
+        this.liveRegion.removeAttribute('slot');
+      }
       this.el.parentNode.insertBefore(this.liveRegion, this.el.nextSibling);
     }
   }
@@ -239,11 +247,15 @@ export class PdsSortable {
 
   /**
    * Focus leaving a picked-up item drops it where it is, unless the whole window lost focus (the user
-   * switched apps), when the item stays picked up for their return.
+   * switched apps), when the item stays picked up for their return. Focus moving into an iframe or
+   * another embedded document reports the same `relatedTarget: null` and `document.hasFocus(): false`
+   * as a window switch, so it's told apart by `document.activeElement`: a real window switch leaves
+   * nothing newly focused in this document, while an iframe becomes the active element.
    */
   private handleFocusOut = (ev: FocusEvent) => {
     if (!this.isGrabbing() || ev.target !== this.focusTarget(this.grabbed.item)) return;
-    if (ev.relatedTarget === null && document.hasFocus?.() === false) return;
+    const nothingElseFocused = document.activeElement === null || document.activeElement === document.body;
+    if (ev.relatedTarget === null && document.hasFocus?.() === false && nothingElseFocused) return;
     this.drop(ev);
   };
 

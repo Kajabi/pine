@@ -268,6 +268,64 @@ describe('pds-sortable keyboard reordering', () => {
     expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('BODY');
   });
 
+  it('keeps the live region in the host\'s named slot', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="host-slot-parent">
+        <pds-sortable component-id="slotted" slot="footer">
+          <pds-sortable-item>Alpha</pds-sortable-item>
+          <pds-sortable-item>Bravo</pds-sortable-item>
+        </pds-sortable>
+      </div>`);
+    await page.waitForChanges();
+
+    const regionSlot = await page.$eval('.pds-sortable__live-region', (region) => region.getAttribute('slot'));
+    expect(regionSlot).toBe('footer');
+  });
+
+  it('drops a picked-up item when focus moves into an iframe, unlike a real window switch', async () => {
+    const { page } = await setup();
+    await page.$eval('pds-sortable', (el) => {
+      const frame = document.createElement('iframe');
+      frame.id = 'escape-frame';
+      frame.src = 'about:blank';
+      el.insertAdjacentElement('afterend', frame);
+    });
+
+    // Focus moving into an iframe: `relatedTarget` is null and `document.hasFocus()` goes false too,
+    // but the iframe becomes `document.activeElement` rather than nothing taking focus.
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+    expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).not.toBeNull();
+
+    await page.$eval('#escape-frame', (frame: HTMLIFrameElement) => frame.focus());
+    await page.waitForChanges();
+
+    expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).toBeNull();
+  });
+
+  it('keeps an item grabbed when nothing else in the document takes focus', async () => {
+    const { page } = await setup();
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+    expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).not.toBeNull();
+
+    // A real window/app switch: the handle loses focus with nothing else taking it, and
+    // `document.hasFocus()` goes false, which is what distinguishes it from the iframe case above.
+    await page.evaluate(() => {
+      const original = document.hasFocus;
+      document.hasFocus = () => false;
+      (document.activeElement as HTMLElement)?.blur();
+      document.hasFocus = original;
+    });
+    await page.waitForChanges();
+
+    expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).not.toBeNull();
+  });
+
   it('still counts drag indexes from the items after the live region is added', async () => {
     const { page, moved } = await setup();
     await page.keyboard.press('Tab');
