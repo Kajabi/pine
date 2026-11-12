@@ -25,21 +25,24 @@ Sortable is for creating containers of items that can be sorted by dragging or f
 
 ### Accessibility
 
-Every item can be reordered from the keyboard as well as by dragging, so the list meets WCAG 2.1.1 (Keyboard) and 2.5.7 (Dragging Movements).
+Every item can be reordered from the keyboard as well as by dragging, so the list meets WCAG 2.1.1 (Keyboard).
 
-- **What gets focus:** with `handle-type="row"`, each row is a tab stop. With `handle-type="handle"`, each handle is a tab stop: a button labelled "Reorder" plus the item's name. Controls inside a row, such as its actions, keep their own keys.
-- **The item's name:** the handle's label and the announcements use the item's text, leaving out the handle and the actions. Set `item-label` on a `pds-sortable-item` when that text is long or isn't a good name.
+WCAG 2.5.7 (Dragging Movements, 2.2 AA) also asks for a way to reorder with single pointer clicks, which the keyboard doesn't give. Where you need it, put "Move up" and "Move down" buttons in the `sortable-item-actions` slot and reorder your data when they're pressed.
+
+- **What gets focus:** each item's handle is a tab stop: a button labelled "Reorder" plus the item's name, that's pressed while the item is picked up. Without `show-handle`, the handle is hidden but still there for the keyboard, and the row shows its focus ring. A pointer still drags the whole row with `handle-type="row"`. Controls inside a row, such as its actions, keep their own keys.
+- **Screen readers:** pressing the handle in a screen reader's browse mode picks the item up and drops it too. Moving it with the arrow keys needs the screen reader's focus (forms) mode, such as NVDA+Space or JAWS's Enter on the button, so the "Move up" and "Move down" buttons above are the most dependable path for screen reader users.
+- **The item's name:** the handle's label and the announcements use the item's text, leaving out the handle and the actions. Set `item-label` on a `pds-sortable-item` when that text is long, isn't a good name, or changes after the item renders.
 - **Announcements:** a polite live region announces when an item is picked up, each move ("Item 2, moved to position 3 of 7"), and the drop or cancel. The live region sits inside the list, so it's announced inside a modal too.
 - **Events:** a keyboard drop emits `pdsSortableItemMoved` with the same detail fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), so a save handler works for both. Escape emits nothing.
 - **Focus:** focus stays on the moved item the whole time. Moving focus away from a picked-up item drops it where it is.
-- **Disabled:** a `disabled` list has no tab stops, and disabling it puts a picked-up item back.
-- **Direction and motion:** only the Up and Down arrows move an item, so right-to-left layouts work the same way. With `prefers-reduced-motion: reduce`, dragged items don't animate into place and the picked-up state doesn't fade in.
+- **Disabled:** a `disabled` list has no tab stops, and disabling it puts a picked-up item back. A pointer drag that starts while an item is picked up drops it first.
+- **Direction and motion:** only the Up and Down arrows move an item, so right-to-left layouts work the same way. With `prefers-reduced-motion: reduce`, dragged items don't animate into place and the picked-up state doesn't fade.
 
 #### Keyboard interactions
 
 | Key | Action |
 | --- | --- |
-| `Tab` | Moves focus to the next row, or to the next handle with `handle-type="handle"`. |
+| `Tab` | Moves focus to the next item's handle. |
 | `Space` or `Enter` | Picks up the focused item. When it's picked up, drops it in its new place. |
 | `ArrowUp` / `ArrowDown` | Moves the picked-up item up or down one position. |
 | `Home` / `End` | Moves the picked-up item to the first or last position. |
@@ -47,16 +50,15 @@ Every item can be reordered from the keyboard as well as by dragging, so the lis
 
 #### Localization
 
-The handle's label, the hint and the announcements are props on `pds-sortable`, with English defaults. Pass translated strings to localize them. `{item}`, `{position}` and `{total}` are filled in.
+The handle's label and the announcements are props on `pds-sortable`, with English defaults. Pass translated strings to localize them. `{item}`, `{position}` and `{total}` are filled in.
 
 | Prop | Default |
 | --- | --- |
 | `handle-label` | `Reorder {item}` |
-| `reorder-description` | `Press Space or Enter to reorder` |
 | `item-picked-up-label` | `{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.` |
 | `item-moved-label` | `{item}, moved to position {position} of {total}` |
 | `item-dropped-label` | `{item}, dropped at position {position} of {total}` |
-| `item-reorder-canceled-label` | `Reorder canceled. {item} returned to position {position} of {total}` |
+| `reorder-canceled-label` | `Reorder canceled. {item} returned to position {position} of {total}` |
 
 ## Properties
 
@@ -165,7 +167,7 @@ When `disabled` is set to `true`, sorting is prevented and items appear dimmed w
 
 ### Handle
 
-When `show-handle` is set on a `pds-sortable-item`, a handle icon is displayed within the item. With `handle-type="row"`, the handle is visual only and the whole row still drags (unless the list is `disabled`); use `handle-type="handle"` to drag only by the handle.
+When `show-handle` is set on a `pds-sortable-item`, a handle icon is displayed within the item. With `handle-type="row"`, a pointer still drags the whole row (unless the list is `disabled`) and the handle is the row's keyboard reorder button; use `handle-type="handle"` to drag only by the handle.
 
 <DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="handle" handleType="row">
@@ -283,18 +285,17 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
 
 ### Localized
 
-Pass translated strings for the handle's label, the hint and the announcements. Here the handles and announcements are in French, and `item-label` gives each item a short name.
+Pass translated strings for the handle's label and the announcements. Here the handles and announcements are in French, and `item-label` gives each item a short name.
 
 <DocCanvas display="block" mdxSource={{
   react: `<PdsSortable
   componentId="localized"
   handleType="handle"
   handleLabel="Réorganiser {item}"
-  reorderDescription="Appuyez sur Espace ou Entrée pour réorganiser"
   itemPickedUpLabel="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
   itemMovedLabel="{item} déplacé en position {position} sur {total}"
   itemDroppedLabel="{item} déposé en position {position} sur {total}"
-  itemReorderCanceledLabel="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+  reorderCanceledLabel="Réorganisation annulée. {item} revenu en position {position} sur {total}"
 >
   <PdsSortableItem itemLabel="Introduction">Introduction · 3 leçons</PdsSortableItem>
   <PdsSortableItem itemLabel="Module 1">Module 1 · 5 leçons</PdsSortableItem>
@@ -304,11 +305,10 @@ Pass translated strings for the handle's label, the hint and the announcements. 
   component-id="localized"
   handle-type="handle"
   handle-label="Réorganiser {item}"
-  reorder-description="Appuyez sur Espace ou Entrée pour réorganiser"
   item-picked-up-label="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
   item-moved-label="{item} déplacé en position {position} sur {total}"
   item-dropped-label="{item} déposé en position {position} sur {total}"
-  item-reorder-canceled-label="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+  reorder-canceled-label="Réorganisation annulée. {item} revenu en position {position} sur {total}"
 >
   <pds-sortable-item item-label="Introduction">Introduction · 3 leçons</pds-sortable-item>
   <pds-sortable-item item-label="Module 1">Module 1 · 5 leçons</pds-sortable-item>
@@ -319,11 +319,10 @@ Pass translated strings for the handle's label, the hint and the announcements. 
     component-id="localized"
     handle-type="handle"
     handle-label="Réorganiser {item}"
-    reorder-description="Appuyez sur Espace ou Entrée pour réorganiser"
     item-picked-up-label="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
     item-moved-label="{item} déplacé en position {position} sur {total}"
     item-dropped-label="{item} déposé en position {position} sur {total}"
-    item-reorder-canceled-label="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+    reorder-canceled-label="Réorganisation annulée. {item} revenu en position {position} sur {total}"
   >
     <pds-sortable-item item-label="Introduction">Introduction · 3 leçons</pds-sortable-item>
     <pds-sortable-item item-label="Module 1">Module 1 · 5 leçons</pds-sortable-item>
