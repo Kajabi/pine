@@ -190,6 +190,20 @@ export class PdsTableHeadCell {
   }
 
   /**
+   * Re-binds the scroll listener to the table's current responsive container. Called by
+   * `pds-table` after a live `responsive` toggle: the cell stays in light DOM across that
+   * change, so it never reconnects on its own and would otherwise keep listening to a container
+   * the table already replaced or removed.
+   */
+  @Method()
+  async rebindScrollListener(): Promise<void> {
+    this.cleanupScrollListener();
+    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+      this.setupScrollListener();
+    }
+  }
+
+  /**
    * Handles scroll events to update fixed column shadow state.
    * Updates the tableScrolling state to control CSS classes for fixed column shadows.
    * @private

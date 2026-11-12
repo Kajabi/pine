@@ -423,6 +423,103 @@ describe('pds-table column widths', () => {
     expect(await scrollContainer()).toBeNull();
   });
 
+  it('rebinds a fixed-column cell\'s own scroll shadow when responsive turns on at runtime', async () => {
+    const page = await newE2EPage();
+    // The cell caches its scroll container at load and stays in light DOM across the toggle, so
+    // it never reconnects on its own -- without an explicit rebind it would keep listening to
+    // nothing (there was no container yet) instead of the one the table just created.
+    await page.setContent(`
+      <div style="width: 150px">
+        <pds-table component-id="fixed-column-rebind" fixed-column>
+          <pds-table-head>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+            <pds-table-head-cell>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Jane Doe</pds-table-cell>
+              <pds-table-cell>jane@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    await page.evaluate(() => {
+      document.querySelector('pds-table').setAttribute('responsive', '');
+    });
+    await page.waitForChanges();
+
+    await page.evaluate(async () => {
+      const table = document.querySelector('pds-table');
+      const container = table.shadowRoot.querySelector('.pds-table-responsive-container');
+      container.scrollLeft = 20;
+      container.dispatchEvent(new Event('scroll'));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    });
+
+    const firstCellScrolled = await page.evaluate(() =>
+      document.querySelectorAll('pds-table-cell')[0].classList.contains('has-scrolled'),
+    );
+    expect(firstCellScrolled).toBe(true);
+  });
+
+  it('does not leak a window resize listener when the table unmounts right after a layout change', async () => {
+    const page = await newE2EPage();
+    // Starts with neither responsive nor fixed layout, so no listener exists yet -- the spy
+    // installed after mount only has to explain any listener that shows up from here on, with
+    // nothing from initial load to account for.
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="unmount-during-sync">
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    const leakedResizeListeners = await page.evaluate(async () => {
+      let active = 0;
+      const originalAdd = window.addEventListener.bind(window);
+      const originalRemove = window.removeEventListener.bind(window);
+      window.addEventListener = ((type: string, ...rest: unknown[]) => {
+        if (type === 'resize') active++;
+        return (originalAdd as any)(type, ...rest);
+      }) as typeof window.addEventListener;
+      window.removeEventListener = ((type: string, ...rest: unknown[]) => {
+        if (type === 'resize') active--;
+        return (originalRemove as any)(type, ...rest);
+      }) as typeof window.removeEventListener;
+
+      const table = document.querySelector('pds-table');
+      // Turning both on starts the fixed-layout and responsive-scroll setup (deferred to
+      // componentDidRender), then removing the table before that render flushes is what the fix
+      // has to see coming: without it, the deferred sync still runs, re-adding the listener this
+      // same disconnect already should have ruled out.
+      table.setAttribute('table-layout', 'fixed');
+      table.setAttribute('responsive', '');
+      table.remove();
+
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+      window.addEventListener = originalAdd;
+      window.removeEventListener = originalRemove;
+      return active;
+    });
+
+    expect(leakedResizeListeners).toBe(0);
+  });
+
   it('grows the auto column back once resizing gives it room again', async () => {
     const page = await newE2EPage();
     await page.setContent(`

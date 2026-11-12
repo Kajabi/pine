@@ -195,6 +195,9 @@ export class PdsTable {
     }
 
     this.teardownFixedLayoutWidths();
+    // A sync requested just before unmount would otherwise still flush in componentDidRender
+    // (Stencil's render queue is async) and reattach listeners nothing will ever tear down again.
+    this._pendingFixedLayoutInputsSync = false;
   }
 
   /**
@@ -226,7 +229,10 @@ export class PdsTable {
    * re-render -- so turning the floor off (including live, e.g. the Storybook control) needs
    * both cleared explicitly, not just the observers torn down. The select-all column reads
    * `tableLayout` the same way, one level up in `pds-table-head`'s own render, since it owns that
-   * cell rather than letting it through a `<slot>`.
+   * cell rather than letting it through a `<slot>`. A `fixedColumn` cell's own sticky-shadow
+   * scroll listener is bound to this same container, cached on the cell itself -- it stays in
+   * light DOM across this change and never reconnects on its own, so it needs telling directly
+   * rather than finding out the container moved.
    * @private
    */
   private syncFixedLayoutInputs() {
@@ -243,6 +249,11 @@ export class PdsTable {
     (Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[]).forEach((cell) => {
       if (!floorActive) cell.style.removeProperty('--pds-table-head-cell-auto-floor-width');
       forceUpdate(cell);
+      void cell.rebindScrollListener();
+    });
+
+    (Array.from(this.el.querySelectorAll('pds-table-cell')) as HTMLPdsTableCellElement[]).forEach((cell) => {
+      void cell.rebindScrollListener();
     });
 
     const head = this.el.querySelector('pds-table-head') as HTMLElement | null;

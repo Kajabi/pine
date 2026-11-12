@@ -1,4 +1,4 @@
-import { Component, Element, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 import { isScrolledFromInlineStart } from '../../../utils/scroll';
 import { setupTruncationTooltip } from '../../../utils/truncation-tooltip';
 
@@ -100,6 +100,20 @@ export class PdsTableCell {
     }
 
     this.setupRetries = 0; // Reset retry counter
+  }
+
+  /**
+   * Re-binds the scroll listener to the table's current responsive container. Called by
+   * `pds-table` after a live `responsive` toggle: the cell stays in light DOM across that change,
+   * so it never reconnects on its own and would otherwise keep listening to a container the
+   * table already replaced or removed.
+   */
+  @Method()
+  async rebindScrollListener(): Promise<void> {
+    this.cleanupScrollListener();
+    if (this.needsScrollShadow) {
+      this.setupScrollListener();
+    }
   }
 
   /**
