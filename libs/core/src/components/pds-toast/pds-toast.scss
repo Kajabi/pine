@@ -19,20 +19,22 @@
   background-color: var(--pine-color-primary);
   border-radius: var(--pine-dimension-xs);
   box-shadow: var(--pine-box-shadow);
+  box-sizing: border-box;
   color: var(--pine-color-text-primary);
   display: flex;
   height: var(--sizing-height-default);
   justify-content: flex-start;
   margin-block-end: var(--pine-dimension-2xs);
-  max-width: 90vw;
-  min-width: var(--sizing-min-width);
+  // border-box, so the padding is added back to keep the toast the size it was as content-box.
+  max-width: calc(90vw + (var(--padding-inline) * 2));
+  min-width: calc(var(--sizing-min-width) + (var(--padding-inline) * 2));
   padding: 0 var(--padding-inline);
   position: relative;
   width: fit-content;
 
   @media screen and (max-width: 767px) {
     height: 36px;
-    max-width: calc(100vw - (var(--pine-dimension-2xs) * 2));
+    max-width: 100vw;
     min-width: auto;
     padding-inline: var(--pine-dimension-2xs);
   }

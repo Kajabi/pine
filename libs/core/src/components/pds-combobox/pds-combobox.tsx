@@ -90,10 +90,10 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() dropdownPlacement: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' = 'bottom-start';
 
   /**
-   * Width of the dropdown. Any valid CSS width value.
-   * @default '236px'
+   * Width of the dropdown, including its padding. Any valid CSS width value.
+   * Without it, the dropdown is 252px wide, 244px with grouped options and 236px with a panel search.
    */
-  @Prop() dropdownWidth: string = '236px';
+  @Prop() dropdownWidth?: string;
 
   /**
    * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”).
@@ -125,17 +125,19 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() noOptionsFoundLabel = 'No options found';
 
   /**
-   * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
-   * @default '380px'
+   * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width
+   * value, including its padding.
+   * @default '388px'
    */
-  @Prop() flyoutMaxWidth: string = '380px';
+  @Prop() flyoutMaxWidth: string = '388px';
 
   /**
-   * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
-   * The flyout is as wide as its options, between this and `flyout-max-width`.
-   * @default '280px'
+   * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width
+   * value, including its padding. The flyout is as wide as its options, between this and
+   * `flyout-max-width`.
+   * @default '288px'
    */
-  @Prop() flyoutMinWidth: string = '280px';
+  @Prop() flyoutMinWidth: string = '288px';
 
   /**
    * How option groups (`<optgroup>`, or the `group` field of `options`) are shown in the dropdown.
@@ -1425,7 +1427,8 @@ export class PdsCombobox implements BasePdsProps {
       ? 'var(--pine-z-index-priority)'
       : 'var(--pine-z-index-raised)';
 
-    this.listboxEl.style.width = this.dropdownWidth;
+    // Unset, the panel's own width applies, which differs with its padding (see the dropdown panel styles).
+    this.listboxEl.style.width = this.dropdownWidth ?? '';
 
     if (this.maxHeight) {
       this.listboxEl.style.maxHeight = this.maxHeight;
