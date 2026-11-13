@@ -17,25 +17,23 @@ Both the label and panel contain slots to use for custom content.
 
 ## Guidelines
 
-### When to Use
+### When to use
 
-- To display step-by-step processes and information
-- To group related, but independent, information together to prevent the need for having multiple accordions open
+- To hide secondary content that only some readers need, such as FAQ answers or settings details.
+- To shorten a long page, especially on narrow screens, by letting readers open only the sections they need.
+- For short sections that don't depend on each other.
 
-### When Not to Use
+### When not to use
 
-- When the user requires information from most or all content on the page
-- When information must be nested multiple levels deep
+- For content most readers need. Show it on the page instead.
+- For longer, related views of one topic that readers switch between. Use [Tabs](/docs/components-tabs--docs) instead.
+- For content nested more than one level deep. Restructure the page instead.
 
 ### Accessibility
 
 The accordion can be navigated using a keyboard. The `Enter` and `Space` keys can be used to open and close the accordion. Interactive elements within the panel can be tabbed through only when the accordion is open.
 
 **Caution**: The label slot is built with the `<summary>` HTML component. Because the `<summary>`'s default accessibility role is `button`, it will strip all child elements of their own roles. This will prevent elements such as headings from being read as such for users of assistive technology. Exercise caution to not use the label as a substitute for a heading. If the content needs a heading, place it before the accordion, not in the label slot.
-
-### Accordions vs Tabs
-
-Though similar, tabs and accordions both offer different user experiences. Consider using accordions for shorter, independent content and on devices with smaller viewports and limited space. Consider using tabs for longer, related content under a main topic.
 
 ## Properties
 
@@ -89,6 +87,31 @@ When the slots are set, the accordion will render with the provided trigger labe
       <p style={{ margin: '0'}}>Custom panel content</p>
       <pds-button variant="primary">Custom Button</pds-button>
     </div>
+  </pds-accordion>
+</DocCanvas>
+
+### Open by default
+
+Add the `open` attribute to render the accordion expanded. In React, the prop is `isOpen`, not `open`. The attribute stays in step with the accordion, so it's added and removed as readers open and close it, and setting it in code opens or closes the accordion and emits `pdsAccordionToggle`.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+      <PdsAccordion isOpen>
+        <span slot="label">What's included in the course?</span>
+        <p style={{ margin: 0 }}>Twelve video lessons, worksheets and a private community.</p>
+      </PdsAccordion>
+    `,
+    webComponent: `
+      <pds-accordion open>
+        <span slot="label">What's included in the course?</span>
+        <p style="margin: 0;">Twelve video lessons, worksheets and a private community.</p>
+      </pds-accordion>
+    `
+}}>
+  <pds-accordion open>
+    <span slot="label">What's included in the course?</span>
+    <p style={{ margin: 0 }}>Twelve video lessons, worksheets and a private community.</p>
   </pds-accordion>
 </DocCanvas>
 

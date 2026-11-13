@@ -81,7 +81,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Can be used to manually set the open state of the accordion.
+          * Determines whether the accordion is open. Set with the `open` attribute, which is added and removed as the accordion opens and closes.
           * @defaultValue false
          */
         "isOpen": boolean;
@@ -2730,7 +2730,7 @@ export namespace Components {
          */
         "rebindScrollListener": () => Promise<void>;
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
+          * Keeps the content on one line and cuts off what doesn't fit the column with an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
         "truncate": boolean;
     }
@@ -2837,7 +2837,7 @@ export namespace Components {
          */
         "stretch"?: boolean;
         /**
-          * Sets the aria-label attached to the tablist element
+          * Sets the aria-label attached to the tablist element, or to the `<nav>` element in navigation mode (`nav`).
          */
         "tablistLabel": string;
         /**
@@ -4047,12 +4047,12 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Can be used to manually set the open state of the accordion.
+          * Determines whether the accordion is open. Set with the `open` attribute, which is added and removed as the accordion opens and closes.
           * @defaultValue false
          */
         "isOpen"?: boolean;
         /**
-          * Emitted when the accordion open state changes.
+          * Emitted when the accordion opens or closes, carrying the new open state. Also emits when programmatically setting the `isOpen` property or the `open` attribute. Not emitted for the state the accordion starts in.
          */
         "onPdsAccordionToggle"?: (event: PdsAccordionCustomEvent<boolean>) => void;
     }
@@ -6829,7 +6829,7 @@ declare namespace LocalJSX {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
+          * Keeps the content on one line and cuts off what doesn't fit the column with an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
         "truncate"?: boolean;
     }
@@ -6854,7 +6854,7 @@ declare namespace LocalJSX {
          */
         "isSelected"?: boolean;
         /**
-          * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+          * Emitted when the user checks or unchecks the select-all checkbox, carrying the new state as `isSelected`. `pds-table` then sets `isSelected` on every row, and the rows don't emit `pdsTableRowSelected`. A head that starts with `isSelected` also emits it on load.
          */
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
     }
@@ -6864,7 +6864,7 @@ declare namespace LocalJSX {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
+          * Emitted when a `sortable` head cell is clicked, carrying the cell's trimmed text as `column` and the new direction, `asc` or `desc`, as `direction`. Each column keeps its own direction and every click reverses it, so a column's first click gives `desc`, or the reverse of `defaultSortDirection` on the default sort column. `pds-table` sorts its rows when the event reaches it, so to sort the rows yourself, call `preventDefault()` in a listener on the head cell or `pds-table-head`, or in the capture phase.
          */
         "onPdsTableSort"?: (event: PdsTableHeadCellCustomEvent<{ column: string; direction: string }>) => void;
         /**
@@ -6886,7 +6886,7 @@ declare namespace LocalJSX {
          */
         "isSelected"?: boolean;
         /**
-          * Event that is emitted when the checkbox is clicked, carrying the selected value.
+          * Emitted when the user checks or unchecks the row's checkbox, carrying the new state as `isSelected` and the row's current position in `pds-table-body` as `rowIndex`, which changes when the table is sorted. A row that starts with `isSelected` also emits it on load.  This event will not emit when programmatically setting the `isSelected` property, or when select all changes the row.
          */
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
     }
@@ -6935,7 +6935,7 @@ declare namespace LocalJSX {
          */
         "stretch"?: boolean;
         /**
-          * Sets the aria-label attached to the tablist element
+          * Sets the aria-label attached to the tablist element, or to the `<nav>` element in navigation mode (`nav`).
          */
         "tablistLabel": string;
         /**

@@ -15,30 +15,47 @@ Tabs organize related content into separate panels that users switch between usi
 
 ## Guidelines
 
-### Accordions vs Tabs
+### When to use
 
-Though similar, tabs and accordions both offer different user experiences to keep in mind. Consider using accordions for shorter, independent content and on devices with smaller viewports and limited space. Consider using tabs for longer, related content under a main topic.
+- To switch between longer, related views of one topic without leaving the page, such as a course's overview, lessons and settings.
+- With `nav`, for links to sibling pages that should look like tabs, such as the sections of an account area. See [Navigation tabs](#navigation-tabs).
 
-### When to Use
+### When not to use
 
-- To display longer, related content under a main topic.
-
-### When Not to Use
-
-- If a longer label is desired. Consider using an accordion instead.
-
+- For short, independent sections, or on narrow screens with little room. Use [Accordion](/docs/components-accordion--docs) instead.
+- When the labels are long. Use an accordion instead.
+- For links to other pages without `nav`. Panel tabs switch content on the same page.
 
 ### Accessibility
 
-For best practices in accessibility, be sure to provide a `tablist-label` and a unique `component-id`. The `tablist-label` will provide context to screen readers about what kind of tablist information is being presented.
+Give every `pds-tabs` a unique `component-id` and a `tablist-label` that describes the set of tabs, such as "Course sections". The label is the accessible name of the tab list, or of the `<nav>` landmark in navigation mode, so never leave a placeholder there.
 
 Each tab's `name` must be unique among the tabs and contain no spaces, and each panel's `name` must match its tab's. The `component-id` and `name` build the ids that link each tab to its panel, and a space breaks that link for screen readers.
+
+Keyboard support in panel mode:
+
+- `Tab` moves focus to the selected tab. The other tabs are left out of the Tab order.
+- `Left Arrow` and `Right Arrow` select the previous or next tab and show its panel, wrapping from the last tab to the first and back.
+- `Home` and `End` select the first and last tab.
+- `Tab` from the selected tab moves focus to its panel, then into the panel's content.
+
+In navigation mode, each tab is a link: `Tab` moves between the links, `Enter` follows one, and the arrow keys do nothing.
 
 ## Properties
 
 <DocArgsTable componentName='pds-tabs' docSource={components} />
 
 Without `active-tab-name`, the first enabled tab starts active. In `nav` mode, set `active` on the current tab instead.
+
+`pds-tabs` emits no event when the active tab changes. Its `active-tab-name` attribute changes instead, whether a reader clicks a tab or uses the arrow keys, or you set `active-tab-name` in code. To react to a change, watch that attribute:
+
+```javascript
+const tabs = document.querySelector('pds-tabs[component-id="course"]');
+
+new MutationObserver(() => {
+  console.log(tabs.getAttribute('active-tab-name'));
+}).observe(tabs, { attributes: true, attributeFilter: ['active-tab-name'] });
+```
 
 ### Tab
 
@@ -57,33 +74,33 @@ The default style of Tabs.
 
 <DocCanvas mdxSource={{
   react: `
-<PdsTabs activeTabName="Dollop" variant="primary" componentId="primary" tablistLabel="Foo">
-  <PdsTab name="Sturdy">Sturdy</PdsTab>
-  <PdsTab name="Dollop">Dollop</PdsTab>
-  <PdsTab name="Waffle">Waffle</PdsTab>
-  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
-  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
-  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+<PdsTabs activeTabName="lessons" variant="primary" componentId="primary-example" tablistLabel="Course sections">
+  <PdsTab name="overview">Overview</PdsTab>
+  <PdsTab name="lessons">Lessons</PdsTab>
+  <PdsTab name="settings">Settings</PdsTab>
+  <PdsTabpanel name="overview">Overview content</PdsTabpanel>
+  <PdsTabpanel name="lessons">Lessons content</PdsTabpanel>
+  <PdsTabpanel name="settings">Settings content</PdsTabpanel>
 </PdsTabs>
 `,
   webComponent: `
-<pds-tabs active-tab-name="Dollop" variant="primary" component-id="primary" tablist-label="Foo">
-  <pds-tab name="Sturdy">Sturdy</pds-tab>
-  <pds-tab name="Dollop">Dollop</pds-tab>
-  <pds-tab name="Waffle">Waffle</pds-tab>
-  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+<pds-tabs active-tab-name="lessons" variant="primary" component-id="primary-example" tablist-label="Course sections">
+  <pds-tab name="overview">Overview</pds-tab>
+  <pds-tab name="lessons">Lessons</pds-tab>
+  <pds-tab name="settings">Settings</pds-tab>
+  <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+  <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+  <pds-tabpanel name="settings">Settings content</pds-tabpanel>
 </pds-tabs>
 `
 }}>
-  <pds-tabs active-tab-name="Dollop" variant="primary" component-id="primary" tablist-label="Foo">
-    <pds-tab name="Sturdy">Sturdy</pds-tab>
-    <pds-tab name="Dollop">Dollop</pds-tab>
-    <pds-tab name="Waffle">Waffle</pds-tab>
-    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  <pds-tabs active-tab-name="lessons" variant="primary" component-id="primary-example" tablist-label="Course sections">
+    <pds-tab name="overview">Overview</pds-tab>
+    <pds-tab name="lessons">Lessons</pds-tab>
+    <pds-tab name="settings">Settings</pds-tab>
+    <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+    <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+    <pds-tabpanel name="settings">Settings content</pds-tabpanel>
   </pds-tabs>
 </DocCanvas>
 
@@ -93,33 +110,33 @@ The Pill variant is to better display a list of items.
 
 <DocCanvas mdxSource={{
   react: `
-<PdsTabs activeTabName="Dollop" variant="pill" componentId="pill" tablistLabel="Foo">
-  <PdsTab name="Sturdy">Sturdy</PdsTab>
-  <PdsTab name="Dollop">Dollop</PdsTab>
-  <PdsTab name="Waffle">Waffle</PdsTab>
-  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
-  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
-  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+<PdsTabs activeTabName="lessons" variant="pill" componentId="pill-example" tablistLabel="Course sections">
+  <PdsTab name="overview">Overview</PdsTab>
+  <PdsTab name="lessons">Lessons</PdsTab>
+  <PdsTab name="settings">Settings</PdsTab>
+  <PdsTabpanel name="overview">Overview content</PdsTabpanel>
+  <PdsTabpanel name="lessons">Lessons content</PdsTabpanel>
+  <PdsTabpanel name="settings">Settings content</PdsTabpanel>
 </PdsTabs>
 `,
   webComponent: `
-<pds-tabs active-tab-name="Dollop" variant="pill" component-id="pill" tablist-label="Foo">
-  <pds-tab name="Sturdy">Sturdy</pds-tab>
-  <pds-tab name="Dollop">Dollop</pds-tab>
-  <pds-tab name="Waffle">Waffle</pds-tab>
-  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+<pds-tabs active-tab-name="lessons" variant="pill" component-id="pill-example" tablist-label="Course sections">
+  <pds-tab name="overview">Overview</pds-tab>
+  <pds-tab name="lessons">Lessons</pds-tab>
+  <pds-tab name="settings">Settings</pds-tab>
+  <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+  <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+  <pds-tabpanel name="settings">Settings content</pds-tabpanel>
 </pds-tabs>
 `
 }}>
-  <pds-tabs active-tab-name="Dollop" variant="pill" component-id="pill" tablist-label="Foo">
-    <pds-tab name="Sturdy">Sturdy</pds-tab>
-    <pds-tab name="Dollop">Dollop</pds-tab>
-    <pds-tab name="Waffle">Waffle</pds-tab>
-    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  <pds-tabs active-tab-name="lessons" variant="pill" component-id="pill-example" tablist-label="Course sections">
+    <pds-tab name="overview">Overview</pds-tab>
+    <pds-tab name="lessons">Lessons</pds-tab>
+    <pds-tab name="settings">Settings</pds-tab>
+    <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+    <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+    <pds-tabpanel name="settings">Settings content</pds-tabpanel>
   </pds-tabs>
 </DocCanvas>
 
@@ -130,7 +147,7 @@ The Availability variant is to better display dates and/or times. The selected t
 <DocCanvas mdxSource={{
   react: `
 <div style={{ backgroundColor: 'var(--pine-color-background-inset-emphasized)', padding: 'var(--pine-dimension-md)' }}>
-  <PdsTabs activeTabName="tuesday" variant="availability" componentId="availability" tablistLabel="Foo">
+  <PdsTabs activeTabName="tuesday" variant="availability" componentId="availability-example" tablistLabel="Available days">
     <PdsTab name="monday">Monday</PdsTab>
     <PdsTab name="tuesday">Tuesday</PdsTab>
     <PdsTab name="wednesday">Wednesday</PdsTab>
@@ -142,7 +159,7 @@ The Availability variant is to better display dates and/or times. The selected t
 `,
   webComponent:`
 <div style="background-color: var(--pine-color-background-inset-emphasized); padding: var(--pine-dimension-md);">
-  <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability" tablist-label="Foo">
+  <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability-example" tablist-label="Available days">
     <pds-tab name="monday">Monday</pds-tab>
     <pds-tab name="tuesday">Tuesday</pds-tab>
     <pds-tab name="wednesday">Wednesday</pds-tab>
@@ -154,7 +171,7 @@ The Availability variant is to better display dates and/or times. The selected t
 `
 }}>
   <div style={{ backgroundColor: 'var(--pine-color-background-inset-emphasized)', padding: 'var(--pine-dimension-md)' }}>
-    <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability" tablist-label="Foo">
+    <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability-example" tablist-label="Available days">
       <pds-tab name="monday">Monday</pds-tab>
       <pds-tab name="tuesday">Tuesday</pds-tab>
       <pds-tab name="wednesday">Wednesday</pds-tab>
@@ -171,69 +188,96 @@ The Filter variant can be used to better display filtered data.
 
 <DocCanvas mdxSource={{
   react: `
-<PdsTabs activeTabName="Sturdy" variant="filter" componentId="filter" tablistLabel="Foo">
-  <PdsTab name="Sturdy">Sturdy</PdsTab>
-  <PdsTab name="Dollop">Dollop</PdsTab>
-  <PdsTab name="Waffle">Waffle</PdsTab>
-  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
-  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
-  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+<PdsTabs activeTabName="all" variant="filter" componentId="filter-example" tablistLabel="Filter posts">
+  <PdsTab name="all">All</PdsTab>
+  <PdsTab name="published">Published</PdsTab>
+  <PdsTab name="drafts">Drafts</PdsTab>
+  <PdsTabpanel name="all">All posts</PdsTabpanel>
+  <PdsTabpanel name="published">Published posts</PdsTabpanel>
+  <PdsTabpanel name="drafts">Draft posts</PdsTabpanel>
 </PdsTabs>
 `,
   webComponent: `
-<pds-tabs active-tab-name="Sturdy" variant="filter" component-id="filter" tablist-label="Foo">
-  <pds-tab name="Sturdy">Sturdy</pds-tab>
-  <pds-tab name="Dollop">Dollop</pds-tab>
-  <pds-tab name="Waffle">Waffle</pds-tab>
-  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+<pds-tabs active-tab-name="all" variant="filter" component-id="filter-example" tablist-label="Filter posts">
+  <pds-tab name="all">All</pds-tab>
+  <pds-tab name="published">Published</pds-tab>
+  <pds-tab name="drafts">Drafts</pds-tab>
+  <pds-tabpanel name="all">All posts</pds-tabpanel>
+  <pds-tabpanel name="published">Published posts</pds-tabpanel>
+  <pds-tabpanel name="drafts">Draft posts</pds-tabpanel>
 </pds-tabs>
 `
 }}>
-  <pds-tabs active-tab-name="Sturdy" variant="filter" component-id="filter" tablist-label="Foo">
-    <pds-tab name="Sturdy">Sturdy</pds-tab>
-    <pds-tab name="Dollop">Dollop</pds-tab>
-    <pds-tab name="Waffle">Waffle</pds-tab>
-    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  <pds-tabs active-tab-name="all" variant="filter" component-id="filter-example" tablist-label="Filter posts">
+    <pds-tab name="all">All</pds-tab>
+    <pds-tab name="published">Published</pds-tab>
+    <pds-tab name="drafts">Drafts</pds-tab>
+    <pds-tabpanel name="all">All posts</pds-tabpanel>
+    <pds-tabpanel name="published">Published posts</pds-tabpanel>
+    <pds-tabpanel name="drafts">Draft posts</pds-tabpanel>
   </pds-tabs>
+</DocCanvas>
+
+### Navigation tabs
+
+Add `nav` to `pds-tabs` when each tab opens its own page. The tabs render as links inside a `<nav>` landmark, so give every `pds-tab` an `href`, set `active` on the tab for the current page, and leave out `pds-tabpanel`. Use `href` on all of the tabs or none: the console warns when `nav` is set and a tab has no `href` attribute, or when a tab has an `href` attribute without `nav`. A tab with `target="_blank"` also gets `rel="noopener noreferrer"`.
+
+<DocCanvas mdxSource={{
+  react: `
+<PdsTabs componentId="nav-example" tablistLabel="Account pages" nav>
+  <PdsTab name="profile" href="#profile" active>Profile</PdsTab>
+  <PdsTab name="billing" href="#billing">Billing</PdsTab>
+  <PdsTab name="help" href="https://help.example.com" target="_blank">Help</PdsTab>
+</PdsTabs>
+`,
+  webComponent: `
+<pds-tabs component-id="nav-example" tablist-label="Account pages" nav>
+  <pds-tab name="profile" href="#profile" active>Profile</pds-tab>
+  <pds-tab name="billing" href="#billing">Billing</pds-tab>
+  <pds-tab name="help" href="https://help.example.com" target="_blank">Help</pds-tab>
+</pds-tabs>
+`
+}}>
+  <div dangerouslySetInnerHTML={{ __html: `<pds-tabs component-id="nav-example" tablist-label="Account pages" nav>
+  <pds-tab name="profile" href="#profile" active>Profile</pds-tab>
+  <pds-tab name="billing" href="#billing">Billing</pds-tab>
+  <pds-tab name="help" href="https://help.example.com" target="_blank">Help</pds-tab>
+</pds-tabs>` }} />
 </DocCanvas>
 
 ### Disabled
 
-Individual tabs can be disabled using the `disabled` prop. Disabled tabs cannot be clicked or focused and are visually styled to indicate their disabled state.
+Individual tabs can be disabled using the `disabled` prop. Disabled tabs cannot be clicked or focused and are visually styled to indicate their disabled state. The arrow keys don't skip a disabled tab, though: they select it and show its panel, while focus stays on the tab the reader moved from.
 
 <DocCanvas mdxSource={{
   react: `
-<PdsTabs activeTabName="Sturdy" variant="filter" componentId="disabled-example" tablistLabel="Foo">
-  <PdsTab name="Sturdy">Sturdy</PdsTab>
-  <PdsTab name="Dollop" disabled>Dollop (Disabled)</PdsTab>
-  <PdsTab name="Waffle">Waffle</PdsTab>
-  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
-  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
-  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+<PdsTabs activeTabName="overview" variant="filter" componentId="disabled-example" tablistLabel="Course sections">
+  <PdsTab name="overview">Overview</PdsTab>
+  <PdsTab name="lessons" disabled>Lessons</PdsTab>
+  <PdsTab name="settings">Settings</PdsTab>
+  <PdsTabpanel name="overview">Overview content</PdsTabpanel>
+  <PdsTabpanel name="lessons">Lessons content</PdsTabpanel>
+  <PdsTabpanel name="settings">Settings content</PdsTabpanel>
 </PdsTabs>
 `,
   webComponent: `
-<pds-tabs active-tab-name="Sturdy" variant="filter" component-id="disabled-example" tablist-label="Foo">
-  <pds-tab name="Sturdy">Sturdy</pds-tab>
-  <pds-tab name="Dollop" disabled>Dollop (Disabled)</pds-tab>
-  <pds-tab name="Waffle">Waffle</pds-tab>
-  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+<pds-tabs active-tab-name="overview" variant="filter" component-id="disabled-example" tablist-label="Course sections">
+  <pds-tab name="overview">Overview</pds-tab>
+  <pds-tab name="lessons" disabled>Lessons</pds-tab>
+  <pds-tab name="settings">Settings</pds-tab>
+  <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+  <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+  <pds-tabpanel name="settings">Settings content</pds-tabpanel>
 </pds-tabs>
 `
 }}>
-  <pds-tabs active-tab-name="Sturdy" variant="filter" component-id="disabled-example" tablist-label="Foo">
-    <pds-tab name="Sturdy">Sturdy</pds-tab>
-    <pds-tab name="Dollop" disabled>Dollop (Disabled)</pds-tab>
-    <pds-tab name="Waffle">Waffle</pds-tab>
-    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  <pds-tabs active-tab-name="overview" variant="filter" component-id="disabled-example" tablist-label="Course sections">
+    <pds-tab name="overview">Overview</pds-tab>
+    <pds-tab name="lessons" disabled>Lessons</pds-tab>
+    <pds-tab name="settings">Settings</pds-tab>
+    <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+    <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+    <pds-tabpanel name="settings">Settings content</pds-tabpanel>
   </pds-tabs>
 </DocCanvas>
 
@@ -243,33 +287,33 @@ The `divider` prop adds a full-width rule beneath the tab list, separating the t
 
 <DocCanvas mdxSource={{
   react: `
-<PdsTabs activeTabName="Dollop" variant="primary" componentId="divider-example" tablistLabel="Foo" divider>
-  <PdsTab name="Sturdy">Sturdy</PdsTab>
-  <PdsTab name="Dollop">Dollop</PdsTab>
-  <PdsTab name="Waffle">Waffle</PdsTab>
-  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
-  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
-  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+<PdsTabs activeTabName="lessons" variant="primary" componentId="divider-example" tablistLabel="Course sections" divider>
+  <PdsTab name="overview">Overview</PdsTab>
+  <PdsTab name="lessons">Lessons</PdsTab>
+  <PdsTab name="settings">Settings</PdsTab>
+  <PdsTabpanel name="overview">Overview content</PdsTabpanel>
+  <PdsTabpanel name="lessons">Lessons content</PdsTabpanel>
+  <PdsTabpanel name="settings">Settings content</PdsTabpanel>
 </PdsTabs>
 `,
   webComponent: `
-<pds-tabs active-tab-name="Dollop" variant="primary" component-id="divider-example" tablist-label="Foo" divider>
-  <pds-tab name="Sturdy">Sturdy</pds-tab>
-  <pds-tab name="Dollop">Dollop</pds-tab>
-  <pds-tab name="Waffle">Waffle</pds-tab>
-  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+<pds-tabs active-tab-name="lessons" variant="primary" component-id="divider-example" tablist-label="Course sections" divider>
+  <pds-tab name="overview">Overview</pds-tab>
+  <pds-tab name="lessons">Lessons</pds-tab>
+  <pds-tab name="settings">Settings</pds-tab>
+  <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+  <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+  <pds-tabpanel name="settings">Settings content</pds-tabpanel>
 </pds-tabs>
 `
 }}>
-  <pds-tabs active-tab-name="Dollop" variant="primary" component-id="divider-example" tablist-label="Foo" divider>
-    <pds-tab name="Sturdy">Sturdy</pds-tab>
-    <pds-tab name="Dollop">Dollop</pds-tab>
-    <pds-tab name="Waffle">Waffle</pds-tab>
-    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  <pds-tabs active-tab-name="lessons" variant="primary" component-id="divider-example" tablist-label="Course sections" divider>
+    <pds-tab name="overview">Overview</pds-tab>
+    <pds-tab name="lessons">Lessons</pds-tab>
+    <pds-tab name="settings">Settings</pds-tab>
+    <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+    <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+    <pds-tabpanel name="settings">Settings content</pds-tabpanel>
   </pds-tabs>
 </DocCanvas>
 
@@ -280,37 +324,37 @@ The `stretch` prop makes the component fill its container's height, for tab sets
 <DocCanvas mdxSource={{
   react: `
 <div style={{ height: '240px', border: '1px solid var(--pine-color-border-subtle)' }}>
-  <PdsTabs activeTabName="Dollop" variant="primary" componentId="stretch-example" tablistLabel="Foo" stretch>
-    <PdsTab name="Sturdy">Sturdy</PdsTab>
-    <PdsTab name="Dollop">Dollop</PdsTab>
-    <PdsTab name="Waffle">Waffle</PdsTab>
-    <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
-    <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
-    <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+  <PdsTabs activeTabName="lessons" variant="primary" componentId="stretch-example" tablistLabel="Course sections" stretch>
+    <PdsTab name="overview">Overview</PdsTab>
+    <PdsTab name="lessons">Lessons</PdsTab>
+    <PdsTab name="settings">Settings</PdsTab>
+    <PdsTabpanel name="overview">Overview content</PdsTabpanel>
+    <PdsTabpanel name="lessons">Lessons content</PdsTabpanel>
+    <PdsTabpanel name="settings">Settings content</PdsTabpanel>
   </PdsTabs>
 </div>
 `,
   webComponent: `
 <div style="height: 240px; border: 1px solid var(--pine-color-border-subtle);">
-  <pds-tabs active-tab-name="Dollop" variant="primary" component-id="stretch-example" tablist-label="Foo" stretch>
-    <pds-tab name="Sturdy">Sturdy</pds-tab>
-    <pds-tab name="Dollop">Dollop</pds-tab>
-    <pds-tab name="Waffle">Waffle</pds-tab>
-    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  <pds-tabs active-tab-name="lessons" variant="primary" component-id="stretch-example" tablist-label="Course sections" stretch>
+    <pds-tab name="overview">Overview</pds-tab>
+    <pds-tab name="lessons">Lessons</pds-tab>
+    <pds-tab name="settings">Settings</pds-tab>
+    <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+    <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+    <pds-tabpanel name="settings">Settings content</pds-tabpanel>
   </pds-tabs>
 </div>
 `
 }}>
   <div style={{height: '240px', border: '1px solid var(--pine-color-border-subtle)'}}>
-    <pds-tabs active-tab-name="Dollop" variant="primary" component-id="stretch-example" tablist-label="Foo" stretch>
-      <pds-tab name="Sturdy">Sturdy</pds-tab>
-      <pds-tab name="Dollop">Dollop</pds-tab>
-      <pds-tab name="Waffle">Waffle</pds-tab>
-      <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-      <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-      <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+    <pds-tabs active-tab-name="lessons" variant="primary" component-id="stretch-example" tablist-label="Course sections" stretch>
+      <pds-tab name="overview">Overview</pds-tab>
+      <pds-tab name="lessons">Lessons</pds-tab>
+      <pds-tab name="settings">Settings</pds-tab>
+      <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+      <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+      <pds-tabpanel name="settings">Settings content</pds-tabpanel>
     </pds-tabs>
   </div>
 </DocCanvas>

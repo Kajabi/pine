@@ -77,7 +77,7 @@ export class PdsTabs {
   }
 
   /**
-   * Sets the aria-label attached to the tablist element
+   * Sets the aria-label attached to the tablist element, or to the `<nav>` element in navigation mode (`nav`).
    */
   @Prop() tablistLabel!: string;
 
