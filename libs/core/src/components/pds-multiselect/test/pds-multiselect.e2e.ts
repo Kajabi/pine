@@ -467,6 +467,32 @@ describe('pds-multiselect', () => {
       expect(formatViolations(await runAxe(page))).toBe('');
     });
 
+    // With no width of its own, in a row that sizes to its content (as docs previews and
+    // content-sized popovers do), the name must still truncate rather than set the width.
+    it('keeps a long name from widening a multiselect that sizes to its content', async () => {
+      const widthWith = async (value: string[]) => {
+        const page = await newE2EPage();
+        await page.setContent(
+          '<div style="display: inline-flex"><pds-multiselect component-id="tags" label="Tags"></pds-multiselect></div>',
+        );
+        await setOptions(page, [
+          { id: '1', text: longText },
+          { id: '2', text: 'Webinar' },
+        ]);
+        await page.$eval('pds-multiselect', (el: HTMLElement & { value?: string[] }, v) => { el.value = v; }, value);
+        await page.waitForChanges();
+        return measure(page);
+      };
+
+      const long = await widthWith(['1']);
+      const short = await widthWith(['2']);
+
+      expect(long.text).toBe(longText);
+      expect(long.clipped).toBe(true);
+      expect(long.width).toBe(short.width);
+      expect(long.width).toBeLessThan(300);
+    });
+
     it('names an unlabeled trigger by the selected item, and a labeled one by its label', async () => {
       const triggerName = async (labelAttribute: string) => {
         const page = await newE2EPage();

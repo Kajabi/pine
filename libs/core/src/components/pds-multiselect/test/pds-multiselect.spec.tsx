@@ -102,9 +102,42 @@ describe('pds-multiselect', () => {
     await page.waitForChanges();
 
     const trigger = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
-    // The chevron is aria-hidden, so the name is the only text the button holds.
+    // The chevron and the width sizer are aria-hidden, so the name is the only text the button exposes.
     expect(trigger.querySelector('pds-icon').getAttribute('aria-hidden')).toBe('true');
-    expect(trigger.textContent.trim()).toBe('Marketing');
+    expect(trigger.querySelector('.pds-multiselect__trigger-sizer').getAttribute('aria-hidden')).toBe('true');
+    expect(trigger.querySelector('.pds-multiselect__trigger-text').textContent.trim()).toBe('Marketing');
+  });
+
+  it('sizes the trigger by the count while it shows a single item\'s name, and by the shown text otherwise', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test" placeholder="Pick tags"></pds-multiselect>`,
+    });
+    const sizer = () => page.root.shadowRoot.querySelector('.pds-multiselect__trigger-sizer').textContent;
+
+    expect(sizer()).toBe('Pick tags');
+
+    page.rootInstance.internalOptions = [{ id: '1', text: 'Marketing' }, { id: '2', text: 'Webinar' }];
+    page.rootInstance.value = ['1'];
+    await page.waitForChanges();
+    expect(sizer()).toBe('1 item');
+
+    page.rootInstance.value = ['1', '2'];
+    await page.waitForChanges();
+    expect(sizer()).toBe('2 items');
+  });
+
+  it('falls back to the count when the single selected item\'s text is only spaces', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+    });
+
+    page.rootInstance.value = ['1'];
+    page.rootInstance.internalOptions = [{ id: '1', text: '   ' }];
+    await page.waitForChanges();
+
+    expect(page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text').textContent).toBe('1 item');
   });
 
   it('falls back to the count when the single selected item has no text', async () => {
