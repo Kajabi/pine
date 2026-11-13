@@ -18,13 +18,15 @@ Pine can be added to any project via CDN. Add the following link and script tags
 <script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.js"></script>
 ```
 
-Replace `[VERSION]` with the desired version number. For example, version 2.0.0 can be accessed as `core@2.0.0`. If the latest version is desired, use `core@latest`.
+Replace `[VERSION]` with an exact version from [Releases](https://github.com/Kajabi/pine/releases), such as `4.11.0`. Don't use `latest`: it serves each new release as soon as it's published. See [Consumer guidance](./VERSIONING.md#consumer-guidance) for how to pin npm and CDN versions.
 
-To use the components within React projects, they must also be installed via npm:
+In React projects, install the components from npm:
 
-```
+```bash
 npm install @pine-ds/react
 ```
+
+`@pine-ds/react` doesn't load the stylesheet, so keep the `<link>` tag above, with `[VERSION]` set to the `@pine-ds/core` version in your lockfile. You don't need the two `<script>` tags. For other ways to load the stylesheet, and for other frameworks, see [Getting Started](https://pine-design-system.netlify.app/?path=/docs/introduction-getting-started--docs).
 
 ## Usage
 
@@ -34,10 +36,12 @@ As Pine components are web components, they can be used as simply as any other H
 <pds-button variant="accent">Pine Button</pds-button>
 ```
 
-For use within React files, components should follow PascalCase to match React component convention:
+In React, import each component from `@pine-ds/react`. Component names are PascalCase, and props are camelCase:
 
-```html
-<PdsCopytext value="Copy this text" fullWidth="true"></PdsCopytext>
+```jsx
+import { PdsCopytext } from '@pine-ds/react';
+
+<PdsCopytext value="Copy this text" fullWidth />
 ```
 
 For the full list of properties available for each component and more robust documentation, please see Pine's [Storybook](https://pine-design-system.netlify.app/).

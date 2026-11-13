@@ -7,83 +7,535 @@ import { default as TokenExample3 } from '../../../assets/images/tokens/token-ex
 
 # Tokens
 
-Within the design system repository, all tokens are converted into **CSS custom properties** during the build process via <pds-link href="https://amzn.github.io/style-dictionary/#/README" external>Style Dictionary</pds-link> once the PR from Tokens Studio is merged into the main branch. Custom properties are supported in every major browser and available globally within the Pine design system.
+Design tokens are Pine's named values for color, spacing, type, radius, shadows and stacking order. Each one is a CSS custom property that starts with `--pine-`, such as `--pine-color-text` or `--pine-dimension-md`. They come from the `@kajabi-ui/styles` package and load with the Pine stylesheet, `pine-core.css`, so any page that loads that stylesheet can use them without another import.
 
-## Why Style Dictionary?
+Tokens come in three tiers:
 
-Style Dictionary has become an industry standard in building and managing design system tokens. Its robust library keeps scalability in mind while offering simplicity when design tokens need to be exported into a variety of different formats or themes. With Style Dictionary, we have the power to create individual, product-specific tokens within Kajabi along with their corresponding light and dark themes if needed.
+- **Core** tokens are raw values, such as `--pine-color-grey-900` (#343332) or `--pine-dimension-100` (8px). They keep the same value in every theme.
+- **Semantic** tokens are named for a job, such as `--pine-color-text` or `--pine-color-background-container`. They point at core tokens, and the color ones switch in dark mode. Use these in your own styles.
+- **Component** tokens belong to one component, such as `--pine-chip-color-accent`. Pine defines them inside the component that uses them.
 
-Integrating Style Dictionary with Tokens Studio provides us with an easy way to maintain a solid source of truth for tokens across design and development.
+## Choosing tokens
 
-## Tiered Tokens: An Introduction
+Start from the job a style does, then pick the semantic token for that job. Use a core token only when no semantic token fits, and expect it to keep its light-mode value in dark mode.
 
-Pine tokens are broken up into a three-tiered system. This structure has been proven across the industry to be effective in helping design systems scale. It has also been proven to allow flexibility with theming and making sweeping changes to token values in the system without friction. Our tiers are as follows: Core, Semantic, and Component.
+### Text
 
-### Core
+Text tokens run from darkest to lightest in light mode. The contrast column is measured against `--pine-color-background-container` (white) in light mode. WCAG AA asks for 4.5 : 1 for body text.
 
-Core tokens, also known as “primitive” or “raw” tokens, are all token values in their most base form. These tokens will always equate to raw values.
+<pds-table component-id="choosing-text-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Light</pds-table-head-cell>
+    <pds-table-head-cell>Dark</pds-table-head-cell>
+    <pds-table-head-cell>Contrast</pds-table-head-cell>
+    <pds-table-head-cell>Use</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-emphasis</code></pds-table-cell>
+      <pds-table-cell>black</pds-table-cell>
+      <pds-table-cell>white</pds-table-cell>
+      <pds-table-cell>21 : 1</pds-table-cell>
+      <pds-table-cell>Maximum emphasis. Use sparingly.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-strong</code></pds-table-cell>
+      <pds-table-cell>grey-950</pds-table-cell>
+      <pds-table-cell>grey-050</pds-table-cell>
+      <pds-table-cell>17.4 : 1</pds-table-cell>
+      <pds-table-cell>Text that stands out from body copy, such as a field's value or an active table heading.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-label</code></pds-table-cell>
+      <pds-table-cell>grey-950</pds-table-cell>
+      <pds-table-cell>grey-050</pds-table-cell>
+      <pds-table-cell>17.4 : 1</pds-table-cell>
+      <pds-table-cell>Form field labels.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text</code></pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+      <pds-table-cell>grey-100</pds-table-cell>
+      <pds-table-cell>12.6 : 1</pds-table-cell>
+      <pds-table-cell>Default body text.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-secondary</code></pds-table-cell>
+      <pds-table-cell>grey-800</pds-table-cell>
+      <pds-table-cell>grey-150</pds-table-cell>
+      <pds-table-cell>8.5 : 1</pds-table-cell>
+      <pds-table-cell>Supporting text next to body text, such as tab labels.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-message</code></pds-table-cell>
+      <pds-table-cell>grey-800</pds-table-cell>
+      <pds-table-cell>grey-150</pds-table-cell>
+      <pds-table-cell>8.5 : 1</pds-table-cell>
+      <pds-table-cell>Helper text under a form field.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-muted</code></pds-table-cell>
+      <pds-table-cell>grey-700</pds-table-cell>
+      <pds-table-cell>grey-200</pds-table-cell>
+      <pds-table-cell>5.4 : 1</pds-table-cell>
+      <pds-table-cell>Lower-priority text that people still need to read, such as a character count.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-tertiary</code></pds-table-cell>
+      <pds-table-cell>grey-600</pds-table-cell>
+      <pds-table-cell>grey-300</pds-table-cell>
+      <pds-table-cell>3.9 : 1</pds-table-cell>
+      <pds-table-cell>Large text only (24px, or 18.7px bold).</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-placeholder</code></pds-table-cell>
+      <pds-table-cell>grey-600</pds-table-cell>
+      <pds-table-cell>grey-300</pds-table-cell>
+      <pds-table-cell>3.9 : 1</pds-table-cell>
+      <pds-table-cell>Placeholder text in an empty field.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-subtle</code></pds-table-cell>
+      <pds-table-cell>grey-500</pds-table-cell>
+      <pds-table-cell>grey-400</pds-table-cell>
+      <pds-table-cell>2.8 : 1</pds-table-cell>
+      <pds-table-cell>Decorative text that carries no information.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-disabled</code></pds-table-cell>
+      <pds-table-cell>grey-500</pds-table-cell>
+      <pds-table-cell>grey-400</pds-table-cell>
+      <pds-table-cell>2.8 : 1</pds-table-cell>
+      <pds-table-cell>Text in a disabled control. WCAG doesn't set a contrast minimum for inactive controls.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
-```
-color.purple.500: #6B62F2;
-font-size.100: 14px;
-```
+Don't use `--pine-color-text-tertiary` or `--pine-color-text-subtle` for body text or labels. On a white container they reach 3.9 : 1 and 2.8 : 1, below the 4.5 : 1 that WCAG AA asks for. `--pine-color-text-placeholder` is also 3.9 : 1, so put anything people need in the label or helper text, not the placeholder.
 
-Ideally, core tokens wouldn't be used in code unless there are no semantic tokens that fulfill the contextual requirement and creating a component-level token doesn't make sense.
+On `--pine-color-background-app` every light-mode ratio drops a little: `--pine-color-text-muted` is 5.1 : 1 and `--pine-color-text-tertiary` is 3.7 : 1. In dark mode every token in this table reaches at least 6.5 : 1 on both the container and app backgrounds.
 
-### Semantic
+### Icons
 
-Semantic tokens, also known as “reference” or “alias” tokens, reference Core tokens as their values. They are intended to apply to **certain contexts** across the brand, product, or application, or in other words, used semantically. What makes these tokens useful is that any component referencing them will be updated appropriately when widespread changes are made to the system.
+<pds-table component-id="choosing-icon-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Light</pds-table-head-cell>
+    <pds-table-head-cell>Dark</pds-table-head-cell>
+    <pds-table-head-cell>Contrast</pds-table-head-cell>
+    <pds-table-head-cell>Use</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-icon</code></pds-table-cell>
+      <pds-table-cell>grey-700</pds-table-cell>
+      <pds-table-cell>grey-200</pds-table-cell>
+      <pds-table-cell>5.4 : 1</pds-table-cell>
+      <pds-table-cell>Default icon color.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-icon-subtle</code></pds-table-cell>
+      <pds-table-cell>grey-500</pds-table-cell>
+      <pds-table-cell>grey-400</pds-table-cell>
+      <pds-table-cell>2.8 : 1</pds-table-cell>
+      <pds-table-cell>Decorative icons only. An icon that carries meaning needs 3 : 1.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
-These tokens are the driving force behind component styling and are intended to be used liberally.
+### Surfaces
 
-```
-color.text.@: {color.grey.900}
-font-size.@: {font-size.100}
-```
+Pick a background by its place in the layout, not by how light or dark it looks, because the order changes in dark mode.
 
-The `@` key is the base value of its group, so these become `--pine-color-text` and `--pine-font-size`.
+<pds-table component-id="choosing-surface-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Light</pds-table-head-cell>
+    <pds-table-head-cell>Dark</pds-table-head-cell>
+    <pds-table-head-cell>Use</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-app</code></pds-table-cell>
+      <pds-table-cell>grey-100</pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+      <pds-table-cell>The page canvas behind everything else.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-container</code></pds-table-cell>
+      <pds-table-cell>white</pds-table-cell>
+      <pds-table-cell>black</pds-table-cell>
+      <pds-table-cell>Cards, panels, tables and other content that sits on the page.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-container-hover</code></pds-table-cell>
+      <pds-table-cell>grey-050</pds-table-cell>
+      <pds-table-cell>grey-950</pds-table-cell>
+      <pds-table-cell>Hover state of a clickable container.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-container-disabled</code></pds-table-cell>
+      <pds-table-cell>grey-150</pds-table-cell>
+      <pds-table-cell>grey-800</pds-table-cell>
+      <pds-table-cell>A disabled field or control.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-overlay</code></pds-table-cell>
+      <pds-table-cell>white</pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+      <pds-table-cell>Modals, popovers, menus and other panels that float above the page.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-inset</code></pds-table-cell>
+      <pds-table-cell>grey-200</pds-table-cell>
+      <pds-table-cell>grey-700</pds-table-cell>
+      <pds-table-cell>A recessed area inside a container.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-inset-emphasized</code></pds-table-cell>
+      <pds-table-cell>grey-300</pds-table-cell>
+      <pds-table-cell>grey-600</pds-table-cell>
+      <pds-table-cell>A recessed area that needs more contrast than <code>background-inset</code>.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-muted</code></pds-table-cell>
+      <pds-table-cell>grey-150</pds-table-cell>
+      <pds-table-cell>grey-800</pds-table-cell>
+      <pds-table-cell>Low-emphasis fills inside a container, such as a progress track or a selected option.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-subtle</code></pds-table-cell>
+      <pds-table-cell>grey-100</pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+      <pds-table-cell>The same value as <code>background-app</code>, for fills inside a container, such as a table header.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
-### Component
+In light mode a container is lighter than the page. In dark mode it's darker (black on grey-900), and `--pine-color-background-overlay` is the same grey-900 as the page. Don't rely on a lighter or darker fill alone to show that one surface sits above another. A border (`--pine-border`) works in both themes. Shadows (`--pine-box-shadow-*`) use the same low-opacity black in both themes, so they barely show on a dark page.
 
-Component-level tokens are defined and used locally within a component. These are created when it makes sense to apply component-specific styling in contexts where the value differs from a semantic token value or when it'd be easier than using a Core token directly.
+### Inverse surfaces
 
-```
-chip.color.accent: {color.purple.100};
-```
+Inverse tokens are for a surface that contrasts with the theme: dark in light mode and light in dark mode.
 
-These are created on a case-by-case basis. If you are unsure of whether a component-level token should be added to the system, please ask!
+<pds-table component-id="choosing-inverse-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Light</pds-table-head-cell>
+    <pds-table-head-cell>Dark</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-inverse-container</code></pds-table-cell>
+      <pds-table-cell>black</pds-table-cell>
+      <pds-table-cell>white</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-inverse-inset</code></pds-table-cell>
+      <pds-table-cell>grey-950</pds-table-cell>
+      <pds-table-cell>grey-050</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-inverse-app</code></pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+      <pds-table-cell>grey-100</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-inverse-subtle</code></pds-table-cell>
+      <pds-table-cell>grey-800</pds-table-cell>
+      <pds-table-cell>grey-150</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-background-inverse-muted</code></pds-table-cell>
+      <pds-table-cell>grey-700</pds-table-cell>
+      <pds-table-cell>grey-200</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-inverse-emphasis</code></pds-table-cell>
+      <pds-table-cell>white</pds-table-cell>
+      <pds-table-cell>black</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-inverse</code></pds-table-cell>
+      <pds-table-cell>grey-100</pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-inverse-secondary</code></pds-table-cell>
+      <pds-table-cell>grey-150</pds-table-cell>
+      <pds-table-cell>grey-800</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-text-inverse-tertiary</code></pds-table-cell>
+      <pds-table-cell>grey-300</pds-table-cell>
+      <pds-table-cell>grey-600</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
-### Why Does Tiering Work Well? An Example…
+In dark mode `--pine-color-text-inverse-tertiary` is 3.9 : 1 on `--pine-color-background-inverse-container`, so keep it for large text.
 
-Container components such as the card, table, and box have been requested for their background colors to change from `color.white` to `color.grey.100`. How would it look to update these tokens?
+### Borders
 
-Scenario A, Using Core Tokens
+<pds-table component-id="choosing-border-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Light</pds-table-head-cell>
+    <pds-table-head-cell>Dark</pds-table-head-cell>
+    <pds-table-head-cell>Use</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-border</code></pds-table-cell>
+      <pds-table-cell>grey-300</pds-table-cell>
+      <pds-table-cell>grey-600</pds-table-cell>
+      <pds-table-cell>Default border for containers and fields.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-border-hover</code></pds-table-cell>
+      <pds-table-cell>grey-400</pds-table-cell>
+      <pds-table-cell>grey-500</pds-table-cell>
+      <pds-table-cell>Border on hover.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-border-active</code></pds-table-cell>
+      <pds-table-cell>grey-400</pds-table-cell>
+      <pds-table-cell>grey-500</pds-table-cell>
+      <pds-table-cell>Border of a focused field.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-border-subtle</code></pds-table-cell>
+      <pds-table-cell>grey-200</pds-table-cell>
+      <pds-table-cell>grey-700</pds-table-cell>
+      <pds-table-cell>Dividers inside a container, such as between table rows.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-border-disabled</code></pds-table-cell>
+      <pds-table-cell>grey-200</pds-table-cell>
+      <pds-table-cell>grey-700</pds-table-cell>
+      <pds-table-cell>Border of a disabled field.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-color-border-danger</code></pds-table-cell>
+      <pds-table-cell>red-600</pds-table-cell>
+      <pds-table-cell>red-600</pds-table-cell>
+      <pds-table-cell>Border of a field with an error.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+`--pine-border` is the whole shorthand: `1px solid` in the default border color for the current theme.
+
+### Decorative colors
+
+The mercury, forest, lime, magenta, pink, salmon, sky and teal palettes are core tokens only, such as `--pine-color-teal-500`. No semantic token points at them, no Pine component uses them, and they keep the same value in dark mode. Keep them for color that carries no meaning of its own, such as chart series, tags and illustrations, and check their contrast in both themes. For text, icons, surfaces and borders, use the semantic tokens above. For status, use the semantic status colors, such as `--pine-color-danger` and `--pine-color-success`.
+
+### Radius, stroke width and spacing
+
+Use `--pine-border-radius-*` for corners and `--pine-border-width*` for strokes. Use `--pine-dimension-*` for spacing and sizes, and prefer the semantic `none` to `2xl` set over the numbered core scale.
+
+<pds-table component-id="choosing-radius-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Value</pds-table-head-cell>
+    <pds-table-head-cell>Use</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-border-radius-sm</code></pds-table-cell>
+      <pds-table-cell>4px</pds-table-cell>
+      <pds-table-cell>Small inputs and tight UI elements.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-border-radius-md</code></pds-table-cell>
+      <pds-table-cell>10px</pds-table-cell>
+      <pds-table-cell>Standard cards and modals.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-border-radius-lg</code></pds-table-cell>
+      <pds-table-cell>16px</pds-table-cell>
+      <pds-table-cell>Large cards and panels.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-border-radius-full</code></pds-table-cell>
+      <pds-table-cell>9999px</pds-table-cell>
+      <pds-table-cell>Fully rounded ends at any size, such as pills and circles.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+Stroke widths are `--pine-border-width` (1px, the default), `--pine-border-width-thin` (1px), `--pine-border-width-thick` (2px) and `--pine-border-width-none` (0).
+
+The semantic spacing set is `--pine-dimension-none` (0), `-2xs` (4px), `-xs` (8px), `-sm` (16px), `-md` (24px), `-lg` (32px), `-xl` (40px) and `-2xl` (48px). The numbered core scale, from `--pine-dimension-025` (2px) to `--pine-dimension-800` (64px), covers the sizes in between.
+
+### Shadows
+
+Shadows run from `--pine-box-shadow-050`, the faintest, through `-100`, `-150`, `-200`, `-300` and `-400` to `-500`, the deepest. `--pine-box-shadow` is the default and matches `--pine-box-shadow-100`. Give a layer the shadow Pine's components use for the same kind of layer:
+
+<pds-table component-id="choosing-shadow-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Used by</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-box-shadow-050</code></pds-table-cell>
+      <pds-table-cell>The <code>pds-filter</code> trigger.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-box-shadow</code> or <code>-100</code></pds-table-cell>
+      <pds-table-cell>Menus and option lists (<code>pds-dropdown-menu</code>, <code>pds-combobox</code>, <code>pds-multiselect</code> and the <code>pds-filter</code> panel), <code>pds-tooltip</code> and <code>pds-toast</code>.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-box-shadow-200</code></pds-table-cell>
+      <pds-table-cell><code>pds-popover</code> and the <code>pds-datepicker</code> calendar.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-box-shadow-400</code></pds-table-cell>
+      <pds-table-cell><code>pds-modal</code>, and a <code>pds-sortable-item</code> while it's dragged.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+No component uses `-150`, `-300` or `-500`. A `pds-box` takes any step through its `shadow` prop, such as `shadow="100"`. Shadows keep the same values in dark mode, where they barely show, so give a raised surface a border as well when it has to stand out in both themes.
+
+### Stacking order
+
+Give positioned elements a z-index token. From lowest to highest:
+
+<pds-table component-id="choosing-z-index-table" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Value</pds-table-head-cell>
+    <pds-table-head-cell>Use</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-hide</code></pds-table-cell>
+      <pds-table-cell>-1</pds-table-cell>
+      <pds-table-cell>Hidden behind other elements.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index</code></pds-table-cell>
+      <pds-table-cell>0</pds-table-cell>
+      <pds-table-cell>Default stacking order.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-raised</code></pds-table-cell>
+      <pds-table-cell>1000</pds-table-cell>
+      <pds-table-cell>Slightly raised above normal content.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-alert</code></pds-table-cell>
+      <pds-table-cell>2000</pds-table-cell>
+      <pds-table-cell>Alert messages and notifications.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-underlay</code></pds-table-cell>
+      <pds-table-cell>3000</pds-table-cell>
+      <pds-table-cell>Background overlays and backdrops.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-navigation</code></pds-table-cell>
+      <pds-table-cell>4000</pds-table-cell>
+      <pds-table-cell>Navigation elements such as headers and sidebars.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-overlay</code></pds-table-cell>
+      <pds-table-cell>5000</pds-table-cell>
+      <pds-table-cell>Overlays such as dropdowns and popovers.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-modal</code></pds-table-cell>
+      <pds-table-cell>6000</pds-table-cell>
+      <pds-table-cell>Modal dialogs and similar blocking UI.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-priority</code></pds-table-cell>
+      <pds-table-cell>8000</pds-table-cell>
+      <pds-table-cell>High-priority elements that must appear above modals.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>--pine-z-index-nuclear</code></pds-table-cell>
+      <pds-table-cell>9000</pds-table-cell>
+      <pds-table-cell>The highest layer. Use sparingly.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+`pds-modal` opens in the browser's top layer by default, which sits above every z-index. `--pine-z-index-priority` and `--pine-z-index-nuclear` only rise above a modal opened with `disable-top-layer`.
+
+## Dark mode
+
+Pine switches to dark mode on any element with `data-theme="dark"` and everything inside it. Set it on `<html>` to theme the whole page. Pine doesn't follow the operating system's setting (`prefers-color-scheme`) on its own.
+
+Pine doesn't set `color-scheme` either, so the browser keeps its light scheme for the parts it draws itself, such as scrollbars and the option list of `pds-select`. Set `color-scheme: dark` on the same elements:
 
 ```css
-/* Card */
-background-color: var(--pine-color-white);
-/* Table */
-background-color: var(--pine-color-white);
-/* Box */
-background-color: var(--pine-color-white);
+[data-theme="dark"] {
+  color-scheme: dark;
+}
 ```
 
-Scenario B, Using Semantic Tokens
+`color-scheme` is inherited, including into shadow roots. Matching the attribute also covers the datepicker's calendar, which moves into `<body>` or the nearest `<dialog>` and copies the nearest `data-theme`.
+
+These tokens switch:
+
+- Semantic color tokens, such as `--pine-color-text`, `--pine-color-background-container` and `--pine-color-border`
+- The border shorthand `--pine-border`
+- The focus outlines `--pine-outline-focus` and `--pine-outline-focus-danger`
+
+These stay the same:
+
+- Core tokens, such as `--pine-color-grey-900` and `--pine-color-white`
+- Hex, `rgb()` and other literal colors
+- Every other token: shadows, spacing, type, radius, z-index and motion
+
+A core token keeps its light value in dark mode:
 
 ```css
-/* Card */
-background-color: var(--pine-color-background-container);
-/* Table */
-background-color: var(--pine-color-background-container);
-/* Box */
-background-color: var(--pine-color-background-container);
+/* Don't: core token, stays white in dark mode */
+.card {
+  background-color: var(--pine-color-white);
+}
 ```
 
-In scenario A, each component's background color is referencing the core tokens directly, meaning all components would have to be updated _separately_. In scenario B, however, all components are referencing the same semantic token for contextual usage. The only change needed would be to update the semantic token's reference. **Every component using that semantic token would have that change already applied.** And considering how semantic tokens are used in specific contexts, there would be little worry in making such a change. We can assure that every component that is or has a container will be appropriately updated.
+A semantic token switches with the theme:
 
-While this is a simple example, imagine a scenario where there are much more than three components to update, or the brand colors change across the entire product, or a theme's text colors need to be updated. It's easy to see that using semantic tokens in this tiering system will **save time** when vast changes are inevitably made.
+```css
+/* Do: semantic token, turns black in dark mode */
+.card {
+  background-color: var(--pine-color-background-container);
+}
+```
 
-## Naming Convention
+A custom property resolves on the element that declares it. If you build your own property from a semantic token on `:root` and set `data-theme` on an element further down, your property keeps its light value inside that element. Declare it on the element that uses it instead:
+
+```css
+/* Don't: resolved on :root, stays light inside a dark section */
+:root {
+  --card-background: var(--pine-color-background-container);
+}
+
+/* Do: resolved on the card, follows the nearest data-theme */
+.card {
+  --card-background: var(--pine-color-background-container);
+  background-color: var(--card-background);
+}
+```
+
+Setting `data-theme` on `<html>` avoids this, because `:root` is then dark too.
+
+Pine components that style themselves with semantic tokens follow the theme in every browser. Dark-mode support is still rolling out one component at a time, and a few dark-mode styles use `:host-context()`, which only Chromium-based browsers support. In Firefox and Safari these keep their light-mode look inside a dark theme:
+
+- `pds-alert` and `pds-chip` colors
+- The error-state fill of `pds-input`, `pds-select`, `pds-textarea` and `pds-combobox`
+- The panel border of `pds-dropdown-menu` and `pds-datepicker`, and the datepicker's native select menus when `color-scheme` isn't set
+
+The semantic Color and Borders pages list each token's light and dark values.
+
+## Naming
 
 Naming is hard, especially for design tokens. Our chosen naming convention aims to align closely with industry standards. It is meant to be as generic or granular as needed from core tokens down to component-level tokens.
 
@@ -96,13 +548,63 @@ namespace-base-context-modifier
 3. **Context (optional):** Describes _where_ and _how_ the token will be used. These are important designators to separate core from semantic and component tokens. This includes contexts such as background or sentiment.
 4. **Modifier (optional):** Refers to any modifiers on the component to call out variants, states, scales, or themes such as hover, primary, 100, or disabled.
 
-### Examples:
+### Examples
 
-<img src={TokenExample1} alt="Example of a Pine token with parts highlighted: namespace (pine), base (color-mercury), and modifier (500)." />
-<img src={TokenExample2} alt="Example of a Pine token with parts highlighted: namespace (pine-chip), base (color), and modifier (accent)." />
-<img src={TokenExample3} alt="Example of a Pine token with parts highlighted: namespace (pine), base (color), context (background-container), and modifier (hover)." />
+- `--pine-color-mercury-500` (core): namespace `pine`, base `color-mercury`, modifier `500`
+- `--pine-chip-color-accent` (component): namespace `pine-chip`, base `color`, modifier `accent`
+- `--pine-color-background-container-hover` (semantic): namespace `pine`, base `color`, context `background-container`, modifier `hover`
 
-## Token Scale
+<img src={TokenExample1} style={{ maxWidth: '100%' }} alt="Example of a Pine token with parts highlighted: namespace (pine), base (color-mercury), and modifier (500)." />
+<img src={TokenExample2} style={{ maxWidth: '100%' }} alt="Example of a Pine token with parts highlighted: namespace (pine-chip), base (color), and modifier (accent)." />
+<img src={TokenExample3} style={{ maxWidth: '100%' }} alt="Example of a Pine token with parts highlighted: namespace (pine), base (color), context (background-container), and modifier (hover)." />
+
+## Technical notes
+
+### How tokens are built
+
+Tokens are maintained in the <pds-link href="https://github.com/Kajabi/ds-tokens" external>ds-tokens</pds-link> repository with Tokens Studio. Once a Tokens Studio change merges there, <pds-link href="https://amzn.github.io/style-dictionary/#/README" external>Style Dictionary</pds-link>, a standard tool for exporting one token source to many formats and themes, converts the tokens to CSS custom properties, which ship in the `@kajabi-ui/styles` package. Pine's build bundles that CSS into `pine-core.css`.
+
+In the token source, each tier looks like this:
+
+```
+color.purple.500: #6B62F2;              /* core */
+color.text.@: {color.grey.900}          /* semantic */
+chip.color.accent: {color.purple.100};  /* component */
+```
+
+The `@` key is the base value of its group, so `color.text.@` becomes `--pine-color-text`.
+
+### Why tiers work
+
+Tiers let one change reach every component. Suppose the card, table and box backgrounds need to change from `color.white` to `color.grey.100`.
+
+When each component points at a core token, each one has to be edited separately:
+
+```css
+/* Don't: core tokens, so every component needs its own edit */
+/* Card */
+background-color: var(--pine-color-white);
+/* Table */
+background-color: var(--pine-color-white);
+/* Box */
+background-color: var(--pine-color-white);
+```
+
+When they share a semantic token, changing that token's reference updates all of them:
+
+```css
+/* Do: one semantic token, one change */
+/* Card */
+background-color: var(--pine-color-background-container);
+/* Table */
+background-color: var(--pine-color-background-container);
+/* Box */
+background-color: var(--pine-color-background-container);
+```
+
+The more components share a token, the more a single change saves, whether it's a container color, a brand color or a theme's text colors.
+
+### Token scale
 
 Within Pine, we use a simple scale to handle variations within categories such as dimensions and font sizes. This numbered scale works proportionally off the base value, which is denoted with a `100` modifier.
 
@@ -124,7 +626,7 @@ Let's say we'd like to add a new dimension token for 72px. We can do:
 
 While this does free us from using the "t-shirt sizing" scale for core tokens and the headache that comes with adding new values, "t-shirt sizing" is still used for some of our semantic tokens. Contextually, it makes sense as we are consciously dictating what our scale will be with semantic tokens.
 
-## Dimension Tokens
+### Dimension tokens
 
 With the release of Tokens Studio version 2.0, the Tokens Studio team has decided to adopt `dimension` as a token category, recommended by the W3C Design Tokens Community Group (DTCG), to match the CSS data type of `<dimension>`. <pds-link href="https://docs.tokens.studio/token-types/token-type-dimension" external>Dimension tokens</pds-link>, like their CSS data type counterparts, are numbers followed by units. They are intended to cover the now-deprecated Tokens Studio categories of:
 
@@ -135,13 +637,11 @@ With the release of Tokens Studio version 2.0, the Tokens Studio team has decide
 - Background Blur
 - X and Y position
 
-Please be sure to use dimension tokens for these categories when making CSS changes.
+In Pine's token source, spacing and sizes are `dimension` tokens. Radius and border width tokens have types of their own: `--pine-border-radius-sm`, `-md` and `-lg` point at the core dimension tokens `050`, `125` and `200`, and the border widths don't point at dimension tokens. In CSS, use the radius, stroke width and spacing tokens described under Choosing tokens.
 
-## Best Practices
+### Adding tokens
 
-When creating, updating, and using the design system tokens, it's important to keep one tip in mind: **if you have questions, please ask!** Design tokens are notoriously difficult to get right, especially when created from scratch. They are the backbone of a design system and have far-reaching effects across a brand or product. The more consistent we can be in usage and naming, the less effort we'll need to exert when the inevitable name or value changes crop up.
-
-Our team is always open to feedback and improving the system overall. Please reach out to our support channels for help.
+New tokens are added in ds-tokens. If you're not sure whether a token should exist, or which tier it belongs in, ask in one of the channels on <pds-link href="?path=/docs/introduction-get-support--docs">Get support</pds-link>.
 
 ## References
 

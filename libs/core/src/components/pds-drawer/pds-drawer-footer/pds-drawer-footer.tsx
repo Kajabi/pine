@@ -2,6 +2,7 @@ import { Component, Element, h } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
+ * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
  * @lightDom renders-markup
  */
 @Component({

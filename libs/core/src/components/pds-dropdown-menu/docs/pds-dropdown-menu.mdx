@@ -35,6 +35,8 @@ Dropdown Menus reveal a list of actions from a button trigger, based on the WAI-
 - Renders `header` slot content outside the menu, so screen readers read it as plain content rather than as a menu item. Keyboard navigation moves between menu items only, so keep links and actions out of the header
 - Keeps `informational` items in keyboard navigation and exposes them as menu items with `aria-disabled="true"`, so people can reach and read them but not activate them. Navigation skips `disabled` items
 - Lets Tab and Shift+Tab move through the enabled menu items, and closes the menu when they move past the last or first enabled item, so keyboard users don't need Escape to leave it. This differs from the APG pattern, where Tab leaves the menu from any item
+- Closes the menu once its trigger scrolls fully out of view, scrolled or clipped by a scrolling container (such as a table that scrolls sideways) or by the window. Focus in the menu returns to the trigger without scrolling it back into view. Opening the menu while its trigger is out of view, such as with Enter on that trigger after it closed this way, scrolls the trigger into view first, so the menu opens beside it. A trigger covered by something rather than clipped, such as a sticky header, keeps the menu open, and so does panning a pinch-zoomed page
+- Treats a `pds-icon` in an item's `start` slot as decorative unless it has an `aria-label` or `aria-labelledby`. A named icon is announced before the label, so leave decorative icons unnamed
 - Provides high-contrast focus indicators for all interactive elements
 
 #### Keyboard interactions
@@ -154,11 +156,11 @@ Activating a `pds-dropdown-menu-item` emits `pdsClick`: a click, Enter on a butt
 
 - `itemIndex`: the item's position among the menu's `pds-dropdown-menu-item` elements, counting from 0. Separators and raw `<a>` and `<button>` elements aren't counted.
 - `item`: the `pds-dropdown-menu-item` element.
-- `content`: the item's text, trimmed.
+- `content`: the item's label text, trimmed. Content in the `start` slot is left out.
 
 Raw `<a>` and `<button>` elements don't emit `pdsClick`, so listen for their `click` instead. A `pds-button` trigger emits its own `pdsClick`, which also bubbles to the menu, so a listener on the menu should check that `event.target` is a `pds-dropdown-menu-item`.
 
-The menu stays open after an item is activated. It closes on Escape, a click outside it, another click on the trigger, or Tab or Shift+Tab past the last or first enabled item. It has no method for closing it from your own code.
+The menu stays open after an item is activated. It closes on Escape, a click outside it, another click on the trigger, Tab or Shift+Tab past the last or first enabled item, or its trigger scrolling out of view. It has no method for closing it from your own code.
 
 <DocCanvas
   mdxSource={{
@@ -245,43 +247,53 @@ The dropdown menu can also display a separator between items.
 
 ### With Icons
 
-Menu items can display icons before the text by including a `pds-icon` component within the item.
+Put a `pds-icon` in an item's `start` slot to show it before the label. The slot lays the icon out with the item's gap, so don't add spaces or wrappers. It works in button, link and informational items, and a destructive item colors the icon to match. An icon without an `aria-label` or `aria-labelledby` is decorative; a named one is announced before the label, so leave decorative icons unnamed.
 
 <DocCanvas
   mdxSource={{
     react: `
+import { pen, duplicate, download, trash } from '@pine-ds/icons/icons';
+
 <PdsDropdownMenu>
   <PdsButton slot="trigger">Actions</PdsButton>
   <PdsDropdownMenuItem>
-    <PdsIcon name="edit" /> Edit
+    <PdsIcon slot="start" icon={pen} />
+    Edit
   </PdsDropdownMenuItem>
   <PdsDropdownMenuItem>
-    <PdsIcon name="copy" /> Duplicate
+    <PdsIcon slot="start" icon={duplicate} />
+    Duplicate
   </PdsDropdownMenuItem>
-  <PdsDropdownMenuItem>
-    <PdsIcon name="download" /> Download
+  <PdsDropdownMenuItem href="/export">
+    <PdsIcon slot="start" icon={download} />
+    Download
   </PdsDropdownMenuItem>
   <PdsDropdownMenuSeparator />
   <PdsDropdownMenuItem destructive>
-    <PdsIcon name="trash" /> Delete
+    <PdsIcon slot="start" icon={trash} />
+    Delete
   </PdsDropdownMenuItem>
 </PdsDropdownMenu>
 `,
-    webComponent:`
+    webComponent: `
 <pds-dropdown-menu>
   <pds-button slot="trigger">Actions</pds-button>
   <pds-dropdown-menu-item>
-    <pds-icon name="edit"></pds-icon> Edit
+    <pds-icon slot="start" name="pen"></pds-icon>
+    Edit
   </pds-dropdown-menu-item>
   <pds-dropdown-menu-item>
-    <pds-icon name="copy"></pds-icon> Duplicate
+    <pds-icon slot="start" name="duplicate"></pds-icon>
+    Duplicate
   </pds-dropdown-menu-item>
-  <pds-dropdown-menu-item>
-    <pds-icon name="download"></pds-icon> Download
+  <pds-dropdown-menu-item href="/export">
+    <pds-icon slot="start" name="download"></pds-icon>
+    Download
   </pds-dropdown-menu-item>
-  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
   <pds-dropdown-menu-item destructive>
-    <pds-icon name="trash"></pds-icon> Delete
+    <pds-icon slot="start" name="trash"></pds-icon>
+    Delete
   </pds-dropdown-menu-item>
 </pds-dropdown-menu>
 `
@@ -290,11 +302,11 @@ Menu items can display icons before the text by including a `pds-icon` component
 <div style={{ height: '250px', width: '100%', textAlign: 'center' }}>
   <pds-dropdown-menu>
     <pds-button slot="trigger">Actions</pds-button>
-    <pds-dropdown-menu-item><pds-icon name="pen"></pds-icon> Edit</pds-dropdown-menu-item>
-    <pds-dropdown-menu-item><pds-icon name="copy"></pds-icon> Duplicate</pds-dropdown-menu-item>
-    <pds-dropdown-menu-item><pds-icon name="download"></pds-icon> Download</pds-dropdown-menu-item>
-    <pds-dropdown-menu-separator />
-    <pds-dropdown-menu-item destructive><pds-icon name="trash"></pds-icon> Delete</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item><pds-icon slot="start" name="pen"></pds-icon>Edit</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item><pds-icon slot="start" name="duplicate"></pds-icon>Duplicate</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item href="#export"><pds-icon slot="start" name="download"></pds-icon>Download</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+    <pds-dropdown-menu-item destructive><pds-icon slot="start" name="trash"></pds-icon>Delete</pds-dropdown-menu-item>
   </pds-dropdown-menu>
 </div>
 </DocCanvas>
@@ -391,7 +403,7 @@ Menu items can function as links by using the href attribute.
 
 ### With External Links
 
-Menu items can open links in a new tab using the `external` boolean prop. This displays an external icon and opens the link in a new tab.
+Set `external` on a link item to show the launch icon and open the link in a new tab. Screen readers hear "(opens in a new tab)" after the item's text; pass a translated `externalLabel` to localize it. Pass an empty string to make the icon decorative only when the item's text already says it opens in a new tab.
 
 <DocCanvas
   mdxSource={{
@@ -426,7 +438,7 @@ Menu items can open links in a new tab using the `external` boolean prop. This d
 </div>
 </DocCanvas>
 
->**Note:** You can also use the `target` prop for more control (e.g., `target="_blank"`, `target="_parent"`). The `target` prop takes precedence over `external` if both are set.
+>**Note:** `target` overrides the new-tab default of `external`, and the icon still shows. Pair `external` with `target="_self"` to show the icon on an item that opens in the same tab; the icon is then hidden from screen readers, they don't hear "(opens in a new tab)", and `externalLabel` is ignored. Read "External in the same tab" in the <pds-link href="../?path=/docs/components-link--docs">Link docs</pds-link> before using this pattern. Use `target` alone for `_parent` or `_top`. `target="_blank"` alone opens a new tab with no icon and no label, so use `external` for new tabs.
 
 ### With Informational Items
 
@@ -574,7 +586,7 @@ The example below demonstrates mixing a standard menu item with raw `<a>` and `<
 
 ### With Disabled Items
 
-Menu items can be disabled using the disabled attribute.
+Menu items can be disabled using the disabled attribute. A disabled item never emits `pdsClick` or navigates, whether it's clicked, activated from the keyboard or called with `clickItem()`.
 
 <DocCanvas
   mdxSource={{
@@ -639,7 +651,7 @@ The dropdown menu can be positioned relative to the trigger using the placement 
 
 ### Scrollable Menu
 
-The `menu-panel` CSS part can be used to customize the menu container's dimensions and enable scrolling for long lists as needed.
+A menu taller than the room beside its trigger is capped to that room and scrolls inside itself. The `menu-panel` CSS part can be used to customize the menu container's dimensions, such as a smaller `max-height`, which the menu keeps.
 
 <DocCanvas
   mdxSource={{

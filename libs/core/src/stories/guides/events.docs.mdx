@@ -1,56 +1,55 @@
-
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
+import { DocCanvas } from '@pine-ds/doc-components';
 
 <Meta title="Guides/Events"/>
 
 # Event Handling
-Pine tries to adhere to the browser standards whenever possible. However, with Web Components there are events that are a result of a direct user
-interaction, like `click`, `focus` that bubble just fine from inside a Web Component's shadow DOM into the light DOM. But then we have others,
-like `change` event, that don't. The difference between those events is that the former are defined as
-<pds-link href="https://developer.mozilla.org/en-US/docs/Web/API/Event/composed" external>composed events</pds-link>, while the latter are not.
 
+Pine tries to adhere to browser standards whenever possible. Some native events, such as `click`, are
+<pds-link href="https://developer.mozilla.org/en-US/docs/Web/API/Event/composed" external>composed</pds-link>: they cross out of a component's shadow DOM, so a listener on the component hears them. Others, such as `change`, aren't composed and stop at the component's shadow root, so a listener on the component never hears the `change` of the control inside it. React's `onChange` prop listens for `change`, so it isn't called for Pine's shadow DOM controls either.
 
-We also try to dispatch non-composed events by manually creating them on Web Component's host elements, but they do not behave 1:1 like their native
-equivalents. This results in unexpected behavior. Similar to React "swallowing" `change` events that are created in such a way and event handlers set with
-the `onChange` prop not being invoked.
-
-Due to that, our components dispatch custom events that are named like the native events they are meant to replace, but prefixed with "pds". So form components
-like `pds-checkbox`, for example, dispatch an `pdsCheckboxChange` event. Which custom events are available can be found in the "Events" section of each component's
-properties table.
+Pine components dispatch their own events instead, named with a `pds` prefix. The names don't follow one pattern: `pds-checkbox` fires `pdsCheckboxChange`, but `pds-input` fires `pdsInput` and `pdsChange`, and `pds-button` fires `pdsClick`. Look a name up in the Events section of the component's properties table, which also shows what each event's `detail` holds.
 
 ## Event Patterns
 
+- **React props**: In React, listen with `on` plus the event name with its first letter capitalized: `pdsCheckboxChange` becomes `onPdsCheckboxChange`.
 - **Composition**: All Pine custom events are composed and bubble so you can listen on ancestor elements or `document`.
+- **Changes from your code**: Setting `value` or `checked` on a Pine form control from your code doesn't fire its change events.
 - **Detail payload**: The `detail` type varies by event: a boolean (`pdsRadioChange`), the native event (`pdsSwitchChange`, `pdsSelectChange`), an object (`pdsTableSort`), or nothing (`pdsAlertDismissClick`). Check the Events table in each component's docs for the exact payload.
 - **Preventing defaults**: `pds-table` sorts and syncs its selection from listeners on its own element, so `event.preventDefault()` on `pdsTableSort`, `pdsTableSelectAll` or `pdsTableRowSelected` only stops it when your listener runs first. Listen in the capture phase (`document.addEventListener('pdsTableSort', handler, { capture: true })`), or on the element that emits the event: `pds-table-head-cell` for sorting, `pds-table-head` for select all, `pds-table-row` for row selection. In React, that means `onPdsTableSort` and the others go on those components, not on `PdsTable`. A listener on `pds-table` or `document` without `capture` runs after the table has already acted. Canceling `pdsTableSort` stops only the row reorder: the head cell has already flipped its direction, cleared the other columns' arrows and shown its own. That fits server-side sorting, where you render the rows in that order yourself. If you reject the sort instead, put the arrows back with the head cells' `setActiveSort()` and `clearActiveSort()` methods. Other `pds` events report what happened, and `preventDefault()` has no effect on them.
 - **Handled keystrokes**: `pds-modal`, `pds-popover` and `pds-dropdown-menu` ignore an Escape or Tab `keydown` that is already `defaultPrevented` when it reaches them, and `pds-multiselect` does the same for Escape. Modal and popover act on the key after it bubbles up, so a control inside that handles it on its own element first stops the overlay from also closing on Escape or moving focus on Tab. Dropdown menu and multiselect act in `document`'s capture phase, before any element inside sees the key.
 
-## Examples
+## Example
 
-These examples show you how to use the custom "pds"-prefixed events with Vanilla JS and React.
+This checkbox reports its new state in `event.detail.checked`. The copied code listens on the checkbox and logs that state.
 
-### Vanilla JS
-
-```html
-<pds-checkbox component-id="example" />
+<DocCanvas
+  mdxSource={{
+    webComponent: `
+<pds-checkbox component-id="terms" name="terms" label="Accept terms"></pds-checkbox>
 
 <script>
-const handleChange = () => {
-  console.log('changed!')
-}
+  document.querySelector('pds-checkbox[component-id="terms"]').addEventListener('pdsCheckboxChange', (event) => {
+    console.log(event.detail.checked);
+  });
+</script>`,
+    react: `
+import { PdsCheckbox } from '@pine-ds/react';
 
-document.getElementById("example").addEventListener('pdsCheckboxChange', handleChange)
-</script>
-```
+const TermsCheckbox = () => {
+  const handleChange = (event) => {
+    console.log(event.detail.checked);
+  };
 
-## React
-
-```javascript
-const MyApp = () => {
-  const handleChange = React.useCallback(() => {
-    console.log('changed!')
-  }, [])
-
-  return <PdsCheckbox onPdsCheckboxChange={handleChange} />
-}
-```
+  return (
+    <PdsCheckbox
+      componentId="terms"
+      name="terms"
+      label="Accept terms"
+      onPdsCheckboxChange={handleChange}
+    />
+  );
+};`
+  }}>
+  <pds-checkbox component-id="terms" name="terms" label="Accept terms"></pds-checkbox>
+</DocCanvas>

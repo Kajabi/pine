@@ -341,7 +341,7 @@ above).
 - **Commit scope = component name** — `feat(pds-table):`,
   `fix(pds-button):`, `style(pds-chip):`, `test(pds-input):`,
   `docs(pds-modal):`, `refactor(pds-form):`, `chore:` for tooling.
-- **Two approved reviews required** before merging.
+- **One approved review required** before merging.
 - **If branch is behind `main`, rebase before pushing** (`git rebase main`).
 - **After modifying a component's `*.tsx`, rebuild** to regenerate
   `components.d.ts` and `readme.md`. Never hand-edit either.

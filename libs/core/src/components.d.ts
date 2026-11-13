@@ -12,6 +12,7 @@ import { ChipSentimentType, ChipSizeType, ChipVariantType, ImageRatioType, Modal
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
+import { ImageErrorEventDetail, ImageLoadEventDetail } from "./components/pds-image/image-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PluralForms } from "./i18n";
 import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
@@ -26,6 +27,7 @@ export { ChipSentimentType, ChipSizeType, ChipVariantType, ImageRatioType, Modal
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
+export { ImageErrorEventDetail, ImageLoadEventDetail } from "./components/pds-image/image-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PluralForms } from "./i18n";
 export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
@@ -160,7 +162,7 @@ export namespace Components {
          */
         "initials"?: string | null;
         /**
-          * Size of the avatar. Value can be preset or custom.
+          * Sets the size of the avatar: `xs` (24px), `sm` (32px), `md` (40px), `lg` (56px), `xl` (64px), or a custom CSS length such as `128px`.
           * @defaultValue lg
          */
         "size"?: | 'xl' // 64px
@@ -816,7 +818,7 @@ export namespace Components {
          */
         "loading"?: boolean;
         /**
-          * Provides the button with a submittable name.
+          * Sets the `name` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "name"?: string;
         /**
@@ -834,7 +836,7 @@ export namespace Components {
          */
         "type"?: 'button' | 'reset' | 'submit';
         /**
-          * Provides button with a submittable value
+          * Sets the `value` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "value"?: string;
         /**
@@ -858,11 +860,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays message text describing an invalid state.
+          * Displays an error message below the checkbox. It becomes the checkbox's accessible description only while `invalid` is set.
          */
         "errorMessage": string;
         /**
-          * String used for helper message below checkbox.
+          * Displays a message or hint below the checkbox.
          */
         "helperMessage": string;
         /**
@@ -870,15 +872,15 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
+          * Shows the checkbox as indeterminate, for a checkbox whose group is only partly selected. It's exposed to screen readers as mixed. Changing `checked` clears it. Has no visual style when `variant` is `pill`.
          */
         "indeterminate": boolean;
         /**
-          * It determines whether or not the checkbox is invalid.
+          * Determines whether or not the checkbox is invalid.
          */
         "invalid": boolean;
         /**
-          * String used for label text next to checkbox.
+          * Text to be displayed as the checkbox label.
          */
         "label": string;
         /**
@@ -1517,11 +1519,13 @@ export namespace Components {
     interface PdsDrawerContent {
     }
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface PdsDrawerFooter {
     }
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface PdsDrawerHeader {
@@ -1539,7 +1543,7 @@ export namespace Components {
     }
     interface PdsDropdownMenuItem {
         /**
-          * Trigger the click event
+          * Trigger the click event. Does nothing when the item is disabled or informational.
          */
         "clickItem": () => Promise<void>;
         /**
@@ -1561,12 +1565,12 @@ export namespace Components {
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.
+          * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue false
          */
         "external": boolean;
         /**
-          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, passed to the inner `pds-link` and appended to the item's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -1580,7 +1584,7 @@ export namespace Components {
          */
         "informational": boolean;
         /**
-          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.
+          * Specifies where to open the linked document when href is provided. Overrides the new-tab default of `external`; the icon still shows. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -1696,7 +1700,7 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the input and gives the field error styling. It becomes the input's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -1716,7 +1720,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the input field is invalid or throws an error.
+          * Determines whether or not the input is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -1768,7 +1772,7 @@ export namespace Components {
          */
         "step"?: string;
         /**
-          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'search'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"
          */
         "type": string;
@@ -1797,13 +1801,12 @@ export namespace Components {
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab.
+          * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise.
           * @defaultValue false
-          * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
          */
         "external": boolean;
         /**
-          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -1817,9 +1820,9 @@ export namespace Components {
          */
         "href": string;
         /**
-          * Specifies where to open the linked document.
+          * Specifies where to open the linked document. Overrides the new-tab default of `external`; the icon still shows.
           * @defaultValue undefined
-          * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+          * @example <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
@@ -1872,7 +1875,7 @@ export namespace Components {
          */
         "showLabel"?: boolean;
         /**
-          * Sets the size of the spinner loader. Value can be preset or custom.
+          * Sets the size of the spinner loader: `xs` (24px), `sm` (32px), `md` (48px), `lg` (64px), `xl` (80px), or a custom CSS length such as `128px`. The `typing` variant ignores it.
           * @default 'md'
          */
         "size"?: | 'xs' // 24px
@@ -1945,11 +1948,13 @@ export namespace Components {
         "border": 'none' | 'both' | 'top' | 'bottom';
     }
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalFooter {
     }
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalHeader {
@@ -2284,7 +2289,7 @@ export namespace Components {
      */
     interface PdsRadio {
         /**
-          * Determines whether or not the radio is checked.
+          * Determines whether or not the radio is checked. It keeps the value you set and doesn't change when the user picks a radio.
           * @defaultValue false
          */
         "checked": boolean;
@@ -2298,7 +2303,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays error message text describing an invalid state.
+          * Displays an error message below the radio. It becomes the radio's accessible description only while `invalid` is set.
          */
         "errorMessage": string;
         /**
@@ -2307,7 +2312,7 @@ export namespace Components {
          */
         "hasBorder": boolean;
         /**
-          * Displays helper message text below radio.
+          * Displays a message or hint below the radio.
          */
         "helperMessage": string;
         /**
@@ -2320,7 +2325,7 @@ export namespace Components {
          */
         "invalid": boolean;
         /**
-          * String used for label text next to radio.
+          * Text to be displayed as the radio label.
          */
         "label": string;
         /**
@@ -2361,7 +2366,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays error message text describing an invalid state for the entire group.
+          * Displays an error message below the radio group. It's part of the group's accessible description, with or without `invalid`.
          */
         "errorMessage": string;
         /**
@@ -2370,11 +2375,11 @@ export namespace Components {
          */
         "gap": string;
         /**
-          * String used for group label/heading.
+          * Text to be displayed as the radio group label. It also names the group, unless you set `aria-label` or `aria-labelledby` on it.
          */
         "groupLabel": string;
         /**
-          * Displays helper message text below the radio group.
+          * Displays a message or hint below the radio group.
          */
         "helperMessage": string;
         /**
@@ -2452,11 +2457,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays error message text describing an invalid state.
+          * Displays an error message below the select and marks the select as invalid, with or without `invalid`.
          */
         "errorMessage": string;
         /**
-          * Displays helper message text below select.
+          * Displays a message or hint below the select.
          */
         "helperMessage": string;
         /**
@@ -2870,7 +2875,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays an error message below the textarea field.
+          * Displays an error message below the textarea while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -2886,7 +2891,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the textarea is invalid or throws an error.
+          * Determines whether or not the textarea is invalid. When `required` is set, the textarea sets it itself each time `pdsTextareaChange` fires, replacing a value you set.
           * @defaultValue false
          */
         "invalid": boolean;
@@ -3064,6 +3069,10 @@ export interface PdsDropdownMenuItemCustomEvent<T> extends CustomEvent<T> {
 export interface PdsFilterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsFilterElement;
+}
+export interface PdsImageCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsImageElement;
 }
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3367,6 +3376,7 @@ declare global {
         new (): HTMLPdsDrawerContentElement;
     };
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface HTMLPdsDrawerFooterElement extends Components.PdsDrawerFooter, HTMLStencilElement {
@@ -3376,6 +3386,7 @@ declare global {
         new (): HTMLPdsDrawerFooterElement;
     };
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface HTMLPdsDrawerHeaderElement extends Components.PdsDrawerHeader, HTMLStencilElement {
@@ -3442,7 +3453,19 @@ declare global {
         prototype: HTMLPdsFiltersElement;
         new (): HTMLPdsFiltersElement;
     };
+    interface HTMLPdsImageElementEventMap {
+        "pdsImageLoad": ImageLoadEventDetail;
+        "pdsImageError": ImageErrorEventDetail;
+    }
     interface HTMLPdsImageElement extends Components.PdsImage, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsImageElementEventMap>(type: K, listener: (this: HTMLPdsImageElement, ev: PdsImageCustomEvent<HTMLPdsImageElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsImageElementEventMap>(type: K, listener: (this: HTMLPdsImageElement, ev: PdsImageCustomEvent<HTMLPdsImageElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsImageElement: {
         prototype: HTMLPdsImageElement;
@@ -3512,6 +3535,7 @@ declare global {
         new (): HTMLPdsModalContentElement;
     };
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface HTMLPdsModalFooterElement extends Components.PdsModalFooter, HTMLStencilElement {
@@ -3521,6 +3545,7 @@ declare global {
         new (): HTMLPdsModalFooterElement;
     };
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface HTMLPdsModalHeaderElement extends Components.PdsModalHeader, HTMLStencilElement {
@@ -4062,7 +4087,7 @@ declare namespace LocalJSX {
          */
         "initials"?: string | null;
         /**
-          * Size of the avatar. Value can be preset or custom.
+          * Sets the size of the avatar: `xs` (24px), `sm` (32px), `md` (40px), `lg` (56px), `xl` (64px), or a custom CSS length such as `128px`.
           * @defaultValue lg
          */
         "size"?: | 'xl' // 64px
@@ -4718,7 +4743,7 @@ declare namespace LocalJSX {
          */
         "loading"?: boolean;
         /**
-          * Provides the button with a submittable name.
+          * Sets the `name` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "name"?: string;
         /**
@@ -4740,7 +4765,7 @@ declare namespace LocalJSX {
          */
         "type"?: 'button' | 'reset' | 'submit';
         /**
-          * Provides button with a submittable value
+          * Sets the `value` attribute of the inner button. Not included in submitted form data, because the form is submitted through a hidden button that carries only the `type`.
          */
         "value"?: string;
         /**
@@ -4764,7 +4789,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state.
+          * Displays an error message below the checkbox. It becomes the checkbox's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -4772,7 +4797,7 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * String used for helper message below checkbox.
+          * Displays a message or hint below the checkbox.
          */
         "helperMessage"?: string;
         /**
@@ -4780,15 +4805,15 @@ declare namespace LocalJSX {
          */
         "hideLabel"?: boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
+          * Shows the checkbox as indeterminate, for a checkbox whose group is only partly selected. It's exposed to screen readers as mixed. Changing `checked` clears it. Has no visual style when `variant` is `pill`.
          */
         "indeterminate"?: boolean;
         /**
-          * It determines whether or not the checkbox is invalid.
+          * Determines whether or not the checkbox is invalid.
          */
         "invalid"?: boolean;
         /**
-          * String used for label text next to checkbox.
+          * Text to be displayed as the checkbox label.
          */
         "label"?: string;
         /**
@@ -4796,11 +4821,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when the user toggles the checkbox, carrying the `value` and the new `checked` state.
+          * Emitted when the user toggles the checkbox, by a click or `Space`, carrying the `value` and the new `checked` state.  This event will not emit when programmatically setting the `checked` property.
          */
         "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
-          * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`. `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.
+          * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`. `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.  This event will not emit when programmatically setting the `checked` property.
          */
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
@@ -5123,7 +5148,7 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
-          * Event fired when copyText button is clicked.
+          * Emitted after a click, once the copy to the clipboard succeeds or fails. `detail` is `Copied to clipboard` on success, or `Error writing text to clipboard: ` followed by the error on failure. Not emitted when `navigator.clipboard` is undefined, as it is outside a secure context.
          */
         "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<string>) => void;
         /**
@@ -5459,11 +5484,13 @@ declare namespace LocalJSX {
     interface PdsDrawerContent {
     }
     /**
+     * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
      * @lightDom renders-markup
      */
     interface PdsDrawerFooter {
     }
     /**
+     * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
      * @lightDom renders-markup
      */
     interface PdsDrawerHeader {
@@ -5499,12 +5526,12 @@ declare namespace LocalJSX {
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case. Ignored when `informational` is set.
+          * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue false
          */
         "external"?: boolean;
         /**
-          * Accessible label for the external-link icon, passed to the inner `pds-link`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, passed to the inner `pds-link` and appended to the item's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -5522,7 +5549,7 @@ declare namespace LocalJSX {
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
         /**
-          * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set. Ignored when `informational` is set.
+          * Specifies where to open the linked document when href is provided. Overrides the new-tab default of `external`; the icon still shows. Only applies when href is set. Ignored when `informational` is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -5604,6 +5631,14 @@ declare namespace LocalJSX {
          */
         "loading"?: 'eager' | 'lazy';
         /**
+          * Emitted when the image fails to load, such as for a broken or empty `src`. An image with no `src` or `srcset` at all emits neither event, since it has nothing to load. Emitted again after `src` or `srcset` changes and the new image fails. Bubbles and is composed, so a listener on an ancestor gets every `pds-image`'s events — check `event.target` when more than one is in scope.
+         */
+        "onPdsImageError"?: (event: PdsImageCustomEvent<ImageErrorEventDetail>) => void;
+        /**
+          * Emitted when the image loads. Also emitted on first render for an image that finished loading before the component could listen, such as a server-rendered image. Emitted again after `src` or `srcset` changes and the new image loads, or when the browser picks a different `srcset` candidate, such as on a resize. Bubbles and is composed, so a listener on an ancestor gets every `pds-image`'s events — check `event.target` when more than one is in scope.
+         */
+        "onPdsImageLoad"?: (event: PdsImageCustomEvent<ImageLoadEventDetail>) => void;
+        /**
           * The aspect ratio the image is sized to, cropping whatever overflows the shape. A preset (`square` 1/1, `landscape` 4/3, `wide` 16/9, `portrait` 3/4, `tall` 9/16) or any custom CSS ratio, such as `21 / 9`. Use this, not `height` and `width`, to crop: those only reserve space, and only `width` reliably does even that.
          */
         "ratio"?: ImageRatioType | (string & Record<never, never>);
@@ -5642,7 +5677,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the input and gives the field error styling. It becomes the input's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -5666,7 +5701,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the input field is invalid or throws an error.
+          * Determines whether or not the input is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -5698,7 +5733,7 @@ declare namespace LocalJSX {
          */
         "onPdsBlur"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value and then presses `Enter` or leaves the field. `detail` has `value`, as a string, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property, unless the field has focus at the time; then it emits when the field loses focus.
          */
         "onPdsChange"?: (event: PdsInputCustomEvent<InputChangeEventDetail>) => void;
         /**
@@ -5706,7 +5741,7 @@ declare namespace LocalJSX {
          */
         "onPdsFocus"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value changes from user input (typing, paste, autofill).
+          * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one. `detail` has `value`, the current value as a string, and `event`, the native `input` event.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
@@ -5734,7 +5769,7 @@ declare namespace LocalJSX {
          */
         "step"?: string;
         /**
-          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'search'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"
          */
         "type"?: string;
@@ -5763,13 +5798,12 @@ declare namespace LocalJSX {
          */
         "download"?: string;
         /**
-          * Determines whether the link should open in a new tab.
+          * Shows the external-link (launch) icon. Opens in a new tab unless `target` says otherwise.
           * @defaultValue false
-          * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
          */
         "external"?: boolean;
         /**
-          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` keeps the link in the same tab. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
+          * Accessible label for the icon that `external` shows, appended to the link's name. It isn't announced when `target` is anything other than `_blank`. Pass a translated string to localize it; defaults to English. Pass an empty string to make the icon decorative.
           * @defaultValue '(opens in a new tab)'
          */
         "externalLabel"?: string;
@@ -5783,9 +5817,9 @@ declare namespace LocalJSX {
          */
         "href": string;
         /**
-          * Specifies where to open the linked document.
+          * Specifies where to open the linked document. Overrides the new-tab default of `external`; the icon still shows.
           * @defaultValue undefined
-          * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+          * @example <pds-link href="/dashboard" target="_top">Opens in the top-level frame</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
@@ -5838,7 +5872,7 @@ declare namespace LocalJSX {
          */
         "showLabel"?: boolean;
         /**
-          * Sets the size of the spinner loader. Value can be preset or custom.
+          * Sets the size of the spinner loader: `xs` (24px), `sm` (32px), `md` (48px), `lg` (64px), `xl` (80px), or a custom CSS length such as `128px`. The `typing` variant ignores it.
           * @default 'md'
          */
         "size"?: | 'xs' // 24px
@@ -5911,11 +5945,13 @@ declare namespace LocalJSX {
         "border"?: 'none' | 'both' | 'top' | 'bottom';
     }
     /**
+     * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalFooter {
     }
     /**
+     * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
      * @lightDom renders-markup
      */
     interface PdsModalHeader {
@@ -6262,7 +6298,7 @@ declare namespace LocalJSX {
      */
     interface PdsRadio {
         /**
-          * Determines whether or not the radio is checked.
+          * Determines whether or not the radio is checked. It keeps the value you set and doesn't change when the user picks a radio.
           * @defaultValue false
          */
         "checked"?: boolean;
@@ -6276,7 +6312,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays error message text describing an invalid state.
+          * Displays an error message below the radio. It becomes the radio's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -6285,7 +6321,7 @@ declare namespace LocalJSX {
          */
         "hasBorder"?: boolean;
         /**
-          * Displays helper message text below radio.
+          * Displays a message or hint below the radio.
          */
         "helperMessage"?: string;
         /**
@@ -6298,7 +6334,7 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
-          * String used for label text next to radio.
+          * Text to be displayed as the radio label.
          */
         "label"?: string;
         /**
@@ -6306,7 +6342,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emits a boolean indicating whether the radio is currently checked or unchecked.
+          * Emitted with `true` when the user checks the radio, by a click or an arrow key. The radio is `event.target`, so read its `value` there. Not emitted when picking another radio unchecks this one. Not emitted inside `pds-radio-group` either; listen for `pdsRadioGroupChange` there.
          */
         "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         /**
@@ -6343,7 +6379,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays error message text describing an invalid state for the entire group.
+          * Displays an error message below the radio group. It's part of the group's accessible description, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -6352,11 +6388,11 @@ declare namespace LocalJSX {
          */
         "gap"?: string;
         /**
-          * String used for group label/heading.
+          * Text to be displayed as the radio group label. It also names the group, unless you set `aria-label` or `aria-labelledby` on it.
          */
         "groupLabel"?: string;
         /**
-          * Displays helper message text below the radio group.
+          * Displays a message or hint below the radio group.
          */
         "helperMessage"?: string;
         /**
@@ -6369,7 +6405,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emits when a radio in the group is selected, providing the selected value and component ID.
+          * Emitted when the user checks a radio in the group, by a click or an arrow key. `detail` has that radio's `value` and `componentId`, and `checked`, which is always `true`.
          */
         "onPdsRadioGroupChange"?: (event: PdsRadioGroupCustomEvent<RadioGroupChangeEventDetail>) => void;
         /**
@@ -6438,7 +6474,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays error message text describing an invalid state.
+          * Displays an error message below the select and marks the select as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -6446,7 +6482,7 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * Displays helper message text below select.
+          * Displays a message or hint below the select.
          */
         "helperMessage"?: string;
         /**
@@ -6487,7 +6523,7 @@ declare namespace LocalJSX {
          */
         "onPdsKeyDown"?: (event: PdsSelectCustomEvent<KeyboardEvent>) => void;
         /**
-          * Emitted when the select value changes.
+          * Emitted when the user changes the selection. `detail` is the native `change` event, so read the new value from the select's `value`: a string, or an array with `multiple`.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
         /**
@@ -6896,7 +6932,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays an error message below the textarea field.
+          * Displays an error message below the textarea while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -6916,7 +6952,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the textarea is invalid or throws an error.
+          * Determines whether or not the textarea is invalid. When `required` is set, the textarea sets it itself each time `pdsTextareaChange` fires, replacing a value you set.
           * @defaultValue false
          */
         "invalid"?: boolean;
@@ -6934,15 +6970,15 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when the input loses focus.
+          * Emitted when the textarea loses focus.
          */
         "onPdsBlur"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the input has focus.
+          * Emitted when the textarea has focus.
          */
         "onPdsFocus"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value changes from user input (typing, paste, autofill).
+          * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one. `detail` has `value`, the current text, and `event`, the native `input` event.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsInput"?: (event: PdsTextareaCustomEvent<TextareaInputEventDetail>) => void;
         /**
@@ -6950,7 +6986,7 @@ declare namespace LocalJSX {
          */
         "onPdsKeyDown"?: (event: PdsTextareaCustomEvent<KeyboardEvent>) => void;
         /**
-          * Event emitted whenever the value of the textarea changes.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value and then leaves the textarea. `Enter` adds a new line, so it doesn't emit this event. `detail` has `value`, the text, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property, unless the field has focus at the time; then it emits when the field loses focus.
          */
         "onPdsTextareaChange"?: (event: PdsTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
@@ -7868,10 +7904,12 @@ declare module "@stencil/core" {
              */
             "pds-drawer-content": LocalJSX.IntrinsicElements["pds-drawer-content"] & JSXBase.HTMLAttributes<HTMLPdsDrawerContentElement>;
             /**
+             * Holds the drawer's actions in a padded row aligned to the end, with a divider above.
              * @lightDom renders-markup
              */
             "pds-drawer-footer": LocalJSX.IntrinsicElements["pds-drawer-footer"] & JSXBase.HTMLAttributes<HTMLPdsDrawerFooterElement>;
             /**
+             * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
              * @lightDom renders-markup
              */
             "pds-drawer-header": LocalJSX.IntrinsicElements["pds-drawer-header"] & JSXBase.HTMLAttributes<HTMLPdsDrawerHeaderElement>;
@@ -7897,10 +7935,12 @@ declare module "@stencil/core" {
              */
             "pds-modal-content": LocalJSX.IntrinsicElements["pds-modal-content"] & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
             /**
+             * Holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
              * @lightDom renders-markup
              */
             "pds-modal-footer": LocalJSX.IntrinsicElements["pds-modal-footer"] & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
             /**
+             * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
              * @lightDom renders-markup
              */
             "pds-modal-header": LocalJSX.IntrinsicElements["pds-modal-header"] & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
