@@ -129,7 +129,7 @@ export class PdsTableCell {
   @Prop() cellAlign?: 'start' | 'center' | 'end' | 'justify';
 
   /**
-   * Truncates content to a max width and adds an ellipsis.
+   * Keeps the content on one line and cuts off what doesn't fit the column with an ellipsis.
    * When text overflows, a tooltip showing the full text will appear on hover/focus.
    * Note: While the content is overflowing, the cell receives tabindex="0" so the
    * tooltip can be reached by keyboard. Content that fits is left out of the tab order.

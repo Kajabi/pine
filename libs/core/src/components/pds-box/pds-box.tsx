@@ -341,156 +341,156 @@ export class PdsBox {
   @Prop() justifyContentXl?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
-   * Defines the box's outer top spacing. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-start spacing (the top in most languages). Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockStart?: BoxMarginType;
 
   /**
-   * Defines the box's outer top spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockStartXs?: BoxMarginType;
 
   /**
-   * Defines the box's outer top spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockStartSm?: BoxMarginType;
 
   /**
-   * Defines the box's outer top spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockStartMd?: BoxMarginType;
 
   /**
-   * Defines the box's outer top spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockStartLg?: BoxMarginType;
 
   /**
-   * Defines the box's outer top spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockStartXl?: BoxMarginType;
 
   /**
-   * Defines the box's outer left spacing. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-start spacing (the left in left-to-right languages, the right in right-to-left). Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineStart?: BoxMarginType;
 
   /**
-   * Defines the box's outer left spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineStartXs?: BoxMarginType;
 
   /**
-   * Defines the box's outer left spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineStartSm?: BoxMarginType;
 
   /**
-   * Defines the box's outer left spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineStartMd?: BoxMarginType;
 
   /**
-   * Defines the box's outer left spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineStartLg?: BoxMarginType;
 
   /**
-   * Defines the box's outer left spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineStartXl?: BoxMarginType;
 
   /**
-   * Defines the box's outer right spacing. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-end spacing (the right in left-to-right languages, the left in right-to-left). Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineEnd?: BoxMarginType;
 
   /**
-   * Defines the box's outer right spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineEndXs?: BoxMarginType;
 
   /**
-   * Defines the box's outer right spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineEndSm?: BoxMarginType;
 
   /**
-   * Defines the box's outer right spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineEndMd?: BoxMarginType;
 
   /**
-   * Defines the box's outer right spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineEndLg?: BoxMarginType;
 
   /**
-   * Defines the box's outer right spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer inline-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginInlineEndXl?: BoxMarginType;
 
   /**
-   * Defines the box's outer bottom spacing. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-end spacing (the bottom in most languages). Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockEnd?: BoxMarginType;
 
   /**
-   * Defines the box's outer bottom spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockEndXs?: BoxMarginType;
 
   /**
-   * Defines the box's outer bottom spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockEndSm?: BoxMarginType;
 
   /**
-   * Defines the box's outer bottom spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockEndMd?: BoxMarginType;
 
   /**
-   * Defines the box's outer bottom spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockEndLg?: BoxMarginType;
 
   /**
-   * Defines the box's outer bottom spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+   * Defines the box's outer block-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
    * @defaultValue none
   */
   @Prop() marginBlockEndXl?: BoxMarginType;
 
   /**
-   * The minimum height of the row. Used in conjunction with alignment props
+   * The minimum height of the box, as a CSS length such as `120px`. Used in conjunction with alignment props
    */
   @Prop({ reflect: true }) minHeight?: string;
 
   /**
-   * The minimum width of the row. Used in conjunction with alignment props
+   * The minimum width of the box, as a CSS length such as `300px`.
    */
   @Prop({ reflect: true }) minWidth?: string;
 
@@ -525,182 +525,182 @@ export class PdsBox {
   @Prop() offsetXl?: BoxColumnType;
 
   /**
-   * Defines the spacing between the box items.
+   * Defines the box's inner spacing on every side.
    * @defaultValue none
   */
   @Prop() padding?: BoxSpacingType;
 
   /**
-   * Defines the spacing between the box items at the XS breakpoint.
+   * Defines the box's inner spacing on every side at the XS breakpoint.
    * @defaultValue none
   */
   @Prop() paddingXs?: BoxSpacingType;
 
   /**
-   * Defines the spacing between the box items at the SM breakpoint.
+   * Defines the box's inner spacing on every side at the SM breakpoint.
    * @defaultValue none
   */
   @Prop() paddingSm?: BoxSpacingType;
 
   /**
-   * Defines the spacing between the box items at the MD breakpoint.
+   * Defines the box's inner spacing on every side at the MD breakpoint.
    * @defaultValue none
   */
   @Prop() paddingMd?: BoxSpacingType;
 
   /**
-   * Defines the spacing between the box items at the LG breakpoint.
+   * Defines the box's inner spacing on every side at the LG breakpoint.
    * @defaultValue none
   */
   @Prop() paddingLg?: BoxSpacingType;
 
   /**
-   * Defines the spacing between the box items at the XL breakpoint.
+   * Defines the box's inner spacing on every side at the XL breakpoint.
    * @defaultValue none
   */
   @Prop() paddingXl?: BoxSpacingType;
 
 
   /**
-   * Defines the top spacing.
+   * Defines the box's inner block-start spacing (the top in most languages).
    * @defaultValue none
   */
   @Prop() paddingBlockStart?: BoxSpacingType;
 
   /**
-   * Defines the top spacing at the XS breakpoint.
+   * Defines the box's inner block-start spacing at the XS breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockStartXs?: BoxSpacingType;
 
   /**
-   * Defines the top spacing at the SM breakpoint.
+   * Defines the box's inner block-start spacing at the SM breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockStartSm?: BoxSpacingType;
 
   /**
-   * Defines the top spacing at the MD breakpoint.
+   * Defines the box's inner block-start spacing at the MD breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockStartMd?: BoxSpacingType;
 
   /**
-   * Defines the top spacing at the LG breakpoint.
+   * Defines the box's inner block-start spacing at the LG breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockStartLg?: BoxSpacingType;
 
   /**
-   * Defines the top spacing at the XL breakpoint.
+   * Defines the box's inner block-start spacing at the XL breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockStartXl?: BoxSpacingType;
 
   /**
-   * Defines the bottom spacing.
+   * Defines the box's inner block-end spacing (the bottom in most languages).
    * @defaultValue none
   */
   @Prop() paddingBlockEnd?: BoxSpacingType;
 
   /**
-   * Defines the bottom spacing at the XS breakpoint.
+   * Defines the box's inner block-end spacing at the XS breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockEndXs?: BoxSpacingType;
 
   /**
-   * Defines the bottom spacing at the SM breakpoint.
+   * Defines the box's inner block-end spacing at the SM breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockEndSm?: BoxSpacingType;
 
   /**
-   * Defines the bottom spacing at the MD breakpoint.
+   * Defines the box's inner block-end spacing at the MD breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockEndMd?: BoxSpacingType;
 
   /**
-   * Defines the bottom spacing at the LG breakpoint.
+   * Defines the box's inner block-end spacing at the LG breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockEndLg?: BoxSpacingType;
 
   /**
-   * Defines the bottom spacing at the XL breakpoint.
+   * Defines the box's inner block-end spacing at the XL breakpoint.
    * @defaultValue none
   */
   @Prop() paddingBlockEndXl?: BoxSpacingType;
 
   /**
-   * Defines the left spacing.
+   * Defines the box's inner inline-start spacing (the left in left-to-right languages, the right in right-to-left).
    * @defaultValue none
   */
   @Prop() paddingInlineStart?: BoxSpacingType;
 
   /**
-   * Defines the left spacing at the XS breakpoint.
+   * Defines the box's inner inline-start spacing at the XS breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineStartXs?: BoxSpacingType;
 
   /**
-   * Defines the left spacing at the SM breakpoint.
+   * Defines the box's inner inline-start spacing at the SM breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineStartSm?: BoxSpacingType;
 
   /**
-   * Defines the left spacing at the MD breakpoint.
+   * Defines the box's inner inline-start spacing at the MD breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineStartMd?: BoxSpacingType;
 
   /**
-   * Defines the left spacing at the LG breakpoint.
+   * Defines the box's inner inline-start spacing at the LG breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineStartLg?: BoxSpacingType;
 
   /**
-   * Defines the left spacing at the XL breakpoint.
+   * Defines the box's inner inline-start spacing at the XL breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineStartXl?: BoxSpacingType;
 
   /**
-   * Defines the right spacing.
+   * Defines the box's inner inline-end spacing (the right in left-to-right languages, the left in right-to-left).
    * @defaultValue none
   */
   @Prop() paddingInlineEnd?: BoxSpacingType;
 
   /**
-   * Defines the right spacing at the XS breakpoint.
+   * Defines the box's inner inline-end spacing at the XS breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineEndXs?: BoxSpacingType;
 
   /**
-   * Defines the right spacing at the SM breakpoint.
+   * Defines the box's inner inline-end spacing at the SM breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineEndSm?: BoxSpacingType;
 
   /**
-   * Defines the right spacing at the MD breakpoint.
+   * Defines the box's inner inline-end spacing at the MD breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineEndMd?: BoxSpacingType;
 
   /**
-   * Defines the right spacing at the LG breakpoint.
+   * Defines the box's inner inline-end spacing at the LG breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineEndLg?: BoxSpacingType;
 
   /**
-   * Defines the right spacing at the XL breakpoint.
+   * Defines the box's inner inline-end spacing at the XL breakpoint.
    * @defaultValue none
   */
   @Prop() paddingInlineEndXl?: BoxSpacingType;

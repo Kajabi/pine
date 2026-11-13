@@ -15,9 +15,9 @@
 
 ## Events
 
-| Event                 | Description                                                                      | Type                                                      |
-| --------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| `pdsTableRowSelected` | Event that is emitted when the checkbox is clicked, carrying the selected value. | `CustomEvent<{ rowIndex: number; isSelected: boolean; }>` |
+| Event                 | Description                                                                                                                                                                                                                                                                                                                                                                                     | Type                                                      |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| `pdsTableRowSelected` | Emitted when the user checks or unchecks the row's checkbox, carrying the new state as `isSelected` and the row's current position in `pds-table-body` as `rowIndex`, which changes when the table is sorted. A row that starts with `isSelected` also emits it on load.  This event will not emit when programmatically setting the `isSelected` property, or when select all changes the row. | `CustomEvent<{ rowIndex: number; isSelected: boolean; }>` |
 
 
 ## Shadow Parts

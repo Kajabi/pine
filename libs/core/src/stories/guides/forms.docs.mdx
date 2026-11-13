@@ -248,14 +248,14 @@ With `required`, `pds-input` shows an asterisk after its label, and the browser 
 
 ### After a failed submit
 
-When a submit fails, mark each field that failed with `invalid` and `error-message`. Above the form, show a `pds-alert` with `variant="danger"` that lists the errors, and move focus to it so keyboard and screen reader users start there. Give the alert `tabindex="-1"` so it can take focus, then call `focus()` on it. Identify it with `component-id`, not `id`: `pds-alert` sets its `id` from `component-id` each time it renders, so an `id` you set is gone after the next change, such as a new `heading`. The <pds-link href="../?path=/docs/guides-accessibility--docs">Accessibility</pds-link> guide follows the same rule.
+When a submit fails, mark each field that failed with `invalid` and `error-message`. Above the form, show a `pds-alert` with `variant="danger"` that lists the errors, and move focus to it so keyboard and screen reader users start there. Give the alert `tabindex="-1"` so it can take focus, then call `focus()` on it. Give the alert an `id` so your script can find it. `component-id` doesn't set the alert's `id`.
 
 Don't move focus while validating a single field as someone types or leaves it. Show its `error-message` and leave focus where it is.
 
 <DocCanvas
   mdxSource={{
     webComponent: `
-<pds-alert component-id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
+<pds-alert id="form-errors" component-id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
   <ul>
     <li>Name: enter your name.</li>
     <li>Billing email: enter an email address, like name@example.com.</li>
@@ -264,14 +264,14 @@ Don't move focus while validating a single field as someone types or leaves it. 
     react: `
 import { PdsAlert } from '@pine-ds/react';
 
-<PdsAlert componentId="form-errors" variant="danger" heading="Fix 2 fields to continue" tabIndex={-1}>
+<PdsAlert id="form-errors" componentId="form-errors" variant="danger" heading="Fix 2 fields to continue" tabIndex={-1}>
   <ul>
     <li>Name: enter your name.</li>
     <li>Billing email: enter an email address, like name@example.com.</li>
   </ul>
 </PdsAlert>`
   }}>
-  <pds-alert component-id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
+  <pds-alert id="form-errors" component-id="form-errors" variant="danger" heading="Fix 2 fields to continue" tabindex="-1">
     <ul>
       <li>Name: enter your name.</li>
       <li>Billing email: enter an email address, like name@example.com.</li>

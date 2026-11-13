@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property    | Attribute    | Description                                                                                                                                                                                                                                                                                               | Type                                        | Default     |
-| ----------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----------- |
-| `cellAlign` | `cell-align` | Sets the text alignment within the cell.                                                                                                                                                                                                                                                                  | `"center" \| "end" \| "justify" \| "start"` | `undefined` |
-| `truncate`  | `truncate`   | Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order. | `boolean`                                   | `undefined` |
+| Property    | Attribute    | Description                                                                                                                                                                                                                                                                                                                                 | Type                                        | Default     |
+| ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----------- |
+| `cellAlign` | `cell-align` | Sets the text alignment within the cell.                                                                                                                                                                                                                                                                                                    | `"center" \| "end" \| "justify" \| "start"` | `undefined` |
+| `truncate`  | `truncate`   | Keeps the content on one line and cuts off what doesn't fit the column with an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order. | `boolean`                                   | `undefined` |
 
 
 ## Methods
@@ -34,6 +34,13 @@ Type: `Promise<void>`
 | Part     | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
 | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `"cell"` | Set on the `pds-table-cell` element itself, so `::part(cell)` matches it only from a shadow root that contains it. Style `pds-table-cell` directly instead. In a `selectable` table, each row's selection cell sits in the row's shadow root: it has the `checkbox-cell` part when first rendered and `cell` after any re-render, so target both with `pds-table-row::part(checkbox-cell), pds-table-row::part(cell)`. |
+
+
+## CSS Custom Properties
+
+| Name                                  | Description                                                                                                                                                      |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--pds-table-cell-truncate-max-width` | The most width a `truncate` cell asks for when a table with the default `auto` layout sizes its columns. The column can still end up wider. Defaults to `100px`. |
 
 
 ## Dependencies

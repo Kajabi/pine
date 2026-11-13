@@ -1,3 +1,23 @@
+# 5.0.0 (2026-11-13)
+
+### Bug Fixes 🐛
+
+- ⚠️  **core:** stop writing component-id onto the host id ([#887](https://github.com/Kajabi/pine/pull/887))
+- **pds-multiselect:** show the item's name for a single selection and match the combobox list spacing ([#982](https://github.com/Kajabi/pine/pull/982))
+
+### Documentation 📄
+
+- **core:** correct form control behavior claims and finish the pds-switch form docs ([#984](https://github.com/Kajabi/pine/pull/984))
+
+### ⚠️  Breaking Changes
+
+- ⚠️  **core:** stop writing component-id onto the host id ([#887](https://github.com/Kajabi/pine/pull/887))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.12.0 (2026-11-13)
 
 ### Features 🚀
