@@ -52,6 +52,24 @@ describe('pds-sortable', () => {
     `);
   });
 
+  it('clears the drag handle restriction when handle-type changes back to row', async () => {
+    const page = await newSpecPage({
+      components: [PdsSortable, PdsSortableItem],
+      html: `<pds-sortable handle-type="handle"><pds-sortable-item>One</pds-sortable-item></pds-sortable>`,
+    });
+    const instance = (page.rootInstance as unknown as { sortableInstance: { option: (name: string) => unknown } })
+      .sortableInstance;
+    expect(instance.option('handle')).toBe('.pds-sortable-item__handle');
+
+    page.root!.handleType = 'row';
+    await page.waitForChanges();
+    expect(instance.option('handle')).toBeFalsy();
+
+    page.root!.handleType = 'handle';
+    await page.waitForChanges();
+    expect(instance.option('handle')).toBe('.pds-sortable-item__handle');
+  });
+
   it('renders with disabled class when disabled prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsSortable],

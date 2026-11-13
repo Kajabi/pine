@@ -103,7 +103,9 @@ export class PdsSortable {
   @Watch('handleType')
   handleHandleTypeChange() {
     if (this.isGrabbing()) this.cancel();
-    this.sortableInstance?.option('handle', this.handleType === 'handle' ? HANDLE_SELECTOR : undefined);
+    // `null`, not `undefined`: SortableJS treats `option(name, undefined)` as a read, which would
+    // leave a previous handle restriction in place.
+    this.sortableInstance?.option('handle', this.handleType === 'handle' ? HANDLE_SELECTOR : null);
     this.updateItems();
   }
 
