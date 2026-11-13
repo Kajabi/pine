@@ -68,7 +68,7 @@ import { PdsInput } from '@pine-ds/react';
   <pds-input component-id="order-search" label="Search orders" hide-label name="q"></pds-input>
 </DocCanvas>
 
-`aria-labelledby` doesn't name `pds-input`, `pds-textarea`, `pds-select`, `pds-checkbox`, `pds-switch`, `pds-radio`, `pds-combobox`, `pds-multiselect` or `pds-datepicker`: the field inside is left with no accessible name, or only its placeholder. Name them with `label`, and add `hide-label` when it shouldn't show.
+`aria-labelledby` doesn't name `pds-input`, `pds-textarea`, `pds-select`, `pds-checkbox`, `pds-switch`, `pds-radio`, `pds-combobox`, `pds-multiselect` or `pds-datepicker`: the field inside has no accessible name, or is named only by its own text, such as its placeholder. Name them with `label`, and add `hide-label` when it shouldn't show.
 
 Name an icon-only button with `aria-label` on `pds-button`, which passes it to its inner `<button>`. Text in the default slot also names it, because `icon-only` hides the text on screen but not from screen readers.
 
