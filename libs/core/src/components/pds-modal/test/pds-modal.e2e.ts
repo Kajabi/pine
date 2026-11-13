@@ -1933,3 +1933,111 @@ describe('pds-modal reduced motion', () => {
     await expectRespectsReducedMotion(page, 'pds-modal', '.pds-modal__backdrop');
   });
 });
+
+describe('pds-modal position', () => {
+  // The md spacing token the backdrop keeps between the modal and the viewport edges.
+  const EDGE_GAP = 24;
+
+  const openModal = async (
+    viewport: { width: number; height: number },
+    { attributes = '', contentHeight = 200, dir = '' } = {}
+  ) => {
+    const page = await newE2EPage();
+    await page.setViewport(viewport);
+    await page.setContent(`
+      <div ${dir !== '' ? `dir="${dir}"` : ''}>
+        <pds-modal component-id="positioned" ${attributes}>
+          <pds-modal-header><div style="height: 56px">Header</div></pds-modal-header>
+          <pds-modal-content><div style="height: ${contentHeight}px">Content</div></pds-modal-content>
+          <pds-modal-footer><button id="save" type="button">Save</button></pds-modal-footer>
+        </pds-modal>
+      </div>
+    `);
+    await (await page.find('pds-modal')).callMethod('showModal');
+    await page.waitForChanges();
+    return page;
+  };
+
+  // The space between the modal and each edge of the viewport. The top is measured from the start
+  // of the backdrop's scroll area, since initial focus can scroll a tall modal's backdrop.
+  const gaps = (page) =>
+    page.evaluate(() => {
+      const rect = document.querySelector('pds-modal [part="modal"]')!.getBoundingClientRect();
+      const backdrop = document.querySelector('pds-modal .pds-modal__backdrop') as HTMLElement;
+      return {
+        top: Math.round(rect.top + backdrop.scrollTop),
+        bottom: Math.round(window.innerHeight - rect.bottom),
+        left: Math.round(rect.left),
+        right: Math.round(window.innerWidth - rect.right),
+        backdropScrolls: backdrop.scrollHeight > backdrop.clientHeight,
+      };
+    });
+
+  for (const [mode, attributes] of [
+    ['in the top layer', ''],
+    ['with disableTopLayer', 'disable-top-layer="true"'],
+  ]) {
+    describe(mode, () => {
+      it('sits a little above vertical center in a large viewport', async () => {
+        const page = await openModal({ width: 1920, height: 1080 }, { attributes });
+        const { top, bottom, left, right } = await gaps(page);
+
+        expect(top).toBeLessThan(bottom);
+        expect(top).toBeGreaterThan(bottom * 0.7);
+        expect(left).toBe(right);
+      });
+
+      it('sits a little above vertical center in a small viewport', async () => {
+        const page = await openModal({ width: 375, height: 667 }, { attributes });
+        const { top, bottom, left, right } = await gaps(page);
+
+        expect(top).toBeLessThan(bottom);
+        expect(top).toBeGreaterThan(bottom * 0.7);
+        expect(left).toBe(EDGE_GAP);
+        expect(right).toBe(EDGE_GAP);
+      });
+
+      it('starts a modal taller than the viewport at the top gap and scrolls to its footer', async () => {
+        const page = await openModal(
+          { width: 1920, height: 1080 },
+          { attributes: `${attributes} scrollable="false"`, contentHeight: 2000 }
+        );
+        const { top, backdropScrolls } = await gaps(page);
+
+        expect(top).toBe(EDGE_GAP);
+        expect(backdropScrolls).toBe(true);
+
+        const footerInView = await page.evaluate(() => {
+          const backdrop = document.querySelector('pds-modal .pds-modal__backdrop') as HTMLElement;
+          backdrop.scrollTop = backdrop.scrollHeight;
+          const rect = document.getElementById('save')!.getBoundingClientRect();
+          return rect.top >= 0 && rect.bottom <= window.innerHeight;
+        });
+        expect(footerInView).toBe(true);
+      });
+
+      it('keeps a scrollable modal with long content inside the viewport, above center', async () => {
+        const page = await openModal({ width: 1920, height: 1080 }, { attributes, contentHeight: 2000 });
+        const { top, bottom, backdropScrolls } = await gaps(page);
+
+        expect(backdropScrolls).toBe(false);
+        expect(top).toBeGreaterThanOrEqual(EDGE_GAP);
+        expect(top).toBeLessThanOrEqual(bottom);
+      });
+    });
+  }
+
+  it('centers horizontally in a right-to-left page', async () => {
+    const page = await openModal({ width: 1920, height: 1080 }, { dir: 'rtl' });
+    const { top, bottom, left, right } = await gaps(page);
+
+    expect(left).toBe(right);
+    expect(top).toBeLessThan(bottom);
+  });
+
+  it('fills the viewport when fullscreen', async () => {
+    const page = await openModal({ width: 1440, height: 900 }, { attributes: 'size="fullscreen"' });
+
+    expect(await gaps(page)).toEqual({ top: 0, bottom: 0, left: 0, right: 0, backdropScrolls: false });
+  });
+});
