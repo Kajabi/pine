@@ -128,6 +128,7 @@ Invalid.args = {
   componentId: 'pds-input-invalid-example',
   label: 'Email',
   errorMessage: "Please provide a valid email address",
+  invalid: true,
   type: 'email',
   value: 'Frank Dux'
 };

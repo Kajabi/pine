@@ -47,7 +47,7 @@ export class PdsSwitch {
   @Prop() disabled? = false;
 
   /**
-   * Displays message text describing an invalid state.
+   * Displays an error message below the switch. It becomes the switch's accessible description only while `invalid` is set.
    */
   @Prop() errorMessage?: string;
 
@@ -57,17 +57,17 @@ export class PdsSwitch {
   @Prop() hideLabel: boolean;
 
   /**
-   * Displays help text for additional description of an input.
+   * Displays a message or hint below the switch.
    */
   @Prop() helperMessage: string;
 
   /**
-   * Determines the input 'invalid' state, signifying an error is present.
+   * Determines whether or not the switch is invalid.
    */
   @Prop() invalid? = false;
 
   /**
-   * Displays text to describe the input.
+   * Text to be displayed as the switch label.
    */
   @Prop() label: string;
 
@@ -94,7 +94,10 @@ export class PdsSwitch {
   @Prop() uncheckedValue?: string;
 
   /**
-   * Emits an event on input change.
+   * Emitted when the user toggles the switch, by a click or `Space`. `detail` is the native `change` event, so read
+   * the new state from the switch's `checked`.
+   *
+   * This event will not emit when programmatically setting the `checked` property.
    */
   @Event() pdsSwitchChange: EventEmitter<InputEvent>;
 
