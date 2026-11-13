@@ -179,6 +179,33 @@ The Box component uses CSS logical properties for layout and spacing, which mean
 
 This approach ensures layouts work correctly regardless of text direction or writing mode.
 
+## Guidelines
+
+### When a box needs `fit`
+
+A box is `inline-flex` unless you change `display`, so on its own it's only as wide as its content. `fit` sets its `width`, `min-width` and `max-width` to `100%`, so it fills its parent instead.
+
+- **A box that isn't inside another box** shrinks to its content. Add `fit` (or `display="flex"`) when it should fill its container, such as a page section, a card body or a footer whose `justify-content` should spread its children.
+- **A box in a `direction="column"` parent** stretches to the parent's width, as long as the parent doesn't set `align-items`. Once the parent sets `align-items` to anything other than `stretch`, each child shrinks to its content. Add `fit` to a child that should still span the column.
+- **A column parent sizes to its widest child.** A child with `fit` can only fill what its parent has, so a column that should span the page needs `fit` on the column too.
+- **Don't combine `fit` with `size` or `auto`.** Use `size` inside `pds-row` and `fit` everywhere else.
+
+### Pushing a box to the far side
+
+Set `margin-inline-start="auto"` on a box to push it, and everything after it, to the end of a row, such as Cancel and Save on one side of a footer and Delete on the other. `margin-inline-end="auto"` pushes what follows it away. In a column, `margin-block-start="auto"` pushes a box to the bottom of a column that has a height. The row needs to be wider than its content for the margin to do anything, so give it `fit` too. Every pds-box in the row needs `flex="none"` or `flex="shrink"`, or the `auto` prop, the pushed box and its siblings alike: a box with the default `flex-grow` takes the free space itself, which leaves the margin nothing to take. Buttons, text and other non-box children don't grow, so they're fine as they are.
+
+Use `justify-content="space-between"` when every child should spread out evenly, and an `auto` margin when only one should move.
+
+### Truncating text in a box
+
+Text that doesn't wrap, such as `pds-text truncate`, still counts toward the width of every box around it, so it can widen its column rather than truncate. Set `container="inline-size"` on the column that should hold the text to its width.
+
+### Growing and shrinking
+
+- `flex="none"` keeps a box at its content size: it won't grow, and it won't shrink when the row runs out of space.
+- `flex="shrink"` sizes a box to its content and lets it give way when space runs out, without growing.
+- `flex="grow"` makes a box take the space that's left.
+
 ## Layout Fundamentals
 
 ### Direction: The Most Important Decision
@@ -458,9 +485,10 @@ Control padding on specific sides using logical properties (accepts both t-shirt
 - **All support responsive variants**
 
 ### Margin
-Controls external spacing around the container using logical properties (accepts both t-shirt sizes and core spacing tokens):
+Controls external spacing around the container using logical properties (accepts both t-shirt sizes and core spacing tokens, or `auto`):
 - `margin-block-start` / `margin-block-end` (top/bottom)
 - `margin-inline-start` / `margin-inline-end` (left/right in LTR)
+- `auto` takes up the free space on that side, to push the box to the far side of its parent. See [Margin auto](#margin-auto).
 - **All support responsive variants**
 
 <DocCanvas
@@ -616,6 +644,46 @@ By default Box has no margin. Use `margin` to add margin around the box.
 </DocCanvas>
 
 > Note: Use `gap` in favor of `margin-*` whenever possible.
+
+### Margin auto
+Every `margin-*` prop and its breakpoint variants also take `auto`. An `auto` margin takes up the free space on its side, so `margin-inline-start="auto"` pushes a box, and everything after it, to the end of its row. The row needs room to spare, so give it `fit`. Every pds-box in the row needs `flex="none"` or `flex="shrink"`, or the `auto` prop, the pushed box and its siblings alike: a box with the default `flex-grow` takes the free space itself, which leaves the margin nothing to take.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsBox fit border padding="sm" gap="sm" alignItems="center">
+  <PdsButton variant="destructive">Delete</PdsButton>
+  <PdsBox flex="none" gap="sm" marginInlineStart="auto">
+    <PdsButton variant="secondary">Cancel</PdsButton>
+    <PdsButton>Save</PdsButton>
+  </PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box fit border="true" padding="sm" gap="sm" align-items="center">
+  <pds-button variant="destructive">Delete</pds-button>
+  <pds-box flex="none" gap="sm" margin-inline-start="auto">
+    <pds-button variant="secondary">Cancel</pds-button>
+    <pds-button>Save</pds-button>
+  </pds-box>
+</pds-box>`
+  }}>
+  <pds-box fit border="true" padding="sm" gap="sm" align-items="center">
+    <pds-button variant="destructive">Delete</pds-button>
+    <pds-box flex="none" gap="sm" margin-inline-start="auto">
+      <pds-button variant="secondary">Cancel</pds-button>
+      <pds-button>Save</pds-button>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
+Use breakpoint variants to move a box only at some widths. Here the action sits right after the text on smaller screens and moves to the end of the row from `md` up:
+
+```html
+<pds-box fit wrap="true" gap="sm" align-items="center">
+  <pds-text>Contact details</pds-text>
+  <pds-box flex="none" margin-inline-start-md="auto">
+    <pds-button variant="secondary">Edit</pds-button>
+  </pds-box>
+</pds-box>
+```
 
 ### Padding
 By default Box has no padding. Use `padding` to add padding to the box.
@@ -1153,8 +1221,8 @@ The `flex` prop controls how a box grows or shrinks within its container. It acc
 
 #### Predefined Values
 - `none` - The box will not grow or shrink (equivalent to `flex: 0 0 auto`)
-- `grow` - The box will grow to fill available space (equivalent to `flex: 1 1 0`)
-- `shrink` - The box will shrink when space is limited (equivalent to `flex: 0 1 auto`)
+- `grow` - The box will grow to fill available space (equivalent to `flex: 1 1 auto`)
+- `shrink` - The box sizes to its content and shrinks when space is limited, but won't grow (equivalent to `flex: 0 1 auto`)
 
 <DocCanvas
   mdxSource={{
@@ -1175,6 +1243,51 @@ The `flex` prop controls how a box grows or shrinks within its container. It acc
     <pds-box border="true" flex="shrink">Flex: shrink</pds-box>
   </pds-box>
 </DocCanvas>
+
+`none` and `shrink` both size a box to its content. The difference shows when the row runs out of room: a `shrink` box gives way and wraps its text, and a `none` box keeps its width and overflows.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsContainer size="sm" centered={false}>
+<PdsBox direction="column" fit gap="sm">
+  <PdsBox fit border padding="xs" gap="xs">
+    <PdsBox flex="shrink" border padding="xs">Shrink lets this box give way, so its text wraps when the row runs out of room instead of overflowing.</PdsBox>
+    <PdsBox flex="shrink" border padding="xs">This box shrinks too, so the two share the row and neither one pushes past its edge.</PdsBox>
+  </PdsBox>
+  <PdsBox fit border padding="xs" gap="xs">
+    <PdsBox flex="none" border padding="xs">None keeps its content width.</PdsBox>
+    <PdsBox flex="none" border padding="xs">So the pair overflows the row.</PdsBox>
+  </PdsBox>
+</PdsBox>
+</PdsContainer>`,
+    webComponent: `<pds-container size="sm" centered="false">
+<pds-box direction="column" fit gap="sm">
+  <pds-box fit border="true" padding="xs" gap="xs">
+    <pds-box flex="shrink" border="true" padding="xs">Shrink lets this box give way, so its text wraps when the row runs out of room instead of overflowing.</pds-box>
+    <pds-box flex="shrink" border="true" padding="xs">This box shrinks too, so the two share the row and neither one pushes past its edge.</pds-box>
+  </pds-box>
+  <pds-box fit border="true" padding="xs" gap="xs">
+    <pds-box flex="none" border="true" padding="xs">None keeps its content width.</pds-box>
+    <pds-box flex="none" border="true" padding="xs">So the pair overflows the row.</pds-box>
+  </pds-box>
+</pds-box>
+</pds-container>`
+}}>
+  <pds-container size="sm" centered="false">
+  <pds-box direction="column" fit gap="sm">
+    <pds-box fit border="true" padding="xs" gap="xs">
+      <pds-box flex="shrink" border="true" padding="xs">Shrink lets this box give way, so its text wraps when the row runs out of room instead of overflowing.</pds-box>
+      <pds-box flex="shrink" border="true" padding="xs">This box shrinks too, so the two share the row and neither one pushes past its edge.</pds-box>
+    </pds-box>
+    <pds-box fit border="true" padding="xs" gap="xs">
+      <pds-box flex="none" border="true" padding="xs">None keeps its content width.</pds-box>
+      <pds-box flex="none" border="true" padding="xs">So the pair overflows the row.</pds-box>
+    </pds-box>
+  </pds-box>
+  </pds-container>
+</DocCanvas>
+
+> **Changed:** `flex="shrink"` used to compile to `flex: 0 0 auto`, the same as `none`. It's now `flex: 0 1 auto`, so a `shrink` box can get narrower than its unwrapped content, and its text wraps. It stops at its narrowest content, such as its longest word -- but a box with `overflow` other than `visible`, or one that holds a `pds-image` or another image with `max-width: 100%`, has no content floor and can shrink to nothing. Use `flex="none"` for thumbnails and other fixed-size tiles.
 
 #### Custom Flex Values
 You can also provide custom CSS flex values as strings for precise control:
@@ -1222,6 +1335,85 @@ Common custom flex patterns:
   <pds-box flex="grow">This flex prop will work</pds-box>
 </pds-box>
 ```
+
+### Fit
+`fit` sets the box's `width`, `min-width` and `max-width` to `100%`, so it fills its parent's width. A box is `inline-flex` by default and sizes to its content, so use `fit` for a box that should span its container. See [When a box needs `fit`](#when-a-box-needs-fit).
+
+In a `direction="column"` parent that sets `align-items`, a child without `fit` shrinks to its content, so `justify-content` has no room to work. With `fit`, it spans the column:
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsBox direction="column" alignItems="start" fit gap="sm" border padding="sm">
+  <PdsBox justifyContent="space-between" border padding="xs">
+    <PdsText>Without fit</PdsText>
+    <PdsText>End</PdsText>
+  </PdsBox>
+  <PdsBox fit justifyContent="space-between" border padding="xs">
+    <PdsText>With fit</PdsText>
+    <PdsText>End</PdsText>
+  </PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box direction="column" align-items="start" fit gap="sm" border="true" padding="sm">
+  <pds-box justify-content="space-between" border="true" padding="xs">
+    <pds-text>Without fit</pds-text>
+    <pds-text>End</pds-text>
+  </pds-box>
+  <pds-box fit justify-content="space-between" border="true" padding="xs">
+    <pds-text>With fit</pds-text>
+    <pds-text>End</pds-text>
+  </pds-box>
+</pds-box>`
+}}>
+  <pds-box direction="column" align-items="start" fit gap="sm" border="true" padding="sm">
+    <pds-box justify-content="space-between" border="true" padding="xs">
+      <pds-text>Without fit</pds-text>
+      <pds-text>End</pds-text>
+    </pds-box>
+    <pds-box fit justify-content="space-between" border="true" padding="xs">
+      <pds-text>With fit</pds-text>
+      <pds-text>End</pds-text>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
+### Container
+`container` sets the box's `container-type`, which makes it a size container:
+
+- `inline-size`: the box's width no longer comes from its content. Text that doesn't wrap, such as `pds-text truncate`, truncates at the box's width instead of widening it and every box around it. Children can also use container query units (`cqi`) and `@container` queries against the box's width.
+- `size`: the same for both width and height. The box's content no longer sets its height either, so give it one some other way (`min-height`, or a stretched flex item), or it collapses.
+
+A box with `container` still needs its width from somewhere else, such as `flex="grow"` or the default `flex-grow` in a row. In a row, `flex="none"` or `flex="shrink"`, or the `auto` prop, leaves it with no content width to size to, and it collapses -- drop them and keep the default or `flex="grow"` instead; adding `fit` there would take the whole row and push its siblings out. A standalone box, or a child of a column that sets `align-items`, collapses for the same reason but has no siblings to push out, so add `fit` to it there.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsContainer size="sm">
+  <PdsBox fit border padding="sm" gap="sm" alignItems="center">
+    <PdsBox container="inline-size" direction="column">
+      <PdsText truncate>A long file name that should truncate rather than push the action out of the card.pdf</PdsText>
+    </PdsBox>
+    <PdsButton variant="secondary">Replace</PdsButton>
+  </PdsBox>
+</PdsContainer>`,
+    webComponent: `<pds-container size="sm">
+  <pds-box fit border="true" padding="sm" gap="sm" align-items="center">
+    <pds-box container="inline-size" direction="column">
+      <pds-text truncate>A long file name that should truncate rather than push the action out of the card.pdf</pds-text>
+    </pds-box>
+    <pds-button variant="secondary">Replace</pds-button>
+  </pds-box>
+</pds-container>`
+}}>
+  <pds-container size="sm">
+    <pds-box fit border="true" padding="sm" gap="sm" align-items="center">
+      <pds-box container="inline-size" direction="column">
+        <pds-text truncate>A long file name that should truncate rather than push the action out of the card.pdf</pds-text>
+      </pds-box>
+      <pds-button variant="secondary">Replace</pds-button>
+    </pds-box>
+  </pds-container>
+</DocCanvas>
+
+In current browsers, `container` doesn't apply layout or paint containment (some of the first browser versions with container queries applied layout containment too), so it doesn't clip the box's content or trap a positioned dropdown or tooltip inside it. It does apply style containment, so CSS counters and quotes restart inside the box.
 
 ### Wrap
 Control whether flex items wrap to new lines when they don't fit in the container:
@@ -1369,6 +1561,7 @@ All of these properties support responsive variants with `-xs`, `-sm`, `-md`, `-
 - **margin-block-end**: `margin-block-end`, `margin-block-end-xs`, `margin-block-end-sm`, etc.
 - **margin-inline-start**: `margin-inline-start`, `margin-inline-start-xs`, `margin-inline-start-sm`, etc.
 - **margin-inline-end**: `margin-inline-end`, `margin-inline-end-xs`, `margin-inline-end-sm`, etc.
+- Every margin prop accepts `auto` as well as a spacing token, at every breakpoint.
 - **wrap**: `wrap`, `wrap-xs`, `wrap-sm`, `wrap-md`, `wrap-lg`, `wrap-xl`
 - **auto**: `auto`, `auto-xs`, `auto-sm`, `auto-md`, `auto-lg`, `auto-xl`
 - **fit**: `fit`, `fit-xs`, `fit-sm`, `fit-md`, `fit-lg`, `fit-xl`
