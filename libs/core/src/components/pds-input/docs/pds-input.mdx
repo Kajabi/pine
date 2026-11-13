@@ -243,7 +243,7 @@ A `helper-message` is used to provide additional information about how to comple
 
 ### Invalid
 
-When `invalid` is true, the input displays the error message and provides a visual treatment.
+Set `invalid` and `error-message` together. Either one gives the field its error styling, and `error-message` shows the message below it, but only `invalid` marks the input as invalid for screen readers and makes the message its description.
 
 <DocCanvas
   mdxSource={{
@@ -306,7 +306,7 @@ The action slot allows you to add helpful content next to the input label, such 
 <DocCanvas
   mdxSource={{
     react: `<PdsInput componentId="pds-input-action-link" label="Password" type="password" placeholder="Enter your password">
-  <PdsLink slot="action" href="#" variant="inline">Forgot?</PdsLink
+  <PdsLink slot="action" href="#" variant="inline">Forgot?</PdsLink>
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-action-link" label="Password" type="password" placeholder="Enter your password">
   <pds-link slot="action" href="#" variant="inline">Forgot?</pds-link>
@@ -409,7 +409,7 @@ Prepend and append elements are placed outside the input container, next to the 
 - Use the `value` prop with `onPdsInput` when you need a controlled field; omit `value` for uncontrolled forms.
 - A value that fails `required`, `pattern`, `min`, `max`, `step`, `minlength` or its `type`'s check stops the form from submitting, as on a native input. `maxlength` stops people typing past the limit instead. The input doesn't set `invalid` itself, so set `invalid` and `error-message` when you show an error.
 - Resetting the form clears the value to an empty string, not back to the `value` it started with.
-- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
+- For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Additional Resources
 
