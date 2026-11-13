@@ -27,7 +27,7 @@ A combobox is a text input with a dropdown list of options, allowing users to fi
 ### Accessibility
 
 - Implements the WAI-ARIA Combobox Pattern for screen reader compatibility: the trigger is labelled and controls the list of options. See [Keyboard interactions](#keyboard-interactions) for the keys.
-- Always set `label`. Use `hide-label` to hide it visually; it still names the trigger. Without a `label`, the trigger has no accessible name.
+- Always set `label`. Use `hide-label` to hide it visually; it still names the trigger. Without a `label`, the `input` trigger is named only by its placeholder, if it has one, and the `button` and `chip` triggers have no accessible name.
 - Translate the strings the combobox shows or announces, which default to English: `no-options-found-label`; `search-placeholder` and `search-options-label` with `panel-search`; and `drill-in-back-label` with `flyout` or `drill-in` groups, since a flyout drills in when there's no room beside the dropdown.
 - A custom layout option (`data-layout`) is named by its content, so give it text, or `alt` text on its image: an option whose only content is an image without `alt` has no name. Add `data-search-text` so search can find it by the words people expect.
 - Say why an option is disabled. When one reason covers every disabled option, put it in `helper-message`, which is read with the field; when reasons differ, add a short one to each option's label, such as "(sold out)".
