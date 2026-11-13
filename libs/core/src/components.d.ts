@@ -1538,7 +1538,7 @@ export namespace Components {
     }
     interface PdsDropdownMenuItem {
         /**
-          * Trigger the click event
+          * Trigger the click event. Does nothing when the item is disabled or informational.
          */
         "clickItem": () => Promise<void>;
         /**
