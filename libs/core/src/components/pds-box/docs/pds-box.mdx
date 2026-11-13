@@ -1082,7 +1082,9 @@ Grid system:
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsRow colGap="sm">
+    react: `import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<PdsRow colGap="sm">
   <PdsBox sizeMd="4" offsetMd="4">
     <PdsBox border padding="sm">size-md 4, offset-md 4</PdsBox>
   </PdsBox>
@@ -1105,7 +1107,9 @@ Grid system:
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsRow colGap="sm">
+    react: `import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<PdsRow colGap="sm">
   <PdsBox auto>
     <PdsBox border padding="sm">auto</PdsBox>
   </PdsBox>
@@ -1137,7 +1141,9 @@ Grid system:
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox minWidth="300px" minHeight="120px" border alignItems="center" justifyContent="center">
+    react: `import { PdsBox } from '@pine-ds/react';
+
+<PdsBox minWidth="300px" minHeight="120px" border alignItems="center" justifyContent="center">
   At least 300px wide and 120px tall, with its content centered
 </PdsBox>`,
     webComponent: `<pds-box min-width="300px" min-height="120px" border="true" align-items="center" justify-content="center">
@@ -1365,7 +1371,9 @@ Use `background-color` to fill the box. Pass a Pine color token, either as its n
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox backgroundColor="--pine-color-background-subtle" padding="sm">Subtle background</PdsBox>
+    react: `import { PdsBox } from '@pine-ds/react';
+
+<PdsBox backgroundColor="--pine-color-background-subtle" padding="sm">Subtle background</PdsBox>
 <PdsBox backgroundColor="var(--pine-color-background-inset)" padding="sm">Inset background</PdsBox>`,
     webComponent: `<pds-box background-color="--pine-color-background-subtle" padding="sm">Subtle background</pds-box>
 <pds-box background-color="var(--pine-color-background-inset)" padding="sm">Inset background</pds-box>`
@@ -1404,7 +1412,9 @@ Please refer to the color brand guidelines for the appropriate color to use. Use
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsBox border>Default border</PdsBox>
+    react: `import { PdsBox } from '@pine-ds/react';
+
+<PdsBox border>Default border</PdsBox>
 <PdsBox border borderColor="--pine-color-border-subtle">Subtle border</PdsBox>
 <PdsBox border borderColor="--pine-color-border-active">Active border</PdsBox>
 <PdsBox border borderColor="var(--pine-color-border-danger)">Danger border</PdsBox>`,
