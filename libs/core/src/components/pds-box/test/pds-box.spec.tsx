@@ -1041,6 +1041,51 @@ describe('pds-box', () => {
     });
   });
 
+  describe('margin auto', () => {
+    const sides = ['block-start', 'block-end', 'inline-start', 'inline-end'];
+
+    it.each(sides)('renders the margin-%s auto class', async (side) => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box margin-${side}="auto"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass(`pds-margin-${side}-auto`);
+    });
+
+    it.each(sides.flatMap((side) => ['xs', 'sm', 'md', 'lg', 'xl'].map((breakpoint) => [side, breakpoint])))(
+      'renders the margin-%s-%s auto class',
+      async (side, breakpoint) => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box margin-${side}-${breakpoint}="auto"></pds-box>`,
+        });
+
+        expect(page.root).toHaveClass(`pds-margin-${side}-${breakpoint}-auto`);
+      },
+    );
+  });
+
+  describe('container', () => {
+    it.each(['inline-size', 'size'])('renders the container class for %s', async (value) => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box container="${value}"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass(`pds-box--container-${value}`);
+    });
+
+    it('renders no container class when the prop is not set', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box></pds-box>`,
+      });
+
+      expect(page.root!.className).not.toContain('pds-box--container');
+    });
+  });
+
   // Removing an attribute from a live element (as a DOM morph does) sets its
   // string prop to `null`, not `undefined`.
   describe('when an attribute is removed', () => {
@@ -1064,6 +1109,10 @@ describe('pds-box', () => {
       ['margin-block-end', 'md'],
       ['margin-inline-start', 'md'],
       ['margin-inline-end', 'md'],
+      ['margin-block-start', 'auto'],
+      ['margin-block-end', 'auto'],
+      ['margin-inline-start', 'auto'],
+      ['margin-inline-end', 'auto'],
       ['offset', '2'],
       ['padding', 'md'],
       ['padding-block-start', 'md'],
@@ -1074,6 +1123,7 @@ describe('pds-box', () => {
     ];
     const attributes: [string, string][] = [
       ['border-radius', 'md'],
+      ['container', 'inline-size'],
       ['direction', 'column'],
       ['display', 'flex'],
       ['flex', 'grow'],

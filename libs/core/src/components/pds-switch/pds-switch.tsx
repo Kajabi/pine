@@ -4,6 +4,7 @@ import { danger } from '@pine-ds/icons/icons';
 
 import { inheritAriaAttributes, HostStylingKeeper } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
+import { referencedElements } from '../../utils/aria-references';
 
 /**
  * @slot label - Content displayed as the switch label in place of the `label` text. Clicking it toggles the switch.
@@ -18,11 +19,17 @@ export class PdsSwitch {
   private inheritedAttributes: Attributes = {};
   private internals?: ElementInternals;
   private readonly _type = 'checkbox' as const;
+  private inputEl?: HTMLInputElement;
+  private hostDescriptionObserver?: MutationObserver;
+  private forwardsDescription = false;
 
   @Element() el: HTMLPdsSwitchElement;
   private hostKeeper = new HostStylingKeeper();
 
   @State() private hasLabelSlot = false;
+
+  // Kept apart from the `disabled` prop so a fieldset never overwrites what the consumer set.
+  @State() private fieldsetDisabled = false;
 
   /**
    * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
@@ -65,9 +72,10 @@ export class PdsSwitch {
   @Prop() label: string;
 
   /**
-   * Specifies the name. Submitted with the form name/value pair when checked.
+   * Specifies the name. Submitted with the form name/value pair when checked, or with `unchecked-value` while unchecked.
    */
-  @Prop() name: string;
+  // Reflected because a form-associated element submits under its name attribute, so a name set as a property posts too.
+  @Prop({ reflect: true }) name: string;
 
   /**
    * Determines the 'required' state of the input.
@@ -79,14 +87,23 @@ export class PdsSwitch {
    */
   @Prop() value: string;
 
+  /**
+   * Provides a string submitted in form data under `name` while the switch is unchecked.
+   * When unset, an unchecked switch submits nothing, like a native checkbox.
+   */
+  @Prop() uncheckedValue?: string;
 
   /**
    * Emits an event on input change.
    */
   @Event() pdsSwitchChange: EventEmitter<InputEvent>;
 
+  private isDisabled() {
+    return this.disabled || this.fieldsetDisabled;
+  }
+
   private onSwitchUpdate = (e: Event) => {
-    if (this.disabled) return;
+    if (this.isDisabled()) return;
 
     const input = e.target as HTMLInputElement;
     this.checked = input.checked;
@@ -120,10 +137,25 @@ export class PdsSwitch {
 
     // Expose type property on the element instance to match native form element behavior
     exposeTypeProperty(this.el, () => this._type);
+
+    // A reconnected switch may sit in a different tree, where its description IDs name other elements.
+    this.forwardDescription();
+
+    if (typeof MutationObserver === 'undefined') return;
+
+    // Consumers set aria-describedby on the host, sometimes after render, but only the inner input is announced.
+    this.hostDescriptionObserver = new MutationObserver(this.forwardDescription);
+    this.hostDescriptionObserver.observe(this.el, { attributeFilter: ['aria-describedby'] });
   }
 
   disconnectedCallback() {
     this.hostKeeper.disconnect();
+    this.hostDescriptionObserver?.disconnect();
+    this.hostDescriptionObserver = undefined;
+  }
+
+  componentDidRender() {
+    this.forwardDescription();
   }
 
   componentDidLoad() {
@@ -131,7 +163,11 @@ export class PdsSwitch {
   }
 
   @Watch('checked')
-  checkedChanged() {
+  @Watch('disabled')
+  @Watch('fieldsetDisabled')
+  @Watch('uncheckedValue')
+  @Watch('value')
+  syncFormValue() {
     this.updateFormValue();
   }
 
@@ -139,14 +175,58 @@ export class PdsSwitch {
     if (isSpecTest()) return;
 
     if (this.internals && this.internals.setFormValue) {
-      // For switches, only send the value when checked, otherwise send null
-      const formValue = this.checked ? (this.value || 'on') : null;
-      this.internals.setFormValue(formValue);
+      // The restoration state always carries the checked value, even while disabled, so a bfcache or
+      // back-forward restore can bring back a checked-then-disabled switch instead of losing it to a null state.
+      this.internals.setFormValue(this.formValue(), this.checkedValue());
     }
 
     if (this.internals && this.internals.setValidity) {
       this.internals.setValidity({});
     }
+  }
+
+  // Unchecked sends uncheckedValue when set, even an empty string, otherwise nothing. Disabled sends nothing, like a
+  // native checkbox: the platform only leaves out a host with the disabled attribute present, which is also how
+  // React's own custom-element attribute serialization writes it.
+  private formValue(): string | null {
+    if (this.isDisabled()) return null;
+    return this.checkedValue();
+  }
+
+  private checkedValue(): string | null {
+    if (this.checked) return this.value || 'on';
+    return this.uncheckedValue ?? null;
+  }
+
+  // An ID on the host can't reach into the shadow root, so the input is pointed at the elements the host's
+  // aria-describedby names, followed by its own helper or error message. A browser without ARIA element
+  // reflection keeps the input's own message only.
+  private forwardDescription = () => {
+    const input = this.inputEl;
+    if (input === undefined || !('ariaDescribedByElements' in input)) return;
+
+    const ownId = this.ownDescriptionId();
+    const referenced = referencedElements(this.el, 'aria-describedby');
+
+    if (referenced.length === 0) {
+      if (!this.forwardsDescription) return;
+      this.forwardsDescription = false;
+      // Setting the element property cleared the attribute render wrote, so put that back.
+      if (ownId !== undefined) {
+        input.setAttribute('aria-describedby', ownId);
+      } else {
+        input.removeAttribute('aria-describedby');
+      }
+      return;
+    }
+
+    const own = ownId === undefined ? null : this.el.shadowRoot?.getElementById(ownId);
+    input.ariaDescribedByElements = own == null ? referenced : [...referenced, own];
+    this.forwardsDescription = true;
+  };
+
+  private ownDescriptionId() {
+    return assignDescription(this.componentId, this.invalid, this.helperMessage, this.errorMessage);
   }
 
   formStateRestoreCallback(state: string | FormData | null) {
@@ -168,13 +248,13 @@ export class PdsSwitch {
     // literal string "false" (a consumer's or React's attribute serialization can write that) —
     // the platform treats any value as disabled, independent of fieldset state. A real disabled
     // fieldset ancestor confirms this is genuinely that, not this element's own attribute.
-    if (disabled && !this.el.closest('fieldset[disabled]')) return;
-    this.disabled = disabled;
+    this.fieldsetDisabled = disabled && this.el.closest('fieldset[disabled]') !== null;
   }
 
   componentWillLoad() {
     this.inheritedAttributes = {
-      ...inheritAriaAttributes(this.el)
+      // aria-describedby stays on the host and is forwarded as element references, since its IDs can't resolve in here.
+      ...inheritAriaAttributes(this.el, ['aria-describedby'])
     }
     this.updateHasLabelSlot();
   }
@@ -185,21 +265,25 @@ export class PdsSwitch {
 
   render() {
     const hostClass = this.switchClassNames();
-    const ariaDisabled = this.disabled ? 'true' : null;
+    const ariaDisabled = this.isDisabled() ? 'true' : null;
     this.hostKeeper.record(hostClass, {}, { 'aria-disabled': ariaDisabled });
 
     return (
       <Host class={hostClass} aria-disabled={ariaDisabled}>
         <label htmlFor={this.componentId}>
           <input
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage, this.errorMessage)}
+            aria-describedby={this.ownDescriptionId()}
             aria-invalid={this.invalid ? "true" : undefined}
             checked={this.checked}
             class="pds-switch__input"
-            disabled={this.disabled}
+            disabled={this.isDisabled()}
             id={this.componentId}
             name={this.name ? this.name : this.componentId}
             onChange={this.onSwitchUpdate}
+            // A description added after the switch, or replaced by a framework or a DOM morph, is picked up by the
+            // time focus reaches the switch and it's announced.
+            onFocus={this.forwardDescription}
+            ref={(el) => (this.inputEl = el)}
             required={this.required}
             type="checkbox"
             value={this.value}

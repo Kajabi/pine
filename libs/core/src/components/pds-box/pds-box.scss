@@ -120,7 +120,7 @@ $pine-spacing-tokens: (
   width: 100%;
 }
 
-$border-sides: ('block-start', 'block-end', 'inline-start', 'inline-end');
+$logical-sides: ('block-start', 'block-end', 'inline-start', 'inline-end');
 $box-border-color: var(--color-border-box, var(--pine-color-border));
 
 .pds-box--border {
@@ -130,7 +130,7 @@ $box-border-color: var(--color-border-box, var(--pine-color-border));
 }
 
 // Per-side border helpers
-@each $side in $border-sides {
+@each $side in $logical-sides {
   .pds-box--border-#{$side} {
     border-#{$side}: var(--border-width-default) solid $box-border-color;
   }
@@ -168,7 +168,16 @@ $box-border-color: var(--color-border-box, var(--pine-color-border));
 }
 
 .pds-box--flex-shrink {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+}
+
+// Container helpers
+.pds-box--container-inline-size {
+  container-type: inline-size;
+}
+
+.pds-box--container-size {
+  container-type: size;
 }
 
 // Border radius helpers
@@ -280,28 +289,16 @@ $spacing-values: (
   }
 }
 
-// Margin helpers
-@each $name, $value in $spacing-values {
-  .pds-margin-block-start-#{$name} {
-    margin-block-start: $value;
+// Margin helpers. Margins also take `auto`, to push a box to the far side of its flex parent.
+@each $side in $logical-sides {
+  @each $name, $value in $spacing-values {
+    .pds-margin-#{$side}-#{$name} {
+      margin-#{$side}: $value;
+    }
   }
-}
 
-@each $name, $value in $spacing-values {
-  .pds-margin-inline-start-#{$name} {
-    margin-inline-start: $value;
-  }
-}
-
-@each $name, $value in $spacing-values {
-  .pds-margin-inline-end-#{$name} {
-    margin-inline-end: $value;
-  }
-}
-
-@each $name, $value in $spacing-values {
-  .pds-margin-block-end-#{$name} {
-    margin-block-end: $value;
+  .pds-margin-#{$side}-auto {
+    margin-#{$side}: auto;
   }
 }
 
@@ -505,21 +502,15 @@ $breakpoints: (
 // Responsive Margin helpers
 @each $breakpoint-name, $breakpoint-value in $breakpoints {
   @media #{$breakpoint-value} {
-    @each $name, $value in $spacing-values {
-      .pds-margin-block-start-#{$breakpoint-name}-#{$name} {
-        margin-block-start: $value;
+    @each $side in $logical-sides {
+      @each $name, $value in $spacing-values {
+        .pds-margin-#{$side}-#{$breakpoint-name}-#{$name} {
+          margin-#{$side}: $value;
+        }
       }
 
-      .pds-margin-inline-start-#{$breakpoint-name}-#{$name} {
-        margin-inline-start: $value;
-      }
-
-      .pds-margin-inline-end-#{$breakpoint-name}-#{$name} {
-        margin-inline-end: $value;
-      }
-
-      .pds-margin-block-end-#{$breakpoint-name}-#{$name} {
-        margin-block-end: $value;
+      .pds-margin-#{$side}-#{$breakpoint-name}-auto {
+        margin-#{$side}: auto;
       }
     }
   }

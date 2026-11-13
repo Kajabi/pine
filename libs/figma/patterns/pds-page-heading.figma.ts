@@ -31,7 +31,7 @@ figma.connect('<FIGMA_PAGE_HEADING>', {
     }),
     thumbnail: figma.boolean('Thumbnail', {
       true: html`<!--Thumbnail-->
-  <pds-box flex="shrink">
+  <pds-box flex="none">
     <pds-image src="Image URL" alt="Image alt text" />
   </pds-box>`,
     }),

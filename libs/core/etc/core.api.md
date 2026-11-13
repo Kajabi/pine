@@ -10,6 +10,12 @@ import { SortableEvent } from 'sortablejs';
 export type BoxColumnType = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
 
 // @public (undocumented)
+export type BoxContainerType = 'inline-size' | 'size';
+
+// @public (undocumented)
+export type BoxMarginType = BoxSpacingType | 'auto';
+
+// @public (undocumented)
 export type BoxShadowSizeType = 'none' | '050' | '100' | '150' | '200' | '300' | '400' | '500';
 
 // @public (undocumented)
@@ -145,6 +151,7 @@ export namespace Components {
         "borderInlineEnd"?: boolean;
         "borderInlineStart"?: boolean;
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "container"?: BoxContainerType;
         "direction"?: `row` | `column`;
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         "fit"?: boolean;
@@ -166,30 +173,30 @@ export namespace Components {
         "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
-        "marginBlockEnd"?: BoxSpacingType;
-        "marginBlockEndLg"?: BoxSpacingType;
-        "marginBlockEndMd"?: BoxSpacingType;
-        "marginBlockEndSm"?: BoxSpacingType;
-        "marginBlockEndXl"?: BoxSpacingType;
-        "marginBlockEndXs"?: BoxSpacingType;
-        "marginBlockStart"?: BoxSpacingType;
-        "marginBlockStartLg"?: BoxSpacingType;
-        "marginBlockStartMd"?: BoxSpacingType;
-        "marginBlockStartSm"?: BoxSpacingType;
-        "marginBlockStartXl"?: BoxSpacingType;
-        "marginBlockStartXs"?: BoxSpacingType;
-        "marginInlineEnd"?: BoxSpacingType;
-        "marginInlineEndLg"?: BoxSpacingType;
-        "marginInlineEndMd"?: BoxSpacingType;
-        "marginInlineEndSm"?: BoxSpacingType;
-        "marginInlineEndXl"?: BoxSpacingType;
-        "marginInlineEndXs"?: BoxSpacingType;
-        "marginInlineStart"?: BoxSpacingType;
-        "marginInlineStartLg"?: BoxSpacingType;
-        "marginInlineStartMd"?: BoxSpacingType;
-        "marginInlineStartSm"?: BoxSpacingType;
-        "marginInlineStartXl"?: BoxSpacingType;
-        "marginInlineStartXs"?: BoxSpacingType;
+        "marginBlockEnd"?: BoxMarginType;
+        "marginBlockEndLg"?: BoxMarginType;
+        "marginBlockEndMd"?: BoxMarginType;
+        "marginBlockEndSm"?: BoxMarginType;
+        "marginBlockEndXl"?: BoxMarginType;
+        "marginBlockEndXs"?: BoxMarginType;
+        "marginBlockStart"?: BoxMarginType;
+        "marginBlockStartLg"?: BoxMarginType;
+        "marginBlockStartMd"?: BoxMarginType;
+        "marginBlockStartSm"?: BoxMarginType;
+        "marginBlockStartXl"?: BoxMarginType;
+        "marginBlockStartXs"?: BoxMarginType;
+        "marginInlineEnd"?: BoxMarginType;
+        "marginInlineEndLg"?: BoxMarginType;
+        "marginInlineEndMd"?: BoxMarginType;
+        "marginInlineEndSm"?: BoxMarginType;
+        "marginInlineEndXl"?: BoxMarginType;
+        "marginInlineEndXs"?: BoxMarginType;
+        "marginInlineStart"?: BoxMarginType;
+        "marginInlineStartLg"?: BoxMarginType;
+        "marginInlineStartMd"?: BoxMarginType;
+        "marginInlineStartSm"?: BoxMarginType;
+        "marginInlineStartXl"?: BoxMarginType;
+        "marginInlineStartXs"?: BoxMarginType;
         "minHeight"?: string;
         "minWidth"?: string;
         "offset"?: BoxColumnType;
@@ -711,6 +718,7 @@ export namespace Components {
         "label": string;
         "name": string;
         "required"?: boolean;
+        "uncheckedValue"?: string;
         "value": string;
     }
     export interface PdsTab {
@@ -1201,6 +1209,7 @@ export namespace LocalJSX {
         "borderInlineEnd"?: boolean;
         "borderInlineStart"?: boolean;
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "container"?: BoxContainerType;
         "direction"?: `row` | `column`;
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         "fit"?: boolean;
@@ -1222,30 +1231,30 @@ export namespace LocalJSX {
         "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
-        "marginBlockEnd"?: BoxSpacingType;
-        "marginBlockEndLg"?: BoxSpacingType;
-        "marginBlockEndMd"?: BoxSpacingType;
-        "marginBlockEndSm"?: BoxSpacingType;
-        "marginBlockEndXl"?: BoxSpacingType;
-        "marginBlockEndXs"?: BoxSpacingType;
-        "marginBlockStart"?: BoxSpacingType;
-        "marginBlockStartLg"?: BoxSpacingType;
-        "marginBlockStartMd"?: BoxSpacingType;
-        "marginBlockStartSm"?: BoxSpacingType;
-        "marginBlockStartXl"?: BoxSpacingType;
-        "marginBlockStartXs"?: BoxSpacingType;
-        "marginInlineEnd"?: BoxSpacingType;
-        "marginInlineEndLg"?: BoxSpacingType;
-        "marginInlineEndMd"?: BoxSpacingType;
-        "marginInlineEndSm"?: BoxSpacingType;
-        "marginInlineEndXl"?: BoxSpacingType;
-        "marginInlineEndXs"?: BoxSpacingType;
-        "marginInlineStart"?: BoxSpacingType;
-        "marginInlineStartLg"?: BoxSpacingType;
-        "marginInlineStartMd"?: BoxSpacingType;
-        "marginInlineStartSm"?: BoxSpacingType;
-        "marginInlineStartXl"?: BoxSpacingType;
-        "marginInlineStartXs"?: BoxSpacingType;
+        "marginBlockEnd"?: BoxMarginType;
+        "marginBlockEndLg"?: BoxMarginType;
+        "marginBlockEndMd"?: BoxMarginType;
+        "marginBlockEndSm"?: BoxMarginType;
+        "marginBlockEndXl"?: BoxMarginType;
+        "marginBlockEndXs"?: BoxMarginType;
+        "marginBlockStart"?: BoxMarginType;
+        "marginBlockStartLg"?: BoxMarginType;
+        "marginBlockStartMd"?: BoxMarginType;
+        "marginBlockStartSm"?: BoxMarginType;
+        "marginBlockStartXl"?: BoxMarginType;
+        "marginBlockStartXs"?: BoxMarginType;
+        "marginInlineEnd"?: BoxMarginType;
+        "marginInlineEndLg"?: BoxMarginType;
+        "marginInlineEndMd"?: BoxMarginType;
+        "marginInlineEndSm"?: BoxMarginType;
+        "marginInlineEndXl"?: BoxMarginType;
+        "marginInlineEndXs"?: BoxMarginType;
+        "marginInlineStart"?: BoxMarginType;
+        "marginInlineStartLg"?: BoxMarginType;
+        "marginInlineStartMd"?: BoxMarginType;
+        "marginInlineStartSm"?: BoxMarginType;
+        "marginInlineStartXl"?: BoxMarginType;
+        "marginInlineStartXs"?: BoxMarginType;
         "minHeight"?: string;
         "minWidth"?: string;
         "offset"?: BoxColumnType;
@@ -1354,6 +1363,8 @@ export namespace LocalJSX {
         // (undocumented)
         "borderRadius": `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         // (undocumented)
+        "container": BoxContainerType;
+        // (undocumented)
         "direction": `row` | `column`;
         // (undocumented)
         "display": `flex` | `inline-flex` | `block` | `inline-block`;
@@ -1396,53 +1407,53 @@ export namespace LocalJSX {
         // (undocumented)
         "justifyContentXs": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         // (undocumented)
-        "marginBlockEnd": BoxSpacingType;
+        "marginBlockEnd": BoxMarginType;
         // (undocumented)
-        "marginBlockEndLg": BoxSpacingType;
+        "marginBlockEndLg": BoxMarginType;
         // (undocumented)
-        "marginBlockEndMd": BoxSpacingType;
+        "marginBlockEndMd": BoxMarginType;
         // (undocumented)
-        "marginBlockEndSm": BoxSpacingType;
+        "marginBlockEndSm": BoxMarginType;
         // (undocumented)
-        "marginBlockEndXl": BoxSpacingType;
+        "marginBlockEndXl": BoxMarginType;
         // (undocumented)
-        "marginBlockEndXs": BoxSpacingType;
+        "marginBlockEndXs": BoxMarginType;
         // (undocumented)
-        "marginBlockStart": BoxSpacingType;
+        "marginBlockStart": BoxMarginType;
         // (undocumented)
-        "marginBlockStartLg": BoxSpacingType;
+        "marginBlockStartLg": BoxMarginType;
         // (undocumented)
-        "marginBlockStartMd": BoxSpacingType;
+        "marginBlockStartMd": BoxMarginType;
         // (undocumented)
-        "marginBlockStartSm": BoxSpacingType;
+        "marginBlockStartSm": BoxMarginType;
         // (undocumented)
-        "marginBlockStartXl": BoxSpacingType;
+        "marginBlockStartXl": BoxMarginType;
         // (undocumented)
-        "marginBlockStartXs": BoxSpacingType;
+        "marginBlockStartXs": BoxMarginType;
         // (undocumented)
-        "marginInlineEnd": BoxSpacingType;
+        "marginInlineEnd": BoxMarginType;
         // (undocumented)
-        "marginInlineEndLg": BoxSpacingType;
+        "marginInlineEndLg": BoxMarginType;
         // (undocumented)
-        "marginInlineEndMd": BoxSpacingType;
+        "marginInlineEndMd": BoxMarginType;
         // (undocumented)
-        "marginInlineEndSm": BoxSpacingType;
+        "marginInlineEndSm": BoxMarginType;
         // (undocumented)
-        "marginInlineEndXl": BoxSpacingType;
+        "marginInlineEndXl": BoxMarginType;
         // (undocumented)
-        "marginInlineEndXs": BoxSpacingType;
+        "marginInlineEndXs": BoxMarginType;
         // (undocumented)
-        "marginInlineStart": BoxSpacingType;
+        "marginInlineStart": BoxMarginType;
         // (undocumented)
-        "marginInlineStartLg": BoxSpacingType;
+        "marginInlineStartLg": BoxMarginType;
         // (undocumented)
-        "marginInlineStartMd": BoxSpacingType;
+        "marginInlineStartMd": BoxMarginType;
         // (undocumented)
-        "marginInlineStartSm": BoxSpacingType;
+        "marginInlineStartSm": BoxMarginType;
         // (undocumented)
-        "marginInlineStartXl": BoxSpacingType;
+        "marginInlineStartXl": BoxMarginType;
         // (undocumented)
-        "marginInlineStartXs": BoxSpacingType;
+        "marginInlineStartXs": BoxMarginType;
         // (undocumented)
         "minHeight": string;
         // (undocumented)
@@ -2883,6 +2894,7 @@ export namespace LocalJSX {
         "name"?: string;
         "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         "required"?: boolean;
+        "uncheckedValue"?: string;
         "value"?: string;
     }
 
@@ -2908,6 +2920,8 @@ export namespace LocalJSX {
         "name": string;
         // (undocumented)
         "required": boolean;
+        // (undocumented)
+        "uncheckedValue": string;
         // (undocumented)
         "value": string;
     }
