@@ -174,8 +174,16 @@ export class PdsImage {
     // `currentSrc`. If it isn't yet, a stale native event from the previous source is still in
     // flight — such as a cached image's `load` arriving just after a same-tick re-render
     // already applied the new `src`. Skipped for an empty `src`: an empty attribute resolves
-    // `img.src` to the document's own URL, which `currentSrc` never settles to.
-    if (!this.srcset && this.src) return img.currentSrc === img.src;
+    // `img.src` to the document's own URL, which `currentSrc` never settles to. `currentSrc` is
+    // already an absolute URL in a real browser, so resolving it here is a no-op there; it only
+    // matters in test environments whose mocked `currentSrc` isn't resolved the way `img.src` is.
+    if (!this.srcset && this.src) {
+      try {
+        return new URL(img.currentSrc, document.baseURI).href === img.src;
+      } catch {
+        return img.currentSrc === img.src;
+      }
+    }
 
     return true;
   }
