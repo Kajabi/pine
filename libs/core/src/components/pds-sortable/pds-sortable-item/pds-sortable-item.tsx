@@ -38,7 +38,9 @@ export class PdsSortableItem {
   @Prop() componentId: string;
 
   /**
-   * Determines whether `sortable-item` should have a handle.
+   * Determines whether the reorder handle is shown. The handle itself renders whenever the list
+   * is reorderable, regardless of this prop; without it, the handle is visually hidden but still
+   * reachable from the keyboard.
    * @defaultValue false
    */
   @Prop({ mutable: true }) showHandle = false;
