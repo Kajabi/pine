@@ -111,6 +111,90 @@ describe('pds-combobox', () => {
     expect(widths.trigger).toBe(300);
   });
 
+  describe('option chips', () => {
+    const LONG = 'Assessment for the quarterly onboarding cohort of new members';
+
+    const openChips = async (options: string, value: string) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-combobox component-id="status" label="Status" trigger="chip" mode="select-only" value="${value}">
+          ${options}
+        </pds-combobox>
+      `);
+      await page.waitForChanges();
+      await (await page.find('pds-combobox >>> .pds-combobox__chip-trigger')).click();
+      await page.waitForChanges();
+      return page;
+    };
+
+    /**
+     * Each chip row: the chip's width and its content width, how far the chip and the check sit
+     * from the row's padding edges, and how far the chip's own text overflows its boundary --
+     * measuring the text itself, not the chip, since a chip can be narrower than its max-content
+     * width (min-width: 0 alone does that) while its unwrapped text still runs past its edge.
+     */
+    const chipRows = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() =>
+        Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll<HTMLElement>('.pds-combobox__option--chip')).map(row => {
+          const chip = row.querySelector<HTMLElement>('.pds-combobox__option-chip')!;
+          const check = row.querySelector('.pds-combobox__option-check');
+          const box = row.getBoundingClientRect();
+          const { paddingInlineStart, paddingInlineEnd } = getComputedStyle(row);
+          const start = box.left + parseFloat(paddingInlineStart);
+          const end = box.right - parseFloat(paddingInlineEnd);
+          const width = chip.getBoundingClientRect().width;
+          chip.style.cssText = 'flex: none; width: max-content';
+          const contentWidth = chip.getBoundingClientRect().width;
+          chip.style.cssText = '';
+          const range = document.createRange();
+          range.selectNodeContents(chip);
+          const textRight = Math.max(...Array.from(range.getClientRects(), rect => rect.right));
+          return {
+            width,
+            contentWidth,
+            chipOffset: chip.getBoundingClientRect().left - start,
+            checkOffset: check ? end - check.getBoundingClientRect().right : null,
+            textOverflow: textRight - chip.getBoundingClientRect().right,
+          };
+        }),
+      );
+
+    // An option chip sizes to its label, as the trigger chip does, so the selected row's check doesn't
+    // make its chip narrower than the rest.
+    it('sizes each option chip to its label, with the check at the end of the selected row', async () => {
+      const page = await openChips(`
+        <option value="high" chip-sentiment="danger" chip-icon="warning">High</option>
+        <option value="urgent" chip-sentiment="danger" chip-icon="warning">High</option>
+      `, 'high');
+
+      const [selected, other] = await chipRows(page);
+
+      expect(selected.width).toBeCloseTo(selected.contentWidth, 0);
+      expect(other.width).toBeCloseTo(other.contentWidth, 0);
+      expect(selected.width).toBeCloseTo(other.width, 0);
+      expect(selected.chipOffset).toBeCloseTo(0, 0);
+      expect(selected.checkOffset).toBeCloseTo(0, 0);
+      expect(other.checkOffset).toBeNull();
+    });
+
+    it.each([
+      ['words', LONG],
+      ['one long word', 'https://example.com/onboarding/quarterly-cohort-assessment-for-new-members'],
+      ['one unbreakable token with no spaces or hyphens', 'Supercalifragilisticexpialidocioussupercalifragilisticexpialidocious'],
+    ])('wraps a long option chip of %s, keeping the check in the row', async (_kind, label) => {
+      const page = await openChips(`
+        <option value="long" chip-sentiment="info">${label}</option>
+        <option value="short" chip-sentiment="info">Event</option>
+      `, 'long');
+
+      const [long] = await chipRows(page);
+
+      expect(long.width).toBeLessThan(long.contentWidth);
+      expect(long.checkOffset).toBeCloseTo(0, 0);
+      expect(long.textOverflow).toBeLessThanOrEqual(0);
+    });
+  });
+
   // The button and chip triggers are divs, which take clicks and focus whether or not they're disabled.
   describe.each([
     ['button', 'trigger="button"', '.pds-combobox__button-trigger'],
