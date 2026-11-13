@@ -397,6 +397,124 @@ describe('pds-multiselect', () => {
     expect(dismiss).not.toHaveReceivedEvent();
   });
 
+  describe('open list spacing', () => {
+    it('spaces the list and its rows as pds-combobox does', async () => {
+      const page = await openWith('', [
+        { id: '1', text: 'Bestsellers', group: 'Tags' },
+        { id: '2', text: 'Webinar', group: 'Tags' },
+      ]);
+
+      const spacing = await page.evaluate(() => {
+        const root = document.querySelector('pds-multiselect')!.shadowRoot!;
+        const pad = (selector: string) => {
+          const style = getComputedStyle(root.querySelector(selector)!);
+          return [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].join(' ');
+        };
+        return {
+          listbox: pad('.pds-multiselect__listbox'),
+          option: pad('.pds-multiselect__option'),
+          groupHeader: pad('.pds-multiselect__group-header'),
+        };
+      });
+
+      expect(spacing).toEqual({
+        listbox: '8px 8px 8px 8px',
+        option: '8px 16px 8px 16px',
+        // The first header's top padding is tighter; its sides line up with the options' text.
+        groupHeader: '8px 16px 4px 16px',
+      });
+    });
+  });
+
+  describe('single selection in the trigger', () => {
+    const longText = `Contact_${'x'.repeat(120)}`;
+
+    const renderWith = async (value: string[]) => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-multiselect component-id="tags" label="Tags" style="width: 240px"></pds-multiselect>');
+      await setOptions(page, [
+        { id: '1', text: longText },
+        { id: '2', text: 'Webinar' },
+      ]);
+      await page.$eval('pds-multiselect', (el: HTMLElement & { value?: string[] }, v) => { el.value = v; }, value);
+      await page.waitForChanges();
+      return page;
+    };
+
+    const measure = (page: Page) =>
+      page.evaluate(() => {
+        const root = document.querySelector('pds-multiselect')!.shadowRoot!;
+        const trigger = root.querySelector('.pds-multiselect__trigger')!;
+        const text = root.querySelector('.pds-multiselect__trigger-text')!;
+        const rect = trigger.getBoundingClientRect();
+        return {
+          text: text.textContent,
+          clipped: text.scrollWidth > text.clientWidth,
+          width: rect.width,
+          height: rect.height,
+        };
+      });
+
+    it('truncates a long name instead of growing the trigger, with no axe violations', async () => {
+      const empty = await measure(await renderWith([]));
+      const page = await renderWith(['1']);
+      const single = await measure(page);
+
+      expect(single.text).toBe(longText);
+      expect(single.clipped).toBe(true);
+      expect(single.width).toBe(empty.width);
+      expect(single.height).toBe(empty.height);
+      expect(formatViolations(await runAxe(page))).toBe('');
+    });
+
+    // With no width of its own, in a row that sizes to its content (as docs previews and
+    // content-sized popovers do), the name must still truncate rather than set the width.
+    it('keeps a long name from widening a multiselect that sizes to its content', async () => {
+      const widthWith = async (value: string[]) => {
+        const page = await newE2EPage();
+        await page.setContent(
+          '<div style="display: inline-flex"><pds-multiselect component-id="tags" label="Tags"></pds-multiselect></div>',
+        );
+        await setOptions(page, [
+          { id: '1', text: longText },
+          { id: '2', text: 'Webinar' },
+        ]);
+        await page.$eval('pds-multiselect', (el: HTMLElement & { value?: string[] }, v) => { el.value = v; }, value);
+        await page.waitForChanges();
+        return measure(page);
+      };
+
+      const long = await widthWith(['1']);
+      const short = await widthWith(['2']);
+
+      expect(long.text).toBe(longText);
+      expect(long.clipped).toBe(true);
+      expect(long.width).toBe(short.width);
+      expect(long.width).toBeLessThan(300);
+    });
+
+    it('names an unlabeled trigger by the selected item, and a labeled one by its label', async () => {
+      const triggerName = async (labelAttribute: string) => {
+        const page = await newE2EPage();
+        await page.setContent(`<pds-multiselect component-id="tags" ${labelAttribute}></pds-multiselect>`);
+        await setOptions(page, [{ id: '1', text: 'Marketing' }]);
+        await page.$eval('pds-multiselect', (el: HTMLElement & { value?: string[] }) => { el.value = ['1']; });
+        await page.waitForChanges();
+        const client = await page.createCDPSession();
+        const { nodes } = await client.send('Accessibility.getFullAXTree');
+        return nodes.find(node => !node.ignored && node.role?.value === 'button')?.name?.value;
+      };
+
+      expect(await triggerName('')).toBe('Marketing');
+      expect(await triggerName('label="Tags"')).toBe('Tags');
+    });
+
+    it('shows the count again once a second item is selected', async () => {
+      const page = await renderWith(['1', '2']);
+      expect((await measure(page)).text).toBe('2 items');
+    });
+  });
+
   describe('chip display', () => {
     it('colors each option dot with its dotColor', async () => {
       const page = await openWith('option-display="chip"', [{ id: '1', text: 'Bestsellers', dotColor: 'rgb(128, 0, 128)' }]);

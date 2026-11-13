@@ -11,7 +11,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Multiselect
 
-Multiselects let users pick several options from a searchable dropdown list. The trigger displays the selected count while the panel surfaces a filterable list of choices.
+Multiselects let users pick several options from a searchable dropdown list. The trigger displays the selected item's name, or a count when several are selected, while the panel surfaces a filterable list of choices.
 
 ## Guidelines
 
@@ -30,7 +30,7 @@ Multiselects let users pick several options from a searchable dropdown list. The
 - Full keyboard navigation: Arrow keys, Enter, Escape, Tab
 - Tab from the search input closes the panel and returns focus to the trigger, as Escape does, so the next Tab moves on to the next control. When the `footer` has a focusable control, Tab goes there first, and Tab from its last control closes the panel and moves on
 - A selected item clipped by the panel width becomes a tab stop between the search input and the footer, and shows its full text in a tooltip. Tab moves through the clipped items before going on to the footer or the trigger, and Shift+Tab from the footer comes back to the last one
-- Screen reader announces selected count and available options
+- Without a `label`, the trigger is named by what it shows: the placeholder, the selected item's name, or the count. With a `label`, the label names it
 - Checkboxes in dropdown provide clear selection state
 
 ## Usage Notes
@@ -39,7 +39,10 @@ Multiselects let users pick several options from a searchable dropdown list. The
 
 The trigger button shows:
 - The placeholder text when nothing is selected (e.g., "Select...")
-- A count when items are selected (e.g., "3 items")
+- The item's name when one item is selected (e.g., "Marketing"). A long name truncates with an ellipsis: the trigger keeps the width "1 item" would give it, so the name never widens a multiselect that sizes to its content
+- A count when two or more items are selected (e.g., "3 items")
+
+With pills (see Selected Display: Pills), the trigger doesn't repeat the name: inline pills show each selection as a chip in place of the text, and pills below keep the placeholder in the trigger with the chips under it.
 
 ### Panel Structure
 
@@ -100,7 +103,7 @@ Basic multiselect with static options.
 
 ### With Preselected Values
 
-Use the `value` prop to set initially selected items. The trigger will display the count (e.g., "2 items").
+Use the `value` prop to set initially selected items. The trigger will display the count (e.g., "2 items"), or the item's name when only one is selected.
 
 <DocCanvas
   mdxSource={{
@@ -924,7 +927,7 @@ For dynamic or async data, add a `group` field to each item in the `options` pro
 
 ## Selected Display: Pills
 
-Use `selected-display="pill"` to render selected items as removable pill chips instead of a count. Control placement with `pill-position`.
+Use `selected-display="pill"` to render selected items as removable pill chips instead of a name or count. Control placement with `pill-position`.
 
 ### Inline Pills
 

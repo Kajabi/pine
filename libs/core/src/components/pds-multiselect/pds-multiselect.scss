@@ -80,6 +80,27 @@
   }
 }
 
+// The sizer and the visible text share one grid cell. Only the sizer sets the width: the text is
+// contained, so a long selected name truncates instead of widening a multiselect sized by its content.
+.pds-multiselect__trigger-label {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.pds-multiselect__trigger-sizer {
+  grid-area: 1 / 1;
+  overflow: hidden;
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+.pds-multiselect__trigger-label > .pds-multiselect__trigger-text {
+  contain: inline-size;
+  grid-area: 1 / 1;
+}
+
 .pds-multiselect__trigger-text {
   color: var(--pine-color-text-strong);
   flex: 1;
@@ -249,7 +270,7 @@
   display: block;
   font: var(--pine-typography-body-sm-medium);
   letter-spacing: var(--pine-letter-spacing);
-  padding: var(--pine-dimension-sm) var(--pine-dimension-xs) var(--pine-dimension-2xs);
+  padding: var(--pine-dimension-sm) var(--pine-dimension-sm) var(--pine-dimension-2xs);
   text-transform: uppercase;
 }
 
@@ -270,7 +291,8 @@
   border-radius: var(--pine-dimension-xs);
   cursor: pointer;
   display: flex;
-  padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
+  // The same row spacing as pds-combobox's options.
+  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
   /* stylelint-disable-next-line pine-design-system/no-hardcoded-motion -- 0.15s off-grid micro-transition; no exact motion token */
   transition: background 0.15s;
 
