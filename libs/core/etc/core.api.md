@@ -309,7 +309,7 @@ export namespace Components {
         "drillInBackLabel": string;
         "dropdownMount": 'host' | 'body';
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
-        "dropdownWidth": string;
+        "dropdownWidth"?: string;
         "errorMessage"?: string;
         "fetchTimeout": number;
         "flyoutMaxWidth": string;

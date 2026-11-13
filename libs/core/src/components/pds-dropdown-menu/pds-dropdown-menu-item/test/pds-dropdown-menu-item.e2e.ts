@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { trash } from '@pine-ds/icons/icons';
 import { formatViolations, runAxe } from '../../../../utils/test/axe';
 
@@ -265,5 +265,163 @@ describe('pds-dropdown-menu-item', () => {
 
     expect(clickSpy).toHaveReceivedEventTimes(1);
     expect(await page.evaluate(() => window.location.hash)).toBe('#moved');
+  });
+
+  describe('focus ring', () => {
+    // A link item draws its ring on the anchor inside pds-link when that's where focus is;
+    // other items draw it on their inner control. (WebKit can leave focus on the pds-link host
+    // itself after a mouse click, where the host's own ring then applies instead -- not
+    // exercised here, since this suite's Chromium always focuses the inner anchor on click.)
+    const ring = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
+      const item = document.querySelector(`[data-name="${itemName}"]`);
+      const content = item.shadowRoot.querySelector('.pds-dropdown-menu-item__content');
+      const anchor = content.shadowRoot?.querySelector('a');
+      const { outlineStyle, outlineColor, outlineOffset, borderRadius, backgroundColor } = getComputedStyle(anchor ?? content);
+      return {
+        style: outlineStyle,
+        color: outlineColor,
+        offset: outlineOffset,
+        radius: borderRadius,
+        background: backgroundColor,
+        hostStyle: anchor ? getComputedStyle(content).outlineStyle : null,
+      };
+    }, name);
+
+    // Resolves an outline token to the color the browser computes for it.
+    const tokenColor = (page: E2EPage, token: string) => page.evaluate((outlineToken: string) => {
+      const probe = document.createElement('div');
+      probe.style.outline = `var(${outlineToken})`;
+      document.body.appendChild(probe);
+      const color = getComputedStyle(probe).outlineColor;
+      probe.remove();
+      return color;
+    }, token);
+
+    // Resolves a color token to the background color the browser computes for it.
+    const backgroundTokenColor = (page: E2EPage, token: string) => page.evaluate((colorToken: string) => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = `var(${colorToken})`;
+      document.body.appendChild(probe);
+      const color = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return color;
+    }, token);
+
+    const isOpen = (page: E2EPage) => page.evaluate(() => {
+      const panel = document.querySelector('pds-dropdown-menu').shadowRoot.querySelector('pds-box');
+      return !panel.classList.contains('is-hidden');
+    });
+
+    // For a link item, focus must reach the anchor inside pds-link (the element the ::part(link)
+    // rule styles), not stop on the pds-link host.
+    const isFocused = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
+      const item = document.querySelector(`[data-name="${itemName}"]`);
+      const active = item.shadowRoot.activeElement;
+      if (active?.tagName === 'PDS-LINK') return active.shadowRoot.activeElement?.tagName === 'A';
+      return active != null;
+    }, name);
+
+    const setUp = async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-dropdown-menu>
+          <button slot="trigger" type="button">Open</button>
+          <pds-dropdown-menu-item data-name="button">Edit</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item data-name="link" href="#details">View details</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item data-name="informational" informational>Last edited today</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item data-name="destructive" destructive>Delete</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item data-name="destructive-link" destructive href="#remove">Remove</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `);
+      return page;
+    };
+
+    const names = ['button', 'link', 'informational', 'destructive', 'destructive-link'];
+
+    it('does not show while the mouse presses an item', async () => {
+      const page = await setUp();
+      await page.click('button[slot="trigger"]');
+      await page.waitForChanges();
+
+      for (const name of names) {
+        // Releasing the press activates the item; none of these items close the menu.
+        expect(await isOpen(page)).toBe(true);
+        const box = await (await page.$(`[data-name="${name}"]`)).boundingBox();
+        await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+        await page.mouse.down();
+        await page.waitForChanges();
+
+        expect(await isFocused(page, name)).toBe(true);
+        const { style, hostStyle } = await ring(page, name);
+        expect(style).toBe('none');
+        expect(hostStyle ?? 'none').toBe('none');
+
+        await page.mouse.up();
+      }
+    });
+
+    it('shows on each item the arrow keys reach', async () => {
+      const page = await setUp();
+      await page.focus('button[slot="trigger"]');
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+
+      const focusColor = await tokenColor(page, '--pine-outline-focus');
+      const dangerColor = await tokenColor(page, '--pine-outline-focus-danger');
+      expect(dangerColor).not.toBe(focusColor);
+      const dangerBackground = await backgroundTokenColor(page, '--pine-color-danger-disabled');
+
+      const rings: Record<string, Awaited<ReturnType<typeof ring>>> = {};
+      for (const name of names) {
+        await page.keyboard.press('ArrowDown');
+        await page.waitForChanges();
+
+        expect(await isFocused(page, name)).toBe(true);
+        rings[name] = await ring(page, name);
+        const { style, color, background, hostStyle } = rings[name];
+        expect(style).toBe('solid');
+        expect(color).toBe(name.startsWith('destructive') ? dangerColor : focusColor);
+        if (name.startsWith('destructive')) expect(background).toBe(dangerBackground);
+        expect(hostStyle ?? 'none').toBe('none');
+      }
+
+      // A link item's ring sits where a button item's does. pds-link's own ring has a larger
+      // offset and smaller radius, so this fails if the item's ::part(link) override stops applying.
+      for (const name of ['link', 'destructive-link']) {
+        expect(rings[name].offset).toBe(rings['button'].offset);
+        expect(rings[name].radius).toBe(rings['button'].radius);
+      }
+    });
+
+    it('has no axe violations with keyboard focus on an item', async () => {
+      const page = await setUp();
+      await page.focus('button[slot="trigger"]');
+      await page.keyboard.press('Enter');
+      await page.keyboard.press('ArrowDown');
+      await page.waitForChanges();
+
+      // `aria-required-children` is disabled as in the pds-dropdown-menu axe test: the menu's slotted
+      // items render `role="none"` on their hosts, which axe doesn't see past.
+      const violations = await runAxe(page, {
+        rules: { 'aria-required-children': { enabled: false } },
+      });
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('shows when Tab moves into a menu opened with the mouse', async () => {
+      const page = await setUp();
+      await page.click('button[slot="trigger"]');
+      await page.waitForChanges();
+
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+      expect(await isFocused(page, 'button')).toBe(true);
+      expect((await ring(page, 'button')).style).toBe('solid');
+
+      await page.keyboard.press('Tab');
+      await page.waitForChanges();
+      expect(await isFocused(page, 'link')).toBe(true);
+      expect((await ring(page, 'link')).style).toBe('solid');
+    });
   });
 });

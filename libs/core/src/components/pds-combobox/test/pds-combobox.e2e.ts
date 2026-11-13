@@ -3075,6 +3075,110 @@ describe('pds-combobox selected field and option badges', () => {
   });
 });
 
+describe('pds-combobox dropdown width', () => {
+  const OPTIONS = '<option value="cat">Cat</option><option value="dog">Dog</option>';
+  const GROUPS = '<optgroup label="Pets"><option value="cat">Cat</option></optgroup><optgroup label="Farm"><option value="cow">Cow</option></optgroup>';
+
+  const listboxWidth = async (attrs: string, options = OPTIONS, trigger = 'pds-combobox >>> input') => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-combobox component-id="width" label="Animal" ${attrs}>${options}</pds-combobox>`);
+    await page.waitForChanges();
+
+    await (await page.find(trigger)).click();
+    await page.waitForChanges();
+
+    return page.evaluate(() => {
+      const roots = [
+        document.querySelector('pds-combobox')!.shadowRoot,
+        document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot,
+      ];
+      const listbox = roots.map((root) => root?.querySelector('.pds-combobox__listbox')).find(Boolean)!;
+      return listbox.getBoundingClientRect().width;
+    });
+  };
+
+  it('renders the listbox at its default width, padding included', async () => {
+    expect(Math.round(await listboxWidth(''))).toBe(252);
+  });
+
+  it('renders the listbox at dropdown-width, padding included', async () => {
+    expect(Math.round(await listboxWidth('dropdown-width="300px"'))).toBe(300);
+  });
+
+  // The widths each panel had as content-box, which added its own padding to 236px.
+  it('renders a grouped panel, with its smaller padding, at its earlier default width', async () => {
+    expect(Math.round(await listboxWidth('group-display="drill-in"', GROUPS))).toBe(244);
+  });
+
+  // Drilling into a group zeroes the listbox's own padding (the back header carries its own),
+  // so the panel should narrow to the padding-less width, matching panel-search.
+  it('narrows to the padding-less width once drilled into a group', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-combobox component-id="width" label="Animal" group-display="drill-in">${GROUPS}</pds-combobox>`);
+    await page.waitForChanges();
+
+    await (await page.find('pds-combobox >>> input')).click();
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+    await page.waitForChanges();
+
+    const width = await page.evaluate(() => {
+      const roots = [
+        document.querySelector('pds-combobox')!.shadowRoot,
+        document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot,
+      ];
+      const listbox = roots.map((root) => root?.querySelector('.pds-combobox__listbox')).find(Boolean)!;
+      return listbox.getBoundingClientRect().width;
+    });
+
+    expect(Math.round(width)).toBe(236);
+  });
+
+  // With panel-search, the drilled-in options list sits inside the panel-search wrapper rather
+  // than being the outer listbox itself, but it still carries `--grouped`. The fixed padding-less
+  // width above must not reach it, or a custom dropdown-width would stop filling the panel once
+  // drilled in.
+  it('keeps a custom dropdown-width once drilled into a group, with panel-search', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      `<pds-combobox component-id="width" label="Animal" trigger="button" mode="select-only" panel-search dropdown-width="300px" group-display="drill-in">${GROUPS}</pds-combobox>`,
+    );
+    await page.waitForChanges();
+
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+    await page.waitForChanges();
+
+    // The wrapper itself (queried by the other tests here) always keeps the custom width: it's
+    // set inline, which outranks any class rule regardless of this bug. The drilled-in options
+    // list inside it is the one a stray width rule can narrow, so that's what this measures.
+    const width = await page.evaluate(() => {
+      const roots = [
+        document.querySelector('pds-combobox')!.shadowRoot,
+        document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot,
+      ];
+      const options = roots.map((root) => root?.querySelector('.pds-combobox__listbox-options')).find(Boolean)!;
+      return options.getBoundingClientRect().width;
+    });
+
+    expect(Math.round(width)).toBe(300);
+  });
+
+  it('renders a panel with a search, which has no padding of its own, at its earlier default width', async () => {
+    const width = await listboxWidth(
+      'trigger="button" mode="select-only" panel-search',
+      OPTIONS,
+      'pds-combobox >>> .pds-combobox__button-trigger',
+    );
+    expect(Math.round(width)).toBe(236);
+  });
+
+  it('renders a grouped panel at dropdown-width too', async () => {
+    expect(Math.round(await listboxWidth('group-display="drill-in" dropdown-width="300px"', GROUPS))).toBe(300);
+  });
+});
+
 describe('pds-combobox value fade', () => {
   const setUp = async (value = '') => {
     const page = await newE2EPage();

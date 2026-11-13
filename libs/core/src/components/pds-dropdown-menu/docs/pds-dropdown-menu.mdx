@@ -495,9 +495,9 @@ The example below demonstrates mixing a standard menu item with raw `<a>` and `<
 {/* Hover/focus styles for raw elements (add to your app's CSS) */}
 <style>{
   'pds-dropdown-menu > a:hover, pds-dropdown-menu > button:hover { background-color: var(--pine-color-background-muted); }' +
-  'pds-dropdown-menu > a:focus, pds-dropdown-menu > button:focus { outline: var(--pine-outline-focus); outline-offset: var(--pine-border-width); }' +
+  'pds-dropdown-menu > a:focus-visible, pds-dropdown-menu > button:focus-visible { outline: var(--pine-outline-focus); outline-offset: var(--pine-border-width); }' +
   'pds-dropdown-menu > a.destructive:hover { background-color: var(--pine-color-danger-disabled); }' +
-  'pds-dropdown-menu > a.destructive:focus { outline: var(--pine-outline-focus-danger); }'
+  'pds-dropdown-menu > a.destructive:focus-visible { outline: var(--pine-outline-focus-danger); }'
 }</style>
 
 <PdsDropdownMenu>
@@ -518,15 +518,15 @@ The example below demonstrates mixing a standard menu item with raw `<a>` and `<
   pds-dropdown-menu > button:hover {
     background-color: var(--pine-color-background-muted);
   }
-  pds-dropdown-menu > a:focus,
-  pds-dropdown-menu > button:focus {
+  pds-dropdown-menu > a:focus-visible,
+  pds-dropdown-menu > button:focus-visible {
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
   pds-dropdown-menu > a.destructive:hover {
     background-color: var(--pine-color-danger-disabled);
   }
-  pds-dropdown-menu > a.destructive:focus {
+  pds-dropdown-menu > a.destructive:focus-visible {
     outline: var(--pine-outline-focus-danger);
   }
 </style>
@@ -550,15 +550,15 @@ The example below demonstrates mixing a standard menu item with raw `<a>` and `<
   .raw-elements-example pds-dropdown-menu > button:hover {
     background-color: var(--pine-color-background-muted);
   }
-  .raw-elements-example pds-dropdown-menu > a:focus,
-  .raw-elements-example pds-dropdown-menu > button:focus {
+  .raw-elements-example pds-dropdown-menu > a:focus-visible,
+  .raw-elements-example pds-dropdown-menu > button:focus-visible {
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
   .raw-elements-example pds-dropdown-menu > a.destructive:hover {
     background-color: var(--pine-color-danger-disabled);
   }
-  .raw-elements-example pds-dropdown-menu > a.destructive:focus {
+  .raw-elements-example pds-dropdown-menu > a.destructive:focus-visible {
     outline: var(--pine-outline-focus-danger);
   }
 `}

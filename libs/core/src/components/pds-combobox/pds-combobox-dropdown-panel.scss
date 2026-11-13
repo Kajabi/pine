@@ -12,10 +12,12 @@
     box-sizing: border-box;
     list-style: none;
     margin: 0;
-    min-width: 220px;
+    // border-box: the 236px wide, 220px minimum it had as content-box, plus its padding.
+    min-width: calc(220px + (var(--pine-dimension-xs) * 2));
     overflow-y: auto;
     padding: var(--pine-dimension-xs);
     position: absolute;
+    width: calc(236px + (var(--pine-dimension-xs) * 2));
     z-index: var(--pine-z-index-raised);
   }
 
@@ -370,6 +372,7 @@
     background: var(--pine-color-background-overlay);
     border-radius: var(--pine-dimension-125);
     box-shadow: var(--pine-box-shadow);
+    box-sizing: border-box;
     list-style: none;
     margin: 0;
     overflow-y: auto;
@@ -380,12 +383,20 @@
     z-index: 1;
   }
 
+  // Its padding is smaller, so its widths are too.
+  .pds-combobox__listbox.pds-combobox__listbox--grouped {
+    min-width: calc(220px + (var(--pine-dimension-2xs) * 2));
+    width: calc(236px + (var(--pine-dimension-2xs) * 2));
+  }
+
   // panel-search: the search field above the options, as in pds-multiselect.
-  .pds-combobox__listbox--with-search {
+  .pds-combobox__listbox.pds-combobox__listbox--with-search {
     display: flex;
     flex-direction: column;
+    min-width: 220px;
     overflow: hidden;
     padding: 0;
+    width: 236px;
   }
 
   .pds-combobox__listbox-options {
@@ -439,6 +450,16 @@
     display: flex;
     flex-direction: column;
     padding: 0;
+  }
+
+  // Only the standalone listbox drops to the padding-less width: the grouped listbox's own width
+  // adds back the padding the rule above just zeroed out. Scoped to the `.pds-combobox__listbox`
+  // class alone (not `-options`), so the panel-search view's drilled-in options list -- which
+  // carries `--grouped` too -- keeps filling its wrapper's width (including any custom
+  // `dropdown-width`) instead of being forced to this fixed width.
+  .pds-combobox__listbox.pds-combobox__listbox--grouped:has(> .pds-combobox__group-back) {
+    min-width: 220px;
+    width: 236px;
   }
 
   .pds-combobox__group-back {

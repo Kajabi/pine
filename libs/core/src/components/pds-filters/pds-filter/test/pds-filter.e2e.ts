@@ -348,3 +348,22 @@ describe('pds-filter reduced motion', () => {
     await expectRespectsReducedMotion(page, 'pds-filter', '.pds-filter__trigger');
   });
 });
+
+describe('pds-filter popover width', () => {
+  it('renders at its width, padding included', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-filter component-id="test" text="Test">
+        <p>Long content that wraps across the panel so it reaches its widest width, and keeps going past the edge of the panel to be sure.</p>
+      </pds-filter>
+    `);
+
+    await (await page.find('pds-filter')).callMethod('showFilter');
+    await page.waitForChanges();
+
+    const width = await page.evaluate(
+      () => document.querySelector('pds-filter')!.shadowRoot!.querySelector('.pds-filter__popover')!.getBoundingClientRect().width,
+    );
+    expect(Math.round(width)).toBe(244);
+  });
+});
