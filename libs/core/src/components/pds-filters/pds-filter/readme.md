@@ -12,12 +12,12 @@ The `clear` variant has no popover and emits `pdsFilterClear` instead.
 
 ## Properties
 
-| Property                   | Attribute      | Description                                                                                                                | Type                                           | Default     |
-| -------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ----------- |
-| `componentId` _(required)_ | `component-id` | A unique identifier used for the underlying component `id` attribute.                                                      | `string`                                       | `undefined` |
-| `icon`                     | `icon`         | The name of the icon to display in the trigger button. For 'clear' variant, this is ignored as it always shows trash icon. | `string`                                       | `undefined` |
-| `text`                     | `text`         | The text content displayed in the trigger button.                                                                          | `string`                                       | `undefined` |
-| `variant`                  | `variant`      | The variant style of the filter trigger.                                                                                   | `"clear" \| "default" \| "more" \| "selected"` | `'default'` |
+| Property                   | Attribute      | Description                                                                                                                        | Type                                           | Default     |
+| -------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ----------- |
+| `componentId` _(required)_ | `component-id` | A unique identifier used for the underlying component `id` attribute.                                                              | `string`                                       | `undefined` |
+| `icon`                     | `icon`         | The name of the icon to display in the trigger button. For 'clear' variant, this is ignored as it always shows trash icon.         | `string`                                       | `undefined` |
+| `text`                     | `text`         | The text content displayed in the trigger button. When text overflows, a tooltip showing the full text will appear on hover/focus. | `string`                                       | `undefined` |
+| `variant`                  | `variant`      | The variant style of the filter trigger.                                                                                           | `"clear" \| "default" \| "more" \| "selected"` | `'default'` |
 
 
 ## Events

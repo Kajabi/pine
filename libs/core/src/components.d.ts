@@ -1621,7 +1621,7 @@ export namespace Components {
          */
         "showFilter": () => Promise<void>;
         /**
-          * The text content displayed in the trigger button.
+          * The text content displayed in the trigger button. When text overflows, a tooltip showing the full text will appear on hover/focus.
          */
         "text"?: string;
         /**
@@ -5639,7 +5639,7 @@ declare namespace LocalJSX {
          */
         "onPdsFilterOpen"?: (event: PdsFilterCustomEvent<PdsFilterOpenEventDetail>) => void;
         /**
-          * The text content displayed in the trigger button.
+          * The text content displayed in the trigger button. When text overflows, a tooltip showing the full text will appear on hover/focus.
          */
         "text"?: string;
         /**
