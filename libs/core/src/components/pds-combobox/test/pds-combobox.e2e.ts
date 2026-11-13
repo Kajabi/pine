@@ -1796,6 +1796,158 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('the opening motion', () => {
+    type Page = Awaited<ReturnType<typeof newE2EPage>>;
+
+    const options = [
+      { id: 'tag-add', text: 'Add a tag', group: 'Tag' },
+      { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+      { id: 'email-send', text: 'Send an email', group: 'Email' },
+    ];
+
+    // Animations held at their first frame, so the test reads where the dropdown starts from. The
+    // open runs for minutes here, so a slow runner can't finish it before the test looks; `hold`
+    // off keeps Pine's own duration (and its reduced-motion 0ms).
+    const setUp = async (attrs: string, wrapperStyle = 'padding: 40px;', hold = true) => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.setContent(`
+        <div style="${wrapperStyle}">
+          <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only"
+            dropdown-width="300px" ${attrs}></pds-combobox>
+        </div>
+      `);
+      await page.$eval('pds-combobox', (el: HTMLElement & { options?: unknown }, opts) => (el.options = opts), options);
+      if (hold) await page.addStyleTag({ content: ':root { --pine-motion-duration-base: 600s; }' });
+      await page.waitForChanges();
+      const client = await page.target().createCDPSession();
+      await client.send('Animation.enable');
+      await client.send('Animation.setPlaybackRate', { playbackRate: 0 });
+      return page;
+    };
+
+    const toggle = async (page: Page) => {
+      await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+      await page.waitForChanges();
+    };
+
+    // The dropdown, in the combobox or its body portal: null when it's gone. `opening` while the open
+    // animation is held at its start; `placement` once Floating UI has placed it.
+    const panel = (page: Page) =>
+      page.evaluate(() => {
+        const roots = [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot];
+        const el = roots.map(root => root?.querySelector('.pds-combobox__listbox')).find(Boolean) as HTMLElement | undefined;
+        if (!el) return null;
+        // Read the open animation's first frame itself, wherever the runner got to.
+        const open = el.getAnimations().find(a => (a as CSSAnimation).animationName === 'pds-combobox-open');
+        if (open) {
+          open.pause();
+          open.currentTime = 0;
+        }
+        const { opacity, marginTop } = getComputedStyle(el);
+        const opening = open !== undefined;
+        return { opacity, marginTop, opening, placement: el.dataset.placement ?? null };
+      });
+
+    const placed = async (page: Page) => {
+      await page.waitForFunction(
+        () => {
+          const roots = [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot];
+          return roots.some(root => (root?.querySelector('.pds-combobox__listbox') as HTMLElement | null)?.dataset.placement);
+        },
+        { timeout: 3000 },
+      );
+      return panel(page);
+    };
+
+    // The portal's teardown is deferred with a setTimeout, so wait for the dropdown to go.
+    const gone = (page: Page) =>
+      page.waitForFunction(
+        () => {
+          const roots = [document.querySelector('pds-combobox')!.shadowRoot, document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot];
+          return !roots.some(root => root?.querySelector('.pds-combobox__listbox'));
+        },
+        { timeout: 3000 },
+      );
+
+    it.each([
+      ['inline groups', ''],
+      ['group-display="flyout"', 'group-display="flyout"'],
+      ['group-display="drill-in" with panel search', 'group-display="drill-in" panel-search'],
+      ['a body portal', 'dropdown-mount="body"'],
+    ])('fades in a few pixels below the field on every open, and closes at once, with %s', async (_name, attrs) => {
+      const page = await setUp(attrs);
+
+      for (let open = 0; open < 2; open++) {
+        await toggle(page);
+        expect(await placed(page)).toEqual({ opacity: '0', marginTop: '-4px', opening: true, placement: 'bottom-start' });
+
+        // Closing doesn't animate: the dropdown is gone as soon as it closes.
+        await toggle(page);
+        await gone(page);
+        expect(await panel(page)).toBeNull();
+      }
+    });
+
+    it('rises away from the field when it flips above it', async () => {
+      const page = await setUp('', 'position: absolute; bottom: 20px; left: 40px;');
+      await toggle(page);
+      expect(await placed(page)).toEqual({ opacity: '0', marginTop: '4px', opening: true, placement: 'top-start' });
+    });
+
+    // The listbox is rendered only while open, so each open gets a new node with no placement from
+    // the last one. Flipped, closed, moved to where it fits below, reopened: it must not still rise.
+    it.each([
+      ['inline', ''],
+      ['a body portal', 'dropdown-mount="body"'],
+    ])("doesn't keep a previous open's flipped placement, %s", async (_name, attrs) => {
+      const page = await setUp(attrs, 'position: absolute; bottom: 20px; left: 40px;');
+      await toggle(page);
+      expect(await placed(page)).toMatchObject({ marginTop: '4px', placement: 'top-start' });
+      await toggle(page);
+      await gone(page);
+
+      await page.$eval('pds-combobox', el => {
+        const wrapper = el.parentElement!;
+        wrapper.style.bottom = '';
+        wrapper.style.top = '20px';
+      });
+      await toggle(page);
+      expect(await placed(page)).toEqual({ opacity: '0', marginTop: '-4px', opening: true, placement: 'bottom-start' });
+    });
+
+    it("doesn't replay when a drill's height glide ends", async () => {
+      const page = await setUp('group-display="drill-in" panel-search');
+      await toggle(page);
+      await placed(page);
+      const finish = (name: string) =>
+        page.evaluate(n => {
+          const root = document.querySelector('pds-combobox')!.shadowRoot!;
+          root.getAnimations().forEach(a => (a as CSSAnimation).animationName === n && a.finish());
+        }, name);
+      await finish('pds-combobox-open');
+
+      // The second group is shorter than the groups, so the dropdown glides.
+      await (await page.find('pds-combobox >>> .pds-combobox__group-row:nth-of-type(2) .pds-combobox__group-row-trigger')).click();
+      await page.waitForChanges();
+      await page.waitForFunction(() =>
+        document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox--height-glide'),
+      );
+      expect((await panel(page))?.opening).toBe(false);
+
+      await finish('pds-combobox-height-glide');
+      await page.waitForChanges();
+      expect(await panel(page)).toMatchObject({ opacity: '1', marginTop: '0px', opening: false });
+    });
+
+    it("doesn't move or fade with reduced motion, since the motion tokens drop to 0ms", async () => {
+      const page = await setUp('', undefined, false);
+      await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+      await toggle(page);
+      expect(await placed(page)).toMatchObject({ opacity: '1', marginTop: '0px' });
+    });
+  });
+
   // Matches pds-select's field, and the Figma filter panel's search field and drilled-in header.
   describe('field and panel sizes', () => {
     const options = [
