@@ -268,8 +268,10 @@ describe('pds-dropdown-menu-item', () => {
   });
 
   describe('focus ring', () => {
-    // A link item draws its ring on the anchor inside pds-link, never on the pds-link host;
-    // other items draw it on their inner control.
+    // A link item draws its ring on the anchor inside pds-link when that's where focus is;
+    // other items draw it on their inner control. (WebKit can leave focus on the pds-link host
+    // itself after a mouse click, where the host's own ring then applies instead -- not
+    // exercised here, since this suite's Chromium always focuses the inner anchor on click.)
     const ring = (page: E2EPage, name: string) => page.evaluate((itemName: string) => {
       const item = document.querySelector(`[data-name="${itemName}"]`);
       const content = item.shadowRoot.querySelector('.pds-dropdown-menu-item__content');
