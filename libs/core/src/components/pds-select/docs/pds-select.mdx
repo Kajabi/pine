@@ -23,13 +23,16 @@ Selects present a single-choice dropdown, letting users pick one value from a pr
 ### When not to use
 - For binary choices; consider a radio or switch instead.
 - When users need to input free-form text; a text field may be better suited.
-- For very long lists of options where search or filtering would be more effective.
+- For a long list that people need to search, use a [Combobox](/docs/components-combobox--docs), which filters its options as people type.
+- When people can pick several options from a long list, use a [Multiselect](/docs/components-multiselect--docs).
 
 ### Accessibility
+
 - Use meaningful labels and associate them clearly with the select element.
+- Always set `label`, even when the design shows no label. With `hide-label`, the select renders no visible label and takes its name from `label` through `aria-label`; the `action` slot is hidden too. Without `label`, the select has no name: an `aria-label` on `pds-select` doesn't name it.
 - Provide helper text or error messages for guidance and validation.
+- The helper message becomes the select's accessible description. An `error-message` replaces it as the description and marks the select invalid, with or without `invalid`.
 - Avoid overloading dropdowns with excessive options to prevent overwhelm.
-- State on the host follows the component's props and slots: the `is-invalid` and `is-disabled` classes, `aria-disabled`, and `has-action` when an `action` slot is shown. It comes back if something removes it, such as a DOM morph, so change it through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ## Usage Notes
 
@@ -251,20 +254,20 @@ The select component is shown invalid along with an error message, providing fee
 
 With the `multiple` attribute enabled, the select component allows users to select more than one option at a time.
 
->Note: When the multiple attribute is enabled, the `value` property should be an array of selected values.
+Once someone changes the selection, `value` is an array of the selected values, and the form submits one entry for each. To preselect several options, set the `value` property to an array in your script, such as `select.value = ['paul', 'ringo']`, or pass an array in React. The `value` attribute holds a single string, so it can preselect only one option: `value="paul,ringo"` selects nothing.
 
 <DocCanvas
  
   mdxSource={{
     react: `
-      <PdsSelect multiple componentId="pds-select-multiple-example" label="Name" name="name">
+      <PdsSelect multiple componentId="pds-select-multiple-example" label="Name" name="name" value={['paul']}>
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select multiple component-id="pds-select-multiple-example" label="Name" name="name">
+      <pds-select multiple component-id="pds-select-multiple-example" label="Name" name="name" value="paul">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
@@ -273,7 +276,7 @@ With the `multiple` attribute enabled, the select component allows users to sele
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select multiple component-id="pds-select-multiple-example" label="Name" name="name">
+    <pds-select multiple component-id="pds-select-multiple-example" label="Name" name="name" value="paul">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
@@ -294,7 +297,7 @@ The `optgroup` element allows for grouping related options within the select com
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
-          <option value="george" selected>George Harrison</option>
+          <option value="george">George Harrison</option>
         </optgroup>
         <optgroup label="Incorrect answers">
           <option value="ringo">Ringo Starr</option>
@@ -305,7 +308,7 @@ The `optgroup` element allows for grouping related options within the select com
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
-          <option value="george" selected>George Harrison</option>
+          <option value="george">George Harrison</option>
         </optgroup>
         <optgroup label="Incorrect answers">
           <option value="ringo">Ringo Starr</option>
@@ -318,7 +321,7 @@ The `optgroup` element allows for grouping related options within the select com
       <optgroup label="Correct answers">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george" selected>George Harrison</option>
+        <option value="george">George Harrison</option>
       </optgroup>
       <optgroup label="Incorrect answers">
         <option value="ringo">Ringo Starr</option>
@@ -438,17 +441,25 @@ The action slot allows you to add helpful content next to the select label, such
 
 ## Form Integration
 
-- Provide a `name` so the chosen option is included in `FormData` (disabled selects are skipped automatically).
-- Manage selection via the `value` prop plus `onPdsSelectChange` for controlled React usage; rely on native selection/default values for uncontrolled forms.
-- Combine `required`, `errorMessage`, and `invalid` to mirror native validation flows, especially when the first option is a disabled placeholder.
+- Provide a `name` so the chosen option is included in `FormData`. A select with the `disabled` attribute, or inside a disabled `fieldset`, is left out.
+- Set `value` to the option that should start selected. Without `value`, the select shows its first enabled option but submits nothing until someone picks a different option; choosing the option already shown doesn't count. A `selected` attribute on an `<option>` is ignored.
+- Manage selection via the `value` prop plus `onPdsSelectChange` for controlled React usage. The event's `detail` is the native `change` event, so read the new value from `event.target.value`.
+- With `required`, start the list with an empty-value placeholder, such as `<option value="">Choose a country</option>`, and the form won't submit until someone picks another option. If you disable the placeholder, also set `value=""`; otherwise the select shows the first enabled option instead and `required` doesn't stop the form. The select doesn't set `invalid` itself, so set `invalid` and `error-message` when you show an error.
 - Labels are wired automatically through the native `<label>` element, and helper/error props render standardized messaging so you don’t need duplicate markup.
-- Use slot-based option content for flexible layouts (icons, descriptions) without breaking form submission.
+- Only `<option>` and `<optgroup>` elements in the default slot become options. Anything else there is ignored.
 - Supports both single and (where applicable) multiple-option scenarios; ensure each option has a unique `value`.
+- Resetting the form sets `value` to an empty string, not back to the `value` it started with. The select then shows the option whose value is empty, or its first enabled option if none is, and submits nothing.
+- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
+
+## Technical Notes
+
+State on the host follows the component's props and slots: the `is-invalid` and `is-disabled` classes, `aria-disabled`, and `has-action` when an `action` slot is shown. It comes back if something removes it, such as a DOM morph, so change it through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ## Additional Resources
 
-[MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)
-[MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
+- [MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)
+- [MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
+- [Using Pine form components](/docs/guides-forms--docs)
 
 ## Playground
 
