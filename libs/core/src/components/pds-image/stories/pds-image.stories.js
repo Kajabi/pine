@@ -35,6 +35,83 @@ const FitTemplate = (args) => html`<div style="display: flex; gap: 1rem;">
   )}
 </div>`;
 
+// Each frame covers its image with a placeholder until `pdsImageLoad` removes it, or shows
+// an error message on `pdsImageError`. The placeholder sits over the image rather than
+// hiding it, since a hidden image with `loading="lazy"` never loads. The loading placeholder
+// is hidden from screen readers, which already announce the image's alt. The error message's
+// `role="status"` region stays rendered the whole time, faded out by opacity rather than
+// `hidden`, so only its text changes when the error arrives — a region that goes from hidden
+// to visible with its text already set often isn't announced.
+const showState = (event, state) => {
+  const frame = event.target.closest('[data-image-frame]');
+  const error = frame.querySelector('[data-image-error]');
+  frame.querySelector('[data-image-placeholder]').hidden = state !== 'loading';
+  error.style.opacity = state === 'error' ? '1' : '0';
+  error.querySelector('pds-text').textContent = state === 'error' ? "This image couldn't load" : '';
+};
+
+const overlayStyle = 'position: absolute; inset: 0;';
+
+const EventsTemplate = (args) => {
+  // Reloading changes `src`, which emits the events again for the new image.
+  const reload = (event) => {
+    event.target.closest('[data-image-events]').querySelectorAll('[data-image-frame]').forEach((frame) => {
+      const image = frame.querySelector('pds-image');
+      const url = new URL(image.getAttribute('src'), window.location.href);
+      url.searchParams.set('reload', Date.now());
+      frame.querySelector('[data-image-placeholder]').hidden = false;
+      frame.querySelector('[data-image-error]').style.opacity = '0';
+      frame.querySelector('[data-image-error] pds-text').textContent = '';
+      image.setAttribute('src', url.href);
+    });
+  };
+
+  return html`<pds-box data-image-events direction="column" gap="md">
+    <pds-box gap="md" wrap>
+      ${[
+        { label: 'Loads', src: args.src },
+        { label: 'Fails to load', src: args.brokenSrc },
+      ].map(
+        ({ label, src }) => html`<div data-image-frame style="width: 240px;">
+          <div style="position: relative;">
+            <pds-image
+              alt="${args.alt}"
+              ratio="landscape"
+              src="${src}"
+              @pdsImageLoad=${(event) => showState(event, 'loaded')}
+              @pdsImageError=${(event) => showState(event, 'error')}
+            ></pds-image>
+            <pds-box
+              data-image-placeholder
+              aria-hidden="true"
+              align-items="center"
+              background-color="var(--pine-color-background-muted)"
+              justify-content="center"
+              style="${overlayStyle}"
+            >
+              <pds-text color="secondary" size="sm">Loading image…</pds-text>
+            </pds-box>
+            <pds-box
+              data-image-error
+              role="status"
+              align-items="center"
+              background-color="var(--pine-color-background-inset)"
+              justify-content="center"
+              style="${overlayStyle} opacity: 0; pointer-events: none;"
+            >
+              <pds-text color="secondary" size="sm"></pds-text>
+            </pds-box>
+          </div>
+          <pds-text size="sm">${label}</pds-text>
+        </div>`,
+      )}
+    </pds-box>
+    <div>
+      <pds-button variant="secondary" @pdsClick=${reload}>Reload images</pds-button>
+    </div>
+  </pds-box>`;
+};
+
 export const Default = BaseTemplate.bind();
 Default.args = {
   alt: 'Random Bear',
@@ -64,4 +141,11 @@ Fit.args = {
   alt: 'Random Bear',
   ratio: 'wide',
   src: 'https://placebear.com/200/300',
+}
+
+export const Events = EventsTemplate.bind();
+Events.args = {
+  alt: 'Random Bear',
+  brokenSrc: 'https://placebear.com/does-not-exist.png',
+  src: 'https://placebear.com/400/300',
 }
