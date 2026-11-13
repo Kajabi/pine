@@ -28,6 +28,14 @@ export const findInAncestorRoots = (host: Element, id: string): HTMLElement | nu
 };
 
 /**
+ * The elements an ID-reference attribute on the host names, skipping IDs that match nothing.
+ */
+export const referencedElements = (host: Element, attribute: string): HTMLElement[] => {
+  const ids = host.getAttribute(attribute)?.split(/\s+/).filter(Boolean) ?? [];
+  return ids.map((id) => findInAncestorRoots(host, id)).filter((el): el is HTMLElement => el !== null);
+};
+
+/**
  * Points the target's reflected ARIA properties at the elements the host's ID-reference attributes
  * name, or clears them. Run it again whenever the attributes or the referenced elements may have
  * changed: element references don't follow an ID to a node added or replaced later.
@@ -36,8 +44,7 @@ export const forwardAriaReferences = (host: Element, target: Element) => {
   Object.entries(ARIA_REFERENCE_PROPERTIES).forEach(([attribute, property]) => {
     if (!(property in target)) return;
 
-    const ids = host.getAttribute(attribute)?.split(/\s+/).filter(Boolean) ?? [];
-    const referenced = ids.map((id) => findInAncestorRoots(host, id)).filter((el): el is HTMLElement => el !== null);
+    const referenced = referencedElements(host, attribute);
     target[property] = referenced.length > 0 ? referenced : null;
   });
 };

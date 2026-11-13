@@ -55,6 +55,10 @@ export type BoxSpacingType =
   | '750'
   | '800';
 
+export type BoxMarginType = BoxSpacingType | 'auto';
+
+export type BoxContainerType = 'inline-size' | 'size';
+
 export type BoxShadowSizeType =
   'none'
   | '050'

@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Host, Method, Prop } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 
 /**
@@ -120,8 +120,6 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     });
   };
 
-  @State() hasFocus: boolean = false;
-
   private startSlotEl?: HTMLSlotElement;
 
   // Checked directly against the light DOM rather than kept in @State: Stencil's JSX doesn't
@@ -163,14 +161,6 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     ];
   }
 
-  private handleFocus = () => {
-    this.hasFocus = true;
-  }
-
-  private handleBlur = () => {
-    this.hasFocus = false;
-  }
-
   // Space would otherwise scroll the page, since nothing in the item takes the key.
   private handleInformationalKeyDown = (event: KeyboardEvent) => {
     if (event.key === ' ') {
@@ -182,17 +172,12 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     if (this.informational) {
       return (
         <div
-          class={{
-            'pds-dropdown-menu-item__content': true,
-            'has-focus': this.hasFocus
-          }}
+          class="pds-dropdown-menu-item__content"
           role="menuitem"
           aria-disabled="true"
           part="button"
           tabIndex={this.disabled ? -1 : 0}
           onKeyDown={this.handleInformationalKeyDown}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
         >
           {this.renderContent()}
         </div>
@@ -207,14 +192,9 @@ export class PdsDropdownMenuItem implements BasePdsProps {
           external={this.external}
           externalLabel={this.externalLabel}
           target={this.target}
-          class={{
-            'pds-dropdown-menu-item__content': true,
-            'has-focus': this.hasFocus
-          }}
+          class="pds-dropdown-menu-item__content"
           tabIndex={this.disabled ? -1 : 0}
           onKeyDown={this.handleKeyDown}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
           aria-disabled={this.disabled ? 'true' : null}
         >
           {this.renderContent()}
@@ -224,16 +204,11 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
     return (
       <button
-        class={{
-          'pds-dropdown-menu-item__content': true,
-          'has-focus': this.hasFocus
-        }}
+        class="pds-dropdown-menu-item__content"
         tabIndex={this.disabled ? -1 : 0}
         type="button"
         part="button"
         onKeyDown={this.handleKeyDown}
-        onFocus={this.handleFocus}
-        onBlur={this.handleBlur}
         disabled={this.disabled}
         aria-disabled={this.disabled ? 'true' : null}
       >

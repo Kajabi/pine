@@ -1,4 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
+import type { SpecPage } from '@stencil/core/testing';
 import { PdsSwitch } from '../pds-switch';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -292,19 +293,59 @@ describe('pds-switch', () => {
     expect(prop).not.toHaveClass('pds-switch--label-slot');
   });
 
-  it('takes its disabled state from a disabled fieldset', async () => {
-    const page = await newSpecPage({
-      components: [PdsSwitch],
-      html: `<fieldset disabled><pds-switch component-id="in-fieldset" label="Label"></pds-switch></fieldset>`,
+  describe('in a disabled fieldset', () => {
+    const fieldsetPage = () =>
+      newSpecPage({
+        components: [PdsSwitch],
+        html: `<fieldset disabled><pds-switch component-id="in-fieldset" label="Label"></pds-switch></fieldset>`,
+      });
+    const input = (page: SpecPage) => page.root.shadowRoot.querySelector('input') as HTMLInputElement;
+
+    it('is disabled while the fieldset is, without changing its disabled prop', async () => {
+      const page = await fieldsetPage();
+
+      page.rootInstance.formDisabledCallback(true);
+      await page.waitForChanges();
+      expect(input(page).disabled).toBe(true);
+      expect(page.root).toHaveAttribute('aria-disabled');
+      expect(page.root.disabled).toBe(false);
+
+      page.rootInstance.formDisabledCallback(false);
+      await page.waitForChanges();
+      expect(input(page).disabled).toBe(false);
+      expect(page.root).not.toHaveAttribute('aria-disabled');
+      expect(page.root.disabled).toBe(false);
     });
 
-    page.rootInstance.formDisabledCallback(true);
-    await page.waitForChanges();
-    expect(page.root.disabled).toBe(true);
+    it('stays disabled when the consumer disables it after the fieldset did, and the fieldset is re-enabled', async () => {
+      const page = await fieldsetPage();
 
-    page.rootInstance.formDisabledCallback(false);
-    await page.waitForChanges();
-    expect(page.root.disabled).toBe(false);
+      page.rootInstance.formDisabledCallback(true);
+      await page.waitForChanges();
+
+      // As React sets it: a property, with no disabled attribute on the host.
+      page.root.disabled = true;
+      await page.waitForChanges();
+
+      page.rootInstance.formDisabledCallback(false);
+      await page.waitForChanges();
+      expect(page.root.disabled).toBe(true);
+      expect(input(page).disabled).toBe(true);
+    });
+
+    it('stays disabled through a fieldset toggle when the consumer disabled it first', async () => {
+      const page = await fieldsetPage();
+
+      page.root.disabled = true;
+      await page.waitForChanges();
+
+      page.rootInstance.formDisabledCallback(true);
+      await page.waitForChanges();
+      page.rootInstance.formDisabledCallback(false);
+      await page.waitForChanges();
+      expect(page.root.disabled).toBe(true);
+      expect(input(page).disabled).toBe(true);
+    });
   });
 
   // formDisabledCallback also fires when this element's own `disabled` attribute is merely
@@ -319,6 +360,220 @@ describe('pds-switch', () => {
 
     page.rootInstance.formDisabledCallback(true);
     await page.waitForChanges();
+
+    // formDisabledCallback writes the private fieldsetDisabled, not disabled, so this is what the
+    // guard actually protects: isDisabled() -- and so the rendered input and aria-disabled -- must
+    // stay false without a real disabled fieldset ancestor to confirm the call.
+    const input = page.root.shadowRoot.querySelector('input') as HTMLInputElement;
+    expect(input.disabled).toBe(false);
+    expect(page.root).not.toHaveAttribute('aria-disabled');
     expect(page.root.disabled).toBe(false);
+  });
+  describe('unchecked-value', () => {
+    // updateFormValue skips ElementInternals in spec tests, so these check the value it would set; the e2e checks FormData.
+    const formValue = (page: SpecPage) => (page.rootInstance as unknown as { formValue: () => string | null }).formValue();
+
+    it('submits nothing while disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<pds-switch component-id="notify" name="notify" label="Notify" unchecked-value="0" checked disabled></pds-switch>`,
+      });
+
+      expect(formValue(page)).toBeNull();
+    });
+
+    it('submits nothing while unchecked when unset', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<pds-switch component-id="notify" name="notify" label="Notify"></pds-switch>`,
+      });
+
+      expect(formValue(page)).toBeNull();
+    });
+
+    it('submits the unchecked value while unchecked, and the value once checked', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<pds-switch component-id="notify" name="notify" label="Notify" value="1" unchecked-value="0"></pds-switch>`,
+      });
+
+      expect(formValue(page)).toBe('0');
+
+      page.root.checked = true;
+      await page.waitForChanges();
+      expect(formValue(page)).toBe('1');
+    });
+
+    it('submits a blank unchecked value', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<pds-switch component-id="notify" name="notify" label="Notify" unchecked-value=""></pds-switch>`,
+      });
+
+      expect(formValue(page)).toBe('');
+    });
+
+    it('keeps the input value attribute for the checked value only', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<pds-switch component-id="notify" name="notify" label="Notify" value="1" unchecked-value="0"></pds-switch>`,
+      });
+
+      expect(page.root.shadowRoot.querySelector('input').getAttribute('value')).toBe('1');
+    });
+
+    // updateFormValue() no-ops while isSpecTest() is true, so form association has to be re-enabled
+    // for a test to observe what reaches ElementInternals.setFormValue().
+    const withFormAssociationEnabled = async (run: () => void | Promise<void>) => {
+      const previous = process.env.__STENCIL_SPEC_TESTS__;
+      process.env.__STENCIL_SPEC_TESTS__ = 'false';
+      try {
+        await run();
+      } finally {
+        if (previous === undefined) {
+          delete process.env.__STENCIL_SPEC_TESTS__;
+        } else {
+          process.env.__STENCIL_SPEC_TESTS__ = previous;
+        }
+      }
+    };
+
+    it('keeps the checked value as restoration state while disabled, even though nothing submits', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<pds-switch component-id="notify" name="notify" label="Notify" value="1" checked disabled></pds-switch>`,
+      });
+
+      const setFormValue = jest.fn();
+      (page.rootInstance as any).internals = { setFormValue };
+
+      await withFormAssociationEnabled(() => {
+        (page.rootInstance as unknown as { updateFormValue: () => void }).updateFormValue();
+      });
+
+      expect(setFormValue).toHaveBeenCalledWith(null, '1');
+    });
+  });
+
+  it('describes a disabled switch with its helper message', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `<pds-switch component-id="commissions" label="Affiliate commissions" disabled helper-message="Free offers can't have affiliate commissions."></pds-switch>`,
+    });
+
+    const input = page.root.shadowRoot.querySelector('input');
+    expect(input.disabled).toBe(true);
+    expect(input.getAttribute('aria-describedby')).toBe('commissions__helper-message');
+  });
+
+  describe('aria-describedby on the host', () => {
+    // mock-doc has no MutationObserver, so this one reports host attribute changes the way a browser would.
+    class HostAttributeObserver {
+      static instances: HostAttributeObserver[] = [];
+      private attributeFilter: string[] = [];
+      constructor(private callback: MutationCallback) {
+        HostAttributeObserver.instances.push(this);
+      }
+      observe(_target: Node, options: MutationObserverInit) {
+        this.attributeFilter = options.attributeFilter ?? [];
+      }
+      disconnect() {}
+      notify(attributeName: string) {
+        if (this.attributeFilter.includes(attributeName)) this.callback([], this as unknown as MutationObserver);
+      }
+    }
+
+    const originalObserver = globalThis.MutationObserver;
+    // mock-doc has no global Document to tell the document root apart, so it gets the spec page's.
+    let hadDocument = false;
+    let originalDocument: unknown;
+
+    beforeEach(() => {
+      HostAttributeObserver.instances = [];
+      globalThis.MutationObserver = HostAttributeObserver as unknown as typeof MutationObserver;
+      hadDocument = 'Document' in globalThis;
+      originalDocument = (globalThis as { Document?: unknown }).Document;
+    });
+
+    afterEach(() => {
+      globalThis.MutationObserver = originalObserver;
+      if (hadDocument) {
+        (globalThis as { Document?: unknown }).Document = originalDocument;
+      } else {
+        delete (globalThis as { Document?: unknown }).Document;
+      }
+    });
+
+    const setHostAttribute = async (page: SpecPage, value: string | null) => {
+      if (value === null) {
+        page.root?.removeAttribute('aria-describedby');
+      } else {
+        page.root?.setAttribute('aria-describedby', value);
+      }
+      HostAttributeObserver.instances.forEach((observer) => observer.notify('aria-describedby'));
+      await page.waitForChanges();
+    };
+
+    // mock-doc has no ARIA element reflection, so the input gets the property a browser would have.
+    const renderWithReflection = async (html: string) => {
+      const page = await newSpecPage({ components: [PdsSwitch], html });
+      (globalThis as { Document?: unknown }).Document = page.doc.constructor;
+      const input = page.root.shadowRoot.querySelector('input');
+      Object.defineProperty(input, 'ariaDescribedByElements', { value: null, writable: true });
+      return { page, input };
+    };
+    const describedIds = (input: HTMLInputElement) =>
+      Array.from(((input as unknown as { ariaDescribedByElements: Element[] | null }).ariaDescribedByElements ?? []), (el) => el.id);
+
+    it('stays on the host instead of being copied onto the input as IDs that cannot resolve there', async () => {
+      const page = await newSpecPage({
+        components: [PdsSwitch],
+        html: `<p id="card-description">Card text</p><pds-switch component-id="card" label="Card" helper-message="Help" aria-describedby="card-description"></pds-switch>`,
+      });
+
+      const host = page.body.querySelector('pds-switch');
+      expect(host.getAttribute('aria-describedby')).toBe('card-description');
+      expect(host.shadowRoot.querySelector('input').getAttribute('aria-describedby')).toBe('card__helper-message');
+    });
+
+    it('points the input at the referenced elements, then its own message, and follows changes and removal', async () => {
+      const { page, input } = await renderWithReflection(`
+        <p id="first">First</p>
+        <p id="second">Second</p>
+        <pds-switch component-id="card" label="Card" helper-message="Help"></pds-switch>
+      `);
+
+      await setHostAttribute(page, 'first missing');
+      expect(describedIds(input)).toEqual(['first', 'card__helper-message']);
+
+      await setHostAttribute(page, 'first second');
+      expect(describedIds(input)).toEqual(['first', 'second', 'card__helper-message']);
+
+      await setHostAttribute(page, null);
+      expect(input.getAttribute('aria-describedby')).toBe('card__helper-message');
+    });
+
+    it('points the input at the referenced elements alone without a message', async () => {
+      const { page, input } = await renderWithReflection(`<p id="first">First</p><pds-switch component-id="card" label="Card"></pds-switch>`);
+
+      await setHostAttribute(page, 'first');
+      expect(describedIds(input)).toEqual(['first']);
+
+      await setHostAttribute(page, null);
+      expect(input.hasAttribute('aria-describedby')).toBe(false);
+    });
+
+    it('picks up a referenced element added after the switch when the input is focused', async () => {
+      const { page, input } = await renderWithReflection(`<pds-switch component-id="card" label="Card" aria-describedby="late"></pds-switch>`);
+      expect(describedIds(input)).toEqual([]);
+
+      const late = page.doc.createElement('p');
+      late.id = 'late';
+      page.body.appendChild(late);
+      input.dispatchEvent(new Event('focus'));
+      await page.waitForChanges();
+
+      expect(describedIds(input)).toEqual(['late']);
+    });
   });
 });
