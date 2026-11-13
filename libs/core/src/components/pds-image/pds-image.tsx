@@ -17,7 +17,7 @@ export class PdsImage {
   @Prop() alt? = '';
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -237,7 +237,6 @@ export class PdsImage {
           'pds-image': true,
           'pds-image--has-ratio': hasRatio,
         }}
-        id={this.componentId}
       >
         <img
           alt={this.alt}
