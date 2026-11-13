@@ -515,6 +515,54 @@ describe('pds-table column widths', () => {
     ).toBe(false);
   });
 
+  // The select-all and row-checkbox cells sit in pds-table-head's and pds-table-row's own
+  // shadow roots rather than coming through a `<slot>`, so a sync that only walks light DOM
+  // never reaches them -- they'd keep listening on the container the toggle just replaced.
+  it('rebinds the select-all and row-checkbox cells once responsive toggles back on', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 150px">
+        <pds-table component-id="checkbox-cell-rebind" fixed-column responsive selectable>
+          <pds-table-head>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+            <pds-table-head-cell>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Jane Doe</pds-table-cell>
+              <pds-table-cell>jane@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+
+    // Turning `responsive` off and back on tears the old `.pds-table-responsive-container` down
+    // and renders a new one -- the case the cached-container bug actually needs.
+    await page.evaluate(() => document.querySelector('pds-table').removeAttribute('responsive'));
+    await page.waitForChanges();
+    await page.evaluate(() => document.querySelector('pds-table').setAttribute('responsive', ''));
+    await page.waitForChanges();
+
+    await page.evaluate(async () => {
+      const table = document.querySelector('pds-table');
+      const container = table.shadowRoot.querySelector('.pds-table-responsive-container');
+      container.scrollLeft = 20;
+      container.dispatchEvent(new Event('scroll'));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    });
+
+    const selectAllScrolled = await page.evaluate(() =>
+      document.querySelector('pds-table-head').shadowRoot.querySelector('pds-table-head-cell').classList.contains('has-scrolled'),
+    );
+    const checkboxCellScrolled = await page.evaluate(() =>
+      document.querySelector('pds-table-row').shadowRoot.querySelector('pds-table-cell').classList.contains('has-scrolled'),
+    );
+    expect(selectAllScrolled).toBe(true);
+    expect(checkboxCellScrolled).toBe(true);
+  });
+
   it('does not leak a window resize listener when the table unmounts right after a layout change', async () => {
     const page = await newE2EPage();
     // Starts with neither responsive nor fixed layout, so no listener exists yet -- the spy
