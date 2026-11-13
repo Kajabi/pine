@@ -35,24 +35,29 @@ export class PdsTextarea {
   @Element() el: HTMLPdsTextareaElement;
 
   /**
-   * Emitted when the input loses focus.
+   * Emitted when the textarea loses focus.
    */
   @Event() pdsBlur!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when the input has focus.
+   * Emitted when the textarea has focus.
    */
   @Event() pdsFocus!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when the value changes from user input (typing, paste, autofill).
+   * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one.
+   * `detail` has `value`, the current text, and `event`, the native `input` event.
+   *
+   * This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsInput: EventEmitter<TextareaInputEventDetail>;
 
   /**
-   * Event emitted whenever the value of the textarea changes.
+   * Emitted when the user changes the value and then leaves the textarea. `Enter` adds a new line, so it doesn't emit this event.
+   * `detail` has `value`, the text, and `event`, the native event behind it, usually `change`.
    *
-   * This event will not emit when programmatically setting the `value` property.
+   * This event will not emit when programmatically setting the `value` property, unless the field has focus at the time;
+   * then it emits when the field loses focus.
    */
   @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
@@ -94,7 +99,7 @@ export class PdsTextarea {
   @Prop() debounce?: number;
 
   /**
-   * Displays an error message below the textarea field.
+   * Displays an error message below the textarea while `invalid` is set.
    */
   @Prop() errorMessage?: string;
 
@@ -104,7 +109,8 @@ export class PdsTextarea {
   @Prop() helperMessage?: string;
 
   /**
-   * Determines whether or not the textarea is invalid or throws an error.
+   * Determines whether or not the textarea is invalid. When `required` is set, the textarea sets it
+   * itself each time `pdsTextareaChange` fires, replacing a value you set.
    * @defaultValue false
    */
   @Prop({mutable: true}) invalid = false;       // eslint-disable-line @stencil-community/strict-mutable
