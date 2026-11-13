@@ -447,9 +447,9 @@ The action slot allows you to add helpful content next to the select label, such
 - With `required`, start the list with an empty-value placeholder, such as `<option value="">Choose a country</option>`, and the form won't submit until someone picks another option. If you disable the placeholder, also set `value=""`; otherwise the select shows the first enabled option instead and `required` doesn't stop the form. The select doesn't set `invalid` itself, so set `invalid` and `error-message` when you show an error.
 - Labels are wired automatically through the native `<label>` element, and helper/error props render standardized messaging so you don’t need duplicate markup.
 - Only `<option>` and `<optgroup>` elements in the default slot become options. Anything else there is ignored.
-- Supports both single and (where applicable) multiple-option scenarios; ensure each option has a unique `value`.
+- Set `multiple` to let people pick more than one option. The form then gets one entry for each selected option, so give each option a unique `value`.
 - Resetting the form sets `value` to an empty string, not back to the `value` it started with. The select then shows the option whose value is empty, or its first enabled option if none is, and submits nothing.
-- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
+- For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Technical Notes
 

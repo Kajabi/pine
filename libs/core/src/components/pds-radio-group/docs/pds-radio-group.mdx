@@ -26,6 +26,7 @@ Radio Groups wrap a set of related radio inputs, displaying a single error messa
 - When people can pick several options; use `pds-checkbox` items in a `fieldset` with a `legend` instead
 
 ### Accessibility
+
 - Ensure the group label is descriptive and clearly identifies the selection group
 - The group is a `radiogroup` named by `group-label` and described by its helper and error messages, so you don't need an `aria-label` that repeats the label
 - Without a visible `group-label`, name the group with `aria-label` (or `aria-labelledby` pointing at a heading); a consumer-set name always wins over `group-label`
@@ -307,7 +308,7 @@ Radio groups work seamlessly with image-based radios.
 - Each radio should have a unique `componentId` and `value` for proper form submission.
 - To track the selection, listen for `pdsRadioGroupChange` (`onPdsRadioGroupChange` in React) on the group and read `event.detail.value`. Radios inside the group don't emit their own `pdsRadioChange`.
 - Resetting the form unchecks every radio in the group, including one that started `checked`, so no option is selected afterwards.
-- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
+- For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Additional Resources
 
