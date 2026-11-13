@@ -1151,7 +1151,7 @@ export namespace Components {
          */
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         /**
-          * Width of the trigger (button or input). Any valid CSS width value.
+          * Width of the trigger (button or input). Any valid CSS width value. Changing it after load from one length or percentage to another eases to the new width, unless reduced motion is on.
           * @default 'fit-content'
          */
         "triggerWidth": string;
@@ -5149,7 +5149,7 @@ declare namespace LocalJSX {
          */
         "triggerVariant"?: 'secondary' | 'primary' | 'accent' | 'destructive';
         /**
-          * Width of the trigger (button or input). Any valid CSS width value.
+          * Width of the trigger (button or input). Any valid CSS width value. Changing it after load from one length or percentage to another eases to the new width, unless reduced motion is on.
           * @default 'fit-content'
          */
         "triggerWidth"?: string;
