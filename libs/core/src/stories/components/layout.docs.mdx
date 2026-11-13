@@ -11,11 +11,11 @@ Three components handle page layout. `pds-container` caps content at a readable 
 
 - Columns are `pds-box` elements placed directly inside a `pds-row`. Size them with `size` props on the `pds-box`. `pds-row` has no size or offset props.
 - A row's column sizes should add up to 12. A column that doesn't fit on the line wraps to the next one.
-- Columns with no size share the width the sized columns leave, equally. That holds only while they have no `direction`, `gap`, `display`, `wrap`, `fit`, `flex`, `offset` or border props (`border`, `border-block-*`, `border-inline-*`), including their breakpoint versions. An unsized column with any of those takes a full line of its own, so give it a `size` or move those props to a `pds-box` inside it.
+- Columns with no size share the width the sized columns leave, equally, and one with `auto` takes its content's width. That holds only while they have no `direction`, `display`, `gap`, `wrap`, `fit`, `container`, `offset`, `flex` preset (`grow`, `none` or `shrink`) or border props (`border`, `border-block-*`, `border-inline-*`), including their breakpoint versions, and no `auto-xs` to `auto-xl`. An unsized column with any of those takes a full line of its own at every width, so give it a `size` or move those props to a `pds-box` inside it. A custom `flex` value, such as `flex="1"`, still shares the row.
 - `size` applies at every width. `size-sm`, `size-md`, `size-lg` and `size-xl` apply from their breakpoint up, and `size-xs` applies only below 576px. Below the breakpoint of its size props, a column is full width, so the columns stack.
 - `size-*="0"` hides a column. `offset-*="0"` removes an offset and hides nothing.
 - `col-gap` sets the gutter as padding inside each column, and without it columns have no gutter. Put borders, backgrounds and shadows on a `pds-box` inside the column, not on the column itself.
-- Use `size` props, not flex props, to size columns. Flex props belong on a `pds-box` inside another `pds-box`, where `flex="grow"` fills the free space and `flex="none"` keeps the content's width. `flex="shrink"` currently behaves like `flex="none"` and doesn't shrink.
+- Use `size` props, not flex props, to size columns. Flex props belong on a `pds-box` inside another `pds-box`, where `flex="grow"` fills the free space, `flex="none"` keeps the content's width even when it overflows, and `flex="shrink"` keeps the content's width but gives way when space runs out.
 
 ## Responsive breakpoints
 
@@ -352,7 +352,7 @@ The columns use the base `size`, which applies at every width. Use a breakpoint 
 
 ### A column without a size jumps to its own line
 
-A column with no size takes a full line when it has `direction`, `gap`, `display`, `wrap`, `fit`, `flex`, `offset` or a border prop. Give it a `size`, or move those props to a `pds-box` inside the column. On a `pds-box` inside another `pds-box`, `flex="grow"` and `flex="none"` work as expected, and `flex="shrink"` currently behaves like `flex="none"`.
+A column with no size takes a full line when it has `direction`, `display`, `gap`, `wrap`, `fit`, `container`, `offset`, a `flex` preset (`grow`, `none` or `shrink`) or a border prop, a breakpoint version of one of these, or `auto-xs` to `auto-xl`. Give it a `size`, or move those props to a `pds-box` inside the column. The `flex` presets belong on a `pds-box` inside another `pds-box`.
 
 ## Related Components
 - <pds-link href="../?path=/docs/components-layout-box--docs">Box</pds-link>
