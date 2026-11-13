@@ -214,8 +214,6 @@ export class PdsSortable {
       // rather than collapsing to (0, 0), which can grow a scrollable ancestor's scroll area.
       Object.assign(region.style, {
         position: 'absolute',
-        insetBlockStart: '0',
-        insetInlineStart: '0',
         width: '1px',
         height: '1px',
         margin: '-1px',
