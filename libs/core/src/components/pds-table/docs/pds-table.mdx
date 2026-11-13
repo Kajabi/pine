@@ -20,7 +20,7 @@ Tables display tabular data using semantic subcomponents for head, head-cell, bo
 - For displaying important data to users in an organized format.
 - When the organized data needs to be sorted.
 
-### When Not to Use
+### When not to use
 
 - For building layouts. Please use [Box](/docs/components-layout-box--docs) and [Row](/docs/components-layout-row--docs) instead.
 
@@ -28,7 +28,9 @@ Tables display tabular data using semantic subcomponents for head, head-cell, bo
 
 Be sure to make proper use of the subcomponents to ensure that the table is accessible to screen reader users.
 
-The sort icon is hidden from assistive technology. To announce the sort direction, set `aria-sort` (`ascending` or `descending`) on the sorted `pds-table-head-cell`, updating it from the `pdsTableSort` event and removing it from the other head cells.
+The sort icon is hidden from assistive technology. To announce the sort direction, set `aria-sort` on the sorted `pds-table-head-cell`, `ascending` when the event's direction is `asc` and `descending` when it's `desc`, updating it from the `pdsTableSort` event and removing it from the other head cells.
+
+Sortable head cells can't take focus and don't respond to keys, so the built-in sorting works only with a pointer.
 
 ## Properties
 
@@ -138,6 +140,403 @@ The default table, properly using all subcomponents.
       </pds-table-row>
     </pds-table-body>
   </pds-table>
+</DocCanvas>
+
+
+### Selectable
+
+When the `selectable` prop is set to `true`, the table renders a checkbox at the start of each row and a select-all checkbox in the head. Add `disable-select-all` to hide the select-all checkbox and keep the row checkboxes, for tables where selecting every row at once isn't appropriate.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="selectable" selectable={true}>
+  <PdsTableHead>
+    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell>Row Item Alpha</PdsTableCell>
+      <PdsTableCell>Row Item Beta</PdsTableCell>
+      <PdsTableCell>Row Item Charlie</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Row Item Alpha</PdsTableCell>
+      <PdsTableCell>Row Item Beta</PdsTableCell>
+      <PdsTableCell>Row Item Charlie</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Row Item Alpha</PdsTableCell>
+      <PdsTableCell>Row Item Beta</PdsTableCell>
+      <PdsTableCell>Row Item Charlie</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `
+  <pds-table component-id="selectable" selectable>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}}>
+  <pds-table component-id="selectable" selectable>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
+When a row's checkbox changes, that `pds-table-row` emits `pdsTableRowSelected` with `{ rowIndex, isSelected }`. `rowIndex` is the row's position in the body, which changes when the table is sorted, so to match a selection to your data, give each row a `data-id` and read `event.target.dataset.id` in the handler. The select-all checkbox emits `pdsTableSelectAll` from `pds-table-head` with `{ isSelected }`. Select all sets every row's `isSelected` without emitting `pdsTableRowSelected`, so listen for both. A row or head that starts with `is-selected` also emits its event on load. Setting `is-selected` in code after that emits nothing, and the select-all checkbox doesn't update to match.
+
+```javascript
+const table = document.querySelector('pds-table[component-id="members"]');
+
+table.addEventListener('pdsTableRowSelected', (event) => {
+  const memberId = event.target.dataset.id;
+  // Add memberId to your selection when event.detail.isSelected is true, or remove it.
+});
+
+table.addEventListener('pdsTableSelectAll', (event) => {
+  // event.detail.isSelected now applies to every row.
+});
+```
+
+In React, pass `onPdsTableRowSelected` to each `PdsTableRow`, so the handler already knows its item, and `onPdsTableSelectAll` to `PdsTableHead`.
+
+
+### Sorting
+
+Add `sortable` to a `pds-table-head-cell` to let readers sort the table by that column. Clicking the head cell sorts the rows by the text in that column and shows an arrow for the direction.
+
+- The first click on a column sorts it in descending order, and each click after that reverses it. Each column keeps its own direction, so going back to a column reverses the direction it had.
+- Sorting by a column clears the arrow from the column sorted before it.
+- Rows are compared as text, ignoring case, so numbers sort by their digits: `10` comes before `9`.
+- The built-in sort finds a column by counting only the sortable head cells. When a column that isn't sortable comes before a sortable one, sorting reads the wrong column's cells, so mark every column `sortable`, or [sort the rows yourself](#sorting-rows-yourself).
+- The built-in sort and the default sort only find head cells that have the `sortable` attribute. When `sortable` is set only as a property, as React 19 does on a raw `pds-table-head-cell` tag, clicking shows the arrow but doesn't sort.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="sortable" selectable={true}>
+  <PdsTableHead>
+    <PdsTableHeadCell sortable={true}>Name</PdsTableHeadCell>
+    <PdsTableHeadCell sortable={true}>Email</PdsTableHeadCell>
+    <PdsTableHeadCell sortable={true}>Account</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell>John Doe</PdsTableCell>
+      <PdsTableCell>john.doe@example.com</PdsTableCell>
+      <PdsTableCell>47321</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Jane Smith</PdsTableCell>
+      <PdsTableCell>jane.smith@example.com</PdsTableCell>
+      <PdsTableCell>89654</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Michael Johnson</PdsTableCell>
+      <PdsTableCell>michael.johnson@example.com</PdsTableCell>
+      <PdsTableCell>21578</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Susan Brown</PdsTableCell>
+      <PdsTableCell>susan.brown@example.com</PdsTableCell>
+      <PdsTableCell>63920</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>William Davis</PdsTableCell>
+      <PdsTableCell>william.davis@example.com</PdsTableCell>
+      <PdsTableCell>17436</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="sortable" selectable>
+  <pds-table-head>
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable>Email</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>John Doe</pds-table-cell>
+      <pds-table-cell>john.doe@example.com</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>William Davis</pds-table-cell>
+      <pds-table-cell>william.davis@example.com</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <div dangerouslySetInnerHTML={{ __html: `<pds-table component-id="sortable" selectable>
+  <pds-table-head>
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable>Email</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>John Doe</pds-table-cell>
+      <pds-table-cell>john.doe@example.com</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>William Davis</pds-table-cell>
+      <pds-table-cell>william.davis@example.com</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>` }} />
+</DocCanvas>
+
+#### Sort event
+
+Each click emits `pdsTableSort` from the clicked `pds-table-head-cell`. The event bubbles to `pds-table`, which sorts the rows when the event reaches it. `detail.column` is the head cell's text, trimmed, and `detail.direction` is the new direction, `asc` or `desc`. Set `aria-sort` to match, as described in [Accessibility](#accessibility).
+
+#### Sorting rows yourself
+
+Sort the rows yourself when they come from a server, or when React or another framework renders them. The built-in sort empties `pds-table-body` and puts back only the rows, so it moves elements the framework rendered and drops anything else in the body, such as the comment markers some frameworks leave there.
+
+To stop the built-in sort, call `preventDefault()` on `pdsTableSort`, then render the rows in the order `detail.direction` gives. The table sorts as soon as the event reaches `pds-table`, so the call has to come first: listen on `pds-table-head` or the head cells, or listen in the capture phase. A listener on `pds-table` or `document` runs after the rows have moved. Canceling doesn't stop the head cell from showing the new direction.
+
+```javascript
+document.querySelector('pds-table-head').addEventListener('pdsTableSort', (event) => {
+  event.preventDefault();
+  const { column, direction } = event.detail;
+  // Sort or fetch your rows by column and direction, then render them.
+});
+```
+
+In React, pass the handler to each sortable `PdsTableHeadCell` and render the rows from state:
+
+```jsx
+import { useState } from 'react';
+import {
+  PdsTable, PdsTableBody, PdsTableCell, PdsTableHead, PdsTableHeadCell, PdsTableRow,
+} from '@pine-ds/react';
+
+const fields = { Name: 'name', Email: 'email' };
+
+export function MembersTable({ members }) {
+  const [sort, setSort] = useState(null);
+
+  const handleSort = (event) => {
+    event.preventDefault();
+    setSort(event.detail);
+  };
+
+  const rows = sort
+    ? [...members].sort((a, b) => {
+        const field = fields[sort.column];
+        const order = a[field].localeCompare(b[field]);
+        return sort.direction === 'asc' ? order : -order;
+      })
+    : members;
+
+  const ariaSort = (column) => {
+    if (sort?.column !== column) return undefined;
+    return sort.direction === 'asc' ? 'ascending' : 'descending';
+  };
+
+  return (
+    <PdsTable componentId="members">
+      <PdsTableHead>
+        {Object.keys(fields).map((column) => (
+          <PdsTableHeadCell key={column} sortable onPdsTableSort={handleSort} aria-sort={ariaSort(column)}>
+            {column}
+          </PdsTableHeadCell>
+        ))}
+      </PdsTableHead>
+      <PdsTableBody>
+        {rows.map((member) => (
+          <PdsTableRow key={member.id}>
+            <PdsTableCell>{member.name}</PdsTableCell>
+            <PdsTableCell>{member.email}</PdsTableCell>
+          </PdsTableRow>
+        ))}
+      </PdsTableBody>
+    </PdsTable>
+  );
+}
+```
+
+### Default Sort
+
+To display the table with a pre-sorted column on initial load, use the `defaultSortColumn` and `defaultSortDirection` properties. The `defaultSortColumn` value must match the text content of a sortable column header exactly. The default sort doesn't emit `pdsTableSort`, so set the matching initial `aria-sort` on that head cell yourself. The first click on that column reverses the default direction.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="default-sort" defaultSortColumn="Name" defaultSortDirection="desc">
+  <PdsTableHead>
+    <PdsTableHeadCell sortable={true} aria-sort="descending">Name</PdsTableHeadCell>
+    <PdsTableHeadCell sortable={true}>Email</PdsTableHeadCell>
+    <PdsTableHeadCell sortable={true}>Account</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell>John Doe</PdsTableCell>
+      <PdsTableCell>john.doe@example.com</PdsTableCell>
+      <PdsTableCell>47321</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Jane Smith</PdsTableCell>
+      <PdsTableCell>jane.smith@example.com</PdsTableCell>
+      <PdsTableCell>89654</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Michael Johnson</PdsTableCell>
+      <PdsTableCell>michael.johnson@example.com</PdsTableCell>
+      <PdsTableCell>21578</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Susan Brown</PdsTableCell>
+      <PdsTableCell>susan.brown@example.com</PdsTableCell>
+      <PdsTableCell>63920</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>William Davis</PdsTableCell>
+      <PdsTableCell>william.davis@example.com</PdsTableCell>
+      <PdsTableCell>17436</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="default-sort" default-sort-column="Name" default-sort-direction="desc">
+  <pds-table-head>
+    <pds-table-head-cell sortable aria-sort="descending">Name</pds-table-head-cell>
+    <pds-table-head-cell sortable>Email</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>John Doe</pds-table-cell>
+      <pds-table-cell>john.doe@example.com</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>William Davis</pds-table-cell>
+      <pds-table-cell>william.davis@example.com</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <div dangerouslySetInnerHTML={{ __html: `<pds-table component-id="default-sort" default-sort-column="Name" default-sort-direction="desc">
+  <pds-table-head>
+    <pds-table-head-cell sortable aria-sort="descending">Name</pds-table-head-cell>
+    <pds-table-head-cell sortable>Email</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>John Doe</pds-table-cell>
+      <pds-table-cell>john.doe@example.com</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>William Davis</pds-table-cell>
+      <pds-table-cell>william.davis@example.com</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>` }} />
 </DocCanvas>
 
 
@@ -304,362 +703,160 @@ When the `border` and `background` props are set to `true` on `pds-table-head`, 
 </DocCanvas>
 
 
-### Selectable
-
-When the `selectable` prop is set to `true`, the table will render a checkbox in the first column of each row.
-
-<DocCanvas mdxSource={{
-  react: `<PdsTable componentId="selectable" selectable={true}>
-  <PdsTableHead>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-  </PdsTableHead>
-  <PdsTableBody>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-    </PdsTableRow>
-  </PdsTableBody>
-</PdsTable>`,
-  webComponent: `
-  <pds-table component-id="selectable" selectable>
-    <pds-table-head>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-`}}>
-  <pds-table component-id="selectable" selectable>
-    <pds-table-head>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</DocCanvas>
-
-When a row's checkbox changes, that `pds-table-row` emits `pdsTableRowSelected` with `{ rowIndex, isSelected }`. `rowIndex` is the row's position in the body, which changes when the table is sorted, so to match a selection to your data, give each row a `data-id` and read `event.target.dataset.id` in the handler. The select-all checkbox emits `pdsTableSelectAll` from `pds-table-head` with `{ isSelected }`. Select all sets every row's `isSelected` without emitting `pdsTableRowSelected`, so listen for both. A row or head that starts with `is-selected` also emits its event on load.
-
-### Selectable without Select All
-
-When the `disable-select-all` prop is set to `true` alongside `selectable`, the select-all checkbox in the header is hidden while individual row checkboxes remain functional. This is useful when bulk selection is not appropriate but per-row selection is still needed.
-
-<DocCanvas mdxSource={{
-  react: `<PdsTable componentId="selectable-no-select-all" selectable={true} disableSelectAll={true}>
-  <PdsTableHead>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-  </PdsTableHead>
-  <PdsTableBody>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-    </PdsTableRow>
-  </PdsTableBody>
-</PdsTable>`,
-  webComponent: `<pds-table component-id="selectable-no-select-all" selectable disable-select-all>
-  <pds-table-head>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-  </pds-table-head>
-  <pds-table-body>
-    <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-    </pds-table-row>
-  </pds-table-body>
-</pds-table>
-`}}>
-  <pds-table component-id="selectable-no-select-all" selectable disable-select-all>
-    <pds-table-head>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</DocCanvas>
-
-
 ### Responsive
 
 When the `responsive` prop is set to `true`, the table scrolls horizontally when it's wider than its container.
 
 - Shadows at the inline-start and inline-end edges show when there's more to scroll. With `fixed-column`, the start shadow stays hidden.
-- The table doesn't reflow: there's no stacked or card layout on small screens. For wide tables, add `fixed-column` so the first column stays in view. With `selectable`, that column slides over the checkboxes as the table scrolls (see [Fixed w/ Checkbox](#fixed-w-checkbox)).
+- The table doesn't reflow: there's no stacked or card layout on small screens. For wide tables, add `fixed-column` so the first column stays in view. With `selectable`, that column slides over the checkboxes as the table scrolls (see [Fixed Column](#fixed-column)).
 - The table is a Tab stop, but arrow keys don't scroll it. Keyboard users can only bring hidden columns into view by tabbing to controls inside them.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="responsive" responsive={true}>
-    <PdsTableHead>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    </PdsTableHead>
-    <PdsTableBody>
-      <PdsTableRow>
-        <PdsTableCell>Row Item Alpha</PdsTableCell>
-        <PdsTableCell>Row Item Beta</PdsTableCell>
-        <PdsTableCell>Row Item Charlie</PdsTableCell>
-        <PdsTableCell>Row Item Delta</PdsTableCell>
-        <PdsTableCell>Row Item Echo</PdsTableCell>
-        <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-        <PdsTableCell>Row Item Golf</PdsTableCell>
-        <PdsTableCell>Row Item Hotel</PdsTableCell>
-        <PdsTableCell>Row Item Juliett</PdsTableCell>
-        <PdsTableCell>Row Item Kilo</PdsTableCell>
-        <PdsTableCell>Row Item Lima</PdsTableCell>
-        <PdsTableCell>Row Item Mike</PdsTableCell>
-      </PdsTableRow>
-      <PdsTableRow>
-        <PdsTableCell>Row Item Alpha</PdsTableCell>
-        <PdsTableCell>Row Item Beta</PdsTableCell>
-        <PdsTableCell>Row Item Charlie</PdsTableCell>
-        <PdsTableCell>Row Item Delta</PdsTableCell>
-        <PdsTableCell>Row Item Echo</PdsTableCell>
-        <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-        <PdsTableCell>Row Item Golf</PdsTableCell>
-        <PdsTableCell>Row Item Hotel</PdsTableCell>
-        <PdsTableCell>Row Item Juliett</PdsTableCell>
-        <PdsTableCell>Row Item Kilo</PdsTableCell>
-        <PdsTableCell>Row Item Lima</PdsTableCell>
-        <PdsTableCell>Row Item Mike</PdsTableCell>
-      </PdsTableRow>
-      <PdsTableRow>
-        <PdsTableCell>Row Item Alpha</PdsTableCell>
-        <PdsTableCell>Row Item Beta</PdsTableCell>
-        <PdsTableCell>Row Item Charlie</PdsTableCell>
-        <PdsTableCell>Row Item Delta</PdsTableCell>
-        <PdsTableCell>Row Item Echo</PdsTableCell>
-        <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-        <PdsTableCell>Row Item Golf</PdsTableCell>
-        <PdsTableCell>Row Item Hotel</PdsTableCell>
-        <PdsTableCell>Row Item Juliett</PdsTableCell>
-        <PdsTableCell>Row Item Kilo</PdsTableCell>
-        <PdsTableCell>Row Item Lima</PdsTableCell>
-        <PdsTableCell>Row Item Mike</PdsTableCell>
-      </PdsTableRow>
-    </PdsTableBody>
-  </PdsTable>`,
+  <PdsTableHead>
+    <PdsTableHeadCell>Name</PdsTableHeadCell>
+    <PdsTableHeadCell>Email</PdsTableHeadCell>
+    <PdsTableHeadCell>Plan</PdsTableHeadCell>
+    <PdsTableHeadCell>Status</PdsTableHeadCell>
+    <PdsTableHeadCell>Joined</PdsTableHeadCell>
+    <PdsTableHeadCell>Last sign-in</PdsTableHeadCell>
+    <PdsTableHeadCell>Country</PdsTableHeadCell>
+    <PdsTableHeadCell>Courses</PdsTableHeadCell>
+    <PdsTableHeadCell>Lifetime value</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell>Jane Smith</PdsTableCell>
+      <PdsTableCell>jane.smith@example.com</PdsTableCell>
+      <PdsTableCell>Pro annual</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>Mar 4, 2025</PdsTableCell>
+      <PdsTableCell>Nov 10, 2026</PdsTableCell>
+      <PdsTableCell>Canada</PdsTableCell>
+      <PdsTableCell>4</PdsTableCell>
+      <PdsTableCell>$1,240.00</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Michael Johnson</PdsTableCell>
+      <PdsTableCell>michael.johnson@example.com</PdsTableCell>
+      <PdsTableCell>Basic monthly</PdsTableCell>
+      <PdsTableCell>Past due</PdsTableCell>
+      <PdsTableCell>Jan 18, 2024</PdsTableCell>
+      <PdsTableCell>Oct 2, 2026</PdsTableCell>
+      <PdsTableCell>United States</PdsTableCell>
+      <PdsTableCell>1</PdsTableCell>
+      <PdsTableCell>$386.50</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Susan Brown</PdsTableCell>
+      <PdsTableCell>susan.brown@example.com</PdsTableCell>
+      <PdsTableCell>Pro monthly</PdsTableCell>
+      <PdsTableCell>Canceled</PdsTableCell>
+      <PdsTableCell>Jul 9, 2023</PdsTableCell>
+      <PdsTableCell>Aug 21, 2026</PdsTableCell>
+      <PdsTableCell>United Kingdom</PdsTableCell>
+      <PdsTableCell>7</PdsTableCell>
+      <PdsTableCell>$2,915.75</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
   webComponent: `<pds-table component-id="responsive" responsive>
   <pds-table-head>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Name</pds-table-head-cell>
+    <pds-table-head-cell>Email</pds-table-head-cell>
+    <pds-table-head-cell>Plan</pds-table-head-cell>
+    <pds-table-head-cell>Status</pds-table-head-cell>
+    <pds-table-head-cell>Joined</pds-table-head-cell>
+    <pds-table-head-cell>Last sign-in</pds-table-head-cell>
+    <pds-table-head-cell>Country</pds-table-head-cell>
+    <pds-table-head-cell>Courses</pds-table-head-cell>
+    <pds-table-head-cell>Lifetime value</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>Pro annual</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>Mar 4, 2025</pds-table-cell>
+      <pds-table-cell>Nov 10, 2026</pds-table-cell>
+      <pds-table-cell>Canada</pds-table-cell>
+      <pds-table-cell>4</pds-table-cell>
+      <pds-table-cell>$1,240.00</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>Basic monthly</pds-table-cell>
+      <pds-table-cell>Past due</pds-table-cell>
+      <pds-table-cell>Jan 18, 2024</pds-table-cell>
+      <pds-table-cell>Oct 2, 2026</pds-table-cell>
+      <pds-table-cell>United States</pds-table-cell>
+      <pds-table-cell>1</pds-table-cell>
+      <pds-table-cell>$386.50</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>Pro monthly</pds-table-cell>
+      <pds-table-cell>Canceled</pds-table-cell>
+      <pds-table-cell>Jul 9, 2023</pds-table-cell>
+      <pds-table-cell>Aug 21, 2026</pds-table-cell>
+      <pds-table-cell>United Kingdom</pds-table-cell>
+      <pds-table-cell>7</pds-table-cell>
+      <pds-table-cell>$2,915.75</pds-table-cell>
     </pds-table-row>
   </pds-table-body>
-</pds-table>
-`}}>
+</pds-table>`}}>
   <pds-table component-id="responsive" responsive>
     <pds-table-head>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Name</pds-table-head-cell>
+      <pds-table-head-cell>Email</pds-table-head-cell>
+      <pds-table-head-cell>Plan</pds-table-head-cell>
+      <pds-table-head-cell>Status</pds-table-head-cell>
+      <pds-table-head-cell>Joined</pds-table-head-cell>
+      <pds-table-head-cell>Last sign-in</pds-table-head-cell>
+      <pds-table-head-cell>Country</pds-table-head-cell>
+      <pds-table-head-cell>Courses</pds-table-head-cell>
+      <pds-table-head-cell>Lifetime value</pds-table-head-cell>
     </pds-table-head>
     <pds-table-body>
       <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+        <pds-table-cell>Jane Smith</pds-table-cell>
+        <pds-table-cell>jane.smith@example.com</pds-table-cell>
+        <pds-table-cell>Pro annual</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>Mar 4, 2025</pds-table-cell>
+        <pds-table-cell>Nov 10, 2026</pds-table-cell>
+        <pds-table-cell>Canada</pds-table-cell>
+        <pds-table-cell>4</pds-table-cell>
+        <pds-table-cell>$1,240.00</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+        <pds-table-cell>Michael Johnson</pds-table-cell>
+        <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+        <pds-table-cell>Basic monthly</pds-table-cell>
+        <pds-table-cell>Past due</pds-table-cell>
+        <pds-table-cell>Jan 18, 2024</pds-table-cell>
+        <pds-table-cell>Oct 2, 2026</pds-table-cell>
+        <pds-table-cell>United States</pds-table-cell>
+        <pds-table-cell>1</pds-table-cell>
+        <pds-table-cell>$386.50</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+        <pds-table-cell>Susan Brown</pds-table-cell>
+        <pds-table-cell>susan.brown@example.com</pds-table-cell>
+        <pds-table-cell>Pro monthly</pds-table-cell>
+        <pds-table-cell>Canceled</pds-table-cell>
+        <pds-table-cell>Jul 9, 2023</pds-table-cell>
+        <pds-table-cell>Aug 21, 2026</pds-table-cell>
+        <pds-table-cell>United Kingdom</pds-table-cell>
+        <pds-table-cell>7</pds-table-cell>
+        <pds-table-cell>$2,915.75</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
 </DocCanvas>
-
 
 
 ### Fixed Column
@@ -668,373 +865,150 @@ When the `fixed-column` prop is set to `true`, the first column of the table wil
 
 **Note:** Fixed column must be used in conjunction with the `responsive` prop to enable horizontal scrolling.
 
+With `selectable`, only the first column stays in place. The checkbox column scrolls with the rest of the table, so once the table scrolls horizontally, the first column slides over the checkboxes and hides them.
+
 <DocCanvas mdxSource={{
-  react: `<PdsTable componentId="fixed" responsive fixedColumn={true}>
+  react: `<PdsTable componentId="fixed" responsive={true} fixedColumn={true}>
   <PdsTableHead>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+    <PdsTableHeadCell>Name</PdsTableHeadCell>
+    <PdsTableHeadCell>Email</PdsTableHeadCell>
+    <PdsTableHeadCell>Plan</PdsTableHeadCell>
+    <PdsTableHeadCell>Status</PdsTableHeadCell>
+    <PdsTableHeadCell>Joined</PdsTableHeadCell>
+    <PdsTableHeadCell>Last sign-in</PdsTableHeadCell>
+    <PdsTableHeadCell>Country</PdsTableHeadCell>
+    <PdsTableHeadCell>Courses</PdsTableHeadCell>
+    <PdsTableHeadCell>Lifetime value</PdsTableHeadCell>
   </PdsTableHead>
   <PdsTableBody>
     <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-      <PdsTableCell>Row Item Delta</PdsTableCell>
-      <PdsTableCell>Row Item Echo</PdsTableCell>
-      <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-      <PdsTableCell>Row Item Golf</PdsTableCell>
-      <PdsTableCell>Row Item Hotel</PdsTableCell>
-      <PdsTableCell>Row Item Juliett</PdsTableCell>
-      <PdsTableCell>Row Item Kilo</PdsTableCell>
-      <PdsTableCell>Row Item Lima</PdsTableCell>
-      <PdsTableCell>Row Item Mike</PdsTableCell>
+      <PdsTableCell>Jane Smith</PdsTableCell>
+      <PdsTableCell>jane.smith@example.com</PdsTableCell>
+      <PdsTableCell>Pro annual</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>Mar 4, 2025</PdsTableCell>
+      <PdsTableCell>Nov 10, 2026</PdsTableCell>
+      <PdsTableCell>Canada</PdsTableCell>
+      <PdsTableCell>4</PdsTableCell>
+      <PdsTableCell>$1,240.00</PdsTableCell>
     </PdsTableRow>
     <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-      <PdsTableCell>Row Item Delta</PdsTableCell>
-      <PdsTableCell>Row Item Echo</PdsTableCell>
-      <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-      <PdsTableCell>Row Item Golf</PdsTableCell>
-      <PdsTableCell>Row Item Hotel</PdsTableCell>
-      <PdsTableCell>Row Item Juliett</PdsTableCell>
-      <PdsTableCell>Row Item Kilo</PdsTableCell>
-      <PdsTableCell>Row Item Lima</PdsTableCell>
-      <PdsTableCell>Row Item Mike</PdsTableCell>
+      <PdsTableCell>Michael Johnson</PdsTableCell>
+      <PdsTableCell>michael.johnson@example.com</PdsTableCell>
+      <PdsTableCell>Basic monthly</PdsTableCell>
+      <PdsTableCell>Past due</PdsTableCell>
+      <PdsTableCell>Jan 18, 2024</PdsTableCell>
+      <PdsTableCell>Oct 2, 2026</PdsTableCell>
+      <PdsTableCell>United States</PdsTableCell>
+      <PdsTableCell>1</PdsTableCell>
+      <PdsTableCell>$386.50</PdsTableCell>
     </PdsTableRow>
     <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-      <PdsTableCell>Row Item Delta</PdsTableCell>
-      <PdsTableCell>Row Item Echo</PdsTableCell>
-      <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-      <PdsTableCell>Row Item Golf</PdsTableCell>
-      <PdsTableCell>Row Item Hotel</PdsTableCell>
-      <PdsTableCell>Row Item Juliett</PdsTableCell>
-      <PdsTableCell>Row Item Kilo</PdsTableCell>
-      <PdsTableCell>Row Item Lima</PdsTableCell>
-      <PdsTableCell>Row Item Mike</PdsTableCell>
+      <PdsTableCell>Susan Brown</PdsTableCell>
+      <PdsTableCell>susan.brown@example.com</PdsTableCell>
+      <PdsTableCell>Pro monthly</PdsTableCell>
+      <PdsTableCell>Canceled</PdsTableCell>
+      <PdsTableCell>Jul 9, 2023</PdsTableCell>
+      <PdsTableCell>Aug 21, 2026</PdsTableCell>
+      <PdsTableCell>United Kingdom</PdsTableCell>
+      <PdsTableCell>7</PdsTableCell>
+      <PdsTableCell>$2,915.75</PdsTableCell>
     </PdsTableRow>
   </PdsTableBody>
 </PdsTable>`,
   webComponent: `<pds-table component-id="fixed" responsive fixed-column>
   <pds-table-head>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Name</pds-table-head-cell>
+    <pds-table-head-cell>Email</pds-table-head-cell>
+    <pds-table-head-cell>Plan</pds-table-head-cell>
+    <pds-table-head-cell>Status</pds-table-head-cell>
+    <pds-table-head-cell>Joined</pds-table-head-cell>
+    <pds-table-head-cell>Last sign-in</pds-table-head-cell>
+    <pds-table-head-cell>Country</pds-table-head-cell>
+    <pds-table-head-cell>Courses</pds-table-head-cell>
+    <pds-table-head-cell>Lifetime value</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>Pro annual</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>Mar 4, 2025</pds-table-cell>
+      <pds-table-cell>Nov 10, 2026</pds-table-cell>
+      <pds-table-cell>Canada</pds-table-cell>
+      <pds-table-cell>4</pds-table-cell>
+      <pds-table-cell>$1,240.00</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>Basic monthly</pds-table-cell>
+      <pds-table-cell>Past due</pds-table-cell>
+      <pds-table-cell>Jan 18, 2024</pds-table-cell>
+      <pds-table-cell>Oct 2, 2026</pds-table-cell>
+      <pds-table-cell>United States</pds-table-cell>
+      <pds-table-cell>1</pds-table-cell>
+      <pds-table-cell>$386.50</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>Pro monthly</pds-table-cell>
+      <pds-table-cell>Canceled</pds-table-cell>
+      <pds-table-cell>Jul 9, 2023</pds-table-cell>
+      <pds-table-cell>Aug 21, 2026</pds-table-cell>
+      <pds-table-cell>United Kingdom</pds-table-cell>
+      <pds-table-cell>7</pds-table-cell>
+      <pds-table-cell>$2,915.75</pds-table-cell>
     </pds-table-row>
   </pds-table-body>
-</pds-table>
-`}}>
+</pds-table>`}}>
   <pds-table component-id="fixed" responsive fixed-column>
     <pds-table-head>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Name</pds-table-head-cell>
+      <pds-table-head-cell>Email</pds-table-head-cell>
+      <pds-table-head-cell>Plan</pds-table-head-cell>
+      <pds-table-head-cell>Status</pds-table-head-cell>
+      <pds-table-head-cell>Joined</pds-table-head-cell>
+      <pds-table-head-cell>Last sign-in</pds-table-head-cell>
+      <pds-table-head-cell>Country</pds-table-head-cell>
+      <pds-table-head-cell>Courses</pds-table-head-cell>
+      <pds-table-head-cell>Lifetime value</pds-table-head-cell>
     </pds-table-head>
     <pds-table-body>
       <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+        <pds-table-cell>Jane Smith</pds-table-cell>
+        <pds-table-cell>jane.smith@example.com</pds-table-cell>
+        <pds-table-cell>Pro annual</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>Mar 4, 2025</pds-table-cell>
+        <pds-table-cell>Nov 10, 2026</pds-table-cell>
+        <pds-table-cell>Canada</pds-table-cell>
+        <pds-table-cell>4</pds-table-cell>
+        <pds-table-cell>$1,240.00</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+        <pds-table-cell>Michael Johnson</pds-table-cell>
+        <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+        <pds-table-cell>Basic monthly</pds-table-cell>
+        <pds-table-cell>Past due</pds-table-cell>
+        <pds-table-cell>Jan 18, 2024</pds-table-cell>
+        <pds-table-cell>Oct 2, 2026</pds-table-cell>
+        <pds-table-cell>United States</pds-table-cell>
+        <pds-table-cell>1</pds-table-cell>
+        <pds-table-cell>$386.50</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</DocCanvas>
-
-### Fixed w/ Checkbox
-
-The `fixed-column` prop can be used in conjunction with the `selectable` prop to render an additional checkbox column. Both columns stick to the same inline-start edge, so once the table scrolls horizontally, the first column slides over the checkboxes and hides them.
-
-<DocCanvas mdxSource={{
-  react: `<PdsTable componentId="fixedcb" responsive={true} fixedColumn={true} selectable={true}>
-  <PdsTableHead>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
-  </PdsTableHead>
-  <PdsTableBody>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-      <PdsTableCell>Row Item Delta</PdsTableCell>
-      <PdsTableCell>Row Item Echo</PdsTableCell>
-      <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-      <PdsTableCell>Row Item Golf</PdsTableCell>
-      <PdsTableCell>Row Item Hotel</PdsTableCell>
-      <PdsTableCell>Row Item Juliett</PdsTableCell>
-      <PdsTableCell>Row Item Kilo</PdsTableCell>
-      <PdsTableCell>Row Item Lima</PdsTableCell>
-      <PdsTableCell>Row Item Mike</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-      <PdsTableCell>Row Item Delta</PdsTableCell>
-      <PdsTableCell>Row Item Echo</PdsTableCell>
-      <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-      <PdsTableCell>Row Item Golf</PdsTableCell>
-      <PdsTableCell>Row Item Hotel</PdsTableCell>
-      <PdsTableCell>Row Item Juliett</PdsTableCell>
-      <PdsTableCell>Row Item Kilo</PdsTableCell>
-      <PdsTableCell>Row Item Lima</PdsTableCell>
-      <PdsTableCell>Row Item Mike</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Row Item Alpha</PdsTableCell>
-      <PdsTableCell>Row Item Beta</PdsTableCell>
-      <PdsTableCell>Row Item Charlie</PdsTableCell>
-      <PdsTableCell>Row Item Delta</PdsTableCell>
-      <PdsTableCell>Row Item Echo</PdsTableCell>
-      <PdsTableCell>Row Item Foxtrot</PdsTableCell>
-      <PdsTableCell>Row Item Golf</PdsTableCell>
-      <PdsTableCell>Row Item Hotel</PdsTableCell>
-      <PdsTableCell>Row Item Juliett</PdsTableCell>
-      <PdsTableCell>Row Item Kilo</PdsTableCell>
-      <PdsTableCell>Row Item Lima</PdsTableCell>
-      <PdsTableCell>Row Item Mike</PdsTableCell>
-    </PdsTableRow>
-  </PdsTableBody>
-</PdsTable>`,
-webComponent: `<pds-table component-id="fixedcb" responsive fixed-column selectable>
-  <pds-table-head>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
-  </pds-table-head>
-  <pds-table-body>
-    <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Row Item Alpha</pds-table-cell>
-      <pds-table-cell>Row Item Beta</pds-table-cell>
-      <pds-table-cell>Row Item Charlie</pds-table-cell>
-      <pds-table-cell>Row Item Delta</pds-table-cell>
-      <pds-table-cell>Row Item Echo</pds-table-cell>
-      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell>Row Item Golf</pds-table-cell>
-      <pds-table-cell>Row Item Hotel</pds-table-cell>
-      <pds-table-cell>Row Item Juliett</pds-table-cell>
-      <pds-table-cell>Row Item Kilo</pds-table-cell>
-      <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
-    </pds-table-row>
-  </pds-table-body>
-</pds-table>
-`}}>
-  <pds-table component-id="fixedcb" responsive fixed-column selectable>
-    <pds-table-head>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
-        <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+        <pds-table-cell>Susan Brown</pds-table-cell>
+        <pds-table-cell>susan.brown@example.com</pds-table-cell>
+        <pds-table-cell>Pro monthly</pds-table-cell>
+        <pds-table-cell>Canceled</pds-table-cell>
+        <pds-table-cell>Jul 9, 2023</pds-table-cell>
+        <pds-table-cell>Aug 21, 2026</pds-table-cell>
+        <pds-table-cell>United Kingdom</pds-table-cell>
+        <pds-table-cell>7</pds-table-cell>
+        <pds-table-cell>$2,915.75</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
@@ -1043,7 +1017,9 @@ webComponent: `<pds-table component-id="fixedcb" responsive fixed-column selecta
 
 ### Cell Truncation
 
-When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cell will visually truncate the text and add an ellipsis when the text exceeds the max-width (100px) of the cell.
+When the `truncate` prop is set on a `pds-table-cell`, the cell keeps its text on one line and cuts off what doesn't fit the column with an ellipsis. While the text is cut off, the cell is a Tab stop and shows a tooltip with the full text on hover and focus.
+
+Truncation doesn't set the column's width. In the default layout, a truncated cell counts as at most 100px wide when the table divides its width among the columns (`--pds-table-cell-truncate-max-width` changes this), and the column still ends up wider when the table has room. To give a column an exact width, use `table-layout="fixed"` with a `width` on its head cell, as in [Column Widths](#column-widths).
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="truncate">
@@ -1430,321 +1406,6 @@ Text alignment can be controlled using the `cell-align` prop on both `pds-table-
       </pds-table-row>
     </pds-table-body>
   </pds-table>
-</DocCanvas>
-
-
-### Sorting
-
-Basic sorting can be enabled by adding the `sortable` attribute to a `pds-table-head-cell` element. The table will automatically sort in ascending or descending order when the cell is clicked.
-
-In cases where the default sorting functionality is not suitable, it is possible to use a custom sorting function by listening to the `pdsTableSort` event.
-
-### Event payload
-
-`pdsTableSort` dispatches from the clicked `<pds-table-head-cell>` and bubbles up to `<pds-table>`.
-
-### Preventing built-in sorting
-
-If you need full control over the rendered rows (for example, server-side sorting), call `event.preventDefault()` on the `pdsTableSort` event to prevent the table from reordering the DOM.
-
-```javascript
-document.addEventListener('pdsTableSort', (event) => {
-  event.preventDefault();
-
-  const { column, direction } = event.detail;
-  // Handle sorting via server request, state management, etc.
-});
-```
-
-<DocCanvas mdxSource={{
-  react: `<PdsTable componentId="sortable" selectable={true}>
-  <PdsTableHead>
-    <PdsTableHeadCell sortable={true}>Name</PdsTableHeadCell>
-    <PdsTableHeadCell sortable={true}>Email</PdsTableHeadCell>
-    <PdsTableHeadCell sortable={true}>Account</PdsTableHeadCell>
-  </PdsTableHead>
-  <PdsTableBody>
-    <PdsTableRow>
-      <PdsTableCell>John Doe</PdsTableCell>
-      <PdsTableCell>john.doe@example.com</PdsTableCell>
-      <PdsTableCell>47321</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Jane Smith</PdsTableCell>
-      <PdsTableCell>jane.smith@example.com</PdsTableCell>
-      <PdsTableCell>89654</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Michael Johnson</PdsTableCell>
-      <PdsTableCell>michael.johnson@example.com</PdsTableCell>
-      <PdsTableCell>21578</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Susan Brown</PdsTableCell>
-      <PdsTableCell>susan.brown@example.com</PdsTableCell>
-      <PdsTableCell>63920</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>William Davis</PdsTableCell>
-      <PdsTableCell>william.davis@example.com</PdsTableCell>
-      <PdsTableCell>17436</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Mary Wilson</PdsTableCell>
-      <PdsTableCell>mary.wilson@example.com</PdsTableCell>
-      <PdsTableCell>58203</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>James Lee</PdsTableCell>
-      <PdsTableCell>james.lee@example.com</PdsTableCell>
-      <PdsTableCell>92617</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Linda Hall</PdsTableCell>
-      <PdsTableCell>linda.hall@example.com</PdsTableCell>
-      <PdsTableCell>30456</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Robert Turner</PdsTableCell>
-      <PdsTableCell>robert.turner@example.com</PdsTableCell>
-      <PdsTableCell>71842</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Elizabeth Miller</PdsTableCell>
-      <PdsTableCell>elizabeth.miller@example.com</PdsTableCell>
-      <PdsTableCell>45908</PdsTableCell>
-    </PdsTableRow>
-  </PdsTableBody>
-</PdsTable>`,
-  webComponent: `<pds-table component-id="sortable" selectable>
-  <pds-table-head>
-    <pds-table-head-cell sortable>Name</pds-table-head-cell>
-    <pds-table-head-cell sortable>Email</pds-table-head-cell>
-    <pds-table-head-cell sortable>Account</pds-table-head-cell>
-  </pds-table-head>
-  <pds-table-body>
-    <pds-table-row>
-      <pds-table-cell>John Doe</pds-table-cell>
-      <pds-table-cell>john.doe@example.com</pds-table-cell>
-      <pds-table-cell>47321</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Jane Smith</pds-table-cell>
-      <pds-table-cell>jane.smith@example.com</pds-table-cell>
-      <pds-table-cell>89654</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Michael Johnson</pds-table-cell>
-      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
-      <pds-table-cell>21578</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Susan Brown</pds-table-cell>
-      <pds-table-cell>susan.brown@example.com</pds-table-cell>
-      <pds-table-cell>63920</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>William Davis</pds-table-cell>
-      <pds-table-cell>william.davis@example.com</pds-table-cell>
-      <pds-table-cell>17436</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Mary Wilson</pds-table-cell>
-      <pds-table-cell>mary.wilson@example.com</pds-table-cell>
-      <pds-table-cell>58203</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>James Lee</pds-table-cell>
-      <pds-table-cell>james.lee@example.com</pds-table-cell>
-      <pds-table-cell>92617</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Linda Hall</pds-table-cell>
-      <pds-table-cell>linda.hall@example.com</pds-table-cell>
-      <pds-table-cell>30456</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Robert Turner</pds-table-cell>
-      <pds-table-cell>robert.turner@example.com</pds-table-cell>
-      <pds-table-cell>71842</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Elizabeth Miller</pds-table-cell>
-      <pds-table-cell>elizabeth.miller@example.com</pds-table-cell>
-      <pds-table-cell>45908</pds-table-cell>
-    </pds-table-row>
-  </pds-table-body>
-</pds-table>
-`}}>
-<pds-table component-id="sortable" selectable>
-  <pds-table-head>
-    <pds-table-head-cell sortable>Name</pds-table-head-cell>
-    <pds-table-head-cell sortable>Email</pds-table-head-cell>
-    <pds-table-head-cell sortable>Account</pds-table-head-cell>
-  </pds-table-head>
-  <pds-table-body>
-    <pds-table-row >
-      <pds-table-cell>John Doe</pds-table-cell>
-      <pds-table-cell>john.doe@example.com</pds-table-cell>
-      <pds-table-cell>47321</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Jane Smith</pds-table-cell>
-      <pds-table-cell>jane.smith@example.com</pds-table-cell>
-      <pds-table-cell>89654</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Michael Johnson</pds-table-cell>
-      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
-      <pds-table-cell>21578</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Susan Brown</pds-table-cell>
-      <pds-table-cell>susan.brown@example.com</pds-table-cell>
-      <pds-table-cell>63920</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>William Davis</pds-table-cell>
-      <pds-table-cell>william.davis@example.com</pds-table-cell>
-      <pds-table-cell>17436</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Mary Wilson</pds-table-cell>
-      <pds-table-cell>mary.wilson@example.com</pds-table-cell>
-      <pds-table-cell>58203</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>James Lee</pds-table-cell>
-      <pds-table-cell>james.lee@example.com</pds-table-cell>
-      <pds-table-cell>92617</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Linda Hall</pds-table-cell>
-      <pds-table-cell>linda.hall@example.com</pds-table-cell>
-      <pds-table-cell>30456</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Robert Turner</pds-table-cell>
-      <pds-table-cell>robert.turner@example.com</pds-table-cell>
-      <pds-table-cell>71842</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Elizabeth Miller</pds-table-cell>
-      <pds-table-cell>elizabeth.miller@example.com</pds-table-cell>
-      <pds-table-cell>45908</pds-table-cell>
-    </pds-table-row>
-  </pds-table-body>
-</pds-table>
-</DocCanvas>
-
-### Default Sort
-
-To display the table with a pre-sorted column on initial load, use the `defaultSortColumn` and `defaultSortDirection` properties. The `defaultSortColumn` value must match the text content of a sortable column header exactly. The default sort doesn't emit `pdsTableSort`, so set the matching initial `aria-sort` on that head cell yourself.
-
-<DocCanvas mdxSource={{
-  react: `<PdsTable componentId="default-sort" defaultSortColumn="Name" defaultSortDirection="desc">
-  <PdsTableHead>
-    <PdsTableHeadCell sortable={true} aria-sort="descending">Name</PdsTableHeadCell>
-    <PdsTableHeadCell sortable={true}>Email</PdsTableHeadCell>
-    <PdsTableHeadCell sortable={true}>Account</PdsTableHeadCell>
-  </PdsTableHead>
-  <PdsTableBody>
-    <PdsTableRow>
-      <PdsTableCell>John Doe</PdsTableCell>
-      <PdsTableCell>john.doe@example.com</PdsTableCell>
-      <PdsTableCell>47321</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Jane Smith</PdsTableCell>
-      <PdsTableCell>jane.smith@example.com</PdsTableCell>
-      <PdsTableCell>89654</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Michael Johnson</PdsTableCell>
-      <PdsTableCell>michael.johnson@example.com</PdsTableCell>
-      <PdsTableCell>21578</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>Susan Brown</PdsTableCell>
-      <PdsTableCell>susan.brown@example.com</PdsTableCell>
-      <PdsTableCell>63920</PdsTableCell>
-    </PdsTableRow>
-    <PdsTableRow>
-      <PdsTableCell>William Davis</PdsTableCell>
-      <PdsTableCell>william.davis@example.com</PdsTableCell>
-      <PdsTableCell>17436</PdsTableCell>
-    </PdsTableRow>
-  </PdsTableBody>
-</PdsTable>`,
-  webComponent: `<pds-table component-id="default-sort" default-sort-column="Name" default-sort-direction="desc">
-  <pds-table-head>
-    <pds-table-head-cell sortable aria-sort="descending">Name</pds-table-head-cell>
-    <pds-table-head-cell sortable>Email</pds-table-head-cell>
-    <pds-table-head-cell sortable>Account</pds-table-head-cell>
-  </pds-table-head>
-  <pds-table-body>
-    <pds-table-row>
-      <pds-table-cell>John Doe</pds-table-cell>
-      <pds-table-cell>john.doe@example.com</pds-table-cell>
-      <pds-table-cell>47321</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Jane Smith</pds-table-cell>
-      <pds-table-cell>jane.smith@example.com</pds-table-cell>
-      <pds-table-cell>89654</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Michael Johnson</pds-table-cell>
-      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
-      <pds-table-cell>21578</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Susan Brown</pds-table-cell>
-      <pds-table-cell>susan.brown@example.com</pds-table-cell>
-      <pds-table-cell>63920</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>William Davis</pds-table-cell>
-      <pds-table-cell>william.davis@example.com</pds-table-cell>
-      <pds-table-cell>17436</pds-table-cell>
-    </pds-table-row>
-  </pds-table-body>
-</pds-table>
-`}}>
-<pds-table component-id="default-sort" default-sort-column="Name" default-sort-direction="desc">
-  <pds-table-head>
-    <pds-table-head-cell sortable aria-sort="descending">Name</pds-table-head-cell>
-    <pds-table-head-cell sortable>Email</pds-table-head-cell>
-    <pds-table-head-cell sortable>Account</pds-table-head-cell>
-  </pds-table-head>
-  <pds-table-body>
-    <pds-table-row>
-      <pds-table-cell>John Doe</pds-table-cell>
-      <pds-table-cell>john.doe@example.com</pds-table-cell>
-      <pds-table-cell>47321</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Jane Smith</pds-table-cell>
-      <pds-table-cell>jane.smith@example.com</pds-table-cell>
-      <pds-table-cell>89654</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Michael Johnson</pds-table-cell>
-      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
-      <pds-table-cell>21578</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Susan Brown</pds-table-cell>
-      <pds-table-cell>susan.brown@example.com</pds-table-cell>
-      <pds-table-cell>63920</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>William Davis</pds-table-cell>
-      <pds-table-cell>william.davis@example.com</pds-table-cell>
-      <pds-table-cell>17436</pds-table-cell>
-    </pds-table-row>
-  </pds-table-body>
-</pds-table>
 </DocCanvas>
 
 ## Additional Resources

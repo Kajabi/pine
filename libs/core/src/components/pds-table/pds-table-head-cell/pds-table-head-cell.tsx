@@ -40,7 +40,10 @@ export class PdsTableHeadCell {
   @Prop({ reflect: true }) width?: string;
 
   /**
-   * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
+   * Emitted when a `sortable` head cell is clicked, carrying the cell's trimmed text as `column` and the new
+   * direction, `asc` or `desc`, as `direction`. The first click on a column gives `desc`, and each click after that reverses it.
+   * `pds-table` sorts its rows when the event reaches it, so to sort the rows yourself, call `preventDefault()` in a
+   * listener on the head cell or `pds-table-head`, or in the capture phase.
    */
   @Event() pdsTableSort: EventEmitter<{ column: string; direction: string }>;
 
