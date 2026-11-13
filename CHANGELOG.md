@@ -1,3 +1,58 @@
+## 4.12.0 (2026-11-13)
+
+### Features 🚀
+
+- **pds-box:** margin auto, container prop, flex shrink fix and fit docs ([#972](https://github.com/Kajabi/pine/pull/972))
+- **pds-datepicker:** let a preset of your own follow today with day offsets ([#955](https://github.com/Kajabi/pine/pull/955))
+- **pds-dropdown-menu-item:** add a start slot and keep disabled items from emitting pdsClick ([#973](https://github.com/Kajabi/pine/pull/973))
+- **pds-image:** crop an image to a shape instead of stretching it ([#947](https://github.com/Kajabi/pine/pull/947))
+- **pds-image:** emit load and error events from the inner image ([#971](https://github.com/Kajabi/pine/pull/971))
+- **pds-sortable:** reorder items from the keyboard ([#975](https://github.com/Kajabi/pine/pull/975))
+- **pds-switch:** add unchecked-value and forward aria-describedby to the input ([#974](https://github.com/Kajabi/pine/pull/974))
+- **pds-table:** add column widths and a fixed table layout ([#966](https://github.com/Kajabi/pine/pull/966))
+
+### Bug Fixes 🐛
+
+- **core:** size overlay panels as border-box without changing how they render ([#970](https://github.com/Kajabi/pine/pull/970))
+- **pds-button:** show slotted start and end content from the first paint ([#963](https://github.com/Kajabi/pine/pull/963))
+- **pds-combobox:** show the selection from the first paint, and keep list-only badges out of the field ([#965](https://github.com/Kajabi/pine/pull/965))
+- **pds-combobox:** polish drill-in spacing, alignment and hover states ([#940](https://github.com/Kajabi/pine/pull/940))
+- **pds-combobox:** glide the drill-in height and slide the header with the groups ([#941](https://github.com/Kajabi/pine/pull/941))
+- **pds-combobox:** mark the selection with the check alone, and ring the row the arrow keys reach ([#944](https://github.com/Kajabi/pine/pull/944))
+- **pds-combobox:** size option chips to their label ([#962](https://github.com/Kajabi/pine/pull/962))
+- **pds-dropdown-menu:** close the menu once its trigger scrolls out of view ([#967](https://github.com/Kajabi/pine/pull/967))
+- **pds-dropdown-menu-item:** show the focus ring for keyboard focus only ([#964](https://github.com/Kajabi/pine/pull/964))
+- **pds-radio:** show keyboard focus on image radio cards ([#897](https://github.com/Kajabi/pine/pull/897))
+- **pds-text:** reveal clipped text that reaches a component through a slot ([#948](https://github.com/Kajabi/pine/pull/948))
+
+### Documentation 📄
+
+- **core:** polish form and selection component docs ([#953](https://github.com/Kajabi/pine/pull/953))
+- **core:** fix broken storybook links, readme titles and two misfiled doc pages ([#950](https://github.com/Kajabi/pine/pull/950))
+- **core:** polish overlay, table and navigation component docs ([#954](https://github.com/Kajabi/pine/pull/954))
+- **core:** polish layout, content and display component docs ([#952](https://github.com/Kajabi/pine/pull/952))
+- **core:** fill empty JSDoc for shadow parts, events and methods ([#957](https://github.com/Kajabi/pine/pull/957))
+- **core:** fill popover, tooltip and dropdown menu guidance and example gaps ([#959](https://github.com/Kajabi/pine/pull/959))
+- **core:** add missing guidance to text, image, icon and link docs ([#958](https://github.com/Kajabi/pine/pull/958))
+- **core:** make doc examples valid with template-literal snippets, accepted values and react conventions ([#960](https://github.com/Kajabi/pine/pull/960))
+- **core:** refresh intro, resource, contributor and agent skill docs ([#969](https://github.com/Kajabi/pine/pull/969))
+- **core:** correct form control docs for events, reset, labeling and per-component gaps ([#978](https://github.com/Kajabi/pine/pull/978))
+- **core:** fix onboarding setup, v4 migration and package readmes ([#979](https://github.com/Kajabi/pine/pull/979))
+- **guides:** polish guides, intro, repo and token docs ([#951](https://github.com/Kajabi/pine/pull/951))
+- **guides:** fix guide accuracy and fill forms, accessibility, layout, events and rtl gaps ([#981](https://github.com/Kajabi/pine/pull/981))
+- **pds-button:** fix guidance and accuracy gaps in button, chip, alert and display docs ([#980](https://github.com/Kajabi/pine/pull/980))
+- **pds-datepicker:** keep month-day value guidance stack-neutral and scope the ISO-8601 claim ([#939](https://github.com/Kajabi/pine/pull/939))
+- **pds-link:** keep external supported and document its target override ([#976](https://github.com/Kajabi/pine/pull/976))
+- **pds-modal:** fill modal and drawer structure, sizing and guidance gaps ([#968](https://github.com/Kajabi/pine/pull/968))
+- **tokens:** add token choosing guidance and dark mode docs ([#961](https://github.com/Kajabi/pine/pull/961))
+- **tokens:** fix radius tables, add shadow guidance and fix admin pattern recipes ([#977](https://github.com/Kajabi/pine/pull/977))
+
+### ❤️ Thank You
+
+- alliichu
+- Phillip Lovelace
+- Quinton Jason
+
 ## 4.11.0 (2026-11-09)
 
 ### Features 🚀
