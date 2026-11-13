@@ -18,9 +18,9 @@
 
 ## Events
 
-| Event              | Description                                  | Type                  |
-| ------------------ | -------------------------------------------- | --------------------- |
-| `pdsCopyTextClick` | Event fired when copyText button is clicked. | `CustomEvent<string>` |
+| Event              | Description                                                                                                                                                                                                                                                                             | Type                  |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `pdsCopyTextClick` | Emitted after a click, once the copy to the clipboard succeeds or fails. `detail` is `Copied to clipboard` on success, or `Error writing text to clipboard: ` followed by the error on failure. Not emitted when `navigator.clipboard` is undefined, as it is outside a secure context. | `CustomEvent<string>` |
 
 
 ## Dependencies

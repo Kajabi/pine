@@ -26,9 +26,11 @@ Avatars display a thumbnail representation of a person or organization, supporti
 - Do not use for items that need a descriptive label or detailed information beyond a simple visual representation.
 
 ### Accessibility
-- Always include an `alt` text description for profile images, ensuring users with visual impairments understand the context.
+
+- Set `alt` to the person's or organization's name when you set `image`, such as `alt="Demi Wilkinson"`. Use `alt=""` when the name is already shown next to the avatar, so the image is skipped rather than read as a duplicate. Without `alt`, the image has no accessible name.
 - Without an `image` or `initials`, the avatar shows a generic user icon that is hidden from assistive technology. Show the person's name in nearby text, or in `triggerLabel` for a dropdown avatar.
 - The `badge` is announced as "Verified". Pass `badgeLabel` to describe what it means in your product or to localize it, or an empty string to make it decorative. On a dropdown avatar, include it in `triggerLabel` instead.
+- The `status` dot is announced as "online status", "away status" or "offline status". Pass `statusLabel` to localize it. On a dropdown avatar, the dot is hidden from assistive technology, so include the status in `triggerLabel` instead.
 
 ## Properties
 
@@ -72,9 +74,66 @@ An avatar that displays a badge in addition to the profile image.
   <pds-avatar badge="true"></pds-avatar>
 </DocCanvas>
 
-### Custom Sizes
+### Status
 
-An avatar where the size can be customized through the `size` prop.
+Set `status` to show a presence dot: `online`, `away` or `offline`. Add `status-ring` to draw a ring in the same color around the avatar. The status and the badge share a corner, so the badge is hidden while `status` is set.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsAvatar initials="KJ" status="online"></PdsAvatar>
+    <PdsAvatar initials="KJ" status="away"></PdsAvatar>
+    <PdsAvatar initials="KJ" status="offline"></PdsAvatar>
+    <PdsAvatar initials="KJ" status="online" statusRing={true}></PdsAvatar>
+    <PdsAvatar initials="KJ" status="away" statusRing={true}></PdsAvatar>
+    <PdsAvatar initials="KJ" status="offline" statusRing={true}></PdsAvatar>
+    `,
+    webComponent: `
+    <pds-avatar initials="KJ" status="online"></pds-avatar>
+    <pds-avatar initials="KJ" status="away"></pds-avatar>
+    <pds-avatar initials="KJ" status="offline"></pds-avatar>
+    <pds-avatar initials="KJ" status="online" status-ring="true"></pds-avatar>
+    <pds-avatar initials="KJ" status="away" status-ring="true"></pds-avatar>
+    <pds-avatar initials="KJ" status="offline" status-ring="true"></pds-avatar>
+    `
+}}>
+  <pds-avatar initials="KJ" status="online"></pds-avatar>
+  <pds-avatar initials="KJ" status="away"></pds-avatar>
+  <pds-avatar initials="KJ" status="offline"></pds-avatar>
+  <pds-avatar initials="KJ" status="online" status-ring="true"></pds-avatar>
+  <pds-avatar initials="KJ" status="away" status-ring="true"></pds-avatar>
+  <pds-avatar initials="KJ" status="offline" status-ring="true"></pds-avatar>
+</DocCanvas>
+
+### Sizes
+
+Set `size` to a preset: `xs` (24px), `sm` (32px), `md` (40px), `lg` (56px, the default) or `xl` (64px).
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsAvatar size="xs"></PdsAvatar>
+    <PdsAvatar size="sm"></PdsAvatar>
+    <PdsAvatar size="md"></PdsAvatar>
+    <PdsAvatar size="lg"></PdsAvatar>
+    <PdsAvatar size="xl"></PdsAvatar>
+    `,
+    webComponent: `
+    <pds-avatar size="xs"></pds-avatar>
+    <pds-avatar size="sm"></pds-avatar>
+    <pds-avatar size="md"></pds-avatar>
+    <pds-avatar size="lg"></pds-avatar>
+    <pds-avatar size="xl"></pds-avatar>
+    `
+}}>
+  <pds-avatar size="xs"></pds-avatar>
+  <pds-avatar size="sm"></pds-avatar>
+  <pds-avatar size="md"></pds-avatar>
+  <pds-avatar size="lg"></pds-avatar>
+  <pds-avatar size="xl"></pds-avatar>
+</DocCanvas>
+
+For a size the presets don't cover, pass a CSS length.
 
 <DocCanvas
   mdxSource={{
@@ -86,26 +145,28 @@ An avatar where the size can be customized through the `size` prop.
 
 ### Dropdown
 
-Allows the avatar to be used as a dropdown trigger.
+Set `dropdown` to render the avatar as a button. It opens nothing on its own and has no events of its own, so slot it as the `trigger` of a `pds-popover`, as in the popover's [Trigger Slot](/docs/components-popover--docs#trigger-slot) example. Set `trigger-label` to say what the button opens; without it, the button is named "Avatar dropdown trigger".
+
+`pds-popover` sets `aria-expanded` on the `pds-avatar` element, but the avatar doesn't pass it to its inner button, so the button's expanded state isn't exposed to assistive technology.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsAvatar dropdown={true}></PdsAvatar>`,
-    webComponent: `<pds-avatar dropdown="true"></pds-avatar>`
+    react: `<PdsAvatar dropdown={true} triggerLabel="Show profile details"></PdsAvatar>`,
+    webComponent: `<pds-avatar dropdown="true" trigger-label="Show profile details"></pds-avatar>`
 }}>
-  <pds-avatar dropdown="true"></pds-avatar>
+  <pds-avatar dropdown="true" trigger-label="Show profile details"></pds-avatar>
 </DocCanvas>
 
 ### Image
 
-An avatar that displays a user's profile image. If no image is provided, a default user icon is shown.
+An avatar that displays a user's profile image. If no image is provided, a default user icon is shown. Set `alt` to the person's name.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsAvatar alt="Customer Profile" image="../assets/demi_wilkinson.jpg"></PdsAvatar>`,
-    webComponent: `<pds-avatar alt="Customer Profile" image="../assets/demi_wilkinson.jpg"></pds-avatar>`
+    react: `<PdsAvatar alt="Demi Wilkinson" image="https://example.com/images/demi-wilkinson.jpg"></PdsAvatar>`,
+    webComponent: `<pds-avatar alt="Demi Wilkinson" image="https://example.com/images/demi-wilkinson.jpg"></pds-avatar>`
 }}>
-  <pds-avatar alt="Customer Profile" image={sampleImg}></pds-avatar>
+  <pds-avatar alt="Demi Wilkinson" image={sampleImg}></pds-avatar>
 </DocCanvas>
 
 ### Initials

@@ -30,10 +30,106 @@ Input captures a single line of text from the user, paired with a label and opti
 For accessibility, it is strongly encouraged to follow these best practices:
 
 - Use the `label` property to help screen reader users identify the purpose of the input.
+- Always set `label`, even when the design shows no label: `hide-label` hides it visually and keeps it as the input's name, and also hides the `action` slot. Without `label`, the input renders no `<label>` and no `action` slot.
 - Do not use a `placeholder` to communicate the field label, use a `label` property.
 - Provide clear and descriptive error, helper, and placeholder messages.
+- The helper message, or the error message while `invalid` is set, becomes the input's accessible description.
 
 ## Usage Notes
+
+### Input types
+
+`type` sets the kind of value the input takes. These are the types it supports:
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="input-types">
+    <pds-table-head>
+      <pds-table-head-cell>Type</pds-table-head-cell>
+      <pds-table-head-cell>Use it for</pds-table-head-cell>
+      <pds-table-head-cell>Built-in check</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>text</code> (default)</pds-table-cell>
+        <pds-table-cell>Any single line of text</pds-table-cell>
+        <pds-table-cell>None</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>email</code></pds-table-cell>
+        <pds-table-cell>An email address</pds-table-cell>
+        <pds-table-cell>Must be an email address</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>password</code></pds-table-cell>
+        <pds-table-cell>A password</pds-table-cell>
+        <pds-table-cell>None</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>number</code></pds-table-cell>
+        <pds-table-cell>A number</pds-table-cell>
+        <pds-table-cell>Must be a number within <code>min</code> and <code>max</code> that matches <code>step</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>tel</code></pds-table-cell>
+        <pds-table-cell>A phone number</pds-table-cell>
+        <pds-table-cell>None. Phone formats vary, so add a <code>pattern</code> to check one</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>url</code></pds-table-cell>
+        <pds-table-cell>A web address</pds-table-cell>
+        <pds-table-cell>Must be a full URL, including its scheme, such as <code>https://</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>search</code></pds-table-cell>
+        <pds-table-cell>A search term. Screen readers get it as a search field</pds-table-cell>
+        <pds-table-cell>None</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+
+A value that fails its check stops the form from submitting, as on a native input. `required`, `pattern`, `minlength` and `maxlength` work with every type except `number`, which ignores `pattern`, `minlength` and `maxlength`.
+
+### Choosing a slot
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="input-slots">
+    <pds-table-head>
+      <pds-table-head-cell>Slot</pds-table-head-cell>
+      <pds-table-head-cell>Where it shows</pds-table-head-cell>
+      <pds-table-head-cell>Use it for</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>prefix</code></pds-table-cell>
+        <pds-table-cell>Inside the field's border, before the text</pds-table-cell>
+        <pds-table-cell>An icon or short text, such as <code>https://</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>suffix</code></pds-table-cell>
+        <pds-table-cell>Inside the field's border, after the text</pds-table-cell>
+        <pds-table-cell>An icon, short text, or a small <code>variant="unstyled"</code> icon button named with <code>aria-label</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>prepend</code></pds-table-cell>
+        <pds-table-cell>Outside the field, joined to its start edge</pds-table-cell>
+        <pds-table-cell>A <code>pds-select</code> or <code>pds-button</code>, which take on borders and corners that join the field</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>append</code></pds-table-cell>
+        <pds-table-cell>Outside the field, joined to its end edge</pds-table-cell>
+        <pds-table-cell>A <code>pds-select</code> or <code>pds-button</code>, as with <code>prepend</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>action</code></pds-table-cell>
+        <pds-table-cell>At the end of the label row</pds-table-cell>
+        <pds-table-cell>A link or small button about the field. It shows only when <code>label</code> is set and <code>hide-label</code> isn't</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+
+The text moves over to make room for `prefix` and `suffix` content, so keep it short. `Tab` moves through focusable slot content in the order it shows: `prepend`, `prefix`, the field, `suffix`, then `append`.
 
 ### Working with Labels
 
@@ -51,7 +147,7 @@ When analyzing designs or screenshots, text that appears above an input field is
 
 ### Default
 
-The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data. For more information on the types this component supports, please see the MDN article on the [input element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types).
+The default `type`, `text`, takes any single line of text. See [Input types](#input-types) for the others.
 
 <DocCanvas
   mdxSource={{
@@ -60,25 +156,6 @@ The type of input used varies based on the type of information you look to captu
 }}>
   <pds-input component-id="pds-input-text-example" label="Name" type="text" value="Frank Dux"></pds-input>
 </DocCanvas>
-
-### Input Types
-
-Available input types:
-- `text`: Standard text input (default)
-- `email`: Email validation and mobile keyboard
-- `password`: Hidden text with security features
-- `number`: Numeric input with min/max/step validation
-- `tel`: Telephone input with mobile keyboard
-- `url`: URL validation and mobile keyboard
-
-Type-specific features:
-- `email`: Browser email validation, mobile email keyboard
-- `password`: Hidden characters, security features
-- `number`: Up/down arrows, min/max validation
-- `tel`: Mobile phone keyboard, pattern validation
-- `url`: Browser URL validation, mobile URL keyboard
-
-Best practice: Choose type that matches expected input for better UX
 
 ### Required
 
@@ -142,24 +219,14 @@ Applies accent styling to the input field with a purple background, border, and 
 
 ### Full Width
 
-When `full-width` is set to `true`, the input component will occupy the full width of its parent container instead of using its natural inline width.
-
-Layout impact:
-- Makes input span 100% width of parent container
-- Useful for mobile layouts or form consistency
-- Works with all input types and states
-- Affects input field only, not label or messages
-
-Best practice: Use for form layouts where consistent width is needed
-
-Example: `full-width` for mobile-friendly forms
+In normal block layout the input already fills its container. Where it keeps its default width instead, such as in a flex row, set `full-width="true"` to make it fill the container. Write the value: the attribute on its own, `full-width`, has no effect in HTML. In React, `fullWidth` works.
 
 <DocCanvas
   mdxSource={{
     react: `<PdsInput componentId="pds-input-full-width-example" label="Full Width Input" type="text" fullWidth placeholder="This input takes full width of its container"></PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width placeholder="This input takes full width of its container"></pds-input>`
+    webComponent: `<pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width="true" placeholder="This input takes full width of its container"></pds-input>`
 }}>
-  <pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width placeholder="This input takes full width of its container"></pds-input>
+  <pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width="true" placeholder="This input takes full width of its container"></pds-input>
 </DocCanvas>
 
 ### Helper Message
@@ -187,22 +254,47 @@ When `invalid` is true, the input displays the error message and provides a visu
 </DocCanvas>
 
 ### Prefix and Suffix
-A prefix or suffix can be added to the input field to provide additional context or formatting. These elements are placed within the input container, directly adjacent to the input field.
+A prefix or suffix can be added to the input field to provide additional context or formatting. These elements are placed within the input container, directly adjacent to the input field. See [Choosing a slot](#choosing-a-slot) for what each slot is for.
 
 <DocCanvas
   mdxSource={{
     react: `<PdsInput componentId="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
   <PdsIcon name="mail" slot="prefix"></PdsIcon>
-  <PdsButton variant="unstyled" slot="suffix" iconOnly icon="remove-circle">Remove</PdsButton>
+  <PdsButton variant="unstyled" slot="suffix" iconOnly aria-label="Clear email">
+    <PdsIcon slot="start" aria-hidden="true" name="remove-circle"></PdsIcon>
+  </PdsButton>
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
   <pds-icon name="mail" slot="prefix"></pds-icon>
-  <pds-button variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button>
+  <pds-button variant="unstyled" slot="suffix" icon-only aria-label="Clear email">
+    <pds-icon slot="start" aria-hidden="true" name="remove-circle"></pds-icon>
+  </pds-button>
 </pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
     <pds-icon name="mail" slot="prefix"></pds-icon>
-    <pds-button variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button>
+    <pds-button variant="unstyled" slot="suffix" icon-only aria-label="Clear email">
+      <pds-icon slot="start" aria-hidden="true" name="remove-circle"></pds-icon>
+    </pds-button>
+  </pds-input>
+</DocCanvas>
+
+Short text works too, such as the parts of a web address around the field.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsInput componentId="pds-input-prefix-suffix-text" label="URL" type="text" value="">
+  <PdsText color="var(--pine-color-text-muted)" slot="prefix">https://</PdsText>
+  <PdsText color="var(--pine-color-text-muted)" slot="suffix">.example.com</PdsText>
+</PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value="">
+  <pds-text color="var(--pine-color-text-muted)" slot="prefix">https://</pds-text>
+  <pds-text color="var(--pine-color-text-muted)" slot="suffix">.example.com</pds-text>
+</pds-input>`
+  }}>
+  <pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value="">
+    <pds-text color="var(--pine-color-text-muted)" slot="prefix">https://</pds-text>
+    <pds-text color="var(--pine-color-text-muted)" slot="suffix">.example.com</pds-text>
   </pds-input>
 </DocCanvas>
 
@@ -274,208 +366,57 @@ The action slot allows you to add helpful content next to the input label, such 
 
 
 ### Prepend and Append
-Prepend and append elements are placed outside the input container, next to the input field. These are typically used for larger elements or controls that need to be visually separated from the input.
+Prepend and append elements are placed outside the input container, next to the input field. These are typically used for larger elements or controls that need to be visually separated from the input. A `pds-select` here still needs a `label` to name it, even with `hide-label`.
 
 <DocCanvas
   mdxSource={{
     react: `<PdsInput componentId="pds-input-prepend-append-example" label="Amount" type="text" value="100">
-  <PdsSelect hideLabel slot="prepend">
+  <PdsSelect componentId="pds-input-currency" name="currency" label="Currency" hideLabel slot="prepend">
     <option value="USD">USD</option>
     <option value="EUR">EUR</option>
   </PdsSelect>
-  <PdsSelect hideLabel slot="append">
-    <option value="1">1</option>
-    <option value="2">2</option>
+  <PdsSelect componentId="pds-input-period" name="period" label="Billing period" hideLabel slot="append">
+    <option value="month">per month</option>
+    <option value="year">per year</option>
   </PdsSelect>
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prepend-append-example" label="Amount" type="text" value="100">
-  <pds-select hide-label slot="prepend">
+  <pds-select component-id="pds-input-currency" name="currency" label="Currency" hide-label slot="prepend">
     <option value="USD">USD</option>
     <option value="EUR">EUR</option>
   </pds-select>
-  <pds-select hide-label slot="append">
-    <option value="1">1</option>
-    <option value="2">2</option>
+  <pds-select component-id="pds-input-period" name="period" label="Billing period" hide-label slot="append">
+    <option value="month">per month</option>
+    <option value="year">per year</option>
   </pds-select>
 </pds-input>`
 }}>
   <pds-input component-id="pds-input-prepend-append-example" label="Amount" type="text" value="100">
-    <pds-select hide-label slot="prepend">
+    <pds-select component-id="pds-input-currency" name="currency" label="Currency" hide-label slot="prepend">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
     </pds-select>
-    <pds-select hide-label slot="append">
-      <option value="1">1</option>
-      <option value="2">2</option>
+    <pds-select component-id="pds-input-period" name="period" label="Billing period" hide-label slot="append">
+      <option value="month">per month</option>
+      <option value="year">per year</option>
     </pds-select>
   </pds-input>
 </DocCanvas>
-
-### Usage Guidelines
-
-- **Prefix/Suffix**: Use for small elements like icons or short text that should be visually integrated with the input field.
-- **Prepend/Append**: Use for larger elements like dropdowns or buttons that need to be visually separated from the input field.
-
-**Prefix Icon**
-<DocCanvas
-  mdxSource={{
-    react: `<PdsInput componentId="pds-input-prefix-icon" label="Email" type="email" value="frank@example.com">
-  <PdsIcon name="mail" slot="prefix"></PdsIcon>
-</PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="frank@example.com">
-  <pds-icon name="mail" slot="prefix"></pds-icon>
-</pds-input>`
-  }}>
-  <pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="frank@example.com">
-    <pds-icon name="mail" slot="prefix"></pds-icon>
-  </pds-input>
-</DocCanvas>
-
-**Prepend Select**
-<DocCanvas
-  mdxSource={{
-    react: `<PdsInput componentId="pds-input-prepend-select" label="Amount" type="text" value="100">
-  <PdsSelect hideLabel slot="prepend">
-    <option value="USD">USD</option>
-    <option value="EUR">EUR</option>
-    <option value="GBP">GBP</option>
-  </PdsSelect>
-</PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-prepend-select" label="Amount" type="text" value="100">
-    <pds-select hide-label slot="prepend">
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="GBP">GBP</option>
-    </pds-select>
-  </pds-input>`
-}}>
-  <pds-input component-id="pds-input-prepend-select" label="Amount" type="text" value="100">
-    <pds-select hide-label slot="prepend">
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="GBP">GBP</option>
-    </pds-select>
-  </pds-input>
-</DocCanvas>
-
-**Prefix Icon and Append Select**
-<DocCanvas
-  mdxSource={{
-    react: `<PdsInput componentId="pds-input-prefix-append" label="Amount" type="text" value="100">
-      <PdsIcon name="dollar" slot="prefix"></PdsIcon>
-      <PdsSelect hideLabel slot="append">
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
-      </PdsSelect>
-    </PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-prefix-append" label="Amount" type="text" value="100">
-      <pds-icon name="dollar" slot="prefix"></pds-icon>
-      <pds-select hide-label slot="append">
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
-      </pds-select>
-    </pds-input>`
-  }}>
-  <pds-input component-id="pds-input-prefix-append" label="Amount" type="text" value="100">
-    <pds-icon name="dollar" slot="prefix"></pds-icon>
-    <pds-select hide-label slot="append">
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="GBP">GBP</option>
-    </pds-select>
-  </pds-input>
-</DocCanvas>
-
-**Prefix text and suffix text**
-<DocCanvas
-  mdxSource={{
-    react: `<PdsInput componentId="pds-input-prefix-suffix-text" label="URL" type="text" value="">
-      <PdsText color="var(--pine-color-text-muted)" slot="prefix">https://</PdsText>
-      <PdsText color="var(--pine-color-text-muted)" slot="suffix">mykajabi.com</PdsText>
-    </PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value="">
-      <pds-text color="var(--pine-color-text-muted)" slot="prefix">https://</pds-text>
-      <pds-text color="var(--pine-color-text-muted)" slot="suffix">mykajabi.com</pds-text>
-    </pds-input>`
-  }}>
-  <pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value="">
-    <pds-text color="var(--pine-color-text-muted)" slot="prefix">https://</pds-text>
-    <pds-text color="var(--pine-color-text-muted)" slot="suffix">mykajabi.com</pds-text>
-  </pds-input>
-</DocCanvas>
-
-**Unstyled button suffix**
-<DocCanvas
-  mdxSource={{
-    react: `<PdsInput componentId="pds-input-suffix-button" label="Search" type="text" value="">
-      <PdsButton variant="unstyled" slot="suffix" aria-label="Submit search">
-        <PdsIcon name="search" aria-hidden="true"></PdsIcon>
-      </PdsButton>
-    </PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-suffix-button" label="Search" type="text" value="">
-      <pds-button variant="unstyled" slot="suffix" aria-label="Submit search">
-        <pds-icon name="search" aria-hidden="true"></pds-icon>
-      </pds-button>
-    </pds-input>`
-  }}>
-  <pds-input component-id="pds-input-suffix-button" label="Search" type="text" value="">
-    <pds-button variant="unstyled" slot="suffix" aria-label="Submit search">
-      <pds-icon name="search" aria-hidden="true"></pds-icon>
-    </pds-button>
-  </pds-input>
-</DocCanvas>
-
-**Prefix Icon and Suffix Button**
-<DocCanvas
-  mdxSource={{
-    react: `<PdsInput componentId="pds-input-prefix-suffix" label="Email" type="email" value="frank@example.com">
-      <PdsIcon name="mail" slot="prefix"></PdsIcon>
-      <PdsButton variant="unstyled" slot="suffix" aria-label="Clear email">
-        <PdsIcon name="remove-circle" aria-hidden="true"></PdsIcon>
-      </PdsButton>
-    </PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="frank@example.com">
-      <pds-icon name="mail" slot="prefix"></pds-icon>
-      <pds-button variant="unstyled" slot="suffix" aria-label="Clear email">
-        <pds-icon name="remove-circle" aria-hidden="true"></pds-icon>
-      </pds-button>
-    </pds-input>`
-  }}>
-  <pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="frank@example.com">
-    <pds-icon name="mail" slot="prefix"></pds-icon>
-    <pds-button variant="unstyled" slot="suffix" aria-label="Clear email">
-      <pds-icon name="remove-circle" aria-hidden="true"></pds-icon>
-    </pds-button>
-  </pds-input>
-</DocCanvas>
-
-## Events
-
-### pdsChange Event
-
-Event behavior:
-- Fires when value changes and input loses focus
-- Does not emit when programmatically setting the `value` property
-- Provides value and original event object
-- Used for form submission and final value handling
-
-Best practice: Use for form submission and final value processing
-
-Example: `<pds-input onPdsChange={handleFormChange}>`
 
 ## Form Integration
 
-- Provide a `name` so the field participates in `FormData` submissions whenever it holds a non-empty value (empty strings are skipped, matching the built-in ElementInternals behavior).
-- Use the `value` prop with `onPdsInputChange` when you need a controlled field; omit `value` for uncontrolled forms.
-- Pair `required`, `pattern`, `errorMessage`, and `invalid` to surface validation rules inline with native form semantics.
+- Provide a `name` so the value is submitted with the form. An empty field is left out of `FormData`, where a native input would submit an empty string.
+- Use the `value` prop with `onPdsInput` when you need a controlled field; omit `value` for uncontrolled forms.
+- A value that fails `required`, `pattern`, `min`, `max`, `step`, `minlength` or its `type`'s check stops the form from submitting, as on a native input. `maxlength` stops people typing past the limit instead. The input doesn't set `invalid` itself, so set `invalid` and `error-message` when you show an error.
+- Resetting the form clears the value to an empty string, not back to the `value` it started with.
+- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Additional Resources
 
 For more information about using inputs, refer to:
 - [MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
 - [MDN Input Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+- [Using Pine form components](/docs/guides-forms--docs)
 
 ## Playground
 
