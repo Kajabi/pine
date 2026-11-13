@@ -172,7 +172,7 @@ Use `aria-describedby` on `pds-switch` when the text that describes it sits outs
 ## Form Integration
 
 - Provide a `name` so the switch contributes a value to `FormData` when checked. Without `unchecked-value`, an unchecked switch is omitted like a native checkbox.
-- Set `unchecked-value` when the form needs an explicit off value, such as `"0"` for a Rails boolean. An unchecked switch then submits it under `name`, so you don't need a hidden input beside it. An empty string submits a blank value. A disabled switch submits nothing, whether `disabled` is set as an attribute or a property.
+- Set `unchecked-value` when the form needs an explicit off value, such as `"0"` for a server that expects one. An unchecked switch then submits it under `name`, so you don't need a hidden input beside it. An empty string submits a blank value. A disabled switch submits nothing, whether `disabled` is set as an attribute or a property.
 - Use `value` (default `"on"`) to differentiate multiple switches that share the same `name`.
 - Combine `checked`, `onPdsSwitchChange`, and state management for controlled React usage, and pair `required`/`invalid` to enforce acknowledgements such as terms of service.
 
