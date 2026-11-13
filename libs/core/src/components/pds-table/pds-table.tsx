@@ -345,6 +345,11 @@ export class PdsTable {
         cell.style.removeProperty('--pds-table-head-cell-auto-floor-width');
       }
     });
+
+    // The floor can widen the table past its container on its own, with no scroll or
+    // container-resize event of its own to trigger the shadows' usual recompute -- reading
+    // `scrollWidth` just below forces the layout the style change above needs anyway.
+    this._responsiveHandleScroll?.();
   };
 
   private setupFixedLayoutWidths() {

@@ -651,6 +651,55 @@ describe('pds-table column widths', () => {
     expect(await headWidths(page)).toEqual([148, 134, 216, 202]);
   });
 
+  // The floor can widen the table past its container on its own, with no scroll or
+  // container-resize event of its own -- the shadow that signals more columns exist has to
+  // notice this the same way it notices any other new overflow. Triggered here by adding a
+  // head cell (a DOM mutation), not by resizing the container: resizing the container would
+  // also fire its own ResizeObserver and mask the gap this is testing for.
+  it('shows the end scroll shadow once the floor alone creates overflow', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div style="width: 343px">
+        <pds-table component-id="floor-overflow-shadow" table-layout="fixed" responsive>
+          <pds-table-head>
+            <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+            <pds-table-head-cell>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>$12,480.00</pds-table-cell>
+              <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+    await page.waitForChanges();
+    // 343 - 148 = 195px for the one auto column -- fits, no floor, nothing to scroll.
+    expect(await headWidths(page)).toEqual([148, 195]);
+
+    const rightShadowOpacity = () =>
+      page.evaluate(() =>
+        getComputedStyle(document.querySelector('pds-table').shadowRoot.querySelector('.scroll-shadow-right')).opacity,
+      );
+    expect(await rightShadowOpacity()).toBe('0');
+
+    await page.evaluate(() => {
+      const head = document.querySelector('pds-table-head');
+      const cell = document.createElement('pds-table-head-cell');
+      cell.setAttribute('width', '134px');
+      cell.textContent = 'Added';
+      head.appendChild(cell);
+    });
+    await page.waitForChanges();
+
+    // 343 - 148 - 134 = 61px left for the auto column, below the floor -- the floor takes over,
+    // widening the table past its unchanged 343px container (148 + 134 + 120 = 402px) with no
+    // scroll or resize of the container itself.
+    expect(await headWidths(page)).toEqual([148, 120, 134]);
+    expect(await rightShadowOpacity()).toBe('1');
+  });
+
   it('never floors an auto column without responsive, since the table itself would be what grows', async () => {
     const page = await newE2EPage();
     // Without responsive there's no container the floor's own growth leaves unaffected to
