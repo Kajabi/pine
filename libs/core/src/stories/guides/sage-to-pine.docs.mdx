@@ -6,7 +6,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Sage → Pine migration
 
-Map common Sage-era and raw HTML/CSS habits from the Kajabi monolith onto their Pine equivalents. Most violations in admin UI are not "wrong Pine" — they are Sage habits (div stacks, utility classes, raw headings, max-width wrappers) that were never translated. Use this when converting existing markup to Pine, or when an AI assistant is editing a file that still contains Sage/HTML layout.
+Map common Sage-era and raw HTML/CSS habits onto their Pine equivalents. Most violations in admin UI are not "wrong Pine" — they are Sage habits (div stacks, utility classes, raw headings, max-width wrappers) that were never translated. Use this when converting existing markup to Pine, or when an AI assistant is editing a file that still contains Sage/HTML layout.
 
 > Before/after mappings use **comparison tables** (`pds-table`) so each Sage and Pine example stays paired on one row.
 
@@ -81,7 +81,7 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
     <pds-table-body>
       <pds-table-row>
         <pds-table-cell><code>&lt;div class="page-wrapper" style="max-width: 960px; margin: 0 auto;"&gt;</code> … <code>&lt;/div&gt;</code></pds-table-cell>
-        <pds-table-cell><code>&lt;pds-container size="lg"&gt;</code> … <code>&lt;/pds-container&gt;</code></pds-table-cell>
+        <pds-table-cell><code>&lt;pds-container size="xl"&gt;</code> … <code>&lt;/pds-container&gt;</code> (1064px), or <code>size="960px"</code> to keep the exact width</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
@@ -115,7 +115,7 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
     <pds-table-body>
       <pds-table-row>
         <pds-table-cell><code>&lt;div class="row"&gt;&lt;div class="col-md-8"&gt;Main&lt;/div&gt;&lt;div class="col-md-4"&gt;Sidebar&lt;/div&gt;&lt;/div&gt;</code></pds-table-cell>
-        <pds-table-cell><code>&lt;pds-row col-gap="md"&gt;&lt;pds-box size-xs="12" size-md="8"&gt;Main&lt;/pds-box&gt;&lt;pds-box size-xs="12" size-md="4"&gt;Sidebar&lt;/pds-box&gt;&lt;/pds-row&gt;</code> (mobile-first; use <code>size-xs</code> baseline, not base <code>size</code>)</pds-table-cell>
+        <pds-table-cell><code>&lt;pds-row col-gap="md"&gt;&lt;pds-box size-md="8"&gt;Main&lt;/pds-box&gt;&lt;pds-box size-md="4"&gt;Sidebar&lt;/pds-box&gt;&lt;/pds-row&gt;</code> (the columns stack full width below 768px)</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
@@ -166,7 +166,7 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
     <pds-table-body>
       <pds-table-row>
         <pds-table-cell>Separate <code>&lt;label&gt;</code>, <code>&lt;input type="email" /&gt;</code>, <code>&lt;button class="btn btn-primary"&gt;</code></pds-table-cell>
-        <pds-table-cell><code>&lt;pds-input label="Email" type="email"&gt;&lt;/pds-input&gt;</code> and <code>&lt;pds-button variant="primary"&gt;Save&lt;/pds-button&gt;</code> (label is a prop; never raw form/button elements)</pds-table-cell>
+        <pds-table-cell><code>&lt;pds-input component-id="email" name="email" label="Email" type="email"&gt;&lt;/pds-input&gt;</code> and <code>&lt;pds-button variant="primary"&gt;Save&lt;/pds-button&gt;</code> (label is a prop, and <code>component-id</code> connects it to the field)</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
@@ -174,10 +174,10 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
 
 ## Gotchas when migrating
 
-- **Don't reintroduce `style="…"`** — there is almost always a Pine prop (`padding`, `gap`, `display`, `background-color`, `width`). Inline styles are a blocking violation.
+- **Don't reintroduce `style="…"`** — there is almost always a Pine prop (`padding`, `gap`, `display`, `background-color`, `min-width`). Inline styles are a blocking violation.
 - **Don't keep utility classes** — `mt-3`, `col-md-6`, `d-flex` have no effect on Pine web components. Translate them to props.
-- **Don't wrap content in a bare `<div>`** inside a Pine layout — use `pds-box`. Raw HTML mixed with Pine components is blocked.
-- **Mobile-first sizing** — inside `pds-row`, give each `pds-box` a `size-xs` baseline before larger breakpoints; never use the base `size` attribute.
+- **Don't wrap content in a bare `<div>`** inside a Pine layout — use `pds-box`. Use Pine components instead of raw controls, text and layout divs. A native `<form>`, landmarks such as `<main>` and `<nav>`, and lists stay as HTML. Use `pds-image` for images.
+- **Size columns from the breakpoint where they split** — inside `pds-row`, use a breakpoint size such as `size-md="8"`, and the columns stack full width below that breakpoint. Use the base `size` only when a column should keep its width at every viewport. `size-xs` applies only below 576px.
 - **`pds-container` ≠ grid** — it caps width; nest a `pds-row` inside it when you also need columns.
 - **Colors are tokens** — replace hex values with semantic tokens (`get_pine_tokens`).
 
