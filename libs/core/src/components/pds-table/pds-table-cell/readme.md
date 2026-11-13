@@ -13,6 +13,22 @@
 | `truncate`  | `truncate`   | Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order. | `boolean`                                   | `undefined` |
 
 
+## Methods
+
+### `rebindScrollListener() => Promise<void>`
+
+Re-binds the scroll listener to the table's current responsive container. Called by
+`pds-table` after a live `responsive` toggle: the cell stays in light DOM across that change,
+so it never reconnects on its own and would otherwise keep listening to a container the
+table already replaced or removed.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Shadow Parts
 
 | Part     | Description                                                                                                                                                                                                                                                                                                                                                                                                            |

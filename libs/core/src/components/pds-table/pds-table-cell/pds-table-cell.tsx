@@ -1,4 +1,5 @@
-import { Component, Element, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Host, Method, Prop, State, Watch, h } from '@stencil/core';
+import { closest } from '@utils/closest';
 import { isScrolledFromInlineStart } from '../../../utils/scroll';
 import { setupTruncationTooltip } from '../../../utils/truncation-tooltip';
 
@@ -20,7 +21,9 @@ export class PdsTableCell {
   private hasLoaded = false;
 
   componentWillRender() {
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    // The shadow-crossing `closest` util, not the native one -- a selectable row's checkbox
+    // cell lives inside pds-table-row's own shadow root, which native `closest` can't see past.
+    this.tableRef = closest('pds-table', this.hostElement) as HTMLPdsTableElement;
   }
 
   // Fires again each time the cell is moved (a sort re-appends every row), unlike componentDidLoad,
@@ -28,7 +31,7 @@ export class PdsTableCell {
   connectedCallback() {
     if (!this.hasLoaded) return;
 
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    this.tableRef = closest('pds-table', this.hostElement) as HTMLPdsTableElement;
     this.cleanupScrollListener();
     if (this.needsScrollShadow) {
       this.setupScrollListener();
@@ -100,6 +103,24 @@ export class PdsTableCell {
     }
 
     this.setupRetries = 0; // Reset retry counter
+    // Without a listener there's no way to know the scroll position any more, so the shadow
+    // this drove shouldn't linger -- matters when a rebind tears this down without setting it
+    // back up (responsive turned off while scrolled), not just on disconnect.
+    this.tableScrolling = false;
+  }
+
+  /**
+   * Re-binds the scroll listener to the table's current responsive container. Called by
+   * `pds-table` after a live `responsive` toggle: the cell stays in light DOM across that change,
+   * so it never reconnects on its own and would otherwise keep listening to a container the
+   * table already replaced or removed.
+   */
+  @Method()
+  async rebindScrollListener(): Promise<void> {
+    this.cleanupScrollListener();
+    if (this.needsScrollShadow) {
+      this.setupScrollListener();
+    }
   }
 
   /**

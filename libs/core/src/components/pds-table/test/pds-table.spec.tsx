@@ -667,4 +667,47 @@ describe('pds-table', () => {
     const headCell = page.body.querySelector('pds-table-head-cell');
     expect(headCell).toHaveClass('is-active');
   });
+
+  it('adds the fixed layout class when tableLayout is fixed', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table table-layout="fixed"></pds-table>`,
+    });
+    expect(page.root).toHaveClass('is-fixed-layout');
+  });
+
+  it('adds the fixed layout class to the inner table when responsive', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table table-layout="fixed" responsive></pds-table>`,
+    });
+    const inner = page.root.shadowRoot.querySelector('.pds-table');
+    expect(inner).toHaveClass('is-fixed-layout');
+  });
+
+  it('does not add the fixed layout class by default', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table></pds-table>`,
+    });
+    expect(page.root).not.toHaveClass('is-fixed-layout');
+  });
+
+  it('gives the select-all head cell a width in a fixed layout', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell],
+      html: `<pds-table table-layout="fixed" selectable><pds-table-head><pds-table-head-cell>Name</pds-table-head-cell></pds-table-head></pds-table>`,
+    });
+    const selectAllCell = page.body.querySelector('pds-table-head').shadowRoot.querySelector('pds-table-head-cell');
+    expect(selectAllCell.getAttribute('width')).toBe('var(--pine-dimension-2xl)');
+  });
+
+  it('leaves the select-all head cell width unset in the default layout', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell],
+      html: `<pds-table selectable><pds-table-head><pds-table-head-cell>Name</pds-table-head-cell></pds-table-head></pds-table>`,
+    });
+    const selectAllCell = page.body.querySelector('pds-table-head').shadowRoot.querySelector('pds-table-head-cell');
+    expect(selectAllCell.hasAttribute('width')).toBe(false);
+  });
 });

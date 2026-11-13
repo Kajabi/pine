@@ -1122,6 +1122,224 @@ When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cel
 </DocCanvas>
 
 
+### Column Widths
+
+By default, a table sizes each column from the content on the page, so a column can change width when the rows change, for example after a sort. To keep columns put, set `table-layout="fixed"` on `pds-table` and a `width` on the `pds-table-head-cell` of each column whose size you know. Columns without a `width` share the space that's left, so leave one column (usually the one with the longest content, such as a name) without a width and add `truncate` to its cells.
+
+- `width` accepts any CSS length (e.g. `148px`, `12rem`, `20%`) and includes the cell's padding.
+- In a fixed layout, content never resizes a column. Content longer than its column overflows, so add `truncate` to cells whose content may not fit.
+- In a `responsive` table, the table scrolls horizontally when the column widths add up to more than the container.
+- Without `table-layout="fixed"`, `width` sets the column's minimum width, and the column can still grow to fit its content.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="column-widths" tableLayout="fixed">
+  <PdsTableHead>
+    <PdsTableHeadCell sortable>Name</PdsTableHeadCell>
+    <PdsTableHeadCell sortable width="148px">Lifetime value</PdsTableHeadCell>
+    <PdsTableHeadCell sortable width="216px">Email marketing</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell truncate>Alexandra Christina Rodriguez-Fitzgerald</PdsTableCell>
+      <PdsTableCell>$12,480.00</PdsTableCell>
+      <PdsTableCell>Unsubscribed manually</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell truncate>Bo Li</PdsTableCell>
+      <PdsTableCell>$0.00</PdsTableCell>
+      <PdsTableCell>Subscribed</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell truncate>Jonathan Alexander Bartholomew III</PdsTableCell>
+      <PdsTableCell>$1,250,300.00</PdsTableCell>
+      <PdsTableCell>Not subscribed</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="column-widths" table-layout="fixed">
+  <pds-table-head>
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable width="148px">Lifetime value</pds-table-head-cell>
+    <pds-table-head-cell sortable width="216px">Email marketing</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+      <pds-table-cell>$12,480.00</pds-table-cell>
+      <pds-table-cell>Unsubscribed manually</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Bo Li</pds-table-cell>
+      <pds-table-cell>$0.00</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Jonathan Alexander Bartholomew III</pds-table-cell>
+      <pds-table-cell>$1,250,300.00</pds-table-cell>
+      <pds-table-cell>Not subscribed</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <pds-table component-id="column-widths" table-layout="fixed">
+    <pds-table-head>
+      <pds-table-head-cell sortable>Name</pds-table-head-cell>
+      <pds-table-head-cell sortable width="148px">Lifetime value</pds-table-head-cell>
+      <pds-table-head-cell sortable width="216px">Email marketing</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+        <pds-table-cell>$12,480.00</pds-table-cell>
+        <pds-table-cell>Unsubscribed manually</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell truncate>Bo Li</pds-table-cell>
+        <pds-table-cell>$0.00</pds-table-cell>
+        <pds-table-cell>Subscribed</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell truncate>Jonathan Alexander Bartholomew III</pds-table-cell>
+        <pds-table-cell>$1,250,300.00</pds-table-cell>
+        <pds-table-cell>Not subscribed</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
+
+#### Column widths with horizontal scrolling
+
+Add `responsive` to a fixed-layout table when its columns can add up to more than the space it has. The table keeps every column at its `width` and scrolls horizontally instead of squeezing them.
+
+- A column without a `width` keeps at least 120px. When the set widths leave it less than that, the table grows wider and scrolls rather than shrinking it further.
+- Add `truncate` to cells whose content may be longer than their column, such as names and tag lists.
+- For tables wide enough that the first column scrolls out of view, add `fixed-column` so it stays in place (see [Fixed Column](#fixed-column)).
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="column-widths-responsive" tableLayout="fixed" responsive={true}>
+  <PdsTableHead>
+    <PdsTableHeadCell>Name</PdsTableHeadCell>
+    <PdsTableHeadCell width="148px">Lifetime value</PdsTableHeadCell>
+    <PdsTableHeadCell width="134px">Added</PdsTableHeadCell>
+    <PdsTableHeadCell width="216px">Email marketing</PdsTableHeadCell>
+    <PdsTableHeadCell width="240px">Tags</PdsTableHeadCell>
+    <PdsTableHeadCell width="180px">Last activity</PdsTableHeadCell>
+    <PdsTableHeadCell width="160px">Source</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell truncate>Alexandra Christina Rodriguez-Fitzgerald</PdsTableCell>
+      <PdsTableCell>$12,480.00</PdsTableCell>
+      <PdsTableCell>Mar 4, 2024</PdsTableCell>
+      <PdsTableCell>Unsubscribed manually</PdsTableCell>
+      <PdsTableCell truncate>Customer, Webinar 2024</PdsTableCell>
+      <PdsTableCell>Opened an email</PdsTableCell>
+      <PdsTableCell>Checkout</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell truncate>Bo Li</PdsTableCell>
+      <PdsTableCell>$0.00</PdsTableCell>
+      <PdsTableCell>Jan 12, 2026</PdsTableCell>
+      <PdsTableCell>Subscribed</PdsTableCell>
+      <PdsTableCell truncate>Lead</PdsTableCell>
+      <PdsTableCell>Signed up</PdsTableCell>
+      <PdsTableCell>Opt-in form</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell truncate>Jonathan Alexander Bartholomew III</PdsTableCell>
+      <PdsTableCell>$1,250,300.00</PdsTableCell>
+      <PdsTableCell>Sep 30, 2025</PdsTableCell>
+      <PdsTableCell>Not subscribed</PdsTableCell>
+      <PdsTableCell truncate>Customer, VIP, Coaching</PdsTableCell>
+      <PdsTableCell>Bought an offer</PdsTableCell>
+      <PdsTableCell>Import</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="column-widths-responsive" table-layout="fixed" responsive>
+  <pds-table-head>
+    <pds-table-head-cell>Name</pds-table-head-cell>
+    <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+    <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+    <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+    <pds-table-head-cell width="240px">Tags</pds-table-head-cell>
+    <pds-table-head-cell width="180px">Last activity</pds-table-head-cell>
+    <pds-table-head-cell width="160px">Source</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+      <pds-table-cell>$12,480.00</pds-table-cell>
+      <pds-table-cell>Mar 4, 2024</pds-table-cell>
+      <pds-table-cell>Unsubscribed manually</pds-table-cell>
+      <pds-table-cell truncate>Customer, Webinar 2024</pds-table-cell>
+      <pds-table-cell>Opened an email</pds-table-cell>
+      <pds-table-cell>Checkout</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Bo Li</pds-table-cell>
+      <pds-table-cell>$0.00</pds-table-cell>
+      <pds-table-cell>Jan 12, 2026</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell truncate>Lead</pds-table-cell>
+      <pds-table-cell>Signed up</pds-table-cell>
+      <pds-table-cell>Opt-in form</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Jonathan Alexander Bartholomew III</pds-table-cell>
+      <pds-table-cell>$1,250,300.00</pds-table-cell>
+      <pds-table-cell>Sep 30, 2025</pds-table-cell>
+      <pds-table-cell>Not subscribed</pds-table-cell>
+      <pds-table-cell truncate>Customer, VIP, Coaching</pds-table-cell>
+      <pds-table-cell>Bought an offer</pds-table-cell>
+      <pds-table-cell>Import</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <pds-table component-id="column-widths-responsive" table-layout="fixed" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Name</pds-table-head-cell>
+      <pds-table-head-cell width="148px">Lifetime value</pds-table-head-cell>
+      <pds-table-head-cell width="134px">Added</pds-table-head-cell>
+      <pds-table-head-cell width="216px">Email marketing</pds-table-head-cell>
+      <pds-table-head-cell width="240px">Tags</pds-table-head-cell>
+      <pds-table-head-cell width="180px">Last activity</pds-table-head-cell>
+      <pds-table-head-cell width="160px">Source</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+        <pds-table-cell>$12,480.00</pds-table-cell>
+        <pds-table-cell>Mar 4, 2024</pds-table-cell>
+        <pds-table-cell>Unsubscribed manually</pds-table-cell>
+        <pds-table-cell truncate>Customer, Webinar 2024</pds-table-cell>
+        <pds-table-cell>Opened an email</pds-table-cell>
+        <pds-table-cell>Checkout</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell truncate>Bo Li</pds-table-cell>
+        <pds-table-cell>$0.00</pds-table-cell>
+        <pds-table-cell>Jan 12, 2026</pds-table-cell>
+        <pds-table-cell>Subscribed</pds-table-cell>
+        <pds-table-cell truncate>Lead</pds-table-cell>
+        <pds-table-cell>Signed up</pds-table-cell>
+        <pds-table-cell>Opt-in form</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell truncate>Jonathan Alexander Bartholomew III</pds-table-cell>
+        <pds-table-cell>$1,250,300.00</pds-table-cell>
+        <pds-table-cell>Sep 30, 2025</pds-table-cell>
+        <pds-table-cell>Not subscribed</pds-table-cell>
+        <pds-table-cell truncate>Customer, VIP, Coaching</pds-table-cell>
+        <pds-table-cell>Bought an offer</pds-table-cell>
+        <pds-table-cell>Import</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
 ### Cell Alignment
 
 Text alignment can be controlled using the `cell-align` prop on both `pds-table-head-cell` and `pds-table-cell` elements. The available alignment options are `start`, `center`, `end`, and `justify`.

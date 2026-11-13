@@ -82,7 +82,10 @@ export class PdsTableHead {
     return (
       <Host role="row" part="head">
         {this.tableRef && this.tableRef.selectable && (
-          <pds-table-head-cell part={this.tableRef.selectable ? 'checkbox-cell' : ''}>
+          <pds-table-head-cell
+            part={this.tableRef.selectable ? 'checkbox-cell' : ''}
+            width={this.tableRef.tableLayout === 'fixed' ? 'var(--pine-dimension-2xl)' : undefined}
+          >
             {!this.tableRef.disableSelectAll && (
               <pds-checkbox
                 componentId={this.generateUniqueId()}
