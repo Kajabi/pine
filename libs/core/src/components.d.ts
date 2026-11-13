@@ -2591,11 +2591,11 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state.
+          * Displays an error message below the switch. It becomes the switch's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
-          * Displays help text for additional description of an input.
+          * Displays a message or hint below the switch.
          */
         "helperMessage": string;
         /**
@@ -2603,12 +2603,12 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
-          * Determines the input 'invalid' state, signifying an error is present.
+          * Determines whether or not the switch is invalid.
           * @default false
          */
         "invalid"?: boolean;
         /**
-          * Displays text to describe the input.
+          * Text to be displayed as the switch label.
          */
         "label": string;
         /**
@@ -6681,7 +6681,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state.
+          * Displays an error message below the switch. It becomes the switch's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -6689,7 +6689,7 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * Displays help text for additional description of an input.
+          * Displays a message or hint below the switch.
          */
         "helperMessage"?: string;
         /**
@@ -6697,12 +6697,12 @@ declare namespace LocalJSX {
          */
         "hideLabel"?: boolean;
         /**
-          * Determines the input 'invalid' state, signifying an error is present.
+          * Determines whether or not the switch is invalid.
           * @default false
          */
         "invalid"?: boolean;
         /**
-          * Displays text to describe the input.
+          * Text to be displayed as the switch label.
          */
         "label"?: string;
         /**
@@ -6710,7 +6710,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emits an event on input change.
+          * Emitted when the user toggles the switch, by a click or `Space`. `detail` is the native `change` event, so read the new state from the switch's `checked`.  This event will not emit when programmatically setting the `checked` property.
          */
         "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         /**
