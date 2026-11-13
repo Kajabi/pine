@@ -855,11 +855,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays message text describing an invalid state.
+          * Displays an error message below the checkbox. It becomes the checkbox's accessible description only while `invalid` is set.
          */
         "errorMessage": string;
         /**
-          * String used for helper message below checkbox.
+          * Displays a message or hint below the checkbox.
          */
         "helperMessage": string;
         /**
@@ -867,15 +867,15 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
+          * Shows the checkbox as indeterminate, for a checkbox whose group is only partly selected. It's exposed to screen readers as mixed. Changing `checked` clears it. Has no visual style when `variant` is `pill`.
          */
         "indeterminate": boolean;
         /**
-          * It determines whether or not the checkbox is invalid.
+          * Determines whether or not the checkbox is invalid.
          */
         "invalid": boolean;
         /**
-          * String used for label text next to checkbox.
+          * Text to be displayed as the checkbox label.
          */
         "label": string;
         /**
@@ -1694,7 +1694,7 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the input and gives the field error styling. It becomes the input's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -1714,7 +1714,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the input field is invalid or throws an error.
+          * Determines whether or not the input is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -1766,7 +1766,7 @@ export namespace Components {
          */
         "step"?: string;
         /**
-          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'search'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"
          */
         "type": string;
@@ -2283,7 +2283,7 @@ export namespace Components {
      */
     interface PdsRadio {
         /**
-          * Determines whether or not the radio is checked.
+          * Determines whether or not the radio is checked. It keeps the value you set and doesn't change when the user picks a radio.
           * @defaultValue false
          */
         "checked": boolean;
@@ -2297,7 +2297,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays error message text describing an invalid state.
+          * Displays an error message below the radio. It becomes the radio's accessible description only while `invalid` is set.
          */
         "errorMessage": string;
         /**
@@ -2306,7 +2306,7 @@ export namespace Components {
          */
         "hasBorder": boolean;
         /**
-          * Displays helper message text below radio.
+          * Displays a message or hint below the radio.
          */
         "helperMessage": string;
         /**
@@ -2319,7 +2319,7 @@ export namespace Components {
          */
         "invalid": boolean;
         /**
-          * String used for label text next to radio.
+          * Text to be displayed as the radio label.
          */
         "label": string;
         /**
@@ -2360,7 +2360,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays error message text describing an invalid state for the entire group.
+          * Displays an error message below the radio group. It's part of the group's accessible description, with or without `invalid`.
          */
         "errorMessage": string;
         /**
@@ -2369,11 +2369,11 @@ export namespace Components {
          */
         "gap": string;
         /**
-          * String used for group label/heading.
+          * Text to be displayed as the radio group label. It also names the group, unless you set `aria-label` or `aria-labelledby` on it.
          */
         "groupLabel": string;
         /**
-          * Displays helper message text below the radio group.
+          * Displays a message or hint below the radio group.
          */
         "helperMessage": string;
         /**
@@ -2451,11 +2451,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays error message text describing an invalid state.
+          * Displays an error message below the select and marks the select as invalid, with or without `invalid`.
          */
         "errorMessage": string;
         /**
-          * Displays helper message text below select.
+          * Displays a message or hint below the select.
          */
         "helperMessage": string;
         /**
@@ -2869,7 +2869,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays an error message below the textarea field.
+          * Displays an error message below the textarea while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -2885,7 +2885,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the textarea is invalid or throws an error.
+          * Determines whether or not the textarea is invalid. When `required` is set, the textarea sets it itself each time `pdsTextareaChange` fires, replacing a value you set.
           * @defaultValue false
          */
         "invalid": boolean;
@@ -4764,7 +4764,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state.
+          * Displays an error message below the checkbox. It becomes the checkbox's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -4772,7 +4772,7 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * String used for helper message below checkbox.
+          * Displays a message or hint below the checkbox.
          */
         "helperMessage"?: string;
         /**
@@ -4780,15 +4780,15 @@ declare namespace LocalJSX {
          */
         "hideLabel"?: boolean;
         /**
-          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes). Has no visual style when `variant` is `pill`.
+          * Shows the checkbox as indeterminate, for a checkbox whose group is only partly selected. It's exposed to screen readers as mixed. Changing `checked` clears it. Has no visual style when `variant` is `pill`.
          */
         "indeterminate"?: boolean;
         /**
-          * It determines whether or not the checkbox is invalid.
+          * Determines whether or not the checkbox is invalid.
          */
         "invalid"?: boolean;
         /**
-          * String used for label text next to checkbox.
+          * Text to be displayed as the checkbox label.
          */
         "label"?: string;
         /**
@@ -4796,11 +4796,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when the user toggles the checkbox, carrying the `value` and the new `checked` state.
+          * Emitted when the user toggles the checkbox, by a click or `Space`, carrying the `value` and the new `checked` state.  This event will not emit when programmatically setting the `checked` property.
          */
         "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
-          * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`. `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.
+          * Emitted when the user toggles the checkbox, just before `pdsCheckboxChange`, carrying the `value` and `checked`. `checked` is still the state from before the toggle, so read the new state from `pdsCheckboxChange`.  This event will not emit when programmatically setting the `checked` property.
          */
         "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
@@ -5643,7 +5643,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the input and gives the field error styling. It becomes the input's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -5667,7 +5667,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the input field is invalid or throws an error.
+          * Determines whether or not the input is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -5699,7 +5699,7 @@ declare namespace LocalJSX {
          */
         "onPdsBlur"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value and then presses `Enter` or leaves the field. `detail` has `value`, as a string, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property, unless the field has focus at the time; then it emits when the field loses focus.
          */
         "onPdsChange"?: (event: PdsInputCustomEvent<InputChangeEventDetail>) => void;
         /**
@@ -5707,7 +5707,7 @@ declare namespace LocalJSX {
          */
         "onPdsFocus"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value changes from user input (typing, paste, autofill).
+          * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one. `detail` has `value`, the current value as a string, and `event`, the native `input` event.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
@@ -5735,7 +5735,7 @@ declare namespace LocalJSX {
          */
         "step"?: string;
         /**
-          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'search'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"
          */
         "type"?: string;
@@ -6264,7 +6264,7 @@ declare namespace LocalJSX {
      */
     interface PdsRadio {
         /**
-          * Determines whether or not the radio is checked.
+          * Determines whether or not the radio is checked. It keeps the value you set and doesn't change when the user picks a radio.
           * @defaultValue false
          */
         "checked"?: boolean;
@@ -6278,7 +6278,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays error message text describing an invalid state.
+          * Displays an error message below the radio. It becomes the radio's accessible description only while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -6287,7 +6287,7 @@ declare namespace LocalJSX {
          */
         "hasBorder"?: boolean;
         /**
-          * Displays helper message text below radio.
+          * Displays a message or hint below the radio.
          */
         "helperMessage"?: string;
         /**
@@ -6300,7 +6300,7 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
-          * String used for label text next to radio.
+          * Text to be displayed as the radio label.
          */
         "label"?: string;
         /**
@@ -6308,7 +6308,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emits a boolean indicating whether the radio is currently checked or unchecked.
+          * Emitted with `true` when the user checks the radio, by a click or an arrow key. The radio is `event.target`, so read its `value` there. Not emitted when picking another radio unchecks this one. Not emitted inside `pds-radio-group` either; listen for `pdsRadioGroupChange` there.
          */
         "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         /**
@@ -6345,7 +6345,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays error message text describing an invalid state for the entire group.
+          * Displays an error message below the radio group. It's part of the group's accessible description, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -6354,11 +6354,11 @@ declare namespace LocalJSX {
          */
         "gap"?: string;
         /**
-          * String used for group label/heading.
+          * Text to be displayed as the radio group label. It also names the group, unless you set `aria-label` or `aria-labelledby` on it.
          */
         "groupLabel"?: string;
         /**
-          * Displays helper message text below the radio group.
+          * Displays a message or hint below the radio group.
          */
         "helperMessage"?: string;
         /**
@@ -6371,7 +6371,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emits when a radio in the group is selected, providing the selected value and component ID.
+          * Emitted when the user checks a radio in the group, by a click or an arrow key. `detail` has that radio's `value` and `componentId`, and `checked`, which is always `true`.
          */
         "onPdsRadioGroupChange"?: (event: PdsRadioGroupCustomEvent<RadioGroupChangeEventDetail>) => void;
         /**
@@ -6440,7 +6440,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays error message text describing an invalid state.
+          * Displays an error message below the select and marks the select as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -6448,7 +6448,7 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * Displays helper message text below select.
+          * Displays a message or hint below the select.
          */
         "helperMessage"?: string;
         /**
@@ -6489,7 +6489,7 @@ declare namespace LocalJSX {
          */
         "onPdsKeyDown"?: (event: PdsSelectCustomEvent<KeyboardEvent>) => void;
         /**
-          * Emitted when the select value changes.
+          * Emitted when the user changes the selection. `detail` is the native `change` event, so read the new value from the select's `value`: a string, or an array with `multiple`.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
         /**
@@ -6898,7 +6898,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays an error message below the textarea field.
+          * Displays an error message below the textarea while `invalid` is set.
          */
         "errorMessage"?: string;
         /**
@@ -6918,7 +6918,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the textarea is invalid or throws an error.
+          * Determines whether or not the textarea is invalid. When `required` is set, the textarea sets it itself each time `pdsTextareaChange` fires, replacing a value you set.
           * @defaultValue false
          */
         "invalid"?: boolean;
@@ -6936,15 +6936,15 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when the input loses focus.
+          * Emitted when the textarea loses focus.
          */
         "onPdsBlur"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the input has focus.
+          * Emitted when the textarea has focus.
          */
         "onPdsFocus"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value changes from user input (typing, paste, autofill).
+          * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one. `detail` has `value`, the current text, and `event`, the native `input` event.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsInput"?: (event: PdsTextareaCustomEvent<TextareaInputEventDetail>) => void;
         /**
@@ -6952,7 +6952,7 @@ declare namespace LocalJSX {
          */
         "onPdsKeyDown"?: (event: PdsTextareaCustomEvent<KeyboardEvent>) => void;
         /**
-          * Event emitted whenever the value of the textarea changes.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value and then leaves the textarea. `Enter` adds a new line, so it doesn't emit this event. `detail` has `value`, the text, and `event`, the native event behind it, usually `change`.  This event will not emit when programmatically setting the `value` property, unless the field has focus at the time; then it emits when the field loses focus.
          */
         "onPdsTextareaChange"?: (event: PdsTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
