@@ -2024,20 +2024,20 @@ describe('pds-modal position', () => {
         expect(top).toBeGreaterThanOrEqual(EDGE_GAP);
         expect(top).toBeLessThanOrEqual(bottom);
       });
+
+      it('centers horizontally in a right-to-left page', async () => {
+        const page = await openModal({ width: 1920, height: 1080 }, { attributes, dir: 'rtl' });
+        const { top, bottom, left, right } = await gaps(page);
+
+        expect(left).toBe(right);
+        expect(top).toBeLessThan(bottom);
+      });
+
+      it('fills the viewport when fullscreen', async () => {
+        const page = await openModal({ width: 1440, height: 900 }, { attributes: `${attributes} size="fullscreen"` });
+
+        expect(await gaps(page)).toEqual({ top: 0, bottom: 0, left: 0, right: 0, backdropScrolls: false });
+      });
     });
   }
-
-  it('centers horizontally in a right-to-left page', async () => {
-    const page = await openModal({ width: 1920, height: 1080 }, { dir: 'rtl' });
-    const { top, bottom, left, right } = await gaps(page);
-
-    expect(left).toBe(right);
-    expect(top).toBeLessThan(bottom);
-  });
-
-  it('fills the viewport when fullscreen', async () => {
-    const page = await openModal({ width: 1440, height: 900 }, { attributes: 'size="fullscreen"' });
-
-    expect(await gaps(page)).toEqual({ top: 0, bottom: 0, left: 0, right: 0, backdropScrolls: false });
-  });
 });
