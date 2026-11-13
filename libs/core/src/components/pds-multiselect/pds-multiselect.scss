@@ -80,6 +80,27 @@
   }
 }
 
+// The sizer and the visible text share one grid cell. Only the sizer sets the width: the text is
+// contained, so a long selected name truncates instead of widening a multiselect sized by its content.
+.pds-multiselect__trigger-label {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.pds-multiselect__trigger-sizer {
+  grid-area: 1 / 1;
+  overflow: hidden;
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+.pds-multiselect__trigger-label > .pds-multiselect__trigger-text {
+  contain: inline-size;
+  grid-area: 1 / 1;
+}
+
 .pds-multiselect__trigger-text {
   color: var(--pine-color-text-strong);
   flex: 1;
