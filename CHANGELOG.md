@@ -1,3 +1,20 @@
+## 5.0.1 (2026-11-13)
+
+### Documentation 📄
+
+- **core:** fix box, row, container and divider docs accuracy and organization ([#986](https://github.com/Kajabi/pine/pull/986))
+- **core:** fill in combobox, multiselect and datepicker contracts and regroup their pages ([#988](https://github.com/Kajabi/pine/pull/988))
+- **guides:** list every control aria-labelledby can't name and keep six examples per guide ([#985](https://github.com/Kajabi/pine/pull/985))
+- **pds-table:** fix table, tabs and accordion docs for events, keyboard and organization ([#987](https://github.com/Kajabi/pine/pull/987))
+
+### Styles 🎨
+
+- **pds-combobox:** ease trigger-width changes after load ([#990](https://github.com/Kajabi/pine/pull/990))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 # 5.0.0 (2026-11-13)
 
 ### Bug Fixes 🐛
