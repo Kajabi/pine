@@ -360,6 +360,13 @@ describe('pds-switch', () => {
 
     page.rootInstance.formDisabledCallback(true);
     await page.waitForChanges();
+
+    // formDisabledCallback writes the private fieldsetDisabled, not disabled, so this is what the
+    // guard actually protects: isDisabled() -- and so the rendered input and aria-disabled -- must
+    // stay false without a real disabled fieldset ancestor to confirm the call.
+    const input = page.root.shadowRoot.querySelector('input') as HTMLInputElement;
+    expect(input.disabled).toBe(false);
+    expect(page.root).not.toHaveAttribute('aria-disabled');
     expect(page.root.disabled).toBe(false);
   });
   describe('unchecked-value', () => {

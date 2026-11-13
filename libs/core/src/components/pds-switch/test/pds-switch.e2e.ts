@@ -385,6 +385,28 @@ describe('pds-switch description', () => {
     expect((await inputAxNode(page))?.description).toBe('Applies to new orders.');
   });
 
+  // No helper or error message and not invalid, so ownDescriptionId() is undefined -- the only
+  // case that reaches the removeAttribute branch, rather than setting the attribute back to its
+  // own message's id.
+  it('clears the description entirely once aria-describedby is removed with no own message', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <p id="card-description">Send a receipt after each purchase.</p>
+      <pds-switch component-id="receipts" label="Receipts" aria-describedby="card-description"></pds-switch>
+    `);
+
+    expect((await inputAxNode(page))?.description).toBe('Send a receipt after each purchase.');
+
+    await page.$eval('pds-switch', (el) => el.removeAttribute('aria-describedby'));
+    await page.waitForChanges();
+
+    const inputHasAttribute = await page.evaluate(
+      () => document.querySelector('pds-switch')!.shadowRoot!.querySelector('input')!.hasAttribute('aria-describedby'),
+    );
+    expect(inputHasAttribute).toBe(false);
+    expect((await inputAxNode(page))?.description).toBeFalsy();
+  });
+
   it('keeps the error message in the description while invalid', async () => {
     const page = await newE2EPage();
     await page.setContent(`
