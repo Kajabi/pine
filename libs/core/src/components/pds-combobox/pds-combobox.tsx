@@ -29,7 +29,7 @@ import type {
 } from './combobox-interface';
 
 /**
- * @slot option - Option elements for the combobox dropdown
+ * @slot (default) - The options: `<option>` and `<optgroup>` elements, and `<pds-text>` group headings. Other elements are ignored, and so are all of them while `options` or `async-url` is set.
  * @slot trigger-content - Custom content for the button trigger when customTriggerContent is true
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
@@ -79,7 +79,7 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() disabled: boolean = false;
 
   /**
-   * Error message to display.
+   * Displays an error message below the combobox and marks the combobox as invalid, with or without `invalid`.
    */
   @Prop() errorMessage?: string;
 
@@ -153,7 +153,7 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() groupDisplay: 'inline' | 'flyout' | 'drill-in' = 'inline';
 
   /**
-   * Helper message to display below the combobox.
+   * Displays a message or hint below the combobox. It's hidden while `error-message` is set.
    */
   @Prop() helperMessage?: string;
 
@@ -165,7 +165,7 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() hideLabel: boolean = false;
 
   /**
-   * If true, the combobox is in an invalid state.
+   * Determines whether or not the combobox is invalid.
    */
   @Prop() invalid?: boolean;
 
@@ -248,6 +248,7 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * The sentiment for the chip trigger. Matches Pine chip sentiments.
+   * Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
    * @default 'neutral'
    */
   @Prop() chipSentiment: ChipSentimentType = 'neutral';
@@ -255,17 +256,20 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Whether the chip trigger should be displayed in a larger size.
+   * Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
    * @default false
    */
   @Prop() chipLarge: boolean = false;
 
   /**
    * The name of the icon to display in the chip trigger.
+   * Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
    */
   @Prop() chipIcon?: string;
 
   /**
    * Whether a dot should be displayed on the chip trigger.
+   * Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
    * @default false
    */
   @Prop() chipDot: boolean = false;
@@ -301,7 +305,9 @@ export class PdsCombobox implements BasePdsProps {
   @Prop({ mutable: true }) loading: boolean = false;
 
   /**
-   * Options provided externally (for consumer-managed async).
+   * The options to list, as an alternative to slotted `<option>` elements, such as results you load yourself.
+   * Each is `{ id, text }`, with optional `group`, `groupIcon`, `groupBadge`, `icon`, `badge` and `disabled`.
+   * While it's set, slotted options are ignored. It's a property only, so set it from JavaScript or a framework.
    */
   @Prop() options?: ComboboxOption[];
 
@@ -311,17 +317,27 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() formatResult?: (item: unknown) => ComboboxOption;
 
   /**
-   * Emitted when the value changes.
+   * Emitted when the user picks an option, with a click or with `Enter` on the highlighted option (or `Space`, on the
+   * `button` and `chip` triggers), even the option already selected. `detail` has `value`, the option's `value` as a string.
+   * `clear()` emits it too, with an empty `value`, when something was selected or typed. Typing in the field only
+   * filters the list and doesn't emit it.
+   *
+   * This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
 
   /**
-   * Emitted on search input (for consumer-managed async).
+   * Emitted when the search text changes, in the `input` trigger or in the `panel-search` field, once `debounce`
+   * milliseconds (300 by default) have passed since the last change. `detail` has `query`, the text as typed. With `panel-search`, it's also emitted with an empty `query` when the dropdown closes with text in
+   * the search field, which is cleared. Use it to load `options` yourself; with `async-url`, the combobox fetches on its own.
    */
   @Event() pdsComboboxSearch!: EventEmitter<ComboboxSearchEventDetail>;
 
   /**
-   * Emitted to request more options (pagination).
+   * Emitted with `async-url` when the list is scrolled near its end and the response's `totalCount` says more
+   * options remain, as the combobox fetches the next page itself. `detail` has `query` and `page`, the page being
+   * fetched. It can be emitted more than once for the same page while that page waits to load, and never without
+   * `async-url`.
    */
   @Event() pdsComboboxLoadOptions!: EventEmitter<ComboboxLoadOptionsEventDetail>;
 
@@ -1916,7 +1932,7 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Sets focus on the native input element.
+   * Sets focus on the trigger: the native `input`, or the `button` or `chip` trigger.
    */
   @Method()
   async setFocus() {
@@ -2166,7 +2182,7 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Gets the value of the currently selected option.
+   * Returns the `value` of the selected option, or `null` when none is selected.
    */
   @Method()
   async getSelectedValue(): Promise<string | null> {
@@ -2175,7 +2191,8 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Clears the selected value and resets the component. Works while disabled too, as setting a
-   * native control's value from script does.
+   * native control's value from script does. Emits `pdsComboboxChange` with an empty `value` when
+   * something was selected or typed.
    */
   @Method()
   async clear() {

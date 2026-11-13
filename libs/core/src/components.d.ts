@@ -971,26 +971,26 @@ export namespace Components {
          */
         "asyncUrl"?: string;
         /**
-          * Whether a dot should be displayed on the chip trigger.
+          * Whether a dot should be displayed on the chip trigger. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default false
          */
         "chipDot": boolean;
         /**
-          * The name of the icon to display in the chip trigger.
+          * The name of the icon to display in the chip trigger. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
          */
         "chipIcon"?: string;
         /**
-          * Whether the chip trigger should be displayed in a larger size.
+          * Whether the chip trigger should be displayed in a larger size. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default false
          */
         "chipLarge": boolean;
         /**
-          * The sentiment for the chip trigger. Matches Pine chip sentiments.
+          * The sentiment for the chip trigger. Matches Pine chip sentiments. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default 'neutral'
          */
         "chipSentiment": ChipSentimentType;
         /**
-          * Clears the selected value and resets the component. Works while disabled too, as setting a native control's value from script does.
+          * Clears the selected value and resets the component. Works while disabled too, as setting a native control's value from script does. Emits `pdsComboboxChange` with an empty `value` when something was selected or typed.
          */
         "clear": () => Promise<void>;
         /**
@@ -1037,7 +1037,7 @@ export namespace Components {
          */
         "dropdownWidth"?: string;
         /**
-          * Error message to display.
+          * Displays an error message below the combobox and marks the combobox as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -1060,7 +1060,7 @@ export namespace Components {
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
         /**
-          * Gets the value of the currently selected option.
+          * Returns the `value` of the selected option, or `null` when none is selected.
          */
         "getSelectedValue": () => Promise<string | null>;
         /**
@@ -1069,7 +1069,7 @@ export namespace Components {
          */
         "groupDisplay": 'inline' | 'flyout' | 'drill-in';
         /**
-          * Helper message to display below the combobox.
+          * Displays a message or hint below the combobox. It's hidden while `error-message` is set.
          */
         "helperMessage"?: string;
         /**
@@ -1078,7 +1078,7 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
-          * If true, the combobox is in an invalid state.
+          * Determines whether or not the combobox is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -1109,7 +1109,7 @@ export namespace Components {
          */
         "noOptionsFoundLabel": string;
         /**
-          * Options provided externally (for consumer-managed async).
+          * The options to list, as an alternative to slotted `<option>` elements, such as results you load yourself. Each is `{ id, text }`, with optional `group`, `groupIcon`, `groupBadge`, `icon`, `badge` and `disabled`. While it's set, slotted options are ignored. It's a property only, so set it from JavaScript or a framework.
          */
         "options"?: ComboboxOption[];
         /**
@@ -1132,7 +1132,7 @@ export namespace Components {
          */
         "searchPlaceholder": string;
         /**
-          * Sets focus on the native input element.
+          * Sets focus on the trigger: the native `input`, or the `button` or `chip` trigger.
          */
         "setFocus": () => Promise<void>;
         /**
@@ -1262,7 +1262,7 @@ export namespace Components {
          */
         "endTimeLabel": string;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the field and gives the field error styling. It becomes the field's accessible description only while the datepicker is invalid: with `invalid` set, or while its date can't be picked.
          */
         "errorMessage"?: string;
         /**
@@ -1292,7 +1292,7 @@ export namespace Components {
          */
         "hourLabel": string;
         /**
-          * Determines whether or not the datepicker is invalid or throws an error.
+          * Determines whether or not the datepicker is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -2015,7 +2015,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Error message to display.
+          * Displays an error message below the multiselect and marks the multiselect as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -2028,7 +2028,7 @@ export namespace Components {
          */
         "formatResult"?: (item: unknown) => MultiselectOption;
         /**
-          * Helper message to display below the input.
+          * Displays a message or hint below the multiselect. It's hidden while `error-message` is set.
          */
         "helperMessage"?: string;
         /**
@@ -2042,7 +2042,7 @@ export namespace Components {
          */
         "hideSelectedItems": boolean;
         /**
-          * If true, the multiselect is in an invalid state.
+          * Determines whether or not the multiselect is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -4965,21 +4965,21 @@ declare namespace LocalJSX {
          */
         "asyncUrl"?: string;
         /**
-          * Whether a dot should be displayed on the chip trigger.
+          * Whether a dot should be displayed on the chip trigger. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default false
          */
         "chipDot"?: boolean;
         /**
-          * The name of the icon to display in the chip trigger.
+          * The name of the icon to display in the chip trigger. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
          */
         "chipIcon"?: string;
         /**
-          * Whether the chip trigger should be displayed in a larger size.
+          * Whether the chip trigger should be displayed in a larger size. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default false
          */
         "chipLarge"?: boolean;
         /**
-          * The sentiment for the chip trigger. Matches Pine chip sentiments.
+          * The sentiment for the chip trigger. Matches Pine chip sentiments. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default 'neutral'
          */
         "chipSentiment"?: ChipSentimentType;
@@ -5027,7 +5027,7 @@ declare namespace LocalJSX {
          */
         "dropdownWidth"?: string;
         /**
-          * Error message to display.
+          * Displays an error message below the combobox and marks the combobox as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -5059,7 +5059,7 @@ declare namespace LocalJSX {
          */
         "groupDisplay"?: 'inline' | 'flyout' | 'drill-in';
         /**
-          * Helper message to display below the combobox.
+          * Displays a message or hint below the combobox. It's hidden while `error-message` is set.
          */
         "helperMessage"?: string;
         /**
@@ -5068,7 +5068,7 @@ declare namespace LocalJSX {
          */
         "hideLabel"?: boolean;
         /**
-          * If true, the combobox is in an invalid state.
+          * Determines whether or not the combobox is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -5099,19 +5099,19 @@ declare namespace LocalJSX {
          */
         "noOptionsFoundLabel"?: string;
         /**
-          * Emitted when the value changes.
+          * Emitted when the user picks an option, with a click or with `Enter` on the highlighted option (or `Space`, on the `button` and `chip` triggers), even the option already selected. `detail` has `value`, the option's `value` as a string. `clear()` emits it too, with an empty `value`, when something was selected or typed. Typing in the field only filters the list and doesn't emit it.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsComboboxChange"?: (event: PdsComboboxCustomEvent<{ value: string }>) => void;
         /**
-          * Emitted to request more options (pagination).
+          * Emitted with `async-url` when the list is scrolled near its end and the response's `totalCount` says more options remain, as the combobox fetches the next page itself. `detail` has `query` and `page`, the page being fetched. It can be emitted more than once for the same page while that page waits to load, and never without `async-url`.
          */
         "onPdsComboboxLoadOptions"?: (event: PdsComboboxCustomEvent<ComboboxLoadOptionsEventDetail>) => void;
         /**
-          * Emitted on search input (for consumer-managed async).
+          * Emitted when the search text changes, in the `input` trigger or in the `panel-search` field, once `debounce` milliseconds (300 by default) have passed since the last change. `detail` has `query`, the text as typed. With `panel-search`, it's also emitted with an empty `query` when the dropdown closes with text in the search field, which is cleared. Use it to load `options` yourself; with `async-url`, the combobox fetches on its own.
          */
         "onPdsComboboxSearch"?: (event: PdsComboboxCustomEvent<ComboboxSearchEventDetail>) => void;
         /**
-          * Options provided externally (for consumer-managed async).
+          * The options to list, as an alternative to slotted `<option>` elements, such as results you load yourself. Each is `{ id, text }`, with optional `group`, `groupIcon`, `groupBadge`, `icon`, `badge` and `disabled`. While it's set, slotted options are ignored. It's a property only, so set it from JavaScript or a framework.
          */
         "options"?: ComboboxOption[];
         /**
@@ -5260,7 +5260,7 @@ declare namespace LocalJSX {
          */
         "endTimeLabel"?: string;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the field and gives the field error styling. It becomes the field's accessible description only while the datepicker is invalid: with `invalid` set, or while its date can't be picked.
          */
         "errorMessage"?: string;
         /**
@@ -5294,7 +5294,7 @@ declare namespace LocalJSX {
          */
         "hourLabel"?: string;
         /**
-          * Determines whether or not the datepicker is invalid or throws an error.
+          * Determines whether or not the datepicker is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -5358,15 +5358,15 @@ declare namespace LocalJSX {
          */
         "nextMonthLabel"?: string;
         /**
-          * Emitted when the datepicker loses focus: when focus leaves the field and the calendar.
+          * Emitted when the datepicker loses focus: when focus leaves the field and the calendar. Moving between the field and the calendar doesn't emit it.
          */
         "onPdsBlur"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value changes.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value: by picking a day, typing a date or range and pressing `Enter` or leaving the field, or with the clear button. In the calendar, a range waits for Apply, or with `auto-apply` for its end or a preset, and a date with `time-picker` waits for Apply. `detail` has `value`, as `YYYY-MM-DD`, `YYYY-MM-DDTHH:mm` with `time-picker`, `--MM-DD` with `month-day`, or an empty string when cleared. In range mode `value` is `start/end`, and `detail` also has `start`, `end` and `preset`, the key of the preset the range matches, when it matches one.  It doesn't emit when the value stays the same, when typed text isn't a date that can be picked, or when a form reset clears the date. This event will not emit when programmatically setting the `value` property.
          */
         "onPdsDatepickerChange"?: (event: PdsDatepickerCustomEvent<DatepickerChangeEventDetail>) => void;
         /**
-          * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside.
+          * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside. Moving between the field and the calendar doesn't emit it.
          */
         "onPdsFocus"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
         /**
@@ -6057,7 +6057,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Error message to display.
+          * Displays an error message below the multiselect and marks the multiselect as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -6074,7 +6074,7 @@ declare namespace LocalJSX {
          */
         "formatResult"?: (item: unknown) => MultiselectOption;
         /**
-          * Helper message to display below the input.
+          * Displays a message or hint below the multiselect. It's hidden while `error-message` is set.
          */
         "helperMessage"?: string;
         /**
@@ -6088,7 +6088,7 @@ declare namespace LocalJSX {
          */
         "hideSelectedItems"?: boolean;
         /**
-          * If true, the multiselect is in an invalid state.
+          * Determines whether or not the multiselect is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -6134,11 +6134,11 @@ declare namespace LocalJSX {
          */
         "noOptionsFoundLabel"?: string;
         /**
-          * Emitted when selection changes.
+          * Emitted when the user selects or deselects an option, with a click or with `Enter` on the highlighted option, or removes a pill. Also emitted when `create-url` adds an option, and by `clear()` when something was selected or typed. `detail` has `values`, the selected values; `items`, the selected options; and `added` and `removed`, the values this change selected and deselected.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
         /**
-          * Emitted when a new option is created.
+          * Emitted when `create-url` has created an option: the request succeeded, and the new option was added and selected. `detail` has `query`, the trimmed search text that was sent, and `newOption`, the option from the response. `pdsMultiselectChange` follows it. A failed request emits nothing; it's logged to the console.
          */
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         /**
@@ -6146,7 +6146,7 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**
-          * Emitted to request more options (pagination).
+          * Emitted with `async-url` when the list is scrolled near its end and the response's `totalCount` says more options remain, as the multiselect fetches the next page itself. `detail` has `query` and `page`, the page being fetched. It can be emitted more than once for the same page while that page waits to load, and never without `async-url`.
          */
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
         /**
@@ -6154,7 +6154,7 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
         /**
-          * Emitted on search input (for consumer-managed async).
+          * Emitted when the search text changes, once `debounce` milliseconds (300 by default) have passed since the last change. `detail` has `query`, the text as typed. Use it to load `options` yourself; with `async-url`, the multiselect fetches on its own.
          */
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
         /**
