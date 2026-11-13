@@ -32,13 +32,21 @@ An item inside a `pds-dropdown-menu`. Renders a button by default, or a link whe
 
 ### `clickItem() => Promise<void>`
 
-Trigger the click event
+Trigger the click event. Does nothing when the item is disabled or informational.
 
 #### Returns
 
 Type: `Promise<void>`
 
 
+
+
+## Slots
+
+| Slot          | Description                                                                                                                                                                                                              |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `"(default)"` | The item's label.                                                                                                                                                                                                        |
+| `"start"`     | Content to display before the item's label, such as a `pds-icon`. A `pds-icon` without an `aria-label` or `aria-labelledby` is decorative; a named one is announced before the label, so leave decorative icons unnamed. |
 
 
 ## Shadow Parts
