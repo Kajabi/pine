@@ -26,12 +26,21 @@ Multiselects let users pick several options from a searchable dropdown list. The
 - For very short lists (3-4 items) - consider using checkboxes directly
 
 ### Accessibility
-- Implements WAI-ARIA Combobox pattern with multiselect support
-- Full keyboard navigation: Arrow keys, Enter, Escape, Tab
-- Tab from the search input closes the panel and returns focus to the trigger, as Escape does, so the next Tab moves on to the next control. When the `footer` has a focusable control, Tab goes there first, and Tab from its last control closes the panel and moves on
-- A selected item clipped by the panel width becomes a tab stop between the search input and the footer, and shows its full text in a tooltip. Tab moves through the clipped items before going on to the footer or the trigger, and Shift+Tab from the footer comes back to the last one
+
+- Implements WAI-ARIA Combobox pattern with multiselect support. See [Keyboard interactions](#keyboard-interactions) for the keys
+- Set `label`, so the trigger is named for what people are choosing. Use `hide-label` to hide it visually; it still names the trigger. With a custom trigger, use `hide-label` and give the trigger its own accessible name; see Custom Trigger
 - Without a `label`, the trigger is named by what it shows: the placeholder, the selected item's name, or the count. With a `label`, the label names it
+- Translate the multiselect's own text, which defaults to English; see [Localization](#localization)
 - Checkboxes in dropdown provide clear selection state
+
+## Keyboard interactions
+
+- On the trigger, `↓`, `↑`, `Enter` or `Space` opens the panel, with focus in its search field.
+- In the search field, typing filters the options. `↓` and `↑` move through them, and `Enter` selects or deselects the highlighted one.
+- `Escape` closes the panel and returns focus to the trigger.
+- Tab from the search input closes the panel and returns focus to the trigger, as Escape does, so the next Tab moves on to the next control. When the `footer` has a focusable control, Tab goes there first, and Tab from its last control closes the panel and moves on.
+- A selected item clipped by the panel width becomes a tab stop between the search input and the footer, and shows its full text in a tooltip. Tab moves through the clipped items before going on to the footer or the trigger, and Shift+Tab from the footer comes back to the last one.
+- With `option-actions`, `→` on the highlighted option runs its action; see [Option Actions](#option-actions).
 
 ## Usage Notes
 
@@ -140,6 +149,422 @@ Use the `value` prop to set initially selected items. The trigger will display t
     <option value="3">Support</option>
   </pds-multiselect>
 </DocCanvas>
+
+### Selected Display: Pills
+
+Use `selected-display="pill"` to render selected items as removable pill chips instead of a name or count. Control placement with `pill-position`.
+
+#### Inline Pills
+
+Pills appear inside the trigger button alongside a chevron. This keeps the form field compact while showing exactly what's selected.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="pill-inline"
+  label="Departments"
+  placeholder="Select..."
+  selected-display="pill"
+  pill-position="inline"
+  value='["1", "2", "3"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="pill-inline"
+  label="Departments"
+  placeholder="Select..."
+  selectedDisplay="pill"
+  pillPosition="inline"
+  value={['1', '2', '3']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="pill-inline"
+    label="Departments"
+    placeholder="Select..."
+    selected-display="pill"
+    pill-position="inline"
+    value='["1", "2", "3"]'
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+    <option value="5">Design</option>
+  </pds-multiselect>
+</DocCanvas>
+
+#### Pills Below
+
+Pills render below the trigger in a wrapping row. Useful when you want the trigger to stay a fixed height and show all selections at a glance.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="pill-below"
+  label="Departments"
+  placeholder="Select..."
+  selected-display="pill"
+  pill-position="below"
+  value='["1", "2", "3", "4"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="pill-below"
+  label="Departments"
+  placeholder="Select..."
+  selectedDisplay="pill"
+  pillPosition="below"
+  value={['1', '2', '3', '4']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="pill-below"
+    label="Departments"
+    placeholder="Select..."
+    selected-display="pill"
+    pill-position="below"
+    value='["1", "2", "3", "4"]'
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+    <option value="5">Design</option>
+  </pds-multiselect>
+</DocCanvas>
+
+#### Inline Pill Overflow
+
+Use `max-inline-pills` to cap how many chips are shown inline. Selections beyond the limit collapse into a "+N more" badge.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="pill-overflow"
+  label="Departments (max 2 inline)"
+  placeholder="Select..."
+  selected-display="pill"
+  pill-position="inline"
+  max-inline-pills="2"
+  value='["1", "2", "3", "4", "5"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="pill-overflow"
+  label="Departments (max 2 inline)"
+  placeholder="Select..."
+  selectedDisplay="pill"
+  pillPosition="inline"
+  maxInlinePills={2}
+  value={['1', '2', '3', '4', '5']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="pill-overflow"
+    label="Departments (max 2 inline)"
+    placeholder="Select..."
+    selected-display="pill"
+    pill-position="inline"
+    max-inline-pills="2"
+    value='["1", "2", "3", "4", "5"]'
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+    <option value="5">Design</option>
+  </pds-multiselect>
+</DocCanvas>
+
+#### Disabled Pills
+
+In the disabled state, pills render without close buttons and the trigger is non-interactive.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="pill-disabled"
+  label="Disabled Pill Multiselect"
+  placeholder="Cannot select..."
+  selected-display="pill"
+  pill-position="inline"
+  disabled
+  value='["1", "2"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="pill-disabled"
+  label="Disabled Pill Multiselect"
+  placeholder="Cannot select..."
+  selectedDisplay="pill"
+  pillPosition="inline"
+  disabled
+  value={['1', '2']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="pill-disabled"
+    label="Disabled Pill Multiselect"
+    placeholder="Cannot select..."
+    selected-display="pill"
+    pill-position="inline"
+    disabled
+    value='["1", "2"]'
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### With Error State
+
+Display validation errors with the `errorMessage` prop.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="error-select"
+  label="Required Tags"
+  placeholder="Select..."
+  error-message="Please select at least one tag."
+  invalid
+>
+  <option value="1">Tag A</option>
+  <option value="2">Tag B</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="error-select"
+  label="Required Tags"
+  placeholder="Select..."
+  errorMessage="Please select at least one tag."
+  invalid
+>
+  <option value="1">Tag A</option>
+  <option value="2">Tag B</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="error-select"
+    label="Required Tags"
+    placeholder="Select..."
+    error-message="Please select at least one tag."
+    invalid
+  >
+    <option value="1">Tag A</option>
+    <option value="2">Tag B</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### Disabled Options
+
+Individual options can be disabled using the `disabled` attribute on `<option>` elements, or by setting `disabled: true` on items in the `options` prop. Disabled options are rendered as non-interactive and visually muted — they cannot be selected via click or keyboard navigation. Disabling an `<optgroup>` propagates to all its child options.
+
+**Say why an option is disabled.** A disabled option can't explain itself. When one reason covers every disabled option, put it in `helper-message`, which is read with the built-in trigger (not a slotted one; see Custom Trigger); when reasons differ, add a short one to each option's label, as in "(sold out)" below.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="disabled-options-select"
+  label="Products"
+  placeholder="Select products..."
+>
+  <option value="ec-1">Classical Guitar Learning Path</option>
+  <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
+  <option value="ec-3">Music Theory 101</option>
+  <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
+  <option value="cc-2">Fall Workshop Series</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="disabled-options-select"
+  label="Products"
+  placeholder="Select products..."
+>
+  <option value="ec-1">Classical Guitar Learning Path</option>
+  <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
+  <option value="ec-3">Music Theory 101</option>
+  <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
+  <option value="cc-2">Fall Workshop Series</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="disabled-options-select"
+    label="Products"
+    placeholder="Select products..."
+  >
+    <option value="ec-1">Classical Guitar Learning Path</option>
+    <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
+    <option value="ec-3">Music Theory 101</option>
+    <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
+    <option value="cc-2">Fall Workshop Series</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### Grouped Options
+
+Use `<optgroup>` elements in the slot to organize options under labeled group headers. Groups are rendered as non-interactive uppercase headings that collapse automatically when search filters out all items in a group.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="grouped-select"
+  label="Products"
+  placeholder="Select products..."
+>
+  <optgroup label="Evergreen Courses">
+    <option value="ec-1">Classical Guitar Learning Path</option>
+    <option value="ec-2">Piano Lessons</option>
+    <option value="ec-3">Music Theory 101</option>
+  </optgroup>
+  <optgroup label="Cohort Courses">
+    <option value="cc-1">Spring Bootcamp 2025</option>
+    <option value="cc-2">Fall Workshop Series</option>
+  </optgroup>
+  <optgroup label="Newsletters">
+    <option value="nl-1">Weekly Digest</option>
+    <option value="nl-2">Product Updates</option>
+  </optgroup>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="grouped-select"
+  label="Products"
+  placeholder="Select products..."
+>
+  <optgroup label="Evergreen Courses">
+    <option value="ec-1">Classical Guitar Learning Path</option>
+    <option value="ec-2">Piano Lessons</option>
+    <option value="ec-3">Music Theory 101</option>
+  </optgroup>
+  <optgroup label="Cohort Courses">
+    <option value="cc-1">Spring Bootcamp 2025</option>
+    <option value="cc-2">Fall Workshop Series</option>
+  </optgroup>
+  <optgroup label="Newsletters">
+    <option value="nl-1">Weekly Digest</option>
+    <option value="nl-2">Product Updates</option>
+  </optgroup>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="grouped-select"
+    label="Products"
+    placeholder="Select products..."
+  >
+    <optgroup label="Evergreen Courses">
+      <option value="ec-1">Classical Guitar Learning Path</option>
+      <option value="ec-2">Piano Lessons</option>
+      <option value="ec-3">Music Theory 101</option>
+    </optgroup>
+    <optgroup label="Cohort Courses">
+      <option value="cc-1">Spring Bootcamp 2025</option>
+      <option value="cc-2">Fall Workshop Series</option>
+    </optgroup>
+    <optgroup label="Newsletters">
+      <option value="nl-1">Weekly Digest</option>
+      <option value="nl-2">Product Updates</option>
+    </optgroup>
+  </pds-multiselect>
+</DocCanvas>
+
+For dynamic or async data, add a `group` field to each item in the `options` prop instead. Items that share a `group` label must appear **contiguously** in the array; if the same label appears again after other options, a second header is shown (same behavior as native `<optgroup>`). Unlike `pds-combobox`, which renders a group's options together wherever they appear in the array, the multiselect keeps the array's order.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  id="grouped-options-select"
+  component-id="grouped-options-select"
+  label="Products"
+  placeholder="Select products..."
+/>
+
+<script>
+  document.querySelector('#grouped-options-select').options = [
+    { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
+    { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
+    { id: 'nl-1', text: 'Weekly Digest', group: 'Newsletters' },
+    { id: 'nl-2', text: 'Product Updates', group: 'Newsletters' },
+  ];
+</script>`,
+    react: `const products = [
+  { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
+  { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
+  { id: 'nl-1', text: 'Weekly Digest', group: 'Newsletters' },
+  { id: 'nl-2', text: 'Product Updates', group: 'Newsletters' },
+];
+
+<PdsMultiselect
+  componentId="grouped-options-select"
+  label="Products"
+  placeholder="Select products..."
+  options={products}
+/>`,
+  }}
+>
+  <pds-multiselect
+    component-id="grouped-options-select"
+    label="Products"
+    placeholder="Select products..."
+  >
+    <optgroup label="Evergreen Courses">
+      <option value="ec-1">Classical Guitar Learning Path</option>
+      <option value="ec-2">Piano Lessons</option>
+    </optgroup>
+    <optgroup label="Newsletters">
+      <option value="nl-1">Weekly Digest</option>
+      <option value="nl-2">Product Updates</option>
+    </optgroup>
+  </pds-multiselect>
+</DocCanvas>
+
+> **Note:** The live preview uses slotted `<optgroup>` markup, which renders the same groups. `options` is a JavaScript property with no attribute, so set it from a script or a framework binding.
 
 ### Hidden Selected Items
 
@@ -281,287 +706,6 @@ Use `trigger-width` to control the trigger size and `panel-width` to control the
     <option value="4">Engineering</option>
   </pds-multiselect>
 </DocCanvas>
-
-### Async with URL
-
-Fetch options from a remote API endpoint. The component expects responses in the format `{ results: [{ id, text }], totalCount }`.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="async-select"
-  label="Search Products"
-  placeholder="Select..."
-  async-url="/api/products"
-  debounce-ms="500"
-/>`,
-    react: `<PdsMultiselect
-  componentId="async-select"
-  label="Search Products"
-  placeholder="Select..."
-  asyncUrl="/api/products"
-  debounceMs={500}
-/>`,
-  }}
->
-  <pds-multiselect
-    component-id="async-select"
-    label="Search Products"
-    placeholder="Select..."
-  >
-    <option value="1">Product A</option>
-    <option value="2">Product B</option>
-    <option value="3">Product C</option>
-  </pds-multiselect>
-</DocCanvas>
-
-> **Note:** The live preview uses static options. In production, options are fetched from the API endpoint.
-
-### Refreshing Options
-
-Async options are fetched once and kept. After an option changes elsewhere, such as when it's renamed in an edit modal, call `refreshOptions()` to fetch the first page again for the current search. Options and selected items in that page show the new text and color without emitting a change event. Selected items outside it keep the text and color they were last loaded with, because the endpoint is only queried by search and page. Without `async-url`, `refreshOptions()` does nothing.
-
-### Consumer-Managed Async
-
-For complex async scenarios (React Query, custom caching), manage data externally and pass options via prop.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="consumer-async"
-  label="Contacts"
-  placeholder="Select..."
-  .options="[{id: '1', text: 'Alice'}, {id: '2', text: 'Bob'}]"
-  @pdsMultiselectSearch="handleSearch"
-  @pdsMultiselectChange="handleChange"
-/>`,
-    react: `<PdsMultiselect
-  componentId="consumer-async"
-  label="Contacts"
-  placeholder="Select..."
-  options={contacts}
-  onPdsMultiselectSearch={(e) => setQuery(e.detail.query)}
-  onPdsMultiselectChange={(e) => setSelected(e.detail.values)}
-/>`,
-  }}
->
-  <pds-multiselect
-    component-id="consumer-async"
-    label="Contacts"
-    placeholder="Select..."
-  >
-    <option value="1">Alice Johnson</option>
-    <option value="2">Bob Smith</option>
-    <option value="3">Charlie Brown</option>
-  </pds-multiselect>
-</DocCanvas>
-
-> **Note:** The live preview uses static options. In production, pass options via the `options` prop and listen to `pdsMultiselectSearch` events.
-
-### With Error State
-
-Display validation errors with the `errorMessage` prop.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="error-select"
-  label="Required Tags"
-  placeholder="Select..."
-  error-message="Please select at least one tag."
-  invalid
->
-  <option value="1">Tag A</option>
-  <option value="2">Tag B</option>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="error-select"
-  label="Required Tags"
-  placeholder="Select..."
-  errorMessage="Please select at least one tag."
-  invalid
->
-  <option value="1">Tag A</option>
-  <option value="2">Tag B</option>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="error-select"
-    label="Required Tags"
-    placeholder="Select..."
-    error-message="Please select at least one tag."
-    invalid
-  >
-    <option value="1">Tag A</option>
-    <option value="2">Tag B</option>
-  </pds-multiselect>
-</DocCanvas>
-
-### With Create Option
-
-Enable users to create new options when no matches are found by setting the `create-url` prop. When a user types a search query that doesn't match any existing options, they'll see an "Add" option that posts to the specified endpoint.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="tags-create"
-  label="Manage Tags"
-  placeholder="Select or create tags..."
-  create-url="/api/tags"
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="tags-create"
-  label="Manage Tags"
-  placeholder="Select or create tags..."
-  createUrl="/api/tags"
-  onPdsMultiselectCreate={(e) => console.log('Created:', e.detail.newOption)}
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="tags-create"
-    label="Manage Tags"
-    placeholder="Select or create tags..."
-    create-url="/api/tags"
-  >
-    <option value="1">Marketing</option>
-    <option value="2">Sales</option>
-    <option value="3">Support</option>
-  </pds-multiselect>
-</DocCanvas>
-
-> **Note:** The live preview uses static options. In production with `create-url` set, typing a query with no matches shows "Add 'query'" option.
-
-#### Create Option API Contract
-
-When the create option is clicked, the component sends a POST request:
-
-**Request:**
-```json
-POST /api/tags
-Content-Type: application/json
-
-{
-  "text": "New Tag Name"
-}
-```
-
-**Expected Response:**
-```json
-{
-  "id": "4",
-  "text": "New Tag Name"
-}
-```
-
-The newly created option is automatically added to the list and selected. The component emits:
-- `pdsMultiselectCreate` - Contains the query and new option details
-- `pdsMultiselectChange` - Updated selection including the new option
-
-**Error Handling:** If the create request fails, an error is logged to the console and the component remains in a usable state. Consider implementing your own error handling by monitoring the `pdsMultiselectCreate` event or network requests.
-
-## CSRF Token Support
-
-When making API requests (async fetching or creating new options), you can configure CSRF token support to include authentication tokens in request headers.
-
-### Configuration
-
-Use the `csrf-token` and `csrf-header-name` props to configure CSRF protection:
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="secure-select"
-  label="Select Tags"
-  placeholder="Select..."
-  async-url="/api/tags"
-  create-url="/api/tags"
-  csrf-token="abc123xyz"
-  csrf-header-name="X-CSRF-Token"
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="secure-select"
-  label="Select Tags"
-  placeholder="Select..."
-  asyncUrl="/api/tags"
-  createUrl="/api/tags"
-  csrfToken="abc123xyz"
-  csrfHeaderName="X-CSRF-Token"
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="secure-select"
-    label="Select Tags"
-    placeholder="Select..."
-    csrf-token="abc123xyz"
-    csrf-header-name="X-CSRF-Token"
-  >
-    <option value="1">Marketing</option>
-    <option value="2">Sales</option>
-  </pds-multiselect>
-</DocCanvas>
-
-### How It Works
-
-When both `csrf-token` and `csrf-header-name` are provided:
-- All async fetch requests (GET) include the CSRF token in the specified header
-- All create requests (POST) include the CSRF token in the specified header
-- The token is automatically included in all API calls made by the component
-
-**Request Example with CSRF Token:**
-```http
-POST /api/tags
-Content-Type: application/json
-X-CSRF-Token: abc123xyz
-
-{
-  "text": "New Tag Name"
-}
-```
-
-### Common Header Names
-
-Different frameworks use different CSRF header conventions:
-- Rails: `X-CSRF-Token`
-- Django: `X-CSRFToken`
-- Express (csurf): `X-CSRF-Token` or `X-XSRF-Token`
-
-Consult your backend framework's documentation for the correct header name.
-
-### Retrieving CSRF Tokens
-
-Common approaches to get the CSRF token:
-- Read from a meta tag: `document.querySelector('meta[name="csrf-token"]')?.content`
-- Read from a cookie (for cookie-based CSRF)
-- Retrieve from your application's authentication state
-
-**React Example:**
-```tsx
-const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-<PdsMultiselect
-  componentId="secure-tags"
-  csrfToken={csrfToken}
-  csrfHeaderName="X-CSRF-Token"
-  asyncUrl="/api/tags"
-/>
-```
 
 ### Custom Search Placeholder
 
@@ -761,382 +905,6 @@ Call the `clear()` method to programmatically reset all selections, clear the se
   </div>
 </DocCanvas>
 
-### Disabled Options
-
-Individual options can be disabled using the `disabled` attribute on `<option>` elements, or by setting `disabled: true` on items in the `options` prop. Disabled options are rendered as non-interactive and visually muted — they cannot be selected via click or keyboard navigation. Disabling an `<optgroup>` propagates to all its child options.
-
-**Say why an option is disabled.** A disabled option can't explain itself. When one reason covers every disabled option, put it in `helper-message`, which is read with the built-in trigger (not a slotted one; see Custom Trigger); when reasons differ, add a short one to each option's label, as in "(sold out)" below.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="disabled-options-select"
-  label="Products"
-  placeholder="Select products..."
->
-  <option value="ec-1">Classical Guitar Learning Path</option>
-  <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
-  <option value="ec-3">Music Theory 101</option>
-  <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
-  <option value="cc-2">Fall Workshop Series</option>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="disabled-options-select"
-  label="Products"
-  placeholder="Select products..."
->
-  <option value="ec-1">Classical Guitar Learning Path</option>
-  <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
-  <option value="ec-3">Music Theory 101</option>
-  <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
-  <option value="cc-2">Fall Workshop Series</option>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="disabled-options-select"
-    label="Products"
-    placeholder="Select products..."
-  >
-    <option value="ec-1">Classical Guitar Learning Path</option>
-    <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
-    <option value="ec-3">Music Theory 101</option>
-    <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
-    <option value="cc-2">Fall Workshop Series</option>
-  </pds-multiselect>
-</DocCanvas>
-
-### Grouped Options
-
-Use `<optgroup>` elements in the slot to organize options under labeled group headers. Groups are rendered as non-interactive uppercase headings that collapse automatically when search filters out all items in a group.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="grouped-select"
-  label="Products"
-  placeholder="Select products..."
->
-  <optgroup label="Evergreen Courses">
-    <option value="ec-1">Classical Guitar Learning Path</option>
-    <option value="ec-2">Piano Lessons</option>
-    <option value="ec-3">Music Theory 101</option>
-  </optgroup>
-  <optgroup label="Cohort Courses">
-    <option value="cc-1">Spring Bootcamp 2025</option>
-    <option value="cc-2">Fall Workshop Series</option>
-  </optgroup>
-  <optgroup label="Newsletters">
-    <option value="nl-1">Weekly Digest</option>
-    <option value="nl-2">Product Updates</option>
-  </optgroup>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="grouped-select"
-  label="Products"
-  placeholder="Select products..."
->
-  <optgroup label="Evergreen Courses">
-    <option value="ec-1">Classical Guitar Learning Path</option>
-    <option value="ec-2">Piano Lessons</option>
-    <option value="ec-3">Music Theory 101</option>
-  </optgroup>
-  <optgroup label="Cohort Courses">
-    <option value="cc-1">Spring Bootcamp 2025</option>
-    <option value="cc-2">Fall Workshop Series</option>
-  </optgroup>
-  <optgroup label="Newsletters">
-    <option value="nl-1">Weekly Digest</option>
-    <option value="nl-2">Product Updates</option>
-  </optgroup>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="grouped-select"
-    label="Products"
-    placeholder="Select products..."
-  >
-    <optgroup label="Evergreen Courses">
-      <option value="ec-1">Classical Guitar Learning Path</option>
-      <option value="ec-2">Piano Lessons</option>
-      <option value="ec-3">Music Theory 101</option>
-    </optgroup>
-    <optgroup label="Cohort Courses">
-      <option value="cc-1">Spring Bootcamp 2025</option>
-      <option value="cc-2">Fall Workshop Series</option>
-    </optgroup>
-    <optgroup label="Newsletters">
-      <option value="nl-1">Weekly Digest</option>
-      <option value="nl-2">Product Updates</option>
-    </optgroup>
-  </pds-multiselect>
-</DocCanvas>
-
-For dynamic or async data, add a `group` field to each item in the `options` prop instead. Items that share a `group` label must appear **contiguously** in the array; if the same label appears again after other options, a second header is shown (same behavior as native `<optgroup>`). Unlike `pds-combobox`, which renders a group's options together wherever they appear in the array, the multiselect keeps the array's order.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  id="grouped-options-select"
-  component-id="grouped-options-select"
-  label="Products"
-  placeholder="Select products..."
-/>
-
-<script>
-  document.querySelector('#grouped-options-select').options = [
-    { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
-    { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
-    { id: 'nl-1', text: 'Weekly Digest', group: 'Newsletters' },
-    { id: 'nl-2', text: 'Product Updates', group: 'Newsletters' },
-  ];
-</script>`,
-    react: `const products = [
-  { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
-  { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
-  { id: 'nl-1', text: 'Weekly Digest', group: 'Newsletters' },
-  { id: 'nl-2', text: 'Product Updates', group: 'Newsletters' },
-];
-
-<PdsMultiselect
-  componentId="grouped-options-select"
-  label="Products"
-  placeholder="Select products..."
-  options={products}
-/>`,
-  }}
->
-  <pds-multiselect
-    component-id="grouped-options-select"
-    label="Products"
-    placeholder="Select products..."
-  >
-    <optgroup label="Evergreen Courses">
-      <option value="ec-1">Classical Guitar Learning Path</option>
-      <option value="ec-2">Piano Lessons</option>
-    </optgroup>
-    <optgroup label="Newsletters">
-      <option value="nl-1">Weekly Digest</option>
-      <option value="nl-2">Product Updates</option>
-    </optgroup>
-  </pds-multiselect>
-</DocCanvas>
-
-> **Note:** The live preview uses slotted `<optgroup>` markup, which renders the same groups. `options` is a JavaScript property with no attribute, so set it from a script or a framework binding.
-
-## Selected Display: Pills
-
-Use `selected-display="pill"` to render selected items as removable pill chips instead of a name or count. Control placement with `pill-position`.
-
-### Inline Pills
-
-Pills appear inside the trigger button alongside a chevron. This keeps the form field compact while showing exactly what's selected.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="pill-inline"
-  label="Departments"
-  placeholder="Select..."
-  selected-display="pill"
-  pill-position="inline"
-  value='["1", "2", "3"]'
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-  <option value="4">Engineering</option>
-  <option value="5">Design</option>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="pill-inline"
-  label="Departments"
-  placeholder="Select..."
-  selectedDisplay="pill"
-  pillPosition="inline"
-  value={['1', '2', '3']}
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-  <option value="4">Engineering</option>
-  <option value="5">Design</option>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="pill-inline"
-    label="Departments"
-    placeholder="Select..."
-    selected-display="pill"
-    pill-position="inline"
-    value='["1", "2", "3"]'
-  >
-    <option value="1">Marketing</option>
-    <option value="2">Sales</option>
-    <option value="3">Support</option>
-    <option value="4">Engineering</option>
-    <option value="5">Design</option>
-  </pds-multiselect>
-</DocCanvas>
-
-### Pills Below
-
-Pills render below the trigger in a wrapping row. Useful when you want the trigger to stay a fixed height and show all selections at a glance.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="pill-below"
-  label="Departments"
-  placeholder="Select..."
-  selected-display="pill"
-  pill-position="below"
-  value='["1", "2", "3", "4"]'
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-  <option value="4">Engineering</option>
-  <option value="5">Design</option>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="pill-below"
-  label="Departments"
-  placeholder="Select..."
-  selectedDisplay="pill"
-  pillPosition="below"
-  value={['1', '2', '3', '4']}
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-  <option value="4">Engineering</option>
-  <option value="5">Design</option>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="pill-below"
-    label="Departments"
-    placeholder="Select..."
-    selected-display="pill"
-    pill-position="below"
-    value='["1", "2", "3", "4"]'
-  >
-    <option value="1">Marketing</option>
-    <option value="2">Sales</option>
-    <option value="3">Support</option>
-    <option value="4">Engineering</option>
-    <option value="5">Design</option>
-  </pds-multiselect>
-</DocCanvas>
-
-### Inline Pill Overflow
-
-Use `max-inline-pills` to cap how many chips are shown inline. Selections beyond the limit collapse into a "+N more" badge.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="pill-overflow"
-  label="Departments (max 2 inline)"
-  placeholder="Select..."
-  selected-display="pill"
-  pill-position="inline"
-  max-inline-pills="2"
-  value='["1", "2", "3", "4", "5"]'
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-  <option value="4">Engineering</option>
-  <option value="5">Design</option>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="pill-overflow"
-  label="Departments (max 2 inline)"
-  placeholder="Select..."
-  selectedDisplay="pill"
-  pillPosition="inline"
-  maxInlinePills={2}
-  value={['1', '2', '3', '4', '5']}
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-  <option value="4">Engineering</option>
-  <option value="5">Design</option>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="pill-overflow"
-    label="Departments (max 2 inline)"
-    placeholder="Select..."
-    selected-display="pill"
-    pill-position="inline"
-    max-inline-pills="2"
-    value='["1", "2", "3", "4", "5"]'
-  >
-    <option value="1">Marketing</option>
-    <option value="2">Sales</option>
-    <option value="3">Support</option>
-    <option value="4">Engineering</option>
-    <option value="5">Design</option>
-  </pds-multiselect>
-</DocCanvas>
-
-### Disabled Pills
-
-In the disabled state, pills render without close buttons and the trigger is non-interactive.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-multiselect
-  component-id="pill-disabled"
-  label="Disabled Pill Multiselect"
-  placeholder="Cannot select..."
-  selected-display="pill"
-  pill-position="inline"
-  disabled
-  value='["1", "2"]'
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-</pds-multiselect>`,
-    react: `<PdsMultiselect
-  componentId="pill-disabled"
-  label="Disabled Pill Multiselect"
-  placeholder="Cannot select..."
-  selectedDisplay="pill"
-  pillPosition="inline"
-  disabled
-  value={['1', '2']}
->
-  <option value="1">Marketing</option>
-  <option value="2">Sales</option>
-  <option value="3">Support</option>
-</PdsMultiselect>`,
-  }}
->
-  <pds-multiselect
-    component-id="pill-disabled"
-    label="Disabled Pill Multiselect"
-    placeholder="Cannot select..."
-    selected-display="pill"
-    pill-position="inline"
-    disabled
-    value='["1", "2"]'
-  >
-    <option value="1">Marketing</option>
-    <option value="2">Sales</option>
-    <option value="3">Support</option>
-  </pds-multiselect>
-</DocCanvas>
-
 ## Option Display
 
 `option-display` sets how each option appears in the panel. `text`, the default, shows each option's text. `chip` shows each option as a `pds-chip`.
@@ -1180,6 +948,152 @@ In the disabled state, pills render without close buttons and the trigger is non
     <option value="3" data-dot-color="--pine-color-grey-600">Archived</option>
   </pds-multiselect>
 </DocCanvas>
+
+## Async data
+
+Load options from an endpoint with `async-url`, or load them yourself and pass them in `options`.
+
+### Async with URL
+
+Fetch options from a remote API endpoint with `async-url`.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="async-select"
+  label="Search Products"
+  placeholder="Select..."
+  async-url="/api/products"
+  debounce-ms="500"
+/>`,
+    react: `<PdsMultiselect
+  componentId="async-select"
+  label="Search Products"
+  placeholder="Select..."
+  asyncUrl="/api/products"
+  debounceMs={500}
+/>`,
+  }}
+>
+  <pds-multiselect
+    component-id="async-select"
+    label="Search Products"
+    placeholder="Select..."
+  >
+    <option value="1">Product A</option>
+    <option value="2">Product B</option>
+    <option value="3">Product C</option>
+  </pds-multiselect>
+</DocCanvas>
+
+> **Note:** The live preview uses static options. In production, options are fetched from the API endpoint.
+
+How it talks to the endpoint:
+
+- It fetches the first page when the panel first opens, and again when the search text is edited, once `debounce` milliseconds (300 by default) have passed since the last edit, starting over at page 1.
+- With `async-method="GET"`, the default, the search text and the page, counted from 1, go in the `search` and `page` query parameters, as in `/api/products?search=mark&page=1`. With `POST`, they go in a JSON body, `{ "search": "mark", "page": 1 }`.
+- Every request sends `Content-Type: application/json` and `Accept: application/json`, and a CSRF token when there is one; see [CSRF tokens](#csrf-tokens).
+- The response is JSON, `{ "results": [{ "id": "1", "text": "Marketing" }], "totalCount": 42 }`. `formatResult` can turn items of another shape into `{ id, text }`. While fewer options than `totalCount` have loaded, scrolling near the end of the list fetches the next page.
+- A request that fails, or takes longer than `fetch-timeout` (30 seconds by default), leaves the options as they were. A failure is logged to the console; a timeout isn't.
+
+### Refreshing Options
+
+Async options are fetched once and kept. After an option changes elsewhere, such as when it's renamed in an edit modal, call `refreshOptions()` to fetch the first page again for the current search. Options and selected items in that page show the new text and color without emitting a change event. Selected items outside it keep the text and color they were last loaded with, because the endpoint is only queried by search and page. Without `async-url`, `refreshOptions()` does nothing.
+
+### Consumer-Managed Async
+
+For complex async scenarios (React Query, custom caching), manage data externally and pass options via prop.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="consumer-async"
+  label="Contacts"
+  placeholder="Select..."
+  .options="[{id: '1', text: 'Alice'}, {id: '2', text: 'Bob'}]"
+  @pdsMultiselectSearch="handleSearch"
+  @pdsMultiselectChange="handleChange"
+/>`,
+    react: `<PdsMultiselect
+  componentId="consumer-async"
+  label="Contacts"
+  placeholder="Select..."
+  options={contacts}
+  onPdsMultiselectSearch={(e) => setQuery(e.detail.query)}
+  onPdsMultiselectChange={(e) => setSelected(e.detail.values)}
+/>`,
+  }}
+>
+  <pds-multiselect
+    component-id="consumer-async"
+    label="Contacts"
+    placeholder="Select..."
+  >
+    <option value="1">Alice Johnson</option>
+    <option value="2">Bob Smith</option>
+    <option value="3">Charlie Brown</option>
+  </pds-multiselect>
+</DocCanvas>
+
+> **Note:** The live preview uses static options. In production, pass options via the `options` prop and listen to `pdsMultiselectSearch` events.
+
+### With Create Option
+
+Enable users to create new options when no matches are found by setting the `create-url` prop. When a user types a search query that doesn't match any existing options, they'll see an "Add" option that posts to the specified endpoint.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="tags-create"
+  label="Manage Tags"
+  placeholder="Select or create tags..."
+  create-url="/api/tags"
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="tags-create"
+  label="Manage Tags"
+  placeholder="Select or create tags..."
+  createUrl="/api/tags"
+  onPdsMultiselectCreate={(e) => console.log('Created:', e.detail.newOption)}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="tags-create"
+    label="Manage Tags"
+    placeholder="Select or create tags..."
+    create-url="/api/tags"
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+  </pds-multiselect>
+</DocCanvas>
+
+> **Note:** The live preview uses static options. In production with `create-url` set, typing a query with no matches shows "Add 'query'" option.
+
+How it creates the option:
+
+- The Add row, labeled by `create-option-label` and named for screen readers by `create-option-aria-label`, shows when the search text matches no option.
+- Choosing it sends a `POST` to `create-url` with the trimmed search text as a JSON body, `{ "text": "New tag" }`, and the same headers as a fetch, CSRF token included.
+- The response is the new option as JSON, `{ "id": "4", "text": "New tag" }`. It's added to the list and selected, the search text clears, and `pdsMultiselectCreate` and then `pdsMultiselectChange` are emitted.
+- A failed request emits nothing and leaves the search text in place; it's logged to the console.
+
+### CSRF tokens
+
+Fetch and create requests send a CSRF token in a header when there is one:
+
+- The token is `csrf-token`, or else the `content` of the page's `<meta name="csrf-token">`. With neither, no token is sent.
+- It's sent in the header named by `csrf-header-name`, `X-CSRF-Token` by default.
+- Set these props only when your app keeps the token elsewhere or expects another header, as with `csrf-header-name="X-CSRFToken"`.
 
 ## Custom Trigger
 
@@ -1329,13 +1243,19 @@ Links or buttons in the `footer` slot sit below the options, such as a link to t
   </pds-multiselect>
 </DocCanvas>
 
+## Localization
+
+The multiselect's own text defaults to English. Pass translated strings to `placeholder`, `search-placeholder`, `search-options-label`, `selected-items-label`, `options-label`, `no-options-found-label`, `create-option-label`, `create-option-aria-label`, `item-removed-label`, `pill-remove-label`, `selected-count-label-one` and `selected-count-label-other` (or `selected-count-labels`, for languages with more plural forms), and with `option-actions`, `option-action-label` and `option-action-description`. Keep placeholders in braces, such as `{count}` and `{text}`, in the translation: the multiselect fills them in.
+
 ## Form Integration
 
 `pds-multiselect` is a form-associated custom element. It participates in form submission using the `name` attribute.
 
 - Selected values are submitted as multiple entries with the same name (native `<select multiple>` behavior)
 - Works with `FormData` API
-- Supports form reset
+- To follow the user's changes, listen for `pdsMultiselectChange` (`onPdsMultiselectChange` in React) and read `event.detail.values`; see [Saving Changes](#saving-changes)
+- Resetting the form doesn't clear the multiselect: it keeps its selection. To clear it, call `clear()` from the form's `reset` event
+- For a complete form, with validation, see [Using Pine form components](/docs/guides-forms--docs)
 
 ## Playground
 

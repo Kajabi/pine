@@ -266,17 +266,17 @@ export class PdsMultiselect {
   @Prop() optionDisplay: 'text' | 'chip' = 'text';
 
   /**
-   * Error message to display.
+   * Displays an error message below the multiselect and marks the multiselect as invalid, with or without `invalid`.
    */
   @Prop() errorMessage?: string;
 
   /**
-   * Helper message to display below the input.
+   * Displays a message or hint below the multiselect. It's hidden while `error-message` is set.
    */
   @Prop() helperMessage?: string;
 
   /**
-   * If true, the multiselect is in an invalid state.
+   * Determines whether or not the multiselect is invalid.
    */
   @Prop() invalid?: boolean;
 
@@ -357,22 +357,34 @@ export class PdsMultiselect {
   private pendingUnresolvedFetch: boolean = false;
 
   /**
-   * Emitted when selection changes.
+   * Emitted when the user selects or deselects an option, with a click or with `Enter` on the highlighted option, or
+   * removes a pill. Also emitted when `create-url` adds an option, and by `clear()` when something was selected or typed.
+   * `detail` has `values`, the selected values; `items`, the selected options; and `added` and `removed`, the values
+   * this change selected and deselected.
+   *
+   * This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsMultiselectChange!: EventEmitter<MultiselectChangeEventDetail>;
 
   /**
-   * Emitted on search input (for consumer-managed async).
+   * Emitted when the search text changes, once `debounce` milliseconds (300 by default) have passed since the last
+   * change. `detail` has `query`, the text as typed. Use it to load `options` yourself; with `async-url`, the
+   * multiselect fetches on its own.
    */
   @Event() pdsMultiselectSearch!: EventEmitter<MultiselectSearchEventDetail>;
 
   /**
-   * Emitted to request more options (pagination).
+   * Emitted with `async-url` when the list is scrolled near its end and the response's `totalCount` says more
+   * options remain, as the multiselect fetches the next page itself. `detail` has `query` and `page`, the page being
+   * fetched. It can be emitted more than once for the same page while that page waits to load, and never without
+   * `async-url`.
    */
   @Event() pdsMultiselectLoadOptions!: EventEmitter<MultiselectLoadOptionsEventDetail>;
 
   /**
-   * Emitted when a new option is created.
+   * Emitted when `create-url` has created an option: the request succeeded, and the new option was added and selected.
+   * `detail` has `query`, the trimmed search text that was sent, and `newOption`, the option from the response.
+   * `pdsMultiselectChange` follows it. A failed request emits nothing; it's logged to the console.
    */
   @Event() pdsMultiselectCreate!: EventEmitter<MultiselectCreateEventDetail>;
 
