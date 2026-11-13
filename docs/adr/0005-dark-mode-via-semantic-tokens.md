@@ -20,7 +20,7 @@ Adopt a **per-component, semantic-token-led migration**:
 2. The `pine-design-system/prefer-semantic-tokens` lint rule (see ADR-0003) blocks core-token usage in new SCSS and is being applied component-by-component to existing SCSS.
 3. Each migrated component lands as a small `style(pds-name): adopt … dark-mode-aware tokens` PR. Example: commit `6cf3324e`, `style(pds-chip): adopt chip-namespaced dark-mode-aware text tokens`.
 
-No global dark-mode launch — readiness is per-component, tracked in `libs/core/src/stories/resources/component-status.docs.mdx` (once landed).
+No global dark-mode launch — readiness is per-component. Nothing tracks it per component yet: `component-status.json` records lifecycle status only. The Dark mode section of `libs/core/src/stories/tokens/tokens.docs.mdx` tells consumers how to turn dark mode on and lists the dark-mode styles that don't apply in every browser.
 
 ## Consequences
 
