@@ -164,42 +164,7 @@ import { PdsBox, PdsRow } from '@pine-ds/react';
   </pds-row>
 </DocCanvas>
 
-To show a column only at some widths, set its size to `0` where it should hide. This sidebar is hidden below 992px.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-import { PdsBox, PdsRow } from '@pine-ds/react';
-
-<PdsRow colGap="sm">
-  <PdsBox sizeLg="8">
-    <PdsBox border padding="sm">Always shown</PdsBox>
-  </PdsBox>
-  <PdsBox size="0" sizeLg="4">
-    <PdsBox border padding="sm">Shown from 992px</PdsBox>
-  </PdsBox>
-</PdsRow>
-`,
-    webComponent: `
-<pds-row col-gap="sm">
-  <pds-box size-lg="8">
-    <pds-box border padding="sm">Always shown</pds-box>
-  </pds-box>
-  <pds-box size="0" size-lg="4">
-    <pds-box border padding="sm">Shown from 992px</pds-box>
-  </pds-box>
-</pds-row>
-`
-}}>
-  <pds-row col-gap="sm">
-    <pds-box size-lg="8">
-      <pds-box border padding="sm">Always shown</pds-box>
-    </pds-box>
-    <pds-box size="0" size-lg="4">
-      <pds-box border padding="sm">Shown from 992px</pds-box>
-    </pds-box>
-  </pds-row>
-</DocCanvas>
+To show a column only at some widths, set its size to `0` where it should hide. A column with `size="0" size-lg="4"` is hidden below 992px and takes four columns from 992px up.
 
 ## Offsetting columns
 
@@ -242,25 +207,7 @@ import { PdsBox, PdsRow } from '@pine-ds/react';
 
 ## Alignment
 
-Inside a `pds-box`, `justify-content` aligns children along its direction and `align-items` across it. Set `display="flex"` so the box fills the width, and a `min-height` when you align children vertically, since a box only grows as tall as its content.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-import { PdsBox } from '@pine-ds/react';
-
-<PdsBox display="flex" alignItems="center" justifyContent="center" minHeight="120px" border>
-  Centered
-</PdsBox>
-`,
-    webComponent: `
-<pds-box display="flex" align-items="center" justify-content="center" min-height="120px" border>
-  Centered
-</pds-box>
-`
-}}>
-  <pds-box display="flex" align-items="center" justify-content="center" min-height="120px" border>Centered</pds-box>
-</DocCanvas>
+Inside a `pds-box`, `justify-content` aligns children along its direction and `align-items` across it. Set `display="flex"` so the box fills the width, and a `min-height` when you align children vertically, since a box only grows as tall as its content. For example, `<pds-box display="flex" align-items="center" justify-content="center" min-height="120px">` fills its container's width and centers its content both ways.
 
 ## Nested rows
 
