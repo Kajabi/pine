@@ -22,7 +22,7 @@ export class PdsRadio {
   @State() private _hasImage = false;
 
   /**
-   * Determines whether or not the radio is checked.
+   * Determines whether or not the radio is checked. It keeps the value you set and doesn't change when the user picks a radio.
    * @defaultValue false
    */
   @Prop() checked = false;
@@ -39,12 +39,12 @@ export class PdsRadio {
   @Prop() disabled = false;
 
   /**
-   * Displays error message text describing an invalid state.
+   * Displays an error message below the radio. It becomes the radio's accessible description only while `invalid` is set.
    */
   @Prop() errorMessage: string;
 
   /**
-   * Displays helper message text below radio.
+   * Displays a message or hint below the radio.
    */
   @Prop() helperMessage: string;
 
@@ -61,7 +61,7 @@ export class PdsRadio {
     @Prop() invalid = false;
 
   /**
-   * String used for label text next to radio.
+   * Text to be displayed as the radio label.
    */
   @Prop() label: string;
 
@@ -93,7 +93,8 @@ export class PdsRadio {
   @Prop() variant: 'default' | 'pill' = 'default';
 
   /**
-   * Emits a boolean indicating whether the radio is currently checked or unchecked.
+   * Emitted with `true` when the user checks the radio, by a click or an arrow key. The radio is `event.target`, so read its `value` there.
+   * Not emitted when picking another radio unchecks this one. Not emitted inside `pds-radio-group` either; listen for `pdsRadioGroupChange` there.
    */
   @Event() pdsRadioChange: EventEmitter<boolean>;
 
