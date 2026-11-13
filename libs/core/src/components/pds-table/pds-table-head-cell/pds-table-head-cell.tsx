@@ -1,6 +1,7 @@
 import { Component, Element, Host, Prop, h, Event, EventEmitter, State, Method } from '@stencil/core';
 
 import { downSmall, upSmall } from '@pine-ds/icons/icons';
+import { closest } from '@utils/closest';
 import { isScrolledFromInlineStart } from '../../../utils/scroll';
 
 /**
@@ -19,6 +20,7 @@ export class PdsTableHeadCell {
   private setupTimer: number | undefined;
   private setupRetries: number = 0;
   private headObserver?: MutationObserver;
+  private hasLoaded = false;
 
   /**
    * Sets the text alignment within the head cell.
@@ -102,25 +104,46 @@ export class PdsTableHeadCell {
   }
 
   componentWillLoad() {
-    // Set initial references and state before first render
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    // Set initial references and state before first render. The shadow-crossing `closest`
+    // util, not the native one -- the select-all cell lives inside pds-table-head's own shadow
+    // root, which native `closest` can't see past.
+    this.tableRef = closest('pds-table', this.hostElement) as HTMLPdsTableElement;
 
-    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    const tableHead = closest('pds-table-head', this.hostElement) as HTMLElement;
     if (tableHead) {
       this.hasHeadBorder = tableHead.hasAttribute('border');
       this.hasHeadBackground = tableHead.hasAttribute('background');
     }
   }
 
+  // Fires again each time the cell is moved (such as a reparent or DOM morph), unlike
+  // componentDidLoad, so it re-binds what disconnectedCallback tore down.
+  connectedCallback() {
+    if (!this.hasLoaded) return;
+
+    this.tableRef = closest('pds-table', this.hostElement) as HTMLPdsTableElement;
+    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+      this.setupScrollListener();
+    }
+
+    this.setupHeadObserver();
+  }
+
   componentDidLoad() {
+    this.hasLoaded = true;
+
     if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
       // For responsive tables with fixed columns, set up scroll detection
       // This enables the first column header to show a shadow when the table is scrolled horizontally
       this.setupScrollListener();
     }
 
-    // Watch for changes to the parent table-head's border and background attributes
-    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    this.setupHeadObserver();
+  }
+
+  // Watches the parent table-head's border and background attributes.
+  private setupHeadObserver() {
+    const tableHead = closest('pds-table-head', this.hostElement) as HTMLElement;
     if (tableHead && typeof MutationObserver !== 'undefined') {
       // Defensive guard: disconnect existing observer before creating a new one
       if (this.headObserver) {

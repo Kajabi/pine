@@ -256,18 +256,37 @@ export class PdsTable {
     const floorActive = this.tableLayout === 'fixed' && this.responsive;
     if (floorActive) this.setupFixedLayoutWidths();
 
-    (Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[]).forEach((cell) => {
+    this.allHeadCells().forEach((cell) => {
       if (!floorActive) cell.style.removeProperty('--pds-table-head-cell-auto-floor-width');
       forceUpdate(cell);
       void cell.rebindScrollListener();
     });
 
-    (Array.from(this.el.querySelectorAll('pds-table-cell')) as HTMLPdsTableCellElement[]).forEach((cell) => {
+    this.allBodyCells().forEach((cell) => {
       void cell.rebindScrollListener();
     });
 
     const head = this.el.querySelector('pds-table-head') as HTMLElement | null;
     if (head) forceUpdate(head);
+  }
+
+  // The select-all cell sits in `pds-table-head`'s own shadow root, and a selectable row's
+  // checkbox cell in its own, rather than coming through a `<slot>` like the rest -- a
+  // light-DOM-only `querySelectorAll` from here never reaches either one.
+  private allHeadCells(): HTMLPdsTableHeadCellElement[] {
+    const slotted = Array.from(this.el.querySelectorAll('pds-table-head-cell')) as HTMLPdsTableHeadCellElement[];
+    const head = this.el.querySelector('pds-table-head');
+    const ownCell = head?.shadowRoot?.querySelector('pds-table-head-cell') as HTMLPdsTableHeadCellElement | null;
+    return ownCell ? [...slotted, ownCell] : slotted;
+  }
+
+  private allBodyCells(): HTMLPdsTableCellElement[] {
+    const slotted = Array.from(this.el.querySelectorAll('pds-table-cell')) as HTMLPdsTableCellElement[];
+    const rows = Array.from(this.el.querySelectorAll('pds-table-row'));
+    const ownCells = rows
+      .map((row) => row.shadowRoot?.querySelector('pds-table-cell') as HTMLPdsTableCellElement | null)
+      .filter((cell): cell is HTMLPdsTableCellElement => cell !== null);
+    return [...slotted, ...ownCells];
   }
 
   /**

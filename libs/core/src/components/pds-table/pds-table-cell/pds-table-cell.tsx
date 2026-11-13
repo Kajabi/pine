@@ -1,4 +1,5 @@
 import { Component, Element, Host, Method, Prop, State, Watch, h } from '@stencil/core';
+import { closest } from '@utils/closest';
 import { isScrolledFromInlineStart } from '../../../utils/scroll';
 import { setupTruncationTooltip } from '../../../utils/truncation-tooltip';
 
@@ -20,7 +21,9 @@ export class PdsTableCell {
   private hasLoaded = false;
 
   componentWillRender() {
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    // The shadow-crossing `closest` util, not the native one -- a selectable row's checkbox
+    // cell lives inside pds-table-row's own shadow root, which native `closest` can't see past.
+    this.tableRef = closest('pds-table', this.hostElement) as HTMLPdsTableElement;
   }
 
   // Fires again each time the cell is moved (a sort re-appends every row), unlike componentDidLoad,
@@ -28,7 +31,7 @@ export class PdsTableCell {
   connectedCallback() {
     if (!this.hasLoaded) return;
 
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    this.tableRef = closest('pds-table', this.hostElement) as HTMLPdsTableElement;
     this.cleanupScrollListener();
     if (this.needsScrollShadow) {
       this.setupScrollListener();
