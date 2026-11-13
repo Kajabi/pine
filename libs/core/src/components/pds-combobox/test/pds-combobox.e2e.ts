@@ -127,7 +127,12 @@ describe('pds-combobox', () => {
       return page;
     };
 
-    /** Each chip row: the chip's width and its content width, and how far the chip and the check sit from the row's padding edges. */
+    /**
+     * Each chip row: the chip's width and its content width, how far the chip and the check sit
+     * from the row's padding edges, and how far the chip's own text overflows its boundary --
+     * measuring the text itself, not the chip, since a chip can be narrower than its max-content
+     * width (min-width: 0 alone does that) while its unwrapped text still runs past its edge.
+     */
     const chipRows = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
       page.evaluate(() =>
         Array.from(document.querySelector('pds-combobox')!.shadowRoot!.querySelectorAll<HTMLElement>('.pds-combobox__option--chip')).map(row => {
@@ -141,11 +146,15 @@ describe('pds-combobox', () => {
           chip.style.cssText = 'flex: none; width: max-content';
           const contentWidth = chip.getBoundingClientRect().width;
           chip.style.cssText = '';
+          const range = document.createRange();
+          range.selectNodeContents(chip);
+          const textRight = Math.max(...Array.from(range.getClientRects(), rect => rect.right));
           return {
             width,
             contentWidth,
             chipOffset: chip.getBoundingClientRect().left - start,
             checkOffset: check ? end - check.getBoundingClientRect().right : null,
+            textOverflow: textRight - chip.getBoundingClientRect().right,
           };
         }),
       );
@@ -182,6 +191,7 @@ describe('pds-combobox', () => {
 
       expect(long.width).toBeLessThan(long.contentWidth);
       expect(long.checkOffset).toBeCloseTo(0, 0);
+      expect(long.textOverflow).toBeLessThanOrEqual(0);
     });
   });
 
