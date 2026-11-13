@@ -317,8 +317,8 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() formatResult?: (item: unknown) => ComboboxOption;
 
   /**
-   * Emitted when the user picks an option, with a click or with `Enter` or `Space` on the highlighted option,
-   * even the option already selected. `detail` has `value`, the option's `value` as a string.
+   * Emitted when the user picks an option, with a click or with `Enter` on the highlighted option (or `Space`, on the
+   * `button` and `chip` triggers), even the option already selected. `detail` has `value`, the option's `value` as a string.
    * `clear()` emits it too, with an empty `value`, when something was selected or typed. Typing in the field only
    * filters the list and doesn't emit it.
    *
