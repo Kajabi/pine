@@ -140,6 +140,7 @@ export class PdsMultiselect {
 
   /**
    * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated.
+   * A single selection shows the item's name instead, so this applies only to other counts that a locale's plural rules treat as singular.
    * @defaultValue '{count} item'
    */
   @Prop() selectedCountLabelOne = '{count} item';
@@ -234,8 +235,9 @@ export class PdsMultiselect {
 
   /**
    * Display mode for selected items outside the dropdown panel.
-   * `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders
-   * selected items as dismissible pds-chip tags.
+   * `'count'` shows the item's name in the trigger when one is selected and
+   * "N items" text otherwise (default). `'pill'` renders selected items as
+   * dismissible pds-chip tags.
    * @default 'count'
    */
   @Prop() selectedDisplay: 'count' | 'pill' = 'count';
@@ -1794,6 +1796,11 @@ export class PdsMultiselect {
       // this text, so an empty/undefined placeholder must never leave it nameless
       // (WCAG 4.1.2). The prop is localizable; this last-resort default is not.
       return this.placeholder || 'Select...';
+    }
+    // One selection shows its name; the count only says something once there's more than one.
+    // An option without text still falls back to the count, so the trigger is never nameless.
+    if (count === 1 && this.selectedItems[0].text) {
+      return this.selectedItems[0].text;
     }
     return pluralize(this.el, count, this.resolveCountForms());
   }

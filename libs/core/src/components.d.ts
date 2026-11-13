@@ -2155,7 +2155,7 @@ export namespace Components {
          */
         "searchPlaceholder": string;
         /**
-          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated.
+          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated. A single selection shows the item's name instead, so this applies only to other counts that a locale's plural rules treat as singular.
           * @defaultValue '{count} item'
          */
         "selectedCountLabelOne": string;
@@ -2170,7 +2170,7 @@ export namespace Components {
          */
         "selectedCountLabels"?: PluralForms | string;
         /**
-          * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
+          * Display mode for selected items outside the dropdown panel. `'count'` shows the item's name in the trigger when one is selected and "N items" text otherwise (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
          */
         "selectedDisplay": 'count' | 'pill';
@@ -6221,7 +6221,7 @@ declare namespace LocalJSX {
          */
         "searchPlaceholder"?: string;
         /**
-          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated.
+          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated. A single selection shows the item's name instead, so this applies only to other counts that a locale's plural rules treat as singular.
           * @defaultValue '{count} item'
          */
         "selectedCountLabelOne"?: string;
@@ -6236,7 +6236,7 @@ declare namespace LocalJSX {
          */
         "selectedCountLabels"?: PluralForms | string;
         /**
-          * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
+          * Display mode for selected items outside the dropdown panel. `'count'` shows the item's name in the trigger when one is selected and "N items" text otherwise (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
          */
         "selectedDisplay"?: 'count' | 'pill';
