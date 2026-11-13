@@ -1,4 +1,4 @@
-import { setupTruncationTooltip } from '../truncation-tooltip';
+import { bindTruncationTooltips, flattenedText, setupTruncationTooltip } from '../truncation-tooltip';
 
 // Mock ResizeObserver
 class MockResizeObserver {
@@ -802,6 +802,99 @@ describe('truncation-tooltip', () => {
     });
   });
 
+  describe('bindTruncationTooltips', () => {
+    const textEl = (text: string) => {
+      const el = document.createElement('span');
+      el.textContent = text;
+      hostEl.appendChild(el);
+      return el;
+    };
+
+    const bindingFor = () => {
+      const getOptions = jest.fn((el: HTMLElement) => ({ hostEl: el, contentEl: el, getTooltipText: () => el.textContent ?? '' }));
+      return { getOptions, binding: bindTruncationTooltips(getOptions) };
+    };
+
+    const disconnected = () => MockResizeObserver.instances.filter((observer) => observer.disconnect.mock.calls.length > 0);
+
+    it('binds each element given, skipping missing ones', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const second = textEl('Second');
+
+      binding.sync([first, null, second, undefined]);
+
+      expect(getOptions.mock.calls.map(([el]) => el)).toEqual([first, second]);
+      expect(MockResizeObserver.instances).toHaveLength(2);
+    });
+
+    // A re-render that keeps the same elements must not tear down a tooltip the pointer is inside.
+    it('keeps its tooltips while the same elements render again', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const second = textEl('Second');
+
+      binding.sync([first, second]);
+      binding.sync([first, second]);
+      binding.sync(hostEl.querySelectorAll('span'));
+
+      expect(getOptions).toHaveBeenCalledTimes(2);
+      expect(disconnected()).toHaveLength(0);
+    });
+
+    it('rebinds once a different element renders in its place', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const replacement = textEl('Replacement');
+
+      binding.sync([first]);
+      binding.sync([replacement]);
+
+      expect(getOptions.mock.calls.map(([el]) => el)).toEqual([first, replacement]);
+      expect(disconnected()).toEqual([MockResizeObserver.instances[0]]);
+    });
+
+    it('rebinds when the set of elements grows or shrinks', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const second = textEl('Second');
+
+      binding.sync([first]);
+      binding.sync([first, second]);
+      binding.sync([first]);
+
+      expect(getOptions).toHaveBeenCalledTimes(4);
+      expect(disconnected()).toHaveLength(3);
+    });
+
+    it('unbinds everything once no element renders, and binds nothing more while none does', () => {
+      const { getOptions, binding } = bindingFor();
+
+      binding.sync([textEl('First')]);
+      binding.sync([null]);
+      binding.sync([]);
+
+      expect(getOptions).toHaveBeenCalledTimes(1);
+      expect(disconnected()).toHaveLength(1);
+    });
+
+    // Reconnecting calls sync again with the same elements, which must bind them anew after destroy.
+    it('destroys every tooltip, and binds the same elements again on the next sync', () => {
+      const { getOptions, binding } = bindingFor();
+      const first = textEl('First');
+      const second = textEl('Second');
+
+      binding.sync([first, second]);
+      binding.destroy();
+
+      expect(disconnected()).toHaveLength(2);
+
+      binding.sync([first, second]);
+
+      expect(getOptions).toHaveBeenCalledTimes(4);
+    });
+  });
+
   describe('where the portal mounts', () => {
     // The spec DOM can't evaluate :modal, so the dialog states whether it's modal.
     function hostInDialog(modal: boolean): HTMLDialogElement {
@@ -878,5 +971,78 @@ describe('truncation-tooltip', () => {
 
       cleanup();
     });
+  });
+});
+
+describe('flattenedText', () => {
+  // The invariant that keeps every caller that holds no slot reading exactly what it read before.
+  it.each([
+    ['plain text', 'A payment failed'],
+    ['nested elements', 'A <strong>payment</strong> <em>has <b>failed</b></em>'],
+    ['surrounding whitespace', '  A payment failed\n'],
+    ['nothing', ''],
+  ])('matches textContent with %s, holding no slot', (_shape, html) => {
+    const el = document.createElement('p');
+    el.innerHTML = html;
+
+    expect(flattenedText(el)).toBe(el.textContent);
+  });
+
+  it('reads text from nested elements', () => {
+    const el = document.createElement('p');
+    el.innerHTML = 'A <strong>payment</strong> failed';
+
+    expect(flattenedText(el)).toBe('A payment failed');
+  });
+
+  // The shape `pds-alert` renders: a clipped `pds-text` wrapped around a slot of its own, whose
+  // content lives in the consumer's light DOM. `textContent` reads that slot as empty.
+  it('reads text through a slot from the light DOM it projects', () => {
+    const outer = document.createElement('div');
+    const shadow = outer.attachShadow({ mode: 'open' });
+    const inner = document.createElement('span');
+    inner.appendChild(document.createElement('slot'));
+    shadow.appendChild(inner);
+    outer.textContent = 'A payment far too long to fit';
+
+    expect(inner.textContent).toBe('');
+    expect(flattenedText(inner)).toBe('A payment far too long to fit');
+  });
+
+  // `textContent` leaves comments out, and Stencil leaves them among slotted content to mark
+  // where it was relocated from, so reading them would put markup in the tooltip.
+  it('leaves comments among the content out, as textContent does', () => {
+    const el = document.createElement('p');
+    el.appendChild(document.createTextNode('A payment'));
+    el.appendChild(document.createComment('s.1.0'));
+    el.appendChild(document.createTextNode(' failed'));
+
+    expect(flattenedText(el)).toBe(el.textContent);
+    expect(flattenedText(el)).toBe('A payment failed');
+  });
+
+  it('leaves comments among slotted content out too', () => {
+    const outer = document.createElement('div');
+    const shadow = outer.attachShadow({ mode: 'open' });
+    const inner = document.createElement('span');
+    inner.appendChild(document.createElement('slot'));
+    shadow.appendChild(inner);
+    outer.appendChild(document.createTextNode('A payment'));
+    outer.appendChild(document.createComment('s.1.0'));
+    outer.appendChild(document.createTextNode(' failed'));
+
+    expect(flattenedText(inner)).toBe('A payment failed');
+  });
+
+  it('reads a slot’s own content when nothing is assigned to it, which is what renders then', () => {
+    const outer = document.createElement('div');
+    const shadow = outer.attachShadow({ mode: 'open' });
+    const inner = document.createElement('span');
+    const slot = document.createElement('slot');
+    slot.textContent = 'Nothing selected';
+    inner.appendChild(slot);
+    shadow.appendChild(inner);
+
+    expect(flattenedText(inner)).toBe('Nothing selected');
   });
 });

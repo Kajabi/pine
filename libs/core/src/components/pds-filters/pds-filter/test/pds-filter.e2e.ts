@@ -1,4 +1,5 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../../utils/test/axe';
 import { expectRespectsReducedMotion } from '../../../../utils/test/reduced-motion';
 
 describe('pds-filter e2e', () => {
@@ -365,5 +366,100 @@ describe('pds-filter popover width', () => {
       () => document.querySelector('pds-filter')!.shadowRoot!.querySelector('.pds-filter__popover')!.getBoundingClientRect().width,
     );
     expect(Math.round(width)).toBe(244);
+  });
+});
+
+describe('pds-filter truncation', () => {
+  const LONG_TEXT = 'Published between January and December of last year';
+
+  const clippedFilter = async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-filter component-id="clipped" text="${LONG_TEXT}"></pds-filter>`);
+    return page;
+  };
+
+  const tooltips = (page: E2EPage) =>
+    page.$$eval('.pds-truncation-tooltip', (els) => els.map((el) => el.textContent.trim()));
+
+  it('clips the button text, not the content box around it', async () => {
+    const page = await clippedFilter();
+
+    expect(
+      await page.$eval('pds-filter', (el) => {
+        const clips = (selector: string) => {
+          const part = el.shadowRoot.querySelector(selector);
+          return part.scrollWidth > part.clientWidth;
+        };
+        return { text: clips('.pds-filter__button-text'), content: clips('.pds-filter__button-content') };
+      }),
+    ).toEqual({ text: true, content: false });
+  });
+
+  it('reveals the full text on hover', async () => {
+    const page = await clippedFilter();
+
+    await (await page.find('pds-filter >>> button')).hover();
+    await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+    expect(await tooltips(page)).toEqual([LONG_TEXT]);
+  });
+
+  // The trigger button is the tab stop; a second one on the text inside it would be nameless.
+  it('reveals the full text when the trigger takes keyboard focus, adding no tab stop of its own', async () => {
+    const page = await clippedFilter();
+
+    // Focus the way a key press does, not with one: every worker's page shares one browser, and a page
+    // another worker just opened takes window focus, so a Tab here can land nowhere.
+    await page.$eval('pds-filter', (el) =>
+      el.shadowRoot.querySelector('button').focus({ focusVisible: true } as FocusOptions),
+    );
+    await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+    expect(await tooltips(page)).toEqual([LONG_TEXT]);
+    expect(
+      await page.$eval('pds-filter', (el) => el.shadowRoot.querySelector('.pds-filter__button-text').getAttribute('tabindex')),
+    ).toBeNull();
+  });
+
+  it('keeps the tooltip bound while opening the popover re-renders the trigger', async () => {
+    const page = await clippedFilter();
+
+    await (await page.find('pds-filter >>> button')).click();
+    await page.waitForChanges();
+
+    await (await page.find('pds-filter >>> button')).hover();
+    await page.waitForSelector('.pds-truncation-tooltip--visible');
+
+    expect(await tooltips(page)).toEqual([LONG_TEXT]);
+  });
+
+  it('shows no tooltip while the pointer is in the open popover, a child of the same host', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      `<pds-filter component-id="clipped" text="${LONG_TEXT}"><p style="block-size: 80px;">Options</p></pds-filter>`,
+    );
+
+    await (await page.find('pds-filter >>> button')).click();
+    await page.waitForChanges();
+    await (await page.find('pds-filter p')).hover();
+    await page.waitForChanges();
+
+    expect(await tooltips(page)).toEqual([]);
+  });
+
+  it('shows no tooltip for text that fits', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-filter component-id="short" text="Date"></pds-filter>');
+
+    await (await page.find('pds-filter >>> button')).hover();
+    await page.waitForChanges();
+
+    expect(await tooltips(page)).toEqual([]);
+  });
+
+  it('has no axe violations while the text is clipped', async () => {
+    const page = await clippedFilter();
+
+    expect(formatViolations(await runAxe(page))).toBe('');
   });
 });

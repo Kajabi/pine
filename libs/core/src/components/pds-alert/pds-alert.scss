@@ -115,13 +115,13 @@
   outline: var(--pds-alert-border-dismiss-outline);
 }
 
+// Only the width contract. `pds-text[truncate]` clips its own paragraph and reveals
+// the full message from there; clipping this host too would hide nothing more and
+// leaves nothing for its tooltip to measure.
 .pds-alert__description--small {
   flex: 1 1 auto;
   max-width: 100%;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .pds-alert__actions {

@@ -3135,3 +3135,50 @@ describe('pds-multiselect', () => {
     expect(page.root.disabled).toBe(false);
   });
 });
+
+describe('pds-multiselect truncation', () => {
+  const withSelections = async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="tags" label="Tags" placeholder="Choose the tags that apply"></pds-multiselect>`,
+    });
+    page.root.options = [
+      { id: '1', text: 'Bestsellers' },
+      { id: '2', text: 'Webinar' },
+    ];
+    page.root.value = ['1', '2'];
+    await page.waitForChanges();
+    return page;
+  };
+
+  // The trigger text's tooltip binds to this element and anchors on the button around it, so a
+  // render that leaves either out would bind nothing or throw where there is no layout to measure.
+  it('renders the trigger text inside the trigger button, ready to bind a tooltip', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="tags" label="Tags" placeholder="Choose the tags that apply"></pds-multiselect>`,
+    });
+
+    const text = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text');
+    expect(text.textContent).toBe('Choose the tags that apply');
+    expect(text.closest('button')).toBeTruthy();
+  });
+
+  it('renders one selected row per selection for the rows to bind to', async () => {
+    const page = await withSelections();
+    page.rootInstance.isOpen = true;
+    await page.waitForChanges();
+
+    const rows = page.root.shadowRoot.querySelectorAll('.pds-multiselect__selected-item');
+    expect(Array.from(rows).map(row => row.textContent)).toEqual(['Bestsellers', 'Webinar']);
+  });
+
+  it('renders no selected rows to bind when they are hidden', async () => {
+    const page = await withSelections();
+    page.root.hideSelectedItems = true;
+    page.rootInstance.isOpen = true;
+    await page.waitForChanges();
+
+    expect(page.root.shadowRoot.querySelector('.pds-multiselect__selected-item')).toBeNull();
+  });
+});

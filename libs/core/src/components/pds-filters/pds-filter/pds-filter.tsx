@@ -4,6 +4,7 @@ import { isRtlDirection } from '@utils/scroll';
 import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClearEventDetail, PdsFilterVariant } from './filter-interface';
 
 import { enlarge, trash } from '@pine-ds/icons/icons';
+import { bindTruncationTooltips } from '../../../utils/truncation-tooltip';
 
 /**
  * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
@@ -28,6 +29,13 @@ export class PdsFilter implements BasePdsProps {
   private popoverEl: HTMLElement;
   private scrollRAF: number | null = null;
   private lastScrollTime = 0;
+  private truncationTooltip = bindTruncationTooltips((textEl) => ({
+    // The trigger, not the host, whose child the popover is; `__button-content` holds the max width, so the text overflows.
+    hostEl: textEl.closest<HTMLElement>('button') ?? textEl,
+    contentEl: textEl,
+    getTooltipText: () => this.text ?? '',
+    manageTabIndex: false,
+  }));
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -48,6 +56,7 @@ export class PdsFilter implements BasePdsProps {
 
   /**
    * The text content displayed in the trigger button.
+   * When text overflows, a tooltip showing the full text will appear on hover/focus.
    */
   @Prop() text?: string;
 
@@ -73,11 +82,17 @@ export class PdsFilter implements BasePdsProps {
   @Event() pdsFilterClear: EventEmitter<PdsFilterClearEventDetail>;
 
 
+  connectedCallback() {
+    this.syncTruncationTooltip();
+  }
+
   /**
    * Component lifecycle: Clean up when disconnected from DOM.
    * Prevents memory leaks by canceling pending operations and closing popovers.
    */
   disconnectedCallback() {
+    this.truncationTooltip.destroy();
+
     // Cancel pending animation frames
     if (this.scrollRAF) {
       cancelAnimationFrame(this.scrollRAF);
@@ -107,6 +122,8 @@ export class PdsFilter implements BasePdsProps {
 
 
   componentDidRender() {
+    this.syncTruncationTooltip();
+
     // Note: popoverEl is set via ref callback in render method
     // For browsers with native popover API, we need direct element listeners
     // since the document listener may not capture native popover toggle events
@@ -120,6 +137,10 @@ export class PdsFilter implements BasePdsProps {
         this.popoverEl.addEventListener('toggle', this.handleNativePopoverToggle);
       }
     }
+  }
+
+  private syncTruncationTooltip() {
+    this.truncationTooltip.sync([this.el.shadowRoot?.querySelector<HTMLElement>('.pds-filter__button-text')]);
   }
 
   /**

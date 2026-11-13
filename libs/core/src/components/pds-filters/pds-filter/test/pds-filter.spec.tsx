@@ -1246,3 +1246,42 @@ describe('pds-filter', () => {
     });
   });
 });
+
+describe('pds-filter truncation', () => {
+  // The tooltip binds to this element and anchors on the button around it, so a render that
+  // leaves either out would bind nothing or throw where there is no layout to measure.
+  it('renders the button text inside the trigger button, ready to bind a tooltip', async () => {
+    const page = await newSpecPage({
+      components: [PdsFilter],
+      html: `<pds-filter component-id="test" text="Published between January and December"></pds-filter>`,
+    });
+
+    const text = page.root?.shadowRoot?.querySelector('.pds-filter__button-text');
+    expect(text?.textContent).toBe('Published between January and December');
+    expect(text?.closest('button')).toBeTruthy();
+  });
+
+  it('renders no button text to bind when text is unset', async () => {
+    const page = await newSpecPage({
+      components: [PdsFilter],
+      html: `<pds-filter component-id="test"></pds-filter>`,
+    });
+
+    expect(page.root?.shadowRoot?.querySelector('.pds-filter__button-text')).toBeNull();
+  });
+
+  // Binding survives the element being taken out and put back: the tooltip is torn down on
+  // disconnect, and re-connecting doesn't render, so nothing else would bind it again.
+  it('rebinds when the filter is moved', async () => {
+    const page = await newSpecPage({
+      components: [PdsFilter],
+      html: `<div id="from"><pds-filter component-id="test" text="Long filter text"></pds-filter></div><div id="to"></div>`,
+    });
+
+    const filter = page.body.querySelector('pds-filter');
+    page.body.querySelector('#to').appendChild(filter);
+    await page.waitForChanges();
+
+    expect(filter.shadowRoot.querySelector('.pds-filter__button-text')?.textContent).toBe('Long filter text');
+  });
+});

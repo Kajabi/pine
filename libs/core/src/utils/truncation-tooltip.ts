@@ -47,6 +47,42 @@ export interface TruncationTooltipOptions {
 export const FOCUSABLE_WRAPPER =
   'a[href], button, summary, pds-button, pds-link, pds-tab, pds-dropdown-menu-item, [role="option"], [role="treeitem"]';
 
+const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
+
+/**
+ * The text `el` actually shows, with every `<slot>` it holds replaced by the
+ * nodes assigned to it.
+ *
+ * `textContent` counts a slot as empty, so a component that renders a clipped
+ * text around a slot of its own — `pds-alert` renders `<pds-text truncate><slot/></pds-text>` —
+ * would leave the tooltip with nothing to show and so no tooltip at all, even
+ * though the text is clipped and holds a tab stop.
+ *
+ * Text nodes only, as `textContent` counts too: Stencil leaves comment nodes
+ * among slotted content to mark where it was relocated from, and their data is
+ * not text anyone reads.
+ */
+export function flattenedText(el: Element): string {
+  let text = '';
+
+  const add = (node: Node) => {
+    const slot = node as HTMLSlotElement;
+    // `flatten` returns the slot's own children when nothing is assigned, which is what renders then.
+    if (node.nodeName === 'SLOT' && typeof slot.assignedNodes === 'function') {
+      slot.assignedNodes({ flatten: true }).forEach(add);
+    } else if (node.nodeType === ELEMENT_NODE) {
+      text += flattenedText(node as Element);
+    } else if (node.nodeType === TEXT_NODE) {
+      text += node.textContent ?? '';
+    }
+  };
+
+  el.childNodes.forEach(add);
+
+  return text;
+}
+
 /** CSS class prefix used for truncation tooltip portal elements */
 const TOOLTIP_CLASS = 'pds-truncation-tooltip';
 
@@ -418,4 +454,53 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     focusEl.removeEventListener('keyup', handleKeyUp);
     removePortal();
   };
+}
+
+export interface TruncationTooltipBinding {
+  /**
+   * Binds a tooltip to each of `els` that has none yet, and removes the rest.
+   * Missing elements are skipped. Call it after every render.
+   */
+  sync(els: ArrayLike<HTMLElement | null | undefined>): void;
+  /** Removes every tooltip it bound. */
+  destroy(): void;
+}
+
+/**
+ * Keeps tooltips bound to the elements a component's render clips, for a component
+ * that re-renders while those elements stay in place.
+ *
+ * Each tooltip holds listeners and an observer on its element, so it is rebound
+ * only when a different set of elements renders: rebinding on every render would
+ * tear down a tooltip the pointer is still inside, and a component can render
+ * again on every keystroke or when it opens its popover.
+ *
+ * Call `sync` from `componentDidRender`, and from `connectedCallback` too, since
+ * moving an element reconnects it without rendering it again. Call `destroy` from
+ * `disconnectedCallback`.
+ *
+ * @param getOptions - The options for one element, read when it is bound.
+ */
+export function bindTruncationTooltips(
+  getOptions: (el: HTMLElement) => TruncationTooltipOptions,
+): TruncationTooltipBinding {
+  let bound: HTMLElement[] = [];
+  let cleanups: (() => void)[] = [];
+
+  const destroy = () => {
+    cleanups.forEach((cleanup) => cleanup());
+    cleanups = [];
+    bound = [];
+  };
+
+  const sync = (els: ArrayLike<HTMLElement | null | undefined>) => {
+    const next = Array.from(els).filter((el): el is HTMLElement => el != null);
+    if (next.length === bound.length && next.every((el, index) => el === bound[index])) return;
+
+    destroy();
+    bound = next;
+    cleanups = next.map((el) => setupTruncationTooltip(getOptions(el)));
+  };
+
+  return { sync, destroy };
 }
