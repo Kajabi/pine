@@ -256,7 +256,7 @@ The open calendar is portaled: into the `<dialog>` or open popover around the da
 - Resetting the form clears the date, rather than restoring the `value` it started with.
 - To follow the user's changes, listen for `pdsDatepickerChange` (`onPdsDatepickerChange` in React) and read `event.detail.value`. The text field inside the datepicker keeps its own `pdsInput`, `pdsChange`, `pdsFocus`, `pdsBlur` and `pdsKeyDown` events to itself.
 - With `required` and no date, typed text that isn't a date, or a date outside `min` and `max` (typed or set in code), the form won't submit and the field shows as invalid. The form reports `badInput` for text that isn't a date and `rangeUnderflow` or `rangeOverflow` for dates outside the range, with the messages set by `invalid-date-message`, `min-date-message` and `max-date-message`; `{date}` in the last two is replaced by the bound.
-- For a complete form, with validation, see [Using Pine form components](/docs/guides-forms--docs).
+- For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Playground
 

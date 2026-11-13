@@ -2147,7 +2147,7 @@ In this example, a click listener on the Reset button calls `clear()` on the com
 - Update the `value` prop to control the selection from a parent component (React state, framework store, etc.). The component automatically syncs the input text/trigger label to match the selected option. To follow the user's picks, listen for `pdsComboboxChange` (`onPdsComboboxChange` in React) and read `event.detail.value`.
 - There's no `required`. Check the value yourself, and set `error-message` to show an error, as in [With error](#with-error).
 - Resetting the form doesn't clear the combobox: it keeps its selection. To clear it, call [`clear()`](#programmatic-clear) from the form's `reset` event. Emptying the input text only filters the option list and leaves the committed value in place.
-- For a complete form, with validation, see [Using Pine form components](/docs/guides-forms--docs).
+- For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs).
 
 ### With error
 
