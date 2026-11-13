@@ -191,6 +191,43 @@ describe('pds-sortable keyboard reordering', () => {
     expect(await order()).toEqual(['Bravo', 'Charlie', 'Alpha']);
   });
 
+  // An attempt that goes nowhere -- off either end, or a no-op key at an end -- must still tell a
+  // screen reader user the key landed, or the silence reads as the key not working at all.
+  it('announces the current position at the first and last positions instead of staying silent', async () => {
+    const { page, announcement } = await setup();
+    // `announcement()` trims the region's text, which hides the trailing space `announce()` adds
+    // to tell two consecutive, identical messages apart -- read untrimmed here, to tell a second,
+    // repeated announcement (what this test is after) from the first one just lingering unchanged.
+    const raw = () => page.$eval('.pds-sortable__live-region', (region) => region.textContent);
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+
+    await page.keyboard.press('ArrowUp');
+    await page.waitForChanges();
+    expect(await announcement()).toBe('Alpha, moved to position 1 of 3');
+    expect(await raw()).toBe('Alpha, moved to position 1 of 3');
+
+    await page.keyboard.press('Home');
+    await page.waitForChanges();
+    expect(await announcement()).toBe('Alpha, moved to position 1 of 3');
+    // A plain repeat of the message just above, which `announce()` would otherwise treat as
+    // nothing having changed and leave silent -- told apart by appending to it, not by its
+    // exact content, so this only checks that it did grow rather than pinning the appended text.
+    expect((await raw()).length).toBeGreaterThan('Alpha, moved to position 1 of 3'.length);
+
+    await page.keyboard.press('End');
+    await page.waitForChanges();
+    expect(await announcement()).toBe('Alpha, moved to position 3 of 3');
+    expect(await raw()).toBe('Alpha, moved to position 3 of 3');
+
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+    expect(await announcement()).toBe('Alpha, moved to position 3 of 3');
+    expect((await raw()).length).toBeGreaterThan('Alpha, moved to position 3 of 3'.length);
+  });
+
   it('cancels with Escape and restores the original order', async () => {
     const { page, moved, order, announcement, focusedText } = await setup();
 
@@ -222,14 +259,79 @@ describe('pds-sortable keyboard reordering', () => {
     expect(await moved()).toHaveLength(1);
   });
 
-  it('keeps the last row without a divider after a keyboard reorder starts', async () => {
+  // A status chip, or an actions menu/button outside the `sortable-item-actions` slot, sits
+  // alongside the row's own content as a sibling -- the default name takes only the first
+  // text-bearing child, so that sibling text doesn't run into the handle's label.
+  it('names a row by only its first text-bearing child, not a status chip or menu beside it', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-sortable component-id="rich-rows" handle-type="handle">
+        <pds-sortable-item>
+          <div>Newsletter</div>
+          <pds-chip>Default</pds-chip>
+          <button>Edit</button>
+        </pds-sortable-item>
+        <pds-sortable-item>Bravo</pds-sortable-item>
+      </pds-sortable>`);
+    await page.waitForChanges();
+
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.activeElement?.getAttribute('aria-label'))).toBe('Reorder Newsletter');
+  });
+
+  it('keeps the last row without a divider', async () => {
     const { page } = await setup('dividers border');
     await page.keyboard.press('Tab');
     await page.waitForChanges();
-    expect(await page.$('.pds-sortable__live-region')).not.toBeNull();
 
     const lastBorder = await page.$eval('pds-sortable-item:last-of-type', (el) => getComputedStyle(el).borderBottomWidth);
     expect(lastBorder).toBe('0px');
+  });
+
+  // NVDA and JAWS in Chromium turn a browse-mode Enter or Space into a `pointerdown` immediately
+  // followed by a `click` with `detail: 0`, both for the same press. The capture-phase
+  // pointerdown sees the item already grabbed (from an earlier browse-mode press) and drops it;
+  // the click that follows must not then see no grab and pick it back up, or the item is stuck
+  // grabbed with no way out in browse mode (Escape and the arrows need forms mode).
+  it('does not re-grab an item after a screen reader\'s browse-mode drop', async () => {
+    const { page, moved, order } = await setup();
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+    expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).not.toBeNull();
+    expect(await order()).toEqual(['Bravo', 'Alpha', 'Charlie']);
+
+    await page.evaluate(() => {
+      const handle = document.activeElement as HTMLElement;
+      handle.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+      handle.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, detail: 0 }));
+    });
+    await page.waitForChanges();
+
+    // The drop from the pointerdown emits once, for the real move above; the click right behind
+    // it must not pick the item back up (and so must not drop, and emit, a second time either).
+    expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).toBeNull();
+    expect(await moved()).toHaveLength(1);
+  });
+
+  it('keeps an item grabbed through a right-click elsewhere in the list', async () => {
+    const { page } = await setup();
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+    expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).not.toBeNull();
+
+    await page.evaluate(() => {
+      document
+        .querySelectorAll('pds-sortable-item')[1]
+        .dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true, button: 2 }));
+    });
+    await page.waitForChanges();
+
+    expect(await page.find('pds-sortable-item.pds-sortable-item--grabbed')).not.toBeNull();
   });
 
   it('marks the handle pressed while the item is picked up', async () => {

@@ -329,7 +329,7 @@ describe('pds-sortable', () => {
       const page = await newSpecPage({
         components: [PdsSortable, PdsSortableItem],
         html: `
-          <pds-sortable handle-type="handle" handle-label="Réorganiser {item}" item-moved-label="{item} : position {position} sur {total}" reorder-canceled-label="Annulé : {item}">
+          <pds-sortable handle-type="handle" handle-label="Réorganiser {item}" item-picked-up-label="{item} saisi" item-moved-label="{item} : position {position} sur {total}" item-dropped-label="{item} déposé" reorder-canceled-label="Annulé : {item}">
             <pds-sortable-item item-label="Premier">Alpha <small>description</small></pds-sortable-item>
             <pds-sortable-item>Bravo</pds-sortable-item>
           </pds-sortable>`,
@@ -338,11 +338,19 @@ describe('pds-sortable', () => {
       expect(handle.getAttribute('aria-label')).toBe('Réorganiser Premier');
 
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+      await page.waitForChanges();
+      expect(page.body.querySelector('.pds-sortable__live-region')?.textContent).toBe('Premier saisi');
+
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
       await page.waitForChanges();
 
       expect(page.body.querySelector('.pds-sortable__live-region')?.textContent).toBe('Premier : position 2 sur 2');
 
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      await page.waitForChanges();
+      expect(page.body.querySelector('.pds-sortable__live-region')?.textContent).toBe('Premier déposé');
+
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       await page.waitForChanges();
       expect(page.body.querySelector('.pds-sortable__live-region')?.textContent).toBe('Annulé : Premier');
@@ -356,6 +364,23 @@ describe('pds-sortable', () => {
       expect(region?.getAttribute('role')).toBe('status');
       expect(region?.getAttribute('aria-live')).toBe('polite');
       expect(sortable.querySelector('.pds-sortable__live-region')).toBeNull();
+    });
+
+    // A page-cache (bfcache, Turbo) restore brings back a DOM snapshot that can already have the
+    // list's own live region sitting right after it, with its last message still in it.
+    it('adopts an existing live region left by a page-cache restore, instead of adding another', async () => {
+      const page = await newSpecPage({
+        components: [PdsSortable, PdsSortableItem],
+        html: `
+          <pds-sortable component-id="list">
+            <pds-sortable-item>Alpha</pds-sortable-item>
+          </pds-sortable>
+          <span class="pds-sortable__live-region" role="status" aria-live="polite" aria-atomic="true" data-stale="true">Stale message</span>`,
+      });
+
+      const regions = Array.from(page.body.querySelectorAll('.pds-sortable__live-region'));
+      expect(regions).toHaveLength(1);
+      expect(regions[0].getAttribute('data-stale')).toBe('true');
     });
 
     it('lets go of a picked-up item that is taken out of the list', async () => {
