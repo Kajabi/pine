@@ -186,7 +186,8 @@ export class PdsSwitch {
   }
 
   // Unchecked sends uncheckedValue when set, even an empty string, otherwise nothing. Disabled sends nothing, like a
-  // native checkbox: the platform only leaves out a host with the disabled attribute, and React sets the property.
+  // native checkbox: the platform only leaves out a host with the disabled attribute present, which is also how
+  // React's own custom-element attribute serialization writes it.
   private formValue(): string | null {
     if (this.isDisabled()) return null;
     return this.checkedValue();
