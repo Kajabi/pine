@@ -51,7 +51,7 @@ export class PdsRow {
   @Prop() colGapInline?: BoxSpacingType | null;
 
   /**
-   * Has no effect: `pds-row` doesn't render an `id` from it. Set `id` on `pds-row` itself instead.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
