@@ -181,9 +181,10 @@ export class PdsModalContent {
         // Calculate the available height by subtracting:
         // 1. Header and footer heights
         // 2. Modal padding (48px)
-        // 3. Additional space for modal positioning (6vh)
+        // 3. Room the panel's scrollable max-height (100dvh - (5dvh + 96px)) leaves outside the
+        //    panel: 6vh covers its 5vh share with some slack, so the content stays inside that cap
         // 4. Extra adjustment for perfect fit (50px)
-        const viewportAdjustment = Math.round(window.innerHeight * 0.06); // 6vh approximation
+        const viewportAdjustment = Math.round(window.innerHeight * 0.06);
         const totalReduction = headerHeight + footerHeight + 48 + viewportAdjustment + 50;
 
         // Set the content max height
