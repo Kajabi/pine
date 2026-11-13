@@ -1,217 +1,99 @@
 import { Meta } from '@storybook/addon-docs/blocks';
-import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
-
-import image from '../../stories/assets/offers.png';
+import { DocCanvas } from '@pine-ds/doc-components';
 
 <Meta title="components/Layout"/>
 
 # Layout
 
-The layout system is a flexible and customizable framework based on three components: `pds-container` caps content to a meaningful max-width; `pds-row` and `pds-box` divide that content into a responsive 12-column grid. Use them together or independently to support layouts ranging from simple single-column forms to complex multi-column pages.
+Three components handle page layout. `pds-container` caps content at a readable max-width. `pds-row` and `pds-box` divide content into a responsive 12-column grid. `pds-box` also spaces and aligns content on its own, outside the grid.
 
-## pds-box
+## Rules
 
-The `pds-box` serves two main purposes:
+- Columns are `pds-box` elements placed directly inside a `pds-row`. Size them with `size` props on the `pds-box`. `pds-row` has no size or offset props.
+- A row's column sizes should add up to 12. A column that doesn't fit on the line wraps to the next one.
+- Columns with no size share the width the sized columns leave, equally. That holds only while they have no `direction`, `gap`, `display`, `wrap`, `fit`, `flex`, `offset` or border props (`border`, `border-block-*`, `border-inline-*`), including their breakpoint versions. An unsized column with any of those takes a full line of its own, so give it a `size` or move those props to a `pds-box` inside it.
+- `size` applies at every width. `size-sm`, `size-md`, `size-lg` and `size-xl` apply from their breakpoint up, and `size-xs` applies only below 576px. Below the breakpoint of its size props, a column is full width, so the columns stack.
+- `size-*="0"` hides a column. `offset-*="0"` removes an offset and hides nothing.
+- `col-gap` sets the gutter as padding inside each column, and without it columns have no gutter. Put borders, backgrounds and shadows on a `pds-box` inside the column, not on the column itself.
+- Use `size` props, not flex props, to size columns. Flex props belong on a `pds-box` inside another `pds-box`, where `flex="grow"` fills the free space and `flex="none"` keeps the content's width. `flex="shrink"` currently behaves like `flex="none"` and doesn't shrink.
 
-1. **Container**: Provides customizable styling options, including border, padding, background color, and alignment.
-2. **Grid Column**: Functions as a column within a `pds-row`.
+## Responsive breakpoints
 
-**Important Notes:**
+The breakpoints are `xs` (below 576px), `sm` (576px and up), `md` (768px and up), `lg` (992px and up) and `xl` (1200px and up).
 
-When used as a grid column, `pds-box` must be:
-  - A direct child of a `pds-row`.
-  - Assigned a `size` property (e.g., `size="4"` for a column spanning 4 grid units).
-Columns cannot exist inside `pds-box` components.
+## pds-box on its own
 
-> **⚠️ CRITICAL LAYOUT CONSTRAINT:** `pds-box` flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex values like `flex="1"`) do **NOT** work when the box is inside a `pds-row`. These flex properties only work when the immediate parent is another `pds-box` component. When inside `pds-row`, use `size` props to control column width instead.
-
-## pds-row
-
-The `pds-row` component defines a horizontal container for multiple columns (`pds-box` children). It provides the structural foundation for creating responsive, multi-column layouts.
-
-**Important Notes:**
-
-- `pds-row` supports responsive design with properties like `size-xs` or `offset-md`. The size modifier is the trigger for responsive behavior.
-- It ensures that the total column size per row does not exceed 12, maintaining the integrity of the grid system.
-
-## pds-container
-
-The `pds-container` component constrains its children to a semantic maximum width and centers them horizontally. Use it to wrap forms, settings pages, and full-page flows — anywhere content should stop growing beyond a meaningful reading width.
-
-It is separate from the column grid: `pds-box` and `pds-row` control how content is divided into columns; `pds-container` controls how wide the overall content area can be. Nest a `pds-row` inside `pds-container` when you need both max-width capping and column layout.
-
-**Named sizes:**
-
-<pds-table compact>
-  <pds-table-head>
-    <pds-table-head-cell>Size</pds-table-head-cell>
-    <pds-table-head-cell>Max-width</pds-table-head-cell>
-    <pds-table-head-cell>Common use</pds-table-head-cell>
-  </pds-table-head>
-  <pds-table-body>
-    <pds-table-row>
-      <pds-table-cell>sm</pds-table-cell>
-      <pds-table-cell>340px</pds-table-cell>
-      <pds-table-cell>Narrow forms, confirmations</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>md</pds-table-cell>
-      <pds-table-cell>520px</pds-table-cell>
-      <pds-table-cell>Standard forms, settings panels</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>lg</pds-table-cell>
-      <pds-table-cell>700px</pds-table-cell>
-      <pds-table-cell>Wide panels, content pages</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>xl</pds-table-cell>
-      <pds-table-cell>1064px</pds-table-cell>
-      <pds-table-cell>Page-level wrappers</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>full</pds-table-cell>
-      <pds-table-cell>1440px</pds-table-cell>
-      <pds-table-cell>Max-width site container</pds-table-cell>
-    </pds-table-row>
-  </pds-table-body>
-</pds-table>
-
-Any valid CSS length (e.g. `size="640px"`) can be passed directly when named tokens don't fit.
-
-## Best Practices for Layouts
-
-Use `pds-box` for Single-Column Layouts:
+A `pds-box` stacks or lines up its children and spaces them with `gap`, so a single-column layout needs no grid. A `pds-box` is only as wide as its content until you set `display="flex"`, which makes it fill its container.
 
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsBox
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="var(--pine-color-background-subtle)"
-        borderRadius="lg"
-        shadow="150"
-        direction="column"
-        fit
-        minHeight="300px"
-      >
-        <PdsText tag="h1" gutter="lg">Explore Your Craft</PdsText>
-        <PdsText gutter="sm">Discover new ways to grow your business.</PdsText>
-        <PdsButton>Get Started</PdsButton>
-      </PdsBox>
-    `,
+import { PdsBox, PdsButton, PdsText } from '@pine-ds/react';
+
+<PdsBox display="flex" direction="column" gap="md" padding="md" border borderRadius="md">
+  <PdsText tag="h3">Explore your craft</PdsText>
+  <PdsText tag="p">Discover new ways to grow your business.</PdsText>
+  <PdsBox gap="sm">
+    <PdsButton variant="primary">Get started</PdsButton>
+    <PdsButton variant="secondary">Learn more</PdsButton>
+  </PdsBox>
+</PdsBox>
+`,
     webComponent: `
-      <pds-box
-        align-items="center"
-        justify-content="center"
-        background-color="var(--pine-color-background-subtle)"
-        border-radius="lg"
-        shadow="150"
-        direction="column"
-        fit="true"
-        min-height="300px"
-      >
-        <pds-text tag="h1" gutter="lg">Explore Your Craft</pds-text>
-        <pds-text gutter="sm">Discover new ways to grow your business.</pds-text>
-        <pds-button>Get Started</pds-button>
-      </pds-box>
-    `
+<pds-box display="flex" direction="column" gap="md" padding="md" border border-radius="md">
+  <pds-text tag="h3">Explore your craft</pds-text>
+  <pds-text tag="p">Discover new ways to grow your business.</pds-text>
+  <pds-box gap="sm">
+    <pds-button variant="primary">Get started</pds-button>
+    <pds-button variant="secondary">Learn more</pds-button>
+  </pds-box>
+</pds-box>
+`
 }}>
-  <pds-box
-    align-items="center"
-    justify-content="center"
-    background-color="var(--pine-color-background-subtle)"
-    border-radius="lg"
-    shadow="150"
-    direction="column"
-    fit="true"
-    min-height="300px"
-  >
-    <pds-text tag="h1" gutter="lg">Explore Your Craft</pds-text>
-    <pds-text gutter="sm">Discover new ways to grow your business.</pds-text>
-    <pds-button>Get Started</pds-button>
+  <pds-box display="flex" direction="column" gap="md" padding="md" border border-radius="md">
+    <pds-text tag="h3">Explore your craft</pds-text>
+    <pds-text tag="p">Discover new ways to grow your business.</pds-text>
+    <pds-box gap="sm">
+      <pds-button variant="primary">Get started</pds-button>
+      <pds-button variant="secondary">Learn more</pds-button>
+    </pds-box>
   </pds-box>
 </DocCanvas>
 
-Use `pds-row` for Multi-Column Layouts:
+## pds-container and the grid
+
+`pds-container` caps its content at a max-width and centers it. Set `size` to `sm` (340px), `md` (520px), `lg` (700px), `xl` (1064px), `full` (1440px), or any CSS length such as `640px`. Without `size` it has no max-width. Nest a `pds-row` inside it when you also need columns.
+
+Here the columns split at 768px and stack below it. Each column holds a bordered `pds-box`, so the border sits inside the gutter that `col-gap` adds.
 
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsBox fit>
-        <PdsRow colGap="sm">
-          <PdsBox sizeMd="8">
-            <PdsBox border padding="md">Column 1</PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="4">
-            <PdsBox border padding="md">Column 2</PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="4">
-            <PdsBox border padding="md">Column 2</PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box fit="true">
-        <pds-row col-gap="sm">
-          <pds-box size-md="8">
-            <pds-box border padding="md">Column 1</pds-box>
-          </pds-box>
-          <pds-box size-md="4">
-            <pds-box border padding="md">Column 2</pds-box>
-          </pds-box>
-          <pds-box size-md="4">
-            <pds-box border padding="md">Column 2</pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box fit="true">
-    <pds-row col-gap="sm">
-      <pds-box size-md="8">
-        <pds-box border padding="md">Column 1</pds-box>
-      </pds-box>
-      <pds-box size-md="4">
-        <pds-box border padding="md">Column 2</pds-box>
-      </pds-box>
-      <pds-box size-md="4">
-        <pds-box border padding="md">Column 2</pds-box>
-      </pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
+import { PdsBox, PdsContainer, PdsRow } from '@pine-ds/react';
 
-Use `pds-container` to constrain content width before applying the grid:
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsContainer size="lg">
-        <PdsRow colGap="sm">
-          <PdsBox sizeMd="8">
-            <PdsBox border padding="md">Main content</PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="4">
-            <PdsBox border padding="md">Sidebar</PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsContainer>
-    `,
+<PdsContainer size="lg">
+  <PdsRow colGap="sm">
+    <PdsBox sizeMd="8">
+      <PdsBox border padding="md">Main content</PdsBox>
+    </PdsBox>
+    <PdsBox sizeMd="4">
+      <PdsBox border padding="md">Sidebar</PdsBox>
+    </PdsBox>
+  </PdsRow>
+</PdsContainer>
+`,
     webComponent: `
-      <pds-container size="lg">
-        <pds-row col-gap="sm">
-          <pds-box size-md="8">
-            <pds-box border padding="md">Main content</pds-box>
-          </pds-box>
-          <pds-box size-md="4">
-            <pds-box border padding="md">Sidebar</pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-container>
-    `
+<pds-container size="lg">
+  <pds-row col-gap="sm">
+    <pds-box size-md="8">
+      <pds-box border padding="md">Main content</pds-box>
+    </pds-box>
+    <pds-box size-md="4">
+      <pds-box border padding="md">Sidebar</pds-box>
+    </pds-box>
+  </pds-row>
+</pds-container>
+`
 }}>
   <pds-container size="lg">
     <pds-row col-gap="sm">
@@ -225,1212 +107,305 @@ Use `pds-container` to constrain content width before applying the grid:
   </pds-container>
 </DocCanvas>
 
-#### Make it responsive
+## Responsive sizes
 
-Add size modifiers to your child `pds-box` for responsive design
+Combine size props to change the number of columns per line as the viewport grows. These items take two per line from 768px, three from 992px and four from 1200px, and stack below 768px.
 
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsBox fit>
-        <PdsRow colGap="sm">
-          <PdsBox sizeMd="8">
-            <PdsBox border padding="md">Column 1</PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="4">
-            <PdsBox border padding="md">Column 2</PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
+import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<PdsRow colGap="sm">
+  <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
+    <PdsBox border padding="sm">Item 1</PdsBox>
+  </PdsBox>
+  <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
+    <PdsBox border padding="sm">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
+    <PdsBox border padding="sm">Item 3</PdsBox>
+  </PdsBox>
+  <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
+    <PdsBox border padding="sm">Item 4</PdsBox>
+  </PdsBox>
+</PdsRow>
+`,
     webComponent: `
-      <pds-box fit="true">
-        <pds-row col-gap="sm">
-          <pds-box size-md="8">
-            <pds-box border padding="sm">Column 1</pds-box>
-          </pds-box>
-          <pds-box size-md="4">
-            <pds-box border padding="sm">Column 2</pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box fit="true">
-    <pds-row col-gap="sm">
-      <pds-box size-md="8">
-        <pds-box border padding="sm">Column 1</pds-box>
-      </pds-box>
-      <pds-box size-md="4">
-        <pds-box border padding="sm">Column 2</pds-box>
-      </pds-box>
-      <pds-box size-md="4">
-        <pds-box border padding="sm">Column 2</pds-box>
-      </pds-box>
-    </pds-row>
+<pds-row col-gap="sm">
+  <pds-box size-md="6" size-lg="4" size-xl="3">
+    <pds-box border padding="sm">Item 1</pds-box>
   </pds-box>
-</DocCanvas>
-
-## Examples
-
-### Form Edit view
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox display="block">
-        <PdsRow colGap="sm">
-          {/* left side */}
-          <PdsBox direction="column" sizeMd="8">
-            <PdsBox class="pds-spacing-bottom-md" border direction="column" padding="md" borderRadius="lg">
-              <h3>Episode Details</h3>
-              <PdsInput class="pds-spacing-bottom-md" componentId="episode-details" label="Episode title" type="text" value="Ep 1"></PdsInput>
-              <PdsButton class="pds-spacing-bottom-md" variant="secondary" icon="calendar-schedule">Create Season (optional)</PdsButton>
-              <label>Media</label>
-              <p>File upload component</p>
-              <label>Show notes</label>
-              <p>Text editor component</p>
-              <PdsCheckbox componentId="episode-explicit" label="Episode contains explicit content" />
-            </PdsBox>
-
-            <PdsBox border direction="column" padding="md" borderRadius="lg">
-              <h3>Transcription</h3>
-              <p>Add an episode transcript your members can access from the episode page.
-      The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
-              <PdsButton variant="secondary" icon="upload">Upload</PdsButton>
-            </PdsBox>
-          </PdsBox>
-
-          {/* right side */}
-          <PdsBox direction="column" sizeMd="4">
-            {/* box 1 */}
-            <PdsBox class="pds-spacing-bottom-md" border direction="column" flex="none" padding="md" borderRadius="lg">
-              <h3>Publish Settings</h3>
-              <PdsChip label="Neutral" sentiment="neutral" />
-              <PdsBox>
-                <PdsChip label="Neutral" sentiment="neutral" />
-              </PdsBox>
-              <p>Publish date</p>
-              <p>Not Set</p>
-              <PdsButton variant="secondary" icon="calendar-schedule">Schedule episode</PdsButton>
-            </PdsBox>
-            {/* box 2 */}
-            <PdsBox class="pds-spacing-bottom-md" border display="block" flex="none" padding="md" borderRadius="lg">
-              <h3>Publish Settings</h3>
-              <PdsChip label="Neutral" sentiment="neutral" />
-              <PdsBox>
-                <PdsChip label="Neutral" sentiment="neutral" />
-              </PdsBox>
-              <p>Publish date</p>
-              <p>Not Set</p>
-              <PdsButton variant="secondary" icon="calendar-schedule">Schedule episode</PdsButton>
-            </PdsBox>
-            <PdsBox border direction="column" flex="none" padding="md" borderRadius="lg">
-              <h3>Episode Thumbnail</h3>
-              <p>File upload component</p>
-            </PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row col-gap="sm">
-          {/* left side */}
-          <pds-box direction="column" size-md="8">
-            <pds-box class="pds-spacing-bottom-md" border direction="column" padding="md" border-radius="lg">
-              <h3>Episode Details</h3>
-              <pds-input class="pds-spacing-bottom-md" component-id="episode-details" label="Episode title" type="text" value="Ep 1"></pds-input>
-              <pds-button class="pds-spacing-bottom-md" variant="secondary" icon="calendar-schedule">Create Season (optional)</pds-button>
-              <label>Media</label>
-              <p>File upload component</p>
-              <label>Show notes</label>
-              <p>Text editor component</p>
-              <pds-checkbox component-id="episode-explicit" label="Episode contains explicit content" />
-            </pds-box>
-
-            <pds-box border direction="column" padding="md" border-radius="lg">
-              <h3>Transcription</h3>
-              <p>Add an episode transcript your members can access from the episode page.
-      The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
-              <pds-button variant="secondary" icon="upload">Upload</pds-button>
-            </pds-box>
-          </pds-box>
-
-          {/* right side */}
-          <pds-box direction="column" size-md="4">
-            {/* box 1 */}
-            <pds-box class="pds-spacing-bottom-md" border direction="column" flex="none" padding="md" border-radius="lg">
-              <h3>Publish Settings</h3>
-              <pds-chip label="Neutral" sentiment="neutral" />
-              <pds-box>
-                <pds-chip label="Neutral" sentiment="neutral" />
-              </pds-box>
-              <p>Publish date</p>
-              <p>Not Set</p>
-              <pds-button variant="secondary" icon="calendar-schedule">Schedule episode</pds-button>
-            </pds-box>
-            {/* box 2 */}
-            <pds-box class="pds-spacing-bottom-md" border display="block" flex="none" padding="md" border-radius="lg">
-              <h3>Publish Settings</h3>
-              <pds-chip label="Neutral" sentiment="neutral" />
-              <pds-box>
-                <pds-chip label="Neutral" sentiment="neutral" />
-              </pds-box>
-              <p>Publish date</p>
-              <p>Not Set</p>
-              <pds-button variant="secondary" icon="calendar-schedule">Schedule episode</pds-button>
-            </pds-box>
-            <pds-box border direction="column" flex="none" padding="md" border-radius="lg">
-              <h3>Episode Thumbnail</h3>
-              <p>File upload component</p>
-            </pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row col-gap="sm">
-      {/* left side */}
-      <pds-box direction="column" size-md="8">
-        <pds-box class="pds-spacing-bottom-md" border direction="column" padding="md" border-radius="lg">
-          <h3>Episode Details</h3>
-          <pds-input class="pds-spacing-bottom-md" component-id="episode-details" label="Episode title" type="text" value="Ep 1"></pds-input>
-          <pds-button class="pds-spacing-bottom-md" variant="secondary" icon="calendar-schedule">Create Season (optional)</pds-button>
-          <label>Media</label>
-          <p>File upload component</p>
-          <label>Show notes</label>
-          <p>Text editor component</p>
-          <pds-checkbox component-id="episode-explicit" label="Episode contains explicit content" />
-        </pds-box>
-
-        <pds-box border direction="column" padding="md" border-radius="lg">
-          <h3>Transcription</h3>
-          <p>Add an episode transcript your members can access from the episode page.
-  The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
-          <pds-button variant="secondary" icon="upload">Upload</pds-button>
-        </pds-box>
-      </pds-box>
-
-      {/* right side */}
-      <pds-box direction="column" size-md="4">
-        {/* box 1 */}
-        <pds-box class="pds-spacing-bottom-md" border direction="column" flex="none" padding="md" border-radius="lg">
-          <h3>Publish Settings</h3>
-          <pds-chip label="Neutral" sentiment="neutral" />
-          <pds-box>
-            <pds-chip label="Neutral" sentiment="neutral" />
-          </pds-box>
-          <p>Publish date</p>
-          <p>Not Set</p>
-          <pds-button variant="secondary" icon="calendar-schedule">Schedule episode</pds-button>
-        </pds-box>
-        {/* box 2 */}
-        <pds-box class="pds-spacing-bottom-md" border display="block" flex="none" padding="md" border-radius="lg">
-          <h3>Publish Settings</h3>
-          <pds-chip label="Neutral" sentiment="neutral" />
-          <pds-box>
-            <pds-chip label="Neutral" sentiment="neutral" />
-          </pds-box>
-          <p>Publish date</p>
-          <p>Not Set</p>
-          <pds-button variant="secondary" icon="calendar-schedule">Schedule episode</pds-button>
-        </pds-box>
-        <pds-box border direction="column" flex="none" padding="md" border-radius="lg">
-          <h3>Episode Thumbnail</h3>
-          <p>File upload component</p>
-        </pds-box>
-      </pds-box>
-    </pds-row>
+  <pds-box size-md="6" size-lg="4" size-xl="3">
+    <pds-box border padding="sm">Item 2</pds-box>
   </pds-box>
-</DocCanvas>
-
-### Example 1
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox
-        backgroundColor="#DDF8F0"
-        borderRadius="lg"
-        display="flex"
-        padding="md"
-      >
-        <PdsRow colGap="sm">
-          <PdsBox alignItems="center" justifyContent="center" sizeSm="3">
-            <img src="../src/stories/assets/offers.png" />
-          </PdsBox>
-          <PdsBox sizeSm="9">
-            <PdsBox direction="column">
-              <PdsText tag="h3" color="var(--pine-color-grey-900)" gutter="sm">Accept payments on all your offers!</PdsText>
-              <PdsText color="var(--pine-color-grey-800)" gutter="sm">Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</PdsText>
-              <PdsBox gap="sm">
-                <PdsButton>Primary</PdsButton>
-                <PdsButton variant="secondary">Secondary</PdsButton>
-              </PdsBox>
-            </PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box
-        background-color="#DDF8F0"
-        border-radius="lg"
-        display="flex"
-        padding="md"
-      >
-        <pds-row col-gap="sm">
-          <pds-box align-items="center" justify-content="center" size-sm="3">
-            <img src="../src/stories/assets/offers.png" />
-          </pds-box>
-          <pds-box size-sm="9">
-            <pds-box direction="column">
-              <pds-text tag="h3" color="var(--pine-color-grey-900)" gutter="sm">Accept payments on all your offers!</pds-text>
-              <pds-text color="var(--pine-color-grey-800)" gutter="sm">Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</pds-text>
-              <pds-box gap="sm">
-                <pds-button>Primary</pds-button>
-                <pds-button variant="secondary">Secondary</pds-button>
-              </pds-box>
-            </pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box
-    background-color="#DDF8F0"
-    border-radius="lg"
-    display="flex"
-    padding="md"
-  >
-    <pds-row col-gap="sm">
-      <pds-box align-items="center" justify-content="center" size-sm="3">
-        <img src={image} />
-      </pds-box>
-      <pds-box size-sm="9">
-        <pds-box direction="column">
-          <pds-text tag="h3" color="var(--pine-color-grey-900)" gutter="sm">Accept payments on all your offers!</pds-text>
-          <pds-text color="var(--pine-color-grey-800)" gutter="sm">Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</pds-text>
-          <pds-box gap="sm">
-            <pds-button>Primary</pds-button>
-            <pds-button variant="secondary">Secondary</pds-button>
-          </pds-box>
-        </pds-box>
-      </pds-box>
-    </pds-row>
+  <pds-box size-md="6" size-lg="4" size-xl="3">
+    <pds-box border padding="sm">Item 3</pds-box>
   </pds-box>
-</DocCanvas>
-
-### Example 2
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      import { caretRight } from '@pine-ds/icons/icons';
-
-      <PdsBox display="block">
-        <PdsRow colGap="md">
-          <PdsBox sizeMd="4">
-            <PdsBox
-              border
-              borderRadius="lg"
-              direction="column"
-              padding="sm"
-            >
-              <PdsText tag="h3" gutter="sm">Transactions</PdsText>
-              <PdsBox gap="sm" justifyContent="space-between">
-                <PdsBox direction="column">
-                  <PdsText gutter="sm">0</PdsText>
-                  <PdsText gutter="sm">Successful transactions</PdsText>
-                </PdsBox>
-                <PdsBox auto alignItems="center">
-                  <PdsIcon icon={caretRight}></PdsIcon>
-                </PdsBox>
-              </PdsBox>
-            </PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="4">
-            <PdsBox
-              border
-              borderRadius="lg"
-              direction="column"
-              padding="sm"
-            >
-              <PdsText tag="h3" gutter="sm">Transactions</PdsText>
-              <PdsBox gap="sm" justifyContent="space-between">
-                <PdsBox direction="column">
-                  <PdsText gutter="sm">0</PdsText>
-                  <PdsText gutter="sm">Successful transactions</PdsText>
-                </PdsBox>
-                <PdsBox auto alignItems="center">
-                  <PdsIcon icon={caretRight}></PdsIcon>
-                </PdsBox>
-              </PdsBox>
-            </PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="4">
-            <PdsBox
-              border
-              borderRadius="lg"
-              direction="column"
-              padding="sm"
-            >
-              <PdsText tag="h3" gutter="sm">Transactions</PdsText>
-              <PdsBox gap="sm" justifyContent="space-between">
-                <PdsBox direction="column">
-                  <span>0</span>
-                  <span>Successful transactions</span>
-                </PdsBox>
-                <PdsBox auto alignItems="center">
-                  <PdsIcon icon={caretRight}></PdsIcon>
-                </PdsBox>
-              </PdsBox>
-            </PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row col-gap="md">
-          <pds-box size-md="4">
-            <pds-box
-              border="true"
-              border-radius="lg"
-              direction="column"
-              padding="sm"
-            >
-              <h3>Transactions</h3>
-              <pds-box gap="sm" justify-content="space-between">
-                <pds-box direction="column">
-                  <span>0</span>
-                  <span>Successful transactions</span>
-                </pds-box>
-                <pds-box auto="true" align-items="center">
-                  <pds-icon name="caret-right"></pds-icon>
-                </pds-box>
-              </pds-box>
-            </pds-box>
-          </pds-box>
-          <pds-box size-md="4">
-            <pds-box
-              border="true"
-              border-radius="lg"
-              direction="column"
-              padding="sm"
-            >
-              <h3>Transactions</h3>
-              <pds-box gap="sm" justify-content="space-between">
-                <pds-box direction="column">
-                  <span>0</span>
-                  <span>Successful transactions</span>
-                </pds-box>
-                <pds-box auto="true" align-items="center">
-                  <pds-icon name="caret-right"></pds-icon>
-                </pds-box>
-              </pds-box>
-            </pds-box>
-          </pds-box>
-          <pds-box size-md="4">
-            <pds-box
-              border="true"
-              border-radius="lg"
-              direction="column"
-              padding="sm"
-            >
-              <h3>Transactions</h3>
-              <pds-box gap="sm" justify-content="space-between">
-                <pds-box direction="column">
-                  <pds-text gutter="sm">0</pds-text>
-                  <pds-text gutter="sm">Successful transactions</pds-text>
-                </pds-box>
-                <pds-box auto="true" align-items="center">
-                  <pds-icon name="caret-right"></pds-icon>
-                </pds-box>
-              </pds-box>
-            </pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row col-gap="md">
-      <pds-box size-md="4">
-        <pds-box
-          border="true"
-          border-radius="lg"
-          direction="column"
-          padding="sm"
-        >
-          <pds-text tag="h3" gutter="sm">Transactions</pds-text>
-          <pds-box gap="sm" justify-content="space-between">
-            <pds-box direction="column">
-              <pds-text gutter="sm">0</pds-text>
-              <pds-text gutter="sm">Successful transactions</pds-text>
-            </pds-box>
-            <pds-box auto="true" align-items="center">
-              <pds-icon name="caret-right"></pds-icon>
-            </pds-box>
-          </pds-box>
-        </pds-box>
-      </pds-box>
-      <pds-box size-md="4">
-        <pds-box
-          border="true"
-          border-radius="lg"
-          direction="column"
-          padding="sm"
-        >
-          <pds-text tag="h3" gutter="sm">Transactions</pds-text>
-          <pds-box gap="sm" justify-content="space-between">
-            <pds-box direction="column">
-              <pds-text gutter="sm">0</pds-text>
-              <pds-text gutter="sm">Successful transactions</pds-text>
-            </pds-box>
-            <pds-box auto="true" align-items="center">
-              <pds-icon name="caret-right"></pds-icon>
-            </pds-box>
-          </pds-box>
-        </pds-box>
-      </pds-box>
-      <pds-box size-md="4">
-        <pds-box
-          border="true"
-          border-radius="lg"
-          direction="column"
-          padding="sm"
-        >
-          <pds-text tag="h3" gutter="sm">Transactions</pds-text>
-          <pds-box gap="sm" justify-content="space-between">
-            <pds-box direction="column">
-              <pds-text gutter="sm">0</pds-text>
-              <pds-text gutter="sm">Successful transactions</pds-text>
-            </pds-box>
-            <pds-box auto="true" align-items="center">
-              <pds-icon name="caret-right"></pds-icon>
-            </pds-box>
-          </pds-box>
-        </pds-box>
-      </pds-box>
-    </pds-row>
+  <pds-box size-md="6" size-lg="4" size-xl="3">
+    <pds-box border padding="sm">Item 4</pds-box>
   </pds-box>
-</DocCanvas>
-
-### Creating a 12-Column Grid System
-
-By combining the `pds-box` and `pds-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox display="block">
-        <PdsRow>
-          <PdsBox>
-            <PdsBox border>
-              <PdsText gutter="sm">Content for column 1</PdsText>
-            </PdsBox>
-          </PdsBox>
-          <PdsBox>
-            <PdsBox border>
-              <PdsText gutter="sm">Content for column 2</PdsText>
-            </PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row col-gap="sm">
-          <pds-box>
-            <pds-box border>
-              <pds-text gutter="sm">Content for column 1</pds-text>
-            </pds-box>
-          </pds-box>
-          <pds-box>
-            <pds-box border>
-              <pds-text gutter="sm">Content for column 2</pds-text>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row col-gap="sm">
-      <pds-box>
-        <pds-box border>
-          <pds-text gutter="sm">Content for column 1</pds-text>
-        </pds-box>
-      </pds-box>
-      <pds-box>
-        <pds-box border>
-          <pds-text gutter="sm">Content for column 2</pds-text>
-        </pds-box>
-      </pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
-
-By default, adding `pds-row`s with no `size` property will create equal width columns.
-This creates a two-column layout, and you can customize the size and arrangement of the columns to achieve the desired layout for your application. The example below sizes from `md` up, so the columns stack full width on phones and split at 768px and above. A bare `size` would apply at every viewport, including the narrowest one.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox display="block">
-        <PdsRow colGap="sm">
-          <PdsBox sizeMd="4">
-            <PdsBox border>
-              <PdsText gutter="sm">Content for column 1</PdsText>
-            </PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="8">
-            <PdsText gutter="sm">Content for column 2</PdsText>
-            </PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row col-gap="sm">
-          <pds-box size-md="4">
-            <pds-box border>
-              <pds-text gutter="sm">Content for column 1</pds-text>
-            </pds-box>
-          </pds-box>
-          <pds-box size-md="8">
-            <pds-box border>
-              <pds-text gutter="sm">Content for column 2</pds-text>
-            </pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row col-gap="sm">
-      <pds-box size-md="4">
-        <pds-box border>
-          <pds-text gutter="sm">Content for column 1</pds-text>
-        </pds-box>
-      </pds-box>
-      <pds-box size-md="8">
-        <pds-box border>Content for column 2</pds-box>
-      </pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
-
-## Responsive Design
-
-Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
-
-### Responsive Breakpoints
-
-The layout system uses the following breakpoints for responsive sizing and properties:
-
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="layout-breakpoints" responsive>
-    <pds-table-head>
-      <pds-table-head-cell>Breakpoint</pds-table-head-cell>
-      <pds-table-head-cell>Suffix</pds-table-head-cell>
-      <pds-table-head-cell>Media Query</pds-table-head-cell>
-      <pds-table-head-cell>Screen Size</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell>Extra Small</pds-table-cell>
-        <pds-table-cell><code>-xs</code></pds-table-cell>
-        <pds-table-cell><code>max-width: 575px</code></pds-table-cell>
-        <pds-table-cell>Up to 575px (mobile devices)</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Small</pds-table-cell>
-        <pds-table-cell><code>-sm</code></pds-table-cell>
-        <pds-table-cell><code>min-width: 576px</code></pds-table-cell>
-        <pds-table-cell>576px and up (tablets)</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Medium</pds-table-cell>
-        <pds-table-cell><code>-md</code></pds-table-cell>
-        <pds-table-cell><code>min-width: 768px</code></pds-table-cell>
-        <pds-table-cell>768px and up (larger tablets, small desktops)</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Large</pds-table-cell>
-        <pds-table-cell><code>-lg</code></pds-table-cell>
-        <pds-table-cell><code>min-width: 992px</code></pds-table-cell>
-        <pds-table-cell>992px and up (desktops)</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell>Extra Large</pds-table-cell>
-        <pds-table-cell><code>-xl</code></pds-table-cell>
-        <pds-table-cell><code>min-width: 1200px</code></pds-table-cell>
-        <pds-table-cell>1200px and up (large desktops)</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
-
-**How breakpoints work:**
-- **`xs`**: Applies only on extra small screens (up to 575px)
-- **`sm`, `md`, `lg`, `xl`**: Apply at their breakpoint and larger (mobile-first approach)
-- **Cascading**: Larger breakpoints override smaller ones
-
-**Common responsive patterns:**
-- Stack on mobile, columns on tablet: Use `size-xs="12" size-sm="6"`
-- Progressive refinement: Use `size-md="6" size-lg="4" size-xl="3"` for 2/3/4 column layouts
-- Hide/show at breakpoints: Use `size-xs="0" size-md="12"` to hide on mobile
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox display="block">
-        <PdsRow>
-          <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
-            <PdsBox border>Item 1</PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
-            <PdsBox border>Item 2</PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
-            <PdsBox border>Item 3</PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row col-gap="sm">
-          <pds-box size-md="6" size-lg="4" size-xl="3">
-            <pds-box border>Item 1</pds-box>
-          </pds-box>
-          <pds-box size-md="6" size-lg="4" size-xl="3">
-            <pds-box border>Item 2</pds-box>
-          </pds-box>
-          <pds-box size-md="6" size-lg="4" size-xl="3">
-            <pds-box border>Item 3</pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row col-gap="sm">
-      <pds-box size-md="6" size-lg="4" size-xl="3">
-        <pds-box border>Item 1</pds-box>
-      </pds-box>
-      <pds-box size-md="6" size-lg="4" size-xl="3">
-        <pds-box border>Item 2</pds-box>
-      </pds-box>
-      <pds-box size-md="6" size-lg="4" size-xl="3">
-        <pds-box border>Item 3</pds-box>
-      </pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
-
-
-### Visible / Hidden Columns
-
-`size` and `offset` can be used to hide or show columns at different breakpoints. Values from 1 - 12 show the column, 0 hides the column.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox display="block">
-        <PdsRow colGap="sm">
-          <PdsBox sizeXs="0" sizeSm="0" sizeLg="12">
-            <PdsBox border>Larger screen content</PdsBox>
-          </PdsBox>
-          <PdsBox sizeMd="12" sizeLg="0">
-            <PdsBox border>Small screen content</PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row col-gap="sm">
-          <pds-box size-xs="0" size-sm="0" size-lg="12">
-            <pds-box border>Larger screen content</pds-box>
-          </pds-box>
-          <pds-box size-md="12" size-lg="0">
-            <pds-box border>Small screen content</pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row col-gap="sm">
-      <pds-box size-xs="0" size-sm="0" size-lg="12">
-        <pds-box border>Larger screen content</pds-box>
-      </pds-box>
-      <pds-box size-md="12" size-lg="0">
-        <pds-box border>Small screen content</pds-box>
-      </pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
-
-### Offsetting Columns
-
-Use the `offset` property to offset columns to the right. The `offset` property accepts values from 1 - 11. For example, `offset="1"` will offset the column by one column width. Adding size modifiers such as `offset-md="1"` will offset the column by one column width on medium screens and larger.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox direction="column" fit>
-        <PdsRow colGap="sm">
-          <PdsBox sizeMd="4">
-            <PdsBox border>Item 1</PdsBox>
-          </PdsBox>
-          <PdsBox offsetMd="4" sizeMd="4">
-            <PdsBox border>Item 2</PdsBox>
-          </PdsBox>
-        </PdsRow>
-        <PdsRow colGap="sm">
-          <PdsBox sizeMd="4">
-            <PdsBox border>Item 1</PdsBox>
-          </PdsBox>
-          <PdsBox offsetMd="4" sizeMd="4">
-            <PdsBox border>Item 2</PdsBox>
-          </PdsBox>
-        </PdsRow>
-        <PdsRow colGap="sm">
-          <PdsBox offset="3" offsetXs="2" size="6" sizeXs="8">
-            <PdsBox border>Item 1</PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box direction="column" fit>
-        <pds-row col-gap="sm">
-          <pds-box size-md="4">
-            <pds-box border>Item 1</pds-box>
-          </pds-box>
-          <pds-box offset-md="4" size-md="4">
-            <pds-box border>Item 2</pds-box>
-          </pds-box>
-        </pds-row>
-        <pds-row col-gap="sm">
-          <pds-box size-md="4">
-            <pds-box border>Item 1</pds-box>
-          </pds-box>
-          <pds-box offset-md="4" size-md="4">
-            <pds-box border>Item 2</pds-box>
-          </pds-box>
-        </pds-row>
-        <pds-row col-gap="sm">
-          <pds-box offset="3" offset-xs="2" size="6" size-xs="8">
-            <pds-box border>Item 1</pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box direction="column" fit>
-    <pds-row>
-      <pds-box size-md="4">
-        <pds-box border>Item 1</pds-box>
-      </pds-box>
-      <pds-box offset-md="4" size-md="4">
-        <pds-box border>Item 2</pds-box>
-      </pds-box>
-    </pds-row>
-    <pds-row>
-      <pds-box size-md="4">
-        <pds-box border>Item 1</pds-box>
-      </pds-box>
-      <pds-box offset-md="4" size-md="4">
-        <pds-box border>Item 2</pds-box>
-      </pds-box>
-    </pds-row>
-    <pds-row>
-      <pds-box border offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
-
-### Alignment
-
-Adding either `flex` **`display`** property to the box will initiate alignment values. Use `align-items` to change the vertical alignment of the box. Use `justify-content` to change the horizontal alignment of the box.
-
-The columns below keep a base `size` on purpose, unlike the rest of this guide. These examples exist to show alignment inside a narrow column, and `size-xs` alone would not hold that shape — `xs` is the one breakpoint defined with `max-width`, so it stops applying at 576px and the columns would flex to fill the row.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox display="block">
-        <PdsRow minHeight="100px" colGap="sm">
-          <PdsBox size="2">
-            <PdsBox
-              alignItems="start"
-              border
-              display="flex"
-              justifyContent="center"
-              minHeight="200px"
-              padding="sm"
-            >
-            Content 1
-            </PdsBox>
-          </PdsBox>
-          <PdsBox>
-            <PdsBox
-              alignItems="center"
-              border
-              display="flex"
-              justifyContent="center"
-              padding="sm"
-            >
-            Content2
-            </PdsBox>
-          </PdsBox>
-          <PdsBox>
-            <PdsBox
-              alignItems="end"
-              border
-              display="flex"
-              justifyContent="end"
-              padding="sm"
-            >
-            Content 3
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row min-height="100px" col-gap="sm">
-          <pds-box size="2">
-            <pds-box
-              align-items="start"
-              border="true"
-              display="flex"
-              justify-content="center"
-              min-height="200px"
-              padding="sm"
-            >Content 1</pds-box>
-          </pds-box>
-          <pds-box>
-            <pds-box
-              align-items="center"
-              border="true"
-              display="flex"
-              justify-content="center"
-              padding="sm"
-            >Content2</pds-box>
-          </pds-box>
-          <pds-box>
-            <pds-box
-              align-items="end"
-              border="true"
-              display="flex"
-              justify-content="end"
-              padding="sm"
-            >Content 3</pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row min-height="100px" col-gap="sm">
-      <pds-box size="2">
-        <pds-box
-          align-items="start"
-          border="true"
-          display="flex"
-          justify-content="center"
-          min-height="200px"
-          padding="sm"
-        >Content 1</pds-box>
-      </pds-box>
-      <pds-box>
-        <pds-box
-          align-items="center"
-          border="true"
-          display="flex"
-          justify-content="center"
-          padding="sm"
-        >Content2</pds-box>
-      </pds-box>
-      <pds-box>
-        <pds-box
-          align-items="end"
-          border="true"
-          display="flex"
-          justify-content="end"
-          padding="sm"
-        >Content 3</pds-box>
-      </pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
-
-Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take effect with no `min-height` present.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox display="block">
-        <PdsRow colGap="sm">
-          <PdsBox size="2">
-            <PdsBox
-              alignItems="start"
-              border
-              display="flex"
-              justifyContent="start"
-              padding="sm"
-            >
-            Content 1
-          </PdsBox>
-          <PdsBox>
-            <PdsBox
-              alignItems="center"
-              border
-              display="flex"
-              justifyContent="center"
-              padding="sm"
-            >
-            Content2
-          </PdsBox>
-          <PdsBox size="2">
-            <PdsBox
-              alignItems="end"
-              border
-              display="flex"
-              justifyContent="end"
-              padding="sm"
-            >
-            Content 3
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row col-gap="sm">
-          <pds-box size="2">
-            <pds-box
-              align-items="start"
-              border="true"
-              display="flex"
-              justify-content="start"
-              padding="sm"
-            >Content 1</pds-box>
-          </pds-box>
-          <pds-box>
-            <pds-box
-              align-items="center"
-              border="true"
-              display="flex"
-              justify-content="center"
-              padding="sm"
-            >Content2</pds-box>
-          </pds-box>
-          <pds-box size="2">
-            <pds-box
-              align-items="end"
-              border="true"
-              display="flex"
-              justify-content="end"
-              padding="sm"
-            >Content 3</pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row col-gap="sm">
-      <pds-box size="2">
-        <pds-box
-          align-items="start"
-          border="true"
-          display="flex"
-          justify-content="start"
-          padding="sm"
-        >Content 1</pds-box>
-      </pds-box>
-      <pds-box>
-        <pds-box
-          align-items="center"
-          border="true"
-          display="flex"
-          justify-content="center"
-          padding="sm"
-        >Content2</pds-box>
-      </pds-box>
-      <pds-box size="2">
-        <pds-box
-          align-items="end"
-          border="true"
-          display="flex"
-          justify-content="end"
-          padding="sm"
-        >Content 3</pds-box>
-      </pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
-
-## Nested Layouts
-
-You can nest `pds-row` and `pds-box` components to create more complex layouts.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsBox display="block">
-        <PdsRow colGap="sm">
-          <PdsBox sizeMd="8">
-            <PdsBox border>
-              <PdsRow>
-                <PdsBox sizeXl="6">Column 1 Item 1</PdsBox>
-                <PdsBox sizeXl="6">Column 1 Item 2</PdsBox>
-              </PdsRow>
-            </PdsBox>
-          </PdsBox>
-          <PdsBox
-            sizeMd="4"
-          >
-            <PdsBox
-              alignItems="center"
-              border="true"
-              display="flex"
-              justifyContent="center"
-            >
-              Column 2
-            </PdsBox>
-          </PdsBox>
-        </PdsRow>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box display="block">
-        <pds-row col-gap="sm">
-          <pds-box size-md="8">
-            <pds-box border>
-              <pds-row>
-                <pds-box size-xl="6">Column 1 Item 1</pds-box>
-                <pds-box size-xl="6">Column 1 Item 2</pds-box>
-              </pds-row>
-            </pds-box>
-          </pds-box>
-          <pds-box size-md="4">
-            <pds-box border display="flex" align-items="center" justify-content="center">
-              Column 2
-            </pds-box>
-          </pds-box>
-        </pds-row>
-      </pds-box>
-    `
-}}>
-  <pds-box display="block">
-    <pds-row col-gap="sm">
-      <pds-box size-md="8">
-        <pds-box border>
-          <pds-row>
-            <pds-box size-xl="6">Column 1 Item 1</pds-box>
-            <pds-box size-xl="6">Column 1 Item 2</pds-box>
-          </pds-row>
-        </pds-box>
-      </pds-box>
-      <pds-box size-md="4">
-        <pds-box border display="flex" align-items="center" justify-content="center">
-          Column 2
-        </pds-box>
-      </pds-box>
-    </pds-row>
-  </pds-box>
-</DocCanvas>
-
-### Gaps / Gutters
-
-When a gap or gutter is needed between the columns, an additional child `pds-box` must be used to ensure correct spacing between the columns and rows
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsRow colGap="sm">
-        <PdsBox sizeSm="4">
-          <PdsBox
-            borderRadius="sm"
-            padding="sm"
-            shadow="100"
-          >
-            Item 1
-          </PdsBox>
-        </PdsBox>
-        <PdsBox sizeSm="8">
-          <PdsBox padding="sm" shadow="100">
-            Item 2
-          </PdsBox>
-        </PdsBox>
-      </PdsRow>
-    `,
-    webComponent: `
-      <pds-row col-gap="sm">
-        <pds-box size-sm="4">
-          <pds-box
-            border-radius="sm"
-            padding="sm"
-            shadow="100"
-          >
-            Item 1
-          </pds-box>
-        </pds-box>
-        <pds-box size-sm="8">
-          <pds-box padding="sm" shadow="100">
-            Item 2
-          </pds-box>
-        </pds-box>
-      </pds-row>
-    `
+</pds-row>
+`
 }}>
   <pds-row col-gap="sm">
-    <pds-box size-sm="4">
-      <pds-box border-radius="sm" padding="sm" shadow="100">Item 1</pds-box>
+    <pds-box size-md="6" size-lg="4" size-xl="3">
+      <pds-box border padding="sm">Item 1</pds-box>
     </pds-box>
-    <pds-box size-sm="8">
-      <pds-box padding="sm" shadow="100">Item 2</pds-box>
+    <pds-box size-md="6" size-lg="4" size-xl="3">
+      <pds-box border padding="sm">Item 2</pds-box>
+    </pds-box>
+    <pds-box size-md="6" size-lg="4" size-xl="3">
+      <pds-box border padding="sm">Item 3</pds-box>
+    </pds-box>
+    <pds-box size-md="6" size-lg="4" size-xl="3">
+      <pds-box border padding="sm">Item 4</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
+
+To show a column only at some widths, set its size to `0` where it should hide. This sidebar is hidden below 992px.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<PdsRow colGap="sm">
+  <PdsBox sizeLg="8">
+    <PdsBox border padding="sm">Always shown</PdsBox>
+  </PdsBox>
+  <PdsBox size="0" sizeLg="4">
+    <PdsBox border padding="sm">Shown from 992px</PdsBox>
+  </PdsBox>
+</PdsRow>
+`,
+    webComponent: `
+<pds-row col-gap="sm">
+  <pds-box size-lg="8">
+    <pds-box border padding="sm">Always shown</pds-box>
+  </pds-box>
+  <pds-box size="0" size-lg="4">
+    <pds-box border padding="sm">Shown from 992px</pds-box>
+  </pds-box>
+</pds-row>
+`
+}}>
+  <pds-row col-gap="sm">
+    <pds-box size-lg="8">
+      <pds-box border padding="sm">Always shown</pds-box>
+    </pds-box>
+    <pds-box size="0" size-lg="4">
+      <pds-box border padding="sm">Shown from 992px</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
+
+## Offsetting columns
+
+`offset` moves a column toward the end of the row by a number of columns, from `0` to `12`. Breakpoint versions such as `offset-md` work like the size props. In right-to-left text the offset comes from the right.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<PdsRow colGap="sm">
+  <PdsBox sizeMd="4">
+    <PdsBox border padding="sm">Item 1</PdsBox>
+  </PdsBox>
+  <PdsBox sizeMd="4" offsetMd="4">
+    <PdsBox border padding="sm">Item 2</PdsBox>
+  </PdsBox>
+</PdsRow>
+`,
+    webComponent: `
+<pds-row col-gap="sm">
+  <pds-box size-md="4">
+    <pds-box border padding="sm">Item 1</pds-box>
+  </pds-box>
+  <pds-box size-md="4" offset-md="4">
+    <pds-box border padding="sm">Item 2</pds-box>
+  </pds-box>
+</pds-row>
+`
+}}>
+  <pds-row col-gap="sm">
+    <pds-box size-md="4">
+      <pds-box border padding="sm">Item 1</pds-box>
+    </pds-box>
+    <pds-box size-md="4" offset-md="4">
+      <pds-box border padding="sm">Item 2</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
+
+## Alignment
+
+Inside a `pds-box`, `justify-content` aligns children along its direction and `align-items` across it. Set `display="flex"` so the box fills the width, and a `min-height` when you align children vertically, since a box only grows as tall as its content.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+import { PdsBox } from '@pine-ds/react';
+
+<PdsBox display="flex" alignItems="center" justifyContent="center" minHeight="120px" border>
+  Centered
+</PdsBox>
+`,
+    webComponent: `
+<pds-box display="flex" align-items="center" justify-content="center" min-height="120px" border>
+  Centered
+</pds-box>
+`
+}}>
+  <pds-box display="flex" align-items="center" justify-content="center" min-height="120px" border>Centered</pds-box>
+</DocCanvas>
+
+## Nested rows
+
+A column can hold its own `pds-row`. Nest it inside the column's inner `pds-box`, which also carries the border.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<PdsRow colGap="sm">
+  <PdsBox sizeMd="8">
+    <PdsBox border padding="sm">
+      <PdsRow colGap="sm">
+        <PdsBox sizeXl="6">Nested 1</PdsBox>
+        <PdsBox sizeXl="6">Nested 2</PdsBox>
+      </PdsRow>
+    </PdsBox>
+  </PdsBox>
+  <PdsBox sizeMd="4">
+    <PdsBox border padding="sm">Column 2</PdsBox>
+  </PdsBox>
+</PdsRow>
+`,
+    webComponent: `
+<pds-row col-gap="sm">
+  <pds-box size-md="8">
+    <pds-box border padding="sm">
+      <pds-row col-gap="sm">
+        <pds-box size-xl="6">Nested 1</pds-box>
+        <pds-box size-xl="6">Nested 2</pds-box>
+      </pds-row>
+    </pds-box>
+  </pds-box>
+  <pds-box size-md="4">
+    <pds-box border padding="sm">Column 2</pds-box>
+  </pds-box>
+</pds-row>
+`
+}}>
+  <pds-row col-gap="sm">
+    <pds-box size-md="8">
+      <pds-box border padding="sm">
+        <pds-row col-gap="sm">
+          <pds-box size-xl="6">Nested 1</pds-box>
+          <pds-box size-xl="6">Nested 2</pds-box>
+        </pds-row>
+      </pds-box>
+    </pds-box>
+    <pds-box size-md="4">
+      <pds-box border padding="sm">Column 2</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
+
+## Example: an edit page
+
+A two-column edit page. Each card is a `pds-box` that stacks its content with `gap`, so no element needs its own margin.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+import { PdsBox, PdsButton, PdsCheckbox, PdsIcon, PdsInput, PdsRow, PdsText, PdsTextarea } from '@pine-ds/react';
+import { calendarSchedule } from '@pine-ds/icons/icons';
+
+<PdsRow colGap="sm">
+  <PdsBox sizeMd="8">
+    <PdsBox direction="column" gap="md" padding="md" border borderRadius="lg">
+      <PdsText tag="h3">Episode details</PdsText>
+      <PdsInput componentId="episode-title" name="title" label="Episode title" />
+      <PdsTextarea componentId="episode-notes" name="notes" label="Show notes" />
+      <PdsCheckbox componentId="episode-explicit" name="explicit" label="Episode contains explicit content" />
+    </PdsBox>
+  </PdsBox>
+  <PdsBox sizeMd="4">
+    <PdsBox direction="column" gap="md" padding="md" border borderRadius="lg">
+      <PdsText tag="h3">Publish settings</PdsText>
+      <PdsText tag="p">Publish date: not set</PdsText>
+      <PdsButton variant="secondary">
+        <PdsIcon slot="start" icon={calendarSchedule} aria-hidden="true" />
+        Schedule episode
+      </PdsButton>
+    </PdsBox>
+  </PdsBox>
+</PdsRow>
+`,
+    webComponent: `
+<pds-row col-gap="sm">
+  <pds-box size-md="8">
+    <pds-box direction="column" gap="md" padding="md" border border-radius="lg">
+      <pds-text tag="h3">Episode details</pds-text>
+      <pds-input component-id="episode-title" name="title" label="Episode title"></pds-input>
+      <pds-textarea component-id="episode-notes" name="notes" label="Show notes"></pds-textarea>
+      <pds-checkbox component-id="episode-explicit" name="explicit" label="Episode contains explicit content"></pds-checkbox>
+    </pds-box>
+  </pds-box>
+  <pds-box size-md="4">
+    <pds-box direction="column" gap="md" padding="md" border border-radius="lg">
+      <pds-text tag="h3">Publish settings</pds-text>
+      <pds-text tag="p">Publish date: not set</pds-text>
+      <pds-button variant="secondary">
+        <pds-icon slot="start" name="calendar-schedule" aria-hidden="true"></pds-icon>
+        Schedule episode
+      </pds-button>
+    </pds-box>
+  </pds-box>
+</pds-row>
+`
+}}>
+  <pds-row col-gap="sm">
+    <pds-box size-md="8">
+      <pds-box direction="column" gap="md" padding="md" border border-radius="lg">
+        <pds-text tag="h3">Episode details</pds-text>
+        <pds-input component-id="episode-title" name="title" label="Episode title"></pds-input>
+        <pds-textarea component-id="episode-notes" name="notes" label="Show notes"></pds-textarea>
+        <pds-checkbox component-id="episode-explicit" name="explicit" label="Episode contains explicit content"></pds-checkbox>
+      </pds-box>
+    </pds-box>
+    <pds-box size-md="4">
+      <pds-box direction="column" gap="md" padding="md" border border-radius="lg">
+        <pds-text tag="h3">Publish settings</pds-text>
+        <pds-text tag="p">Publish date: not set</pds-text>
+        <pds-button variant="secondary"><pds-icon slot="start" name="calendar-schedule" aria-hidden="true"></pds-icon>Schedule episode</pds-button>
+      </pds-box>
     </pds-box>
   </pds-row>
 </DocCanvas>
 
 ## Troubleshooting
 
-If you encounter issues with your layout, here are some common problems and their solutions:
+### A column wraps to a new line
 
-### 1. **Columns Not Aligning Correctly**
-  - **Issue:** Columns are not aligning as expected.
-  - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-row` component. Ensure that the sum of the column sizes within the row is less than or equal to 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
+The sizes on that line add up to more than 12. Columns that don't fit wrap to the next line, so check the sizes that apply at the current viewport width.
 
-### 2. **Unexpected Spacing**
-  - **Issue:** Unexpected spacing between columns.
-  - **Solution:** Check the `padding` property on the `pds-box` components. Adjust the padding values to achieve the desired spacing between columns.
+### Borders or backgrounds run into the gutter
 
-### 3. **Misalignment on Small Screens**
-  - **Issue:** Misalignment of columns on small screens.
-  - **Solution:** Use responsive properties like `offset-xs` to adjust column positions on smaller screens. Also, consider testing with a simplified layout or applying different alignment properties for smaller screens.
+The border or background is on the column itself. `col-gap` is padding inside each column, so move the styling to a `pds-box` inside the column. To change the gutter, set `col-gap`, or `col-gap-inline` and `col-gap-block` for one direction.
 
-### 4. **Layout Not Responsive**
-  - **Issue:** The layout does not respond as expected on different devices.
-  - **Solution:** Review the usage of responsive properties across your layout. Ensure that breakpoints are applied consistently, and test on various devices to identify and address responsiveness issues.
+### Columns stay side by side on phones
 
-### 5. **Performance Degradation due to Unnecessary Nesting**
-  - **Issue:** Noticeable performance degradation, especially on complex layouts.
-  - **Solution:** Review the nested `pds-box`s structure and minimize unnecessary nesting by flattening your layout structure where possible. Excessive nesting can cause performance issues, especially on complex layouts.
+The columns use the base `size`, which applies at every width. Use a breakpoint size such as `size-md` so they stack below that breakpoint.
 
-### 6. **Flex Properties Not Working in Grid Layouts**
-  - **Issue:** Using `flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex values like `flex="1"` on `pds-box` inside `pds-row` has no effect.
-  - **Solution:** Flex properties only work when the immediate parent is another `pds-box`, not when inside `pds-row`. Use responsive `size-*` props (e.g., `size-md="6"`) to control column width within rows; the base breakpoint stays full width so the column stacks on mobile. For flex behavior, nest the box inside another `pds-box` container instead of using it directly in `pds-row`.
+### A column without a size jumps to its own line
+
+A column with no size takes a full line when it has `direction`, `gap`, `display`, `wrap`, `fit`, `flex`, `offset` or a border prop. Give it a `size`, or move those props to a `pds-box` inside the column. On a `pds-box` inside another `pds-box`, `flex="grow"` and `flex="none"` work as expected, and `flex="shrink"` currently behaves like `flex="none"`.
 
 ## Related Components
 - <pds-link href="../?path=/docs/components-layout-box--docs">Box</pds-link>
