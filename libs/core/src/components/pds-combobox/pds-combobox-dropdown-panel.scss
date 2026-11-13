@@ -444,11 +444,14 @@
   }
 
   // group-display="drill-in": only the options scroll, so the scrollbar starts below the header.
-  // The class twice, to outrank the grouped list's padding.
+  // The class twice, to outrank the grouped list's padding. Width drops to the padding-less
+  // width too: the grouped listbox's own width adds the padding this rule just zeroed out.
   .pds-combobox__listbox--grouped.pds-combobox__listbox--grouped:has(> .pds-combobox__group-back) {
     display: flex;
     flex-direction: column;
+    min-width: 220px;
     padding: 0;
+    width: 236px;
   }
 
   .pds-combobox__group-back {

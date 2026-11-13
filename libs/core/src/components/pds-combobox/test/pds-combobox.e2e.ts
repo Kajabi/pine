@@ -3026,6 +3026,30 @@ describe('pds-combobox dropdown width', () => {
     expect(Math.round(await listboxWidth('group-display="drill-in"', GROUPS))).toBe(244);
   });
 
+  // Drilling into a group zeroes the listbox's own padding (the back header carries its own),
+  // so the panel should narrow to the padding-less width, matching panel-search.
+  it('narrows to the padding-less width once drilled into a group', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<pds-combobox component-id="width" label="Animal" group-display="drill-in">${GROUPS}</pds-combobox>`);
+    await page.waitForChanges();
+
+    await (await page.find('pds-combobox >>> input')).click();
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+    await page.waitForChanges();
+
+    const width = await page.evaluate(() => {
+      const roots = [
+        document.querySelector('pds-combobox')!.shadowRoot,
+        document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot,
+      ];
+      const listbox = roots.map((root) => root?.querySelector('.pds-combobox__listbox')).find(Boolean)!;
+      return listbox.getBoundingClientRect().width;
+    });
+
+    expect(Math.round(width)).toBe(236);
+  });
+
   it('renders a panel with a search, which has no padding of its own, at its earlier default width', async () => {
     const width = await listboxWidth(
       'trigger="button" mode="select-only" panel-search',
