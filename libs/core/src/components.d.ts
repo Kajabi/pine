@@ -2155,7 +2155,7 @@ export namespace Components {
          */
         "searchPlaceholder": string;
         /**
-          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated. A single selection shows the item's name instead, so this applies only to other counts that a locale's plural rules treat as singular.
+          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated. A single selection shows the item's name instead, so this applies to other counts that a locale's plural rules treat as singular, and to a single selection whose item has no text.
           * @defaultValue '{count} item'
          */
         "selectedCountLabelOne": string;
@@ -2165,7 +2165,7 @@ export namespace Components {
          */
         "selectedCountLabelOther": string;
         /**
-          * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated.
+          * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated. A single selection shows the item's name instead of any form, unless the item has no text.
           * @defaultValue undefined
          */
         "selectedCountLabels"?: PluralForms | string;
@@ -6221,7 +6221,7 @@ declare namespace LocalJSX {
          */
         "searchPlaceholder"?: string;
         /**
-          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated. A single selection shows the item's name instead, so this applies only to other counts that a locale's plural rules treat as singular.
+          * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated. A single selection shows the item's name instead, so this applies to other counts that a locale's plural rules treat as singular, and to a single selection whose item has no text.
           * @defaultValue '{count} item'
          */
         "selectedCountLabelOne"?: string;
@@ -6231,7 +6231,7 @@ declare namespace LocalJSX {
          */
         "selectedCountLabelOther"?: string;
         /**
-          * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated.
+          * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated. A single selection shows the item's name instead of any form, unless the item has no text.
           * @defaultValue undefined
          */
         "selectedCountLabels"?: PluralForms | string;
