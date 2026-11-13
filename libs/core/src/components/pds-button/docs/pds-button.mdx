@@ -20,52 +20,22 @@ A button is an interactive element that can be clicked to perform various action
 - Communicating an action that will occur (e.g. saving a page).
 - Triggering or enabling an action, such as submitting requested information (e.g. forms).
 - Progressing or regressing a user through a step in a flow (e.g. modals).
+- A call-to-action that navigates and needs button styling, such as "Create a product". Set `href`, and `pds-button` renders a link (see [Button Link](#button-link)).
 
 ### When not to use
 - When space is limited consider an IconButton.
+- Navigating without `href`. A button without `href` performs an action on the current page or submits a form.
+- A link in running text. Use `pds-link`.
 
 ### Accessibility
 
-While accessible out of the box, there are some best practices to keep in mind when using the component:
-
-- Use helpful text to describe the button's action even if this text is expected to be visually hidden (e.g. "submit form" or "delete account"). Visually hidden text will still be read by screen readers.
-- Buttons should not disable tabbing or keyboard navigation.
-- A disabled button can't take focus, so people moving through the page with the keyboard skip it. Screen readers still list it when reading the page, as unavailable.
-- Name an icon-only button with `aria-label` on `pds-button` (see [Icon Only](#icon-only)). The component passes it to the focusable `<button>` inside it (or `<a>` when `href` is set). Text in the default slot works too, since `icon-only` hides it visually but not from screen readers.
+- Write text that says what the button does, such as "Delete account". On an `icon-only` button the text is visually hidden, but screen readers still read it as the button's name.
+- To name an icon-only button without slot text, set `aria-label` on `pds-button` (see [Icon Only](#icon-only)).
 - An `aria-label` replaces the slot text as the button's name, so start it with the visible text (e.g. "Edit profile" on a button that shows "Edit"). People using voice control say the words they see.
-- Use `aria-pressed` for a button that toggles on and off, and `aria-current` for a link to the current page or step. Both pass to the inner element, except that a link never gets `aria-pressed`, which ARIA allows only on buttons. `aria-expanded`, `aria-haspopup` and `aria-controls` pass through too, so the button can open a popover or menu.
-- `aria-describedby` adds context from text elsewhere on the page, such as what a button will do or why it isn't available yet. It keeps the visible text as the name, so prefer it for adding to a text button.
-- `aria-labelledby` names the button from text elsewhere on the page, and replaces both the slot text and any `aria-label`. A visible label must still start the name (WCAG 2.5.3), so it rarely suits a text button. For an icon-only button, use `aria-label`. axe-core reports two violations on one named by `aria-labelledby`: `aria-prohibited-attr`, because the attribute stays on `pds-button`, which has no role, and ARIA doesn't allow naming an element without one; and `button-name`, because axe-core reads ID references only as attributes and misses the name browsers and screen readers get.
-- A disabled button's description reaches people reading the page, but not people tabbing, since they never land on it. Show the reason as visible text next to the button too.
-- These ID references, like `aria-controls`, pass to the inner element as the elements they point at, since an ID can't reach inside the shadow DOM:
-  - The element must be in the same document as `pds-button`, or in a shadow root that contains it. If an ID repeats, the closest root wins.
-  - The element must exist when the button renders, when it takes focus, or when the attribute is set. One added or replaced later is picked up the next time the button is focused.
-  - A disabled button can't take focus, so that fallback never runs for one. An element replaced while the button stays disabled isn't picked up until the button renders again, such as when it's enabled or the attribute is set again. To change a disabled button's description, update the referenced element's text rather than replacing the element.
-  - This needs ARIA element reflection: Chrome and Edge 135+, Firefox 136+, Safari 16.4+. Older browsers ignore these three attributes. jsdom, and so React Testing Library, doesn't implement it either, so unit tests there won't see the description or name.
-  - What doesn't work: an ID inside another component's shadow DOM, such as `<pds-button aria-describedby="help">` pointing at a `#help` rendered inside a `pds-modal`'s own markup rather than in your page.
-
-### Buttons vs Links
-
-In many current web design patterns, buttons and links have evolved to look visually identical. However, for best practices, the fundamental differences between the two should be considered before using. Links are used to navigate the user to another page. Buttons are used to perform an action on the current page or submit a form.
-
-### Icon Slots
-
-The `start` and `end` slots allow icons to be placed before and after the button text but will be hidden when `loading` is true. For more information on web component slots, see the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots#adding_flexibility_with_slots).
-
-```html
-<pds-button>
-  <pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>
-  Start Icon
-</pds-button>
-```
-
-```html
-<pds-button>
-  End Icon
-  <pds-icon slot="end" aria-hidden="true" name="trash"></pds-icon>
-</pds-button>
-```
-
+- Use `aria-pressed` for a button that toggles on and off, and `aria-current` for a link to the current page or step. A link never gets `aria-pressed`, which ARIA allows only on buttons.
+- Use `aria-describedby` to add a hint from text elsewhere on the page, such as what the button will do or why it isn't available yet. The visible text stays the name.
+- Prefer `aria-label` over `aria-labelledby`. Browsers name the button from `aria-labelledby`, but axe-core reports two violations for it on `pds-button` (see [Technical notes](#technical-notes)).
+- A disabled button can't take focus, so people moving through the page with the keyboard skip it, and its `aria-describedby` hint never reaches them. Screen readers still list it when reading the page, as unavailable. Show the reason it's disabled as visible text next to the button.
 
 ## Properties
 
@@ -187,21 +157,33 @@ Destructive button variant, intended to be used with destructive actions, such a
 
 Disclosure button variant, intended to be used as a trigger to show or hide content elsewhere on the page.
 
+As the `trigger` slot of a `pds-dropdown-menu` or `pds-popover`, the button's `aria-expanded` is set for you. On a standalone disclosure, set `aria-expanded` and `aria-controls` on `pds-button` yourself, and update `aria-expanded` when the content opens or closes. Clicking the button doesn't change it, so the copied markup below needs your own toggle.
+
 > **Note:** Icon cannot be customized.
 
 <DocCanvas
   mdxSource={{
     react: `
-    <PdsButton variant="disclosure">Disclosure</PdsButton>
-    <PdsButton variant="disclosure" disabled>Disabled</PdsButton>
-    `,
+function DisclosureExample() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <PdsButton variant="disclosure" aria-expanded={open ? 'true' : 'false'} aria-controls="disclosure-details" onClick={() => setOpen(!open)}>Disclosure</PdsButton>
+      <PdsButton variant="disclosure" disabled>Disabled</PdsButton>
+      <div id="disclosure-details" hidden={!open}>Content the disclosure button shows and hides.</div>
+    </>
+  );
+}`,
     webComponent: `
-    <pds-button variant="disclosure">Disclosure</pds-button>
+    <pds-button variant="disclosure" aria-expanded="false" aria-controls="disclosure-details">Disclosure</pds-button>
     <pds-button variant="disclosure" disabled>Disabled</pds-button>
+    <div id="disclosure-details" hidden>Content the disclosure button shows and hides.</div>
     `
 }}>
-  <pds-button variant="disclosure">Disclosure</pds-button>
+  <pds-button variant="disclosure" aria-expanded="false" aria-controls="disclosure-details">Disclosure</pds-button>
   <pds-button variant="disclosure" disabled>Disabled</pds-button>
+  <div id="disclosure-details" hidden>Content the disclosure button shows and hides.</div>
 </DocCanvas>
 
 ### Filter
@@ -318,13 +300,32 @@ The loader color can be customized using CSS parts.
   <pds-button class="custom-loader-danger" variant="secondary" loading>Danger Loader</pds-button>
 </DocCanvas>
 
+### Icons
+
+Use the `start` and `end` slots to place an icon before or after the text, and mark a decorative icon `aria-hidden="true"`. Both slots are hidden while `loading` is set. `icon-only` and `disclosure` buttons don't render the `end` slot, and `filter` buttons don't render the `start` slot. For more on slots, see the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots#adding_flexibility_with_slots).
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    import { arrowRight, trash } from '@pine-ds/icons/icons';
+
+    <PdsButton variant="secondary"><PdsIcon slot="start" icon={trash} aria-hidden="true" />Delete</PdsButton>
+    <PdsButton variant="secondary">Next<PdsIcon slot="end" icon={arrowRight} aria-hidden="true" /></PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="secondary"><pds-icon slot="start" name="trash" aria-hidden="true"></pds-icon>Delete</pds-button>
+    <pds-button variant="secondary">Next<pds-icon slot="end" name="arrow-right" aria-hidden="true"></pds-icon></pds-button>
+    `
+}}>
+  <pds-button variant="secondary"><pds-icon slot="start" name="trash" aria-hidden="true"></pds-icon>Delete</pds-button>
+  <pds-button variant="secondary">Next<pds-icon slot="end" name="arrow-right" aria-hidden="true"></pds-icon></pds-button>
+</DocCanvas>
+
 ### Icon Only
 
-The icon-only prop allows a `pds-button` to display an icon only.
+The `icon-only` prop shows only the icon. The slot text is visually hidden, but it still names the button for screen readers.
 
-While the text is visually hidden, it is still remains accessible.
-
-> ***Note:*** An icon is required to be provided.
+Put the icon in the `start` slot: an `icon-only` button doesn't render the `end` slot.
 
 <DocCanvas
   mdxSource={{
@@ -398,23 +399,23 @@ Buttons come in three sizes: default, small, and micro. The size prop allows you
 
 #### Icon Only Sizes
 
-Sizes also apply to icon-only buttons, adjusting the button dimensions accordingly.
+Sizes also apply to icon-only buttons, adjusting the button dimensions accordingly. The icon keeps its own size, which is 16px by default at every button size. The micro example sets the icon's `size` to `var(--pine-dimension-150)` (12px) to match the smaller button.
 
 <DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="primary" iconOnly><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Default</PdsButton>
-    <PdsButton variant="primary" iconOnly size="small"><PdsIcon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-sm)"></PdsIcon>Small</PdsButton>
+    <PdsButton variant="primary" iconOnly size="small"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Small</PdsButton>
     <PdsButton variant="primary" iconOnly size="micro"><PdsIcon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></PdsIcon>Micro</PdsButton>
     `,
     webComponent: `
     <pds-button variant="primary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Default</pds-button>
-    <pds-button variant="primary" icon-only size="small"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-sm)"></pds-icon>Small</pds-button>
+    <pds-button variant="primary" icon-only size="small"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Small</pds-button>
     <pds-button variant="primary" icon-only size="micro"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
     `
 }}>
   <pds-button variant="primary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Default</pds-button>
-  <pds-button variant="primary" icon-only size="small"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-sm)"></pds-icon>Small</pds-button>
+  <pds-button variant="primary" icon-only size="small"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Small</pds-button>
   <pds-button variant="primary" icon-only size="micro"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
 </DocCanvas>
 
@@ -425,12 +426,7 @@ example a chat composer's **send** affordance: a compact fixed square with an in
 surface — target the exposed `button` shadow part rather than reaching into internals.
 `::part(button)` is public API, so this is a supported customization.
 
-The example pairs the override with `variant="unstyled"`. That's a recommendation, not a
-requirement: `unstyled` is a state-neutral base (transparent background across default/
-hover/disabled, no padding, border, or min-width), so the `::part(button)` rules fully own
-the appearance instead of layering over — and fighting the hover/focus surface of — another
-variant. Any variant works, but a non-`unstyled` one will still apply its own interaction-
-state colors underneath.
+Pair the `::part(button)` override with `variant="unstyled"`, which has no border. Other variants keep their 1px border under your styles, and most change its color on hover or focus.
 
 > ***Note:*** Reach for this only when the built-in `variant` and `size` props can't
 > get you there. Keep the accessible label (the visually-hidden slot text) so the
@@ -439,6 +435,8 @@ state colors underneath.
 <DocCanvas
   mdxSource={{
     react: `
+    import { arrowUp } from '@pine-ds/icons/icons';
+
     <style>{
       '.compact-inverse-icon-button::part(button) {' +
       '  width: var(--pine-dimension-400);' +
@@ -451,7 +449,7 @@ state colors underneath.
       '}'
     }</style>
 
-    <PdsButton className="compact-inverse-icon-button" variant="unstyled" iconOnly icon="arrow-up">Send message</PdsButton>
+    <PdsButton className="compact-inverse-icon-button" variant="unstyled" iconOnly><PdsIcon slot="start" icon={arrowUp} aria-hidden="true" />Send message</PdsButton>
     `,
     webComponent: `
     <style>
@@ -466,7 +464,7 @@ state colors underneath.
       }
     </style>
 
-    <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only icon="arrow-up">Send message</pds-button>
+    <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only><pds-icon slot="start" name="arrow-up" aria-hidden="true"></pds-icon>Send message</pds-button>
     `
 }}>
   <style>{`
@@ -481,7 +479,7 @@ state colors underneath.
     }
   `}</style>
 
-  <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only icon="arrow-up">Send message</pds-button>
+  <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only><pds-icon slot="start" name="arrow-up" aria-hidden="true"></pds-icon>Send message</pds-button>
 </DocCanvas>
 
 ### Button Link
@@ -511,17 +509,65 @@ The type prop allows a `pds-button` to set a [button type attribute](https://dev
 
 > ***Note:*** The `type` prop does not apply to buttons with an `href` attribute. When an `href` is provided, the button will render as an anchor (`<a>`) element, and the types will be ignored.
 
-#### Default (Button)
+- `button` (default): does nothing on its own, even inside a form. Listen for `pdsClick` to run your action.
+- `submit`: submits the form the button is in.
+- `reset`: resets the form the button is in. [As noted on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type), this behavior tends to annoy users.
 
-The button has no default click behavior. It can have client-side scripts listen to the element's events, which are triggered when the events occur.
+In a form, pressing Enter in an `<input>`, `pds-input`, `pds-select`, `pds-checkbox`, `pds-radio` or `pds-switch` clicks the form's first enabled submit button when that button is a `pds-button`.
 
-#### Submit
+The `name` and `value` props aren't included in the submitted form data. The form is submitted through a hidden button that carries only the `type`, so the server can't tell which `pds-button` submitted it.
 
-The button submits the form data to the server.
+See the [Forms guide](/docs/guides-forms--docs) for building forms with Pine components.
 
-#### Reset
+<DocCanvas
+  mdxSource={{
+    react: `
+    <form onSubmit={handleSubmit}>
+      <PdsBox direction="column" gap="md">
+        <PdsInput componentId="button-type-email" label="Email" name="email" type="email" />
+        <PdsBox gap="sm">
+          <PdsButton type="submit">Subscribe</PdsButton>
+          <PdsButton type="reset" variant="secondary">Clear</PdsButton>
+        </PdsBox>
+      </PdsBox>
+    </form>
+    `,
+    webComponent: `
+    <form>
+      <pds-box direction="column" gap="md">
+        <pds-input component-id="button-type-email" label="Email" name="email" type="email"></pds-input>
+        <pds-box gap="sm">
+          <pds-button type="submit">Subscribe</pds-button>
+          <pds-button type="reset" variant="secondary">Clear</pds-button>
+        </pds-box>
+      </pds-box>
+    </form>
+    `
+}}>
+  <form onSubmit={(event) => event.preventDefault()}>
+    <pds-box direction="column" gap="md">
+      <pds-input component-id="button-type-email" label="Email" name="email" type="email"></pds-input>
+      <pds-box gap="sm">
+        <pds-button type="submit">Subscribe</pds-button>
+        <pds-button type="reset" variant="secondary">Clear</pds-button>
+      </pds-box>
+    </pds-box>
+  </form>
+</DocCanvas>
 
-The button resets all the controls to their initial values. [As noted on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type), this behavior tends to annoy users.
+## Technical notes
+
+`pds-button` copies `aria-current`, `aria-expanded`, `aria-haspopup`, `aria-label` and `aria-pressed` from the `pds-button` element to the `<button>` inside it (or `<a>` when `href` is set), and updates them when they change.
+
+The three ID-reference attributes, `aria-controls`, `aria-describedby` and `aria-labelledby`, can't be copied, since an ID can't reach inside the shadow DOM. They pass to the inner element as the elements they point at instead:
+
+- The element must be in the same document as `pds-button`, or in a shadow root that contains it. If an ID repeats, the closest root wins.
+- The element must exist when the button renders, when it takes focus, or when the attribute is set. One added or replaced later is picked up the next time the button is focused.
+- A disabled button can't take focus, so that fallback never runs for one. An element replaced while the button stays disabled isn't picked up until the button renders again, such as when it's enabled or the attribute is set again. To change a disabled button's description, update the referenced element's text rather than replacing the element.
+- This needs ARIA element reflection: Chrome and Edge 135+, Firefox 136+, Safari 16.4+. Older browsers ignore these three attributes. jsdom, and so React Testing Library, doesn't implement it either, so unit tests there won't see the description or name.
+- What doesn't work: an ID inside another component's shadow DOM, such as `<pds-button aria-describedby="help">` pointing at a `#help` rendered inside a `pds-modal`'s own markup rather than in your page.
+
+`aria-labelledby` replaces both the slot text and any `aria-label` as the button's name. axe-core reports two violations on a button named this way: `aria-prohibited-attr`, because the attribute stays on `pds-button`, which has no role, and ARIA doesn't allow naming an element without one; and `button-name`, because axe-core reads ID references only as attributes and misses the name browsers and screen readers get.
 
 ## Additional Resources
 

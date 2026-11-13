@@ -29,7 +29,9 @@ Progress bars visualize how far a task has advanced toward completion. They help
 
 ### Accessibility
 
-- Make sure to provide a clear and descriptive label for the progress indicator, like "Uploading file" or "Creating account".
+- Set `label` to describe the task, such as "Uploading report.pdf" or "Creating account". The label is visually hidden, and it names the progress bar for screen readers.
+- Set `component-id`. It links the label to the progress bar; without it, the progress bar has no accessible name.
+- `pds-progress` sets no `aria-live`. To tell screen reader users that the task has finished, announce it yourself, such as in a `role="status"` region.
 
 ## Properties
 
@@ -41,10 +43,10 @@ Progress bars visualize how far a task has advanced toward completion. They help
 Set `percent` (0–100) to fill the bar. The bar is empty at the default of 0.
 
 <DocCanvas mdxSource={{
-  react: `<PdsProgress componentId="default" label="Default" percent={15}></PdsProgress>`,
-  webComponent: `<pds-progress component-id="default" label="Default" percent="15"></pds-progress>`
+  react: `<PdsProgress componentId="default" label="Uploading report.pdf" percent={15}></PdsProgress>`,
+  webComponent: `<pds-progress component-id="default" label="Uploading report.pdf" percent="15"></pds-progress>`
 }}>
-  <pds-progress component-id="default" label="Default" percent="15"></pds-progress>
+  <pds-progress component-id="default" label="Uploading report.pdf" percent="15"></pds-progress>
 </DocCanvas>
 
 ### Percent
@@ -52,10 +54,10 @@ Set `percent` (0–100) to fill the bar. The bar is empty at the default of 0.
 The percent of how much the `pds-progress` is filled. Should be a number ranging from 0 to 100.
 
 <DocCanvas mdxSource={{
-  react: `<PdsProgress componentId="percent" label="percent" percent={25}></PdsProgress>`,
-  webComponent: `<pds-progress component-id="percent" label="percent" percent="25"></pds-progress>`
+  react: `<PdsProgress componentId="percent" label="Importing contacts" percent={25}></PdsProgress>`,
+  webComponent: `<pds-progress component-id="percent" label="Importing contacts" percent="25"></pds-progress>`
 }}>
-  <pds-progress component-id="percent" label="percent" percent="25"></pds-progress>
+  <pds-progress component-id="percent" label="Importing contacts" percent="25"></pds-progress>
 </DocCanvas>
 
 ### Show Percent
@@ -63,10 +65,10 @@ The percent of how much the `pds-progress` is filled. Should be a number ranging
 Displays the `percent` value as text beside the progress.
 
 <DocCanvas mdxSource={{
-  react: `<PdsProgress componentId="show-percent" label="Show percent" percent={50} showPercent></PdsProgress>`,
-  webComponent: `<pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>`
+  react: `<PdsProgress componentId="show-percent" label="Course progress" percent={50} showPercent></PdsProgress>`,
+  webComponent: `<pds-progress component-id="show-percent" label="Course progress" percent="50" show-percent></pds-progress>`
 }}>
-  <pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>
+  <pds-progress component-id="show-percent" label="Course progress" percent="50" show-percent></pds-progress>
 </DocCanvas>
 
 ### Animated
@@ -74,10 +76,10 @@ Displays the `percent` value as text beside the progress.
 When `animated`, progress will animate from 0 to the `percent` value.
 
 <DocCanvas mdxSource={{
-  react: `<PdsProgress componentId="animated" label="Animated " percent={75} animated></PdsProgress>`,
-  webComponent: `<pds-progress component-id="animated" label="Animated " percent="75" animated></pds-progress>`
+  react: `<PdsProgress componentId="animated" label="Saving changes" percent={75} animated></PdsProgress>`,
+  webComponent: `<pds-progress component-id="animated" label="Saving changes" percent="75" animated></pds-progress>`
 }}>
-  <pds-progress component-id="animated" label="Animated " percent="75" animated></pds-progress>
+  <pds-progress component-id="animated" label="Saving changes" percent="75" animated></pds-progress>
 </DocCanvas>
 
 ### Fill Color
@@ -85,10 +87,10 @@ When `animated`, progress will animate from 0 to the `percent` value.
 Allows for `pds-progress` to be filled with a custom color. Accepts any valid color token or CSS color value. Prefer a semantic token, such as `--pine-color-success`, over a hex value.
 
 <DocCanvas mdxSource={{
-  react: `<PdsProgress componentId="fillcolor" label="Fill color" percent={95} fillColor="--pine-color-success"></PdsProgress>`,
-  webComponent: `<pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="--pine-color-success"></pds-progress>
+  react: `<PdsProgress componentId="fillcolor" label="Storage used" percent={95} fillColor="--pine-color-success"></PdsProgress>`,
+  webComponent: `<pds-progress component-id="fillcolor" label="Storage used" percent="95" fill-color="--pine-color-success"></pds-progress>
 `}}>
-  <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="--pine-color-success"></pds-progress>
+  <pds-progress component-id="fillcolor" label="Storage used" percent="95" fill-color="--pine-color-success"></pds-progress>
 </DocCanvas>
 
 ### Fill Color with Gradient
@@ -96,26 +98,26 @@ Allows for `pds-progress` to be filled with a custom color. Accepts any valid co
 You can also use CSS gradients for more visual interest.
 
 <DocCanvas mdxSource={{
-  react: `<PdsProgress componentId="fillcolor-gradient" label="Gradient fill color" percent={75} fillColor="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></PdsProgress>`,
-  webComponent: `<pds-progress component-id="fillcolor-gradient" label="Gradient fill color" percent="75" fill-color="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></pds-progress>
+  react: `<PdsProgress componentId="fillcolor-gradient" label="Profile completion" percent={75} fillColor="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></PdsProgress>`,
+  webComponent: `<pds-progress component-id="fillcolor-gradient" label="Profile completion" percent="75" fill-color="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></pds-progress>
 `}}>
-  <pds-progress component-id="fillcolor-gradient" label="Gradient fill color" percent="75" fill-color="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></pds-progress>
+  <pds-progress component-id="fillcolor-gradient" label="Profile completion" percent="75" fill-color="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></pds-progress>
 </DocCanvas>
 
 ### Tooltip
 
-A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default).
+A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default). The tooltip shows on hover only: the progress bar can't take focus, so keyboard users never see it. When the value must be readable by everyone, use `show-percent` instead.
 
 <DocCanvas mdxSource={{
   react: `<PdsTooltip content="50%" hasArrow={false} placement="top" style={{ width: '100%' }}>
-    <PdsProgress componentId="tooltip-demo" label="Progress w/ tooltip" percent={50}></PdsProgress>
+    <PdsProgress componentId="tooltip-demo" label="Uploading video" percent={50}></PdsProgress>
   </PdsTooltip>`,
-  webComponent: `<pds-tooltip content="50%" has-arrow="false" placement="top" style={{ width: '100%' }}>
-    <pds-progress component-id="tooltip-demo" label="Progress w/ tooltip" percent="50"></pds-progress>
+  webComponent: `<pds-tooltip content="50%" has-arrow="false" placement="top" style="width: 100%">
+    <pds-progress component-id="tooltip-demo" label="Uploading video" percent="50"></pds-progress>
   </pds-tooltip>
 `}}>
   <pds-tooltip content="50%" has-arrow="false" placement="top" style={{ width: '100%' }}>
-    <pds-progress component-id="tooltip-demo" label="Progress w/ tooltip" percent="50"></pds-progress>
+    <pds-progress component-id="tooltip-demo" label="Uploading video" percent="50"></pds-progress>
   </pds-tooltip>
 </DocCanvas>
 

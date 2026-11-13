@@ -34,12 +34,12 @@ export class PdsRadioGroup {
   @Prop() direction: 'row' | 'column' = 'column';
 
   /**
-   * Displays error message text describing an invalid state for the entire group.
+   * Displays an error message below the radio group. It's part of the group's accessible description, with or without `invalid`.
    */
   @Prop() errorMessage: string;
 
   /**
-   * Displays helper message text below the radio group.
+   * Displays a message or hint below the radio group.
    */
   @Prop() helperMessage: string;
 
@@ -62,7 +62,7 @@ export class PdsRadioGroup {
   @Prop() invalid = false;
 
   /**
-   * String used for group label/heading.
+   * Text to be displayed as the radio group label. It also names the group, unless you set `aria-label` or `aria-labelledby` on it.
    */
   @Prop() groupLabel: string;
 
@@ -79,7 +79,8 @@ export class PdsRadioGroup {
   @Prop() required = false;
 
   /**
-   * Emits when a radio in the group is selected, providing the selected value and component ID.
+   * Emitted when the user checks a radio in the group, by a click or an arrow key. `detail` has that radio's `value`
+   * and `componentId`, and `checked`, which is always `true`.
    */
   @Event() pdsRadioGroupChange: EventEmitter<RadioGroupChangeEventDetail>;
 

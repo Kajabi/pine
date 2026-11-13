@@ -117,10 +117,10 @@ Don't remove or rename a public API in place. Instead:
    to the replacement:
    ```ts
    /**
-    * Determines whether the chip should be displayed in a larger size.
-    * @deprecated Use `size` prop instead. Set `size="lg"` for the large variant.
+    * Displays a leading icon in the button.
+    * @deprecated Use `start` slot instead.
     */
-   @Prop() large = false;
+   @Prop() icon?: string = null;
    ```
 2. **Keep it functional** — a deprecated prop must still work for the whole
    deprecation window so consumers can upgrade without breaking.
@@ -134,9 +134,7 @@ Live examples of this pattern in the codebase:
 
 | Component | Deprecated | Replacement |
 | --- | --- | --- |
-| `pds-chip` | `large` prop | `size="lg"` |
 | `pds-button` | `icon` prop | `start` slot |
-| `pds-link` | `external` prop | `target` prop |
 
 ## Migration notes
 
@@ -165,6 +163,18 @@ before/after snippet:
 
 ## Consumer guidance
 
-- Pin real ranges (`^3.x`), not `*`, so a release lands on your schedule.
+- **npm:** depend on a caret range of the current major, such as `"@pine-ds/react": "^4.0.0"`, not `*` or
+  `latest`. Minor and patch releases then arrive when you update your lockfile, and a new major only
+  when you change the range.
+- **CDN:** put an exact version in every jsDelivr URL, such as `@pine-ds/core@4.11.0`. Never use
+  `@latest` or a bare major such as `@4`: jsDelivr serves each new release at those URLs, so your
+  page changes without a deploy.
+- **React with the CDN stylesheet:** `@pine-ds/react` registers the components from npm, while
+  `pine-core.css` comes from the CDN. Pin the stylesheet URL to the `@pine-ds/core` version in your
+  lockfile, so the styles and the components come from the same release.
+- **Tokens:** `pine-core.css` already includes Pine's design tokens (the `--pine-*` custom
+  properties), so you don't need a separate `@kajabi-ui/styles` stylesheet. If you load one anyway,
+  it declares the same custom properties on the same selectors, so whichever stylesheet loads last
+  sets the token values.
 - Read the changelog before a minor/major bump; watch for **[DEPRECATED]** markers
   in component docs and migrate ahead of the eventual major.

@@ -4,14 +4,13 @@ import { Meta, Story } from '@storybook/addon-docs/blocks';
 
 # Assets
 
-The icon component require static assets during runtime.
+`pds-icon` loads its SVG files at runtime when you set its `name`.
 
 By default, Pine and `pds-icon` components will fetch these assets via <pds-link href="https://www.jsdelivr.com/" external>jsDelivr</pds-link>. JsDelivr is a free CDN for open source projects. However, as we cannot guarantee the availability and performance of this CDN, we recommend bundling the assets with your application.
 
-Copy the assets from the Pine Design System package to your application. We recommend including copying these assets in your build process, which ensures that the assets are always up to date.
+Copy the assets from the Pine Design System package to your application. We recommend copying them as part of your build, so they stay in step with the `@pine-ds/icons` version in your lockfile.
 
-
-  You should add the copied assets (e.g. <code>public/assets/pine-ds/svg/*</code>) to your <code>.gitignore</code> file.
+> **Note:** Add the copied assets (e.g. `public/assets/pine-ds/svg/*`) to your `.gitignore` file.
 
 For the following example, we assume you are using <pds-link href="https://vitejs.dev/" external>Vite</pds-link>. By default, Vite uses the `public` folder for static assets. To include the Pine Design System assets in your output bundle, you can copy them to this folder.
 
@@ -33,7 +32,7 @@ export default defineConfig({
     copy({
       targets: [
         {
-          src: 'node_modules/@pine-ds/core/dist/pine-core/svg/*',
+          src: 'node_modules/@pine-ds/icons/dist/svg/*',
           dest: 'public/assets/pine-ds/svg',
         },
       ],
@@ -45,7 +44,7 @@ export default defineConfig({
 })
 ```
 
-You need to "tell" Pine Design System where to find the assets. The components will look for the `__PINE_ASSET_PATH__` variable in the `window` object. The path should point to the `pine-ds/svg` folder.
+You need to "tell" Pine Design System where to find the assets. The components will look for the `__PINE_ASSET_PATH__` variable in the `window` object. The path should point to the folder that contains `svg/` (here `/assets/pine-ds/`), because Pine adds `svg/<name>.svg` to it.
 
 You have 2 options:
 
@@ -66,4 +65,4 @@ if (typeof window !== 'undefined') {
 }
 ```
 
-Once the asset path is set and the assets are available on runtime, all components can automatically load their assets.
+Once the asset path is set and the assets are available at runtime, all components load their assets from it. Without either option, Pine loads icons from the latest `@pine-ds/icons` release on jsDelivr and logs a console warning that starts "Fetching Pine assets from jsDelivr CDN".

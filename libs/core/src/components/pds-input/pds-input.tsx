@@ -70,9 +70,11 @@ export class PdsInput {
   @Event() pdsBlur!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when the value has changed.
+   * Emitted when the user changes the value and then presses `Enter` or leaves the field.
+   * `detail` has `value`, as a string, and `event`, the native event behind it, usually `change`.
    *
-   * This event will not emit when programmatically setting the `value` property.
+   * This event will not emit when programmatically setting the `value` property, unless the field has focus at the time;
+   * then it emits when the field loses focus.
    */
   @Event() pdsChange!: EventEmitter<InputChangeEventDetail>;
 
@@ -82,7 +84,10 @@ export class PdsInput {
   @Event() pdsFocus!: EventEmitter<FocusEvent>;
 
   /**
-   * Emitted when the value changes from user input (typing, paste, autofill).
+   * Emitted after each `input` event, such as typing or pasting. With `debounce`, it waits until that many milliseconds have passed since the last one.
+   * `detail` has `value`, the current value as a string, and `event`, the native `input` event.
+   *
+   * This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsInput: EventEmitter<InputInputEventDetail>;
 
@@ -124,7 +129,7 @@ export class PdsInput {
   @Prop() disabled?: boolean;
 
   /**
-   * Specifies the error message and provides an error-themed treatment to the field.
+   * Displays an error message below the input and gives the field error styling. It becomes the input's accessible description only while `invalid` is set.
    */
   @Prop() errorMessage?: string;
 
@@ -134,7 +139,7 @@ export class PdsInput {
   @Prop() helperMessage?: string;
 
   /**
-   * Determines whether or not the input field is invalid or throws an error.
+   * Determines whether or not the input is invalid.
    */
   @Prop() invalid?: boolean;
 
@@ -201,7 +206,7 @@ export class PdsInput {
 
   /**
    * Determines the type of control that will be displayed
-   * `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+   * `'email'`, `'number'`, `'password'`, `'search'`, `'tel'`, `'text'`, `'url'`
    * @defaultValue "text"
    */
   @Prop() type = 'text';
