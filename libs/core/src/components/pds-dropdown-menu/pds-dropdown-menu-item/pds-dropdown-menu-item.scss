@@ -36,10 +36,13 @@
     color: var(--pine-color-text-hover);
   }
 
-  // Keyboard focus only, so a mouse press doesn't draw the ring. A link item's ring is drawn on
-  // the anchor inside pds-link (below): Chrome never matches :focus-visible on the pds-link host,
-  // and skipping the host keeps a browser that does from drawing a second ring.
-  &:not(pds-link):focus-visible {
+  // Keyboard focus only, so a mouse press doesn't draw the ring. A link item's ring is usually
+  // drawn on the anchor inside pds-link (below) instead, since that's where focus actually sits
+  // -- but WebKit doesn't focus the <a> on a mouse click, leaving focus on the pds-link host, so
+  // a key that doesn't move it (Enter) can make the host itself :focus-visible there. This rule
+  // has to cover that case too: in WebKit, Chromium and Firefox alike, the host and its inner <a>
+  // are never both :focus-visible at once, so there's no second ring to guard against.
+  &:focus-visible {
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
@@ -77,7 +80,7 @@
       color: var(--pine-color-danger-hover);
     }
 
-    &:not(pds-link):focus-visible {
+    &:focus-visible {
       background-color: var(--pine-color-danger-disabled);
       outline: var(--pine-outline-focus-danger);
       outline-offset: var(--pine-border-width);
