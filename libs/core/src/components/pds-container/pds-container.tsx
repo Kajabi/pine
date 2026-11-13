@@ -12,8 +12,8 @@ const NAMED_SIZES = new Set(['sm', 'md', 'lg', 'xl', 'full']);
 })
 export class PdsContainer {
   /**
-   * Sets the maximum width of the container. Accepts a named size token
-   * (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`) or any valid CSS length value (e.g. `'640px'`, `'50rem'`).
+   * Sets the maximum width of the container. Accepts a named size token (`'sm'` 340px, `'md'` 520px,
+   * `'lg'` 700px, `'xl'` 1064px, `'full'` 1440px) or any valid CSS length value (e.g. `'640px'`, `'50rem'`).
    * When omitted, no max-width is applied.
    */
   @Prop() size?: string;

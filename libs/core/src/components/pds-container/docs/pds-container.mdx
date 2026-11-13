@@ -21,7 +21,25 @@ Container constrains its children to a semantic max-width, centering them within
 - Settings pages and content areas that need a consistent reading width
 - Page-level wrappers that cap the maximum site width
 
-### Named sizes
+### When not to use
+
+- To divide content into columns. Nest a `pds-row` inside the container and size its `pds-box` columns.
+- To add side gutters. Container adds no padding, so on screens narrower than its max-width its content runs edge to edge. Put a `pds-box` with `padding` inside it.
+- To stack, space or align content. Use `pds-box`.
+
+### Accessibility
+
+- `tag` sets the element rendered inside the container's shadow root. `tag="main"` renders a `main` landmark, and a page should have only one, so use it for the page's primary content.
+- `tag="section"` renders a `section` with no accessible name, so it isn't exposed as a region landmark. Start it with a heading so readers know what the content is.
+- `aria-label` on `pds-container` labels the host element, not the inner `main`, `section` or `article`, so it doesn't name the landmark.
+
+## Properties
+
+<DocArgsTable componentName="pds-container" docSource={components} />
+
+## Sizes
+
+`size` takes one of these named sizes:
 
 <pds-table compact>
   <pds-table-head>
@@ -58,15 +76,11 @@ Container constrains its children to a semantic max-width, centering them within
   </pds-table-body>
 </pds-table>
 
-### Arbitrary sizes
-
-Pass any valid CSS length string to `size` when the named tokens don't fit (e.g. `size="640px"` or `size="50rem"`). Named tokens are preferred for consistency.
-
-## Properties
-
-<DocArgsTable componentName="pds-container" docSource={components} />
+Or pass any valid CSS length string to `size` when the named tokens don't fit (e.g. `size="640px"` or `size="50rem"`). Named tokens are preferred for consistency.
 
 ## Examples
+
+The examples put a `pds-box` with a background inside each container to show its width. A `pds-box` is only as wide as its content unless it has `fit`, so each one sets `fit`.
 
 ### Default
 
@@ -75,11 +89,21 @@ Without a `size`, the container grows to fill its parent with no max-width const
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsContainer><div>Content</div></PdsContainer>`,
-    webComponent: `<pds-container><div>Content</div></pds-container>`
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsContainer>
+  <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="md">
+    <PdsText tag="p">No max-width applied.</PdsText>
+  </PdsBox>
+</PdsContainer>`,
+    webComponent: `<pds-container>
+  <pds-box fit background-color="var(--pine-color-background-inset)" padding="md">
+    <pds-text tag="p">No max-width applied.</pds-text>
+  </pds-box>
+</pds-container>`
   }}>
   <pds-container>
-    <pds-box background-color="secondary" padding="md">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="md">
       <pds-text tag="p">No max-width applied.</pds-text>
     </pds-box>
   </pds-container>
@@ -90,27 +114,69 @@ Without a `size`, the container grows to fill its parent with no max-width const
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `
-<PdsContainer size="sm"><div>sm — 340px</div></PdsContainer>
-<PdsContainer size="md"><div>md — 520px</div></PdsContainer>
-<PdsContainer size="lg"><div>lg — 700px</div></PdsContainer>
-<PdsContainer size="xl"><div>xl — 1064px</div></PdsContainer>
-<PdsContainer size="full"><div>full — 1440px</div></PdsContainer>
-    `,
-    webComponent: `
-<pds-container size="sm"><div>sm — 340px</div></pds-container>
-<pds-container size="md"><div>md — 520px</div></pds-container>
-<pds-container size="lg"><div>lg — 700px</div></pds-container>
-<pds-container size="xl"><div>xl — 1064px</div></pds-container>
-<pds-container size="full"><div>full — 1440px</div></pds-container>
-    `
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsBox direction="column" gap="sm" fit>
+  <PdsContainer size="sm">
+    <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="sm">
+      <PdsText tag="p" size="sm">sm — 340px</PdsText>
+    </PdsBox>
+  </PdsContainer>
+  <PdsContainer size="md">
+    <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="sm">
+      <PdsText tag="p" size="sm">md — 520px</PdsText>
+    </PdsBox>
+  </PdsContainer>
+  <PdsContainer size="lg">
+    <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="sm">
+      <PdsText tag="p" size="sm">lg — 700px</PdsText>
+    </PdsBox>
+  </PdsContainer>
+  <PdsContainer size="xl">
+    <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="sm">
+      <PdsText tag="p" size="sm">xl — 1064px</PdsText>
+    </PdsBox>
+  </PdsContainer>
+  <PdsContainer size="full">
+    <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="sm">
+      <PdsText tag="p" size="sm">full — 1440px</PdsText>
+    </PdsBox>
+  </PdsContainer>
+</PdsBox>`,
+    webComponent: `<pds-box direction="column" gap="sm" fit>
+  <pds-container size="sm">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="sm">
+      <pds-text tag="p" size="sm">sm — 340px</pds-text>
+    </pds-box>
+  </pds-container>
+  <pds-container size="md">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="sm">
+      <pds-text tag="p" size="sm">md — 520px</pds-text>
+    </pds-box>
+  </pds-container>
+  <pds-container size="lg">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="sm">
+      <pds-text tag="p" size="sm">lg — 700px</pds-text>
+    </pds-box>
+  </pds-container>
+  <pds-container size="xl">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="sm">
+      <pds-text tag="p" size="sm">xl — 1064px</pds-text>
+    </pds-box>
+  </pds-container>
+  <pds-container size="full">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="sm">
+      <pds-text tag="p" size="sm">full — 1440px</pds-text>
+    </pds-box>
+  </pds-container>
+</pds-box>`
   }}>
-  <pds-box display="flex" flex-direction="column" gap="sm">
-    <pds-container size="sm"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">sm — 340px</pds-text></pds-box></pds-container>
-    <pds-container size="md"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">md — 520px</pds-text></pds-box></pds-container>
-    <pds-container size="lg"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">lg — 700px</pds-text></pds-box></pds-container>
-    <pds-container size="xl"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">xl — 1064px</pds-text></pds-box></pds-container>
-    <pds-container size="full"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">full — 1440px</pds-text></pds-box></pds-container>
+  <pds-box direction="column" gap="sm" fit>
+    <pds-container size="sm"><pds-box fit background-color="var(--pine-color-background-inset)" padding="sm"><pds-text tag="p" size="sm">sm — 340px</pds-text></pds-box></pds-container>
+    <pds-container size="md"><pds-box fit background-color="var(--pine-color-background-inset)" padding="sm"><pds-text tag="p" size="sm">md — 520px</pds-text></pds-box></pds-container>
+    <pds-container size="lg"><pds-box fit background-color="var(--pine-color-background-inset)" padding="sm"><pds-text tag="p" size="sm">lg — 700px</pds-text></pds-box></pds-container>
+    <pds-container size="xl"><pds-box fit background-color="var(--pine-color-background-inset)" padding="sm"><pds-text tag="p" size="sm">xl — 1064px</pds-text></pds-box></pds-container>
+    <pds-container size="full"><pds-box fit background-color="var(--pine-color-background-inset)" padding="sm"><pds-text tag="p" size="sm">full — 1440px</pds-text></pds-box></pds-container>
   </pds-box>
 </DocCanvas>
 
@@ -119,11 +185,21 @@ Without a `size`, the container grows to fill its parent with no max-width const
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsContainer size="640px"><div>Custom 640px max-width</div></PdsContainer>`,
-    webComponent: `<pds-container size="640px"><div>Custom 640px max-width</div></pds-container>`
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsContainer size="640px">
+  <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="md">
+    <PdsText tag="p">Custom 640px max-width.</PdsText>
+  </PdsBox>
+</PdsContainer>`,
+    webComponent: `<pds-container size="640px">
+  <pds-box fit background-color="var(--pine-color-background-inset)" padding="md">
+    <pds-text tag="p">Custom 640px max-width.</pds-text>
+  </pds-box>
+</pds-container>`
   }}>
   <pds-container size="640px">
-    <pds-box background-color="secondary" padding="md">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="md">
       <pds-text tag="p">Custom 640px max-width.</pds-text>
     </pds-box>
   </pds-container>
@@ -136,11 +212,21 @@ Set `centered="false"` to align the container to the start of its parent instead
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsContainer size="md" centered={false}><div>Left-aligned</div></PdsContainer>`,
-    webComponent: `<pds-container size="md" centered="false"><div>Left-aligned</div></pds-container>`
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsContainer size="md" centered={false}>
+  <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="md">
+    <PdsText tag="p">Left-aligned — centered=false.</PdsText>
+  </PdsBox>
+</PdsContainer>`,
+    webComponent: `<pds-container size="md" centered="false">
+  <pds-box fit background-color="var(--pine-color-background-inset)" padding="md">
+    <pds-text tag="p">Left-aligned — centered=false.</pds-text>
+  </pds-box>
+</pds-container>`
   }}>
   <pds-container size="md" centered="false">
-    <pds-box background-color="secondary" padding="md">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="md">
       <pds-text tag="p">Left-aligned — centered=false.</pds-text>
     </pds-box>
   </pds-container>
@@ -153,11 +239,21 @@ Use `tag` to render the inner container as a semantic HTML element.
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsContainer size="lg" tag="main"><h1>Page title</h1></PdsContainer>`,
-    webComponent: `<pds-container size="lg" tag="main"><h1>Page title</h1></pds-container>`
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsContainer size="lg" tag="main">
+  <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="md">
+    <PdsText tag="h2">Page title inside tag="main"</PdsText>
+  </PdsBox>
+</PdsContainer>`,
+    webComponent: `<pds-container size="lg" tag="main">
+  <pds-box fit background-color="var(--pine-color-background-inset)" padding="md">
+    <pds-text tag="h2">Page title inside tag="main"</pds-text>
+  </pds-box>
+</pds-container>`
   }}>
   <pds-container size="lg" tag="main">
-    <pds-box background-color="secondary" padding="md">
+    <pds-box fit background-color="var(--pine-color-background-inset)" padding="md">
       <pds-text tag="h2">Page title inside tag="main"</pds-text>
     </pds-box>
   </pds-container>

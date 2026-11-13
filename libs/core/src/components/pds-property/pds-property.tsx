@@ -11,7 +11,7 @@ import { Component, Host, h, Prop } from '@stencil/core';
 })
 export class PdsProperty {
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
@@ -22,7 +22,7 @@ export class PdsProperty {
 
   render() {
     return (
-      <Host id={this.componentId}>
+      <Host>
         <pds-box align-items="center" gap="xs">
           <pds-icon icon={this.icon} size="var(--pine-dimension-sm)" aria-hidden="true"></pds-icon>
           <slot />

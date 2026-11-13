@@ -9,7 +9,7 @@
 
 | Property      | Attribute      | Description                                                                                                                            | Type      | Default     |
 | ------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
-| `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute.                                                                  | `string`  | `undefined` |
+| `componentId` | `component-id` | A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.   | `string`  | `undefined` |
 | `isOpen`      | `open`         | Determines whether the accordion is open. Set with the `open` attribute, which is added and removed as the accordion opens and closes. | `boolean` | `false`     |
 
 

@@ -192,14 +192,14 @@ Learn more about popover target actions in the [MDN Documentation](https://devel
 
 #### Manual with a close button
 
-Give a manual popover a close button in its content that calls `hide()`. The HTML snippet wires the button with a short script; the button's `id` and the popover's `component-id` are how the script finds them.
+Give a manual popover a close button in its content that calls `hide()`. The HTML snippet wires the button with a short script; the button's `id` and the popover's `id` are how the script finds them. `component-id` doesn't set the popover's `id`, so give it one.
 
 In React, listen with `onPdsClick` on a `PdsButton` in the content, not `onClick`. While the popover is open, its content moves to the end of the page, usually outside your app's root, where React's `onClick` doesn't reach it.
 
 <DocCanvas
   mdxSource={{
     react: `
-      <PdsPopover componentId="manual-close" placement="bottom-start" popoverTargetAction="toggle" popoverType="manual">
+      <PdsPopover id="manual-close" componentId="manual-close" placement="bottom-start" popoverTargetAction="toggle" popoverType="manual">
         <PdsButton slot="trigger">Manual Popover</PdsButton>
         <PdsBox direction="column" gap="sm">
           <PdsText tag="p">Close this popover with the button below or the trigger.</PdsText>
@@ -208,7 +208,7 @@ In React, listen with `onPdsClick` on a `PdsButton` in the content, not `onClick
       </PdsPopover>
     `,
     webComponent: `
-      <pds-popover component-id="manual-close" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
+      <pds-popover id="manual-close" component-id="manual-close" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
         <pds-button slot="trigger">Manual Popover</pds-button>
         <pds-box direction="column" gap="sm">
           <pds-text tag="p">Close this popover with the button below or the trigger.</pds-text>
@@ -223,7 +223,7 @@ In React, listen with `onPdsClick` on a `PdsButton` in the content, not `onClick
       </script>
     `
   }}>
-  <pds-popover component-id="manual-close" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
+  <pds-popover id="manual-close" component-id="manual-close" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
     <pds-button slot="trigger">Manual Popover</pds-button>
     <pds-box direction="column" gap="sm">
       <pds-text tag="p">Close this popover with the button below or the trigger.</pds-text>
