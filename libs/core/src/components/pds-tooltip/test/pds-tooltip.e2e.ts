@@ -257,3 +257,25 @@ describe('pds-tooltip inside an open pds-modal', () => {
     expect(await page.evaluate(() => document.activeElement?.id)).toBe('first');
   });
 });
+
+describe('pds-tooltip width', () => {
+  it('renders at its max-width, padding included', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tooltip content="Long content that wraps across the panel so it reaches its widest width, and keeps going past the edge of the panel to be sure.">
+        <span>Trigger</span>
+      </pds-tooltip>
+    `);
+
+    await (await page.find('pds-tooltip')).callMethod('showTooltip');
+    await page.waitForChanges();
+
+    const width = await page.evaluate(async () => {
+      for (let i = 0; i < 40 && !document.querySelector('.pds-tooltip--is-open .pds-tooltip__content'); i++) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+      return document.querySelector('.pds-tooltip--is-open .pds-tooltip__content')!.getBoundingClientRect().width;
+    });
+    expect(Math.round(width)).toBe(344);
+  });
+});
