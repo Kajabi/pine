@@ -32,7 +32,7 @@ Radio components allow users to select one option from a group of two or more ch
 - Group radios logically using a `name` attribute to indicate relationships.
 - Put related radios in a `pds-radio-group` with a `group-label`, which names the group.
 - Give each radio a `component-id` that's unique on the page. It becomes the input's `id`, which the label's `for` points at, so a repeated id labels the wrong radio.
-- Use proper error messaging and states (e.g., `invalid`) for validation feedback.
+- The helper message, or the error message while `invalid` is set, becomes the radio's accessible description.
 - Avoid disabling radios unless necessary; provide context for disabled options.
 
 ## Properties
@@ -178,7 +178,7 @@ Radio buttons can display custom images instead of the default radio input in a 
 - For grouped radios with a single error message, use `pds-radio-group` which automatically handles `name` propagation and displays a single error message for the entire group.
 - The radio's `checked` property keeps the value you set and doesn't change when someone picks a radio. To track the selection, listen for `pdsRadioChange` (`onPdsRadioChange` in React) and read `event.target.value`.
 - Resetting the form unchecks every radio in it, including one that started `checked`, so no option is selected afterwards.
-- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
+- For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Technical Notes
 
