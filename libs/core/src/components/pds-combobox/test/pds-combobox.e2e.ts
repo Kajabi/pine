@@ -721,6 +721,24 @@ describe('pds-combobox', () => {
       expect(await activeClass(page)).toContain('pds-combobox__button-trigger');
     });
 
+    // A flyout with room beside it searches from the panel too, so its results are listed under group labels.
+    it.each([
+      ['inline', 'uppercase', ''],
+      ['drill-in', 'none', 'group-display="drill-in"'],
+      ['flyout', 'none', 'group-display="flyout"'],
+    ])("heads %s search results' groups with text-transform: %s", async (_display, textTransform, attrs) => {
+      const page = await setUp(`panel-search ${attrs}`);
+      await page.keyboard.type('a');
+      await page.waitForChanges();
+
+      const transform = await page.evaluate(() => {
+        const label = document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__group-label');
+        return label === null ? null : getComputedStyle(label).textTransform;
+      });
+      expect(transform).not.toBeNull();
+      expect(transform).toBe(textTransform);
+    });
+
     it('drills into a group and back', async () => {
       const page = await setUp('group-display="drill-in"');
       const rows = () =>
