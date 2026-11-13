@@ -21,6 +21,19 @@
 | `"container"` | The inner semantic container element |
 
 
+## Dependencies
+
+### Used by
+
+ - [pds-app](../pds-app)
+
+### Graph
+```mermaid
+graph TD;
+  pds-app --> pds-container
+  style pds-container fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 
