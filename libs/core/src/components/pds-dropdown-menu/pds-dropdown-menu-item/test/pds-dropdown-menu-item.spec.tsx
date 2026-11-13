@@ -118,7 +118,7 @@ describe('pds-dropdown-menu-item', () => {
     expect(linkElement?.target).toBe('_blank');
   });
 
-  it('target prop takes precedence over external when both are set', async () => {
+  it('shows a decorative icon and stays in the same tab when external has target _self', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuItem, PdsLink],
       html: `<pds-dropdown-menu-item href="https://example.com" external target="_self">Link</pds-dropdown-menu-item>`,
@@ -131,9 +131,17 @@ describe('pds-dropdown-menu-item', () => {
     const shadowRoot = page.root.shadowRoot;
     const linkElement = shadowRoot.querySelector('pds-link');
     expect(linkElement).not.toBeNull();
-    // Both props are passed through, pds-link handles precedence
+    // Both props pass through; pds-link resolves the target and the icon label
     expect(linkElement?.external).toBe(true);
     expect(linkElement?.target).toBe('_self');
+
+    const anchor = linkElement?.shadowRoot?.querySelector('a');
+    expect(anchor?.getAttribute('target')).toBe('_self');
+
+    const icon = linkElement?.shadowRoot?.querySelector('pds-icon');
+    expect(icon).not.toBeNull();
+    expect(icon?.hasAttribute('aria-label')).toBe(false);
+    expect(icon?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('sets href to null when link is disabled', async () => {
