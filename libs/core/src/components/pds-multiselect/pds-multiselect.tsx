@@ -140,6 +140,7 @@ export class PdsMultiselect {
 
   /**
    * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated.
+   * A single selection shows the item's name instead, so this applies to other counts that a locale's plural rules treat as singular, and to a single selection whose item has no text.
    * @defaultValue '{count} item'
    */
   @Prop() selectedCountLabelOne = '{count} item';
@@ -151,7 +152,7 @@ export class PdsMultiselect {
   @Prop() selectedCountLabelOther = '{count} items';
 
   /**
-   * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated.
+   * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated. A single selection shows the item's name instead of any form, unless the item has no text.
    * @defaultValue undefined
    */
   @Prop() selectedCountLabels?: PluralForms | string;
@@ -234,8 +235,9 @@ export class PdsMultiselect {
 
   /**
    * Display mode for selected items outside the dropdown panel.
-   * `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders
-   * selected items as dismissible pds-chip tags.
+   * `'count'` shows the item's name in the trigger when one is selected and
+   * "N items" text otherwise (default). `'pill'` renders selected items as
+   * dismissible pds-chip tags.
    * @default 'count'
    */
   @Prop() selectedDisplay: 'count' | 'pill' = 'count';
@@ -1795,7 +1797,24 @@ export class PdsMultiselect {
       // (WCAG 4.1.2). The prop is localizable; this last-resort default is not.
       return this.placeholder || 'Select...';
     }
+    // One selection shows its name; the count only says something once there's more than one.
+    // An option without text still falls back to the count, so the trigger is never nameless.
+    if (count === 1 && this.selectedItems[0].text?.trim()) {
+      return this.selectedItems[0].text;
+    }
     return pluralize(this.el, count, this.resolveCountForms());
+  }
+
+  /**
+   * The text that sets the trigger's width. A single selection's name could be any length, so the
+   * trigger keeps the width the count would give it and the name truncates inside that, rather than
+   * widening a multiselect that has no width of its own.
+   */
+  private getTriggerSizerText(): string {
+    const text = this.getTriggerText();
+    const count = this.selectedItems.length;
+    const showsName = count === 1 && text === this.selectedItems[0].text && !(this.selectedDisplay === 'pill' && this.pillPosition === 'below');
+    return showsName ? pluralize(this.el, count, this.resolveCountForms()) : text;
   }
 
   /**
@@ -1914,11 +1933,14 @@ export class PdsMultiselect {
                 onClick={this.handleTriggerClick}
                 onKeyDown={this.handleTriggerKeyDown}
               >
-                <span class={{
-                  'pds-multiselect__trigger-text': true,
-                  'pds-multiselect__trigger-text--placeholder': !hasSelections || (this.selectedDisplay === 'pill' && this.pillPosition === 'below'),
-                }}>
-                  {this.getTriggerText()}
+                <span class="pds-multiselect__trigger-label">
+                  <span class="pds-multiselect__trigger-sizer" aria-hidden="true">{this.getTriggerSizerText()}</span>
+                  <span class={{
+                    'pds-multiselect__trigger-text': true,
+                    'pds-multiselect__trigger-text--placeholder': !hasSelections || (this.selectedDisplay === 'pill' && this.pillPosition === 'below'),
+                  }}>
+                    {this.getTriggerText()}
+                  </span>
                 </span>
                 <pds-icon aria-hidden="true" class="pds-multiselect__icon" icon={enlarge} />
               </button>
