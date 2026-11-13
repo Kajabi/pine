@@ -3139,6 +3139,44 @@ describe('pds-combobox', () => {
     const groupNamed = (component: { optionEls: HTMLOptionElement[] }, label: string) =>
       component.optionEls.map(o => o.parentElement as HTMLOptGroupElement).find(g => g?.label === label)!;
 
+    // Drilled in, the group's options scroll under the row back, so they're what loads more.
+    it("loads more as a drilled-in group's options scroll near their end", async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" async-url="/api/actions"');
+      const fetchSpy = jest.spyOn(component, 'debouncedFetchAsyncOptions').mockImplementation(() => undefined);
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+      component.hasMore = true;
+      component.currentPage = 1;
+      await page.waitForChanges();
+
+      const options = root.querySelector('.pds-combobox__drill-in-options') as HTMLElement;
+      Object.defineProperties(options, { scrollHeight: { value: 100 }, scrollTop: { value: 90 }, clientHeight: { value: 10 } });
+      options.dispatchEvent(new Event('scroll'));
+
+      expect(fetchSpy).toHaveBeenLastCalledWith(expect.anything(), 2);
+    });
+
+    it("keeps a drilled-in group's loading rows in its options, below the row back", async () => {
+      const { page, component, root } = await openDrillIn('group-display="drill-in" mode="select-only" trigger="button" async-url="/api/actions"');
+      jest.spyOn(component, 'debouncedFetchAsyncOptions').mockImplementation(() => undefined);
+      (root.querySelectorAll('.pds-combobox__group-row-trigger')[1] as HTMLElement).click();
+      await page.waitForChanges();
+
+      // More to load: the row comes after the group's last option, where it scrolls into view.
+      component.hasMore = true;
+      await page.waitForChanges();
+      const options = () => root.querySelector('.pds-combobox__drill-in-options')!;
+      expect(options().lastElementChild!.classList.contains('pds-combobox__load-more')).toBe(true);
+      expect(root.querySelectorAll('.pds-combobox__load-more')).toHaveLength(1);
+
+      // Loading: the row heads the options, under the row back, never above it.
+      component.loading = true;
+      await page.waitForChanges();
+      expect(options().firstElementChild!.classList.contains('pds-combobox__loading')).toBe(true);
+      expect(root.querySelectorAll('.pds-combobox__loading')).toHaveLength(1);
+      expect(root.querySelector('.pds-combobox__load-more')).toBeNull();
+    });
+
     it('replaces the group list with the clicked group and a row back', async () => {
       const { page, component, root } = await openDrillIn();
 
@@ -4311,6 +4349,36 @@ describe('pds-combobox', () => {
         'fb-reply',
       ]);
     });
+  });
+
+  // Opening places the dropdown a tick later, which can run before it has rendered and skip it.
+  it('places a newly rendered dropdown once, without waiting for the opening tick', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="placed" trigger="button" mode="select-only" dropdown-width="300px" max-height="200px">
+        <option value="a">Add a tag</option>
+        <option value="b">Remove a tag</option>
+      </pds-combobox>`,
+    });
+    const component = page.rootInstance;
+    const place = jest.spyOn(component, 'positionDropdown').mockImplementation(() => Promise.resolve());
+
+    // Opened without the trigger's handlers, so no opening tick is scheduled: rendering alone places it.
+    component.isOpen = true;
+    await page.waitForChanges();
+    expect(place).toHaveBeenCalledTimes(1);
+
+    // Later renders of the same dropdown don't place it again.
+    component.highlightedIndex = 1;
+    await page.waitForChanges();
+    expect(place).toHaveBeenCalledTimes(1);
+
+    // Reopened, it's a new dropdown, placed again.
+    component.isOpen = false;
+    await page.waitForChanges();
+    component.isOpen = true;
+    await page.waitForChanges();
+    expect(place).toHaveBeenCalledTimes(2);
   });
 
   describe('disabled options', () => {
