@@ -12,69 +12,123 @@ For the full version history, see <pds-link href="../?path=/docs/resources-chang
 
 ## Deprecation Policy
 
-Pine follows a staged deprecation process before removing or changing any public API:
+Pine deprecates a public API before it removes it. <pds-link href="https://github.com/Kajabi/pine/blob/main/VERSIONING.md" external>VERSIONING.md</pds-link> has the full policy. In short:
 
-1. **Deprecation notice** — a browser console warning is emitted when the deprecated prop, attribute, or pattern is used. The Storybook story for the affected component is updated with a deprecation notice.
-2. **Deprecation period** — the deprecated API remains functional for at least one minor version cycle, giving consumers time to migrate.
-3. **Removal** — the API is removed in the next **major** version bump and documented in the `### ⚠️ Breaking Changes` section of the changelog.
+1. **Deprecation notice** — the prop's JSDoc gets an `@deprecated` tag that names the replacement, and the component's generated readme marks the prop **[DEPRECATED]**. Pine doesn't log a console warning when a deprecated prop is used. For example, the <pds-link href="https://github.com/Kajabi/pine/blob/main/libs/core/src/components/pds-button/readme.md" external>`pds-button` readme</pds-link> marks the `icon` prop, which the `start` slot replaces.
+2. **Deprecation period** — the deprecated API keeps working until a major release removes it.
+3. **Removal** — in a major release.
 
-If you see a deprecation warning in the console, address it before the next major release.
+Before each major upgrade, check the readmes of the components you use for **[DEPRECATED]** props.
 
 ---
 
 ## Breaking Change Format
 
-Breaking changes are marked with `⚠️` in the changelog and grouped under `### ⚠️ Breaking Changes`:
+The changelog marks breaking changes with `⚠️` and groups them under `### ⚠️ Breaking Changes`:
 
 ```
 # 3.0.0 (2025-04-11)
 
-### ⚠️ Breaking Changes
+### ⚠️  Breaking Changes
 
 - ⚠️  **chip:** move value to slot (#364)
 ```
 
-A major version bump (`2.x → 3.x`) always signals that breaking changes are present. Minor and patch releases are non-breaking.
+The changelog marks a change as breaking only when its commit message does, and it leaves out some commit types, such as `refactor`, entirely. So 4.0.0's changelog has no Breaking Changes section, although 4.0.0 removed `pds-chip`'s `large` prop, and 3.0.0's lists the `hide-label` rename as a bug fix. Version Migration Examples below covers both.
+
+A major version bump (`2.x → 3.x`) always signals that breaking changes are present. Pine's policy is that minor and patch releases are non-breaking, but two 3.x minor releases removed APIs. Version Migration Examples below lists them too.
 
 ---
 
 ## Version Migration Examples
 
-### v2.x → v3.0.0
+These are the props and events each major release removed or renamed, plus the two removals in 3.x minor releases.
 
-#### `pds-chip`: `value` prop moved to slot
+### v3.x → v4.0.0
 
-**Before (v2.x):**
+#### `pds-chip`: `large` removed
+
+3.19.0 added `size` and deprecated `large`. 4.0.0 removed `large`. A chip that still sets it renders at the default `md` size, so use `size="lg"` instead.
+
 ```html
-<pds-chip value="Design systems"></pds-chip>
-```
+<!-- Before (3.x): large, removed in 4.0.0 -->
+<pds-chip large>Design systems</pds-chip>
 
-**After (v3.x):**
-```html
-<pds-chip>Design systems</pds-chip>
-```
-
-**Why:** Moving `value` to the default slot allows richer content inside chips and aligns with standard web component slot conventions.
-
-#### `pds-checkbox`: `label-hidden` renamed to `hide-label`
-
-**Before (v2.x):**
-```html
-<pds-checkbox label="Agree" label-hidden></pds-checkbox>
-```
-
-**After (v3.x):**
-```html
-<pds-checkbox label="Agree" hide-label></pds-checkbox>
+<!-- After (3.19.0 and later) -->
+<pds-chip size="lg">Design systems</pds-chip>
 ```
 
 In React:
 ```jsx
-// Before
-<PdsCheckbox label="Agree" labelHidden />
+// Before (3.x): large, removed in 4.0.0
+<PdsChip large>Design systems</PdsChip>
 
-// After
-<PdsCheckbox label="Agree" hideLabel />
+// After (3.19.0 and later)
+<PdsChip size="lg">Design systems</PdsChip>
+```
+
+#### Removed in 3.x minor releases
+
+If you're upgrading from an earlier 3.x release, check these too.
+
+**3.10.0, `pds-popover`: `text` removed.** The popover no longer renders its own trigger button. Put your trigger in the `trigger` slot:
+
+```html
+<!-- Before (3.9.0 and earlier): text, removed in 3.10.0 -->
+<pds-popover component-id="details" text="Details">
+  <p>More about this item.</p>
+</pds-popover>
+
+<!-- After (3.10.0 and later) -->
+<pds-popover component-id="details">
+  <pds-button slot="trigger">Details</pds-button>
+  <p>More about this item.</p>
+</pds-popover>
+```
+
+**3.18.0, `pds-table`: `pdsTableSelect` removed.** Pine never emitted this event, so a listener for it never ran. Delete any `pdsTableSelect` listener, or `onPdsTableSelect` prop in React.
+
+### v2.x → v3.0.0
+
+#### `pds-chip`: `label` prop moved to the default slot
+
+```html
+<!-- Before (2.x): label, removed in 3.0.0 -->
+<pds-chip label="Design systems"></pds-chip>
+
+<!-- After (3.0.0 and later) -->
+<pds-chip>Design systems</pds-chip>
+```
+
+**Why:** Moving the text from `label` to the default slot allows richer content inside chips and aligns with standard web component slot conventions.
+
+#### `pds-checkbox`: `label-hidden` renamed to `hide-label`
+
+```html
+<!-- Before (2.x): label-hidden, removed in 3.0.0 -->
+<pds-checkbox component-id="agree" label="Agree" label-hidden></pds-checkbox>
+
+<!-- After (3.0.0 and later) -->
+<pds-checkbox component-id="agree" label="Agree" hide-label></pds-checkbox>
+```
+
+In React:
+```jsx
+// Before (2.x): labelHidden, removed in 3.0.0
+<PdsCheckbox componentId="agree" label="Agree" labelHidden />
+
+// After (3.0.0 and later)
+<PdsCheckbox componentId="agree" label="Agree" hideLabel />
+```
+
+#### `pds-box`: `padding-block` and `padding-inline` split into start and end
+
+```html
+<!-- Before (2.x): padding-block and padding-inline, removed in 3.0.0 -->
+<pds-box padding-block="md" padding-inline="sm">Content</pds-box>
+
+<!-- After (3.0.0 and later) -->
+<pds-box padding-block-start="md" padding-block-end="md" padding-inline-start="sm" padding-inline-end="sm">Content</pds-box>
 ```
 
 ---
@@ -100,7 +154,7 @@ When tokens are renamed, the old token is aliased to the new one during a deprec
 - <pds-link href="https://kajabi.slack.com/archives/C046HHS5KTN" external>#design-system-discussion</pds-link> (Kajabi-internal) — design system conversation. GitHub releases are the complete record of what shipped.
 
 **Before upgrading a major version:**
-1. Read the full changelog section for the new major version
-2. Search your codebase for any `⚠️ Breaking Changes` listed (grep for deprecated prop/attribute names)
-3. Run your app's lint and type checks after upgrading — with `@pine-ds/react`, renamed or removed props show up as type errors
+1. Read the full changelog section for the new major version, and its entry under Version Migration Examples above
+2. Search your codebase for the props and attributes that version removes or renames
+3. Run your app's lint and type checks after upgrading. With `@pine-ds/react` and `"moduleResolution": "node"` in your `tsconfig.json`, removed props show up as type errors. Other `moduleResolution` settings don't load the wrapper's prop types today, so rely on the search in step 2.
 4. Run your app's test suites to catch visual or behavioral regressions
