@@ -772,8 +772,8 @@ GroupBadges.args = {
   placeholder: 'Choose an action',
   groupDisplay: 'drill-in',
   options: [
-    { id: 'email_send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
-    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact', groupIcon: 'contact' },
+    { id: 'email_send', text: 'Send an email', group: 'Email' },
+    { id: 'contact_tag_add', text: 'Add a tag', group: 'Contact' },
     {
       id: 'facebook_message_send',
       text: 'Send a Facebook message',
