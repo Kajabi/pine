@@ -268,6 +268,12 @@ export class PdsTable {
 
     const head = this.el.querySelector('pds-table-head') as HTMLElement | null;
     if (head) forceUpdate(head);
+
+    // The select-all cell's `width` is applied by that `forceUpdate`, which hasn't flushed yet --
+    // the floor's own recalc above just ran against its previous (or absent) width. That cell
+    // sits in `pds-table-head`'s shadow root, out of reach of the mutation observer that would
+    // otherwise catch the change, so this needs scheduling directly rather than left to notice.
+    if (floorActive) this.scheduleColumnWidthsRecalc();
   }
 
   // The select-all cell sits in `pds-table-head`'s own shadow root, and a selectable row's
