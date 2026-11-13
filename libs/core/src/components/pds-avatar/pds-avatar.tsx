@@ -8,7 +8,6 @@ const DEFAULT_BADGE_LABEL = 'Verified';
 /**
  * @part asset-wrapper - Exposes the sized wrapper around the avatar's image, initials or icon, badge and status dot for styling.
  * @part button - Exposes the dropdown trigger button for styling. Appears only when `dropdown` is set.
- * @part image - The main image element that represents the avatar component.
  * @part initials - The text element that renders the avatar's initials, for restyling their color.
  * @part status - Exposes the status dot for styling, such as a custom color. Appears only when `status` is set.
 */
@@ -65,7 +64,8 @@ export class PdsAvatar {
   @Prop() initials?: string | null = null;
 
   /**
-   * Size of the avatar. Value can be preset or custom.
+   * Sets the size of the avatar: `xs` (24px), `sm` (32px), `md` (40px), `lg` (56px), `xl` (64px),
+   * or a custom CSS length such as `128px`.
    * @defaultValue lg
    */
   @Prop({ reflect: true, mutable: true }) size?:
