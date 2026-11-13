@@ -18,6 +18,23 @@
   vertical-align: inherit;
 }
 
+// Column width. border-box so the width includes the cell's padding.
+:host(.has-width) {
+  box-sizing: border-box;
+  min-width: var(--pds-table-head-cell-width);
+  width: var(--pds-table-head-cell-width);
+}
+
+// A fixed-layout column with no width of its own shares whatever's left, which can shrink to
+// nothing once the other columns' widths already fill a narrow viewport -- table-layout: fixed
+// sizes columns from the first row's own `width`, not `min-width`, so a floor has to be an
+// explicit width. pds-table sets this custom property (and clears it once there's room again)
+// after measuring the available space against the explicit-width columns.
+:host(.has-auto-width) {
+  box-sizing: border-box;
+  width: var(--pds-table-head-cell-auto-floor-width, auto);
+}
+
 :host(.is-compact) {
   padding-block: var(--pine-dimension-2xs)
 }

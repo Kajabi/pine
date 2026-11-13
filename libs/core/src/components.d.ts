@@ -2712,6 +2712,11 @@ export namespace Components {
           * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable": boolean;
+        /**
+          * Sets how the table sizes its columns. With `auto`, each column is sized from its content, so columns can change width when the rows change (for example after a sort). With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content; columns without a `width` share the remaining space. Under `responsive`, that remaining share keeps a 120px floor on narrow viewports where the other columns' widths already fill it, growing the table instead (scrollable) -- without `responsive` there's no floor, since there would be nothing to scroll the overflow it would create. Content longer than its column overflows, so add `truncate` to cells whose content may not fit.
+          * @defaultValue 'auto'
+         */
+        "tableLayout": 'auto' | 'fixed';
     }
     interface PdsTableBody {
     }
@@ -2720,6 +2725,10 @@ export namespace Components {
           * Sets the text alignment within the cell.
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
+        /**
+          * Re-binds the scroll listener to the table's current responsive container. Called by `pds-table` after a live `responsive` toggle: the cell stays in light DOM across that change, so it never reconnects on its own and would otherwise keep listening to a container the table already replaced or removed.
+         */
+        "rebindScrollListener": () => Promise<void>;
         /**
           * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
@@ -2756,6 +2765,10 @@ export namespace Components {
          */
         "clearActiveSort": () => Promise<void>;
         /**
+          * Re-binds the scroll listener to the table's current responsive container. Called by `pds-table` after a live `responsive` toggle: the cell stays in light DOM across that change, so it never reconnects on its own and would otherwise keep listening to a container the table already replaced or removed.
+         */
+        "rebindScrollListener": () => Promise<void>;
+        /**
           * Programmatically sets this column as the active sort column with the specified direction. Used by pds-table to apply a default sort on initial load.
           * @param direction - The sort direction to apply ('asc' or 'desc')
          */
@@ -2764,6 +2777,10 @@ export namespace Components {
           * Determines whether the table column is sortable when set to `true`.
          */
         "sortable": boolean;
+        /**
+          * Sets the width of the column. Accepts any CSS length (e.g. '148px', '12rem', '20%'). When the table's `tableLayout` is `fixed`, the column keeps this width whatever its content. Otherwise the column is at least this wide and can grow to fit its content.
+         */
+        "width"?: string;
     }
     interface PdsTableRow {
         /**
@@ -6798,6 +6815,11 @@ declare namespace LocalJSX {
           * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable"?: boolean;
+        /**
+          * Sets how the table sizes its columns. With `auto`, each column is sized from its content, so columns can change width when the rows change (for example after a sort). With `fixed`, columns take the `width` set on their `pds-table-head-cell` and ignore their content; columns without a `width` share the remaining space. Under `responsive`, that remaining share keeps a 120px floor on narrow viewports where the other columns' widths already fill it, growing the table instead (scrollable) -- without `responsive` there's no floor, since there would be nothing to scroll the overflow it would create. Content longer than its column overflows, so add `truncate` to cells whose content may not fit.
+          * @defaultValue 'auto'
+         */
+        "tableLayout"?: 'auto' | 'fixed';
     }
     interface PdsTableBody {
     }
@@ -6849,6 +6871,10 @@ declare namespace LocalJSX {
           * Determines whether the table column is sortable when set to `true`.
          */
         "sortable"?: boolean;
+        /**
+          * Sets the width of the column. Accepts any CSS length (e.g. '148px', '12rem', '20%'). When the table's `tableLayout` is `fixed`, the column keeps this width whatever its content. Otherwise the column is at least this wide and can grow to fit its content.
+         */
+        "width"?: string;
     }
     interface PdsTableRow {
         /**
@@ -7766,6 +7792,7 @@ declare namespace LocalJSX {
         "selectable": boolean;
         "disableSelectAll": boolean;
         "rowDividers": boolean;
+        "tableLayout": 'auto' | 'fixed';
         "defaultSortColumn": string;
         "defaultSortDirection": 'asc' | 'desc';
     }
@@ -7782,6 +7809,7 @@ declare namespace LocalJSX {
     interface PdsTableHeadCellAttributes {
         "cellAlign": 'start' | 'center' | 'end' | 'justify';
         "sortable": boolean;
+        "width": string;
     }
     interface PdsTableRowAttributes {
         "indeterminate": boolean;
