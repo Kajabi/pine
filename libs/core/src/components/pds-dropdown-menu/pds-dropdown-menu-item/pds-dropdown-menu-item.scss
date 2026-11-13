@@ -45,6 +45,15 @@
   }
 }
 
+.pds-dropdown-menu-item__start {
+  display: inline-flex;
+  flex-shrink: 0;
+
+  &--empty {
+    display: none;
+  }
+}
+
 :host(.is-informational) {
   cursor: default;
 
