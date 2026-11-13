@@ -4,6 +4,8 @@ import { formatMessage } from '../../../i18n';
 import { sortableItemLabel } from '../sortable-label';
 
 import { handle as handleIcon } from '@pine-ds/icons/icons';
+
+const GRABBED_CLASS = 'pds-sortable-item--grabbed';
 /**
  * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered when `enable-actions` is set.
  * @lightDom renders-markup
@@ -26,6 +28,7 @@ export class PdsSortableItem {
   }
 
   sortableRef: HTMLPdsSortableElement;
+
   /**
    * Determines whether `sortable-item-actions` slot should be enabled.
    * @defaultValue false
@@ -82,10 +85,22 @@ export class PdsSortableItem {
     // In a list that can be reordered, the handle is what the keyboard reorders with. It's always
     // rendered, and only hidden visually when `show-handle` is off, so every row has a named button.
     const reorderable = typeof sortable?.handleLabel === 'string' && !sortable.disabled;
-    this.hostKeeper.record('pds-sortable-item');
+
+    // `pds-sortable` sets the grabbed class and `aria-pressed` directly on this element and its
+    // handle, not through a prop -- read back whatever's there now rather than hardcoding the
+    // rest state, so a re-render for an unrelated reason (`handleLabel` changing, for one,
+    // `forceUpdate`s every row) carries the current grabbed state forward instead of resetting it.
+    const wasGrabbed = this.el.classList.contains(GRABBED_CLASS);
+    const hostClasses = {
+      'pds-sortable-item': true,
+      [GRABBED_CLASS]: wasGrabbed,
+    };
+    this.hostKeeper.record(hostClasses);
+    const existingHandle = this.el.querySelector('.pds-sortable-item__handle');
+    const wasPressed = existingHandle?.getAttribute('aria-pressed') === 'true';
 
     return (
-      <Host class="pds-sortable-item" id={this.componentId}>
+      <Host class={hostClasses} id={this.componentId}>
         {(this.showHandle || reorderable) && (
           <div
             class={{
@@ -95,7 +110,7 @@ export class PdsSortableItem {
             role={reorderable ? 'button' : undefined}
             tabindex={reorderable ? '0' : undefined}
             aria-label={reorderable ? formatMessage(sortable.handleLabel, { item: sortableItemLabel(this.el) }) : undefined}
-            aria-pressed={reorderable ? 'false' : undefined}
+            aria-pressed={reorderable ? String(wasPressed) : undefined}
           >
             <pds-icon aria-hidden="true" icon={handleIcon}></pds-icon>
           </div>

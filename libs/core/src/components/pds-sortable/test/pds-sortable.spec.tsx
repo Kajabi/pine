@@ -186,6 +186,25 @@ describe('pds-sortable', () => {
       expect(moved).toHaveBeenCalledTimes(1);
     });
 
+    // `handleLabel` changing forceUpdates every item -- picked-up styling and the pressed state
+    // are set directly on the DOM, not through a prop, so that re-render must carry them forward
+    // rather than resetting them to their rest values.
+    it('keeps the picked-up styling and pressed state through an unrelated re-render', async () => {
+      const { sortable, page, itemAt, press } = await setup();
+      const alpha = itemAt(0);
+
+      await press(alpha, ' ');
+      expect(alpha).toHaveClass('pds-sortable-item--grabbed');
+      expect(alpha.querySelector('.pds-sortable-item__handle')?.getAttribute('aria-pressed')).toBe('true');
+
+      sortable.setAttribute('handle-label', 'Move {item}');
+      await page.waitForChanges();
+
+      expect(alpha).toHaveClass('pds-sortable-item--grabbed');
+      expect(alpha.querySelector('.pds-sortable-item__handle')?.getAttribute('aria-pressed')).toBe('true');
+      expect(alpha.querySelector('.pds-sortable-item__handle')?.getAttribute('aria-label')).toBe('Move Alpha');
+    });
+
     it('emits the same detail fields as a drag', async () => {
       const { sortable, moved, itemAt, press } = await setup();
       const bravo = itemAt(1);
