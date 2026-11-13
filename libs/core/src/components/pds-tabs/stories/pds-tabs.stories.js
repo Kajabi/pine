@@ -24,7 +24,7 @@ Default.args = {
   activeTabName: "Dollop",
   componentId: "primary",
   variant: "primary",
-  tablistLabel: "Foo",
+  tablistLabel: "Example sections",
 }
 
 export const Filter = BaseTemplate.bind({});
@@ -32,7 +32,7 @@ Filter.args = {
   activeTabName: "Sturdy",
   componentId: "filter",
   variant: 'filter',
-  tablistLabel: "Foo",
+  tablistLabel: "Example sections",
 }
 
 export const Pill = BaseTemplate.bind({});
@@ -40,6 +40,7 @@ Pill.args = {
   activeTabName: "Sturdy",
   componentId: "pill",
   variant: 'pill',
+  tablistLabel: "Example sections",
 }
 const AvailabilityTemplate = (args) => html`
 <div style="background-color: var(--pine-color-background-inset-emphasized); padding: var(--pine-dimension-md);">
@@ -59,11 +60,11 @@ Availability.args = {
   activeTabName: "tuesday",
   componentId: "availability",
   variant: 'availability',
-  tablistLabel: "Foo",
+  tablistLabel: "Example sections",
 }
 
 export const Divider = () => html`
-<pds-tabs active-tab-name="Dollop" component-id="divider" tablist-label="Foo" variant="primary" divider>
+<pds-tabs active-tab-name="Dollop" component-id="divider" tablist-label="Example sections" variant="primary" divider>
   <pds-tab name="Sturdy">Sturdy</pds-tab>
   <pds-tab name="Dollop">Dollop</pds-tab>
   <pds-tab name="Waffle">Waffle</pds-tab>
@@ -75,7 +76,7 @@ export const Divider = () => html`
 
 export const Stretch = () => html`
 <div style="block-size: 240px; border: var(--pine-border-width-thin) solid var(--pine-color-border-subtle); display: flex;">
-  <pds-tabs active-tab-name="Dollop" component-id="stretch" tablist-label="Foo" variant="primary" divider stretch>
+  <pds-tabs active-tab-name="Dollop" component-id="stretch" tablist-label="Example sections" variant="primary" divider stretch>
     <pds-tab name="Sturdy">Sturdy</pds-tab>
     <pds-tab name="Dollop">Dollop</pds-tab>
     <pds-tab name="Waffle">Waffle</pds-tab>
