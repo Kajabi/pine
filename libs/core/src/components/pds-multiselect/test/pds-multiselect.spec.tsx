@@ -74,7 +74,7 @@ describe('pds-multiselect', () => {
     expect(triggerText.classList.contains('pds-multiselect__trigger-text--placeholder')).toBe(false);
   });
 
-  it('renders "1 item" for single selection', async () => {
+  it('renders the item\'s name for a single selection', async () => {
     const page = await newSpecPage({
       components: [PdsMultiselect],
       html: `<pds-multiselect component-id="test"></pds-multiselect>`,
@@ -87,7 +87,95 @@ describe('pds-multiselect', () => {
     await page.waitForChanges();
 
     const triggerText = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text');
+    expect(triggerText.textContent).toBe('Option 1');
+    expect(triggerText.classList.contains('pds-multiselect__trigger-text--placeholder')).toBe(false);
+  });
+
+  it('gives the trigger the item\'s name as its accessible text for a single selection', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+    });
+
+    page.rootInstance.value = ['1'];
+    page.rootInstance.internalOptions = [{ id: '1', text: 'Marketing' }];
+    await page.waitForChanges();
+
+    const trigger = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
+    // The chevron and the width sizer are aria-hidden, so the name is the only text the button exposes.
+    expect(trigger.querySelector('pds-icon').getAttribute('aria-hidden')).toBe('true');
+    expect(trigger.querySelector('.pds-multiselect__trigger-sizer').getAttribute('aria-hidden')).toBe('true');
+    expect(trigger.querySelector('.pds-multiselect__trigger-text').textContent.trim()).toBe('Marketing');
+  });
+
+  it('sizes the trigger by the count while it shows a single item\'s name, and by the shown text otherwise', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test" placeholder="Pick tags"></pds-multiselect>`,
+    });
+    const sizer = () => page.root.shadowRoot.querySelector('.pds-multiselect__trigger-sizer').textContent;
+
+    expect(sizer()).toBe('Pick tags');
+
+    page.rootInstance.internalOptions = [{ id: '1', text: 'Marketing' }, { id: '2', text: 'Webinar' }];
+    page.rootInstance.value = ['1'];
+    await page.waitForChanges();
+    expect(sizer()).toBe('1 item');
+
+    page.rootInstance.value = ['1', '2'];
+    await page.waitForChanges();
+    expect(sizer()).toBe('2 items');
+  });
+
+  it('falls back to the count when the single selected item\'s text is only spaces', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+    });
+
+    page.rootInstance.value = ['1'];
+    page.rootInstance.internalOptions = [{ id: '1', text: '   ' }];
+    await page.waitForChanges();
+
+    expect(page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text').textContent).toBe('1 item');
+  });
+
+  it('falls back to the count when the single selected item has no text', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+    });
+
+    page.rootInstance.value = ['1'];
+    page.rootInstance.internalOptions = [{ id: '1', text: '' }];
+    await page.waitForChanges();
+
+    const triggerText = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text');
     expect(triggerText.textContent).toBe('1 item');
+  });
+
+  it('goes back to the count when a second item is selected, and to the name when one is left', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+    });
+
+    page.rootInstance.internalOptions = [
+      { id: '1', text: 'Option 1' },
+      { id: '2', text: 'Option 2' },
+    ];
+    page.rootInstance.value = ['1'];
+    await page.waitForChanges();
+    const triggerText = () => page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text').textContent;
+    expect(triggerText()).toBe('Option 1');
+
+    page.rootInstance.value = ['1', '2'];
+    await page.waitForChanges();
+    expect(triggerText()).toBe('2 items');
+
+    page.rootInstance.value = ['2'];
+    await page.waitForChanges();
+    expect(triggerText()).toBe('Option 2');
   });
 
   it('renders with proper ARIA attributes on trigger', async () => {
@@ -1743,6 +1831,40 @@ describe('pds-multiselect', () => {
       expect(triggerText.textContent).toBe('2 items');
     });
 
+    it('pill inline with one selection: the name appears once, in its chip', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text')).toBeNull();
+      const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
+      expect(chips.length).toBe(1);
+      expect(chips[0].textContent).toBe('Option 1');
+    });
+
+    it('pill below with one selection: the trigger keeps its placeholder, the chip shows the name', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="below" placeholder="Select items..."></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      const triggerText = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text');
+      expect(triggerText.textContent).toBe('Select items...');
+      expect(triggerText.classList.contains('pds-multiselect__trigger-text--placeholder')).toBe(true);
+      const chips = page.root.shadowRoot.querySelectorAll('.pds-multiselect__pill-list--below pds-chip');
+      expect(chips.length).toBe(1);
+      expect(chips[0].textContent).toBe('Option 1');
+    });
+
     it('pill inline empty: shows placeholder span, no chips', async () => {
       const page = await newSpecPage({
         components: [PdsMultiselect],
@@ -2122,6 +2244,29 @@ describe('pds-multiselect', () => {
       };
       await selectTwo(page); // count 2 → Polish "few"
       expect(triggerTextOf(page)).toBe('2 elementy');
+    });
+
+    it('shows the item\'s name, not the translated singular label, for a single selection', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-count-label-one="{count} elemento"></pds-multiselect>`,
+      });
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Opción 1' }];
+      await page.waitForChanges();
+      expect(triggerTextOf(page)).toBe('Opción 1');
+    });
+
+    it('still uses the singular form for other counts a locale treats as singular (Russian 21)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" lang="ru" selected-count-labels='{"one":"{count} элемент","few":"{count} элемента","many":"{count} элементов","other":"{count} элемента"}'></pds-multiselect>`,
+      });
+      const ids = Array.from({ length: 21 }, (_, i) => String(i + 1));
+      page.rootInstance.internalOptions = ids.map(id => ({ id, text: `Option ${id}` }));
+      page.rootInstance.value = ids;
+      await page.waitForChanges();
+      expect(triggerTextOf(page)).toBe('21 элемент');
     });
 
     it('degrades to the one/other defaults when selected-count-labels is malformed JSON', async () => {
