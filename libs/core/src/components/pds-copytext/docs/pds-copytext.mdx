@@ -83,6 +83,29 @@ When `truncate` is set, long value text will be truncated with an ellipsis added
   </div>
 </DocCanvas>
 
+### Copy result
+
+`pdsCopyTextClick` fires after a click, once the copy succeeds or fails, and its `detail` says which: `Copied to clipboard`, or a message that starts with `Error writing text to clipboard`. Use it to show people the result, such as in a `pds-toast`. Outside a secure context, `navigator.clipboard` is undefined, so nothing is copied and the event doesn't fire.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsCopytext
+      value="Copy this text"
+      onPdsCopyTextClick={(event) => {
+        if (event.detail === 'Copied to clipboard') {
+          showToast('Copied');
+        } else {
+          showToast('Copy failed');
+        }
+      }}
+    ></PdsCopytext>
+    `,
+    webComponent: `<pds-copytext value="Copy this text"></pds-copytext>`
+}}>
+  <pds-copytext value="Copy this text"></pds-copytext>
+</DocCanvas>
+
 ## Playground
 
 <Canvas of={stories.Default} />

@@ -135,16 +135,29 @@ Disclosure.parameters = {
   controls: { exclude: 'icon' }
 }
 
-export const IconOnly = BaseTemplate.bind();
-IconOnly.args = {
-  ariaLabel: 'Favorite',
-  disabled: false,
-  fullWidth: false,
-  icon: 'favorite',
-  iconOnly: true,
-  loading: false,
-  type: 'button',
-  variant: 'secondary',
+export const IconOnly = {
+  render: (args) => html`
+    <pds-button
+      aria-label=${ifDefined(args.ariaLabel)}
+      ?disabled=${args.disabled}
+      ?full-width=${args.fullWidth}
+      ?icon-only=${args.iconOnly}
+      ?loading=${args.loading}
+      size=${ifDefined(args.size)}
+      type=${args.type}
+      variant=${args.variant}
+    >
+      <pds-icon slot="start" name="favorite" aria-hidden="true"></pds-icon>
+    </pds-button>`,
+  args: {
+    ariaLabel: 'Favorite',
+    disabled: false,
+    fullWidth: false,
+    iconOnly: true,
+    loading: false,
+    type: 'button',
+    variant: 'secondary',
+  },
 };
 
 export const Filter = BaseTemplate.bind({});
@@ -268,7 +281,8 @@ export const CompactIconButtonViaPart = {
         color: var(--pine-color-text-primary);
       }
     </style>
-    <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only icon="arrow-up">
+    <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only>
+      <pds-icon slot="start" name="arrow-up" aria-hidden="true"></pds-icon>
       Send message
     </pds-button>
   `,
