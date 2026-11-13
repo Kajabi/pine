@@ -2166,6 +2166,57 @@ describe('pds-combobox', () => {
     });
   });
 
+  describe('a trigger-width change after load', () => {
+    const setUp = async (trigger: 'button' | 'input') => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <div style="width: 400px;">
+          <pds-combobox component-id="condition" label="Condition" hide-label trigger="${trigger}" trigger-shape="input"
+            mode="select-only" trigger-width="100%" placeholder="Select condition">
+            <option value="open">90-day open rate is at least (%)</option>
+          </pds-combobox>
+        </div>
+      `);
+      await page.waitForChanges();
+      return page;
+    };
+
+    const triggerWidth = (page: Awaited<ReturnType<typeof newE2EPage>>, trigger: 'button' | 'input') =>
+      page.evaluate(
+        selector => document.querySelector('pds-combobox')!.shadowRoot!.querySelector(selector)!.getBoundingClientRect().width,
+        trigger === 'button' ? '.pds-combobox__button-trigger' : '.pds-combobox__input-wrapper',
+      );
+
+    const halve = async (page: Awaited<ReturnType<typeof newE2EPage>>) => {
+      await page.$eval('pds-combobox', el => el.setAttribute('trigger-width', '50%'));
+      await page.waitForChanges();
+    };
+
+    describe.each(['button', 'input'] as const)('trigger="%s"', trigger => {
+      it('eases to the new width instead of jumping', async () => {
+        const page = await setUp(trigger);
+        // Stretched so the ease is still near its start when read, however slow the runner.
+        await page.addStyleTag({
+          content: '@media (prefers-reduced-motion: no-preference) { :root { --pine-motion-duration-base: 600s; } }',
+        });
+        expect(await triggerWidth(page, trigger)).toBeCloseTo(400, 0);
+
+        await halve(page);
+
+        expect(await triggerWidth(page, trigger)).toBeGreaterThan(300);
+      });
+
+      it('jumps straight to the new width with reduced motion', async () => {
+        const page = await setUp(trigger);
+        await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+
+        await halve(page);
+
+        expect(await triggerWidth(page, trigger)).toBeCloseTo(200, 0);
+      });
+    });
+  });
+
   describe('option icons', () => {
     // A category list: ungrouped options with icons, with groups listed between them.
     const categories = [

@@ -221,6 +221,7 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Width of the trigger (button or input). Any valid CSS width value.
+   * Changing it after load from one length or percentage to another eases to the new width, unless reduced motion is on.
    * @default 'fit-content'
    */
   @Prop() triggerWidth: string = 'fit-content';

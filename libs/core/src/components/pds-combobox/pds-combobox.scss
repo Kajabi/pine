@@ -34,6 +34,7 @@
   align-items: center;
   display: flex;
   position: relative;
+  transition: width var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   width: 100%;
 }
 
@@ -144,8 +145,9 @@
   min-height: var(--pine-dimension-450);
   outline: none;
   padding: 0 var(--pine-dimension-sm);
+  // Width eases so a trigger-width change after load, like a field opening beside it, doesn't jump.
   /* stylelint-disable-next-line pine-design-system/no-hardcoded-motion -- 0.15s off-grid micro-transition; no exact motion token */
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, width var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   width: fit-content;
 
   // Common layout wrapper for all button trigger content
