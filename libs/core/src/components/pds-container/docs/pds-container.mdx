@@ -89,7 +89,9 @@ Without a `size`, the container grows to fill its parent with no max-width const
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsContainer>
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsContainer>
   <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="md">
     <PdsText tag="p">No max-width applied.</PdsText>
   </PdsBox>
@@ -112,7 +114,9 @@ Without a `size`, the container grows to fill its parent with no max-width const
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsBox direction="column" gap="sm" fit>
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsBox direction="column" gap="sm" fit>
   <PdsContainer size="sm">
     <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="sm">
       <PdsText tag="p" size="sm">sm — 340px</PdsText>
@@ -181,7 +185,9 @@ Without a `size`, the container grows to fill its parent with no max-width const
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsContainer size="640px">
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsContainer size="640px">
   <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="md">
     <PdsText tag="p">Custom 640px max-width.</PdsText>
   </PdsBox>
@@ -206,7 +212,9 @@ Set `centered="false"` to align the container to the start of its parent instead
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsContainer size="md" centered={false}>
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsContainer size="md" centered={false}>
   <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="md">
     <PdsText tag="p">Left-aligned — centered=false.</PdsText>
   </PdsBox>
@@ -231,7 +239,9 @@ Use `tag` to render the inner container as a semantic HTML element.
 <DocCanvas
   display="block"
   mdxSource={{
-    react: `<PdsContainer size="lg" tag="main">
+    react: `import { PdsBox, PdsContainer, PdsText } from '@pine-ds/react';
+
+<PdsContainer size="lg" tag="main">
   <PdsBox fit backgroundColor="var(--pine-color-background-inset)" padding="md">
     <PdsText tag="h2">Page title inside tag="main"</PdsText>
   </PdsBox>
