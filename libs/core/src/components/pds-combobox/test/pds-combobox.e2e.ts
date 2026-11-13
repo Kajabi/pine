@@ -3050,6 +3050,37 @@ describe('pds-combobox dropdown width', () => {
     expect(Math.round(width)).toBe(236);
   });
 
+  // With panel-search, the drilled-in options list sits inside the panel-search wrapper rather
+  // than being the outer listbox itself, but it still carries `--grouped`. The fixed padding-less
+  // width above must not reach it, or a custom dropdown-width would stop filling the panel once
+  // drilled in.
+  it('keeps a custom dropdown-width once drilled into a group, with panel-search', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      `<pds-combobox component-id="width" label="Animal" trigger="button" mode="select-only" panel-search dropdown-width="300px" group-display="drill-in">${GROUPS}</pds-combobox>`,
+    );
+    await page.waitForChanges();
+
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__group-row-trigger')).click();
+    await page.waitForChanges();
+
+    // The wrapper itself (queried by the other tests here) always keeps the custom width: it's
+    // set inline, which outranks any class rule regardless of this bug. The drilled-in options
+    // list inside it is the one a stray width rule can narrow, so that's what this measures.
+    const width = await page.evaluate(() => {
+      const roots = [
+        document.querySelector('pds-combobox')!.shadowRoot,
+        document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot,
+      ];
+      const options = roots.map((root) => root?.querySelector('.pds-combobox__listbox-options')).find(Boolean)!;
+      return options.getBoundingClientRect().width;
+    });
+
+    expect(Math.round(width)).toBe(300);
+  });
+
   it('renders a panel with a search, which has no padding of its own, at its earlier default width', async () => {
     const width = await listboxWidth(
       'trigger="button" mode="select-only" panel-search',

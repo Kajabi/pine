@@ -444,13 +444,20 @@
   }
 
   // group-display="drill-in": only the options scroll, so the scrollbar starts below the header.
-  // The class twice, to outrank the grouped list's padding. Width drops to the padding-less
-  // width too: the grouped listbox's own width adds the padding this rule just zeroed out.
+  // The class twice, to outrank the grouped list's padding.
   .pds-combobox__listbox--grouped.pds-combobox__listbox--grouped:has(> .pds-combobox__group-back) {
     display: flex;
     flex-direction: column;
-    min-width: 220px;
     padding: 0;
+  }
+
+  // Only the standalone listbox drops to the padding-less width: the grouped listbox's own width
+  // adds back the padding the rule above just zeroed out. Scoped to the `.pds-combobox__listbox`
+  // class alone (not `-options`), so the panel-search view's drilled-in options list -- which
+  // carries `--grouped` too -- keeps filling its wrapper's width (including any custom
+  // `dropdown-width`) instead of being forced to this fixed width.
+  .pds-combobox__listbox.pds-combobox__listbox--grouped:has(> .pds-combobox__group-back) {
+    min-width: 220px;
     width: 236px;
   }
 
