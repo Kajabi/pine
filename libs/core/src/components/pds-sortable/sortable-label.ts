@@ -11,18 +11,27 @@ export const sortableItemLabel = (item: HTMLElement): string => {
   const { itemLabel } = item as HTMLPdsSortableItemElement;
   if (itemLabel) return itemLabel;
 
-  // Text and rendered elements only: comments (such as a server's template annotations) and
-  // script, style and template contents aren't part of the name.
-  return Array.from(item.childNodes)
-    .filter((node) =>
-      node.nodeType === TEXT_NODE ||
-      (node.nodeType === ELEMENT_NODE &&
-        !(node as Element).matches(
-          '.pds-sortable-item__handle, .pds-sortable-item__actions, [slot="sortable-item-actions"], script, style, template',
-        )),
-    )
-    .map((node) => node.textContent ?? '')
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  // Only the first text-bearing child, not every one of them joined: a row with a status chip or
+  // an actions menu outside the `sortable-item-actions` slot would otherwise read that text into
+  // the name too (e.g. "Reorder Newsletter Default Edit Archive Duplicate"). The main content is
+  // conventionally the first child, so this still gets a real multi-line label (the first child
+  // can itself wrap several lines of text) without pulling in siblings meant to be set dressing.
+  for (const node of Array.from(item.childNodes)) {
+    // Comments (such as a server's template annotations) and script, style and template contents
+    // aren't part of the name.
+    if (
+      node.nodeType === ELEMENT_NODE &&
+      (node as Element).matches(
+        '.pds-sortable-item__handle, .pds-sortable-item__actions, [slot="sortable-item-actions"], script, style, template',
+      )
+    ) {
+      continue;
+    }
+    if (node.nodeType !== TEXT_NODE && node.nodeType !== ELEMENT_NODE) continue;
+
+    const text = (node.textContent ?? '').replace(/\s+/g, ' ').trim();
+    if (text) return text;
+  }
+
+  return '';
 };

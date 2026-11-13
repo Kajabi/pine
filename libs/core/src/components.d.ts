@@ -2566,7 +2566,7 @@ export namespace Components {
          */
         "itemLabel"?: string;
         /**
-          * Determines whether `sortable-item` should have a handle.
+          * Determines whether the reorder handle is shown. The handle itself renders whenever the list is reorderable, regardless of this prop; without it, the handle is visually hidden but still reachable from the keyboard.
           * @defaultValue false
          */
         "showHandle": boolean;
@@ -6582,7 +6582,7 @@ declare namespace LocalJSX {
          */
         "itemPickedUpLabel"?: string;
         /**
-          * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the `KeyboardEvent` as `originalEvent`.
+          * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a screen reader's browse-mode click.
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
         /**
@@ -6609,7 +6609,7 @@ declare namespace LocalJSX {
          */
         "itemLabel"?: string;
         /**
-          * Determines whether `sortable-item` should have a handle.
+          * Determines whether the reorder handle is shown. The handle itself renders whenever the list is reorderable, regardless of this prop; without it, the handle is visually hidden but still reachable from the keyboard.
           * @defaultValue false
          */
         "showHandle"?: boolean;

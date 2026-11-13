@@ -24,7 +24,10 @@ export class PdsSortable {
   /**
    * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move
    * carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`,
-   * `oldDraggableIndex`, `newDraggableIndex`), with the `KeyboardEvent` as `originalEvent`.
+   * `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as
+   * `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or
+   * `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a
+   * screen reader's browse-mode click.
    */
   @Event() pdsSortableItemMoved: EventEmitter<SortableEvent>;
 
@@ -192,14 +195,27 @@ export class PdsSortable {
    */
   private ensureLiveRegion() {
     if (!this.liveRegion) {
+      // A page-cache (bfcache, Turbo) restore brings back a DOM snapshot that can already have
+      // this list's own live region sitting right after it -- adopted here instead of making
+      // another, which would leave the stale one behind with its last message still in it.
+      const existing = this.el.nextElementSibling;
+      if (existing?.classList.contains(LIVE_REGION_CLASS)) {
+        this.liveRegion = existing as HTMLElement;
+        return;
+      }
+
       const region = document.createElement('span');
       region.className = LIVE_REGION_CLASS;
       region.setAttribute('role', 'status');
       region.setAttribute('aria-live', 'polite');
       region.setAttribute('aria-atomic', 'true');
-      // Created here, not rendered, so the scoped stylesheet can't reach it.
+      // Created here, not rendered, so the scoped stylesheet can't reach it. With no inset, an
+      // absolutely positioned element sits at its static position -- the end of the list, here --
+      // rather than collapsing to (0, 0), which can grow a scrollable ancestor's scroll area.
       Object.assign(region.style, {
         position: 'absolute',
+        insetBlockStart: '0',
+        insetInlineStart: '0',
         width: '1px',
         height: '1px',
         margin: '-1px',
@@ -237,10 +253,25 @@ export class PdsSortable {
     this.liveRegion.textContent = message === this.liveRegion.textContent ? `${message} ` : message;
   }
 
+  // Set only when a `pointerdown` here drops a picked-up item, and only until the `click` that
+  // follows it, if one does: a screen reader's browse-mode Enter or Space synthesizes both for
+  // the same press, and that click must not re-pick-up what its own pointerdown just dropped.
+  private droppedByPointerDown: HTMLElement | null = null;
+
   @Listen('pointerdown', { capture: true })
   handlePointerDown(ev: PointerEvent) {
     // A drag takes over from a keyboard reorder: keep the moves so far, so the drag starts from them.
-    if (this.isGrabbing()) this.drop(ev);
+    // Only the primary button (or a touch/pen contact, same value) can start that drag -- a
+    // right-click or a secondary pointer does something else (a context menu, typically) and
+    // must not drop the item out from under it.
+    if (ev.button !== 0 || !this.isGrabbing()) return;
+
+    const item = this.grabbed.item;
+    this.drop(ev);
+    this.droppedByPointerDown = item;
+    window.setTimeout(() => {
+      if (this.droppedByPointerDown === item) this.droppedByPointerDown = null;
+    }, 0);
   }
 
   private handleFocusIn = () => {
@@ -280,6 +311,16 @@ export class PdsSortable {
     if (this.disabled || ev.detail !== 0) return;
     const item = this.targetItem(ev.target as HTMLElement);
     if (!item) return;
+
+    // NVDA and JAWS in Chromium fire this click's capture-phase `pointerdown` first, for the
+    // same Enter or Space press. If that pointerdown found the item already grabbed and dropped
+    // it, this click is that same press's drop, already handled -- picking the item back up here
+    // would leave it stuck grabbed, since Escape and the arrow keys don't reach the handle in
+    // browse mode.
+    if (this.droppedByPointerDown === item) {
+      this.droppedByPointerDown = null;
+      return;
+    }
 
     if (!this.isGrabbing()) {
       this.pickUp(item);
@@ -349,10 +390,13 @@ export class PdsSortable {
     return (Array.from(item.children).find((child) => child.matches(HANDLE_SELECTOR)) ?? null) as HTMLElement | null;
   }
 
-  /** Where an item sits among all the children, then among the items, as SortableJS counts them. */
+  // SortableJS tells `index` (among all children) and `draggableIndex` (among draggable ones)
+  // apart for a list that also holds non-draggable children. This list doesn't -- the live
+  // region that once lived among `this.el`'s children now sits outside it as a sibling -- so
+  // `items()` already is every child, and the two counts are always the same.
   private indexes(item: HTMLElement) {
-    const children = Array.from(this.el.children).filter((child) => child.tagName !== 'TEMPLATE');
-    return { index: children.indexOf(item), draggableIndex: this.items().indexOf(item) };
+    const index = this.items().indexOf(item);
+    return { index, draggableIndex: index };
   }
 
   private pickUp(item: HTMLElement) {
@@ -370,7 +414,15 @@ export class PdsSortable {
   private moveTo(item: HTMLElement, to: number, announce = true) {
     const items = this.items();
     const from = items.indexOf(item);
-    if (to < 0 || to >= items.length || to === from) return;
+    if (to < 0 || to >= items.length || to === from) {
+      // At the first or last position, an out-of-range attempt (ArrowUp at the top, ArrowDown at
+      // the bottom) or a no-op one (Home already first, End already last) would otherwise leave
+      // a screen reader user with no sign the key landed at all. Repeating the current position
+      // confirms it without implying a move that didn't happen -- `cancel()`'s own call here
+      // passes `announce: false` and gets its own, different announcement instead.
+      if (announce) this.announce(this.itemMovedLabel, item);
+      return;
+    }
 
     if (to < from) {
       const next = item.nextSibling;
@@ -390,7 +442,15 @@ export class PdsSortable {
     this.announce(this.itemDroppedLabel, item);
 
     const { index, draggableIndex } = this.indexes(item);
-    // The same shape SortableJS gives `onEnd`, so a listener can't tell a keyboard move from a drag.
+    // A keyboard drop happens more often than a drag: tabbing away from a picked-up row, a click
+    // elsewhere in the list, or the second press of a screen reader's browse-mode Enter all drop
+    // it too. Emitting unconditionally would have a consumer that saves on every event send a
+    // no-op request each time nothing actually moved.
+    if (draggableIndex === oldDraggableIndex) return;
+
+    // The same shape SortableJS gives `onEnd`, with the event that ended the move as
+    // `originalEvent` -- not always a `KeyboardEvent`: a `FocusEvent` when focus leaves the row,
+    // a `PointerEvent` for a pointerdown, or a `MouseEvent` for a browse-mode click.
     const detail = Object.assign(new CustomEvent('end', { bubbles: true, cancelable: true }), {
       item,
       from: this.el,
