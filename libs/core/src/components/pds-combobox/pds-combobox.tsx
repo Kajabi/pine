@@ -1439,10 +1439,13 @@ export class PdsCombobox implements BasePdsProps {
       placement: this.dropdownPlacement,
       strategy,
       middleware: [offset(8), flip(), shift({ padding: 5 })],
-    }).then(({ x, y }) => {
+    }).then(({ x, y, placement }) => {
       if (!this.listboxEl) {
         return;
       }
+
+      // Where it landed after flipping, so the opening motion moves away from the field.
+      this.listboxEl.dataset.placement = placement;
 
       Object.assign(this.listboxEl.style, {
         left: `${x}px`,
