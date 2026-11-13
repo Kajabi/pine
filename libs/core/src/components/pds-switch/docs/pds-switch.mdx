@@ -24,7 +24,13 @@ Switches toggle a single setting between on and off, rendered as a sliding thumb
 - Do not use for situations where the user's choice needs to be explicitly confirmed.
 
 ### Accessibility
-- The `aria-describedby` attribute is used to associate the switch with an error message or helper message but may not be read out by all screen readers.
+- The switch's helper message, or its error message while it's invalid, is announced as its description.
+- To explain why a switch is disabled, put the reason in `helper-message`. A tooltip around a disabled switch opens on hover only: a disabled switch can't take focus, so people using a keyboard never reach it, and screen readers don't get the tooltip text. See [Disabled with a reason](#disabled-with-a-reason).
+  - Tab still skips a disabled switch, as it does any disabled control. Screen readers reach it, with its helper message, when reading through the page. If the reason must be reachable by Tab, keep the switch enabled and explain the problem when it's changed.
+- `aria-describedby` on `pds-switch` describes the switch with text elsewhere on the page, such as a card's description beside it. The text it points at is announced first, then the switch's own message. See [Described by text outside it](#described-by-text-outside-it).
+  - The ID reference passes to the inner input as the elements it points at, since an ID can't reach inside the shadow DOM. The element must be in the same document as `pds-switch`, or in a shadow root that contains it.
+  - The element must exist when the switch renders, when it takes focus, or when the attribute is set. One added or replaced later is picked up the next time the switch is focused. A disabled switch can't take focus, so to change its description, update the referenced element's text rather than replacing the element.
+  - This needs ARIA element reflection: Chrome and Edge 135+, Firefox 136+, Safari 16.4+. Older browsers announce the switch's own message only. jsdom, and so React Testing Library, doesn't implement it either, so unit tests there won't see the description.
 - Put only non-interactive content in the `label` slot. Buttons and links inside a label are invalid HTML.
 - State on the host follows the component's props: the `pds-switch--error` class and `aria-disabled`. It comes back if something removes it, such as a DOM morph, so change it through props. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
@@ -66,6 +72,24 @@ Disables user interaction with the switch.
     disabled
     label="Can't touch this"
     name="pds-switch-disabled"
+  ></pds-switch>
+</DocCanvas>
+
+### Disabled with a reason
+
+When a switch is disabled for a reason the person needs to know, show the reason in `helper-message`. It stays visible, and it's announced as the switch's description without hover or focus.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsSwitch componentId="pds-switch-disabled-reason-example" disabled helperMessage="Free offers can't have affiliate commissions." label="Affiliate commissions" name="pds-switch-disabled-reason"/>`,
+    webComponent: `<pds-switch component-id="pds-switch-disabled-reason-example" disabled helper-message="Free offers can't have affiliate commissions." label="Affiliate commissions" name="pds-switch-disabled-reason"></pds-switch>`
+}}>
+  <pds-switch
+    component-id="pds-switch-disabled-reason-example"
+    disabled
+    helper-message="Free offers can't have affiliate commissions."
+    label="Affiliate commissions"
+    name="pds-switch-disabled-reason"
   ></pds-switch>
 </DocCanvas>
 
@@ -119,11 +143,62 @@ Use the `label` slot when the label needs more than text, such as a `pds-chip`. 
   <pds-switch component-id="label-slot"><pds-chip slot="label" dot>Spring Launch</pds-chip></pds-switch>
 </DocCanvas>
 
+### Described by text outside it
+
+Use `aria-describedby` on `pds-switch` when the text that describes it sits outside the component, such as the description in a settings card. The switch is announced with its label, then that text, then its own helper or error message.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsBox direction="column" gap="xs">
+  <PdsText id="pds-switch-described-text" tag="p">Send customers a receipt after each purchase.</PdsText>
+  <PdsSwitch aria-describedby="pds-switch-described-text" componentId="pds-switch-described-example" label="Purchase receipts" name="pds-switch-described" />
+</PdsBox>`,
+    webComponent: `<pds-box direction="column" gap="xs">
+  <pds-text id="pds-switch-described-text" tag="p">Send customers a receipt after each purchase.</pds-text>
+  <pds-switch aria-describedby="pds-switch-described-text" component-id="pds-switch-described-example" label="Purchase receipts" name="pds-switch-described"></pds-switch>
+</pds-box>`
+}}>
+  <pds-box direction="column" gap="xs">
+    <pds-text id="pds-switch-described-text" tag="p">Send customers a receipt after each purchase.</pds-text>
+    <pds-switch
+      aria-describedby="pds-switch-described-text"
+      component-id="pds-switch-described-example"
+      label="Purchase receipts"
+      name="pds-switch-described"
+    ></pds-switch>
+  </pds-box>
+</DocCanvas>
+
 ## Form Integration
 
-- Provide a `name` so the switch contributes a value to `FormData` when checked; unchecked switches are omitted like native checkboxes.
+- Provide a `name` so the switch contributes a value to `FormData` when checked. Without `unchecked-value`, an unchecked switch is omitted like a native checkbox.
+- Set `unchecked-value` when the form needs an explicit off value, such as `"0"` for a server that expects one. An unchecked switch then submits it under `name`, so you don't need a hidden input beside it. An empty string submits a blank value. A disabled switch submits nothing, whether `disabled` is set as an attribute or a property.
 - Use `value` (default `"on"`) to differentiate multiple switches that share the same `name`.
 - Combine `checked`, `onPdsSwitchChange`, and state management for controlled React usage, and pair `required`/`invalid` to enforce acknowledgements such as terms of service.
+
+### Unchecked value
+
+With `value="1"` and `unchecked-value="0"`, the form below submits `notify=0` while the switch is off and `notify=1` while it's on.
+
+<DocCanvas
+  mdxSource={{
+    react: `<form>
+  <PdsSwitch componentId="pds-switch-unchecked-value-example" label="Email notifications" name="notify" uncheckedValue="0" value="1" />
+</form>`,
+    webComponent: `<form>
+  <pds-switch component-id="pds-switch-unchecked-value-example" label="Email notifications" name="notify" unchecked-value="0" value="1"></pds-switch>
+</form>`
+}}>
+  <form>
+    <pds-switch
+      component-id="pds-switch-unchecked-value-example"
+      label="Email notifications"
+      name="notify"
+      unchecked-value="0"
+      value="1"
+    ></pds-switch>
+  </form>
+</DocCanvas>
 
 ## Playground
 

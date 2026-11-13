@@ -718,6 +718,7 @@ export namespace Components {
         "label": string;
         "name": string;
         "required"?: boolean;
+        "uncheckedValue"?: string;
         "value": string;
     }
     export interface PdsTab {
@@ -2889,6 +2890,7 @@ export namespace LocalJSX {
         "name"?: string;
         "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         "required"?: boolean;
+        "uncheckedValue"?: string;
         "value"?: string;
     }
 
@@ -2914,6 +2916,8 @@ export namespace LocalJSX {
         "name": string;
         // (undocumented)
         "required": boolean;
+        // (undocumented)
+        "uncheckedValue": string;
         // (undocumented)
         "value": string;
     }
