@@ -417,131 +417,131 @@ export namespace Components {
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the box's outer bottom spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing (the bottom in most languages). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing (the top in most languages). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStart"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartXs"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing (the right in left-to-right languages, the left in right-to-left). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing (the left in left-to-right languages, the right in right-to-left). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStart"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartXs"?: BoxMarginType;
         /**
-          * The minimum height of the row. Used in conjunction with alignment props
+          * The minimum height of the box, as a CSS length such as `120px`. Used in conjunction with alignment props
          */
         "minHeight"?: string;
         /**
-          * The minimum width of the row. Used in conjunction with alignment props
+          * The minimum width of the box, as a CSS length such as `300px`.
          */
         "minWidth"?: string;
         /**
@@ -569,152 +569,152 @@ export namespace Components {
          */
         "offsetXs"?: BoxColumnType;
         /**
-          * Defines the spacing between the box items.
+          * Defines the box's inner spacing on every side.
           * @defaultValue none
          */
         "padding"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing.
+          * Defines the box's inner block-end spacing (the bottom in most languages).
           * @defaultValue none
          */
         "paddingBlockEnd"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the LG breakpoint.
+          * Defines the box's inner block-end spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndLg"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the MD breakpoint.
+          * Defines the box's inner block-end spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndMd"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the SM breakpoint.
+          * Defines the box's inner block-end spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndSm"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the XL breakpoint.
+          * Defines the box's inner block-end spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndXl"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the XS breakpoint.
+          * Defines the box's inner block-end spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndXs"?: BoxSpacingType;
         /**
-          * Defines the top spacing.
+          * Defines the box's inner block-start spacing (the top in most languages).
           * @defaultValue none
          */
         "paddingBlockStart"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the LG breakpoint.
+          * Defines the box's inner block-start spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartLg"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the MD breakpoint.
+          * Defines the box's inner block-start spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartMd"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the SM breakpoint.
+          * Defines the box's inner block-start spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartSm"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the XL breakpoint.
+          * Defines the box's inner block-start spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartXl"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the XS breakpoint.
+          * Defines the box's inner block-start spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartXs"?: BoxSpacingType;
         /**
-          * Defines the right spacing.
+          * Defines the box's inner inline-end spacing (the right in left-to-right languages, the left in right-to-left).
           * @defaultValue none
          */
         "paddingInlineEnd"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the LG breakpoint.
+          * Defines the box's inner inline-end spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndLg"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the MD breakpoint.
+          * Defines the box's inner inline-end spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndMd"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the SM breakpoint.
+          * Defines the box's inner inline-end spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndSm"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the XL breakpoint.
+          * Defines the box's inner inline-end spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndXl"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the XS breakpoint.
+          * Defines the box's inner inline-end spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndXs"?: BoxSpacingType;
         /**
-          * Defines the left spacing.
+          * Defines the box's inner inline-start spacing (the left in left-to-right languages, the right in right-to-left).
           * @defaultValue none
          */
         "paddingInlineStart"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the LG breakpoint.
+          * Defines the box's inner inline-start spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartLg"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the MD breakpoint.
+          * Defines the box's inner inline-start spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartMd"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the SM breakpoint.
+          * Defines the box's inner inline-start spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartSm"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the XL breakpoint.
+          * Defines the box's inner inline-start spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartXl"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the XS breakpoint.
+          * Defines the box's inner inline-start spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartXs"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the LG breakpoint.
+          * Defines the box's inner spacing on every side at the LG breakpoint.
           * @defaultValue none
          */
         "paddingLg"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the MD breakpoint.
+          * Defines the box's inner spacing on every side at the MD breakpoint.
           * @defaultValue none
          */
         "paddingMd"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the SM breakpoint.
+          * Defines the box's inner spacing on every side at the SM breakpoint.
           * @defaultValue none
          */
         "paddingSm"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the XL breakpoint.
+          * Defines the box's inner spacing on every side at the XL breakpoint.
           * @defaultValue none
          */
         "paddingXl"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the XS breakpoint.
+          * Defines the box's inner spacing on every side at the XS breakpoint.
           * @defaultValue none
          */
         "paddingXs"?: BoxSpacingType;
@@ -1173,7 +1173,7 @@ export namespace Components {
          */
         "centered": boolean;
         /**
-          * Sets the maximum width of the container. Accepts a named size token (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
+          * Sets the maximum width of the container. Accepts a named size token (`'sm'` 340px, `'md'` 520px, `'lg'` 700px, `'xl'` 1064px, `'full'` 1440px) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
          */
         "size"?: string;
         /**
@@ -2402,7 +2402,7 @@ export namespace Components {
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
-          * @defaultValue start
+          * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -2411,19 +2411,19 @@ export namespace Components {
          */
         "border"?: boolean;
         /**
-          * Defines the spacing between the row items.
+          * Defines the gutter between columns, as padding on every side of each column, so the space between two columns' content is twice the value. Without a gap prop, columns have no gutter.
          */
         "colGap"?: BoxSpacingType | null;
         /**
-          * Defines the spacing between the row items vertically.
+          * Defines the vertical gutter, as padding above and below each column. Overrides `col-gap` vertically.
          */
         "colGapBlock"?: BoxSpacingType | null;
         /**
-          * Defines the spacing between the row items horizontally.
+          * Defines the horizontal gutter, as padding on both sides of each column. Overrides `col-gap` horizontally.
          */
         "colGapInline"?: BoxSpacingType | null;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -4391,131 +4391,131 @@ declare namespace LocalJSX {
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the box's outer bottom spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing (the bottom in most languages). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing (the top in most languages). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStart"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartXs"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing (the right in left-to-right languages, the left in right-to-left). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing (the left in left-to-right languages, the right in right-to-left). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStart"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartXs"?: BoxMarginType;
         /**
-          * The minimum height of the row. Used in conjunction with alignment props
+          * The minimum height of the box, as a CSS length such as `120px`. Used in conjunction with alignment props
          */
         "minHeight"?: string;
         /**
-          * The minimum width of the row. Used in conjunction with alignment props
+          * The minimum width of the box, as a CSS length such as `300px`.
          */
         "minWidth"?: string;
         /**
@@ -4543,152 +4543,152 @@ declare namespace LocalJSX {
          */
         "offsetXs"?: BoxColumnType;
         /**
-          * Defines the spacing between the box items.
+          * Defines the box's inner spacing on every side.
           * @defaultValue none
          */
         "padding"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing.
+          * Defines the box's inner block-end spacing (the bottom in most languages).
           * @defaultValue none
          */
         "paddingBlockEnd"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the LG breakpoint.
+          * Defines the box's inner block-end spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndLg"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the MD breakpoint.
+          * Defines the box's inner block-end spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndMd"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the SM breakpoint.
+          * Defines the box's inner block-end spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndSm"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the XL breakpoint.
+          * Defines the box's inner block-end spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndXl"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the XS breakpoint.
+          * Defines the box's inner block-end spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndXs"?: BoxSpacingType;
         /**
-          * Defines the top spacing.
+          * Defines the box's inner block-start spacing (the top in most languages).
           * @defaultValue none
          */
         "paddingBlockStart"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the LG breakpoint.
+          * Defines the box's inner block-start spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartLg"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the MD breakpoint.
+          * Defines the box's inner block-start spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartMd"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the SM breakpoint.
+          * Defines the box's inner block-start spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartSm"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the XL breakpoint.
+          * Defines the box's inner block-start spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartXl"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the XS breakpoint.
+          * Defines the box's inner block-start spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartXs"?: BoxSpacingType;
         /**
-          * Defines the right spacing.
+          * Defines the box's inner inline-end spacing (the right in left-to-right languages, the left in right-to-left).
           * @defaultValue none
          */
         "paddingInlineEnd"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the LG breakpoint.
+          * Defines the box's inner inline-end spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndLg"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the MD breakpoint.
+          * Defines the box's inner inline-end spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndMd"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the SM breakpoint.
+          * Defines the box's inner inline-end spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndSm"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the XL breakpoint.
+          * Defines the box's inner inline-end spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndXl"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the XS breakpoint.
+          * Defines the box's inner inline-end spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndXs"?: BoxSpacingType;
         /**
-          * Defines the left spacing.
+          * Defines the box's inner inline-start spacing (the left in left-to-right languages, the right in right-to-left).
           * @defaultValue none
          */
         "paddingInlineStart"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the LG breakpoint.
+          * Defines the box's inner inline-start spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartLg"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the MD breakpoint.
+          * Defines the box's inner inline-start spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartMd"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the SM breakpoint.
+          * Defines the box's inner inline-start spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartSm"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the XL breakpoint.
+          * Defines the box's inner inline-start spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartXl"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the XS breakpoint.
+          * Defines the box's inner inline-start spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartXs"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the LG breakpoint.
+          * Defines the box's inner spacing on every side at the LG breakpoint.
           * @defaultValue none
          */
         "paddingLg"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the MD breakpoint.
+          * Defines the box's inner spacing on every side at the MD breakpoint.
           * @defaultValue none
          */
         "paddingMd"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the SM breakpoint.
+          * Defines the box's inner spacing on every side at the SM breakpoint.
           * @defaultValue none
          */
         "paddingSm"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the XL breakpoint.
+          * Defines the box's inner spacing on every side at the XL breakpoint.
           * @defaultValue none
          */
         "paddingXl"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the XS breakpoint.
+          * Defines the box's inner spacing on every side at the XS breakpoint.
           * @defaultValue none
          */
         "paddingXs"?: BoxSpacingType;
@@ -5171,7 +5171,7 @@ declare namespace LocalJSX {
          */
         "centered"?: boolean;
         /**
-          * Sets the maximum width of the container. Accepts a named size token (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
+          * Sets the maximum width of the container. Accepts a named size token (`'sm'` 340px, `'md'` 520px, `'lg'` 700px, `'xl'` 1064px, `'full'` 1440px) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
          */
         "size"?: string;
         /**
@@ -6468,7 +6468,7 @@ declare namespace LocalJSX {
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
-          * @defaultValue start
+          * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -6477,19 +6477,19 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * Defines the spacing between the row items.
+          * Defines the gutter between columns, as padding on every side of each column, so the space between two columns' content is twice the value. Without a gap prop, columns have no gutter.
          */
         "colGap"?: BoxSpacingType | null;
         /**
-          * Defines the spacing between the row items vertically.
+          * Defines the vertical gutter, as padding above and below each column. Overrides `col-gap` vertically.
          */
         "colGapBlock"?: BoxSpacingType | null;
         /**
-          * Defines the spacing between the row items horizontally.
+          * Defines the horizontal gutter, as padding on both sides of each column. Overrides `col-gap` horizontally.
          */
         "colGapInline"?: BoxSpacingType | null;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**

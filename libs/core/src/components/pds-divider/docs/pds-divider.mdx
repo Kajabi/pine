@@ -26,6 +26,7 @@ A divider is used to create a clear visual separation between sections of conten
 - When excessive dividers could create visual clutter or detract from content hierarchy.
 
 ### Accessibility
+
 - Ensure sufficient contrast between the divider and the background to meet WCAG contrast requirements.
 - Avoid using dividers as the sole method of separating content; support visual indicators with clear headings or labels.
 
@@ -61,7 +62,7 @@ A vertical divider fills its parent's height, so the parent needs a set height, 
   mdxSource={{
     react: `
 <div style={{ height: '150px' }}>
-  <PdsDivider vertical="true" />
+  <PdsDivider vertical />
 </div>
     `,
     webComponent: `
@@ -79,7 +80,7 @@ A vertical divider fills its parent's height, so the parent needs a set height, 
 
 Both horizontal and vertical dividers can be offset to create a full-width or full-height bleed appearance. To bleed to the edges of a padded parent, set `offset` to the parent's padding size, such as `offset="md"` inside a `pds-box` with `direction="column"` and `padding="md"`. A `pds-box` is a row by default, and a horizontal divider in a row collapses to no width.
 
-Offset sizes follow the global spacing sizes: `xxs`: 4px, `xs`: 8px, `sm`: 12px, `md`: 24px, `lg`: 32px, `xl`: 48px, `xxl`: 64px.
+Offset sizes follow the global spacing sizes: `xxs`: 4px, `xs`: 8px, `sm`: 16px, `md`: 24px, `lg`: 32px, `xl`: 40px, `xxl`: 48px.
 
 <DocCanvas
   mdxSource={{
@@ -97,7 +98,7 @@ Below, you will see a vertical divider using a large offset.
   mdxSource={{
     react: `
 <div style={{ height: '150px' }}>
-  <PdsDivider offset="lg" vertical="true" />
+  <PdsDivider offset="lg" vertical />
 </div>
     `,
     webComponent: `
