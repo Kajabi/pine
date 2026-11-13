@@ -1,6 +1,7 @@
 import { Component, Element, Host, Prop, h, Event, EventEmitter, State, Method } from '@stencil/core';
 
 import { downSmall, upSmall } from '@pine-ds/icons/icons';
+import { closest } from '@utils/closest';
 import { isScrolledFromInlineStart } from '../../../utils/scroll';
 
 /**
@@ -19,6 +20,7 @@ export class PdsTableHeadCell {
   private setupTimer: number | undefined;
   private setupRetries: number = 0;
   private headObserver?: MutationObserver;
+  private hasLoaded = false;
 
   /**
    * Sets the text alignment within the head cell.
@@ -29,6 +31,13 @@ export class PdsTableHeadCell {
    * Determines whether the table column is sortable when set to `true`.
    */
   @Prop() sortable: boolean;
+
+  /**
+   * Sets the width of the column. Accepts any CSS length (e.g. '148px', '12rem', '20%').
+   * When the table's `tableLayout` is `fixed`, the column keeps this width whatever its content.
+   * Otherwise the column is at least this wide and can grow to fit its content.
+   */
+  @Prop({ reflect: true }) width?: string;
 
   /**
    * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
@@ -95,25 +104,46 @@ export class PdsTableHeadCell {
   }
 
   componentWillLoad() {
-    // Set initial references and state before first render
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    // Set initial references and state before first render. The shadow-crossing `closest`
+    // util, not the native one -- the select-all cell lives inside pds-table-head's own shadow
+    // root, which native `closest` can't see past.
+    this.tableRef = closest('pds-table', this.hostElement) as HTMLPdsTableElement;
 
-    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    const tableHead = closest('pds-table-head', this.hostElement) as HTMLElement;
     if (tableHead) {
       this.hasHeadBorder = tableHead.hasAttribute('border');
       this.hasHeadBackground = tableHead.hasAttribute('background');
     }
   }
 
+  // Fires again each time the cell is moved (such as a reparent or DOM morph), unlike
+  // componentDidLoad, so it re-binds what disconnectedCallback tore down.
+  connectedCallback() {
+    if (!this.hasLoaded) return;
+
+    this.tableRef = closest('pds-table', this.hostElement) as HTMLPdsTableElement;
+    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+      this.setupScrollListener();
+    }
+
+    this.setupHeadObserver();
+  }
+
   componentDidLoad() {
+    this.hasLoaded = true;
+
     if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
       // For responsive tables with fixed columns, set up scroll detection
       // This enables the first column header to show a shadow when the table is scrolled horizontally
       this.setupScrollListener();
     }
 
-    // Watch for changes to the parent table-head's border and background attributes
-    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    this.setupHeadObserver();
+  }
+
+  // Watches the parent table-head's border and background attributes.
+  private setupHeadObserver() {
+    const tableHead = closest('pds-table-head', this.hostElement) as HTMLElement;
     if (tableHead && typeof MutationObserver !== 'undefined') {
       // Defensive guard: disconnect existing observer before creating a new one
       if (this.headObserver) {
@@ -180,6 +210,24 @@ export class PdsTableHeadCell {
     }
 
     this.setupRetries = 0; // Reset retry counter
+    // Without a listener there's no way to know the scroll position any more, so the shadow
+    // this drove shouldn't linger -- matters when a rebind tears this down without setting it
+    // back up (responsive turned off while scrolled), not just on disconnect.
+    this.tableScrolling = false;
+  }
+
+  /**
+   * Re-binds the scroll listener to the table's current responsive container. Called by
+   * `pds-table` after a live `responsive` toggle: the cell stays in light DOM across that
+   * change, so it never reconnects on its own and would otherwise keep listening to a container
+   * the table already replaced or removed.
+   */
+  @Method()
+  async rebindScrollListener(): Promise<void> {
+    this.cleanupScrollListener();
+    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+      this.setupScrollListener();
+    }
   }
 
   /**
@@ -260,7 +308,28 @@ export class PdsTableHeadCell {
       classNames.push('has-head-border');
     }
 
+    if (this.width) {
+      classNames.push('has-width');
+    } else if (this.tableRef && this.tableRef.tableLayout === 'fixed') {
+      classNames.push('has-auto-width');
+    }
+
     return classNames.join(' ');
+  }
+
+  private hostStyles(): Record<string, string> {
+    const styles: Record<string, string> = {};
+
+    if (this.tableRef && this.tableRef.fixedColumn && this.tableRef.selectable) {
+      styles['--fixed-cell-position'] = '40px';
+    }
+
+    // Hand the width to the stylesheet as a custom property rather than an inline width.
+    if (this.width) {
+      styles['--pds-table-head-cell-width'] = this.width;
+    }
+
+    return styles;
   }
 
   render() {
@@ -270,13 +339,7 @@ export class PdsTableHeadCell {
         role="columnheader"
         onClick={this.toggleSort}
         part="head-cell"
-        style={
-          this.tableRef &&
-          this.tableRef.fixedColumn &&
-          this.tableRef.selectable
-            ? { '--fixed-cell-position': '40px' }
-            : {}
-        }
+        style={this.hostStyles()}
       >
         <slot></slot>
         {this.sortable && this.isActive && (

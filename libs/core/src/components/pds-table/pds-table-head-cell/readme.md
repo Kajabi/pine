@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property    | Attribute    | Description                                                         | Type                                        | Default     |
-| ----------- | ------------ | ------------------------------------------------------------------- | ------------------------------------------- | ----------- |
-| `cellAlign` | `cell-align` | Sets the text alignment within the head cell.                       | `"center" \| "end" \| "justify" \| "start"` | `undefined` |
-| `sortable`  | `sortable`   | Determines whether the table column is sortable when set to `true`. | `boolean`                                   | `undefined` |
+| Property    | Attribute    | Description                                                                                                                                                                                                                                                   | Type                                        | Default     |
+| ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----------- |
+| `cellAlign` | `cell-align` | Sets the text alignment within the head cell.                                                                                                                                                                                                                 | `"center" \| "end" \| "justify" \| "start"` | `undefined` |
+| `sortable`  | `sortable`   | Determines whether the table column is sortable when set to `true`.                                                                                                                                                                                           | `boolean`                                   | `undefined` |
+| `width`     | `width`      | Sets the width of the column. Accepts any CSS length (e.g. '148px', '12rem', '20%'). When the table's `tableLayout` is `fixed`, the column keeps this width whatever its content. Otherwise the column is at least this wide and can grow to fit its content. | `string`                                    | `undefined` |
 
 
 ## Events
@@ -26,6 +27,19 @@
 
 Clears the active sort state from this column.
 Used internally when another column becomes active.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `rebindScrollListener() => Promise<void>`
+
+Re-binds the scroll listener to the table's current responsive container. Called by
+`pds-table` after a live `responsive` toggle: the cell stays in light DOM across that
+change, so it never reconnects on its own and would otherwise keep listening to a container
+the table already replaced or removed.
 
 #### Returns
 
