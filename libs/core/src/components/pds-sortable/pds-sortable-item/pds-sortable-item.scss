@@ -3,6 +3,11 @@
   display: flex;
   padding-block: var(--pine-dimension-xs);
   padding-inline: var(--pine-dimension-md);
+  // The hidden handle below is `position: absolute`; without this, it positions against
+  // whatever ancestor outside this row happens to be positioned (or the viewport), which can
+  // grow a scrollable ancestor's scroll area far past the list's own height.
+  position: relative;
+  transition: box-shadow var(--pine-motion-duration-fast) var(--pine-motion-easing-out);
 
   .pds-sortable-item__actions {
     margin-inline-start: auto;
@@ -10,8 +15,29 @@
   }
 
   .pds-sortable-item__handle {
+    border-radius: var(--pine-border-radius-sm);
     line-height: 1;
     margin-inline-end: var(--pine-dimension-md);
+
+    &:focus-visible {
+      outline: var(--pine-outline-focus);
+      outline-offset: var(--pine-border-width);
+    }
+  }
+
+  // Without `show-handle`, the handle is still the keyboard's reorder button, just not shown.
+  .pds-sortable-item__handle--hidden {
+    clip-path: inset(50%);
+    height: 1px;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+
+    &:focus-visible {
+      outline: 0;
+    }
   }
 
   // styles when sortable is bordered
@@ -69,6 +95,32 @@
     pds-icon {
       color: var(--pine-color-info)
     }
+  }
+}
+
+// A hidden handle can't show its focus, so the row shows it.
+:host(.pds-sortable-item:has(> .pds-sortable-item__handle--hidden:focus-visible)) {
+  outline: var(--pine-outline-focus);
+  // Inset, so a bordered list's edge doesn't clip it.
+  outline-offset: calc(var(--pine-border-width-thick) * -1);
+}
+
+// Picked up from the keyboard: lifted like an item being dragged, with an inset border too, as the
+// shadow barely shows on a dark background.
+:host(.pds-sortable-item--grabbed) {
+  background-color: var(--pine-color-background-container-hover);
+  box-shadow: var(--pine-box-shadow-400), inset 0 0 0 var(--pine-border-width-thick) var(--pine-color-border-active);
+  position: relative;
+  z-index: 1;
+
+  // Forced colors drops both the box-shadow and the background, leaving a picked-up row looking
+  // the same as a plain focused one. A real border survives forced colors (recolored to the
+  // system highlight), unlike the box-shadow above; padding is cut by the same amount the border
+  // grows so the row doesn't resize.
+  @media (forced-colors: active) {
+    border: var(--pine-border-width-thick) solid Highlight;
+    padding-block: calc(var(--pine-dimension-xs) - var(--pine-border-width-thick));
+    padding-inline: calc(var(--pine-dimension-md) - var(--pine-border-width-thick));
   }
 }
 

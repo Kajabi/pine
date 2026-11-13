@@ -1,7 +1,11 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
 import { HostStylingKeeper } from '@utils/attributes';
+import { formatMessage } from '../../../i18n';
+import { sortableItemLabel } from '../sortable-label';
 
 import { handle as handleIcon } from '@pine-ds/icons/icons';
+
+const GRABBED_CLASS = 'pds-sortable-item--grabbed';
 /**
  * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered when `enable-actions` is set.
  * @lightDom renders-markup
@@ -24,6 +28,7 @@ export class PdsSortableItem {
   }
 
   sortableRef: HTMLPdsSortableElement;
+
   /**
    * Determines whether `sortable-item-actions` slot should be enabled.
    * @defaultValue false
@@ -36,10 +41,17 @@ export class PdsSortableItem {
   @Prop() componentId: string;
 
   /**
-   * Determines whether `sortable-item` should have a handle.
+   * Determines whether the reorder handle is shown. The handle itself renders whenever the list
+   * is reorderable, regardless of this prop; without it, the handle is visually hidden but still
+   * reachable from the keyboard.
    * @defaultValue false
    */
   @Prop({ mutable: true }) showHandle = false;
+
+  /**
+   * Name of the item in its reorder handle's label and in the reorder announcements. Pass a translated string to localize it; defaults to the item's text content.
+   */
+  @Prop() itemLabel?: string;
 
   // Discards stale handle/actions siblings left by a page-cache (Turbo, bfcache) reconnect; the fresh handle is always first, the fresh actions wrapper always last.
   componentDidRender() {
@@ -61,7 +73,7 @@ export class PdsSortableItem {
   componentWillRender() {
     // When the parent sortable has a type of 'handle', the sortable items
     // will automatically set showHandle to 'true'.
-    this.sortableRef = this.el.closest('pds-sortable') as HTMLPdsSortableElement;
+    this.sortableRef = this.el.closest('pds-sortable');
 
     if (this.sortableRef && this.sortableRef.handleType === 'handle') {
       this.showHandle = true;
@@ -69,12 +81,37 @@ export class PdsSortableItem {
   }
 
   render() {
-    this.hostKeeper.record('pds-sortable-item');
+    const sortable = this.sortableRef;
+    // In a list that can be reordered, the handle is what the keyboard reorders with. It's always
+    // rendered, and only hidden visually when `show-handle` is off, so every row has a named button.
+    const reorderable = typeof sortable?.handleLabel === 'string' && !sortable.disabled;
+
+    // `pds-sortable` sets the grabbed class and `aria-pressed` directly on this element and its
+    // handle, not through a prop -- read back whatever's there now rather than hardcoding the
+    // rest state, so a re-render for an unrelated reason (`handleLabel` changing, for one,
+    // `forceUpdate`s every row) carries the current grabbed state forward instead of resetting it.
+    const wasGrabbed = this.el.classList.contains(GRABBED_CLASS);
+    const hostClasses = {
+      'pds-sortable-item': true,
+      [GRABBED_CLASS]: wasGrabbed,
+    };
+    this.hostKeeper.record(hostClasses);
+    const existingHandle = this.el.querySelector('.pds-sortable-item__handle');
+    const wasPressed = existingHandle?.getAttribute('aria-pressed') === 'true';
 
     return (
-      <Host class="pds-sortable-item" id={this.componentId}>
-        {this.showHandle && (
-          <div class="pds-sortable-item__handle">
+      <Host class={hostClasses} id={this.componentId}>
+        {(this.showHandle || reorderable) && (
+          <div
+            class={{
+              'pds-sortable-item__handle': true,
+              'pds-sortable-item__handle--hidden': !this.showHandle,
+            }}
+            role={reorderable ? 'button' : undefined}
+            tabindex={reorderable ? '0' : undefined}
+            aria-label={reorderable ? formatMessage(sortable.handleLabel, { item: sortableItemLabel(this.el) }) : undefined}
+            aria-pressed={reorderable ? String(wasPressed) : undefined}
+          >
             <pds-icon aria-hidden="true" icon={handleIcon}></pds-icon>
           </div>
         )}

@@ -107,4 +107,14 @@ describe('pds-sortable-item', () => {
       </pds-sortable-item>
     `);
   });
+
+  it('is not a reorder target outside a pds-sortable', async () => {
+    const page = await newSpecPage({
+      components: [PdsSortableItem],
+      html: `<pds-sortable-item show-handle="true" item-label="Alpha">Content</pds-sortable-item>`,
+    });
+
+    expect(page.root?.hasAttribute('tabindex')).toBe(false);
+    expect(page.root?.querySelector('.pds-sortable-item__handle')?.hasAttribute('role')).toBe(false);
+  });
 });

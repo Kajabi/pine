@@ -11,12 +11,12 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Sortable
 
-Sortable is for creating containers of items that can be sorted via drag and drop functionality.
+Sortable is for creating containers of items that can be sorted by dragging or from the keyboard.
 
 ## Guidelines
 
 ### When to use
-- Use the `sortable` component when you need to create an interface for reordering items through drag and drop.
+- Use the `sortable` component when you need to create an interface for reordering items, by dragging or from the keyboard.
 - Ideal for situations where users need to arrange content dynamically.
 
 ### When not to use
@@ -24,7 +24,57 @@ Sortable is for creating containers of items that can be sorted via drag and dro
 - Not suitable for forms or content that does not require item reordering.
 
 ### Accessibility
-- Ensure that drag-and-drop interactions are accessible by providing clear visual handles for reordering.
+
+Every item can be reordered from the keyboard as well as by dragging, so the list meets WCAG 2.1.1 (Keyboard).
+
+WCAG 2.5.7 (Dragging Movements, 2.2 AA) also asks for a way to reorder with single pointer clicks, which the keyboard doesn't give. Where you need it, put "Move up" and "Move down" buttons in the `sortable-item-actions` slot and reorder your data when they're pressed.
+
+- **What gets focus:** every item's handle is now a tab stop (not only ones with `show-handle`): a button labelled "Reorder" plus the item's name, that's pressed while the item is picked up. Without `show-handle`, the handle is visually hidden but still reachable from the keyboard, and the row shows its focus ring instead. A pointer still drags the whole row with `handle-type="row"`. Controls inside a row, such as its actions, keep their own keys. If you keep other rows out of the tab order during an inline edit with `pointer-events: none`, that no longer blocks reordering by keyboard: a keyboard user can still Tab to another row's handle.
+- **Screen readers:** pressing the handle in a screen reader's browse mode picks the item up and drops it too. Moving it with the arrow keys needs the screen reader's focus (forms) mode, such as NVDA+Space or JAWS's Enter on the button, so the "Move up" and "Move down" buttons above are the most dependable path for screen reader users.
+- **The item's name:** the handle's label and the announcements use the item's text, leaving out the handle and the actions. Set `item-label` on a `pds-sortable-item` when that text is long, isn't a good name, or changes after the item renders -- the default name is computed once, when the item first renders, and doesn't notice a later change to its slotted text.
+- **Announcements:** a polite live region announces when an item is picked up, each move ("Item 2, moved to position 3 of 7"), and the drop or cancel. Reaching the first or last position repeats the current one instead of staying silent. The live region is placed right after the list, not among its items, so it's never counted as an item and is still announced inside a modal.
+- **Landmarks:** `pds-sortable` doesn't set `role="list"` itself, but if you set one, give each `pds-sortable-item` `role="listitem"` too (not just its own content) -- the handle's `role="button"` sits between them, which axe flags as a missing required child of the list item otherwise.
+- **Events:** a keyboard drop emits `pdsSortableItemMoved` with the same detail fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), so a save handler works for both -- except when the drop didn't actually change the item's position (tabbing away, a click elsewhere in the list, or a second browse-mode Enter all drop it too), when nothing is emitted. Escape emits nothing either.
+- **Focus:** focus stays on the moved item the whole time, and the item scrolls into view as it moves. Moving focus elsewhere on the page drops it where it is. Switching to another window keeps it picked up. This holds only if your own code doesn't re-render the row before the next tick -- replacing it with a server response after `pdsSortableItemMoved`, say -- which would drop the focused handle along with it. Keep the existing row element across that update, or return focus to its handle afterward, if you do.
+- **Disabled:** a `disabled` list has no tab stops, and disabling it puts a picked-up item back. A pointer drag that starts while an item is picked up drops it first.
+- **Direction and motion:** only the Up and Down arrows move an item, so right-to-left layouts work the same way. With `prefers-reduced-motion: reduce`, dragged items don't animate into place and the picked-up state doesn't fade.
+
+#### Keyboard interactions
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sortable-keyboard">
+    <pds-table-head>
+      <pds-table-head-cell>Key</pds-table-head-cell>
+      <pds-table-head-cell>Action</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>Tab</code></pds-table-cell>
+        <pds-table-cell>Moves focus to the next item's handle.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Space</code> or <code>Enter</code></pds-table-cell>
+        <pds-table-cell>Picks up the focused item. When it's picked up, drops it in its new place.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>ArrowUp</code> / <code>ArrowDown</code></pds-table-cell>
+        <pds-table-cell>Moves the picked-up item up or down one position.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Home</code> / <code>End</code></pds-table-cell>
+        <pds-table-cell>Moves the picked-up item to the first or last position.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>Escape</code></pds-table-cell>
+        <pds-table-cell>Cancels and puts the picked-up item back where it started.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+
+#### Localization
+
+The handle's label and the announcements are props on `pds-sortable`, with English defaults. Pass translated strings to localize them: `handle-label`, `item-picked-up-label`, `item-moved-label`, `item-dropped-label` and `reorder-canceled-label`. `{item}` is filled in for all five; `{position}` and `{total}` only for the four announcements, not `handle-label`, which has no position to fill them with. Their English defaults are in the properties table below, and the Localized example shows them in French.
 
 ## Properties
 
@@ -133,7 +183,7 @@ When `disabled` is set to `true`, sorting is prevented and items appear dimmed w
 
 ### Handle
 
-When `show-handle` is set on a `pds-sortable-item`, a handle icon is displayed within the item. With `handle-type="row"`, the handle is visual only and the whole row still drags (unless the list is `disabled`); use `handle-type="handle"` to drag only by the handle.
+When `show-handle` is set on a `pds-sortable-item`, a handle icon is displayed within the item. With `handle-type="row"`, a pointer still drags the whole row (unless the list is `disabled`) and the handle is the row's keyboard reorder button; use `handle-type="handle"` to drag only by the handle.
 
 <DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="handle" handleType="row">
@@ -246,6 +296,53 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
+  </pds-sortable>
+</DocCanvas>
+
+### Localized
+
+Pass translated strings for the handle's label and the announcements. Here the handles and announcements are in French, and `item-label` gives each item a short name.
+
+<DocCanvas display="block" mdxSource={{
+  react: `<PdsSortable
+  componentId="localized"
+  handleType="handle"
+  handleLabel="Réorganiser {item}"
+  itemPickedUpLabel="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
+  itemMovedLabel="{item} déplacé en position {position} sur {total}"
+  itemDroppedLabel="{item} déposé en position {position} sur {total}"
+  reorderCanceledLabel="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+>
+  <PdsSortableItem itemLabel="Introduction">Introduction · 3 leçons</PdsSortableItem>
+  <PdsSortableItem itemLabel="Module 1">Module 1 · 5 leçons</PdsSortableItem>
+  <PdsSortableItem itemLabel="Module 2">Module 2 · 4 leçons</PdsSortableItem>
+</PdsSortable>`,
+  webComponent: `<pds-sortable
+  component-id="localized"
+  handle-type="handle"
+  handle-label="Réorganiser {item}"
+  item-picked-up-label="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
+  item-moved-label="{item} déplacé en position {position} sur {total}"
+  item-dropped-label="{item} déposé en position {position} sur {total}"
+  reorder-canceled-label="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+>
+  <pds-sortable-item item-label="Introduction">Introduction · 3 leçons</pds-sortable-item>
+  <pds-sortable-item item-label="Module 1">Module 1 · 5 leçons</pds-sortable-item>
+  <pds-sortable-item item-label="Module 2">Module 2 · 4 leçons</pds-sortable-item>
+</pds-sortable>
+`}}>
+  <pds-sortable
+    component-id="localized"
+    handle-type="handle"
+    handle-label="Réorganiser {item}"
+    item-picked-up-label="{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler."
+    item-moved-label="{item} déplacé en position {position} sur {total}"
+    item-dropped-label="{item} déposé en position {position} sur {total}"
+    reorder-canceled-label="Réorganisation annulée. {item} revenu en position {position} sur {total}"
+  >
+    <pds-sortable-item item-label="Introduction">Introduction · 3 leçons</pds-sortable-item>
+    <pds-sortable-item item-label="Module 1">Module 1 · 5 leçons</pds-sortable-item>
+    <pds-sortable-item item-label="Module 2">Module 2 · 4 leçons</pds-sortable-item>
   </pds-sortable>
 </DocCanvas>
 

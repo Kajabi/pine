@@ -1,8 +1,14 @@
-import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, forceUpdate, Host, h, Listen, Prop, Watch } from '@stencil/core';
 import type { SortableEvent } from 'sortablejs';
 import { SortableType } from './sortable-interface';
+import { sortableItemLabel } from './sortable-label';
 import { HostStylingKeeper } from '../../utils/attributes';
+import { formatMessage } from '../../i18n';
 import Sortable from 'sortablejs';
+
+const LIVE_REGION_CLASS = 'pds-sortable__live-region';
+const GRABBED_CLASS = 'pds-sortable-item--grabbed';
+const HANDLE_SELECTOR = '.pds-sortable-item__handle';
 
 /**
  * @lightDom host-only
@@ -16,7 +22,12 @@ export class PdsSortable {
   @Element() el: HTMLPdsSortableElement;
 
   /**
-   * Event emitted when a sortable item is moved.
+   * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move
+   * carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`,
+   * `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as
+   * `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or
+   * `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a
+   * screen reader's browse-mode click.
    */
   @Event() pdsSortableItemMoved: EventEmitter<SortableEvent>;
 
@@ -47,11 +58,65 @@ export class PdsSortable {
    */
   @Prop() handleType: 'handle' | 'row' = 'row';
 
+  /**
+   * Accessible label for each item's reorder handle, the button the keyboard reorders with. Pass a translated string to localize it; `{item}` is interpolated.
+   * @defaultValue 'Reorder {item}'
+   */
+  @Prop() handleLabel = 'Reorder {item}';
+
+  /**
+   * Screen-reader announcement when an item is picked up from the keyboard. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+   * @defaultValue '{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.'
+   */
+  @Prop() itemPickedUpLabel =
+    '{item}, picked up. Position {position} of {total}. Press the arrow keys to move, Space or Enter to drop, Escape to cancel.';
+
+  /**
+   * Screen-reader announcement when a picked-up item is moved. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+   * @defaultValue '{item}, moved to position {position} of {total}'
+   */
+  @Prop() itemMovedLabel = '{item}, moved to position {position} of {total}';
+
+  /**
+   * Screen-reader announcement when a picked-up item is dropped. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+   * @defaultValue '{item}, dropped at position {position} of {total}'
+   */
+  @Prop() itemDroppedLabel = '{item}, dropped at position {position} of {total}';
+
+  /**
+   * Screen-reader announcement when a keyboard reorder is canceled and the item goes back. Pass a translated string to localize it; `{item}`, `{position}` and `{total}` are interpolated.
+   * @defaultValue 'Reorder canceled. {item} returned to position {position} of {total}'
+   */
+  @Prop() reorderCanceledLabel = 'Reorder canceled. {item} returned to position {position} of {total}';
+
   private sortableInstance: InstanceType<typeof Sortable>;
+
+  /** The item picked up from the keyboard, and where it started. */
+  private grabbed: { item: HTMLElement; oldIndex: number; oldDraggableIndex: number } | null = null;
+
+  private liveRegion: HTMLElement | null = null;
 
   @Watch('disabled')
   handleDisabledChange() {
     this.sortableInstance?.option('disabled', this.disabled);
+    if (this.disabled && this.isGrabbing()) this.cancel();
+    this.updateItems();
+  }
+
+  @Watch('handleType')
+  handleHandleTypeChange() {
+    if (this.isGrabbing()) this.cancel();
+    // `null`, not `undefined`: SortableJS treats `option(name, undefined)` as a read, which would
+    // leave a previous handle restriction in place.
+    this.sortableInstance?.option('handle', this.handleType === 'handle' ? HANDLE_SELECTOR : null);
+    this.updateItems();
+  }
+
+  @Watch('handleLabel')
+  updateItems() {
+    this.items().forEach((item) => {
+      if (item.tagName === 'PDS-SORTABLE-ITEM') forceUpdate(item);
+    });
   }
 
   private classNames() {
@@ -84,12 +149,18 @@ export class PdsSortable {
 
   disconnectedCallback() {
     this.hostKeeper.disconnect();
+    // Put the order back: a move that was never dropped was never emitted.
+    if (this.isGrabbing()) this.cancel(false);
+    this.liveRegion?.remove();
+    this.liveRegion = null;
   }
 
   componentDidLoad() {
+    const reduceMotion =
+      typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
     let sortableOptions: SortableType = {
-      animation: 150,
+      animation: reduceMotion ? 0 : 150,
       disabled: this.disabled,
       ghostClass: 'pds-sortable-item--ghost',
       dragClass: 'pds-sortable-item--drag',
@@ -101,11 +172,309 @@ export class PdsSortable {
     if (this.handleType === 'handle') {
       sortableOptions = {
         ...sortableOptions,
-        handle: '.pds-sortable-item__handle',
+        handle: HANDLE_SELECTOR,
       };
     }
 
     this.sortableInstance = Sortable.create(this.el as HTMLElement, sortableOptions);
+    // In place before the first announcement, as a region that's created with its text isn't read.
+    this.ensureLiveRegion();
+    // Items that rendered before this list was defined have no handle yet.
+    this.updateItems();
+  }
+
+  /** The children that can be reordered, counted as SortableJS counts them. */
+  private items(): HTMLElement[] {
+    return Array.from(this.el.children).filter((child) => child.tagName !== 'TEMPLATE') as HTMLElement[];
+  }
+
+  /**
+   * The live region sits right after the list, not in it, so it's never counted as an item, by
+   * SortableJS or by a consumer reading the list's children, and it's still in the same modal. A
+   * morph that removes it gets it put back on the next focus.
+   */
+  private ensureLiveRegion() {
+    if (!this.liveRegion) {
+      // A page-cache (bfcache, Turbo) restore brings back a DOM snapshot that can already have
+      // this list's own live region sitting right after it -- adopted here instead of making
+      // another, which would leave the stale one behind with its last message still in it.
+      const existing = this.el.nextElementSibling;
+      if (existing?.classList.contains(LIVE_REGION_CLASS)) {
+        this.liveRegion = existing as HTMLElement;
+        return;
+      }
+
+      const region = document.createElement('span');
+      region.className = LIVE_REGION_CLASS;
+      region.setAttribute('role', 'status');
+      region.setAttribute('aria-live', 'polite');
+      region.setAttribute('aria-atomic', 'true');
+      // Created here, not rendered, so the scoped stylesheet can't reach it. With no inset, an
+      // absolutely positioned element sits at its static position -- the end of the list, here --
+      // rather than collapsing to (0, 0), which can grow a scrollable ancestor's scroll area.
+      Object.assign(region.style, {
+        position: 'absolute',
+        width: '1px',
+        height: '1px',
+        margin: '-1px',
+        padding: '0',
+        overflow: 'hidden',
+        clipPath: 'inset(50%)',
+        whiteSpace: 'nowrap',
+        border: '0',
+      });
+      this.liveRegion = region;
+    }
+
+    if (!this.liveRegion.isConnected && this.el.parentNode) {
+      // The host may itself be slotted into a named slot (e.g. inside a modal); stay in it rather
+      // than falling back to the default slot, which a consumer's template may not render.
+      const hostSlot = this.el.getAttribute('slot');
+      if (hostSlot !== null) {
+        this.liveRegion.setAttribute('slot', hostSlot);
+      } else {
+        this.liveRegion.removeAttribute('slot');
+      }
+      this.el.parentNode.insertBefore(this.liveRegion, this.el.nextSibling);
+    }
+  }
+
+  private announce(template: string, item: HTMLElement) {
+    this.ensureLiveRegion();
+    const items = this.items();
+    const message = formatMessage(template, {
+      item: sortableItemLabel(item),
+      position: items.indexOf(item) + 1,
+      total: items.length,
+    });
+    // A repeat of the same text isn't announced again, so tell the two apart.
+    this.liveRegion.textContent = message === this.liveRegion.textContent ? `${message} ` : message;
+  }
+
+  // Set only when a `pointerdown` here drops a picked-up item, and only until the `click` that
+  // follows it, if one does: a screen reader's browse-mode Enter or Space synthesizes both for
+  // the same press, and that click must not re-pick-up what its own pointerdown just dropped.
+  private droppedByPointerDown: HTMLElement | null = null;
+
+  @Listen('pointerdown', { capture: true })
+  handlePointerDown(ev: PointerEvent) {
+    // A drag takes over from a keyboard reorder: keep the moves so far, so the drag starts from them.
+    // Only the primary button (or a touch/pen contact, same value) can start that drag -- a
+    // right-click or a secondary pointer does something else (a context menu, typically) and
+    // must not drop the item out from under it.
+    if (ev.button !== 0 || !this.isGrabbing()) return;
+
+    const item = this.grabbed.item;
+    this.drop(ev);
+    this.droppedByPointerDown = item;
+    window.setTimeout(() => {
+      if (this.droppedByPointerDown === item) this.droppedByPointerDown = null;
+    }, 0);
+  }
+
+  private handleFocusIn = () => {
+    this.ensureLiveRegion();
+  };
+
+  /**
+   * Focus leaving a picked-up item drops it where it is, unless the whole window lost focus (the user
+   * switched apps), when the item stays picked up for their return. A real window blur does not move
+   * `document.activeElement` away from the handle that's losing focus (some browsers reset it to `body`
+   * instead, but never to a different element), so it's told apart from focus moving into an iframe or
+   * another embedded document that way: an iframe becomes a genuinely different active element, while a
+   * window blur leaves `activeElement` as the handle itself, `null`, or `body`.
+   */
+  private handleFocusOut = (ev: FocusEvent) => {
+    if (!this.isGrabbing() || ev.target !== this.focusTarget(this.grabbed.item)) return;
+    const nothingElseFocused =
+      document.activeElement === null || document.activeElement === document.body || document.activeElement === ev.target;
+    if (ev.relatedTarget === null && document.hasFocus?.() === false && nothingElseFocused) return;
+    this.drop(ev);
+  };
+
+  /**
+   * Whether an item is picked up. One that's been taken out of the list meanwhile (a re-render, a
+   * stream update) is let go, as there's nothing left to move.
+   */
+  private isGrabbing(): boolean {
+    if (this.grabbed && this.grabbed.item.parentElement !== this.el) this.release();
+    return this.grabbed !== null;
+  }
+
+  /**
+   * Screen readers in browse mode turn Enter and Space on a button into a click with no key events,
+   * so a click that isn't from a pointer (`detail` is 0) picks up or drops too.
+   */
+  private handleClick = (ev: MouseEvent) => {
+    if (this.disabled || ev.detail !== 0) return;
+    const item = this.targetItem(ev.target as HTMLElement);
+    if (!item) return;
+
+    // NVDA and JAWS in Chromium fire this click's capture-phase `pointerdown` first, for the
+    // same Enter or Space press. If that pointerdown found the item already grabbed and dropped
+    // it, this click is that same press's drop, already handled -- picking the item back up here
+    // would leave it stuck grabbed, since Escape and the arrow keys don't reach the handle in
+    // browse mode.
+    if (this.droppedByPointerDown === item) {
+      this.droppedByPointerDown = null;
+      return;
+    }
+
+    if (!this.isGrabbing()) {
+      this.pickUp(item);
+    } else if (this.grabbed.item === item) {
+      this.drop(ev);
+    }
+  };
+
+  /** The item whose handle `target` is, if it is one. */
+  private targetItem(target: HTMLElement): HTMLElement | undefined {
+    const item = this.items().find((candidate) => candidate.contains(target));
+    return item && this.focusTarget(item) === target ? item : undefined;
+  }
+
+  private handleKeyDown = (ev: KeyboardEvent) => {
+    if (this.disabled || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+
+    const item = this.targetItem(ev.target as HTMLElement);
+    if (!item) return;
+
+    if (!this.isGrabbing()) {
+      if ((ev.key === ' ' || ev.key === 'Enter') && !ev.repeat) {
+        ev.preventDefault();
+        this.pickUp(item);
+      }
+      return;
+    }
+
+    if (this.grabbed.item !== item) return;
+
+    const items = this.items();
+    const index = items.indexOf(item);
+
+    switch (ev.key) {
+      case 'ArrowUp':
+        ev.preventDefault();
+        this.moveTo(item, index - 1);
+        break;
+      case 'ArrowDown':
+        ev.preventDefault();
+        this.moveTo(item, index + 1);
+        break;
+      case 'Home':
+        ev.preventDefault();
+        this.moveTo(item, 0);
+        break;
+      case 'End':
+        ev.preventDefault();
+        this.moveTo(item, items.length - 1);
+        break;
+      case ' ':
+      case 'Enter':
+        ev.preventDefault();
+        if (!ev.repeat) this.drop(ev);
+        break;
+      case 'Escape':
+        // Keep an enclosing modal or drawer from closing too.
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.cancel();
+        break;
+    }
+  };
+
+  /** The item's handle, the button the keyboard reorders with. */
+  private focusTarget(item: HTMLElement): HTMLElement | null {
+    return (Array.from(item.children).find((child) => child.matches(HANDLE_SELECTOR)) ?? null) as HTMLElement | null;
+  }
+
+  // SortableJS tells `index` (among all children) and `draggableIndex` (among draggable ones)
+  // apart for a list that also holds non-draggable children. This list doesn't -- the live
+  // region that once lived among `this.el`'s children now sits outside it as a sibling -- so
+  // `items()` already is every child, and the two counts are always the same.
+  private indexes(item: HTMLElement) {
+    const index = this.items().indexOf(item);
+    return { index, draggableIndex: index };
+  }
+
+  private pickUp(item: HTMLElement) {
+    const { index, draggableIndex } = this.indexes(item);
+    this.grabbed = { item, oldIndex: index, oldDraggableIndex: draggableIndex };
+    item.classList.add(GRABBED_CLASS);
+    this.focusTarget(item)?.setAttribute('aria-pressed', 'true');
+    this.announce(this.itemPickedUpLabel, item);
+  }
+
+  /**
+   * Moves the other items around `item` rather than `item` itself, so it never leaves the DOM and
+   * keeps focus.
+   */
+  private moveTo(item: HTMLElement, to: number, announce = true) {
+    const items = this.items();
+    const from = items.indexOf(item);
+    if (to < 0 || to >= items.length || to === from) {
+      // At the first or last position, an out-of-range attempt (ArrowUp at the top, ArrowDown at
+      // the bottom) or a no-op one (Home already first, End already last) would otherwise leave
+      // a screen reader user with no sign the key landed at all. Repeating the current position
+      // confirms it without implying a move that didn't happen -- `cancel()`'s own call here
+      // passes `announce: false` and gets its own, different announcement instead.
+      if (announce) this.announce(this.itemMovedLabel, item);
+      return;
+    }
+
+    if (to < from) {
+      const next = item.nextSibling;
+      items.slice(to, from).forEach((sibling) => this.el.insertBefore(sibling, next));
+    } else {
+      items.slice(from + 1, to + 1).forEach((sibling) => this.el.insertBefore(sibling, item));
+    }
+    // Focus doesn't move, so the browser won't scroll the item into view itself.
+    item.scrollIntoView?.({ block: 'nearest' });
+
+    if (announce) this.announce(this.itemMovedLabel, item);
+  }
+
+  private drop(originalEvent: Event) {
+    const { item, oldIndex, oldDraggableIndex } = this.grabbed;
+    this.release();
+    this.announce(this.itemDroppedLabel, item);
+
+    const { index, draggableIndex } = this.indexes(item);
+    // A keyboard drop happens more often than a drag: tabbing away from a picked-up row, a click
+    // elsewhere in the list, or the second press of a screen reader's browse-mode Enter all drop
+    // it too. Emitting unconditionally would have a consumer that saves on every event send a
+    // no-op request each time nothing actually moved.
+    if (draggableIndex === oldDraggableIndex) return;
+
+    // The same shape SortableJS gives `onEnd`, with the event that ended the move as
+    // `originalEvent` -- not always a `KeyboardEvent`: a `FocusEvent` when focus leaves the row,
+    // a `PointerEvent` for a pointerdown, or a `MouseEvent` for a browse-mode click.
+    const detail = Object.assign(new CustomEvent('end', { bubbles: true, cancelable: true }), {
+      item,
+      from: this.el,
+      to: this.el,
+      oldIndex,
+      newIndex: index,
+      oldDraggableIndex,
+      newDraggableIndex: draggableIndex,
+      originalEvent,
+      pullMode: undefined,
+    }) as unknown as SortableEvent;
+    this.pdsSortableItemMoved.emit(detail);
+  }
+
+  private cancel(announce = true) {
+    const { item, oldDraggableIndex } = this.grabbed;
+    this.release();
+    // Items may have come or gone meanwhile, so go back as near the start as the list allows.
+    this.moveTo(item, Math.min(oldDraggableIndex, this.items().length - 1), false);
+    if (announce) this.announce(this.reorderCanceledLabel, item);
+  }
+
+  private release() {
+    this.grabbed.item.classList.remove(GRABBED_CLASS);
+    this.focusTarget(this.grabbed.item)?.setAttribute('aria-pressed', 'false');
+    this.grabbed = null;
   }
 
   render() {
@@ -113,7 +482,14 @@ export class PdsSortable {
     this.hostKeeper.record(classNames);
 
     return (
-      <Host class={classNames} id={this.componentId}>
+      <Host
+        class={classNames}
+        id={this.componentId}
+        onFocusin={this.handleFocusIn}
+        onFocusout={this.handleFocusOut}
+        onKeyDown={this.handleKeyDown}
+        onClick={this.handleClick}
+      >
         <slot></slot>
       </Host>
     );

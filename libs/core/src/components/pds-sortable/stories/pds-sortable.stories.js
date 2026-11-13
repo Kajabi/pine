@@ -75,6 +75,21 @@ const FullDemoTemplate = (args) => html`
   </pds-sortable-item>
 </pds-sortable>`;
 
+const LocalizedTemplate = (args) => html`
+<pds-sortable
+  component-id="${args.componentId}"
+  handle-type="${args.handleType}"
+  handle-label="${args.handleLabel}"
+  item-picked-up-label="${args.itemPickedUpLabel}"
+  item-moved-label="${args.itemMovedLabel}"
+  item-dropped-label="${args.itemDroppedLabel}"
+  reorder-canceled-label="${args.reorderCanceledLabel}"
+>
+  <pds-sortable-item item-label="Introduction">Introduction · 3 leçons</pds-sortable-item>
+  <pds-sortable-item item-label="Module 1">Module 1 · 5 leçons</pds-sortable-item>
+  <pds-sortable-item item-label="Module 2">Module 2 · 4 leçons</pds-sortable-item>
+</pds-sortable>`;
+
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'default',
@@ -136,4 +151,16 @@ FullDemo.args = {
   disabled: false,
   dividers: true,
   handleType: 'row',
+};
+
+export const Localized = LocalizedTemplate.bind();
+Localized.args = {
+  componentId: 'localized',
+  handleType: 'handle',
+  handleLabel: 'Réorganiser {item}',
+  itemPickedUpLabel:
+    '{item} sélectionné. Position {position} sur {total}. Utilisez les flèches pour déplacer, Espace ou Entrée pour déposer, Échap pour annuler.',
+  itemMovedLabel: '{item} déplacé en position {position} sur {total}',
+  itemDroppedLabel: '{item} déposé en position {position} sur {total}',
+  reorderCanceledLabel: 'Réorganisation annulée. {item} revenu en position {position} sur {total}',
 };
