@@ -69,12 +69,6 @@
     width: 100%;
   }
 
-  .pds-combobox__option.pds-combobox__option--chip .pds-combobox__option-chip {
-    align-items: center;
-    display: flex;
-    width: 100%;
-  }
-
   .pds-combobox__option:last-child {
     margin-block-end: 0;
   }
@@ -117,6 +111,13 @@
 
   .pds-combobox__option-icon {
     flex-shrink: 0;
+  }
+
+  // An option chip sizes to its label. Like an icon or badge option's label, a word too long for
+  // the row breaks rather than push the check out; overflow-wrap inherits into the chip's label.
+  .pds-combobox__option-chip {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .pds-combobox__listbox--truncate {
