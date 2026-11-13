@@ -894,6 +894,18 @@ const Event_2: EventDecorator;
 export { Event_2 as Event }
 
 // @public (undocumented)
+export interface ImageErrorEventDetail {
+    currentSrc: string;
+}
+
+// @public (undocumented)
+export interface ImageLoadEventDetail {
+    currentSrc: string;
+    naturalHeight: number;
+    naturalWidth: number;
+}
+
+// @public (undocumented)
 export type ImageRatioType = 'square' | 'landscape' | 'wide' | 'portrait' | 'tall';
 
 // @public (undocumented)
@@ -2172,6 +2184,8 @@ export namespace LocalJSX {
         "fit"?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
         "height"?: number;
         "loading"?: 'eager' | 'lazy';
+        "onPdsImageError"?: (event: PdsImageCustomEvent<ImageErrorEventDetail>) => void;
+        "onPdsImageLoad"?: (event: PdsImageCustomEvent<ImageLoadEventDetail>) => void;
         "ratio"?: ImageRatioType | (string & Record<never, never>);
         "sizes"?: string;
         "src"?: string;
@@ -3454,6 +3468,14 @@ export interface PdsFilterOpenEventDetail {
 
 // @public (undocumented)
 export type PdsFilterVariant = 'default' | 'selected' | 'more' | 'clear';
+
+// @public (undocumented)
+export interface PdsImageCustomEvent<T> extends CustomEvent<T> {
+    // (undocumented)
+    detail: T;
+    // (undocumented)
+    target: HTMLPdsImageElement;
+}
 
 // @public (undocumented)
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
