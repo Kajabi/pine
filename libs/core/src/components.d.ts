@@ -76,19 +76,19 @@ export namespace Components {
     }
     interface PdsAccordion {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
           * @defaultValue null
          */
         "componentId": string;
         /**
-          * Can be used to manually set the open state of the accordion.
+          * Determines whether the accordion is open. Set with the `open` attribute, which is added and removed as the accordion opens and closes.
           * @defaultValue false
          */
         "isOpen": boolean;
     }
     interface PdsAlert {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -143,7 +143,7 @@ export namespace Components {
          */
         "badgeLabel"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -417,131 +417,131 @@ export namespace Components {
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the box's outer bottom spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing (the bottom in most languages). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing (the top in most languages). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStart"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartXs"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing (the right in left-to-right languages, the left in right-to-left). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing (the left in left-to-right languages, the right in right-to-left). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStart"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartXs"?: BoxMarginType;
         /**
-          * The minimum height of the row. Used in conjunction with alignment props
+          * The minimum height of the box, as a CSS length such as `120px`. Used in conjunction with alignment props
          */
         "minHeight"?: string;
         /**
-          * The minimum width of the row. Used in conjunction with alignment props
+          * The minimum width of the box, as a CSS length such as `300px`.
          */
         "minWidth"?: string;
         /**
@@ -569,152 +569,152 @@ export namespace Components {
          */
         "offsetXs"?: BoxColumnType;
         /**
-          * Defines the spacing between the box items.
+          * Defines the box's inner spacing on every side.
           * @defaultValue none
          */
         "padding"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing.
+          * Defines the box's inner block-end spacing (the bottom in most languages).
           * @defaultValue none
          */
         "paddingBlockEnd"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the LG breakpoint.
+          * Defines the box's inner block-end spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndLg"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the MD breakpoint.
+          * Defines the box's inner block-end spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndMd"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the SM breakpoint.
+          * Defines the box's inner block-end spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndSm"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the XL breakpoint.
+          * Defines the box's inner block-end spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndXl"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the XS breakpoint.
+          * Defines the box's inner block-end spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndXs"?: BoxSpacingType;
         /**
-          * Defines the top spacing.
+          * Defines the box's inner block-start spacing (the top in most languages).
           * @defaultValue none
          */
         "paddingBlockStart"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the LG breakpoint.
+          * Defines the box's inner block-start spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartLg"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the MD breakpoint.
+          * Defines the box's inner block-start spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartMd"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the SM breakpoint.
+          * Defines the box's inner block-start spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartSm"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the XL breakpoint.
+          * Defines the box's inner block-start spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartXl"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the XS breakpoint.
+          * Defines the box's inner block-start spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartXs"?: BoxSpacingType;
         /**
-          * Defines the right spacing.
+          * Defines the box's inner inline-end spacing (the right in left-to-right languages, the left in right-to-left).
           * @defaultValue none
          */
         "paddingInlineEnd"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the LG breakpoint.
+          * Defines the box's inner inline-end spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndLg"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the MD breakpoint.
+          * Defines the box's inner inline-end spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndMd"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the SM breakpoint.
+          * Defines the box's inner inline-end spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndSm"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the XL breakpoint.
+          * Defines the box's inner inline-end spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndXl"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the XS breakpoint.
+          * Defines the box's inner inline-end spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndXs"?: BoxSpacingType;
         /**
-          * Defines the left spacing.
+          * Defines the box's inner inline-start spacing (the left in left-to-right languages, the right in right-to-left).
           * @defaultValue none
          */
         "paddingInlineStart"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the LG breakpoint.
+          * Defines the box's inner inline-start spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartLg"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the MD breakpoint.
+          * Defines the box's inner inline-start spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartMd"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the SM breakpoint.
+          * Defines the box's inner inline-start spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartSm"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the XL breakpoint.
+          * Defines the box's inner inline-start spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartXl"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the XS breakpoint.
+          * Defines the box's inner inline-start spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartXs"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the LG breakpoint.
+          * Defines the box's inner spacing on every side at the LG breakpoint.
           * @defaultValue none
          */
         "paddingLg"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the MD breakpoint.
+          * Defines the box's inner spacing on every side at the MD breakpoint.
           * @defaultValue none
          */
         "paddingMd"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the SM breakpoint.
+          * Defines the box's inner spacing on every side at the SM breakpoint.
           * @defaultValue none
          */
         "paddingSm"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the XL breakpoint.
+          * Defines the box's inner spacing on every side at the XL breakpoint.
           * @defaultValue none
          */
         "paddingXl"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the XS breakpoint.
+          * Defines the box's inner spacing on every side at the XS breakpoint.
           * @defaultValue none
          */
         "paddingXs"?: BoxSpacingType;
@@ -780,7 +780,7 @@ export namespace Components {
     }
     interface PdsButton {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -903,7 +903,7 @@ export namespace Components {
     }
     interface PdsChip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1173,7 +1173,7 @@ export namespace Components {
          */
         "centered": boolean;
         /**
-          * Sets the maximum width of the container. Accepts a named size token (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
+          * Sets the maximum width of the container. Accepts a named size token (`'sm'` 340px, `'md'` 520px, `'lg'` 700px, `'xl'` 1064px, `'full'` 1440px) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
          */
         "size"?: string;
         /**
@@ -1189,7 +1189,7 @@ export namespace Components {
          */
         "border": boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1442,7 +1442,7 @@ export namespace Components {
     }
     interface PdsDivider {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1531,7 +1531,7 @@ export namespace Components {
     }
     interface PdsDropdownMenu {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1546,7 +1546,7 @@ export namespace Components {
          */
         "clickItem": () => Promise<void>;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1590,7 +1590,7 @@ export namespace Components {
     }
     interface PdsDropdownMenuSeparator {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1605,7 +1605,7 @@ export namespace Components {
      */
     interface PdsFilter {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its internal popover's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1632,7 +1632,7 @@ export namespace Components {
     }
     interface PdsFilters {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
     }
@@ -1643,7 +1643,7 @@ export namespace Components {
          */
         "alt"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2196,7 +2196,7 @@ export namespace Components {
     }
     interface PdsPopover {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its portal element's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2274,7 +2274,7 @@ export namespace Components {
     }
     interface PdsProperty {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2351,7 +2351,7 @@ export namespace Components {
      */
     interface PdsRadioGroup {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its helper and error message `id`s. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2402,7 +2402,7 @@ export namespace Components {
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
-          * @defaultValue start
+          * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -2411,19 +2411,19 @@ export namespace Components {
          */
         "border"?: boolean;
         /**
-          * Defines the spacing between the row items.
+          * Defines the gutter between columns, as padding on every side of each column, so the space between two columns' content is twice the value. Without a gap prop, columns have no gutter.
          */
         "colGap"?: BoxSpacingType | null;
         /**
-          * Defines the spacing between the row items vertically.
+          * Defines the vertical gutter, as padding above and below each column. Overrides `col-gap` vertically.
          */
         "colGapBlock"?: BoxSpacingType | null;
         /**
-          * Defines the spacing between the row items horizontally.
+          * Defines the horizontal gutter, as padding on both sides of each column. Overrides `col-gap` horizontally.
          */
         "colGapInline"?: BoxSpacingType | null;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2508,7 +2508,7 @@ export namespace Components {
          */
         "border": boolean;
         /**
-          * A unique identifier used for the sortable container `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2557,7 +2557,7 @@ export namespace Components {
      */
     interface PdsSortableItem {
         /**
-          * A unique identifier used for the sortable item `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2678,7 +2678,7 @@ export namespace Components {
          */
         "compact": boolean;
         /**
-          * A unique identifier used for the table `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2730,7 +2730,7 @@ export namespace Components {
          */
         "rebindScrollListener": () => Promise<void>;
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
+          * Keeps the content on one line and cuts off what doesn't fit the column with an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
         "truncate": boolean;
     }
@@ -2818,7 +2818,7 @@ export namespace Components {
          */
         "activeTabName"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, passed down to its tabs and panels. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2837,7 +2837,7 @@ export namespace Components {
          */
         "stretch"?: boolean;
         /**
-          * Sets the aria-label attached to the tablist element
+          * Sets the aria-label attached to the tablist element, or to the `<nav>` element in navigation mode (`nav`).
          */
         "tablistLabel": string;
         /**
@@ -3029,7 +3029,7 @@ export namespace Components {
      */
     interface PdsTooltip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its portal element's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -4042,23 +4042,23 @@ declare namespace LocalJSX {
     }
     interface PdsAccordion {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
           * @defaultValue null
          */
         "componentId"?: string;
         /**
-          * Can be used to manually set the open state of the accordion.
+          * Determines whether the accordion is open. Set with the `open` attribute, which is added and removed as the accordion opens and closes.
           * @defaultValue false
          */
         "isOpen"?: boolean;
         /**
-          * Emitted when the accordion open state changes.
+          * Emitted when the accordion opens or closes, carrying the new open state. Also emits when programmatically setting the `isOpen` property or the `open` attribute. Not emitted for the state the accordion starts in.
          */
         "onPdsAccordionToggle"?: (event: PdsAccordionCustomEvent<boolean>) => void;
     }
     interface PdsAlert {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -4117,7 +4117,7 @@ declare namespace LocalJSX {
          */
         "badgeLabel"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -4391,131 +4391,131 @@ declare namespace LocalJSX {
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the box's outer bottom spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing (the bottom in most languages). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing (the top in most languages). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStart"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer block-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginBlockStartXs"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing (the right in left-to-right languages, the left in right-to-left). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-end spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing (the left in left-to-right languages, the right in right-to-left). Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStart"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the LG breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the MD breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the SM breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XL breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XS breakpoint. Accepts a spacing token or `auto`.
+          * Defines the box's outer inline-start spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
         "marginInlineStartXs"?: BoxMarginType;
         /**
-          * The minimum height of the row. Used in conjunction with alignment props
+          * The minimum height of the box, as a CSS length such as `120px`. Used in conjunction with alignment props
          */
         "minHeight"?: string;
         /**
-          * The minimum width of the row. Used in conjunction with alignment props
+          * The minimum width of the box, as a CSS length such as `300px`.
          */
         "minWidth"?: string;
         /**
@@ -4543,152 +4543,152 @@ declare namespace LocalJSX {
          */
         "offsetXs"?: BoxColumnType;
         /**
-          * Defines the spacing between the box items.
+          * Defines the box's inner spacing on every side.
           * @defaultValue none
          */
         "padding"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing.
+          * Defines the box's inner block-end spacing (the bottom in most languages).
           * @defaultValue none
          */
         "paddingBlockEnd"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the LG breakpoint.
+          * Defines the box's inner block-end spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndLg"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the MD breakpoint.
+          * Defines the box's inner block-end spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndMd"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the SM breakpoint.
+          * Defines the box's inner block-end spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndSm"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the XL breakpoint.
+          * Defines the box's inner block-end spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndXl"?: BoxSpacingType;
         /**
-          * Defines the bottom spacing at the XS breakpoint.
+          * Defines the box's inner block-end spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingBlockEndXs"?: BoxSpacingType;
         /**
-          * Defines the top spacing.
+          * Defines the box's inner block-start spacing (the top in most languages).
           * @defaultValue none
          */
         "paddingBlockStart"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the LG breakpoint.
+          * Defines the box's inner block-start spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartLg"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the MD breakpoint.
+          * Defines the box's inner block-start spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartMd"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the SM breakpoint.
+          * Defines the box's inner block-start spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartSm"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the XL breakpoint.
+          * Defines the box's inner block-start spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartXl"?: BoxSpacingType;
         /**
-          * Defines the top spacing at the XS breakpoint.
+          * Defines the box's inner block-start spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingBlockStartXs"?: BoxSpacingType;
         /**
-          * Defines the right spacing.
+          * Defines the box's inner inline-end spacing (the right in left-to-right languages, the left in right-to-left).
           * @defaultValue none
          */
         "paddingInlineEnd"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the LG breakpoint.
+          * Defines the box's inner inline-end spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndLg"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the MD breakpoint.
+          * Defines the box's inner inline-end spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndMd"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the SM breakpoint.
+          * Defines the box's inner inline-end spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndSm"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the XL breakpoint.
+          * Defines the box's inner inline-end spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndXl"?: BoxSpacingType;
         /**
-          * Defines the right spacing at the XS breakpoint.
+          * Defines the box's inner inline-end spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingInlineEndXs"?: BoxSpacingType;
         /**
-          * Defines the left spacing.
+          * Defines the box's inner inline-start spacing (the left in left-to-right languages, the right in right-to-left).
           * @defaultValue none
          */
         "paddingInlineStart"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the LG breakpoint.
+          * Defines the box's inner inline-start spacing at the LG breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartLg"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the MD breakpoint.
+          * Defines the box's inner inline-start spacing at the MD breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartMd"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the SM breakpoint.
+          * Defines the box's inner inline-start spacing at the SM breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartSm"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the XL breakpoint.
+          * Defines the box's inner inline-start spacing at the XL breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartXl"?: BoxSpacingType;
         /**
-          * Defines the left spacing at the XS breakpoint.
+          * Defines the box's inner inline-start spacing at the XS breakpoint.
           * @defaultValue none
          */
         "paddingInlineStartXs"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the LG breakpoint.
+          * Defines the box's inner spacing on every side at the LG breakpoint.
           * @defaultValue none
          */
         "paddingLg"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the MD breakpoint.
+          * Defines the box's inner spacing on every side at the MD breakpoint.
           * @defaultValue none
          */
         "paddingMd"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the SM breakpoint.
+          * Defines the box's inner spacing on every side at the SM breakpoint.
           * @defaultValue none
          */
         "paddingSm"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the XL breakpoint.
+          * Defines the box's inner spacing on every side at the XL breakpoint.
           * @defaultValue none
          */
         "paddingXl"?: BoxSpacingType;
         /**
-          * Defines the spacing between the box items at the XS breakpoint.
+          * Defines the box's inner spacing on every side at the XS breakpoint.
           * @defaultValue none
          */
         "paddingXs"?: BoxSpacingType;
@@ -4754,7 +4754,7 @@ declare namespace LocalJSX {
     }
     interface PdsButton {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -4893,7 +4893,7 @@ declare namespace LocalJSX {
     }
     interface PdsChip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5171,7 +5171,7 @@ declare namespace LocalJSX {
          */
         "centered"?: boolean;
         /**
-          * Sets the maximum width of the container. Accepts a named size token (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
+          * Sets the maximum width of the container. Accepts a named size token (`'sm'` 340px, `'md'` 520px, `'lg'` 700px, `'xl'` 1064px, `'full'` 1440px) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
          */
         "size"?: string;
         /**
@@ -5187,7 +5187,7 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5448,7 +5448,7 @@ declare namespace LocalJSX {
     }
     interface PdsDivider {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5545,7 +5545,7 @@ declare namespace LocalJSX {
     }
     interface PdsDropdownMenu {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5556,7 +5556,7 @@ declare namespace LocalJSX {
     }
     interface PdsDropdownMenuItem {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5604,7 +5604,7 @@ declare namespace LocalJSX {
     }
     interface PdsDropdownMenuSeparator {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5619,7 +5619,7 @@ declare namespace LocalJSX {
      */
     interface PdsFilter {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its internal popover's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -5650,7 +5650,7 @@ declare namespace LocalJSX {
     }
     interface PdsFilters {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
     }
@@ -5661,7 +5661,7 @@ declare namespace LocalJSX {
          */
         "alt"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6258,7 +6258,7 @@ declare namespace LocalJSX {
     }
     interface PdsPopover {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its portal element's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6332,7 +6332,7 @@ declare namespace LocalJSX {
     }
     interface PdsProperty {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6413,7 +6413,7 @@ declare namespace LocalJSX {
      */
     interface PdsRadioGroup {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its helper and error message `id`s. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6468,7 +6468,7 @@ declare namespace LocalJSX {
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
-          * @defaultValue start
+          * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -6477,19 +6477,19 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * Defines the spacing between the row items.
+          * Defines the gutter between columns, as padding on every side of each column, so the space between two columns' content is twice the value. Without a gap prop, columns have no gutter.
          */
         "colGap"?: BoxSpacingType | null;
         /**
-          * Defines the spacing between the row items vertically.
+          * Defines the vertical gutter, as padding above and below each column. Overrides `col-gap` vertically.
          */
         "colGapBlock"?: BoxSpacingType | null;
         /**
-          * Defines the spacing between the row items horizontally.
+          * Defines the horizontal gutter, as padding on both sides of each column. Overrides `col-gap` horizontally.
          */
         "colGapInline"?: BoxSpacingType | null;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6594,7 +6594,7 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * A unique identifier used for the sortable container `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -6647,7 +6647,7 @@ declare namespace LocalJSX {
      */
     interface PdsSortableItem {
         /**
-          * A unique identifier used for the sortable item `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6777,7 +6777,7 @@ declare namespace LocalJSX {
          */
         "compact"?: boolean;
         /**
-          * A unique identifier used for the table `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -6829,7 +6829,7 @@ declare namespace LocalJSX {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
+          * Keeps the content on one line and cuts off what doesn't fit the column with an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: While the content is overflowing, the cell receives tabindex="0" so the tooltip can be reached by keyboard. Content that fits is left out of the tab order.
          */
         "truncate"?: boolean;
     }
@@ -6854,7 +6854,7 @@ declare namespace LocalJSX {
          */
         "isSelected"?: boolean;
         /**
-          * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+          * Emitted when the user checks or unchecks the select-all checkbox, carrying the new state as `isSelected`. `pds-table` then sets `isSelected` on every row, and the rows don't emit `pdsTableRowSelected`. A head that starts with `isSelected` also emits it on load.
          */
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
     }
@@ -6864,7 +6864,7 @@ declare namespace LocalJSX {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
+          * Emitted when a `sortable` head cell is clicked, carrying the cell's trimmed text as `column` and the new direction, `asc` or `desc`, as `direction`. Each column keeps its own direction and every click reverses it, so a column's first click gives `desc`, or the reverse of `defaultSortDirection` on the default sort column. `pds-table` sorts its rows when the event reaches it, so to sort the rows yourself, call `preventDefault()` in a listener on the head cell or `pds-table-head`, or in the capture phase.
          */
         "onPdsTableSort"?: (event: PdsTableHeadCellCustomEvent<{ column: string; direction: string }>) => void;
         /**
@@ -6886,7 +6886,7 @@ declare namespace LocalJSX {
          */
         "isSelected"?: boolean;
         /**
-          * Event that is emitted when the checkbox is clicked, carrying the selected value.
+          * Emitted when the user checks or unchecks the row's checkbox, carrying the new state as `isSelected` and the row's current position in `pds-table-body` as `rowIndex`, which changes when the table is sorted. A row that starts with `isSelected` also emits it on load.  This event will not emit when programmatically setting the `isSelected` property, or when select all changes the row.
          */
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
     }
@@ -6916,7 +6916,7 @@ declare namespace LocalJSX {
          */
         "activeTabName"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, passed down to its tabs and panels. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -6935,7 +6935,7 @@ declare namespace LocalJSX {
          */
         "stretch"?: boolean;
         /**
-          * Sets the aria-label attached to the tablist element
+          * Sets the aria-label attached to the tablist element, or to the `<nav>` element in navigation mode (`nav`).
          */
         "tablistLabel": string;
         /**
@@ -7147,7 +7147,7 @@ declare namespace LocalJSX {
      */
     interface PdsTooltip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its portal element's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**

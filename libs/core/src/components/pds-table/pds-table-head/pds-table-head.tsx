@@ -38,7 +38,9 @@ export class PdsTableHead {
   @Prop({ reflect: true }) background = false;
 
   /**
-   * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+   * Emitted when the user checks or unchecks the select-all checkbox, carrying the new state as `isSelected`.
+   * `pds-table` then sets `isSelected` on every row, and the rows don't emit `pdsTableRowSelected`.
+   * A head that starts with `isSelected` also emits it on load.
    */
   @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;
 

@@ -17,13 +17,14 @@ export class PdsAccordion {
   private detailsEl: HTMLDetailsElement;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    * @defaultValue null
    */
   @Prop() componentId: string;
 
   /**
-   * Can be used to manually set the open state of the accordion.
+   * Determines whether the accordion is open. Set with the `open` attribute, which is
+   * added and removed as the accordion opens and closes.
    * @defaultValue false
    */
   @Prop({
@@ -33,7 +34,9 @@ export class PdsAccordion {
   }) isOpen: boolean = false;
 
   /**
-   * Emitted when the accordion open state changes.
+   * Emitted when the accordion opens or closes, carrying the new open state.
+   * Also emits when programmatically setting the `isOpen` property or the `open` attribute.
+   * Not emitted for the state the accordion starts in.
    */
   @Event() pdsAccordionToggle: EventEmitter<boolean>;
 
@@ -59,7 +62,7 @@ export class PdsAccordion {
 
   render() {
     return (
-      <Host class="pds-accordion" id={this.componentId}>
+      <Host class="pds-accordion">
         <details {...this.getOpenAttribute()} ref={(el) => (this.detailsEl = el as HTMLDetailsElement)}>
           <summary part="accordion-button">
             <slot name="label">Details</slot>

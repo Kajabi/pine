@@ -44,7 +44,7 @@ export class PdsSortable {
   @Prop({ reflect: true }) disabled = false;
 
   /**
-   * A unique identifier used for the sortable container `id` attribute.
+   * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId!: string;
 
@@ -484,7 +484,6 @@ export class PdsSortable {
     return (
       <Host
         class={classNames}
-        id={this.componentId}
         onFocusin={this.handleFocusIn}
         onFocusout={this.handleFocusOut}
         onKeyDown={this.handleKeyDown}

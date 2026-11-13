@@ -1,4 +1,7 @@
 :host {
+  /**
+   * @prop --pds-table-cell-truncate-max-width: The most width a `truncate` cell asks for when a table with the default `auto` layout sizes its columns. The column can still end up wider. Defaults to `100px`.
+   */
   /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
   --box-shadow-fixed: 3px 3px 6px -2px rgba(0, 0, 0, 0.2);
 

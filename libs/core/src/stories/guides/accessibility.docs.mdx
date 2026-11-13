@@ -68,7 +68,7 @@ import { PdsInput } from '@pine-ds/react';
   <pds-input component-id="order-search" label="Search orders" hide-label name="q"></pds-input>
 </DocCanvas>
 
-Don't name a `pds-input`, `pds-textarea` or `pds-select` with `aria-labelledby`. The ID it points to is outside the component's shadow root, so the field ends up with no name.
+`aria-labelledby` doesn't name `pds-input`, `pds-textarea`, `pds-select`, `pds-checkbox`, `pds-switch`, `pds-radio`, `pds-combobox`, `pds-multiselect` or `pds-datepicker`: the field inside has no accessible name, or is named only by its own text, such as its placeholder. Name them with `label`, and add `hide-label` when it shouldn't show.
 
 Name an icon-only button with `aria-label` on `pds-button`, which passes it to its inner `<button>`. Text in the default slot also names it, because `icon-only` hides the text on screen but not from screen readers.
 
@@ -204,18 +204,7 @@ document.querySelector('#my-target').focus();
 
 These patterns cover form accessibility. See <pds-link href="../?path=/docs/guides-forms--docs">Using Pine Form Components</pds-link> for full form examples and the validation rules.
 
-**Always pair inputs with labels** using the `label` prop and a `component-id`. Never use `placeholder` as a substitute.
-
-<DocCanvas
-  mdxSource={{
-    webComponent: `<pds-input component-id="password" label="Password" type="password" name="password"></pds-input>`,
-    react: `
-import { PdsInput } from '@pine-ds/react';
-
-<PdsInput componentId="password" label="Password" type="password" name="password" />`
-  }}>
-  <pds-input component-id="password" label="Password" type="password" name="password"></pds-input>
-</DocCanvas>
+**Always pair inputs with labels** using the `label` prop and a `component-id`, as in the Labels examples above. Never use `placeholder` as a substitute.
 
 **Inline validation:** set `invalid` and `error-message` on the field in response to user input, and leave focus where it is.
 
