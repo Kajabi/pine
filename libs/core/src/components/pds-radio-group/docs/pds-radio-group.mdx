@@ -300,14 +300,20 @@ Radio groups work seamlessly with image-based radios.
 
 ## Form Integration
 
-- The `name` prop is automatically applied to all child radios, ensuring proper form grouping
-- Set `required` on the group to mark all radios as required for form validation
-- Use `invalid` and `errorMessage` to display validation feedback when no choice is selected
-- Each radio should have a unique `componentId` and `value` for proper form submission
+- The group sets `name`, `disabled`, `invalid` and `required` on every `pds-radio` inside it when it loads, and again whenever one of those props changes on the group. While the group's `disabled`, `invalid` or `required` is false, it removes that attribute from every radio, so a value set on a single radio doesn't last. Set them on the group.
+- A radio added after the group has loaded doesn't get these until one of those props changes on the group, so give it the group's `name` yourself.
+- Set `required` on the group to mark all radios as required for form validation.
+- Use `invalid` and `errorMessage` to display validation feedback when no choice is selected.
+- Each radio should have a unique `componentId` and `value` for proper form submission.
+- To track the selection, listen for `pdsRadioGroupChange` (`onPdsRadioGroupChange` in React) on the group and read `event.detail.value`. Radios inside the group don't emit their own `pdsRadioChange`.
+- Resetting the form unchecks every radio in the group, including one that started `checked`, so no option is selected afterwards.
+- For a complete form, with validation and debugging, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Additional Resources
 
 [MDN Web Docs: Radio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
+
+[Using Pine form components](/docs/guides-forms--docs)
 
 ## Playground
 
