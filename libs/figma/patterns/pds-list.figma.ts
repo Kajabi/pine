@@ -209,7 +209,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
       "All products": html`
       <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -230,7 +230,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   </pds-box>
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -251,7 +251,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   </pds-box>
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -272,7 +272,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   </pds-box>
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -296,7 +296,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Course -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -317,7 +317,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Course -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -337,7 +337,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   </pds-box>
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -360,7 +360,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Podcast -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -383,7 +383,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Podcast -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -406,7 +406,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Podcast -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -431,7 +431,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Coaching -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -452,7 +452,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Coaching -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -473,7 +473,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Coaching -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -495,7 +495,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Community -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -516,7 +516,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Community -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -537,7 +537,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Community -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -559,7 +559,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Page -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -589,7 +589,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Page -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->
@@ -619,7 +619,7 @@ figma.connect("<FIGMA_PRODUCT_LIST>", {
   <!-- Page -->
   <pds-box gap="sm">
     <!-- Image -->
-    <pds-box flex="shrink">
+    <pds-box flex="none">
       <pds-image src={image} alt="Offers" width="100px"/>
     </pds-box>
     <!-- Title and properties -->

@@ -240,10 +240,10 @@ export class PdsPopover {
   @Prop() componentId: string;
 
   /**
-   * Sets the maximum width of the popover content, in pixels.
-   * @defaultValue 352
+   * Sets the maximum width of the popover, in pixels, including its padding.
+   * @defaultValue 400
    */
-  @Prop() maxWidth?: number = 352;
+  @Prop() maxWidth?: number = 400;
 
   /**
    * Sets the padding of the popover content
@@ -588,6 +588,8 @@ export class PdsPopover {
     this.portalEl.style.backgroundColor = 'var(--pine-color-background-overlay)';
     this.portalEl.style.borderRadius = 'var(--pine-dimension-125)';
     this.portalEl.style.boxShadow = 'var(--pine-box-shadow-200)';
+    // So the padding below stays inside max-width rather than adding to it.
+    this.portalEl.style.boxSizing = 'border-box';
     this.portalEl.style.margin = 'var(--pine-dimension-none)';
     this.portalEl.style.padding = this.paddingToken();
 

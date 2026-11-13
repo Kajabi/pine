@@ -5,13 +5,14 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
+import { BoxColumnType, BoxContainerType, BoxMarginType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { ChipSentimentType, ChipSizeType, ChipVariantType, ImageRatioType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
+import { ImageErrorEventDetail, ImageLoadEventDetail } from "./components/pds-image/image-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PluralForms } from "./i18n";
 import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
@@ -19,13 +20,14 @@ import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interfac
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
-export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
+export { BoxColumnType, BoxContainerType, BoxMarginType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { ChipSentimentType, ChipSizeType, ChipVariantType, ImageRatioType, ModalSizeType, PlacementType, PopoverPaddingType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { DatepickerChangeEventDetail, DatepickerPreset } from "./components/pds-datepicker/datepicker-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
+export { ImageErrorEventDetail, ImageLoadEventDetail } from "./components/pds-image/image-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PluralForms } from "./i18n";
 export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectOptionActionEventDetail, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
@@ -313,6 +315,10 @@ export namespace Components {
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
+          * Makes the box a size container by setting `container-type`. `inline-size` stops the box's content from setting its width, so long unwrapped text truncates instead of widening it, and lets children use container query units. `size` does the same for both axes, so the box needs a height from somewhere else. Either way the box still needs its width from its parent, such as the default `flex-grow`, `flex="grow"` or `fit`; with `flex="none"` or `flex="shrink"`, or the `auto` prop, it collapses.
+         */
+        "container"?: BoxContainerType;
+        /**
           * Defines the orientation of the box items.
           * @defaultValue row
          */
@@ -323,32 +329,31 @@ export namespace Components {
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         /**
-          * If `true`, sets the box `max-width` to `100%`.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%`, so it fills its parent's width. A box in a `direction="column"` parent needs it when the parent sets `align-items`, and a box that isn't a flex item needs it to fill its container.
          */
         "fit"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the LG breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the LG breakpoint.
          */
         "fitLg"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the MD breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the MD breakpoint.
          */
         "fitMd"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the SM breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the SM breakpoint.
          */
         "fitSm"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the XL breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the XL breakpoint.
          */
         "fitXl"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the XS breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the XS breakpoint.
          */
         "fitXs"?: boolean;
         /**
-          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
-          * @defaultValue none
+          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value or a custom flex value (e.g., '1', '0 1 auto'). The predefined values are `none` (`flex: 0 0 auto`), `grow` (`flex: 1 1 auto`) and `shrink` (`flex: 0 1 auto`). Without it, a box grows to share its row with its siblings (`flex-grow: 1; flex-basis: 0`).
          */
         "flex"?: `none` | `grow` | `shrink` | string;
         /**
@@ -412,125 +417,125 @@ export namespace Components {
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the box's outer bottom spacing.
+          * Defines the box's outer bottom spacing. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEnd"?: BoxSpacingType;
+        "marginBlockEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the LG breakpoint.
+          * Defines the box's outer bottom spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndLg"?: BoxSpacingType;
+        "marginBlockEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the MD breakpoint.
+          * Defines the box's outer bottom spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndMd"?: BoxSpacingType;
+        "marginBlockEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the SM breakpoint.
+          * Defines the box's outer bottom spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndSm"?: BoxSpacingType;
+        "marginBlockEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XL breakpoint.
+          * Defines the box's outer bottom spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndXl"?: BoxSpacingType;
+        "marginBlockEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XS breakpoint.
+          * Defines the box's outer bottom spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndXs"?: BoxSpacingType;
+        "marginBlockEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing.
+          * Defines the box's outer top spacing. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStart"?: BoxSpacingType;
+        "marginBlockStart"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the LG breakpoint.
+          * Defines the box's outer top spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartLg"?: BoxSpacingType;
+        "marginBlockStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the MD breakpoint.
+          * Defines the box's outer top spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartMd"?: BoxSpacingType;
+        "marginBlockStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the SM breakpoint.
+          * Defines the box's outer top spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartSm"?: BoxSpacingType;
+        "marginBlockStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XL breakpoint.
+          * Defines the box's outer top spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartXl"?: BoxSpacingType;
+        "marginBlockStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XS breakpoint.
+          * Defines the box's outer top spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartXs"?: BoxSpacingType;
+        "marginBlockStartXs"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing.
+          * Defines the box's outer right spacing. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEnd"?: BoxSpacingType;
+        "marginInlineEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the LG breakpoint.
+          * Defines the box's outer right spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndLg"?: BoxSpacingType;
+        "marginInlineEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the MD breakpoint.
+          * Defines the box's outer right spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndMd"?: BoxSpacingType;
+        "marginInlineEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the SM breakpoint.
+          * Defines the box's outer right spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndSm"?: BoxSpacingType;
+        "marginInlineEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XL breakpoint.
+          * Defines the box's outer right spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndXl"?: BoxSpacingType;
+        "marginInlineEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XS breakpoint.
+          * Defines the box's outer right spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndXs"?: BoxSpacingType;
+        "marginInlineEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing.
+          * Defines the box's outer left spacing. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStart"?: BoxSpacingType;
+        "marginInlineStart"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the LG breakpoint.
+          * Defines the box's outer left spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartLg"?: BoxSpacingType;
+        "marginInlineStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the MD breakpoint.
+          * Defines the box's outer left spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartMd"?: BoxSpacingType;
+        "marginInlineStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the SM breakpoint.
+          * Defines the box's outer left spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartSm"?: BoxSpacingType;
+        "marginInlineStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XL breakpoint.
+          * Defines the box's outer left spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartXl"?: BoxSpacingType;
+        "marginInlineStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XS breakpoint.
+          * Defines the box's outer left spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartXs"?: BoxSpacingType;
+        "marginInlineStartXs"?: BoxMarginType;
         /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
@@ -1028,10 +1033,9 @@ export namespace Components {
          */
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         /**
-          * Width of the dropdown. Any valid CSS width value.
-          * @default '236px'
+          * Width of the dropdown, including its padding. Any valid CSS width value. Without it, the dropdown is 252px wide, 244px with grouped options and 236px with a panel search.
          */
-        "dropdownWidth": string;
+        "dropdownWidth"?: string;
         /**
           * Error message to display.
          */
@@ -1042,13 +1046,13 @@ export namespace Components {
          */
         "fetchTimeout": number;
         /**
-          * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
-          * @default '380px'
+          * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value, including its padding.
+          * @default '388px'
          */
         "flyoutMaxWidth": string;
         /**
-          * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value. The flyout is as wide as its options, between this and `flyout-max-width`.
-          * @default '280px'
+          * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value, including its padding. The flyout is as wide as its options, between this and `flyout-max-width`.
+          * @default '288px'
          */
         "flyoutMinWidth": string;
         /**
@@ -2200,8 +2204,8 @@ export namespace Components {
          */
         "hide": () => Promise<void>;
         /**
-          * Sets the maximum width of the popover content, in pixels.
-          * @defaultValue 352
+          * Sets the maximum width of the popover, in pixels, including its padding.
+          * @defaultValue 400
          */
         "maxWidth"?: number;
         /**
@@ -3069,6 +3073,10 @@ export interface PdsFilterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsFilterElement;
 }
+export interface PdsImageCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsImageElement;
+}
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
@@ -3448,7 +3456,19 @@ declare global {
         prototype: HTMLPdsFiltersElement;
         new (): HTMLPdsFiltersElement;
     };
+    interface HTMLPdsImageElementEventMap {
+        "pdsImageLoad": ImageLoadEventDetail;
+        "pdsImageError": ImageErrorEventDetail;
+    }
     interface HTMLPdsImageElement extends Components.PdsImage, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsImageElementEventMap>(type: K, listener: (this: HTMLPdsImageElement, ev: PdsImageCustomEvent<HTMLPdsImageElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsImageElementEventMap>(type: K, listener: (this: HTMLPdsImageElement, ev: PdsImageCustomEvent<HTMLPdsImageElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsImageElement: {
         prototype: HTMLPdsImageElement;
@@ -4223,6 +4243,10 @@ declare namespace LocalJSX {
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
+          * Makes the box a size container by setting `container-type`. `inline-size` stops the box's content from setting its width, so long unwrapped text truncates instead of widening it, and lets children use container query units. `size` does the same for both axes, so the box needs a height from somewhere else. Either way the box still needs its width from its parent, such as the default `flex-grow`, `flex="grow"` or `fit`; with `flex="none"` or `flex="shrink"`, or the `auto` prop, it collapses.
+         */
+        "container"?: BoxContainerType;
+        /**
           * Defines the orientation of the box items.
           * @defaultValue row
          */
@@ -4233,32 +4257,31 @@ declare namespace LocalJSX {
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         /**
-          * If `true`, sets the box `max-width` to `100%`.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%`, so it fills its parent's width. A box in a `direction="column"` parent needs it when the parent sets `align-items`, and a box that isn't a flex item needs it to fill its container.
          */
         "fit"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the LG breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the LG breakpoint.
          */
         "fitLg"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the MD breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the MD breakpoint.
          */
         "fitMd"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the SM breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the SM breakpoint.
          */
         "fitSm"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the XL breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the XL breakpoint.
          */
         "fitXl"?: boolean;
         /**
-          * If `true`, sets the box `max-width` to `100%` at the XS breakpoint.
+          * If `true`, sets the box `width`, `min-width` and `max-width` to `100%` at the XS breakpoint.
          */
         "fitXs"?: boolean;
         /**
-          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
-          * @defaultValue none
+          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value or a custom flex value (e.g., '1', '0 1 auto'). The predefined values are `none` (`flex: 0 0 auto`), `grow` (`flex: 1 1 auto`) and `shrink` (`flex: 0 1 auto`). Without it, a box grows to share its row with its siblings (`flex-grow: 1; flex-basis: 0`).
          */
         "flex"?: `none` | `grow` | `shrink` | string;
         /**
@@ -4322,125 +4345,125 @@ declare namespace LocalJSX {
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the box's outer bottom spacing.
+          * Defines the box's outer bottom spacing. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEnd"?: BoxSpacingType;
+        "marginBlockEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the LG breakpoint.
+          * Defines the box's outer bottom spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndLg"?: BoxSpacingType;
+        "marginBlockEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the MD breakpoint.
+          * Defines the box's outer bottom spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndMd"?: BoxSpacingType;
+        "marginBlockEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the SM breakpoint.
+          * Defines the box's outer bottom spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndSm"?: BoxSpacingType;
+        "marginBlockEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XL breakpoint.
+          * Defines the box's outer bottom spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndXl"?: BoxSpacingType;
+        "marginBlockEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer bottom spacing at the XS breakpoint.
+          * Defines the box's outer bottom spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockEndXs"?: BoxSpacingType;
+        "marginBlockEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing.
+          * Defines the box's outer top spacing. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStart"?: BoxSpacingType;
+        "marginBlockStart"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the LG breakpoint.
+          * Defines the box's outer top spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartLg"?: BoxSpacingType;
+        "marginBlockStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the MD breakpoint.
+          * Defines the box's outer top spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartMd"?: BoxSpacingType;
+        "marginBlockStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the SM breakpoint.
+          * Defines the box's outer top spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartSm"?: BoxSpacingType;
+        "marginBlockStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XL breakpoint.
+          * Defines the box's outer top spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartXl"?: BoxSpacingType;
+        "marginBlockStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer top spacing at the XS breakpoint.
+          * Defines the box's outer top spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginBlockStartXs"?: BoxSpacingType;
+        "marginBlockStartXs"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing.
+          * Defines the box's outer right spacing. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEnd"?: BoxSpacingType;
+        "marginInlineEnd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the LG breakpoint.
+          * Defines the box's outer right spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndLg"?: BoxSpacingType;
+        "marginInlineEndLg"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the MD breakpoint.
+          * Defines the box's outer right spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndMd"?: BoxSpacingType;
+        "marginInlineEndMd"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the SM breakpoint.
+          * Defines the box's outer right spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndSm"?: BoxSpacingType;
+        "marginInlineEndSm"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XL breakpoint.
+          * Defines the box's outer right spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndXl"?: BoxSpacingType;
+        "marginInlineEndXl"?: BoxMarginType;
         /**
-          * Defines the box's outer right spacing at the XS breakpoint.
+          * Defines the box's outer right spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineEndXs"?: BoxSpacingType;
+        "marginInlineEndXs"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing.
+          * Defines the box's outer left spacing. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStart"?: BoxSpacingType;
+        "marginInlineStart"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the LG breakpoint.
+          * Defines the box's outer left spacing at the LG breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartLg"?: BoxSpacingType;
+        "marginInlineStartLg"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the MD breakpoint.
+          * Defines the box's outer left spacing at the MD breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartMd"?: BoxSpacingType;
+        "marginInlineStartMd"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the SM breakpoint.
+          * Defines the box's outer left spacing at the SM breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartSm"?: BoxSpacingType;
+        "marginInlineStartSm"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XL breakpoint.
+          * Defines the box's outer left spacing at the XL breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartXl"?: BoxSpacingType;
+        "marginInlineStartXl"?: BoxMarginType;
         /**
-          * Defines the box's outer left spacing at the XS breakpoint.
+          * Defines the box's outer left spacing at the XS breakpoint. Accepts a spacing token or `auto`.
           * @defaultValue none
          */
-        "marginInlineStartXs"?: BoxSpacingType;
+        "marginInlineStartXs"?: BoxMarginType;
         /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
@@ -4954,8 +4977,7 @@ declare namespace LocalJSX {
          */
         "dropdownPlacement"?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         /**
-          * Width of the dropdown. Any valid CSS width value.
-          * @default '236px'
+          * Width of the dropdown, including its padding. Any valid CSS width value. Without it, the dropdown is 252px wide, 244px with grouped options and 236px with a panel search.
          */
         "dropdownWidth"?: string;
         /**
@@ -4968,13 +4990,13 @@ declare namespace LocalJSX {
          */
         "fetchTimeout"?: number;
         /**
-          * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value.
-          * @default '380px'
+          * Maximum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value, including its padding.
+          * @default '388px'
          */
         "flyoutMaxWidth"?: string;
         /**
-          * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value. The flyout is as wide as its options, between this and `flyout-max-width`.
-          * @default '280px'
+          * Minimum width of a group's flyout when `group-display` is `flyout`. Any valid CSS width value, including its padding. The flyout is as wide as its options, between this and `flyout-max-width`.
+          * @default '288px'
          */
         "flyoutMinWidth"?: string;
         /**
@@ -5611,6 +5633,14 @@ declare namespace LocalJSX {
          */
         "loading"?: 'eager' | 'lazy';
         /**
+          * Emitted when the image fails to load, such as for a broken or empty `src`. An image with no `src` or `srcset` at all emits neither event, since it has nothing to load. Emitted again after `src` or `srcset` changes and the new image fails. Bubbles and is composed, so a listener on an ancestor gets every `pds-image`'s events — check `event.target` when more than one is in scope.
+         */
+        "onPdsImageError"?: (event: PdsImageCustomEvent<ImageErrorEventDetail>) => void;
+        /**
+          * Emitted when the image loads. Also emitted on first render for an image that finished loading before the component could listen, such as a server-rendered image. Emitted again after `src` or `srcset` changes and the new image loads, or when the browser picks a different `srcset` candidate, such as on a resize. Bubbles and is composed, so a listener on an ancestor gets every `pds-image`'s events — check `event.target` when more than one is in scope.
+         */
+        "onPdsImageLoad"?: (event: PdsImageCustomEvent<ImageLoadEventDetail>) => void;
+        /**
           * The aspect ratio the image is sized to, cropping whatever overflows the shape. A preset (`square` 1/1, `landscape` 4/3, `wide` 16/9, `portrait` 3/4, `tall` 9/16) or any custom CSS ratio, such as `21 / 9`. Use this, not `height` and `width`, to crop: those only reserve space, and only `width` reliably does even that.
          */
         "ratio"?: ImageRatioType | (string & Record<never, never>);
@@ -6186,8 +6216,8 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Sets the maximum width of the popover content, in pixels.
-          * @defaultValue 352
+          * Sets the maximum width of the popover, in pixels, including its padding.
+          * @defaultValue 400
          */
         "maxWidth"?: number;
         /**
@@ -7135,6 +7165,7 @@ declare namespace LocalJSX {
         "borderInlineEnd": boolean;
         "borderInlineStart": boolean;
         "borderRadius": `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "container": BoxContainerType;
         "direction": `row` | `column`;
         "display": `flex` | `inline-flex` | `block` | `inline-block`;
         "fit": boolean;
@@ -7162,30 +7193,30 @@ declare namespace LocalJSX {
         "justifyContentMd": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         "justifyContentLg": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         "justifyContentXl": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
-        "marginBlockStart": BoxSpacingType;
-        "marginBlockStartXs": BoxSpacingType;
-        "marginBlockStartSm": BoxSpacingType;
-        "marginBlockStartMd": BoxSpacingType;
-        "marginBlockStartLg": BoxSpacingType;
-        "marginBlockStartXl": BoxSpacingType;
-        "marginInlineStart": BoxSpacingType;
-        "marginInlineStartXs": BoxSpacingType;
-        "marginInlineStartSm": BoxSpacingType;
-        "marginInlineStartMd": BoxSpacingType;
-        "marginInlineStartLg": BoxSpacingType;
-        "marginInlineStartXl": BoxSpacingType;
-        "marginInlineEnd": BoxSpacingType;
-        "marginInlineEndXs": BoxSpacingType;
-        "marginInlineEndSm": BoxSpacingType;
-        "marginInlineEndMd": BoxSpacingType;
-        "marginInlineEndLg": BoxSpacingType;
-        "marginInlineEndXl": BoxSpacingType;
-        "marginBlockEnd": BoxSpacingType;
-        "marginBlockEndXs": BoxSpacingType;
-        "marginBlockEndSm": BoxSpacingType;
-        "marginBlockEndMd": BoxSpacingType;
-        "marginBlockEndLg": BoxSpacingType;
-        "marginBlockEndXl": BoxSpacingType;
+        "marginBlockStart": BoxMarginType;
+        "marginBlockStartXs": BoxMarginType;
+        "marginBlockStartSm": BoxMarginType;
+        "marginBlockStartMd": BoxMarginType;
+        "marginBlockStartLg": BoxMarginType;
+        "marginBlockStartXl": BoxMarginType;
+        "marginInlineStart": BoxMarginType;
+        "marginInlineStartXs": BoxMarginType;
+        "marginInlineStartSm": BoxMarginType;
+        "marginInlineStartMd": BoxMarginType;
+        "marginInlineStartLg": BoxMarginType;
+        "marginInlineStartXl": BoxMarginType;
+        "marginInlineEnd": BoxMarginType;
+        "marginInlineEndXs": BoxMarginType;
+        "marginInlineEndSm": BoxMarginType;
+        "marginInlineEndMd": BoxMarginType;
+        "marginInlineEndLg": BoxMarginType;
+        "marginInlineEndXl": BoxMarginType;
+        "marginBlockEnd": BoxMarginType;
+        "marginBlockEndXs": BoxMarginType;
+        "marginBlockEndSm": BoxMarginType;
+        "marginBlockEndMd": BoxMarginType;
+        "marginBlockEndLg": BoxMarginType;
+        "marginBlockEndXl": BoxMarginType;
         "minHeight": string;
         "minWidth": string;
         "offset": BoxColumnType;
