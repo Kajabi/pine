@@ -25,7 +25,7 @@ export class PdsRow {
 
   /**
    * Defines the vertical alignment of the row items.
-   * @defaultValue start
+   * @defaultValue stretch
    */
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
@@ -35,22 +35,23 @@ export class PdsRow {
   @Prop() border? = false;
 
   /**
-   * Defines the spacing between the row items.
+   * Defines the gutter between columns, as padding on every side of each column, so the space
+   * between two columns' content is twice the value. Without a gap prop, columns have no gutter.
    */
   @Prop() colGap?: BoxSpacingType | null;
 
   /**
-   * Defines the spacing between the row items vertically.
+   * Defines the vertical gutter, as padding above and below each column. Overrides `col-gap` vertically.
    */
   @Prop() colGapBlock?: BoxSpacingType | null;
 
   /**
-   * Defines the spacing between the row items horizontally.
+   * Defines the horizontal gutter, as padding on both sides of each column. Overrides `col-gap` horizontally.
    */
   @Prop() colGapInline?: BoxSpacingType | null;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * Has no effect: `pds-row` doesn't render an `id` from it. Set `id` on `pds-row` itself instead.
    */
   @Prop() componentId: string;
 

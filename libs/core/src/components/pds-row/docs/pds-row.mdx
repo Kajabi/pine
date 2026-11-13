@@ -13,44 +13,38 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 Row is a flexbox-based grid container that arranges content into responsive columns. It uses a 12-column system for laying out horizontal rows.
 
+## Guidelines
+
+### When to use
+
+- Responsive layouts with two or more columns on a 12-column grid, such as a main column beside a sidebar or a grid of cards.
+- Columns that stack on small screens and sit side by side from a breakpoint up.
+
+### When not to use
+
+- A single line or stack of items, such as a toolbar, a button group or a form. Use a `pds-box` with `gap`.
+- Capping content at a readable width. Use `pds-container`.
+- Tabular data. Use `pds-table`.
+- Styling a column directly. Put `border`, `padding`, `background-color` and `shadow` on a `pds-box` inside the column, so they don't replace or enclose the gutter.
+
+### Accessibility
+
+- `pds-row` and its columns add no role or semantics. Use headings, lists and landmark elements inside the columns to structure the content.
+- Columns keep their DOM order when they wrap, and that order is the reading and focus order. Write the markup in the order the content should be read.
+
 ## Properties
 
 <DocArgsTable componentName="pds-row" docSource={components} />
 
-## Usage Notes
+## Columns
 
-### Grid Layout Essentials
+Row is a wrapping flex row that always lays its columns out horizontally. Its direct children are its columns, so make each one a `pds-box`.
 
-The pds-row component creates a 12-column grid system for responsive layouts. It always maintains horizontal (row) direction and works best with pds-box children that have size props.
-
-### Layout Patterns
-
-- Grid Layout: Use with `pds-box` children that have `size-*` props (1-12)
-- Responsive Grid: Use responsive size variants (e.g., `size-md="6"`)
-- Equal Columns: Children without `size` props become equal-width columns
-- Wrapping: Columns wrap to next line if total exceeds 12
-
-### Key Props for Layout
-
-- `col-gap`: Controls spacing between columns
-- `justify-content`: Horizontal alignment of columns
-- `align-items`: Vertical alignment of columns
-- `no-wrap`: Prevents column wrapping
-
-The component keeps the classes and inline styles it puts on its host. If something removes them, such as a DOM morph, it puts them back, so change its layout through props. Classes and styles you add yourself are left alone. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
-
-### Working with PDS-Box
-
-> **CRITICAL:** `pds-row` transforms `pds-box` children into **grid columns**, not flexbox items. This changes how they behave.
-
-**Grid Column Behavior Inside pds-row:**
-- **REQUIRED:** Only `pds-box` components should be direct children
-- **USE:** `size` props (1-12) for column width control
-- **DEFAULT:** Children use `direction="row"` which works well in grid
-- **LIMIT:** Total of all size props should not exceed 12 per row
-- **FORBIDDEN:** Flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom values like `flex="1"`) are **ignored**
-
-> **COMMON MISTAKE:** Using `flex` props on boxes inside `pds-row` won't work. Use `size` props instead.
+- Size columns with `size` props (`1` to `12`). Columns with no size share the width the sized columns leave, equally.
+- Nothing limits the total. Columns whose sizes add up to more than 12 wrap to a new line.
+- A column without a `size` shares the row only while it has no layout or border props of its own. With `direction`, `display`, `gap`, `wrap`, `fit`, `container`, `offset`, a `flex` preset or a border prop (or a breakpoint version of one of these, or of `auto`), it takes a full line. Give it a `size`, or move those props to a `pds-box` inside it.
+- Use `size` props, not `flex`, to size columns. A column starts at `width: 100%`, so `flex="grow"`, `flex="none"` or `flex="shrink"` on an unsized column gives it a full line. A custom value with a basis, such as `flex="1"`, does share the row.
+- Put the column's border, padding, background and shadow on a `pds-box` inside it, as the examples below do. `col-gap` is padding on the column, so padding on the column replaces the gutter, and a border or background on it wraps around the gutter too.
 
 ### Common Patterns
 
@@ -65,33 +59,45 @@ The component keeps the classes and inline styles it puts on its host. If someth
 
 ## Responsive Breakpoints
 
-For detailed information about responsive breakpoints and how they work with the grid system, see the [Layout documentation](/docs/components-layout--docs#responsive-breakpoints).
+The breakpoint props on `pds-box` columns use these ranges: `xs` below 576px, `sm` 576px and up, `md` 768px and up, `lg` 992px and up, and `xl` 1200px and up. See the [Box breakpoint table](/docs/components-layout-box--docs#responsive-breakpoints) and the [Layout documentation](/docs/components-layout--docs#responsive-breakpoints) for more detail.
 
 ## Variants
 
 ### Default
-By default boxes with rows will be equal width if no size is specified.
+Columns without a `size` share the row's width equally.
 
 <DocCanvas
   mdxSource={{
     react: `
       <PdsRow>
-        <PdsBox>Item 1</PdsBox>
-        <PdsBox direction="column">
-          <p>Content 1</p>
-          <p>Content 2</p>
+        <PdsBox>
+          <PdsBox border>Item 1</PdsBox>
         </PdsBox>
-        <PdsBox>Item 3</PdsBox>
+        <PdsBox>
+          <PdsBox border direction="column">
+            <p>Content 1</p>
+            <p>Content 2</p>
+          </PdsBox>
+        </PdsBox>
+        <PdsBox>
+          <PdsBox border>Item 3</PdsBox>
+        </PdsBox>
       </PdsRow>
     `,
     webComponent: `
       <pds-row>
-        <pds-box>Item 1</pds-box>
-        <pds-box direction="column">
-          <p>Content 1</p>
-          <p>Content 2</p>
+        <pds-box>
+          <pds-box border>Item 1</pds-box>
         </pds-box>
-        <pds-box>Item 3</pds-box>
+        <pds-box>
+          <pds-box border direction="column">
+            <p>Content 1</p>
+            <p>Content 2</p>
+          </pds-box>
+        </pds-box>
+        <pds-box>
+          <pds-box border>Item 3</pds-box>
+        </pds-box>
       </pds-row>
     `
   }}>
@@ -170,7 +176,63 @@ The `pds-row` component provides flexible gap control with three different props
 - **`col-gap-inline`**: Sets only horizontal spacing between items (overrides `col-gap` for horizontal)
 - **`col-gap-block`**: Sets only vertical spacing between items (overrides `col-gap` for vertical)
 
-Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`
+#### How the gutter works
+
+Without `col-gap`, `col-gap-inline` or `col-gap-block`, columns have no gutter. The gap props add padding on every side of each column, and give the row a negative margin of the same size on every side:
+
+- The space between two columns' content is twice the value. `col-gap="sm"` (16px) leaves 32px between columns, and 32px between wrapped lines.
+- The negative margin lines the column content up with the edges of the row's parent, so the row's own box reaches one gap past its parent on every side. When the parent has no padding and meets the edge of the viewport, that overhang can make the page scroll horizontally.
+
+#### Gap sizes
+
+Each gap prop takes a t-shirt size or a core spacing token. The `lg`, `xl` and `xxl` gutters are wider than the same names on `pds-box` `gap` and `padding`, which are 32px, 40px and 48px.
+
+<pds-table component-id="row-gap-sizes" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Value</pds-table-head-cell>
+    <pds-table-head-cell>Gutter on each side of a column</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><code>"none"</code></pds-table-cell>
+      <pds-table-cell>0</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>"xxs"</code></pds-table-cell>
+      <pds-table-cell>0.25rem (4px)</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>"xs"</code></pds-table-cell>
+      <pds-table-cell>0.5rem (8px)</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>"sm"</code></pds-table-cell>
+      <pds-table-cell>1rem (16px)</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>"md"</code></pds-table-cell>
+      <pds-table-cell>1.5rem (24px)</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>"lg"</code></pds-table-cell>
+      <pds-table-cell>2.25rem (36px)</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>"xl"</code></pds-table-cell>
+      <pds-table-cell>3rem (48px)</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>"xxl"</code></pds-table-cell>
+      <pds-table-cell>4rem (64px)</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>"025"</code> to <code>"800"</code></pds-table-cell>
+      <pds-table-cell>The matching <code>--pine-dimension-*</code> token</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+Pixel values assume the default 16px root font size. The core tokens' pixel values are in the Box [Spacing Value Reference](/docs/components-layout-box--docs#spacing-value-reference).
 
 #### Basic Gap Usage
 
@@ -402,6 +464,10 @@ Best practice: Use sparingly, only when you need to prevent wrapping
 
 ### Layout Properties
 `pds-row` creates the horizontal rows that are used to contain a set of columns and can be viewed on the [Layouts](/docs/components-layout--docs) page.
+
+## Technical notes
+
+The component keeps the classes and inline styles it puts on its host. If something removes them, such as a DOM morph, it puts them back, so change its layout through props. Classes and styles you add yourself are left alone. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
 ## Playground
 
