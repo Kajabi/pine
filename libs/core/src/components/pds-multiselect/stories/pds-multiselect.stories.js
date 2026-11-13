@@ -7,7 +7,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: 'A multiselect component with a filter-style dropdown. Displays selected count in the trigger, with search and selected items shown in the dropdown panel. Use triggerWidth, panelWidth, and minWidth to control sizing.',
+        component: 'A multiselect component with a filter-style dropdown. Displays the name of a single selected item, or the selected count, in the trigger, with search and selected items shown in the dropdown panel. Use triggerWidth, panelWidth, and minWidth to control sizing.',
       },
     },
   },
@@ -22,7 +22,7 @@ export default {
     },
     placeholder: {
       control: 'text',
-      description: 'Placeholder text shown in the trigger when no items are selected. When items are selected, shows "X item(s)" instead.',
+      description: 'Placeholder text shown in the trigger when no items are selected. When one item is selected, shows its name instead; when more are selected, shows "N items".',
     },
     searchPlaceholder: {
       control: 'text',

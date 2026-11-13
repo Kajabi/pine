@@ -44,7 +44,7 @@
   {
     "name": "pds-multiselect entry (gzipped)",
     "path": "libs/core/dist/esm/pds-multiselect.entry.js",
-    "limit": "17.5 KB",
+    "limit": "18 KB",
     "gzip": true
   },
   {
