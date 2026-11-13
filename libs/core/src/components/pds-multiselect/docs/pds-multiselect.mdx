@@ -11,7 +11,7 @@ import { StatusBadge } from '../../../stories/_helpers';
 
 # Multiselect
 
-Multiselects let users pick several options from a searchable dropdown list. The trigger displays the selected count while the panel surfaces a filterable list of choices.
+Multiselects let users pick several options from a searchable dropdown list. The trigger displays the selected item's name, or a count when several are selected, while the panel surfaces a filterable list of choices.
 
 ## Guidelines
 
@@ -39,7 +39,7 @@ Multiselects let users pick several options from a searchable dropdown list. The
 
 The trigger button shows:
 - The placeholder text when nothing is selected (e.g., "Select...")
-- The item's name when one item is selected (e.g., "Marketing"). A long name truncates with an ellipsis rather than widening the trigger
+- The item's name when one item is selected (e.g., "Marketing"). A long name truncates with an ellipsis: the trigger keeps the width "1 item" would give it, so the name never widens a multiselect that sizes to its content
 - A count when two or more items are selected (e.g., "3 items")
 
 With pills (see Selected Display: Pills), the trigger doesn't repeat the name: inline pills show each selection as a chip in place of the text, and pills below keep the placeholder in the trigger with the chips under it.
