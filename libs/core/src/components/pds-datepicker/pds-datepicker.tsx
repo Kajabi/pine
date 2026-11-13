@@ -175,7 +175,8 @@ export class PdsDatepicker {
   @Prop() endTimeLabel = 'End time';
 
   /**
-   * Specifies the error message and provides an error-themed treatment to the field.
+   * Displays an error message below the field and gives the field error styling. It becomes the field's accessible
+   * description only while the datepicker is invalid: with `invalid` set, or while its date can't be picked.
    */
   @Prop() errorMessage?: string;
 
@@ -218,7 +219,7 @@ export class PdsDatepicker {
   @Prop() hourLabel = 'Hour';
 
   /**
-   * Determines whether or not the datepicker is invalid or throws an error.
+   * Determines whether or not the datepicker is invalid.
    */
   @Prop() invalid?: boolean;
 
@@ -388,19 +389,26 @@ export class PdsDatepicker {
   @Prop() yearLabel = 'Year';
 
   /**
-   * Emitted when the value changes.
+   * Emitted when the user changes the value: by picking a day, typing a date or range and pressing `Enter` or leaving
+   * the field, or with the clear button. In the calendar, a range waits for Apply, or with `auto-apply` for its end or a
+   * preset, and a date with `time-picker` waits for Apply. `detail` has `value`, as `YYYY-MM-DD`, `YYYY-MM-DDTHH:mm` with `time-picker`, `--MM-DD`
+   * with `month-day`, or an empty string when cleared. In range mode `value` is `start/end`, and `detail` also has
+   * `start`, `end` and `preset`, the key of the preset the range matches, when it matches one.
    *
-   * This event will not emit when programmatically setting the `value` property.
+   * It doesn't emit when the value stays the same, when typed text isn't a date that can be picked, or when a form
+   * reset clears the date. This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsDatepickerChange!: EventEmitter<DatepickerChangeEventDetail>;
 
   /**
    * Emitted when the datepicker loses focus: when focus leaves the field and the calendar.
+   * Moving between the field and the calendar doesn't emit it.
    */
   @Event() pdsBlur!: EventEmitter<FocusEvent>;
 
   /**
    * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside.
+   * Moving between the field and the calendar doesn't emit it.
    */
   @Event() pdsFocus!: EventEmitter<FocusEvent>;
 

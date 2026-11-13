@@ -18,12 +18,13 @@ Datepicker captures a date, or with `range` a start and end date, as an ISO `YYY
 ### When to use
 
 - To capture one calendar date, such as a due date, a start date or a date in a filter.
+- To capture a range of dates, with `range`, or a date and a time together, with the `time-picker` prop.
 - When `min` and `max` bound the dates people can choose.
+- For a date far in the past that people know by heart, such as a date of birth, with `show-dropdowns`. Paging back through months is slow; `show-dropdowns` jumps to the year, or people can type the date.
 
 ### When not to use
 
-- For a time of day on its own, with no date. For a date and time together, use `time-picker`.
-- For a date far in the past that people know by heart, without `show-dropdowns`. Paging back through months is slow; turn on `show-dropdowns` to jump to the year, or let people type it.
+- For a time of day on its own, with no date. Pine has no time-only control, and `pds-input` has no `time` type; a [Select](/docs/components-select--docs) of times can stand in.
 
 ### Accessibility
 
@@ -31,50 +32,21 @@ Datepicker captures a date, or with `range` a start and end date, as an ISO `YYY
 - The calendar is a modal dialog with a date grid, following the [WAI-ARIA date picker dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/).
 - The button that opens the calendar is named by `trigger-label`, followed by the selected date. Set `trigger-label`, `previous-month-label` and `next-month-label` when the page isn't in English.
 
-### Keyboard
+## Keyboard interactions
 
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="datepicker-keyboard">
-    <pds-table-head>
-      <pds-table-head-cell>Key</pds-table-head-cell>
-      <pds-table-head-cell>Action</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>Alt</code> + <code>↓</code> in the field</pds-table-cell>
-        <pds-table-cell>Opens the calendar, or moves focus into it when a click has already opened it.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>←</code> <code>→</code></pds-table-cell>
-        <pds-table-cell>Moves one day. The arrows follow the reading direction on right-to-left pages.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>↑</code> <code>↓</code></pds-table-cell>
-        <pds-table-cell>Moves one week, or in <code>month-day</code> mode one row of seven days.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>Home</code> <code>End</code></pds-table-cell>
-        <pds-table-cell>Moves to the first or last day of the week, or in <code>month-day</code> mode the row.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>Page Up</code> <code>Page Down</code></pds-table-cell>
-        <pds-table-cell>Moves one month. With <code>Shift</code>, one year; <code>month-day</code> mode has no year to jump by, so <code>Shift</code> stays put.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>Enter</code> <code>Space</code></pds-table-cell>
-        <pds-table-cell>Picks the day and closes the calendar. In range mode, starts or ends the range. With <code>time-picker</code>, the date waits for Apply.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>Escape</code></pds-table-cell>
-        <pds-table-cell>Closes the calendar without changing the date.</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>Tab</code></pds-table-cell>
-        <pds-table-cell>Moves between the presets, the month buttons, the day and, in range mode, Cancel and Apply.</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
+In the field:
+
+- `Alt`+`↓` opens the calendar, or moves focus into it when a click has already opened it.
+
+In the calendar:
+
+- `←` and `→` move one day. The arrows follow the reading direction on right-to-left pages.
+- `↑` and `↓` move one week, or in `month-day` mode one row of seven days.
+- `Home` and `End` move to the first or last day of the week, or in `month-day` mode of the row.
+- `Page Up` and `Page Down` move one month. With `Shift`, they move one year; `month-day` mode has no year to jump by, so `Shift` stays put.
+- `Enter` or `Space` picks the day and closes the calendar. In range mode, it starts or ends the range. With `time-picker`, the date waits for Apply.
+- `Escape` closes the calendar without changing the date.
+- `Tab` moves between the presets, the month buttons, the day and, in range mode, Cancel and Apply.
 
 ## Properties
 
@@ -118,16 +90,16 @@ Month and weekday names come from the browser's `Intl` support for `locale`, whi
 
 ### Format
 
-`format` sets how the field shows dates and reads typed ones, with the tokens `YYYY`, `MM` or `M` (month), `DD` or `D` (day), and for times `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM). Typed dates may drop leading zeros, and a typed ISO date is always accepted too.
+`format` sets how the field shows dates and reads typed ones, with the tokens `YYYY`, `MMMM` or `MMM` (the month's name, in the locale), `MM` or `M` (month), `DD` or `D` (day), and for times `HH` or `H` (24-hour), `hh` or `h` (12-hour), `mm` and `A` (AM/PM). Put literal text in brackets: `[Due] D/M/YYYY` shows "Due 13/10/2026", and reads a typed date that includes "Due". Typed dates may drop leading zeros, and a typed ISO date is always accepted too.
 
 The **value stays ISO** (`YYYY-MM-DD`, or `YYYY-MM-DDTHH:mm`; `--MM-DD` with `month-day`) whatever the format, so what a form submits and what the change event carries never depends on how the field reads. A `YYYY-MM-DD` or `YYYY-MM-DDTHH:mm` value can be parsed directly as ISO 8601 on the backend, as a calendar date rather than a midnight timestamp. `--MM-DD`, with no year, needs the handling below instead.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsDatepicker componentId="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></PdsDatepicker>`,
-    webComponent: `<pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>`
+    react: `<PdsDatepicker componentId="pds-datepicker-format-example" label="Due date" format="MMM D, YYYY" value="2026-10-13"></PdsDatepicker>`,
+    webComponent: `<pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MMM D, YYYY" value="2026-10-13"></pds-datepicker>`
 }}>
-  <pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MM/DD/YYYY" value="2026-10-13"></pds-datepicker>
+  <pds-datepicker component-id="pds-datepicker-format-example" label="Due date" format="MMM D, YYYY" value="2026-10-13"></pds-datepicker>
 </DocCanvas>
 
 ### Range
@@ -154,19 +126,12 @@ A range of your own can follow today as a built-in does, or sit on fixed days. `
 
 Prefer the offsets for anything meant to stay relative. Fixed days never move, so a "last N days" range written as fixed dates is stale by the next day — and because a preset is matched by its exact range, the change event stops carrying its `key` too, leaving the panel on **Custom range**. A key of your own needs a `label`, as only built-in keys have one to fall back to. A preset with no label, or with neither a usable range nor a built-in key to take one from, is left out of the list, and says so once in the console.
 
+The array form is a property, so set it from JavaScript or a framework, as in React: `presets={[{ key: 'last-7-days', label: '7 derniers jours' }, { key: 'last-14-days', label: 'Last 14 days', startOffset: -13 }, { key: 'launch', label: 'Launch week', start: '2026-03-02', end: '2026-03-08' }]}`.
+
 <DocCanvas
   mdxSource={{
     react: `<PdsDatepicker componentId="pds-datepicker-range-presets-example" label="Period" hideLabel range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></PdsDatepicker>`,
-    webComponent: `<pds-datepicker component-id="pds-datepicker-range-presets-example" label="Period" hide-label range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></pds-datepicker>
-
-<script>
-  // Translated labels, a range of your own that follows today, and one on fixed days.
-  document.querySelector('pds-datepicker').presets = [
-    { key: 'last-7-days', label: '7 derniers jours' },
-    { key: 'last-14-days', label: 'Last 14 days', startOffset: -13 },
-    { key: 'launch', label: 'Launch week', start: '2026-03-02', end: '2026-03-08' },
-  ];
-</script>`
+    webComponent: `<pds-datepicker component-id="pds-datepicker-range-presets-example" label="Period" hide-label range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></pds-datepicker>`
 }}>
   <pds-datepicker component-id="pds-datepicker-range-presets-example" label="Period" hide-label range presets="today,last-7-days,last-30-days,last-month,this-month,last-quarter,this-quarter,this-year,last-12-months,year-to-date"></pds-datepicker>
 </DocCanvas>
@@ -267,20 +232,6 @@ For a date people can see but not change, set `readonly` instead. The date shows
   <pds-datepicker component-id="pds-datepicker-disabled-example" label="Due date" disabled value="2026-10-13"></pds-datepicker>
 </DocCanvas>
 
-## Events
-
-### pdsDatepickerChange
-
-Emitted with `{ value }` when someone picks a day, or types a date and leaves the field or presses `Enter`. `value` is `YYYY-MM-DD`, or `--MM-DD` with `month-day`, or an empty string when the field is cleared. It doesn't emit when the `value` property is set programmatically, or when the typed text isn't a date that can be picked.
-
-In range mode it emits on Apply, or on a typed range, with `{ value, start, end, preset }`: `value` is `YYYY-MM-DD/YYYY-MM-DD`, `start` and `end` are its two dates, and `preset` is the key of the preset the range matches, when it matches one. With the time picker, each date carries its time, as `YYYY-MM-DDTHH:mm`, and the change waits for Apply.
-
-### pdsFocus and pdsBlur
-
-Emitted when focus moves into the datepicker from outside, and when it leaves. Moving between the field and the calendar doesn't emit them.
-
-The inner field's own `pdsInput`, `pdsChange`, `pdsFocus`, `pdsBlur` and `pdsKeyDown` events stay inside the datepicker.
-
 ## Methods
 
 - `open()` opens the calendar and moves focus to the selected day (a range's end), or today, kept within `min` and `max`. It does nothing while the datepicker is `disabled` or `readonly`.
@@ -302,8 +253,10 @@ The open calendar is portaled: into the `<dialog>` or open popover around the da
 ## Form Integration
 
 - Set `name` and the date is submitted with its form as `YYYY-MM-DD`, `YYYY-MM-DD/YYYY-MM-DD` in range mode, or `--MM-DD` in month-day mode.
-- Resetting the form clears the date.
+- Resetting the form clears the date, rather than restoring the `value` it started with.
+- To follow the user's changes, listen for `pdsDatepickerChange` (`onPdsDatepickerChange` in React) and read `event.detail.value`. The text field inside the datepicker keeps its own `pdsInput`, `pdsChange`, `pdsFocus`, `pdsBlur` and `pdsKeyDown` events to itself.
 - With `required` and no date, typed text that isn't a date, or a date outside `min` and `max` (typed or set in code), the form won't submit and the field shows as invalid. The form reports `badInput` for text that isn't a date and `rangeUnderflow` or `rangeOverflow` for dates outside the range, with the messages set by `invalid-date-message`, `min-date-message` and `max-date-message`; `{date}` in the last two is replaced by the bound.
+- For a complete form, with validation, see [Using Pine form components](/docs/guides-forms--docs).
 
 ## Playground
 
