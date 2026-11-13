@@ -13,6 +13,35 @@ describe('pds-radio-group', () => {
     expect(page.root).toBeTruthy();
   });
 
+  it('does not write component-id onto the host id', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="plan"></pds-radio-group>`,
+    });
+
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group id="author-id" component-id="plan"></pds-radio-group>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
+  });
+
+  it('still derives its helper message id from component-id, even though the host id no longer does', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group component-id="plan" helper-message="Choose one"></pds-radio-group>`,
+    });
+
+    const helper = page.root?.querySelector('[id="plan__helper-message"]');
+    expect(helper).toBeTruthy();
+    expect(page.root?.getAttribute('aria-describedby')).toBe('plan__helper-message');
+  });
+
   it('renders with child radios', async () => {
     const page = await newSpecPage({
       components: [PdsRadioGroup, PdsRadio],
@@ -325,7 +354,7 @@ describe('pds-radio-group', () => {
     const page = await newSpecPage({
       components: [PdsRadioGroup],
       html: `
-        <pds-radio-group id="radio-group-old" group-label="Comments" helper-message="Helper" aria-labelledby="radio-group-old__label" aria-describedby="radio-group-old__helper-message">
+        <pds-radio-group group-label="Comments" helper-message="Helper" aria-labelledby="radio-group-old__label" aria-describedby="radio-group-old__helper-message">
           <div class="pds-radio-group__label" id="radio-group-old__label">Comments</div>
         </pds-radio-group>
       `,
@@ -336,6 +365,19 @@ describe('pds-radio-group', () => {
     expect(labelledBy).toBe(page.root?.querySelector('.pds-radio-group__label')?.id);
     expect(page.root?.querySelectorAll('.pds-radio-group__label').length).toBe(1);
     expect(page.root?.getAttribute('aria-describedby')).toBe(page.root?.querySelector('.pds-radio-group__message')?.id);
+  });
+
+  it("drops an earlier instance's references but keeps an author id outside the group", async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `
+        <h2 id="plan-heading">Plan</h2>
+        <pds-radio-group group-label="Comments" aria-labelledby="radio-group-old__label plan-heading"></pds-radio-group>
+      `,
+    });
+
+    const group = page.body.querySelector('pds-radio-group');
+    expect(group?.getAttribute('aria-labelledby')).toBe('plan-heading');
   });
 
   it('renders helper message when helperMessage prop is set', async () => {

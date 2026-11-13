@@ -18,13 +18,22 @@ describe('pds-filters', () => {
     `);
   });
 
-  it('renders with component-id', async () => {
+  it('does not write component-id onto the host id', async () => {
     const page = await newSpecPage({
       components: [PdsFilters],
       html: `<pds-filters component-id="test-filters"></pds-filters>`,
     });
 
-    expect(page.root?.id).toBe('test-filters');
+    expect(page.root?.id).toBe('');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsFilters],
+      html: `<pds-filters id="author-id" component-id="test-filters"></pds-filters>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
   });
 
   it('has correct CSS classes for layout', async () => {

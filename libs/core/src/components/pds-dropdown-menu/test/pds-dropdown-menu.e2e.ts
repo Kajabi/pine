@@ -451,7 +451,7 @@ describe('pds-dropdown-menu Tab through the items', () => {
     ['Tab from the last item', 'End', 'Tab', 'after'],
   ] as const)('keeps focus on the page with a pds-chip trigger on %s', async (_, jump, key, expected) => {
     const page = await setUp({
-      trigger: '<pds-chip slot="trigger" component-id="trigger" variant="dropdown">Actions</pds-chip>',
+      trigger: '<pds-chip slot="trigger" id="trigger" component-id="trigger" variant="dropdown">Actions</pds-chip>',
     });
     await open(page);
     await page.keyboard.press(jump);

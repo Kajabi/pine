@@ -9,12 +9,21 @@ describe('pds-filter', () => {
     });
 
     expect(page.root).toBeTruthy();
-    expect(page.root?.id).toBe('test-filter');
+    expect(page.root?.id).toBe('');
 
     const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger).toBeTruthy();
     expect(trigger?.getAttribute('aria-expanded')).toBe('false');
     expect(trigger?.textContent!.trim()).toContain('Test Filter');
+  });
+
+  it('keeps an author-set id even when component-id is also set', async () => {
+    const page = await newSpecPage({
+      components: [PdsFilter],
+      html: `<pds-filter id="author-id" component-id="test-filter" text="Test Filter"></pds-filter>`,
+    });
+
+    expect(page.root?.id).toBe('author-id');
   });
 
   it('renders with default variant', async () => {

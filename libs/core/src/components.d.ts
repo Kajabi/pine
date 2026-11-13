@@ -76,7 +76,7 @@ export namespace Components {
     }
     interface PdsAccordion {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
           * @defaultValue null
          */
         "componentId": string;
@@ -88,7 +88,7 @@ export namespace Components {
     }
     interface PdsAlert {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -143,7 +143,7 @@ export namespace Components {
          */
         "badgeLabel"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -780,7 +780,7 @@ export namespace Components {
     }
     interface PdsButton {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -903,7 +903,7 @@ export namespace Components {
     }
     interface PdsChip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1189,7 +1189,7 @@ export namespace Components {
          */
         "border": boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1442,7 +1442,7 @@ export namespace Components {
     }
     interface PdsDivider {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1531,7 +1531,7 @@ export namespace Components {
     }
     interface PdsDropdownMenu {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1546,7 +1546,7 @@ export namespace Components {
          */
         "clickItem": () => Promise<void>;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1590,7 +1590,7 @@ export namespace Components {
     }
     interface PdsDropdownMenuSeparator {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1605,7 +1605,7 @@ export namespace Components {
      */
     interface PdsFilter {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its internal popover's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1632,7 +1632,7 @@ export namespace Components {
     }
     interface PdsFilters {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
     }
@@ -1643,7 +1643,7 @@ export namespace Components {
          */
         "alt"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2196,7 +2196,7 @@ export namespace Components {
     }
     interface PdsPopover {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its portal element's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2274,7 +2274,7 @@ export namespace Components {
     }
     interface PdsProperty {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2351,7 +2351,7 @@ export namespace Components {
      */
     interface PdsRadioGroup {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its helper and error message `id`s. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2508,7 +2508,7 @@ export namespace Components {
          */
         "border": boolean;
         /**
-          * A unique identifier used for the sortable container `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2557,7 +2557,7 @@ export namespace Components {
      */
     interface PdsSortableItem {
         /**
-          * A unique identifier used for the sortable item `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2678,7 +2678,7 @@ export namespace Components {
          */
         "compact": boolean;
         /**
-          * A unique identifier used for the table `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2818,7 +2818,7 @@ export namespace Components {
          */
         "activeTabName"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, passed down to its tabs and panels. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -3029,7 +3029,7 @@ export namespace Components {
      */
     interface PdsTooltip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its portal element's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -4042,7 +4042,7 @@ declare namespace LocalJSX {
     }
     interface PdsAccordion {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
           * @defaultValue null
          */
         "componentId"?: string;
@@ -4058,7 +4058,7 @@ declare namespace LocalJSX {
     }
     interface PdsAlert {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -4117,7 +4117,7 @@ declare namespace LocalJSX {
          */
         "badgeLabel"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -4754,7 +4754,7 @@ declare namespace LocalJSX {
     }
     interface PdsButton {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -4893,7 +4893,7 @@ declare namespace LocalJSX {
     }
     interface PdsChip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5187,7 +5187,7 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5448,7 +5448,7 @@ declare namespace LocalJSX {
     }
     interface PdsDivider {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5545,7 +5545,7 @@ declare namespace LocalJSX {
     }
     interface PdsDropdownMenu {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5556,7 +5556,7 @@ declare namespace LocalJSX {
     }
     interface PdsDropdownMenuItem {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5604,7 +5604,7 @@ declare namespace LocalJSX {
     }
     interface PdsDropdownMenuSeparator {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5619,7 +5619,7 @@ declare namespace LocalJSX {
      */
     interface PdsFilter {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its internal popover's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -5650,7 +5650,7 @@ declare namespace LocalJSX {
     }
     interface PdsFilters {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
     }
@@ -5661,7 +5661,7 @@ declare namespace LocalJSX {
          */
         "alt"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6258,7 +6258,7 @@ declare namespace LocalJSX {
     }
     interface PdsPopover {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its portal element's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6332,7 +6332,7 @@ declare namespace LocalJSX {
     }
     interface PdsProperty {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6413,7 +6413,7 @@ declare namespace LocalJSX {
      */
     interface PdsRadioGroup {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its helper and error message `id`s. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6594,7 +6594,7 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * A unique identifier used for the sortable container `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -6647,7 +6647,7 @@ declare namespace LocalJSX {
      */
     interface PdsSortableItem {
         /**
-          * A unique identifier used for the sortable item `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6777,7 +6777,7 @@ declare namespace LocalJSX {
          */
         "compact"?: boolean;
         /**
-          * A unique identifier used for the table `id` attribute.
+          * A unique identifier for this component instance. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -6916,7 +6916,7 @@ declare namespace LocalJSX {
          */
         "activeTabName"?: string;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, passed down to its tabs and panels. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -7147,7 +7147,7 @@ declare namespace LocalJSX {
      */
     interface PdsTooltip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, used to build its portal element's `id`. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
