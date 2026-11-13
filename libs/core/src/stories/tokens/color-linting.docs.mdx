@@ -4,7 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Color Linting Rules
 
-Stylelint plugins enforce proper usage of Pine semantic color tokens in SCSS files to ensure consistent theming and dark mode support.
+These Stylelint rules check the SCSS of Pine's own components, so they keep theming and dark mode consistent. They aren't published with `@pine-ds/core` and don't run on your app's styles. In app code, pick tokens by hand with <pds-link href="?path=/docs/design-tokens-tokens--docs">Choosing tokens</pds-link> on the Tokens page.
 
 ## Overview
 
@@ -62,6 +62,8 @@ Core tokens like `--pine-color-grey-900` have fixed values that don't adapt to d
 
 ### 1. Hardcoded Colors (Hex, RGB, RGBA, HSL, HSLA)
 
+`pine-design-system/no-hardcoded-colors` rejects literal colors in hex, `rgb()`, `rgba()`, `hsl()` or `hsla()` form:
+
 ```scss
 // ❌ BLOCKED - Hex colors
 .pds-component {
@@ -84,6 +86,8 @@ Core tokens like `--pine-color-grey-900` have fixed values that don't adapt to d
 
 ### 2. Core Pine Tokens
 
+`pine-design-system/prefer-semantic-tokens` rejects core color tokens, such as `--pine-color-grey-900` or `--pine-color-white`, because they keep the same value in dark mode:
+
 ```scss
 // ❌ BLOCKED - Use semantic tokens instead
 .pds-component {
@@ -95,6 +99,8 @@ Core tokens like `--pine-color-grey-900` have fixed values that don't adapt to d
 
 ## What's Allowed
 
+Semantic color tokens pass both rules:
+
 ```scss
 // ✅ ALLOWED - Semantic tokens
 .pds-component {
@@ -104,153 +110,17 @@ Core tokens like `--pine-color-grey-900` have fixed values that don't adapt to d
 }
 ```
 
-## Token Mapping Reference
+## Choosing a replacement
 
-### Text Colors
+The CSS property gives the rules a context to search for a semantic token:
 
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="text-colors-table" responsive>
-    <pds-table-head>
-      <pds-table-head-cell>Core Token</pds-table-head-cell>
-      <pds-table-head-cell>Semantic Token</pds-table-head-cell>
-      <pds-table-head-cell>Use Case</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>grey-950</code></pds-table-cell>
-        <pds-table-cell><code>text-strong</code></pds-table-cell>
-        <pds-table-cell>Strong/emphasized text</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-900</code></pds-table-cell>
-        <pds-table-cell><code>text</code></pds-table-cell>
-        <pds-table-cell>Default body text</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-800</code></pds-table-cell>
-        <pds-table-cell><code>text-secondary</code></pds-table-cell>
-        <pds-table-cell>Secondary text</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-700</code></pds-table-cell>
-        <pds-table-cell><code>text-muted</code></pds-table-cell>
-        <pds-table-cell>Muted text</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-600</code></pds-table-cell>
-        <pds-table-cell><code>text-tertiary</code></pds-table-cell>
-        <pds-table-cell>Tertiary text</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-500</code></pds-table-cell>
-        <pds-table-cell><code>text-subtle</code></pds-table-cell>
-        <pds-table-cell>Subtle text</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>black</code></pds-table-cell>
-        <pds-table-cell><code>text-emphasis</code></pds-table-cell>
-        <pds-table-cell>Maximum emphasis</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
+- `color` and `fill`: text tokens
+- `background` and `background-color`: background tokens
+- `border`, `border-color`, `border-*-color`, `outline`, `outline-color` and `box-shadow`: border tokens
 
-### Background Colors
+When that context has a token whose light-mode value matches the color, the error suggests it. When it doesn't, the error lists every token in the context. Any other property, such as `stroke`, gets the one token that matches across all three contexts, or no suggestion when the color matches more than one.
 
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="background-colors-table" responsive>
-    <pds-table-head>
-      <pds-table-head-cell>Core Token</pds-table-head-cell>
-      <pds-table-head-cell>Semantic Token</pds-table-head-cell>
-      <pds-table-head-cell>Use Case</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>white</code></pds-table-cell>
-        <pds-table-cell><code>background-container</code></pds-table-cell>
-        <pds-table-cell>Card/panel backgrounds</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-050</code></pds-table-cell>
-        <pds-table-cell><code>background-container-hover</code></pds-table-cell>
-        <pds-table-cell>Hover states</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-100</code></pds-table-cell>
-        <pds-table-cell><code>background-subtle</code> / <code>background-app</code></pds-table-cell>
-        <pds-table-cell>Subtle backgrounds</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-150</code></pds-table-cell>
-        <pds-table-cell><code>background-muted</code></pds-table-cell>
-        <pds-table-cell>Muted backgrounds</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-200</code></pds-table-cell>
-        <pds-table-cell><code>background-inset</code></pds-table-cell>
-        <pds-table-cell>Inset/recessed areas</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
-
-### Border Colors
-
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="border-colors-table" responsive>
-    <pds-table-head>
-      <pds-table-head-cell>Core Token</pds-table-head-cell>
-      <pds-table-head-cell>Semantic Token</pds-table-head-cell>
-      <pds-table-head-cell>Use Case</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>grey-200</code></pds-table-cell>
-        <pds-table-cell><code>border-disabled</code> / <code>border-subtle</code></pds-table-cell>
-        <pds-table-cell>Subtle/disabled borders</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-300</code></pds-table-cell>
-        <pds-table-cell><code>border</code></pds-table-cell>
-        <pds-table-cell>Default borders</pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-400</code></pds-table-cell>
-        <pds-table-cell><code>border-hover</code></pds-table-cell>
-        <pds-table-cell>Hover state borders</pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
-
-### Inverse Tokens (for dark backgrounds)
-
-<pds-box border border-radius="sm" fit>
-  <pds-table component-id="inverse-tokens-table" responsive>
-    <pds-table-head>
-      <pds-table-head-cell>Core Token</pds-table-head-cell>
-      <pds-table-head-cell>Inverse Semantic Token</pds-table-head-cell>
-    </pds-table-head>
-    <pds-table-body>
-      <pds-table-row>
-        <pds-table-cell><code>grey-100</code></pds-table-cell>
-        <pds-table-cell><code>text-inverse</code></pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-150</code></pds-table-cell>
-        <pds-table-cell><code>text-inverse-secondary</code></pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>grey-300</code></pds-table-cell>
-        <pds-table-cell><code>text-inverse-tertiary</code></pds-table-cell>
-      </pds-table-row>
-      <pds-table-row>
-        <pds-table-cell><code>white</code></pds-table-cell>
-        <pds-table-cell><code>text-inverse-emphasis</code></pds-table-cell>
-      </pds-table-row>
-    </pds-table-body>
-  </pds-table>
-</pds-box>
+A match on the light-mode value isn't always the right job for the style. For example, `var(--pine-color-grey-950)` in `color` suggests `--pine-color-text-hover`, not `--pine-color-text-strong`, and `var(--pine-color-grey-050)` in `stroke` suggests `--pine-color-background-container-hover`. Check each suggestion against <pds-link href="?path=/docs/design-tokens-tokens--docs">Choosing tokens</pds-link>, which lists the text, surface, border and inverse tokens with their light and dark values.
 
 ## Handling Inverse Context
 
@@ -274,6 +144,8 @@ If you're intentionally using a core token for inverse context (e.g., text on a 
 
 ## Running the Linter
 
+Run these from `libs/core`:
+
 ```bash
 # Run stylelint
 npm run lint.styles
@@ -284,12 +156,10 @@ npm run lint.styles -- --fix
 
 ## Auto-fix
 
-The rules support auto-fix when the property context is clear:
+- `prefer-semantic-tokens` writes its suggested token whenever it has exactly one, including for a property with no context.
+- `no-hardcoded-colors` fixes a hex or color function that exactly or closely matches a Pine color. It writes the semantic suggestion when there is one, and the matching core token otherwise: `#ff3e14` in `color` becomes `var(--pine-color-mercury-500)`. `prefer-semantic-tokens` flags that core token only if it's a grey, white or black.
 
-- `color` → text tokens
-- `background-color` → background tokens
-- `border-color` → border tokens
-- `box-shadow` → border tokens
+Review each fix against <pds-link href="?path=/docs/design-tokens-tokens--docs">Choosing tokens</pds-link>.
 
 **Note:** Colors with alpha values (e.g., `rgba(0, 0, 0, 0.1)`) are NOT auto-fixed since they may need special handling (shadows, overlays, etc.). Use `stylelint-disable-next-line` to ignore these cases.
 
@@ -297,7 +167,10 @@ The rules support auto-fix when the property context is clear:
 
 Token mappings are loaded from `@kajabi-ui/styles/lint-mappings`. This JSON file is generated from the core and semantic token definitions in <pds-link href="https://github.com/Kajabi/ds-tokens" external>ds-tokens</pds-link>.
 
+For the plugin files, including an ESLint version that isn't enabled, see the <pds-link href="https://github.com/Kajabi/pine/blob/main/libs/core/lint-plugins/README.md" external>lint-plugins README</pds-link>.
+
 ## Related Documentation
 
+- <pds-link href="?path=/docs/design-tokens-tokens--docs">Tokens</pds-link>
 - <pds-link href="?path=/docs/design-tokens-semantic-color--docs">Semantic Color Tokens</pds-link>
 - <pds-link href="https://github.com/Kajabi/ds-tokens" external>ds-tokens Repository</pds-link>
