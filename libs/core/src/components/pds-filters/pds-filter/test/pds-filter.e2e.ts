@@ -758,54 +758,58 @@ describe('pds-filter focus after Escape', () => {
     expect(await focusedElement(page)).toBe('inside');
   });
 
-  it('returns focus to the trigger when the filter sits in another component\'s shadow root', async () => {
-    const page = await newE2EPage();
-    await page.setContent('<x-filter-host></x-filter-host>');
-    await page.evaluate(() => {
-      customElements.define(
-        'x-filter-host',
-        class extends HTMLElement {
-          constructor() {
-            super();
-            this.attachShadow({ mode: 'open' }).innerHTML =
-              '<pds-filter component-id="test" text="Test"><input id="inside" aria-label="Inside" /></pds-filter>';
-          }
-        },
-      );
-    });
-    await page.waitForFunction(() => {
-      const trigger = document
-        .querySelector('x-filter-host')
-        ?.shadowRoot?.querySelector('pds-filter')
-        ?.shadowRoot?.querySelector('.pds-filter__trigger');
-      return trigger != null && getComputedStyle(trigger).visibility === 'visible';
-    });
-    await page.evaluate(() =>
-      document
-        .querySelector('x-filter-host')!
-        .shadowRoot!.querySelector('pds-filter')!
-        .shadowRoot!.querySelector<HTMLElement>('.pds-filter__trigger')!
-        .focus(),
-    );
-    await page.keyboard.press('Enter');
-    await page.waitForChanges();
-    await page.keyboard.press('Tab');
-
-    const focusedInHost = () =>
-      page.evaluate(() => {
-        const root = document.querySelector('x-filter-host')!.shadowRoot!;
-        const filter = root.querySelector('pds-filter')!;
-        if (root.activeElement === filter) {
-          return filter.shadowRoot!.activeElement?.matches('.pds-filter__trigger') ? 'trigger' : 'filter';
-        }
-        return root.activeElement?.id ?? document.activeElement?.localName;
+  it.each(['open', 'closed'] as const)(
+    'returns focus to the trigger when the filter sits in another component\'s %s shadow root',
+    async (mode) => {
+      type HostWindow = Window & { filterHostRoot: ShadowRoot };
+      const page = await newE2EPage();
+      await page.setContent('<x-filter-host></x-filter-host>');
+      await page.evaluate((rootMode) => {
+        customElements.define(
+          'x-filter-host',
+          class extends HTMLElement {
+            constructor() {
+              super();
+              const root = this.attachShadow({ mode: rootMode });
+              root.innerHTML =
+                '<pds-filter component-id="test" text="Test"><input id="inside" aria-label="Inside" /></pds-filter>';
+              (window as HostWindow).filterHostRoot = root;
+            }
+          },
+        );
+      }, mode);
+      await page.waitForFunction(() => {
+        const trigger = (window as HostWindow).filterHostRoot
+          ?.querySelector('pds-filter')
+          ?.shadowRoot?.querySelector('.pds-filter__trigger');
+        return trigger != null && getComputedStyle(trigger).visibility === 'visible';
       });
-    expect(await focusedInHost()).toBe('inside');
+      await page.evaluate(() =>
+        (window as HostWindow).filterHostRoot
+          .querySelector('pds-filter')!
+          .shadowRoot!.querySelector<HTMLElement>('.pds-filter__trigger')!
+          .focus(),
+      );
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+      await page.keyboard.press('Tab');
 
-    await pressEscape(page);
+      const focusedInHost = () =>
+        page.evaluate(() => {
+          const root = (window as HostWindow).filterHostRoot;
+          const filter = root.querySelector('pds-filter')!;
+          if (root.activeElement === filter) {
+            return filter.shadowRoot!.activeElement?.matches('.pds-filter__trigger') ? 'trigger' : 'filter';
+          }
+          return root.activeElement?.id ?? document.activeElement?.localName;
+        });
+      expect(await focusedInHost()).toBe('inside');
 
-    expect(await focusedInHost()).toBe('trigger');
-  });
+      await pressEscape(page);
+
+      expect(await focusedInHost()).toBe('trigger');
+    },
+  );
 
   it('leaves focus where a pdsFilterClose listener moves it', async () => {
     const page = await setup('<input id="inside" aria-label="Inside" />');
