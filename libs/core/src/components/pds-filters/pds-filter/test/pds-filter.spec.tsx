@@ -1175,6 +1175,26 @@ describe('pds-filter', () => {
         expect(focusSpy).not.toHaveBeenCalled();
       });
 
+      it('returns focus to the trigger when the filter sits in another shadow root and focus is still inside it', async () => {
+        const { page, shadowRoot, popover, focusSpy, setActiveElement, pressEscape, inside } = await setup();
+        setActiveElement(page.doc.createElement('x-outer-host'));
+        jest.spyOn(page.root!, 'getRootNode').mockReturnValue({ activeElement: inside } as unknown as ShadowRoot);
+
+        await pressEscape([inside, popover, shadowRoot, page.root!]);
+
+        expect(focusSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it('leaves focus alone when the filter sits in another shadow root and focus left that root', async () => {
+        const { page, shadowRoot, popover, focusSpy, setActiveElement, pressEscape, inside, outside } = await setup();
+        setActiveElement(outside);
+        jest.spyOn(page.root!, 'getRootNode').mockReturnValue({ activeElement: null } as unknown as ShadowRoot);
+
+        await pressEscape([inside, popover, shadowRoot, page.root!]);
+
+        expect(focusSpy).not.toHaveBeenCalled();
+      });
+
       it('leaves focus where other code moved it before the popover closed', async () => {
         const { page, shadowRoot, popover, focusSpy, setActiveElement, pressEscape, inside, outside } = await setup();
         setActiveElement(outside);
