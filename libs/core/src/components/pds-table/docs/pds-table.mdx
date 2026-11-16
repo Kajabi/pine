@@ -30,7 +30,7 @@ Be sure to make proper use of the subcomponents to ensure that the table is acce
 
 Give every `pds-table` an accessible name: `aria-label`, or `aria-labelledby` pointing at the table's visible heading. The table is a `grid` and a Tab stop in every layout, and without a name screen readers announce it with nothing to say what it holds.
 
-With `selectable`, every row checkbox is named "Select Row" and the select-all checkbox "Select All Rows". The names can't be changed or translated, and they don't say which row a checkbox selects.
+With `selectable`, every row checkbox is named "Select Row" unless you set `select-label` on its `pds-table-row`. Name the row in it, such as "Select Jane Doe", so each checkbox says which row it selects. The select-all checkbox is named "Select All Rows"; set `select-all-label` on `pds-table-head` to change it. Pass translated strings to localize both. See [Checkbox labels](#checkbox-labels).
 
 The sort icon is hidden from assistive technology. To announce the sort direction, set `aria-sort` on the sorted `pds-table-head-cell`, `ascending` when the event's direction is `asc` and `descending` when it's `desc`, updating it from the `pdsTableSort` event and removing it from the other head cells.
 
@@ -244,6 +244,75 @@ table.addEventListener('pdsTableSelectAll', (event) => {
 ```
 
 In React, pass `onPdsTableRowSelected` to each `PdsTableRow`, so the handler already knows its item, and `onPdsTableSelectAll` to `PdsTableHead`.
+
+#### Checkbox labels
+
+Every row checkbox is named "Select Row" by default, which doesn't tell a screen reader user which row it selects. Set `select-label` on each `pds-table-row` to a name that identifies the row, and `select-all-label` on `pds-table-head` to rename the select-all checkbox. Both labels are visually hidden. Pass translated strings to localize them; an empty value falls back to the English default.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="selection-labels" aria-label="Members" selectable={true}>
+  <PdsTableHead selectAllLabel="Select all members">
+    <PdsTableHeadCell>Name</PdsTableHeadCell>
+    <PdsTableHeadCell>Email</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow selectLabel="Select Jane Doe">
+      <PdsTableCell>Jane Doe</PdsTableCell>
+      <PdsTableCell>jane@example.com</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow selectLabel="Select John Roe">
+      <PdsTableCell>John Roe</PdsTableCell>
+      <PdsTableCell>john@example.com</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow selectLabel="Select Ana Lee">
+      <PdsTableCell>Ana Lee</PdsTableCell>
+      <PdsTableCell>ana@example.com</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `
+  <pds-table component-id="selection-labels" aria-label="Members" selectable>
+    <pds-table-head select-all-label="Select all members">
+      <pds-table-head-cell>Name</pds-table-head-cell>
+      <pds-table-head-cell>Email</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row select-label="Select Jane Doe">
+        <pds-table-cell>Jane Doe</pds-table-cell>
+        <pds-table-cell>jane@example.com</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row select-label="Select John Roe">
+        <pds-table-cell>John Roe</pds-table-cell>
+        <pds-table-cell>john@example.com</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row select-label="Select Ana Lee">
+        <pds-table-cell>Ana Lee</pds-table-cell>
+        <pds-table-cell>ana@example.com</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}}>
+  <pds-table component-id="selection-labels" aria-label="Members" selectable>
+    <pds-table-head select-all-label="Select all members">
+      <pds-table-head-cell>Name</pds-table-head-cell>
+      <pds-table-head-cell>Email</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row select-label="Select Jane Doe">
+        <pds-table-cell>Jane Doe</pds-table-cell>
+        <pds-table-cell>jane@example.com</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row select-label="Select John Roe">
+        <pds-table-cell>John Roe</pds-table-cell>
+        <pds-table-cell>john@example.com</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row select-label="Select Ana Lee">
+        <pds-table-cell>Ana Lee</pds-table-cell>
+        <pds-table-cell>ana@example.com</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
 
 
 ### Sorting

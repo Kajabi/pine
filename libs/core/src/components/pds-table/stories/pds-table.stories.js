@@ -28,6 +28,13 @@ export default {
       control: { type: 'boolean' },
       description: 'Hides the select-all checkbox in the table header while keeping individual row checkboxes functional. Only applies when selectable is true.',
     },
+    selectAllLabel: {
+      control: { type: 'text' },
+      description: 'Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty string falls back to the default.',
+      table: {
+        category: 'Table Head',
+      },
+    },
     defaultSortColumn: {
       control: { type: 'text' },
       description: 'The name of the column to sort by on initial load. Must match the text content of a sortable column header.',
@@ -389,6 +396,39 @@ DisableSelectAll.args = {
   rowDividers: false,
   selectable: true,
   disableSelectAll: true,
+};
+
+const SelectionLabelsTemplate = (args) => html`
+<pds-table
+  component-id="${args.componentId}"
+  aria-label="Members"
+  ?selectable=${args.selectable}
+>
+  <pds-table-head select-all-label="${args.selectAllLabel}">
+    <pds-table-head-cell>Name</pds-table-head-cell>
+    <pds-table-head-cell>Email</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row select-label="Select Jane Doe">
+      <pds-table-cell>Jane Doe</pds-table-cell>
+      <pds-table-cell>jane@example.com</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row select-label="Select John Roe">
+      <pds-table-cell>John Roe</pds-table-cell>
+      <pds-table-cell>john@example.com</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row select-label="Select Ana Lee">
+      <pds-table-cell>Ana Lee</pds-table-cell>
+      <pds-table-cell>ana@example.com</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>`;
+
+export const SelectionLabels = SelectionLabelsTemplate.bind();
+SelectionLabels.args = {
+  componentId: 'selection-labels',
+  selectable: true,
+  selectAllLabel: 'Select all members',
 };
 
 export const Responsive = ResponsiveTemplate.bind();
