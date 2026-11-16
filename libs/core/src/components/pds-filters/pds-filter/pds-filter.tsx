@@ -70,14 +70,16 @@ export class PdsFilter implements BasePdsProps {
   @State() isOpen = false;
 
   /**
-   * Emitted when the filter popover is opened, from the trigger or `showFilter()`.
-   * `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
+   * Emitted when the filter popover is opened, from the trigger or `showFilter()`. In browsers without the
+   * Popover API, `showFilter()` doesn't emit it. `detail` is the filter's `componentId`, `variant` and `text`.
+   * The `clear` variant doesn't emit it.
    */
   @Event() pdsFilterOpen: EventEmitter<PdsFilterOpenEventDetail>;
 
   /**
    * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it,
    * or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`.
+   * In browsers without the Popover API, `hideFilter()` doesn't emit it.
    * The `clear` variant doesn't emit it.
    */
   @Event() pdsFilterClose: EventEmitter<PdsFilterCloseEventDetail>;
@@ -334,7 +336,8 @@ export class PdsFilter implements BasePdsProps {
   }
 
   /**
-   * Opens the filter popover programmatically.
+   * Opens the filter popover programmatically. In browsers without the Popover API, it doesn't emit
+   * `pdsFilterOpen`, and Escape or a click outside doesn't close the popover it opened.
    * Note: Clear variant does not support popover functionality.
    */
   @Method()
@@ -356,7 +359,8 @@ export class PdsFilter implements BasePdsProps {
   }
 
   /**
-   * Closes the filter popover programmatically.
+   * Closes the filter popover programmatically. In browsers without the Popover API, it doesn't emit
+   * `pdsFilterClose`.
    * Note: Clear variant does not support popover functionality.
    */
   @Method()

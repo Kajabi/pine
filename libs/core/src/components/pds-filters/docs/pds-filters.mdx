@@ -248,11 +248,11 @@ Each `pds-filter` emits its own events, and they bubble, so one listener on `pds
 
 ### showFilter()
 
-Opens the filter popover programmatically. Clear variant will log a warning if this method is called.
+Opens the filter popover programmatically. In browsers without the Popover API, it doesn't emit `pdsFilterOpen`, and Escape or a click outside doesn't close the popover it opened. Clear variant will log a warning if this method is called.
 
 ### hideFilter()
 
-Closes the filter popover programmatically. Clear variant will log a warning if this method is called.
+Closes the filter popover programmatically. In browsers without the Popover API, it doesn't emit `pdsFilterClose`. Clear variant will log a warning if this method is called.
 
 ## Playground
 
