@@ -49,6 +49,15 @@
       letter-spacing: var(--pine-letter-spacing-heading-6);
     }
 
+    /* Storybook wraps each docs heading's text in its own .sb-unstyled span;
+       keep that span from picking up the body and dark-mode .sb-unstyled styles. */
+    .sbdocs :is(h1, h2, h3, h4, h5, h6) > .sb-unstyled {
+      font: inherit;
+      letter-spacing: inherit;
+      color: inherit;
+      background-color: transparent;
+    }
+
     button, input, select, textarea {
       font-family: inherit;
     }
