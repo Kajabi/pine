@@ -35,6 +35,13 @@ export default {
         category: 'Table Head',
       },
     },
+    selectLabel: {
+      control: { type: 'text' },
+      description: "Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as 'Select Jane Doe', so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default. In the SelectionLabels story it sets the first row's label.",
+      table: {
+        category: 'Table Row',
+      },
+    },
     defaultSortColumn: {
       control: { type: 'text' },
       description: 'The name of the column to sort by on initial load. Must match the text content of a sortable column header.',
@@ -409,7 +416,7 @@ const SelectionLabelsTemplate = (args) => html`
     <pds-table-head-cell>Email</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
-    <pds-table-row select-label="Select Jane Doe">
+    <pds-table-row select-label="${args.selectLabel}">
       <pds-table-cell>Jane Doe</pds-table-cell>
       <pds-table-cell>jane@example.com</pds-table-cell>
     </pds-table-row>
@@ -429,6 +436,7 @@ SelectionLabels.args = {
   componentId: 'selection-labels',
   selectable: true,
   selectAllLabel: 'Select all members',
+  selectLabel: 'Select Jane Doe',
 };
 
 export const Responsive = ResponsiveTemplate.bind();
