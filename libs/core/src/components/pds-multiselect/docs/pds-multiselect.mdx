@@ -838,6 +838,12 @@ The `pdsMultiselectDismiss` event fires when the dropdown is closed via the Esca
 
 > **Note:** Open the console, then press Escape or click outside while the dropdown is open to see the dismiss event logged.
 
+### Open and Close Events
+
+`pdsMultiselectOpen` fires each time the dropdown panel opens, and `pdsMultiselectClose` each time it closes, however it closes: Escape, a click outside, a click on the trigger, Tab, a selection with `close-panel-on-select`, an option action, or the multiselect becoming disabled. Each open is followed by exactly one close. Use them to keep surrounding UI in step with the panel; use `pdsMultiselectDismiss` only for the user cancelling.
+
+`pdsMultiselectOpen` fires once the panel is positioned, so a handler can measure it. The panel is exposed as the `panel` part: style it with `pds-multiselect::part(panel)`, and find it with `[part~="panel"]` in the multiselect's shadow root. It exists only while the panel is open.
+
 ### Saving Changes
 
 `pdsMultiselectChange` reports what each change did: `added` and `removed` list the values selected and deselected, alongside the full `values` and `items`. To save each change as it happens, send `added` and `removed` to your server. If the save fails, set `value` back to the previous values; setting `value` doesn't emit another change event.
