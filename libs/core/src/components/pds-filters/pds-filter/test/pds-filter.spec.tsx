@@ -1,6 +1,40 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsFilter } from '../pds-filter';
 
+const FIREFOX_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0';
+
+const nextTask = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+async function inBrowser(browser: { popoverApi: boolean; userAgent?: string }, run: () => unknown) {
+  const proto = HTMLElement.prototype as any;
+  const showPopover = Object.getOwnPropertyDescriptor(proto, 'showPopover');
+  const userAgent = Object.getOwnPropertyDescriptor(navigator, 'userAgent');
+
+  if (browser.popoverApi) {
+    Object.defineProperty(proto, 'showPopover', { value: jest.fn(), configurable: true });
+  } else {
+    delete proto.showPopover;
+  }
+  if (browser.userAgent) {
+    Object.defineProperty(navigator, 'userAgent', { value: browser.userAgent, configurable: true });
+  }
+
+  try {
+    await run();
+  } finally {
+    if (showPopover) {
+      Object.defineProperty(proto, 'showPopover', showPopover);
+    } else {
+      delete proto.showPopover;
+    }
+    if (userAgent) {
+      Object.defineProperty(navigator, 'userAgent', userAgent);
+    } else {
+      delete (navigator as any).userAgent;
+    }
+  }
+}
+
 describe('pds-filter', () => {
   it('renders with default props', async () => {
     const page = await newSpecPage({
@@ -743,40 +777,132 @@ describe('pds-filter', () => {
       });
     });
 
-    it('componentDidRender skips native listeners for Firefox', async () => {
+    it('componentDidRender sets up native event listeners with a Firefox user agent', async () => {
       const page = await newSpecPage({
         components: [PdsFilter],
         html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
       });
 
       const component = page.rootInstance;
-
-      // Mock popover element with event listener methods
       const mockPopover = {
         removeEventListener: jest.fn(),
         addEventListener: jest.fn()
       };
-
-      // Set popoverEl directly (as it would be set by the ref callback)
       component.popoverEl = mockPopover as any;
 
-      // Mock Firefox user agent
-      const originalUserAgent = navigator.userAgent;
-      Object.defineProperty(navigator, 'userAgent', {
-        value: 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
-        configurable: true
+      await inBrowser({ popoverApi: true, userAgent: FIREFOX_USER_AGENT }, () => component.componentDidRender());
+
+      expect(mockPopover.addEventListener).toHaveBeenCalledWith('toggle', component.handleNativePopoverToggle);
+    });
+
+    it('componentDidRender skips native listeners without the Popover API', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
       });
 
-      component.componentDidRender();
+      const component = page.rootInstance;
+      const mockPopover = {
+        removeEventListener: jest.fn(),
+        addEventListener: jest.fn()
+      };
+      component.popoverEl = mockPopover as any;
+
+      await inBrowser({ popoverApi: false }, () => component.componentDidRender());
 
       expect(mockPopover.removeEventListener).not.toHaveBeenCalled();
       expect(mockPopover.addEventListener).not.toHaveBeenCalled();
+    });
 
-      // Restore original value
-      Object.defineProperty(navigator, 'userAgent', {
-        value: originalUserAgent,
-        configurable: true
+    it('disconnectedCallback removes the native listener with a Firefox user agent', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
       });
+
+      const component = page.rootInstance;
+      const mockPopover = {
+        removeEventListener: jest.fn(),
+        hidePopover: jest.fn()
+      };
+      component.popoverEl = mockPopover as any;
+
+      await inBrowser({ popoverApi: true, userAgent: FIREFOX_USER_AGENT }, () => component.disconnectedCallback());
+
+      expect(mockPopover.removeEventListener).toHaveBeenCalledWith('toggle', component.handleNativePopoverToggle);
+    });
+
+    it('trigger click leaves the toggle to the Popover API with a Firefox user agent', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const openEventSpy = jest.fn();
+      component.pdsFilterOpen.emit = openEventSpy;
+      const clickEvent = { preventDefault: jest.fn() };
+
+      await inBrowser({ popoverApi: true, userAgent: FIREFOX_USER_AGENT }, async () => {
+        component.handleClick(clickEvent);
+        await nextTask();
+      });
+
+      expect(clickEvent.preventDefault).not.toHaveBeenCalled();
+      expect(component.isOpen).toBe(false);
+      expect(openEventSpy).not.toHaveBeenCalled();
+    });
+
+    it('trigger click opens the popover itself without the Popover API', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const openEventSpy = jest.fn();
+      component.pdsFilterOpen.emit = openEventSpy;
+      const adjustSpy = jest.spyOn(component, 'adjustPopoverPosition').mockImplementation(() => {});
+      const clickEvent = { preventDefault: jest.fn() };
+
+      await inBrowser({ popoverApi: false }, async () => {
+        component.handleClick(clickEvent);
+        await nextTask();
+      });
+
+      expect(clickEvent.preventDefault).toHaveBeenCalled();
+      expect(component.isOpen).toBe(true);
+      expect(component.popoverEl.classList.contains('is-open')).toBe(true);
+      expect(openEventSpy).toHaveBeenCalledTimes(1);
+
+      adjustSpy.mockRestore();
+    });
+
+    it('outside click checks whether the popover is still open with a Firefox user agent', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const closeEventSpy = jest.fn();
+      component.pdsFilterClose.emit = closeEventSpy;
+      component.isOpen = true;
+      const mockPopover = {
+        matches: jest.fn(() => true),
+        style: {},
+        classList: { remove: jest.fn() }
+      };
+      component.popoverEl = mockPopover as any;
+
+      await inBrowser({ popoverApi: true, userAgent: FIREFOX_USER_AGENT }, async () => {
+        component.handleDocumentClick({ target: document.body } as any);
+        await nextTask();
+      });
+
+      expect(mockPopover.matches).toHaveBeenCalledWith(':popover-open');
+      expect(component.isOpen).toBe(true);
+      expect(closeEventSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -925,7 +1051,7 @@ describe('pds-filter', () => {
       expect(closeEventSpy).not.toHaveBeenCalled();
     });
 
-    it('handlePopoverToggle detects open state with try/catch fallback', async () => {
+    it('handleNativePopoverToggle detects open state with try/catch fallback', async () => {
       const page = await newSpecPage({
         components: [PdsFilter],
         html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
@@ -945,7 +1071,7 @@ describe('pds-filter', () => {
       const adjustPositionSpy = jest.spyOn(component, 'adjustPopoverPosition').mockImplementation(() => {});
 
       const mockEvent = { target: mockTarget };
-      component.handlePopoverToggle(mockEvent as any);
+      component.handleNativePopoverToggle(mockEvent as any);
 
       expect(mockTarget.matches).toHaveBeenCalledWith(':popover-open');
       expect(component.isOpen).toBe(true); // Should fallback to style.display check
@@ -1014,7 +1140,6 @@ describe('pds-filter', () => {
       const { component, close } = await setup();
 
       component.handleNativePopoverToggle(toggleEvent(false));
-      component.handlePopoverToggle(toggleEvent(false));
 
       expect(close).not.toHaveBeenCalled();
     });
