@@ -5627,15 +5627,15 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Event emitted when the clear variant is clicked.
+          * Emitted when the clear variant is clicked, or pressed with Enter or Space. `detail` is the filter's `componentId` and `text`. It doesn't change any filter itself.
          */
         "onPdsFilterClear"?: (event: PdsFilterCustomEvent<PdsFilterClearEventDetail>) => void;
         /**
-          * Event emitted when the filter popover is closed.
+          * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it, or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`. Escape emits it twice, except in Firefox. The `clear` variant doesn't emit it.
          */
         "onPdsFilterClose"?: (event: PdsFilterCustomEvent<PdsFilterCloseEventDetail>) => void;
         /**
-          * Event emitted when the filter popover is opened.
+          * Emitted when the filter popover is opened, from the trigger or `showFilter()`. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
          */
         "onPdsFilterOpen"?: (event: PdsFilterCustomEvent<PdsFilterOpenEventDetail>) => void;
         /**
@@ -6633,7 +6633,7 @@ declare namespace LocalJSX {
          */
         "itemPickedUpLabel"?: string;
         /**
-          * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a screen reader's browse-mode click.
+          * Event emitted when a sortable item is moved, by dragging or from the keyboard. The list has already moved the item when it fires. A drag emits it on every drop, even one that ends where it started, so compare `oldIndex` and `newIndex`; a keyboard drop emits it only when the item's position changed. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a screen reader's browse-mode click.
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
         /**
