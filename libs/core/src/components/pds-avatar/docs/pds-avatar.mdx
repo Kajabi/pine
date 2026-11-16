@@ -28,9 +28,9 @@ Avatars display a thumbnail representation of a person or organization, supporti
 ### Accessibility
 
 - Set `alt` to the person's or organization's name when you set `image`, such as `alt="Demi Wilkinson"`. Use `alt=""` when the name is already shown next to the avatar, so the image is skipped rather than read as a duplicate. Without `alt`, the image has no accessible name.
-- Without an `image` or `initials`, the avatar shows a generic user icon that is hidden from assistive technology. Show the person's name in nearby text, or in `triggerLabel` for a dropdown avatar.
-- The `badge` is announced as "Verified". Pass `badgeLabel` to describe what it means in your product or to localize it, or an empty string to make it decorative. On a dropdown avatar, include it in `triggerLabel` instead.
-- The `status` dot is announced as "online status", "away status" or "offline status". Pass `statusLabel` to localize it. On a dropdown avatar, the dot is hidden from assistive technology, so include the status in `triggerLabel` instead.
+- Without an `image` or `initials`, the avatar shows a generic user icon that is hidden from assistive technology. Show the person's name in nearby text, or in `trigger-label` for a dropdown avatar.
+- The `badge` is announced as "Verified". Pass `badge-label` to describe what it means in your product or to localize it, or an empty string to make it decorative. On a dropdown avatar, include it in `trigger-label` instead.
+- The `status` dot is announced as "online status", "away status" or "offline status". Pass `status-label` to localize it. On a dropdown avatar, the dot is hidden from assistive technology, so include the status in `trigger-label` instead.
 
 ## Properties
 

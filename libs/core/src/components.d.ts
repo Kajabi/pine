@@ -1609,7 +1609,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Closes the filter popover programmatically. Note: Clear variant does not support popover functionality.
+          * Closes the filter popover programmatically. In Firefox, it doesn't close a popover that the trigger opened. Note: Clear variant does not support popover functionality.
          */
         "hideFilter": () => Promise<void>;
         /**
@@ -3609,6 +3609,8 @@ declare global {
         "pdsMultiselectLoadOptions": MultiselectLoadOptionsEventDetail;
         "pdsMultiselectCreate": MultiselectCreateEventDetail;
         "pdsMultiselectDismiss": void;
+        "pdsMultiselectOpen": void;
+        "pdsMultiselectClose": void;
         "pdsMultiselectOptionAction": MultiselectOptionActionEventDetail;
     }
     interface HTMLPdsMultiselectElement extends Components.PdsMultiselect, HTMLStencilElement {
@@ -5627,15 +5629,15 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Event emitted when the clear variant is clicked.
+          * Emitted when the clear variant is clicked, or pressed with Enter or Space. `detail` is the filter's `componentId` and `text`. It doesn't change any filter itself.
          */
         "onPdsFilterClear"?: (event: PdsFilterCustomEvent<PdsFilterClearEventDetail>) => void;
         /**
-          * Event emitted when the filter popover is closed.
+          * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it, or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`. Escape can emit it twice, and does in Chromium and WebKit. In Firefox, `hideFilter()` doesn't emit it, and neither does Escape, a click outside or another filter closing a popover that `showFilter()` opened. The `clear` variant doesn't emit it.
          */
         "onPdsFilterClose"?: (event: PdsFilterCustomEvent<PdsFilterCloseEventDetail>) => void;
         /**
-          * Event emitted when the filter popover is opened.
+          * Emitted when the filter popover is opened, from the trigger or `showFilter()`. In Firefox, `showFilter()` doesn't emit it. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
          */
         "onPdsFilterOpen"?: (event: PdsFilterCustomEvent<PdsFilterOpenEventDetail>) => void;
         /**
@@ -6138,17 +6140,25 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
         /**
+          * Emitted when the dropdown panel closes, however it closes: Escape, a click outside, a click on the trigger, Tab, a selection with `closePanelOnSelect`, an option action, the multiselect becoming disabled, or its removal from the page, which only listeners on the multiselect itself hear. Each `pdsMultiselectOpen` is followed by one `pdsMultiselectClose`.
+         */
+        "onPdsMultiselectClose"?: (event: PdsMultiselectCustomEvent<void>) => void;
+        /**
           * Emitted when `create-url` has created an option: the request succeeded, and the new option was added and selected. `detail` has `query`, the trimmed search text that was sent, and `newOption`, the option from the response. `pdsMultiselectChange` follows it. A failed request emits nothing; it's logged to the console.
          */
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         /**
-          * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the component, such as with a click elsewhere on the page.  It doesn't fire when the panel closes any other way: from a selection (including with `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while the panel is open fires this event, and the panel opens again. Use it to restore parent UI state or run cleanup when the user cancels.
+          * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the component, such as with a click elsewhere on the page.  It doesn't fire when the panel closes any other way: from a selection (including with `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while the panel is open fires this event, and the panel opens again. Use it to restore parent UI state or run cleanup when the user cancels. `pdsMultiselectClose` follows it, and fires on every close.
          */
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**
           * Emitted with `async-url` when the list is scrolled near its end and the response's `totalCount` says more options remain, as the multiselect fetches the next page itself. `detail` has `query` and `page`, the page being fetched. It can be emitted more than once for the same page while that page waits to load, and never without `async-url`.
          */
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
+        /**
+          * Emitted when the dropdown panel opens, from a click on the trigger, the keyboard, or a custom trigger. It fires once the panel is positioned, so the panel (`part="panel"`) can be measured in the handler. If the panel closes before it's positioned, such as when it's toggled twice in one frame, it fires just before `pdsMultiselectClose` instead, and there may be no panel to measure.
+         */
+        "onPdsMultiselectOpen"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**
           * Emitted when an option's action runs, from a click on its icon or Right Arrow on the highlighted option. The panel closes and focus returns to the trigger first, so a modal opened from the handler restores focus to the trigger.
          */
@@ -6633,7 +6643,7 @@ declare namespace LocalJSX {
          */
         "itemPickedUpLabel"?: string;
         /**
-          * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a screen reader's browse-mode click.
+          * Emitted when a sortable item is moved, by dragging or from the keyboard. The list has already moved the item when it fires. A drag emits it on every drop, even one that ends where it started, so compare `oldIndex` and `newIndex`; a keyboard drop emits it only when the item's position changed. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a screen reader's browse-mode click.
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
         /**
