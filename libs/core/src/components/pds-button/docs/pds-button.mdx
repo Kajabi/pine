@@ -23,7 +23,8 @@ A button is an interactive element that can be clicked to perform various action
 - A call-to-action that navigates and needs button styling, such as "Create a product". Set `href`, and `pds-button` renders a link (see [Button Link](#button-link)).
 
 ### When not to use
-- When space is limited consider an IconButton.
+- A text button where there's no room for its text. Set `icon-only` instead: the slot text is hidden but still names the button (see [Icon Only](#icon-only)).
+- Opening one filter's options in a filter bar. Use `pds-filter` inside `pds-filters`. The `filter` variant is for an "Add filter" action beside the bar (see [Filter](#filter)).
 - Navigating without `href`. A button without `href` performs an action on the current page or submits a form.
 - A link in running text. Use `pds-link`.
 
