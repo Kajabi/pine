@@ -458,6 +458,33 @@ export class PdsFilter implements BasePdsProps {
         }
       }, 0);
     }
+
+    this.returnFocusAfterEscape(event);
+  }
+
+  // Slotted controls sit outside the popover's shadow tree, so the browser's own focus restore skips them.
+  // Scheduled after the close timer above, because on the manual open path that timer is what hides the popover.
+  private returnFocusAfterEscape(event: KeyboardEvent) {
+    if (event.key !== 'Escape' || this.popoverEl == null || !event.composedPath().includes(this.popoverEl)) return;
+
+    setTimeout(() => {
+      if (this.isPopoverShowing()) return;
+
+      const active = document.activeElement;
+      const focusMovedElsewhere = active != null && active !== document.body && !this.el.contains(active);
+      if (focusMovedElsewhere) return;
+
+      this.el.shadowRoot?.querySelector<HTMLElement>('.pds-filter__trigger')?.focus();
+    }, 0);
+  }
+
+  private isPopoverShowing(): boolean {
+    try {
+      if (this.popoverEl.matches(':popover-open')) return true;
+    } catch {
+      // Engines without :popover-open rely on the manual open class alone.
+    }
+    return this.popoverEl.classList.contains('is-open');
   }
 
   /**
