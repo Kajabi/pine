@@ -41,7 +41,8 @@ export class PdsTableHead {
 
   /**
    * Accessible label for the select-all checkbox. Pass a translated string to localize it;
-   * defaults to English. An empty string falls back to the default.
+   * defaults to English. An empty or whitespace-only value falls back to the default. Has no
+   * effect when the table sets `disableSelectAll`, which removes the select-all checkbox.
    * @defaultValue 'Select All Rows'
    */
   @Prop() selectAllLabel = 'Select All Rows';

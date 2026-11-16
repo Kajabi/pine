@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property        | Attribute       | Description                                                                                                                                                                                                                                            | Type      | Default        |
-| --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | -------------- |
-| `indeterminate` | `indeterminate` | Determines if the row selected is in an indeterminate state.                                                                                                                                                                                           | `boolean` | `undefined`    |
-| `isSelected`    | `is-selected`   | Determines if the table row is currently selected.                                                                                                                                                                                                     | `boolean` | `undefined`    |
-| `selectLabel`   | `select-label`  | Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty string falls back to the default. | `string`  | `'Select Row'` |
+| Property        | Attribute       | Description                                                                                                                                                                                                                                                              | Type      | Default        |
+| --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | -------------- |
+| `indeterminate` | `indeterminate` | Determines if the row selected is in an indeterminate state.                                                                                                                                                                                                             | `boolean` | `undefined`    |
+| `isSelected`    | `is-selected`   | Determines if the table row is currently selected.                                                                                                                                                                                                                       | `boolean` | `undefined`    |
+| `selectLabel`   | `select-label`  | Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default. | `string`  | `'Select Row'` |
 
 
 ## Events

@@ -33,7 +33,7 @@ export class PdsTableRow {
   /**
    * Accessible label for the row's selection checkbox. Pass a translated string to localize it;
    * defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says
-   * which row it selects. An empty string falls back to the default.
+   * which row it selects. An empty or whitespace-only value falls back to the default.
    * @defaultValue 'Select Row'
    */
   @Prop() selectLabel = 'Select Row';

@@ -2755,7 +2755,7 @@ export namespace Components {
          */
         "isSelected": boolean;
         /**
-          * Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty string falls back to the default.
+          * Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty or whitespace-only value falls back to the default. Has no effect when the table sets `disableSelectAll`, which removes the select-all checkbox.
           * @defaultValue 'Select All Rows'
          */
         "selectAllLabel": string;
@@ -2797,7 +2797,7 @@ export namespace Components {
          */
         "isSelected"?: boolean;
         /**
-          * Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty string falls back to the default.
+          * Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default.
           * @defaultValue 'Select Row'
          */
         "selectLabel": string;
@@ -6878,7 +6878,7 @@ declare namespace LocalJSX {
          */
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
         /**
-          * Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty string falls back to the default.
+          * Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty or whitespace-only value falls back to the default. Has no effect when the table sets `disableSelectAll`, which removes the select-all checkbox.
           * @defaultValue 'Select All Rows'
          */
         "selectAllLabel"?: string;
@@ -6915,7 +6915,7 @@ declare namespace LocalJSX {
          */
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
         /**
-          * Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty string falls back to the default.
+          * Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default.
           * @defaultValue 'Select Row'
          */
         "selectLabel"?: string;

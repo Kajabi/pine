@@ -247,7 +247,7 @@ In React, pass `onPdsTableRowSelected` to each `PdsTableRow`, so the handler alr
 
 #### Checkbox labels
 
-Every row checkbox is named "Select Row" by default, which doesn't tell a screen reader user which row it selects. Set `select-label` on each `pds-table-row` to a name that identifies the row, and `select-all-label` on `pds-table-head` to rename the select-all checkbox. Both labels are visually hidden. Pass translated strings to localize them; an empty value falls back to the English default.
+Every row checkbox is named "Select Row" by default, which doesn't tell a screen reader user which row it selects. Set `select-label` on each `pds-table-row` to a name that identifies the row, and `select-all-label` on `pds-table-head` to rename the select-all checkbox. Both labels are visually hidden. Pass translated strings to localize them; an empty or whitespace-only value falls back to the English default.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="selection-labels" aria-label="Members" selectable={true}>
