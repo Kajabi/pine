@@ -78,7 +78,7 @@ When analyzing designs or screenshots, text that appears above an input field is
 The combobox supports two modes:
 
 - **Filtering** (`mode="filter"`): Filters options as you type (default).
-- **Select-only** (`mode="select-only"`): Always shows all options, regardless of input value.
+- **Select-only** (`mode="select-only"`): Always shows all options, regardless of input value. With `panel-search`, the panel's search field still filters them.
 
 Use the `mode` prop to control this behavior.
 
@@ -110,7 +110,7 @@ In filtering mode, the combobox filters the available options as you type, makin
 </DocCanvas>
 
 ### Select-only
-In select-only mode, all options are always shown regardless of what you type. This is useful when you want dropdown behavior without filtering.
+In select-only mode, the `input` trigger shows all options regardless of what you type. This is useful when you want dropdown behavior without filtering.
 
 <DocCanvas
   mdxSource={{
@@ -1824,7 +1824,7 @@ How it talks to the endpoint:
 - With `async-method="GET"`, the default, the search text and the page, counted from 1, are added to the URL's query string as `search` and `page`, as in `/api/users?search=ada&page=1`. With `POST`, they go in a JSON body, `{ "search": "ada", "page": 1 }`.
 - Every request sends `Content-Type: application/json` and `Accept: application/json`. Unlike `pds-multiselect`, it sends no CSRF token.
 - The response is JSON, `{ "results": [{ "id": "ada", "text": "Ada Lovelace" }], "totalCount": 42 }`. Each result takes the same fields as an `options` entry, such as `group` and `icon` (see [Option reference](#option-reference)), and `formatResult` can turn items of another shape into options. While fewer options than `totalCount` have loaded, scrolling near the end of the list fetches the next page.
-- In `filter` mode, the combobox also filters the results by the typed text, as it does slotted options, so a result the endpoint matched on something else, such as an email address, isn't listed. Use `mode="select-only"` to list every result.
+- The combobox also filters the results by the search text, as it does slotted options, so a result the endpoint matched on something else, such as an email address, isn't listed. It filters in `filter` mode, and with `panel-search` in either mode; only `mode="select-only"` without `panel-search` lists every result.
 - A request that fails, or takes longer than `fetch-timeout` (30 seconds by default), leaves the options as they were. A failure is logged to the console; a timeout isn't.
 
 **Basic Example:**
@@ -1896,7 +1896,7 @@ For more control over async operations, you can manage the data fetching yoursel
 - `loading`: Boolean to control loading state
 - `pdsComboboxSearch`: Event emitted when user types (debounced)
 
-There's no pagination hook without `async-url`: `pdsComboboxLoadOptions` isn't emitted, so load the full result set for each search, or use `async-url`. As with `async-url`, `filter` mode also filters the options you pass by the typed text; use `mode="select-only"` to list them all.
+There's no pagination hook without `async-url`: `pdsComboboxLoadOptions` isn't emitted, so load the full result set for each search, or use `async-url`. As with `async-url`, the combobox also filters the options you pass by the search text, in `filter` mode and with `panel-search`; only `mode="select-only"` without `panel-search` lists them all.
 
 **Example:**
 
