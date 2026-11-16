@@ -93,6 +93,8 @@ export class PdsFilter implements BasePdsProps {
 
   connectedCallback() {
     this.syncTruncationTooltip();
+    // A move runs disconnectedCallback, which removes the toggle listener, without a re-render to add it back.
+    this.listenForNativeToggle();
   }
 
   /**
@@ -132,7 +134,10 @@ export class PdsFilter implements BasePdsProps {
 
   componentDidRender() {
     this.syncTruncationTooltip();
+    this.listenForNativeToggle();
+  }
 
+  private listenForNativeToggle() {
     // Note: popoverEl is set via ref callback in render method
     // For browsers with native popover API, we need direct element listeners
     // since native popover toggle events don't bubble
