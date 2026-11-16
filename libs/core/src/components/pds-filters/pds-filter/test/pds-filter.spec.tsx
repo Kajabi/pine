@@ -832,6 +832,48 @@ describe('pds-filter', () => {
       expect(mockPopover.removeEventListener).toHaveBeenCalledWith('toggle', component.handleNativePopoverToggle);
     });
 
+    it('attaches the native toggle listener again when the filter reconnects', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const mockPopover = {
+        removeEventListener: jest.fn(),
+        addEventListener: jest.fn()
+      };
+      component.popoverEl = mockPopover as any;
+
+      await inBrowser({ popoverApi: true }, () => {
+        component.disconnectedCallback();
+        component.connectedCallback();
+      });
+
+      expect(mockPopover.addEventListener).toHaveBeenCalledTimes(1);
+      expect(mockPopover.addEventListener).toHaveBeenCalledWith('toggle', component.handleNativePopoverToggle);
+      const lastRemove = Math.max(...mockPopover.removeEventListener.mock.invocationCallOrder);
+      expect(mockPopover.addEventListener.mock.invocationCallOrder[0]).toBeGreaterThan(lastRemove);
+    });
+
+    it('attaches no native toggle listener on reconnect without the Popover API', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const mockPopover = {
+        removeEventListener: jest.fn(),
+        addEventListener: jest.fn()
+      };
+      component.popoverEl = mockPopover as any;
+
+      await inBrowser({ popoverApi: false }, () => component.connectedCallback());
+
+      expect(mockPopover.addEventListener).not.toHaveBeenCalled();
+    });
+
     it('trigger click leaves the toggle to the Popover API with a Firefox user agent', async () => {
       const page = await newSpecPage({
         components: [PdsFilter],
