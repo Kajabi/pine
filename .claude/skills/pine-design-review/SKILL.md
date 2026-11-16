@@ -63,10 +63,12 @@ disproportionately.
   exposing the values as custom properties on `:host`. Inline
   hardcoded `var(--pine-color-*)` in the main `*.scss` without a
   tokens file is BLOCKER.
-- **Dark-mode regression** — Introducing a new hardcoded color that
-  doesn't respond to dark mode, or a new `:host-context()` rule, which
-  Firefox and Safari ignore. Replacing an existing `:host-context()`
-  rule with one that works in every browser isn't a regression.
+- **Dark-mode regression** — Removing or breaking existing dark-mode
+  behavior, including a `:host-context()` rule, without a replacement
+  that keeps it; introducing a new hardcoded color that doesn't respond
+  to dark mode; or adding a new `:host-context()` rule, which Firefox and
+  Safari ignore. Replacing an existing `:host-context()` rule with one
+  that works in every browser isn't a regression.
 - **a11y: interactive element without keyboard access** —
   Non-`<button>` / non-`<a>` element with a click handler and no
   `onKeyDown` for Enter/Space, no `role="button"` + `tabIndex={0}`.

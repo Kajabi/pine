@@ -267,6 +267,8 @@ components:
     z_index: "{z-index.raised}"
     transition: "{motion.duration.base}"
   pds-popover:                                 # inline styles on the portaled panel
+    # Outside an open <dialog> the panel moves to <body>, so it themes from a
+    # data-theme on <html> or <body>, not from one scoped to a nearer element.
     surface: "{color.background.overlay}"
     radius: "{dimension.125}"
     elevation: "{box-shadow.200}"

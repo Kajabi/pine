@@ -54,7 +54,7 @@ Stencil.js web component library in an Nx monorepo. Core components live in `lib
 - E2E tests also in the component's `test/` folder using Stencil's `newE2EPage`
 - Every new prop, event, or behavior needs corresponding test coverage
 - E2E specs should assert `runAxe(page)` returns no violations (`libs/core/src/utils/test/axe.ts`); the themed Storybook gate covers `color-contrast` separately
-- Never add entries to `libs/core/.storybook/a11y-baseline.json` by hand — it is generated, and only shrinks
+- Never add entries to `libs/core/.storybook/a11y-baseline.json` by hand — regenerate it with `npm run test.a11y -- --update-baseline`. It should only shrink, except for new stories of a component that already has baselined violations (see CONTRIBUTING.md § Accessibility gate)
 
 ## Build & Test
 
