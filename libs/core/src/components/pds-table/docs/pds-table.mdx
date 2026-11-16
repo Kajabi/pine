@@ -28,9 +28,13 @@ Tables display tabular data using semantic subcomponents for head, head-cell, bo
 
 Be sure to make proper use of the subcomponents to ensure that the table is accessible to screen reader users.
 
+Give every `pds-table` an accessible name: `aria-label`, or `aria-labelledby` pointing at the table's visible heading. The table is a `grid` and a Tab stop in every layout, and without a name screen readers announce it with nothing to say what it holds.
+
+With `selectable`, every row checkbox is named "Select Row" and the select-all checkbox "Select All Rows". The names can't be changed or translated, and they don't say which row a checkbox selects.
+
 The sort icon is hidden from assistive technology. To announce the sort direction, set `aria-sort` on the sorted `pds-table-head-cell`, `ascending` when the event's direction is `asc` and `descending` when it's `desc`, updating it from the `pdsTableSort` event and removing it from the other head cells.
 
-Sortable head cells can't take focus and don't respond to keys, so the built-in sorting works only with a pointer.
+Sortable head cells can't take focus and don't respond to keys, so the built-in sorting works only with a pointer. Give keyboard users another way to sort, such as a sort control above the table, and [sort the rows yourself](#sorting-rows-yourself).
 
 ## Properties
 
@@ -63,10 +67,10 @@ The table body cell (`pds-table-cell`). Equivalent to the `<td>` element.
 ## Examples
 ### Default
 
-The default table, properly using all subcomponents.
+The default table, properly using all subcomponents, with an `aria-label` to name it.
 
 <DocCanvas mdxSource={{
-  react: `<PdsTable componentId="default">
+  react: `<PdsTable componentId="default" aria-label="Example table">
     <PdsTableHead>
       <PdsTableHeadCell>Column Title</PdsTableHeadCell>
       <PdsTableHeadCell>Column Title</PdsTableHeadCell>
@@ -90,7 +94,7 @@ The default table, properly using all subcomponents.
       </PdsTableRow>
     </PdsTableBody>
   </PdsTable>`,
-  webComponent: `<pds-table component-id="default">
+  webComponent: `<pds-table component-id="default" aria-label="Example table">
     <pds-table-head>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
@@ -116,7 +120,7 @@ The default table, properly using all subcomponents.
   </pds-table>`,
 
 }}>
-  <pds-table component-id="default">
+  <pds-table component-id="default" aria-label="Example table">
     <pds-table-head>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
@@ -248,7 +252,7 @@ Add `sortable` to a `pds-table-head-cell` to let readers sort the table by that 
 
 - The first click on a column sorts it in descending order, and each click after that reverses it. Each column keeps its own direction, so going back to a column reverses the direction it had.
 - Sorting by a column clears the arrow from the column sorted before it.
-- Rows are compared as text, ignoring case, so numbers sort by their digits: `10` comes before `9`.
+- Rows are compared as text, ignoring case, so numbers sort by their digits: `10` comes before `9`. Dates sort by their text too, so `Nov 2, 2026` comes before `Oct 30, 2026`. For number, price or date columns, [sort the rows yourself](#sorting-rows-yourself).
 - The built-in sort finds a column by counting only the sortable head cells. When a column that isn't sortable comes before a sortable one, sorting reads the wrong column's cells, so mark every column `sortable`, or [sort the rows yourself](#sorting-rows-yourself).
 - The built-in sort and the default sort only find head cells that have the `sortable` attribute. When `sortable` is set only as a property, as React 19 does on a raw `pds-table-head-cell` tag, clicking shows the arrow but doesn't sort.
 
