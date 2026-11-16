@@ -669,6 +669,108 @@ describe('pds-filter moved in the page', () => {
   });
 });
 
+describe('pds-filter focus after Escape', () => {
+  const setup = async (content: string) => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-filter component-id="test" text="Test">${content}</pds-filter>
+      <div style="margin-top: 400px"><input id="outside" aria-label="Outside" /></div>
+    `);
+
+    const trigger = await page.find('pds-filter >>> .pds-filter__trigger');
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+
+    return page;
+  };
+
+  const focusedElement = (page: E2EPage) =>
+    page.evaluate(() => {
+      let el = document.activeElement;
+      while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
+      return el?.matches('.pds-filter__trigger') ? 'trigger' : el?.id || el?.localName;
+    });
+
+  const isPopoverVisible = async (page: E2EPage) => (await page.find('pds-filter >>> .pds-filter__popover')).isVisible();
+
+  const pressEscape = async (page: E2EPage) => {
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 20)));
+  };
+
+  it('returns focus to the trigger when Escape is pressed on a control inside the popover', async () => {
+    const page = await setup('<input id="inside" aria-label="Inside" />');
+    await page.keyboard.press('Tab');
+    expect(await focusedElement(page)).toBe('inside');
+
+    await pressEscape(page);
+
+    expect(await isPopoverVisible(page)).toBe(false);
+    expect(await focusedElement(page)).toBe('trigger');
+  });
+
+  it('returns focus to the trigger from a control with its own shadow root, such as pds-checkbox', async () => {
+    const page = await setup('<pds-checkbox component-id="inside-checkbox" label="Inside"></pds-checkbox>');
+    await page.keyboard.press('Tab');
+    expect(await focusedElement(page)).toBe('inside-checkbox');
+
+    await pressEscape(page);
+
+    expect(await isPopoverVisible(page)).toBe(false);
+    expect(await focusedElement(page)).toBe('trigger');
+  });
+
+  it('keeps focus on the trigger when Escape is pressed on it', async () => {
+    const page = await setup('<input id="inside" aria-label="Inside" />');
+
+    await pressEscape(page);
+
+    expect(await isPopoverVisible(page)).toBe(false);
+    expect(await focusedElement(page)).toBe('trigger');
+  });
+
+  it('leaves focus where a click outside the popover puts it', async () => {
+    const page = await setup('<input id="inside" aria-label="Inside" />');
+    await page.keyboard.press('Tab');
+
+    await (await page.find('#outside')).click();
+    await page.waitForChanges();
+    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 20)));
+
+    expect(await isPopoverVisible(page)).toBe(false);
+    expect(await focusedElement(page)).toBe('outside');
+  });
+
+  it('leaves the popover open and focus in place when a control inside cancels Escape', async () => {
+    const page = await setup('<input id="inside" aria-label="Inside" />');
+    await page.keyboard.press('Tab');
+    await page.$eval('#inside', (el) =>
+      el.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.key === 'Escape') event.preventDefault();
+      }),
+    );
+
+    await pressEscape(page);
+
+    expect(await isPopoverVisible(page)).toBe(true);
+    expect(await focusedElement(page)).toBe('inside');
+  });
+
+  it('leaves focus where a pdsFilterClose listener moves it', async () => {
+    const page = await setup('<input id="inside" aria-label="Inside" />');
+    await page.keyboard.press('Tab');
+    await page.evaluate(() =>
+      document.addEventListener('pdsFilterClose', () => document.getElementById('outside')!.focus()),
+    );
+
+    await pressEscape(page);
+
+    expect(await focusedElement(page)).toBe('outside');
+  });
+});
+
 describe('pds-filter reduced motion', () => {
   it('zeroes out the trigger transition under prefers-reduced-motion', async () => {
     const page = await newE2EPage();

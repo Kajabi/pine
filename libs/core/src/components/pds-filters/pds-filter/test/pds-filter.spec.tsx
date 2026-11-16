@@ -1061,7 +1061,8 @@ describe('pds-filter', () => {
 
       // Create mock Escape key event
       const mockEvent = {
-        key: 'Escape'
+        key: 'Escape',
+        composedPath: () => [],
       };
 
       component.handleEscapeKey(mockEvent as any);
@@ -1091,6 +1092,85 @@ describe('pds-filter', () => {
 
       // Should not emit close event for clear variant
       expect(closeEventSpy).not.toHaveBeenCalled();
+    });
+
+    describe('focus after Escape', () => {
+      const setup = async () => {
+        const page = await newSpecPage({
+          components: [PdsFilter],
+          html: `<pds-filter component-id="test" text="Test"><input id="inside" /></pds-filter><input id="outside" />`,
+        });
+
+        const component = page.rootInstance;
+        component.isOpen = true;
+        component.pdsFilterClose.emit = jest.fn();
+
+        const shadowRoot = page.root!.shadowRoot!;
+        const popover = shadowRoot.querySelector('.pds-filter__popover') as HTMLElement;
+        const trigger = shadowRoot.querySelector('.pds-filter__trigger') as HTMLElement;
+        const matchesSpy = jest.spyOn(popover, 'matches').mockReturnValue(false);
+        const focusSpy = jest.spyOn(trigger, 'focus');
+
+        const setActiveElement = (el: Element) =>
+          Object.defineProperty(page.doc, 'activeElement', { configurable: true, get: () => el });
+        const pressEscape = async (path: EventTarget[]) => {
+          component.handleEscapeKey({ key: 'Escape', composedPath: () => path } as any);
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        };
+
+        return {
+          page,
+          shadowRoot,
+          popover,
+          trigger,
+          matchesSpy,
+          focusSpy,
+          setActiveElement,
+          pressEscape,
+          inside: page.body.querySelector('#inside')!,
+          outside: page.body.querySelector('#outside')!,
+        };
+      };
+
+      it.each([
+        ['the hidden control', 'inside'],
+        ['the page body', 'body'],
+      ])('returns focus to the trigger when Escape from inside the popover closes it, with focus on %s', async (_label, focused) => {
+        const { page, shadowRoot, popover, focusSpy, setActiveElement, pressEscape, inside } = await setup();
+        setActiveElement(focused === 'inside' ? inside : page.body);
+
+        await pressEscape([inside, popover, shadowRoot, page.root!]);
+
+        expect(focusSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it('leaves focus alone after Escape on the trigger', async () => {
+        const { page, shadowRoot, trigger, focusSpy, setActiveElement, pressEscape } = await setup();
+        setActiveElement(page.root!);
+
+        await pressEscape([trigger, shadowRoot, page.root!]);
+
+        expect(focusSpy).not.toHaveBeenCalled();
+      });
+
+      it('leaves focus alone when the popover stays open', async () => {
+        const { page, shadowRoot, popover, matchesSpy, focusSpy, setActiveElement, pressEscape, inside } = await setup();
+        matchesSpy.mockReturnValue(true);
+        setActiveElement(inside);
+
+        await pressEscape([inside, popover, shadowRoot, page.root!]);
+
+        expect(focusSpy).not.toHaveBeenCalled();
+      });
+
+      it('leaves focus where other code moved it before the popover closed', async () => {
+        const { page, shadowRoot, popover, focusSpy, setActiveElement, pressEscape, inside, outside } = await setup();
+        setActiveElement(outside);
+
+        await pressEscape([inside, popover, shadowRoot, page.root!]);
+
+        expect(focusSpy).not.toHaveBeenCalled();
+      });
     });
 
     it('handleNativePopoverToggle detects open state with try/catch fallback', async () => {
