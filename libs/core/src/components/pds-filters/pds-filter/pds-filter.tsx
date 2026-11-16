@@ -465,7 +465,7 @@ export class PdsFilter implements BasePdsProps {
   // Slotted controls sit outside the popover's shadow tree, so the browser's own focus restore skips them.
   // Scheduled after the close timer above, because on the manual open path that timer is what hides the popover.
   private returnFocusAfterEscape(event: KeyboardEvent) {
-    if (event.key !== 'Escape' || this.popoverEl == null || !event.composedPath().includes(this.popoverEl)) return;
+    if (event.key !== 'Escape' || this.popoverEl == null || !this.isFocusInPopover()) return;
 
     setTimeout(() => {
       if (this.isPopoverShowing() || this.focusMovedElsewhere()) return;
@@ -481,6 +481,12 @@ export class PdsFilter implements BasePdsProps {
 
     const rootActive = (this.el.getRootNode() as Document | ShadowRoot).activeElement;
     return rootActive == null || !this.el.contains(rootActive);
+  }
+
+  // Asks the filter's own root: a document listener's composedPath() can't see into a closed shadow root around it.
+  private isFocusInPopover(): boolean {
+    const rootActive = (this.el.getRootNode() as Document | ShadowRoot).activeElement;
+    return rootActive != null && rootActive !== this.el && this.el.contains(rootActive);
   }
 
   private isPopoverShowing(): boolean {
