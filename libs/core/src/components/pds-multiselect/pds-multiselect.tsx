@@ -406,7 +406,9 @@ export class PdsMultiselect {
 
   /**
    * Emitted when the dropdown panel opens, from a click on the trigger, the keyboard, or a custom trigger. It fires
-   * once the panel is positioned, so the panel (`part="panel"`) can be measured in the handler.
+   * once the panel is positioned, so the panel (`part="panel"`) can be measured in the handler. If the panel closes
+   * before it's positioned, such as when it's toggled twice in one frame, it fires just before `pdsMultiselectClose`
+   * instead, and there may be no panel to measure.
    */
   @Event() pdsMultiselectOpen!: EventEmitter<void>;
 
