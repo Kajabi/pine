@@ -11,12 +11,10 @@
   - any-glob-to-any-file: 'libs/doc-components/**/*'
 
 documentation:
-- head-branch: ['docs']
-- changed-files:
-  - any-glob-to-any-file: '**/*.[md|mdx]'
+- head-branch: ['^docs/']
 
 enhancement:
-- head-branch: ['feature']
+- head-branch: ['^feat/']
 
 bug:
-- head-branch: ['fix']
+- head-branch: ['^(fix|hotfix)/']
