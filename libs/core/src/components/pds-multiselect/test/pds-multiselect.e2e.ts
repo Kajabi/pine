@@ -984,6 +984,45 @@ describe('pds-multiselect', () => {
       });
     }
 
+    // A removed element's events don't reach page.spyOnEvent on the document, so these listen on the host.
+    const toggleThen = (page: Page, action: 'remove' | 'move', { waitForOpen = false } = {}) =>
+      page.evaluate(
+        async (action, waitForOpen) => {
+          const host = document.querySelector('pds-multiselect')!;
+          const log: string[] = [];
+          for (const name of ['pdsMultiselectOpen', 'pdsMultiselectClose', 'pdsMultiselectDismiss']) {
+            host.addEventListener(name, () => log.push(name.replace('pdsMultiselect', '').toLowerCase()));
+          }
+          const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+          host.shadowRoot!.querySelector<HTMLElement>('.pds-multiselect__trigger')!.click();
+          if (waitForOpen) await wait(200);
+          if (action === 'remove') host.remove();
+          else host.parentElement!.appendChild(host);
+          await wait(200);
+          return { log, panelOpen: !!host.shadowRoot!.querySelector('[part~="panel"]') && host.isConnected };
+        },
+        action,
+        waitForOpen,
+      );
+
+    it('emits one pdsMultiselectClose and no dismiss when removed from the page while open', async () => {
+      const { page } = await setUp();
+
+      expect(await toggleThen(page, 'remove', { waitForOpen: true })).toEqual({ log: ['open', 'close'], panelOpen: false });
+    });
+
+    it('emits pdsMultiselectOpen then pdsMultiselectClose when removed before the panel is positioned', async () => {
+      const { page } = await setUp();
+
+      expect(await toggleThen(page, 'remove')).toEqual({ log: ['open', 'close'], panelOpen: false });
+    });
+
+    it('stays open without a pdsMultiselectClose when moved in one operation', async () => {
+      const { page } = await setUp();
+
+      expect(await toggleThen(page, 'move')).toEqual({ log: ['open'], panelOpen: true });
+    });
+
     it('styles the panel through ::part(panel)', async () => {
       const { page } = await setUp();
       await page.addStyleTag({ content: 'pds-multiselect::part(panel) { z-index: 1234; }' });

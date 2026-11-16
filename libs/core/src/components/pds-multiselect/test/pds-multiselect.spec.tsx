@@ -1077,6 +1077,30 @@ describe('pds-multiselect', () => {
       expect(events).toEqual(['open', 'close']);
     });
 
+    it('emits pdsMultiselectClose when removed from the page while open', async () => {
+      const { page, events, resolvePositions } = await setUp();
+
+      page.rootInstance.handleTriggerClick();
+      await page.waitForChanges();
+      await nextFrame();
+      await resolvePositions();
+      page.root.remove();
+
+      expect(events).toEqual(['open', 'close']);
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('emits pdsMultiselectOpen then pdsMultiselectClose when removed before the panel is positioned', async () => {
+      const { page, events, resolvePositions } = await setUp();
+
+      page.rootInstance.handleTriggerClick();
+      page.root.remove();
+      await nextFrame();
+      await resolvePositions();
+
+      expect(events).toEqual(['open', 'close']);
+    });
+
     it('emits nothing when a disabled multiselect is clicked', async () => {
       const { page, events, resolvePositions } = await setUp('<pds-multiselect component-id="test" disabled></pds-multiselect>');
 
