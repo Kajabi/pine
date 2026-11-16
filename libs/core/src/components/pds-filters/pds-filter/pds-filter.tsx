@@ -176,10 +176,11 @@ export class PdsFilter implements BasePdsProps {
   };
 
   /**
-   * Updates `isOpen` and emits `pdsFilterOpen` or `pdsFilterClose`, once per change of state.
+   * Only a repeated close is skipped: the Escape and outside-click checks race the toggle event to report one close,
+   * while an open can follow a stale `isOpen` left by moving the element while it was open.
    */
   private setOpenState(open: boolean) {
-    if (open === this.isOpen) return;
+    if (!open && !this.isOpen) return;
 
     this.isOpen = open;
     const detail = { componentId: this.componentId, variant: this.variant, text: this.text };
