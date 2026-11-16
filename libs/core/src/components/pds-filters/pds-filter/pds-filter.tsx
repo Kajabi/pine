@@ -76,7 +76,7 @@ export class PdsFilter implements BasePdsProps {
   /**
    * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it,
    * or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`.
-   * Escape can emit it twice, and does in Chromium and WebKit. In Firefox, `hideFilter()` doesn't emit it, and
+   * In Firefox, `hideFilter()` doesn't emit it, and
    * neither does Escape, a click outside or another filter closing a popover that `showFilter()` opened.
    * The `clear` variant doesn't emit it.
    */
@@ -167,26 +167,28 @@ export class PdsFilter implements BasePdsProps {
         isCurrentlyOpen = target.style.display === 'block';
       }
 
-      // Update state
-      this.isOpen = isCurrentlyOpen;
-
-      if (this.isOpen) {
+      if (isCurrentlyOpen) {
         setTimeout(() => this.adjustPopoverPosition(), 0);
-
-        this.pdsFilterOpen.emit({
-          componentId: this.componentId,
-          variant: this.variant,
-          text: this.text,
-        });
-      } else {
-        this.pdsFilterClose.emit({
-          componentId: this.componentId,
-          variant: this.variant,
-          text: this.text,
-        });
       }
+
+      this.setOpenState(isCurrentlyOpen);
     }
   };
+
+  /**
+   * Updates `isOpen` and emits `pdsFilterOpen` or `pdsFilterClose`, once per change of state.
+   */
+  private setOpenState(open: boolean) {
+    if (open === this.isOpen) return;
+
+    this.isOpen = open;
+    const detail = { componentId: this.componentId, variant: this.variant, text: this.text };
+    if (open) {
+      this.pdsFilterOpen.emit(detail);
+    } else {
+      this.pdsFilterClose.emit(detail);
+    }
+  }
 
   /**
    * Reposition popovers on window resize.
@@ -394,24 +396,11 @@ export class PdsFilter implements BasePdsProps {
         isCurrentlyOpen = target.style.display === 'block';
       }
 
-      // Update state
-      this.isOpen = isCurrentlyOpen;
-
-      if (this.isOpen) {
+      if (isCurrentlyOpen) {
         setTimeout(() => this.adjustPopoverPosition(), 0);
-
-        this.pdsFilterOpen.emit({
-          componentId: this.componentId,
-          variant: this.variant,
-          text: this.text,
-        });
-      } else {
-        this.pdsFilterClose.emit({
-          componentId: this.componentId,
-          variant: this.variant,
-          text: this.text,
-        });
       }
+
+      this.setOpenState(isCurrentlyOpen);
     }
   }
 
@@ -441,16 +430,11 @@ export class PdsFilter implements BasePdsProps {
           }
 
           if (popoverIsClosed) {
-            this.isOpen = false;
             if (!supportsPopoverAPI) {
               this.popoverEl.style.display = 'none';
               this.popoverEl.classList.remove('is-open');
             }
-            this.pdsFilterClose.emit({
-              componentId: this.componentId,
-              variant: this.variant,
-              text: this.text,
-            });
+            this.setOpenState(false);
           }
         }
       }, 0);
@@ -483,16 +467,11 @@ export class PdsFilter implements BasePdsProps {
           }
 
           if (popoverIsClosed) {
-            this.isOpen = false;
             if (!supportsPopoverAPI) {
               this.popoverEl.style.display = 'none';
               this.popoverEl.classList.remove('is-open');
             }
-            this.pdsFilterClose.emit({
-              componentId: this.componentId,
-              variant: this.variant,
-              text: this.text,
-            });
+            this.setOpenState(false);
           }
         }
       }, 0);
@@ -536,25 +515,16 @@ export class PdsFilter implements BasePdsProps {
 
       setTimeout(() => {
         if (this.popoverEl != null) {
-          this.isOpen = !this.isOpen;
-          if (this.isOpen) {
+          const open = !this.isOpen;
+          if (open) {
             this.popoverEl.style.display = 'block';
             this.popoverEl.classList.add('is-open');
             this.adjustPopoverPosition();
-            this.pdsFilterOpen.emit({
-              componentId: this.componentId,
-              variant: this.variant,
-              text: this.text,
-            });
           } else {
             this.popoverEl.style.display = 'none';
             this.popoverEl.classList.remove('is-open');
-            this.pdsFilterClose.emit({
-              componentId: this.componentId,
-              variant: this.variant,
-              text: this.text,
-            });
           }
+          this.setOpenState(open);
         }
       }, 0);
     }

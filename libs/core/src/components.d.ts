@@ -5633,7 +5633,7 @@ declare namespace LocalJSX {
          */
         "onPdsFilterClear"?: (event: PdsFilterCustomEvent<PdsFilterClearEventDetail>) => void;
         /**
-          * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it, or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`. Escape can emit it twice, and does in Chromium and WebKit. In Firefox, `hideFilter()` doesn't emit it, and neither does Escape, a click outside or another filter closing a popover that `showFilter()` opened. The `clear` variant doesn't emit it.
+          * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it, or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`. In Firefox, `hideFilter()` doesn't emit it, and neither does Escape, a click outside or another filter closing a popover that `showFilter()` opened. The `clear` variant doesn't emit it.
          */
         "onPdsFilterClose"?: (event: PdsFilterCustomEvent<PdsFilterCloseEventDetail>) => void;
         /**
