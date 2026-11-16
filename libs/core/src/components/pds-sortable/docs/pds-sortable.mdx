@@ -442,6 +442,72 @@ The following is a demo of how all the properties and slots can be used together
   </pds-sortable>
 </DocCanvas>
 
+### Saving the new order
+
+When an item is dropped, `pdsSortableItemMoved` fires with its position before and after the move in `detail.oldIndex` and `detail.newIndex`, counted from 0. The list has already moved the item by then, so the page shows the new order. A drag emits the event on every drop, even one that ends where it started, so check that the two indexes differ before you save. A keyboard drop emits it only when the position changed (see [Accessibility](#accessibility)).
+
+<DocCanvas display="block" mdxSource={{
+  react: `<PdsSortable componentId="lessons">
+  <PdsSortableItem data-id="intro">Introduction</PdsSortableItem>
+  <PdsSortableItem data-id="module-1">Module 1</PdsSortableItem>
+  <PdsSortableItem data-id="module-2">Module 2</PdsSortableItem>
+</PdsSortable>`,
+  webComponent: `<pds-sortable component-id="lessons">
+  <pds-sortable-item data-id="intro">Introduction</pds-sortable-item>
+  <pds-sortable-item data-id="module-1">Module 1</pds-sortable-item>
+  <pds-sortable-item data-id="module-2">Module 2</pds-sortable-item>
+</pds-sortable>
+`}}>
+  <pds-sortable component-id="lessons">
+    <pds-sortable-item data-id="intro">Introduction</pds-sortable-item>
+    <pds-sortable-item data-id="module-1">Module 1</pds-sortable-item>
+    <pds-sortable-item data-id="module-2">Module 2</pds-sortable-item>
+  </pds-sortable>
+</DocCanvas>
+
+Read the new order from the list's items:
+
+```javascript
+const list = document.querySelector('pds-sortable[component-id="lessons"]');
+
+list.addEventListener('pdsSortableItemMoved', (event) => {
+  const { oldIndex, newIndex } = event.detail;
+  if (oldIndex === newIndex) return;
+  const order = Array.from(list.children, (item) => item.dataset.id);
+  // Save the new order, such as by sending it to your server.
+});
+```
+
+In React, render the items from state with a stable `key`, and move the item in state with the same two indexes. React then renders the order the list already shows.
+
+```jsx
+import { useState } from 'react';
+import { PdsSortable, PdsSortableItem } from '@pine-ds/react';
+
+export function LessonOrder({ initialLessons }) {
+  const [lessons, setLessons] = useState(initialLessons);
+
+  const handleMoved = (event) => {
+    const { oldIndex, newIndex } = event.detail;
+    if (oldIndex === newIndex) return;
+    setLessons((current) => {
+      const next = [...current];
+      const [moved] = next.splice(oldIndex, 1);
+      next.splice(newIndex, 0, moved);
+      return next;
+    });
+  };
+
+  return (
+    <PdsSortable componentId="lessons" onPdsSortableItemMoved={handleMoved}>
+      {lessons.map((lesson) => (
+        <PdsSortableItem key={lesson.id}>{lesson.title}</PdsSortableItem>
+      ))}
+    </PdsSortable>
+  );
+}
+```
+
 ## Technical Notes
 
 The component keeps the classes it puts on its host. If something removes them, such as a DOM morph, it puts them back, so change its layout through props. Classes you add yourself are left alone. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.

@@ -22,7 +22,9 @@ export class PdsSortable {
   @Element() el: HTMLPdsSortableElement;
 
   /**
-   * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move
+   * Event emitted when a sortable item is moved, by dragging or from the keyboard. The list has already
+   * moved the item when it fires. A drag emits it on every drop, even one that ends where it started, so
+   * compare `oldIndex` and `newIndex`; a keyboard drop emits it only when the item's position changed. A keyboard move
    * carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`,
    * `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as
    * `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or
