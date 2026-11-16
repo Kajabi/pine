@@ -15,13 +15,20 @@ Copy Text displays a value alongside a copy button, letting users copy codes, ID
 
 ## Guidelines
 
-### When to Use
+### When to use
 
 - When the user needs to copy specific, valuable text to the clipboard, such as URLs, emails, API keys, and other important information.
 
-### When Not to Use
+### When not to use
 
 - When the user needs to copy a large amount of non-specific or dynamically-changing text.
+- For long text, such as a paragraph or a block of code. Show it in a `pds-textarea` with `readonly`, where people can read and select all of it.
+
+### Accessibility
+
+- The value is the copy button's only text, so screen readers name the button by the value alone, with nothing saying it copies. An `aria-label` on `pds-copytext` doesn't reach the button, so put a visible label next to it that says what the value is, such as "API key".
+- With `truncate`, the button's name is still the full value.
+- Nothing tells people the copy worked. Listen for `pdsCopyTextClick` and show the result, such as in a `pds-toast`, which screen readers announce (see [Copy result](#copy-result)).
 
 ## Properties
 
