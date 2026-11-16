@@ -19,6 +19,7 @@ export class PdsTableRow {
   private tableRef: HTMLPdsTableElement;
   private observer: MutationObserver | null = null;
   private bodyObserver: MutationObserver | null = null;
+  private checkboxId: string;
 
   /**
     * Determines if the row selected is in an indeterminate state.
@@ -106,6 +107,8 @@ export class PdsTableRow {
   }
 
   componentWillLoad() {
+    this.checkboxId = this.generateUniqueId();
+
     // Handle initial selection state
     if (this.isSelected) {
       this.handleSelect(this.isSelected);
@@ -219,7 +222,7 @@ export class PdsTableRow {
         {this.tableRef && this.tableRef.selectable && (
           <pds-table-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : 'checkbox-cell'} class={this.tableRef.selectable ? 'has-checkbox' : ''} >
             <pds-checkbox
-              componentId={this.generateUniqueId()}
+              componentId={this.checkboxId}
               onPdsCheckboxChange={this.handleCheckboxChange}
               indeterminate={this.indeterminate}
               label={this.checkboxLabel()}

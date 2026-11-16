@@ -15,6 +15,7 @@ const DEFAULT_SELECT_ALL_LABEL = 'Select All Rows';
 export class PdsTableHead {
   @Element() hostElement: HTMLPdsTableHeadElement;
   private tableRef: HTMLPdsTableElement
+  private checkboxId: string;
 
    /**
     * Determines if the select all checkbox is in an indeterminate state.
@@ -81,6 +82,8 @@ export class PdsTableHead {
   }
 
   componentWillLoad() {
+    this.checkboxId = this.generateUniqueId();
+
     if (this.isSelected) {
       this.handleSelect(this.isSelected)
     }
@@ -105,7 +108,7 @@ export class PdsTableHead {
           >
             {!this.tableRef.disableSelectAll && (
               <pds-checkbox
-                componentId={this.generateUniqueId()}
+                componentId={this.checkboxId}
                 indeterminate={this.indeterminate}
                 onInput={this.handleInput}
                 label={this.checkboxLabel()}
