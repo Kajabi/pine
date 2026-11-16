@@ -514,11 +514,12 @@ component tokens from `@kajabi-ui/styles`, whose dark values rely on
   `no-hardcoded-motion`); spacing and radii are left to review.
 - Add `:host-context()`. Only Chromium supports it; Firefox and Safari drop the
   whole rule. Pine still uses it for some dark-mode styles (the error fill of
-  `pds-input`, `pds-select`, `pds-textarea` and `pds-combobox`; the panel border
-  of `pds-dropdown-menu` and `pds-datepicker`; the datepicker's native selects),
-  for the scroll and fixed-column shadows of `pds-table` in RTL, and, through
-  `@kajabi-ui/styles`, for the dark colors of `pds-alert` and `pds-chip`. In
-  Firefox and Safari those keep their light-mode or LTR look.
+  `pds-input`, `pds-select`, `pds-textarea` and `pds-combobox`, and the error
+  border of `pds-input` on hover; the panel border of `pds-dropdown-menu` and
+  `pds-datepicker`; the datepicker's native selects), for the scroll and
+  fixed-column shadows of `pds-table` in RTL, and, through `@kajabi-ui/styles`,
+  for the dark colors of `pds-alert` and `pds-chip`. In Firefox and Safari those
+  keep their light-mode or LTR look.
 - Add a separate interaction color outside the `accent` tokens, or use intent
   colors decoratively.
 - Use FAIRE Sprig for product UI, or invent radii/shadows outside the ramps.
