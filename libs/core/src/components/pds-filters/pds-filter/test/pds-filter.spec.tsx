@@ -1114,7 +1114,7 @@ describe('pds-filter', () => {
         const setActiveElement = (el: Element) =>
           Object.defineProperty(page.doc, 'activeElement', { configurable: true, get: () => el });
         const pressEscape = async (path: EventTarget[]) => {
-          component.handleEscapeKey({ key: 'Escape', composedPath: () => path } as any);
+          component.handleEscapeKey({ key: 'Escape', composedPath: () => path } as unknown as KeyboardEvent);
           await new Promise((resolve) => setTimeout(resolve, 0));
         };
 
@@ -1141,6 +1141,18 @@ describe('pds-filter', () => {
 
         await pressEscape([inside, popover, shadowRoot, page.root!]);
 
+        expect(focusSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it('returns focus to the trigger once the manual open path hides the popover', async () => {
+        const { page, shadowRoot, popover, focusSpy, setActiveElement, pressEscape, inside } = await setup();
+        popover.classList.add('is-open');
+        popover.style.display = 'block';
+        setActiveElement(inside);
+
+        await pressEscape([inside, popover, shadowRoot, page.root!]);
+
+        expect(popover.classList.contains('is-open')).toBe(false);
         expect(focusSpy).toHaveBeenCalledTimes(1);
       });
 
