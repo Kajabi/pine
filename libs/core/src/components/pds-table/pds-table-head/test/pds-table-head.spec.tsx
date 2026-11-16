@@ -176,4 +176,53 @@ describe('pds-table-head', () => {
     expect(page.root).toHaveAttribute('border');
     expect(page.root).toHaveAttribute('background');
   });
+
+  describe('select-all checkbox label', () => {
+    const renderHead = (attributes = '') =>
+      newSpecPage({
+        components: [PdsTableHead, PdsTable],
+        html: `<pds-table selectable="true"><pds-table-head ${attributes}><pds-table-head-cell>Name</pds-table-head-cell></pds-table-head></pds-table>`,
+      });
+
+    const checkboxLabel = (page) =>
+      page.root.querySelector('pds-table-head').shadowRoot.querySelector('pds-checkbox').getAttribute('label');
+
+    it('uses select-all-label', async () => {
+      const page = await renderHead('select-all-label="Tout sélectionner"');
+
+      expect(checkboxLabel(page)).toBe('Tout sélectionner');
+    });
+
+    it.each([
+      ['empty', 'select-all-label=""'],
+      ['whitespace-only', 'select-all-label="   "'],
+    ])('falls back to "Select All Rows" for an %s select-all-label', async (_case, attributes) => {
+      const page = await renderHead(attributes);
+
+      expect(checkboxLabel(page)).toBe('Select All Rows');
+    });
+
+    it('falls back to the default when selectAllLabel is cleared or set to a non-string', async () => {
+      const page = await renderHead('select-all-label="Tout sélectionner"');
+      const head = page.root.querySelector('pds-table-head') as HTMLPdsTableHeadElement;
+
+      head.removeAttribute('select-all-label');
+      await page.waitForChanges();
+      expect(checkboxLabel(page)).toBe('Select All Rows');
+
+      (head as unknown as { selectAllLabel: unknown }).selectAllLabel = ['Tout sélectionner'];
+      await page.waitForChanges();
+      expect(checkboxLabel(page)).toBe('Select All Rows');
+    });
+
+    it('updates the checkbox when select-all-label changes', async () => {
+      const page = await renderHead();
+      const head = page.root.querySelector('pds-table-head') as HTMLPdsTableHeadElement;
+
+      head.selectAllLabel = 'Tout sélectionner';
+      await page.waitForChanges();
+
+      expect(checkboxLabel(page)).toBe('Tout sélectionner');
+    });
+  });
 });

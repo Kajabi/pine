@@ -134,4 +134,62 @@ describe('pds-table-row', () => {
     const row = page.root?.querySelector('pds-table-row');
     expect(row?.classList.contains('has-divider')).toBe(false);
   });
+
+  describe('selection checkbox label', () => {
+    const renderRows = (rows: string) =>
+      newSpecPage({
+        components: [PdsTable, PdsTableBody, PdsTableRow],
+        html: `<pds-table selectable="true"><pds-table-body>${rows}</pds-table-body></pds-table>`,
+      });
+
+    const checkboxLabels = (page) =>
+      Array.from(page.root.querySelectorAll('pds-table-row')).map((row: HTMLElement) =>
+        row.shadowRoot.querySelector('pds-checkbox').getAttribute('label'),
+      );
+
+    it('defaults to "Select Row" on every row', async () => {
+      const page = await renderRows('<pds-table-row></pds-table-row><pds-table-row></pds-table-row>');
+
+      expect(checkboxLabels(page)).toEqual(['Select Row', 'Select Row']);
+    });
+
+    it('uses each row\'s select-label', async () => {
+      const page = await renderRows(`
+        <pds-table-row select-label="Select Jane Doe"></pds-table-row>
+        <pds-table-row select-label="Sélectionner John Roe"></pds-table-row>
+      `);
+
+      expect(checkboxLabels(page)).toEqual(['Select Jane Doe', 'Sélectionner John Roe']);
+    });
+
+    it('falls back to the default for an empty or whitespace-only select-label', async () => {
+      const page = await renderRows(`
+        <pds-table-row select-label=""></pds-table-row>
+        <pds-table-row select-label="   "></pds-table-row>
+      `);
+
+      expect(checkboxLabels(page)).toEqual(['Select Row', 'Select Row']);
+    });
+
+    it('falls back to the default when selectLabel is cleared or set to a non-string', async () => {
+      const page = await renderRows('<pds-table-row select-label="Select Jane Doe"></pds-table-row><pds-table-row></pds-table-row>');
+      const [first, second] = Array.from(page.root.querySelectorAll('pds-table-row')) as HTMLPdsTableRowElement[];
+
+      first.removeAttribute('select-label');
+      (second as unknown as { selectLabel: unknown }).selectLabel = { text: 'Select Jane Doe' };
+      await page.waitForChanges();
+
+      expect(checkboxLabels(page)).toEqual(['Select Row', 'Select Row']);
+    });
+
+    it('updates the checkbox when select-label changes', async () => {
+      const page = await renderRows('<pds-table-row></pds-table-row>');
+      const row = page.root.querySelector('pds-table-row') as HTMLPdsTableRowElement;
+
+      row.selectLabel = 'Select Jane Doe';
+      await page.waitForChanges();
+
+      expect(checkboxLabels(page)).toEqual(['Select Jane Doe']);
+    });
+  });
 });
