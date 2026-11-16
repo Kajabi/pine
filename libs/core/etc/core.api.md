@@ -2486,9 +2486,11 @@ export namespace LocalJSX {
         "name"?: string;
         "noOptionsFoundLabel"?: string;
         "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
+        "onPdsMultiselectClose"?: (event: PdsMultiselectCustomEvent<void>) => void;
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
+        "onPdsMultiselectOpen"?: (event: PdsMultiselectCustomEvent<void>) => void;
         "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
         "optionActionDescription"?: string;
