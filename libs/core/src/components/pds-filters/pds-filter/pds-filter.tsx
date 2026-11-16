@@ -6,6 +6,8 @@ import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClea
 import { enlarge, trash } from '@pine-ds/icons/icons';
 import { bindTruncationTooltips } from '../../../utils/truncation-tooltip';
 
+const hasPopoverApi = (): boolean => typeof HTMLElement.prototype.showPopover === 'function';
+
 /**
  * A single filter in `pds-filters`: a trigger button that opens a popover holding the filter controls.
  * The `clear` variant has no popover and emits `pdsFilterClear` instead.
@@ -68,16 +70,14 @@ export class PdsFilter implements BasePdsProps {
   @State() isOpen = false;
 
   /**
-   * Emitted when the filter popover is opened, from the trigger or `showFilter()`. In Firefox, `showFilter()`
-   * doesn't emit it. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
+   * Emitted when the filter popover is opened, from the trigger or `showFilter()`.
+   * `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
    */
   @Event() pdsFilterOpen: EventEmitter<PdsFilterOpenEventDetail>;
 
   /**
    * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it,
    * or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`.
-   * In Firefox, `hideFilter()` doesn't emit it, and
-   * neither does Escape, a click outside or another filter closing a popover that `showFilter()` opened.
    * The `clear` variant doesn't emit it.
    */
   @Event() pdsFilterClose: EventEmitter<PdsFilterCloseEventDetail>;
@@ -110,7 +110,7 @@ export class PdsFilter implements BasePdsProps {
 
     // Clean up native popover event listeners
     if (this.popoverEl) {
-      const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+      const supportsPopoverAPI = hasPopoverApi();
       if (supportsPopoverAPI) {
         this.popoverEl.removeEventListener('toggle', this.handleNativePopoverToggle);
       }
@@ -133,9 +133,9 @@ export class PdsFilter implements BasePdsProps {
 
     // Note: popoverEl is set via ref callback in render method
     // For browsers with native popover API, we need direct element listeners
-    // since the document listener may not capture native popover toggle events
+    // since native popover toggle events don't bubble
     if (this.popoverEl) {
-      const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+      const supportsPopoverAPI = hasPopoverApi();
 
       if (supportsPopoverAPI) {
         // Remove any existing listeners to avoid duplicates
@@ -356,7 +356,7 @@ export class PdsFilter implements BasePdsProps {
   }
 
   /**
-   * Closes the filter popover programmatically. In Firefox, it doesn't close a popover that the trigger opened.
+   * Closes the filter popover programmatically.
    * Note: Clear variant does not support popover functionality.
    */
   @Method()
@@ -378,34 +378,6 @@ export class PdsFilter implements BasePdsProps {
   }
 
   /**
-   * Listen for popover toggle events for browsers without native Popover API (fallback).
-   * Native API browsers use direct element listeners to avoid conflicts.
-   */
-  @Listen('toggle', { target: 'document' })
-  handlePopoverToggle(event: Event) {
-    const target = event.target as HTMLElement;
-    const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
-
-    // Only handle events for fallback browsers (Firefox) to avoid duplicate handling
-    if (!supportsPopoverAPI && target && target.id === `${this.componentId}-popover`) {
-      // Check for popover API support to avoid crashes
-      let isCurrentlyOpen = false;
-      try {
-        isCurrentlyOpen = target.matches(':popover-open');
-      } catch (error) {
-        // Fallback if :popover-open selector isn't supported
-        isCurrentlyOpen = target.style.display === 'block';
-      }
-
-      if (isCurrentlyOpen) {
-        setTimeout(() => this.adjustPopoverPosition(), 0);
-      }
-
-      this.setOpenState(isCurrentlyOpen);
-    }
-  }
-
-  /**
    * Listen for clicks to detect outside dismissal.
    */
   @Listen('click', { target: 'document' })
@@ -415,7 +387,7 @@ export class PdsFilter implements BasePdsProps {
       setTimeout(() => {
         if (this.popoverEl && this.isOpen) {
           // Check for popover API support to avoid crashes
-          const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+          const supportsPopoverAPI = hasPopoverApi();
 
           let popoverIsClosed = false;
           if (supportsPopoverAPI) {
@@ -452,7 +424,7 @@ export class PdsFilter implements BasePdsProps {
       setTimeout(() => {
         if (this.popoverEl && this.isOpen) {
           // Check for popover API support to avoid crashes
-          const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+          const supportsPopoverAPI = hasPopoverApi();
 
           let popoverIsClosed = false;
           if (supportsPopoverAPI) {
@@ -505,7 +477,7 @@ export class PdsFilter implements BasePdsProps {
     this.closeOtherPopovers();
 
     // Check for popover API support
-    const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+    const supportsPopoverAPI = hasPopoverApi();
 
     if (!supportsPopoverAPI) {
       // Manual fallback for browsers without popover API support
