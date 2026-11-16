@@ -34,7 +34,8 @@ Filters are a row of popover triggers for narrowing a set of data. The `pds-filt
 - The `selected` variant changes only how the trigger looks. Put the applied value in `text`, such as "Status: Published", so screen reader users hear which filters are on.
 - Give every control in the popover a label, such as `pds-checkbox`'s `label`.
 - The trigger is a button that reports `aria-expanded`, and Enter or Space opens and closes the popover. Focus stays on the trigger when the popover opens, and Tab moves into the popover's controls. Tabbing past the last control moves on to the next filter and leaves the popover open.
-- Escape closes the popover and leaves focus on the trigger, whether it was pressed on the trigger or on a control inside the popover. If your code moves focus somewhere else when the popover closes, such as in a `pdsFilterClose` listener, focus stays where you put it. A control inside the popover that handles Escape itself and cancels it keeps the popover open. Opening one filter closes any other open filter.
+- Escape closes the popover and leaves focus on the trigger, whether it was pressed on the trigger or on a control inside the popover. Opening one filter closes any other open filter.
+- If your code moves focus to another element when the popover closes, such as in a `pdsFilterClose` listener, focus stays on that element.
 
 ## Properties
 
