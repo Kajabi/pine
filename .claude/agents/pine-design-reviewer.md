@@ -1,6 +1,6 @@
 ---
 name: pine-design-reviewer
-description: Design-token, SCSS, accessibility, and Figma Code Connect reviewer for Pine. Checks component token files (*.tokens.scss), `:host` custom-property patterns, `:host-context([data-theme=dark])` dark-mode support, keyboard / ARIA / focus / semantic HTML, and `.figma.ts` alignment with public props.
+description: Design-token, SCSS, accessibility, and Figma Code Connect reviewer for Pine. Checks component token files (*.tokens.scss), `:host` custom-property patterns, dark-mode support, keyboard / ARIA / focus / semantic HTML, and `.figma.ts` alignment with public props.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 skills: pine-design-review
@@ -33,9 +33,10 @@ high.
      stepping through a ramp (dark-mode shims, etc.)
    - No raw hex / `rgb()` unless an explicit stylelint-disable +
      reason is present
-4. **Check dark mode** — `:host-context([data-theme=dark])` blocks
-   should remap the same custom properties to dark palette steps; new
-   tokens should follow the same convention as siblings
+4. **Check dark mode** — colors should come from semantic `--pine-*`
+   tokens, which switch under `[data-theme=dark]` and inherit into shadow
+   roots. Flag any new `:host-context()` rule: only Chromium supports it,
+   so Firefox and Safari keep the light-mode look
 5. **Check accessibility** — keyboard, ARIA, focus management,
    semantic HTML, label association, color-only signals
 6. **Check Figma Code Connect** — when a public `@Prop` is added /
