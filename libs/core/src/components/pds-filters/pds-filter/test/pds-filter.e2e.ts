@@ -514,7 +514,7 @@ describe('pds-filter with a Firefox user agent', () => {
     expect(closeEventSpy).toHaveReceivedEventTimes(1);
   });
 
-  it('emits pdsFilterClose when Escape closes a popover showFilter() opened', async () => {
+  it('emits pdsFilterClose once when Escape closes a popover showFilter() opened', async () => {
     const page = await newFirefoxPage();
     const filter = await page.find('#first');
     const closeEventSpy = await filter.spyOnEvent('pdsFilterClose');
@@ -525,7 +525,7 @@ describe('pds-filter with a Firefox user agent', () => {
     await settle(page);
 
     expect(await isPopoverVisible(page, 'first')).toBe(false);
-    expect(closeEventSpy).toHaveReceivedEvent();
+    expect(closeEventSpy).toHaveReceivedEventTimes(1);
   });
 
   it('emits pdsFilterClose before the next filter opens', async () => {
