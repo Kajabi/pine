@@ -30,10 +30,11 @@ Filters are a row of popover triggers for narrowing a set of data. The `pds-filt
 
 ### Accessibility
 
-- Full keyboard support: Tab navigation, Enter/Space to activate, Escape to close
-- Proper ARIA attributes for screen readers (`aria-expanded`, `aria-haspopup`, `aria-controls`)
-- Focus management between trigger and popover content
-- Only one popover open at a time to prevent confusion
+- Always set `text`. The trigger's icons are hidden from screen readers, so a filter without `text` has no accessible name, and an `aria-label` on `pds-filter` doesn't reach the trigger.
+- The `selected` variant changes only how the trigger looks. Put the applied value in `text`, such as "Status: Published", so screen reader users hear which filters are on.
+- Give every control in the popover a label, such as `pds-checkbox`'s `label`.
+- The trigger is a button that reports `aria-expanded`, and Enter or Space opens and closes the popover. Focus stays on the trigger when the popover opens, and Tab moves into the popover's controls. Tabbing past the last control moves on to the next filter and leaves the popover open.
+- Escape closes the popover. Pressed on the trigger, focus stays there. Pressed on a control inside the popover, focus doesn't go back to the trigger: it falls back to the page body. Opening one filter closes any other open filter.
 
 ## Properties
 
@@ -154,19 +155,94 @@ For clear/reset actions, always shows trash icon. The clear variant does not ope
   </pds-filters>
 </DocCanvas>
 
+### Filter bar
+
+A bar with two filters, a `more` filter for less common options, and a `clear` filter. The filters don't track what's checked: your code sets each filter's `variant` and `text`, applies the filters to your data, and resets everything on `pdsFilterClear`.
+
+<DocCanvas mdxSource={{
+  react: `
+<PdsFilters>
+  <PdsFilter componentId="status-filter" data-label="Status" variant="selected" text="Status: Published">
+    <PdsCheckbox componentId="status-published" label="Published" checked />
+    <PdsCheckbox componentId="status-draft" label="Draft" />
+  </PdsFilter>
+  <PdsFilter componentId="type-filter" data-label="Type" text="Type">
+    <PdsCheckbox componentId="type-course" label="Course" />
+    <PdsCheckbox componentId="type-coaching" label="Coaching" />
+  </PdsFilter>
+  <PdsFilter componentId="more-filters" variant="more" text="More filters" icon="add-circle">
+    <PdsCheckbox componentId="has-sales" label="Has sales" />
+  </PdsFilter>
+  <PdsFilter componentId="clear-filters" variant="clear" text="Clear filters" />
+</PdsFilters>
+  `,
+  webComponent: `
+<pds-filters>
+  <pds-filter component-id="status-filter" data-label="Status" variant="selected" text="Status: Published">
+    <pds-checkbox component-id="status-published" label="Published" checked></pds-checkbox>
+    <pds-checkbox component-id="status-draft" label="Draft"></pds-checkbox>
+  </pds-filter>
+  <pds-filter component-id="type-filter" data-label="Type" text="Type">
+    <pds-checkbox component-id="type-course" label="Course"></pds-checkbox>
+    <pds-checkbox component-id="type-coaching" label="Coaching"></pds-checkbox>
+  </pds-filter>
+  <pds-filter component-id="more-filters" variant="more" text="More filters" icon="add-circle">
+    <pds-checkbox component-id="has-sales" label="Has sales"></pds-checkbox>
+  </pds-filter>
+  <pds-filter component-id="clear-filters" variant="clear" text="Clear filters"></pds-filter>
+</pds-filters>
+  `
+}}>
+  <pds-filters>
+    <pds-filter component-id="status-filter" data-label="Status" variant="selected" text="Status: Published">
+      <pds-checkbox component-id="status-published" label="Published" checked></pds-checkbox>
+      <pds-checkbox component-id="status-draft" label="Draft"></pds-checkbox>
+    </pds-filter>
+    <pds-filter component-id="type-filter" data-label="Type" text="Type">
+      <pds-checkbox component-id="type-course" label="Course"></pds-checkbox>
+      <pds-checkbox component-id="type-coaching" label="Coaching"></pds-checkbox>
+    </pds-filter>
+    <pds-filter component-id="more-filters" variant="more" text="More filters" icon="add-circle">
+      <pds-checkbox component-id="has-sales" label="Has sales"></pds-checkbox>
+    </pds-filter>
+    <pds-filter component-id="clear-filters" variant="clear" text="Clear filters"></pds-filter>
+  </pds-filters>
+</DocCanvas>
+
+The markup alone doesn't update the triggers. A script like this one does: when a filter closes, it shows the checked options in `text` and switches to `selected`, and the clear filter unchecks everything.
+
+```javascript
+const bar = document.querySelector('pds-filters');
+
+bar.addEventListener('pdsFilterClose', (event) => {
+  const filter = event.target;
+  const label = filter.dataset.label;
+  if (!label) return;
+  const picked = Array.from(filter.querySelectorAll('pds-checkbox'))
+    .filter((checkbox) => checkbox.checked)
+    .map((checkbox) => checkbox.label);
+  filter.variant = picked.length ? 'selected' : 'default';
+  filter.text = picked.length ? `${label}: ${picked.join(', ')}` : label;
+  // Filter your data by the checked values.
+});
+
+bar.addEventListener('pdsFilterClear', () => {
+  bar.querySelectorAll('pds-checkbox').forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+  bar.querySelectorAll('pds-filter[data-label]').forEach((filter) => {
+    filter.variant = 'default';
+    filter.text = filter.dataset.label;
+  });
+  // Show your data unfiltered.
+});
+```
+
+In React, keep the checked options in state, render each checkbox's `checked` and each filter's `variant` and `text` from that state, and empty it in the clear filter's `onPdsFilterClear`.
+
 ## Events
 
-### pdsFilterOpen
-
-Emitted when a filter popover is opened. Clear variant does not emit this event.
-
-### pdsFilterClose
-
-Emitted when a filter popover is closed. Clear variant does not emit this event.
-
-### pdsFilterClear
-
-Emitted when a clear variant is clicked. Use this event to clear/reset other filters.
+Each `pds-filter` emits its own events, and they bubble, so one listener on `pds-filters` hears every filter, as in [Filter bar](#filter-bar). The `pds-filter` properties table above says when each event fires and what its `detail` holds.
 
 ## Methods
 
