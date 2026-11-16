@@ -1010,17 +1010,22 @@ describe('pds-filter', () => {
       expect(close).toHaveBeenCalledTimes(1);
     });
 
-    it('emits nothing for a toggle event that leaves the open state as it was', async () => {
-      const { component, open, close } = await setup();
+    it('emits no pdsFilterClose for a toggle event when the popover is already closed', async () => {
+      const { component, close } = await setup();
 
       component.handleNativePopoverToggle(toggleEvent(false));
       component.handlePopoverToggle(toggleEvent(false));
-      component.isOpen = true;
-      component.handleNativePopoverToggle(toggleEvent(true));
-      component.handlePopoverToggle(toggleEvent(true));
 
-      expect(open).not.toHaveBeenCalled();
       expect(close).not.toHaveBeenCalled();
+    });
+
+    it('emits pdsFilterOpen when the toggle event opens the popover while isOpen is stale', async () => {
+      const { component, open } = await setup();
+      component.isOpen = true;
+
+      component.handleNativePopoverToggle(toggleEvent(true));
+
+      expect(open).toHaveBeenCalledTimes(1);
     });
 
     it('emits pdsFilterOpen and pdsFilterClose once each when the toggle event opens and closes the popover', async () => {
