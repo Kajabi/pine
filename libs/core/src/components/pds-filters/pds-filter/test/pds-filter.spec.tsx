@@ -1311,18 +1311,6 @@ describe('pds-filter trigger ARIA', () => {
     expect(trigger.hasAttribute('aria-haspopup')).toBe(false);
   });
 
-  it('renders the clear trigger as a plain button', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
-    });
-
-    const trigger = triggerOf(page);
-    expect(trigger.hasAttribute('aria-expanded')).toBe(false);
-    expect(trigger.hasAttribute('aria-haspopup')).toBe(false);
-    expect(trigger.hasAttribute('aria-controls')).toBe(false);
-  });
-
   it('drops aria-expanded when the variant changes to clear, and restores it when it changes back', async () => {
     const page = await newSpecPage({
       components: [PdsFilter],
