@@ -1240,7 +1240,7 @@ describe('pds-filter', () => {
       const { component, close } = await setup();
       component.isOpen = true;
 
-      component.handleEscapeKey({ key: 'Escape' } as KeyboardEvent);
+      component.handleEscapeKey({ key: 'Escape', composedPath: () => [] } as KeyboardEvent);
       await flushTimers();
       component.handleNativePopoverToggle(toggleEvent(false));
 
@@ -1252,7 +1252,7 @@ describe('pds-filter', () => {
       const { component, close } = await setup();
       component.isOpen = true;
 
-      component.handleEscapeKey({ key: 'Escape' } as KeyboardEvent);
+      component.handleEscapeKey({ key: 'Escape', composedPath: () => [] } as KeyboardEvent);
       component.handleNativePopoverToggle(toggleEvent(false));
       await flushTimers();
 
