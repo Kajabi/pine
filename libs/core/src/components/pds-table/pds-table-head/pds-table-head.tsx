@@ -1,6 +1,8 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { closest } from '@utils/closest';
 
+const DEFAULT_SELECT_ALL_LABEL = 'Select All Rows';
+
 /**
  * @part head - Set on the `pds-table-head` element itself, so `::part(head)` matches it only from a shadow root that contains it. Style `pds-table-head` directly instead.
  * @part select-all-checkbox - Exposes the select-all checkbox for styling. Appears only when the table is `selectable` and `disableSelectAll` isn't set.
@@ -38,6 +40,13 @@ export class PdsTableHead {
   @Prop({ reflect: true }) background = false;
 
   /**
+   * Accessible label for the select-all checkbox. Pass a translated string to localize it;
+   * defaults to English. An empty string falls back to the default.
+   * @defaultValue 'Select All Rows'
+   */
+  @Prop() selectAllLabel = 'Select All Rows';
+
+  /**
    * Emitted when the user checks or unchecks the select-all checkbox, carrying the new state as `isSelected`.
    * `pds-table` then sets `isSelected` on every row, and the rows don't emit `pdsTableRowSelected`.
    * A head that starts with `isSelected` also emits it on load.
@@ -50,6 +59,11 @@ export class PdsTableHead {
     const uniqueId = `${randomString}-${timestamp}`;
 
     return uniqueId;
+  }
+
+  private checkboxLabel(): string {
+    const label = this.selectAllLabel;
+    return typeof label === 'string' && label.trim() !== '' ? label : DEFAULT_SELECT_ALL_LABEL;
   }
 
   private handleInput = (ev: Event) => {
@@ -93,7 +107,7 @@ export class PdsTableHead {
                 componentId={this.generateUniqueId()}
                 indeterminate={this.indeterminate}
                 onInput={this.handleInput}
-                label={"Select All Rows"}
+                label={this.checkboxLabel()}
                 hideLabel={true}
                 checked={this.isSelected}
                 part="select-all-checkbox"

@@ -773,6 +773,7 @@ export namespace Components {
         "border": boolean;
         "indeterminate"?: boolean;
         "isSelected": boolean;
+        "selectAllLabel": string;
     }
     // (undocumented)
     export interface PdsTableHeadCell {
@@ -787,6 +788,7 @@ export namespace Components {
     export interface PdsTableRow {
         "indeterminate"?: boolean;
         "isSelected"?: boolean;
+        "selectLabel": string;
     }
     export interface PdsTabpanel {
         "name": string;
@@ -3044,6 +3046,7 @@ export namespace LocalJSX {
         "indeterminate"?: boolean;
         "isSelected"?: boolean;
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
+        "selectAllLabel"?: string;
     }
 
     // (undocumented)
@@ -3056,6 +3059,8 @@ export namespace LocalJSX {
         "indeterminate": boolean;
         // (undocumented)
         "isSelected": boolean;
+        // (undocumented)
+        "selectAllLabel": string;
     }
 
     // (undocumented)
@@ -3081,6 +3086,7 @@ export namespace LocalJSX {
         "indeterminate"?: boolean;
         "isSelected"?: boolean;
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
+        "selectLabel"?: string;
     }
 
     // (undocumented)
@@ -3089,6 +3095,8 @@ export namespace LocalJSX {
         "indeterminate": boolean;
         // (undocumented)
         "isSelected": boolean;
+        // (undocumented)
+        "selectLabel": string;
     }
 
     export interface PdsTabpanel {
