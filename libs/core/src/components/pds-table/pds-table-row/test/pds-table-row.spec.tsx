@@ -172,7 +172,7 @@ describe('pds-table-row', () => {
       expect(checkboxLabels(page)).toEqual(['Select Row', 'Select Row']);
     });
 
-    it('falls back to the default when selectLabel is cleared or set to a non-string', async () => {
+    it('falls back to the default when selectLabel is cleared or set to an object', async () => {
       const page = await renderRows('<pds-table-row select-label="Select Jane Doe"></pds-table-row><pds-table-row></pds-table-row>');
       const [first, second] = Array.from(page.root.querySelectorAll('pds-table-row')) as HTMLPdsTableRowElement[];
 

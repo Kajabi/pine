@@ -203,7 +203,7 @@ describe('pds-table-head', () => {
       expect(checkboxLabel(page)).toBe('Select All Rows');
     });
 
-    it('falls back to the default when selectAllLabel is cleared or set to a non-string', async () => {
+    it('falls back to the default when selectAllLabel is cleared or set to an array', async () => {
       const page = await renderHead('select-all-label="Tout sélectionner"');
       const head = page.root.querySelector('pds-table-head') as HTMLPdsTableHeadElement;
 
