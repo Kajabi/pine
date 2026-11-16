@@ -342,6 +342,98 @@ describe('pds-filter e2e', () => {
   });
 });
 
+describe('pds-filter open and close events', () => {
+  const settle = async (page: E2EPage) => {
+    await page.waitForChanges();
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  };
+
+  const setup = async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-filters>
+        <pds-filter component-id="first" text="First"><button id="inside">Inside</button></pds-filter>
+        <pds-filter component-id="second" text="Second"><p>Second content</p></pds-filter>
+      </pds-filters>
+      <div id="outside" style="margin-block-start: 400px">Outside</div>
+    `);
+    const first = await page.find('pds-filter[component-id="first"]');
+    const second = await page.find('pds-filter[component-id="second"]');
+    return {
+      page,
+      first,
+      firstTrigger: await page.find('pds-filter[component-id="first"] >>> .pds-filter__trigger'),
+      secondTrigger: await page.find('pds-filter[component-id="second"] >>> .pds-filter__trigger'),
+      firstOpen: await first.spyOnEvent('pdsFilterOpen'),
+      firstClose: await first.spyOnEvent('pdsFilterClose'),
+      secondOpen: await second.spyOnEvent('pdsFilterOpen'),
+    };
+  };
+
+  it('emits pdsFilterOpen once when the trigger opens the popover', async () => {
+    const { page, firstTrigger, firstOpen, firstClose } = await setup();
+
+    await firstTrigger.click();
+    await settle(page);
+
+    expect(firstOpen).toHaveReceivedEventTimes(1);
+    expect(firstClose).toHaveReceivedEventTimes(0);
+  });
+
+  it('emits pdsFilterOpen once when showFilter() opens the popover', async () => {
+    const { page, first, firstOpen } = await setup();
+
+    await first.callMethod('showFilter');
+    await settle(page);
+
+    expect(firstOpen).toHaveReceivedEventTimes(1);
+  });
+
+  type Filter = Awaited<ReturnType<typeof setup>>;
+
+  it.each([
+    ['Escape on the trigger', async ({ page, firstTrigger }: Filter) => {
+      await firstTrigger.focus();
+      await page.keyboard.press('Escape');
+    }],
+    ['Escape inside the popover', async ({ page }: Filter) => {
+      await page.focus('#inside');
+      await page.keyboard.press('Escape');
+    }],
+    ['a trigger click', async ({ firstTrigger }: Filter) => {
+      await firstTrigger.click();
+    }],
+    ['a click outside', async ({ page }: Filter) => {
+      await (await page.find('#outside')).click();
+    }],
+    ['hideFilter()', async ({ first }: Filter) => {
+      await first.callMethod('hideFilter');
+    }],
+  ])('emits pdsFilterClose once when the popover closes from %s', async (_label, close) => {
+    const filter = await setup();
+    await filter.firstTrigger.click();
+    await settle(filter.page);
+
+    await close(filter);
+    await settle(filter.page);
+
+    expect(await filter.page.find('pds-filter[component-id="first"] >>> .pds-filter__popover:popover-open')).toBeNull();
+    expect(filter.firstClose).toHaveReceivedEventTimes(1);
+  });
+
+  it('emits pdsFilterClose once for a filter that another filter closes by opening', async () => {
+    const { page, firstTrigger, secondTrigger, firstClose, secondOpen } = await setup();
+    await firstTrigger.click();
+    await settle(page);
+
+    await secondTrigger.click();
+    await settle(page);
+
+    expect(firstClose).toHaveReceivedEventTimes(1);
+    expect(secondOpen).toHaveReceivedEventTimes(1);
+  });
+});
+
 describe('pds-filter reduced motion', () => {
   it('zeroes out the trigger transition under prefers-reduced-motion', async () => {
     const page = await newE2EPage();

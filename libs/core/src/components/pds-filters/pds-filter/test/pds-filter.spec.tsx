@@ -957,6 +957,83 @@ describe('pds-filter', () => {
     // Additional fallback tests removed due to timeout issues in test environment
   });
 
+  describe('open and close events', () => {
+    const flushTimers = () => new Promise((resolve) => setTimeout(resolve, 0));
+    const toggleEvent = (open: boolean) =>
+      ({ target: { id: 'test-popover', matches: () => open } }) as unknown as Event;
+
+    const setup = async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"><p>Content</p></pds-filter>`,
+      });
+      const component = page.rootInstance;
+      jest.spyOn(component, 'adjustPopoverPosition').mockImplementation(() => {});
+      const open = jest.fn();
+      const close = jest.fn();
+      page.root?.addEventListener('pdsFilterOpen', open);
+      page.root?.addEventListener('pdsFilterClose', close);
+      return { component, open, close };
+    };
+
+    it('emits pdsFilterClose once when Escape closes the popover before its toggle event', async () => {
+      const { component, close } = await setup();
+      component.isOpen = true;
+
+      component.handleEscapeKey({ key: 'Escape' } as KeyboardEvent);
+      await flushTimers();
+      component.handleNativePopoverToggle(toggleEvent(false));
+
+      expect(close).toHaveBeenCalledTimes(1);
+      expect(component.isOpen).toBe(false);
+    });
+
+    it('emits pdsFilterClose once when the toggle event closes the popover before the Escape check', async () => {
+      const { component, close } = await setup();
+      component.isOpen = true;
+
+      component.handleEscapeKey({ key: 'Escape' } as KeyboardEvent);
+      component.handleNativePopoverToggle(toggleEvent(false));
+      await flushTimers();
+
+      expect(close).toHaveBeenCalledTimes(1);
+    });
+
+    it('emits pdsFilterClose once when an outside click and the toggle event both see the close', async () => {
+      const { component, close } = await setup();
+      component.isOpen = true;
+
+      component.handleDocumentClick({ target: document.body } as unknown as Event);
+      await flushTimers();
+      component.handleNativePopoverToggle(toggleEvent(false));
+
+      expect(close).toHaveBeenCalledTimes(1);
+    });
+
+    it('emits nothing for a toggle event that leaves the open state as it was', async () => {
+      const { component, open, close } = await setup();
+
+      component.handleNativePopoverToggle(toggleEvent(false));
+      component.handlePopoverToggle(toggleEvent(false));
+      component.isOpen = true;
+      component.handleNativePopoverToggle(toggleEvent(true));
+      component.handlePopoverToggle(toggleEvent(true));
+
+      expect(open).not.toHaveBeenCalled();
+      expect(close).not.toHaveBeenCalled();
+    });
+
+    it('emits pdsFilterOpen and pdsFilterClose once each when the toggle event opens and closes the popover', async () => {
+      const { component, open, close } = await setup();
+
+      component.handleNativePopoverToggle(toggleEvent(true));
+      component.handleNativePopoverToggle(toggleEvent(false));
+
+      expect(open).toHaveBeenCalledTimes(1);
+      expect(close).toHaveBeenCalledTimes(1);
+    });
+  });
+
   // Coverage tests for scroll logic (simplified to avoid test environment issues)
   describe('scroll handling coverage', () => {
     it('handleWindowScroll checks anchor positioning support for throttling', async () => {
