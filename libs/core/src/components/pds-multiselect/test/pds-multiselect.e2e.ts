@@ -869,6 +869,137 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('open and close events', () => {
+    const setUp = async ({ attributes = '', options = tagOptions as unknown, content = '' } = {}) => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-multiselect component-id="tags" label="Tags" ${attributes}>${content}</pds-multiselect>
+        <button type="button" id="outside">Outside</button>
+      `);
+      await setOptions(page, options);
+      const open = await page.spyOnEvent('pdsMultiselectOpen');
+      const close = await page.spyOnEvent('pdsMultiselectClose');
+      return { page, open, close };
+    };
+
+    const clickInShadow = async (page: Page, selector: string) => {
+      await (await page.find(`pds-multiselect >>> ${selector}`)).click();
+    };
+
+    for (const [name, key] of [['Enter', 'Enter'], ['Space', ' '], ['ArrowDown', 'ArrowDown'], ['ArrowUp', 'ArrowUp']]) {
+      it(`emits one pdsMultiselectOpen when ${name} on the trigger opens the panel`, async () => {
+        const { page, open, close } = await setUp();
+
+        await page.keyboard.press('Tab');
+        await page.keyboard.press(key as 'Enter');
+        await waitForSearchFocus(page);
+        await settle();
+
+        expect(open).toHaveReceivedEventTimes(1);
+        expect(close).not.toHaveReceivedEvent();
+      });
+    }
+
+    it('emits one pdsMultiselectOpen when a slotted trigger opens the panel', async () => {
+      const { page, open } = await setUp({ content: '<button slot="trigger" type="button" id="custom-trigger">Pick tags</button>' });
+
+      await page.click('#custom-trigger');
+      await waitForSearchFocus(page);
+      await settle();
+
+      expect(open).toHaveReceivedEventTimes(1);
+    });
+
+    it('emits pdsMultiselectOpen once the panel is positioned, so the handler can measure it', async () => {
+      const { page, open } = await setUp();
+      await page.evaluate(() => {
+        const host = document.querySelector('pds-multiselect')!;
+        host.addEventListener('pdsMultiselectOpen', () => {
+          const panel = host.shadowRoot!.querySelector<HTMLElement>('[part~="panel"]')!;
+          document.body.dataset.measured = JSON.stringify({ height: panel.getBoundingClientRect().height, top: panel.style.top });
+        });
+      });
+
+      await openBuiltInTrigger(page);
+      await settle();
+
+      expect(open).toHaveReceivedEventTimes(1);
+      const measured = JSON.parse(await page.evaluate(() => document.body.dataset.measured ?? '{}'));
+      expect(measured.height).toBeGreaterThan(0);
+      expect(measured.top).toMatch(/px$/);
+    });
+
+    const closePaths: { name: string; dismisses: boolean; close: (page: Page) => Promise<unknown>; setUp?: Parameters<typeof setUp>[0] }[] = [
+      { name: 'a click on the trigger', dismisses: false, close: page => clickInShadow(page, '.pds-multiselect__trigger') },
+      { name: 'Escape', dismisses: true, close: page => page.keyboard.press('Escape') },
+      { name: 'a click outside', dismisses: true, close: page => page.click('#outside') },
+      { name: 'Tab from the search input', dismisses: false, close: page => page.keyboard.press('Tab') },
+      {
+        name: 'Tab from the last footer control',
+        dismisses: false,
+        close: async page => {
+          await page.keyboard.press('Tab');
+          await page.keyboard.press('Tab');
+        },
+        setUp: { content: '<button slot="footer" type="button" id="manage">Manage tags</button>' },
+      },
+      {
+        name: 'a selection with close-panel-on-select',
+        dismisses: false,
+        close: page => clickInShadow(page, '.pds-multiselect__option'),
+        setUp: { attributes: 'close-panel-on-select' },
+      },
+      {
+        name: 'an option action',
+        dismisses: false,
+        close: async page => {
+          await (await page.find('pds-multiselect >>> .pds-multiselect__option')).hover();
+          await page.waitForChanges();
+          await clickInShadow(page, '.pds-multiselect__option-action');
+        },
+        setUp: { attributes: 'option-actions', options: actionOptions },
+      },
+      {
+        name: 'disabling the multiselect',
+        dismisses: false,
+        close: page => page.evaluate(() => ((document.querySelector('pds-multiselect') as HTMLElement & { disabled: boolean }).disabled = true)),
+      },
+    ];
+
+    for (const { name, dismisses, close, setUp: options } of closePaths) {
+      it(`emits one pdsMultiselectOpen and one pdsMultiselectClose when ${name} closes the panel`, async () => {
+        const { page, open, close: closeEvents } = await setUp(options);
+        const dismiss = await page.spyOnEvent('pdsMultiselectDismiss');
+        await openBuiltInTrigger(page);
+        await settle();
+
+        await close(page);
+        await page.waitForChanges();
+        await settle();
+
+        expect(await isPanelOpen(page)).toBe(false);
+        expect(open).toHaveReceivedEventTimes(1);
+        expect(closeEvents).toHaveReceivedEventTimes(1);
+        expect(dismiss).toHaveReceivedEventTimes(dismisses ? 1 : 0);
+      });
+    }
+
+    it('styles the panel through ::part(panel)', async () => {
+      const { page } = await setUp();
+      await page.addStyleTag({ content: 'pds-multiselect::part(panel) { z-index: 1234; }' });
+
+      await openBuiltInTrigger(page);
+
+      expect(
+        await page.evaluate(() => {
+          const panel = document.querySelector('pds-multiselect')!.shadowRoot!.querySelector('[part~="panel"]')!;
+          return getComputedStyle(panel).zIndex;
+        })
+      ).toBe('1234');
+      expect(await axeViolations(page)).toBe('');
+    });
+  });
+
   describe('axe', () => {
     it('finds no violations when open from the built-in trigger', async () => {
       const page = await newE2EPage();

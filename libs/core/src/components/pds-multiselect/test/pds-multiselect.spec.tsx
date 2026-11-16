@@ -1015,6 +1015,88 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('pdsMultiselectOpen and pdsMultiselectClose events', () => {
+    const nextFrame = () => new Promise(resolve => setTimeout(resolve, 20));
+
+    const setUp = async (html = '<pds-multiselect component-id="test"></pds-multiselect>') => {
+      const positions: Array<() => void> = [];
+      jest
+        .spyOn(floatingUI, 'computePosition')
+        .mockImplementation(() => new Promise(resolve => positions.push(() => resolve({ x: 0, y: 0, placement: 'bottom-start' }))));
+      jest.spyOn(floatingUI, 'autoUpdate').mockReturnValue(jest.fn());
+
+      const page = await newSpecPage({ components: [PdsMultiselect], html });
+      const events: string[] = [];
+      page.root.addEventListener('pdsMultiselectOpen', () => events.push('open'));
+      page.root.addEventListener('pdsMultiselectClose', () => events.push('close'));
+      const resolvePositions = async () => {
+        positions.splice(0).forEach(resolve => resolve());
+        await nextFrame();
+      };
+      return { page, events, resolvePositions };
+    };
+
+    it('emits pdsMultiselectOpen once the panel is positioned, not before', async () => {
+      const { page, events, resolvePositions } = await setUp();
+
+      page.rootInstance.handleTriggerClick();
+      await page.waitForChanges();
+      await nextFrame();
+      expect(events).toEqual([]);
+
+      await resolvePositions();
+      expect(events).toEqual(['open']);
+    });
+
+    it('emits pdsMultiselectOpen before pdsMultiselectClose when the panel closes before it is positioned', async () => {
+      const { page, events, resolvePositions } = await setUp();
+
+      page.rootInstance.handleTriggerClick();
+      await page.waitForChanges();
+      await nextFrame();
+      page.rootInstance.handleTriggerClick();
+      await page.waitForChanges();
+      await resolvePositions();
+
+      expect(events).toEqual(['open', 'close']);
+    });
+
+    it('emits each event once per open and close, and nothing when the panel is already closed', async () => {
+      const { page, events, resolvePositions } = await setUp();
+
+      page.rootInstance.handleTriggerClick();
+      await page.waitForChanges();
+      await nextFrame();
+      await resolvePositions();
+      page.rootInstance.handleWindowKeyDown(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await page.waitForChanges();
+      page.rootInstance.handleWindowKeyDown(new KeyboardEvent('keydown', { key: 'Escape' }));
+      page.rootInstance.closeDropdown();
+      await page.waitForChanges();
+
+      expect(events).toEqual(['open', 'close']);
+    });
+
+    it('emits nothing when a disabled multiselect is clicked', async () => {
+      const { page, events, resolvePositions } = await setUp('<pds-multiselect component-id="test" disabled></pds-multiselect>');
+
+      page.rootInstance.handleTriggerClick();
+      await page.waitForChanges();
+      await resolvePositions();
+
+      expect(events).toEqual([]);
+    });
+
+    it('exposes the open panel as part="panel"', async () => {
+      const { page } = await setUp();
+
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      expect(page.root.shadowRoot.querySelector('.pds-multiselect__panel').getAttribute('part')).toBe('panel');
+    });
+  });
+
   describe('closePanelOnSelect prop', () => {
     it('keeps panel open by default', async () => {
       const page = await newSpecPage({
