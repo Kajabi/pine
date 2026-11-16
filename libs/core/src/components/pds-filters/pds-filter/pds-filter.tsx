@@ -468,14 +468,19 @@ export class PdsFilter implements BasePdsProps {
     if (event.key !== 'Escape' || this.popoverEl == null || !event.composedPath().includes(this.popoverEl)) return;
 
     setTimeout(() => {
-      if (this.isPopoverShowing()) return;
-
-      const active = document.activeElement;
-      const focusMovedElsewhere = active != null && active !== document.body && !this.el.contains(active);
-      if (focusMovedElsewhere) return;
+      if (this.isPopoverShowing() || this.focusMovedElsewhere()) return;
 
       this.el.shadowRoot?.querySelector<HTMLElement>('.pds-filter__trigger')?.focus();
     }, 0);
+  }
+
+  // Inside another shadow root, document.activeElement is that root's host, so ask the filter's own root too.
+  private focusMovedElsewhere(): boolean {
+    const pageActive = document.activeElement;
+    if (pageActive == null || pageActive === document.body) return false;
+
+    const rootActive = (this.el.getRootNode() as Document | ShadowRoot).activeElement;
+    return rootActive == null || !this.el.contains(rootActive);
   }
 
   private isPopoverShowing(): boolean {
