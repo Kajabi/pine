@@ -257,7 +257,7 @@ Add `sortable` to a `pds-table-head-cell` to let readers sort the table by that 
 - The built-in sort and the default sort only find head cells that have the `sortable` attribute. When `sortable` is set only as a property, as React 19 does on a raw `pds-table-head-cell` tag, clicking shows the arrow but doesn't sort.
 
 <DocCanvas mdxSource={{
-  react: `<PdsTable componentId="sortable" selectable={true}>
+  react: `<PdsTable componentId="sortable" aria-label="Members" selectable={true}>
   <PdsTableHead>
     <PdsTableHeadCell sortable={true}>Name</PdsTableHeadCell>
     <PdsTableHeadCell sortable={true}>Email</PdsTableHeadCell>
@@ -291,7 +291,7 @@ Add `sortable` to a `pds-table-head-cell` to let readers sort the table by that 
     </PdsTableRow>
   </PdsTableBody>
 </PdsTable>`,
-  webComponent: `<pds-table component-id="sortable" selectable>
+  webComponent: `<pds-table component-id="sortable" aria-label="Members" selectable>
   <pds-table-head>
     <pds-table-head-cell sortable>Name</pds-table-head-cell>
     <pds-table-head-cell sortable>Email</pds-table-head-cell>
@@ -326,7 +326,7 @@ Add `sortable` to a `pds-table-head-cell` to let readers sort the table by that 
   </pds-table-body>
 </pds-table>
 `}}>
-  <div dangerouslySetInnerHTML={{ __html: `<pds-table component-id="sortable" selectable>
+  <div dangerouslySetInnerHTML={{ __html: `<pds-table component-id="sortable" aria-label="Members" selectable>
   <pds-table-head>
     <pds-table-head-cell sortable>Name</pds-table-head-cell>
     <pds-table-head-cell sortable>Email</pds-table-head-cell>
@@ -412,7 +412,7 @@ export function MembersTable({ members }) {
   };
 
   return (
-    <PdsTable componentId="members">
+    <PdsTable componentId="members" aria-label="Members">
       <PdsTableHead>
         {Object.keys(fields).map((column) => (
           <PdsTableHeadCell key={column} sortable onPdsTableSort={handleSort} aria-sort={ariaSort(column)}>
