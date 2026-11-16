@@ -6140,7 +6140,7 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
         /**
-          * Emitted when the dropdown panel closes, however it closes: Escape, a click outside, a click on the trigger, Tab, a selection with `closePanelOnSelect`, an option action, or the multiselect becoming disabled. Each `pdsMultiselectOpen` is followed by one `pdsMultiselectClose`.
+          * Emitted when the dropdown panel closes, however it closes: Escape, a click outside, a click on the trigger, Tab, a selection with `closePanelOnSelect`, an option action, the multiselect becoming disabled, or its removal from the page, which only listeners on the multiselect itself hear. Each `pdsMultiselectOpen` is followed by one `pdsMultiselectClose`.
          */
         "onPdsMultiselectClose"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**

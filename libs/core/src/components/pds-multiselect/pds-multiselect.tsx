@@ -414,8 +414,9 @@ export class PdsMultiselect {
 
   /**
    * Emitted when the dropdown panel closes, however it closes: Escape, a click outside, a click on the trigger, Tab,
-   * a selection with `closePanelOnSelect`, an option action, or the multiselect becoming disabled. Each
-   * `pdsMultiselectOpen` is followed by one `pdsMultiselectClose`.
+   * a selection with `closePanelOnSelect`, an option action, the multiselect becoming disabled, or its removal from
+   * the page, which only listeners on the multiselect itself hear. Each `pdsMultiselectOpen` is followed by one
+   * `pdsMultiselectClose`.
    */
   @Event() pdsMultiselectClose!: EventEmitter<void>;
 
@@ -498,6 +499,9 @@ export class PdsMultiselect {
   }
 
   disconnectedCallback() {
+    // Moved in one operation (a DOM morph, or a framework reparenting it), it's already back in the page and stays
+    // open. Removed, it closes, so each pdsMultiselectOpen still gets its pdsMultiselectClose.
+    if (this.isOpen && !this.el.isConnected) this.closeDropdown();
     this.triggerTextTooltip.destroy();
     this.selectedItemTooltips.destroy();
     cancelDebouncedEvent(this.pdsMultiselectSearch);
