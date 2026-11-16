@@ -2,6 +2,7 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsTable } from '../../pds-table';
 import { PdsTableBody } from '../../pds-table-body/pds-table-body';
 import { PdsTableRow } from '../pds-table-row';
+import { PdsCheckbox } from '../../../pds-checkbox/pds-checkbox';
 
 describe('pds-table-row', () => {
   it('renders', async () => {
@@ -191,5 +192,43 @@ describe('pds-table-row', () => {
 
       expect(checkboxLabels(page)).toEqual(['Select Jane Doe']);
     });
+  });
+
+  it('keeps its checkbox id when the row re-renders', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableBody, PdsTableRow, PdsCheckbox],
+      html: '<pds-table selectable="true"><pds-table-body><pds-table-row></pds-table-row></pds-table-body></pds-table>',
+    });
+    const row = page.root.querySelector('pds-table-row') as HTMLPdsTableRowElement;
+    const inputId = () => row.shadowRoot.querySelector('pds-checkbox').shadowRoot.querySelector('input').id;
+    const initialId = inputId();
+
+    row.isSelected = true;
+    await page.waitForChanges();
+    expect(inputId()).toBe(initialId);
+
+    row.selectLabel = 'Select Jane Doe';
+    await page.waitForChanges();
+    expect(inputId()).toBe(initialId);
+    expect(initialId).not.toBe('');
+  });
+
+  it('keeps its checkbox id when the row is moved, as sorting does', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableBody, PdsTableRow, PdsCheckbox],
+      html: '<pds-table selectable="true"><pds-table-body><pds-table-row></pds-table-row><pds-table-row></pds-table-row></pds-table-body></pds-table>',
+    });
+    const body = page.root.querySelector('pds-table-body');
+    const row = body.querySelector('pds-table-row') as HTMLPdsTableRowElement;
+    const checkbox = () => row.shadowRoot.querySelector('pds-checkbox').shadowRoot;
+    const initialId = checkbox().querySelector('input').id;
+
+    body.appendChild(row);
+    await page.waitForChanges();
+    row.isSelected = true;
+    await page.waitForChanges();
+
+    expect(checkbox().querySelector('input').id).toBe(initialId);
+    expect(checkbox().querySelector('label').getAttribute('for')).toBe(initialId);
   });
 });

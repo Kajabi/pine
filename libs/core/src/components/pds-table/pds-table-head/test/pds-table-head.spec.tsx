@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsTableHead } from '../pds-table-head';
 import { PdsTable } from '../../pds-table';
+import { PdsCheckbox } from '../../../pds-checkbox/pds-checkbox';
 
 describe('pds-table-head', () => {
   it('renders', async () => {
@@ -224,5 +225,24 @@ describe('pds-table-head', () => {
 
       expect(checkboxLabel(page)).toBe('Tout sélectionner');
     });
+  });
+
+  it('keeps its select-all checkbox id when the head re-renders', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHead, PdsTable, PdsCheckbox],
+      html: '<pds-table selectable="true"><pds-table-head><pds-table-head-cell>Name</pds-table-head-cell></pds-table-head></pds-table>',
+    });
+    const head = page.root.querySelector('pds-table-head') as HTMLPdsTableHeadElement;
+    const inputId = () => head.shadowRoot.querySelector('pds-checkbox').shadowRoot.querySelector('input').id;
+    const initialId = inputId();
+
+    head.isSelected = true;
+    await page.waitForChanges();
+    expect(inputId()).toBe(initialId);
+
+    head.selectAllLabel = 'Select all members';
+    await page.waitForChanges();
+    expect(inputId()).toBe(initialId);
+    expect(initialId).not.toBe('');
   });
 });
