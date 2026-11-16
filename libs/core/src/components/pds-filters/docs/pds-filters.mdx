@@ -33,7 +33,7 @@ Filters are a row of popover triggers for narrowing a set of data. The `pds-filt
 - Always set `text`. The trigger's icons are hidden from screen readers, so a filter without `text` has no accessible name, and an `aria-label` on `pds-filter` doesn't reach the trigger.
 - The `selected` variant changes only how the trigger looks. Put the applied value in `text`, such as "Status: Published", so screen reader users hear which filters are on.
 - Give every control in the popover a label, such as `pds-checkbox`'s `label`.
-- The trigger is a button that reports `aria-expanded`, and Enter or Space opens and closes the popover. Focus stays on the trigger when the popover opens, and Tab moves into the popover's controls. Tabbing past the last control moves on to the next filter and leaves the popover open.
+- The trigger is a button that reports `aria-expanded`, so screen readers announce it as collapsed or expanded. It doesn't announce a menu or a dialog, because the popover is neither. The `clear` trigger opens nothing, so it's a plain button with no expanded state. Enter or Space opens and closes the popover. Focus stays on the trigger when the popover opens, and Tab moves into the popover's controls. Tabbing past the last control moves on to the next filter and leaves the popover open.
 - Escape closes the popover. Pressed on the trigger, focus stays there. Pressed on a control inside the popover, focus doesn't go back to the trigger: it falls back to the page body. Opening one filter closes any other open filter.
 
 ## Properties
