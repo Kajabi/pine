@@ -19,6 +19,13 @@ A tab inside `pds-tabs`. In panel mode, its `name` matches the `pds-tabpanel` it
 | `turboFrame`        | `turbo-frame`  | Navigation mode: the Turbo Frame to target. Maps to `data-turbo-frame` on the anchor, so a tab can swap a single frame (e.g. a page body) while leaving the rest of the page in place.                                                                                                                                                                                                                                                                 | `string`                                     | `undefined` |
 
 
+## Slots
+
+| Slot          | Description      |
+| ------------- | ---------------- |
+| `"(default)"` | The tab's label. |
+
+
 ----------------------------------------------
 
 
