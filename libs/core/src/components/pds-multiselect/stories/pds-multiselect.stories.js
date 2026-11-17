@@ -811,7 +811,7 @@ export const CustomTrigger = {
         >
           ${selected.length
             ? selected.map((label) => html`<pds-chip sentiment="subtle">${label.text}</pds-chip>`)
-            : html`<pds-icon name="add" size="small" aria-hidden="true"></pds-icon> Add label`}
+            : html`<pds-icon name="add" size="small"></pds-icon> Add label`}
         </button>
       </pds-multiselect>
     `;
