@@ -181,7 +181,8 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() maxHeight?: string;
 
   /**
-   * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
+   * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options; the
+   * `panel-search` field still filters them).
    * In filter mode, reopening the menu while the input still shows the label of the selected option temporarily lists
    * all options until you type (so you can switch to a different choice without clearing the field first).
    * @default 'filter'
