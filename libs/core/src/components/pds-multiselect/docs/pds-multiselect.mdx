@@ -519,20 +519,10 @@ For dynamic or async data, add a `group` field to each item in the `options` pro
 <DocCanvas
   mdxSource={{
     webComponent: `<pds-multiselect
-  id="grouped-options-select"
   component-id="grouped-options-select"
   label="Products"
   placeholder="Select products..."
-/>
-
-<script>
-  document.querySelector('#grouped-options-select').options = [
-    { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
-    { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
-    { id: 'nl-1', text: 'Weekly Digest', group: 'Newsletters' },
-    { id: 'nl-2', text: 'Product Updates', group: 'Newsletters' },
-  ];
-</script>`,
+></pds-multiselect>`,
     react: `const products = [
   { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
   { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
@@ -564,7 +554,7 @@ For dynamic or async data, add a `group` field to each item in the `options` pro
   </pds-multiselect>
 </DocCanvas>
 
-> **Note:** The live preview uses slotted `<optgroup>` markup, which renders the same groups. `options` is a JavaScript property with no attribute, so set it from a script or a framework binding.
+> **Note:** The live preview uses slotted `<optgroup>` markup, which renders the same groups. `options` is a JavaScript property with no attribute, so set it from a script or a framework binding, with each item's group in `group`, such as `{ id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' }`.
 
 ### Hidden Selected Items
 
@@ -836,7 +826,7 @@ The `pdsMultiselectDismiss` event fires when the dropdown is closed via the Esca
   </pds-multiselect>
 </DocCanvas>
 
-> **Note:** Open the console, then press Escape or click outside while the dropdown is open to see the dismiss event logged.
+> **Note:** The live preview has no listener. In a page with the snippet above, the script logs "Panel dismissed" to the console when you press Escape or click outside while the dropdown is open. The `id` on the multiselect is what the script selects; `component-id` doesn't set it.
 
 ### Open and Close Events
 
@@ -970,14 +960,14 @@ Fetch options from a remote API endpoint with `async-url`.
   label="Search Products"
   placeholder="Select..."
   async-url="/api/products"
-  debounce-ms="500"
-/>`,
+  debounce="500"
+></pds-multiselect>`,
     react: `<PdsMultiselect
   componentId="async-select"
   label="Search Products"
   placeholder="Select..."
   asyncUrl="/api/products"
-  debounceMs={500}
+  debounce={500}
 />`,
   }}
 >
@@ -1010,16 +1000,15 @@ Async options are fetched once and kept. After an option changes elsewhere, such
 
 For complex async scenarios (React Query, custom caching), manage data externally and pass options via prop.
 
+Set the `options` property from a script or a framework, as an array of `{ id, text }` objects, such as `[{ id: '1', text: 'Alice' }]`. It has no attribute, so markup alone can't set it. Listen for `pdsMultiselectSearch`, whose `detail.query` is the search text, debounced by `debounce`, to load the matching options, and for `pdsMultiselectChange` to follow the selection. The multiselect still filters the options you pass by their text, so an option whose text doesn't contain the search text isn't listed.
+
 <DocCanvas
   mdxSource={{
     webComponent: `<pds-multiselect
   component-id="consumer-async"
   label="Contacts"
   placeholder="Select..."
-  .options="[{id: '1', text: 'Alice'}, {id: '2', text: 'Bob'}]"
-  @pdsMultiselectSearch="handleSearch"
-  @pdsMultiselectChange="handleChange"
-/>`,
+></pds-multiselect>`,
     react: `<PdsMultiselect
   componentId="consumer-async"
   label="Contacts"
@@ -1041,7 +1030,7 @@ For complex async scenarios (React Query, custom caching), manage data externall
   </pds-multiselect>
 </DocCanvas>
 
-> **Note:** The live preview uses static options. In production, pass options via the `options` prop and listen to `pdsMultiselectSearch` events.
+> **Note:** The live preview uses static options. In production, set the `options` property and load options from `pdsMultiselectSearch`, as described above.
 
 ### With Create Option
 
@@ -1259,6 +1248,7 @@ The multiselect's own text defaults to English. Pass translated strings to `plac
 
 - Selected values are submitted as multiple entries with the same name (native `<select multiple>` behavior)
 - Works with `FormData` API
+- With `required` and nothing selected, the multiselect is invalid (`valueMissing`), so the form won't submit
 - To follow the user's changes, listen for `pdsMultiselectChange` (`onPdsMultiselectChange` in React) and read `event.detail.values`; see [Saving Changes](#saving-changes)
 - Resetting the form doesn't clear the multiselect: it keeps its selection. To clear it, call `clear()` from the form's `reset` event
 - For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs)
