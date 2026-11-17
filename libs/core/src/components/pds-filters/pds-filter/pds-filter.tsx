@@ -70,16 +70,14 @@ export class PdsFilter implements BasePdsProps {
   @State() isOpen = false;
 
   /**
-   * Emitted when the filter popover is opened, from the trigger or `showFilter()`. In browsers without the
-   * Popover API, `showFilter()` doesn't emit it. `detail` is the filter's `componentId`, `variant` and `text`.
-   * The `clear` variant doesn't emit it.
+   * Emitted when the filter popover is opened, from the trigger or `showFilter()`.
+   * `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
    */
   @Event() pdsFilterOpen: EventEmitter<PdsFilterOpenEventDetail>;
 
   /**
    * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it,
    * or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`.
-   * In browsers without the Popover API, `hideFilter()` doesn't emit it.
    * The `clear` variant doesn't emit it.
    */
   @Event() pdsFilterClose: EventEmitter<PdsFilterCloseEventDetail>;
@@ -128,6 +126,8 @@ export class PdsFilter implements BasePdsProps {
         this.popoverEl.style.display = 'none';
         this.popoverEl.classList.remove('is-open');
       }
+      // Removal hides a native popover without a toggle event. No pdsFilterClose: moving the filter isn't a close.
+      this.isOpen = false;
     }
   }
 
@@ -184,7 +184,7 @@ export class PdsFilter implements BasePdsProps {
 
   /**
    * Only a repeated close is skipped: the Escape and outside-click checks race the toggle event to report one close,
-   * while an open can follow a stale `isOpen` left by moving the element while it was open.
+   * while an open can follow a stale `isOpen` left when switching to the `clear` variant removes the open popover.
    */
   private setOpenState(open: boolean) {
     if (!open && !this.isOpen) return;
@@ -341,8 +341,7 @@ export class PdsFilter implements BasePdsProps {
   }
 
   /**
-   * Opens the filter popover programmatically. In browsers without the Popover API, it doesn't emit
-   * `pdsFilterOpen`, and Escape or a click outside doesn't close the popover it opened.
+   * Opens the filter popover programmatically.
    * Note: Clear variant does not support popover functionality.
    */
   @Method()
@@ -359,13 +358,13 @@ export class PdsFilter implements BasePdsProps {
         // Fallback for testing environment where showPopover is not available
         this.popoverEl.style.display = 'block';
         this.popoverEl.classList.add('is-open');
+        this.setOpenState(true);
       }
     }
   }
 
   /**
-   * Closes the filter popover programmatically. In browsers without the Popover API, it doesn't emit
-   * `pdsFilterClose`.
+   * Closes the filter popover programmatically.
    * Note: Clear variant does not support popover functionality.
    */
   @Method()
@@ -382,6 +381,7 @@ export class PdsFilter implements BasePdsProps {
         // Fallback for testing environment where hidePopover is not available
         this.popoverEl.style.display = 'none';
         this.popoverEl.classList.remove('is-open');
+        this.setOpenState(false);
       }
     }
   }

@@ -1609,7 +1609,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Closes the filter popover programmatically. In browsers without the Popover API, it doesn't emit `pdsFilterClose`. Note: Clear variant does not support popover functionality.
+          * Closes the filter popover programmatically. Note: Clear variant does not support popover functionality.
          */
         "hideFilter": () => Promise<void>;
         /**
@@ -1617,7 +1617,7 @@ export namespace Components {
          */
         "icon"?: string;
         /**
-          * Opens the filter popover programmatically. In browsers without the Popover API, it doesn't emit `pdsFilterOpen`, and Escape or a click outside doesn't close the popover it opened. Note: Clear variant does not support popover functionality.
+          * Opens the filter popover programmatically. Note: Clear variant does not support popover functionality.
          */
         "showFilter": () => Promise<void>;
         /**
@@ -5643,11 +5643,11 @@ declare namespace LocalJSX {
          */
         "onPdsFilterClear"?: (event: PdsFilterCustomEvent<PdsFilterClearEventDetail>) => void;
         /**
-          * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it, or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`. In browsers without the Popover API, `hideFilter()` doesn't emit it. The `clear` variant doesn't emit it.
+          * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it, or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
          */
         "onPdsFilterClose"?: (event: PdsFilterCustomEvent<PdsFilterCloseEventDetail>) => void;
         /**
-          * Emitted when the filter popover is opened, from the trigger or `showFilter()`. In browsers without the Popover API, `showFilter()` doesn't emit it. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
+          * Emitted when the filter popover is opened, from the trigger or `showFilter()`. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
          */
         "onPdsFilterOpen"?: (event: PdsFilterCustomEvent<PdsFilterOpenEventDetail>) => void;
         /**
