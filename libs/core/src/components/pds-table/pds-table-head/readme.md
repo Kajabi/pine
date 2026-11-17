@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property        | Attribute       | Description                                                         | Type      | Default     |
-| --------------- | --------------- | ------------------------------------------------------------------- | --------- | ----------- |
-| `background`    | `background`    | Adds a subtle background color to the table head.                   | `boolean` | `false`     |
-| `border`        | `border`        | Adds top and bottom borders to the table head.                      | `boolean` | `false`     |
-| `indeterminate` | `indeterminate` | Determines if the select all checkbox is in an indeterminate state. | `boolean` | `undefined` |
-| `isSelected`    | `is-selected`   | Determines if the select all checkbox is checked.                   | `boolean` | `undefined` |
+| Property         | Attribute          | Description                                                                                                                                                                                                                                                           | Type      | Default             |
+| ---------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------- |
+| `background`     | `background`       | Adds a subtle background color to the table head.                                                                                                                                                                                                                     | `boolean` | `false`             |
+| `border`         | `border`           | Adds top and bottom borders to the table head.                                                                                                                                                                                                                        | `boolean` | `false`             |
+| `indeterminate`  | `indeterminate`    | Determines if the select all checkbox is in an indeterminate state.                                                                                                                                                                                                   | `boolean` | `undefined`         |
+| `isSelected`     | `is-selected`      | Determines if the select all checkbox is checked.                                                                                                                                                                                                                     | `boolean` | `undefined`         |
+| `selectAllLabel` | `select-all-label` | Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty or whitespace-only value falls back to the default. Has no effect when the table sets `disableSelectAll`, which removes the select-all checkbox. | `string`  | `'Select All Rows'` |
 
 
 ## Events
