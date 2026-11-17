@@ -1330,9 +1330,21 @@ describe('pds-filter', () => {
       expect(close).not.toHaveBeenCalled();
     });
 
+    const fallbackPopover = () => {
+      const classes = new Set<string>();
+      return {
+        style: {},
+        classList: {
+          add: (name: string) => classes.add(name),
+          remove: (name: string) => classes.delete(name),
+          contains: (name: string) => classes.has(name),
+        },
+      } as unknown as HTMLElement;
+    };
+
     it('emits pdsFilterOpen and pdsFilterClose from showFilter and hideFilter without the Popover API', async () => {
       const { component, open, close } = await setup();
-      component.popoverEl = { style: {}, classList: { add: jest.fn(), remove: jest.fn() } } as unknown as HTMLElement;
+      component.popoverEl = fallbackPopover();
 
       await component.showFilter();
       expect(open).toHaveBeenCalledTimes(1);
@@ -1350,6 +1362,26 @@ describe('pds-filter', () => {
       await component.hideFilter();
 
       expect(close).not.toHaveBeenCalled();
+    });
+
+    it('emits pdsFilterOpen once when showFilter runs twice without the Popover API', async () => {
+      const { component, open } = await setup();
+      component.popoverEl = fallbackPopover();
+
+      await component.showFilter();
+      await component.showFilter();
+
+      expect(open).toHaveBeenCalledTimes(1);
+    });
+
+    it('emits pdsFilterOpen from showFilter without the Popover API while isOpen is stale', async () => {
+      const { component, open } = await setup();
+      component.isOpen = true;
+      component.popoverEl = fallbackPopover();
+
+      await component.showFilter();
+
+      expect(open).toHaveBeenCalledTimes(1);
     });
 
     it('emits pdsFilterOpen and pdsFilterClose once each when the toggle event opens and closes the popover', async () => {

@@ -609,6 +609,19 @@ describe('pds-filter without the Popover API', () => {
     expect(closeEventSpy).toHaveReceivedEventTimes(1);
   });
 
+  it('emits pdsFilterOpen once when showFilter runs twice', async () => {
+    const page = await newPageWithoutPopoverApi();
+    const filter = await page.find('#first');
+    const openEventSpy = await filter.spyOnEvent('pdsFilterOpen');
+
+    await filter.callMethod('showFilter');
+    await filter.callMethod('showFilter');
+    await settle(page);
+
+    expect(await isPopoverVisible(page, 'first')).toBe(true);
+    expect(openEventSpy).toHaveReceivedEventTimes(1);
+  });
+
   it('emits pdsFilterClose once from hideFilter and sets aria-expanded to false', async () => {
     const page = await newPageWithoutPopoverApi();
     await waitForTriggerVisible(page, '#first');
