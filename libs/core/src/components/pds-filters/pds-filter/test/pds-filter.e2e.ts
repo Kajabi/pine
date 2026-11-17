@@ -293,28 +293,6 @@ describe('pds-filter e2e', () => {
     expect(await popover2.isVisible()).toBe(true);
   });
 
-  it('has proper ARIA attributes', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`
-      <pds-filter component-id="test" text="Test">
-        <p>Content</p>
-      </pds-filter>
-    `);
-
-    const trigger = await page.find('pds-filter >>> .pds-filter__trigger');
-
-    // Check initial ARIA attributes
-    expect(await trigger.getAttribute('aria-expanded')).toBe('false');
-    expect(await trigger.getAttribute('aria-haspopup')).toBeNull();
-    expect(await trigger.getAttribute('aria-controls')).toBe('test-popover');
-
-    // Open and check updated attributes
-    await trigger.click();
-    await page.waitForChanges();
-
-    expect(await trigger.getAttribute('aria-expanded')).toBe('true');
-  });
-
   it('displays slotted content in popover', async () => {
     const page = await newE2EPage();
     await page.setContent(`

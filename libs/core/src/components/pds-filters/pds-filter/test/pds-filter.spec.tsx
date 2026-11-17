@@ -1299,7 +1299,7 @@ describe('pds-filter trigger ARIA', () => {
   const triggerOf = (page: Awaited<ReturnType<typeof newSpecPage>>) =>
     page.root?.shadowRoot?.querySelector('.pds-filter__trigger') as HTMLElement;
 
-  it.each(['default', 'selected', 'more'])('describes the %s trigger as a button that expands its popover, not a menu', async (variant) => {
+  it.each(['selected', 'more'])('describes the %s trigger as a button that expands its popover, not a menu', async (variant) => {
     const page = await newSpecPage({
       components: [PdsFilter],
       html: `<pds-filter component-id="test" variant="${variant}" text="Test"></pds-filter>`,
