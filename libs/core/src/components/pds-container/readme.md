@@ -14,6 +14,13 @@
 | `tag`      | `tag`      | Sets the semantic HTML tag rendered as the inner container element.                                                                                                                                                                              | `"article" \| "div" \| "main" \| "section"` | `'div'`     |
 
 
+## Slots
+
+| Slot          | Description                                  |
+| ------------- | -------------------------------------------- |
+| `"(default)"` | The content to display inside the container. |
+
+
 ## Shadow Parts
 
 | Part          | Description                          |
