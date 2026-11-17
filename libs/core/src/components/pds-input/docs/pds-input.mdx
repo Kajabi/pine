@@ -261,20 +261,20 @@ A prefix or suffix can be added to the input field to provide additional context
     react: `<PdsInput componentId="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
   <PdsIcon name="mail" slot="prefix"></PdsIcon>
   <PdsButton variant="unstyled" slot="suffix" iconOnly aria-label="Clear email">
-    <PdsIcon slot="start" aria-hidden="true" name="remove-circle"></PdsIcon>
+    <PdsIcon slot="start" name="remove-circle"></PdsIcon>
   </PdsButton>
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
   <pds-icon name="mail" slot="prefix"></pds-icon>
   <pds-button variant="unstyled" slot="suffix" icon-only aria-label="Clear email">
-    <pds-icon slot="start" aria-hidden="true" name="remove-circle"></pds-icon>
+    <pds-icon slot="start" name="remove-circle"></pds-icon>
   </pds-button>
 </pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-suffix-example" label="Email" type="email" value="frank@example.com">
     <pds-icon name="mail" slot="prefix"></pds-icon>
     <pds-button variant="unstyled" slot="suffix" icon-only aria-label="Clear email">
-      <pds-icon slot="start" aria-hidden="true" name="remove-circle"></pds-icon>
+      <pds-icon slot="start" name="remove-circle"></pds-icon>
     </pds-button>
   </pds-input>
 </DocCanvas>
@@ -339,7 +339,7 @@ The action slot allows you to add helpful content next to the input label, such 
     react: `<PdsInput componentId="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
   <PdsTooltip slot="action">
     <PdsButton variant="unstyled" aria-label="Help with account ID">
-      <PdsIcon name="question-circle" aria-hidden="true"></PdsIcon>
+      <PdsIcon name="question-circle"></PdsIcon>
     </PdsButton>
     <span slot="content">Find your account ID in your account page</span>
   </PdsTooltip>
@@ -347,7 +347,7 @@ The action slot allows you to add helpful content next to the input label, such 
     webComponent: `<pds-input component-id="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
   <pds-tooltip slot="action">
     <pds-button variant="unstyled" aria-label="Help with account ID">
-      <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+      <pds-icon name="question-circle"></pds-icon>
     </pds-button>
     <span slot="content">Find your account ID in your account page</span>
   </pds-tooltip>
@@ -356,7 +356,7 @@ The action slot allows you to add helpful content next to the input label, such 
   <pds-input component-id="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
     <pds-tooltip slot="action">
       <pds-button variant="unstyled" aria-label="Help with account ID">
-        <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+        <pds-icon name="question-circle"></pds-icon>
       </pds-button>
       <span slot="content">Find your account ID in your account page</span>
     </pds-tooltip>
