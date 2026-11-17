@@ -591,6 +591,58 @@ describe('pds-filter without the Popover API', () => {
     expect(await isPopoverVisible(page, 'first')).toBe(false);
     expect(closeEventSpy).toHaveReceivedEventTimes(1);
   });
+
+  it('emits pdsFilterOpen from showFilter, then closes on Escape, emitting pdsFilterClose once', async () => {
+    const page = await newPageWithoutPopoverApi();
+    const filter = await page.find('#first');
+    const openEventSpy = await filter.spyOnEvent('pdsFilterOpen');
+    const closeEventSpy = await filter.spyOnEvent('pdsFilterClose');
+
+    await filter.callMethod('showFilter');
+    await settle(page);
+    expect(await isPopoverVisible(page, 'first')).toBe(true);
+    expect(openEventSpy).toHaveReceivedEventTimes(1);
+
+    await page.keyboard.press('Escape');
+    await settle(page);
+    expect(await isPopoverVisible(page, 'first')).toBe(false);
+    expect(closeEventSpy).toHaveReceivedEventTimes(1);
+  });
+
+  it('emits pdsFilterClose once from hideFilter and sets aria-expanded to false', async () => {
+    const page = await newPageWithoutPopoverApi();
+    await waitForTriggerVisible(page, '#first');
+    const filter = await page.find('#first');
+    const closeEventSpy = await filter.spyOnEvent('pdsFilterClose');
+
+    await (await page.find('#first >>> .pds-filter__trigger')).click();
+    await settle(page);
+    await filter.callMethod('hideFilter');
+    await settle(page);
+
+    expect(await isPopoverVisible(page, 'first')).toBe(false);
+    expect(closeEventSpy).toHaveReceivedEventTimes(1);
+    expect(await (await page.find('#first >>> .pds-filter__trigger')).getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('opens from the trigger after an open filter moves', async () => {
+    const page = await newPageWithoutPopoverApi();
+    await waitForTriggerVisible(page, '#first');
+    await (await page.find('#first >>> .pds-filter__trigger')).click();
+    await settle(page);
+    await page.evaluate(() => document.body.appendChild(document.getElementById('first')));
+    await settle(page);
+
+    const filter = await page.find('#first');
+    const openEventSpy = await filter.spyOnEvent('pdsFilterOpen');
+    const closeEventSpy = await filter.spyOnEvent('pdsFilterClose');
+    await (await page.find('#first >>> .pds-filter__trigger')).click();
+    await settle(page);
+
+    expect(await isPopoverVisible(page, 'first')).toBe(true);
+    expect(openEventSpy).toHaveReceivedEventTimes(1);
+    expect(closeEventSpy).toHaveReceivedEventTimes(0);
+  });
 });
 
 describe('pds-filter moved in the page', () => {
@@ -598,7 +650,9 @@ describe('pds-filter moved in the page', () => {
     const page = await newE2EPage();
     await page.setContent(TWO_FILTERS);
     if (openBeforeMove) {
+      await waitForTriggerVisible(page, '#first');
       await (await page.find('#first >>> .pds-filter__trigger')).click();
+      await waitForPopoverOpen(page, '#first');
       await settle(page);
     }
     await page.evaluate(() => document.body.appendChild(document.getElementById('first')));
@@ -632,6 +686,26 @@ describe('pds-filter moved in the page', () => {
 
     eventSpies.forEach((eventSpy) => expect(eventSpy).toHaveReceivedEventTimes(0));
   });
+
+  it.each(['Escape', 'click outside'])(
+    'sets aria-expanded to false when an open filter moves, and emits no pdsFilterClose on a later %s',
+    async (dismiss) => {
+      const page = await newPageWithMovedFilter(true);
+      const closeEventSpy = await (await page.find('#first')).spyOnEvent('pdsFilterClose');
+
+      expect(await isPopoverVisible(page, 'first')).toBe(false);
+      expect(await ariaExpanded(page)).toBe('false');
+
+      if (dismiss === 'Escape') {
+        await page.keyboard.press('Escape');
+      } else {
+        await (await page.find('#outside')).click();
+      }
+      await settle(page);
+
+      expect(closeEventSpy).toHaveReceivedEventTimes(0);
+    },
+  );
 
   it('emits pdsFilterOpen when a filter moved while closed opens', async () => {
     const page = await newPageWithMovedFilter(false);

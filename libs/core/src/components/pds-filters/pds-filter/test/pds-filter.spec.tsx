@@ -1319,6 +1319,39 @@ describe('pds-filter', () => {
       expect(open).toHaveBeenCalledTimes(1);
     });
 
+    it('resets isOpen without emitting pdsFilterClose when an open filter disconnects', async () => {
+      const { component, close } = await setup();
+      component.isOpen = true;
+      component.popoverEl = { hidePopover: jest.fn(), removeEventListener: jest.fn() } as unknown as HTMLElement;
+
+      component.disconnectedCallback();
+
+      expect(component.isOpen).toBe(false);
+      expect(close).not.toHaveBeenCalled();
+    });
+
+    it('emits pdsFilterOpen and pdsFilterClose from showFilter and hideFilter without the Popover API', async () => {
+      const { component, open, close } = await setup();
+      component.popoverEl = { style: {}, classList: { add: jest.fn(), remove: jest.fn() } } as unknown as HTMLElement;
+
+      await component.showFilter();
+      expect(open).toHaveBeenCalledTimes(1);
+      expect(component.isOpen).toBe(true);
+
+      await component.hideFilter();
+      expect(close).toHaveBeenCalledTimes(1);
+      expect(component.isOpen).toBe(false);
+    });
+
+    it('emits no pdsFilterClose from hideFilter without the Popover API when the popover is already closed', async () => {
+      const { component, close } = await setup();
+      component.popoverEl = { style: {}, classList: { remove: jest.fn() } } as unknown as HTMLElement;
+
+      await component.hideFilter();
+
+      expect(close).not.toHaveBeenCalled();
+    });
+
     it('emits pdsFilterOpen and pdsFilterClose once each when the toggle event opens and closes the popover', async () => {
       const { component, open, close } = await setup();
 
