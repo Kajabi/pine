@@ -39,6 +39,13 @@ Type: `Promise<void>`
 
 
 
+## Slots
+
+| Slot          | Description          |
+| ------------- | -------------------- |
+| `"(default)"` | The toast's message. |
+
+
 ## Shadow Parts
 
 | Part        | Description                                                                      |

@@ -5,6 +5,7 @@ const TOAST_DISMISS_ANIMATION_MS = 300;
 
 /**
  * @part dismiss - Exposes the dismiss button for styling. Appears unless `dismissible` is `false`.
+ * @slot (default) - The toast's message.
  */
 @Component({
   tag: 'pds-toast',
