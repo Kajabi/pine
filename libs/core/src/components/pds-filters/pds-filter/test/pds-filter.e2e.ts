@@ -21,6 +21,25 @@ const settle = async (page: E2EPage) => {
 const isPopoverVisible = async (page: E2EPage, id: string) =>
   (await page.find(`#${id} >>> .pds-filter__popover`)).isVisible();
 
+// The trigger fades in on hydration, and focus() or a click on it does nothing until it's visible.
+const waitForTriggerVisible = (page: E2EPage, filter = 'pds-filter') =>
+  page.waitForFunction(
+    (selector: string) => {
+      const trigger = document.querySelector(selector)?.shadowRoot?.querySelector('.pds-filter__trigger');
+      return trigger != null && getComputedStyle(trigger).visibility === 'visible';
+    },
+    { timeout: 5000 },
+    filter,
+  );
+
+const waitForPopoverOpen = (page: E2EPage, filter = 'pds-filter') =>
+  page.waitForFunction(
+    (selector: string) =>
+      document.querySelector(selector)?.shadowRoot?.querySelector('.pds-filter__popover')?.matches(':popover-open') === true,
+    { timeout: 5000 },
+    filter,
+  );
+
 describe('pds-filter e2e', () => {
   it('renders', async () => {
     const page = await newE2EPage();
@@ -360,6 +379,7 @@ describe('pds-filter open and close events', () => {
     `);
     const first = await page.find('pds-filter[component-id="first"]');
     const second = await page.find('pds-filter[component-id="second"]');
+    await waitForTriggerVisible(page, 'pds-filter[component-id="first"]');
     return {
       page,
       first,
@@ -413,6 +433,7 @@ describe('pds-filter open and close events', () => {
   ])('emits pdsFilterClose once when the popover closes from %s', async (_label, close) => {
     const filter = await setup();
     await filter.firstTrigger.click();
+    await waitForPopoverOpen(filter.page, 'pds-filter[component-id="first"]');
     await settle(filter.page);
 
     await close(filter);
@@ -498,6 +519,7 @@ describe('pds-filter with a Firefox user agent', () => {
     const closeEventSpy = await filter.spyOnEvent('pdsFilterClose');
 
     await filter.callMethod('showFilter');
+    await waitForPopoverOpen(page, '#first');
     await settle(page);
     await page.keyboard.press('Escape');
     await settle(page);
@@ -655,9 +677,11 @@ describe('pds-filter focus after Escape', () => {
       <div style="margin-top: 400px"><input id="outside" aria-label="Outside" /></div>
     `);
 
+    await waitForTriggerVisible(page);
     const trigger = await page.find('pds-filter >>> .pds-filter__trigger');
     await trigger.focus();
     await page.keyboard.press('Enter');
+    await waitForPopoverOpen(page);
     await page.waitForChanges();
 
     return page;
@@ -769,6 +793,14 @@ describe('pds-filter focus after Escape', () => {
           .focus(),
       );
       await page.keyboard.press('Enter');
+      await page.waitForFunction(
+        () =>
+          (window as HostWindow).filterHostRoot
+            .querySelector('pds-filter')!
+            .shadowRoot!.querySelector('.pds-filter__popover')!
+            .matches(':popover-open'),
+        { timeout: 5000 },
+      );
       await page.waitForChanges();
       await page.keyboard.press('Tab');
 
