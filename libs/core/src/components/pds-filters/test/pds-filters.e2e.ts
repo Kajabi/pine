@@ -185,11 +185,11 @@ describe('pds-filters e2e', () => {
     // Both triggers should be focusable and have proper ARIA
     await trigger1.focus();
     expect(await trigger1.getAttribute('aria-expanded')).toBe('false');
-    expect(await trigger1.getAttribute('aria-haspopup')).toBe('true');
+    expect(await trigger1.getAttribute('aria-haspopup')).toBeNull();
 
     await trigger2.focus();
     expect(await trigger2.getAttribute('aria-expanded')).toBe('false');
-    expect(await trigger2.getAttribute('aria-haspopup')).toBe('true');
+    expect(await trigger2.getAttribute('aria-haspopup')).toBeNull();
 
     // Keyboard navigation should work
     await page.keyboard.press('Tab'); // Should move focus

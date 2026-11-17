@@ -991,4 +991,52 @@ describe('pds-table accessibility', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  describe('selection checkbox names', () => {
+    const selectableTable = (headAttributes: string, rowAttributes: [string, string]) => `
+      <pds-table selectable component-id="people" aria-label="People">
+        <pds-table-head ${headAttributes}>
+          <pds-table-head-cell>Name</pds-table-head-cell>
+          <pds-table-head-cell>Email</pds-table-head-cell>
+        </pds-table-head>
+        <pds-table-body>
+          <pds-table-row ${rowAttributes[0]}>
+            <pds-table-cell>Jane Doe</pds-table-cell>
+            <pds-table-cell>jane@example.com</pds-table-cell>
+          </pds-table-row>
+          <pds-table-row ${rowAttributes[1]}>
+            <pds-table-cell>John Roe</pds-table-cell>
+            <pds-table-cell>john@example.com</pds-table-cell>
+          </pds-table-row>
+        </pds-table-body>
+      </pds-table>
+    `;
+
+    const checkboxNames = async (page) => {
+      const tree = await page.accessibility.snapshot();
+      const find = (node) => [node.role === 'checkbox' ? node.name : null, ...(node.children ?? []).flatMap(find)].filter(Boolean);
+      return find(tree);
+    };
+
+    it('names the select-all and row checkboxes "Select All Rows" and "Select Row" by default', async () => {
+      const page = await newE2EPage();
+      await page.setContent(selectableTable('', ['', '']));
+
+      expect(await checkboxNames(page)).toEqual(['Select All Rows', 'Select Row', 'Select Row']);
+      expect(formatViolations(await runAxe(page))).toBe('');
+    });
+
+    it('names them from select-all-label and each row\'s select-label', async () => {
+      const page = await newE2EPage();
+      await page.setContent(
+        selectableTable('select-all-label="Seleccionar todas las filas"', [
+          'select-label="Seleccionar Jane Doe"',
+          'select-label="Seleccionar John Roe"',
+        ]),
+      );
+
+      expect(await checkboxNames(page)).toEqual(['Seleccionar todas las filas', 'Seleccionar Jane Doe', 'Seleccionar John Roe']);
+      expect(formatViolations(await runAxe(page))).toBe('');
+    });
+  });
 });

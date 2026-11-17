@@ -3,6 +3,8 @@ import { Component, Element, Host, h, Event, EventEmitter, Prop, State } from '@
 import { CheckboxChangeEventDetail } from '../../pds-checkbox/checkbox-interface';
 import { closest } from '../../../utils/closest';
 
+const DEFAULT_SELECT_LABEL = 'Select Row';
+
 /**
  * @part row - Set on the `pds-table-row` element itself, so `::part(row)` matches it only from a shadow root that contains it. Style `pds-table-row` directly instead.
  * @part row-checkbox - Exposes the row's selection checkbox for styling. Appears only when the table is `selectable`.
@@ -17,6 +19,7 @@ export class PdsTableRow {
   private tableRef: HTMLPdsTableElement;
   private observer: MutationObserver | null = null;
   private bodyObserver: MutationObserver | null = null;
+  private checkboxId: string;
 
   /**
     * Determines if the row selected is in an indeterminate state.
@@ -27,6 +30,14 @@ export class PdsTableRow {
    * Determines if the table row is currently selected.
    */
   @Prop({ mutable: true }) isSelected?: boolean;
+
+  /**
+   * Accessible label for the row's selection checkbox. Pass a translated string to localize it;
+   * defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says
+   * which row it selects. An empty or whitespace-only value falls back to the default.
+   * @defaultValue 'Select Row'
+   */
+  @Prop() selectLabel = 'Select Row';
 
   /**
    * Determines if the row should have a divider border.
@@ -96,6 +107,8 @@ export class PdsTableRow {
   }
 
   componentWillLoad() {
+    this.checkboxId = this.generateUniqueId();
+
     // Handle initial selection state
     if (this.isSelected) {
       this.handleSelect(this.isSelected);
@@ -194,6 +207,11 @@ export class PdsTableRow {
     return uniqueId;
   }
 
+  private checkboxLabel(): string {
+    const label = this.selectLabel;
+    return typeof label === 'string' && label.trim() !== '' ? label : DEFAULT_SELECT_LABEL;
+  }
+
   render() {
     return (
       <Host
@@ -204,10 +222,10 @@ export class PdsTableRow {
         {this.tableRef && this.tableRef.selectable && (
           <pds-table-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : 'checkbox-cell'} class={this.tableRef.selectable ? 'has-checkbox' : ''} >
             <pds-checkbox
-              componentId={this.generateUniqueId()}
+              componentId={this.checkboxId}
               onPdsCheckboxChange={this.handleCheckboxChange}
               indeterminate={this.indeterminate}
-              label={"Select Row"}
+              label={this.checkboxLabel()}
               hideLabel={true}
               checked={this.isSelected}
               part="row-checkbox"

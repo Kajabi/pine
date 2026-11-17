@@ -622,8 +622,7 @@ export class PdsFilter implements BasePdsProps {
           onKeyDown={this.variant === 'clear' ? this.handleKeyDown : undefined}
           onClick={(event) => this.handleClick(event)}
           part="button"
-          aria-expanded={this.isOpen ? 'true' : 'false'}
-          aria-haspopup={this.variant !== 'clear' ? 'true' : undefined}
+          aria-expanded={this.variant !== 'clear' ? (this.isOpen ? 'true' : 'false') : undefined}
           aria-controls={this.variant !== 'clear' ? `${this.componentId}-popover` : undefined}
         >
           <span class="pds-filter__button-content" part="button-content">

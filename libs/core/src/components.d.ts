@@ -2754,6 +2754,11 @@ export namespace Components {
           * @defaultValue false
          */
         "isSelected": boolean;
+        /**
+          * Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty or whitespace-only value falls back to the default. Has no effect when the table sets `disableSelectAll`, which removes the select-all checkbox.
+          * @defaultValue 'Select All Rows'
+         */
+        "selectAllLabel": string;
     }
     interface PdsTableHeadCell {
         /**
@@ -2791,6 +2796,11 @@ export namespace Components {
           * Determines if the table row is currently selected.
          */
         "isSelected"?: boolean;
+        /**
+          * Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default.
+          * @defaultValue 'Select Row'
+         */
+        "selectLabel": string;
     }
     /**
      * @lightDom renders-markup
@@ -6867,6 +6877,11 @@ declare namespace LocalJSX {
           * Emitted when the user checks or unchecks the select-all checkbox, carrying the new state as `isSelected`. `pds-table` then sets `isSelected` on every row, and the rows don't emit `pdsTableRowSelected`. A head that starts with `isSelected` also emits it on load.
          */
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
+        /**
+          * Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty or whitespace-only value falls back to the default. Has no effect when the table sets `disableSelectAll`, which removes the select-all checkbox.
+          * @defaultValue 'Select All Rows'
+         */
+        "selectAllLabel"?: string;
     }
     interface PdsTableHeadCell {
         /**
@@ -6899,6 +6914,11 @@ declare namespace LocalJSX {
           * Emitted when the user checks or unchecks the row's checkbox, carrying the new state as `isSelected` and the row's current position in `pds-table-body` as `rowIndex`, which changes when the table is sorted. A row that starts with `isSelected` also emits it on load.  This event will not emit when programmatically setting the `isSelected` property, or when select all changes the row.
          */
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
+        /**
+          * Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default.
+          * @defaultValue 'Select Row'
+         */
+        "selectLabel"?: string;
     }
     /**
      * @lightDom renders-markup
@@ -7815,6 +7835,7 @@ declare namespace LocalJSX {
         "isSelected": boolean;
         "border": boolean;
         "background": boolean;
+        "selectAllLabel": string;
     }
     interface PdsTableHeadCellAttributes {
         "cellAlign": 'start' | 'center' | 'end' | 'justify';
@@ -7824,6 +7845,7 @@ declare namespace LocalJSX {
     interface PdsTableRowAttributes {
         "indeterminate": boolean;
         "isSelected": boolean;
+        "selectLabel": string;
     }
     interface PdsTabpanelAttributes {
         "name": string;
