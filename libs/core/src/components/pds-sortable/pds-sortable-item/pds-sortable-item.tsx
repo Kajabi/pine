@@ -8,6 +8,7 @@ import { handle as handleIcon } from '@pine-ds/icons/icons';
 const GRABBED_CLASS = 'pds-sortable-item--grabbed';
 /**
  * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered when `enable-actions` is set.
+ * @slot (default) - The item's content.
  * @lightDom renders-markup
  */
 @Component({
