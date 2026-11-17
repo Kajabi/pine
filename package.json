@@ -34,7 +34,7 @@
     "@nx/devkit": "20.4.6",
     "@nx/js": "20.4.6",
     "@size-limit/file": "^11.1.6",
-    "@storybook/addon-docs": "^10.4.2",
+    "@storybook/addon-docs": "^10.6.7",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.15.24",
     "@swc/helpers": "~0.5.17",
