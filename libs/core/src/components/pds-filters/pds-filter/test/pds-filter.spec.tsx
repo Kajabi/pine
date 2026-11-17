@@ -159,7 +159,7 @@ describe('pds-filter', () => {
 
     const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger?.getAttribute('aria-expanded')).toBe('false');
-    expect(trigger?.getAttribute('aria-haspopup')).toBe('true');
+    expect(trigger?.getAttribute('aria-haspopup')).toBeNull();
     expect(trigger?.getAttribute('aria-controls')).toBe('test-popover');
   });
 
@@ -170,7 +170,7 @@ describe('pds-filter', () => {
     });
 
     const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
-    expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger?.getAttribute('aria-expanded')).toBeNull();
     expect(trigger?.getAttribute('aria-haspopup')).toBeNull();
     expect(trigger?.getAttribute('aria-controls')).toBeNull();
   });
@@ -1292,5 +1292,37 @@ describe('pds-filter truncation', () => {
     await page.waitForChanges();
 
     expect(filter.shadowRoot.querySelector('.pds-filter__button-text')?.textContent).toBe('Long filter text');
+  });
+});
+
+describe('pds-filter trigger ARIA', () => {
+  const triggerOf = (page: Awaited<ReturnType<typeof newSpecPage>>) =>
+    page.root?.shadowRoot?.querySelector('.pds-filter__trigger') as HTMLElement;
+
+  it.each(['selected', 'more'])('describes the %s trigger as a button that expands its popover, not a menu', async (variant) => {
+    const page = await newSpecPage({
+      components: [PdsFilter],
+      html: `<pds-filter component-id="test" variant="${variant}" text="Test"></pds-filter>`,
+    });
+
+    const trigger = triggerOf(page);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger.getAttribute('aria-controls')).toBe('test-popover');
+    expect(trigger.hasAttribute('aria-haspopup')).toBe(false);
+  });
+
+  it('drops aria-expanded when the variant changes to clear, and restores it when it changes back', async () => {
+    const page = await newSpecPage({
+      components: [PdsFilter],
+      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+    });
+
+    page.root!.variant = 'clear';
+    await page.waitForChanges();
+    expect(triggerOf(page).hasAttribute('aria-expanded')).toBe(false);
+
+    page.root!.variant = 'default';
+    await page.waitForChanges();
+    expect(triggerOf(page).getAttribute('aria-expanded')).toBe('false');
   });
 });

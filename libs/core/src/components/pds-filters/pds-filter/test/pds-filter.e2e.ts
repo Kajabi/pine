@@ -293,28 +293,6 @@ describe('pds-filter e2e', () => {
     expect(await popover2.isVisible()).toBe(true);
   });
 
-  it('has proper ARIA attributes', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`
-      <pds-filter component-id="test" text="Test">
-        <p>Content</p>
-      </pds-filter>
-    `);
-
-    const trigger = await page.find('pds-filter >>> .pds-filter__trigger');
-
-    // Check initial ARIA attributes
-    expect(await trigger.getAttribute('aria-expanded')).toBe('false');
-    expect(await trigger.getAttribute('aria-haspopup')).toBe('true');
-    expect(await trigger.getAttribute('aria-controls')).toBe('test-popover');
-
-    // Open and check updated attributes
-    await trigger.click();
-    await page.waitForChanges();
-
-    expect(await trigger.getAttribute('aria-expanded')).toBe('true');
-  });
-
   it('displays slotted content in popover', async () => {
     const page = await newE2EPage();
     await page.setContent(`
@@ -459,6 +437,119 @@ describe('pds-filter truncation', () => {
 
   it('has no axe violations while the text is clipped', async () => {
     const page = await clippedFilter();
+
+    expect(formatViolations(await runAxe(page))).toBe('');
+  });
+});
+
+describe('pds-filter trigger ARIA', () => {
+  const BAR = `
+    <pds-filter component-id="status" variant="default" text="Status"><button>Published</button></pds-filter>
+    <pds-filter component-id="product" variant="selected" text="Product: Course"><button>Course</button></pds-filter>
+    <pds-filter component-id="more" variant="more" text="More filters"><button>Archived</button></pds-filter>
+    <pds-filter component-id="clear" variant="clear" text="Clear filters"></pds-filter>
+    <button id="outside">Outside</button>
+  `;
+
+  const triggerSelector = (componentId: string) => `pds-filter[component-id="${componentId}"] >>> .pds-filter__trigger`;
+
+  const triggerAxNode = async (page: E2EPage, componentId: string) => {
+    const trigger = await page.evaluateHandle(
+      (id) => document.querySelector(`pds-filter[component-id="${id}"]`)?.shadowRoot?.querySelector('button') as HTMLElement,
+      componentId,
+    );
+    return page.accessibility.snapshot({ root: trigger, interestingOnly: false });
+  };
+
+  const popoverState = (page: E2EPage, componentId: string) =>
+    page.$eval(`pds-filter[component-id="${componentId}"]`, (host) => ({
+      expanded: host.shadowRoot.querySelector('button').getAttribute('aria-expanded'),
+      open: host.shadowRoot.querySelector('.pds-filter__popover').matches(':popover-open'),
+    }));
+
+  it.each(['status', 'product', 'more'])('announces the %s trigger as a collapsed or expanded button, not a menu', async (componentId) => {
+    const page = await newE2EPage();
+    await page.setContent(BAR);
+
+    const closed = await triggerAxNode(page, componentId);
+    expect(closed?.role).toBe('button');
+    expect(closed?.expanded).toBe(false);
+    expect(closed?.haspopup).toBeUndefined();
+
+    await (await page.find(triggerSelector(componentId))).click();
+    await page.waitForChanges();
+
+    const open = await triggerAxNode(page, componentId);
+    expect(open?.expanded).toBe(true);
+    expect(open?.haspopup).toBeUndefined();
+  });
+
+  it('announces the clear trigger as a plain button, before and after a click', async () => {
+    const page = await newE2EPage();
+    await page.setContent(BAR);
+
+    const before = await triggerAxNode(page, 'clear');
+    expect(before?.role).toBe('button');
+    expect(before?.name).toBe('Clear filters');
+    expect(before?.expanded).toBeUndefined();
+    expect(before?.haspopup).toBeUndefined();
+
+    await (await page.find(triggerSelector('clear'))).click();
+    await page.waitForChanges();
+
+    const after = await triggerAxNode(page, 'clear');
+    expect(after?.expanded).toBeUndefined();
+    expect(after?.haspopup).toBeUndefined();
+  });
+
+  it('keeps aria-expanded in step with the popover on every open and close path', async () => {
+    const page = await newE2EPage();
+    await page.setContent(BAR);
+    const status = await page.find('pds-filter[component-id="status"]');
+    const statusTrigger = await page.find(triggerSelector('status'));
+
+    await statusTrigger.click();
+    await page.waitForChanges();
+    expect(await popoverState(page, 'status')).toEqual({ expanded: 'true', open: true });
+
+    await statusTrigger.click();
+    await page.waitForChanges();
+    expect(await popoverState(page, 'status')).toEqual({ expanded: 'false', open: false });
+
+    await statusTrigger.click();
+    await page.waitForChanges();
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    expect(await popoverState(page, 'status')).toEqual({ expanded: 'false', open: false });
+
+    await statusTrigger.click();
+    await page.waitForChanges();
+    await page.click('#outside');
+    await page.waitForChanges();
+    expect(await popoverState(page, 'status')).toEqual({ expanded: 'false', open: false });
+
+    await status.callMethod('showFilter');
+    await page.waitForChanges();
+    expect(await popoverState(page, 'status')).toEqual({ expanded: 'true', open: true });
+
+    await status.callMethod('hideFilter');
+    await page.waitForChanges();
+    expect(await popoverState(page, 'status')).toEqual({ expanded: 'false', open: false });
+
+    await statusTrigger.click();
+    await page.waitForChanges();
+    await (await page.find(triggerSelector('product'))).click();
+    await page.waitForChanges();
+    expect(await popoverState(page, 'status')).toEqual({ expanded: 'false', open: false });
+    expect(await popoverState(page, 'product')).toEqual({ expanded: 'true', open: true });
+  });
+
+  it('has no axe violations with every variant, while a popover is open', async () => {
+    const page = await newE2EPage();
+    await page.setContent(BAR);
+
+    await (await page.find(triggerSelector('more'))).click();
+    await page.waitForChanges();
 
     expect(formatViolations(await runAxe(page))).toBe('');
   });
