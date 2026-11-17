@@ -12,6 +12,13 @@
 | `border` | `border`  | The border style for the content area. When not explicitly set, automatically determined based on scroll state. | `"both" \| "bottom" \| "none" \| "top"` | `'none'` |
 
 
+## Slots
+
+| Slot          | Description               |
+| ------------- | ------------------------- |
+| `"(default)"` | The modal's main content. |
+
+
 ----------------------------------------------
 
 

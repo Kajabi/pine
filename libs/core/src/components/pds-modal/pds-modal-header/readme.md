@@ -9,6 +9,13 @@
 
 Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
 
+## Slots
+
+| Slot          | Description                          |
+| ------------- | ------------------------------------ |
+| `"(default)"` | The modal's title and close control. |
+
+
 ----------------------------------------------
 
 
