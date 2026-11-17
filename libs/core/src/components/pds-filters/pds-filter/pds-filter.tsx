@@ -356,9 +356,11 @@ export class PdsFilter implements BasePdsProps {
         this.popoverEl.showPopover();
       } catch (error) {
         // Fallback for testing environment where showPopover is not available
+        // Like native showPopover(), a repeat call emits nothing. Ask the popover, because isOpen can be stale.
+        const wasShowing = this.isPopoverShowing();
         this.popoverEl.style.display = 'block';
         this.popoverEl.classList.add('is-open');
-        this.setOpenState(true);
+        if (!wasShowing) this.setOpenState(true);
       }
     }
   }
