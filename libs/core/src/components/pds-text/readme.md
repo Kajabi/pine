@@ -20,6 +20,13 @@
 | `weight`     | `weight`     | Sets the font weight.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `"bold" \| "extra-light" \| "light" \| "medium" \| "regular" \| "semibold"`                              | `undefined` |
 
 
+## Slots
+
+| Slot          | Description          |
+| ------------- | -------------------- |
+| `"(default)"` | The text to display. |
+
+
 ## Shadow Parts
 
 | Part        | Description                |

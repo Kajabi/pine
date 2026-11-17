@@ -9,6 +9,7 @@ const textsUsingWrapper = new WeakMap<HTMLElement, () => void>();
 
 /**
  * @part content - The text content container
+ * @slot (default) - The text to display.
  */
 @Component({
   tag: 'pds-text',
