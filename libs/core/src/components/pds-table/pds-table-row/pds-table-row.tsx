@@ -8,6 +8,7 @@ const DEFAULT_SELECT_LABEL = 'Select Row';
 /**
  * @part row - Set on the `pds-table-row` element itself, so `::part(row)` matches it only from a shadow root that contains it. Style `pds-table-row` directly instead.
  * @part row-checkbox - Exposes the row's selection checkbox for styling. Appears only when the table is `selectable`.
+ * @slot (default) - The row's cells: `pds-table-cell` elements.
  */
 @Component({
   tag: 'pds-table-row',

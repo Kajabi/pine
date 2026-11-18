@@ -3,6 +3,7 @@ import { HostStylingKeeper } from '@utils/attributes';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
+ * @slot (default) - The tab's label.
  * @lightDom renders-markup
  */
 @Component({

@@ -23,6 +23,13 @@
 | `pdsTableSelectAll` | Emitted when the user checks or unchecks the select-all checkbox, carrying the new state as `isSelected`. `pds-table` then sets `isSelected` on every row, and the rows don't emit `pdsTableRowSelected`. A head that starts with `isSelected` also emits it on load. | `CustomEvent<{ isSelected: boolean; }>` |
 
 
+## Slots
+
+| Slot          | Description                                         |
+| ------------- | --------------------------------------------------- |
+| `"(default)"` | The column headers: `pds-table-head-cell` elements. |
+
+
 ## Shadow Parts
 
 | Part                    | Description                                                                                                                                                 |
