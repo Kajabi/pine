@@ -109,7 +109,7 @@ import { star } from '@pine-ds/icons/icons';
 
 Give an icon an `aria-label` only when it carries meaning on its own, such as a status icon with no text beside it. An icon in an icon-only button doesn't need one: name the button instead, as in the example above. Don't add `aria-hidden` to an icon you name, because `pds-icon` keeps it and the icon stays hidden.
 
-Before `@pine-ds/icons` 10.8.1, `pds-icon` labelled itself from its `name`. On those versions, add `aria-hidden="true"` to decorative icons. See <pds-link href="../?path=/docs/components-icon--docs">Icon</pds-link> for the full rule.
+Before `@pine-ds/icons` 10.8.1, `pds-icon` labelled itself from its `name`. Add `aria-hidden="true"` to decorative icons only on `@pine-ds/core` earlier than 4.9.1, or on `@pine-ds/react` earlier than 4.12.0 with `@pine-ds/icons` earlier than 10.8.1 installed. See <pds-link href="../?path=/docs/components-icon--docs#accessibility">Icon</pds-link> for the full rule.
 
 ### Landmark Roles
 
