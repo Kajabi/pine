@@ -31,6 +31,7 @@
     "**/*.stories.ts",
     "**/*.stories.tsx",
     "scripts/custom-elements",
+    "scripts/docs-content",
     "**/stories/_helpers/**/*"
   ]
 }
