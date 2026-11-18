@@ -2,21 +2,25 @@ import GithubSlugger from 'github-slugger';
 import { mdxToMarkdown } from 'mdast-util-mdx';
 import { toMarkdown } from 'mdast-util-to-markdown';
 import { toString } from 'mdast-util-to-string';
+import path from 'node:path';
 import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import { toId } from 'storybook/internal/csf';
 import { unified } from 'unified';
 
-export const SCHEMA_VERSION = 1;
+/** Repo-relative path of @pine-ds/core; every page's `file` starts with it. */
+export const CORE_ROOT = 'libs/core';
+
+const SCHEMA_VERSION = 1;
+const COMPONENTS_DIR = `${CORE_ROOT}/src/components`;
+const STATUSES = ['stable', 'beta', 'deprecated'];
+const UNWRAPPED_ELEMENTS = new Set(['div', 'span', 'p', 'pds-box', 'pds-text']);
+const DROPPED_ELEMENTS = new Set(['Meta', 'Controls', 'Story', 'StatusBadge', 'img']);
 
 const mdxParser = unified().use(remarkParse).use(remarkMdx).freeze();
 
 export const parseMdx = (source) => mdxParser.parse(source);
-
-const STATUSES = ['stable', 'beta', 'deprecated'];
-const UNWRAPPED_ELEMENTS = new Set(['div', 'span', 'p', 'pds-box', 'pds-text']);
-const DROPPED_ELEMENTS = new Set(['Meta', 'Controls', 'Story', 'StatusBadge', 'img']);
 
 const markdownOptions = {
   bullet: '-',
@@ -48,6 +52,7 @@ function tableToMarkdown(node, _parent, state, info) {
   return [rows[0], separator, ...rows.slice(1)].join('\n');
 }
 
+const compareStrings = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const isJsx = (node) => node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement';
 const attribute = (node, name) => node?.attributes?.find((a) => a.type === 'mdxJsxAttribute' && a.name === name);
 const attributeString = (node, name) => {
@@ -55,7 +60,6 @@ const attributeString = (node, name) => {
   return typeof value === 'string' ? value : undefined;
 };
 const attributeExpression = (node, name) => attribute(node, name)?.value?.data?.estree?.body?.[0]?.expression;
-const lineOf = (node) => node.position?.start.line;
 
 function staticString(expression) {
   if (expression?.type === 'Literal' && typeof expression.value === 'string') return expression.value;
@@ -84,11 +88,70 @@ function headingText(node) {
 /** The text Storybook's rehype-slug reads to make a heading's anchor. */
 const slugText = (heading) => toString(heading, { includeImageAlt: false });
 
+/**
+ * Slugs every heading in page order, the way rehype-slug does in Storybook, and stores the slug on the
+ * heading node so the section tree and the link checks read the same value.
+ */
+function slugHeadings(tree) {
+  const slugger = new GithubSlugger();
+  const slugs = new Set();
+  const visit = (node) => {
+    if (node.type === 'heading') {
+      const slug = slugger.slug(slugText(node));
+      node.data = { ...node.data, slug };
+      slugs.add(slug);
+    }
+    node.children?.forEach(visit);
+  };
+  visit(tree);
+  return slugs;
+}
+
+function storiesImports(tree) {
+  const imports = new Map();
+  for (const node of tree.children) {
+    if (node.type !== 'mdxjsEsm') continue;
+    for (const statement of node.data?.estree?.body ?? []) {
+      if (statement.type !== 'ImportDeclaration' || !/\.stories\.[jt]sx?$/.test(statement.source.value)) continue;
+      for (const specifier of statement.specifiers) imports.set(specifier.local.name, statement.source.value);
+    }
+  }
+  return imports;
+}
+
 function storybookLinkTarget(href) {
   const url = new URL(href, 'https://storybook.invalid/docs-root/');
   const pathParam = url.searchParams.get('path') ?? url.pathname;
   if (!pathParam.startsWith('/docs/')) return undefined;
   return { id: pathParam.slice('/docs/'.length), hash: url.hash.slice(1) };
+}
+
+function body(nodes, title, sectionSlug) {
+  const examples = [];
+  const embeds = [];
+  const content = [];
+  let prose = [];
+  for (const node of nodes) {
+    if (node.type === 'docCanvas') {
+      examples.push({ sectionSlug, title, prose: toMd(prose), webComponent: node.webComponent, react: node.react });
+      content.push({ type: 'example', index: examples.length - 1 });
+      prose = [];
+    } else if (node.type === 'embed') {
+      embeds.push(node.embed);
+    } else {
+      content.push(node);
+      prose.push(node);
+    }
+  }
+  return { markdown: toMd(content), examples, embeds };
+}
+
+function roleOf(name, parentName) {
+  if (parentName === null && ['guidelines', 'properties', 'examples'].includes(name)) return name;
+  if (parentName === 'guidelines' && name === 'when to use') return 'when-to-use';
+  if (parentName === 'guidelines' && name === 'when not to use') return 'when-not-to-use';
+  if (name === 'accessibility') return 'accessibility';
+  return null;
 }
 
 /**
@@ -101,21 +164,10 @@ function storybookLinkTarget(href) {
  * @param {(fromFile: string, specifier: string) => { file: string, source: string }} input.readStories Reads a stories file a page imports.
  * @param {string} input.version
  * @param {string | null} input.commit
- * @param {string} [input.coreRoot] Repo-relative path of @pine-ds/core.
  */
-export function buildDocsContent({ pages, components, statusManifest, readStories, version, commit, coreRoot = 'libs/core' }) {
+export function buildDocsContent({ pages, components, statusManifest, readStories, version, commit }) {
   const warnings = [];
-  const warn = (file, node, message) => warnings.push(`${file}${node && lineOf(node) ? `:${lineOf(node)}` : ''}: ${message}`);
   const csfCache = new Map();
-
-  const sorted = [...pages].sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0));
-  const parsed = sorted.map((page) => {
-    const tree = parseMdx(page.source);
-    const stories = storiesImports(tree, page.file);
-    const meta = storybookMeta(tree, page.file, stories);
-    return { ...page, tree, stories, ...meta, slugs: headingSlugs(tree) };
-  });
-  const pagesById = new Map(parsed.map((page) => [page.storybookId, page]));
 
   function loadStoriesFile(fromFile, specifier) {
     const key = `${fromFile}\u0000${specifier}`;
@@ -126,139 +178,125 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     return csfCache.get(key);
   }
 
-  function storiesImports(tree, file) {
-    const imports = new Map();
-    for (const node of tree.children) {
-      if (node.type !== 'mdxjsEsm') continue;
-      for (const statement of node.data?.estree?.body ?? []) {
-        if (statement.type !== 'ImportDeclaration' || !/\.stories\.[jt]sx?$/.test(statement.source.value)) continue;
-        for (const specifier of statement.specifiers) imports.set(specifier.local.name, statement.source.value);
-      }
-    }
-    return { file, imports };
-  }
-
-  function storybookMeta(tree, file, stories) {
+  function storybookMeta(tree, file, imports) {
     const meta = tree.children.find((node) => isJsx(node) && node.name === 'Meta');
     if (!meta) throw new Error(`${file}: no <Meta>, so the page has no Storybook id`);
     const title = attributeString(meta, 'title');
     if (title) return { storybookTitle: title, storybookId: toId(title, 'Docs') };
     const of = attributeExpression(meta, 'of');
-    const specifier = of?.type === 'Identifier' ? stories.imports.get(of.name) : undefined;
+    const specifier = of?.type === 'Identifier' ? imports.get(of.name) : undefined;
     if (!specifier) throw new Error(`${file}: <Meta of> doesn't name an imported stories file`);
     const csfTitle = loadStoriesFile(file, specifier).meta.title;
     if (!csfTitle) throw new Error(`${file}: the stories file ${specifier} has no title`);
     return { storybookTitle: csfTitle, storybookId: toId(csfTitle, 'Docs') };
   }
 
-  function headingSlugs(tree) {
-    const slugger = new GithubSlugger();
-    const slugs = [];
-    const visit = (node) => {
-      if (node.type === 'heading') slugs.push(slugger.slug(slugText(node)));
-      for (const child of node.children ?? []) {
-        if (!(isJsx(child) && child.name === 'DocCanvas')) visit(child);
-      }
+  const parsed = [...pages].sort((a, b) => compareStrings(a.file, b.file)).map(({ file, source }) => {
+    const tree = parseMdx(source);
+    const imports = storiesImports(tree);
+    const parts = file.split('/');
+    const isComponentPage = file.startsWith(`${COMPONENTS_DIR}/`) && parts.at(-2) === 'docs';
+    return {
+      file,
+      tree,
+      imports,
+      kind: isComponentPage ? 'component' : 'guide',
+      componentDir: isComponentPage ? parts.slice(0, -2).join('/') : null,
+      slugs: slugHeadings(tree),
+      warn: (node, message) => warnings.push(`${file}${node?.position ? `:${node.position.start.line}` : ''}: ${message}`),
+      ...storybookMeta(tree, file, imports),
     };
-    visit(tree);
-    return new Set(slugs);
-  }
+  });
+  const pagesById = new Map(parsed.map((page) => [page.storybookId, page]));
 
-  function convertHref(href, ctx, node) {
+  function convertHref(href, page, node) {
     if (/^[a-z][a-z\d+.-]*:/i.test(href)) return href;
     if (href.startsWith('#')) {
-      if (!ctx.page.slugs.has(href.slice(1))) warn(ctx.page.file, node, `in-page link ${href} has no matching heading`);
+      if (!page.slugs.has(href.slice(1))) page.warn(node, `in-page link ${href} has no matching heading`);
       return href;
     }
     const target = storybookLinkTarget(href);
     if (!target) {
-      warn(ctx.page.file, node, `link "${href}" is neither absolute, in-page nor a Storybook docs link; kept as is`);
+      page.warn(node, `link "${href}" is neither absolute, in-page nor a Storybook docs link; kept as is`);
       return href;
     }
     let { id } = target;
-    if (!pagesById.has(id) && !id.endsWith('--docs') && pagesById.has(`${id.split('--')[0]}--docs`)) {
-      warn(ctx.page.file, node, `link to the story "${id}" points at its docs page instead`);
-      id = `${id.split('--')[0]}--docs`;
+    const docsId = `${id.split('--')[0]}--docs`;
+    if (!pagesById.has(id) && !id.endsWith('--docs') && pagesById.has(docsId)) {
+      page.warn(node, `link to the story "${id}" points at its docs page instead`);
+      id = docsId;
     }
-    if (!pagesById.has(id)) warn(ctx.page.file, node, `Storybook link "${id}" has no MDX page`);
-    else if (target.hash && !pagesById.get(id).slugs.has(target.hash)) warn(ctx.page.file, node, `link to ${id}#${target.hash} has no matching heading`);
+    if (!pagesById.has(id)) page.warn(node, `Storybook link "${id}" has no MDX page`);
+    else if (target.hash && !pagesById.get(id).slugs.has(target.hash)) page.warn(node, `link to ${id}#${target.hash} has no matching heading`);
     return `pine-doc:${id}${target.hash ? `#${target.hash}` : ''}`;
   }
 
-  function convertDocCanvas(node, ctx) {
+  function convertDocCanvas(node, page) {
     const source = {};
     const mdxSource = attributeExpression(node, 'mdxSource');
-    if (mdxSource?.type !== 'ObjectExpression') warn(ctx.page.file, node, '<DocCanvas> has no mdxSource object');
+    if (mdxSource?.type !== 'ObjectExpression') page.warn(node, '<DocCanvas> has no mdxSource object');
     for (const property of mdxSource?.properties ?? []) {
       const key = property.key?.name ?? property.key?.value;
       const value = staticString(property.value);
-      if (value === undefined) warn(ctx.page.file, node, `mdxSource.${key} isn't a static string; left out`);
+      if (value === undefined) page.warn(node, `mdxSource.${key} isn't a static string; left out`);
       else source[key] = dedent(value);
     }
     return { type: 'docCanvas', webComponent: source.webComponent ?? null, react: source.react ?? null };
   }
 
-  function convertCanvas(node, ctx) {
+  function convertCanvas(node, page) {
     const of = attributeExpression(node, 'of');
-    const specifier = of?.type === 'MemberExpression' ? ctx.page.stories.imports.get(of.object.name) : undefined;
-    const exportName = of?.property?.name;
-    const story = specifier ? loadStoriesFile(ctx.page.file, specifier)._stories[exportName] : undefined;
+    const specifier = of?.type === 'MemberExpression' ? page.imports.get(of.object.name) : undefined;
+    const story = specifier ? loadStoriesFile(page.file, specifier)._stories[of.property.name] : undefined;
     if (!story) {
-      warn(ctx.page.file, node, "<Canvas of> doesn't name a story in an imported stories file");
+      page.warn(node, "<Canvas of> doesn't name a story in an imported stories file");
       return [];
     }
     return [{ type: 'embed', embed: { type: 'story', storyId: story.id } }];
   }
 
-  function convertTable(node, ctx) {
-    const cellsOf = (row) => {
-      const cells = [];
-      const collect = (parent) => {
-        for (const child of parent.children ?? []) {
-          if (child.name === 'pds-table-cell' || child.name === 'pds-table-head-cell') {
-            const phrasing = child.children.flatMap((c) => (c.type === 'paragraph' ? c.children : [c]));
-            cells.push({ type: 'tableCell', children: transform(phrasing, ctx) });
-          } else if (child.type === 'paragraph') {
-            collect(child);
-          }
+  function convertTable(node, page) {
+    const cellsOf = (parent) =>
+      (parent.children ?? []).flatMap((child) => {
+        if (child.name === 'pds-table-cell' || child.name === 'pds-table-head-cell') {
+          const phrasing = child.children.flatMap((c) => (c.type === 'paragraph' ? c.children : [c]));
+          return [{ type: 'tableCell', children: transform(phrasing, page) }];
         }
-      };
-      collect(row);
-      return cells;
-    };
+        return child.type === 'paragraph' ? cellsOf(child) : [];
+      });
     const rows = [];
     for (const part of node.children) {
       if (part.name === 'pds-table-head') rows.push({ type: 'tableRow', children: cellsOf(part) });
       if (part.name !== 'pds-table-body') continue;
       for (const row of part.children) {
         if (row.name === 'pds-table-row') rows.push({ type: 'tableRow', children: cellsOf(row) });
-        else if (row.type === 'mdxFlowExpression') warn(ctx.page.file, row, '<pds-table> rows are built at render time; only the header row is kept');
+        else if (row.type === 'mdxFlowExpression') page.warn(row, '<pds-table> rows are built at render time; only the header row is kept');
       }
     }
     if (rows.length === 0) {
-      warn(ctx.page.file, node, '<pds-table> has no rows; dropped');
+      page.warn(node, '<pds-table> has no rows; dropped');
       return [];
     }
     return [{ type: 'table', children: rows }];
   }
 
-  function convertExpression(node, ctx) {
+  function convertExpression(node, page) {
     const program = node.data?.estree;
     if (program && program.body.length === 0) return [];
     const value = staticString(program?.body?.[0]?.expression);
     if (value !== undefined) return [{ type: 'text', value }];
-    warn(ctx.page.file, node, `{${node.value.trim().slice(0, 40)}…} runs at render time; dropped`);
+    page.warn(node, `{${node.value.trim().slice(0, 40)}…} runs at render time; dropped`);
     return [];
   }
 
-  function convertJsx(node, ctx) {
+  function convertJsx(node, page) {
     if (DROPPED_ELEMENTS.has(node.name)) return [];
-    if (UNWRAPPED_ELEMENTS.has(node.name)) return transform(node.children, ctx);
+    if (UNWRAPPED_ELEMENTS.has(node.name)) return transform(node.children, page);
     switch (node.name) {
       case 'DocCanvas':
-        return [convertDocCanvas(node, ctx)];
+        return [convertDocCanvas(node, page)];
       case 'Canvas':
-        return convertCanvas(node, ctx);
+        return convertCanvas(node, page);
       case 'DocArgsTable':
         return [{ type: 'embed', embed: { type: 'props', tag: attributeString(node, 'componentName') ?? null } }];
       case 'DocTokenTable': {
@@ -271,71 +309,53 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       case 'PatternCatalog':
         return [{ type: 'embed', embed: { type: 'patterns' } }];
       case 'pds-table':
-        return convertTable(node, ctx);
+        return convertTable(node, page);
       case 'pds-link':
       case 'a':
-        return [{ type: 'link', url: convertHref(attributeString(node, 'href') ?? '', ctx, node), children: transform(node.children, ctx) }];
+        return [{ type: 'link', url: convertHref(attributeString(node, 'href') ?? '', page, node), children: transform(node.children, page) }];
       case 'code':
-        return [{ type: 'inlineCode', value: toString({ type: 'root', children: transform(node.children, ctx) }) }];
+        return [{ type: 'inlineCode', value: toString({ type: 'root', children: transform(node.children, page) }) }];
       case 'strong':
-        return [{ type: 'strong', children: transform(node.children, ctx) }];
+        return [{ type: 'strong', children: transform(node.children, page) }];
       case 'em':
-        return [{ type: 'emphasis', children: transform(node.children, ctx) }];
+        return [{ type: 'emphasis', children: transform(node.children, page) }];
       default:
-        warn(ctx.page.file, node, `<${node.name ?? ''}> outside a DocCanvas has no conversion; kept as JSX`);
+        page.warn(node, `<${node.name ?? ''}> outside a DocCanvas has no conversion; kept as JSX`);
         return [node];
     }
   }
 
-  function transform(nodes, ctx) {
+  function transform(nodes, page) {
     const out = [];
     for (const node of nodes) {
       if (node.type === 'mdxjsEsm') continue;
-      if (node.type === 'mdxFlowExpression' || node.type === 'mdxTextExpression') out.push(...convertExpression(node, ctx));
-      else if (isJsx(node)) out.push(...convertJsx(node, ctx));
-      else if (node.type === 'link') out.push({ ...node, url: convertHref(node.url, ctx, node), children: transform(node.children, ctx) });
-      else if (node.children) out.push({ ...node, children: transform(node.children, ctx) });
+      if (node.type === 'mdxFlowExpression' || node.type === 'mdxTextExpression') out.push(...convertExpression(node, page));
+      else if (isJsx(node)) out.push(...convertJsx(node, page));
+      else if (node.type === 'link') out.push({ ...node, url: convertHref(node.url, page, node), children: transform(node.children, page) });
+      else if (node.children) out.push({ ...node, children: transform(node.children, page) });
       else out.push(node);
     }
     return out;
   }
 
-  function body(nodes, title, sectionSlug) {
-    const examples = [];
-    const embeds = [];
-    const content = [];
-    let prose = [];
-    for (const node of nodes) {
-      if (node.type === 'docCanvas') {
-        examples.push({ sectionSlug, title, prose: toMd(prose), webComponent: node.webComponent, react: node.react });
-        content.push({ type: 'example', index: examples.length - 1 });
-        prose = [];
-      } else if (node.type === 'embed') {
-        embeds.push(node.embed);
-      } else {
-        content.push(node);
-        prose.push(node);
-      }
-    }
-    return { markdown: toMd(content), examples, embeds };
+  function statusOf(page) {
+    const badge = page.tree.children.find((node) => isJsx(node) && node.name === 'StatusBadge');
+    if (!badge) return { status: null, statusNote: null };
+    const tag = page.componentDir.split('/').at(-1);
+    const badgeTag = attributeString(badge, 'component');
+    if (badgeTag !== undefined && badgeTag !== tag) page.warn(badge, `StatusBadge names ${badgeTag}, but the page documents ${tag}`);
+    const statusProp = attributeString(badge, 'status');
+    const fromManifest = statusProp === undefined ? statusManifest[badgeTag ?? tag] : undefined;
+    const value = statusProp ?? fromManifest?.status;
+    return {
+      status: STATUSES.includes(value) ? value : null,
+      statusNote: attributeString(badge, 'note') ?? fromManifest?.note ?? null,
+    };
   }
 
-  function roleOf(section, parent) {
-    const heading = slugText(section.node).trim().toLowerCase();
-    const parentHeading = parent.node ? slugText(parent.node).trim().toLowerCase() : null;
-    if (!parent.node && ['guidelines', 'properties', 'examples'].includes(heading)) return heading;
-    if (parentHeading === 'guidelines' && heading === 'when to use') return 'when-to-use';
-    if (parentHeading === 'guidelines' && heading === 'when not to use') return 'when-not-to-use';
-    if (heading === 'accessibility') return 'accessibility';
-    return null;
-  }
-
-  function pageEntry(page, componentIndex) {
-    const ctx = { page };
-    const kind = page.file.startsWith(`${coreRoot}/src/components/`) && page.file.split('/').at(-2) === 'docs' ? 'component' : 'guide';
-    const nodes = transform(page.tree.children, ctx);
-    const slugger = new GithubSlugger();
-    const root = { level: 1, node: null, nodes: [], children: [] };
+  function pageEntry(page, parentOf) {
+    const nodes = transform(page.tree.children, page);
+    const root = { level: 1, name: null, nodes: [], children: [] };
     const stack = [root];
     let title = null;
     for (const node of nodes) {
@@ -343,73 +363,59 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
         stack.at(-1).nodes.push(node);
         continue;
       }
-      const slug = slugger.slug(slugText(node));
       if (node.depth === 1 && title === null) {
         title = headingText(node);
         continue;
       }
-      if (node.depth === 1) warn(page.file, node, 'a second h1 is kept as a level-1 section');
-      const section = { level: node.depth, node, slug, nodes: [], children: [] };
+      if (node.depth === 1) page.warn(node, 'a second h1 is kept as a level-1 section');
+      const section = { level: node.depth, node, name: slugText(node).trim().toLowerCase(), nodes: [], children: [] };
       while (stack.length > 1 && stack.at(-1).level >= node.depth) stack.pop();
       stack.at(-1).children.push(section);
       stack.push(section);
     }
-    if (title === null) warn(page.file, null, 'no h1');
+    if (title === null) page.warn(null, 'no h1');
 
     let accessibilityTaken = false;
     const finish = (section, parent) => {
-      let role = roleOf(section, parent);
+      let role = roleOf(section.name, parent.name);
       if (role === 'accessibility') {
         if (accessibilityTaken) role = null;
         accessibilityTaken = true;
       }
       const heading = headingText(section.node);
+      const slug = section.node.data.slug;
       return {
         level: section.level,
         heading,
-        slug: section.slug,
+        slug,
         role,
-        ...body(section.nodes, heading, section.slug),
+        ...body(section.nodes, heading, slug),
         children: section.children.map((child) => finish(child, section)),
       };
     };
     const intro = body(root.nodes, title ?? '', null);
     const sections = root.children.map((section) => finish(section, root));
     const summary = root.nodes.find((node) => node.type === 'paragraph');
-
-    let tag = null;
-    let status = null;
-    let statusNote = null;
-    if (kind === 'component') {
-      tag = page.file.split('/').at(-3);
-      const badge = page.tree.children.find((node) => isJsx(node) && node.name === 'StatusBadge');
-      const badgeTag = attributeString(badge, 'component');
-      if (badgeTag !== undefined && badgeTag !== tag) warn(page.file, badge, `StatusBadge names ${badgeTag}, but the page documents ${tag}`);
-      const statusProp = attributeString(badge, 'status');
-      const entry = statusManifest[badgeTag ?? tag];
-      if (statusProp !== undefined) status = STATUSES.includes(statusProp) ? statusProp : null;
-      else if (badge && entry) status = STATUSES.includes(entry.status) ? entry.status : null;
-      statusNote = attributeString(badge, 'note') ?? (badge && statusProp === undefined ? entry?.note : undefined) ?? null;
-    }
+    const tag = page.kind === 'component' ? page.componentDir.split('/').at(-1) : null;
 
     return {
-      kind,
+      kind: page.kind,
       tag,
-      parent: tag ? componentIndex.find((c) => c.tag === tag)?.parent ?? null : null,
+      parent: tag ? parentOf.get(tag) ?? null : null,
       title: title ?? '',
       storybookId: page.storybookId,
       storybookTitle: page.storybookTitle,
       file: page.file,
-      status,
-      statusNote,
+      ...(page.kind === 'component' ? statusOf(page) : { status: null, statusNote: null }),
       summary: summary ? toMd([summary]) : null,
       ...intro,
       sections,
     };
   }
 
-  const componentIndex = buildComponentIndex(components, parsed, coreRoot);
-  const docs = parsed.map((page) => pageEntry(page, componentIndex));
+  const componentIndex = buildComponentIndex(components, parsed);
+  const parentOf = new Map(componentIndex.map((entry) => [entry.tag, entry.parent]));
+  const docs = parsed.map((page) => pageEntry(page, parentOf));
   for (const entry of componentIndex) if (!entry.doc) warnings.push(`${entry.tag}: no page documents it or its parent`);
 
   return {
@@ -418,32 +424,29 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
   };
 }
 
-function buildComponentIndex(components, pages, coreRoot) {
-  const dirOf = (file) => file.split('/').slice(0, -1).join('/');
-  const pageDirs = new Map();
-  for (const page of pages) {
-    const parts = page.file.split('/');
-    if (page.file.startsWith(`${coreRoot}/src/components/`) && parts.at(-2) === 'docs') pageDirs.set(parts.slice(0, -2).join('/'), page.storybookId);
-  }
+function buildComponentIndex(components, pages) {
+  const pageDirs = new Map(pages.filter((page) => page.kind === 'component').map((page) => [page.componentDir, page.storybookId]));
   const tagDirs = new Map();
   for (const component of components) {
     if (component.filePath.split('/').includes('test')) continue;
-    tagDirs.set(component.tag, dirOf(`${coreRoot}/${component.filePath}`));
+    tagDirs.set(component.tag, path.posix.dirname(`${CORE_ROOT}/${component.filePath}`));
   }
+  const knownDirs = new Set(tagDirs.values());
   for (const dir of pageDirs.keys()) {
-    if (![...tagDirs.values()].includes(dir)) tagDirs.set(dir.split('/').at(-1), dir);
+    if (!knownDirs.has(dir)) tagDirs.set(path.posix.basename(dir), dir);
   }
   const tagByDir = new Map([...tagDirs].map(([tag, dir]) => [dir, tag]));
   const ancestors = (dir) => {
     const out = [];
-    for (let d = dirOf(dir); d.startsWith(`${coreRoot}/src/components/`); d = dirOf(d)) out.push(d);
+    for (let d = path.posix.dirname(dir); d.startsWith(`${COMPONENTS_DIR}/`); d = path.posix.dirname(d)) out.push(d);
     return out;
   };
   return [...tagDirs.entries()]
-    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .sort(([a], [b]) => compareStrings(a, b))
     .map(([tag, dir]) => {
-      const parentDir = ancestors(dir).find((d) => tagByDir.has(d));
-      const pageDir = [dir, ...ancestors(dir)].find((d) => pageDirs.has(d));
+      const above = ancestors(dir);
+      const parentDir = above.find((d) => tagByDir.has(d));
+      const pageDir = [dir, ...above].find((d) => pageDirs.has(d));
       return { tag, parent: parentDir ? tagByDir.get(parentDir) : null, doc: pageDir ? pageDirs.get(pageDir) : null };
     });
 }

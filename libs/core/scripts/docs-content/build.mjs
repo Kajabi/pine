@@ -2,13 +2,12 @@ import { execFileSync } from 'node:child_process';
 import { copyFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildDocsContent } from './extract.mjs';
+import { buildDocsContent, CORE_ROOT } from './extract.mjs';
 import { findDocPages } from './pages.mjs';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const coreDir = path.resolve(scriptDir, '../..');
 const repoDir = path.resolve(coreDir, '../..');
-const coreRoot = path.relative(repoDir, coreDir).split(path.sep).join('/');
 const distDir = path.join(coreDir, 'dist');
 const docsJsonPath = path.join(distDir, 'docs.json');
 
@@ -28,7 +27,7 @@ function currentCommit() {
 }
 
 const pages = findDocPages(coreDir).map((relative) => ({
-  file: `${coreRoot}/${relative}`,
+  file: `${CORE_ROOT}/${relative}`,
   source: readFileSync(path.join(coreDir, relative), 'utf8'),
 }));
 
@@ -42,7 +41,6 @@ const { content, warnings } = buildDocsContent({
   },
   version: readJson(path.join(coreDir, 'package.json')).version,
   commit: currentCommit(),
-  coreRoot,
 });
 
 writeFileSync(path.join(distDir, 'docs-content.json'), `${JSON.stringify(content, null, 2)}\n`);

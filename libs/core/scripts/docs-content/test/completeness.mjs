@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
-import { parseMdx } from '../extract.mjs';
+import { CORE_ROOT, parseMdx } from '../extract.mjs';
 import { findDocPages } from '../pages.mjs';
 
 const coreDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -15,23 +15,29 @@ const EXAMPLE_LINE = /^<!-- example:\d+ -->$/;
 
 const DISPLAY_ONLY = new Set(['DocCanvas', 'Meta', 'Controls', 'Canvas', 'Story', 'StatusBadge', 'DocArgsTable', 'DocTokenTable', 'img', 'ChangelogLoader', 'PatternCatalog']);
 
+const wordsIn = (text) => text.match(/[\p{L}\p{N}_]+/gu) ?? [];
+
 function walk(node, visit) {
   if (visit(node) === false) return;
   for (const child of node.children ?? []) walk(child, visit);
 }
 
+function staticText(expression) {
+  if (expression?.type === 'Literal' && typeof expression.value === 'string') return expression.value;
+  if (expression?.type === 'TemplateLiteral' && expression.expressions.length === 0) return expression.quasis[0].value.cooked;
+  return '';
+}
+
 /** Every word of prose a page shows, outside its live previews and data-driven blocks. */
-function wordsOf(node) {
+function wordsOf(tree) {
   const words = [];
-  walk(node, (n) => {
+  walk(tree, (n) => {
     if (n.type === 'mdxjsEsm' || DISPLAY_ONLY.has(n.name)) return false;
     if (n.type === 'mdxFlowExpression' || n.type === 'mdxTextExpression') {
-      const expression = n.data?.estree?.body?.[0]?.expression;
-      if (expression?.type === 'Literal' && typeof expression.value === 'string') words.push(...(expression.value.match(/[\p{L}\p{N}_]+/gu) ?? []));
+      words.push(...wordsIn(staticText(n.data?.estree?.body?.[0]?.expression)));
       return false;
     }
-    if (typeof n.value === 'string') words.push(...(n.value.match(/[\p{L}\p{N}_]+/gu) ?? []));
-    return true;
+    if (typeof n.value === 'string') words.push(...wordsIn(n.value));
   });
   return words;
 }
@@ -47,7 +53,7 @@ test('docs-content.json holds every page, heading, example, fenced code block an
 
   assert.equal(content.docs.length, pages.length, 'one entry per MDX page');
   for (const relative of pages) {
-    const file = `libs/core/${relative}`;
+    const file = `${CORE_ROOT}/${relative}`;
     const doc = byFile.get(file);
     assert.ok(doc, `${file} has an entry`);
 
@@ -60,29 +66,27 @@ test('docs-content.json holds every page, heading, example, fenced code block an
         mdx.examples++;
         return false;
       }
-      return true;
     });
 
     const json = { headings: 1, examples: 0, fences: [] };
-    const words = doc.title.match(/[\p{L}\p{N}_]+/gu) ?? [];
+    const words = wordsIn(doc.title);
     const checkBody = (where, part, sectionSlug) => {
       json.examples += part.examples.length;
+      const lines = part.markdown.split('\n');
       part.examples.forEach((example, index) => {
         assert.equal(example.sectionSlug, sectionSlug, `${where}: example ${index} names its section`);
-        assert.equal(part.markdown.split('\n').filter((line) => line === `<!-- example:${index} -->`).length, 1, `${where}: example ${index} has one line in the markdown`);
+        assert.equal(lines.filter((line) => line === `<!-- example:${index} -->`).length, 1, `${where}: example ${index} has one line in the markdown`);
       });
-      const markdown = markdownParser.parse(part.markdown);
-      walk(markdown, (n) => {
+      walk(markdownParser.parse(part.markdown), (n) => {
         if (n.type === 'code') json.fences.push(n.lang ?? null);
         if (n.type === 'html') assert.match(n.value, EXAMPLE_LINE, `${where}: no markup left in the markdown`);
-        if (typeof n.value === 'string' && n.type !== 'html') words.push(...(n.value.match(/[\p{L}\p{N}_]+/gu) ?? []));
-        return true;
+        else if (typeof n.value === 'string') words.push(...wordsIn(n.value));
       });
     };
     checkBody(file, doc, null);
     const visitSection = (section) => {
       json.headings++;
-      words.push(...(section.heading.match(/[\p{L}\p{N}_]+/gu) ?? []));
+      words.push(...wordsIn(section.heading));
       checkBody(`${file}#${section.slug}`, section, section.slug);
       section.children.forEach(visitSection);
     };
