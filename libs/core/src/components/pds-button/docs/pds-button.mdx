@@ -21,6 +21,7 @@ A button is an interactive element that can be clicked to perform various action
 - Triggering or enabling an action, such as submitting requested information (e.g. forms).
 - Progressing or regressing a user through a step in a flow (e.g. modals).
 - A call-to-action that navigates and needs button styling, such as "Create a product". Set `href`, and `pds-button` renders a link (see [Button Link](#button-link)).
+- Any action people click, in place of a `pds-box` or other element with a click handler. A box can't take keyboard focus, and screen readers don't announce it as a button.
 
 ### When not to use
 - A text button where there's no room for its text. Set `icon-only` instead: the slot text is hidden but still names the button (see [Icon Only](#icon-only)).
@@ -304,6 +305,8 @@ The loader color can be customized using CSS parts.
 ### Icons
 
 Use the `start` and `end` slots to place an icon before or after the text. A decorative icon needs no attributes, because `pds-icon` hides itself from assistive technology; see [Icon](/docs/components-icon--docs#accessibility) for when an icon needs a label. Both slots are hidden while `loading` is set. `icon-only` and `disclosure` buttons don't render the `end` slot, and `filter` buttons don't render the `start` slot. For more on slots, see the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots#adding_flexibility_with_slots).
+
+The `icon` prop is deprecated: put a `pds-icon` in the `start` slot instead. On every variant except `disclosure` and `filter`, which ignore it, `icon` draws its icon in place of the `start` slot, so anything slotted there isn't shown.
 
 <DocCanvas
   mdxSource={{

@@ -21,12 +21,15 @@ Text renders content using configurable semantic HTML tags for headings or body 
 - Paragraphs and other body copy, with `tag="p"` (the default).
 - Inline emphasis, with `tag="em"` or `tag="strong"`.
 - Code, with `tag="code"` for inline code or `tag="pre"` for a preformatted block.
+- In place of raw `h1`–`h6`, `p` and `span` tags for headings and body copy. Pine's CSS doesn't style raw tags, so they get the browser's default font rather than Pine's type styles.
 
 ### When not to use
 
 - Form field labels: use the `label` prop on the form component, such as `pds-input` or `pds-select`.
 - Navigation to another page or location: use `pds-link`.
 - Actions such as saving or opening a dialog: use `pds-button`.
+- Lists: `pds-text` has no list tags, so use a native `ul` or `ol` with `li` items.
+- Styling text through `style`: prefer the `color`, `size`, `weight` and `align` props. A color set in `style` doesn't reach the text, and neither does a font size or weight except with `tag="span"`, because the element inside sets its own. Keep `style` for what no prop sets, such as a background or the width that `truncate` needs.
 
 ### Accessibility
 
@@ -82,6 +85,8 @@ Text can be aligned to the start, center, end, or justified.
 ### Color
 
 Text color can align to our common variant/sentiment values, Pine tokens, or custom colors.
+
+Use a preset or a semantic Pine token rather than a hex value. The presets are `primary`, `secondary`, `neutral`, `accent`, `danger`, `info`, `success` and `warning`, and a token can be written as `--pine-color-text-subtle` or `var(--pine-color-text-subtle)`. The default color, the `primary`, `secondary`, `neutral` and `accent` presets, and semantic tokens such as `--pine-color-text-subtle` switch with `data-theme="dark"`. The `danger`, `info`, `success` and `warning` presets, a hex value, and a palette token such as `--pine-color-purple-300` stay the same in both themes. `primary` is white in the light theme, for text on a dark background, as in the first example below.
 
 <DocCanvas
   mdxSource={{
