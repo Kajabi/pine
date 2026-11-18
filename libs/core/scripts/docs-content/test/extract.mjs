@@ -272,6 +272,21 @@ A second heading with this name gets no role.`),
     );
   });
 
+  it('counts headings nested inside other content when it numbers repeated slugs', () => {
+    const { content, warnings } = build({
+      [GUIDE_PAGE]: guidePage(`## Notes
+
+> ## Notes
+
+## Notes
+
+[Last notes](#notes-2)`),
+    });
+
+    assert.deepEqual(doc(content, GUIDE_PAGE).sections.map((s) => s.slug), ['notes', 'notes-2']);
+    assert.deepEqual(warnings, []);
+  });
+
   it('takes the summary from the first paragraph under the h1, if there is one', () => {
     const { content } = build({
       [WIDGET_PAGE]: widgetPage('More about widgets.\n\n## Guidelines'),
