@@ -166,7 +166,9 @@ Layout impact:
 - `baseline`: Items align to their text baseline
 - `stretch`: Items stretch to fill the row height (default)
 
-Best practice: Use with `min-height` for consistent vertical alignment
+`align-items` has no breakpoint versions, so it applies at every width. To align one column differently, set `align-self` on its `pds-box`, or a breakpoint version such as `align-self-md` to change it from that breakpoint up.
+
+Best practice: `align-items` aligns columns against the tallest column on their line, so it doesn't need `min-height`. Add `min-height` only when the row must be taller than its content (see [Min Height](#min-height)).
 
 ### Column Gap
 
@@ -439,6 +441,8 @@ Layout impact:
 - `end`: Columns pack toward the right
 - `space-between`: Columns are evenly distributed with first at start, last at end
 - `space-around`: Columns are evenly distributed with equal space around them
+
+`justify-content` has no breakpoint versions, so it applies at every width.
 
 Best practice: Use `space-between` for navigation or action buttons
 
