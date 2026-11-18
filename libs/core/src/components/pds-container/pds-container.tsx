@@ -4,6 +4,7 @@ const NAMED_SIZES = new Set(['sm', 'md', 'lg', 'xl', 'full']);
 
 /**
  * @part container - The inner semantic container element
+ * @slot (default) - The content to display inside the container.
  */
 @Component({
   tag: 'pds-container',

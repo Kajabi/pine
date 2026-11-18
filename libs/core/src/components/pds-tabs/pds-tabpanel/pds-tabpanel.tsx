@@ -3,6 +3,7 @@ import { HostStylingKeeper } from '@utils/attributes';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
+ * @slot (default) - The panel's content, shown while its tab is selected.
  * @lightDom renders-markup
  */
 @Component({

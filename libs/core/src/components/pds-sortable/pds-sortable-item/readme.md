@@ -19,6 +19,7 @@
 
 | Slot                      | Description                                                                                                                             |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `"(default)"`             | The item's content.                                                                                                                     |
 | `"sortable-item-actions"` | Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered when `enable-actions` is set. |
 
 

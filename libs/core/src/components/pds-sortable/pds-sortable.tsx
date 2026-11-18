@@ -11,6 +11,7 @@ const GRABBED_CLASS = 'pds-sortable-item--grabbed';
 const HANDLE_SELECTOR = '.pds-sortable-item__handle';
 
 /**
+ * @slot (default) - The `pds-sortable-item` elements to reorder.
  * @lightDom host-only
  */
 @Component({

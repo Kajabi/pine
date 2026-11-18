@@ -3,6 +3,7 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
  * Holds the modal's title and close control. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
+ * @slot (default) - The modal's title and close control.
  * @lightDom renders-markup
  */
 @Component({

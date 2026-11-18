@@ -65,6 +65,13 @@ Type: `Promise<void>`
 
 
 
+## Slots
+
+| Slot          | Description                |
+| ------------- | -------------------------- |
+| `"(default)"` | The column's heading text. |
+
+
 ## Shadow Parts
 
 | Part          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                          |

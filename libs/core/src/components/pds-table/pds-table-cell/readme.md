@@ -29,6 +29,13 @@ Type: `Promise<void>`
 
 
 
+## Slots
+
+| Slot          | Description         |
+| ------------- | ------------------- |
+| `"(default)"` | The cell's content. |
+
+
 ## Shadow Parts
 
 | Part     | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
