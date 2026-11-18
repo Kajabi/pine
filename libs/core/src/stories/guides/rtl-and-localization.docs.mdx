@@ -29,7 +29,7 @@ This right-to-left section of a left-to-right page needs `flip-rtl` on its arrow
     <pds-input component-id="rtl-name" name="name" label="الاسم"></pds-input>
     <pds-button variant="primary">
       التالي
-      <pds-icon slot="end" name="arrow-right" flip-rtl aria-hidden="true"></pds-icon>
+      <pds-icon slot="end" name="arrow-right" flip-rtl></pds-icon>
     </pds-button>
   </pds-box>
 </div>`,
@@ -42,7 +42,7 @@ import { arrowRight } from '@pine-ds/icons/icons';
     <PdsInput componentId="rtl-name" name="name" label="الاسم" />
     <PdsButton variant="primary">
       التالي
-      <PdsIcon slot="end" icon={arrowRight} flipRtl aria-hidden="true" />
+      <PdsIcon slot="end" icon={arrowRight} flipRtl />
     </PdsButton>
   </PdsBox>
 </div>`
@@ -50,7 +50,7 @@ import { arrowRight } from '@pine-ds/icons/icons';
   <div dir="rtl" lang="ar">
     <pds-box direction="column" gap="md">
       <pds-input component-id="rtl-name" name="name" label="الاسم"></pds-input>
-      <pds-button variant="primary">التالي<pds-icon slot="end" name="arrow-right" flip-rtl aria-hidden="true"></pds-icon></pds-button>
+      <pds-button variant="primary">التالي<pds-icon slot="end" name="arrow-right" flip-rtl></pds-icon></pds-button>
     </pds-box>
   </div>
 </DocCanvas>

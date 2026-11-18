@@ -178,7 +178,7 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Lima</pds-table-cell>
       <pds-table-cell>
         <pds-dropdown-menu placement="bottom-end">
-          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon></pds-button>
+          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal"></pds-icon></pds-button>
           <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
           <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
           <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
@@ -200,7 +200,7 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Lima</pds-table-cell>
       <pds-table-cell>
         <pds-dropdown-menu placement="bottom-end">
-          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon></pds-button>
+          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal"></pds-icon></pds-button>
           <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
           <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
           <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
@@ -222,7 +222,7 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Lima</pds-table-cell>
       <pds-table-cell>
         <pds-dropdown-menu placement="bottom-end">
-          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal" aria-hidden="true"></pds-icon></pds-button>
+          <pds-button slot="trigger" size="small" variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal"></pds-icon></pds-button>
           <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
           <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
           <pds-dropdown-menu-separator></pds-dropdown-menu-separator>

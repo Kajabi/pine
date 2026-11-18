@@ -76,38 +76,40 @@ Name an icon-only button with `aria-label` on `pds-button`, which passes it to i
   mdxSource={{
     webComponent: `
 <pds-button icon-only aria-label="Close dialog">
-  <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+  <pds-icon slot="start" name="remove"></pds-icon>
 </pds-button>`,
     react: `
 import { PdsButton, PdsIcon } from '@pine-ds/react';
 import { remove } from '@pine-ds/icons/icons';
 
 <PdsButton iconOnly aria-label="Close dialog">
-  <PdsIcon slot="start" icon={remove} aria-hidden="true" />
+  <PdsIcon slot="start" icon={remove} />
 </PdsButton>`
   }}>
   <pds-button icon-only aria-label="Close dialog">
-    <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+    <pds-icon slot="start" name="remove"></pds-icon>
   </pds-button>
 </DocCanvas>
 
 ### Decorative Icons
 
-Mark a decorative icon with `aria-hidden="true"` so assistive technologies skip it.
+A decorative icon needs no attributes. `pds-icon` sets `aria-hidden="true"` on itself unless it has an `aria-label`, `aria-labelledby` or `tabindex`, so assistive technologies skip it.
 
 <DocCanvas
   mdxSource={{
-    webComponent: `<pds-icon name="star" aria-hidden="true"></pds-icon>`,
+    webComponent: `<pds-icon name="star"></pds-icon>`,
     react: `
 import { PdsIcon } from '@pine-ds/react';
 import { star } from '@pine-ds/icons/icons';
 
-<PdsIcon icon={star} aria-hidden="true" />`
+<PdsIcon icon={star} />`
   }}>
-  <pds-icon name="star" aria-hidden="true"></pds-icon>
+  <pds-icon name="star"></pds-icon>
 </DocCanvas>
 
-When an icon conveys meaning with no adjacent label, provide an `aria-label` on the parent interactive element instead (see icon-only button example above).
+Give an icon an `aria-label` only when it carries meaning on its own, such as a status icon with no text beside it. An icon in an icon-only button doesn't need one: name the button instead, as in the example above. Don't add `aria-hidden` to an icon you name, because `pds-icon` keeps it and the icon stays hidden.
+
+Before `@pine-ds/icons` 10.8.1, `pds-icon` labelled itself from its `name`. Add `aria-hidden="true"` to decorative icons only on `@pine-ds/core` earlier than 4.9.1, or on `@pine-ds/react` earlier than 4.12.0 with `@pine-ds/icons` earlier than 10.8.1 installed. See <pds-link href="../?path=/docs/components-icon--docs#accessibility">Icon</pds-link> for the full rule.
 
 ### Landmark Roles
 
@@ -315,7 +317,8 @@ Use this checklist when reviewing a feature for accessibility:
 - [ ] Error messages are associated with their inputs (`invalid` with `error-message` sets `aria-describedby` internally)
 - [ ] Focus is trapped inside open modals
 - [ ] Focus is restored when modals close
-- [ ] Decorative images and icons have `aria-hidden="true"`
+- [ ] Decorative images have `aria-hidden="true"`
+- [ ] Icons that carry meaning on their own have an `aria-label`, and decorative icons have none
 - [ ] Color is not the only way information is conveyed
 - [ ] Text meets 4.5:1 contrast ratio (check with Storybook a11y panel or browser DevTools)
 - [ ] Dynamic content updates are announced via `aria-live`

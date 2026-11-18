@@ -116,7 +116,7 @@ export const WholeRowLink = {
     </style>
     <pds-box class="pds-link-row" border border-radius="md" padding="sm" align-items="center" justify-content="space-between">
       <pds-box gap="xs" align-items="center">
-        <pds-icon name="file" aria-hidden="true"></pds-icon>
+        <pds-icon name="file"></pds-icon>
         <pds-link href="#row-target" variant="plain">Quarterly report</pds-link>
       </pds-box>
       <pds-box class="pds-link-row__trailing">
