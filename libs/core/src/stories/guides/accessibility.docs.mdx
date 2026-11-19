@@ -311,19 +311,19 @@ Contributing to Pine? See <pds-link href="https://github.com/Kajabi/pine/blob/ma
 
 Use this checklist when reviewing a feature for accessibility:
 
-- [ ] All interactive elements are reachable by `Tab` key
-- [ ] Focus order matches visual reading order
-- [ ] All inputs have visible, programmatically associated labels
-- [ ] Error messages are associated with their inputs (`invalid` with `error-message` sets `aria-describedby` internally)
-- [ ] Focus is trapped inside open modals
-- [ ] Focus is restored when modals close
-- [ ] Decorative images have `aria-hidden="true"`
-- [ ] Icons that carry meaning on their own have an `aria-label`, and decorative icons have none
-- [ ] Color is not the only way information is conveyed
-- [ ] Text meets 4.5:1 contrast ratio (check with Storybook a11y panel or browser DevTools)
-- [ ] Dynamic content updates are announced via `aria-live`
-- [ ] Page works end-to-end using only a keyboard
-- [ ] VoiceOver or NVDA smoke test passes for key user flows
+- All interactive elements are reachable by `Tab` key
+- Focus order matches visual reading order
+- All inputs have visible, programmatically associated labels
+- Error messages are associated with their inputs (`invalid` with `error-message` sets `aria-describedby` internally)
+- Focus is trapped inside open modals
+- Focus is restored when modals close
+- Decorative images have `aria-hidden="true"`
+- Icons that carry meaning on their own have an `aria-label`, and decorative icons have none
+- Color is not the only way information is conveyed
+- Text meets 4.5:1 contrast ratio (check with Storybook a11y panel or browser DevTools)
+- Dynamic content updates are announced via `aria-live`
+- Page works end-to-end using only a keyboard
+- VoiceOver or NVDA smoke test passes for key user flows
 
 ---
 
