@@ -43,7 +43,7 @@ const BaseTemplate = (args) => html`
             onclick="document.querySelector('#${args.componentId}').open = false"
             aria-label="Close drawer"
           >
-            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            <pds-icon slot="start" name="remove"></pds-icon>
           </pds-button>
         </pds-box>
       </pds-drawer-header>

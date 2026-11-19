@@ -3,6 +3,7 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
  * Fills the space between the drawer header and footer.
+ * @slot (default) - The drawer's main content.
  * @lightDom renders-markup
  */
 @Component({
