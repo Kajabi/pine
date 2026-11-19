@@ -384,3 +384,120 @@ Plain text.`),
     assert.doesNotMatch(JSON.stringify(content), /import |<Meta|<StatusBadge|<DocCanvas|mdxSource/);
   });
 });
+
+describe('buildDocsContent on input it cannot convert cleanly', () => {
+  it('leaves out a DocCanvas or embed nested in a list or quote, with a warning', () => {
+    const { content, warnings } = build({
+      [GUIDE_PAGE]: guidePage(`## Steps
+
+- Install
+
+  <DocCanvas mdxSource={{ webComponent: \`<pds-widget></pds-widget>\` }}>
+    <pds-widget></pds-widget>
+  </DocCanvas>
+
+> <DocArgsTable componentName="pds-widget" />
+
+After.`),
+    });
+    const steps = section(doc(content, GUIDE_PAGE).sections, 'steps');
+
+    assert.deepEqual([steps.examples, steps.embeds], [[], []]);
+    assert.equal(steps.markdown, '- Install\n\nAfter.');
+    assert.deepEqual(warnings, [
+      `${GUIDE_PAGE}:11: a DocCanvas inside a list, quote or table is left out; move it to the top level of its section`,
+      `${GUIDE_PAGE}:15: a props block inside a list, quote or table is left out; move it to the top level of its section`,
+    ]);
+  });
+
+  it('keeps a link the URL parser rejects as it is', () => {
+    const { content, warnings } = build({ [GUIDE_PAGE]: guidePage('## Links\n\n<pds-link href="//">Broken</pds-link>') });
+
+    assert.equal(section(doc(content, GUIDE_PAGE).sections, 'links').markdown, '[Broken](//)');
+    assert.deepEqual(warnings, [`${GUIDE_PAGE}:9: link "//" is neither absolute, in-page nor a Storybook docs link; kept as is`]);
+  });
+
+  it('keeps the text of a Storybook link to a page the file does not have', () => {
+    const { content, warnings } = build({ [GUIDE_PAGE]: guidePage('## Links\n\n[Gone](/docs/components-gone--docs) stays readable.') });
+
+    assert.equal(section(doc(content, GUIDE_PAGE).sections, 'links').markdown, 'Gone stays readable.');
+    assert.deepEqual(warnings, [`${GUIDE_PAGE}:9: Storybook link "components-gone--docs" has no MDX page; kept as plain text`]);
+  });
+
+  it('leaves out a page with no Storybook id and builds the rest', () => {
+    const noMeta = 'libs/core/src/stories/guides/no-meta.docs.mdx';
+    const { content, warnings } = build({ [GUIDE_PAGE]: guidePage(''), [noMeta]: '# No meta\n\nText.' });
+
+    assert.deepEqual(content.docs.map((d) => d.file), [GUIDE_PAGE]);
+    assert.deepEqual(warnings, [`${noMeta}: no <Meta> to give the page a Storybook id; page left out`]);
+  });
+
+  it('keeps a space between the paragraphs of a table cell', () => {
+    const { content } = build({
+      [GUIDE_PAGE]: guidePage(`## Notes
+
+<pds-table>
+  <pds-table-head>
+    <pds-table-head-cell>Note</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>
+        First
+
+        Second
+      </pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>`),
+    });
+
+    assert.equal(section(doc(content, GUIDE_PAGE).sections, 'notes').markdown, '| Note |\n| --- |\n| First Second |');
+  });
+
+  it('records a story canvas named by a direct import', () => {
+    const { content } = build({
+      [WIDGET_PAGE]: `import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-widget.stories.js';
+import { Compact } from '../stories/pds-widget.stories.js';
+
+<Meta of={stories} />
+
+# Widget
+
+## Playground
+
+<Canvas of={Compact} />`,
+    });
+
+    assert.deepEqual(section(doc(content, WIDGET_PAGE).sections, 'playground').embeds, [{ type: 'story', storyId: 'components-widget--compact' }]);
+  });
+
+  it('gives a status badge with no component the status Storybook shows for it', () => {
+    const { content } = build(
+      { [WIDGET_PAGE]: widgetPage('').replace('<StatusBadge component="pds-widget" />', '<StatusBadge />') },
+      { statusManifest: { 'pds-widget': { status: 'beta', note: 'Sizes may change.' } } },
+    );
+
+    assert.deepEqual([doc(content, WIDGET_PAGE).status, doc(content, WIDGET_PAGE).statusNote], ['stable', null]);
+  });
+
+  it('takes the summary from under the h1 when content sits above it', () => {
+    const { content, warnings } = build({
+      [GUIDE_PAGE]: `import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/Layouts" />
+
+A note above the title.
+
+# Layouts
+
+The real summary.`,
+    });
+    const page = doc(content, GUIDE_PAGE);
+
+    assert.equal(page.summary, 'The real summary.');
+    assert.equal(page.markdown, 'A note above the title.\n\nThe real summary.');
+    assert.deepEqual(warnings, [`${GUIDE_PAGE}:7: content above the h1 is kept at the start of the page markdown`]);
+  });
+});
