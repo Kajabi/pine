@@ -169,19 +169,39 @@ function ProductImage({ product }) {
 
   return (
     <>
-      <PdsImage
-        alt="Product photo"
-        src={product.imageUrl}
-        onPdsImageLoad={() => setLoaded(true)}
-        onPdsImageError={() => setErrorMessage('The image failed to load.')}
-      />
-      {!loaded && !errorMessage && <div aria-hidden="true">Loading…</div>}
+      <div style={{ position: 'relative' }}>
+        <PdsImage
+          alt="Product photo"
+          ratio="landscape"
+          src={product.imageUrl}
+          onPdsImageLoad={() => setLoaded(true)}
+          onPdsImageError={() => setErrorMessage('The image failed to load.')}
+        />
+        {!loaded && !errorMessage && (
+          <PdsBox
+            aria-hidden="true"
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor="var(--pine-color-background-muted)"
+            style={{ position: 'absolute', inset: 0 }}
+          >
+            <PdsText color="secondary" size="sm">Loading…</PdsText>
+          </PdsBox>
+        )}
+      </div>
       <p role="status">{errorMessage}</p>
     </>
   );
-}`,
-  webComponent: `<pds-image alt="Product photo" src="..."></pds-image>
-<div class="placeholder" aria-hidden="true">Loading…</div>
+}
+
+// A key of the source resets the state when the image changes.
+<ProductImage key={product.imageUrl} product={product} />`,
+  webComponent: `<div style="position: relative;">
+  <pds-image alt="Product photo" ratio="landscape" src="..."></pds-image>
+  <pds-box class="placeholder" aria-hidden="true" align-items="center" justify-content="center" background-color="var(--pine-color-background-muted)" style="position: absolute; inset: 0;">
+    <pds-text color="secondary" size="sm">Loading…</pds-text>
+  </pds-box>
+</div>
 <p role="status"></p>`
 }}>
   <Story of={stories.Events} />
