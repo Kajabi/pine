@@ -2997,7 +2997,7 @@ export namespace Components {
     }
     interface PdsToast {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, sent in the `pdsToastDismissed` event detail. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -7135,7 +7135,7 @@ declare namespace LocalJSX {
     }
     interface PdsToast {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, sent in the `pdsToastDismissed` event detail. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -7158,7 +7158,7 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Event emitted when the toast is dismissed, either manually or automatically.
+          * Emitted when the toast is dismissed by its dismiss button, by `dismiss()` or when `duration` runs out, after the exit animation. The detail holds the toast's `componentId`.
          */
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
         /**
