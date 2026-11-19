@@ -86,12 +86,81 @@ Text can be aligned to the start, center, end, or justified.
 
 Text color can align to our common variant/sentiment values, Pine tokens, or custom colors.
 
-Use a preset or a semantic Pine token rather than a hex value. The presets are `primary`, `secondary`, `neutral`, `accent`, `danger`, `info`, `success` and `warning`, and a token can be written as `--pine-color-text-subtle` or `var(--pine-color-text-subtle)`. The default color, the `primary`, `secondary`, `neutral` and `accent` presets, and semantic tokens such as `--pine-color-text-subtle` switch with `data-theme="dark"`. The `danger`, `info`, `success` and `warning` presets, a hex value, and a palette token such as `--pine-color-purple-300` stay the same in both themes. `primary` is white in the light theme, for text on a dark background, as in the first example below.
+Use a preset or a semantic Pine token rather than a hex value. The presets are `primary`, `secondary`, `neutral`, `accent`, `danger`, `info`, `success` and `warning`, and a token can be written as `--pine-color-text-subtle` or `var(--pine-color-text-subtle)`. The default color, the `primary`, `secondary`, `neutral` and `accent` presets, and semantic tokens such as `--pine-color-text-subtle` switch with `data-theme="dark"`. The `danger`, `info`, `success` and `warning` presets, a hex value, and a palette token such as `--pine-color-purple-300` stay the same in both themes. `primary` is for text on a `--pine-color-primary` fill, as in the first example below. It's the same color as `--pine-color-background-container` in both themes, so it can't be read on a default container or page background.
+
+Each preset sets one of these text tokens:
+
+<pds-table component-id="text-color-presets" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Preset</pds-table-head-cell>
+    <pds-table-head-cell>Token</pds-table-head-cell>
+    <pds-table-head-cell>Light</pds-table-head-cell>
+    <pds-table-head-cell>Dark</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>None (default)</pds-table-cell>
+      <pds-table-cell><code>--pine-color-text</code></pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+      <pds-table-cell>grey-100</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>primary</code></pds-table-cell>
+      <pds-table-cell><code>--pine-color-text-primary</code></pds-table-cell>
+      <pds-table-cell>white</pds-table-cell>
+      <pds-table-cell>black</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>secondary</code></pds-table-cell>
+      <pds-table-cell><code>--pine-color-text-secondary</code></pds-table-cell>
+      <pds-table-cell>grey-800</pds-table-cell>
+      <pds-table-cell>grey-150</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>neutral</code></pds-table-cell>
+      <pds-table-cell><code>--pine-color-text-neutral</code></pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+      <pds-table-cell>grey-100</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>accent</code></pds-table-cell>
+      <pds-table-cell><code>--pine-color-text-accent</code></pds-table-cell>
+      <pds-table-cell>grey-900</pds-table-cell>
+      <pds-table-cell>grey-100</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>danger</code></pds-table-cell>
+      <pds-table-cell><code>--pine-color-text-danger</code></pds-table-cell>
+      <pds-table-cell>red-900</pds-table-cell>
+      <pds-table-cell>red-900</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>info</code></pds-table-cell>
+      <pds-table-cell><code>--pine-color-text-info</code></pds-table-cell>
+      <pds-table-cell>blue-900</pds-table-cell>
+      <pds-table-cell>blue-900</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>success</code></pds-table-cell>
+      <pds-table-cell><code>--pine-color-text-success</code></pds-table-cell>
+      <pds-table-cell>green-900</pds-table-cell>
+      <pds-table-cell>green-900</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><code>warning</code></pds-table-cell>
+      <pds-table-cell><code>--pine-color-text-warning</code></pds-table-cell>
+      <pds-table-cell>yellow-900</pds-table-cell>
+      <pds-table-cell>yellow-900</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+`neutral` and `accent` have the same values as the default color. Without `color`, a `pds-text` or `pds-link` takes any inherited `--color` custom property instead of its default, such as the one an enclosing `pds-text` with `color` sets.
 
 <DocCanvas
   mdxSource={{
     react: `
-      <PdsText style={{backgroundColor: 'var(--pine-color-background-inverse-app)', paddingInline: '8px'}} color="primary" tag="h5">Zebstrika</PdsText>
+      <PdsText style={{backgroundColor: 'var(--pine-color-primary)', paddingInline: '8px'}} color="primary" tag="h5">Zebstrika</PdsText>
       <PdsText color="secondary" tag="h5">Pangoro</PdsText>
       <PdsText color="neutral" tag="h5">Urshifu</PdsText>
       <PdsText color="accent" tag="h5">Sableye</PdsText>
@@ -102,7 +171,7 @@ Use a preset or a semantic Pine token rather than a hex value. The presets are `
       <PdsText color="var(--pine-color-purple-300)" tag="h5">Ditto</PdsText>
     `,
     webComponent: `
-      <pds-text style="background-color: var(--pine-color-background-inverse-app); padding-inline: 8px" color="primary" tag="h5">Zebstrika</pds-text>
+      <pds-text style="background-color: var(--pine-color-primary); padding-inline: 8px" color="primary" tag="h5">Zebstrika</pds-text>
       <pds-text color="secondary" tag="h5">Pangoro</pds-text>
       <pds-text color="neutral" tag="h5">Urshifu</pds-text>
       <pds-text color="accent" tag="h5">Sableye</pds-text>
@@ -113,7 +182,7 @@ Use a preset or a semantic Pine token rather than a hex value. The presets are `
       <pds-text color="var(--pine-color-purple-300)" tag="h5">Ditto</pds-text>
     `
 }}>
-  <pds-text style={{backgroundColor: 'var(--pine-color-background-inverse-app)', paddingInline: '8px'}} color="primary" tag="h5">Zebstrika</pds-text>
+  <pds-text style={{backgroundColor: 'var(--pine-color-primary)', paddingInline: '8px'}} color="primary" tag="h5">Zebstrika</pds-text>
   <pds-text color="secondary" tag="h5">Pangoro</pds-text>
   <pds-text color="neutral" tag="h5">Urshifu</pds-text>
   <pds-text color="accent" tag="h5">Sableye</pds-text>
