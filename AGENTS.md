@@ -65,6 +65,7 @@ Stencil.js web component library in an Nx monorepo. Core components live in `lib
 - Target core only: `npx nx run @pine-ds/core:build`, `npx nx run @pine-ds/core:test`
 - Bundle size: build core, then `npm run size`; PR CI enforces the gzipped budgets (see CONTRIBUTING.md § Bundle size budgets)
 - Public API: `npm run api.check`; after an intentional API change, run `npm run api.update` and commit the reports
+- Docs examples: `npm run docs.check` (builds core first) checks each `DocCanvas` example's `pds-*` tags and `Pds*` components, `pds-icon` names and imported icons, web component attributes, and values of props limited to a fixed set of strings, against `docs.json` and `@pine-ds/icons`; PR CI's `docs-check` job runs it (see CONTRIBUTING.md § Docs examples check)
 - CI's `test-lint` job and the pre-push hook also run `npm run design.tokens -- --check` (DESIGN.md token block) and `npm run truncation.check` (truncated text needs a tooltip)
 - After modifying `*.tsx`, rebuild to regenerate `components.d.ts` and `readme.md`
 - Dev server: `npm run start` (Storybook at localhost:6006)
