@@ -9,7 +9,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-  <pds-tooltip content=${args.content} max-width=${args.maxWidth} has-arrow="${args.hasArrow}" placement=${args.placement} ?opened=${args.opened}>${args.slot}</pds-tooltip>`;
+  <pds-tooltip content=${args.content} max-width=${args.maxWidth} has-arrow="${args.hasArrow}" placement=${args.placement} ?opened=${args.opened}><pds-button variant="secondary">${args.slot}</pds-button></pds-tooltip>`;
 
 const HTMLContentTemplate = (args) => html`
   <pds-tooltip has-arrow="${args.hasArrow}" max-width=${args.maxWidth} placement=${args.placement} ?html-content=${args.htmlContent} ?opened=${args.opened}>
@@ -98,7 +98,7 @@ Default.args = {
   content: "The tooltip content",
   opened: false,
   placement: "right",
-  slot: "target text",
+  slot: "Button",
 };
 
 export const HTMLContent = HTMLContentTemplate.bind({});
@@ -120,7 +120,7 @@ NoArrow.args = {
   hasArrow: false,
   opened: false,
   placement: "bottom-start",
-  slot: "target text"
+  slot: "Button"
 };
 
 export const InModal = InModalTemplate.bind({});
