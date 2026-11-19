@@ -34,6 +34,9 @@
     },
     "api.update": {
       "dependsOn": ["build"]
+    },
+    "docs.check": {
+      "dependsOn": ["build"]
     }
   },
   "release": {
