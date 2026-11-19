@@ -1788,7 +1788,7 @@ export namespace Components {
          */
         "active": boolean;
         /**
-          * Sets the link color. Accepts a preset (`secondary`, `accent` or `danger`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). `secondary` is for links on an inverse background: it's white in the light theme and black in the dark theme.
+          * Sets the link color. Accepts a preset (`secondary`, `accent` or `danger`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Without it, the link takes the color of an enclosing `pds-text` that sets `color`. `secondary` is for links on an inverse background: it's white in the light theme and black in the dark theme.
          */
         "color"?: string;
         /**
@@ -5846,7 +5846,7 @@ declare namespace LocalJSX {
          */
         "active"?: boolean;
         /**
-          * Sets the link color. Accepts a preset (`secondary`, `accent` or `danger`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). `secondary` is for links on an inverse background: it's white in the light theme and black in the dark theme.
+          * Sets the link color. Accepts a preset (`secondary`, `accent` or `danger`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Without it, the link takes the color of an enclosing `pds-text` that sets `color`. `secondary` is for links on an inverse background: it's white in the light theme and black in the dark theme.
          */
         "color"?: string;
         /**
