@@ -25,7 +25,8 @@ export class PdsLink {
   @Prop({ reflect: true }) active = false;
 
   /**
-   * Sets the link color.
+   * Sets the link color. Accepts a preset (`secondary`, `accent` or `danger`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   * `secondary` is for links on an inverse background: it's white in the light theme and black in the dark theme.
    */
   @Prop() color?: string;
 
