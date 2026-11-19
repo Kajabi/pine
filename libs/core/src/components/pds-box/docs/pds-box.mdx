@@ -592,14 +592,16 @@ This approach ensures layouts work correctly regardless of text direction or wri
   </pds-table-body>
 </pds-table>
 
+Start and end follow the text direction: the inline start is on the left in left-to-right text and on the right in right-to-left text (see [Logical Properties](#logical-properties)).
+
 ### Align Items
 
-Defines how items within the box are aligned.
+Defines how items within the box are aligned across its `direction`.
 
 Layout impact:
-- `start`: Items align to the start (top for row, left for column)
+- `start`: Items align to the start (top for row, inline start for column)
 - `center`: Items align to the center
-- `end`: Items align to the end (bottom for row, right for column)
+- `end`: Items align to the end (bottom for row, inline end for column)
 - `baseline`: Items align to their text baseline
 - `stretch`: Items stretch to fill the container (default)
 
@@ -679,11 +681,13 @@ Layout impact:
 Defines how an individual box aligns itself within its parent container, overriding the parent's `align-items` setting.
 
 Layout impact:
-- `start`: Box aligns to the start (top for row, left for column)
+- `start`: Box aligns to the start (top for row, inline start for column)
 - `center`: Box aligns to the center
-- `end`: Box aligns to the end (bottom for row, right for column)
+- `end`: Box aligns to the end (bottom for row, inline end for column)
 - `baseline`: Box aligns to its text baseline
-- `stretch`: Box stretches to fill the container (default)
+- `stretch`: Box stretches to fill the container
+
+Without `align-self`, the box follows its parent's `align-items`.
 
 <DocCanvas
   mdxSource={{
@@ -716,9 +720,9 @@ Layout impact:
 Defines how items within the box are aligned along its `direction`.
 
 Layout impact:
-- `start`: Items pack toward the start (left for row, top for column)
+- `start`: Items pack toward the start (inline start for row, top for column)
 - `center`: Items pack toward the center
-- `end`: Items pack toward the end (right for row, bottom for column)
+- `end`: Items pack toward the end (inline end for row, bottom for column)
 - `space-between`: Items are evenly distributed with first at start, last at end
 - `space-around`: Items are evenly distributed with equal space around them
 - `space-evenly`: Items are evenly distributed with equal space between them and at both ends
