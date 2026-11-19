@@ -17,6 +17,8 @@ const COMPONENTS_DIR = `${CORE_ROOT}/src/components`;
 const STATUSES = ['stable', 'beta', 'deprecated'];
 const UNWRAPPED_ELEMENTS = new Set(['div', 'span', 'p', 'pds-box', 'pds-text']);
 const DROPPED_ELEMENTS = new Set(['Meta', 'Controls', 'Story', 'StatusBadge', 'img']);
+const ABSOLUTE_URL = /^(?:[a-z][a-z\d+.-]*:|\/\/)/i;
+const UNTITLED = '\u0000untitled';
 
 const mdxParser = unified().use(remarkParse).use(remarkMdx).freeze();
 
@@ -107,6 +109,27 @@ function slugHeadings(tree) {
   return slugs;
 }
 
+function referenceDefinitions(tree) {
+  const definitions = new Map();
+  const visit = (node) => {
+    if (node.type === 'definition') definitions.set(node.identifier, node);
+    node.children?.forEach(visit);
+  };
+  visit(tree);
+  return definitions;
+}
+
+/** Storybook names an attached page after its MDX file unless that file shares its stories file's name. */
+function autoName(mdxFile, storiesFile) {
+  const stem = (file) => path.posix.basename(file).split('.')[0];
+  return stem(mdxFile) === stem(storiesFile) ? 'Docs' : stem(mdxFile);
+}
+
+function isTemplate(meta) {
+  const flag = attribute(meta, 'isTemplate');
+  return Boolean(flag) && (flag.value == null || attributeExpression(meta, 'isTemplate')?.value === true);
+}
+
 function storiesImports(tree) {
   const imports = new Map();
   for (const node of tree.children) {
@@ -139,7 +162,7 @@ function withoutNestedBlocks(node, page) {
   if (!node.children) return node;
   const children = node.children.flatMap((child) => {
     if (child.type === 'docCanvas' || child.type === 'embed') {
-      page.warn(child, `${child.type === 'docCanvas' ? 'a DocCanvas' : `a ${child.embed.type} block`} inside a list, quote or table is left out; move it to the top level of its section`);
+      page?.warn(child, `${child.type === 'docCanvas' ? 'a DocCanvas' : `a ${child.embed.type} block`} inside a list, quote or table is left out; move it to the top level of its section`);
       return [];
     }
     const kept = withoutNestedBlocks(child, page);
@@ -194,26 +217,40 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
   const warnings = [];
   const csfCache = new Map();
 
-  function loadStoriesFile(fromFile, specifier) {
+  /** The parsed stories file, or null (with a warning) when it can't be read or has no title. */
+  function loadStoriesFile(fromFile, specifier, warn, node) {
     const key = `${fromFile}\u0000${specifier}`;
     if (!csfCache.has(key)) {
-      const stories = readStories(fromFile, specifier);
-      csfCache.set(key, loadCsf(stories.source, { fileName: stories.file, makeTitle: (title) => title }).parse());
+      let csf = null;
+      try {
+        const stories = readStories(fromFile, specifier);
+        csf = loadCsf(stories.source, { fileName: stories.file, makeTitle: (title) => title ?? UNTITLED }).parse();
+        if (csf.meta.title === UNTITLED) {
+          warn(node, `${specifier} has no title, so its stories have no Storybook id`);
+          csf = null;
+        }
+      } catch (error) {
+        warn(node, `couldn't read ${specifier}: ${error.message.split('\n')[0]}`);
+      }
+      csfCache.set(key, csf);
     }
     return csfCache.get(key);
   }
 
+  /** Mirrors how Storybook's indexer titles and ids an MDX docs page. */
   function storybookMeta(tree, file, imports, warn) {
     const meta = tree.children.find((node) => isJsx(node) && node.name === 'Meta');
     if (!meta) return warn(null, 'no <Meta> to give the page a Storybook id; page left out');
-    const title = attributeString(meta, 'title');
-    if (title) return { storybookTitle: title, storybookId: toId(title, 'Docs') };
+    if (isTemplate(meta)) return null;
     const of = attributeExpression(meta, 'of');
-    const source = of?.type === 'Identifier' ? imports.get(of.name)?.source : undefined;
-    if (!source) return warn(meta, "<Meta of> doesn't name an imported stories file; page left out");
-    const csfTitle = loadStoriesFile(file, source).meta.title;
-    if (!csfTitle) return warn(meta, `${source} has no title, so the page has no Storybook id; page left out`);
-    return { storybookTitle: csfTitle, storybookId: toId(csfTitle, 'Docs') };
+    const binding = of?.type === 'Identifier' ? imports.get(of.name) : undefined;
+    if (of && !binding) return warn(meta, "<Meta of> doesn't name an imported stories file; page left out");
+    const csf = binding ? loadStoriesFile(file, binding.source, warn, meta) : null;
+    if (binding && !csf) return warn(meta, 'page left out');
+    const title = csf?.meta.title || attributeString(meta, 'title');
+    if (!title) return warn(meta, 'no title to give the page a Storybook id; page left out');
+    const name = attributeString(meta, 'name') || (binding ? autoName(file, binding.source) : 'Docs');
+    return { storybookTitle: title, storybookId: toId(csf?.meta.id || attributeString(meta, 'id') || title, name) };
   }
 
   const parsed = [...pages].sort((a, b) => compareStrings(a.file, b.file)).flatMap(({ file, source }) => {
@@ -233,14 +270,19 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       kind: isComponentPage ? 'component' : 'guide',
       componentDir: isComponentPage ? parts.slice(0, -2).join('/') : null,
       slugs: slugHeadings(tree),
+      definitions: referenceDefinitions(tree),
       warn,
       ...meta,
     }];
   });
-  const pagesById = new Map(parsed.map((page) => [page.storybookId, page]));
+  const pagesById = new Map();
+  for (const page of parsed) {
+    if (pagesById.has(page.storybookId)) page.warn(null, `Storybook id ${page.storybookId} is also used by ${pagesById.get(page.storybookId).file}`);
+    else pagesById.set(page.storybookId, page);
+  }
 
   function convertHref(href, page, node) {
-    if (/^[a-z][a-z\d+.-]*:/i.test(href)) return href;
+    if (ABSOLUTE_URL.test(href)) return href;
     if (href.startsWith('#')) {
       if (!page.slugs.has(href.slice(1))) page.warn(node, `in-page link ${href} has no matching heading`);
       return href;
@@ -281,7 +323,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     const of = attributeExpression(node, 'of');
     const binding = page.imports.get(of?.type === 'MemberExpression' ? of.object.name : of?.name);
     const exportName = of?.type === 'MemberExpression' ? of.property.name : binding?.exportName;
-    const stories = binding && exportName ? loadStoriesFile(page.file, binding.source)._stories : undefined;
+    const stories = binding && exportName ? loadStoriesFile(page.file, binding.source, page.warn, node)?._stories : undefined;
     const story = stories && Object.hasOwn(stories, exportName) ? stories[exportName] : undefined;
     if (!story) {
       page.warn(node, "<Canvas of> doesn't name a story in an imported stories file");
@@ -374,6 +416,15 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       if (node.type === 'mdxFlowExpression' || node.type === 'mdxTextExpression') out.push(...convertExpression(node, page));
       else if (isJsx(node)) out.push(...convertJsx(node, page));
       else if (node.type === 'link') out.push(...linkOrText(convertHref(node.url, page, node), node, page));
+      else if (node.type === 'definition') continue;
+      else if (node.type === 'linkReference') {
+        const definition = page.definitions.get(node.identifier);
+        const url = definition ? convertHref(definition.url, page, node) : null;
+        out.push(...linkOrText(url, { type: 'link', title: definition?.title ?? null, children: node.children }, page));
+      } else if (node.type === 'imageReference') {
+        const definition = page.definitions.get(node.identifier);
+        out.push(definition ? { type: 'image', url: definition.url, title: definition.title ?? null, alt: node.alt } : { type: 'text', value: node.alt ?? '' });
+      }
       else if (node.children) out.push({ ...node, children: transform(node.children, page) });
       else out.push(node);
     }
@@ -441,7 +492,8 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     };
     const intro = body(root.nodes, title ?? '', null, page);
     const sections = root.children.map((section) => finish(section, root));
-    const summary = root.nodes.slice(afterTitle).find((node) => node.type === 'paragraph');
+    const firstParagraph = root.nodes.slice(afterTitle).find((node) => node.type === 'paragraph');
+    const summary = firstParagraph && withoutNestedBlocks(firstParagraph, null);
     const tag = page.kind === 'component' ? page.componentDir.split('/').at(-1) : null;
 
     return {
