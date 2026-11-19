@@ -189,7 +189,7 @@ export class PdsBox {
 
   /**
    * Defines the display style of the box.
-   * @defaultValue flex
+   * @defaultValue inline-flex
   */
   @Prop() display?: `flex` | `inline-flex` | `block` | `inline-block`;
 
@@ -305,37 +305,37 @@ export class PdsBox {
   @Prop() flex?: `none` | `grow` | `shrink` | string;
 
   /**
-   * Defines the horizontal alignment of the box items.
+   * Defines how items within the box are aligned along its `direction`: horizontally in a row, vertically in a column.
    * @defaultValue start
   */
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
-   * Defines the horizontal alignment of the box items at the XS breakpoint.
+   * Defines how items within the box are aligned along its `direction` at the XS breakpoint.
    * @defaultValue start
   */
   @Prop() justifyContentXs?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
-   * Defines the horizontal alignment of the box items at the SM breakpoint.
+   * Defines how items within the box are aligned along its `direction` at the SM breakpoint.
    * @defaultValue start
   */
   @Prop() justifyContentSm?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
-   * Defines the horizontal alignment of the box items at the MD breakpoint.
+   * Defines how items within the box are aligned along its `direction` at the MD breakpoint.
    * @defaultValue start
   */
   @Prop() justifyContentMd?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
-   * Defines the horizontal alignment of the box items at the LG breakpoint.
+   * Defines how items within the box are aligned along its `direction` at the LG breakpoint.
    * @defaultValue start
   */
   @Prop() justifyContentLg?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
-   * Defines the horizontal alignment of the box items at the XL breakpoint.
+   * Defines how items within the box are aligned along its `direction` at the XL breakpoint.
    * @defaultValue start
   */
   @Prop() justifyContentXl?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
