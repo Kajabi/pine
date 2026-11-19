@@ -37,12 +37,12 @@ const guidePage = (body) => `import { Meta } from '@storybook/addon-docs/blocks'
 ${body}
 `;
 
-function build(pages, { components = [], statusManifest = {} } = {}) {
+function build(pages, { components = [], statusManifest = {}, stories = {} } = {}) {
   return buildDocsContent({
     pages: Object.entries(pages).map(([file, source]) => ({ file, source })),
     components,
     statusManifest,
-    readStories: (_fromFile, specifier) => ({ file: specifier, source: WIDGET_STORIES }),
+    readStories: (_fromFile, specifier) => ({ file: specifier, source: stories[specifier] ?? WIDGET_STORIES }),
     version: '1.2.3',
     commit: 'abc123',
   });
@@ -411,10 +411,95 @@ After.`),
   });
 
   it('keeps a link the URL parser rejects as it is', () => {
-    const { content, warnings } = build({ [GUIDE_PAGE]: guidePage('## Links\n\n<pds-link href="//">Broken</pds-link>') });
+    const { content, warnings } = build({ [GUIDE_PAGE]: guidePage('## Links\n\n<pds-link href="\\\\">Broken</pds-link>') });
 
-    assert.equal(section(doc(content, GUIDE_PAGE).sections, 'links').markdown, '[Broken](//)');
-    assert.deepEqual(warnings, [`${GUIDE_PAGE}:9: link "//" is neither absolute, in-page nor a Storybook docs link; kept as is`]);
+    assert.equal(section(doc(content, GUIDE_PAGE).sections, 'links').markdown, '[Broken](\\\\\\\\)');
+    assert.deepEqual(warnings, [`${GUIDE_PAGE}:9: link "\\\\" is neither absolute, in-page nor a Storybook docs link; kept as is`]);
+  });
+
+  it('treats protocol-relative links as external, even when their path looks like Storybook', () => {
+    const { content, warnings } = build({
+      [GUIDE_PAGE]: guidePage('## Links\n\n[CDN](//cdn.example.com/docs/guides-layouts--docs) and [other](//other.example.com/?path=/docs/guides-layouts--docs)'),
+    });
+
+    assert.equal(
+      section(doc(content, GUIDE_PAGE).sections, 'links').markdown,
+      '[CDN](//cdn.example.com/docs/guides-layouts--docs) and [other](//other.example.com/?path=/docs/guides-layouts--docs)',
+    );
+    assert.deepEqual(warnings, []);
+  });
+
+  it('resolves reference-style links in the section where the reference sits', () => {
+    const { content, warnings } = build({
+      [GUIDE_PAGE]: guidePage(`## Links
+
+See [the grid][grid] and ![a diagram][diagram].
+
+## Definitions
+
+Text.
+
+[grid]: /docs/guides-layouts--docs#links "Grid notes"
+[diagram]: https://example.com/diagram.png`),
+    });
+    const page = doc(content, GUIDE_PAGE);
+
+    assert.equal(section(page.sections, 'links').markdown, 'See [the grid](pine-doc:guides-layouts--docs#links "Grid notes") and ![a diagram](https://example.com/diagram.png).');
+    assert.equal(section(page.sections, 'definitions').markdown, 'Text.');
+    assert.deepEqual(warnings, []);
+  });
+
+  it('leaves out a page whose stories file has no title, with a warning', () => {
+    const { content, warnings } = build(
+      { [WIDGET_PAGE]: widgetPage(''), [GUIDE_PAGE]: guidePage('') },
+      { stories: { '../stories/pds-widget.stories.js': "export default { component: 'pds-widget' };\nexport const Default = {};" } },
+    );
+
+    assert.deepEqual(content.docs.map((d) => d.file), [GUIDE_PAGE]);
+    assert.deepEqual(warnings, [
+      `${WIDGET_PAGE}:7: ../stories/pds-widget.stories.js has no title, so its stories have no Storybook id`,
+      `${WIDGET_PAGE}:7: page left out`,
+    ]);
+  });
+
+  it('gives a page the Storybook id Storybook does, from its name, ids and file name', () => {
+    const meta = (attributes) => `import { Meta } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-widget.stories.js';
+
+<Meta of={stories} ${attributes} />
+
+# Widget`;
+    const ids = (pages, stories) => build(pages, { stories }).content.docs.map((d) => [d.file.split('/').at(-1), d.storybookId, d.storybookTitle]);
+
+    assert.deepEqual(ids({ [WIDGET_PAGE]: meta('name="Overview"') }), [['pds-widget.mdx', 'components-widget--overview', 'components/Widget']]);
+    assert.deepEqual(ids({ [WIDGET_PAGE]: meta('id="widget-docs"') }), [['pds-widget.mdx', 'widget-docs--docs', 'components/Widget']]);
+    assert.deepEqual(
+      ids({ [WIDGET_PAGE]: meta('') }, { '../stories/pds-widget.stories.js': "export default { title: 'components/Widget', id: 'widget' };\nexport const Default = {};" }),
+      [['pds-widget.mdx', 'widget--docs', 'components/Widget']],
+    );
+    assert.deepEqual(
+      ids({ 'libs/core/src/components/pds-widget/docs/widget-recipes.mdx': meta('title="Ignored/When attached"') }),
+      [['widget-recipes.mdx', 'components-widget--widget-recipes', 'components/Widget']],
+    );
+    assert.deepEqual(ids({ [WIDGET_PAGE]: meta('isTemplate'), [GUIDE_PAGE]: guidePage('') }), [['layouts.docs.mdx', 'guides-layouts--docs', 'Guides/Layouts']]);
+  });
+
+  it('warns when two pages share a Storybook id', () => {
+    const second = 'libs/core/src/stories/guides/layouts-again.docs.mdx';
+    const { content, warnings } = build({ [GUIDE_PAGE]: guidePage(''), [second]: guidePage('') });
+
+    assert.equal(content.docs.length, 2);
+    assert.deepEqual(warnings, [`${GUIDE_PAGE}: Storybook id guides-layouts--docs is also used by ${second}`]);
+  });
+
+  it('keeps a summary paragraph that holds an inline story canvas', () => {
+    const { content, warnings } = build({
+      [WIDGET_PAGE]: widgetPage('').replace('A widget groups related controls.', 'A widget <Canvas of={stories.Default} /> groups related controls.'),
+    });
+
+    assert.equal(doc(content, WIDGET_PAGE).summary, 'A widget  groups related controls.');
+    assert.equal(warnings.length, 1);
+    assert.match(warnings[0], /a story block inside a list, quote or table is left out/);
   });
 
   it('keeps the text of a Storybook link to a page the file does not have', () => {
