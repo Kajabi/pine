@@ -44,7 +44,7 @@ export interface DocsContentDoc {
   statusNote: string | null;
   /** Markdown of the first paragraph under the h1, or null when the page has none there. */
   summary: string | null;
-  /** The page's content between its h1 and its first h2, the summary included. Same rules as `DocsContentSection.markdown`. */
+  /** The page's content before its first h2, other than the h1 itself; the summary included. Same rules as `DocsContentSection.markdown`. */
   markdown: string;
   /** Examples in that content. Their `sectionSlug` is null. */
   examples: DocsContentExample[];
@@ -55,7 +55,8 @@ export interface DocsContentDoc {
 }
 
 export interface DocsContentSection {
-  level: 2 | 3 | 4 | 5 | 6;
+  /** 2 to 6. A page's second h1, if it has one, is a section with level 1. */
+  level: 1 | 2 | 3 | 4 | 5 | 6;
   /** The heading as plain text with inline code kept in backticks. Not escaped markdown. */
   heading: string;
   /** The anchor Storybook gives this heading. Unique within the page, so `#slug` links resolve to it. */

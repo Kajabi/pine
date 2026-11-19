@@ -113,20 +113,42 @@ function storiesImports(tree) {
     if (node.type !== 'mdxjsEsm') continue;
     for (const statement of node.data?.estree?.body ?? []) {
       if (statement.type !== 'ImportDeclaration' || !/\.stories\.[jt]sx?$/.test(statement.source.value)) continue;
-      for (const specifier of statement.specifiers) imports.set(specifier.local.name, statement.source.value);
+      for (const specifier of statement.specifiers) {
+        const exportName = specifier.type === 'ImportSpecifier' ? specifier.imported.name ?? specifier.imported.value : null;
+        imports.set(specifier.local.name, { source: statement.source.value, exportName });
+      }
     }
   }
   return imports;
 }
 
 function storybookLinkTarget(href) {
-  const url = new URL(href, 'https://storybook.invalid/docs-root/');
+  let url;
+  try {
+    url = new URL(href, 'https://storybook.invalid/docs-root/');
+  } catch {
+    return undefined;
+  }
   const pathParam = url.searchParams.get('path') ?? url.pathname;
   if (!pathParam.startsWith('/docs/')) return undefined;
   return { id: pathParam.slice('/docs/'.length), hash: url.hash.slice(1) };
 }
 
-function body(nodes, title, sectionSlug) {
+/** toMarkdown can't write the docCanvas and embed nodes, so any left inside a list, quote or table is dropped. */
+function withoutNestedBlocks(node, page) {
+  if (!node.children) return node;
+  const children = node.children.flatMap((child) => {
+    if (child.type === 'docCanvas' || child.type === 'embed') {
+      page.warn(child, `${child.type === 'docCanvas' ? 'a DocCanvas' : `a ${child.embed.type} block`} inside a list, quote or table is left out; move it to the top level of its section`);
+      return [];
+    }
+    const kept = withoutNestedBlocks(child, page);
+    return kept ? [kept] : [];
+  });
+  return children.length === 0 && node.children.length > 0 ? null : { ...node, children };
+}
+
+function body(nodes, title, sectionSlug, page) {
   const examples = [];
   const embeds = [];
   const content = [];
@@ -139,8 +161,11 @@ function body(nodes, title, sectionSlug) {
     } else if (node.type === 'embed') {
       embeds.push(node.embed);
     } else {
-      content.push(node);
-      prose.push(node);
+      const flow = withoutNestedBlocks(node, page);
+      if (flow) {
+        content.push(flow);
+        prose.push(flow);
+      }
     }
   }
   return { markdown: toMd(content), examples, embeds };
@@ -178,34 +203,39 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     return csfCache.get(key);
   }
 
-  function storybookMeta(tree, file, imports) {
+  function storybookMeta(tree, file, imports, warn) {
     const meta = tree.children.find((node) => isJsx(node) && node.name === 'Meta');
-    if (!meta) throw new Error(`${file}: no <Meta>, so the page has no Storybook id`);
+    if (!meta) return warn(null, 'no <Meta> to give the page a Storybook id; page left out');
     const title = attributeString(meta, 'title');
     if (title) return { storybookTitle: title, storybookId: toId(title, 'Docs') };
     const of = attributeExpression(meta, 'of');
-    const specifier = of?.type === 'Identifier' ? imports.get(of.name) : undefined;
-    if (!specifier) throw new Error(`${file}: <Meta of> doesn't name an imported stories file`);
-    const csfTitle = loadStoriesFile(file, specifier).meta.title;
-    if (!csfTitle) throw new Error(`${file}: the stories file ${specifier} has no title`);
+    const source = of?.type === 'Identifier' ? imports.get(of.name)?.source : undefined;
+    if (!source) return warn(meta, "<Meta of> doesn't name an imported stories file; page left out");
+    const csfTitle = loadStoriesFile(file, source).meta.title;
+    if (!csfTitle) return warn(meta, `${source} has no title, so the page has no Storybook id; page left out`);
     return { storybookTitle: csfTitle, storybookId: toId(csfTitle, 'Docs') };
   }
 
-  const parsed = [...pages].sort((a, b) => compareStrings(a.file, b.file)).map(({ file, source }) => {
+  const parsed = [...pages].sort((a, b) => compareStrings(a.file, b.file)).flatMap(({ file, source }) => {
     const tree = parseMdx(source);
     const imports = storiesImports(tree);
+    const warn = (node, message) => {
+      warnings.push(`${file}${node?.position ? `:${node.position.start.line}` : ''}: ${message}`);
+    };
+    const meta = storybookMeta(tree, file, imports, warn);
+    if (!meta) return [];
     const parts = file.split('/');
     const isComponentPage = file.startsWith(`${COMPONENTS_DIR}/`) && parts.at(-2) === 'docs';
-    return {
+    return [{
       file,
       tree,
       imports,
       kind: isComponentPage ? 'component' : 'guide',
       componentDir: isComponentPage ? parts.slice(0, -2).join('/') : null,
       slugs: slugHeadings(tree),
-      warn: (node, message) => warnings.push(`${file}${node?.position ? `:${node.position.start.line}` : ''}: ${message}`),
-      ...storybookMeta(tree, file, imports),
-    };
+      warn,
+      ...meta,
+    }];
   });
   const pagesById = new Map(parsed.map((page) => [page.storybookId, page]));
 
@@ -226,8 +256,11 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       page.warn(node, `link to the story "${id}" points at its docs page instead`);
       id = docsId;
     }
-    if (!pagesById.has(id)) page.warn(node, `Storybook link "${id}" has no MDX page`);
-    else if (target.hash && !pagesById.get(id).slugs.has(target.hash)) page.warn(node, `link to ${id}#${target.hash} has no matching heading`);
+    if (!pagesById.has(id)) {
+      page.warn(node, `Storybook link "${id}" has no MDX page; kept as plain text`);
+      return null;
+    }
+    if (target.hash && !pagesById.get(id).slugs.has(target.hash)) page.warn(node, `link to ${id}#${target.hash} has no matching heading`);
     return `pine-doc:${id}${target.hash ? `#${target.hash}` : ''}`;
   }
 
@@ -241,25 +274,29 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       if (value === undefined) page.warn(node, `mdxSource.${key} isn't a static string; left out`);
       else source[key] = dedent(value);
     }
-    return { type: 'docCanvas', webComponent: source.webComponent ?? null, react: source.react ?? null };
+    return { type: 'docCanvas', position: node.position, webComponent: source.webComponent ?? null, react: source.react ?? null };
   }
 
   function convertCanvas(node, page) {
     const of = attributeExpression(node, 'of');
-    const specifier = of?.type === 'MemberExpression' ? page.imports.get(of.object.name) : undefined;
-    const story = specifier ? loadStoriesFile(page.file, specifier)._stories[of.property.name] : undefined;
+    const binding = page.imports.get(of?.type === 'MemberExpression' ? of.object.name : of?.name);
+    const exportName = of?.type === 'MemberExpression' ? of.property.name : binding?.exportName;
+    const stories = binding && exportName ? loadStoriesFile(page.file, binding.source)._stories : undefined;
+    const story = stories && Object.hasOwn(stories, exportName) ? stories[exportName] : undefined;
     if (!story) {
       page.warn(node, "<Canvas of> doesn't name a story in an imported stories file");
       return [];
     }
-    return [{ type: 'embed', embed: { type: 'story', storyId: story.id } }];
+    return [{ type: 'embed', position: node.position, embed: { type: 'story', storyId: story.id } }];
   }
 
   function convertTable(node, page) {
     const cellsOf = (parent) =>
       (parent.children ?? []).flatMap((child) => {
         if (child.name === 'pds-table-cell' || child.name === 'pds-table-head-cell') {
-          const phrasing = child.children.flatMap((c) => (c.type === 'paragraph' ? c.children : [c]));
+          const phrasing = child.children.flatMap((c, index) =>
+            c.type === 'paragraph' ? [...(index > 0 ? [{ type: 'text', value: ' ' }] : []), ...c.children] : [c],
+          );
           return [{ type: 'tableCell', children: transform(phrasing, page) }];
         }
         return child.type === 'paragraph' ? cellsOf(child) : [];
@@ -298,21 +335,21 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       case 'Canvas':
         return convertCanvas(node, page);
       case 'DocArgsTable':
-        return [{ type: 'embed', embed: { type: 'props', tag: attributeString(node, 'componentName') ?? null } }];
+        return [{ type: 'embed', position: node.position, embed: { type: 'props', tag: attributeString(node, 'componentName') ?? null } }];
       case 'DocTokenTable': {
         const embed = { type: 'tokens', tier: attributeString(node, 'tier') ?? null, category: attributeString(node, 'category') ?? null };
         const use = attributeString(node, 'use');
-        return [{ type: 'embed', embed: use ? { ...embed, use } : embed }];
+        return [{ type: 'embed', position: node.position, embed: use ? { ...embed, use } : embed }];
       }
       case 'ChangelogLoader':
-        return [{ type: 'embed', embed: { type: 'changelog' } }];
+        return [{ type: 'embed', position: node.position, embed: { type: 'changelog' } }];
       case 'PatternCatalog':
-        return [{ type: 'embed', embed: { type: 'patterns' } }];
+        return [{ type: 'embed', position: node.position, embed: { type: 'patterns' } }];
       case 'pds-table':
         return convertTable(node, page);
       case 'pds-link':
       case 'a':
-        return [{ type: 'link', url: convertHref(attributeString(node, 'href') ?? '', page, node), children: transform(node.children, page) }];
+        return linkOrText(convertHref(attributeString(node, 'href') ?? '', page, node), node, page);
       case 'code':
         return [{ type: 'inlineCode', value: toString({ type: 'root', children: transform(node.children, page) }) }];
       case 'strong':
@@ -325,13 +362,18 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     }
   }
 
+  function linkOrText(url, node, page) {
+    const children = transform(node.children, page);
+    return url === null ? children : [{ ...(node.type === 'link' ? node : {}), type: 'link', url, children }];
+  }
+
   function transform(nodes, page) {
     const out = [];
     for (const node of nodes) {
       if (node.type === 'mdxjsEsm') continue;
       if (node.type === 'mdxFlowExpression' || node.type === 'mdxTextExpression') out.push(...convertExpression(node, page));
       else if (isJsx(node)) out.push(...convertJsx(node, page));
-      else if (node.type === 'link') out.push({ ...node, url: convertHref(node.url, page, node), children: transform(node.children, page) });
+      else if (node.type === 'link') out.push(...linkOrText(convertHref(node.url, page, node), node, page));
       else if (node.children) out.push({ ...node, children: transform(node.children, page) });
       else out.push(node);
     }
@@ -345,8 +387,9 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     const badgeTag = attributeString(badge, 'component');
     if (badgeTag !== undefined && badgeTag !== tag) page.warn(badge, `StatusBadge names ${badgeTag}, but the page documents ${tag}`);
     const statusProp = attributeString(badge, 'status');
-    const fromManifest = statusProp === undefined ? statusManifest[badgeTag ?? tag] : undefined;
-    const value = statusProp ?? fromManifest?.status;
+    const entry = badgeTag === undefined ? undefined : statusManifest[badgeTag];
+    const fromManifest = statusProp === undefined ? entry : undefined;
+    const value = statusProp ?? fromManifest?.status ?? (badgeTag === undefined ? 'stable' : undefined);
     return {
       status: STATUSES.includes(value) ? value : null,
       statusNote: attributeString(badge, 'note') ?? fromManifest?.note ?? null,
@@ -358,6 +401,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     const root = { level: 1, name: null, nodes: [], children: [] };
     const stack = [root];
     let title = null;
+    let afterTitle = 0;
     for (const node of nodes) {
       if (node.type !== 'heading') {
         stack.at(-1).nodes.push(node);
@@ -365,6 +409,8 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       }
       if (node.depth === 1 && title === null) {
         title = headingText(node);
+        afterTitle = root.nodes.length;
+        if (afterTitle > 0) page.warn(node, 'content above the h1 is kept at the start of the page markdown');
         continue;
       }
       if (node.depth === 1) page.warn(node, 'a second h1 is kept as a level-1 section');
@@ -389,13 +435,13 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
         heading,
         slug,
         role,
-        ...body(section.nodes, heading, slug),
+        ...body(section.nodes, heading, slug, page),
         children: section.children.map((child) => finish(child, section)),
       };
     };
-    const intro = body(root.nodes, title ?? '', null);
+    const intro = body(root.nodes, title ?? '', null, page);
     const sections = root.children.map((section) => finish(section, root));
-    const summary = root.nodes.find((node) => node.type === 'paragraph');
+    const summary = root.nodes.slice(afterTitle).find((node) => node.type === 'paragraph');
     const tag = page.kind === 'component' ? page.componentDir.split('/').at(-1) : null;
 
     return {
