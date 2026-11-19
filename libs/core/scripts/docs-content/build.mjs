@@ -37,6 +37,10 @@ const { content, warnings } = buildDocsContent({
   statusManifest: readJson(path.join(coreDir, 'src/stories/resources/component-status.json')).components,
   readStories: (fromFile, specifier) => {
     const absolute = path.resolve(repoDir, path.dirname(fromFile), specifier);
+    const fromSrc = path.relative(path.join(coreDir, 'src'), absolute);
+    if (fromSrc.startsWith('..') || path.isAbsolute(fromSrc)) {
+      throw new Error(`docs-content: ${fromFile} imports stories from outside libs/core/src (${specifier})`);
+    }
     return { file: absolute, source: readFileSync(absolute, 'utf8') };
   },
   version: readJson(path.join(coreDir, 'package.json')).version,
