@@ -1,4 +1,4 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls, Story } from '@storybook/addon-docs/blocks';
 import * as stories from '../stories/pds-image.stories.js';
 
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
@@ -161,29 +161,51 @@ The same portrait source in the same `wide` shape, under each `fit`. `cover` cro
 
 In the example below, each image is covered by a placeholder until it loads. The second `src` does not exist, so its placeholder is replaced by an error message. Reloading changes both `src` values, which shows the placeholders again until the new events arrive.
 
-<Canvas of={stories.Events} />
+<DocCanvas mdxSource={{
+  react: `
+function ProductImage({ product }) {
+  const [loaded, setLoaded] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-```jsx
-// React
-const [loaded, setLoaded] = useState(false);
-const [errorMessage, setErrorMessage] = useState('');
+  return (
+    <>
+      <div style={{ position: 'relative' }}>
+        <PdsImage
+          alt="Product photo"
+          ratio="landscape"
+          src={product.imageUrl}
+          onPdsImageLoad={() => setLoaded(true)}
+          onPdsImageError={() => setErrorMessage('The image failed to load.')}
+        />
+        {!loaded && !errorMessage && (
+          <PdsBox
+            aria-hidden="true"
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor="var(--pine-color-background-muted)"
+            style={{ position: 'absolute', inset: 0 }}
+          >
+            <PdsText color="secondary" size="sm">Loading…</PdsText>
+          </PdsBox>
+        )}
+      </div>
+      <p role="status">{errorMessage}</p>
+    </>
+  );
+}
 
-<PdsImage
-  alt="Product photo"
-  src={product.imageUrl}
-  onPdsImageLoad={() => setLoaded(true)}
-  onPdsImageError={() => setErrorMessage('The image failed to load.')}
-/>
-{!loaded && <div aria-hidden="true">Loading…</div>}
-<p role="status">{errorMessage}</p>
-```
-
-```html
-<!-- Web component -->
-<pds-image alt="Product photo" src="..."></pds-image>
-<div class="placeholder" aria-hidden="true">Loading…</div>
-<p role="status"></p>
-```
+// A key of the source resets the state when the image changes.
+<ProductImage key={product.imageUrl} product={product} />`,
+  webComponent: `<div style="position: relative;">
+  <pds-image alt="Product photo" ratio="landscape" src="..."></pds-image>
+  <pds-box class="placeholder" aria-hidden="true" align-items="center" justify-content="center" background-color="var(--pine-color-background-muted)" style="position: absolute; inset: 0;">
+    <pds-text color="secondary" size="sm">Loading…</pds-text>
+  </pds-box>
+</div>
+<p role="status"></p>`
+}}>
+  <Story of={stories.Events} />
+</DocCanvas>
 
 ```js
 // Web component

@@ -230,17 +230,17 @@ While the text is clipped, a tooltip shows the full text on hover and keyboard f
 - Clipped text becomes a tab stop, so keyboard users can reach the tooltip. Text that fits stays out of the tab order.
 - Inside a link or button (including `pds-button`, `pds-link`, `pds-tab`, and `pds-dropdown-menu-item`), it adds no tab stop of its own. The tooltip appears when that control receives keyboard focus.
 
-See Technical Notes for controls that hold more than one truncated item.
+See [Technical notes](#technical-notes) for controls that hold more than one truncated item.
 
 <DocCanvas
   mdxSource={{
-    react: `<a href="#"><PdsText style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</PdsText></a>`,
-    webComponent: `<a href="#"><pds-text style="max-width: 40ch;" tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</pds-text></a>`
+    react: `<PdsLink href="#"><PdsText style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</PdsText></PdsLink>`,
+    webComponent: `<pds-link href="#"><pds-text style="max-width: 40ch;" tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</pds-text></pds-link>`
 }}>
-  <a href="#"><pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</pds-text></a>
+  <pds-link href="#"><pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</pds-text></pds-link>
 </DocCanvas>
 
-## Technical Notes
+## Technical notes
 
 - A control that holds more than one truncated text keeps a tab stop on each, so their tooltips never open at once.
 - Truncated text beside a `pds-chip` with a `max-width` in the same control keeps its tab stop too. Focusing that tab stop shows only the text's tooltip, and focusing the control shows only the chip's.

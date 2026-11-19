@@ -69,7 +69,7 @@ Columns without a `size` share the row's width equally.
 <DocCanvas
   mdxSource={{
     react: `
-      import { PdsBox, PdsRow } from '@pine-ds/react';
+      import { PdsBox, PdsRow, PdsText } from '@pine-ds/react';
 
       <PdsRow>
         <PdsBox>
@@ -77,8 +77,8 @@ Columns without a `size` share the row's width equally.
         </PdsBox>
         <PdsBox>
           <PdsBox border direction="column">
-            <p>Content 1</p>
-            <p>Content 2</p>
+            <PdsText>Content 1</PdsText>
+            <PdsText>Content 2</PdsText>
           </PdsBox>
         </PdsBox>
         <PdsBox>
@@ -93,8 +93,8 @@ Columns without a `size` share the row's width equally.
         </pds-box>
         <pds-box>
           <pds-box border direction="column">
-            <p>Content 1</p>
-            <p>Content 2</p>
+            <pds-text>Content 1</pds-text>
+            <pds-text>Content 2</pds-text>
           </pds-box>
         </pds-box>
         <pds-box>
@@ -109,8 +109,8 @@ Columns without a `size` share the row's width equally.
     </pds-box>
     <pds-box>
       <pds-box border direction="column">
-        <p>Content 1</p>
-        <p>Content 2</p>
+        <pds-text>Content 1</pds-text>
+        <pds-text>Content 2</pds-text>
       </pds-box>
     </pds-box>
     <pds-box>

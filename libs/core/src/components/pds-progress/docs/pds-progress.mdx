@@ -106,7 +106,9 @@ You can also use CSS gradients for more visual interest.
 
 ### Tooltip
 
-A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default). The tooltip shows on hover only: the progress bar can't take focus, so keyboard users never see it. When the value must be readable by everyone, use `show-percent` instead.
+A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--docs). The tooltip shows on hover only: the progress bar can't take focus, so keyboard users never see it. When the value must be readable by everyone, use `show-percent` instead.
+
+The example sets `width: 100%` on the tooltip. Inside a flex container, the tooltip otherwise shrinks to fit its content and the bar collapses to zero width.
 
 <DocCanvas mdxSource={{
   react: `<PdsTooltip content="50%" hasArrow={false} placement="top" style={{ width: '100%' }}>

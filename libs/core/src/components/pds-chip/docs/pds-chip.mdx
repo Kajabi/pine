@@ -383,7 +383,7 @@ When `remove-url` is provided, the close button is rendered as an `<a>` element 
 
 #### Tag with HTTP Method
 
-The `remove-http-method` property adds `data-method` and `data-turbo-method` to the remove link, for frameworks that read link methods from those attributes. Use it when removal needs a DELETE or another non-GET request. The chip doesn't send the request itself, and any method other than `get` also adds `rel="nofollow"` to the link.
+The `remove-http-method` property adds `data-method` to the remove link, for frameworks that read the link's method from it. Use it when removal needs a DELETE or another non-GET request. The chip doesn't send the request itself, and any method other than `get` also adds `rel="nofollow"` to the link.
 
 > **Note**: The `remove-http-method` property only applies when `remove-url` is provided.
 

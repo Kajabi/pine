@@ -237,19 +237,19 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
 <DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="actions">
   <PdsSortableItem enableActions>
-    <div>Item 1</div>
+    <PdsText>Item 1</PdsText>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
   </PdsSortableItem>
   <PdsSortableItem enableActions>
-    <div>Item 2</div>
+    <PdsText>Item 2</PdsText>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
   </PdsSortableItem>
   <PdsSortableItem enableActions>
-    <div>Item 3</div>
+    <PdsText>Item 3</PdsText>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
@@ -258,19 +258,19 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
   `,
   webComponent: `<pds-sortable component-id="actions">
   <pds-sortable-item enable-actions>
-    <div>Item 1</div>
+    <pds-text>Item 1</pds-text>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
   <pds-sortable-item enable-actions>
-    <div>Item 2</div>
+    <pds-text>Item 2</pds-text>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
   <pds-sortable-item enable-actions>
-    <div>Item 3</div>
+    <pds-text>Item 3</pds-text>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
@@ -279,19 +279,19 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
 `}}>
   <pds-sortable component-id="actions">
     <pds-sortable-item enable-actions>
-      <div>Item 1</div>
+      <pds-text>Item 1</pds-text>
       <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
     <pds-sortable-item enable-actions>
-      <div>Item 2</div>
+      <pds-text>Item 2</pds-text>
       <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
     <pds-sortable-item enable-actions>
-      <div>Item 3</div>
+      <pds-text>Item 3</pds-text>
       <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
@@ -353,28 +353,28 @@ The following is a demo of how all the properties and slots can be used together
 <DocCanvas display="block" mdxSource={{
   react: `<PdsSortable border dividers componentId="demo" handleType="row">
   <PdsSortableItem enableActions showHandle>
-    <div>
-      <div><strong>Item 1</strong></div>
-      <div>Item 1 description copy text</div>
-    </div>
+    <PdsBox direction="column">
+      <PdsText weight="bold">Item 1</PdsText>
+      <PdsText>Item 1 description copy text</PdsText>
+    </PdsBox>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
   </PdsSortableItem>
   <PdsSortableItem enableActions showHandle>
-    <div>
-      <div><strong>Item 2</strong></div>
-      <div>Item 2 description copy text</div>
-    </div>
+    <PdsBox direction="column">
+      <PdsText weight="bold">Item 2</PdsText>
+      <PdsText>Item 2 description copy text</PdsText>
+    </PdsBox>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
   </PdsSortableItem>
   <PdsSortableItem enableActions showHandle>
-    <div>
-      <div><strong>Item 3</strong></div>
-      <div>Item 3 description copy text</div>
-    </div>
+    <PdsBox direction="column">
+      <PdsText weight="bold">Item 3</PdsText>
+      <PdsText>Item 3 description copy text</PdsText>
+    </PdsBox>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
@@ -383,28 +383,28 @@ The following is a demo of how all the properties and slots can be used together
   `,
   webComponent: `<pds-sortable border dividers component-id="demo" handle-type="row">
   <pds-sortable-item enable-actions show-handle>
-    <div>
-      <div><strong>Item 1</strong></div>
-      <div>Item 1 description copy text</div>
-    </div>
+    <pds-box direction="column">
+      <pds-text weight="bold">Item 1</pds-text>
+      <pds-text>Item 1 description copy text</pds-text>
+    </pds-box>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
   <pds-sortable-item enable-actions show-handle>
-    <div>
-      <div><strong>Item 2</strong></div>
-      <div>Item 2 description copy text</div>
-    </div>
+    <pds-box direction="column">
+      <pds-text weight="bold">Item 2</pds-text>
+      <pds-text>Item 2 description copy text</pds-text>
+    </pds-box>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
   <pds-sortable-item enable-actions show-handle>
-    <div>
-      <div><strong>Item 3</strong></div>
-      <div>Item 3 description copy text</div>
-    </div>
+    <pds-box direction="column">
+      <pds-text weight="bold">Item 3</pds-text>
+      <pds-text>Item 3 description copy text</pds-text>
+    </pds-box>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
@@ -413,28 +413,28 @@ The following is a demo of how all the properties and slots can be used together
 `}}>
   <pds-sortable border dividers component-id="demo" handle-type="row">
     <pds-sortable-item enable-actions show-handle>
-      <div>
-        <div><strong>Item 1</strong></div>
-        <div>Item 1 description copy text</div>
-      </div>
+      <pds-box direction="column">
+        <pds-text weight="bold">Item 1</pds-text>
+        <pds-text>Item 1 description copy text</pds-text>
+      </pds-box>
       <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
     <pds-sortable-item enable-actions show-handle>
-      <div>
-        <div><strong>Item 2</strong></div>
-        <div>Item 2 description copy text</div>
-      </div>
+      <pds-box direction="column">
+        <pds-text weight="bold">Item 2</pds-text>
+        <pds-text>Item 2 description copy text</pds-text>
+      </pds-box>
       <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
     <pds-sortable-item enable-actions show-handle>
-      <div>
-        <div><strong>Item 3</strong></div>
-        <div>Item 3 description copy text</div>
-      </div>
+      <pds-box direction="column">
+        <pds-text weight="bold">Item 3</pds-text>
+        <pds-text>Item 3 description copy text</pds-text>
+      </pds-box>
       <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
@@ -508,7 +508,7 @@ export function LessonOrder({ initialLessons }) {
 }
 ```
 
-## Technical Notes
+## Technical notes
 
 The component keeps the classes it puts on its host. If something removes them, such as a DOM morph, it puts them back, so change its layout through props. Classes you add yourself are left alone. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 
