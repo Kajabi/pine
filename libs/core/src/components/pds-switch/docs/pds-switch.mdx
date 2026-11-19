@@ -204,7 +204,7 @@ With `value="1"` and `unchecked-value="0"`, the form below submits `notify=0` wh
   </form>
 </DocCanvas>
 
-## Technical Notes
+## Technical notes
 
 State on the host follows the component's props: the `pds-switch--error` class and `aria-disabled`. It comes back if something removes it, such as a DOM morph, so change it through props. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 

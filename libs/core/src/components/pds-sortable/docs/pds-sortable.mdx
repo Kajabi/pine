@@ -508,7 +508,7 @@ export function LessonOrder({ initialLessons }) {
 }
 ```
 
-## Technical Notes
+## Technical notes
 
 The component keeps the classes it puts on its host. If something removes them, such as a DOM morph, it puts them back, so change its layout through props. Classes you add yourself are left alone. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 

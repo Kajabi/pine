@@ -232,7 +232,7 @@ import { danger } from '@pine-ds/icons/icons';
 3. **React vs Web Component**: Use `icon` property for React, `name` for web components
 4. **Check the asset path**: An icon set with `name` loads from the [asset path](/docs/guides-assets--docs) at runtime, so make sure the SVG assets are served there
 
-## Technical Notes
+## Technical notes
 
 - React uses the `icon` property while web components use `name`. This difference is intentional and optimized for each framework's strengths.
 - In React, icons are imported as objects from `@pine-ds/icons/icons` and passed to the `icon` property. This provides type safety, editor autocomplete, and tree-shaking—only imported icons are bundled.
