@@ -25,44 +25,43 @@ export class PdsBox {
   }
 
   /**
-   * Defines how items within the box are aligned.
+   * Defines how items within the box are aligned across its `direction`: vertically in a row, horizontally in a column.
    * @defaultValue stretch
   */
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch` ;
 
   /**
-   * Defines how items within the box are aligned at the XS breakpoint.
+   * Defines how items within the box are aligned across its `direction` at the XS breakpoint.
    * @defaultValue stretch
   */
   @Prop() alignItemsXs?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * Defines how items within the box are aligned at the SM breakpoint.
+   * Defines how items within the box are aligned across its `direction` at the SM breakpoint.
    * @defaultValue stretch
   */
   @Prop() alignItemsSm?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * Defines how items within the box are aligned at the MD breakpoint.
+   * Defines how items within the box are aligned across its `direction` at the MD breakpoint.
    * @defaultValue stretch
   */
   @Prop() alignItemsMd?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * Defines how items within the box are aligned at the LG breakpoint.
+   * Defines how items within the box are aligned across its `direction` at the LG breakpoint.
    * @defaultValue stretch
   */
   @Prop() alignItemsLg?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * Defines how items within the box are aligned at the XL breakpoint.
+   * Defines how items within the box are aligned across its `direction` at the XL breakpoint.
    * @defaultValue stretch
   */
   @Prop() alignItemsXl?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * Defines how the box is aligned within its container.
-   * @defaultValue stretch
+   * Defines how the box is aligned within its container. Without it, the box follows its container's `align-items`.
   */
   @Prop() alignSelf?: `start` | `center` | `end` | `baseline` | `stretch`;
 

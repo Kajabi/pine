@@ -202,38 +202,37 @@ export namespace Components {
      */
     interface PdsBox {
         /**
-          * Defines how items within the box are aligned.
+          * Defines how items within the box are aligned across its `direction`: vertically in a row, horizontally in a column.
           * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the LG breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the LG breakpoint.
           * @defaultValue stretch
          */
         "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the MD breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the MD breakpoint.
           * @defaultValue stretch
          */
         "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the SM breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the SM breakpoint.
           * @defaultValue stretch
          */
         "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XL breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XL breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XS breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XS breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how the box is aligned within its container.
-          * @defaultValue stretch
+          * Defines how the box is aligned within its container. Without it, the box follows its container's `align-items`.
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -4188,38 +4187,37 @@ declare namespace LocalJSX {
      */
     interface PdsBox {
         /**
-          * Defines how items within the box are aligned.
+          * Defines how items within the box are aligned across its `direction`: vertically in a row, horizontally in a column.
           * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the LG breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the LG breakpoint.
           * @defaultValue stretch
          */
         "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the MD breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the MD breakpoint.
           * @defaultValue stretch
          */
         "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the SM breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the SM breakpoint.
           * @defaultValue stretch
          */
         "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XL breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XL breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XS breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XS breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how the box is aligned within its container.
-          * @defaultValue stretch
+          * Defines how the box is aligned within its container. Without it, the box follows its container's `align-items`.
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
