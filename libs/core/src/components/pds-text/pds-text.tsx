@@ -26,7 +26,8 @@ export class PdsText {
   @Prop() align?: 'start' | 'center' | 'end' | 'justify';
 
   /**
-   * Sets the text color.
+   * Sets the text color. Accepts a preset (`primary`, `secondary`, `neutral`, `accent`, `danger`, `info`, `success` or `warning`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   * Defaults to the body text color. `primary` is for text on an inverse background: it's white in the light theme and black in the dark theme.
    */
   @Prop() color?: string;
 
