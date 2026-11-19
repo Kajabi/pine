@@ -30,11 +30,12 @@ By default, modals show content in a dialog that blocks interaction with the pag
 
 ### Accessibility
 
-- Name the dialog: it's labelled by the element with the id `{component-id}-heading`, so give the modal's heading that id.
+- Name the dialog: it's labelled by the element with the id `{component-id}-heading`, so give the modal's heading that id. Without `component-id`, the dialog has no name.
 - Include a close button in the header, with an `aria-label` such as "Close modal".
 - When the modal opens, focus moves to its first control. When it closes, focus returns to the control that opened it.
 - `backdrop-dismiss="false"` turns off Escape as well as backdrop clicks, so keep a clear way out, such as a Cancel or Close button.
-- `disable-top-layer` doesn't trap focus or make the page inert. Use it only when an overlay has to show above the modal (see [Overlays Above the Modal](#overlays-above-the-modal)), or with `disable-initial-focus` for a modal that opens from a background event (see [Technical Notes](#technical-notes)).
+- `disable-top-layer` doesn't trap focus or make the page inert. Use it only when an overlay has to show above the modal (see [Overlays Above the Modal](#overlays-above-the-modal)), or with `disable-initial-focus` for a modal that opens from a background event (see [Technical notes](#technical-notes)).
+- While a modal is open without `disable-top-layer`, a toast outside it sits behind it and can't be clicked, focused or read by assistive technology. Show the message in the modal, such as with a `pds-alert`, or close the modal before showing the toast (see [Toast](/docs/components-toast--docs)).
 
 ## Properties
 
@@ -54,13 +55,13 @@ The `pds-modal-content` component provides a container for the main content of t
 
 The `pds-modal-header` component holds the modal's title and close button. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
 
-{/* <DocArgsTable componentName="pds-modal-header" docSource={components} /> */}
+<DocArgsTable componentName="pds-modal-header" docSource={components} />
 
 #### Modal Footer
 
 The `pds-modal-footer` component holds the modal's actions. It adds no padding or layout, so wrap its content in a `pds-box` with `padding="md"`.
 
-{/* <DocArgsTable componentName="pds-modal-footer" docSource={components} /> */}
+<DocArgsTable componentName="pds-modal-footer" docSource={components} />
 
 ## Examples
 ### Default
@@ -80,7 +81,7 @@ The `pds-modal-footer` component holds the modal's actions. It adds no padding o
                 <PdsBox alignItems="center" justifyContent="space-between" padding="md" fit>
                   <PdsText tag="h2" size="h3" id="default-modal-heading">Modal Title</PdsText>
                   <PdsButton variant="unstyled" iconOnly aria-label="Close modal" onClick={() => setOpen(false)}>
-                    <PdsIcon slot="start" name="remove" aria-hidden="true" />
+                    <PdsIcon slot="start" name="remove" />
                   </PdsButton>
                 </PdsBox>
               </PdsModalHeader>
@@ -108,7 +109,7 @@ The `pds-modal-footer` component holds the modal's actions. It adds no padding o
           <pds-box align-items="center" justify-content="space-between" padding="md" fit>
             <pds-text tag="h2" size="h3" id="default-modal-heading">Modal Title</pds-text>
             <pds-button variant="unstyled" icon-only aria-label="Close modal" onclick="document.querySelector('#default-modal').open = false">
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-modal-header>
@@ -139,7 +140,7 @@ The `pds-modal-footer` component holds the modal's actions. It adds no padding o
           <pds-button variant="unstyled" icon-only aria-label="Close modal" onClick={() => {
             document.querySelector('#default-modal').open = false;
           }}>
-            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            <pds-icon slot="start" name="remove"></pds-icon>
           </pds-button>
         </pds-box>
       </pds-modal-header>
@@ -196,7 +197,7 @@ By default, a modal closes on:
 - Escape. When a control inside the modal is open (a combobox, dropdown menu, multiselect, datepicker or `pds-popover` with `popover-type="auto"`), the first Escape closes only that control; the next Escape closes the modal.
 - The browser's own close request, such as a back gesture on Android.
 
-To have a control of your own take Escape, call `preventDefault()` on the Escape `keydown` from a listener on that control, and the modal stays open (see [Technical Notes](#technical-notes)).
+To have a control of your own take Escape, call `preventDefault()` on the Escape `keydown` from a listener on that control, and the modal stays open (see [Technical notes](#technical-notes)).
 
 `backdrop-dismiss` (default `true`) controls whether the modal can be dismissed by clicking outside it, pressing Escape, or the browser's own close request (such as a back gesture).
 
@@ -260,7 +261,7 @@ Modals come in four preset sizes, or a custom width:
     <pds-modal-header>
       <pds-box direction="column" fit padding="md">
         <pds-box align-items="center" fit justify-content="space-between">
-          <pds-text tag="h2" size="h3">Small Modal</pds-text>
+          <pds-text tag="h2" size="h3" id="size-modal-sm-heading">Small Modal</pds-text>
           <pds-button
             class="pds-modal__close"
             variant="unstyled"
@@ -268,7 +269,7 @@ Modals come in four preset sizes, or a custom width:
             onclick="document.querySelector('#size-modal-sm').open = false"
             aria-label="Close modal"
           >
-            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            <pds-icon slot="start" name="remove"></pds-icon>
           </pds-button>
         </pds-box>
       </pds-box>
@@ -284,7 +285,7 @@ Modals come in four preset sizes, or a custom width:
     <pds-modal-header>
       <pds-box direction="column" fit padding="md">
         <pds-box align-items="center" fit justify-content="space-between">
-          <pds-text tag="h2" size="h3">Medium Modal</pds-text>
+          <pds-text tag="h2" size="h3" id="size-modal-md-heading">Medium Modal</pds-text>
           <pds-button
             class="pds-modal__close"
             variant="unstyled"
@@ -292,7 +293,7 @@ Modals come in four preset sizes, or a custom width:
             onclick="document.querySelector('#size-modal-md').open = false"
             aria-label="Close modal"
           >
-            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            <pds-icon slot="start" name="remove"></pds-icon>
           </pds-button>
         </pds-box>
       </pds-box>
@@ -308,7 +309,7 @@ Modals come in four preset sizes, or a custom width:
     <pds-modal-header>
       <pds-box direction="column" fit padding="md">
         <pds-box align-items="center" fit justify-content="space-between">
-          <pds-text tag="h2" size="h3">Large Modal</pds-text>
+          <pds-text tag="h2" size="h3" id="size-modal-lg-heading">Large Modal</pds-text>
           <pds-button
             class="pds-modal__close"
             variant="unstyled"
@@ -316,7 +317,7 @@ Modals come in four preset sizes, or a custom width:
             onclick="document.querySelector('#size-modal-lg').open = false"
             aria-label="Close modal"
           >
-            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            <pds-icon slot="start" name="remove"></pds-icon>
           </pds-button>
         </pds-box>
       </pds-box>
@@ -332,7 +333,7 @@ Modals come in four preset sizes, or a custom width:
     <pds-modal-header>
       <pds-box direction="column" fit padding="md" padding-block-end="xs" padding-block-start="xs">
         <pds-box align-items="center" fit justify-content="space-between">
-          <pds-text tag="h2" size="h3">Fullscreen Modal</pds-text>
+          <pds-text tag="h2" size="h3" id="size-modal-full-heading">Fullscreen Modal</pds-text>
           <pds-button
             class="pds-modal__close"
             variant="unstyled"
@@ -340,7 +341,7 @@ Modals come in four preset sizes, or a custom width:
             onclick="document.querySelector('#size-modal-full').open = false"
             aria-label="Close modal"
           >
-            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            <pds-icon slot="start" name="remove"></pds-icon>
           </pds-button>
         </pds-box>
       </pds-box>
@@ -382,7 +383,7 @@ Custom widths are a code-only option: the Figma component has the preset sizes o
     <pds-modal-header>
       <pds-box direction="column" fit padding="md">
         <pds-box align-items="center" fit justify-content="space-between">
-          <pds-text tag="h2" size="h3">Custom Width Modal</pds-text>
+          <pds-text tag="h2" size="h3" id="size-modal-custom-heading">Custom Width Modal</pds-text>
           <pds-button
             class="pds-modal__close"
             variant="unstyled"
@@ -390,7 +391,7 @@ Custom widths are a code-only option: the Figma component has the preset sizes o
             onclick="document.querySelector('#size-modal-custom').open = false"
             aria-label="Close modal"
           >
-            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            <pds-icon slot="start" name="remove"></pds-icon>
           </pds-button>
         </pds-box>
       </pds-box>
@@ -454,7 +455,7 @@ Use the destructive variant for actions that can't be undone.
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Delete Item</pds-text>
+            <pds-text tag="h2" size="h3" id="destructive-modal-heading">Delete Item</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -462,7 +463,7 @@ Use the destructive variant for actions that can't be undone.
               onclick="document.querySelector('#destructive-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -524,7 +525,7 @@ By default, modals are scrollable when content exceeds the viewport height. The 
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Scrollable Content</pds-text>
+            <pds-text tag="h2" size="h3" id="scroll-modal-heading">Scrollable Content</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -532,7 +533,7 @@ By default, modals are scrollable when content exceeds the viewport height. The 
               onclick="document.querySelector('#scroll-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -588,7 +589,7 @@ When `scrollable={false}`, the modal content will overflow naturally without cre
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Non-Scrollable Content</pds-text>
+            <pds-text tag="h2" size="h3" id="non-scroll-modal-heading">Non-Scrollable Content</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -596,7 +597,7 @@ When `scrollable={false}`, the modal content will overflow naturally without cre
               onclick="document.querySelector('#non-scroll-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -661,7 +662,7 @@ You can override the automatic border detection by explicitly setting the `borde
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Custom Border Examples</pds-text>
+            <pds-text tag="h2" size="h3" id="border-demo-modal-heading">Custom Border Examples</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -669,7 +670,7 @@ You can override the automatic border detection by explicitly setting the `borde
               onclick="document.querySelector('#border-demo-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -759,7 +760,7 @@ Modals can be nested, with only the topmost modal responding to escape key and b
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Outer Modal</pds-text>
+            <pds-text tag="h2" size="h3" id="nested-modal-1-heading">Outer Modal</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -767,7 +768,7 @@ Modals can be nested, with only the topmost modal responding to escape key and b
               onclick="document.querySelector('#nested-modal-1').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -788,7 +789,7 @@ Modals can be nested, with only the topmost modal responding to escape key and b
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Inner Modal</pds-text>
+            <pds-text tag="h2" size="h3" id="nested-modal-2-heading">Inner Modal</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -796,7 +797,7 @@ Modals can be nested, with only the topmost modal responding to escape key and b
               onclick="document.querySelector('#nested-modal-2').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -830,7 +831,7 @@ By default a modal opens with the native `dialog.showModal()`, which promotes it
 
 Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`) in the normal stacking context instead. Overlays with a higher `z-index` can then display above it. A lone `disable-top-layer` modal sits at `--pine-z-index-modal` (6000), and one nested inside another modal at `--pine-z-index-priority` (8000), so an overlay needs a `z-index` above the tier of the modal it stacks over, such as `calc(var(--pine-z-index-modal) + 1)` over a lone modal. In the demo below, a button appended to `document.body` stands in for that overlay.
 
-> **Note:** This mode is for letting a higher-`z-index` overlay (a file picker, an editor menu) appear _above_ the modal, or for pairing with `disable-initial-focus` (see [Technical Notes](#technical-notes)) &mdash; not for making the modal itself non-blocking. The dimming backdrop still covers the page and an outside click still dismisses it (unless `backdrop-dismiss="false"`). What changes: the page is **not** made `inert` and **focus is not trapped**, so controls in an overlay stacked above the modal stay reachable by keyboard and assistive tech (which is why `aria-modal` is `false` in this mode). Escape closes the modal while focus is inside it; when an overlay above the modal owns focus, Escape is left to that overlay so it can close itself. A modal taller than the viewport scrolls the same way in both modes, so its footer stays reachable. One caveat: because the dialog now participates in normal stacking, a page element with its own higher stacking context can overlap it.
+> **Note:** This mode is for letting a higher-`z-index` overlay (a file picker, an editor menu) appear _above_ the modal, or for pairing with `disable-initial-focus` (see [Technical notes](#technical-notes)) &mdash; not for making the modal itself non-blocking. The dimming backdrop still covers the page and an outside click still dismisses it (unless `backdrop-dismiss="false"`). What changes: the page is **not** made `inert` and **focus is not trapped**, so controls in an overlay stacked above the modal stay reachable by keyboard and assistive tech (which is why `aria-modal` is `false` in this mode). Escape closes the modal while focus is inside it; when an overlay above the modal owns focus, Escape is left to that overlay so it can close itself. A modal taller than the viewport scrolls the same way in both modes, so its footer stays reachable. One caveat: because the dialog now participates in normal stacking, a page element with its own higher stacking context can overlap it.
 
 <DocCanvas
   mdxSource={{
@@ -860,7 +861,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Overlays Above the Modal</pds-text>
+            <pds-text tag="h2" size="h3" id="top-layer-modal-heading">Overlays Above the Modal</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -868,7 +869,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
               onclick="document.querySelector('#top-layer-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -898,7 +899,7 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
   </div>
 </DocCanvas>
 
-## Technical Notes
+## Technical notes
 
 - The component renders a native `<dialog>` with `aria-labelledby="{component-id}-heading"`, so give the heading in the modal header that id (for example `<pds-text tag="h2" id="{component-id}-heading">`) for assistive technologies to announce the dialog by name. `aria-modal` is `true` by default and `false` when `disable-top-layer` is set (a non-modal dialog).
 - Focus trapping is managed internally. When `open` becomes `true`, the component stores the previously focused element, queries for focusable nodes inside the modal, and moves focus to the first match. When `hideModal()` is called (directly or indirectly), focus is restored to the element that opened the modal. If that element is gone or can't take focus (disabled or hidden), focus goes to the first control of the open modal now on top, as long as that modal is in the top layer or wraps the one that closed; otherwise the page isn't inert, so focus is left where the browser puts it. In `disable-top-layer` mode focus is still placed on open but **not** trapped, so it can move to overlays stacked above the modal.

@@ -20,6 +20,7 @@ const PORTALED_OVERLAY_SELECTOR = '.pds-popover, .pds-tooltip, .pds-combobox-dro
  * side panel needs on top. With `modal`, it opens that `pds-modal` in the top
  * layer instead and keeps its backdrop. It does not reimplement focus, Escape or dialog semantics —
  * those come from `pds-modal` unchanged.
+ * @slot (default) - The drawer's `pds-drawer-header`, `pds-drawer-content` and `pds-drawer-footer`.
  * @lightDom renders-markup
  */
 @Component({
@@ -59,7 +60,9 @@ export class PdsDrawer {
   }
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. The drawer's dialog is labelled by the element
+   * with the id `{componentId}-heading`, so give the drawer's heading that id. Does not set the host
+   * element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 
