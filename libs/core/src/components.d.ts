@@ -1899,7 +1899,7 @@ export namespace Components {
          */
         "backdropDismiss": boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The dialog is labelled by the element with the id `{componentId}-heading`, so give the modal's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -5957,7 +5957,7 @@ declare namespace LocalJSX {
          */
         "backdropDismiss"?: boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The dialog is labelled by the element with the id `{componentId}-heading`, so give the modal's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
