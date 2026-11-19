@@ -1,13 +1,7 @@
-import { execFileSync } from 'node:child_process';
 import { copyFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { buildDocsContent, CORE_ROOT } from './extract.mjs';
-import { findDocPages } from './pages.mjs';
+import { coreDir, generateDocsContent } from './generate.mjs';
 
-const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-const coreDir = path.resolve(scriptDir, '../..');
-const repoDir = path.resolve(coreDir, '../..');
 const distDir = path.join(coreDir, 'dist');
 const docsJsonPath = path.join(distDir, 'docs.json');
 
@@ -16,39 +10,10 @@ if (!existsSync(docsJsonPath)) {
   process.exit(1);
 }
 
-const readJson = (file) => JSON.parse(readFileSync(file, 'utf8'));
-
-function currentCommit() {
-  try {
-    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: coreDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-  } catch {
-    return null;
-  }
-}
-
-const pages = findDocPages(coreDir).map((relative) => ({
-  file: `${CORE_ROOT}/${relative}`,
-  source: readFileSync(path.join(coreDir, relative), 'utf8'),
-}));
-
-const { content, warnings } = buildDocsContent({
-  pages,
-  components: readJson(docsJsonPath).components,
-  statusManifest: readJson(path.join(coreDir, 'src/stories/resources/component-status.json')).components,
-  readStories: (fromFile, specifier) => {
-    const absolute = path.resolve(repoDir, path.dirname(fromFile), specifier);
-    const fromSrc = path.relative(path.join(coreDir, 'src'), absolute);
-    if (fromSrc.startsWith('..') || path.isAbsolute(fromSrc)) {
-      throw new Error(`docs-content: ${fromFile} imports stories from outside libs/core/src (${specifier})`);
-    }
-    return { file: absolute, source: readFileSync(absolute, 'utf8') };
-  },
-  version: readJson(path.join(coreDir, 'package.json')).version,
-  commit: currentCommit(),
-});
+const { content, warnings } = generateDocsContent(JSON.parse(readFileSync(docsJsonPath, 'utf8')).components);
 
 writeFileSync(path.join(distDir, 'docs-content.json'), `${JSON.stringify(content, null, 2)}\n`);
-copyFileSync(path.join(scriptDir, 'docs-content.d.ts'), path.join(distDir, 'docs-content.d.ts'));
+copyFileSync(path.join(coreDir, 'scripts/docs-content/docs-content.d.ts'), path.join(distDir, 'docs-content.d.ts'));
 
 console.log(`docs-content: wrote dist/docs-content.json (${content.docs.length} pages, ${content.components.length} components)`);
 if (warnings.length) {
