@@ -626,14 +626,14 @@ The dropdown menu can be positioned relative to the trigger using the placement 
   mdxSource={{
     react: `
 <PdsDropdownMenu placement="bottom-end">
-  <PdsChip slot="trigger" sentiment="success" variant="dropdown">Trigger</PdsChip>
+  <PdsButton slot="trigger">Trigger</PdsButton>
   <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
   <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
 </PdsDropdownMenu>
 `,
     webComponent: `
 <pds-dropdown-menu placement="bottom-end">
-  <pds-chip slot="trigger" sentiment="success" variant="dropdown">Trigger</pds-chip>
+  <pds-button slot="trigger">Trigger</pds-button>
   <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
   <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
 </pds-dropdown-menu>
@@ -642,7 +642,7 @@ The dropdown menu can be positioned relative to the trigger using the placement 
 >
 <div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
   <pds-dropdown-menu placement="bottom-end">
-   <pds-chip slot="trigger" sentiment="success" variant="dropdown">Trigger</pds-chip>
+   <pds-button slot="trigger">Trigger</pds-button>
    <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
   </pds-dropdown-menu>
