@@ -47,9 +47,11 @@ Box is our primitive layout component. It is intended to be used as a building b
 
 <DocArgsTable componentName="pds-box" docSource={components} />
 
-## Layout & Direction Properties
+## Examples
 
-### Direction
+### Layout & Direction Properties
+
+#### Direction
 Controls how items flow within the container. It applies to the box's direct children only, so a nested box sets its own.
 
 **Options:**
@@ -116,7 +118,7 @@ import { infoCircle } from '@pine-ds/icons/icons';
   </pds-box>
 </DocCanvas>
 
-### Display
+#### Display
 By default Box is `display: inline-flex`, so on its own it's only as wide as its content. `display="flex"` makes it fill a parent that isn't a flex container. Inside another box, its width comes from the flex layout instead, so use [`fit`](#fit) to make it fill.
 
 Layout impact:
@@ -125,7 +127,7 @@ Layout impact:
 - `block`: Creates a block-level container
 - `inline-block`: Creates an inline-block container
 
-### Wrap
+#### Wrap
 Controls whether flex items wrap to new lines when they don't fit in the container.
 
 **Options:**
@@ -172,9 +174,9 @@ Controls whether flex items wrap to new lines when they don't fit in the contain
 
 ---
 
-## Spacing Properties
+### Spacing Properties
 
-### Spacing Value Reference
+#### Spacing Value Reference
 
 **Core Spacing Tokens** map to specific pixel values from the Pine design system:
 
@@ -313,7 +315,7 @@ Controls whether flex items wrap to new lines when they don't fit in the contain
 
 Use t-shirt sizes for consistent, design-system-aligned spacing, and core tokens when you need precise pixel control.
 
-### Gap
+#### Gap
 Controls spacing between items within the container.
 
 **Options:**
@@ -359,7 +361,7 @@ Controls spacing between items within the container.
   </pds-box>
 </DocCanvas>
 
-### Padding
+#### Padding
 Controls internal spacing within the container. By default Box has no padding.
 
 **Options:**
@@ -394,7 +396,7 @@ Controls internal spacing within the container. By default Box has no padding.
   <pds-box border="true" padding="xxl">Padding xxl</pds-box>
 </DocCanvas>
 
-### Directional Padding
+#### Directional Padding
 Control padding on specific sides using logical properties (accepts both t-shirt sizes and core spacing tokens):
 - `padding-block-start` / `padding-block-end` (top/bottom)
 - `padding-inline-start` / `padding-inline-end` (left/right in LTR)
@@ -434,7 +436,7 @@ Control padding on specific sides using logical properties (accepts both t-shirt
   </pds-box>
 </DocCanvas>
 
-### Margin
+#### Margin
 Controls external spacing around the container using logical properties. By default Box has no margin. There's no `margin` shorthand prop, so set each side you need (accepts both t-shirt sizes and core spacing tokens, or `auto`):
 - `margin-block-start` / `margin-block-end` (top/bottom)
 - `margin-inline-start` / `margin-inline-end` (left/right in LTR)
@@ -460,7 +462,7 @@ Controls external spacing around the container using logical properties. By defa
 
 > Note: Use `gap` in favor of `margin-*` whenever possible.
 
-### Margin auto
+#### Margin auto
 Every `margin-*` prop and its breakpoint variants also take `auto`. An `auto` margin takes up the free space on its side, so `margin-inline-start="auto"` pushes a box, and everything after it, to the end of its row. The row needs room to spare, so give it `fit`. Every pds-box in the row needs `flex="none"` or `flex="shrink"`, or the `auto` prop, the pushed box and its siblings alike: a box with the default `flex-grow` takes the free space itself, which leaves the margin nothing to take.
 
 `margin-inline-end="auto"` pushes what follows it away instead, and in a column that has a height, `margin-block-start="auto"` pushes a box to the bottom. Buttons, text and other non-box children don't grow, so they need no `flex`.
@@ -504,7 +506,7 @@ Use breakpoint variants to move a box only at some widths. Here the action sits 
 
 Use `justify-content="space-between"` when every child should spread out evenly, and an `auto` margin when only one should move.
 
-### Using Core Spacing Tokens
+#### Using Core Spacing Tokens
 When you need precise pixel control that doesn't align with t-shirt sizes, use core spacing tokens. These are numeric values that map to specific pixel sizes (see [Spacing Value Reference](#spacing-value-reference) for the full list).
 
 <DocCanvas
@@ -555,7 +557,7 @@ When you need precise pixel control that doesn't align with t-shirt sizes, use c
   </pds-box>
 </DocCanvas>
 
-### Logical Properties
+#### Logical Properties
 The Box component uses CSS logical properties for layout and spacing, which means properties are defined relative to the content's writing direction rather than physical directions. This makes the component more adaptable to different writing modes and languages.
 
 **Key concepts:**
@@ -568,7 +570,7 @@ This approach ensures layouts work correctly regardless of text direction or wri
 
 ---
 
-## Alignment Properties
+### Alignment Properties
 
 `justify-content` aligns a box's children along its `direction`, and `align-items` and `align-self` align them across it. So in a row, the default, `justify-content` works horizontally and `align-items` vertically, and in a column they swap:
 
@@ -594,7 +596,7 @@ This approach ensures layouts work correctly regardless of text direction or wri
 
 Start and end follow the text direction: the inline start is on the left in left-to-right text and on the right in right-to-left text (see [Logical Properties](#logical-properties)).
 
-### Align Items
+#### Align Items
 
 Defines how items within the box are aligned across its `direction`.
 
@@ -676,7 +678,7 @@ Layout impact:
   </pds-box>
 </DocCanvas>
 
-### Align Self
+#### Align Self
 
 Defines how an individual box aligns itself within its parent container, overriding the parent's `align-items` setting.
 
@@ -715,7 +717,7 @@ Without `align-self`, the box follows its parent's `align-items`.
   </pds-box>
 </DocCanvas>
 
-### Justify Content
+#### Justify Content
 
 Defines how items within the box are aligned along its `direction`.
 
@@ -812,9 +814,9 @@ Layout impact:
 
 ---
 
-## Sizing Properties
+### Sizing Properties
 
-### Size
+#### Size
 
 Grid system:
 - Uses a 12-column grid system
@@ -826,32 +828,146 @@ A `pds-box` that's a direct child of `pds-row` is a column of the row's 12-colum
 
 Columns with no `size` share the width the sized columns leave, equally, as long as they have no layout or border props of their own:
 
-```html
-<!-- These boxes will share available space equally -->
-<pds-row>
-  <pds-box></pds-box>
-  <pds-box></pds-box>
-</pds-row>
-```
+<DocCanvas
+  mdxSource={{
+    react: `import { PdsBox, PdsRow } from '@pine-ds/react';
 
-`size` applies at every width. `size-sm` to `size-xl` apply from their breakpoint up, and `size-xs` applies only below 576px (see [Responsive Breakpoints](#responsive-breakpoints)). Below the breakpoint of its size props, a column is full width, so the columns stack:
+<PdsRow colGap="sm">
+  <PdsBox>
+    <PdsBox border padding="sm">No size</PdsBox>
+  </PdsBox>
+  <PdsBox>
+    <PdsBox border padding="sm">No size</PdsBox>
+  </PdsBox>
+</PdsRow>`,
+    webComponent: `<pds-row col-gap="sm">
+  <pds-box>
+    <pds-box border padding="sm">No size</pds-box>
+  </pds-box>
+  <pds-box>
+    <pds-box border padding="sm">No size</pds-box>
+  </pds-box>
+</pds-row>`
+  }}>
+  <pds-row col-gap="sm">
+    <pds-box>
+      <pds-box border padding="sm">No size</pds-box>
+    </pds-box>
+    <pds-box>
+      <pds-box border padding="sm">No size</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
 
-```html
-<!-- Full width on mobile, half width on tablets and up -->
-<pds-box size="12" size-md="6"></pds-box>
+`size` applies at every width. `size-sm` to `size-xl` apply from their breakpoint up, and `size-xs` applies only below 576px (see [Responsive Breakpoints](#responsive-breakpoints)). Below the breakpoint of its size props, a column is full width, so the columns stack. These are full width below 768px and half width from there up:
 
-<!-- Explicit full width on mobile, different widths at different breakpoints -->
-<pds-box size="12" size-sm="6" size-lg="4"></pds-box>
-```
+<DocCanvas
+  mdxSource={{
+    react: `import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<PdsRow colGap="sm">
+  <PdsBox size="12" sizeMd="6">
+    <PdsBox border padding="sm">size 12, size-md 6</PdsBox>
+  </PdsBox>
+  <PdsBox size="12" sizeMd="6">
+    <PdsBox border padding="sm">size 12, size-md 6</PdsBox>
+  </PdsBox>
+</PdsRow>`,
+    webComponent: `<pds-row col-gap="sm">
+  <pds-box size="12" size-md="6">
+    <pds-box border padding="sm">size 12, size-md 6</pds-box>
+  </pds-box>
+  <pds-box size="12" size-md="6">
+    <pds-box border padding="sm">size 12, size-md 6</pds-box>
+  </pds-box>
+</pds-row>`
+  }}>
+  <pds-row col-gap="sm">
+    <pds-box size="12" size-md="6">
+      <pds-box border padding="sm">size 12, size-md 6</pds-box>
+    </pds-box>
+    <pds-box size="12" size-md="6">
+      <pds-box border padding="sm">size 12, size-md 6</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
+
+With more breakpoint props, each one takes over from its width up. These columns are full width below 576px, half width from 576px and a third from 992px:
+
+<DocCanvas
+  mdxSource={{
+    react: `import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<PdsRow colGap="sm">
+  <PdsBox size="12" sizeSm="6" sizeLg="4">
+    <PdsBox border padding="sm">size 12, size-sm 6, size-lg 4</PdsBox>
+  </PdsBox>
+  <PdsBox size="12" sizeSm="6" sizeLg="4">
+    <PdsBox border padding="sm">size 12, size-sm 6, size-lg 4</PdsBox>
+  </PdsBox>
+  <PdsBox size="12" sizeSm="6" sizeLg="4">
+    <PdsBox border padding="sm">size 12, size-sm 6, size-lg 4</PdsBox>
+  </PdsBox>
+</PdsRow>`,
+    webComponent: `<pds-row col-gap="sm">
+  <pds-box size="12" size-sm="6" size-lg="4">
+    <pds-box border padding="sm">size 12, size-sm 6, size-lg 4</pds-box>
+  </pds-box>
+  <pds-box size="12" size-sm="6" size-lg="4">
+    <pds-box border padding="sm">size 12, size-sm 6, size-lg 4</pds-box>
+  </pds-box>
+  <pds-box size="12" size-sm="6" size-lg="4">
+    <pds-box border padding="sm">size 12, size-sm 6, size-lg 4</pds-box>
+  </pds-box>
+</pds-row>`
+  }}>
+  <pds-row col-gap="sm">
+    <pds-box size="12" size-sm="6" size-lg="4">
+      <pds-box border padding="sm">size 12, size-sm 6, size-lg 4</pds-box>
+    </pds-box>
+    <pds-box size="12" size-sm="6" size-lg="4">
+      <pds-box border padding="sm">size 12, size-sm 6, size-lg 4</pds-box>
+    </pds-box>
+    <pds-box size="12" size-sm="6" size-lg="4">
+      <pds-box border padding="sm">size 12, size-sm 6, size-lg 4</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
 
 A base `size` below `12` is a narrow column **on the smallest screen** too: `size="6"` is half the viewport on a phone, and nothing overrides it. Keep it for a column that should stay narrow at every width, such as a checkbox or icon gutter beside a body column:
 
-```html
-<!-- Deliberately narrow at every breakpoint, including mobile -->
-<pds-box size="2"></pds-box>
-```
+<DocCanvas
+  mdxSource={{
+    react: `import { PdsBox, PdsRow } from '@pine-ds/react';
 
-### Offset
+<PdsRow colGap="sm">
+  <PdsBox size="2">
+    <PdsBox border padding="sm">size 2</PdsBox>
+  </PdsBox>
+  <PdsBox size="10">
+    <PdsBox border padding="sm">size 10</PdsBox>
+  </PdsBox>
+</PdsRow>`,
+    webComponent: `<pds-row col-gap="sm">
+  <pds-box size="2">
+    <pds-box border padding="sm">size 2</pds-box>
+  </pds-box>
+  <pds-box size="10">
+    <pds-box border padding="sm">size 10</pds-box>
+  </pds-box>
+</pds-row>`
+  }}>
+  <pds-row col-gap="sm">
+    <pds-box size="2">
+      <pds-box border padding="sm">size 2</pds-box>
+    </pds-box>
+    <pds-box size="10">
+      <pds-box border padding="sm">size 10</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
+
+#### Offset
 `offset` moves a column toward the end of its `pds-row` by a number of columns, from `0` to `12`, by adding that fraction of the row's width as a start margin. Breakpoint versions such as `offset-md` work like the size props. Use it on a column that has a `size`.
 
 <DocCanvas
@@ -876,7 +992,7 @@ A base `size` below `12` is a narrow column **on the smallest screen** too: `siz
   </pds-row>
 </DocCanvas>
 
-### Auto
+#### Auto
 `auto` sizes a box to its content and stops it from growing or shrinking. In a `pds-row`, it makes a column as wide as its content, and the columns without a size share what's left. Only the base `auto` does this in a row: on a column without a `size`, `auto-xs` to `auto-xl` give it a full line instead, at every screen width.
 
 <DocCanvas
@@ -910,7 +1026,7 @@ A base `size` below `12` is a narrow column **on the smallest screen** too: `siz
   </pds-row>
 </DocCanvas>
 
-### Min Width and Min Height
+#### Min Width and Min Height
 `min-width` and `min-height` set the box's minimum size, as any CSS length such as `300px` or `10rem`. A `min-height` gives the box room to align its items vertically, as in the [Align Items](#align-items) examples.
 
 <DocCanvas
@@ -929,12 +1045,12 @@ A base `size` below `12` is a narrow column **on the smallest screen** too: `siz
   </pds-box>
 </DocCanvas>
 
-### Flex
+#### Flex
 The `flex` prop controls how a box grows or shrinks within its container. It accepts both predefined values and custom CSS flex values.
 
 > **Inside `pds-row`, size columns with `size`, not `flex`.** A column starts at `width: 100%`, so the predefined values give a column without a `size` a full line. A custom value with a basis, such as `flex="1"`, does share the row. Outside a row, `flex` works on a box whose parent is a flex container, such as another `pds-box`.
 
-#### Predefined Values
+##### Predefined Values
 - `none` - The box will not grow or shrink (equivalent to `flex: 0 0 auto`)
 - `grow` - The box will grow to fill available space (equivalent to `flex: 1 1 auto`)
 - `shrink` - The box sizes to its content and shrinks when space is limited, but won't grow (equivalent to `flex: 0 1 auto`)
@@ -1004,7 +1120,7 @@ The `flex` prop controls how a box grows or shrinks within its container. It acc
 
 > **Changed:** `flex="shrink"` used to compile to `flex: 0 0 auto`, the same as `none`. It's now `flex: 0 1 auto`, so a `shrink` box can get narrower than its unwrapped content, and its text wraps. It stops at its narrowest content, such as its longest word -- but a box with `overflow` other than `visible`, or one that holds a `pds-image` or another image with `max-width: 100%`, has no content floor and can shrink to nothing. Use `flex="none"` for thumbnails and other fixed-size tiles.
 
-#### Custom Flex Values
+##### Custom Flex Values
 You can also provide custom CSS flex values as strings for precise control:
 
 <DocCanvas
@@ -1033,7 +1149,7 @@ Common custom flex patterns:
 - `"0 1 auto"`: No growth, can shrink, size based on content
 - `"0 0 200px"`: Fixed 200px width, no grow/shrink
 
-#### ❌ Don't size row columns with flex
+##### ❌ Don't size row columns with flex
 ```html
 <!-- Each column takes a full line -->
 <pds-row>
@@ -1042,7 +1158,7 @@ Common custom flex patterns:
 </pds-row>
 ```
 
-#### ✅ Size columns with size, and use flex inside a box
+##### ✅ Size columns with size, and use flex inside a box
 ```html
 <!-- Two half-width columns -->
 <pds-row>
@@ -1057,7 +1173,7 @@ Common custom flex patterns:
 </pds-box>
 ```
 
-### Fit
+#### Fit
 `fit` sets the box's `width`, `min-width` and `max-width` to `100%`, so it fills its parent's width. A box is `inline-flex` by default and sizes to its content, so use `fit` for a box that should span its container.
 
 - **A box that isn't inside another box** shrinks to its content. Add `fit` (or `display="flex"`) when it should fill its container, such as a page section, a card body or a footer whose `justify-content` should spread its children.
@@ -1102,7 +1218,7 @@ In a `direction="column"` parent that sets `align-items`, a child without `fit` 
   </pds-box>
 </DocCanvas>
 
-### Container
+#### Container
 `container` sets the box's `container-type`, which makes it a size container:
 
 - `inline-size`: the box's width no longer comes from its content. Text that doesn't wrap, such as `pds-text truncate`, truncates at the box's width instead of widening it and every box around it. Children can also use container query units (`cqi`) and `@container` queries against the box's width.
@@ -1143,9 +1259,9 @@ In current browsers, `container` doesn't apply layout or paint containment (some
 
 ---
 
-## Visual Properties
+### Visual Properties
 
-### Background Color
+#### Background Color
 Use `background-color` to fill the box. Pass a Pine color token, either as its name (`--pine-color-background-subtle`) or wrapped in `var()`, or any CSS color. Prefer tokens, so the color follows the theme. Semantic names such as `secondary` aren't supported: the box passes them to CSS as they are, so the background stays transparent.
 
 <DocCanvas
@@ -1163,7 +1279,7 @@ Use `background-color` to fill the box. Pass a Pine color token, either as its n
   </pds-box>
 </DocCanvas>
 
-### Border Sides
+#### Border Sides
 By default, `border` applies to all four sides. Use `border-block-start`, `border-block-end`, `border-inline-start`, and `border-inline-end` to control individual edges.
 
 These follow the same longhand-over-shorthand rules as CSS: `border` sets every side, and a per-side property overrides the side it names. Set a side to `true` to add a border, `false` to remove one, or leave it unset to inherit whatever `border` specifies.
@@ -1186,7 +1302,7 @@ These follow the same longhand-over-shorthand rules as CSS: `border` sets every 
 
 For a standalone rule between unrelated blocks of content, reach for `pds-divider` instead — these props are for edges that belong to the box itself.
 
-### Border Color
+#### Border Color
 Please refer to the color brand guidelines for the appropriate color to use. Use `border-color` to change the color of the border. Like `background-color`, it takes a Pine color token, as its name or wrapped in `var()`, or any CSS color. Without it, the border uses `--pine-color-border`. A semantic name such as `danger` isn't supported, and the border falls back to the text color.
 
 <DocCanvas
@@ -1208,7 +1324,7 @@ Please refer to the color brand guidelines for the appropriate color to use. Use
   <pds-box border="true" border-color="var(--pine-color-border-danger)">Danger border</pds-box>
 </DocCanvas>
 
-### Border Radius
+#### Border Radius
 By default Box has no border radius. Use `border-radius` to change the rounding of the box's corners.
 
 <DocCanvas
@@ -1228,7 +1344,7 @@ By default Box has no border radius. Use `border-radius` to change the rounding 
   <pds-box border="true" border-radius="lg">lg border radius</pds-box>
 </DocCanvas>
 
-### Shadow
+#### Shadow
 By default Box has no shadow. Use `shadow` to add a shadow to the box.
 
 <DocCanvas
@@ -1271,11 +1387,13 @@ A shadow doesn't give the box a background. Pair it with `background-color="--pi
   <pds-box background-color="--pine-color-background-container" shadow="100" padding="md">Card content</pds-box>
 </DocCanvas>
 
-## Responsive Properties
+### Responsive Properties
 
 The base prop, with no suffix, applies at every width. A breakpoint prop overrides it, and any smaller breakpoint prop, within its range. For styles that should apply from small screens up, use the base prop, not `-xs`.
 
-### Responsive Breakpoints
+The breakpoint versions of the boolean props `wrap`, `fit` and `auto` can only turn their behavior on. A `false` value adds nothing, so `wrap-md="false"` doesn't stop a box with `wrap` from wrapping at `md` and up.
+
+#### Responsive Breakpoints
 
 A breakpoint prop ends in the name of the range it applies to, such as `gap-md` or `size-lg`. The `-xs` props apply only below 576px. The others apply from their width up.
 
@@ -1310,7 +1428,7 @@ A breakpoint prop ends in the name of the range it applies to, such as `gap-md` 
 
 For more on how breakpoints work with the grid, see the [Layout documentation](/docs/components-layout--docs#responsive-breakpoints).
 
-### Responsive Gap
+#### Responsive Gap
 
 Control spacing between items at different breakpoints:
 
@@ -1334,7 +1452,7 @@ Control spacing between items at different breakpoints:
   </pds-box>
 </DocCanvas>
 
-### Available Responsive Properties
+#### Available Responsive Properties
 
 These props have `-xs`, `-sm`, `-md`, `-lg` and `-xl` versions, such as `padding-block-start-md`:
 
