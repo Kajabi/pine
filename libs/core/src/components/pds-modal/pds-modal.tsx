@@ -57,6 +57,7 @@ function deepActiveElement(): Element | null {
 }
 
 /**
+ * @slot (default) - The modal's `pds-modal-header`, `pds-modal-content` and `pds-modal-footer`.
  * @lightDom renders-markup
  * @part modal - The panel inside the dialog that holds the modal's content. `pds-modal` has no shadow root, so `::part(modal)` doesn't match it; select it with `pds-modal [part="modal"]` instead.
  */
@@ -80,7 +81,9 @@ export class PdsModal {
   @Prop() backdropDismiss = true;
 
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance. The dialog is labelled by the element with the
+   * id `{componentId}-heading`, so give the modal's heading that id. Does not set the host element's
+   * `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId: string;
 

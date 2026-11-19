@@ -3,6 +3,7 @@ import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
  * Holds the drawer's title and close control in a padded row, spaced apart, with a divider below.
+ * @slot (default) - The drawer's title and close control.
  * @lightDom renders-markup
  */
 @Component({
