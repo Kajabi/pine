@@ -1,0 +1,53 @@
+name: 'Docs Check'
+description: 'Checks the DocCanvas examples in the MDX docs against docs.json and the icon set'
+
+inputs:
+  node-version:
+    description: 'The version of node to use'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out latest
+      uses: actions/checkout@v6
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Set up Node.js (pinned npm)
+      uses: ./.github/workflows/actions/setup-node-with-pinned-npm
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: '.nvmrc'
+
+    - name: Get NPM cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+    - name: Cache npm
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-npm-${{ github.sha }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
+    - name: Install Dependencies
+      run: npm ci
+      shell: bash
+
+    - name: Download core dist from build-core
+      uses: actions/download-artifact@v4
+      with:
+        name: pine-core-dist-${{ inputs.node-version }}-${{ github.sha }}
+        path: /tmp/pine-core-dist
+
+    - name: Extract core dist
+      run: unzip -q -o /tmp/pine-core-dist/core-dist.zip -d .
+      shell: bash
+
+    # The core workspace script, not the root one: the root script builds core first, and dist/ is already here.
+    - name: Check doc examples
+      run: npm run docs.check --workspace @pine-ds/core
+      shell: bash
