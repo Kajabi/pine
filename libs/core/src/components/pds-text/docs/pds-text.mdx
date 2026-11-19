@@ -155,7 +155,7 @@ Each preset sets one of these text tokens:
   </pds-table-body>
 </pds-table>
 
-`neutral` and `accent` have the same values as the default color. A `pds-text` or `pds-link` without `color` inside a `pds-text` that sets `color` takes that color instead of its default.
+`neutral` and `accent` have the same values as the default color. Without `color`, a `pds-text` or `pds-link` takes any inherited `--color` custom property instead of its default, such as the one an enclosing `pds-text` with `color` sets.
 
 <DocCanvas
   mdxSource={{
