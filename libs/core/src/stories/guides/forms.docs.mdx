@@ -5,6 +5,8 @@ import { DocCanvas } from '@pine-ds/doc-components';
 
 # Using Pine Form Components
 
+How to build a native `<form>` with Pine's form controls: what each control submits, the rules for labels, names and boolean props, how to show validation errors, and which events report changes.
+
 ## Overview
 
 Pine form controls work inside a native `<form>`. `pds-input`, `pds-textarea`, `pds-select`, `pds-checkbox`, `pds-switch`, `pds-combobox`, `pds-multiselect` and `pds-datepicker` are form-associated custom elements, so the form submits their values the way it submits native controls. `pds-radio` renders a native radio input in the page, outside any shadow root, and `pds-radio-group` gives a set of radios one name and one label. A `pds-button` with `type="submit"` submits the form it's in.
