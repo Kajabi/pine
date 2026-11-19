@@ -100,6 +100,26 @@ Write each example as a `DocCanvas` with both sources, and the same markup as it
 - Keep the wording consumer-neutral: describe Pine's behavior, not a particular app or framework that uses it.
 - Everything below `<!-- Auto Generated Below -->` in `readme.md` is generated. To change a prop, event or method description there, edit the JSDoc in the `.tsx` and rebuild.
 
+### Docs as data (`docs-content.json`)
+
+The core build also publishes the docs as data, for tools and AI agents that read them without parsing MDX. After `stencil build`, it parses every MDX page Storybook shows and writes `libs/core/dist/docs-content.json`, which ships in `@pine-ds/core` next to `docs.json`. That covers the component pages and the pages under `libs/core/src/stories/`. `dist/docs-content.d.ts` describes every field; its source is `libs/core/scripts/docs-content/docs-content.d.ts`.
+
+Each page becomes an entry with its summary, its status and a tree of its sections. Each section has its heading, the anchor Storybook gives it, its own markdown and its `DocCanvas` examples. The conversion relies on the page conventions above, plus:
+
+- Each `mdxSource` string is plain text, with no `${…}`.
+- `DocCanvas`, `<Canvas>` and `<DocArgsTable>` sit at the top level of their section, not inside a list, quote or table.
+- Doc tables are `<pds-table>` elements with `<pds-table-head>` and `<pds-table-body>`. They become markdown tables.
+- Links to another page use its Storybook path (`/docs/<id>` or `?path=/docs/<id>`). They become `pine-doc:<id>` links.
+- Headings are markdown headings, not JSX.
+
+A component outside a `DocCanvas` that the converter doesn't know stays in the markdown as JSX, and the build prints a warning. Add a conversion for it in `libs/core/scripts/docs-content/extract.mjs` instead of leaving the warning.
+
+Core's `npm test` checks the content against every page's sections, words, table cells, examples, code blocks and links. To run that check on its own:
+
+```zsh
+npm run test.docs-content --workspace @pine-ds/core
+```
+
 ### Bundle size budgets
 
 PR CI enforces gzipped size budgets on core CDN bundles via `size-limit`. Build core, then check budgets locally:
