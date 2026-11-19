@@ -35,7 +35,7 @@ For accessibility, it is strongly encouraged to follow these best practices:
 - Use appropriate toast types (default, danger, loading) to convey the message importance.
 - A `danger` toast announces "Error" before its message, so the severity isn't conveyed by color alone. Pass a translated `severityLabel` to localize it, or to announce a severity on another type. Because the severity is read first, don't start the message with the same word ("Error: payment failed" would be heard as "Error Error: payment failed"); pass `severityLabel=""` to turn the announcement off if the message already says it.
 - The toast's `icon` is decorative and hidden from assistive technology; put anything it means in the message.
-- The `duration` timer doesn't pause on hover or focus. Give a toast that holds a link `duration="0"` and keep it `dismissible`, so keyboard and screen reader users can reach the link before the toast closes.
+- The `duration` timer doesn't pause on hover or focus. Give a toast that holds a link `duration="0"` and leave it `dismissible` (the default), so keyboard and screen reader users can reach the link before the toast closes.
 - While a `pds-modal` is open in the top layer (the default), the rest of the page is inert. A toast outside the modal is drawn under its backdrop, can't be clicked or focused, and is left out of the accessibility tree, so it isn't announced. Show the message inside the modal, such as with a `pds-alert`, or close the modal before showing the toast.
 
 ## Properties
