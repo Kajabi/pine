@@ -1,12 +1,16 @@
 .pds-modal__backdrop {
-  align-items: flex-start;
   /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
   background-color: rgba(0, 0, 0, 0.4);
   border: 0;
-  display: flex;
+  // Three rows place the modal a little above vertical center: the space around it splits 4:5 above
+  // and below, never less than the md gap on either side. A modal taller than the viewport leaves
+  // both gaps at their minimum and scrolls from its top. The side columns keep the same gap from
+  // the edges of a narrow viewport.
+  display: grid;
+  grid-template-columns: var(--pine-dimension-md) minmax(0, 1fr) var(--pine-dimension-md);
+  grid-template-rows: minmax(var(--pine-dimension-md), 4fr) auto minmax(var(--pine-dimension-md), 5fr);
   height: 100%;
   inset: 0;
-  justify-content: center;
   margin: 0;
   max-height: 100%;
   max-width: 100%;
@@ -68,7 +72,9 @@
   box-shadow: var(--pine-box-shadow-400);
   display: flex;
   flex-direction: column;
-  margin: var(--pine-dimension-md);
+  grid-area: 2 / 2;
+  justify-self: center;
+  margin: 0;
   max-height: none;
   width: 100%;
 
@@ -80,21 +86,6 @@
     }
   }
 
-  @media (min-width: 992px) {
-    margin-block-start: 6vh;
-
-    @supports (height: 100dvh) {
-      margin-block-start: 6dvh;
-    }
-  }
-
-  @media (min-width: 1200px) {
-    margin-block-start: 8vh;
-
-    @supports (height: 100dvh) {
-      margin-block-start: 8dvh;
-    }
-  }
 }
 
 .pds-modal--sm {
@@ -116,6 +107,7 @@
 
 .pds-modal--fullscreen {
   border-radius: 0;
+  grid-area: 1 / 1 / -1 / -1;
   height: 100%;
   margin: 0;
   max-height: 100vh;
