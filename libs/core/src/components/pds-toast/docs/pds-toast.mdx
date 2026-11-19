@@ -35,6 +35,8 @@ For accessibility, it is strongly encouraged to follow these best practices:
 - Use appropriate toast types (default, danger, loading) to convey the message importance.
 - A `danger` toast announces "Error" before its message, so the severity isn't conveyed by color alone. Pass a translated `severityLabel` to localize it, or to announce a severity on another type. Because the severity is read first, don't start the message with the same word ("Error: payment failed" would be heard as "Error Error: payment failed"); pass `severityLabel=""` to turn the announcement off if the message already says it.
 - The toast's `icon` is decorative and hidden from assistive technology; put anything it means in the message.
+- The `duration` timer doesn't pause on hover or focus. Give a toast that holds a link `duration="0"` and leave it `dismissible` (the default), so keyboard and screen reader users can reach the link before the toast closes.
+- While a `pds-modal` is open in the top layer (the default), the rest of the page is inert. A toast outside the modal is drawn under its backdrop, can't be clicked or focused, and is left out of the accessibility tree, so it isn't announced. Show the message inside the modal, such as with a `pds-alert`, or close the modal before showing the toast.
 
 ## Properties
 
@@ -94,19 +96,19 @@ A toast notification with a custom icon.
 
 ### With Link
 
-A toast notification that includes a clickable link. Links are automatically styled to match the toast design.
+A toast notification that includes a clickable link. Links are automatically styled to match the toast design. Keep `duration="0"` on a toast with a link outside this demo too, because the timer doesn't pause while someone moves to the link.
 
 <DocCanvas
   mdxSource={{
     react: `<PdsToast componentId="toast-link" duration={0}>
-  New update available. <a href="#">Learn more</a>
+  New update available. <a href="#updates">Learn more</a>
 </PdsToast>`,
     webComponent: `<pds-toast component-id="toast-link" duration="0">
-  New update available. <a href="#">Learn more</a>
+  New update available. <a href="#updates">Learn more</a>
 </pds-toast>`
 }}>
   <div style={{ width: '100%', maxWidth: '300px' }}>
-  <pds-toast component-id="toast-link" duration="0">New update available. <a href="#">Learn more</a></pds-toast>
+  <pds-toast component-id="toast-link" duration="0">New update available. <a href="#updates">Learn more</a></pds-toast>
   </div>
 </DocCanvas>
 
@@ -137,6 +139,45 @@ A toast notification that will remain visible until manually dismissed. This is 
 }}>
   <pds-toast component-id="toast-persistent" duration="0">This toast will stay until dismissed</pds-toast>
 </DocCanvas>
+
+## Showing toasts
+
+A toast renders where you put it, in the normal flow of the page. It doesn't position itself, and Pine has no toast container, so add a container to your page and position it there. Each toast has a `--pine-dimension-2xs` bottom margin, so toasts in the same container are spaced apart.
+
+Add a toast to the container when the event it reports happens. Its message is in a `role="alert"` region, which screen readers announce when it's added.
+
+A toast is dismissed by its dismiss button, when `duration` runs out, or when you call `dismiss()`. It plays its exit animation, emits `pdsToastDismissed` and is then hidden, but it stays in the DOM, so remove it in a `pdsToastDismissed` listener. The event bubbles, so one listener on the container hears every toast in it.
+
+With a container `<div id="toasts">`, this script adds toasts and removes each one once it's dismissed:
+
+```javascript
+const container = document.getElementById('toasts');
+
+container.addEventListener('pdsToastDismissed', (event) => event.target.remove());
+
+function showToast(componentId, message) {
+  const toast = document.createElement('pds-toast');
+  toast.componentId = componentId;
+  toast.textContent = message;
+  container.append(toast);
+}
+```
+
+In React, render the toasts from state and drop each one when it's dismissed:
+
+```tsx
+type Toast = { id: string; message: string };
+
+const Toasts = ({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id: string) => void }) => (
+  <div id="toasts">
+    {toasts.map(({ id, message }) => (
+      <PdsToast key={id} componentId={id} onPdsToastDismissed={() => onDismiss(id)}>
+        {message}
+      </PdsToast>
+    ))}
+  </div>
+);
+```
 
 ## Playground
 

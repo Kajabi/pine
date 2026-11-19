@@ -202,38 +202,37 @@ export namespace Components {
      */
     interface PdsBox {
         /**
-          * Defines how items within the box are aligned.
+          * Defines how items within the box are aligned across its `direction`: vertically in a row, horizontally in a column.
           * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the LG breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the LG breakpoint.
           * @defaultValue stretch
          */
         "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the MD breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the MD breakpoint.
           * @defaultValue stretch
          */
         "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the SM breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the SM breakpoint.
           * @defaultValue stretch
          */
         "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XL breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XL breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XS breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XS breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how the box is aligned within its container.
-          * @defaultValue stretch
+          * Defines how the box is aligned within its container. Without it, the box follows its container's `align-items`.
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -325,7 +324,7 @@ export namespace Components {
         "direction"?: `row` | `column`;
         /**
           * Defines the display style of the box.
-          * @defaultValue flex
+          * @defaultValue inline-flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         /**
@@ -387,32 +386,32 @@ export namespace Components {
          */
         "gapXs"?: BoxSpacingType;
         /**
-          * Defines the horizontal alignment of the box items.
+          * Defines how items within the box are aligned along its `direction`: horizontally in a row, vertically in a column.
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the LG breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the LG breakpoint.
           * @defaultValue start
          */
         "justifyContentLg"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the MD breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the MD breakpoint.
           * @defaultValue start
          */
         "justifyContentMd"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the SM breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the SM breakpoint.
           * @defaultValue start
          */
         "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the XL breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the XL breakpoint.
           * @defaultValue start
          */
         "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the XS breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the XS breakpoint.
           * @defaultValue start
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
@@ -1472,7 +1471,7 @@ export namespace Components {
      */
     interface PdsDrawer {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The drawer's dialog is labelled by the element with the id `{componentId}-heading`, so give the drawer's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1899,7 +1898,7 @@ export namespace Components {
          */
         "backdropDismiss": boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The dialog is labelled by the element with the id `{componentId}-heading`, so give the modal's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2997,7 +2996,7 @@ export namespace Components {
     }
     interface PdsToast {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, sent in the `pdsToastDismissed` event detail. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -4188,38 +4187,37 @@ declare namespace LocalJSX {
      */
     interface PdsBox {
         /**
-          * Defines how items within the box are aligned.
+          * Defines how items within the box are aligned across its `direction`: vertically in a row, horizontally in a column.
           * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the LG breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the LG breakpoint.
           * @defaultValue stretch
          */
         "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the MD breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the MD breakpoint.
           * @defaultValue stretch
          */
         "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the SM breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the SM breakpoint.
           * @defaultValue stretch
          */
         "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XL breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XL breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XS breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XS breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how the box is aligned within its container.
-          * @defaultValue stretch
+          * Defines how the box is aligned within its container. Without it, the box follows its container's `align-items`.
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -4311,7 +4309,7 @@ declare namespace LocalJSX {
         "direction"?: `row` | `column`;
         /**
           * Defines the display style of the box.
-          * @defaultValue flex
+          * @defaultValue inline-flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         /**
@@ -4373,32 +4371,32 @@ declare namespace LocalJSX {
          */
         "gapXs"?: BoxSpacingType;
         /**
-          * Defines the horizontal alignment of the box items.
+          * Defines how items within the box are aligned along its `direction`: horizontally in a row, vertically in a column.
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the LG breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the LG breakpoint.
           * @defaultValue start
          */
         "justifyContentLg"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the MD breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the MD breakpoint.
           * @defaultValue start
          */
         "justifyContentMd"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the SM breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the SM breakpoint.
           * @defaultValue start
          */
         "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the XL breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the XL breakpoint.
           * @defaultValue start
          */
         "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the XS breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the XS breakpoint.
           * @defaultValue start
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
@@ -5490,7 +5488,7 @@ declare namespace LocalJSX {
      */
     interface PdsDrawer {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The drawer's dialog is labelled by the element with the id `{componentId}-heading`, so give the drawer's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5957,7 +5955,7 @@ declare namespace LocalJSX {
          */
         "backdropDismiss"?: boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The dialog is labelled by the element with the id `{componentId}-heading`, so give the modal's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -7135,7 +7133,7 @@ declare namespace LocalJSX {
     }
     interface PdsToast {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, sent in the `pdsToastDismissed` event detail. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -7158,7 +7156,7 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Event emitted when the toast is dismissed, either manually or automatically.
+          * Emitted when the toast is dismissed by its dismiss button, by `dismiss()` or when `duration` runs out, after the exit animation. The detail holds the toast's `componentId`.
          */
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
         /**
