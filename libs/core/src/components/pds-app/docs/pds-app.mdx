@@ -1,0 +1,100 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-app.stories.js';
+
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+import { StatusBadge } from '../../../stories/_helpers';
+
+<Meta of={stories} />
+
+<StatusBadge component="pds-app" />
+
+# App frame
+
+> **Proposal, not yet design-reviewed.** Filed as <a href="https://linear.app/kajabi/issue/DSS-237">DSS-237</a>. This is a scaffold matching that ticket's acceptance criteria, built to make the shape concrete for review — treat every visual and API decision here as a starting point, not a settled answer.
+
+`pds-app` is a slot-driven application shell: a fixed header, an optional side nav, and a scrollable main stage — replacing the pattern of wrapping Pine content in Sage's `SageBody`/`SageHeader`/`SageStage`.
+
+## Guidelines
+
+### When to use
+
+- The top-level frame of an admin-style application — one `pds-app` per page, wrapping everything else.
+- Anywhere currently composing `SageBody` + `SageHeader` + `SageStage`, or hand-rolling the same three-region layout from `pds-box`.
+
+### Why one component, not three
+
+Body/Header/Stage in Sage are empty structural wrappers — their only value is a documented, consistent frame. Bundling them as slots on one component means there's one shape to learn instead of three components nobody composes the same way twice.
+
+## Properties
+
+<DocArgsTable componentName="pds-app" docSource={components} />
+
+## Slots
+
+- `header` — fixed top bar, not scrolled with the page. Typically a `pds-topbar`. Collapses to nothing when empty.
+- `nav` — optional side navigation. Collapses to nothing when empty, so a page with no nav doesn't reserve space for it.
+- default — the scrollable main stage. Rendered inside a `pds-container` using the same `size` scale (`mainSize` prop), so this is also how a page gets its content max-width.
+
+## Examples
+
+### Header + main only
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsApp>
+      <PdsTopbar slot="header" logoSrc="/brand/logo.svg" logoAlt="Acme" logoHref="/">
+        <PdsButton size="small" variant="tertiary">Sign out</PdsButton>
+      </PdsTopbar>
+      <div>Main stage content</div>
+    </PdsApp>
+    `,
+    webComponent: `
+    <pds-app>
+      <pds-topbar slot="header" logo-src="/brand/logo.svg" logo-alt="Acme" logo-href="/">
+        <pds-button size="small" variant="tertiary">Sign out</pds-button>
+      </pds-topbar>
+      <div>Main stage content</div>
+    </pds-app>
+    `
+}}>
+  <pds-app style={{ height: '320px', border: '1px solid var(--pine-color-border)', borderRadius: '8px', overflow: 'hidden' }}>
+    <pds-topbar slot="header" logo-src="https://pine-design-system.netlify.app/favicon.svg" logo-alt="Pine" logo-href="/">
+      <pds-button size="small" variant="tertiary">Sign out</pds-button>
+    </pds-topbar>
+    <div style={{ padding: '16px' }}>Main stage content</div>
+  </pds-app>
+</DocCanvas>
+
+### With a nav region
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsApp>
+      <PdsTopbar slot="header" logoSrc="/brand/logo.svg" logoAlt="Acme" />
+      <nav slot="nav">Side nav</nav>
+      <div>Main stage content</div>
+    </PdsApp>
+    `,
+    webComponent: `
+    <pds-app>
+      <pds-topbar slot="header" logo-src="/brand/logo.svg" logo-alt="Acme"></pds-topbar>
+      <nav slot="nav">Side nav</nav>
+      <div>Main stage content</div>
+    </pds-app>
+    `
+}}>
+  <pds-app style={{ height: '320px', border: '1px solid var(--pine-color-border)', borderRadius: '8px', overflow: 'hidden' }}>
+    <pds-topbar slot="header" logo-src="https://pine-design-system.netlify.app/favicon.svg" logo-alt="Pine"></pds-topbar>
+    <nav slot="nav" style={{ inlineSize: '160px', padding: '16px', borderInlineEnd: '1px solid var(--pine-color-border)' }}>Side nav</nav>
+    <div style={{ padding: '16px' }}>Main stage content</div>
+  </pds-app>
+</DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
