@@ -27,7 +27,7 @@ export class PdsText {
 
   /**
    * Sets the text color. Accepts a preset (`primary`, `secondary`, `neutral`, `accent`, `danger`, `info`, `success` or `warning`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-   * Without it, the text takes any inherited `--color` custom property, such as the one an enclosing `pds-text` or `pds-link` with `color` sets, and otherwise uses the body text color. `primary` is for text on an inverse background: it's white in the light theme and black in the dark theme.
+   * Without it, the text takes any inherited `--color` custom property, such as the one an enclosing `pds-text` or `pds-link` with `color` sets, and otherwise uses the body text color. `primary` is for text on a `--pine-color-primary` fill: it's white in the light theme and black in the dark theme.
    */
   @Prop() color?: string;
 
