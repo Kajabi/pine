@@ -107,6 +107,7 @@ The core build also publishes the docs as data, for tools and AI agents that rea
 Each page becomes an entry with its summary, its status and a tree of its sections. Each section has its heading, the anchor Storybook gives it, its own markdown and its `DocCanvas` examples. The conversion relies on the page conventions above, plus:
 
 - Each `mdxSource` string is plain text, with no `${…}`.
+- `DocCanvas`, `<Canvas>` and `<DocArgsTable>` sit at the top level of their section, not inside a list, quote or table.
 - Doc tables are `<pds-table>` elements with `<pds-table-head>` and `<pds-table-body>`. They become markdown tables.
 - Links to another page use its Storybook path (`/docs/<id>` or `?path=/docs/<id>`). They become `pine-doc:<id>` links.
 - Headings are markdown headings, not JSX.
