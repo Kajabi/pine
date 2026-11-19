@@ -114,7 +114,7 @@ Each page becomes an entry with its summary, its status and a tree of its sectio
 
 A component outside a `DocCanvas` that the converter doesn't know stays in the markdown as JSX, and the build prints a warning. Add a conversion for it in `libs/core/scripts/docs-content/extract.mjs` instead of leaving the warning.
 
-Core's `npm test` checks that the file holds every page, heading, example, code block and word of prose. To check it on its own, build core first, then run:
+Core's `npm test` checks the content against every page's sections, words, table cells, examples, code blocks and links. To run that check on its own:
 
 ```zsh
 npm run test.docs-content --workspace @pine-ds/core
