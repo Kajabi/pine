@@ -35,7 +35,7 @@ By default, modals show content in a dialog that blocks interaction with the pag
 - When the modal opens, focus moves to its first control. When it closes, focus returns to the control that opened it.
 - `backdrop-dismiss="false"` turns off Escape as well as backdrop clicks, so keep a clear way out, such as a Cancel or Close button.
 - `disable-top-layer` doesn't trap focus or make the page inert. Use it only when an overlay has to show above the modal (see [Overlays Above the Modal](#overlays-above-the-modal)), or with `disable-initial-focus` for a modal that opens from a background event (see [Technical notes](#technical-notes)).
-- While a modal is open without `disable-top-layer`, a toast outside it sits behind it and can't be clicked, focused or read by assistive technology. See [Toast](/docs/components-toast--docs) for showing feedback while a modal is open.
+- While a modal is open without `disable-top-layer`, a toast outside it sits behind it and can't be clicked, focused or read by assistive technology. Show the message in the modal, such as with a `pds-alert`, or close the modal before showing the toast (see [Toast](/docs/components-toast--docs)).
 
 ## Properties
 
