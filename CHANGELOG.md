@@ -1,3 +1,29 @@
+## 5.1.0 (2026-11-19)
+
+### Features 🚀
+
+- **core:** publish component docs and guides as docs-content.json ([#1004](https://github.com/Kajabi/pine/pull/1004))
+- **pds-multiselect:** emit open and close events and expose the panel as a part ([#992](https://github.com/Kajabi/pine/pull/992))
+- **pds-table:** add select-label and select-all-label for the selection checkboxes ([#998](https://github.com/Kajabi/pine/pull/998))
+
+### Bug Fixes 🐛
+
+- **pds-filter:** stop announcing a menu popup and a collapsed clear trigger ([#997](https://github.com/Kajabi/pine/pull/997))
+- **pds-filter:** emit close once, detect the popover api, and return focus after escape ([#999](https://github.com/Kajabi/pine/pull/999))
+
+### Documentation 📄
+
+- **core:** fix table, sortable, filters and display docs for events and accessibility duties ([#994](https://github.com/Kajabi/pine/pull/994))
+- **core:** fix broken combobox and multiselect examples and document the async-url contract ([#996](https://github.com/Kajabi/pine/pull/996))
+- **core:** describe the default slot of 16 components ([#1001](https://github.com/Kajabi/pine/pull/1001))
+- **core:** document one rule for decorative icons and drop the redundant aria-hidden ([#1002](https://github.com/Kajabi/pine/pull/1002))
+- **core:** move component guidance that only lived in pine-mcp rules into the docs ([#1003](https://github.com/Kajabi/pine/pull/1003))
+- **repo:** bring DESIGN.md and AGENTS.md up to date for AI contributors ([#993](https://github.com/Kajabi/pine/pull/993))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 5.0.1 (2026-11-13)
 
 ### Documentation 📄
