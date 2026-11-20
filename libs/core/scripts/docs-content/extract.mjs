@@ -92,16 +92,16 @@ const slugText = (heading) => toString(heading, { includeImageAlt: false });
 
 /**
  * Slugs every heading in page order, the way rehype-slug does in Storybook, and stores the slug on the
- * heading node so the section tree and the link checks read the same value.
+ * heading node so the section tree and the link checks read the same value. Maps each slug to its line.
  */
 function slugHeadings(tree) {
   const slugger = new GithubSlugger();
-  const slugs = new Set();
+  const slugs = new Map();
   const visit = (node) => {
     if (node.type === 'heading') {
       const slug = slugger.slug(slugText(node));
       node.data = { ...node.data, slug };
-      slugs.add(slug);
+      slugs.set(slug, node.position?.start.line ?? null);
     }
     node.children?.forEach(visit);
   };
@@ -271,6 +271,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       componentDir: isComponentPage ? parts.slice(0, -2).join('/') : null,
       slugs: slugHeadings(tree),
       definitions: referenceDefinitions(tree),
+      links: [],
       warn,
       ...meta,
     }];
@@ -283,11 +284,14 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
 
   function convertHref(href, page, node) {
     if (ABSOLUTE_URL.test(href)) return href;
+    const line = node.position?.start.line ?? null;
     if (href.startsWith('#')) {
+      page.links.push({ href, line, target: { id: page.storybookId, hash: href.slice(1) } });
       if (!page.slugs.has(href.slice(1))) page.warn(node, `in-page link ${href} has no matching heading`);
       return href;
     }
     const target = storybookLinkTarget(href);
+    page.links.push({ href, line, target: target ?? null });
     if (!target) {
       page.warn(node, `link "${href}" is neither absolute, in-page nor a Storybook docs link; kept as is`);
       return href;
@@ -519,6 +523,12 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
   return {
     content: { schemaVersion: SCHEMA_VERSION, version, commit, components: componentIndex, docs },
     warnings,
+    pageLinks: parsed.map((page) => ({
+      file: page.file,
+      storybookId: page.storybookId,
+      headings: [...page.slugs].map(([slug, line]) => ({ slug, line })),
+      links: page.links,
+    })),
   };
 }
 

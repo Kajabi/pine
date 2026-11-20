@@ -196,6 +196,29 @@ Then use the components.`),
     ]);
   });
 
+  it("lists each page's headings and the links it converts, with their lines", () => {
+    const { pageLinks } = build({
+      [WIDGET_PAGE]: widgetPage(`## Related
+
+- [Grid](?path=/docs/guides-layouts--docs#grid)
+- [MDN](https://developer.mozilla.org/)
+- [This page](#related)
+- [Elsewhere](./other.md)`),
+      [GUIDE_PAGE]: guidePage('## Grid\n\nColumns.'),
+    });
+
+    assert.deepEqual(pageLinks.find((page) => page.file === WIDGET_PAGE), {
+      file: WIDGET_PAGE,
+      storybookId: 'components-widget--docs',
+      headings: [{ slug: 'widget', line: 11 }, { slug: 'related', line: 15 }],
+      links: [
+        { href: '?path=/docs/guides-layouts--docs#grid', line: 17, target: { id: 'guides-layouts--docs', hash: 'grid' } },
+        { href: '#related', line: 19, target: { id: 'components-widget--docs', hash: 'related' } },
+        { href: './other.md', line: 20, target: null },
+      ],
+    });
+  });
+
   it('nests headings and marks the sections readers ask for by name', () => {
     const { content } = build({
       [WIDGET_PAGE]: widgetPage(`## Guidelines
