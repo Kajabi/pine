@@ -120,6 +120,33 @@ Core's `npm test` checks the content against every page's sections, words, table
 npm run test.docs-content --workspace @pine-ds/core
 ```
 
+### Docs examples check
+
+PR CI checks the code in every `DocCanvas` (`react` and `webComponent`) on component pages and guides against `dist/docs.json` and the installed `@pine-ds/icons`. It reports:
+
+- **unknown-component**: a `pds-*` tag that isn't in `docs.json`, or a React `Pds*` name that maps to no tag.
+- **unknown-icon**: a literal `name` on `pds-icon` or `PdsIcon` that isn't in the icon set, or a React `icon={x}` whose `x` the snippet imports from `@pine-ds/icons/icons` but the package doesn't export.
+- **unknown-attribute** (web component code only): an attribute on a `pds-*` element that is neither the component's nor a global attribute (`id`, `class`, `slot`, `aria-*`, `data-*`, `on*` and the rest of the HTML standard's list).
+- **invalid-value**: a literal value for a prop whose type is a fixed set of strings, such as `variant`, that isn't in the set. Props that also take free text or CSS lengths aren't checked.
+
+It doesn't check fenced code blocks in prose. Run it locally with:
+
+```zsh
+npm run docs.check
+```
+
+That builds core first. After a build, `npm run docs.check --workspace @pine-ds/core` runs only the check, which reads the MDX as it is now.
+
+Each finding gives the MDX file and line, the example's heading, the rule, what's wrong and a fix:
+
+```text
+libs/core/src/components/pds-button/docs/pds-button.mdx:77  invalid-value  "Secondary" (React)
+  <PdsButton variant="secondry">: pds-button accepts only "accent", "destructive", "disclosure", "filter", "primary", "secondary", "tertiary", "unstyled".
+  Fix: Did you mean "secondary"?
+```
+
+For React code, the line is the element's own line. For web component code, it's the snippet's first line, so look for the quoted tag in that snippet. React code with a syntax error isn't checked: the report lists it under "Not checked", and it doesn't fail the check. The command exits 0 when there are no findings, 1 when there are findings, and 2 when the check itself fails.
+
 ### Bundle size budgets
 
 PR CI enforces gzipped size budgets on core CDN bundles via `size-limit`. Build core, then check budgets locally:

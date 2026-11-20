@@ -62,6 +62,7 @@
     "build.storybook": "storybook build",
     "build.ts": "tsc -p scripts/tsconfig.json",
     "deploy": "npm run build.all",
+    "docs.check": "node scripts/docs-check/run.mjs",
     "generate": "stencil generate",
     "lint": "run-p lint.*",
     "lint.eslint": "eslint src",
@@ -72,8 +73,9 @@
     "start": "run-p start.*",
     "start.stencil": "stencil build --docs --dev --watch --serve --config=stencil.local.config.ts",
     "start.storybook": "storybook dev -p 6006",
-    "test": "npm run test.docs-content && stencil test --spec --e2e --coverage",
+    "test": "npm run test.docs-content && npm run test.docs-check && stencil test --spec --e2e --coverage",
     "test.a11y": "node scripts/a11y.mjs",
+    "test.docs-check": "node --test scripts/docs-check/test/rules.mjs scripts/docs-check/test/examples.mjs scripts/docs-check/test/load.mjs",
     "test.docs-content": "node --test scripts/docs-content/test/extract.mjs scripts/docs-content/test/completeness.mjs",
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },

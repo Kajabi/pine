@@ -155,3 +155,17 @@ jobs:
       - uses: ./.github/workflows/actions/api-check
         with:
           node-version: ${{ matrix.node }}
+
+  # Not a matrix: the check reads static files, so every Node version gives the same result. Pinned to 22 so
+  # build-core's pine-core-dist-22-<sha> artifact resolves, as in build-storybook.
+  docs-check:
+    needs: [build-core]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/workflows/actions/docs-check
+        with:
+          node-version: '22'
