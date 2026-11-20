@@ -41,6 +41,15 @@ export function closedValues(prop) {
   return listed.length === typed.length && listed.every((value, i) => value === typed[i]) ? listed : null;
 }
 
+/** Each page's heading anchors by Storybook id. When two pages share an id, the first keeps it, as in the docs content. */
+function anchorsById(pages) {
+  const anchors = new Map();
+  for (const page of pages) {
+    if (!anchors.has(page.storybookId)) anchors.set(page.storybookId, new Set(page.headings.map((h) => h.slug)));
+  }
+  return anchors;
+}
+
 /**
  * Everything the rules look up, built from plain data so tests can pass fixtures.
  *
@@ -49,8 +58,11 @@ export function closedValues(prop) {
  * @param {string[]} input.iconNames Icon names `pds-icon` accepts in `name`.
  * @param {string[]} input.iconExports Names `@pine-ds/icons/icons` exports.
  * @param {string} input.iconsVersion
+ * @param {{ storybookId: string, headings: { slug: string }[] }[]} [input.pages] Every MDX page with its heading anchors.
+ * @param {string[]} [input.storyDocsIds] The docs page id Storybook gives each stories file, which exists even with no MDX page.
+ * @param {string[]} [input.unknownStories] Stories files with no title or that don't parse, whose docs page id isn't known.
  */
-export function buildContext({ components, iconNames, iconExports, iconsVersion }) {
+export function buildContext({ components, iconNames, iconExports, iconsVersion, pages = [], storyDocsIds = [], unknownStories = [] }) {
   const byTag = new Map();
   for (const component of components) {
     if (!component.tag.startsWith('pds-')) continue;
@@ -71,5 +83,8 @@ export function buildContext({ components, iconNames, iconExports, iconsVersion 
     iconNames: new Set(iconNames),
     iconExports: new Set(iconExports),
     iconsVersion,
+    anchors: anchorsById(pages),
+    docsIds: new Set([...pages.map((page) => page.storybookId), ...storyDocsIds]),
+    unknownStories: [...unknownStories].sort(compareStrings),
   };
 }

@@ -47,6 +47,7 @@ function importFindings(element, snippet, context) {
 
 export default {
   id: 'unknown-icon',
+  scope: 'snippet',
   languages: ['webComponent', 'react'],
   check(snippet, context) {
     return snippet.elements.flatMap((element) => [
