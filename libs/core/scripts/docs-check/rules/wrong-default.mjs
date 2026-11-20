@@ -40,19 +40,25 @@ function stated(text) {
 
 const asNumber = (value) => (value.value !== '' && !Number.isNaN(Number(value.value)) ? Number(value.value) : null);
 
-/** The numbers a prop takes when its type is a union of number literals, such as `1 | 2`; null when it takes any number. */
-function numberUnion(type) {
+const NO_NUMBERS = new Set([ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NullKeyword, ts.SyntaxKind.UndefinedKeyword]);
+
+/**
+ * The numbers a prop's type allows: `'any'` when it includes `number`, the literals of a union such as `1 | 2 | 'auto'`,
+ * or null when part of the type, such as an alias, can't be read here.
+ */
+function allowedNumbers(type) {
   const source = ts.createSourceFile('type.ts', `type T = ${type ?? ''};`, ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
   const [statement] = source.statements;
   if (source.statements.length !== 1 || !statement || !ts.isTypeAliasDeclaration(statement)) return null;
   const members = ts.isUnionTypeNode(statement.type) ? statement.type.types : [statement.type];
   const numbers = [];
   for (const member of members) {
+    if (member.kind === ts.SyntaxKind.NumberKeyword) return 'any';
+    if (NO_NUMBERS.has(member.kind)) continue;
     if (!ts.isLiteralTypeNode(member)) return null;
     const { literal: node } = member;
     if (ts.isNumericLiteral(node)) numbers.push(Number(node.text));
     else if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.MinusToken && ts.isNumericLiteral(node.operand)) numbers.push(-Number(node.operand.text));
-    else return null;
   }
   return numbers;
 }
@@ -67,8 +73,8 @@ function contradicts(value, code, prop) {
     const number = asNumber(value);
     if (number === null) return null;
     if (number === Number(code.value)) return false;
-    const allowed = numberUnion(prop.type);
-    return allowed === null || allowed.includes(number) ? true : null;
+    const allowed = allowedNumbers(prop.type);
+    return allowed === 'any' || allowed?.includes(number) ? true : null;
   }
   if (code.kind === 'keyword') {
     const keyword = value.value.toLowerCase();

@@ -256,13 +256,17 @@ describe('wrong-default', () => {
     assert.deepEqual(messages(run(withDefault("'md'", 'lg'))), ["wrong-default:12: pds-widget's size prop: @defaultValue says lg, but the code default is 'md'."]);
     assert.equal(messages(run(withDefault("'md'", '"sm"'))).length, 1);
     assert.deepEqual(messages(run(withDefault('false', 'true', 'default', {}))), ["wrong-default:12: pds-widget's size prop: @default says true, but the code default is false."]);
-    assert.equal(messages(run(withDefault('1', '2', 'defaultValue', {}))).length, 1);
+    assert.equal(messages(run(withDefault('1', '2', 'defaultValue', { type: 'number', values: [{ type: 'number' }] }))).length, 1);
     assert.equal(messages(run(withDefault('1', '2', 'defaultValue', { type: '1 | 2', values: [{ type: 'number' }] }))).length, 1);
   });
 
-  it('lists a number outside a union of number literals as not checked', () => {
-    const result = run(withDefault('1', '3', 'defaultValue', { type: '1 | 2', values: [{ type: 'number' }] }));
-    assert.deepEqual([messages(result), result.skipped.length], [[], 1]);
+  it('lists a number the type may not allow as not checked: outside a union of literals, or behind an alias', () => {
+    for (const type of ['1 | 2', '1 | 2 | "auto"', 'Size']) {
+      const result = run(withDefault('1', '3', 'defaultValue', { type, values: [{ type: 'number' }] }));
+      assert.deepEqual([messages(result), result.skipped.length], [[], 1], type);
+    }
+    assert.equal(messages(run(withDefault('1', '2', 'defaultValue', { type: '1 | 2 | "auto"', values: [{ type: 'number' }] }))).length, 1);
+    assert.equal(messages(run(withDefault('1', '3', 'defaultValue', { type: 'number | undefined', values: [{ type: 'number' }] }))).length, 1);
   });
 
   it('lists a string default on a prop with no fixed set of values as not checked when the tag differs', () => {
