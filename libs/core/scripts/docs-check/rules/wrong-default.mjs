@@ -40,27 +40,24 @@ function stated(text) {
 
 const asNumber = (value) => (value.value !== '' && !Number.isNaN(Number(value.value)) ? Number(value.value) : null);
 
-const NO_NUMBERS = new Set([ts.SyntaxKind.StringKeyword, ts.SyntaxKind.BooleanKeyword, ts.SyntaxKind.NullKeyword, ts.SyntaxKind.UndefinedKeyword]);
-
 /**
- * The numbers a prop's type allows: `'any'` when it includes `number`, the literals of a union such as `1 | 2 | 'auto'`,
- * or null when part of the type, such as an alias, can't be read here.
+ * The numbers a prop's type certainly allows: `'any'` when any member of the type is `number`, otherwise the number
+ * literals among its members, such as 1 and 2 in `1 | 2 | 'auto' | Size`. Other members, such as an alias, can't make
+ * a number certain.
  */
 function allowedNumbers(type) {
   const source = ts.createSourceFile('type.ts', `type T = ${type ?? ''};`, ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
   const [statement] = source.statements;
-  if (source.statements.length !== 1 || !statement || !ts.isTypeAliasDeclaration(statement)) return null;
+  if (source.statements.length !== 1 || !statement || !ts.isTypeAliasDeclaration(statement)) return [];
   const members = ts.isUnionTypeNode(statement.type) ? statement.type.types : [statement.type];
-  const numbers = [];
-  for (const member of members) {
-    if (member.kind === ts.SyntaxKind.NumberKeyword) return 'any';
-    if (NO_NUMBERS.has(member.kind)) continue;
-    if (!ts.isLiteralTypeNode(member)) return null;
+  if (members.some((member) => member.kind === ts.SyntaxKind.NumberKeyword)) return 'any';
+  return members.flatMap((member) => {
+    if (!ts.isLiteralTypeNode(member)) return [];
     const { literal: node } = member;
-    if (ts.isNumericLiteral(node)) numbers.push(Number(node.text));
-    else if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.MinusToken && ts.isNumericLiteral(node.operand)) numbers.push(-Number(node.operand.text));
-  }
-  return numbers;
+    if (ts.isNumericLiteral(node)) return [Number(node.text)];
+    if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.MinusToken && ts.isNumericLiteral(node.operand)) return [-Number(node.operand.text)];
+    return [];
+  });
 }
 
 /**
@@ -74,7 +71,7 @@ function contradicts(value, code, prop) {
     if (number === null) return null;
     if (number === Number(code.value)) return false;
     const allowed = allowedNumbers(prop.type);
-    return allowed === 'any' || allowed?.includes(number) ? true : null;
+    return allowed === 'any' || allowed.includes(number) ? true : null;
   }
   if (code.kind === 'keyword') {
     const keyword = value.value.toLowerCase();

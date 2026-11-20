@@ -265,8 +265,9 @@ describe('wrong-default', () => {
       const result = run(withDefault('1', '3', 'defaultValue', { type, values: [{ type: 'number' }] }));
       assert.deepEqual([messages(result), result.skipped.length], [[], 1], type);
     }
-    assert.equal(messages(run(withDefault('1', '2', 'defaultValue', { type: '1 | 2 | "auto"', values: [{ type: 'number' }] }))).length, 1);
-    assert.equal(messages(run(withDefault('1', '3', 'defaultValue', { type: 'number | undefined', values: [{ type: 'number' }] }))).length, 1);
+    for (const [type, text] of [['1 | 2 | "auto"', '2'], ['Size | 1 | 2', '2'], ['number | undefined', '3'], ['Size | number', '3'], ['number | Size', '3']]) {
+      assert.equal(messages(run(withDefault('1', text, 'defaultValue', { type, values: [{ type: 'number' }] }))).length, 1, `${type} vs ${text}`);
+    }
   });
 
   it('lists a string default on a prop with no fixed set of values as not checked when the tag differs', () => {
