@@ -109,49 +109,6 @@ function slugHeadings(tree) {
   return slugs;
 }
 
-const containsJsx = (value) => {
-  if (!value || typeof value !== 'object') return false;
-  if (Array.isArray(value)) return value.some(containsJsx);
-  if (value.type === 'JSXElement' || value.type === 'JSXFragment') return true;
-  return Object.keys(value).some((key) => key !== 'loc' && key !== 'range' && containsJsx(value[key]));
-};
-
-const rendersInCode = (node) => {
-  if (node.type === 'mdxjsEsm') return containsJsx(node.data?.estree);
-  const program = node.data?.estree;
-  return program?.body.length > 0 && staticString(program.body[0].expression) === undefined;
-};
-
-/**
- * What the page renders that a link can scroll to besides headings: the `id` of each JSX element and the `name` of
- * each `<a>`, plus the names of all its JSX elements. An id set by an expression or a spread, or anything an
- * expression or JSX in code renders, can't be read, so `dynamic` says the page has one.
- */
-function pageElements(tree) {
-  const ids = new Set();
-  const names = new Set();
-  let dynamic = false;
-  const visit = (node) => {
-    if (['mdxjsEsm', 'mdxFlowExpression', 'mdxTextExpression'].includes(node.type) && rendersInCode(node)) dynamic = true;
-    if (isJsx(node)) {
-      if (node.name) names.add(node.name);
-      for (const attr of node.attributes ?? []) {
-        if (attr.type !== 'mdxJsxAttribute' || containsJsx(attr.value?.data?.estree)) {
-          dynamic = true;
-          continue;
-        }
-        if (attr.name !== 'id' && !(attr.name === 'name' && node.name === 'a')) continue;
-        const value = typeof attr.value === 'string' ? attr.value : staticString(attr.value?.data?.estree?.body?.[0]?.expression);
-        if (value === undefined) dynamic = true;
-        else ids.add(value);
-      }
-    }
-    node.children?.forEach(visit);
-  };
-  visit(tree);
-  return { ids, names, dynamic };
-}
-
 function referenceDefinitions(tree) {
   const definitions = new Map();
   const visit = (node) => {
@@ -313,7 +270,6 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       kind: isComponentPage ? 'component' : 'guide',
       componentDir: isComponentPage ? parts.slice(0, -2).join('/') : null,
       slugs: slugHeadings(tree),
-      elements: pageElements(tree),
       definitions: referenceDefinitions(tree),
       links: [],
       warn,
@@ -571,9 +527,6 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       file: page.file,
       storybookId: page.storybookId,
       headings: [...page.slugs].map(([slug, line]) => ({ slug, line })),
-      ids: [...page.elements.ids].sort(compareStrings),
-      dynamicIds: page.elements.dynamic,
-      elements: [...page.elements.names].sort(compareStrings),
       links: page.links,
     })),
   };
