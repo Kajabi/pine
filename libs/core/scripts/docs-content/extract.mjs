@@ -17,6 +17,7 @@ const COMPONENTS_DIR = `${CORE_ROOT}/src/components`;
 const STATUSES = ['stable', 'beta', 'deprecated'];
 const UNWRAPPED_ELEMENTS = new Set(['div', 'span', 'p', 'pds-box', 'pds-text']);
 const DROPPED_ELEMENTS = new Set(['Meta', 'Controls', 'Story', 'StatusBadge', 'img']);
+const EXAMPLE_ELEMENTS = new Set(['DocCanvas', 'Canvas', 'Story']);
 const ABSOLUTE_URL = /^(?:[a-z][a-z\d+.-]*:|\/\/)/i;
 const UNTITLED = '\u0000untitled';
 
@@ -282,16 +283,32 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     else pagesById.set(page.storybookId, page);
   }
 
+  /** Lists a link the page shows, for the docs check, with its line and the Storybook page and heading it targets. */
+  function recordLink(href, page, node) {
+    if (href === '' || ABSOLUTE_URL.test(href)) return;
+    const target = href.startsWith('#') ? { id: page.storybookId, hash: href.slice(1) } : storybookLinkTarget(href) ?? null;
+    page.links.push({ href, line: node.position?.start.line ?? null, target });
+  }
+
+  /** Lists the links inside JSX the conversion keeps as is, leaving out example code. */
+  function recordNestedLinks(nodes, page) {
+    for (const node of nodes ?? []) {
+      if (isJsx(node) && EXAMPLE_ELEMENTS.has(node.name)) continue;
+      if (node.type === 'link') recordLink(node.url, page, node);
+      if (isJsx(node) && (node.name === 'a' || node.name === 'pds-link')) recordLink(attributeString(node, 'href') ?? '', page, node);
+      if (node.type === 'linkReference' && page.definitions.has(node.identifier)) recordLink(page.definitions.get(node.identifier).url, page, node);
+      recordNestedLinks(node.children, page);
+    }
+  }
+
   function convertHref(href, page, node) {
+    recordLink(href, page, node);
     if (ABSOLUTE_URL.test(href)) return href;
-    const line = node.position?.start.line ?? null;
     if (href.startsWith('#')) {
-      page.links.push({ href, line, target: { id: page.storybookId, hash: href.slice(1) } });
       if (!page.slugs.has(href.slice(1))) page.warn(node, `in-page link ${href} has no matching heading`);
       return href;
     }
     const target = storybookLinkTarget(href);
-    if (href !== '') page.links.push({ href, line, target: target ?? null });
     if (!target) {
       page.warn(node, `link "${href}" is neither absolute, in-page nor a Storybook docs link; kept as is`);
       return href;
@@ -404,6 +421,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
         return [{ type: 'emphasis', children: transform(node.children, page) }];
       default:
         page.warn(node, `<${node.name ?? ''}> outside a DocCanvas has no conversion; kept as JSX`);
+        recordNestedLinks(node.children, page);
         return [node];
     }
   }
