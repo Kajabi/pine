@@ -1,5 +1,5 @@
 name: 'Docs Check'
-description: 'Checks the DocCanvas examples in the MDX docs against docs.json and the icon set'
+description: 'Checks the DocCanvas examples, component JSDoc, and docs page links and section sizes'
 
 inputs:
   node-version:
@@ -48,6 +48,6 @@ runs:
       shell: bash
 
     # The core workspace script, not the root one: the root script builds core first, and dist/ is already here.
-    - name: Check doc examples
+    - name: Check docs
       run: npm run docs.check --workspace @pine-ds/core
       shell: bash

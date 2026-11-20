@@ -8,6 +8,7 @@ function propFor(name, component, language) {
 
 export default {
   id: 'invalid-value',
+  scope: 'snippet',
   languages: ['webComponent', 'react'],
   check(snippet, context) {
     return snippet.elements

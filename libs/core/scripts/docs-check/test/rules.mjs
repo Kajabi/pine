@@ -249,9 +249,9 @@ describe('reporting', () => {
       { file: 'c.mdx', title: 'C', language: REACT, code: '<PdsIconButton />', line: 7, exactLines: true },
       { file: 'b.mdx', title: 'B', language: REACT, code: '<PdsButton variant="x" />\n<PdsBadge />', line: 1, exactLines: true },
     ];
-    const first = formatReport(checkSnippets(snippets, context), 3);
-    assert.equal(formatReport(checkSnippets([...snippets].reverse(), context), 3), first);
-    assert.match(first, /docs-check: 4 findings in 3 example snippets on 3 pages\./);
+    const first = formatReport(checkSnippets(snippets, context));
+    assert.equal(formatReport(checkSnippets([...snippets].reverse(), context)), first);
+    assert.match(first, /docs-check: 4 findings in 3 example snippets on 0 pages\./);
   });
 
   it('lists React snippets with syntax errors as not checked, not as findings', () => {

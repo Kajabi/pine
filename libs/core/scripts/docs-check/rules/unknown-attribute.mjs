@@ -7,6 +7,7 @@ import { closest } from '../suggest.mjs';
  */
 export default {
   id: 'unknown-attribute',
+  scope: 'snippet',
   languages: ['webComponent'],
   check(snippet, context) {
     return snippet.elements

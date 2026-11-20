@@ -75,7 +75,7 @@
     "start.storybook": "storybook dev -p 6006",
     "test": "npm run test.docs-content && npm run test.docs-check && stencil test --spec --e2e --coverage",
     "test.a11y": "node scripts/a11y.mjs",
-    "test.docs-check": "node --test scripts/docs-check/test/rules.mjs scripts/docs-check/test/examples.mjs scripts/docs-check/test/load.mjs",
+    "test.docs-check": "node --test scripts/docs-check/test/rules.mjs scripts/docs-check/test/examples.mjs scripts/docs-check/test/load.mjs scripts/docs-check/test/components.mjs scripts/docs-check/test/pages.mjs",
     "test.docs-content": "node --test scripts/docs-content/test/extract.mjs scripts/docs-content/test/completeness.mjs",
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },

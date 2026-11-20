@@ -17,6 +17,7 @@ const COMPONENTS_DIR = `${CORE_ROOT}/src/components`;
 const STATUSES = ['stable', 'beta', 'deprecated'];
 const UNWRAPPED_ELEMENTS = new Set(['div', 'span', 'p', 'pds-box', 'pds-text']);
 const DROPPED_ELEMENTS = new Set(['Meta', 'Controls', 'Story', 'StatusBadge', 'img']);
+const EXAMPLE_ELEMENTS = new Set(['DocCanvas', 'Canvas', 'Story']);
 const ABSOLUTE_URL = /^(?:[a-z][a-z\d+.-]*:|\/\/)/i;
 const UNTITLED = '\u0000untitled';
 
@@ -92,16 +93,16 @@ const slugText = (heading) => toString(heading, { includeImageAlt: false });
 
 /**
  * Slugs every heading in page order, the way rehype-slug does in Storybook, and stores the slug on the
- * heading node so the section tree and the link checks read the same value.
+ * heading node so the section tree and the link checks read the same value. Maps each slug to its line.
  */
 function slugHeadings(tree) {
   const slugger = new GithubSlugger();
-  const slugs = new Set();
+  const slugs = new Map();
   const visit = (node) => {
     if (node.type === 'heading') {
       const slug = slugger.slug(slugText(node));
       node.data = { ...node.data, slug };
-      slugs.add(slug);
+      slugs.set(slug, node.position?.start.line ?? null);
     }
     node.children?.forEach(visit);
   };
@@ -271,6 +272,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       componentDir: isComponentPage ? parts.slice(0, -2).join('/') : null,
       slugs: slugHeadings(tree),
       definitions: referenceDefinitions(tree),
+      links: [],
       warn,
       ...meta,
     }];
@@ -281,7 +283,26 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     else pagesById.set(page.storybookId, page);
   }
 
+  /** Lists a link the page shows, for the docs check, with its line and the Storybook page and heading it targets. */
+  function recordLink(href, page, node) {
+    if (href === '' || ABSOLUTE_URL.test(href)) return;
+    const target = href.startsWith('#') ? { id: page.storybookId, hash: href.slice(1) } : storybookLinkTarget(href) ?? null;
+    page.links.push({ href, line: node.position?.start.line ?? null, target });
+  }
+
+  /** Lists the links inside JSX the conversion keeps as is, leaving out example code. */
+  function recordNestedLinks(nodes, page) {
+    for (const node of nodes ?? []) {
+      if (isJsx(node) && EXAMPLE_ELEMENTS.has(node.name)) continue;
+      if (node.type === 'link') recordLink(node.url, page, node);
+      if (isJsx(node) && (node.name === 'a' || node.name === 'pds-link')) recordLink(attributeString(node, 'href') ?? '', page, node);
+      if (node.type === 'linkReference' && page.definitions.has(node.identifier)) recordLink(page.definitions.get(node.identifier).url, page, node);
+      recordNestedLinks(node.children, page);
+    }
+  }
+
   function convertHref(href, page, node) {
+    recordLink(href, page, node);
     if (ABSOLUTE_URL.test(href)) return href;
     if (href.startsWith('#')) {
       if (!page.slugs.has(href.slice(1))) page.warn(node, `in-page link ${href} has no matching heading`);
@@ -400,6 +421,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
         return [{ type: 'emphasis', children: transform(node.children, page) }];
       default:
         page.warn(node, `<${node.name ?? ''}> outside a DocCanvas has no conversion; kept as JSX`);
+        recordNestedLinks(node.children, page);
         return [node];
     }
   }
@@ -519,6 +541,12 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
   return {
     content: { schemaVersion: SCHEMA_VERSION, version, commit, components: componentIndex, docs },
     warnings,
+    pageLinks: parsed.map((page) => ({
+      file: page.file,
+      storybookId: page.storybookId,
+      headings: [...page.slugs].map(([slug, line]) => ({ slug, line })),
+      links: page.links,
+    })),
   };
 }
 
