@@ -7,7 +7,8 @@ const KEYWORDS = new Map([
   [ts.SyntaxKind.FalseKeyword, 'false'],
   [ts.SyntaxKind.NullKeyword, 'null'],
 ]);
-const BARE_WORD = /^[^\s()'"`]+$/;
+const WORD = /^[\p{L}\p{N}_#%+-]+(?:\.[\p{L}\p{N}_#%+-]+)*$/u;
+const KEYWORD_WORDS = new Set(['true', 'false', 'null', 'undefined']);
 
 const collapse = (text) => text.trim().replace(/\s+/g, ' ');
 
@@ -27,23 +28,36 @@ function literal(code) {
   return null;
 }
 
-/** The single value a JSDoc default tag states: a literal or one bare word. Null when the tag says more than that. */
+/**
+ * The single value a JSDoc default tag states: a literal, or one word such as `md`, `_blank`, `#fff` or `1.5rem`.
+ * Null when the tag says more, including markdown emphasis (`_md_`) and trailing punctuation (`md.`).
+ */
 function stated(text) {
-  return literal(text) ?? (BARE_WORD.test(text) ? { kind: 'word', value: text } : null);
-}
-
-/** Compares as the code default's kind: numbers by value, keywords in any letter case, strings exactly. */
-function canonical(value, kind) {
-  if (kind === 'number') return String(Number(value));
-  if (kind === 'keyword') return value.toLowerCase();
-  return collapse(value);
+  const parsed = literal(text);
+  if (parsed) return parsed;
+  return WORD.test(text) && !(text.length > 2 && text.startsWith('_') && text.endsWith('_')) ? { kind: 'word', value: text } : null;
 }
 
 /**
+ * The stated value in the terms of the code default's kind, or null when it isn't that kind of value: a number for a
+ * number (`1px` isn't one), one of `true`, `false`, `null` or `undefined` in any letter case for a keyword, and any
+ * single value for a string. A word stated for an empty string usually describes it (`empty`), so only a quoted
+ * value is compared with one.
+ */
+function asKind(value, code) {
+  if (code.kind === 'number') return value.kind === 'number' || (value.value !== '' && !Number.isNaN(Number(value.value))) ? String(Number(value.value)) : null;
+  if (code.kind === 'keyword') return KEYWORD_WORDS.has(value.value.toLowerCase()) ? value.value.toLowerCase() : null;
+  if (code.value === '' && value.kind === 'word') return null;
+  return collapse(value.value);
+}
+
+const codeValue = (code) => (code.kind === 'number' ? String(Number(code.value)) : collapse(code.value));
+
+/**
  * Compares each JSDoc `@defaultValue` (or `@default`) with the prop's default in code, as docs.json gives it. A finding
- * needs both to be single values: a literal in code, and a literal or bare word in the tag. Anything else is listed
- * as not checked. A tag on a prop with no default in code is listed for review, since that default often comes from
- * CSS or a fallback in the component.
+ * needs both to be single values of the same kind: a literal in code, and a literal or one word in the tag. Anything
+ * else is listed as not checked. A tag on a prop with no default in code is listed for review, since that default
+ * often comes from CSS or a fallback in the component.
  */
 export default {
   id: 'wrong-default',
@@ -56,6 +70,10 @@ export default {
       for (const docsTag of prop.docsTags.filter((t) => DEFAULT_TAGS.has(t.name))) {
         const text = collapse(docsTag.text ?? '');
         const where = `${tag}'s ${prop.name} prop: @${docsTag.name}`;
+        if (text === '') {
+          findings.push({ line, skipped: true, message: `${where} has no value.` });
+          continue;
+        }
         if (prop.default === undefined) {
           if (text !== 'undefined') unset.push(prop.name);
           continue;
@@ -63,13 +81,18 @@ export default {
         if (text === collapse(prop.default)) continue;
         const code = literal(prop.default);
         if (code?.kind === 'string' && collapse(code.value) === text) continue;
-        const value = text === '' ? null : stated(text);
-        if (!code || !value) {
-          const why = text === '' ? 'has no value' : !code ? `can't be compared with the code default ${prop.default}, which isn't a literal` : 'says more than a single value';
+        const value = stated(text);
+        const comparable = code && value ? asKind(value, code) : null;
+        if (comparable === null) {
+          const why = !code
+            ? `can't be compared with the code default ${prop.default}, which isn't a literal`
+            : !value
+              ? 'says more than a single value'
+              : `says ${text}, which can't be compared with the code default ${prop.default}`;
           findings.push({ line, skipped: true, message: `${where} ${why}.` });
           continue;
         }
-        if (canonical(value.value, code.kind) === canonical(code.value, code.kind)) continue;
+        if (comparable === codeValue(code)) continue;
         findings.push({
           line,
           message: `${where} says ${text}, but the code default is ${prop.default}.`,

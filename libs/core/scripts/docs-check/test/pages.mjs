@@ -22,7 +22,7 @@ ${body}
 const OTHER_BODY = '## Usage\n\nText.\n\n## Usage\n\nMore text.\n';
 
 /** Checks the fixture page next to a second page, with the docs ids that stories files give. */
-function check(body, { storyDocsIds = ['components-table-rows--docs'], unknownStories = [], other = OTHER_BODY } = {}) {
+function check(body, { storyDocsIds = ['components-table-rows--docs'], unknownStories = [], other = OTHER_BODY, idTags = ['pds-tab'] } = {}) {
   const { content, pageLinks } = buildDocsContent({
     pages: [{ file: GUIDE, source: page('Fixture', body) }, { file: OTHER, source: page('Other', other) }],
     components: [],
@@ -33,7 +33,7 @@ function check(body, { storyDocsIds = ['components-table-rows--docs'], unknownSt
     version: '0.0.0',
     commit: null,
   });
-  const context = buildContext({ components: [], iconNames: [], iconExports: [], iconsVersion: '0', pages: pageLinks, storyDocsIds, unknownStories });
+  const context = buildContext({ components: [], iconNames: [], iconExports: [], iconsVersion: '0', pages: pageLinks, storyDocsIds, unknownStories, idTags });
   return checkDocs({ pages: pageTargets(content, pageLinks) }, context);
 }
 
@@ -82,11 +82,30 @@ describe('broken-anchor', () => {
     assert.deepEqual([messages(result), skips(result)], [[], []]);
   });
 
-  it('lists an unmatched anchor as not checked on a page that sets an id with an expression or spread', () => {
-    for (const element of ['<div id={sectionId}></div>', '<div {...props}></div>']) {
+  it('lists an unmatched anchor as not checked on a page that may render ids it cannot see', () => {
+    for (const element of [
+      '<div id={sectionId}></div>',
+      '<div {...props}></div>',
+      '{items.map((item) => <h3>{item}</h3>)}',
+      '{renderSections()}',
+      '<pds-box header={<h3 id="x" />}></pds-box>',
+      '<PatternCatalog />',
+      '<pds-tabs><pds-tab name="one">One</pds-tab></pds-tabs>',
+    ]) {
       const result = check(`## Usage\n\n[Gone](#gone)\n\n${element}`);
       assert.deepEqual([messages(result), skips(result)], [[], ['broken-anchor:10']], element);
     }
+  });
+
+  it('still checks a page whose code only holds static text, and Storybook blocks apart from their own ids', () => {
+    assert.equal(messages(check("## Usage\n\n[Gone](#gone)\n\n{'Static text'} {/* a comment */}")).length, 1);
+    const blocks = check('## Usage\n\n[Story](#story--components-button--default) [Gone](#gone)\n\n<Canvas of={stories.Default} />\n\n<Controls />');
+    assert.deepEqual([messages(blocks), skips(blocks)], [['broken-anchor:10: #gone matches no heading or element id on this page.'], ['broken-anchor:10']]);
+  });
+
+  it('lists an anchor on another page as not checked when that page may render ids it cannot see', () => {
+    const result = check('## Links\n\n[Pattern](../?path=/docs/guides-other--docs#list-page)', { other: '## Patterns\n\n<PatternCatalog />\n' });
+    assert.deepEqual([messages(result), skips(result)], [[], ['broken-anchor:10']]);
   });
 
   it('checks JSX links outside examples, and never links inside a DocCanvas', () => {

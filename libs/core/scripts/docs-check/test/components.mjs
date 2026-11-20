@@ -110,6 +110,14 @@ describe('readComponentSource', () => {
     assert.deepEqual(facts.slots.map((s) => s.name), ['x']);
   });
 
+  it('notes an id on the host or anywhere, and resolves a spread of a const object literal', () => {
+    const facts = (jsx) => readComponentSource(`function render() {\n  const host = { role: 'row', 'aria-busy': 'true' };\n  const withId = { id: 'x' };\n  return ${jsx};\n}`, FILE).ids;
+    assert.deepEqual(facts('<Host {...host}><div /></Host>'), { onHost: false, anywhere: false });
+    assert.deepEqual(facts('<Host {...withId} />'), { onHost: true, anywhere: true });
+    assert.deepEqual(facts('<Host {...this.attrs} />'), { onHost: true, anywhere: true });
+    assert.deepEqual(facts('<Host><input id={this.inputId} /></Host>'), { onHost: false, anywhere: true });
+  });
+
   it('finds a @Prop on an accessor', () => {
     const facts = readComponentSource('class A {\n  /** V. */\n  @Prop()\n  get value() { return 1; }\n}', FILE);
     assert.deepEqual([...facts.members.props], [['value', 4]]);
@@ -224,6 +232,10 @@ describe('wrong-default', () => {
       ['0', '"0"'],
       ["'false'", 'false'],
       ['[]', '[]'],
+      ["'_blank'", '_blank'],
+      ["'#fff'", '#fff'],
+      ["'1.5rem'", '1.5rem'],
+      ["''", '""'],
     ]) {
       assert.deepEqual(messages(run(withDefault(code, text))), [], `${code} vs ${text}`);
     }
@@ -233,7 +245,9 @@ describe('wrong-default', () => {
   it('fails a stated default that differs from a literal code default', () => {
     assert.deepEqual(messages(run(withDefault("'md'", 'lg'))), ["wrong-default:12: pds-widget's size prop: @defaultValue says lg, but the code default is 'md'."]);
     assert.deepEqual(messages(run(withDefault('false', 'true', 'default'))), ["wrong-default:12: pds-widget's size prop: @default says true, but the code default is false."]);
-    assert.equal(messages(run(withDefault('1', 'one'))).length, 1);
+    assert.equal(messages(run(withDefault('1', '2'))).length, 1);
+    assert.equal(messages(run(withDefault("'md'", 'MD'))).length, 1);
+    assert.equal(messages(run(withDefault("''", "'none'"))).length, 1);
   });
 
   it('lists a tag it cannot read as one value, or a code default that is an expression, as not checked', () => {
@@ -241,6 +255,13 @@ describe('wrong-default', () => {
       ['generateId()', 'A generated id', "can't be compared with the code default generateId(), which isn't a literal"],
       ["'sm'", "'sm' (small)", 'says more than a single value'],
       ["'md'", 'Medium size', 'says more than a single value'],
+      ["'sm'", 'sm.', 'says more than a single value'],
+      ["'sm'", '**sm**', 'says more than a single value'],
+      ["'sm'", '_sm_', 'says more than a single value'],
+      ['1000', '1,000', 'says more than a single value'],
+      ['1', '1px', "says 1px, which can't be compared with the code default 1"],
+      ['undefined', 'none', "says none, which can't be compared with the code default undefined"],
+      ["''", 'empty', "says empty, which can't be compared with the code default ''"],
       ["'md'", '', 'has no value'],
     ]) {
       const result = run(withDefault(code, text));
@@ -261,6 +282,8 @@ describe('wrong-default', () => {
     assert.deepEqual(result.review.map((r) => `${r.rule}:${r.line}: ${r.message}`), [
       'wrong-default:12: pds-widget sets no default in code for a prop whose JSDoc states one: size.',
     ]);
+    const empty = run(docsEntry({ props: [prop('size', 'The size.', { tags: [{ name: 'defaultValue', text: '' }] })] }));
+    assert.deepEqual([empty.review, empty.skipped.map((s) => s.message)], [[], ["pds-widget's size prop: @defaultValue has no value."]]);
     const both = docsEntry({
       props: [
         prop('size', 'The size.', { tags: [{ name: 'defaultValue', text: 'md' }] }),

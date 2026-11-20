@@ -93,6 +93,15 @@ export function componentTargets(components, readSource = readComponentFile) {
     });
 }
 
+/**
+ * Tags whose rendered ids land in the page itself, where a link can reach them: an id on the host element, or any id
+ * in a component without a shadow root. Ids inside a shadow root can't be linked to.
+ */
+export const idTags = (targets) =>
+  targets
+    .filter(({ docs, source }) => source.ids.onHost || (docs.encapsulation !== 'shadow' && source.ids.anywhere))
+    .map((target) => target.tag);
+
 function walkSections(sections, visit) {
   for (const section of sections) {
     visit(section);
@@ -127,6 +136,7 @@ export function loadDocsCheck() {
   const { components } = JSON.parse(readFileSync(docsJsonPath, 'utf8'));
   const { content, pageLinks } = generateDocsContent(components);
 
+  const targets = componentTargets(components);
   const iconsDir = path.dirname(require.resolve('@pine-ds/icons/package.json'));
   const context = buildContext({
     components: [...components, ...require('@pine-ds/icons/dist/docs.json').components],
@@ -136,13 +146,14 @@ export function loadDocsCheck() {
     iconExports: Object.keys(require('@pine-ds/icons/icons')),
     iconsVersion: require('@pine-ds/icons/package.json').version,
     pages: pageLinks,
+    idTags: idTags(targets),
     ...storyDocs(),
   });
 
   return {
     context,
     snippets: collectSnippets(content.docs, readDocPage),
-    components: componentTargets(components),
+    components: targets,
     pages: pageTargets(content, pageLinks),
   };
 }
