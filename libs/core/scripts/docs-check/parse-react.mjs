@@ -13,6 +13,13 @@ function syntaxErrors(source) {
   }).diagnostics.length;
 }
 
+/** Functions, classes, enums and namespaces, declared or as expressions, whose name shadows an import of the same name. */
+const isNamedScope = (node) =>
+  (ts.isFunctionDeclaration(node) || ts.isFunctionExpression(node) || ts.isClassDeclaration(node) || ts.isClassExpression(node) ||
+    ts.isEnumDeclaration(node) || ts.isModuleDeclaration(node)) &&
+  node.name !== undefined &&
+  ts.isIdentifier(node.name);
+
 function bindingNames(name, out) {
   if (ts.isIdentifier(name)) out.add(name.text);
   else for (const element of name.elements) if (!ts.isOmittedExpression(element)) bindingNames(element.name, out);
@@ -90,7 +97,7 @@ export function parseReact(code) {
           if (from === PINE_ICONS) iconImports.set(specifier.name.text, name);
         }
       }
-    } else if ((ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)) && node.name) {
+    } else if (isNamedScope(node)) {
       declared.add(node.name.text);
     } else if (ts.isVariableDeclaration(node) || ts.isParameter(node)) {
       bindingNames(node.name, declared);

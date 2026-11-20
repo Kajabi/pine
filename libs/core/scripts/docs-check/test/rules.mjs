@@ -47,6 +47,17 @@ describe('unknown-component', () => {
   it('skips an imported name the snippet also declares, since it may be shadowed', () => {
     const code = "import { PdsButton as Button } from '@pine-ds/react';\n\nfunction Demo({ Button }) {\n  return <Button variant=\"custom\" />;\n}";
     assert.deepEqual(check(REACT, code), []);
+    const imported = "import { PdsButton as Button } from '@pine-ds/react';\n";
+    for (const local of [
+      'const Demo = function Button() {\n  return <Button variant="custom" />;\n};',
+      'const Demo = class Button {\n  render() {\n    return <Button variant="custom" />;\n  }\n};',
+      'enum Button { A }\n<Button variant="custom" />',
+      'try {} catch (Button) {}\n<Button variant="custom" />',
+    ]) {
+      const result = checkSnippets([{ file: 'f.mdx', title: 't', language: REACT, code: imported + local, line: 1, exactLines: true }], context);
+      assert.deepEqual([result.findings, result.unparsed], [[], []], local);
+    }
+    assert.equal(check(REACT, `${imported}<Button variant="custom" />`).length, 1);
   });
 
   it('checks members of a @pine-ds/react namespace import, and nothing else reached through a namespace', () => {
