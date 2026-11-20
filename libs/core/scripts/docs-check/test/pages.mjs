@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { buildDocsContent } from '../../docs-content/extract.mjs';
-import { checkDocs } from '../check.mjs';
+import { checkDocs, formatReport } from '../check.mjs';
 import { buildContext } from '../context.mjs';
 import { pageTargets } from '../load.mjs';
 import { SECTION_BUDGET } from '../rules/oversize-section.mjs';
@@ -19,12 +19,12 @@ import { DocCanvas } from '@pine-ds/doc-components';
 ${body}
 `;
 
-const OTHER_PAGE = page('Other', '## Usage\n\nText.\n\n## Usage\n\nMore text.\n');
+const OTHER_BODY = '## Usage\n\nText.\n\n## Usage\n\nMore text.\n';
 
 /** Checks the fixture page next to a second page, with the docs ids that stories files give. */
-function check(body, { storyDocsIds = ['components-table-rows--docs'], unknownStories = [] } = {}) {
+function check(body, { storyDocsIds = ['components-table-rows--docs'], unknownStories = [], other = OTHER_BODY } = {}) {
   const { content, pageLinks } = buildDocsContent({
-    pages: [{ file: GUIDE, source: page('Fixture', body) }, { file: OTHER, source: OTHER_PAGE }],
+    pages: [{ file: GUIDE, source: page('Fixture', body) }, { file: OTHER, source: page('Other', other) }],
     components: [],
     statusManifest: {},
     readStories: () => {
@@ -59,11 +59,34 @@ describe('broken-anchor', () => {
   it('fails an in-page link to a heading the page lacks, with the closest slug', () => {
     const result = check('## Border\n\nSee [border](#bordr) and [missing](#nothing-like-it).\n\n## Border\n\n[Third](#border-2)');
     assert.deepEqual(messages(result), [
-      'broken-anchor:10: #bordr matches no heading on this page.',
-      'broken-anchor:10: #nothing-like-it matches no heading on this page.',
-      'broken-anchor:14: #border-2 matches no heading on this page.',
+      'broken-anchor:10: #bordr matches no heading or element id on this page.',
+      'broken-anchor:10: #nothing-like-it matches no heading or element id on this page.',
+      'broken-anchor:14: #border-2 matches no heading or element id on this page.',
     ]);
     assert.equal(result.findings[0].hint, 'Did you mean #border?');
+  });
+
+  it('passes links to element ids, including ids in examples and <a name>, and skips <a> with no href', () => {
+    const body = [
+      '## Usage',
+      '',
+      '[Details](#details) [Panel](#panel) [Old](#old-anchor) [Other](../?path=/docs/guides-other--docs#target)',
+      '',
+      '<div id="details">Details</div> <a name="old-anchor"></a>',
+      '',
+      '<DocCanvas mdxSource={{ webComponent: `<div id="panel"></div>` }}>',
+      '  <div id={\'panel\'}>Panel</div>',
+      '</DocCanvas>',
+    ].join('\n');
+    const result = check(body, { other: '## Usage\n\n<span id="target"></span>\n' });
+    assert.deepEqual([messages(result), skips(result)], [[], []]);
+  });
+
+  it('lists an unmatched anchor as not checked on a page that sets an id with an expression or spread', () => {
+    for (const element of ['<div id={sectionId}></div>', '<div {...props}></div>']) {
+      const result = check(`## Usage\n\n[Gone](#gone)\n\n${element}`);
+      assert.deepEqual([messages(result), skips(result)], [[], ['broken-anchor:10']], element);
+    }
   });
 
   it('checks JSX links outside examples, and never links inside a DocCanvas', () => {
@@ -76,7 +99,7 @@ describe('broken-anchor', () => {
       '  <pds-link href="#profile">Profile</pds-link>',
       '</DocCanvas>',
     ].join('\n');
-    assert.deepEqual(messages(check(body)), ['broken-anchor:10: #nope matches no heading on this page.']);
+    assert.deepEqual(messages(check(body)), ['broken-anchor:10: #nope matches no heading or element id on this page.']);
   });
 
   it('checks an anchor on another MDX page, and skips one on a page with no MDX file', () => {
@@ -87,7 +110,7 @@ describe('broken-anchor', () => {
       '',
       '[Missing](../?path=/docs/guides-other--docs#examples)',
     ].join('\n');
-    assert.deepEqual(messages(check(body)), ['broken-anchor:12: ../?path=/docs/guides-other--docs#examples matches no heading on guides-other--docs.']);
+    assert.deepEqual(messages(check(body)), ['broken-anchor:12: ../?path=/docs/guides-other--docs#examples matches no heading or element id on guides-other--docs.']);
   });
 });
 
@@ -112,6 +135,7 @@ describe('broken-docs-link', () => {
   it("doesn't fail an unknown id while a stories file's docs id is unknown, or when only letter case differs", () => {
     const unknown = check('## Links\n\n[Gone](../?path=/docs/guides-gone--docs)', { unknownStories: ['libs/core/src/x.stories.js'] });
     assert.deepEqual([messages(unknown), skips(unknown)], [[], ['broken-docs-link:10']]);
+    assert.match(formatReport(unknown), /the docs page id of libs\/core\/src\/x\.stories\.js isn't known/);
     const cased = check('## Links\n\n[Other](../?path=/docs/Guides-Other--docs)');
     assert.deepEqual([messages(cased), skips(cased)], [[], ['broken-docs-link:10']]);
   });

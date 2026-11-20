@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
-import { describe, it } from 'node:test';
-import { readComponentFile, readDocPage } from '../load.mjs';
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { after, describe, it } from 'node:test';
+import { readComponentFile, readDocPage, readInside } from '../load.mjs';
 
 describe('readDocPage', () => {
   it('reads an MDX page under libs/core/src', () => {
@@ -38,5 +41,26 @@ describe('readComponentFile', () => {
     ]) {
       assert.throws(() => readComponentFile(file), /isn't a TypeScript file under libs\/core\/src\/components/, file);
     }
+  });
+});
+
+describe('readInside', () => {
+  const root = mkdtempSync(path.join(tmpdir(), 'docs-check-'));
+  const inside = path.join(root, 'inside');
+  mkdirSync(inside);
+  writeFileSync(path.join(inside, 'page.mdx'), 'inside');
+  writeFileSync(path.join(root, 'secret.mdx'), 'outside');
+  symlinkSync(path.join(root, 'secret.mdx'), path.join(inside, 'link.mdx'));
+  symlinkSync(path.join(inside, 'page.mdx'), path.join(inside, 'alias.mdx'));
+  after(() => rmSync(root, { recursive: true, force: true }));
+  const isMdx = (target) => target.endsWith('.mdx');
+
+  it('reads a file, or a symlink to a file, that resolves inside the folder', () => {
+    assert.equal(readInside(inside, path.join(inside, 'page.mdx'), isMdx, 'an MDX page'), 'inside');
+    assert.equal(readInside(inside, path.join(inside, 'alias.mdx'), isMdx, 'an MDX page'), 'inside');
+  });
+
+  it('refuses a symlink inside the folder that resolves outside it', () => {
+    assert.throws(() => readInside(inside, path.join(inside, 'link.mdx'), isMdx, 'an MDX page'), /isn't an MDX page/);
   });
 });

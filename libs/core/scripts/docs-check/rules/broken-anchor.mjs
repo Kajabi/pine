@@ -14,8 +14,8 @@ function resolves(hash, anchors) {
 }
 
 /**
- * Checks links to a heading: `#slug` on the same page, and `#slug` on another MDX page. Headings get their anchors from
- * the same slugger the docs content uses, which matches Storybook's. A page with no MDX file has no headings to check.
+ * Checks links to an anchor: `#slug` on the same page, and `#slug` on another MDX page. Anchors are headings, slugged
+ * the way Storybook does, and the ids of JSX elements. A page with no MDX file has no anchors to check.
  */
 export default {
   id: 'broken-anchor',
@@ -24,13 +24,16 @@ export default {
     return page.links.flatMap((link) => {
       if (!link.target?.hash) return [];
       const inPage = link.href.startsWith('#');
-      const anchors = inPage ? page.headingLines : context.anchors.get(link.target.id);
-      if (!anchors || resolves(link.target.hash, anchors)) return [];
+      const target = inPage ? page : context.anchors.get(link.target.id);
+      if (!target || resolves(link.target.hash, target.anchors)) return [];
       const where = inPage ? 'this page' : link.target.id;
-      const suggestion = closest(link.target.hash, anchors.keys());
+      if (target.dynamicIds) {
+        return [{ line: link.line, skipped: true, message: `${link.href} matches no heading or element id on ${where}, which sets an id with an expression or a spread.` }];
+      }
+      const suggestion = closest(link.target.hash, target.anchors);
       return [{
         line: link.line,
-        message: `${link.href} matches no heading on ${where}.`,
+        message: `${link.href} matches no heading or element id on ${where}.`,
         hint: suggestion ? `Did you mean #${suggestion}?` : `Link to a heading that's on ${where}, or remove the anchor.`,
       }];
     });

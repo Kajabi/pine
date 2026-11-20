@@ -110,6 +110,11 @@ describe('readComponentSource', () => {
     assert.deepEqual(facts.slots.map((s) => s.name), ['x']);
   });
 
+  it('finds a @Prop on an accessor', () => {
+    const facts = readComponentSource('class A {\n  /** V. */\n  @Prop()\n  get value() { return 1; }\n}', FILE);
+    assert.deepEqual([...facts.members.props], [['value', 4]]);
+  });
+
   it('sets aside slot names and parts it can only know at run time', () => {
     const code = [
       'const a = <slot name={this.slotName} />;',
@@ -118,6 +123,7 @@ describe('readComponentSource', () => {
       'const d = <div part={`item-${i}`} />;',
       'const e = <div part={`plain`} />;',
       "const f = h('slot', { name: 'built' });",
+      'const g = <div part="a&#10;b"><slot name="x&amp;y" /></div>;',
     ].join('\n');
     const facts = readComponentSource(code, FILE);
     assert.deepEqual(facts.slots, []);
@@ -128,6 +134,8 @@ describe('readComponentSource', () => {
       { kind: 'part', line: 3 },
       { kind: 'part', line: 4 },
       { kind: 'part', line: 5 },
+      { kind: 'part', line: 7 },
+      { kind: 'slot', line: 7 },
     ]);
   });
 });
@@ -211,7 +219,10 @@ describe('wrong-default', () => {
       ['1.0', '1'],
       ['-1', '-1'],
       ['false', 'false'],
-      ['null', 'null'],
+      ['false', 'False'],
+      ['null', 'NULL'],
+      ['0', '"0"'],
+      ["'false'", 'false'],
       ['[]', '[]'],
     ]) {
       assert.deepEqual(messages(run(withDefault(code, text))), [], `${code} vs ${text}`);
@@ -222,13 +233,20 @@ describe('wrong-default', () => {
   it('fails a stated default that differs from a literal code default', () => {
     assert.deepEqual(messages(run(withDefault("'md'", 'lg'))), ["wrong-default:12: pds-widget's size prop: @defaultValue says lg, but the code default is 'md'."]);
     assert.deepEqual(messages(run(withDefault('false', 'true', 'default'))), ["wrong-default:12: pds-widget's size prop: @default says true, but the code default is false."]);
-    assert.equal(messages(run(withDefault('0', ''))).length, 1);
+    assert.equal(messages(run(withDefault('1', 'one'))).length, 1);
   });
 
-  it('lists a code default that is an expression as not checked, never as a finding', () => {
-    const result = run(withDefault('generateId()', 'A generated id'));
-    assert.deepEqual(messages(result), []);
-    assert.equal(result.skipped.length, 1);
+  it('lists a tag it cannot read as one value, or a code default that is an expression, as not checked', () => {
+    for (const [code, text, why] of [
+      ['generateId()', 'A generated id', "can't be compared with the code default generateId(), which isn't a literal"],
+      ["'sm'", "'sm' (small)", 'says more than a single value'],
+      ["'md'", 'Medium size', 'says more than a single value'],
+      ["'md'", '', 'has no value'],
+    ]) {
+      const result = run(withDefault(code, text));
+      assert.deepEqual(messages(result), [], `${code} vs ${text}`);
+      assert.deepEqual(result.skipped.map((s) => s.message), [`pds-widget's size prop: @defaultValue ${why}.`]);
+    }
   });
 
   it('lists a stated default with no code default for review, never as a finding', () => {
@@ -243,6 +261,13 @@ describe('wrong-default', () => {
     assert.deepEqual(result.review.map((r) => `${r.rule}:${r.line}: ${r.message}`), [
       'wrong-default:12: pds-widget sets no default in code for a prop whose JSDoc states one: size.',
     ]);
+    const both = docsEntry({
+      props: [
+        prop('size', 'The size.', { tags: [{ name: 'defaultValue', text: 'md' }] }),
+        prop('open', 'Whether.', { tags: [{ name: 'defaultValue', text: 'false' }] }),
+      ],
+    });
+    assert.deepEqual(run(both).review.map((r) => `${r.line}: ${r.message}`), ['15: pds-widget sets no default in code for 2 props whose JSDoc states one: open, size.']);
     assert.match(formatReport(result), /For review: 1 item worth a look, which don't fail the check\.\n {2}libs\/core\/src\/components\/pds-widget\/pds-widget\.tsx:12 {2}wrong-default {2}pds-widget\n/);
     assert.match(formatReport(result), /docs-check: no findings in 0 example snippets on 0 pages, 0 links and 0 sections, and 1 component\.\n$/);
   });

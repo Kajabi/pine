@@ -30,13 +30,16 @@ function eventName(call, propertyName) {
   return propertyName;
 }
 
-/** The text of a JSX attribute written as a string literal, `name="x"` or `name={'x'}`; null for anything else. */
+/**
+ * The text of a JSX attribute written as a string literal, `name="x"` or `name={'x'}`; null for anything else. The
+ * compiler leaves HTML entities in JSX text undecoded, so text with an `&` counts as unknown too.
+ */
 function literalValue(attribute) {
   const { initializer } = attribute;
-  if (!initializer) return null;
-  if (ts.isStringLiteral(initializer)) return initializer.text;
-  if (ts.isJsxExpression(initializer) && initializer.expression && ts.isStringLiteral(initializer.expression)) return initializer.expression.text;
-  return null;
+  let text = null;
+  if (initializer && ts.isStringLiteral(initializer)) text = initializer.text;
+  else if (initializer && ts.isJsxExpression(initializer) && initializer.expression && ts.isStringLiteral(initializer.expression)) text = initializer.expression.text;
+  return text !== null && !text.includes('&') ? text : null;
 }
 
 const attributeName = (attribute) => (ts.isIdentifier(attribute.name) ? attribute.name.text : null);
@@ -82,6 +85,9 @@ export function readComponentSource(code, fileName) {
 
   const visit = (node) => {
     if (ts.isClassDeclaration(node) && componentLine === null && decoratorCall(node, 'Component')) componentLine = lineOf(node.name ?? node, source);
+    if (ts.isGetAccessorDeclaration(node) || ts.isSetAccessorDeclaration(node)) {
+      if (decoratorCall(node, 'Prop')) addMember('props', memberName(node), node.name);
+    }
     if (ts.isPropertyDeclaration(node)) {
       const name = memberName(node);
       if (decoratorCall(node, 'Prop')) addMember('props', name, node.name);

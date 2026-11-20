@@ -1,11 +1,11 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { toId } from 'storybook/internal/csf';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import { coreDir, generateDocsContent } from '../docs-content/generate.mjs';
 import { readComponentSource } from './component-source.mjs';
-import { buildContext, compareStrings } from './context.mjs';
+import { buildContext, compareStrings, pageAnchors } from './context.mjs';
 import { collectSnippets } from './examples.mjs';
 
 const repoDir = path.resolve(coreDir, '../..');
@@ -16,14 +16,21 @@ const require = createRequire(import.meta.url);
 const STORIES_FILE = /\.stories\.(js|jsx|ts|tsx)$/;
 const UNTITLED = '\u0000untitled';
 
-/** Reads `file` (repo-relative) only if it sits under `dir` and passes `accepts`, since paths come from data. */
-function readInside(dir, file, accepts, description) {
-  const target = path.resolve(repoDir, file);
+const isInside = (dir, target) => {
   const relative = path.relative(dir, target);
-  if (!accepts(target) || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
-    throw new Error(`${file} isn't ${description}`);
-  }
-  return readFileSync(target, 'utf8');
+  return relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+};
+
+/**
+ * Reads `file` (repo-relative) only if it sits under `dir` and passes `accepts`, since paths come from data. The
+ * resolved path is checked too, so a symlink can't lead outside `dir`.
+ */
+export function readInside(dir, file, accepts, description) {
+  const target = path.resolve(repoDir, file);
+  if (!accepts(target) || !isInside(dir, target)) throw new Error(`${file} isn't ${description}`);
+  const real = realpathSync(target);
+  if (!accepts(real) || !isInside(realpathSync(dir), real)) throw new Error(`${file} isn't ${description}`);
+  return readFileSync(real, 'utf8');
 }
 
 /** Reads a page docs-content lists. Its path comes from data, so only an MDX file under libs/core/src is read. */
@@ -93,14 +100,21 @@ function walkSections(sections, visit) {
   }
 }
 
-/** Each docs page with its links, its headings' lines and its sections in page order, from the docs-content extractor. */
+/** Each docs page with its links, anchors, headings' lines and sections in page order, from the docs-content extractor. */
 export function pageTargets(content, pageLinks) {
   const linksByFile = new Map(pageLinks.map((page) => [page.file, page]));
   return content.docs.map((doc) => {
-    const { headings, links } = linksByFile.get(doc.file);
+    const page = linksByFile.get(doc.file);
     const sections = [];
     walkSections(doc.sections, (section) => sections.push(section));
-    return { file: doc.file, title: doc.title, headingLines: new Map(headings.map((h) => [h.slug, h.line])), links, sections };
+    return {
+      file: doc.file,
+      title: doc.title,
+      headingLines: new Map(page.headings.map((h) => [h.slug, h.line])),
+      ...pageAnchors(page),
+      links: page.links,
+      sections,
+    };
   });
 }
 

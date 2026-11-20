@@ -41,11 +41,17 @@ export function closedValues(prop) {
   return listed.length === typed.length && listed.every((value, i) => value === typed[i]) ? listed : null;
 }
 
-/** Each page's heading anchors by Storybook id. When two pages share an id, the first keeps it, as in the docs content. */
+/** A page's heading anchors and element ids, and whether it sets an id the check can't read. */
+export const pageAnchors = (page) => ({
+  anchors: new Set([...page.headings.map((h) => h.slug), ...(page.ids ?? [])]),
+  dynamicIds: Boolean(page.dynamicIds),
+});
+
+/** Each page's anchors by Storybook id. When two pages share an id, the first keeps it, as in the docs content. */
 function anchorsById(pages) {
   const anchors = new Map();
   for (const page of pages) {
-    if (!anchors.has(page.storybookId)) anchors.set(page.storybookId, new Set(page.headings.map((h) => h.slug)));
+    if (!anchors.has(page.storybookId)) anchors.set(page.storybookId, pageAnchors(page));
   }
   return anchors;
 }
@@ -58,7 +64,7 @@ function anchorsById(pages) {
  * @param {string[]} input.iconNames Icon names `pds-icon` accepts in `name`.
  * @param {string[]} input.iconExports Names `@pine-ds/icons/icons` exports.
  * @param {string} input.iconsVersion
- * @param {{ storybookId: string, headings: { slug: string }[] }[]} [input.pages] Every MDX page with its heading anchors.
+ * @param {{ storybookId: string, headings: { slug: string }[], ids?: string[], dynamicIds?: boolean }[]} [input.pages] Every MDX page with its anchors.
  * @param {string[]} [input.storyDocsIds] The docs page id Storybook gives each stories file, which exists even with no MDX page.
  * @param {string[]} [input.unknownStories] Stories files with no title or that don't parse, whose docs page id isn't known.
  */

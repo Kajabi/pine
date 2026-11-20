@@ -9,7 +9,7 @@ import { RULES } from './rules/index.mjs';
  * @typedef {{ written: string, reactName: string | null, tag: string | null, line: number | null, attributes: SnippetAttribute[], hasSpread: boolean }} SnippetElement
  * @typedef {{ file: string, title: string, language: 'webComponent' | 'react', code: string, line: number, exactLines: boolean }} Snippet
  * @typedef {{ file: string, tag: string, docs: object, source: ReturnType<import('./component-source.mjs').readComponentSource> }} ComponentTarget
- * @typedef {{ file: string, title: string, headingLines: Map<string, number | null>, links: { href: string, line: number | null, target: { id: string, hash: string } | null }[], sections: object[] }} PageTarget
+ * @typedef {{ file: string, title: string, headingLines: Map<string, number | null>, anchors: Set<string>, dynamicIds: boolean, links: { href: string, line: number | null, target: { id: string, hash: string } | null }[], sections: object[] }} PageTarget
  */
 
 const LANGUAGE_LABELS = { webComponent: 'web component', react: 'React' };
