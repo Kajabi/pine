@@ -1,3 +1,18 @@
+## 5.1.1 (2026-11-20)
+
+### Documentation 📄
+
+- **core:** fix docs flagged by docs-content.json and pine-mcp's validator ([#1005](https://github.com/Kajabi/pine/pull/1005))
+- **core:** name modal and drawer dialogs, add drawer examples and default-slot docs ([#1008](https://github.com/Kajabi/pine/pull/1008))
+- **core:** fix dropdown menu, tooltip and toast docs ([#1010](https://github.com/Kajabi/pine/pull/1010))
+- **core:** say what the white text presets and --pine-color-text-primary are for ([#1006](https://github.com/Kajabi/pine/pull/1006))
+- **pds-box:** fix layout facts and move the layout rules into guidelines ([#1007](https://github.com/Kajabi/pine/pull/1007))
+- **pds-sortable:** move keyboard and localization guidance into their own sections ([#1009](https://github.com/Kajabi/pine/pull/1009))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 5.1.0 (2026-11-19)
 
 ### Features 🚀
