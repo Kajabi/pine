@@ -81,6 +81,25 @@ describe('collectSnippets', () => {
     }
   });
 
+  it('ignores a dropped DocCanvas with the same code as a kept one', () => {
+    const source = [
+      "<Meta title=\"Guides/Fixture\" />",
+      '',
+      '# Fixture',
+      '',
+      '## Section',
+      '',
+      '- Item',
+      '  <DocCanvas mdxSource={{ webComponent: `<pds-button>Same</pds-button>` }} />',
+      '',
+      '> <DocCanvas mdxSource={{ webComponent: `<pds-button>Same</pds-button>` }} />',
+      '',
+      '<DocCanvas mdxSource={{ webComponent: `<pds-button>Same</pds-button>` }} />',
+      '',
+    ].join('\n');
+    assert.deepEqual(snippetsOf(source).map((s) => s.line), [12]);
+  });
+
   it('keeps the code the extractor gives', () => {
     const [first] = snippetsOf(PAGE);
     assert.equal(first.code, '<pds-button>Intro</pds-button>\n<pds-text>Second line</pds-text>');

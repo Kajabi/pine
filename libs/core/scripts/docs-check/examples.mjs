@@ -31,10 +31,15 @@ function codeStart(property, canvasLine) {
   };
 }
 
+/**
+ * The DocCanvas elements the extractor can turn into examples. It drops any inside a list, quote, table or
+ * paragraph, so those are skipped here too, or one with the same code could take a kept example's line.
+ */
 function docCanvases(source) {
   const canvases = [];
   const visit = (node) => {
-    if ((node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement') && node.name === 'DocCanvas') {
+    if (node.type !== 'root' && node.type !== 'mdxJsxFlowElement') return;
+    if (node.name === 'DocCanvas') {
       const mdxSource = node.attributes.find((a) => a.type === 'mdxJsxAttribute' && a.name === 'mdxSource');
       const object = mdxSource?.value?.data?.estree?.body?.[0]?.expression;
       const code = {};
