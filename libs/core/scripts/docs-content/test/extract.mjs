@@ -215,6 +215,7 @@ Then use the components.`),
       headings: [{ slug: 'widget', line: 11 }, { slug: 'related', line: 15 }],
       ids: ['details'],
       dynamicIds: false,
+      elements: ['Meta', 'StatusBadge', 'a', 'div'],
       links: [
         { href: '?path=/docs/guides-layouts--docs#grid', line: 17, target: { id: 'guides-layouts--docs', hash: 'grid' } },
         { href: '#related', line: 19, target: { id: 'components-widget--docs', hash: 'related' } },
