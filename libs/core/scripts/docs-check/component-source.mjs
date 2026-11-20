@@ -43,23 +43,10 @@ function literalValue(attribute) {
 
 const attributeName = (attribute) => (ts.isIdentifier(attribute.name) ? attribute.name.text : null);
 
-/** The keys of an object literal whose keys are all written out, such as `{ role: 'x', 'aria-busy': y }`; else null. */
-function literalKeys(object) {
-  const keys = new Set();
-  for (const property of object.properties) {
-    if (!(ts.isPropertyAssignment(property) || ts.isShorthandPropertyAssignment(property))) return null;
-    const name = memberName(property);
-    if (name === null) return null;
-    keys.add(name);
-  }
-  return keys;
-}
-
 /**
  * What a component's source file declares, read with the TypeScript compiler: the lines of its `@Component` class
- * and its `@Prop`, `@Event` and `@Method` members, the slots and parts its JSX renders, and whether its JSX sets an
- * `id`. A spread counts unless it spreads a `const` object literal in the file whose keys are all written out and
- * don't include `id`. Slots and parts whose names are only known at run time are listed apart.
+ * and its `@Prop`, `@Event` and `@Method` members, and the slots and parts its JSX renders. Slots and parts whose
+ * names are only known at run time are listed apart, since they can't be checked.
  */
 export function readComponentSource(code, fileName) {
   const kind = fileName.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
@@ -69,13 +56,6 @@ export function readComponentSource(code, fileName) {
   const parts = [];
   const dynamic = [];
   let componentLine = null;
-  const ids = { onHost: false, anywhere: false };
-  const objectKeys = new Map();
-  const spreads = [];
-  const setsId = (onHost) => {
-    ids.anywhere = true;
-    if (onHost) ids.onHost = true;
-  };
 
   const addMember = (kind, name, node) => {
     if (name !== null && !members[kind].has(name)) members[kind].set(name, lineOf(node, source));
@@ -83,11 +63,6 @@ export function readComponentSource(code, fileName) {
 
   const visitOpening = (opening) => {
     const attributes = opening.attributes.properties;
-    const onHost = ts.isIdentifier(opening.tagName) && opening.tagName.text === 'Host';
-    for (const attribute of attributes) {
-      if (ts.isJsxSpreadAttribute(attribute)) spreads.push({ onHost, name: ts.isIdentifier(attribute.expression) ? attribute.expression.text : null });
-      else if (attributeName(attribute) === 'id') setsId(onHost);
-    }
     const isSlot = ts.isIdentifier(opening.tagName) && opening.tagName.text === 'slot';
     if (isSlot) {
       const nameAttribute = attributes.find((a) => ts.isJsxAttribute(a) && attributeName(a) === 'name');
@@ -108,10 +83,6 @@ export function readComponentSource(code, fileName) {
   };
 
   const visit = (node) => {
-    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && ts.getCombinedNodeFlags(node) & ts.NodeFlags.Const) {
-      const keys = node.initializer && ts.isObjectLiteralExpression(node.initializer) ? literalKeys(node.initializer) : null;
-      objectKeys.set(node.name.text, objectKeys.has(node.name.text) ? null : keys);
-    }
     if (ts.isClassDeclaration(node) && componentLine === null && decoratorCall(node, 'Component')) componentLine = lineOf(node.name ?? node, source);
     if (ts.isGetAccessorDeclaration(node) || ts.isSetAccessorDeclaration(node)) {
       if (decoratorCall(node, 'Prop')) addMember('props', memberName(node), node.name);
@@ -128,10 +99,6 @@ export function readComponentSource(code, fileName) {
     ts.forEachChild(node, visit);
   };
   visit(source);
-  for (const spread of spreads) {
-    const keys = spread.name === null ? null : objectKeys.get(spread.name);
-    if (!keys || keys.has('id')) setsId(spread.onHost);
-  }
 
-  return { componentLine, members, slots, parts, dynamic, ids };
+  return { componentLine, members, slots, parts, dynamic };
 }

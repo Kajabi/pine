@@ -5,7 +5,7 @@ import { toId } from 'storybook/internal/csf';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import { coreDir, generateDocsContent } from '../docs-content/generate.mjs';
 import { readComponentSource } from './component-source.mjs';
-import { buildContext, compareStrings, pageAnchors } from './context.mjs';
+import { buildContext, compareStrings } from './context.mjs';
 import { collectSnippets } from './examples.mjs';
 
 const repoDir = path.resolve(coreDir, '../..');
@@ -93,15 +93,6 @@ export function componentTargets(components, readSource = readComponentFile) {
     });
 }
 
-/**
- * Tags whose rendered ids land in the page itself, where a link can reach them: an id on the host element, or any id
- * in a component without a shadow root. Ids inside a shadow root can't be linked to.
- */
-export const idTags = (targets) =>
-  targets
-    .filter(({ docs, source }) => source.ids.onHost || (docs.encapsulation !== 'shadow' && source.ids.anywhere))
-    .map((target) => target.tag);
-
 function walkSections(sections, visit) {
   for (const section of sections) {
     visit(section);
@@ -109,21 +100,14 @@ function walkSections(sections, visit) {
   }
 }
 
-/** Each docs page with its links, anchors, headings' lines and sections in page order, from the docs-content extractor. */
+/** Each docs page with its links, its headings' lines and its sections in page order, from the docs-content extractor. */
 export function pageTargets(content, pageLinks) {
   const linksByFile = new Map(pageLinks.map((page) => [page.file, page]));
   return content.docs.map((doc) => {
-    const page = linksByFile.get(doc.file);
+    const { headings, links } = linksByFile.get(doc.file);
     const sections = [];
     walkSections(doc.sections, (section) => sections.push(section));
-    return {
-      file: doc.file,
-      title: doc.title,
-      headingLines: new Map(page.headings.map((h) => [h.slug, h.line])),
-      ...pageAnchors(page),
-      links: page.links,
-      sections,
-    };
+    return { file: doc.file, title: doc.title, headingLines: new Map(headings.map((h) => [h.slug, h.line])), links, sections };
   });
 }
 
@@ -136,7 +120,6 @@ export function loadDocsCheck() {
   const { components } = JSON.parse(readFileSync(docsJsonPath, 'utf8'));
   const { content, pageLinks } = generateDocsContent(components);
 
-  const targets = componentTargets(components);
   const iconsDir = path.dirname(require.resolve('@pine-ds/icons/package.json'));
   const context = buildContext({
     components: [...components, ...require('@pine-ds/icons/dist/docs.json').components],
@@ -146,14 +129,13 @@ export function loadDocsCheck() {
     iconExports: Object.keys(require('@pine-ds/icons/icons')),
     iconsVersion: require('@pine-ds/icons/package.json').version,
     pages: pageLinks,
-    idTags: idTags(targets),
     ...storyDocs(),
   });
 
   return {
     context,
     snippets: collectSnippets(content.docs, readDocPage),
-    components: targets,
+    components: componentTargets(components),
     pages: pageTargets(content, pageLinks),
   };
 }

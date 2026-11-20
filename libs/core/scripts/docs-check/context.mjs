@@ -41,18 +41,11 @@ export function closedValues(prop) {
   return listed.length === typed.length && listed.every((value, i) => value === typed[i]) ? listed : null;
 }
 
-/** A page's heading anchors and element ids, whether it sets an id the check can't read, and the elements it renders. */
-export const pageAnchors = (page) => ({
-  anchors: new Set([...page.headings.map((h) => h.slug), ...(page.ids ?? [])]),
-  dynamicIds: Boolean(page.dynamicIds),
-  elements: page.elements ?? [],
-});
-
-/** Each page's anchors by Storybook id. When two pages share an id, the first keeps it, as in the docs content. */
+/** Each page's heading anchors by Storybook id. When two pages share an id, the first keeps it, as in the docs content. */
 function anchorsById(pages) {
   const anchors = new Map();
   for (const page of pages) {
-    if (!anchors.has(page.storybookId)) anchors.set(page.storybookId, pageAnchors(page));
+    if (!anchors.has(page.storybookId)) anchors.set(page.storybookId, new Set(page.headings.map((h) => h.slug)));
   }
   return anchors;
 }
@@ -65,12 +58,11 @@ function anchorsById(pages) {
  * @param {string[]} input.iconNames Icon names `pds-icon` accepts in `name`.
  * @param {string[]} input.iconExports Names `@pine-ds/icons/icons` exports.
  * @param {string} input.iconsVersion
- * @param {{ storybookId: string, headings: { slug: string }[], ids?: string[], dynamicIds?: boolean, elements?: string[] }[]} [input.pages] Every MDX page with its anchors.
+ * @param {{ storybookId: string, headings: { slug: string }[] }[]} [input.pages] Every MDX page with its heading anchors.
  * @param {string[]} [input.storyDocsIds] The docs page id Storybook gives each stories file, which exists even with no MDX page.
  * @param {string[]} [input.unknownStories] Stories files with no title or that don't parse, whose docs page id isn't known.
- * @param {string[]} [input.idTags] Tags that render ids a link on the page can reach.
  */
-export function buildContext({ components, iconNames, iconExports, iconsVersion, pages = [], storyDocsIds = [], unknownStories = [], idTags = [] }) {
+export function buildContext({ components, iconNames, iconExports, iconsVersion, pages = [], storyDocsIds = [], unknownStories = [] }) {
   const byTag = new Map();
   for (const component of components) {
     if (!component.tag.startsWith('pds-')) continue;
@@ -94,6 +86,5 @@ export function buildContext({ components, iconNames, iconExports, iconsVersion,
     anchors: anchorsById(pages),
     docsIds: new Set([...pages.map((page) => page.storybookId), ...storyDocsIds]),
     unknownStories: [...unknownStories].sort(compareStrings),
-    idTags: new Set(idTags),
   };
 }

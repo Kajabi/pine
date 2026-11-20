@@ -1,5 +1,5 @@
 import ts from 'typescript';
-import { compareStrings } from '../context.mjs';
+import { closedValues, compareStrings } from '../context.mjs';
 
 const DEFAULT_TAGS = new Set(['defaultValue', 'default']);
 const KEYWORDS = new Map([
@@ -7,8 +7,8 @@ const KEYWORDS = new Map([
   [ts.SyntaxKind.FalseKeyword, 'false'],
   [ts.SyntaxKind.NullKeyword, 'null'],
 ]);
+const BOOLEANS = new Set(['true', 'false']);
 const WORD = /^[\p{L}\p{N}_#%+-]+(?:\.[\p{L}\p{N}_#%+-]+)*$/u;
-const KEYWORD_WORDS = new Set(['true', 'false', 'null', 'undefined']);
 
 const collapse = (text) => text.trim().replace(/\s+/g, ' ');
 
@@ -38,26 +38,33 @@ function stated(text) {
   return WORD.test(text) && !(text.length > 2 && text.startsWith('_') && text.endsWith('_')) ? { kind: 'word', value: text } : null;
 }
 
+const asNumber = (value) => (value.value !== '' && !Number.isNaN(Number(value.value)) ? Number(value.value) : null);
+
 /**
- * The stated value in the terms of the code default's kind, or null when it isn't that kind of value: a number for a
- * number (`1px` isn't one), one of `true`, `false`, `null` or `undefined` in any letter case for a keyword, and any
- * single value for a string. A word stated for an empty string usually describes it (`empty`), so only a quoted
- * value is compared with one.
+ * Whether the stated value contradicts the code default: true when it is certainly another value the prop can take,
+ * false when it is the same value, and null when it can't be told, such as `MD` or `medium` for `'md'`, `1px` for
+ * `1`, or `null` for `undefined`.
  */
-function asKind(value, code) {
-  if (code.kind === 'number') return value.kind === 'number' || (value.value !== '' && !Number.isNaN(Number(value.value))) ? String(Number(value.value)) : null;
-  if (code.kind === 'keyword') return KEYWORD_WORDS.has(value.value.toLowerCase()) ? value.value.toLowerCase() : null;
-  if (code.value === '' && value.kind === 'word') return null;
-  return collapse(value.value);
+function contradicts(value, code, prop) {
+  if (code.kind === 'number') {
+    const number = asNumber(value);
+    return number === null ? null : number !== Number(code.value);
+  }
+  if (code.kind === 'keyword') {
+    const keyword = value.value.toLowerCase();
+    if (keyword === code.value) return false;
+    return BOOLEANS.has(keyword) && BOOLEANS.has(code.value) ? true : null;
+  }
+  const text = collapse(value.value);
+  if (text === collapse(code.value)) return false;
+  return closedValues(prop)?.includes(text) ? true : null;
 }
 
-const codeValue = (code) => (code.kind === 'number' ? String(Number(code.value)) : collapse(code.value));
-
 /**
- * Compares each JSDoc `@defaultValue` (or `@default`) with the prop's default in code, as docs.json gives it. A finding
- * needs both to be single values of the same kind: a literal in code, and a literal or one word in the tag. Anything
- * else is listed as not checked. A tag on a prop with no default in code is listed for review, since that default
- * often comes from CSS or a fallback in the component.
+ * Compares each JSDoc `@defaultValue` (or `@default`) with the prop's default in code, as docs.json gives it. It
+ * reports only a tag that names another value the prop can take: another of a fixed set of strings, another number,
+ * or the other boolean. Anything else that differs is listed as not checked. A tag on a prop with no default in code
+ * is listed for review, since that default often comes from CSS or a fallback in the component.
  */
 export default {
   id: 'wrong-default',
@@ -80,10 +87,10 @@ export default {
         }
         if (text === collapse(prop.default)) continue;
         const code = literal(prop.default);
-        if (code?.kind === 'string' && collapse(code.value) === text) continue;
         const value = stated(text);
-        const comparable = code && value ? asKind(value, code) : null;
-        if (comparable === null) {
+        const result = code && value ? contradicts(value, code, prop) : null;
+        if (result === false) continue;
+        if (result === null) {
           const why = !code
             ? `can't be compared with the code default ${prop.default}, which isn't a literal`
             : !value
@@ -92,7 +99,6 @@ export default {
           findings.push({ line, skipped: true, message: `${where} ${why}.` });
           continue;
         }
-        if (comparable === codeValue(code)) continue;
         findings.push({
           line,
           message: `${where} says ${text}, but the code default is ${prop.default}.`,

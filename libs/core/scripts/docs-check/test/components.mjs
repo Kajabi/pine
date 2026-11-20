@@ -51,10 +51,11 @@ export class PdsWidget {
 }
 `;
 
-const prop = (name, docs, { defaultCode, tags = [], deprecation } = {}) => ({
+const prop = (name, docs, { defaultCode, tags = [], deprecation, type, values } = {}) => ({
   name,
   docs,
   docsTags: tags,
+  ...(type === undefined ? {} : { type, values }),
   ...(defaultCode === undefined ? {} : { default: defaultCode }),
   ...(deprecation === undefined ? {} : { deprecation }),
 });
@@ -108,14 +109,6 @@ describe('readComponentSource', () => {
     const facts = readComponentSource(`const a = <div part="  one\ttwo  "><slot name={'x'} /></div>;`, FILE);
     assert.deepEqual(facts.parts.map((p) => p.name), ['one', 'two']);
     assert.deepEqual(facts.slots.map((s) => s.name), ['x']);
-  });
-
-  it('notes an id on the host or anywhere, and resolves a spread of a const object literal', () => {
-    const facts = (jsx) => readComponentSource(`function render() {\n  const host = { role: 'row', 'aria-busy': 'true' };\n  const withId = { id: 'x' };\n  return ${jsx};\n}`, FILE).ids;
-    assert.deepEqual(facts('<Host {...host}><div /></Host>'), { onHost: false, anywhere: false });
-    assert.deepEqual(facts('<Host {...withId} />'), { onHost: true, anywhere: true });
-    assert.deepEqual(facts('<Host {...this.attrs} />'), { onHost: true, anywhere: true });
-    assert.deepEqual(facts('<Host><input id={this.inputId} /></Host>'), { onHost: false, anywhere: true });
   });
 
   it('finds a @Prop on an accessor', () => {
@@ -213,8 +206,9 @@ describe('undocumented-part', () => {
 });
 
 describe('wrong-default', () => {
-  const withDefault = (defaultCode, text, name = 'defaultValue') =>
-    docsEntry({ props: [prop('size', 'The size.', { defaultCode, tags: [{ name, text }] })] });
+  const sizes = { type: '"sm" | "md" | "lg"', values: ['sm', 'md', 'lg'].map((value) => ({ type: 'string', value })) };
+  const withDefault = (defaultCode, text, name = 'defaultValue', closed = sizes) =>
+    docsEntry({ props: [prop('size', 'The size.', { defaultCode, tags: [{ name, text }], ...closed })] });
 
   it('passes a stated default that matches the code, apart from quotes, whitespace and escapes', () => {
     for (const [code, text] of [
@@ -242,12 +236,16 @@ describe('wrong-default', () => {
     assert.deepEqual(messages(run(withDefault("'md'", 'md', 'default'))), []);
   });
 
-  it('fails a stated default that differs from a literal code default', () => {
+  it('fails a stated default that names another value the prop takes', () => {
     assert.deepEqual(messages(run(withDefault("'md'", 'lg'))), ["wrong-default:12: pds-widget's size prop: @defaultValue says lg, but the code default is 'md'."]);
-    assert.deepEqual(messages(run(withDefault('false', 'true', 'default'))), ["wrong-default:12: pds-widget's size prop: @default says true, but the code default is false."]);
-    assert.equal(messages(run(withDefault('1', '2'))).length, 1);
-    assert.equal(messages(run(withDefault("'md'", 'MD'))).length, 1);
-    assert.equal(messages(run(withDefault("''", "'none'"))).length, 1);
+    assert.equal(messages(run(withDefault("'md'", '"sm"'))).length, 1);
+    assert.deepEqual(messages(run(withDefault('false', 'true', 'default', {}))), ["wrong-default:12: pds-widget's size prop: @default says true, but the code default is false."]);
+    assert.equal(messages(run(withDefault('1', '2', 'defaultValue', {}))).length, 1);
+  });
+
+  it('lists a string default on a prop with no fixed set of values as not checked when the tag differs', () => {
+    const result = run(withDefault("'text'", 'email', 'defaultValue', { type: 'string', values: [{ type: 'string' }] }));
+    assert.deepEqual([messages(result), result.skipped.length], [[], 1]);
   });
 
   it('lists a tag it cannot read as one value, or a code default that is an expression, as not checked', () => {
@@ -261,7 +259,10 @@ describe('wrong-default', () => {
       ['1000', '1,000', 'says more than a single value'],
       ['1', '1px', "says 1px, which can't be compared with the code default 1"],
       ['undefined', 'none', "says none, which can't be compared with the code default undefined"],
+      ['undefined', 'null', "says null, which can't be compared with the code default undefined"],
       ["''", 'empty', "says empty, which can't be compared with the code default ''"],
+      ["'md'", 'MD', "says MD, which can't be compared with the code default 'md'"],
+      ["'md'", 'medium', "says medium, which can't be compared with the code default 'md'"],
       ["'md'", '', 'has no value'],
     ]) {
       const result = run(withDefault(code, text));
