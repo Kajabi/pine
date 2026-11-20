@@ -203,7 +203,9 @@ Then use the components.`),
 - [Grid](?path=/docs/guides-layouts--docs#grid)
 - [MDN](https://developer.mozilla.org/)
 - [This page](#related)
-- [Elsewhere](./other.md)`),
+- [Elsewhere](./other.md)
+
+<a href="">Empty</a> <div id="details">Details</div>`),
       [GUIDE_PAGE]: guidePage('## Grid\n\nColumns.'),
     });
 
@@ -211,6 +213,8 @@ Then use the components.`),
       file: WIDGET_PAGE,
       storybookId: 'components-widget--docs',
       headings: [{ slug: 'widget', line: 11 }, { slug: 'related', line: 15 }],
+      ids: ['details'],
+      dynamicIds: false,
       links: [
         { href: '?path=/docs/guides-layouts--docs#grid', line: 17, target: { id: 'guides-layouts--docs', hash: 'grid' } },
         { href: '#related', line: 19, target: { id: 'components-widget--docs', hash: 'related' } },

@@ -109,6 +109,32 @@ function slugHeadings(tree) {
   return slugs;
 }
 
+/**
+ * The element ids a browser can scroll to besides headings: `id` on any JSX element, and `name` on `<a>`. An id set
+ * by an expression or a spread can't be read, so `dynamic` says the page has one.
+ */
+function elementIds(tree) {
+  const ids = new Set();
+  let dynamic = false;
+  const visit = (node) => {
+    if (isJsx(node)) {
+      for (const attr of node.attributes ?? []) {
+        if (attr.type !== 'mdxJsxAttribute') {
+          dynamic = true;
+          continue;
+        }
+        if (attr.name !== 'id' && !(attr.name === 'name' && node.name === 'a')) continue;
+        const value = typeof attr.value === 'string' ? attr.value : staticString(attr.value?.data?.estree?.body?.[0]?.expression);
+        if (value === undefined) dynamic = true;
+        else ids.add(value);
+      }
+    }
+    node.children?.forEach(visit);
+  };
+  visit(tree);
+  return { ids, dynamic };
+}
+
 function referenceDefinitions(tree) {
   const definitions = new Map();
   const visit = (node) => {
@@ -270,6 +296,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       kind: isComponentPage ? 'component' : 'guide',
       componentDir: isComponentPage ? parts.slice(0, -2).join('/') : null,
       slugs: slugHeadings(tree),
+      elementIds: elementIds(tree),
       definitions: referenceDefinitions(tree),
       links: [],
       warn,
@@ -291,7 +318,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       return href;
     }
     const target = storybookLinkTarget(href);
-    page.links.push({ href, line, target: target ?? null });
+    if (href !== '') page.links.push({ href, line, target: target ?? null });
     if (!target) {
       page.warn(node, `link "${href}" is neither absolute, in-page nor a Storybook docs link; kept as is`);
       return href;
@@ -527,6 +554,8 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       file: page.file,
       storybookId: page.storybookId,
       headings: [...page.slugs].map(([slug, line]) => ({ slug, line })),
+      ids: [...page.elementIds.ids].sort(compareStrings),
+      dynamicIds: page.elementIds.dynamic,
       links: page.links,
     })),
   };
