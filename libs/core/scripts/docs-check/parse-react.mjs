@@ -29,15 +29,28 @@ function attributeValue(initializer) {
 }
 
 /**
- * The Pine element a JSX tag name stands for: a `@pine-ds/react` import under any local name, a `Pds*` name the
- * snippet doesn't import or declare, or a `pds-*` tag (lowercased, as the DOM does). Null for anything else.
+ * The Pine element a JSX tag stands for: a `@pine-ds/react` import under any local name or through a namespace
+ * import, a `Pds*` name the snippet doesn't import, or a `pds-*` tag (lowercased, as the DOM does). A name the
+ * snippet also declares may be shadowed, so it is skipped. Null for anything else.
  */
-function pineTarget(written, imports, declared) {
+function pineTarget(tagName, imports, declared) {
+  if (ts.isPropertyAccessExpression(tagName) && ts.isIdentifier(tagName.expression)) {
+    const namespace = tagName.expression.text;
+    const imported = imports.get(namespace);
+    const member = tagName.name.text;
+    const isPine = imported?.namespace && imported.from === PINE_REACT && !declared.has(namespace) && COMPONENT_NAME.test(member);
+    return isPine ? { written: `${namespace}.${member}`, reactName: member, tag: null } : null;
+  }
+  if (!ts.isIdentifier(tagName)) return null;
+  const written = tagName.text;
+  if (ELEMENT_NAME.test(written)) return { written, reactName: null, tag: written.toLowerCase() };
+  if (declared.has(written)) return null;
   const imported = imports.get(written);
-  if (imported) return imported.from === PINE_REACT && COMPONENT_NAME.test(imported.name ?? '') ? { reactName: imported.name, tag: null } : null;
-  if (ELEMENT_NAME.test(written)) return { reactName: null, tag: written.toLowerCase() };
-  if (COMPONENT_NAME.test(written) && !declared.has(written)) return { reactName: written, tag: null };
-  return null;
+  if (imported) {
+    const isPine = imported.from === PINE_REACT && !imported.namespace && COMPONENT_NAME.test(imported.name ?? '');
+    return isPine ? { written, reactName: imported.name, tag: null } : null;
+  }
+  return COMPONENT_NAME.test(written) ? { written, reactName: written, tag: null } : null;
 }
 
 /**
@@ -67,13 +80,13 @@ export function parseReact(code) {
     if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
       const from = node.moduleSpecifier.text;
       const clause = node.importClause;
-      if (clause?.name) imports.set(clause.name.text, { from, name: null });
+      if (clause?.name) imports.set(clause.name.text, { from, name: null, namespace: false });
       const bindings = clause?.namedBindings;
-      if (bindings && ts.isNamespaceImport(bindings)) imports.set(bindings.name.text, { from, name: null });
+      if (bindings && ts.isNamespaceImport(bindings)) imports.set(bindings.name.text, { from, name: null, namespace: true });
       if (bindings && ts.isNamedImports(bindings)) {
         for (const specifier of bindings.elements) {
           const name = (specifier.propertyName ?? specifier.name).text;
-          imports.set(specifier.name.text, { from, name });
+          imports.set(specifier.name.text, { from, name, namespace: false });
           if (from === PINE_ICONS) iconImports.set(specifier.name.text, name);
         }
       }
@@ -92,9 +105,7 @@ export function parseReact(code) {
 
   const elements = [];
   for (const node of jsx) {
-    if (!ts.isIdentifier(node.tagName)) continue;
-    const written = node.tagName.text;
-    const target = pineTarget(written, imports, declared);
+    const target = pineTarget(node.tagName, imports, declared);
     if (!target) continue;
     const properties = node.attributes.properties;
     const lastSpread = properties.findLastIndex((p) => ts.isJsxSpreadAttribute(p));
@@ -108,7 +119,7 @@ export function parseReact(code) {
         overridable: index < lastSpread,
       });
     });
-    elements.push({ written, ...target, line: lineOf(node), attributes, hasSpread: lastSpread !== -1 });
+    elements.push({ ...target, line: lineOf(node), attributes, hasSpread: lastSpread !== -1 });
   }
   return { elements, iconImports, usesAddIcons };
 }

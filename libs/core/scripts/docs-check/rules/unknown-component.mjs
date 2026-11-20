@@ -10,7 +10,8 @@ export default {
       .map((element) => {
         if (element.tag === null) {
           const suggestion = closest(element.reactName, context.tags.map(reactName));
-          const shown = element.reactName === element.written ? `<${element.written}>` : `<${element.written}> (${element.reactName})`;
+          const aliased = element.written !== element.reactName && !element.written.endsWith(`.${element.reactName}`);
+          const shown = aliased ? `<${element.written}> (${element.reactName})` : `<${element.written}>`;
           return {
             line: element.line,
             message: `${shown} isn't a Pine React component: no tag in docs.json maps to it.`,

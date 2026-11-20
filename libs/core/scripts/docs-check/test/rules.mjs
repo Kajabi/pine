@@ -44,6 +44,19 @@ describe('unknown-component', () => {
     ]);
   });
 
+  it('skips an imported name the snippet also declares, since it may be shadowed', () => {
+    const code = "import { PdsButton as Button } from '@pine-ds/react';\n\nfunction Demo({ Button }) {\n  return <Button variant=\"custom\" />;\n}";
+    assert.deepEqual(check(REACT, code), []);
+  });
+
+  it('checks members of a @pine-ds/react namespace import, and nothing else reached through a namespace', () => {
+    assert.deepEqual(check(REACT, "import * as Pine from '@pine-ds/react';\n\n<Pine.PdsButton variant=\"primary\" />"), []);
+    assert.deepEqual(check(REACT, "import * as Pine from '@pine-ds/react';\n\n<Pine.PdsButon />"), [
+      'unknown-component: <Pine.PdsButon> isn\'t a Pine React component: no tag in docs.json maps to it.',
+    ]);
+    assert.deepEqual(check(REACT, "import * as UI from './ui';\n\n<UI.PdsButon />"), []);
+  });
+
   it('matches pds-* JSX tags in any letter case, as the DOM lowercases them', () => {
     assert.deepEqual(check(REACT, '<pds-BUTTON variant="secondary"></pds-BUTTON>'), []);
     assert.deepEqual(check(HTML, '<PDS-BUTTON variant="secondary"></PDS-BUTTON>'), []);
@@ -74,6 +87,15 @@ describe('unknown-icon', () => {
     assert.deepEqual(check(REACT, "import { addIcons } from '@pine-ds/icons';\naddIcons({ custom });\n<PdsIcon name=\"custom\" />"), []);
     assert.deepEqual(check(REACT, '<PdsIcon name={iconName} />'), []);
     assert.deepEqual(check(REACT, '<PdsIcon {...props} name="custom" />'), []);
+  });
+
+  it('checks name when src is empty, has no / or ., or is a bare React prop, since pds-icon then falls back to name', () => {
+    assert.equal(check(HTML, '<pds-icon src="" name="info"></pds-icon>').length, 1);
+    assert.equal(check(HTML, '<pds-icon src="  " name="info"></pds-icon>').length, 1);
+    assert.equal(check(HTML, '<pds-icon src="custom" name="info"></pds-icon>').length, 1);
+    assert.equal(check(REACT, '<PdsIcon src name="info" />').length, 1);
+    assert.deepEqual(check(HTML, '<pds-icon src="icon.svg" name="info"></pds-icon>'), []);
+    assert.deepEqual(check(REACT, '<PdsIcon src={url} name="info" />'), []);
   });
 
   it('checks icon={x} only when the snippet imports x from @pine-ds/icons/icons', () => {

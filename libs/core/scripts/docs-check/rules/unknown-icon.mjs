@@ -1,11 +1,22 @@
 import { closest } from '../suggest.mjs';
 
 /**
- * `pds-icon` lowercases `name` before it looks the icon up. A `src` wins over `name`, a JSX spread may carry a `src`,
- * and `addIcons` can register names outside the icon set, so those cases are skipped.
+ * Mirrors `getSrc` in `@pine-ds/icons`: only a trimmed, non-empty string with a `/` or `.` is used as the URL;
+ * anything else falls back to `name`. A `src` expression can't be known, so it counts as winning.
+ */
+function srcWins(value) {
+  if (value.kind === 'expression') return true;
+  if (value.kind !== 'string') return false;
+  const src = value.text.trim();
+  return src.length > 0 && /[/.]/.test(src);
+}
+
+/**
+ * `pds-icon` lowercases `name` before it looks the icon up. A `src` that wins, a JSX spread that may carry one, and
+ * `addIcons`, which can register names outside the icon set, all skip the check.
  */
 function nameFindings(element, snippet, context) {
-  if (snippet.usesAddIcons || element.hasSpread || element.attributes.some((a) => a.name === 'src')) return [];
+  if (snippet.usesAddIcons || element.hasSpread || element.attributes.some((a) => a.name === 'src' && srcWins(a.value))) return [];
   return element.attributes
     .filter((a) => a.name === 'name' && a.value.kind === 'string' && a.value.text !== '')
     .filter((a) => !context.iconNames.has(a.value.text.toLowerCase()))
