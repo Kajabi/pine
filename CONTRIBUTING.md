@@ -138,13 +138,13 @@ Each component's JSDoc, from `docs.json` and the component's `.tsx`:
 - **missing-description**: a prop, event or method with no description. Deprecated members are skipped.
 - **undocumented-slot**: a `<slot>` in the component's JSX with no `@slot` line. Document the default slot as `@slot (default) - …`.
 - **undocumented-part**: a name in a JSX `part="…"` with no `@part` line.
-- **wrong-default**: an `@defaultValue` or `@default` that differs from the prop's default in code, apart from quotes, whitespace and the letter case of `true`, `false` and `null`. Only single values of the same kind are compared: a literal default in code (a string, number, `true`, `false` or `null`), and a tag that is a literal or one word.
+- **wrong-default**: an `@defaultValue` or `@default` that contradicts the prop's default in code by naming another of the prop's fixed set of strings, another number, or the other of `true` and `false`. Quotes and whitespace don't count.
 
-Only the component's own file is read. A slot name or part set with an expression, a template literal or a spread isn't checked, and neither is a tag with more than one value, such as `@defaultValue 'sm' (small)`. A prop that states a default but sets none in code is listed for review, since its default often comes from CSS or a fallback.
+Only the component's own file is read. A slot name or part set with an expression, a template literal or a spread isn't checked. Neither is a default the check can't be sure of, such as `@defaultValue 'sm' (small)`, `MD` for `'md'`, a prop that takes any string, or a default in code that isn't a literal. A prop that states a default but sets none in code is listed for review, since its default often comes from CSS or a fallback.
 
 Each docs page, through the docs-content extractor:
 
-- **broken-anchor**: a link to `#slug`, on the same page or another MDX page, that matches no heading and no `id` on a JSX element. Heading anchors come from the slugger Storybook uses, so the second "Border" heading is `#border-1`. An unmatched anchor isn't checked on a page that may render ids the check can't see: through an expression or a spread, a component of the page's own, or a Pine component that renders ids outside its shadow root.
+- **broken-anchor**: a link to `#slug`, on the same page or another MDX page, that matches no heading. Anchors come from the slugger Storybook uses, so the second "Border" heading is `#border-1`. The docs content follows in-page links only to headings, so a link to another element's `id` fails too: link to the heading above it.
 - **broken-docs-link**: a `?path=/docs/<id>--docs` link whose id is neither an MDX page nor the docs page of a stories file. Links to a single story need Storybook's own index, so they aren't checked.
 - **oversize-section**: a section over 8,000 characters, counting its heading and text in `docs-content.json` but not its subsections or example code. Agents read docs one section at a time, and the Pine MCP caps a response at 15,000 characters.
 
@@ -166,7 +166,7 @@ libs/core/src/components/pds-button/docs/pds-button.mdx:77  invalid-value  "Seco
 
 For React code, the line is the element's own line. For web component code, it's the snippet's first line, so look for the quoted tag in that snippet. For JSDoc, it's the line of the prop, event, method, slot or part in the component's `.tsx`.
 
-The report also lists what it couldn't decide under "Not checked" (React code with a syntax error, a slot name or part set with an expression, a default it can't compare, a story link) and what's worth a look under "For review". Neither fails the check. The command exits 0 when there are no findings, 1 when there are findings, and 2 when the check itself fails.
+The report also lists what it couldn't decide under "Not checked" (React code with a syntax error, a slot name or part set with an expression, a default it can't be sure of, a story link) and what's worth a look under "For review". Neither fails the check. The command exits 0 when there are no findings, 1 when there are findings, and 2 when the check itself fails.
 
 ### Bundle size budgets
 
