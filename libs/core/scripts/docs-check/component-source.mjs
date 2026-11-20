@@ -62,18 +62,20 @@ export function readComponentSource(code, fileName) {
   };
 
   const visitOpening = (opening) => {
-    const attributes = opening.attributes.properties;
+    const attributes = [...opening.attributes.properties];
+    const lastSpread = attributes.findLastIndex((a) => ts.isJsxSpreadAttribute(a));
+    // A spread replaces any attribute written before it, so only a literal after the last spread is certain.
+    const certain = (attribute) => (attributes.indexOf(attribute) > lastSpread ? literalValue(attribute) : null);
     const isSlot = ts.isIdentifier(opening.tagName) && opening.tagName.text === 'slot';
     if (isSlot) {
       const nameAttribute = attributes.find((a) => ts.isJsxAttribute(a) && attributeName(a) === 'name');
-      const hasSpread = attributes.some((a) => ts.isJsxSpreadAttribute(a));
-      const name = nameAttribute ? literalValue(nameAttribute) : hasSpread ? null : '';
+      const name = nameAttribute ? certain(nameAttribute) : lastSpread === -1 ? '' : null;
       if (name === null) dynamic.push({ kind: 'slot', line: lineOf(opening, source) });
       else slots.push({ name, line: lineOf(opening, source) });
     }
     for (const attribute of attributes) {
       if (!ts.isJsxAttribute(attribute) || attributeName(attribute) !== 'part') continue;
-      const value = literalValue(attribute);
+      const value = certain(attribute);
       if (value === null) {
         dynamic.push({ kind: 'part', line: lineOf(attribute, source) });
         continue;

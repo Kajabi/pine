@@ -1,10 +1,12 @@
+import { taggedNames } from '../context.mjs';
+
 const DEFAULT_SLOT = '(default)';
 
 export default {
   id: 'undocumented-slot',
   scope: 'component',
   check({ tag, docs, source }) {
-    const documented = new Set(docs.slots.map((slot) => slot.name));
+    const documented = taggedNames(docs, 'slot');
     const reported = new Set();
     const findings = [];
     for (const slot of source.slots) {

@@ -41,6 +41,13 @@ export function closedValues(prop) {
   return listed.length === typed.length && listed.every((value, i) => value === typed[i]) ? listed : null;
 }
 
+/**
+ * The names a component's JSDoc documents with a tag such as `@part name - …`. Stencil also lists in docs.json the
+ * parts it finds in the JSX, with no description, so only the tags show what is documented.
+ */
+export const taggedNames = (docs, tagName) =>
+  new Set((docs.docsTags ?? []).filter((t) => t.name === tagName).map((t) => (t.text ?? '').trim().split(/\s/)[0]));
+
 /** Each page's heading anchors by Storybook id. When two pages share an id, the first keeps it, as in the docs content. */
 function anchorsById(pages) {
   const anchors = new Map();

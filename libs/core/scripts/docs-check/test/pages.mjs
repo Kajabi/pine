@@ -85,7 +85,7 @@ describe('broken-anchor', () => {
     assert.deepEqual(messages(check(body)), ['broken-anchor:10: #nope matches no heading on this page.']);
   });
 
-  it('checks an anchor on another MDX page, and skips one on a page with no MDX file', () => {
+  it('checks an anchor on another MDX page, and lists one on a page with no MDX file as not checked', () => {
     const body = [
       '## Links',
       '',
@@ -93,7 +93,31 @@ describe('broken-anchor', () => {
       '',
       '[Missing](../?path=/docs/guides-other--docs#examples)',
     ].join('\n');
-    assert.deepEqual(messages(check(body)), ['broken-anchor:12: ../?path=/docs/guides-other--docs#examples matches no heading on guides-other--docs.']);
+    const result = check(body);
+    assert.deepEqual(messages(result), ['broken-anchor:12: ../?path=/docs/guides-other--docs#examples matches no heading on guides-other--docs.']);
+    assert.deepEqual(skips(result), ['broken-anchor:10']);
+  });
+
+  it('checks links inside JSX the docs content keeps as is, but not example code inside it', () => {
+    const body = [
+      '## Usage',
+      '',
+      '<section>',
+      '',
+      '[Usage](#usage) [Gone](#gone)',
+      '',
+      '<a href="#also-gone">x</a>',
+      '',
+      '<DocCanvas mdxSource={{ webComponent: `<a href="#x">x</a>` }}>',
+      '  <a href="#profile">Profile</a>',
+      '</DocCanvas>',
+      '',
+      '</section>',
+    ].join('\n');
+    assert.deepEqual(messages(check(body)), [
+      'broken-anchor:12: #gone matches no heading on this page.',
+      'broken-anchor:14: #also-gone matches no heading on this page.',
+    ]);
   });
 });
 

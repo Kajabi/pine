@@ -60,10 +60,16 @@ const prop = (name, docs, { defaultCode, tags = [], deprecation, type, values } 
   ...(deprecation === undefined ? {} : { deprecation }),
 });
 
+const jsdocTags = ({ slots = ['(default) - Widget content.', 'header - Widget header.'], parts = ['body - The widget body.', 'icon - The widget icon.'] } = {}) => [
+  ...slots.map((text) => ({ name: 'slot', text })),
+  ...parts.map((text) => ({ name: 'part', text })),
+];
+
 function docsEntry(overrides = {}) {
   return {
     tag: 'pds-widget',
     filePath: 'src/components/pds-widget/pds-widget.tsx',
+    docsTags: jsdocTags(),
     props: [
       prop('size', 'The size.', { defaultCode: "'md'", tags: [{ name: 'defaultValue', text: 'md' }] }),
       prop('open', "Whether it's open.", { defaultCode: 'false', tags: [{ name: 'defaultValue', text: 'false' }] }),
@@ -109,6 +115,13 @@ describe('readComponentSource', () => {
     const facts = readComponentSource(`const a = <div part="  one\ttwo  "><slot name={'x'} /></div>;`, FILE);
     assert.deepEqual(facts.parts.map((p) => p.name), ['one', 'two']);
     assert.deepEqual(facts.slots.map((s) => s.name), ['x']);
+  });
+
+  it('counts a literal name or part as unknown when a later spread may replace it', () => {
+    const facts = readComponentSource('const a = <div>\n  <slot name="old" {...attrs} />\n  <slot {...attrs} name="kept" />\n  <i part="p" {...attrs} />\n  <b {...attrs} part="q" />\n</div>;', FILE);
+    assert.deepEqual(facts.slots, [{ name: 'kept', line: 3 }]);
+    assert.deepEqual(facts.parts, [{ name: 'q', line: 5 }]);
+    assert.deepEqual(facts.dynamic, [{ kind: 'slot', line: 2 }, { kind: 'part', line: 4 }]);
   });
 
   it('finds a @Prop on an accessor', () => {
@@ -174,7 +187,7 @@ describe('missing-description', () => {
 
 describe('undocumented-slot', () => {
   it('fails a rendered slot with no @slot line, once per name', () => {
-    const entry = docsEntry({ slots: [] });
+    const entry = docsEntry({ docsTags: jsdocTags({ slots: [] }), slots: [] });
     const source = SOURCE.replace('<slot />', '<slot /><slot />');
     assert.deepEqual(messages(run(entry, source)), [
       'undocumented-slot:28: pds-widget renders <slot name="header">, but its JSDoc has no @slot header line.',
@@ -190,8 +203,11 @@ describe('undocumented-slot', () => {
 });
 
 describe('undocumented-part', () => {
-  it('fails each part name with no @part line', () => {
-    const entry = docsEntry({ parts: [{ name: 'body', docs: 'Body.' }] });
+  it('fails each part name with no @part line, though Stencil lists the parts it finds in docs.json', () => {
+    const entry = docsEntry({
+      docsTags: jsdocTags({ parts: ['body - Body.'] }),
+      parts: [{ name: 'body', docs: 'Body.' }, { name: 'extra', docs: '' }, { name: 'icon', docs: '' }],
+    });
     assert.deepEqual(messages(run(entry, SOURCE.replace('part="body"', 'part="body extra"'))), [
       'undocumented-part:35: pds-widget renders part="extra", but its JSDoc has no @part extra line.',
       'undocumented-part:36: pds-widget renders part="icon", but its JSDoc has no @part icon line.',
@@ -241,6 +257,12 @@ describe('wrong-default', () => {
     assert.equal(messages(run(withDefault("'md'", '"sm"'))).length, 1);
     assert.deepEqual(messages(run(withDefault('false', 'true', 'default', {}))), ["wrong-default:12: pds-widget's size prop: @default says true, but the code default is false."]);
     assert.equal(messages(run(withDefault('1', '2', 'defaultValue', {}))).length, 1);
+    assert.equal(messages(run(withDefault('1', '2', 'defaultValue', { type: '1 | 2', values: [{ type: 'number' }] }))).length, 1);
+  });
+
+  it('lists a number outside a union of number literals as not checked', () => {
+    const result = run(withDefault('1', '3', 'defaultValue', { type: '1 | 2', values: [{ type: 'number' }] }));
+    assert.deepEqual([messages(result), result.skipped.length], [[], 1]);
   });
 
   it('lists a string default on a prop with no fixed set of values as not checked when the tag differs', () => {

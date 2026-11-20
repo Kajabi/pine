@@ -1,8 +1,10 @@
+import { taggedNames } from '../context.mjs';
+
 export default {
   id: 'undocumented-part',
   scope: 'component',
   check({ tag, docs, source }) {
-    const documented = new Set(docs.parts.map((part) => part.name));
+    const documented = taggedNames(docs, 'part');
     const reported = new Set();
     const findings = [];
     for (const part of source.parts) {
