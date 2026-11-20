@@ -166,7 +166,7 @@ libs/core/src/components/pds-button/docs/pds-button.mdx:77  invalid-value  "Seco
 
 For React code, the line is the element's own line. For web component code, it's the snippet's first line, so look for the quoted tag in that snippet. For JSDoc, it's the line of the prop, event, method, slot or part in the component's `.tsx`.
 
-The report also lists what it couldn't decide under "Not checked" (React code with a syntax error, a slot name or part set with an expression, a default it can't be sure of, a story link) and what's worth a look under "For review". Neither fails the check. The command exits 0 when there are no findings, 1 when there are findings, and 2 when the check itself fails.
+The report also lists what it couldn't decide under "Not checked" (React code with a syntax error, a slot name or part set with an expression, a default it can't be sure of, a story link) and what's worth a look under "For review". Neither fails the check. `npm run docs.check --workspace @pine-ds/core` exits 0 when there are no findings, 1 when there are findings, and 2 when the check itself fails. The root `npm run docs.check` runs it through Nx, which exits 1 for either failure, so read its output to tell them apart.
 
 ### Bundle size budgets
 
