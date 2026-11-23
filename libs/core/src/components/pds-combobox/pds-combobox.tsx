@@ -446,6 +446,7 @@ export class PdsCombobox implements BasePdsProps {
   private portalRoot: ShadowRoot | null = null;
   private cleanupPositionAutoUpdate?: () => void;
   private bodyPortalAutoUpdateActive = false;
+  private triggerVisibility?: IntersectionObserver;
   /** Deferred so portal teardown runs after Stencil reconciles `isOpen === false`. */
   private deferredPortalTeardownId?: ReturnType<typeof setTimeout>;
   private internals?: ElementInternals;
@@ -538,6 +539,7 @@ export class PdsCombobox implements BasePdsProps {
       this.deferredPortalTeardownId = undefined;
     }
     this.observer?.disconnect();
+    this.stopWatchingTriggerVisibility();
     cancelDebouncedEvent(this.pdsComboboxSearch);
     this.clearAsyncFetchState();
     this.removeBodyPortal();
@@ -782,6 +784,12 @@ export class PdsCombobox implements BasePdsProps {
 
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
+    if (isOpen) {
+      this.watchTriggerVisibility();
+    } else {
+      this.stopWatchingTriggerVisibility();
+    }
+
     if (!isOpen) {
       this.endHeightGlide();
       this.revealedGroupLabel = null;
@@ -1526,6 +1534,59 @@ export class PdsCombobox implements BasePdsProps {
     this.cleanupPositionAutoUpdate?.();
     this.cleanupPositionAutoUpdate = undefined;
     this.bodyPortalAutoUpdateActive = false;
+  }
+
+  /**
+   * Once the trigger is fully out of view, scrolled or clipped by any container or the window, the
+   * list closes rather than float away from it, matching pds-dropdown-menu. An IntersectionObserver
+   * measures against the layout viewport, so panning a pinch-zoomed page doesn't close it.
+   */
+  private watchTriggerVisibility() {
+    this.stopWatchingTriggerVisibility();
+    if (typeof IntersectionObserver === 'undefined' || !this.triggerEl) {
+      return;
+    }
+
+    // Only a trigger seen in view this opening closes the list when it leaves.
+    let triggerSeen = false;
+    let broughtIntoView = false;
+
+    this.triggerVisibility = new IntersectionObserver((entries) => {
+      if (!this.isOpen) {
+        return;
+      }
+
+      if (entries[entries.length - 1].isIntersecting) {
+        triggerSeen = true;
+      } else if (triggerSeen) {
+        this.closeFromTriggerScrolledOut();
+      } else if (!broughtIntoView) {
+        // Opened with its trigger out of view, from the keyboard after an earlier close or from a
+        // script, the trigger is scrolled into view so the list opens beside it. A trigger that
+        // still can't be seen leaves the list open.
+        broughtIntoView = true;
+        this.triggerEl?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      }
+    });
+    this.triggerVisibility.observe(this.triggerEl);
+  }
+
+  private stopWatchingTriggerVisibility() {
+    this.triggerVisibility?.disconnect();
+    this.triggerVisibility = undefined;
+  }
+
+  /** Closed because its trigger left the view; focus is left wherever it already was. */
+  private closeFromTriggerScrolledOut() {
+    this.isOpen = false;
+    this.highlightedIndex = -1;
+    this.clearExpandFilterList();
+    this.isArrowKeyNavigationMode = false;
+    this.updateAriaActiveDescendant();
+
+    if (this.selectedOption && this.displayText !== this.getOptionLabel(this.selectedOption)) {
+      this.displayText = this.getOptionLabel(this.selectedOption);
+    }
   }
 
   private getPortalMountRoot(): HTMLElement {
