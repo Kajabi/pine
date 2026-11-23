@@ -1,3 +1,14 @@
+## 5.1.2 (2026-11-23)
+
+### Bug Fixes 🐛
+
+- **forms:** stop stale disabled/required validity from blocking or passing submission ([#956](https://github.com/Kajabi/pine/pull/956))
+- **pds-combobox:** close the list once its trigger scrolls out of view ([#1013](https://github.com/Kajabi/pine/pull/1013))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 5.1.1 (2026-11-20)
 
 ### Documentation 📄
