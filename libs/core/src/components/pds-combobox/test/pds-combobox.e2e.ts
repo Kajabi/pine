@@ -3265,8 +3265,9 @@ describe('pds-combobox value fade', () => {
   });
 });
 
-// A dropdown, especially one mounted in the body with fixed positioning, closes once its trigger
-// scrolls out of view rather than float away from it -- matching pds-dropdown-menu (#967).
+// A dropdown mounted in the body, with fixed positioning, closes once its trigger scrolls out of
+// view rather than float away from it -- matching pds-dropdown-menu. One mounted in the field
+// scrolls along with its trigger, so it stays open.
 describe('pds-combobox when its trigger scrolls out of view', () => {
   const isOpen = (page: E2EPage) =>
     page.evaluate(
@@ -3274,6 +3275,9 @@ describe('pds-combobox when its trigger scrolls out of view', () => {
         !!document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') ||
         !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'),
     );
+
+  const isOpenAnywhere = (page: E2EPage) =>
+    page.evaluate(() => !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'));
 
   // The IntersectionObserver fires asynchronously once the scroll settles.
   const settle = (page: E2EPage) =>
@@ -3373,7 +3377,7 @@ describe('pds-combobox when its trigger scrolls out of view', () => {
   });
 
   // A row action combobox in a table that scrolls sideways, whose scroll container is in the
-  // table's shadow root -- the real case this ships for (kajabi-products#62072).
+  // table's shadow root.
   it("closes once the trigger scrolls out of a responsive pds-table's scroll container", async () => {
     const page = await openCombobox(`
       <div style="width: 300px;">
@@ -3494,5 +3498,63 @@ describe('pds-combobox when its trigger scrolls out of view', () => {
     await closed(page);
 
     expect(await isOpen(page)).toBe(false);
+  });
+
+  // Overscroll chained to the page could scroll the trigger out and close the list mid-scroll.
+  it('contains scroll chaining on a body-mounted list, so overscrolling it does not scroll the page', async () => {
+    const page = await openCombobox(scroller(' dropdown-mount="body"'));
+
+    const overscroll = await page.evaluate(() => {
+      const listbox = document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!.querySelector('.pds-combobox__listbox')!;
+      return getComputedStyle(listbox).overscrollBehaviorBlock;
+    });
+    expect(overscroll).toBe('contain');
+  });
+
+  // document.activeElement stops at the outermost shadow host, so inside another component's shadow
+  // root it would read as focus having left, and snap typed text back to the selected label.
+  it("keeps a trigger='input' user's typed text when closed from inside another component's shadow root", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="scroller" style="width: 300px; overflow: auto;">
+        <div style="width: 1500px; padding: 8px 8px 8px 100px;"><x-wrapper></x-wrapper></div>
+      </div>
+    `);
+    await page.evaluate(() => {
+      customElements.define(
+        'x-wrapper',
+        class extends HTMLElement {
+          connectedCallback() {
+            this.attachShadow({ mode: 'open' }).innerHTML = `
+              <pds-combobox component-id="fruit" label="Fruit" dropdown-mount="body" value="a" style="width: 100px;">
+                <option value="a">Apple</option>
+                <option value="b">Banana</option>
+              </pds-combobox>`;
+          }
+        },
+      );
+    });
+    await page.waitForChanges();
+
+    const input = () =>
+      page.evaluateHandle(
+        () => document.querySelector('x-wrapper')!.shadowRoot!.querySelector('pds-combobox')!.shadowRoot!.querySelector('input')!,
+      );
+    await page.waitForFunction(
+      () => document.querySelector('x-wrapper')?.shadowRoot?.querySelector('pds-combobox')?.shadowRoot?.querySelector('input')?.value === 'Apple',
+    );
+    await (await input()).asElement()!.click({ clickCount: 3 });
+    await page.keyboard.type('Ban');
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpenAnywhere(page)).toBe(true);
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await page.waitForFunction(() => !document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'));
+    await page.waitForChanges();
+
+    expect(await (await input()).evaluate((el: HTMLInputElement) => el.value)).toBe('Ban');
   });
 });
