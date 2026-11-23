@@ -209,14 +209,10 @@ test('fenced code blocks stay in place with their language', () => {
   }
 });
 
-test('every example keeps the indentation its lines have relative to each other in the MDX', () => {
+test('every example keeps the indentation its lines have in the MDX, less the margin it is written against', () => {
   const { content } = generateDocsContent([]);
   const byFile = new Map(content.docs.map((doc) => [doc.file, doc]));
   const indentOf = (line) => line.length - line.trimStart().length;
-  const shape = (lines, from) => {
-    const indents = lines.slice(from).filter((line) => line.trim()).map(indentOf);
-    return indents.map((indent) => indent - indents[0]);
-  };
   for (const relative of findDocPages(coreDir)) {
     const source = readFileSync(path.join(coreDir, relative), 'utf8');
     const tree = parseMdx(source);
@@ -235,11 +231,18 @@ test('every example keeps the indentation its lines have relative to each other 
       for (const property of mdxSource.properties) {
         const key = property.key.name ?? property.key.value;
         const written = source.slice(property.value.start + 1, property.value.end - 1);
+        const startsOnOpeningLine = !/^\s*\n/.test(written);
         const lines = written.replace(/^\s*\n/, '').replace(/\n\s*$/, '').split('\n');
-        const from = /^\s*\n/.test(written) ? 0 : 1;
         const code = examples[index][key].split('\n');
         assert.equal(code.length, lines.length, `${relative}: example ${index} ${key} has every line`);
-        assert.deepEqual(shape(code, from), shape(lines, from), `${relative}: example ${index} ${key} keeps the indentation the MDX gives its lines`);
+        const measured = lines.flatMap((line, k) => (line.trim() && !(k === 0 && startsOnOpeningLine) ? [k] : []));
+        const removed = new Set(measured.map((k) => indentOf(lines[k]) - indentOf(code[k])));
+        const propertyLine = source.slice(source.lastIndexOf('\n', property.value.start) + 1, property.value.start);
+        const margins = startsOnOpeningLine ? [0, indentOf(propertyLine)] : [Math.min(...measured.map((k) => indentOf(lines[k])))];
+        assert.ok(
+          removed.size <= 1 && [...removed].every((margin) => margins.includes(margin)),
+          `${relative}: example ${index} ${key} keeps the indentation the MDX gives its lines, less the margin it is written against`,
+        );
       }
     });
   }

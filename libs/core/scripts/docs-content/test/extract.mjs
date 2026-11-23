@@ -111,8 +111,7 @@ Use the small size in dense tables.
   });
 
   it('keeps the indentation each example line has in the MDX, whichever line the code starts on', () => {
-    const { content } = build({
-      [WIDGET_PAGE]: widgetPage(`## Layout
+    const page = widgetPage(`## Layout
 
 <DocCanvas
   mdxSource={{
@@ -143,22 +142,37 @@ Use the small size in dense tables.
   }}
 >
   <pds-widget></pds-widget>
-</DocCanvas>`),
-    });
+</DocCanvas>
 
-    assert.deepEqual(
-      section(doc(content, WIDGET_PAGE).sections, 'layout').examples.map(({ webComponent, react }) => ({ webComponent, react })),
-      [
-        {
-          webComponent: '<pds-widget\n  size="sm">\n  <pds-widget-item>\n    <span>One</span>\n  </pds-widget-item>\n</pds-widget>',
-          react: '<PdsWidget\n  size="sm"\n/>',
-        },
-        {
-          webComponent: '<pds-widget>\n  <pds-widget-item></pds-widget-item>\n</pds-widget>',
-          react: '<PdsWidget label={`One`}>\n  <span>One</span>\n</PdsWidget>',
-        },
-      ],
-    );
+<DocCanvas
+  mdxSource={{
+    webComponent: \`<pds-widget
+      size="sm"></pds-widget>\`,
+    react: \`<PdsWidget
+  size="sm" />\`,
+  }}
+>
+  <pds-widget size="sm"></pds-widget>
+</DocCanvas>`);
+    const examples = (source) =>
+      section(doc(build({ [WIDGET_PAGE]: source }).content, WIDGET_PAGE).sections, 'layout').examples.map(({ webComponent, react }) => ({ webComponent, react }));
+    const expected = [
+      {
+        webComponent: '<pds-widget\n  size="sm">\n  <pds-widget-item>\n    <span>One</span>\n  </pds-widget-item>\n</pds-widget>',
+        react: '<PdsWidget\n  size="sm"\n/>',
+      },
+      {
+        webComponent: '<pds-widget>\n  <pds-widget-item></pds-widget-item>\n</pds-widget>',
+        react: '<PdsWidget label={`One`}>\n  <span>One</span>\n</PdsWidget>',
+      },
+      {
+        webComponent: '<pds-widget\n  size="sm"></pds-widget>',
+        react: '<PdsWidget\n  size="sm" />',
+      },
+    ];
+
+    assert.deepEqual(examples(page), expected);
+    assert.deepEqual(examples(page.replace(/\n/g, '\r\n')), expected);
   });
 
   it('fills in the rows the component status page builds from component-status.json', () => {
