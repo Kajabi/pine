@@ -1859,26 +1859,36 @@ How it talks to the endpoint:
 
 ### Custom Result Formatting
 
-Use the `formatResult` function to transform API response items into the expected option format:
+Use the `formatResult` function to transform API response items into the expected option format. On the web component, it's a property only, so set it from JavaScript:
 
 ```javascript
-// Web Component
 const combobox = document.querySelector('pds-combobox');
 combobox.formatResult = (item) => ({
   id: item.userId,
   text: `${item.firstName} ${item.lastName}`,
 });
+```
 
-// React
+In React, pass it as a prop:
+
+```jsx
+import { PdsCombobox } from '@pine-ds/react';
+
 const formatResult = (item) => ({
   id: item.userId,
   text: `${item.firstName} ${item.lastName}`,
 });
 
-<PdsCombobox
-  asyncUrl="/api/users"
-  formatResult={formatResult}
-/>
+export function UserSearch() {
+  return (
+    <PdsCombobox
+      componentId="user-search"
+      label="Search users"
+      asyncUrl="/api/users"
+      formatResult={formatResult}
+    />
+  );
+}
 ```
 
 ### Pagination Support
@@ -1894,50 +1904,86 @@ For more control over async operations, you can manage the data fetching yoursel
 **Key Props and Events:**
 
 - `options`: Array of option objects to display
-- `loading`: Boolean to control loading state
+- `loading`: Boolean to control loading state. Without `async-url`, the combobox never changes it, so set it back to `false` yourself, as the example does.
 - `pdsComboboxSearch`: Event emitted when user types (debounced)
 
 There's no pagination hook without `async-url`: `pdsComboboxLoadOptions` isn't emitted, so load the full result set for each search, or use `async-url`. As with `async-url`, the combobox also filters the options you pass by the search text, in `filter` mode and with `panel-search`; only `mode="select-only"` without `panel-search` lists them all.
 
 **Example:**
 
+Each search aborts the previous request, so a slower response for an earlier search can't replace newer results. A request that fails, answers with an error status, or returns invalid JSON clears the options, so the list shows its empty state instead of results for an earlier search. `loading` turns off when the latest request ends, however it ends.
+
+On the web component, set the properties and listen for the event in JavaScript:
+
 ```javascript
-// Web Component
 const combobox = document.querySelector('pds-combobox');
-combobox.loading = false;
 combobox.options = [];
+let controller;
 
 combobox.addEventListener('pdsComboboxSearch', async (e) => {
   const query = e.detail.query;
+  controller?.abort();
+  controller = new AbortController();
+  const { signal } = controller;
   combobox.loading = true;
 
-  const response = await fetch(`/api/search?search=${encodeURIComponent(query)}`);
-  const data = await response.json();
-
-  combobox.options = data.results;
-  combobox.loading = false;
+  try {
+    const response = await fetch(`/api/search?search=${encodeURIComponent(query)}`, { signal });
+    if (!response.ok) throw new Error(`Search failed: ${response.status}`);
+    const data = await response.json();
+    combobox.options = data.results;
+  } catch {
+    if (!signal.aborted) combobox.options = [];
+  } finally {
+    // An aborted request was replaced by a newer one, which turns loading off.
+    if (!signal.aborted) combobox.loading = false;
+  }
 });
+```
 
-// React
-const [options, setOptions] = useState([]);
-const [loading, setLoading] = useState(false);
+In React, keep the options and loading flag in state, and the controller in a ref:
 
-const handleSearch = async (e) => {
-  const query = e.detail.query;
-  setLoading(true);
+```jsx
+import { useRef, useState } from 'react';
+import { PdsCombobox } from '@pine-ds/react';
 
-  const response = await fetch(`/api/search?search=${encodeURIComponent(query)}`);
-  const data = await response.json();
+export function UserSearch() {
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const controllerRef = useRef(null);
 
-  setOptions(data.results);
-  setLoading(false);
-};
+  const handleSearch = async (e) => {
+    const query = e.detail.query;
+    controllerRef.current?.abort();
+    const controller = new AbortController();
+    controllerRef.current = controller;
+    setLoading(true);
 
-<PdsCombobox
-  options={options}
-  loading={loading}
-  onPdsComboboxSearch={handleSearch}
-/>
+    try {
+      const response = await fetch(`/api/search?search=${encodeURIComponent(query)}`, {
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`Search failed: ${response.status}`);
+      const data = await response.json();
+      setOptions(data.results);
+    } catch {
+      if (!controller.signal.aborted) setOptions([]);
+    } finally {
+      // An aborted request was replaced by a newer one, which turns loading off.
+      if (!controller.signal.aborted) setLoading(false);
+    }
+  };
+
+  return (
+    <PdsCombobox
+      componentId="user-search"
+      label="Search users"
+      options={options}
+      loading={loading}
+      onPdsComboboxSearch={handleSearch}
+    />
+  );
+}
 ```
 
 ### Loading States
