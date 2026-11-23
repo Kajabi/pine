@@ -14,6 +14,8 @@ const ABSOLUTE_URL = /^(?:[a-z][a-z\d+.-]*:|\/\/)/i;
 const TABLE_SEPARATOR = /^\|(\s*-+\s*\|)+$/;
 
 const DISPLAY_ONLY = new Set(['DocCanvas', 'Meta', 'Controls', 'Canvas', 'Story', 'StatusBadge', 'DocArgsTable', 'DocTokenTable', 'img', 'ChangelogLoader', 'PatternCatalog']);
+const STATUS = JSON.parse(readFileSync(path.join(coreDir, 'src/stories/resources/component-status.json'), 'utf8'));
+const ASCII_PUNCTUATION_ESCAPE = /\\[!-/:-@[-`{-~]/;
 
 const wordsIn = (text) => text.match(/[\p{L}\p{N}_]+/gu) ?? [];
 const tally = (words) => words.reduce((counts, word) => counts.set(word, (counts.get(word) ?? 0) + 1), new Map());
@@ -37,6 +39,16 @@ function pipeTableCells(text) {
     .map((line) => line.trim())
     .filter((line) => line.startsWith('|') && line.endsWith('|') && !TABLE_SEPARATOR.test(line))
     .reduce((cells, line) => cells + line.slice(1, -1).split(/(?<!\\)\|/).length, 0);
+}
+
+/** The cells of each row the component status page builds from component-status.json, found by what its table maps over. */
+function statusTableRows(expression) {
+  const list = /^Object\.entries\(\w+\.(statuses|components)\)\.map\(/.exec(expression.trim())?.[1];
+  if (list === 'statuses') return Object.values(STATUS.statuses).map(({ label, summary }) => [label, summary]);
+  if (list === 'components') {
+    return Object.entries(STATUS.components).map(([name, { status, note }]) => [name, STATUS.statuses[status]?.label ?? status, note ?? '']);
+  }
+  return [];
 }
 
 function isTemplatePage(tree) {
@@ -72,6 +84,10 @@ function readMdx(tree, source) {
     if (n.type === 'paragraph') bucket().cells += pipeTableCells(source.slice(n.position.start.offset, n.position.end.offset));
     if (n.type === 'mdxFlowExpression' || n.type === 'mdxTextExpression') {
       bucket().words.push(...wordsIn(staticText(n.data?.estree?.body?.[0]?.expression)));
+      for (const row of statusTableRows(n.value)) {
+        bucket().cells += row.length;
+        bucket().words.push(...row.flatMap(wordsIn));
+      }
       return false;
     }
     if (typeof n.value === 'string') bucket().words.push(...wordsIn(n.value));
@@ -191,4 +207,70 @@ test('fenced code blocks stay in place with their language', () => {
     visit(doc);
     assert.deepEqual(actual, expected, `${relative}: every fenced code block, in order, with its language`);
   }
+});
+
+test('every example keeps the indentation its lines have in the MDX, less the margin it is written against', () => {
+  const { content } = generateDocsContent([]);
+  const byFile = new Map(content.docs.map((doc) => [doc.file, doc]));
+  const indentOf = (line) => line.length - line.trimStart().length;
+  for (const relative of findDocPages(coreDir)) {
+    const source = readFileSync(path.join(coreDir, relative), 'utf8');
+    const tree = parseMdx(source);
+    if (isTemplatePage(tree)) continue;
+    const doc = byFile.get(`${CORE_ROOT}/${relative}`);
+    const examples = [...doc.examples];
+    const visit = (section) => {
+      examples.push(...section.examples);
+      section.children.forEach(visit);
+    };
+    doc.sections.forEach(visit);
+    const canvases = [];
+    walk(tree, (n) => (n.name === 'DocCanvas' ? (canvases.push(n), false) : undefined));
+    canvases.forEach((canvas, index) => {
+      const mdxSource = canvas.attributes.find((a) => a.name === 'mdxSource').value.data.estree.body[0].expression;
+      for (const property of mdxSource.properties) {
+        const key = property.key.name ?? property.key.value;
+        const written = source.slice(property.value.start + 1, property.value.end - 1);
+        const startsOnOpeningLine = !/^\s*\n/.test(written);
+        const lines = written.replace(/^\s*\n/, '').replace(/\n\s*$/, '').split('\n');
+        const code = examples[index][key].split('\n');
+        assert.equal(code.length, lines.length, `${relative}: example ${index} ${key} has every line`);
+        const measured = lines.flatMap((line, k) => (line.trim() && !(k === 0 && startsOnOpeningLine) ? [k] : []));
+        const removed = new Set(measured.map((k) => indentOf(lines[k]) - indentOf(code[k])));
+        const propertyLine = source.slice(source.lastIndexOf('\n', property.value.start) + 1, property.value.start);
+        const margins = startsOnOpeningLine ? [0, indentOf(propertyLine)] : [Math.min(...measured.map((k) => indentOf(lines[k])))];
+        assert.ok(
+          removed.size <= 1 && [...removed].every((margin) => margins.includes(margin)),
+          `${relative}: example ${index} ${key} keeps the indentation the MDX gives its lines, less the margin it is written against`,
+        );
+      }
+    });
+  }
+});
+
+test('the markdown has no backslash escapes outside code, apart from pipes in table rows', () => {
+  const { content } = generateDocsContent([]);
+  const strays = [];
+  const check = (markdown, where) => {
+    let text = markdown;
+    walk(markdownParser.parse(markdown), (n) => {
+      if (n.type === 'code' || n.type === 'inlineCode') {
+        const { start, end } = n.position;
+        text = text.slice(0, start.offset) + ' '.repeat(end.offset - start.offset) + text.slice(end.offset);
+      }
+    });
+    for (const line of text.split('\n')) {
+      const escape = (line.startsWith('|') ? line.replaceAll('\\|', '') : line).match(ASCII_PUNCTUATION_ESCAPE);
+      if (escape) strays.push(`${where}: ${escape[0]} in "${line.trim().slice(0, 80)}"`);
+    }
+  };
+  for (const doc of content.docs) {
+    check(doc.markdown, doc.file);
+    const visit = (section) => {
+      check(section.markdown, `${doc.file}#${section.slug}`);
+      section.children.forEach(visit);
+    };
+    doc.sections.forEach(visit);
+  }
+  assert.deepEqual(strays, [], 'markdown escapes text that would otherwise read as markup; put that text in a code span or reword it');
 });

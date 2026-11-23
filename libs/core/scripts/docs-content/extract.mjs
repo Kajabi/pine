@@ -70,11 +70,47 @@ function staticString(expression) {
   return undefined;
 }
 
-function dedent(code) {
+const indentOf = (line) => line.length - line.trimStart().length;
+
+/**
+ * A static template literal's text with each line indented as the MDX source has it: the MDX parser strips leading
+ * spaces from continuation lines inside a JSX attribute. Keeps the parsed text when the lines don't match.
+ */
+function writtenTemplate(literal, source) {
+  const { raw, cooked } = literal.quasis[0].value;
+  const written = source.slice(literal.start + 1, literal.end - 1).split(/\r?\n/);
+  const rawLines = raw.split('\n');
+  const cookedLines = cooked.split('\n');
+  const stripped = written.map((line, index) => line.slice(0, line.length - (rawLines[index]?.length ?? 0)));
+  const aligned =
+    written.length === rawLines.length &&
+    cookedLines.length === rawLines.length &&
+    written.every((line, index) => line.endsWith(rawLines[index]) && !stripped[index].trim());
+  return aligned ? cookedLines.map((line, index) => stripped[index] + line).join('\n') : cooked;
+}
+
+/**
+ * Removes the indentation the lines share. Code that starts right after the backtick lines up with the left margin or
+ * with its property's line, so the other lines lose that line's indentation only when they all have it.
+ */
+function dedent(code, openingIndent = 0) {
+  const startsOnOpeningLine = !/^\s*\n/.test(code);
   const lines = code.replace(/^\s*\n/, '').replace(/\n\s*$/, '').split('\n');
-  const indents = lines.filter((line) => line.trim()).map((line) => line.length - line.trimStart().length);
-  const shared = indents.length ? Math.min(...indents) : 0;
-  return lines.map((line) => line.slice(shared)).join('\n');
+  const first = startsOnOpeningLine ? [lines.shift().trimStart()] : [];
+  const indents = lines.filter((line) => line.trim()).map(indentOf);
+  const shared = startsOnOpeningLine
+    ? (indents.every((indent) => indent >= openingIndent) ? openingIndent : 0)
+    : Math.min(...indents);
+  return [...first, ...lines.map((line) => line.slice(Number.isFinite(shared) ? shared : 0))].join('\n');
+}
+
+/** An mdxSource value's code as the MDX writes it, or undefined when it isn't a static string. */
+function exampleCode(expression, source) {
+  const value = staticString(expression);
+  if (value === undefined) return undefined;
+  if (expression.type !== 'TemplateLiteral') return dedent(value);
+  const openingLine = source.slice(source.lastIndexOf('\n', expression.start) + 1, expression.start);
+  return dedent(writtenTemplate(expression, source), indentOf(openingLine));
 }
 
 /** A heading's text with inline code kept in backticks, the way readers see it. */
@@ -130,6 +166,23 @@ function isTemplate(meta) {
   const flag = attribute(meta, 'isTemplate');
   return Boolean(flag) && (flag.value == null || attributeExpression(meta, 'isTemplate')?.value === true);
 }
+
+/** The local name of the page's default import of a file with this name, if it has one. */
+function defaultImport(tree, fileName) {
+  for (const node of tree.children) {
+    if (node.type !== 'mdxjsEsm') continue;
+    for (const statement of node.data?.estree?.body ?? []) {
+      if (statement.type !== 'ImportDeclaration' || path.posix.basename(statement.source.value) !== fileName) continue;
+      const specifier = statement.specifiers.find((s) => s.type === 'ImportDefaultSpecifier');
+      if (specifier) return specifier.local.name;
+    }
+  }
+  return undefined;
+}
+
+/** Text with its backtick spans as inline code, the way the component status page shows a note. */
+const withInlineCode = (text = '') =>
+  text.split('`').flatMap((part, index) => (part ? [index % 2 ? { type: 'inlineCode', value: part } : { type: 'text', value: part }] : []));
 
 function storiesImports(tree) {
   const imports = new Map();
@@ -210,11 +263,12 @@ function roleOf(name, parentName) {
  * @param {{ file: string, source: string }[]} input.pages MDX pages, `file` repo-relative.
  * @param {{ tag: string, filePath: string }[]} input.components `components` from docs.json; `filePath` relative to libs/core.
  * @param {Record<string, { status: string, note?: string }>} input.statusManifest `components` from component-status.json.
+ * @param {Record<string, { label: string, summary: string }>} [input.statusDefinitions] `statuses` from component-status.json.
  * @param {(fromFile: string, specifier: string) => { file: string, source: string }} input.readStories Reads a stories file a page imports.
  * @param {string} input.version
  * @param {string | null} input.commit
  */
-export function buildDocsContent({ pages, components, statusManifest, readStories, version, commit }) {
+export function buildDocsContent({ pages, components, statusManifest, statusDefinitions = {}, readStories, version, commit }) {
   const warnings = [];
   const csfCache = new Map();
 
@@ -266,6 +320,7 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     const isComponentPage = file.startsWith(`${COMPONENTS_DIR}/`) && parts.at(-2) === 'docs';
     return [{
       file,
+      source,
       tree,
       imports,
       kind: isComponentPage ? 'component' : 'guide',
@@ -333,9 +388,9 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
     if (mdxSource?.type !== 'ObjectExpression') page.warn(node, '<DocCanvas> has no mdxSource object');
     for (const property of mdxSource?.properties ?? []) {
       const key = property.key?.name ?? property.key?.value;
-      const value = staticString(property.value);
-      if (value === undefined) page.warn(node, `mdxSource.${key} isn't a static string; left out`);
-      else source[key] = dedent(value);
+      const code = exampleCode(property.value, page.source);
+      if (code === undefined) page.warn(node, `mdxSource.${key} isn't a static string; left out`);
+      else source[key] = code;
     }
     return { type: 'docCanvas', position: node.position, webComponent: source.webComponent ?? null, react: source.react ?? null };
   }
@@ -370,7 +425,11 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       if (part.name !== 'pds-table-body') continue;
       for (const row of part.children) {
         if (row.name === 'pds-table-row') rows.push({ type: 'tableRow', children: cellsOf(row) });
-        else if (row.type === 'mdxFlowExpression') page.warn(row, '<pds-table> rows are built at render time; only the header row is kept');
+        else if (row.type === 'mdxFlowExpression') {
+          const built = statusRows(row, page);
+          if (built?.length && built.every((r) => r.children.length === rows[0]?.children.length)) rows.push(...built);
+          else page.warn(row, '<pds-table> rows are built at render time; only the header row is kept');
+        }
       }
     }
     if (rows.length === 0) {
@@ -378,6 +437,30 @@ export function buildDocsContent({ pages, components, statusManifest, readStorie
       return [];
     }
     return [{ type: 'table', children: rows }];
+  }
+
+  /**
+   * The rows of a table that maps over the `statuses` or `components` of the page's component-status.json import,
+   * with the columns the component status page shows.
+   */
+  function statusRows(expression, page) {
+    const call = expression.data?.estree?.body?.[0]?.expression;
+    const entries = call?.callee?.property?.name === 'map' ? call.callee.object : undefined;
+    const isEntries = entries?.callee?.object?.name === 'Object' && entries.callee.property?.name === 'entries';
+    const list = isEntries ? entries.arguments[0] : undefined;
+    const manifest = defaultImport(page.tree, 'component-status.json');
+    if (!manifest || list?.type !== 'MemberExpression' || list.object.name !== manifest) return undefined;
+    const row = (...cells) => ({ type: 'tableRow', children: cells.map((children) => ({ type: 'tableCell', children })) });
+    const text = (value) => ({ type: 'text', value });
+    if (list.property.name === 'statuses') {
+      return Object.values(statusDefinitions).map(({ label, summary }) => row([{ type: 'strong', children: [text(label)] }], [text(summary)]));
+    }
+    if (list.property.name === 'components') {
+      return Object.entries(statusManifest).map(([name, { status, note }]) =>
+        row([{ type: 'inlineCode', value: name }], [text(statusDefinitions[status]?.label ?? status)], withInlineCode(note)),
+      );
+    }
+    return undefined;
   }
 
   function convertExpression(node, page) {
