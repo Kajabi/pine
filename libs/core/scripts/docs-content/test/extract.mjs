@@ -37,11 +37,12 @@ const guidePage = (body) => `import { Meta } from '@storybook/addon-docs/blocks'
 ${body}
 `;
 
-function build(pages, { components = [], statusManifest = {}, stories = {} } = {}) {
+function build(pages, { components = [], statusManifest = {}, statusDefinitions = {}, stories = {} } = {}) {
   return buildDocsContent({
     pages: Object.entries(pages).map(([file, source]) => ({ file, source })),
     components,
     statusManifest,
+    statusDefinitions,
     readStories: (_fromFile, specifier) => ({ file: specifier, source: stories[specifier] ?? WIDGET_STORIES }),
     version: '1.2.3',
     commit: 'abc123',
@@ -106,6 +107,109 @@ Use the small size in dense tables.
         webComponent: '<pds-widget size="sm" dense></pds-widget>',
         react: null,
       },
+    ]);
+  });
+
+  it('keeps the indentation each example line has in the MDX, whichever line the code starts on', () => {
+    const { content } = build({
+      [WIDGET_PAGE]: widgetPage(`## Layout
+
+<DocCanvas
+  mdxSource={{
+    webComponent: \`<pds-widget
+  size="sm">
+  <pds-widget-item>
+    <span>One</span>
+  </pds-widget-item>
+</pds-widget>\`,
+    react: \`
+    <PdsWidget
+      size="sm"
+    />
+    \`,
+  }}
+>
+  <pds-widget size="sm"></pds-widget>
+</DocCanvas>
+
+<DocCanvas
+  mdxSource={{
+    webComponent: \`<pds-widget>
+      <pds-widget-item></pds-widget-item>
+    </pds-widget>\`,
+    react: \`<PdsWidget label={\\\`One\\\`}>
+  <span>One</span>
+</PdsWidget>\`,
+  }}
+>
+  <pds-widget></pds-widget>
+</DocCanvas>`),
+    });
+
+    assert.deepEqual(
+      section(doc(content, WIDGET_PAGE).sections, 'layout').examples.map(({ webComponent, react }) => ({ webComponent, react })),
+      [
+        {
+          webComponent: '<pds-widget\n  size="sm">\n  <pds-widget-item>\n    <span>One</span>\n  </pds-widget-item>\n</pds-widget>',
+          react: '<PdsWidget\n  size="sm"\n/>',
+        },
+        {
+          webComponent: '<pds-widget>\n  <pds-widget-item></pds-widget-item>\n</pds-widget>',
+          react: '<PdsWidget label={`One`}>\n  <span>One</span>\n</PdsWidget>',
+        },
+      ],
+    );
+  });
+
+  it('fills in the rows the component status page builds from component-status.json', () => {
+    const statusPage = 'libs/core/src/stories/resources/component-status.docs.mdx';
+    const table = (headers, rows) => `<pds-table>
+  <pds-table-head>
+${headers.map((header) => `    <pds-table-head-cell>${header}</pds-table-head-cell>`).join('\n')}
+  </pds-table-head>
+  <pds-table-body>
+    {${rows}.map(([key]) => <pds-table-row key={key} />)}
+  </pds-table-body>
+</pds-table>`;
+    const { content, warnings } = build(
+      {
+        [statusPage]: `import { Meta } from '@storybook/addon-docs/blocks';
+import componentStatus from './component-status.json';
+
+<Meta title="Resources/Component status" />
+
+# Component status
+
+## Definitions
+
+${table(['Label', 'Meaning'], 'Object.entries(componentStatus.statuses)')}
+
+## Components
+
+${table(['Component', 'Status', 'Notes'], 'Object.entries(componentStatus.components)')}
+
+## Other
+
+${table(['Component', 'Status'], 'Object.entries(componentStatus.components)')}
+
+${table(['Name'], 'Object.entries(rows)')}`,
+      },
+      {
+        statusManifest: { 'pds-widget': { status: 'stable' }, 'pds-widget-item': { status: 'beta', note: 'Ships with `pds-widget`.' } },
+        statusDefinitions: { stable: { label: 'Stable', summary: 'Safe to use.' }, beta: { label: 'Beta', summary: 'May change.' } },
+      },
+    );
+    const page = doc(content, statusPage);
+
+    assert.equal(section(page.sections, 'definitions').markdown, '| Label | Meaning |\n| --- | --- |\n| **Stable** | Safe to use. |\n| **Beta** | May change. |');
+    assert.equal(
+      section(page.sections, 'components').markdown,
+      '| Component | Status | Notes |\n| --- | --- | --- |\n| `pds-widget` | Stable |  |\n| `pds-widget-item` | Beta | Ships with `pds-widget`. |',
+    );
+    assert.equal(section(page.sections, 'other').markdown, '| Component | Status |\n| --- | --- |\n\n| Name |\n| --- |');
+    assert.deepEqual(warnings, [
+      `${statusPage}:41: <pds-table> rows are built at render time; only the header row is kept`,
+      `${statusPage}:50: <pds-table> rows are built at render time; only the header row is kept`,
     ]);
   });
 
