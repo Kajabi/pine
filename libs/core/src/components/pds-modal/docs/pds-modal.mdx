@@ -47,7 +47,7 @@ The Modal component is composed of several subcomponents that work together to c
 
 #### Modal Content
 
-The `pds-modal-content` component provides a container for the main content of the modal. By default, modals are scrollable when content exceeds the available space. You can control this behavior using the `scrollable` prop on the main modal component. The content component automatically handles border visibility based on scroll state. It adds no padding, so wrap its content in a `pds-box` with `padding-inline-start="md"` and `padding-inline-end="md"`, as the examples do.
+The `pds-modal-content` component provides a container for the main content of the modal. By default, modals are scrollable when content exceeds the available space. You can control this behavior using the `scrollable` prop on the main modal component. The content component automatically handles border visibility based on scroll state. It adds no padding, so wrap its content in a `pds-box` with `padding-inline-start="md"` and `padding-inline-end="md"`, as the examples do. `pds-text` has no margin by default, so to space text from the header and footer, also set `padding-block-start` and `padding-block-end` on that box, as the [Default](#default) example does with `sm`.
 
 <DocArgsTable componentName="pds-modal-content" docSource={components} />
 
@@ -86,8 +86,8 @@ The `pds-modal-footer` component holds the modal's actions. It adds no padding o
                 </PdsBox>
               </PdsModalHeader>
               <PdsModalContent>
-                <PdsBox direction="column" paddingInlineStart="md" paddingInlineEnd="md" fit>
-                  <p>This is the modal content. You can put any content here.</p>
+                <PdsBox direction="column" paddingBlockStart="sm" paddingBlockEnd="sm" paddingInlineStart="md" paddingInlineEnd="md" fit>
+                  <PdsText tag="p">This is the modal content. You can put any content here.</PdsText>
                 </PdsBox>
               </PdsModalContent>
               <PdsModalFooter>
@@ -114,8 +114,8 @@ The `pds-modal-footer` component holds the modal's actions. It adds no padding o
           </pds-box>
         </pds-modal-header>
         <pds-modal-content>
-          <pds-box direction="column" padding-inline-start="md" padding-inline-end="md" fit>
-            <p>This is the modal content. You can put any content here.</p>
+          <pds-box direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md" fit>
+            <pds-text tag="p">This is the modal content. You can put any content here.</pds-text>
           </pds-box>
         </pds-modal-content>
         <pds-modal-footer>
@@ -145,8 +145,8 @@ The `pds-modal-footer` component holds the modal's actions. It adds no padding o
         </pds-box>
       </pds-modal-header>
       <pds-modal-content>
-        <pds-box direction="column" padding-inline-start="md" padding-inline-end="md" fit>
-          <p>This is the modal content. You can put any content here.</p>
+        <pds-box direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md" fit>
+          <pds-text tag="p">This is the modal content. You can put any content here.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -415,8 +415,8 @@ Use the destructive variant for actions that can't be undone.
       <PdsModal componentId="destructive-modal" size="sm" open={open} onPdsModalClose={() => setOpen(false)}>
         <PdsModalHeader>…</PdsModalHeader>
         <PdsModalContent>
-          <PdsBox direction="column" paddingInlineStart="md" paddingInlineEnd="md" fit>
-            <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+          <PdsBox direction="column" paddingBlockStart="sm" paddingBlockEnd="sm" paddingInlineStart="md" paddingInlineEnd="md" fit>
+            <PdsText tag="p">Are you sure you want to delete this item? This action cannot be undone.</PdsText>
           </PdsBox>
         </PdsModalContent>
         <PdsModalFooter>
@@ -431,8 +431,8 @@ Use the destructive variant for actions that can't be undone.
       <pds-modal id="destructive-modal" component-id="destructive-modal" size="sm">
         <pds-modal-header>…</pds-modal-header>
         <pds-modal-content>
-          <pds-box direction="column" padding-inline-start="md" padding-inline-end="md" fit>
-            <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+          <pds-box direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md" fit>
+            <pds-text tag="p">Are you sure you want to delete this item? This action cannot be undone.</pds-text>
           </pds-box>
         </pds-modal-content>
         <pds-modal-footer>
@@ -469,8 +469,8 @@ Use the destructive variant for actions that can't be undone.
         </pds-box>
       </pds-modal-header>
       <pds-modal-content>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+        <pds-box fit direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">Are you sure you want to delete this item? This action cannot be undone.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -710,8 +710,8 @@ Modals can be nested, with only the topmost modal responding to escape key and b
       <PdsModal componentId="nested-modal-1" size="fullscreen" open={outerOpen} onPdsModalClose={() => setOuterOpen(false)}>
         <PdsModalHeader>…</PdsModalHeader>
         <PdsModalContent>
-          <PdsBox direction="column" padding="md" paddingBlockStart="none" fit>
-            <p>This is the outer modal. Click the button below to open an inner modal.</p>
+          <PdsBox direction="column" gap="sm" padding="md" paddingBlockStart="sm" fit>
+            <PdsText tag="p">This is the outer modal. Click the button below to open an inner modal.</PdsText>
             <PdsButton onClick={() => setInnerOpen(true)}>Open Inner Modal</PdsButton>
           </PdsBox>
         </PdsModalContent>
@@ -731,8 +731,8 @@ Modals can be nested, with only the topmost modal responding to escape key and b
       <pds-modal id="nested-modal-1" component-id="nested-modal-1" size="fullscreen">
         <pds-modal-header>…</pds-modal-header>
         <pds-modal-content>
-          <pds-box direction="column" padding="md" padding-block-start="none" fit>
-            <p>This is the outer modal. Click the button below to open an inner modal.</p>
+          <pds-box direction="column" gap="sm" padding="md" padding-block-start="sm" fit>
+            <pds-text tag="p">This is the outer modal. Click the button below to open an inner modal.</pds-text>
             <pds-button onclick="document.querySelector('#nested-modal-2').open = true">Open Inner Modal</pds-button>
           </pds-box>
         </pds-modal-content>
@@ -775,8 +775,8 @@ Modals can be nested, with only the topmost modal responding to escape key and b
       </pds-modal-header>
 
       <pds-modal-content>
-        <pds-box fit direction="column" padding="md" padding-block-start="none">
-          <p>This is the outer modal. Click the button below to open an inner modal.</p>
+        <pds-box fit direction="column" gap="sm" padding="md" padding-block-start="sm">
+          <pds-text tag="p">This is the outer modal. Click the button below to open an inner modal.</pds-text>
           <pds-button onClick={() => {
             const modal = document.querySelector('#nested-modal-2');
             if (modal) modal.open = true;

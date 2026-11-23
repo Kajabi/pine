@@ -54,26 +54,26 @@ The default divider displays a horizontal line.
 
 To display the divider vertically, set the `vertical` prop to `true`.
 
-A vertical divider fills its parent's height, so the parent needs a set height, such as a fixed height or a stretched flex row.
+A vertical divider fills its parent's height, so the parent needs a set height, such as a fixed height or a stretched flex row. A `pds-box` row stretches the divider to the row's height, so `min-height` on the box sets the divider's minimum height.
 
 **Note**: Vertical dividers are hidden below 768px.
 
 <DocCanvas
   mdxSource={{
     react: `
-<div style={{ height: '150px' }}>
+<PdsBox minHeight="150px">
   <PdsDivider vertical />
-</div>
+</PdsBox>
     `,
     webComponent: `
-<div style="height: 150px">
+<pds-box min-height="150px">
   <pds-divider vertical="true"></pds-divider>
-</div>
+</pds-box>
     `
 }}>
-  <div style={{ height: '150px' }}>
+  <pds-box min-height="150px">
     <pds-divider vertical="true"></pds-divider>
-  </div>
+  </pds-box>
 </DocCanvas>
 
 ### Offsets
@@ -97,19 +97,19 @@ Below, you will see a vertical divider using a large offset.
 <DocCanvas
   mdxSource={{
     react: `
-<div style={{ height: '150px' }}>
+<PdsBox minHeight="150px">
   <PdsDivider offset="lg" vertical />
-</div>
+</PdsBox>
     `,
     webComponent: `
-<div style="height: 150px">
+<pds-box min-height="150px">
   <pds-divider offset="lg" vertical="true"></pds-divider>
-</div>
+</pds-box>
     `
 }}>
-  <div style={{ height: '150px' }}>
+  <pds-box min-height="150px">
     <pds-divider offset="lg" vertical="true"></pds-divider>
-  </div>
+  </pds-box>
 </DocCanvas>
 
 ### With label

@@ -320,32 +320,28 @@ The `divider` prop adds a full-width rule beneath the tab list, separating the t
 
 ### Stretch
 
-The `stretch` prop makes the component fill its container's height, for tab sets inside a height-bounded region (a rail, a modal body, a split-pane column). The active panel doesn't grow to fill the space below the tab list, and it doesn't scroll on its own: it keeps the height of its content, so taller content overflows the region. To scroll long content, wrap it in your own container with a fixed height (such as `max-block-size`) and `overflow: auto`. Give the parent a fixed height for the effect to show.
+The `stretch` prop makes the component fill its container's height, for tab sets inside a height-bounded region (a rail, a modal body, a split-pane column). The active panel doesn't grow to fill the space below the tab list, and it doesn't scroll on its own: it keeps the height of its content, so taller content overflows the region. To scroll long content, wrap it in your own container with a fixed height (such as `max-block-size`) and `overflow: auto`. Place the tabs inside a container with a fixed height for the effect to show. The code below shows only the tabs; the preview puts them in a 240px-tall frame with a border.
 
 <DocCanvas mdxSource={{
   react: `
-<div style={{ height: '240px', border: '1px solid var(--pine-color-border-subtle)' }}>
-  <PdsTabs activeTabName="lessons" variant="primary" componentId="stretch-example" tablistLabel="Course sections" stretch>
-    <PdsTab name="overview">Overview</PdsTab>
-    <PdsTab name="lessons">Lessons</PdsTab>
-    <PdsTab name="settings">Settings</PdsTab>
-    <PdsTabpanel name="overview">Overview content</PdsTabpanel>
-    <PdsTabpanel name="lessons">Lessons content</PdsTabpanel>
-    <PdsTabpanel name="settings">Settings content</PdsTabpanel>
-  </PdsTabs>
-</div>
+<PdsTabs activeTabName="lessons" variant="primary" componentId="stretch-example" tablistLabel="Course sections" stretch>
+  <PdsTab name="overview">Overview</PdsTab>
+  <PdsTab name="lessons">Lessons</PdsTab>
+  <PdsTab name="settings">Settings</PdsTab>
+  <PdsTabpanel name="overview">Overview content</PdsTabpanel>
+  <PdsTabpanel name="lessons">Lessons content</PdsTabpanel>
+  <PdsTabpanel name="settings">Settings content</PdsTabpanel>
+</PdsTabs>
 `,
   webComponent: `
-<div style="height: 240px; border: 1px solid var(--pine-color-border-subtle);">
-  <pds-tabs active-tab-name="lessons" variant="primary" component-id="stretch-example" tablist-label="Course sections" stretch>
-    <pds-tab name="overview">Overview</pds-tab>
-    <pds-tab name="lessons">Lessons</pds-tab>
-    <pds-tab name="settings">Settings</pds-tab>
-    <pds-tabpanel name="overview">Overview content</pds-tabpanel>
-    <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
-    <pds-tabpanel name="settings">Settings content</pds-tabpanel>
-  </pds-tabs>
-</div>
+<pds-tabs active-tab-name="lessons" variant="primary" component-id="stretch-example" tablist-label="Course sections" stretch>
+  <pds-tab name="overview">Overview</pds-tab>
+  <pds-tab name="lessons">Lessons</pds-tab>
+  <pds-tab name="settings">Settings</pds-tab>
+  <pds-tabpanel name="overview">Overview content</pds-tabpanel>
+  <pds-tabpanel name="lessons">Lessons content</pds-tabpanel>
+  <pds-tabpanel name="settings">Settings content</pds-tabpanel>
+</pds-tabs>
 `
 }}>
   <div style={{height: '240px', border: '1px solid var(--pine-color-border-subtle)'}}>
