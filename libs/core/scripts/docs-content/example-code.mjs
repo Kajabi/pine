@@ -2,7 +2,6 @@ const SOURCE_KEYS = new Set(['webComponent', 'react']);
 
 const indentOf = (line) => line.length - line.trimStart().length;
 
-/** The indentation of the source line a node starts on. */
 export const openingIndent = (node, source) => indentOf(source.slice(source.lastIndexOf('\n', node.start) + 1, node.start));
 
 /**
@@ -37,6 +36,13 @@ export function dedent(code, openingIndent = 0) {
   return [...first, ...lines.map((line) => line.slice(Number.isFinite(shared) ? shared : 0))].join('\n');
 }
 
+const stringLiteral = (value) => ({
+  type: 'Literal',
+  value,
+  // JSON.stringify leaves U+2028 and U+2029 as they are, and some JavaScript parsers reject them in a string literal.
+  raw: JSON.stringify(value).replace(/[\u2028\u2029]/g, (character) => `\\u${character.charCodeAt(0).toString(16)}`),
+});
+
 function restoreExampleCode(docCanvas, source) {
   const mdxSource = docCanvas.attributes?.find((a) => a.type === 'mdxJsxAttribute' && a.name === 'mdxSource');
   const expression = mdxSource?.value?.data?.estree?.body?.[0]?.expression;
@@ -48,7 +54,7 @@ function restoreExampleCode(docCanvas, source) {
     const written = writtenTemplate(literal, source);
     if (written === undefined) continue;
     const { start, end, loc, range } = literal;
-    property.value = { type: 'Literal', value: dedent(written, openingIndent(literal, source)), start, end, loc, range };
+    property.value = { ...stringLiteral(dedent(written, openingIndent(literal, source))), start, end, loc, range };
   }
 }
 
