@@ -1576,15 +1576,36 @@ export class PdsCombobox implements BasePdsProps {
     this.triggerVisibility = undefined;
   }
 
-  /** Closed because its trigger left the view; focus is left wherever it already was. */
+  /**
+   * Closed because its trigger left the view. Unlike a click or Tab, scrolling doesn't blur
+   * anything, so focus can still be on a highlighted option or the panel search field -- about to
+   * be unmounted along with the rest of the listbox/portal. Restoring focus to the trigger then,
+   * as `disabledChanged` does for its own non-user-driven close, keeps it from falling to
+   * `<body>`; `preventScroll` matters here, since the trigger may be out of view too, and letting
+   * the browser scroll it back on focus would undo the very scroll that closed this. Anywhere else
+   * focus already was -- the trigger itself, or outside the combobox entirely -- is left alone.
+   */
   private closeFromTriggerScrolledOut() {
+    const shadowActive = this.el.shadowRoot?.activeElement ?? null;
+    const focusInDropdown =
+      !!this.portalEl?.shadowRoot?.activeElement || (!!shadowActive && !!this.listboxEl?.contains(shadowActive));
+    const focusLeftComponent = !focusInDropdown && document.activeElement !== this.el && document.activeElement !== this.portalEl;
+
     this.isOpen = false;
     this.highlightedIndex = -1;
     this.clearExpandFilterList();
     this.isArrowKeyNavigationMode = false;
     this.updateAriaActiveDescendant();
 
-    if (this.selectedOption && this.displayText !== this.getOptionLabel(this.selectedOption)) {
+    if (focusInDropdown) {
+      this.triggerEl?.focus({ preventScroll: true });
+    }
+
+    // Only once focus has actually left the combobox, same as onComboboxFocusOut: a trigger="input"
+    // user still typing keeps their in-progress text instead of having it snapped back.
+    if (focusLeftComponent && this.selectedOption && this.displayText !== this.getOptionLabel(this.selectedOption)) {
+      // If there's a selected option but the display text doesn't match, restore the selected
+      // option's display text. The @Watch('selectedOption') will handle value and form internals if needed.
       this.displayText = this.getOptionLabel(this.selectedOption);
     }
   }
