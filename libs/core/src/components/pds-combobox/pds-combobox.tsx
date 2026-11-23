@@ -106,7 +106,8 @@ export class PdsCombobox implements BasePdsProps {
    * styles, so it needs no global CSS and page CSS can't reach it: customize it with custom
    * properties on `pds-combobox`. Its reading direction, language, theme and custom properties are
    * taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when
-   * `body` is used; the default empty and loading content is shown instead.
+   * `body` is used; the default empty and loading content is shown instead. With `body`, the
+   * dropdown closes once its trigger scrolls fully out of view.
    * @default 'host'
    */
   @Prop() dropdownMount: 'host' | 'body' = 'host';
@@ -446,6 +447,7 @@ export class PdsCombobox implements BasePdsProps {
   private portalRoot: ShadowRoot | null = null;
   private cleanupPositionAutoUpdate?: () => void;
   private bodyPortalAutoUpdateActive = false;
+  private triggerVisibility?: IntersectionObserver;
   /** Deferred so portal teardown runs after Stencil reconciles `isOpen === false`. */
   private deferredPortalTeardownId?: ReturnType<typeof setTimeout>;
   private internals?: ElementInternals;
@@ -538,6 +540,7 @@ export class PdsCombobox implements BasePdsProps {
       this.deferredPortalTeardownId = undefined;
     }
     this.observer?.disconnect();
+    this.stopWatchingTriggerVisibility();
     cancelDebouncedEvent(this.pdsComboboxSearch);
     this.clearAsyncFetchState();
     this.removeBodyPortal();
@@ -782,6 +785,12 @@ export class PdsCombobox implements BasePdsProps {
 
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
+    if (isOpen) {
+      this.watchTriggerVisibility();
+    } else {
+      this.stopWatchingTriggerVisibility();
+    }
+
     if (!isOpen) {
       this.endHeightGlide();
       this.revealedGroupLabel = null;
@@ -1526,6 +1535,85 @@ export class PdsCombobox implements BasePdsProps {
     this.cleanupPositionAutoUpdate?.();
     this.cleanupPositionAutoUpdate = undefined;
     this.bodyPortalAutoUpdateActive = false;
+  }
+
+  /**
+   * With `dropdown-mount="body"`, once the trigger is fully out of view, scrolled or clipped by any
+   * container or the window, the list closes rather than float away from it, matching
+   * pds-dropdown-menu. A list mounted in the field scrolls along with its trigger, so it's left
+   * open: that also keeps the combobox from closing itself when it scrolls a container to reveal a
+   * highlighted row. An IntersectionObserver measures against the layout viewport, so panning a
+   * pinch-zoomed page doesn't close it.
+   */
+  private watchTriggerVisibility() {
+    this.stopWatchingTriggerVisibility();
+    if (!this.usesBodyPortal || typeof IntersectionObserver === 'undefined' || !this.triggerEl) {
+      return;
+    }
+
+    // Only a trigger seen in view this opening closes the list when it leaves.
+    let triggerSeen = false;
+    let broughtIntoView = false;
+
+    this.triggerVisibility = new IntersectionObserver((entries) => {
+      if (!this.isOpen) {
+        return;
+      }
+
+      if (entries[entries.length - 1].isIntersecting) {
+        triggerSeen = true;
+      } else if (triggerSeen) {
+        this.closeFromTriggerScrolledOut();
+      } else if (!broughtIntoView) {
+        // Opened with its trigger out of view, from the keyboard after an earlier close or from a
+        // script, the trigger is scrolled into view so the list opens beside it. A trigger that
+        // still can't be seen leaves the list open.
+        broughtIntoView = true;
+        this.triggerEl?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      }
+    });
+    this.triggerVisibility.observe(this.triggerEl);
+  }
+
+  private stopWatchingTriggerVisibility() {
+    this.triggerVisibility?.disconnect();
+    this.triggerVisibility = undefined;
+  }
+
+  /**
+   * Closed because its trigger left the view. Unlike a click or Tab, scrolling doesn't blur
+   * anything, so focus can still be on the panel search field -- about to be unmounted along with
+   * the rest of the portal. Only a body-mounted list closes this way, and its options never take
+   * focus, so the search field is the one thing in it that can hold focus. Restoring focus to the trigger then,
+   * as `disabledChanged` does for its own non-user-driven close, keeps it from falling to
+   * `<body>`; `preventScroll` matters here, since the trigger may be out of view too, and letting
+   * the browser scroll it back on focus would undo the very scroll that closed this. Anywhere else
+   * focus already was -- the trigger itself, or outside the combobox entirely -- is left alone.
+   */
+  private closeFromTriggerScrolledOut() {
+    const focusInDropdown = !!this.portalEl?.shadowRoot?.activeElement;
+    // Read from the combobox's own root: document.activeElement stops at the outermost shadow host,
+    // so inside another component's shadow root it would never be the combobox.
+    const rootActive = (this.el.getRootNode() as Document | ShadowRoot).activeElement;
+    const focusLeftComponent = !focusInDropdown && rootActive !== this.el && document.activeElement !== this.portalEl;
+
+    this.isOpen = false;
+    this.highlightedIndex = -1;
+    this.clearExpandFilterList();
+    this.isArrowKeyNavigationMode = false;
+    this.updateAriaActiveDescendant();
+
+    if (focusInDropdown) {
+      this.triggerEl?.focus({ preventScroll: true });
+    }
+
+    // Only once focus has actually left the combobox, same as onComboboxFocusOut: a trigger="input"
+    // user still typing keeps their in-progress text instead of having it snapped back.
+    if (focusLeftComponent && this.selectedOption && this.displayText !== this.getOptionLabel(this.selectedOption)) {
+      // If there's a selected option but the display text doesn't match, restore the selected
+      // option's display text. The @Watch('selectedOption') will handle value and form internals if needed.
+      this.displayText = this.getOptionLabel(this.selectedOption);
+    }
   }
 
   private getPortalMountRoot(): HTMLElement {

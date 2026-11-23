@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-combobox', () => {
@@ -3262,5 +3262,299 @@ describe('pds-combobox value fade', () => {
     await (await page.find('pds-combobox >>> [role="option"]')).click();
     await page.waitForChanges();
     expect(await fades(page)).toBe(true);
+  });
+});
+
+// A dropdown mounted in the body, with fixed positioning, closes once its trigger scrolls out of
+// view rather than float away from it -- matching pds-dropdown-menu. One mounted in the field
+// scrolls along with its trigger, so it stays open.
+describe('pds-combobox when its trigger scrolls out of view', () => {
+  const isOpen = (page: E2EPage) =>
+    page.evaluate(
+      () =>
+        !!document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') ||
+        !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'),
+    );
+
+  const isOpenAnywhere = (page: E2EPage) =>
+    page.evaluate(() => !!document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'));
+
+  // The IntersectionObserver fires asynchronously once the scroll settles.
+  const settle = (page: E2EPage) =>
+    page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 50)))));
+
+  // A close is waited for, rather than settled, so a slow run doesn't fail it.
+  const closed = (page: E2EPage) =>
+    page.waitForFunction(
+      () =>
+        !document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__listbox') &&
+        !document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'),
+    );
+
+  const triggerAttr = (page: E2EPage, name: string) =>
+    page.evaluate(
+      attr => document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!.getAttribute(attr),
+      name,
+    );
+
+  // The trigger is given a width, as it otherwise stretches the whole scrolled width and its
+  // centre, where a click lands, is out of view. Its inset keeps the panel clear of the window's
+  // edge, where the panel stops following it.
+  const scroller = (mount: string) => `
+    <div id="scroller" style="width: 300px; overflow: auto;">
+      <div style="width: 1500px; padding: 8px 8px 8px 100px;">
+        <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only"${mount}>
+          <option value="a">A</option>
+          <option value="b">B</option>
+        </pds-combobox>
+      </div>
+    </div>
+  `;
+
+  const openCombobox = async (content: string) => {
+    const page = await newE2EPage();
+    await page.setContent(content);
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpen(page)).toBe(true);
+    return page;
+  };
+
+  it('stays open while its trigger is still in view', async () => {
+    const page = await openCombobox(scroller(' dropdown-mount="body"'));
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 40;
+    });
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+  });
+
+  it('closes once the trigger scrolls out of its scrolling container, mounted in the body', async () => {
+    const page = await openCombobox(scroller(' dropdown-mount="body"'));
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await closed(page);
+    // The body portal is torn down in a timeout that can run before the trigger re-renders.
+    await page.waitForChanges();
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await triggerAttr(page, 'aria-expanded')).toBe('false');
+  });
+
+  // A list mounted in the field scrolls along with its trigger, so it can't float away from it.
+  it('stays open when the trigger scrolls out of its scrolling container, mounted in the field', async () => {
+    const page = await openCombobox(scroller(''));
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+    expect(await triggerAttr(page, 'aria-expanded')).toBe('true');
+  });
+
+  it('closes once the window scrolls the trigger out of view', async () => {
+    const page = await openCombobox(`
+      <div style="height: 3000px; padding: 8px;">
+        <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only" dropdown-mount="body">
+          <option value="a">A</option>
+          <option value="b">B</option>
+        </pds-combobox>
+      </div>
+    `);
+
+    await page.evaluate(() => window.scrollTo(0, 2000));
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+
+  // A row action combobox in a table that scrolls sideways, whose scroll container is in the
+  // table's shadow root.
+  it("closes once the trigger scrolls out of a responsive pds-table's scroll container", async () => {
+    const page = await openCombobox(`
+      <div style="width: 300px;">
+        <pds-table responsive="true">
+          <pds-table-head>
+            <pds-table-head-cell>Actions</pds-table-head-cell>
+            <pds-table-head-cell><div style="width: 1500px;">Wide column</div></pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>
+                <pds-combobox component-id="actions" label="Action" trigger="button" mode="select-only" dropdown-mount="body">
+                  <option value="a">A</option>
+                  <option value="b">B</option>
+                </pds-combobox>
+              </pds-table-cell>
+              <pds-table-cell>Wide cell</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      </div>
+    `);
+
+    const scrolled = await page.$eval('pds-table', el => {
+      const container = el.shadowRoot!.querySelector('.pds-table-responsive-container') as HTMLElement;
+      container.scrollLeft = 1000;
+      return container.scrollLeft;
+    });
+    expect(scrolled).toBeGreaterThan(500);
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+
+  it('does not move focus or scroll the container back when it closes from a scroll-out', async () => {
+    const page = await openCombobox(scroller(' dropdown-mount="body"'));
+    await page.evaluate(() => {
+      (document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement).focus();
+    });
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await page.$eval('#scroller', el => el.scrollLeft)).toBe(800);
+  });
+
+  // Unlike a click or Tab, scrolling doesn't blur anything: a portaled panel-search field, which
+  // opening focuses, can still hold focus when the scroll-out close unmounts it. Left alone, that
+  // would drop focus to <body>.
+  it('returns focus to the trigger when a portaled panel-search field is unmounted by a scroll-out close', async () => {
+    const page = await newE2EPage();
+    await page.setContent(scroller(' dropdown-mount="body" panel-search'));
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpen(page)).toBe(true);
+    expect(
+      await page.evaluate(() => document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.activeElement?.className ?? ''),
+    ).toContain('pds-combobox__panel-search-input');
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await closed(page);
+    // The portal and the trigger's aria-expanded both come from isOpen, but the body-portal
+    // teardown is deferred (a setTimeout(0) inside isOpenChanged), so aria-expanded can lag the
+    // listbox's removal by a tick in this configuration; wait for it rather than a fixed delay.
+    await page.waitForFunction(
+      () =>
+        document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!.getAttribute('aria-expanded') ===
+        'false',
+    );
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await triggerAttr(page, 'aria-expanded')).toBe('false');
+    expect(
+      await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.className ?? ''),
+    ).toContain('pds-combobox__button-trigger');
+    // preventScroll: true is the point -- focusing the trigger must not yank the container back
+    // and undo the very scroll that closed the dropdown.
+    expect(await page.$eval('#scroller', el => el.scrollLeft)).toBe(800);
+  });
+
+  // Waits for the trigger to be scrolled back into its scrolling container.
+  const triggerInView = (page: E2EPage) =>
+    page.waitForFunction(() => {
+      const scroller = document.querySelector('#scroller')!.getBoundingClientRect();
+      const trigger = document
+        .querySelector('pds-combobox')!
+        .shadowRoot!.querySelector('.pds-combobox__button-trigger')!
+        .getBoundingClientRect();
+      return trigger.left >= scroller.left && trigger.right <= scroller.right;
+    });
+
+  it('scrolls the trigger into view when opened with the trigger out of view, then closes again once it scrolls back out', async () => {
+    const page = await newE2EPage();
+    await page.setContent(scroller(' dropdown-mount="body"'));
+    await page.waitForChanges();
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await page.evaluate(() => {
+      (document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger') as HTMLElement).click();
+    });
+    await page.waitForChanges();
+    await triggerInView(page);
+    await settle(page);
+
+    expect(await isOpen(page)).toBe(true);
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+  });
+
+  // Overscroll chained to the page could scroll the trigger out and close the list mid-scroll.
+  it('contains scroll chaining on a body-mounted list, so overscrolling it does not scroll the page', async () => {
+    const page = await openCombobox(scroller(' dropdown-mount="body"'));
+
+    const overscroll = await page.evaluate(() => {
+      const listbox = document.querySelector('.pds-combobox-dropdown-portal')!.shadowRoot!.querySelector('.pds-combobox__listbox')!;
+      return getComputedStyle(listbox).overscrollBehaviorBlock;
+    });
+    expect(overscroll).toBe('contain');
+  });
+
+  // document.activeElement stops at the outermost shadow host, so inside another component's shadow
+  // root it would read as focus having left, and snap typed text back to the selected label.
+  it("keeps a trigger='input' user's typed text when closed from inside another component's shadow root", async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <div id="scroller" style="width: 300px; overflow: auto;">
+        <div style="width: 1500px; padding: 8px 8px 8px 100px;"><x-wrapper></x-wrapper></div>
+      </div>
+    `);
+    await page.evaluate(() => {
+      customElements.define(
+        'x-wrapper',
+        class extends HTMLElement {
+          connectedCallback() {
+            this.attachShadow({ mode: 'open' }).innerHTML = `
+              <pds-combobox component-id="fruit" label="Fruit" dropdown-mount="body" value="a" style="width: 100px;">
+                <option value="a">Apple</option>
+                <option value="b">Banana</option>
+              </pds-combobox>`;
+          }
+        },
+      );
+    });
+    await page.waitForChanges();
+
+    const input = () =>
+      page.evaluateHandle(
+        () => document.querySelector('x-wrapper')!.shadowRoot!.querySelector('pds-combobox')!.shadowRoot!.querySelector('input')!,
+      );
+    await page.waitForFunction(
+      () => document.querySelector('x-wrapper')?.shadowRoot?.querySelector('pds-combobox')?.shadowRoot?.querySelector('input')?.value === 'Apple',
+    );
+    await (await input()).asElement()!.click({ clickCount: 3 });
+    await page.keyboard.type('Ban');
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpenAnywhere(page)).toBe(true);
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await page.waitForFunction(() => !document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.querySelector('.pds-combobox__listbox'));
+    await page.waitForChanges();
+
+    expect(await (await input()).evaluate((el: HTMLInputElement) => el.value)).toBe('Ban');
   });
 });
