@@ -21,20 +21,25 @@ ${body}
 
 const OTHER_BODY = '## Usage\n\nText.\n\n## Usage\n\nMore text.\n';
 
-/** Checks the fixture page next to a second page, with the docs ids that stories files give. */
-function check(body, { storyDocsIds = ['components-table-rows--docs'], unknownStories = [], other = OTHER_BODY } = {}) {
+function checkPages(pages, { storyDocsIds = ['components-table-rows--docs'], unknownStories = [], statusManifest = {} } = {}) {
   const { content, pageLinks } = buildDocsContent({
-    pages: [{ file: GUIDE, source: page('Fixture', body) }, { file: OTHER, source: page('Other', other) }],
+    pages,
     components: [],
-    statusManifest: {},
+    statusManifest,
     readStories: () => {
       throw new Error('no stories');
     },
     version: '0.0.0',
     commit: null,
   });
+  const sources = new Map(pages.map(({ file, source }) => [file, source]));
   const context = buildContext({ components: [], iconNames: [], iconExports: [], iconsVersion: '0', pages: pageLinks, storyDocsIds, unknownStories });
-  return checkDocs({ pages: pageTargets(content, pageLinks) }, context);
+  return checkDocs({ pages: pageTargets(content, pageLinks, (file) => sources.get(file)) }, context);
+}
+
+/** Checks the fixture page next to a second page, with the docs ids that stories files give. */
+function check(body, { other = OTHER_BODY, ...options } = {}) {
+  return checkPages([{ file: GUIDE, source: page('Fixture', body) }, { file: OTHER, source: page('Other', other) }], options);
 }
 
 const messages = (result) => result.findings.map((f) => `${f.rule}:${f.line}: ${f.message}`);
@@ -163,5 +168,210 @@ describe('oversize-section', () => {
     assert.deepEqual(messages(check(`Intro.\n\n${atBudget('Big')}z`)), [
       `oversize-section:10: "Big" is ${SECTION_BUDGET + 1} characters, over the ${SECTION_BUDGET}-character budget for one section (its heading and text, without subsections or example code).`,
     ]);
+  });
+});
+
+describe('heading-contract', () => {
+  const COMPONENT = 'libs/core/src/components/pds-widget/docs/pds-widget.mdx';
+  const BADGE = '<StatusBadge component="pds-widget" />';
+  const TEMPLATE = [
+    '# Widget',
+    '',
+    'A widget groups related controls.',
+    '',
+    '## Guidelines',
+    '',
+    '### When to use',
+    '',
+    '- Grouping controls.',
+    '',
+    '### When not to use',
+    '',
+    '- A single control.',
+    '',
+    '### Accessibility',
+    '',
+    '- Label the group.',
+    '',
+    '## Properties',
+    '',
+    '<DocArgsTable componentName="pds-widget" />',
+    '',
+    '## Examples',
+    '',
+    '### Default',
+    '',
+    'A default widget.',
+    '',
+    '## Playground',
+    '',
+    'The main story.',
+  ].join('\n');
+
+  /** Checks a component page whose body starts at line 9, after the imports, the Meta and the status badge. */
+  const checkComponent = (body, { badge = BADGE, statusManifest = { 'pds-widget': { status: 'stable' } } } = {}) => {
+    const source = `import { Meta } from '@storybook/addon-docs/blocks';
+import { DocArgsTable } from '@pine-ds/doc-components';
+import { StatusBadge } from '../../../stories/_helpers';
+
+<Meta title="Components/Widget" />
+
+${badge}
+
+${body}
+`;
+    return checkPages([{ file: COMPONENT, source }], { statusManifest });
+  };
+
+  const THREE = '### When to use, ### When not to use and ### Accessibility';
+
+  it('passes a page that follows the template', () => {
+    const result = checkComponent(TEMPLATE);
+    assert.deepEqual([messages(result), skips(result)], [[], []]);
+  });
+
+  it('passes topic ## sections between Guidelines and Properties, and a page with no ## Examples', () => {
+    const topics = TEMPLATE.replace('## Properties', '## Modes\n\nText.\n\n### Filtering\n\nText.\n\n## Triggers\n\nText.\n\n## Properties');
+    assert.deepEqual(messages(checkComponent(topics)), []);
+    const noExamples = TEMPLATE.replace('## Examples\n\n### Default\n\nA default widget.', '## Usage\n\n### Sizes\n\nText.\n\n## Modal\n\nText.');
+    assert.deepEqual(messages(checkComponent(noExamples)), []);
+  });
+
+  it('passes a ## Keyboard interactions section after Guidelines, with its own subheadings', () => {
+    const keyboard = TEMPLATE.replace('## Properties', '## Keyboard interactions\n\n### On the trigger\n\n- Enter opens it.\n\n#### Arrows\n\n- Down moves.\n\n## Properties');
+    assert.deepEqual(messages(checkComponent(keyboard)), []);
+  });
+
+  it('passes ## Properties and ## Playground in any letter case, and a blank line that holds spaces', () => {
+    const body = TEMPLATE.replace('## Properties', '## properties').replace('## Playground', '## PLAYGROUND').replace('### Accessibility\n\n', '### Accessibility\n  \n');
+    assert.deepEqual(messages(checkComponent(body)), []);
+  });
+
+  it("doesn't check guides, which have no template", () => {
+    const result = check('## Overview\n\nText.');
+    assert.deepEqual(result.findings.filter((f) => f.rule === 'heading-contract'), []);
+  });
+
+  it('fails a page with no # title, or an empty one, and still checks a # heading after it', () => {
+    const noTitle = 'heading-contract:1: The page has no # title, or its # heading is empty.';
+    assert.deepEqual(messages(checkComponent(TEMPLATE.replace('# Widget\n\n', ''))), [noTitle]);
+    assert.deepEqual(messages(checkComponent(TEMPLATE.replace('# Widget', '#'))), [noTitle]);
+    assert.deepEqual(messages(checkComponent(TEMPLATE.replace('# Widget', '#\n\n# Widget'))), [
+      noTitle,
+      'heading-contract:11: "# Widget" is a second # heading. The docs content takes only the first one as the page title.',
+    ]);
+  });
+
+  it('fails a second # heading and a heading above the title', () => {
+    const second = TEMPLATE.replace('## Examples', '# Examples');
+    assert.deepEqual(messages(checkComponent(second)), [
+      'heading-contract:31: "# Examples" is a second # heading. The docs content takes only the first one as the page title.',
+    ]);
+    const above = `## Overview\n\nText.\n\n${TEMPLATE}`;
+    assert.deepEqual(messages(checkComponent(above)), [
+      'heading-contract:9: "## Overview" comes before the "# Widget" title, which must be the page\'s first heading.',
+      'heading-contract:13: The page has no summary under "# Widget", so the docs content has no description for the component.',
+    ]);
+  });
+
+  it('fails a title with no summary under it, or a first paragraph with no text', () => {
+    const summary = 'heading-contract:9: The page has no summary under "# Widget", so the docs content has no description for the component.';
+    assert.deepEqual(messages(checkComponent(TEMPLATE.replace('A widget groups related controls.\n\n', ''))), [summary]);
+    assert.deepEqual(messages(checkComponent(TEMPLATE.replace('A widget groups related controls.', '<img src="widget.png" alt="" />'))), [summary]);
+  });
+
+  it("doesn't decide which # heading is the title when one sits inside a quote, and never fails for it", () => {
+    const quoted = `> # Quoted title\n\n## Overview\n\nText.\n\n${TEMPLATE}`;
+    const result = checkComponent(quoted);
+    assert.deepEqual(messages(result), ['heading-contract:1: The page has no summary under "# Widget", so the docs content has no description for the component.']);
+    assert.deepEqual(skips(result), ['heading-contract:9']);
+    assert.match(formatReport(result), /# headings at lines 9, 15 sit outside the page's sections/);
+  });
+
+  it('fails a page with no status: no badge, a badge whose component has none, or an invalid status', () => {
+    const message = 'heading-contract:9: The docs content has no status for the page. It needs a <StatusBadge> at the top level whose component is in component-status.json, with a status of stable, beta or deprecated.';
+    const noBadge = checkComponent(TEMPLATE, { badge: '' });
+    assert.deepEqual(messages(noBadge), [message]);
+    assert.equal(noBadge.findings[0].hint, 'Put <StatusBadge component="pds-widget" /> above the title, and list pds-widget in libs/core/src/stories/resources/component-status.json.');
+    assert.deepEqual(messages(checkComponent(TEMPLATE, { statusManifest: {} })), [message]);
+    assert.deepEqual(messages(checkComponent(TEMPLATE, { badge: '<StatusBadge component="pds-widget" status="bogus" />' })), [message]);
+  });
+
+  it("passes a status the manifest gives when the badge's own status is an expression", () => {
+    assert.deepEqual(messages(checkComponent(TEMPLATE, { badge: '<StatusBadge component="pds-widget" status={current} />' })), []);
+  });
+
+  it('checks only the first ## Guidelines', () => {
+    const twice = TEMPLATE.replace('## Properties', '## Guidelines\n\n### Anything\n\nText.\n\n## Properties');
+    assert.deepEqual(messages(checkComponent(twice)), []);
+  });
+
+  it('fails a page with no ## Guidelines, and one whose name differs in letter case', () => {
+    const none = TEMPLATE.replace(/## Guidelines[\s\S]*?(?=## Properties)/, '');
+    assert.deepEqual(messages(checkComponent(none)), ['heading-contract:9: The page has no ## Guidelines section.']);
+    assert.deepEqual(messages(checkComponent(TEMPLATE.replace('## Guidelines', '## guidelines'))), [
+      'heading-contract:13: "## guidelines" must be "## Guidelines": agents find it by that exact name.',
+    ]);
+  });
+
+  it('fails a Guidelines heading whose name differs in letter case', () => {
+    assert.deepEqual(messages(checkComponent(TEMPLATE.replace('### When to use', '### When to Use'))), [
+      'heading-contract:15: "### When to Use" must be "### When to use": agents match the Guidelines headings case-sensitively.',
+    ]);
+  });
+
+  it('fails Guidelines with one of its three headings missing, repeated or out of order', () => {
+    const needs = `heading-contract:13: Guidelines needs exactly ${THREE}, in that order.`;
+    const missing = TEMPLATE.replace('### When not to use\n\n- A single control.\n\n', '');
+    assert.deepEqual(messages(checkComponent(missing)), [`${needs} It has ### When to use, ### Accessibility.`]);
+    const swapped = TEMPLATE.replace('### When to use', '### TEMP').replace('### When not to use', '### When to use').replace('### TEMP', '### When not to use');
+    assert.deepEqual(messages(checkComponent(swapped)), [`${needs} It has ### When not to use, ### When to use, ### Accessibility.`]);
+    const twice = TEMPLATE.replace('- Label the group.', '- Label the group.\n\n### Accessibility\n\n- Again.');
+    assert.deepEqual(messages(checkComponent(twice)), [`${needs} It has ### When to use, ### When not to use, ### Accessibility, ### Accessibility.`]);
+  });
+
+  it('fails any other heading inside Guidelines, at any depth', () => {
+    const extra = (heading, line) =>
+      `heading-contract:${line}: "${heading}" is inside Guidelines, which holds only ${THREE}. Agents drop or misfile any other heading there.`;
+    const topic = TEMPLATE.replace('### Accessibility', '### Buttons vs links\n\nText.\n\n### Accessibility');
+    assert.deepEqual(messages(checkComponent(topic)), [extra('### Buttons vs links', 23)]);
+    const keyboard = TEMPLATE.replace('- Label the group.', '- Label the group.\n\n#### Keyboard interactions\n\n- Enter opens it.\n\n##### On items\n\n- Space selects.');
+    const result = checkComponent(keyboard);
+    assert.deepEqual(messages(result), [extra('#### Keyboard interactions', 27), extra('##### On items', 31)]);
+    assert.equal(result.findings[0].hint, 'Move it and its content to a ## section of its own after Guidelines.');
+  });
+
+  it('fails ### Accessibility with no blank line after it', () => {
+    const tight = TEMPLATE.replace('### Accessibility\n\n', '### Accessibility\n');
+    assert.deepEqual(messages(checkComponent(tight)), [
+      'heading-contract:23: No blank line follows "### Accessibility", so the Pine MCP leaves out the accessibility notes.',
+    ]);
+  });
+
+  it('fails a page with no ## Properties, and one where it comes before Guidelines', () => {
+    const none = TEMPLATE.replace('## Properties\n\n<DocArgsTable componentName="pds-widget" />\n\n', '');
+    assert.deepEqual(messages(checkComponent(none)), ['heading-contract:9: The page has no ## Properties section.']);
+    const early = TEMPLATE.replace('## Properties\n\n<DocArgsTable componentName="pds-widget" />\n\n', '').replace('## Guidelines', '## Properties\n\n<DocArgsTable componentName="pds-widget" />\n\n## Guidelines');
+    assert.deepEqual(messages(checkComponent(early)), ['heading-contract:13: "## Properties" comes before "## Guidelines".']);
+  });
+
+  it('fails a page with no ## Playground, and one where it is not the last ## section', () => {
+    const none = TEMPLATE.replace('## Playground\n\nThe main story.', '');
+    assert.deepEqual(messages(checkComponent(none)), ['heading-contract:9: The page has no ## Playground section.']);
+    const early = `${TEMPLATE}\n\n## Technical notes\n\nText.`;
+    assert.deepEqual(messages(checkComponent(early)), [
+      'heading-contract:37: "## Playground" isn\'t the last ## section: "## Technical notes" follows it. The Pine MCP ignores everything from ## Playground on.',
+    ]);
+    const twice = `${TEMPLATE}\n\n## Technical notes\n\nText.\n\n## Playground\n\nAgain.`;
+    assert.deepEqual(messages(checkComponent(twice)), [
+      'heading-contract:37: "## Playground" isn\'t the last ## section: "## Technical notes", "## Playground" follow it. The Pine MCP ignores everything from ## Playground on.',
+    ]);
+  });
+
+  it('lists a heading inside JSX, a list or a quote as not checked, never as a finding', () => {
+    const nested = TEMPLATE.replace('- Label the group.', '- Label the group.\n\n> ### Quoted\n\n<pds-alert>\n\n### In an alert\n\n</pds-alert>');
+    const result = checkComponent(nested);
+    assert.deepEqual([messages(result), skips(result)], [[], ['heading-contract:27', 'heading-contract:31']]);
+    assert.match(formatReport(result), /The heading #quoted sits inside JSX, a list or a quote/);
   });
 });

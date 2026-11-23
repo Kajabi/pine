@@ -30,7 +30,7 @@ Dropdown Menus reveal a list of actions from a button trigger, based on the WAI-
 
 - Follows the WAI-ARIA Menu Button pattern for the trigger and for keyboard navigation. The panel has `role="menu"`, but button and link items, raw `<a>` and `<button>` elements included, are exposed to assistive tech as buttons and links rather than menu items. Only `informational` items have `role="menuitem"`
 - Sets `aria-haspopup="menu"` and `aria-expanded` on the trigger and keeps them in step with the menu. If anything removes or changes them, such as a DOM morph, the menu puts its values back, so don't set your own. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning
-- Supports keyboard navigation with the arrow keys, Home, End, Enter and Space. The arrow keys skip disabled items and wrap from the last item to the first and back
+- Supports keyboard navigation with the arrow keys, Home, End, Enter and Space. The arrow keys skip disabled items and wrap from the last item to the first and back. See [Keyboard interactions](#keyboard-interactions) for the keys
 - Closes on Escape and moves focus from the menu back to the trigger
 - Renders `header` slot content outside the menu, so screen readers read it as plain content rather than as a menu item. Keyboard navigation moves between menu items only, so keep links and actions out of the header
 - Keeps `informational` items in keyboard navigation and exposes them as menu items with `aria-disabled="true"`, so people can reach and read them but not activate them. Navigation skips `disabled` items
@@ -39,7 +39,7 @@ Dropdown Menus reveal a list of actions from a button trigger, based on the WAI-
 - Treats a `pds-icon` in an item's `start` slot as decorative unless it has an `aria-label` or `aria-labelledby`. A named icon is announced before the label, so leave decorative icons unnamed
 - Provides high-contrast focus indicators for all interactive elements
 
-#### Keyboard interactions
+## Keyboard interactions
 
 <pds-box border border-radius="sm" fit>
   <pds-table component-id="keyboard-shortcuts" >

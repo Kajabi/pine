@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { toId } from 'storybook/internal/csf';
 import { loadCsf } from 'storybook/internal/csf-tools';
+import { parseMdx } from '../docs-content/extract.mjs';
 import { coreDir, generateDocsContent } from '../docs-content/generate.mjs';
 import { readComponentSource } from './component-source.mjs';
 import { buildContext, compareStrings } from './context.mjs';
@@ -100,14 +101,42 @@ function walkSections(sections, visit) {
   }
 }
 
-/** Each docs page with its links, its headings' lines and its sections in page order, from the docs-content extractor. */
-export function pageTargets(content, pageLinks) {
+/** The depth of each heading the extractor's MDX parser finds, by line. */
+function headingDepths(source) {
+  const depths = new Map();
+  const visit = (node) => {
+    if (node.type === 'heading') depths.set(node.position?.start.line, node.depth);
+    node.children?.forEach(visit);
+  };
+  visit(parseMdx(source));
+  return depths;
+}
+
+/**
+ * Each docs page with its links, its headings in page order with their lines and depths, and its sections in page
+ * order, from the docs-content extractor, and the lines of its MDX source.
+ */
+export function pageTargets(content, pageLinks, readPage = readDocPage) {
   const linksByFile = new Map(pageLinks.map((page) => [page.file, page]));
   return content.docs.map((doc) => {
     const { headings, links } = linksByFile.get(doc.file);
+    const source = readPage(doc.file);
+    const depths = headingDepths(source);
     const sections = [];
     walkSections(doc.sections, (section) => sections.push(section));
-    return { file: doc.file, title: doc.title, headingLines: new Map(headings.map((h) => [h.slug, h.line])), links, sections };
+    return {
+      file: doc.file,
+      kind: doc.kind,
+      tag: doc.tag,
+      title: doc.title,
+      summary: doc.summary,
+      status: doc.status,
+      headings: headings.map((h) => ({ ...h, depth: depths.get(h.line) ?? null })),
+      headingLines: new Map(headings.map((h) => [h.slug, h.line])),
+      links,
+      sections,
+      lines: source.split('\n'),
+    };
   });
 }
 
