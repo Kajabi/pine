@@ -396,18 +396,20 @@ export class PdsInput {
   }
 
   @Watch('disabled')
+  @Watch('readonly')
   @Watch('required')
   /**
-   * Neither prop changes the value, so nothing else recomputes validity for them: a field that
-   * renders disabled and required keeps whatever validity it had while disabled once re-enabled,
-   * and toggling required at runtime wouldn't otherwise start (or stop) blocking an empty value.
+   * None of these props changes the value, so nothing else recomputes validity for them: a field
+   * that renders disabled or readonly and required keeps whatever validity it had once it becomes
+   * editable, and toggling required at runtime wouldn't otherwise start (or stop) blocking an empty value.
    */
   protected disabledOrRequiredChanged() {
     // Eagerly synced, not left to the next render: Stencil patches the native input's
-    // `disabled`/`required` asynchronously, so reading its validity right here, still inside this
-    // synchronous watcher, would see the value these props had before this change.
+    // `disabled`/`readOnly`/`required` asynchronously, so reading its validity right here, still
+    // inside this synchronous watcher, would see the value these props had before this change.
     if (this.nativeInput) {
       this.nativeInput.disabled = !!this.disabled;
+      this.nativeInput.readOnly = !!this.readonly;
       this.nativeInput.required = !!this.required;
     }
     this.updateFormValue();
@@ -496,7 +498,7 @@ export class PdsInput {
       this.internals.setFormValue(value || null);
 
       // Set validity based on native input validation
-      reportNativeValidity(this.internals, this.disabled, this.nativeInput, this.nativeInput);
+      reportNativeValidity(this.internals, this.disabled || this.readonly, this.nativeInput, this.nativeInput);
     }
   }
 
