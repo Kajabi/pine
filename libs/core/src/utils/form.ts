@@ -56,11 +56,12 @@ export function exposeTypeProperty(element: Element, type: string | (() => strin
 
 /**
  * Mirrors a native form control's validity onto ElementInternals, as pds-input, pds-select,
- * pds-textarea and pds-checkbox do. A disabled control takes no part in constraint validation —
+ * pds-textarea and pds-checkbox do. Pass `disabled` as true for any control barred from constraint
+ * validation, a readonly one included. A disabled control takes no part in constraint validation —
  * the browser still computes its `validity` flags but clears `validationMessage` to `''` for it,
  * and `setValidity` throws if told a flag is true with an empty message, so a disabled control
  * always reports valid instead of relaying that stale, message-less native state. Callers must
- * also re-run this whenever `disabled` or `required` changes and from `formDisabledCallback`:
+ * also re-run this whenever `disabled`, `readonly` or `required` changes and from `formDisabledCallback`:
  * nothing else does, so a field that renders disabled keeps whatever validity it had while
  * disabled even after becoming enabled.
  */
