@@ -2,7 +2,7 @@ const SOURCE_KEYS = new Set(['webComponent', 'react']);
 
 const indentOf = (line) => line.length - line.trimStart().length;
 
-export const openingIndent = (node, source) => indentOf(source.slice(source.lastIndexOf('\n', node.start) + 1, node.start));
+export const lineIndent = (node, source) => indentOf(source.slice(source.lastIndexOf('\n', node.start) + 1, node.start));
 
 /**
  * A static template literal's text with each line indented as the MDX source has it: the MDX parser strips leading
@@ -54,7 +54,7 @@ function restoreExampleCode(docCanvas, source) {
     const written = writtenTemplate(literal, source);
     if (written === undefined) continue;
     const { start, end, loc, range } = literal;
-    property.value = { ...stringLiteral(dedent(written, openingIndent(literal, source))), start, end, loc, range };
+    property.value = { ...stringLiteral(dedent(written, lineIndent(literal, source))), start, end, loc, range };
   }
 }
 

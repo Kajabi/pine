@@ -8,7 +8,7 @@ import remarkParse from 'remark-parse';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import { toId } from 'storybook/internal/csf';
 import { unified } from 'unified';
-import { dedent, openingIndent, writtenTemplate } from './example-code.mjs';
+import { dedent, lineIndent, writtenTemplate } from './example-code.mjs';
 
 /** Repo-relative path of @pine-ds/core; every page's `file` starts with it. */
 export const CORE_ROOT = 'libs/core';
@@ -76,7 +76,7 @@ function exampleCode(expression, source) {
   const value = staticString(expression);
   if (value === undefined) return undefined;
   if (expression.type !== 'TemplateLiteral') return dedent(value);
-  return dedent(writtenTemplate(expression, source) ?? value, openingIndent(expression, source));
+  return dedent(writtenTemplate(expression, source) ?? value, lineIndent(expression, source));
 }
 
 /** A heading's text with inline code kept in backticks, the way readers see it. */
