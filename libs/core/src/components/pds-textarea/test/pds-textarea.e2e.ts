@@ -376,6 +376,45 @@ describe('pds-textarea validity', () => {
     expect(await isInvalid()).toBe(true);
   });
 
+  it('stays valid while required, readonly and empty, then goes invalid once readonly is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-textarea component-id="bio" name="bio" label="Bio" required readonly></pds-textarea></form>');
+    await page.waitForChanges();
+
+    const isInvalid = () => page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(await isInvalid()).toBe(false);
+
+    await page.$eval('pds-textarea', (el: Element) => el.removeAttribute('readonly'));
+    await page.waitForChanges();
+    expect(await isInvalid()).toBe(true);
+  });
+
+  it('treats an over-maxLength value as valid while readonly, and invalid again once readonly is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio" value="abcdef"></pds-textarea>');
+    await page.waitForChanges();
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { maxLength: number }).maxLength = 3;
+    });
+    await page.waitForChanges();
+
+    const isInvalid = () => page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(await isInvalid()).toBe(true);
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { readonly: boolean }).readonly = true;
+    });
+    await page.waitForChanges();
+    expect(await isInvalid()).toBe(false);
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { readonly: boolean }).readonly = false;
+    });
+    await page.waitForChanges();
+    expect(await isInvalid()).toBe(true);
+  });
+
   it('goes valid when maxLength is removed from a field that was over it', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio" value="abcdef"></pds-textarea>');
