@@ -160,7 +160,7 @@ Wrap related pills in a `fieldset` with a `legend` so the group has a name, and 
 - Set the `name` attribute so each checked box contributes its `value` to `FormData`; unchecked boxes are omitted automatically.
 - Give every checkbox in a group a distinct `value` so the server can differentiate selections.
 - To react to a toggle, listen for `pdsCheckboxChange` (`onPdsCheckboxChange` in React) and read the new state from `event.detail.checked`.
-- `required` doesn't stop the form from submitting while the box is unchecked. Check it yourself before submitting, and set `invalid` and `error-message` to show the error.
+- With `required`, the form won't submit while the box is unchecked, as with a native checkbox. The checkbox doesn't set `invalid` itself, so set `invalid` and `error-message` when you show an error.
 - Resetting the form doesn't change the checkbox: it stays checked or unchecked, as it was before the reset.
 - For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs).
 
