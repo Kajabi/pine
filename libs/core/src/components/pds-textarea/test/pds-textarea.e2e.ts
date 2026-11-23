@@ -327,6 +327,49 @@ describe('pds-textarea validity', () => {
     expect(invalid).toBe(true);
   });
 
+  // As with a native textarea, a value that arrives already over maxLength (from markup or a
+  // script) doesn't count as too long, so a stored value from before a length cap still submits.
+  it('stays valid with a value already over maxLength on load', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-textarea component-id="bio" name="bio" label="Bio" max-length="3" value="abcdef"></pds-textarea></form>');
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+    expect(await page.$eval('form', (el: HTMLFormElement) => el.checkValidity())).toBe(true);
+  });
+
+  it('stays valid when a script sets a value over maxLength', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio" max-length="3"></pds-textarea>');
+    await page.waitForChanges();
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { value: string }).value = 'abcdef';
+    });
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+  });
+
+  it('goes too-long when maxLength is lowered under text the user typed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio"></pds-textarea>');
+    await page.waitForChanges();
+
+    await (await page.find('pds-textarea >>> textarea')).type('abcdef');
+    await page.waitForChanges();
+
+    await page.$eval('pds-textarea', (el: Element) => {
+      (el as unknown as { maxLength: number }).maxLength = 3;
+    });
+    await page.waitForChanges();
+
+    const invalid = await page.$eval('pds-textarea', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+
   it('keeps a required-empty field invalid when maxLength also changes, instead of maxLengthChanged clearing it', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-textarea component-id="bio" name="bio" label="Bio" required></pds-textarea>');
