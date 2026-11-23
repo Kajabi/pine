@@ -25,20 +25,24 @@ const compile = (source, remarkPlugins) =>
     );
   });
 
-/** Each `component` element's props on the compiled page, as the source text of their values. */
+/** Each `component` element's props on the compiled page: the source text of each value, and the value when it's static. */
 function props(code, component) {
   const found = [];
   traverse(babelParse(code), {
-    CallExpression({ node }) {
-      const [type, elementProps] = node.arguments;
+    CallExpression(path) {
+      const [type, elementProps] = path.node.arguments;
       if (type?.type !== 'Identifier' || type.name !== component || elementProps?.type !== 'ObjectExpression') return;
-      found.push(Object.fromEntries(elementProps.properties.map((p) => [p.key.name ?? p.key.value, code.slice(p.value.start, p.value.end)])));
+      const entries = path.get('arguments.1.properties').map((property) => {
+        const value = property.get('value');
+        const { confident, value: staticValue } = value.evaluate();
+        const text = code.slice(value.node.start, value.node.end);
+        return [property.node.key.name ?? property.node.key.value, { text, value: confident ? staticValue : undefined }];
+      });
+      found.push(Object.fromEntries(entries));
     },
   });
   return found;
 }
-
-const evaluate = (expression) => new Function(`return (${expression});`)();
 
 /** The props `component` gets on the page compiled with and without the plugin. */
 async function compiled(source, component = 'DocCanvas') {
@@ -49,7 +53,7 @@ async function compiled(source, component = 'DocCanvas') {
 }
 
 /** The mdxSource each DocCanvas gets on the page compiled with the plugin. */
-const mdxSources = async (source) => (await compiled(source)).after.map((p) => evaluate(p.mdxSource));
+const mdxSources = async (source) => (await compiled(source)).after.map((p) => p.mdxSource.value);
 
 const sameLine = `<DocCanvas
   mdxSource={{
@@ -163,7 +167,7 @@ describe('remarkExampleCode', () => {
   </DocCanvas>`);
     const { before } = await compiled(source);
 
-    assert.equal(evaluate(before[0].mdxSource).webComponent, '<pds-widget\n    size="sm">\n    <span>One</span>\n  </pds-widget>');
+    assert.equal(before[0].mdxSource.value.webComponent, '<pds-widget\n    size="sm">\n    <span>One</span>\n  </pds-widget>');
     assert.deepEqual(await mdxSources(source), [{ webComponent: sameLineCode }]);
   });
 
@@ -184,10 +188,23 @@ describe('remarkExampleCode', () => {
   <pds-widget></pds-widget>
 </DocCanvas>`);
     const { after, before } = await compiled(source);
-    const lines = (expression) => evaluate(expression.mdxSource).webComponent.split('\n');
+    const lines = (canvas) => canvas.mdxSource.value.webComponent.split('\n');
 
     assert.deepEqual(lines(after[0]), ['<pds-widget', '  label="`One`">', '  <span>C:\\One</span>', '  <span>${one}</span>', '</pds-widget>']);
     assert.deepEqual(lines(after[0]).map((line) => line.trimStart()), lines(before[0]));
+  });
+
+  it('keeps quotes, a closing script tag and a line separator as text', async () => {
+    const code = `<pds-widget\n  label='One "Two"'>\n  <span>One\u2028Two</span>\n  <span></script></span>\n</pds-widget>`;
+    const source = page(`<DocCanvas
+  mdxSource={{
+    webComponent: \`${code}\`,
+  }}
+>
+  <pds-widget></pds-widget>
+</DocCanvas>`);
+
+    assert.deepEqual(await mdxSources(source), [{ webComponent: code }]);
   });
 
   it('leaves a template literal with an expression as the compiler writes it', async () => {
@@ -205,11 +222,89 @@ describe('remarkExampleCode', () => {
 </DocCanvas>`),
     );
 
-    assert.deepEqual(evaluate(after[0].mdxSource), {
-      webComponent: evaluate(before[0].mdxSource).webComponent,
+    assert.deepEqual(after[0].mdxSource.value, {
+      webComponent: before[0].mdxSource.value.webComponent,
       react: '<PdsWidget\n  size="sm" />',
     });
-    assert.equal(evaluate(before[0].mdxSource).webComponent, '<pds-widget\nlabel="One">\n</pds-widget>');
+    assert.equal(before[0].mdxSource.value.webComponent, '<pds-widget\nlabel="One">\n</pds-widget>');
+  });
+
+  it("leaves a template literal whose lines don't match the source as the compiler writes it", async () => {
+    const source = page(`> <DocCanvas
+>   mdxSource={{
+>     webComponent: \`
+>       <pds-widget>
+>         <span>One</span>
+>       </pds-widget>
+>     \`,
+>   }}
+> >
+>   <pds-widget></pds-widget>
+> </DocCanvas>
+
+<DocCanvas
+  mdxSource={{
+    webComponent: \`
+      <pds-widget \\
+        size="sm">
+      </pds-widget>
+    \`,
+  }}
+>
+  <pds-widget></pds-widget>
+</DocCanvas>
+
+${sameLine}`);
+    const { after, before } = await compiled(source);
+
+    assert.deepEqual(
+      after.slice(0, 2).map((canvas) => canvas.mdxSource.text),
+      before.slice(0, 2).map((canvas) => canvas.mdxSource.text),
+    );
+    assert.equal(before[1].mdxSource.value.webComponent, '\n    <pds-widget       size="sm">\n    </pds-widget>\n  ');
+    assert.deepEqual(after[2].mdxSource.value, { webComponent: sameLineCode });
+  });
+
+  it('finds a DocCanvas inside another element or a paragraph and reads quoted keys', async () => {
+    const source = page(`<pds-box>
+  <DocCanvas
+    mdxSource={{
+      'webComponent': \`<pds-widget
+  size="sm">
+  <span>One</span>
+</pds-widget>\`,
+    }}
+  >
+    <pds-widget size="sm"></pds-widget>
+  </DocCanvas>
+</pds-box>
+
+Inline <DocCanvas mdxSource={{ react: \`<PdsWidget
+  size="sm" />\` }}>One</DocCanvas> canvas.`);
+
+    assert.deepEqual(await mdxSources(source), [{ webComponent: sameLineCode }, { react: '<PdsWidget\n  size="sm" />' }]);
+  });
+
+  it('leaves shorthand, spread and plain string mdxSource properties alone', async () => {
+    const { after, before } = await compiled(
+      page(`export const react = '<PdsWidget />';
+export const more = {};
+
+<DocCanvas
+  mdxSource={{
+    webComponent: "<pds-widget>\\n  <span>One</span>\\n</pds-widget>",
+    react,
+    ...more,
+  }}
+>
+  <pds-widget></pds-widget>
+</DocCanvas>
+
+${sameLine}`),
+    );
+
+    assert.equal(after[0].mdxSource.text, before[0].mdxSource.text);
+    assert.deepEqual(after[1].mdxSource.value, { webComponent: sameLineCode });
   });
 
   it("leaves other components, other attributes and a DocCanvas's children alone", async () => {
@@ -241,11 +336,11 @@ describe('remarkExampleCode', () => {
     const canvases = await compiled(source);
 
     assert.deepEqual(samples.after, samples.before);
-    assert.equal(canvases.after[0].display, canvases.before[0].display);
-    assert.equal(canvases.after[0].children, canvases.before[0].children);
-    assert.deepEqual(evaluate(canvases.after[0].mdxSource), {
+    assert.equal(canvases.after[0].display.text, canvases.before[0].display.text);
+    assert.equal(canvases.after[0].children.text, canvases.before[0].children.text);
+    assert.deepEqual(canvases.after[0].mdxSource.value, {
       webComponent: sameLineCode,
-      vue: evaluate(canvases.before[0].mdxSource).vue,
+      vue: canvases.before[0].mdxSource.value.vue,
     });
   });
 
@@ -260,8 +355,8 @@ describe('remarkExampleCode', () => {
 ${sameLine}`),
     );
 
-    assert.equal(after[0].mdxSource, before[0].mdxSource);
-    assert.deepEqual(evaluate(after[1].mdxSource), { webComponent: sameLineCode });
+    assert.equal(after[0].mdxSource.text, before[0].mdxSource.text);
+    assert.deepEqual(after[1].mdxSource.value, { webComponent: sameLineCode });
   });
 
   it('compiles a page with no DocCanvas exactly as before', async () => {
