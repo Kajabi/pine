@@ -78,7 +78,7 @@ const indentOf = (line) => line.length - line.trimStart().length;
  */
 function writtenTemplate(literal, source) {
   const { raw, cooked } = literal.quasis[0].value;
-  const written = source.slice(literal.start + 1, literal.end - 1).split('\n');
+  const written = source.slice(literal.start + 1, literal.end - 1).split(/\r?\n/);
   const rawLines = raw.split('\n');
   const cookedLines = cooked.split('\n');
   const stripped = written.map((line, index) => line.slice(0, line.length - (rawLines[index]?.length ?? 0)));
@@ -90,15 +90,17 @@ function writtenTemplate(literal, source) {
 }
 
 /**
- * Removes the indentation the code's lines share. Code that starts right after the backtick has no indentation on
- * its first line, so that line counts as indented like the source line it sits on.
+ * Removes the indentation the lines share. Code that starts right after the backtick lines up with the left margin or
+ * with its property's line, so the other lines lose that line's indentation only when they all have it.
  */
 function dedent(code, openingIndent = 0) {
   const startsOnOpeningLine = !/^\s*\n/.test(code);
   const lines = code.replace(/^\s*\n/, '').replace(/\n\s*$/, '').split('\n');
   const first = startsOnOpeningLine ? [lines.shift().trimStart()] : [];
   const indents = lines.filter((line) => line.trim()).map(indentOf);
-  const shared = Math.min(startsOnOpeningLine ? openingIndent : Infinity, ...indents);
+  const shared = startsOnOpeningLine
+    ? (indents.every((indent) => indent >= openingIndent) ? openingIndent : 0)
+    : Math.min(...indents);
   return [...first, ...lines.map((line) => line.slice(Number.isFinite(shared) ? shared : 0))].join('\n');
 }
 
@@ -106,9 +108,9 @@ function dedent(code, openingIndent = 0) {
 function exampleCode(expression, source) {
   const value = staticString(expression);
   if (value === undefined) return undefined;
-  const text = expression.type === 'TemplateLiteral' ? writtenTemplate(expression, source) : value;
+  if (expression.type !== 'TemplateLiteral') return dedent(value);
   const openingLine = source.slice(source.lastIndexOf('\n', expression.start) + 1, expression.start);
-  return dedent(text, indentOf(openingLine));
+  return dedent(writtenTemplate(expression, source), indentOf(openingLine));
 }
 
 /** A heading's text with inline code kept in backticks, the way readers see it. */
@@ -443,7 +445,9 @@ export function buildDocsContent({ pages, components, statusManifest, statusDefi
    */
   function statusRows(expression, page) {
     const call = expression.data?.estree?.body?.[0]?.expression;
-    const list = call?.callee?.property?.name === 'map' ? call.callee.object?.arguments?.[0] : undefined;
+    const entries = call?.callee?.property?.name === 'map' ? call.callee.object : undefined;
+    const isEntries = entries?.callee?.object?.name === 'Object' && entries.callee.property?.name === 'entries';
+    const list = isEntries ? entries.arguments[0] : undefined;
     const manifest = defaultImport(page.tree, 'component-status.json');
     if (!manifest || list?.type !== 'MemberExpression' || list.object.name !== manifest) return undefined;
     const row = (...cells) => ({ type: 'tableRow', children: cells.map((children) => ({ type: 'tableCell', children })) });
