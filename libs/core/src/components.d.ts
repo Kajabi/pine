@@ -875,7 +875,7 @@ export namespace Components {
          */
         "indeterminate": boolean;
         /**
-          * Determines whether or not the checkbox is invalid.
+          * Determines whether or not the checkbox is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid": boolean;
         /**
@@ -1718,7 +1718,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the input is invalid.
+          * Determines whether or not the input is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -2471,7 +2471,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the select is invalid.
+          * Determines whether or not the select is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -2949,7 +2949,7 @@ export namespace Components {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the textarea is invalid. When `required` is set, the textarea sets it itself each time `pdsTextareaChange` fires, replacing a value you set.
+          * Determines whether or not the textarea is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
           * @defaultValue false
          */
         "invalid": boolean;
@@ -4868,7 +4868,7 @@ declare namespace LocalJSX {
          */
         "indeterminate"?: boolean;
         /**
-          * Determines whether or not the checkbox is invalid.
+          * Determines whether or not the checkbox is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -5759,7 +5759,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the input is invalid.
+          * Determines whether or not the input is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -6560,7 +6560,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the select is invalid.
+          * Determines whether or not the select is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
          */
         "invalid"?: boolean;
         /**
@@ -7070,7 +7070,7 @@ declare namespace LocalJSX {
          */
         "highlight"?: boolean;
         /**
-          * Determines whether or not the textarea is invalid. When `required` is set, the textarea sets it itself each time `pdsTextareaChange` fires, replacing a value you set.
+          * Determines whether or not the textarea is invalid. Independent of the native/ElementInternals constraint validation `required` drives (which blocks form submission on its own) — set this to also show the error styling and `aria-invalid`.
           * @defaultValue false
          */
         "invalid"?: boolean;
