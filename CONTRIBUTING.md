@@ -110,13 +110,14 @@ Each page becomes an entry with its summary, its status and a tree of its sectio
 
 - Each `mdxSource` string is plain text, with no `${…}`.
 - `DocCanvas`, `<Canvas>` and `<DocArgsTable>` sit at the top level of their section, not inside a list, quote or table.
-- Doc tables are `<pds-table>` elements with `<pds-table-head>` and `<pds-table-body>`. They become markdown tables.
+- Doc tables are `<pds-table>` elements with `<pds-table-head>` and `<pds-table-body>`. They become markdown tables. Rows a script builds when the page renders are left out, apart from the component status tables, which the build fills in from `component-status.json`.
+- Prose needs no markdown escapes. Text that markdown could read as markup, such as a name with `_` in it or a literal `[label]`, goes in a code span.
 - Links to another page use its Storybook path (`/docs/<id>` or `?path=/docs/<id>`). They become `pine-doc:<id>` links.
 - Headings are markdown headings, not JSX.
 
 A component outside a `DocCanvas` that the converter doesn't know stays in the markdown as JSX, and the build prints a warning. Add a conversion for it in `libs/core/scripts/docs-content/extract.mjs` instead of leaving the warning.
 
-Core's `npm test` checks the content against every page's sections, words, table cells, examples, code blocks and links. To run that check on its own:
+Core's `npm test` checks the content against every page's sections, words, table cells, examples and their indentation, code blocks and links, and checks that the markdown has no backslash escapes outside code. To run that check on its own:
 
 ```zsh
 npm run test.docs-content --workspace @pine-ds/core
