@@ -3336,20 +3336,24 @@ describe('pds-combobox when its trigger scrolls out of view', () => {
       el.scrollLeft = 800;
     });
     await closed(page);
+    // The body portal is torn down in a timeout that can run before the trigger re-renders.
+    await page.waitForChanges();
 
     expect(await isOpen(page)).toBe(false);
     expect(await triggerAttr(page, 'aria-expanded')).toBe('false');
   });
 
-  it('closes once the trigger scrolls out of its scrolling container, mounted in the field', async () => {
+  // A list mounted in the field scrolls along with its trigger, so it can't float away from it.
+  it('stays open when the trigger scrolls out of its scrolling container, mounted in the field', async () => {
     const page = await openCombobox(scroller(''));
 
     await page.$eval('#scroller', el => {
       el.scrollLeft = 800;
     });
-    await closed(page);
+    await settle(page);
 
-    expect(await isOpen(page)).toBe(false);
+    expect(await isOpen(page)).toBe(true);
+    expect(await triggerAttr(page, 'aria-expanded')).toBe('true');
   });
 
   it('closes once the window scrolls the trigger out of view', async () => {
@@ -3419,32 +3423,9 @@ describe('pds-combobox when its trigger scrolls out of view', () => {
     expect(await page.$eval('#scroller', el => el.scrollLeft)).toBe(800);
   });
 
-  // Unlike a click or Tab, scrolling doesn't blur anything: focus can still be on a highlighted
-  // option, about to be unmounted along with the rest of the listbox, when the scroll-out close
-  // fires. Left alone, that would drop focus to <body> instead of leaving it "wherever it was".
-  it('returns focus to the trigger, not <body>, when a focused option is unmounted by a scroll-out close', async () => {
-    const page = await openCombobox(scroller(''));
-    await page.keyboard.press('ArrowDown');
-    await page.waitForChanges();
-    expect(
-      await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.getAttribute('role')),
-    ).toBe('option');
-
-    await page.$eval('#scroller', el => {
-      el.scrollLeft = 800;
-    });
-    await closed(page);
-
-    expect(await isOpen(page)).toBe(false);
-    expect(
-      await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.className ?? ''),
-    ).toContain('pds-combobox__button-trigger');
-    // preventScroll: true is the point -- focusing the trigger must not yank the container back
-    // and undo the very scroll that closed the dropdown.
-    expect(await page.$eval('#scroller', el => el.scrollLeft)).toBe(800);
-  });
-
-  // The same hazard for a portaled panel-search field, which opening already focuses.
+  // Unlike a click or Tab, scrolling doesn't blur anything: a portaled panel-search field, which
+  // opening focuses, can still hold focus when the scroll-out close unmounts it. Left alone, that
+  // would drop focus to <body>.
   it('returns focus to the trigger when a portaled panel-search field is unmounted by a scroll-out close', async () => {
     const page = await newE2EPage();
     await page.setContent(scroller(' dropdown-mount="body" panel-search'));
