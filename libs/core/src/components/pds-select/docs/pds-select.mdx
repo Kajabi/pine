@@ -19,6 +19,7 @@ Selects present a single-choice dropdown, letting users pick one value from a pr
 - When a user needs to select options from a predefined list.
 - For forms with multiple dropdowns requiring consistent styling and behavior.
 - When displaying grouped or categorized options for easier navigation.
+- In place of a native `<select>`. `pds-select` adds the label, helper and error messages and Pine's styling, and submits with its form (see [Form Integration](#form-integration)).
 
 ### When not to use
 - For binary choices; consider a radio or switch instead.
@@ -400,7 +401,7 @@ The action slot allows you to add helpful content next to the select label, such
     react: `<PdsSelect componentId="pds-select-action-tooltip" label="Country" name="country" required>
   <PdsTooltip slot="action" placement="bottom-start">
     <PdsButton variant="unstyled" aria-label="Help with country">
-      <PdsIcon name="question-circle" aria-hidden="true"></PdsIcon>
+      <PdsIcon name="question-circle"></PdsIcon>
     </PdsButton>
     <span slot="content">Select your country of residence for shipping purposes</span>
   </PdsTooltip>
@@ -413,7 +414,7 @@ The action slot allows you to add helpful content next to the select label, such
     webComponent: `<pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
   <pds-tooltip slot="action" placement="bottom-start">
     <pds-button variant="unstyled" aria-label="Help with country">
-      <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+      <pds-icon name="question-circle"></pds-icon>
     </pds-button>
     <span slot="content">Select your country of residence for shipping purposes</span>
   </pds-tooltip>
@@ -427,7 +428,7 @@ The action slot allows you to add helpful content next to the select label, such
   <pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
     <pds-tooltip slot="action" placement="bottom-start">
       <pds-button variant="unstyled" aria-label="Help with country">
-        <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+        <pds-icon name="question-circle"></pds-icon>
       </pds-button>
       <span slot="content">Select your country of residence for shipping purposes</span>
     </pds-tooltip>
@@ -451,7 +452,7 @@ The action slot allows you to add helpful content next to the select label, such
 - Resetting the form sets `value` to an empty string, not back to the `value` it started with. The select then shows the option whose value is empty, or its first enabled option if none is, and submits nothing.
 - For a complete form, what each control submits and how to show validation errors, see [Using Pine form components](/docs/guides-forms--docs).
 
-## Technical Notes
+## Technical notes
 
 State on the host follows the component's props and slots: the `is-invalid` and `is-disabled` classes, `aria-disabled`, and `has-action` when an `action` slot is shown. It comes back if something removes it, such as a DOM morph, so change it through props or the slot. A script that undoes them as soon as they come back (from a `MutationObserver`, say) wins after a few rounds, and the component logs a console warning.
 

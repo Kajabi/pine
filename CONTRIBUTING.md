@@ -40,7 +40,7 @@ To add new components, run the following command:
 
 When prompted, choose `*.scss Format`, then confirm. The initial component files will be generated. Once they are, you will need them to match other components. It may be best to copy any missing folders such as `stories/` and `docs/` from other components and update any imports or text to match.
 
-A component without a shadow root (`shadow: false`, or `scoped: true`) must declare which kind of light-DOM component it is with a `@lightDom` tag in the JSDoc above `@Component`. The tag is published in `docs.json` and the `components.d.ts` hover text, and a spec fails if it's missing.
+A component without a shadow root (`shadow: false`, `scoped: true`, or no `shadow` option) must declare which kind of light-DOM component it is with a `@lightDom` tag in the JSDoc above `@Component`. The tag is published in `docs.json` and the `components.d.ts` hover text, and a spec fails if it's missing.
 
 - `@lightDom host-only`: `render()` only sets classes, styles or attributes on `<Host>`; it adds no elements.
 - `@lightDom renders-markup`: `render()` wraps the slotted content in its own elements, which Stencil won't restore if code outside the component rewrites the light DOM.
@@ -99,6 +99,74 @@ Write each example as a `DocCanvas` with both sources, and the same markup as it
 - Keep the `webComponent` snippet to markup, with no `<script>`. Use `Pds*` wrappers with camelCase props in the `react` snippet.
 - Keep the wording consumer-neutral: describe Pine's behavior, not a particular app or framework that uses it.
 - Everything below `<!-- Auto Generated Below -->` in `readme.md` is generated. To change a prop, event or method description there, edit the JSDoc in the `.tsx` and rebuild.
+
+### Docs as data (`docs-content.json`)
+
+The core build also publishes the docs as data, for tools and AI agents that read them without parsing MDX. After `stencil build`, it parses every MDX page Storybook shows and writes `libs/core/dist/docs-content.json`, which ships in `@pine-ds/core` next to `docs.json`. That covers the component pages and the pages under `libs/core/src/stories/`. `dist/docs-content.d.ts` describes every field; its source is `libs/core/scripts/docs-content/docs-content.d.ts`.
+
+Each page becomes an entry with its summary, its status and a tree of its sections. Each section has its heading, the anchor Storybook gives it, its own markdown and its `DocCanvas` examples. The conversion relies on the page conventions above, plus:
+
+- Each `mdxSource` string is plain text, with no `${…}`.
+- `DocCanvas`, `<Canvas>` and `<DocArgsTable>` sit at the top level of their section, not inside a list, quote or table.
+- Doc tables are `<pds-table>` elements with `<pds-table-head>` and `<pds-table-body>`. They become markdown tables.
+- Links to another page use its Storybook path (`/docs/<id>` or `?path=/docs/<id>`). They become `pine-doc:<id>` links.
+- Headings are markdown headings, not JSX.
+
+A component outside a `DocCanvas` that the converter doesn't know stays in the markdown as JSX, and the build prints a warning. Add a conversion for it in `libs/core/scripts/docs-content/extract.mjs` instead of leaving the warning.
+
+Core's `npm test` checks the content against every page's sections, words, table cells, examples, code blocks and links. To run that check on its own:
+
+```zsh
+npm run test.docs-content --workspace @pine-ds/core
+```
+
+### Docs check
+
+PR CI's `docs-check` job checks the examples, each component's JSDoc, and the links and section sizes of every docs page. Data comes from `dist/docs.json` and the installed `@pine-ds/icons`.
+
+The code in every `DocCanvas` (`react` and `webComponent`) on component pages and guides:
+
+- **unknown-component**: a `pds-*` tag that isn't in `docs.json`, or a React `Pds*` name that maps to no tag.
+- **unknown-icon**: a literal `name` on `pds-icon` or `PdsIcon` that isn't in the icon set, or a React `icon={x}` whose `x` the snippet imports from `@pine-ds/icons/icons` but the package doesn't export.
+- **unknown-attribute** (web component code only): an attribute on a `pds-*` element that is neither the component's nor a global attribute (`id`, `class`, `slot`, `aria-*`, `data-*`, `on*` and the rest of the HTML standard's list).
+- **invalid-value**: a literal value for a prop whose type is a fixed set of strings, such as `variant`, that isn't in the set. Props that also take free text or CSS lengths aren't checked.
+
+It doesn't check fenced code blocks in prose.
+
+Each component's JSDoc, from `docs.json` and the component's `.tsx`:
+
+- **missing-description**: a prop, event or method with no description. Deprecated members are skipped.
+- **undocumented-slot**: a `<slot>` in the component's JSX with no `@slot` line. Document the default slot as `@slot (default) - …`.
+- **undocumented-part**: a name in a JSX `part="…"` with no `@part` line.
+- **wrong-default**: an `@defaultValue` or `@default` that contradicts the prop's default in code by naming another of the prop's fixed set of strings, another number, or the other of `true` and `false`. Quotes and whitespace don't count.
+
+Only the component's own file is read. A slot name or part set with an expression, a template literal or a spread isn't checked. Neither is a default the check can't be sure of, such as `@defaultValue 'sm' (small)`, `MD` for `'md'`, a prop that takes any string, or a default in code that isn't a literal. A prop that states a default but sets none in code is listed for review, since its default often comes from CSS or a fallback.
+
+Each docs page, through the docs-content extractor:
+
+- **broken-anchor**: a link to `#slug`, on the same page or another MDX page, that matches no heading. Anchors come from the slugger Storybook uses, so the second "Border" heading is `#border-1`. The docs content follows in-page links only to headings, so a link to another element's `id` fails too: link to the heading above it.
+- **broken-docs-link**: a `?path=/docs/<id>--docs` link whose id is neither an MDX page nor the docs page of a stories file. Links to a single story need Storybook's own index, so they aren't checked.
+- **oversize-section**: a section over 8,000 characters, counting its heading and text in `docs-content.json` but not its subsections or example code. Agents read docs one section at a time, and the Pine MCP caps a response at 15,000 characters.
+
+Links inside a `DocCanvas` are example code, so they aren't checked. Run it locally with:
+
+```zsh
+npm run docs.check
+```
+
+That builds core first. After a build, `npm run docs.check --workspace @pine-ds/core` runs only the check, which reads the MDX and component source as they are now.
+
+Each finding gives the file and line, the rule, what's wrong and a fix. For an example, it also gives the example's heading:
+
+```text
+libs/core/src/components/pds-button/docs/pds-button.mdx:77  invalid-value  "Secondary" (React)
+  <PdsButton variant="secondry">: pds-button accepts only "accent", "destructive", "disclosure", "filter", "primary", "secondary", "tertiary", "unstyled".
+  Fix: Did you mean "secondary"?
+```
+
+For React code, the line is the element's own line. For web component code, it's the snippet's first line, so look for the quoted tag in that snippet. For JSDoc, it's the line of the prop, event, method, slot or part in the component's `.tsx`.
+
+The report also lists what it couldn't decide under "Not checked" (React code with a syntax error, a slot name or part set with an expression, a default it can't be sure of, a story link) and what's worth a look under "For review". Neither fails the check. `npm run docs.check --workspace @pine-ds/core` exits 0 when there are no findings, 1 when there are findings, and 2 when the check itself fails. The root `npm run docs.check` runs it through Nx, which exits 1 for either failure, so read its output to tell them apart.
 
 ### Bundle size budgets
 

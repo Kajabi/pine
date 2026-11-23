@@ -99,19 +99,19 @@ Add the `open` attribute to render the accordion expanded. In React, the prop is
     react: `
       <PdsAccordion isOpen>
         <span slot="label">What's included in the course?</span>
-        <p style={{ margin: 0 }}>Twelve video lessons, worksheets and a private community.</p>
+        <PdsText tag="p">Twelve video lessons, worksheets and a private community.</PdsText>
       </PdsAccordion>
     `,
     webComponent: `
       <pds-accordion open>
         <span slot="label">What's included in the course?</span>
-        <p style="margin: 0;">Twelve video lessons, worksheets and a private community.</p>
+        <pds-text tag="p">Twelve video lessons, worksheets and a private community.</pds-text>
       </pds-accordion>
     `
 }}>
   <pds-accordion open>
     <span slot="label">What's included in the course?</span>
-    <p style={{ margin: 0 }}>Twelve video lessons, worksheets and a private community.</p>
+    <pds-text tag="p">Twelve video lessons, worksheets and a private community.</pds-text>
   </pds-accordion>
 </DocCanvas>
 

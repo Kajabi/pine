@@ -17,6 +17,7 @@ const AUTO_COLUMN_FLOOR_WIDTH_PX = 120;
  * @part scroll-shadow-right - Exposes the scroll shadow at the inline-end edge for styling. Appears only when `responsive` is set.
  * @part table - Set on the `pds-table` element itself, so `::part(table)` matches it only from a shadow root that contains it. Style `pds-table` directly instead.
  * @part table-inner - Exposes the inner table element around the slotted head and body for styling. Appears only when `responsive` is set.
+ * @slot (default) - The table's `pds-table-head` and `pds-table-body`.
  */
 @Component({
   tag: 'pds-table',

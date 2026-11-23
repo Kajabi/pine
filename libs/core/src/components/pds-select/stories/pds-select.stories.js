@@ -199,7 +199,7 @@ export const withActionButton = (args) => html`<pds-select
   type="${args.type}"
   value="${args.value}">
   <pds-button slot="action" variant="unstyled" aria-label="Help with country">
-    <pds-icon name="question-circle" aria-hidden="true"></pds-icon>
+    <pds-icon name="question-circle"></pds-icon>
   </pds-button>
   ${options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}
 </pds-select>`;

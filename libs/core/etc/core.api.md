@@ -773,6 +773,7 @@ export namespace Components {
         "border": boolean;
         "indeterminate"?: boolean;
         "isSelected": boolean;
+        "selectAllLabel": string;
     }
     // (undocumented)
     export interface PdsTableHeadCell {
@@ -787,6 +788,7 @@ export namespace Components {
     export interface PdsTableRow {
         "indeterminate"?: boolean;
         "isSelected"?: boolean;
+        "selectLabel": string;
     }
     export interface PdsTabpanel {
         "name": string;
@@ -2486,9 +2488,11 @@ export namespace LocalJSX {
         "name"?: string;
         "noOptionsFoundLabel"?: string;
         "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
+        "onPdsMultiselectClose"?: (event: PdsMultiselectCustomEvent<void>) => void;
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
+        "onPdsMultiselectOpen"?: (event: PdsMultiselectCustomEvent<void>) => void;
         "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
         "optionActionDescription"?: string;
@@ -3042,6 +3046,7 @@ export namespace LocalJSX {
         "indeterminate"?: boolean;
         "isSelected"?: boolean;
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
+        "selectAllLabel"?: string;
     }
 
     // (undocumented)
@@ -3054,6 +3059,8 @@ export namespace LocalJSX {
         "indeterminate": boolean;
         // (undocumented)
         "isSelected": boolean;
+        // (undocumented)
+        "selectAllLabel": string;
     }
 
     // (undocumented)
@@ -3079,6 +3086,7 @@ export namespace LocalJSX {
         "indeterminate"?: boolean;
         "isSelected"?: boolean;
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
+        "selectLabel"?: string;
     }
 
     // (undocumented)
@@ -3087,6 +3095,8 @@ export namespace LocalJSX {
         "indeterminate": boolean;
         // (undocumented)
         "isSelected": boolean;
+        // (undocumented)
+        "selectLabel": string;
     }
 
     export interface PdsTabpanel {

@@ -31,6 +31,7 @@ const TABBABLE_SELECTOR =
  * @slot footer - Links or buttons displayed below the options inside the dropdown panel
  * @part trigger - The trigger surface that opens the dropdown panel
  * @part pill-toggle - The chevron button inside the inline pill trigger
+ * @part panel - The dropdown panel that holds the search input, selected items, options and footer. Rendered only while open.
  */
 @Component({
   tag: 'pds-multiselect',
@@ -266,17 +267,17 @@ export class PdsMultiselect {
   @Prop() optionDisplay: 'text' | 'chip' = 'text';
 
   /**
-   * Error message to display.
+   * Displays an error message below the multiselect and marks the multiselect as invalid, with or without `invalid`.
    */
   @Prop() errorMessage?: string;
 
   /**
-   * Helper message to display below the input.
+   * Displays a message or hint below the multiselect. It's hidden while `error-message` is set.
    */
   @Prop() helperMessage?: string;
 
   /**
-   * If true, the multiselect is in an invalid state.
+   * Determines whether or not the multiselect is invalid.
    */
   @Prop() invalid?: boolean;
 
@@ -351,28 +352,42 @@ export class PdsMultiselect {
   private isOpening: boolean = false;
   // Flag to suppress dismiss event when panel closes due to selection (not user dismissal)
   private isClosingViaSelection: boolean = false;
+  // Set from open until pdsMultiselectOpen fires, so a close before the first position still emits it first
+  private openEventPending: boolean = false;
   // Flag to track if initial async fetch has been triggered (prevents double fetch)
   private initialAsyncFetchTriggered: boolean = false;
   // Flag to track if value changed during loading and needs resolution after fetch completes
   private pendingUnresolvedFetch: boolean = false;
 
   /**
-   * Emitted when selection changes.
+   * Emitted when the user selects or deselects an option, with a click or with `Enter` on the highlighted option, or
+   * removes a pill. Also emitted when `create-url` adds an option, and by `clear()` when something was selected or typed.
+   * `detail` has `values`, the selected values; `items`, the selected options; and `added` and `removed`, the values
+   * this change selected and deselected.
+   *
+   * This event will not emit when programmatically setting the `value` property.
    */
   @Event() pdsMultiselectChange!: EventEmitter<MultiselectChangeEventDetail>;
 
   /**
-   * Emitted on search input (for consumer-managed async).
+   * Emitted when the search text changes, once `debounce` milliseconds (300 by default) have passed since the last
+   * change. `detail` has `query`, the text as typed. Use it to load `options` yourself; with `async-url`, the
+   * multiselect fetches on its own.
    */
   @Event() pdsMultiselectSearch!: EventEmitter<MultiselectSearchEventDetail>;
 
   /**
-   * Emitted to request more options (pagination).
+   * Emitted with `async-url` when the list is scrolled near its end and the response's `totalCount` says more
+   * options remain, as the multiselect fetches the next page itself. `detail` has `query` and `page`, the page being
+   * fetched. It can be emitted more than once for the same page while that page waits to load, and never without
+   * `async-url`.
    */
   @Event() pdsMultiselectLoadOptions!: EventEmitter<MultiselectLoadOptionsEventDetail>;
 
   /**
-   * Emitted when a new option is created.
+   * Emitted when `create-url` has created an option: the request succeeded, and the new option was added and selected.
+   * `detail` has `query`, the trimmed search text that was sent, and `newOption`, the option from the response.
+   * `pdsMultiselectChange` follows it. A failed request emits nothing; it's logged to the console.
    */
   @Event() pdsMultiselectCreate!: EventEmitter<MultiselectCreateEventDetail>;
 
@@ -384,9 +399,26 @@ export class PdsMultiselect {
    * `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect
    * becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while
    * the panel is open fires this event, and the panel opens again.
-   * Use it to restore parent UI state or run cleanup when the user cancels.
+   * Use it to restore parent UI state or run cleanup when the user cancels. `pdsMultiselectClose` follows it, and
+   * fires on every close.
    */
   @Event() pdsMultiselectDismiss!: EventEmitter<void>;
+
+  /**
+   * Emitted when the dropdown panel opens, from a click on the trigger, the keyboard, or a custom trigger. It fires
+   * once the panel is positioned, so the panel (`part="panel"`) can be measured in the handler. If the panel closes
+   * before it's positioned, such as when it's toggled twice in one frame, it fires just before `pdsMultiselectClose`
+   * instead, and there may be no panel to measure.
+   */
+  @Event() pdsMultiselectOpen!: EventEmitter<void>;
+
+  /**
+   * Emitted when the dropdown panel closes, however it closes: Escape, a click outside, a click on the trigger, Tab,
+   * a selection with `closePanelOnSelect`, an option action, the multiselect becoming disabled, or its removal from
+   * the page, which only listeners on the multiselect itself hear. Each `pdsMultiselectOpen` is followed by one
+   * `pdsMultiselectClose`.
+   */
+  @Event() pdsMultiselectClose!: EventEmitter<void>;
 
   /**
    * Emitted when an option's action runs, from a click on its icon or Right Arrow on the highlighted option.
@@ -467,6 +499,9 @@ export class PdsMultiselect {
   }
 
   disconnectedCallback() {
+    // Moved in one operation (a DOM morph, or a framework reparenting it), it's already back in the page and stays
+    // open. Removed, it closes, so each pdsMultiselectOpen still gets its pdsMultiselectClose.
+    if (this.isOpen && !this.el.isConnected) this.closeDropdown();
     this.triggerTextTooltip.destroy();
     this.selectedItemTooltips.destroy();
     cancelDebouncedEvent(this.pdsMultiselectSearch);
@@ -1284,10 +1319,11 @@ export class PdsMultiselect {
   };
 
   private openDropdown() {
-    if (this.disabled) return;
+    if (this.disabled || this.isOpen) return;
 
     this.isOpening = true;
     this.isOpen = true;
+    this.openEventPending = true;
     this.highlightedIndex = -1;
 
     // Trigger initial fetch if async (skip if already fetching from componentDidLoad)
@@ -1298,7 +1334,8 @@ export class PdsMultiselect {
     this.initialAsyncFetchTriggered = false;
 
     requestAnimationFrame(() => {
-      this.positionDropdown();
+      const emitOpenEvent = () => this.emitOpenEvent();
+      this.positionDropdown().then(emitOpenEvent, emitOpenEvent);
       // Focus the search input after the panel is positioned
       this.searchInputEl?.focus();
       // Clear the opening flag after focus has moved
@@ -1308,7 +1345,14 @@ export class PdsMultiselect {
     });
   }
 
+  private emitOpenEvent() {
+    if (!this.openEventPending) return;
+    this.openEventPending = false;
+    this.pdsMultiselectOpen.emit();
+  }
+
   private closeDropdown() {
+    const wasOpen = this.isOpen;
     this.isOpen = false;
     this.highlightedIndex = -1;
     this.searchQuery = '';
@@ -1325,17 +1369,22 @@ export class PdsMultiselect {
       this.cleanupAutoUpdate();
       this.cleanupAutoUpdate = undefined;
     }
+
+    if (wasOpen) {
+      this.emitOpenEvent();
+      this.pdsMultiselectClose.emit();
+    }
   }
 
-  private positionDropdown() {
-    if (!this.containerEl || !this.panelEl) return;
+  private positionDropdown(): Promise<void> {
+    if (!this.containerEl || !this.panelEl) return Promise.resolve();
     // In inline pill mode, triggerEl is the small chevron button — use the full-width
     // wrapper div as the Floating UI reference so the panel aligns with the whole trigger.
     const referenceEl = this.slottedTriggerEl || this.pillInlineTriggerEl || this.triggerEl || this.containerEl;
 
     const { minWidth, panelWidth } = this;
 
-    const updatePosition = () => {
+    const updatePosition = () =>
       computePosition(referenceEl!, this.panelEl!, {
         placement: 'bottom-start',
         strategy: 'fixed',
@@ -1358,10 +1407,9 @@ export class PdsMultiselect {
           this.panelEl.style.top = `${y}px`;
         }
       });
-    };
 
     // Initial position
-    updatePosition();
+    const initialPosition = updatePosition();
 
     // Set up auto-update for window resize and scroll
     const cleanupAutoUpdate = autoUpdate(
@@ -1373,6 +1421,8 @@ export class PdsMultiselect {
       cleanupAutoUpdate();
       this.clearAsyncFetchState();
     };
+
+    return initialPosition;
   }
 
   private scrollOptionIntoView() {
@@ -1612,6 +1662,7 @@ export class PdsMultiselect {
     return (
       <div
         class="pds-multiselect__panel"
+        part="panel"
         ref={el => (this.panelEl = el)}
         style={{ minWidth: this.minWidth }}
       >

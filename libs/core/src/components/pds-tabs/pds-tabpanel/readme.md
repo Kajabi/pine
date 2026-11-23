@@ -13,6 +13,13 @@ The content for one tab inside `pds-tabs` in panel mode, shown when the `pds-tab
 | `name` _(required)_ | `name`    | Sets the related tab name, this name must match a `pds-tab`'s tab name property | `string` | `undefined` |
 
 
+## Slots
+
+| Slot          | Description                                           |
+| ------------- | ----------------------------------------------------- |
+| `"(default)"` | The panel's content, shown while its tab is selected. |
+
+
 ----------------------------------------------
 
 

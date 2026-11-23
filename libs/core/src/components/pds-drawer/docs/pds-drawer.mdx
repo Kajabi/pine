@@ -1,5 +1,5 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
-import { DocArgsTable } from '@pine-ds/doc-components';
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 import * as PdsDrawerStories from '../stories/pds-drawer.stories.js';
 import { StatusBadge } from '../../../stories/_helpers';
@@ -20,9 +20,6 @@ clicks.
 Escape and dialog semantics unchanged. It adds the edge, width and dismiss
 behavior a side panel needs.
 
-<Canvas of={PdsDrawerStories.Default} />
-<Controls of={PdsDrawerStories.Default} />
-
 ## Guidelines
 
 ### When to use
@@ -37,7 +34,8 @@ behavior a side panel needs.
 
 ### Accessibility
 
-- Name the drawer: its dialog is labelled by the element with the id `{component-id}-heading`, modal or not, so give the drawer's heading that id.
+- Name the drawer: its dialog is labelled by the element with the id `{component-id}-heading`, modal or not, so give the drawer's heading that id. Without `component-id`, the dialog has no name.
+- Include a close button in the header, with an `aria-label` such as "Close drawer". With `light-dismiss="false"`, Escape and clicks outside don't close the drawer, so a close control is the only way out.
 - A drawer moves focus to its first control when it opens, unless it's non-modal with `initial-focus="none"`.
 - In a non-modal drawer, Tab isn't trapped, so focus moves freely between the drawer and the page. A `modal` drawer keeps focus inside it and makes the page inert.
 - Escape closes a non-modal drawer from anywhere on the page, not only from inside it. It doesn't when focus is in a dialog or overlay stacked above the drawer, or when an open control, such as a dropdown menu, closes on that Escape first.
@@ -57,15 +55,88 @@ Unlike the modal's subcomponents, these add their own padding and layout, so the
 
 ## Usage
 
-```html
-<pds-drawer open component-id="automation-settings" side="end" size="md">
-  <pds-drawer-header>
-    <pds-text tag="h2" size="h4" id="automation-settings-heading">Automation settings</pds-text>
-  </pds-drawer-header>
-  <pds-drawer-content>…</pds-drawer-content>
-  <pds-drawer-footer>…</pds-drawer-footer>
-</pds-drawer>
-```
+<DocCanvas
+  mdxSource={{
+    react: `
+      import { useState } from 'react';
+      import { PdsButton, PdsDrawer, PdsDrawerContent, PdsDrawerFooter, PdsDrawerHeader, PdsIcon, PdsText } from '@pine-ds/react';
+      import { remove } from '@pine-ds/icons/icons';
+
+      function AutomationSettingsDrawer() {
+        const [open, setOpen] = useState(false);
+
+        return (
+          <>
+            <PdsButton onClick={() => setOpen(true)}>Open drawer</PdsButton>
+
+            <PdsDrawer componentId="automation-settings" side="end" size="md" open={open} onPdsDrawerClose={() => setOpen(false)}>
+              <PdsDrawerHeader>
+                <PdsText tag="h2" size="h4" id="automation-settings-heading">Automation settings</PdsText>
+                <PdsButton variant="unstyled" iconOnly aria-label="Close drawer" onClick={() => setOpen(false)}>
+                  <PdsIcon slot="start" icon={remove} />
+                </PdsButton>
+              </PdsDrawerHeader>
+              <PdsDrawerContent>
+                <PdsText tag="p">Choose when this automation runs.</PdsText>
+              </PdsDrawerContent>
+              <PdsDrawerFooter>
+                <PdsButton variant="secondary" onClick={() => setOpen(false)}>Cancel</PdsButton>
+                <PdsButton variant="primary" onClick={() => setOpen(false)}>Save</PdsButton>
+              </PdsDrawerFooter>
+            </PdsDrawer>
+          </>
+        );
+      }
+    `,
+    webComponent: `
+      <pds-button onclick="document.querySelector('#automation-settings').open = true">Open drawer</pds-button>
+
+      <pds-drawer id="automation-settings" component-id="automation-settings" side="end" size="md">
+        <pds-drawer-header>
+          <pds-text tag="h2" size="h4" id="automation-settings-heading">Automation settings</pds-text>
+          <pds-button variant="unstyled" icon-only aria-label="Close drawer" onclick="document.querySelector('#automation-settings').open = false">
+            <pds-icon slot="start" name="remove"></pds-icon>
+          </pds-button>
+        </pds-drawer-header>
+        <pds-drawer-content>
+          <pds-text tag="p">Choose when this automation runs.</pds-text>
+        </pds-drawer-content>
+        <pds-drawer-footer>
+          <pds-button variant="secondary" onclick="document.querySelector('#automation-settings').open = false">Cancel</pds-button>
+          <pds-button variant="primary" onclick="document.querySelector('#automation-settings').open = false">Save</pds-button>
+        </pds-drawer-footer>
+      </pds-drawer>
+    `
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      document.querySelector('#automation-settings').open = true;
+    }}>Open drawer</pds-button>
+
+    <pds-drawer id="automation-settings" component-id="automation-settings" side="end" size="md">
+      <pds-drawer-header>
+        <pds-text tag="h2" size="h4" id="automation-settings-heading">Automation settings</pds-text>
+        <pds-button variant="unstyled" icon-only aria-label="Close drawer" onClick={() => {
+          document.querySelector('#automation-settings').open = false;
+        }}>
+          <pds-icon slot="start" name="remove"></pds-icon>
+        </pds-button>
+      </pds-drawer-header>
+      <pds-drawer-content>
+        <pds-text tag="p">Choose when this automation runs.</pds-text>
+      </pds-drawer-content>
+      <pds-drawer-footer>
+        <pds-button variant="secondary" onClick={() => {
+          document.querySelector('#automation-settings').open = false;
+        }}>Cancel</pds-button>
+        <pds-button variant="primary" onClick={() => {
+          document.querySelector('#automation-settings').open = false;
+        }}>Save</pds-button>
+      </pds-drawer-footer>
+    </pds-drawer>
+  </div>
+</DocCanvas>
 
 - A trigger only sets `open` to `true`. The drawer closes itself (Escape, a
   click outside) and sets its own `open` to `false`, so listen for
@@ -97,22 +168,82 @@ them, add `modal`. A modal drawer dims the page with a backdrop, makes the page
 inert, and keeps focus inside the drawer, like `pds-modal`. It still docks to
 its `side` at its `size`.
 
-- Always include a close control. With `light-dismiss="false"`, Escape and the
-  backdrop don't close it, so the close control is the only way out.
 - `modal` is read when the drawer opens. Set it before opening, not while open.
 - `initial-focus="none"` doesn't apply: focus starts in a modal drawer.
 - Tooltips and popovers inside a modal drawer open inside it and show above
   it. A tooltip opened with `opened` before the drawer opens stays behind the
   drawer until the tooltip opens again.
 
-```html
-<pds-drawer open modal component-id="contact-filters" side="end" size="md">
-  <pds-drawer-header>
-    <pds-text tag="h2" size="h4" id="contact-filters-heading">Filters</pds-text>
-  </pds-drawer-header>
-  <pds-drawer-content>…</pds-drawer-content>
-  <pds-drawer-footer>…</pds-drawer-footer>
-</pds-drawer>
-```
+<DocCanvas
+  mdxSource={{
+    react: `
+      import { remove } from '@pine-ds/icons/icons';
 
-<Canvas of={PdsDrawerStories.Modal} />
+      <PdsDrawer componentId="contact-filters" modal side="end" size="md" open={open} onPdsDrawerClose={() => setOpen(false)}>
+        <PdsDrawerHeader>
+          <PdsText tag="h2" size="h4" id="contact-filters-heading">Filters</PdsText>
+          <PdsButton variant="unstyled" iconOnly aria-label="Close drawer" onClick={() => setOpen(false)}>
+            <PdsIcon slot="start" icon={remove} />
+          </PdsButton>
+        </PdsDrawerHeader>
+        <PdsDrawerContent>
+          <PdsText tag="p">Choose which contacts to show.</PdsText>
+        </PdsDrawerContent>
+        <PdsDrawerFooter>
+          <PdsButton variant="secondary" onClick={() => setOpen(false)}>Cancel</PdsButton>
+          <PdsButton variant="primary" onClick={() => setOpen(false)}>Apply filters</PdsButton>
+        </PdsDrawerFooter>
+      </PdsDrawer>
+    `,
+    webComponent: `
+      <pds-drawer id="contact-filters" component-id="contact-filters" modal side="end" size="md">
+        <pds-drawer-header>
+          <pds-text tag="h2" size="h4" id="contact-filters-heading">Filters</pds-text>
+          <pds-button variant="unstyled" icon-only aria-label="Close drawer" onclick="document.querySelector('#contact-filters').open = false">
+            <pds-icon slot="start" name="remove"></pds-icon>
+          </pds-button>
+        </pds-drawer-header>
+        <pds-drawer-content>
+          <pds-text tag="p">Choose which contacts to show.</pds-text>
+        </pds-drawer-content>
+        <pds-drawer-footer>
+          <pds-button variant="secondary" onclick="document.querySelector('#contact-filters').open = false">Cancel</pds-button>
+          <pds-button variant="primary" onclick="document.querySelector('#contact-filters').open = false">Apply filters</pds-button>
+        </pds-drawer-footer>
+      </pds-drawer>
+    `
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      document.querySelector('#contact-filters').open = true;
+    }}>Open modal drawer</pds-button>
+
+    <pds-drawer id="contact-filters" component-id="contact-filters" modal side="end" size="md">
+      <pds-drawer-header>
+        <pds-text tag="h2" size="h4" id="contact-filters-heading">Filters</pds-text>
+        <pds-button variant="unstyled" icon-only aria-label="Close drawer" onClick={() => {
+          document.querySelector('#contact-filters').open = false;
+        }}>
+          <pds-icon slot="start" name="remove"></pds-icon>
+        </pds-button>
+      </pds-drawer-header>
+      <pds-drawer-content>
+        <pds-text tag="p">Choose which contacts to show.</pds-text>
+      </pds-drawer-content>
+      <pds-drawer-footer>
+        <pds-button variant="secondary" onClick={() => {
+          document.querySelector('#contact-filters').open = false;
+        }}>Cancel</pds-button>
+        <pds-button variant="primary" onClick={() => {
+          document.querySelector('#contact-filters').open = false;
+        }}>Apply filters</pds-button>
+      </pds-drawer-footer>
+    </pds-drawer>
+  </div>
+</DocCanvas>
+
+## Playground
+
+<Canvas of={PdsDrawerStories.Default} />
+<Controls of={PdsDrawerStories.Default} />

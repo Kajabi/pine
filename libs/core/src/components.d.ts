@@ -202,38 +202,37 @@ export namespace Components {
      */
     interface PdsBox {
         /**
-          * Defines how items within the box are aligned.
+          * Defines how items within the box are aligned across its `direction`: vertically in a row, horizontally in a column.
           * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the LG breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the LG breakpoint.
           * @defaultValue stretch
          */
         "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the MD breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the MD breakpoint.
           * @defaultValue stretch
          */
         "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the SM breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the SM breakpoint.
           * @defaultValue stretch
          */
         "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XL breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XL breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XS breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XS breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how the box is aligned within its container.
-          * @defaultValue stretch
+          * Defines how the box is aligned within its container. Without it, the box follows its container's `align-items`.
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -325,7 +324,7 @@ export namespace Components {
         "direction"?: `row` | `column`;
         /**
           * Defines the display style of the box.
-          * @defaultValue flex
+          * @defaultValue inline-flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         /**
@@ -387,32 +386,32 @@ export namespace Components {
          */
         "gapXs"?: BoxSpacingType;
         /**
-          * Defines the horizontal alignment of the box items.
+          * Defines how items within the box are aligned along its `direction`: horizontally in a row, vertically in a column.
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the LG breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the LG breakpoint.
           * @defaultValue start
          */
         "justifyContentLg"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the MD breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the MD breakpoint.
           * @defaultValue start
          */
         "justifyContentMd"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the SM breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the SM breakpoint.
           * @defaultValue start
          */
         "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the XL breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the XL breakpoint.
           * @defaultValue start
          */
         "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the XS breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the XS breakpoint.
           * @defaultValue start
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
@@ -971,26 +970,26 @@ export namespace Components {
          */
         "asyncUrl"?: string;
         /**
-          * Whether a dot should be displayed on the chip trigger.
+          * Whether a dot should be displayed on the chip trigger. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default false
          */
         "chipDot": boolean;
         /**
-          * The name of the icon to display in the chip trigger.
+          * The name of the icon to display in the chip trigger. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
          */
         "chipIcon"?: string;
         /**
-          * Whether the chip trigger should be displayed in a larger size.
+          * Whether the chip trigger should be displayed in a larger size. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default false
          */
         "chipLarge": boolean;
         /**
-          * The sentiment for the chip trigger. Matches Pine chip sentiments.
+          * The sentiment for the chip trigger. Matches Pine chip sentiments. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default 'neutral'
          */
         "chipSentiment": ChipSentimentType;
         /**
-          * Clears the selected value and resets the component. Works while disabled too, as setting a native control's value from script does.
+          * Clears the selected value and resets the component. Works while disabled too, as setting a native control's value from script does. Emits `pdsComboboxChange` with an empty `value` when something was selected or typed.
          */
         "clear": () => Promise<void>;
         /**
@@ -1037,7 +1036,7 @@ export namespace Components {
          */
         "dropdownWidth"?: string;
         /**
-          * Error message to display.
+          * Displays an error message below the combobox and marks the combobox as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -1060,7 +1059,7 @@ export namespace Components {
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
         /**
-          * Gets the value of the currently selected option.
+          * Returns the `value` of the selected option, or `null` when none is selected.
          */
         "getSelectedValue": () => Promise<string | null>;
         /**
@@ -1069,7 +1068,7 @@ export namespace Components {
          */
         "groupDisplay": 'inline' | 'flyout' | 'drill-in';
         /**
-          * Helper message to display below the combobox.
+          * Displays a message or hint below the combobox. It's hidden while `error-message` is set.
          */
         "helperMessage"?: string;
         /**
@@ -1078,7 +1077,7 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
-          * If true, the combobox is in an invalid state.
+          * Determines whether or not the combobox is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -1095,7 +1094,7 @@ export namespace Components {
          */
         "maxHeight"?: string;
         /**
-          * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options). In filter mode, reopening the menu while the input still shows the label of the selected option temporarily lists all options until you type (so you can switch to a different choice without clearing the field first).
+          * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options; the `panel-search` field still filters them). In filter mode, reopening the menu while the input still shows the label of the selected option temporarily lists all options until you type (so you can switch to a different choice without clearing the field first).
           * @default 'filter'
          */
         "mode": 'filter' | 'select-only';
@@ -1109,7 +1108,7 @@ export namespace Components {
          */
         "noOptionsFoundLabel": string;
         /**
-          * Options provided externally (for consumer-managed async).
+          * The options to list, as an alternative to slotted `<option>` elements, such as results you load yourself. Each is `{ id, text }`, with optional `group`, `groupIcon`, `groupBadge`, `icon`, `badge` and `disabled`. While it's set, slotted options are ignored. It's a property only, so set it from JavaScript or a framework.
          */
         "options"?: ComboboxOption[];
         /**
@@ -1132,7 +1131,7 @@ export namespace Components {
          */
         "searchPlaceholder": string;
         /**
-          * Sets focus on the native input element.
+          * Sets focus on the trigger: the native `input`, or the `button` or `chip` trigger.
          */
         "setFocus": () => Promise<void>;
         /**
@@ -1151,7 +1150,7 @@ export namespace Components {
          */
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
         /**
-          * Width of the trigger (button or input). Any valid CSS width value.
+          * Width of the trigger (button or input). Any valid CSS width value. Changing it after load from one length or percentage to another eases to the new width, unless reduced motion is on.
           * @default 'fit-content'
          */
         "triggerWidth": string;
@@ -1262,7 +1261,7 @@ export namespace Components {
          */
         "endTimeLabel": string;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the field and gives the field error styling. It becomes the field's accessible description only while the datepicker is invalid: with `invalid` set, or while its date can't be picked.
          */
         "errorMessage"?: string;
         /**
@@ -1292,7 +1291,7 @@ export namespace Components {
          */
         "hourLabel": string;
         /**
-          * Determines whether or not the datepicker is invalid or throws an error.
+          * Determines whether or not the datepicker is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -1472,7 +1471,7 @@ export namespace Components {
      */
     interface PdsDrawer {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The drawer's dialog is labelled by the element with the id `{componentId}-heading`, so give the drawer's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -1788,7 +1787,7 @@ export namespace Components {
          */
         "active": boolean;
         /**
-          * Sets the link color.
+          * Sets the link color. Accepts a preset (`secondary`, `accent` or `danger`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Without it, the link takes any inherited `--color` custom property, such as the one an enclosing `pds-text` with `color` sets. `secondary` is for links on a `--pine-color-primary` fill: it's white in the light theme and black in the dark theme.
          */
         "color"?: string;
         /**
@@ -1899,7 +1898,7 @@ export namespace Components {
          */
         "backdropDismiss": boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The dialog is labelled by the element with the id `{componentId}-heading`, so give the modal's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -2015,7 +2014,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Error message to display.
+          * Displays an error message below the multiselect and marks the multiselect as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -2028,7 +2027,7 @@ export namespace Components {
          */
         "formatResult"?: (item: unknown) => MultiselectOption;
         /**
-          * Helper message to display below the input.
+          * Displays a message or hint below the multiselect. It's hidden while `error-message` is set.
          */
         "helperMessage"?: string;
         /**
@@ -2042,7 +2041,7 @@ export namespace Components {
          */
         "hideSelectedItems": boolean;
         /**
-          * If true, the multiselect is in an invalid state.
+          * Determines whether or not the multiselect is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -2754,6 +2753,11 @@ export namespace Components {
           * @defaultValue false
          */
         "isSelected": boolean;
+        /**
+          * Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty or whitespace-only value falls back to the default. Has no effect when the table sets `disableSelectAll`, which removes the select-all checkbox.
+          * @defaultValue 'Select All Rows'
+         */
+        "selectAllLabel": string;
     }
     interface PdsTableHeadCell {
         /**
@@ -2791,6 +2795,11 @@ export namespace Components {
           * Determines if the table row is currently selected.
          */
         "isSelected"?: boolean;
+        /**
+          * Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default.
+          * @defaultValue 'Select Row'
+         */
+        "selectLabel": string;
     }
     /**
      * @lightDom renders-markup
@@ -2851,7 +2860,7 @@ export namespace Components {
          */
         "align"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Sets the text color.
+          * Sets the text color. Accepts a preset (`primary`, `secondary`, `neutral`, `accent`, `danger`, `info`, `success` or `warning`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Without it, the text takes any inherited `--color` custom property, such as the one an enclosing `pds-text` or `pds-link` with `color` sets, and otherwise uses the body text color. `primary` is for text on a `--pine-color-primary` fill: it's white in the light theme and black in the dark theme.
          */
         "color"?: string;
         /**
@@ -2987,7 +2996,7 @@ export namespace Components {
     }
     interface PdsToast {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, sent in the `pdsToastDismissed` event detail. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -3609,6 +3618,8 @@ declare global {
         "pdsMultiselectLoadOptions": MultiselectLoadOptionsEventDetail;
         "pdsMultiselectCreate": MultiselectCreateEventDetail;
         "pdsMultiselectDismiss": void;
+        "pdsMultiselectOpen": void;
+        "pdsMultiselectClose": void;
         "pdsMultiselectOptionAction": MultiselectOptionActionEventDetail;
     }
     interface HTMLPdsMultiselectElement extends Components.PdsMultiselect, HTMLStencilElement {
@@ -4176,38 +4187,37 @@ declare namespace LocalJSX {
      */
     interface PdsBox {
         /**
-          * Defines how items within the box are aligned.
+          * Defines how items within the box are aligned across its `direction`: vertically in a row, horizontally in a column.
           * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the LG breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the LG breakpoint.
           * @defaultValue stretch
          */
         "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the MD breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the MD breakpoint.
           * @defaultValue stretch
          */
         "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the SM breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the SM breakpoint.
           * @defaultValue stretch
          */
         "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XL breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XL breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how items within the box are aligned at the XS breakpoint.
+          * Defines how items within the box are aligned across its `direction` at the XS breakpoint.
           * @defaultValue stretch
          */
         "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines how the box is aligned within its container.
-          * @defaultValue stretch
+          * Defines how the box is aligned within its container. Without it, the box follows its container's `align-items`.
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -4299,7 +4309,7 @@ declare namespace LocalJSX {
         "direction"?: `row` | `column`;
         /**
           * Defines the display style of the box.
-          * @defaultValue flex
+          * @defaultValue inline-flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         /**
@@ -4361,32 +4371,32 @@ declare namespace LocalJSX {
          */
         "gapXs"?: BoxSpacingType;
         /**
-          * Defines the horizontal alignment of the box items.
+          * Defines how items within the box are aligned along its `direction`: horizontally in a row, vertically in a column.
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the LG breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the LG breakpoint.
           * @defaultValue start
          */
         "justifyContentLg"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the MD breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the MD breakpoint.
           * @defaultValue start
          */
         "justifyContentMd"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the SM breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the SM breakpoint.
           * @defaultValue start
          */
         "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the XL breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the XL breakpoint.
           * @defaultValue start
          */
         "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
-          * Defines the horizontal alignment of the box items at the XS breakpoint.
+          * Defines how items within the box are aligned along its `direction` at the XS breakpoint.
           * @defaultValue start
          */
         "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
@@ -4965,21 +4975,21 @@ declare namespace LocalJSX {
          */
         "asyncUrl"?: string;
         /**
-          * Whether a dot should be displayed on the chip trigger.
+          * Whether a dot should be displayed on the chip trigger. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default false
          */
         "chipDot"?: boolean;
         /**
-          * The name of the icon to display in the chip trigger.
+          * The name of the icon to display in the chip trigger. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
          */
         "chipIcon"?: string;
         /**
-          * Whether the chip trigger should be displayed in a larger size.
+          * Whether the chip trigger should be displayed in a larger size. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default false
          */
         "chipLarge"?: boolean;
         /**
-          * The sentiment for the chip trigger. Matches Pine chip sentiments.
+          * The sentiment for the chip trigger. Matches Pine chip sentiments. Used only while the selected option has no `chip-*` attributes, which replace all four `chip-*` props.
           * @default 'neutral'
          */
         "chipSentiment"?: ChipSentimentType;
@@ -5027,7 +5037,7 @@ declare namespace LocalJSX {
          */
         "dropdownWidth"?: string;
         /**
-          * Error message to display.
+          * Displays an error message below the combobox and marks the combobox as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -5059,7 +5069,7 @@ declare namespace LocalJSX {
          */
         "groupDisplay"?: 'inline' | 'flyout' | 'drill-in';
         /**
-          * Helper message to display below the combobox.
+          * Displays a message or hint below the combobox. It's hidden while `error-message` is set.
          */
         "helperMessage"?: string;
         /**
@@ -5068,7 +5078,7 @@ declare namespace LocalJSX {
          */
         "hideLabel"?: boolean;
         /**
-          * If true, the combobox is in an invalid state.
+          * Determines whether or not the combobox is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -5085,7 +5095,7 @@ declare namespace LocalJSX {
          */
         "maxHeight"?: string;
         /**
-          * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options). In filter mode, reopening the menu while the input still shows the label of the selected option temporarily lists all options until you type (so you can switch to a different choice without clearing the field first).
+          * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options; the `panel-search` field still filters them). In filter mode, reopening the menu while the input still shows the label of the selected option temporarily lists all options until you type (so you can switch to a different choice without clearing the field first).
           * @default 'filter'
          */
         "mode"?: 'filter' | 'select-only';
@@ -5099,19 +5109,19 @@ declare namespace LocalJSX {
          */
         "noOptionsFoundLabel"?: string;
         /**
-          * Emitted when the value changes.
+          * Emitted when the user picks an option, with a click or with `Enter` on the highlighted option (or `Space`, on the `button` and `chip` triggers), even the option already selected. `detail` has `value`, the option's `value` as a string. `clear()` emits it too, with an empty `value`, when something was selected or typed. Typing in the field only filters the list and doesn't emit it.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsComboboxChange"?: (event: PdsComboboxCustomEvent<{ value: string }>) => void;
         /**
-          * Emitted to request more options (pagination).
+          * Emitted with `async-url` when the list is scrolled near its end and the response's `totalCount` says more options remain, as the combobox fetches the next page itself. `detail` has `query` and `page`, the page being fetched. It can be emitted more than once for the same page while that page waits to load, and never without `async-url`.
          */
         "onPdsComboboxLoadOptions"?: (event: PdsComboboxCustomEvent<ComboboxLoadOptionsEventDetail>) => void;
         /**
-          * Emitted on search input (for consumer-managed async).
+          * Emitted when the search text changes, in the `input` trigger or in the `panel-search` field, once `debounce` milliseconds (300 by default) have passed since the last change. `detail` has `query`, the text as typed. With `panel-search`, it's also emitted with an empty `query` when the dropdown closes with text in the search field, which is cleared. Use it to load `options` yourself; with `async-url`, the combobox fetches on its own.
          */
         "onPdsComboboxSearch"?: (event: PdsComboboxCustomEvent<ComboboxSearchEventDetail>) => void;
         /**
-          * Options provided externally (for consumer-managed async).
+          * The options to list, as an alternative to slotted `<option>` elements, such as results you load yourself. Each is `{ id, text }`, with optional `group`, `groupIcon`, `groupBadge`, `icon`, `badge` and `disabled`. While it's set, slotted options are ignored. It's a property only, so set it from JavaScript or a framework.
          */
         "options"?: ComboboxOption[];
         /**
@@ -5149,7 +5159,7 @@ declare namespace LocalJSX {
          */
         "triggerVariant"?: 'secondary' | 'primary' | 'accent' | 'destructive';
         /**
-          * Width of the trigger (button or input). Any valid CSS width value.
+          * Width of the trigger (button or input). Any valid CSS width value. Changing it after load from one length or percentage to another eases to the new width, unless reduced motion is on.
           * @default 'fit-content'
          */
         "triggerWidth"?: string;
@@ -5260,7 +5270,7 @@ declare namespace LocalJSX {
          */
         "endTimeLabel"?: string;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the field and gives the field error styling. It becomes the field's accessible description only while the datepicker is invalid: with `invalid` set, or while its date can't be picked.
          */
         "errorMessage"?: string;
         /**
@@ -5294,7 +5304,7 @@ declare namespace LocalJSX {
          */
         "hourLabel"?: string;
         /**
-          * Determines whether or not the datepicker is invalid or throws an error.
+          * Determines whether or not the datepicker is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -5358,15 +5368,15 @@ declare namespace LocalJSX {
          */
         "nextMonthLabel"?: string;
         /**
-          * Emitted when the datepicker loses focus: when focus leaves the field and the calendar.
+          * Emitted when the datepicker loses focus: when focus leaves the field and the calendar. Moving between the field and the calendar doesn't emit it.
          */
         "onPdsBlur"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value changes.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the user changes the value: by picking a day, typing a date or range and pressing `Enter` or leaving the field, or with the clear button. In the calendar, a range waits for Apply, or with `auto-apply` for its end or a preset, and a date with `time-picker` waits for Apply. `detail` has `value`, as `YYYY-MM-DD`, `YYYY-MM-DDTHH:mm` with `time-picker`, `--MM-DD` with `month-day`, or an empty string when cleared. In range mode `value` is `start/end`, and `detail` also has `start`, `end` and `preset`, the key of the preset the range matches, when it matches one.  It doesn't emit when the value stays the same, when typed text isn't a date that can be picked, or when a form reset clears the date. This event will not emit when programmatically setting the `value` property.
          */
         "onPdsDatepickerChange"?: (event: PdsDatepickerCustomEvent<DatepickerChangeEventDetail>) => void;
         /**
-          * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside.
+          * Emitted when the datepicker gains focus: when focus moves into the field or the calendar from outside. Moving between the field and the calendar doesn't emit it.
          */
         "onPdsFocus"?: (event: PdsDatepickerCustomEvent<FocusEvent>) => void;
         /**
@@ -5478,7 +5488,7 @@ declare namespace LocalJSX {
      */
     interface PdsDrawer {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The drawer's dialog is labelled by the element with the id `{componentId}-heading`, so give the drawer's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -5627,15 +5637,15 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Event emitted when the clear variant is clicked.
+          * Emitted when the clear variant is clicked, or pressed with Enter or Space. `detail` is the filter's `componentId` and `text`. It doesn't change any filter itself.
          */
         "onPdsFilterClear"?: (event: PdsFilterCustomEvent<PdsFilterClearEventDetail>) => void;
         /**
-          * Event emitted when the filter popover is closed.
+          * Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it, or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
          */
         "onPdsFilterClose"?: (event: PdsFilterCustomEvent<PdsFilterCloseEventDetail>) => void;
         /**
-          * Event emitted when the filter popover is opened.
+          * Emitted when the filter popover is opened, from the trigger or `showFilter()`. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.
          */
         "onPdsFilterOpen"?: (event: PdsFilterCustomEvent<PdsFilterOpenEventDetail>) => void;
         /**
@@ -5834,7 +5844,7 @@ declare namespace LocalJSX {
          */
         "active"?: boolean;
         /**
-          * Sets the link color.
+          * Sets the link color. Accepts a preset (`secondary`, `accent` or `danger`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Without it, the link takes any inherited `--color` custom property, such as the one an enclosing `pds-text` with `color` sets. `secondary` is for links on a `--pine-color-primary` fill: it's white in the light theme and black in the dark theme.
          */
         "color"?: string;
         /**
@@ -5945,7 +5955,7 @@ declare namespace LocalJSX {
          */
         "backdropDismiss"?: boolean;
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance. The dialog is labelled by the element with the id `{componentId}-heading`, so give the modal's heading that id. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId"?: string;
         /**
@@ -6057,7 +6067,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Error message to display.
+          * Displays an error message below the multiselect and marks the multiselect as invalid, with or without `invalid`.
          */
         "errorMessage"?: string;
         /**
@@ -6074,7 +6084,7 @@ declare namespace LocalJSX {
          */
         "formatResult"?: (item: unknown) => MultiselectOption;
         /**
-          * Helper message to display below the input.
+          * Displays a message or hint below the multiselect. It's hidden while `error-message` is set.
          */
         "helperMessage"?: string;
         /**
@@ -6088,7 +6098,7 @@ declare namespace LocalJSX {
          */
         "hideSelectedItems"?: boolean;
         /**
-          * If true, the multiselect is in an invalid state.
+          * Determines whether or not the multiselect is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -6134,27 +6144,35 @@ declare namespace LocalJSX {
          */
         "noOptionsFoundLabel"?: string;
         /**
-          * Emitted when selection changes.
+          * Emitted when the user selects or deselects an option, with a click or with `Enter` on the highlighted option, or removes a pill. Also emitted when `create-url` adds an option, and by `clear()` when something was selected or typed. `detail` has `values`, the selected values; `items`, the selected options; and `added` and `removed`, the values this change selected and deselected.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
         /**
-          * Emitted when a new option is created.
+          * Emitted when the dropdown panel closes, however it closes: Escape, a click outside, a click on the trigger, Tab, a selection with `closePanelOnSelect`, an option action, the multiselect becoming disabled, or its removal from the page, which only listeners on the multiselect itself hear. Each `pdsMultiselectOpen` is followed by one `pdsMultiselectClose`.
+         */
+        "onPdsMultiselectClose"?: (event: PdsMultiselectCustomEvent<void>) => void;
+        /**
+          * Emitted when `create-url` has created an option: the request succeeded, and the new option was added and selected. `detail` has `query`, the trimmed search text that was sent, and `newOption`, the option from the response. `pdsMultiselectChange` follows it. A failed request emits nothing; it's logged to the console.
          */
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         /**
-          * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the component, such as with a click elsewhere on the page.  It doesn't fire when the panel closes any other way: from a selection (including with `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while the panel is open fires this event, and the panel opens again. Use it to restore parent UI state or run cleanup when the user cancels.
+          * Emitted when the dropdown is dismissed with the Escape key, or by focus moving outside the component, such as with a click elsewhere on the page.  It doesn't fire when the panel closes any other way: from a selection (including with `closePanelOnSelect`) or an option action, a click on the trigger, Tab, or the multiselect becoming disabled. Safari doesn't focus a clicked button, so there a click on the trigger while the panel is open fires this event, and the panel opens again. Use it to restore parent UI state or run cleanup when the user cancels. `pdsMultiselectClose` follows it, and fires on every close.
          */
         "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**
-          * Emitted to request more options (pagination).
+          * Emitted with `async-url` when the list is scrolled near its end and the response's `totalCount` says more options remain, as the multiselect fetches the next page itself. `detail` has `query` and `page`, the page being fetched. It can be emitted more than once for the same page while that page waits to load, and never without `async-url`.
          */
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
+        /**
+          * Emitted when the dropdown panel opens, from a click on the trigger, the keyboard, or a custom trigger. It fires once the panel is positioned, so the panel (`part="panel"`) can be measured in the handler. If the panel closes before it's positioned, such as when it's toggled twice in one frame, it fires just before `pdsMultiselectClose` instead, and there may be no panel to measure.
+         */
+        "onPdsMultiselectOpen"?: (event: PdsMultiselectCustomEvent<void>) => void;
         /**
           * Emitted when an option's action runs, from a click on its icon or Right Arrow on the highlighted option. The panel closes and focus returns to the trigger first, so a modal opened from the handler restores focus to the trigger.
          */
         "onPdsMultiselectOptionAction"?: (event: PdsMultiselectCustomEvent<MultiselectOptionActionEventDetail>) => void;
         /**
-          * Emitted on search input (for consumer-managed async).
+          * Emitted when the search text changes, once `debounce` milliseconds (300 by default) have passed since the last change. `detail` has `query`, the text as typed. Use it to load `options` yourself; with `async-url`, the multiselect fetches on its own.
          */
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
         /**
@@ -6633,7 +6651,7 @@ declare namespace LocalJSX {
          */
         "itemPickedUpLabel"?: string;
         /**
-          * Event emitted when a sortable item is moved, by dragging or from the keyboard. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a screen reader's browse-mode click.
+          * Emitted when a sortable item is moved, by dragging or from the keyboard. The list has already moved the item when it fires. A drag emits it on every drop, even one that ends where it started, so compare `oldIndex` and `newIndex`; a keyboard drop emits it only when the item's position changed. A keyboard move carries the same fields as a drag (`item`, `from`, `to`, `oldIndex`, `newIndex`, `oldDraggableIndex`, `newDraggableIndex`), with the event that ended the move as `originalEvent` -- a `KeyboardEvent` for Space or Enter, but a `FocusEvent`, `PointerEvent` or `MouseEvent` when the drop instead comes from focus leaving the row, a drag taking over, or a screen reader's browse-mode click.
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
         /**
@@ -6857,6 +6875,11 @@ declare namespace LocalJSX {
           * Emitted when the user checks or unchecks the select-all checkbox, carrying the new state as `isSelected`. `pds-table` then sets `isSelected` on every row, and the rows don't emit `pdsTableRowSelected`. A head that starts with `isSelected` also emits it on load.
          */
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
+        /**
+          * Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty or whitespace-only value falls back to the default. Has no effect when the table sets `disableSelectAll`, which removes the select-all checkbox.
+          * @defaultValue 'Select All Rows'
+         */
+        "selectAllLabel"?: string;
     }
     interface PdsTableHeadCell {
         /**
@@ -6889,6 +6912,11 @@ declare namespace LocalJSX {
           * Emitted when the user checks or unchecks the row's checkbox, carrying the new state as `isSelected` and the row's current position in `pds-table-body` as `rowIndex`, which changes when the table is sorted. A row that starts with `isSelected` also emits it on load.  This event will not emit when programmatically setting the `isSelected` property, or when select all changes the row.
          */
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
+        /**
+          * Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default.
+          * @defaultValue 'Select Row'
+         */
+        "selectLabel"?: string;
     }
     /**
      * @lightDom renders-markup
@@ -6949,7 +6977,7 @@ declare namespace LocalJSX {
          */
         "align"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Sets the text color.
+          * Sets the text color. Accepts a preset (`primary`, `secondary`, `neutral`, `accent`, `danger`, `info`, `success` or `warning`), a color token, or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). Without it, the text takes any inherited `--color` custom property, such as the one an enclosing `pds-text` or `pds-link` with `color` sets, and otherwise uses the body text color. `primary` is for text on a `--pine-color-primary` fill: it's white in the light theme and black in the dark theme.
          */
         "color"?: string;
         /**
@@ -7105,7 +7133,7 @@ declare namespace LocalJSX {
     }
     interface PdsToast {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for this component instance, sent in the `pdsToastDismissed` event detail. Does not set the host element's `id` attribute — set `id` directly if you need one.
          */
         "componentId": string;
         /**
@@ -7128,7 +7156,7 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Event emitted when the toast is dismissed, either manually or automatically.
+          * Emitted when the toast is dismissed by its dismiss button, by `dismiss()` or when `duration` runs out, after the exit animation. The detail holds the toast's `componentId`.
          */
         "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
         /**
@@ -7805,6 +7833,7 @@ declare namespace LocalJSX {
         "isSelected": boolean;
         "border": boolean;
         "background": boolean;
+        "selectAllLabel": string;
     }
     interface PdsTableHeadCellAttributes {
         "cellAlign": 'start' | 'center' | 'end' | 'justify';
@@ -7814,6 +7843,7 @@ declare namespace LocalJSX {
     interface PdsTableRowAttributes {
         "indeterminate": boolean;
         "isSelected": boolean;
+        "selectLabel": string;
     }
     interface PdsTabpanelAttributes {
         "name": string;

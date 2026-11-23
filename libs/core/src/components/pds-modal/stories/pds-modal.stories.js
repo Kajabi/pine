@@ -45,7 +45,7 @@ const BaseTemplate = (args) => html`
             fit
             justify-content="space-between"
           >
-            <pds-text tag="h2" size="h3">Modal Title</pds-text>
+            <pds-text tag="h2" size="h3" id="${args.componentId}-heading">Modal Title</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -54,7 +54,7 @@ const BaseTemplate = (args) => html`
               aria-label="Close modal"
               part="close-button"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
           <pds-box>
@@ -123,7 +123,7 @@ const DestructiveTemplate = (args) => html`
             fit
             justify-content="space-between"
           >
-            <pds-text tag="h2" size="h3">Modal Title</pds-text>
+            <pds-text tag="h2" size="h3" id="${args.componentId}-heading">Modal Title</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -132,7 +132,7 @@ const DestructiveTemplate = (args) => html`
               aria-label="Close modal"
               part="close-button"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
           <pds-box>
@@ -178,6 +178,7 @@ const CustomContentTemplate = (args) => html`
 
       <pds-modal
         id="${args.componentId}"
+        component-id="${args.componentId}"
         size="${args.size}"
         backdrop-dismiss="${args.backdropDismiss}"
         ?open=${args.open}
@@ -190,7 +191,7 @@ const CustomContentTemplate = (args) => html`
               fit
               justify-content="space-between"
             >
-              <pds-text tag="h2" size="h3">Modal Title</pds-text>
+              <pds-text tag="h2" size="h3" id="${args.componentId}-heading">Modal Title</pds-text>
               <pds-button
                 class="pds-modal__close"
                 variant="unstyled"
@@ -199,7 +200,7 @@ const CustomContentTemplate = (args) => html`
                 aria-label="Close modal"
                 part="close-button"
               >
-                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+                <pds-icon slot="start" name="remove"></pds-icon>
               </pds-button>
             </pds-box>
             <pds-box>
@@ -266,6 +267,7 @@ const ScrollableTemplate = (args) => {
 
       <pds-modal
         id="${args.componentId}"
+        component-id="${args.componentId}"
         size="${args.size}"
         backdrop-dismiss="${args.backdropDismiss}"
         ?open=${args.open}
@@ -277,7 +279,7 @@ const ScrollableTemplate = (args) => {
               fit
               justify-content="space-between"
             >
-              <pds-text tag="h2" size="h3">Modal Title</pds-text>
+              <pds-text tag="h2" size="h3" id="${args.componentId}-heading">Modal Title</pds-text>
               <pds-button
                 class="pds-modal__close"
                 variant="unstyled"
@@ -286,7 +288,7 @@ const ScrollableTemplate = (args) => {
                 aria-label="Close modal"
                 part="close-button"
               >
-                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+                <pds-icon slot="start" name="remove"></pds-icon>
               </pds-button>
             </pds-box>
             <pds-box>
@@ -349,6 +351,7 @@ const FullscreenTemplate = (args) => html`
 
     <pds-modal
       id="${args.componentId}"
+      component-id="${args.componentId}"
       size=${args.size}
       backdrop-dismiss="${args.backdropDismiss}"
       ?open=${args.open}
@@ -367,7 +370,7 @@ const FullscreenTemplate = (args) => html`
             justify-content="space-between"
           >
             <pds-box flex="grow">
-              <pds-text tag="h2" size="h3">Modal Title</pds-text>
+              <pds-text tag="h2" size="h3" id="${args.componentId}-heading">Modal Title</pds-text>
             </pds-box>
             <pds-box flex="shrink">
               <pds-button
@@ -378,7 +381,7 @@ const FullscreenTemplate = (args) => html`
                 aria-label="Close modal"
                 part="close-button"
               >
-                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+                <pds-icon slot="start" name="remove"></pds-icon>
               </pds-button>
             </pds-box>
           </pds-box>
@@ -449,7 +452,7 @@ const NonScrollableTemplate = (args) => html`
             fit
             justify-content="space-between"
           >
-            <pds-text tag="h2" size="h3">Non-Scrollable Modal</pds-text>
+            <pds-text tag="h2" size="h3" id="${args.componentId}-heading">Non-Scrollable Modal</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -458,7 +461,7 @@ const NonScrollableTemplate = (args) => html`
               aria-label="Close modal"
               part="close-button"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
           <pds-box>
@@ -543,7 +546,7 @@ const CustomBordersTemplate = () => html`
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">No Borders</pds-text>
+            <pds-text tag="h2" size="h3" id="border-none-modal-heading">No Borders</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -551,7 +554,7 @@ const CustomBordersTemplate = () => html`
               onclick="document.querySelector('#border-none-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -574,7 +577,7 @@ const CustomBordersTemplate = () => html`
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Top Border Only</pds-text>
+            <pds-text tag="h2" size="h3" id="border-top-modal-heading">Top Border Only</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -582,7 +585,7 @@ const CustomBordersTemplate = () => html`
               onclick="document.querySelector('#border-top-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -605,7 +608,7 @@ const CustomBordersTemplate = () => html`
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Bottom Border Only</pds-text>
+            <pds-text tag="h2" size="h3" id="border-bottom-modal-heading">Bottom Border Only</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -613,7 +616,7 @@ const CustomBordersTemplate = () => html`
               onclick="document.querySelector('#border-bottom-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -636,7 +639,7 @@ const CustomBordersTemplate = () => html`
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Both Borders</pds-text>
+            <pds-text tag="h2" size="h3" id="border-both-modal-heading">Both Borders</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -644,7 +647,7 @@ const CustomBordersTemplate = () => html`
               onclick="document.querySelector('#border-both-modal').open = false"
               aria-label="Close modal"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>
@@ -690,7 +693,7 @@ const DisableTopLayerTemplate = (args) => html`
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
-            <pds-text tag="h2" size="h3">Modal Title</pds-text>
+            <pds-text tag="h2" size="h3" id="${args.componentId}-heading">Modal Title</pds-text>
             <pds-button
               class="pds-modal__close"
               variant="unstyled"
@@ -699,7 +702,7 @@ const DisableTopLayerTemplate = (args) => html`
               aria-label="Close modal"
               part="close-button"
             >
-              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              <pds-icon slot="start" name="remove"></pds-icon>
             </pds-button>
           </pds-box>
         </pds-box>

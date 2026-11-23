@@ -5,6 +5,13 @@
 <!-- Auto Generated Below -->
 
 
+## Slots
+
+| Slot          | Description                                 |
+| ------------- | ------------------------------------------- |
+| `"(default)"` | The table's rows: `pds-table-row` elements. |
+
+
 ## Shadow Parts
 
 | Part     | Description                                                                                                                                                 |

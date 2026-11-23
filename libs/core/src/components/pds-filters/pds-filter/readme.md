@@ -22,11 +22,11 @@ The `clear` variant has no popover and emits `pdsFilterClear` instead.
 
 ## Events
 
-| Event            | Description                                      | Type                                     |
-| ---------------- | ------------------------------------------------ | ---------------------------------------- |
-| `pdsFilterClear` | Event emitted when the clear variant is clicked. | `CustomEvent<PdsFilterClearEventDetail>` |
-| `pdsFilterClose` | Event emitted when the filter popover is closed. | `CustomEvent<PdsFilterCloseEventDetail>` |
-| `pdsFilterOpen`  | Event emitted when the filter popover is opened. | `CustomEvent<PdsFilterOpenEventDetail>`  |
+| Event            | Description                                                                                                                                                                                                                            | Type                                     |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `pdsFilterClear` | Emitted when the clear variant is clicked, or pressed with Enter or Space. `detail` is the filter's `componentId` and `text`. It doesn't change any filter itself.                                                                     | `CustomEvent<PdsFilterClearEventDetail>` |
+| `pdsFilterClose` | Emitted when the filter popover is closed: from the trigger, `hideFilter()`, Escape, a click outside it, or another filter opening. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it. | `CustomEvent<PdsFilterCloseEventDetail>` |
+| `pdsFilterOpen`  | Emitted when the filter popover is opened, from the trigger or `showFilter()`. `detail` is the filter's `componentId`, `variant` and `text`. The `clear` variant doesn't emit it.                                                      | `CustomEvent<PdsFilterOpenEventDetail>`  |
 
 
 ## Methods

@@ -125,17 +125,17 @@ The default dropdown menu displays a list of options that can be selected by the
     react: `
 <PdsDropdownMenu>
   <PdsButton slot="trigger">Trigger</PdsButton>
-  <PdsDropdownItem>Item 1</PdsDropdownItem>
-  <PdsDropdownItem>Item 2</PdsDropdownItem>
-  <PdsDropdownItem>Item 3</PdsDropdownItem>
+  <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 3</PdsDropdownMenuItem>
 </PdsDropdownMenu>
 `,
     webComponent:`
 <pds-dropdown-menu>
   <pds-button slot="trigger">Trigger</pds-button>
-  <pds-dropdown-item>Item 1</pds-dropdown-item>
-  <pds-dropdown-item>Item 2</pds-dropdown-item>
-  <pds-dropdown-item>Item 3</pds-dropdown-item>
+  <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
 </pds-dropdown-menu>
 `
   }}
@@ -225,9 +225,9 @@ The dropdown menu can also display a separator between items.
 <pds-dropdown-menu>
   <pds-button slot="trigger">Trigger</pds-button>
   <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
-  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
   <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
-  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
   <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
 </pds-dropdown-menu>
 `
@@ -421,7 +421,7 @@ Set `external` on a link item to show the launch icon and open the link in a new
   <pds-button slot="trigger">Resources</pds-button>
   <pds-dropdown-menu-item href="https://example.com/docs" external>Documentation</pds-dropdown-menu-item>
   <pds-dropdown-menu-item href="https://example.com/support" external>Support</pds-dropdown-menu-item>
-  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
   <pds-dropdown-menu-item href="/settings">Settings</pds-dropdown-menu-item>
 </pds-dropdown-menu>
 `
@@ -534,10 +534,10 @@ The example below demonstrates mixing a standard menu item with raw `<a>` and `<
 <pds-dropdown-menu>
   <pds-button slot="trigger">Actions</pds-button>
   <pds-dropdown-menu-item href="/view">View</pds-dropdown-menu-item>
-  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
   <a href="/edit" data-remote="true">Edit</a>
   <a href="/archive" data-method="post">Archive</a>
-  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
   <button type="button" data-action="modal#open">Open Modal</button>
   <a href="/delete" data-method="delete" class="destructive">Delete</a>
 </pds-dropdown-menu>
@@ -626,14 +626,14 @@ The dropdown menu can be positioned relative to the trigger using the placement 
   mdxSource={{
     react: `
 <PdsDropdownMenu placement="bottom-end">
-  <PdsChip slot="trigger" sentiment="success" variant="dropdown">Trigger/PdsChip>
+  <PdsButton slot="trigger">Trigger</PdsButton>
   <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
   <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
 </PdsDropdownMenu>
 `,
     webComponent: `
 <pds-dropdown-menu placement="bottom-end">
-  <pds-chip slot="trigger" sentiment="success" variant="dropdown">Trigger</pds-chip>
+  <pds-button slot="trigger">Trigger</pds-button>
   <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
   <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
 </pds-dropdown-menu>
@@ -642,7 +642,7 @@ The dropdown menu can be positioned relative to the trigger using the placement 
 >
 <div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
   <pds-dropdown-menu placement="bottom-end">
-   <pds-chip slot="trigger" sentiment="success" variant="dropdown">Trigger</pds-chip>
+   <pds-button slot="trigger">Trigger</pds-button>
    <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
   </pds-dropdown-menu>

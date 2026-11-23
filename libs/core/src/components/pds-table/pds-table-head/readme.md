@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property        | Attribute       | Description                                                         | Type      | Default     |
-| --------------- | --------------- | ------------------------------------------------------------------- | --------- | ----------- |
-| `background`    | `background`    | Adds a subtle background color to the table head.                   | `boolean` | `false`     |
-| `border`        | `border`        | Adds top and bottom borders to the table head.                      | `boolean` | `false`     |
-| `indeterminate` | `indeterminate` | Determines if the select all checkbox is in an indeterminate state. | `boolean` | `undefined` |
-| `isSelected`    | `is-selected`   | Determines if the select all checkbox is checked.                   | `boolean` | `undefined` |
+| Property         | Attribute          | Description                                                                                                                                                                                                                                                           | Type      | Default             |
+| ---------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------- |
+| `background`     | `background`       | Adds a subtle background color to the table head.                                                                                                                                                                                                                     | `boolean` | `false`             |
+| `border`         | `border`           | Adds top and bottom borders to the table head.                                                                                                                                                                                                                        | `boolean` | `false`             |
+| `indeterminate`  | `indeterminate`    | Determines if the select all checkbox is in an indeterminate state.                                                                                                                                                                                                   | `boolean` | `undefined`         |
+| `isSelected`     | `is-selected`      | Determines if the select all checkbox is checked.                                                                                                                                                                                                                     | `boolean` | `undefined`         |
+| `selectAllLabel` | `select-all-label` | Accessible label for the select-all checkbox. Pass a translated string to localize it; defaults to English. An empty or whitespace-only value falls back to the default. Has no effect when the table sets `disableSelectAll`, which removes the select-all checkbox. | `string`  | `'Select All Rows'` |
 
 
 ## Events
@@ -20,6 +21,13 @@
 | Event               | Description                                                                                                                                                                                                                                                           | Type                                    |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `pdsTableSelectAll` | Emitted when the user checks or unchecks the select-all checkbox, carrying the new state as `isSelected`. `pds-table` then sets `isSelected` on every row, and the rows don't emit `pdsTableRowSelected`. A head that starts with `isSelected` also emits it on load. | `CustomEvent<{ isSelected: boolean; }>` |
+
+
+## Slots
+
+| Slot          | Description                                         |
+| ------------- | --------------------------------------------------- |
+| `"(default)"` | The column headers: `pds-table-head-cell` elements. |
 
 
 ## Shadow Parts

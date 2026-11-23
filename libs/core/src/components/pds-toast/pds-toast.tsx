@@ -5,6 +5,7 @@ const TOAST_DISMISS_ANIMATION_MS = 300;
 
 /**
  * @part dismiss - Exposes the dismiss button for styling. Appears unless `dismissible` is `false`.
+ * @slot (default) - The toast's message.
  */
 @Component({
   tag: 'pds-toast',
@@ -16,7 +17,8 @@ export class PdsToast {
 
   // Props
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for this component instance, sent in the `pdsToastDismissed` event detail.
+   * Does not set the host element's `id` attribute — set `id` directly if you need one.
    */
   @Prop() componentId!: string;
 
@@ -81,7 +83,8 @@ export class PdsToast {
   private dismissTimer?: number;
 
   /**
-   * Event emitted when the toast is dismissed, either manually or automatically.
+   * Emitted when the toast is dismissed by its dismiss button, by `dismiss()` or when `duration` runs out, after the exit animation.
+   * The detail holds the toast's `componentId`.
    */
   @Event() pdsToastDismissed: EventEmitter<{ componentId?: string }>;
 

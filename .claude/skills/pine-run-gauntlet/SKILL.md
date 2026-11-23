@@ -33,7 +33,7 @@ Stencil component library.
 |---|---|---|---|
 | Code reviewer | `pine-code-reviewer` | Stencil decorators (`@Component`, `@Prop`, `@Event`, `@Method`), TypeScript types, JSDoc consistency across components, lifecycle methods, spec + e2e test coverage, auto-generated file hygiene | Always when `*.tsx` / `*.ts` files change |
 | Security reviewer | `pine-security-reviewer` | XSS via `innerHTML` / `dangerouslySetInnerHTML`, slot sanitization, URL-prop validation, event handler injection, secret leakage | Always when component code or stories change |
-| Design reviewer | `pine-design-reviewer` | Token discipline (`*.tokens.scss` patterns, `:host` CSS custom properties), `:host-context([data-theme=dark])` dark-mode support, accessibility (keyboard, ARIA, focus, semantic HTML), Figma Code Connect alignment | Always when `*.scss`, `*.tokens.scss`, `*.figma.ts`, or any rendered markup changes |
+| Design reviewer | `pine-design-reviewer` | Token discipline (`*.tokens.scss` patterns, `:host` CSS custom properties), dark-mode support, accessibility (keyboard, ARIA, focus, semantic HTML), Figma Code Connect alignment | Always when `*.scss`, `*.tokens.scss`, `*.figma.ts`, or any rendered markup changes |
 | Existence reviewer | `pine-existence-reviewer` | Duplication: new component overlapping an existing one, new prop overlapping a sibling component's prop, new token aliasing an existing one | Only if the diff introduces new files under `libs/core/src/components/` (including `*.tokens.scss`), `libs/core/src/global/`, or bumps `@kajabi-ui/styles` |
 
 Accessibility lives inside the design reviewer (matching the kp pattern)

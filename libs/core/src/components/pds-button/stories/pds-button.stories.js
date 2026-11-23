@@ -147,7 +147,7 @@ export const IconOnly = {
       type=${args.type}
       variant=${args.variant}
     >
-      <pds-icon slot="start" name="favorite" aria-hidden="true"></pds-icon>
+      <pds-icon slot="start" name="favorite"></pds-icon>
     </pds-button>`,
   args: {
     ariaLabel: 'Favorite',
@@ -282,7 +282,7 @@ export const CompactIconButtonViaPart = {
       }
     </style>
     <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only>
-      <pds-icon slot="start" name="arrow-up" aria-hidden="true"></pds-icon>
+      <pds-icon slot="start" name="arrow-up"></pds-icon>
       Send message
     </pds-button>
   `,

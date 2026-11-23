@@ -1,6 +1,6 @@
 ---
 name: pine-design-review
-description: Design-token, SCSS, accessibility, and Figma Code Connect review for Pine. Covers component token files (`*.tokens.scss`), `:host` custom-property patterns, `:host-context([data-theme=dark])` dark-mode support, keyboard / ARIA / focus, semantic HTML, and `.figma.ts` alignment.
+description: Design-token, SCSS, accessibility, and Figma Code Connect review for Pine. Covers component token files (`*.tokens.scss`), `:host` custom-property patterns, dark-mode support, keyboard / ARIA / focus, semantic HTML, and `.figma.ts` alignment.
 ---
 
 # Design Review (Pine)
@@ -26,9 +26,12 @@ disproportionately.
   `--pine-color-text-strong`), with core palette
   (`--pine-color-green-100`) reserved for explicit ramp work like
   dark-mode shims.
-- **Dark mode:** Pine uses `:host-context([data-theme=dark])` inside
-  component token files to remap the same custom properties to dark
-  palette steps.
+- **Dark mode:** semantic `--pine-*` tokens switch under
+  `[data-theme=dark]` and inherit into shadow roots, so a component that
+  uses them needs no dark-mode rules. `:host-context()` only works in
+  Chromium; Pine's remaining uses (and the `pds-alert` / `pds-chip`
+  token CSS from `@kajabi-ui/styles`) are known gaps, not a pattern to
+  copy.
 - **Figma Code Connect (`*.figma.ts`):** declarative mapping of Figma
   component variants to Pine props. Updated whenever a public prop
   changes.
@@ -60,9 +63,12 @@ disproportionately.
   exposing the values as custom properties on `:host`. Inline
   hardcoded `var(--pine-color-*)` in the main `*.scss` without a
   tokens file is BLOCKER.
-- **Dark-mode regression** — Removing or breaking a
-  `:host-context([data-theme=dark])` block, or introducing a new
-  hardcoded color that doesn't respond to dark mode.
+- **Dark-mode regression** — Removing or breaking existing dark-mode
+  behavior, including a `:host-context()` rule, without a replacement
+  that keeps it; introducing a new hardcoded color that doesn't respond
+  to dark mode; or adding a new `:host-context()` rule, which Firefox and
+  Safari ignore. Replacing an existing `:host-context()` rule with one
+  that works in every browser isn't a regression.
 - **a11y: interactive element without keyboard access** —
   Non-`<button>` / non-`<a>` element with a click handler and no
   `onKeyDown` for Enter/Space, no `role="button"` + `tabIndex={0}`.

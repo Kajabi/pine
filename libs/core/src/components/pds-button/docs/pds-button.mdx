@@ -21,9 +21,11 @@ A button is an interactive element that can be clicked to perform various action
 - Triggering or enabling an action, such as submitting requested information (e.g. forms).
 - Progressing or regressing a user through a step in a flow (e.g. modals).
 - A call-to-action that navigates and needs button styling, such as "Create a product". Set `href`, and `pds-button` renders a link (see [Button Link](#button-link)).
+- Any action people click, in place of a `pds-box` or other element with a click handler. A box can't take keyboard focus, and screen readers don't announce it as a button.
 
 ### When not to use
-- When space is limited consider an IconButton.
+- A text button where there's no room for its text. Set `icon-only` instead: the slot text is hidden but still names the button (see [Icon Only](#icon-only)).
+- Opening one filter's options in a filter bar. Use `pds-filter` inside `pds-filters`. The `filter` variant is for an "Add filter" action beside the bar (see [Filter](#filter)).
 - Navigating without `href`. A button without `href` performs an action on the current page or submits a form.
 - A link in running text. Use `pds-link`.
 
@@ -52,17 +54,17 @@ The default button, intended to be used with affirmative actions such as submitt
     react: `
     <PdsButton>Primary</PdsButton>
     <PdsButton disabled>Disabled</PdsButton>
-    <PdsButton><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
+    <PdsButton><PdsIcon slot="start" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button>Primary</pds-button>
     <pds-button disabled>Disabled</pds-button>
-    <pds-button><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+    <pds-button><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button>Primary</pds-button>
   <pds-button disabled>Disabled</pds-button>
-  <pds-button><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+  <pds-button><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Secondary
@@ -74,17 +76,17 @@ Secondary button variant, intended to be used as back buttons, for saving drafts
     react: `
     <PdsButton variant="secondary">Secondary</PdsButton>
     <PdsButton variant="secondary" disabled>Disabled</PdsButton>
-    <PdsButton variant="secondary"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
+    <PdsButton variant="secondary"><PdsIcon slot="start" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button variant="secondary">Secondary</pds-button>
     <pds-button variant="secondary" disabled>Disabled</pds-button>
-    <pds-button variant="secondary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+    <pds-button variant="secondary"><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button variant="secondary">Secondary</pds-button>
   <pds-button variant="secondary" disabled>Disabled</pds-button>
-  <pds-button variant="secondary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+  <pds-button variant="secondary"><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Tertiary
@@ -96,17 +98,17 @@ Tertiary button variant, intended to be used for low-emphasis actions or when a 
     react: `
     <PdsButton variant="tertiary">Tertiary</PdsButton>
     <PdsButton variant="tertiary" disabled>Disabled</PdsButton>
-    <PdsButton variant="tertiary"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
+    <PdsButton variant="tertiary"><PdsIcon slot="start" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button variant="tertiary">Tertiary</pds-button>
     <pds-button variant="tertiary" disabled>Disabled</pds-button>
-    <pds-button variant="tertiary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+    <pds-button variant="tertiary"><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button variant="tertiary">Tertiary</pds-button>
   <pds-button variant="tertiary" disabled>Disabled</pds-button>
-  <pds-button variant="tertiary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+  <pds-button variant="tertiary"><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Accent
@@ -118,17 +120,17 @@ Accent button variant, intended to be used for special emphasis or when higher c
     react: `
     <PdsButton variant="accent">Accent</PdsButton>
     <PdsButton variant="accent" disabled>Disabled</PdsButton>
-    <PdsButton variant="accent"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
+    <PdsButton variant="accent"><PdsIcon slot="start" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button variant="accent">Accent</pds-button>
     <pds-button variant="accent" disabled>Disabled</pds-button>
-    <pds-button variant="accent"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+    <pds-button variant="accent"><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button variant="accent">Accent</pds-button>
   <pds-button variant="accent" disabled>Disabled</pds-button>
-  <pds-button variant="accent"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+  <pds-button variant="accent"><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Destructive
@@ -140,17 +142,17 @@ Destructive button variant, intended to be used with destructive actions, such a
     react: `
     <PdsButton variant="destructive">Destructive</PdsButton>
     <PdsButton variant="destructive" disabled>Disabled</PdsButton>
-    <PdsButton variant="destructive"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
+    <PdsButton variant="destructive"><PdsIcon slot="start" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button variant="destructive">Destructive</pds-button>
     <pds-button variant="destructive" disabled>Disabled</pds-button>
-    <pds-button variant="destructive"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+    <pds-button variant="destructive"><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button variant="destructive">Destructive</pds-button>
   <pds-button variant="destructive" disabled>Disabled</pds-button>
-  <pds-button variant="destructive"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+  <pds-button variant="destructive"><pds-icon slot="start" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Disclosure
@@ -302,23 +304,25 @@ The loader color can be customized using CSS parts.
 
 ### Icons
 
-Use the `start` and `end` slots to place an icon before or after the text, and mark a decorative icon `aria-hidden="true"`. Both slots are hidden while `loading` is set. `icon-only` and `disclosure` buttons don't render the `end` slot, and `filter` buttons don't render the `start` slot. For more on slots, see the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots#adding_flexibility_with_slots).
+Use the `start` and `end` slots to place an icon before or after the text. A decorative icon needs no attributes, because `pds-icon` hides itself from assistive technology; see [Icon](/docs/components-icon--docs#accessibility) for when an icon needs a label. Both slots are hidden while `loading` is set. `icon-only` and `disclosure` buttons don't render the `end` slot, and `filter` buttons don't render the `start` slot. For more on slots, see the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots#adding_flexibility_with_slots).
+
+The `icon` prop is deprecated: put a `pds-icon` in the `start` slot instead. On every variant except `disclosure` and `filter`, which ignore it, `icon` draws its icon in place of the `start` slot, so anything slotted there isn't shown.
 
 <DocCanvas
   mdxSource={{
     react: `
     import { arrowRight, trash } from '@pine-ds/icons/icons';
 
-    <PdsButton variant="secondary"><PdsIcon slot="start" icon={trash} aria-hidden="true" />Delete</PdsButton>
-    <PdsButton variant="secondary">Next<PdsIcon slot="end" icon={arrowRight} aria-hidden="true" /></PdsButton>
+    <PdsButton variant="secondary"><PdsIcon slot="start" icon={trash} />Delete</PdsButton>
+    <PdsButton variant="secondary">Next<PdsIcon slot="end" icon={arrowRight} /></PdsButton>
     `,
     webComponent: `
-    <pds-button variant="secondary"><pds-icon slot="start" name="trash" aria-hidden="true"></pds-icon>Delete</pds-button>
-    <pds-button variant="secondary">Next<pds-icon slot="end" name="arrow-right" aria-hidden="true"></pds-icon></pds-button>
+    <pds-button variant="secondary"><pds-icon slot="start" name="trash"></pds-icon>Delete</pds-button>
+    <pds-button variant="secondary">Next<pds-icon slot="end" name="arrow-right"></pds-icon></pds-button>
     `
 }}>
-  <pds-button variant="secondary"><pds-icon slot="start" name="trash" aria-hidden="true"></pds-icon>Delete</pds-button>
-  <pds-button variant="secondary">Next<pds-icon slot="end" name="arrow-right" aria-hidden="true"></pds-icon></pds-button>
+  <pds-button variant="secondary"><pds-icon slot="start" name="trash"></pds-icon>Delete</pds-button>
+  <pds-button variant="secondary">Next<pds-icon slot="end" name="arrow-right"></pds-icon></pds-button>
 </DocCanvas>
 
 ### Icon Only
@@ -330,45 +334,45 @@ Put the icon in the `start` slot: an `icon-only` button doesn't render the `end`
 <DocCanvas
   mdxSource={{
     react: `
-    <PdsButton variant="primary" iconOnly><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
+    <PdsButton variant="primary" iconOnly><PdsIcon slot="start" name="favorite"></PdsIcon>Icon Only
     </PdsButton>
-    <PdsButton variant="secondary" iconOnly><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
+    <PdsButton variant="secondary" iconOnly><PdsIcon slot="start" name="favorite"></PdsIcon>Icon Only
     </PdsButton>
-    <PdsButton variant="accent" iconOnly><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only</PdsButton>
-    <PdsButton variant="destructive" iconOnly><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only</PdsButton>
-    <PdsButton variant="tertiary" iconOnly><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
+    <PdsButton variant="accent" iconOnly><PdsIcon slot="start" name="favorite"></PdsIcon>Icon Only</PdsButton>
+    <PdsButton variant="destructive" iconOnly><PdsIcon slot="start" name="favorite"></PdsIcon>Icon Only</PdsButton>
+    <PdsButton variant="tertiary" iconOnly><PdsIcon slot="start" name="favorite"></PdsIcon>Icon Only
     </PdsButton>
     `,
     webComponent: `
-    <pds-button variant="primary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
-    <pds-button variant="secondary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
-    <pds-button variant="accent" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
-    <pds-button variant="destructive" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
-    <pds-button variant="tertiary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="primary" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="secondary" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="accent" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="destructive" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="tertiary" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
     `
 }}>
-  <pds-button variant="primary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
-  <pds-button variant="secondary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
-  <pds-button variant="accent" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
-  <pds-button variant="destructive" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
-  <pds-button variant="tertiary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="primary" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="secondary" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="accent" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="destructive" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="tertiary" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Icon Only</pds-button>
 </DocCanvas>
 
-To name an icon-only button without slot text, set `aria-label` on `pds-button`. Mark the icon `aria-hidden="true"` so it doesn't add its own name.
+To name an icon-only button without slot text, set `aria-label` on `pds-button`. The icon needs no attributes.
 
 <DocCanvas
   mdxSource={{
     react: `
-    <PdsButton variant="tertiary" iconOnly aria-label="More actions"><PdsIcon slot="start" aria-hidden="true" name="dot-menu-horizontal"></PdsIcon></PdsButton>
-    <PdsButton variant="secondary" iconOnly aria-label="Delete"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon></PdsButton>
+    <PdsButton variant="tertiary" iconOnly aria-label="More actions"><PdsIcon slot="start" name="dot-menu-horizontal"></PdsIcon></PdsButton>
+    <PdsButton variant="secondary" iconOnly aria-label="Delete"><PdsIcon slot="start" name="trash"></PdsIcon></PdsButton>
     `,
     webComponent: `
-    <pds-button variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" aria-hidden="true" name="dot-menu-horizontal"></pds-icon></pds-button>
-    <pds-button variant="secondary" icon-only aria-label="Delete"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon></pds-button>
+    <pds-button variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal"></pds-icon></pds-button>
+    <pds-button variant="secondary" icon-only aria-label="Delete"><pds-icon slot="start" name="trash"></pds-icon></pds-button>
     `
 }}>
-  <pds-button variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" aria-hidden="true" name="dot-menu-horizontal"></pds-icon></pds-button>
-  <pds-button variant="secondary" icon-only aria-label="Delete"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon></pds-button>
+  <pds-button variant="tertiary" icon-only aria-label="More actions"><pds-icon slot="start" name="dot-menu-horizontal"></pds-icon></pds-button>
+  <pds-button variant="secondary" icon-only aria-label="Delete"><pds-icon slot="start" name="trash"></pds-icon></pds-button>
 </DocCanvas>
 
 ### Sizes
@@ -404,19 +408,19 @@ Sizes also apply to icon-only buttons, adjusting the button dimensions according
 <DocCanvas
   mdxSource={{
     react: `
-    <PdsButton variant="primary" iconOnly><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Default</PdsButton>
-    <PdsButton variant="primary" iconOnly size="small"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Small</PdsButton>
-    <PdsButton variant="primary" iconOnly size="micro"><PdsIcon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></PdsIcon>Micro</PdsButton>
+    <PdsButton variant="primary" iconOnly><PdsIcon slot="start" name="favorite"></PdsIcon>Default</PdsButton>
+    <PdsButton variant="primary" iconOnly size="small"><PdsIcon slot="start" name="favorite"></PdsIcon>Small</PdsButton>
+    <PdsButton variant="primary" iconOnly size="micro"><PdsIcon slot="start" name="favorite" size="var(--pine-dimension-150)"></PdsIcon>Micro</PdsButton>
     `,
     webComponent: `
-    <pds-button variant="primary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Default</pds-button>
-    <pds-button variant="primary" icon-only size="small"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Small</pds-button>
-    <pds-button variant="primary" icon-only size="micro"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
+    <pds-button variant="primary" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Default</pds-button>
+    <pds-button variant="primary" icon-only size="small"><pds-icon slot="start" name="favorite"></pds-icon>Small</pds-button>
+    <pds-button variant="primary" icon-only size="micro"><pds-icon slot="start" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
     `
 }}>
-  <pds-button variant="primary" icon-only><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Default</pds-button>
-  <pds-button variant="primary" icon-only size="small"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Small</pds-button>
-  <pds-button variant="primary" icon-only size="micro"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
+  <pds-button variant="primary" icon-only><pds-icon slot="start" name="favorite"></pds-icon>Default</pds-button>
+  <pds-button variant="primary" icon-only size="small"><pds-icon slot="start" name="favorite"></pds-icon>Small</pds-button>
+  <pds-button variant="primary" icon-only size="micro"><pds-icon slot="start" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
 </DocCanvas>
 
 ### Compact / custom-surface icon buttons
@@ -449,7 +453,7 @@ Pair the `::part(button)` override with `variant="unstyled"`, which has no borde
       '}'
     }</style>
 
-    <PdsButton className="compact-inverse-icon-button" variant="unstyled" iconOnly><PdsIcon slot="start" icon={arrowUp} aria-hidden="true" />Send message</PdsButton>
+    <PdsButton className="compact-inverse-icon-button" variant="unstyled" iconOnly><PdsIcon slot="start" icon={arrowUp} />Send message</PdsButton>
     `,
     webComponent: `
     <style>
@@ -464,7 +468,7 @@ Pair the `::part(button)` override with `variant="unstyled"`, which has no borde
       }
     </style>
 
-    <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only><pds-icon slot="start" name="arrow-up" aria-hidden="true"></pds-icon>Send message</pds-button>
+    <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only><pds-icon slot="start" name="arrow-up"></pds-icon>Send message</pds-button>
     `
 }}>
   <style>{`
@@ -479,7 +483,7 @@ Pair the `::part(button)` override with `variant="unstyled"`, which has no borde
     }
   `}</style>
 
-  <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only><pds-icon slot="start" name="arrow-up" aria-hidden="true"></pds-icon>Send message</pds-button>
+  <pds-button class="compact-inverse-icon-button" variant="unstyled" icon-only><pds-icon slot="start" name="arrow-up"></pds-icon>Send message</pds-button>
 </DocCanvas>
 
 ### Button Link

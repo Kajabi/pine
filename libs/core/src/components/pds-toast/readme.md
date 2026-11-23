@@ -9,7 +9,7 @@
 
 | Property                   | Attribute        | Description                                                                                                                                                                                                                                                   | Type                                 | Default             |
 | -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------- |
-| `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                                                                                                                                                                         | `string`                             | `undefined`         |
+| `componentId` _(required)_ | `component-id`   | A unique identifier for this component instance, sent in the `pdsToastDismissed` event detail. Does not set the host element's `id` attribute — set `id` directly if you need one.                                                                            | `string`                             | `undefined`         |
 | `dismissLabel`             | `dismiss-label`  | Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.                                                                                                                                                        | `string`                             | `'Dismiss message'` |
 | `dismissible`              | `dismissible`    | Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies.                                                                                                       | `boolean`                            | `true`              |
 | `duration`                 | `duration`       | The duration in milliseconds to show the toast before auto-dismissing. Set to 0 to disable auto-dismiss.                                                                                                                                                      | `number`                             | `4500`              |
@@ -20,9 +20,9 @@
 
 ## Events
 
-| Event               | Description                                                                  | Type                                     |
-| ------------------- | ---------------------------------------------------------------------------- | ---------------------------------------- |
-| `pdsToastDismissed` | Event emitted when the toast is dismissed, either manually or automatically. | `CustomEvent<{ componentId?: string; }>` |
+| Event               | Description                                                                                                                                                                  | Type                                     |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `pdsToastDismissed` | Emitted when the toast is dismissed by its dismiss button, by `dismiss()` or when `duration` runs out, after the exit animation. The detail holds the toast's `componentId`. | `CustomEvent<{ componentId?: string; }>` |
 
 
 ## Methods
@@ -37,6 +37,13 @@ gets `hidden` on the next render, after the event. Works even when `dismissible`
 Type: `Promise<void>`
 
 
+
+
+## Slots
+
+| Slot          | Description          |
+| ------------- | -------------------- |
+| `"(default)"` | The toast's message. |
 
 
 ## Shadow Parts

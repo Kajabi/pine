@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property        | Attribute       | Description                                                  | Type      | Default     |
-| --------------- | --------------- | ------------------------------------------------------------ | --------- | ----------- |
-| `indeterminate` | `indeterminate` | Determines if the row selected is in an indeterminate state. | `boolean` | `undefined` |
-| `isSelected`    | `is-selected`   | Determines if the table row is currently selected.           | `boolean` | `undefined` |
+| Property        | Attribute       | Description                                                                                                                                                                                                                                                              | Type      | Default        |
+| --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | -------------- |
+| `indeterminate` | `indeterminate` | Determines if the row selected is in an indeterminate state.                                                                                                                                                                                                             | `boolean` | `undefined`    |
+| `isSelected`    | `is-selected`   | Determines if the table row is currently selected.                                                                                                                                                                                                                       | `boolean` | `undefined`    |
+| `selectLabel`   | `select-label`  | Accessible label for the row's selection checkbox. Pass a translated string to localize it; defaults to English. Name the row in it, such as `Select Jane Doe`, so each checkbox says which row it selects. An empty or whitespace-only value falls back to the default. | `string`  | `'Select Row'` |
 
 
 ## Events
@@ -18,6 +19,13 @@
 | Event                 | Description                                                                                                                                                                                                                                                                                                                                                                                     | Type                                                      |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | `pdsTableRowSelected` | Emitted when the user checks or unchecks the row's checkbox, carrying the new state as `isSelected` and the row's current position in `pds-table-body` as `rowIndex`, which changes when the table is sorted. A row that starts with `isSelected` also emits it on load.  This event will not emit when programmatically setting the `isSelected` property, or when select all changes the row. | `CustomEvent<{ rowIndex: number; isSelected: boolean; }>` |
+
+
+## Slots
+
+| Slot          | Description                                 |
+| ------------- | ------------------------------------------- |
+| `"(default)"` | The row's cells: `pds-table-cell` elements. |
 
 
 ## Shadow Parts

@@ -2,6 +2,7 @@ import { Component, h, Host, Prop, Element, State } from '@stencil/core';
 import { unwrapReconnectedContent } from '@utils/reconnected-content';
 
 /**
+ * @slot (default) - The modal's main content.
  * @lightDom renders-markup
  */
 @Component({

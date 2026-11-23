@@ -53,25 +53,29 @@ The default `inline` link. Visually, it maintains the underlined appearance of a
 
 ### Colors
 
-The `color` prop can be used to change the color of the link to any available preset or, Pine token, or custom color. The available preset colors are `secondary`, `accent`, and `danger`.
+The `color` prop can be used to change the color of the link to any available preset, Pine token, or custom color. The available preset colors are `secondary`, `accent`, and `danger`. `secondary` is for links on a `--pine-color-primary` fill. It's white in the light theme and black in the dark theme, the same as `--pine-color-background-container`, so it can't be read on a default container or page background.
 
 >Note: Only presets have hover state colors.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsLink href="https://www.google.com" color="secondary">Link</PdsLink>
+    react: `<PdsBox backgroundColor="--pine-color-primary" padding="xxs">
+      <PdsLink href="https://www.google.com" color="secondary">Link</PdsLink>
+    </PdsBox>
     <PdsLink href="https://www.google.com" color="accent">Link</PdsLink>
     <PdsLink href="https://www.google.com" color="danger">Link</PdsLink>
     <PdsLink href="https://www.google.com" color="var(--pine-color-green-600)">Link</PdsLink>
     <PdsLink href="https://www.google.com" color="#daa520">Link</PdsLink>
     `,
-    webComponent: `<pds-link href="https://www.google.com" color="secondary">Link</pds-link>
+    webComponent: `<pds-box background-color="--pine-color-primary" padding="xxs">
+      <pds-link href="https://www.google.com" color="secondary">Link</pds-link>
+    </pds-box>
     <pds-link href="https://www.google.com" color="accent">Link</pds-link>
     <pds-link href="https://www.google.com" color="danger">Link</pds-link>
     <pds-link href="https://www.google.com" color="var(--pine-color-green-600)">Link</pds-link>
     <pds-link href="https://www.google.com" color="#daa520">Link</pds-link>`
 }}>
-  <div style={{ backgroundColor: 'var(--pine-color-background-inverse-app)', padding: '4px' }}><pds-link href="https://www.google.com" color="secondary">Link</pds-link></div>
+  <pds-box background-color="--pine-color-primary" padding="xxs"><pds-link href="https://www.google.com" color="secondary">Link</pds-link></pds-box>
   <pds-link href="https://www.google.com" color="accent">Link</pds-link>
   <pds-link href="https://www.google.com" color="danger">Link</pds-link>
   <pds-link href="https://www.google.com" color="var(--pine-color-green-600)">Link</pds-link>
@@ -92,7 +96,7 @@ The `plain` variant displays a standard plain hyperlink without an underline.
 
 ### Active
 
-Set `active` on the link for the current page in a nav rail or tab strip built from links. It sets `aria-current="page"` and keeps the link underlined with strong text. Mark only one link in a set as active.
+Set `active` on the link for the current page in a nav rail or tab strip built from links. It sets `aria-current="page"` and keeps the link underlined with strong text, or with the alert's link color inside a `pds-alert`, whatever its `color`. That includes `secondary`, so an active link can't be read on a `--pine-color-primary` fill. Mark only one link in a set as active.
 
 <DocCanvas
   mdxSource={{
@@ -338,21 +342,6 @@ Two things to pair with it:
     </pds-box>
   </pds-box>
 </DocCanvas>
-
-## Navigation Attributes
-
-These props copy their value to a `data-*` attribute on the link's inner `<a>`, for client-side navigation libraries that read link behavior from those attributes. `pds-link` doesn't act on them itself, and an empty value leaves the attribute off.
-
-| Prop | Attribute | Values |
-| --- | --- | --- |
-| `turbo` | `data-turbo` | string |
-| `turbo-action` | `data-turbo-action` | `advance`, `replace` |
-| `turbo-confirm` | `data-turbo-confirm` | string |
-| `turbo-frame` | `data-turbo-frame` | string |
-| `turbo-method` | `data-turbo-method` | `get`, `post`, `put`, `patch`, `delete` |
-| `turbo-prefetch` | `data-turbo-prefetch` | string |
-| `turbo-preload` | `data-turbo-preload` | string |
-| `turbo-stream` | `data-turbo-stream` | string |
 
 ## Additional Resources
 

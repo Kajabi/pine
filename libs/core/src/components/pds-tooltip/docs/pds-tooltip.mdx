@@ -29,7 +29,7 @@ Tooltips display helpful popup text when users hover over or keyboard focus on a
 
 - Wrap a focusable trigger, such as a `pds-button` or `pds-link`. The tooltip opens when the trigger takes keyboard focus, and plain text can't take focus, so keyboard users never see a tooltip on it.
 - Don't use a tooltip to explain why a control is disabled. A disabled control can't take focus, so keyboard users never open the tooltip, and screen readers don't get its text. Show the reason as visible text with the control instead, such as a switch's `helper-message` (see [Disabled with a reason](/docs/components-switch--docs#disabled-with-a-reason)).
-- The tooltip opens on hover or keyboard focus of the trigger, and closes when the pointer leaves or focus moves away, unless `opened` holds it open (see [Technical Notes](#technical-notes)). Escape doesn't close it.
+- The tooltip opens on hover or keyboard focus of the trigger, and closes when the pointer leaves or focus moves away, unless `opened` holds it open (see [Technical notes](#technical-notes)). Escape doesn't close it.
 - Reserve tooltips for purely supplemental information and display critical validation or blocking instructions inline.
 - The open tooltip is a polite live region. Changes to its content while it's open are announced, but opening it isn't reliably announced.
 - The tooltip sets `aria-describedby` on its own wrapper around the trigger, not on the control inside it, so screen readers don't read the tooltip text when that control takes focus. If the text must be heard, also put it in the control's accessible name.
@@ -42,21 +42,21 @@ Tooltips display helpful popup text when users hover over or keyboard focus on a
 ## Examples
 
 ### Trigger
-Whether your trigger is text or an HTML element, it will be placed in the default slot between the opening and closing tags.
+Your trigger is placed in the default slot between the opening and closing tags. Use a focusable element, such as a `pds-button` or `pds-link`, so keyboard users can open the tooltip.
 
 <DocCanvas
   mdxSource={{
     react: `
-      <PdsTooltip content="this is tooltip content" hasArrow="true" placement="bottom-start">
-        text
+      <PdsTooltip content="this is tooltip content" hasArrow placement="bottom-start">
+        <PdsLink href="#pricing">Link</PdsLink>
       </PdsTooltip>
-      <PdsTooltip content="this is tooltip content" hasArrow="true" placement="right-start">
-        <PdsButton variant="secondary">Button</pds-button>
+      <PdsTooltip content="this is tooltip content" hasArrow placement="right-start">
+        <PdsButton variant="secondary">Button</PdsButton>
       </PdsTooltip>
     `,
     webComponent: `
       <pds-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
-        text
+        <pds-link href="#pricing">Link</pds-link>
       </pds-tooltip>
       <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
         <pds-button variant="secondary">Button</pds-button>
@@ -64,7 +64,7 @@ Whether your trigger is text or an HTML element, it will be placed in the defaul
     `
 }}>
   <pds-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
-    text
+    <pds-link href="#pricing">Link</pds-link>
   </pds-tooltip>
   <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
     <pds-button variant="secondary">Button</pds-button>
@@ -78,10 +78,10 @@ tooltip content is expected to be a string.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsTooltip content="this is tooltip content" hasArrow="true" placement="right">text</PdsTooltip>`,
-    webComponent: `<pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>`
+    react: `<PdsTooltip content="this is tooltip content" hasArrow placement="right"><PdsButton variant="secondary">Button</PdsButton></PdsTooltip>`,
+    webComponent: `<pds-tooltip content="this is tooltip content" has-arrow="true" placement="right"><pds-button variant="secondary">Button</pds-button></pds-tooltip>`
   }}>
-  <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>
+  <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right"><pds-button variant="secondary">Button</pds-button></pds-tooltip>
 </DocCanvas>
 
 #### HTML Element Content
@@ -100,8 +100,8 @@ re-renders while the tooltip is open appears without reopening it.
 <DocCanvas
   mdxSource={{
     react: `
-      <PdsTooltip htmlContent="true" hasArrow="true" placement="right">
-        text
+      <PdsTooltip htmlContent hasArrow placement="right">
+        <PdsButton variant="secondary">Button</PdsButton>
         <div slot="content">
           <p>this is a sentence in a tooltip.</p>
           <p>this is a sentence in a tooltip.</p>
@@ -110,7 +110,7 @@ re-renders while the tooltip is open appears without reopening it.
     `,
     webComponent: `
       <pds-tooltip html-content="true" has-arrow="true" placement="right">
-        text
+        <pds-button variant="secondary">Button</pds-button>
         <div slot="content">
           <p>this is a sentence in a tooltip.</p>
           <p>this is a sentence in a tooltip.</p>
@@ -119,7 +119,7 @@ re-renders while the tooltip is open appears without reopening it.
     `
 }}>
   <pds-tooltip html-content="true" has-arrow="true" placement="right">
-    text
+    <pds-button variant="secondary">Button</pds-button>
     <div slot="content">
       <p>this is a sentence in a tooltip.</p>
       <p>this is a sentence in a tooltip.</p>
@@ -278,10 +278,10 @@ By default the arrow is visible but it can be hidden by disabling it when `has-a
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsTooltip content="this is tooltip content" hasArrow="false" placement="right">text</PdsTooltip>`,
-    webComponent: `<pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>`
+    react: `<PdsTooltip content="this is tooltip content" hasArrow={false} placement="right"><PdsButton variant="secondary">Button</PdsButton></PdsTooltip>`,
+    webComponent: `<pds-tooltip content="this is tooltip content" has-arrow="false" placement="right"><pds-button variant="secondary">Button</pds-button></pds-tooltip>`
 }}>
-  <pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>
+  <pds-tooltip content="this is tooltip content" has-arrow="false" placement="right"><pds-button variant="secondary">Button</pds-button></pds-tooltip>
 </DocCanvas>
 
 
@@ -290,10 +290,10 @@ The `max-width` prop lets you adjust the maximum width of the tooltip content. T
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsTooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." maxWidth="520px" placement="right">text</PdsTooltip>`,
-    webComponent: `<pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>`
+    react: `<PdsTooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." maxWidth="520px" placement="right"><PdsButton variant="secondary">Button</PdsButton></PdsTooltip>`,
+    webComponent: `<pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right"><pds-button variant="secondary">Button</pds-button></pds-tooltip>`
 }}>
-  <pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>
+  <pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right"><pds-button variant="secondary">Button</pds-button></pds-tooltip>
 </DocCanvas>
 
 ### Inside a modal or popover
@@ -378,7 +378,7 @@ The snippets show the modal with its Cancel button wired to `hideModal()`. Open 
   </pds-modal>
 </DocCanvas>
 
-## Technical Notes
+## Technical notes
 
 - The tooltip already opens on hover and focus, so don't wire those events yourself. Use the `opened` property when it should stay open beyond a hover or focus, such as a guided-tour step. While `opened` is set from outside, moving the pointer or focus away doesn't close it. If hover or focus opened the tooltip first, setting `opened` to `true` changes nothing, and moving away still closes it; set `opened` to `false` and then `true` to hold it open. Set it as an attribute or a property. It reflects to the attribute, so `pds-tooltip[opened]` matches an open tooltip.
 - Call the public methods `showTooltip()` and `hideTooltip()` from your own script to open or close the tooltip, such as when a tour advances. Each sets `opened` and returns a promise that resolves once it's set.

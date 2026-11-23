@@ -28,6 +28,13 @@
 | `pdsTableSelectAll` | Event that is emitted by `pds-table-head` when the select all checkbox is clicked, carrying the selected value. It bubbles through the table; the table doesn't emit it itself. | `CustomEvent<{ isSelected: boolean; }>` |
 
 
+## Slots
+
+| Slot          | Description                                        |
+| ------------- | -------------------------------------------------- |
+| `"(default)"` | The table's `pds-table-head` and `pds-table-body`. |
+
+
 ## Shadow Parts
 
 | Part                     | Description                                                                                                                                                                            |

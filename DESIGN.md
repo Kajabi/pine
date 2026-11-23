@@ -7,10 +7,12 @@
 #   1. tokens:  AUTOGEN block — raw values pulled verbatim from the source of
 #      truth. NEVER hand-edit; run `npm run design.tokens` to regenerate.
 #   2. colors / typography / components — hand-curated SEMANTIC interpretation
-#      and prose. Edit these by hand.
+#      and prose. Edit these by hand. No check compares them with the tokens,
+#      so re-verify them against semantic.json and semantic-dark.json after
+#      every @kajabi-ui/styles bump.
 #
 # SOURCE OF TRUTH (tokens block):
-#   node_modules/@kajabi-ui/styles/dist/tokens/{core,semantic,semantic-dark}.json
+#   node_modules/@kajabi-ui/styles/dist/tokens/{core,semantic}.json
 #   libs/core/src/global/styles/_motion.scss   (Pine-local motion)
 # CSS custom properties surface under the --pine-* namespace
 #   (e.g. --pine-color-accent, --pine-border-radius-md, --pine-motion-duration-base).
@@ -71,38 +73,40 @@ tokens:
 # ---------------------------------------------------------------------------
 
 colors:
-  # Semantic roles. light = default; dark = the [data-theme=dark] override.
+  # Semantic roles from @kajabi-ui/styles semantic.json (light, the default) and
+  # semantic-dark.json (the [data-theme=dark] override). A single value means
+  # both themes use it.
   # Always consume the SEMANTIC name (--pine-color-*), not a raw palette hex.
-  accent:        # purple — sole interaction accent (links, focus, selected, accent button)
-    default:  "{color.purple.500}"   # #6B62F2
-    hover:    "{color.purple.600}"
-    disabled: "{color.purple.100}"
-  brand:
-    default:  "{color.black}"         # brand mark / strongest emphasis
-  primary:       # filled "primary" surface (e.g. primary button) — DARK, not purple
+  accent:        # links, checked checkbox/radio, switch track, highlight state, accent button; same values as primary
     default:  { light: "{color.grey.900}", dark: "{color.grey.100}" }
-    hover:    "{color.grey.950}"
-    disabled: "{color.grey.150}"
+    hover:    { light: "{color.grey.950}", dark: "{color.white}" }
+    disabled: { light: "{color.grey.150}", dark: "{color.grey.800}" }
+  brand:
+    default:  { light: "{color.black}", dark: "{color.grey.050}" }   # brand mark / strongest emphasis
+  primary:       # filled "primary" surface (e.g. primary button)
+    default:  { light: "{color.grey.900}", dark: "{color.grey.100}" }
+    hover:    { light: "{color.grey.950}", dark: "{color.white}" }
+    disabled: { light: "{color.grey.150}", dark: "{color.grey.800}" }
   secondary:     # light/outlined surface
-    default:  "{color.white}"
-    hover:    "{color.grey.050}"
+    default:  { light: "{color.white}", dark: "{color.black}" }
+    hover:    { light: "{color.grey.050}", dark: "{color.grey.950}" }
   neutral:
-    default:  "{color.grey.500}"
-    hover:    "{color.grey.600}"
+    default:  { light: "{color.grey.500}", dark: "{color.grey.400}" }
+    hover:    { light: "{color.grey.600}", dark: "{color.grey.300}" }
   focus_ring:
-    default:  "{color.purple.300}"
+    default:  { light: "{color.grey.400}", dark: "{color.grey.500}" }
     danger:   "{color.red.300}"
   text:
     default:    { light: "{color.grey.900}", dark: "{color.grey.100}" }
-    secondary:  { light: "{color.grey.800}", dark: "{color.grey.200}" }
-    tertiary:   "{color.grey.600}"
-    subtle:     "{color.grey.500}"
-    placeholder:{ light: "{color.grey.600}", dark: "{color.grey.400}" }
+    secondary:  { light: "{color.grey.800}", dark: "{color.grey.150}" }
+    tertiary:   { light: "{color.grey.700}", dark: "{color.grey.200}" }
+    subtle:     { light: "{color.grey.600}", dark: "{color.grey.300}" }
+    placeholder: { light: "{color.grey.700}", dark: "{color.grey.200}" }
     disabled:   { light: "{color.grey.500}", dark: "{color.grey.400}" }
-    inverse:    "{color.grey.100}"
-    primary:    "{color.white}"        # text ON a filled primary/accent surface
-    message:        "{color.grey.800}"
-    message_danger: "{color.red.600}"  # inline error text
+    inverse:    { light: "{color.grey.100}", dark: "{color.grey.900}" }
+    primary:    { light: "{color.white}", dark: "{color.black}" }   # text ON a filled primary/accent surface
+    message:        { light: "{color.grey.800}", dark: "{color.grey.150}" }
+    message_danger: { light: "{color.red.600}", dark: "{color.red.500}" }  # inline error text
   background:
     app:             { light: "{color.grey.100}", dark: "{color.grey.900}" }
     container:       { light: "{color.white}",    dark: "{color.black}" }
@@ -117,10 +121,10 @@ colors:
     disabled: { light: "{color.grey.200}", dark: "{color.grey.700}" }
     danger:   "{color.red.600}"
   icon:
-    default:  "{color.grey.700}"
-    subtle:   "{color.grey.500}"
-    disabled: "{color.grey.400}"
-    inverse:  "{color.white}"
+    default:  { light: "{color.grey.700}", dark: "{color.grey.200}" }
+    subtle:   { light: "{color.grey.500}", dark: "{color.grey.400}" }
+    disabled: { light: "{color.grey.400}", dark: "{color.grey.500}" }
+    inverse:  { light: "{color.white}", dark: "{color.grey.900}" }
   # Intent hexes live in tokens.intent (autogen). Decorative ramps
   # (mercury, forest, lime, magenta, pink, salmon, sky, teal) are in
   # tokens.palette — use for charts/tags/illustration only, never core chrome.
@@ -135,13 +139,16 @@ typography:
   line_height_use: { headings_dense: 125, body: 150 }   # keys into tokens.line_height
 
 components:
-  # Semantic mappings for every pds-* component. States are separate entries.
-  # Each property points at a semantic token, never a literal. Derived from each
-  # component's *.scss var() usage (+ upstream *.tokens.css where applicable).
+  # Token mappings for every top-level pds-* component; subcomponents (pds-tab,
+  # pds-table-row, ...) fold into their parent. States are separate entries.
+  # Properties point at tokens, preferring semantic ones. Derived from each
+  # component's *.scss var() usage (+ upstream *.tokens.css where applicable, and
+  # the inline portal styles in pds-popover.tsx). {border} is the --pine-border
+  # shorthand: 1px solid, in the color.border colors.
   pds-accordion:
     surface: "{color.background.container}"
     surface_hover: "{color.background.container.hover}"
-    text: "{color.text.default}"
+    text: "{color.text}"
     text_active: "{color.text.active}"
     text_muted: "{color.text.muted}"
   pds-alert:                                   # per upstream pds-alert.tokens.css
@@ -151,7 +158,8 @@ components:
     success: { surface: "{color.green.150}", border: "{color.green.300}", icon: "{color.green.700}", text: "{color.green.950}" }
     warning: { surface: "{color.yellow.150}",border: "{color.yellow.300}",icon: "{color.yellow.700}",text: "{color.yellow.950}" }
     danger:  { surface: "{color.red.150}",   border: "{color.red.300}",   icon: "{color.red.700}",   text: "{color.red.950}" }
-    # dark mode inverts surfaces to the *-900 step (see semantic-dark / tokens.css)
+    # dark: default surface grey.800, intent surfaces the *-900 step, from a
+    # :host-context([data-theme=dark]) rule in the upstream tokens.css, so Chromium only
   pds-avatar:
     radius: "{border-radius.full}"
     placeholder_bg: "{color.background.container.hover}"
@@ -163,9 +171,10 @@ components:
     primary:   { background: "{color.primary}",  background_hover: "{color.primary.hover}",  text: "{color.text.primary}", disabled: "{color.primary.disabled}" }
     secondary: { background: "{color.secondary}",border: "{color.border}", border_hover: "{color.border.hover}", text: "{color.text.secondary}" }
     accent:    { background: "{color.accent}",   background_hover: "{color.accent.hover}",   text: "{color.text.primary}", disabled: "{color.accent.disabled}" }
-    danger:    { background: "{color.danger}",   background_hover: "{color.danger.hover}",   text: "{color.text.primary}" }
+    destructive: { background: "{color.danger}", background_hover: "{color.danger.hover}", text: "{color.white}", disabled: "{color.danger.disabled}" }
+    # tertiary, disclosure, filter and unstyled are the other variants
     radius: "{border-radius.full}"
-    focus: "{color.focus-ring} (danger: {color.focus-ring.danger}) via --pds-button-outline-*"
+    focus: "{color.focus-ring} via --pine-outline-focus (destructive: {color.focus-ring.danger}); override with --pds-button-outline-focus"
     min_height: "size variants via --pds-button-min-height"
   pds-checkbox:
     fill_checked: "{color.accent}"
@@ -185,12 +194,24 @@ components:
     focus: "{color.focus-ring}"
     intent_text: "{color.text.info|success|warning|danger}"
     transition: "{motion.duration.base}"
+  pds-container:                               # layout primitive, no color tokens
+    max_width: "size prop: sm 340px, md 520px, lg 700px, xl 1064px, full 1440px, or any CSS length"
   pds-copytext:
-    surface: "{color.background.inset}"
-    text: "{color.secondary}"
+    surface_hover: "{color.background.inset}"
     text_hover: "{color.text.secondary.hover}"
+    bordered: { surface: "{color.secondary}", border: "{border}", radius: "{border-radius.full}" }
+  pds-datepicker:
+    panel: { surface: "{color.background.overlay}", radius: "{dimension.150}", elevation: "{box-shadow.200}", z_index: "{z-index.priority}" }
+    day_hover: "{color.background.muted}"
+    day_selected: { background: "{color.primary}", text: "{color.text.primary}" }
+    today_marker: "{color.primary}"
+    panel_border_dark: "{border} via :host-context([data-theme=dark]), so Chromium only"
   pds-divider:
     line: "{color.border}"
+  pds-drawer:                                  # renders a pds-modal; panel docks to an edge
+    surface: "pds-modal's panel with square corners; size prop sm 360px, md 500px (default)"
+    header_footer_border: "{color.border.subtle}"
+    backdrop: "transparent and click-through unless the modal prop is set"
   pds-dropdown-menu:
     surface: "{color.background.overlay}"
     border: "{color.border}"
@@ -204,6 +225,11 @@ components:
     elevation: "{box-shadow.050} / {box-shadow.100}"
     z_index: "{z-index.overlay}"
     transition: "{motion.duration.base}"
+  pds-icon:                                    # from @pine-ds/icons
+    fill: "currentColor, or the color prop"
+    size: "16px, or the size prop"
+  pds-image:                                   # no color tokens
+    shape: "ratio and fit props, or --dimension-aspect-ratio / --dimension-object-fit"
   pds-input:
     background: "{color.background.container}"
     border: "{color.border}"
@@ -212,7 +238,7 @@ components:
     border_danger: "{color.border.danger}"
     text: "{color.text.strong}"
     placeholder: "{color.text.placeholder}"
-    label: "{color.text.label}"
+    label: "{color.text.strong}"
     message_danger: "{color.text.message.danger}"
     states: "disabled / readonly via {color.text.disabled} / {color.text.readonly}"
     z_index: "{z-index.raised}"
@@ -240,6 +266,14 @@ components:
     message_danger: "{color.text.message.danger}"
     z_index: "{z-index.raised}"
     transition: "{motion.duration.base}"
+  pds-popover:                                 # inline styles on the portaled panel
+    # Outside an open <dialog> the panel moves to <body>, so it themes from a
+    # data-theme on <html> or <body>, not from one scoped to a nearer element.
+    surface: "{color.background.overlay}"
+    radius: "{dimension.125}"
+    elevation: "{box-shadow.200}"
+    z_index: "{z-index.raised}"
+    border_dark: "{border} in dark mode"
   pds-progress:
     track: "{color.background.muted}"
     indicator: "{color.primary}"
@@ -256,18 +290,21 @@ components:
     label: "{color.text.label}"
     message: "{color.text.message}"
     message_danger: "{color.text.message.danger}"
+  pds-row:                                     # layout primitive
+    gap: "{dimension.125} (--row-gap-x / --row-gap-y)"
+    border: "{border} with the border prop"
   pds-select:
     background: "{color.background.container}"
-    border: "{color.border}"
+    border: "{border}"
     border_focus: "{color.focus-ring}"
     border_danger: "{color.border.danger}"
-    text: "{color.text.default}"
+    text: "{color.text}"
     message_danger: "{color.text.message.danger}"
     z_index: "{z-index.raised}"
   pds-sortable:
     surface: "{color.background.container}"
     surface_hover: "{color.background.container.hover}"
-    drop_indicator: "{color.info}"
+    icon_hover: "{color.info}"
     drag_elevation: "{box-shadow.400}"
   pds-switch:
     track_on: "{color.accent}"
@@ -280,7 +317,7 @@ components:
     surface: "{color.background.container}"
     header_bg: "{color.background.subtle}"
     row_border: "{color.border.subtle}"
-    text: "{color.text.default}"
+    text: "{color.text}"
     text_strong: "{color.text.strong}"
     z_index: "{z-index.raised}"
   pds-tabs:
@@ -292,13 +329,13 @@ components:
     elevation: "{box-shadow.100}"
     z_index: "{z-index.raised}"
   pds-text:
-    default: "{color.text.default}"
-    tertiary: "{color.text.tertiary}"
+    default: "{color.text}"
+    decoration: "{color.text.tertiary}"         # underline-dotted
   pds-textarea:
     background: "{color.background.container}"
     border_focus: "{color.focus-ring}"
     border_danger: "{color.border.danger}"
-    text: "{color.text.default}"
+    text: "{color.text}"
     placeholder: "{color.text.placeholder}"
     message_danger: "{color.text.message.danger}"
   pds-toast:
@@ -323,11 +360,12 @@ give every Kajabi surface one coherent, accessible, themeable visual language �
 the same `pds-*` element renders identically whether consumed in React, Vue, or
 plain HTML.
 
-The identity is **calm and utilitarian with one decisive accent**. Surfaces are
-near-neutral greys and white; **purple (`accent`) is the sole driver of
-interaction** — links, focus rings, selected states, and the accent button.
-**Black/grey-900 (`primary`/`brand`) carries the strongest emphasis** — it's the
-fill of the primary button and the brand mark, *not* purple. The system is built
+The identity is **calm and utilitarian**. Surfaces are near-neutral greys and
+white. **Grey-900 (`primary`) carries the strongest emphasis**: it fills the
+primary button, and since `@kajabi-ui/styles` 2.0.0 the `accent` tokens (links,
+checked checkboxes and radios, the switch track, the accent button) have the
+same values as `primary`. Focus rings are grey too. Black (`brand`) is reserved
+for the brand mark. The system is built
 mobile-first, internationalized (LTR + RTL; Latin, Arabic, Hebrew, Devanagari),
 and ships light and dark themes from the same token set.
 
@@ -343,12 +381,16 @@ in `tokens.palette`), **semantic tokens** that name a role (`colors:` above),
 and **dark overrides** applied under `[data-theme=dark]`. Always consume the
 semantic layer.
 
-- **Accent (purple 500, `#6B62F2`)** — the single interaction color: links,
-  focus, selected/active states, and the accent button. Don't introduce a second
-  interaction color; restraint is what makes the accent read as actionable.
-- **Primary / brand (grey-900 / black)** — the strongest emphasis surface. Pine's
-  *primary button is dark*, not purple; purple is the *accent* button. Brand
-  black is reserved for the mark and max emphasis.
+- **Accent (grey 900; grey 100 on dark)** — links, checked checkboxes and
+  radios, the switch track, the `highlight` state of `pds-input`, `pds-select`
+  and `pds-textarea`, and the accent button. It has the same values as
+  `primary`; use the `accent` tokens for these roles rather than introducing
+  another interaction color.
+- **Primary / brand (grey 900 / black)** — the strongest emphasis surface and
+  the primary button's fill, which flips to grey 100 on dark. Brand black
+  (grey 50 on dark) is reserved for the mark and max emphasis.
+- **Focus ring (grey 400; grey 500 on dark)** — red 300 (`focus_ring.danger`)
+  on destructive and invalid controls.
 - **Text** — `default` is grey 900 on light / grey 100 on dark. Step down through
   `secondary` → `tertiary` → `subtle`. `placeholder`, `disabled`, `inverse`, and
   `message_danger` (inline errors) are distinct slots, not opacity hacks.
@@ -389,45 +431,60 @@ not ad-hoc numbers: `hide` (-1) → `raised` (1000) → `alert` (2000) → `unde
 ## Elevation & Depth
 
 Depth comes from a 7-step `box-shadow` ramp (`050` → `500` in `tokens.box_shadow`),
-all soft and near-black. Resting cards use `100`; floating UI (dropdowns,
-popovers, tooltips) uses `150`–`200`; modals use `400`; only full-screen overlays
-reach `500`. Use the smallest shadow that reads — depth signals hierarchy, it
-doesn't decorate. Prefer `inset`/`muted` backgrounds over shadows for quiet
-separation.
+all soft and near-black. `100` is the default (`--pine-box-shadow`): tooltips,
+toasts, the switch thumb, the combobox and multiselect panels, the dropdown
+menu and the active tab use it. Popovers and the datepicker panel use `200`;
+the modal and a dragged or keyboard-grabbed sortable item use `400`.
+`pds-box`'s `shadow` prop offers the whole ramp, and no other component uses
+`150`, `300` or `500`. Use the smallest shadow that reads — depth signals
+hierarchy, it doesn't decorate. Prefer `inset`/`muted` backgrounds over shadows
+for quiet separation.
 
 ## Shapes
 
-Corners follow a small, intentional vocabulary (`tokens.border_radius`): `sm`
-(4px) for inputs and tight controls, `md` (10px) for cards and modals, `lg`
-(16px) for large panels, and `full` (9999px) for pills, chips, avatars, and
-toasts. Borders are `thin` (1px) by default; `thick` (2px) for emphasis. Don't
-invent intermediate radii.
+The radius tokens (`tokens.border_radius`) are `sm` (4px), `md` (10px), `lg`
+(16px) and `full` (9999px), but most components set their corners with the
+spacing tokens instead. Text fields, selects, textareas, tooltips, popovers,
+the combobox and multiselect fields and the `filter` button round at 10px
+(mostly `--pine-dimension-125`); menus, accordions and the toast at 8px
+(`--pine-dimension-xs`); the modal at 16px (`--pine-dimension-sm`); the checkbox
+at 4px (`--pine-dimension-2xs`). Other buttons, avatars (except the `admin`
+variant, 12px) and the radio are pills (`full`). Match the component you're
+building next to rather than adding a new radius. Borders are `thin` (1px) by
+default; `thick` (2px) for emphasis.
 
 ## Components
 
-Every `pds-*` component maps its surfaces to semantic tokens (see `components:`
-in the front matter), so one token change re-themes the whole library. Patterns
-worth calling out:
+Components map their surfaces to tokens (see `components:` in the front
+matter), mostly semantic ones, so a semantic token change re-themes them. A few
+use core palette steps that don't switch with the theme, such as `pds-filters`'
+purple and the destructive button's white text. `pds-alert` and `pds-chip` take
+component tokens from `@kajabi-ui/styles`, whose dark values rely on
+`:host-context()` (see Do's and Don'ts). Patterns worth calling out:
 
-- **pds-button** — `primary` (dark grey-900 fill), `secondary` (white/outlined),
-  `accent` (purple), `danger` (red). Every variant has hover, disabled, and a
-  purple focus ring via `--pds-button-outline-*`.
+- **pds-button** — `primary` (grey 900 fill, grey 100 on dark), `secondary`
+  (white with a border, black on dark), `accent` (same values as primary) and
+  `destructive` (red 600 with white text), plus `tertiary`, `disclosure`,
+  `filter` and `unstyled`. The focus ring is the grey `focus-ring`, red 300 on
+  `destructive`.
 - **Form controls** (`pds-input`, `pds-textarea`, `pds-select`, `pds-checkbox`,
   `pds-radio`, `pds-switch`, `pds-multiselect`, `pds-combobox`) share the
   border → border-hover → focus-ring progression, distinct `disabled`/`readonly`
   slots, and `message_danger` for inline errors. Accent fills the checked state.
-- **Overlays** (`pds-modal`, `pds-dropdown-menu`, `pds-tooltip`, `pds-toast`,
-  `pds-filters`) sit on `background.overlay`/`primary` surfaces with elevation
-  `200`–`400` and the matching `z-index` layer. Tooltip and toast invert to a
-  dark `primary` surface with white `text.primary`.
-- **Layout/data** (`pds-box`, `pds-table`, `pds-tabs`, `pds-divider`,
-  `pds-accordion`) lean on `background`/`border` tokens and the elevation ramp.
+- **Overlays** (`pds-modal`, `pds-drawer`, `pds-popover`, `pds-datepicker`,
+  `pds-dropdown-menu`, `pds-filters`) sit on `background.overlay`, each with a
+  shadow from the ramp and a named `z-index` layer. Tooltip and toast use the
+  `primary` surface with `text.primary` instead: grey 900 with white text, or
+  grey 100 with black text on dark.
+- **Layout/data** (`pds-box`, `pds-row`, `pds-table`, `pds-tabs`,
+  `pds-divider`, `pds-accordion`) lean on `background`/`border` tokens and the
+  elevation ramp; `pds-container` only caps the width.
 
 **Accessibility (applies to every component):**
 - Color is never the only signal — pair intent colors with an icon or text.
 - Targets meet WCAG AA contrast; the dark theme has its own audited token values.
 - All interactive components are keyboard-operable with a visible `focus-ring`
-  (purple 300); never remove focus outlines.
+  (grey 400; grey 500 on dark); never remove focus outlines.
 - Use semantic HTML and ARIA; icon-only controls need an accessible name.
   A decorative `pds-icon` needs nothing: it's hidden from assistive tech unless it
   has `aria-label`, `aria-labelledby` or `tabindex`. Give it an `aria-label` only
@@ -440,18 +497,30 @@ worth calling out:
 **Do**
 - Consume `--pine-*` semantic tokens (and per-component `--pds-*` vars) for every
   color, space, radius, shadow, and transition.
-- Let purple (`accent`) be the only interaction accent; let grey-900/black
-  (`primary`/`brand`) carry strong emphasis and the primary button.
-- Support dark mode with `:host-context([data-theme="dark"])` and RTL with
-  `:host-context([dir="rtl"])` — the token layer carries dark values for you.
+- Use the `accent` tokens for interactive emphasis and `primary` for the
+  primary button and strong emphasis; reserve `brand` black for the mark.
+- Get dark mode from semantic `--pine-*` tokens: they switch under
+  `[data-theme="dark"]` and inherit into shadow roots. For RTL, use logical
+  properties (`margin-inline-start`, `inset-inline-end`) and, where those can't
+  express it, `:dir(rtl)`. Both work in Chromium, Firefox and Safari.
 - Use motion tokens (`--pine-motion-duration-*`, `--pine-motion-easing-*`) for
   transitions, and snap spacing to the 8px scale.
 - Prefix every component `pds-`; match JSDoc terminology to existing components.
 
 **Don't**
-- Hardcode hex colors, pixel spacing, raw radii, or transition timing — these are
-  lint-enforced (`pine-colors`, `pine-motion`).
-- Add a second interaction color, make the primary button purple, or use intent
+- Hardcode hex colors, pixel spacing, raw radii, or transition timing. Stylelint
+  catches the colors and transition durations
+  (`pine-design-system/no-hardcoded-colors`, `prefer-semantic-tokens`,
+  `no-hardcoded-motion`); spacing and radii are left to review.
+- Add `:host-context()`. Only Chromium supports it; Firefox and Safari drop the
+  whole rule. Pine still uses it for some dark-mode styles (the error fill of
+  `pds-input`, `pds-select`, `pds-textarea` and `pds-combobox`, and the error
+  border of `pds-input` on hover; the panel border of `pds-dropdown-menu` and
+  `pds-datepicker`; the datepicker's native selects), for the scroll and
+  fixed-column shadows of `pds-table` in RTL, and, through `@kajabi-ui/styles`,
+  for the dark colors of `pds-alert` and `pds-chip`. In Firefox and Safari those
+  keep their light-mode or LTR look.
+- Add a separate interaction color outside the `accent` tokens, or use intent
   colors decoratively.
 - Use FAIRE Sprig for product UI, or invent radii/shadows outside the ramps.
 - Remove focus outlines, rely on color alone to convey state, or ship animation
@@ -466,7 +535,12 @@ The curated semantic layer (`colors`, `typography`, `components`) and this prose
 are hand-maintained.
 
 - **Regenerate tokens:** `npm run design.tokens`
-- **CI drift check:** `npm run design.tokens -- --check` (exits non-zero if the
-  committed token block no longer matches `@kajabi-ui/styles`). Wire this into
-  the lint/CI job that already runs on token bumps so DESIGN.md can't silently
-  drift from the shipped tokens.
+- **Drift check:** `npm run design.tokens -- --check` exits non-zero when the
+  `tokens:` block no longer matches `@kajabi-ui/styles`. It runs in CI's
+  `test-lint` job and the pre-push hook.
+- **What it doesn't check:** everything outside the `tokens:` block. The script
+  reads only `core.json` and `semantic.json`, never `semantic-dark.json`, and
+  doesn't compare the `colors:` or `components:` values with either, so a token
+  bump that changes a semantic value passes the check. After bumping
+  `@kajabi-ui/styles`, diff its `semantic.json` and `semantic-dark.json` against
+  the previous version and update this file by hand.

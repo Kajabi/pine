@@ -26,7 +26,7 @@ Before each major upgrade, check the readmes of the components you use for **[DE
 
 The changelog marks breaking changes with `⚠️` and groups them under `### ⚠️ Breaking Changes`:
 
-```
+```markdown
 # 3.0.0 (2025-04-11)
 
 ### ⚠️  Breaking Changes
@@ -76,13 +76,13 @@ If you're upgrading from an earlier 3.x release, check these too.
 ```html
 <!-- Before (3.9.0 and earlier): text, removed in 3.10.0 -->
 <pds-popover component-id="details" text="Details">
-  <p>More about this item.</p>
+  <pds-text tag="p">More about this item.</pds-text>
 </pds-popover>
 
 <!-- After (3.10.0 and later) -->
 <pds-popover component-id="details">
   <pds-button slot="trigger">Details</pds-button>
-  <p>More about this item.</p>
+  <pds-text tag="p">More about this item.</pds-text>
 </pds-popover>
 ```
 

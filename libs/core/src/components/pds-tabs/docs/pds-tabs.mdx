@@ -19,6 +19,7 @@ Tabs organize related content into separate panels that users switch between usi
 
 - To switch between longer, related views of one topic without leaving the page, such as a course's overview, lessons and settings.
 - With `nav`, for links to sibling pages that should look like tabs, such as the sections of an account area. See [Navigation tabs](#navigation-tabs).
+- For any row of tabs, in place of a `pds-box` of `span`s or buttons. `pds-tabs` gives the tabs their roles, selected state and keyboard support (see [Accessibility](#accessibility)).
 
 ### When not to use
 
@@ -146,7 +147,7 @@ The Availability variant is to better display dates and/or times. The selected t
 
 <DocCanvas mdxSource={{
   react: `
-<div style={{ backgroundColor: 'var(--pine-color-background-inset-emphasized)', padding: 'var(--pine-dimension-md)' }}>
+<PdsBox backgroundColor="var(--pine-color-background-inset-emphasized)" padding="md">
   <PdsTabs activeTabName="tuesday" variant="availability" componentId="availability-example" tablistLabel="Available days">
     <PdsTab name="monday">Monday</PdsTab>
     <PdsTab name="tuesday">Tuesday</PdsTab>
@@ -155,10 +156,10 @@ The Availability variant is to better display dates and/or times. The selected t
     <PdsTabpanel name="wednesday">Content Wednesday</PdsTabpanel>
     <PdsTabpanel name="monday">Content Monday</PdsTabpanel>
   </PdsTabs>
-</div>
+</PdsBox>
 `,
   webComponent:`
-<div style="background-color: var(--pine-color-background-inset-emphasized); padding: var(--pine-dimension-md);">
+<pds-box background-color="var(--pine-color-background-inset-emphasized)" padding="md">
   <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability-example" tablist-label="Available days">
     <pds-tab name="monday">Monday</pds-tab>
     <pds-tab name="tuesday">Tuesday</pds-tab>
@@ -167,10 +168,10 @@ The Availability variant is to better display dates and/or times. The selected t
     <pds-tabpanel name="wednesday">Content Wednesday</pds-tabpanel>
     <pds-tabpanel name="monday">Content Monday</pds-tabpanel>
   </pds-tabs>
-</div>
+</pds-box>
 `
 }}>
-  <div style={{ backgroundColor: 'var(--pine-color-background-inset-emphasized)', padding: 'var(--pine-dimension-md)' }}>
+  <pds-box background-color="var(--pine-color-background-inset-emphasized)" padding="md">
     <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability-example" tablist-label="Available days">
       <pds-tab name="monday">Monday</pds-tab>
       <pds-tab name="tuesday">Tuesday</pds-tab>
@@ -179,7 +180,7 @@ The Availability variant is to better display dates and/or times. The selected t
       <pds-tabpanel name="wednesday">Content Wednesday</pds-tabpanel>
       <pds-tabpanel name="monday">Content Monday</pds-tabpanel>
     </pds-tabs>
-  </div>
+  </pds-box>
 </DocCanvas>
 
 #### Filter
