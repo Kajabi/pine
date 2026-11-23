@@ -84,6 +84,8 @@ Each component's page is `libs/core/src/components/<name>/docs/<name>.mdx`. Stor
 5. `## Examples`, with one `###` heading per example.
 6. `## Playground`, with a `<Canvas>` of the main story (for example `<Canvas of={stories.Default} />`), as the last section. The MCP ignores everything from this heading on.
 
+The [docs check](#docs-check) enforces the status, the title and its summary, the Guidelines headings with no other heading at any depth inside Guidelines, the blank line after `### Accessibility`, `## Properties` after Guidelines, and `## Playground` as the last `##` section.
+
 Write each example as a `DocCanvas` with both sources, and the same markup as its live preview:
 
 ```mdx
@@ -122,7 +124,7 @@ npm run test.docs-content --workspace @pine-ds/core
 
 ### Docs check
 
-PR CI's `docs-check` job checks the examples, each component's JSDoc, and the links and section sizes of every docs page. Data comes from `dist/docs.json` and the installed `@pine-ds/icons`.
+PR CI's `docs-check` job checks the examples, each component's JSDoc, the links and section sizes of every docs page, and the headings of component pages. Data comes from `dist/docs.json` and the installed `@pine-ds/icons`.
 
 The code in every `DocCanvas` (`react` and `webComponent`) on component pages and guides:
 
@@ -147,6 +149,7 @@ Each docs page, through the docs-content extractor:
 - **broken-anchor**: a link to `#slug`, on the same page or another MDX page, that matches no heading. Anchors come from the slugger Storybook uses, so the second "Border" heading is `#border-1`. The docs content follows in-page links only to headings, so a link to another element's `id` fails too: link to the heading above it.
 - **broken-docs-link**: a `?path=/docs/<id>--docs` link whose id is neither an MDX page nor the docs page of a stories file. Links to a single story need Storybook's own index, so they aren't checked.
 - **oversize-section**: a section over 8,000 characters, counting its heading and text in `docs-content.json` but not its subsections or example code. Agents read docs one section at a time, and the Pine MCP caps a response at 15,000 characters.
+- **heading-contract** (component pages only): a page that breaks [Writing component docs](#writing-component-docs). It needs one `#` title, as the first heading, with a summary paragraph under it; a status from a `<StatusBadge>` whose component is in `component-status.json`; `## Guidelines` with exactly `### When to use`, `### When not to use` and `### Accessibility`, in that order and letter case, no other heading at any depth, and a blank line after `### Accessibility`; `## Properties` after Guidelines; and `## Playground` as the last `##` section. A heading inside JSX, a list or a quote isn't a section in `docs-content.json`, so it's listed as not checked.
 
 Links inside a `DocCanvas` are example code, so they aren't checked. Run it locally with:
 
@@ -166,7 +169,7 @@ libs/core/src/components/pds-button/docs/pds-button.mdx:77  invalid-value  "Seco
 
 For React code, the line is the element's own line. For web component code, it's the snippet's first line, so look for the quoted tag in that snippet. For JSDoc, it's the line of the prop, event, method, slot or part in the component's `.tsx`.
 
-The report also lists what it couldn't decide under "Not checked" (React code with a syntax error, a slot name or part set with an expression, a default it can't be sure of, a story link) and what's worth a look under "For review". Neither fails the check. `npm run docs.check --workspace @pine-ds/core` exits 0 when there are no findings, 1 when there are findings, and 2 when the check itself fails. The root `npm run docs.check` runs it through Nx, which exits 1 for either failure, so read its output to tell them apart.
+The report also lists what it couldn't decide under "Not checked" (React code with a syntax error, a slot name or part set with an expression, a default it can't be sure of, a story link, a heading inside JSX) and what's worth a look under "For review". Neither fails the check. `npm run docs.check --workspace @pine-ds/core` exits 0 when there are no findings, 1 when there are findings, and 2 when the check itself fails. The root `npm run docs.check` runs it through Nx, which exits 1 for either failure, so read its output to tell them apart.
 
 ### Bundle size budgets
 
