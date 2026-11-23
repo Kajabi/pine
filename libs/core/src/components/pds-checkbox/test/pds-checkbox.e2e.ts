@@ -184,6 +184,23 @@ describe('pds-checkbox validity', () => {
     invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
     expect(invalid).toBe(true);
   });
+
+  it('goes required-invalid when required is turned on at runtime while unchecked', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="tos" name="tos" label="Agree"></pds-checkbox>');
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('pds-checkbox', (el: Element) => {
+      (el as unknown as { required: boolean }).required = true;
+    });
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-checkbox', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
 });
 
 describe('pds-checkbox checkmark color', () => {
