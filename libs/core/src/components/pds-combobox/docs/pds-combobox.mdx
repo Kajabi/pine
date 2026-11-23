@@ -1911,7 +1911,7 @@ There's no pagination hook without `async-url`: `pdsComboboxLoadOptions` isn't e
 
 **Example:**
 
-Each search aborts the previous request, so a slower response for an earlier search can't replace newer results. A request that fails, answers with an error status, or returns invalid JSON clears the options, so the list shows its empty state instead of results for an earlier search. `loading` turns off when the latest request ends, however it ends.
+Each search aborts the previous request, and an aborted request changes nothing, so a slower response for an earlier search can't replace newer results. A request that fails, answers with an error status, or returns invalid JSON clears the options, so the list shows its empty state instead of results for an earlier search. `loading` turns off when the latest request ends, however it ends.
 
 On the web component, set the properties and listen for the event in JavaScript:
 
@@ -1927,15 +1927,15 @@ combobox.addEventListener('pdsComboboxSearch', async (e) => {
   const { signal } = controller;
   combobox.loading = true;
 
+  // A newer search aborts this one and sets options and loading from then on.
   try {
     const response = await fetch(`/api/search?search=${encodeURIComponent(query)}`, { signal });
     if (!response.ok) throw new Error(`Search failed: ${response.status}`);
     const data = await response.json();
-    combobox.options = data.results;
+    if (!signal.aborted) combobox.options = data.results;
   } catch {
     if (!signal.aborted) combobox.options = [];
   } finally {
-    // An aborted request was replaced by a newer one, which turns loading off.
     if (!signal.aborted) combobox.loading = false;
   }
 });
@@ -1959,17 +1959,17 @@ export function UserSearch() {
     controllerRef.current = controller;
     setLoading(true);
 
+    // A newer search aborts this one and sets options and loading from then on.
     try {
       const response = await fetch(`/api/search?search=${encodeURIComponent(query)}`, {
         signal: controller.signal,
       });
       if (!response.ok) throw new Error(`Search failed: ${response.status}`);
       const data = await response.json();
-      setOptions(data.results);
+      if (!controller.signal.aborted) setOptions(data.results);
     } catch {
       if (!controller.signal.aborted) setOptions([]);
     } finally {
-      // An aborted request was replaced by a newer one, which turns loading off.
       if (!controller.signal.aborted) setLoading(false);
     }
   };
