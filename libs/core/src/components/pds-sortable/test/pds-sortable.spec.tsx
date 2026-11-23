@@ -223,6 +223,28 @@ describe('pds-sortable', () => {
       expect(alpha.querySelector('.pds-sortable-item__handle')?.getAttribute('aria-label')).toBe('Move Alpha');
     });
 
+    // Apps find a row by the id they gave it (a lookup, a Turbo Stream target), so the same
+    // re-render must leave that id alone on rows that set no component-id.
+    it('keeps the id an app set on each row through an unrelated re-render', async () => {
+      const page = await newSpecPage({
+        components: [PdsSortable, PdsSortableItem],
+        html: `
+          <pds-sortable component-id="list">
+            <pds-sortable-item id="row-alpha">Alpha</pds-sortable-item>
+            <pds-sortable-item id="row-bravo">Bravo</pds-sortable-item>
+          </pds-sortable>`,
+      });
+      const sortable = page.root as HTMLPdsSortableElement;
+      const ids = () => Array.from(sortable.querySelectorAll('pds-sortable-item')).map((item) => item.id);
+
+      expect(ids()).toEqual(['row-alpha', 'row-bravo']);
+
+      sortable.setAttribute('handle-label', 'Move {item}');
+      await page.waitForChanges();
+
+      expect(ids()).toEqual(['row-alpha', 'row-bravo']);
+    });
+
     it('emits the same detail fields as a drag', async () => {
       const { sortable, moved, itemAt, press } = await setup();
       const bravo = itemAt(1);
