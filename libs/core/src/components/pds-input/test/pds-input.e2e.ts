@@ -362,6 +362,38 @@ describe('pds-input validity', () => {
     invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
     expect(invalid).toBe(true);
   });
+
+  it('stays valid while required, readonly and empty, then goes invalid once readonly is removed', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-input component-id="i" name="i" label="Name" required readonly></pds-input></form>');
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+
+    await page.$eval('pds-input', (el: Element) => el.removeAttribute('readonly'));
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+  });
+
+  it('goes valid when readonly is turned on at runtime for a required, empty field', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<form><pds-input component-id="i" name="i" label="Name" required></pds-input></form>');
+    await page.waitForChanges();
+
+    let invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(true);
+
+    await page.$eval('pds-input', (el: Element) => {
+      (el as unknown as { readonly: boolean }).readonly = true;
+    });
+    await page.waitForChanges();
+
+    invalid = await page.$eval('pds-input', (el: Element) => el.matches(':invalid'));
+    expect(invalid).toBe(false);
+  });
 });
 
 describe('pds-input reduced motion', () => {
