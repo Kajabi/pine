@@ -182,11 +182,11 @@ Ask: "Validate this Pine layout code"
 - **Time Savings** - No need to manually lookup component documentation
 - **Quality Assurance** - Built-in validation prevents common mistakes
 
-Pine MCP serves a snapshot of Pine taken at its last deploy, so it can trail a new Pine release. The component and design-doc tools accept `forceRefresh: true` to read live docs from GitHub instead.
+Pine MCP serves the docs and component API of the Pine release that was current at its last deploy, so a new Pine release reaches agents after Pine MCP's next deploy. With `forceRefresh: true`, `get_pine_component`, `get_pine_design_doc` and `list_pine_design_docs` read the newest published release instead, and fall back to the deployed one if it can't be read.
 
 Pine MCP makes it easy for AI assistants to work intelligently with the Pine Design System, ensuring consistent, compliant code generation and reducing the need for manual documentation lookups.
 
 ## Get Help
 
-- Report wrong or missing data in an answer, such as a prop, example or icon, as a <pds-link href="https://github.com/Kajabi/pine/issues/new/choose" external>Pine GitHub issue</pds-link>. Most answers come from Pine's own docs, so the fix usually lands in Pine.
+- Report wrong or missing data in an answer, such as a prop, example or icon, as a <pds-link href="https://github.com/Kajabi/pine/issues/new/choose" external>Pine GitHub issue</pds-link>. Most answers come from Pine's own docs, so the fix usually lands in Pine and reaches agents once Pine releases it and Pine MCP redeploys.
 - Kajabi staff can ask in <pds-link href="https://kajabi.slack.com/archives/C0922PA4509" external>#dss-pine-mcp</pds-link> (Kajabi-internal Slack).
