@@ -106,7 +106,8 @@ export class PdsCombobox implements BasePdsProps {
    * styles, so it needs no global CSS and page CSS can't reach it: customize it with custom
    * properties on `pds-combobox`. Its reading direction, language, theme and custom properties are
    * taken from the combobox when it opens. Custom `empty` and `loading` slots are not supported when
-   * `body` is used; the default empty and loading content is shown instead.
+   * `body` is used; the default empty and loading content is shown instead. With `body`, the
+   * dropdown closes once its trigger scrolls fully out of view.
    * @default 'host'
    */
   @Prop() dropdownMount: 'host' | 'body' = 'host';
