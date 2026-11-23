@@ -1,5 +1,6 @@
 import brokenAnchor from './broken-anchor.mjs';
 import brokenDocsLink from './broken-docs-link.mjs';
+import headingContract from './heading-contract.mjs';
 import invalidValue from './invalid-value.mjs';
 import missingDescription from './missing-description.mjs';
 import oversizeSection from './oversize-section.mjs';
@@ -29,4 +30,5 @@ export const RULES = [
   brokenAnchor,
   brokenDocsLink,
   oversizeSection,
+  headingContract,
 ];
