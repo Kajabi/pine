@@ -1537,13 +1537,16 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
-   * Once the trigger is fully out of view, scrolled or clipped by any container or the window, the
-   * list closes rather than float away from it, matching pds-dropdown-menu. An IntersectionObserver
-   * measures against the layout viewport, so panning a pinch-zoomed page doesn't close it.
+   * With `dropdown-mount="body"`, once the trigger is fully out of view, scrolled or clipped by any
+   * container or the window, the list closes rather than float away from it, matching
+   * pds-dropdown-menu. A list mounted in the field scrolls along with its trigger, so it's left
+   * open: that also keeps the combobox from closing itself when it scrolls a container to reveal a
+   * highlighted row. An IntersectionObserver measures against the layout viewport, so panning a
+   * pinch-zoomed page doesn't close it.
    */
   private watchTriggerVisibility() {
     this.stopWatchingTriggerVisibility();
-    if (typeof IntersectionObserver === 'undefined' || !this.triggerEl) {
+    if (!this.usesBodyPortal || typeof IntersectionObserver === 'undefined' || !this.triggerEl) {
       return;
     }
 
