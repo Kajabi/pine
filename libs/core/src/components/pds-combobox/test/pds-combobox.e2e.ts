@@ -3439,6 +3439,9 @@ describe('pds-combobox when its trigger scrolls out of view', () => {
     expect(
       await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.className ?? ''),
     ).toContain('pds-combobox__button-trigger');
+    // preventScroll: true is the point -- focusing the trigger must not yank the container back
+    // and undo the very scroll that closed the dropdown.
+    expect(await page.$eval('#scroller', el => el.scrollLeft)).toBe(800);
   });
 
   // The same hazard for a portaled panel-search field, which opening already focuses.
@@ -3472,6 +3475,9 @@ describe('pds-combobox when its trigger scrolls out of view', () => {
     expect(
       await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.className ?? ''),
     ).toContain('pds-combobox__button-trigger');
+    // preventScroll: true is the point -- focusing the trigger must not yank the container back
+    // and undo the very scroll that closed the dropdown.
+    expect(await page.$eval('#scroller', el => el.scrollLeft)).toBe(800);
   });
 
   // Waits for the trigger to be scrolled back into its scrolling container.
