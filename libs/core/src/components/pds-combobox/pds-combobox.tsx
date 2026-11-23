@@ -1582,18 +1582,20 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Closed because its trigger left the view. Unlike a click or Tab, scrolling doesn't blur
-   * anything, so focus can still be on a highlighted option or the panel search field -- about to
-   * be unmounted along with the rest of the listbox/portal. Restoring focus to the trigger then,
+   * anything, so focus can still be on the panel search field -- about to be unmounted along with
+   * the rest of the portal. Only a body-mounted list closes this way, and its options never take
+   * focus, so the search field is the one thing in it that can hold focus. Restoring focus to the trigger then,
    * as `disabledChanged` does for its own non-user-driven close, keeps it from falling to
    * `<body>`; `preventScroll` matters here, since the trigger may be out of view too, and letting
    * the browser scroll it back on focus would undo the very scroll that closed this. Anywhere else
    * focus already was -- the trigger itself, or outside the combobox entirely -- is left alone.
    */
   private closeFromTriggerScrolledOut() {
-    const shadowActive = this.el.shadowRoot?.activeElement ?? null;
-    const focusInDropdown =
-      !!this.portalEl?.shadowRoot?.activeElement || (!!shadowActive && !!this.listboxEl?.contains(shadowActive));
-    const focusLeftComponent = !focusInDropdown && document.activeElement !== this.el && document.activeElement !== this.portalEl;
+    const focusInDropdown = !!this.portalEl?.shadowRoot?.activeElement;
+    // Read from the combobox's own root: document.activeElement stops at the outermost shadow host,
+    // so inside another component's shadow root it would never be the combobox.
+    const rootActive = (this.el.getRootNode() as Document | ShadowRoot).activeElement;
+    const focusLeftComponent = !focusInDropdown && rootActive !== this.el && document.activeElement !== this.portalEl;
 
     this.isOpen = false;
     this.highlightedIndex = -1;
