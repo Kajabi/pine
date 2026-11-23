@@ -3419,6 +3419,61 @@ describe('pds-combobox when its trigger scrolls out of view', () => {
     expect(await page.$eval('#scroller', el => el.scrollLeft)).toBe(800);
   });
 
+  // Unlike a click or Tab, scrolling doesn't blur anything: focus can still be on a highlighted
+  // option, about to be unmounted along with the rest of the listbox, when the scroll-out close
+  // fires. Left alone, that would drop focus to <body> instead of leaving it "wherever it was".
+  it('returns focus to the trigger, not <body>, when a focused option is unmounted by a scroll-out close', async () => {
+    const page = await openCombobox(scroller(''));
+    await page.keyboard.press('ArrowDown');
+    await page.waitForChanges();
+    expect(
+      await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.getAttribute('role')),
+    ).toBe('option');
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await closed(page);
+
+    expect(await isOpen(page)).toBe(false);
+    expect(
+      await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.className ?? ''),
+    ).toContain('pds-combobox__button-trigger');
+  });
+
+  // The same hazard for a portaled panel-search field, which opening already focuses.
+  it('returns focus to the trigger when a portaled panel-search field is unmounted by a scroll-out close', async () => {
+    const page = await newE2EPage();
+    await page.setContent(scroller(' dropdown-mount="body" panel-search'));
+    await page.waitForChanges();
+    await (await page.find('pds-combobox >>> .pds-combobox__button-trigger')).click();
+    await page.waitForChanges();
+    await settle(page);
+    expect(await isOpen(page)).toBe(true);
+    expect(
+      await page.evaluate(() => document.querySelector('.pds-combobox-dropdown-portal')?.shadowRoot?.activeElement?.className ?? ''),
+    ).toContain('pds-combobox__panel-search-input');
+
+    await page.$eval('#scroller', el => {
+      el.scrollLeft = 800;
+    });
+    await closed(page);
+    // The portal and the trigger's aria-expanded both come from isOpen, but the body-portal
+    // teardown is deferred (a setTimeout(0) inside isOpenChanged), so aria-expanded can lag the
+    // listbox's removal by a tick in this configuration; wait for it rather than a fixed delay.
+    await page.waitForFunction(
+      () =>
+        document.querySelector('pds-combobox')!.shadowRoot!.querySelector('.pds-combobox__button-trigger')!.getAttribute('aria-expanded') ===
+        'false',
+    );
+
+    expect(await isOpen(page)).toBe(false);
+    expect(await triggerAttr(page, 'aria-expanded')).toBe('false');
+    expect(
+      await page.evaluate(() => document.querySelector('pds-combobox')!.shadowRoot!.activeElement?.className ?? ''),
+    ).toContain('pds-combobox__button-trigger');
+  });
+
   // Waits for the trigger to be scrolled back into its scrolling container.
   const triggerInView = (page: E2EPage) =>
     page.waitForFunction(() => {
