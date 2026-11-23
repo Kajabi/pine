@@ -31,6 +31,8 @@ export class PdsTextarea {
   private resizeObserver?: ResizeObserver;
   private characterCounter?: HTMLElement;
   private readonly _type = 'textarea' as const;
+  /** Whether the current text counts against `maxLength`: typed, or kept through a runtime limit change. */
+  private lengthChecked = false;
 
   @Element() el: HTMLPdsTextareaElement;
 
@@ -201,6 +203,8 @@ export class PdsTextarea {
     const value = this.getValue();
 
     if (nativeTextarea && nativeTextarea.value !== value) {
+      // Set from outside rather than typed, so it isn't checked against maxLength, as on a native textarea.
+      this.lengthChecked = false;
       nativeTextarea.value = value;
     }
 
@@ -224,6 +228,8 @@ export class PdsTextarea {
       this.setupResizeObserver();
     }
 
+    // Lowering the limit under the current text marks it too long, as it did before.
+    this.lengthChecked = true;
     this.updateValidity();
   }
 
@@ -299,6 +305,7 @@ export class PdsTextarea {
         // Prevent input beyond maxLength
         input.value = input.value.substring(0, this.maxLength);
       }
+      this.lengthChecked = true;
       this.value = input.value || '';
     }
     this.emitInputChange(ev);
@@ -480,8 +487,10 @@ export class PdsTextarea {
    * Reports the textarea's validity to ElementInternals. `tooLong` is computed from the
    * `maxLength` prop and the value rather than read from the native textarea: native
    * `validity.tooLong` is only ever set for user edits (never for a programmatic value), and its
-   * `maxlength` attribute is still stale inside the `maxLength` watcher. Every path that reports
-   * validity goes through here so a later `disabled`/`required`/value change can't drop it.
+   * `maxlength` attribute is still stale inside the `maxLength` watcher. Like the native check, it
+   * only applies once `lengthChecked` is set: after the user types, or the limit changes at runtime.
+   * Every path that reports validity goes through here so a later `disabled`/`required`/value
+   * change can't drop it.
    */
   private updateValidity() {
     if (isSpecTest() || !this.internals?.setValidity) return;
@@ -494,7 +503,7 @@ export class PdsTextarea {
       return;
     }
 
-    if ((this.maxLength ?? 0) > 0 && native.value.length > this.maxLength) {
+    if (this.lengthChecked && (this.maxLength ?? 0) > 0 && native.value.length > this.maxLength) {
       this.internals.setValidity({ tooLong: true }, 'Value exceeds maxLength', native);
       return;
     }
