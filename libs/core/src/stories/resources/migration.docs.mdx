@@ -14,11 +14,11 @@ For the full version history, see <pds-link href="../?path=/docs/resources-chang
 
 Pine deprecates a public API before it removes it. <pds-link href="https://github.com/Kajabi/pine/blob/main/VERSIONING.md" external>VERSIONING.md</pds-link> has the full policy. In short:
 
-1. **Deprecation notice** — the prop's JSDoc gets an `@deprecated` tag that names the replacement, and the component's generated readme marks the prop **[DEPRECATED]**. Pine doesn't log a console warning when a deprecated prop is used. For example, the <pds-link href="https://github.com/Kajabi/pine/blob/main/libs/core/src/components/pds-button/readme.md" external>`pds-button` readme</pds-link> marks the `icon` prop, which the `start` slot replaces.
+1. **Deprecation notice** — the prop's JSDoc gets an `@deprecated` tag that names the replacement, and the component's generated readme marks the prop `[DEPRECATED]`. Pine doesn't log a console warning when a deprecated prop is used. For example, the <pds-link href="https://github.com/Kajabi/pine/blob/main/libs/core/src/components/pds-button/readme.md" external>`pds-button` readme</pds-link> marks the `icon` prop, which the `start` slot replaces.
 2. **Deprecation period** — the deprecated API keeps working until a major release removes it.
 3. **Removal** — in a major release.
 
-Before each major upgrade, check the readmes of the components you use for **[DEPRECATED]** props.
+Before each major upgrade, check the readmes of the components you use for `[DEPRECATED]` props.
 
 ---
 

@@ -36,10 +36,12 @@ export function generateDocsContent(components) {
     file: `${CORE_ROOT}/${relative}`,
     source: readFileSync(path.join(coreDir, relative), 'utf8'),
   }));
+  const status = JSON.parse(readFileSync(path.join(srcDir, 'stories/resources/component-status.json'), 'utf8'));
   return buildDocsContent({
     pages,
     components,
-    statusManifest: JSON.parse(readFileSync(path.join(srcDir, 'stories/resources/component-status.json'), 'utf8')).components,
+    statusManifest: status.components,
+    statusDefinitions: status.statuses,
     readStories,
     version: JSON.parse(readFileSync(path.join(coreDir, 'package.json'), 'utf8')).version,
     commit: currentCommit(),
