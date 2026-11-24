@@ -314,6 +314,11 @@ export namespace Components {
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
+          * Defines the style of the box's border, and of each edge set with the per-side border props. Use `dashed` for an empty or loading placeholder.
+          * @defaultValue solid
+         */
+        "borderStyle"?: `solid` | `dashed`;
+        /**
           * Makes the box a size container by setting `container-type`. `inline-size` stops the box's content from setting its width, so long unwrapped text truncates instead of widening it, and lets children use container query units. `size` does the same for both axes, so the box needs a height from somewhere else. Either way the box still needs its width from its parent, such as the default `flex-grow`, `flex="grow"` or `fit`; with `flex="none"` or `flex="shrink"`, or the `auto` prop, it collapses.
          */
         "container"?: BoxContainerType;
@@ -4299,6 +4304,11 @@ declare namespace LocalJSX {
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
+          * Defines the style of the box's border, and of each edge set with the per-side border props. Use `dashed` for an empty or loading placeholder.
+          * @defaultValue solid
+         */
+        "borderStyle"?: `solid` | `dashed`;
+        /**
           * Makes the box a size container by setting `container-type`. `inline-size` stops the box's content from setting its width, so long unwrapped text truncates instead of widening it, and lets children use container query units. `size` does the same for both axes, so the box needs a height from somewhere else. Either way the box still needs its width from its parent, such as the default `flex-grow`, `flex="grow"` or `fit`; with `flex="none"` or `flex="shrink"`, or the `auto` prop, it collapses.
          */
         "container"?: BoxContainerType;
@@ -7277,6 +7287,7 @@ declare namespace LocalJSX {
         "borderInlineEnd": boolean;
         "borderInlineStart": boolean;
         "borderRadius": `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "borderStyle": `solid` | `dashed`;
         "container": BoxContainerType;
         "direction": `row` | `column`;
         "display": `flex` | `inline-flex` | `block` | `inline-block`;
