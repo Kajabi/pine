@@ -2,6 +2,8 @@ const SOURCE_KEYS = new Set(['webComponent', 'react']);
 
 const indentOf = (line) => line.length - line.trimStart().length;
 
+const endsInLineContinuation = (rawLine) => /(?:^|[^\\])(?:\\\\)*\\$/.test(rawLine);
+
 export const lineIndent = (node, source) => indentOf(source.slice(source.lastIndexOf('\n', node.start) + 1, node.start));
 
 /**
@@ -14,9 +16,12 @@ export function writtenTemplate(literal, source) {
   const rawLines = raw.split('\n');
   const cookedLines = cooked.split('\n');
   const stripped = written.map((line, index) => line.slice(0, line.length - (rawLines[index]?.length ?? 0)));
+  // A line continuation drops a cooked line and an escaped newline adds one, so equal counts only mean the
+  // lines match one for one when no raw line continues onto the next.
   const aligned =
     written.length === rawLines.length &&
     cookedLines.length === rawLines.length &&
+    !rawLines.slice(0, -1).some(endsInLineContinuation) &&
     written.every((line, index) => line.endsWith(rawLines[index]) && !stripped[index].trim());
   return aligned ? cookedLines.map((line, index) => stripped[index] + line).join('\n') : undefined;
 }
