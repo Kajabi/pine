@@ -1625,7 +1625,19 @@ Set `group-display="flyout"` to list the groups instead of every option. Hoverin
 - Groups come from `<optgroup>` elements or the `group` field of `options`. Options under a `<pds-text>` heading are listed ungrouped.
 - The flyout is as wide as its options, between `flyout-min-width` (default `288px`) and `flyout-max-width` (default `388px`), padding included. It opens on the side with room, and scrolls when a group is taller than the space available.
 
-```jsx
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-flyout-example" label="Action" group-display="flyout" dropdown-mount="body">
+  <optgroup label="Tag" data-icon="hashtag">
+    <option value="tag-add">Add a tag</option>
+    <option value="tag-remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-send">Send an email</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `import { PdsCombobox } from '@pine-ds/react';
+
 <PdsCombobox
   componentId="combobox-flyout-example"
   label="Action"
@@ -1636,8 +1648,19 @@ Set `group-display="flyout"` to list the groups instead of every option. Hoverin
     { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
     { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
   ]}
-/>
-```
+/>`,
+  }}
+>
+  <pds-combobox component-id="combobox-flyout-example" label="Action" group-display="flyout" dropdown-mount="body">
+    <optgroup label="Tag" data-icon="hashtag">
+      <option value="tag-add">Add a tag</option>
+      <option value="tag-remove">Remove a tag</option>
+    </optgroup>
+    <optgroup label="Email" data-icon="mail">
+      <option value="email-send">Send an email</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
 
 #### Drill-In Groups
 
@@ -1645,7 +1668,19 @@ Set `group-display="drill-in"` where nothing can open beside the dropdown, such 
 
 With `panel-search`, the search field shows only over the groups. Inside a group, the back row takes its place above the divider, since one group's options don't need searching, and typing a character starts a search of the whole list.
 
-```jsx
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-drill-in-example" label="Filter" trigger="button" mode="select-only" group-display="drill-in" drill-in-back-label="Back">
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-status">Marketing status</option>
+    <option value="email-activity">Email activity</option>
+  </optgroup>
+  <optgroup label="Contact">
+    <option value="contact-added">Was added</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `import { PdsCombobox } from '@pine-ds/react';
+
 <PdsCombobox
   componentId="combobox-drill-in-example"
   label="Filter"
@@ -1658,8 +1693,19 @@ With `panel-search`, the search field shows only over the groups. Inside a group
     { id: 'email-activity', text: 'Email activity', group: 'Email' },
     { id: 'contact-added', text: 'Was added', group: 'Contact' },
   ]}
-/>
-```
+/>`,
+  }}
+>
+  <pds-combobox component-id="combobox-drill-in-example" label="Filter" trigger="button" mode="select-only" group-display="drill-in" drill-in-back-label="Back">
+    <optgroup label="Email" data-icon="mail">
+      <option value="email-status">Marketing status</option>
+      <option value="email-activity">Email activity</option>
+    </optgroup>
+    <optgroup label="Contact">
+      <option value="contact-added">Was added</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
 
 #### Keyboard and Screen Readers in Grouped Displays
 
@@ -1722,7 +1768,19 @@ The `button` and `chip` triggers can't be typed into. Add `panel-search` to put 
 
 With `panel-search`, the trigger is a button that opens the dropdown, and the search field is the combobox. Unlike the other triggers, `panel-search` moves keyboard focus into the dropdown. With `dropdown-mount="body"` inside a `<dialog>` (including `pds-modal`) that's fine, because the dropdown mounts in the dialog. Inside a focus trap that isn't a `<dialog>`, such as a custom side panel, check that the trap allows focus into the portaled dropdown, or use `dropdown-mount="host"`.
 
-```jsx
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-panel-search-example" label="Action" trigger="button" mode="select-only" group-display="flyout" panel-search search-placeholder="Search actions" search-options-label="Search actions">
+  <optgroup label="Tag" data-icon="hashtag">
+    <option value="tag-add">Add a tag</option>
+    <option value="tag-remove">Remove a tag</option>
+  </optgroup>
+  <optgroup label="Email" data-icon="mail">
+    <option value="email-send">Send an email</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `import { PdsCombobox } from '@pine-ds/react';
+
 <PdsCombobox
   componentId="combobox-panel-search-example"
   label="Action"
@@ -1732,9 +1790,24 @@ With `panel-search`, the trigger is a button that opens the dropdown, and the se
   panelSearch
   searchPlaceholder="Search actions"
   searchOptionsLabel="Search actions"
-  options={actions}
-/>
-```
+  options={[
+    { id: 'tag-add', text: 'Add a tag', group: 'Tag', groupIcon: 'hashtag' },
+    { id: 'tag-remove', text: 'Remove a tag', group: 'Tag' },
+    { id: 'email-send', text: 'Send an email', group: 'Email', groupIcon: 'mail' },
+  ]}
+/>`,
+  }}
+>
+  <pds-combobox component-id="combobox-panel-search-example" label="Action" trigger="button" mode="select-only" group-display="flyout" panel-search search-placeholder="Search actions" search-options-label="Search actions">
+    <optgroup label="Tag" data-icon="hashtag">
+      <option value="tag-add">Add a tag</option>
+      <option value="tag-remove">Remove a tag</option>
+    </optgroup>
+    <optgroup label="Email" data-icon="mail">
+      <option value="email-send">Send an email</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
 
 #### Disabled Options
 
