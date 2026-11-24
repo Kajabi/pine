@@ -151,6 +151,13 @@ body {
     vertical-align: text-bottom;
   }
 
+  @media (forced-colors: active) {
+    #storybook-docs a.sbdocs-a[target="_blank"]::after {
+      background-color: LinkText;
+      forced-color-adjust: none;
+    }
+  }
+
   /* Docs code blocks */
   [data-theme="dark"] .sbdocs pre,
   [data-theme="dark"] .sbdocs code {
