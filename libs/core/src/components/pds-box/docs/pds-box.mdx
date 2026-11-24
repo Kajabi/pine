@@ -495,14 +495,30 @@ Every `margin-*` prop and its breakpoint variants also take `auto`. An `auto` ma
 
 Use breakpoint variants to move a box only at some widths. Here the action sits right after the text on smaller screens and moves to the end of the row from `md` up:
 
-```html
-<pds-box fit wrap="true" gap="sm" align-items="center">
+<DocCanvas
+  mdxSource={{
+    react: `import { PdsBox, PdsButton, PdsText } from '@pine-ds/react';
+
+<PdsBox fit wrap gap="sm" alignItems="center">
+  <PdsText>Contact details</PdsText>
+  <PdsBox flex="none" marginInlineStartMd="auto">
+    <PdsButton variant="secondary">Edit</PdsButton>
+  </PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box fit wrap="true" gap="sm" align-items="center">
   <pds-text>Contact details</pds-text>
   <pds-box flex="none" margin-inline-start-md="auto">
     <pds-button variant="secondary">Edit</pds-button>
   </pds-box>
-</pds-box>
-```
+</pds-box>`
+  }}>
+  <pds-box fit wrap="true" gap="sm" align-items="center">
+    <pds-text>Contact details</pds-text>
+    <pds-box flex="none" margin-inline-start-md="auto">
+      <pds-button variant="secondary">Edit</pds-button>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
 
 Use `justify-content="space-between"` when every child should spread out evenly, and an `auto` margin when only one should move.
 
@@ -1159,8 +1175,25 @@ Common custom flex patterns:
 ```
 
 ##### ✅ Size columns with size, and use flex inside a box
-```html
-<!-- Two half-width columns -->
+
+<DocCanvas
+  mdxSource={{
+    react: `import { PdsBox, PdsRow } from '@pine-ds/react';
+
+<>
+  {/* Two half-width columns */}
+  <PdsRow>
+    <PdsBox size="6">Column</PdsBox>
+    <PdsBox size="6">Column</PdsBox>
+  </PdsRow>
+
+  {/* flex sizes boxes inside another pds-box */}
+  <PdsBox fit>
+    <PdsBox flex="grow">Takes the free space</PdsBox>
+    <PdsBox flex="none">Keeps its content width</PdsBox>
+  </PdsBox>
+</>`,
+    webComponent: `<!-- Two half-width columns -->
 <pds-row>
   <pds-box size="6">Column</pds-box>
   <pds-box size="6">Column</pds-box>
@@ -1170,8 +1203,19 @@ Common custom flex patterns:
 <pds-box fit>
   <pds-box flex="grow">Takes the free space</pds-box>
   <pds-box flex="none">Keeps its content width</pds-box>
-</pds-box>
-```
+</pds-box>`
+  }}>
+  <>
+    <pds-row>
+      <pds-box size="6">Column</pds-box>
+      <pds-box size="6">Column</pds-box>
+    </pds-row>
+    <pds-box fit>
+      <pds-box flex="grow">Takes the free space</pds-box>
+      <pds-box flex="none">Keeps its content width</pds-box>
+    </pds-box>
+  </>
+</DocCanvas>
 
 #### Fit
 `fit` sets the box's `width`, `min-width` and `max-width` to `100%`, so it fills its parent's width. A box is `inline-flex` by default and sizes to its content, so use `fit` for a box that should span its container.

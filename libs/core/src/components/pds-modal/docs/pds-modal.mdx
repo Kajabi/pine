@@ -201,12 +201,77 @@ To have a control of your own take Escape, call `preventDefault()` on the Escape
 
 `backdrop-dismiss` (default `true`) controls whether the modal can be dismissed by clicking outside it, pressing Escape, or the browser's own close request (such as a back gesture).
 
-```html
-<!-- Non-dismissible modal: backdrop clicks, Escape and the browser's close request are all ignored -->
-<pds-modal backdrop-dismiss="false">
-  <!-- Modal content that can only be closed via explicit button clicks -->
-</pds-modal>
-```
+<DocCanvas
+  mdxSource={{
+    react: `
+      <PdsModal componentId="non-dismissible-modal" backdropDismiss={false} open={open} onPdsModalClose={() => setOpen(false)}>
+        <PdsModalHeader>…</PdsModalHeader>
+        <PdsModalContent>…</PdsModalContent>
+        <PdsModalFooter>
+          <PdsBox justifyContent="end" gap="sm" padding="md" fit>
+            <PdsButton variant="secondary" onClick={() => setOpen(false)}>Cancel</PdsButton>
+            <PdsButton variant="primary" onClick={() => setOpen(false)}>Confirm</PdsButton>
+          </PdsBox>
+        </PdsModalFooter>
+      </PdsModal>
+    `,
+    webComponent: `
+      <pds-modal id="non-dismissible-modal" component-id="non-dismissible-modal" backdrop-dismiss="false">
+        <pds-modal-header>…</pds-modal-header>
+        <pds-modal-content>…</pds-modal-content>
+        <pds-modal-footer>
+          <pds-box justify-content="end" gap="sm" padding="md" fit>
+            <pds-button variant="secondary" onclick="document.querySelector('#non-dismissible-modal').open = false">Cancel</pds-button>
+            <pds-button variant="primary" onclick="document.querySelector('#non-dismissible-modal').open = false">Confirm</pds-button>
+          </pds-box>
+        </pds-modal-footer>
+      </pds-modal>
+    `
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#non-dismissible-modal');
+      if (modal) modal.open = true;
+    }}>Non-dismissible Modal</pds-button>
+
+    <pds-modal id="non-dismissible-modal" component-id="non-dismissible-modal" backdrop-dismiss="false">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3" id="non-dismissible-modal-heading">Non-dismissible Modal</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#non-dismissible-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">Escape and clicks on the backdrop don't close this modal. Close it with one of its buttons.</pds-text>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box justify-content="end" gap="sm" padding="md" fit>
+          <pds-button variant="secondary" onClick={() => {
+            const modal = document.querySelector('#non-dismissible-modal');
+            if (modal) modal.open = false;
+          }}>Cancel</pds-button>
+          <pds-button variant="primary" onClick={() => {
+            const modal = document.querySelector('#non-dismissible-modal');
+            if (modal) modal.open = false;
+          }}>Confirm</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+</DocCanvas>
 
 > **Note:** While WAI-ARIA guidelines recommend Escape-to-close for standard modals, setting `backdrop-dismiss="false"` disables this for use cases requiring explicit user action (e.g., required onboarding flows, critical confirmations). Ensure users have a clear, accessible path to complete the required action.
 
@@ -275,8 +340,8 @@ Modals come in four preset sizes, or a custom width:
       </pds-box>
     </pds-modal-header>
     <pds-modal-content>
-      <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
-        <p>This is a small modal, ideal for simple confirmations or short forms.</p>
+      <pds-box fit direction="column" padding-block-start="sm" padding-block-end="xl" padding-inline-start="md" padding-inline-end="md">
+        <pds-text tag="p">This is a small modal, ideal for simple confirmations or short forms.</pds-text>
       </pds-box>
     </pds-modal-content>
   </pds-modal>
@@ -299,8 +364,8 @@ Modals come in four preset sizes, or a custom width:
       </pds-box>
     </pds-modal-header>
     <pds-modal-content>
-      <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
-        <p>This is a medium modal, ideal for most use cases.</p>
+      <pds-box fit direction="column" padding-block-start="sm" padding-block-end="xl" padding-inline-start="md" padding-inline-end="md">
+        <pds-text tag="p">This is a medium modal, ideal for most use cases.</pds-text>
       </pds-box>
     </pds-modal-content>
   </pds-modal>
@@ -323,8 +388,8 @@ Modals come in four preset sizes, or a custom width:
       </pds-box>
     </pds-modal-header>
     <pds-modal-content>
-      <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
-        <p>This is a large modal, suitable for complex forms or detailed content.</p>
+      <pds-box fit direction="column" padding-block-start="sm" padding-block-end="xl" padding-inline-start="md" padding-inline-end="md">
+        <pds-text tag="p">This is a large modal, suitable for complex forms or detailed content.</pds-text>
       </pds-box>
     </pds-modal-content>
   </pds-modal>
@@ -347,8 +412,8 @@ Modals come in four preset sizes, or a custom width:
       </pds-box>
     </pds-modal-header>
     <pds-modal-content>
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        <p>This is a fullscreen modal that takes up the entire viewport.</p>
+      <pds-box fit direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+        <pds-text tag="p">This is a fullscreen modal that takes up the entire viewport.</pds-text>
       </pds-box>
     </pds-modal-content>
   </pds-modal>
@@ -397,8 +462,8 @@ Custom widths are a code-only option: the Figma component has the preset sizes o
       </pds-box>
     </pds-modal-header>
     <pds-modal-content>
-      <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
-        <p>This modal uses <code>size="1100px"</code>. It narrows to fit smaller screens.</p>
+      <pds-box fit direction="column" padding-block-start="sm" padding-block-end="xl" padding-inline-start="md" padding-inline-end="md">
+        <pds-text tag="p">This modal uses <code>size="1100px"</code>. It narrows to fit smaller screens.</pds-text>
       </pds-box>
     </pds-modal-content>
   </pds-modal>
@@ -539,9 +604,9 @@ By default, modals are scrollable when content exceeds the viewport height. The 
         </pds-box>
       </pds-modal-header>
       <pds-modal-content>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+        <pds-box fit direction="column" gap="lg" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
           {Array(20).fill().map((_, i) => (
-            <p key={i}>This is paragraph {i + 1} demonstrating scrollable content in the modal.</p>
+            <pds-text key={i} tag="p">This is paragraph {i + 1} demonstrating scrollable content in the modal.</pds-text>
           ))}
         </pds-box>
       </pds-modal-content>
@@ -603,19 +668,19 @@ When `scrollable={false}`, the modal content will overflow naturally without cre
         </pds-box>
       </pds-modal-header>
       <pds-modal-content>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
+        <pds-box fit direction="column" gap="lg" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -676,17 +741,19 @@ You can override the automatic border detection by explicitly setting the `borde
         </pds-box>
       </pds-modal-header>
       <pds-modal-content border="both">
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p><strong>This content has border="both"</strong></p>
-          <p>Notice the borders at top and bottom are always visible, regardless of scroll position.</p>
-          <p>Available border values:</p>
-          <ul>
-            <li><code>border="none"</code> - No borders</li>
-            <li><code>border="top"</code> - Top border only</li>
-            <li><code>border="bottom"</code> - Bottom border only</li>
-            <li><code>border="both"</code> - Top and bottom borders</li>
-          </ul>
-          <p>When you set a border value explicitly, the automatic scroll-based detection is disabled.</p>
+        <pds-box fit direction="column" gap="lg" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p"><strong>This content has border="both"</strong></pds-text>
+          <pds-text tag="p">Notice the borders at top and bottom are always visible, regardless of scroll position.</pds-text>
+          <pds-box direction="column" gap="sm">
+            <pds-text tag="p">Available border values:</pds-text>
+            <ul>
+              <li><code>border="none"</code> - No borders</li>
+              <li><code>border="top"</code> - Top border only</li>
+              <li><code>border="bottom"</code> - Bottom border only</li>
+              <li><code>border="both"</code> - Top and bottom borders</li>
+            </ul>
+            <pds-text tag="p">When you set a border value explicitly, the automatic scroll-based detection is disabled.</pds-text>
+          </pds-box>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -803,8 +870,8 @@ Modals can be nested, with only the topmost modal responding to escape key and b
         </pds-box>
       </pds-modal-header>
       <pds-modal-content>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</p>
+        <pds-box fit direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -875,8 +942,8 @@ Set `disable-top-layer` to open the modal as a non-modal dialog (`dialog.show()`
         </pds-box>
       </pds-modal-header>
       <pds-modal-content>
-        <pds-box fit direction="column" gap="sm" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> with a higher <code>z-index</code> can display above it.</p>
+        <pds-box fit direction="column" gap="lg" padding-block-start="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This modal uses <code>disable-top-layer</code>, so an overlay appended to <code>document.body</code> with a higher <code>z-index</code> can display above it.</pds-text>
           <pds-button variant="secondary" onClick={() => {
             const o = document.createElement('button');
             o.type = 'button';

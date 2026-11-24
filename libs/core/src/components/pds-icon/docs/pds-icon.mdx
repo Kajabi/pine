@@ -146,29 +146,31 @@ Here, `flip-rtl` mirrors the arrow inside a right-to-left section:
 
 ## Usage
 
-### React Usage
-
 In React, import the icon from `@pine-ds/icons/icons` and pass it to the `icon` property, which bundles the SVG with your app. `name` isn't deprecated, but in React it logs a console warning and fetches the SVG at runtime from the [asset path](/docs/guides-assets--docs) (jsDelivr by default).
 
-```jsx
+For web components, use the `name` property with the icon name as a string.
+
+<DocCanvas mdxSource={{
+  react: `
 import { bulb, danger, launch } from '@pine-ds/icons/icons';
 import { PdsIcon } from '@pine-ds/react';
 
-// Correct usage
 <PdsIcon icon={bulb} />
 <PdsIcon icon={danger} color="var(--pine-color-danger)" />
 <PdsIcon icon={launch} size="large" />
-```
-
-### Web Component Usage
-
-For web components, use the `name` property with the icon name as a string:
-
-```html
+`,
+  webComponent: `
 <pds-icon name="bulb"></pds-icon>
 <pds-icon name="danger" color="var(--pine-color-danger)"></pds-icon>
 <pds-icon name="launch" size="large"></pds-icon>
-```
+`
+}}>
+  <>
+    <pds-icon name="bulb"></pds-icon>
+    <pds-icon name="danger" color="var(--pine-color-danger)"></pds-icon>
+    <pds-icon name="launch" size="large"></pds-icon>
+  </>
+</DocCanvas>
 
 ## Performance
 

@@ -64,8 +64,8 @@ const BaseTemplate = (args) => html`
       </pds-modal-header>
 
       <pds-modal-content>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This is the modal content. You can put any content here.</p>
+        <pds-box fit direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This is the modal content. You can put any content here.</pds-text>
         </pds-box>
       </pds-modal-content>
 
@@ -142,8 +142,8 @@ const DestructiveTemplate = (args) => html`
       </pds-modal-header>
 
       <pds-modal-content>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This is the modal content. You can put any content here.</p>
+        <pds-box fit direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This is the modal content. You can put any content here.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -297,16 +297,16 @@ const ScrollableTemplate = (args) => {
           </pds-box>
         </pds-modal-header>
         <pds-modal-content>
-          <pds-box direction="column" padding="md">
+          <pds-box direction="column" gap="lg" padding="md" padding-block-start="xl" padding-block-end="xl">
             ${Array(20)
               .fill(0)
               .map(
                 () => html`
-                  <p>
+                  <pds-text tag="p">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
                     dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
                     ea commodo consequat.
-                  </p>
+                  </pds-text>
                 `
               )}
           </pds-box>
@@ -388,17 +388,19 @@ const FullscreenTemplate = (args) => html`
         </pds-box>
       </pds-modal-header>
       <pds-modal-content>
-        <pds-box direction="column" padding="md">
-          <p>This is a sample modal dialog. It demonstrates the basic features of the pds-modal component.</p>
-          <p>The modal supports:</p>
-          <ul>
-            <li>Different sizes (small, medium, large)</li>
-            <li>Optional close button</li>
-            <li>Backdrop click to close</li>
-            <li>Escape key to close</li>
-            <li>Focus management</li>
-            <li>ARIA attributes for accessibility</li>
-          </ul>
+        <pds-box direction="column" gap="lg" padding="md" padding-block-start="xl">
+          <pds-text tag="p">This is a sample modal dialog. It demonstrates the basic features of the pds-modal component.</pds-text>
+          <pds-box direction="column" gap="sm">
+            <pds-text tag="p">The modal supports:</pds-text>
+            <ul>
+              <li>Different sizes (small, medium, large)</li>
+              <li>Optional close button</li>
+              <li>Backdrop click to close</li>
+              <li>Escape key to close</li>
+              <li>Focus management</li>
+              <li>ARIA attributes for accessibility</li>
+            </ul>
+          </pds-box>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -470,24 +472,24 @@ const NonScrollableTemplate = (args) => html`
         </pds-box>
       </pds-modal-header>
       <pds-modal-content>
-        <pds-box direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
-          <p>This modal has scrollable=false, so content will overflow naturally.</p>
-          <p>Use this when you want to control overflow behavior differently.</p>
-          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
+        <pds-box direction="column" gap="lg" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
+          <pds-text tag="p">This modal has scrollable=false, so content will overflow naturally.</pds-text>
+          <pds-text tag="p">Use this when you want to control overflow behavior differently.</pds-text>
+          <pds-text tag="p">This is ideal for modals with fixed-height content or custom overflow handling.</pds-text>
         </pds-box>
       </pds-modal-content>
 
@@ -560,9 +562,9 @@ const CustomBordersTemplate = () => html`
         </pds-box>
       </pds-modal-header>
       <pds-modal-content border="none">
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal content has <code>border="none"</code></p>
-          <p>No borders will be shown regardless of content length or scroll position.</p>
+        <pds-box fit direction="column" gap="lg" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This modal content has <code>border="none"</code></pds-text>
+          <pds-text tag="p">No borders will be shown regardless of content length or scroll position.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -591,9 +593,9 @@ const CustomBordersTemplate = () => html`
         </pds-box>
       </pds-modal-header>
       <pds-modal-content border="top">
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal content has <code>border="top"</code></p>
-          <p>Only the top border is visible, indicating there's content above.</p>
+        <pds-box fit direction="column" gap="lg" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This modal content has <code>border="top"</code></pds-text>
+          <pds-text tag="p">Only the top border is visible, indicating there's content above.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -622,9 +624,9 @@ const CustomBordersTemplate = () => html`
         </pds-box>
       </pds-modal-header>
       <pds-modal-content border="bottom">
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal content has <code>border="bottom"</code></p>
-          <p>Only the bottom border is visible, indicating there's content below.</p>
+        <pds-box fit direction="column" gap="lg" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This modal content has <code>border="bottom"</code></pds-text>
+          <pds-text tag="p">Only the bottom border is visible, indicating there's content below.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -653,9 +655,9 @@ const CustomBordersTemplate = () => html`
         </pds-box>
       </pds-modal-header>
       <pds-modal-content border="both">
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal content has <code>border="both"</code></p>
-          <p>Both top and bottom borders are visible, indicating content above and below.</p>
+        <pds-box fit direction="column" gap="lg" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">This modal content has <code>border="both"</code></pds-text>
+          <pds-text tag="p">Both top and bottom borders are visible, indicating content above and below.</pds-text>
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
@@ -709,16 +711,18 @@ const DisableTopLayerTemplate = (args) => html`
       </pds-modal-header>
 
       <pds-modal-content>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md" gap="sm">
-          <p>
-            This modal uses <code>disable-top-layer</code>, so it renders in the normal stacking
-            context instead of the browser top layer.
-          </p>
-          <p>
-            An overlay appended to <code>document.body</code> with a higher <code>z-index</code> can
-            therefore display above it &mdash; useful for file pickers, rich-text editor menus, and
-            other body-mounted overlays that would otherwise be trapped behind a top-layer dialog.
-          </p>
+        <pds-box fit direction="column" padding-block-start="sm" padding-inline-start="md" padding-inline-end="md" gap="lg">
+          <pds-box direction="column" gap="xxl">
+            <pds-text tag="p">
+              This modal uses <code>disable-top-layer</code>, so it renders in the normal stacking
+              context instead of the browser top layer.
+            </pds-text>
+            <pds-text tag="p">
+              An overlay appended to <code>document.body</code> with a higher <code>z-index</code> can
+              therefore display above it &mdash; useful for file pickers, rich-text editor menus, and
+              other body-mounted overlays that would otherwise be trapped behind a top-layer dialog.
+            </pds-text>
+          </pds-box>
           <pds-button
             variant="secondary"
             onclick="(function(){var o=document.createElement('button');o.type='button';o.textContent='Overlay above the modal — focusable, keyboard-dismissable. Click or press Enter.';o.setAttribute('style','position:fixed;inset:auto 2rem 2rem auto;max-width:20rem;padding:1rem;border:0;text-align:start;border-radius:8px;background:#111;color:#fff;z-index:2147483647;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4)');var modal=document.querySelector('#${args.componentId}');var remove=function(){o.remove()};o.onclick=remove;o.addEventListener('keydown',function(e){if(e.key==='Escape')remove()});if(modal)modal.addEventListener('pdsModalClose',remove,{once:true});document.body.appendChild(o);o.focus();})()"
