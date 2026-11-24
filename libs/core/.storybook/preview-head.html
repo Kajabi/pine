@@ -111,6 +111,46 @@ body {
     color: #8bc34a;
   }
 
+  #storybook-docs a.sbdocs-a,
+  #storybook-docs .arg-table-cell a,
+  #storybook-docs .docblock-argstable a {
+    -webkit-font-smoothing: inherit;
+    color: var(--pine-color-text);
+    font: inherit;
+    font-weight: var(--pine-font-weight-medium);
+    text-decoration: underline;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+  }
+
+  #storybook-docs a.sbdocs-a:hover,
+  #storybook-docs .arg-table-cell a:hover,
+  #storybook-docs .docblock-argstable a:hover {
+    color: var(--pine-color-text-hover);
+    text-decoration: none;
+  }
+
+  #storybook-docs a.sbdocs-a:focus-visible,
+  #storybook-docs .arg-table-cell a:focus-visible,
+  #storybook-docs .docblock-argstable a:focus-visible {
+    border-radius: var(--pine-dimension-2xs);
+    isolation: isolate;
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width-thick);
+  }
+
+  /* main.js's rehype-external-links gives offsite markdown links target="_blank". */
+  #storybook-docs a.sbdocs-a[target="_blank"]::after {
+    background-color: currentColor;
+    block-size: var(--pine-dimension-sm);
+    content: "";
+    display: inline-block;
+    inline-size: var(--pine-dimension-sm);
+    margin-inline-start: var(--pine-dimension-2xs);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' d='M14 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V5.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L18.586 4H15a1 1 0 0 1-1-1M7.759 4H10a1 1 0 1 1 0 2H7.8c-.857 0-1.439 0-1.889.038-.438.035-.663.1-.819.18a2 2 0 0 0-.874.874c-.08.156-.145.38-.18.819C4 8.361 4 8.943 4 9.8v6.4c0 .857 0 1.439.038 1.889.035.438.1.663.18.819a2 2 0 0 0 .874.874c.156.08.38.145.819.18C6.361 20 6.943 20 7.8 20h6.4c.857 0 1.439 0 1.889-.038.438-.035.663-.1.819-.18a2 2 0 0 0 .874-.874c.08-.156.145-.38.18-.819.037-.45.038-1.032.038-1.889V14a1 1 0 1 1 2 0v2.241c0 .805 0 1.47-.044 2.01-.046.563-.145 1.08-.392 1.565a4 4 0 0 1-1.748 1.748c-.485.247-1.002.346-1.564.392-.541.044-1.206.044-2.01.044H7.758c-.805 0-1.47 0-2.01-.044-.563-.046-1.08-.145-1.565-.392a4 4 0 0 1-1.748-1.748c-.247-.485-.346-1.002-.392-1.564C2 17.71 2 17.046 2 16.242V9.758c0-.805 0-1.47.044-2.01.046-.563.145-1.08.392-1.565a4 4 0 0 1 1.748-1.748c.485-.247 1.002-.346 1.564-.392C6.29 4 6.954 4 7.758 4'/%3E%3C/svg%3E") center / contain no-repeat;
+    vertical-align: text-bottom;
+  }
+
   /* Docs code blocks */
   [data-theme="dark"] .sbdocs pre,
   [data-theme="dark"] .sbdocs code {
