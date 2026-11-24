@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "path";
 import { copyFileSync, mkdirSync, existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import react from '@vitejs/plugin-react';
+import rehypeExternalLinks from 'rehype-external-links';
 import { remarkExampleCode } from '../scripts/docs-content/example-code.mjs';
 
 // Get directory paths
@@ -87,6 +88,16 @@ const config = {
         mdxPluginOptions: {
           mdxCompileOptions: {
             remarkPlugins: [remarkExampleCode],
+            rehypePlugins: [
+              [
+                rehypeExternalLinks,
+                {
+                  target: '_blank',
+                  content: { type: 'text', value: ' (opens in a new tab)' },
+                  contentProperties: { className: ['sb-sr-only'] },
+                },
+              ],
+            ],
           },
         },
       },

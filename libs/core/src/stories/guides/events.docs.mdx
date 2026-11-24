@@ -6,7 +6,7 @@ import { DocCanvas } from '@pine-ds/doc-components';
 # Event Handling
 
 Pine tries to adhere to browser standards whenever possible. Some native events, such as `click`, are
-<pds-link href="https://developer.mozilla.org/en-US/docs/Web/API/Event/composed" external>composed</pds-link>: they cross out of a component's shadow DOM, so a listener on the component hears them. Others, such as `change`, aren't composed and stop at the component's shadow root, so a listener on the component never hears the `change` of the control inside it. React's `onChange` prop listens for `change`, so it isn't called for Pine's shadow DOM controls either.
+[composed](https://developer.mozilla.org/en-US/docs/Web/API/Event/composed): they cross out of a component's shadow DOM, so a listener on the component hears them. Others, such as `change`, aren't composed and stop at the component's shadow root, so a listener on the component never hears the `change` of the control inside it. React's `onChange` prop listens for `change`, so it isn't called for Pine's shadow DOM controls either.
 
 Pine components dispatch their own events instead, named with a `pds` prefix. The names don't follow one pattern: `pds-checkbox` fires `pdsCheckboxChange`, but `pds-input` fires `pdsInput` and `pdsChange`, and `pds-button` fires `pdsClick`. Look a name up in the Events section of the component's properties table, which also shows what each event's `detail` holds.
 

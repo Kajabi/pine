@@ -25,7 +25,7 @@ Users who rely on keyboard navigation must be able to reach and operate every in
 
 ### Overlay focus
 
-Each Pine overlay handles focus on its own. Don't move focus out of an open modal or a `modal` drawer from your code, because the page behind it is inert. The component docs describe each one in full: <pds-link href="../?path=/docs/components-modal--docs">Modal</pds-link>, <pds-link href="../?path=/docs/components-drawer--docs">Drawer</pds-link>, <pds-link href="../?path=/docs/components-popover--docs">Popover</pds-link>, <pds-link href="../?path=/docs/components-dropdown-menu--docs">Dropdown Menu</pds-link>, <pds-link href="../?path=/docs/components-tooltip--docs">Tooltip</pds-link> and <pds-link href="../?path=/docs/components-toast--docs">Toast</pds-link>.
+Each Pine overlay handles focus on its own. Don't move focus out of an open modal or a `modal` drawer from your code, because the page behind it is inert. The component docs describe each one in full: [Modal](/docs/components-modal--docs), [Drawer](/docs/components-drawer--docs), [Popover](/docs/components-popover--docs), [Dropdown Menu](/docs/components-dropdown-menu--docs), [Tooltip](/docs/components-tooltip--docs) and [Toast](/docs/components-toast--docs).
 
 - **`pds-modal`** moves focus to its first control when it opens and keeps Tab inside. Escape closes it, and focus returns to the control that had it before the modal opened.
 - **`pds-modal` with `disable-top-layer`** moves focus to its first control unless `disable-initial-focus` is set, and lets Tab move between the modal and the page. Escape closes it. Focus returns to the control that opened it only if focus was inside the modal.
@@ -109,7 +109,7 @@ import { star } from '@pine-ds/icons/icons';
 
 Give an icon an `aria-label` only when it carries meaning on its own, such as a status icon with no text beside it. An icon in an icon-only button doesn't need one: name the button instead, as in the example above. Don't add `aria-hidden` to an icon you name, because `pds-icon` keeps it and the icon stays hidden.
 
-Before `@pine-ds/icons` 10.8.1, `pds-icon` labelled itself from its `name`. Add `aria-hidden="true"` to decorative icons only on `@pine-ds/core` earlier than 4.9.1, or on `@pine-ds/react` earlier than 4.12.0 with `@pine-ds/icons` earlier than 10.8.1 installed. See <pds-link href="../?path=/docs/components-icon--docs#accessibility">Icon</pds-link> for the full rule.
+Before `@pine-ds/icons` 10.8.1, `pds-icon` labelled itself from its `name`. Add `aria-hidden="true"` to decorative icons only on `@pine-ds/core` earlier than 4.9.1, or on `@pine-ds/react` earlier than 4.12.0 with `@pine-ds/icons` earlier than 10.8.1 installed. See [Icon](/docs/components-icon--docs#accessibility) for the full rule.
 
 ### Landmark Roles
 
@@ -163,11 +163,11 @@ WCAG 2.1 AA sets these minimum contrast ratios.
 
 Do not use raw hex values or core tokens for text and UI colors in application code. Reference semantic tokens (e.g. `--pine-color-text`) so that contrast is maintained across themes.
 
-See <pds-link href="../?path=/docs/design-tokens-tokens--docs">Tokens</pds-link> for each text token's contrast and when to use it. Pine's <pds-link href="../?path=/docs/design-tokens-color-linting--docs">Color Linting</pds-link> rules check only Pine's own component styles; they don't run on your app.
+See [Tokens](/docs/design-tokens-tokens--docs) for each text token's contrast and when to use it. Pine's [Color Linting](/docs/design-tokens-color-linting--docs) rules check only Pine's own component styles; they don't run on your app.
 
 ### Dark mode
 
-Set `data-theme="dark"` on `<html>` to turn on dark mode. Semantic color tokens switch with the theme, but core tokens such as `--pine-color-grey-900` and literal colors such as hex values keep their light-mode value, so check contrast in both themes. The Dark mode section of <pds-link href="../?path=/docs/design-tokens-tokens--docs">Tokens</pds-link> lists which tokens switch.
+Set `data-theme="dark"` on `<html>` to turn on dark mode. Semantic color tokens switch with the theme, but core tokens such as `--pine-color-grey-900` and literal colors such as hex values keep their light-mode value, so check contrast in both themes. The Dark mode section of [Tokens](/docs/design-tokens-tokens--docs) lists which tokens switch.
 
 A few component dark-mode styles use the CSS `:host-context()` selector, which only Chromium-based browsers support. In Firefox and Safari, these keep their light-mode look in dark mode: `pds-alert` and `pds-chip` colors, the error-state colors of `pds-input`, `pds-select`, `pds-textarea` and `pds-combobox`, the panel border of `pds-dropdown-menu` and of the `pds-datepicker` calendar, and the calendar's month, year and time menus. `pds-select` keeps its light error fill in every browser when `invalid` is set without an `error-message`.
 
@@ -204,7 +204,7 @@ document.querySelector('#my-target').focus();
 
 ## Forms
 
-These patterns cover form accessibility. See <pds-link href="../?path=/docs/guides-forms--docs">Using Pine Form Components</pds-link> for full form examples and the validation rules.
+These patterns cover form accessibility. See [Using Pine Form Components](/docs/guides-forms--docs) for full form examples and the validation rules.
 
 **Always pair inputs with labels** using the `label` prop and a `component-id`, as in the Labels examples above. Never use `placeholder` as a substitute.
 
@@ -303,7 +303,7 @@ Choose the right pattern when a control should not accept input. `disabled` and 
 
 Pine runs axe-core against every component and every Storybook story in its own CI. That covers each component on its own, not how your app composes them. Run axe in your app's tests too (for example with `@axe-core/playwright`) to catch missing labels and broken ARIA wiring in your own markup.
 
-Contributing to Pine? See <pds-link href="https://github.com/Kajabi/pine/blob/main/CONTRIBUTING.md#accessibility-gate" external>CONTRIBUTING.md § Accessibility gate</pds-link> for how Pine's CI checks run and how to run them locally.
+Contributing to Pine? See [CONTRIBUTING.md § Accessibility gate](https://github.com/Kajabi/pine/blob/main/CONTRIBUTING.md#accessibility-gate) for how Pine's CI checks run and how to run them locally.
 
 ---
 
@@ -329,8 +329,8 @@ Use this checklist when reviewing a feature for accessibility:
 
 ## Resources
 
-- <pds-link href="https://www.w3.org/WAI/WCAG21/quickref/" external>WCAG 2.1 Quick Reference</pds-link>
-- <pds-link href="https://www.a11yproject.com/checklist/" external>A11y Project Checklist</pds-link>
-- <pds-link href="https://dequeuniversity.com/rules/axe/" external>axe Rules Reference</pds-link>
-- <pds-link href="../?path=/docs/design-tokens-color-linting--docs">Pine Color Linting</pds-link>
-- <pds-link href="../?path=/docs/guides-forms--docs">Pine Forms Guide</pds-link>
+- [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
+- [A11y Project Checklist](https://www.a11yproject.com/checklist/)
+- [axe Rules Reference](https://dequeuniversity.com/rules/axe/)
+- [Pine Color Linting](/docs/design-tokens-color-linting--docs)
+- [Pine Forms Guide](/docs/guides-forms--docs)

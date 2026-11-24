@@ -3,7 +3,7 @@ import { Meta, Story } from '@storybook/addon-docs/blocks';
 <Meta title="Resources/Icon Management"/>
 
 # Icon Management
-Pine's icons come from the `@pine-ds/icons` package, and the <pds-link href="../?path=/docs/components-icon--docs">`pds-icon`</pds-link> component renders them. This page covers where the icon files load from, how to pin them, how to find an icon's name, and how new icons are added.
+Pine's icons come from the `@pine-ds/icons` package, and the [`pds-icon`](/docs/components-icon--docs) component renders them. This page covers where the icon files load from, how to pin them, how to find an icon's name, and how new icons are added.
 
 ## How named icons load
 
@@ -16,17 +16,17 @@ Pine's icons come from the `@pine-ds/icons` package, and the <pds-link href="../
 Which version of the icons you get depends on where they come from:
 
 - **jsDelivr (the default):** always the newest `@pine-ds/icons` release, whichever Pine version you load. Updating packages in your project doesn't change it.
-- **Self-hosted:** the SVG files you copied. They're in `node_modules/@pine-ds/icons/dist/svg/`. Serve them from a `svg/` folder and set the asset path to that folder's parent, as <pds-link href="../?path=/docs/guides-assets--docs">Assets</pds-link> describes. A build step that copies them from `node_modules` follows the `@pine-ds/icons` version in your lockfile.
-- **Imported in React:** icons imported from `@pine-ds/icons/icons` and passed to `icon` are bundled into your app from the `@pine-ds/icons` version in your lockfile. See <pds-link href="../?path=/docs/components-icon--docs">Icon</pds-link> for both usages.
+- **Self-hosted:** the SVG files you copied. They're in `node_modules/@pine-ds/icons/dist/svg/`. Serve them from a `svg/` folder and set the asset path to that folder's parent, as [Assets](/docs/guides-assets--docs) describes. A build step that copies them from `node_modules` follows the `@pine-ds/icons` version in your lockfile.
+- **Imported in React:** icons imported from `@pine-ds/icons/icons` and passed to `icon` are bundled into your app from the `@pine-ds/icons` version in your lockfile. See [Icon](/docs/components-icon--docs) for both usages.
 
 ## Finding an icon's name
 
-- Browse the icons in the `name` control of the <pds-link href="../?path=/docs/components-icon--docs">Icon</pds-link> playground.
-- AI assistants connected to the <pds-link href="../?path=/docs/resources-pine-mcp--docs">Pine MCP</pds-link> can search the set with `list_pine_icons`.
+- Browse the icons in the `name` control of the [Icon](/docs/components-icon--docs) playground.
+- AI assistants connected to the [Pine MCP](/docs/resources-pine-mcp--docs) can search the set with `list_pine_icons`.
 
 ## Adding icons
 
-An automated job in the `pine-icons` repository exports the <pds-link href="https://www.figma.com/file/gr2OhPSlvtsYIZQCL5G2ey/%E2%84%B9%EF%B8%8F-Sage-icons?node-id=2-2" external>Figma Icon document</pds-link> on Tuesdays and Thursdays, and publishes new icons in a new `@pine-ds/icons` release.
+An automated job in the `pine-icons` repository exports the [Figma Icon document](https://www.figma.com/file/gr2OhPSlvtsYIZQCL5G2ey/%E2%84%B9%EF%B8%8F-Sage-icons?node-id=2-2) on Tuesdays and Thursdays, and publishes new icons in a new `@pine-ds/icons` release.
 
 * **Designers:** add new icons to the Figma Icon document before telling developers about them, so the next run can publish them.
-* **Developers:** if an icon you need is missing from the Figma Icon document, <pds-link href="https://github.com/Kajabi/pine/issues/new/choose" external>open a feature request</pds-link>. Once a release includes the icon, icons served from jsDelivr pick it up on their own. For self-hosted or imported icons, update `@pine-ds/icons` in your lockfile, then copy the SVG files again if your build doesn't.
+* **Developers:** if an icon you need is missing from the Figma Icon document, [open a feature request](https://github.com/Kajabi/pine/issues/new/choose). Once a release includes the icon, icons served from jsDelivr pick it up on their own. For self-hosted or imported icons, update `@pine-ds/icons` in your lockfile, then copy the SVG files again if your build doesn't.
