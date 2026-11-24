@@ -13,13 +13,13 @@ Welcome to Pine. This guide gets you up and running quickly, whether you're a de
 
 ### 1. Access the Figma library
 
-Pine's component library and token set are maintained in Figma. Request access through <pds-link href="https://kajabi.slack.com/archives/C01A424HY8Y" external>#ds-support</pds-link> if the library isn't already enabled in your Figma workspace.
+Pine's component library and token set are maintained in Figma. Request access through [#ds-support](https://kajabi.slack.com/archives/C01A424HY8Y) if the library isn't already enabled in your Figma workspace.
 
 ### 2. Use Pine tokens
 
 All spacing, color, and typography values in Figma are backed by Pine design tokens. Use token-named styles (e.g. `color/background/container`) rather than raw hex values so your designs stay in sync with the coded components.
 
-See <pds-link href="../?path=/docs/design-tokens-tokens--docs">Design Tokens</pds-link> for the full token reference.
+See [Design Tokens](/docs/design-tokens-tokens--docs) for the full token reference.
 
 ### 3. Map designs to component docs
 
@@ -29,11 +29,11 @@ Browse components in the **Components** section of the sidebar.
 
 ### 4. Request components or file issues
 
-If a component you need doesn't exist or a token is missing, <pds-link href="https://github.com/Kajabi/pine/issues/new/choose" external>open a GitHub issue</pds-link> with the Feature request template. Kajabi staff can also ask in <pds-link href="https://kajabi.slack.com/archives/C01A424HY8Y" external>#ds-support</pds-link> (Kajabi-internal Slack).
+If a component you need doesn't exist or a token is missing, [open a GitHub issue](https://github.com/Kajabi/pine/issues/new/choose) with the Feature request template. Kajabi staff can also ask in [#ds-support](https://kajabi.slack.com/archives/C01A424HY8Y) (Kajabi-internal Slack).
 
 ### 5. Contribute
 
-Designers can contribute to Pine too. See <pds-link href="../?path=/docs/introduction-contributing--docs">Contributing</pds-link> for the process.
+Designers can contribute to Pine too. See [Contributing](/docs/introduction-contributing--docs) for the process.
 
 ---
 
@@ -49,7 +49,7 @@ Designers can contribute to Pine too. See <pds-link href="../?path=/docs/introdu
 <script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.js"></script>
 ```
 
-Replace `[VERSION]` with an exact version from <pds-link href="https://github.com/Kajabi/pine/releases" external>GitHub Releases</pds-link>, not `latest`. See <pds-link href="https://github.com/Kajabi/pine/blob/main/VERSIONING.md#consumer-guidance" external>Consumer guidance</pds-link> for how to pin npm and CDN versions.
+Replace `[VERSION]` with an exact version from [GitHub Releases](https://github.com/Kajabi/pine/releases), not `latest`. See [Consumer guidance](https://github.com/Kajabi/pine/blob/main/VERSIONING.md#consumer-guidance) for how to pin npm and CDN versions.
 
 **React projects:**
 
@@ -105,7 +105,7 @@ import { PdsButton, PdsIcon } from '@pine-ds/react';
   <pds-button><pds-icon slot="start" name="add"></pds-icon>Add item</pds-button>
 </DocCanvas>
 
-Find an icon's name in the `name` control on the <pds-link href="../?path=/docs/components-icon--docs">Icon</pds-link> page. A named icon loads its SVG at runtime, from jsDelivr unless you set an asset path. <pds-link href="../?path=/docs/resources-icon-management--docs">Icon Management</pds-link> explains where icons load from and how to pin them.
+Find an icon's name in the `name` control on the [Icon](/docs/components-icon--docs) page. A named icon loads its SVG at runtime, from jsDelivr unless you set an asset path. [Icon Management](/docs/resources-icon-management--docs) explains where icons load from and how to pin them.
 
 ### 4. Style with tokens
 
@@ -119,7 +119,7 @@ Pine components use CSS custom properties (design tokens) internally. You can re
 }
 ```
 
-Tokens are available after the Pine CSS file is loaded. See <pds-link href="../?path=/docs/design-tokens-tokens--docs">Design Tokens</pds-link> for the full list.
+Tokens are available after the Pine CSS file is loaded. See [Design Tokens](/docs/design-tokens-tokens--docs) for the full list.
 
 ### 5. Turn on dark mode
 
@@ -129,7 +129,7 @@ Set `data-theme="dark"` on `<html>` to switch the page to Pine's dark tokens:
 <html data-theme="dark">
 ```
 
-Pine doesn't follow the operating system's setting on its own, and dark-mode support is still rolling out one component at a time. See <pds-link href="../?path=/docs/design-tokens-tokens--docs#dark-mode">Dark mode</pds-link> for what switches, the `color-scheme` setting to add, and the components whose dark styles depend on the browser.
+Pine doesn't follow the operating system's setting on its own, and dark-mode support is still rolling out one component at a time. See [Dark mode](/docs/design-tokens-tokens--docs#dark-mode) for what switches, the `color-scheme` setting to add, and the components whose dark styles depend on the browser.
 
 ### 6. Run Storybook locally
 
@@ -139,16 +139,16 @@ To browse components with live examples, run the Pine dev server:
 npm run start
 ```
 
-Storybook will open at `http://localhost:6006`. See <pds-link href="../?path=/docs/introduction-contributing--docs">Contributing</pds-link> for the full local setup steps.
+Storybook will open at `http://localhost:6006`. See [Contributing](/docs/introduction-contributing--docs) for the full local setup steps.
 
 ### 7. Get help
 
-- <pds-link href="https://github.com/Kajabi/pine/issues/new/choose" external>GitHub issues</pds-link> — report a bug or request a feature
-- <pds-link href="https://github.com/Kajabi/pine" external>GitHub</pds-link> — source code and releases
-- <pds-link href="https://kajabi.slack.com/archives/C01A424HY8Y" external>#ds-support</pds-link> (Kajabi-internal Slack) — usage questions and support
-- <pds-link href="https://kajabi.slack.com/archives/C046HHS5KTN" external>#design-system-discussion</pds-link> (Kajabi-internal Slack) — design system conversation
+- [GitHub issues](https://github.com/Kajabi/pine/issues/new/choose) — report a bug or request a feature
+- [GitHub](https://github.com/Kajabi/pine) — source code and releases
+- [#ds-support](https://kajabi.slack.com/archives/C01A424HY8Y) (Kajabi-internal Slack) — usage questions and support
+- [#design-system-discussion](https://kajabi.slack.com/archives/C046HHS5KTN) (Kajabi-internal Slack) — design system conversation
 
-Pine is maintained by its contributors, with no dedicated support team. See <pds-link href="../?path=/docs/introduction-get-support--docs">Get Support</pds-link> for details.
+Pine is maintained by its contributors, with no dedicated support team. See [Get Support](/docs/introduction-get-support--docs) for details.
 
 ---
 
@@ -176,6 +176,6 @@ React wrappers use camelCase props (e.g. `hideLabel`) while web component attrib
 
 ## Next Steps
 
-- Browse the <pds-link href="../?path=/docs/guides-forms--docs">Forms Guide</pds-link> to see how Pine components work together in a complete form
-- Review the <pds-link href="../?path=/docs/components-layout--docs">Layout Guide</pds-link> to understand `pds-box` and `pds-row`
-- Read the <pds-link href="../?path=/docs/guides-accessibility--docs">Accessibility Guide</pds-link> before shipping any consumer-facing UI
+- Browse the [Forms Guide](/docs/guides-forms--docs) to see how Pine components work together in a complete form
+- Review the [Layout Guide](/docs/components-layout--docs) to understand `pds-box` and `pds-row`
+- Read the [Accessibility Guide](/docs/guides-accessibility--docs) before shipping any consumer-facing UI

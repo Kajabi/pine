@@ -26,7 +26,7 @@ Your assistant picks these tools itself; you don't call them by hand. Knowing th
 
 - `list_pine_components` - every Pine component, with a short description
 - `list_pine_icons` - the icon set, searchable by name, tag or category
-- `list_pine_patterns` - page-level composition recipes from the <pds-link href="../?path=/docs/resources-patterns--docs">Patterns</pds-link> page
+- `list_pine_patterns` - page-level composition recipes from the [Patterns](/docs/resources-patterns--docs) page
 - `list_pine_design_docs` - Pine's design docs, such as tokens, layout and forms
 
 **Resolve**
@@ -103,7 +103,7 @@ Cursor reads `.cursor/mcp.json` in the project, or `~/.cursor/mcp.json` for ever
 
 ### Visual Studio Code
 
-VS Code's MCP support needs `"type": "http"` on the server entry. Its config file and top-level key have changed between releases, so follow <pds-link href="https://code.visualstudio.com/docs/copilot/reference/mcp-configuration" external>VS Code's MCP configuration guide</pds-link> for where the entry goes, and use:
+VS Code's MCP support needs `"type": "http"` on the server entry. Its config file and top-level key have changed between releases, so follow [VS Code's MCP configuration guide](https://code.visualstudio.com/docs/copilot/reference/mcp-configuration) for where the entry goes, and use:
 
 ```json
 {
@@ -155,7 +155,7 @@ The `pine` agent skill tells a coding agent when to use these tools: it resolves
 npx skills add https://pine-design-system.netlify.app
 ```
 
-Or copy <pds-link href="https://github.com/Kajabi/pine/tree/main/skills/pine" external>skills/pine</pds-link> from the Pine repository into your agent's skills directory.
+Or copy [skills/pine](https://github.com/Kajabi/pine/tree/main/skills/pine) from the Pine repository into your agent's skills directory.
 
 ## Example Usage
 
@@ -188,5 +188,5 @@ Pine MCP makes it easy for AI assistants to work intelligently with the Pine Des
 
 ## Get Help
 
-- Report wrong or missing data in an answer, such as a prop, example or icon, as a <pds-link href="https://github.com/Kajabi/pine/issues/new/choose" external>Pine GitHub issue</pds-link>. Most answers come from Pine's own docs, so the fix usually lands in Pine and reaches agents once Pine releases it and Pine MCP redeploys.
-- Kajabi staff can ask in <pds-link href="https://kajabi.slack.com/archives/C0922PA4509" external>#dss-pine-mcp</pds-link> (Kajabi-internal Slack).
+- Report wrong or missing data in an answer, such as a prop, example or icon, as a [Pine GitHub issue](https://github.com/Kajabi/pine/issues/new/choose). Most answers come from Pine's own docs, so the fix usually lands in Pine and reaches agents once Pine releases it and Pine MCP redeploys.
+- Kajabi staff can ask in [#dss-pine-mcp](https://kajabi.slack.com/archives/C0922PA4509) (Kajabi-internal Slack).

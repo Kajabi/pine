@@ -6,15 +6,15 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 This guide covers how Pine communicates breaking changes, how to migrate between major versions, and how to stay current with releases.
 
-For the full version history, see <pds-link href="../?path=/docs/resources-changelog--docs">Changelog</pds-link>.
+For the full version history, see [Changelog](/docs/resources-changelog--docs).
 
 ---
 
 ## Deprecation Policy
 
-Pine deprecates a public API before it removes it. <pds-link href="https://github.com/Kajabi/pine/blob/main/VERSIONING.md" external>VERSIONING.md</pds-link> has the full policy. In short:
+Pine deprecates a public API before it removes it. [VERSIONING.md](https://github.com/Kajabi/pine/blob/main/VERSIONING.md) has the full policy. In short:
 
-1. **Deprecation notice** — the prop's JSDoc gets an `@deprecated` tag that names the replacement, and the component's generated readme marks the prop `[DEPRECATED]`. Pine doesn't log a console warning when a deprecated prop is used. For example, the <pds-link href="https://github.com/Kajabi/pine/blob/main/libs/core/src/components/pds-button/readme.md" external>`pds-button` readme</pds-link> marks the `icon` prop, which the `start` slot replaces.
+1. **Deprecation notice** — the prop's JSDoc gets an `@deprecated` tag that names the replacement, and the component's generated readme marks the prop `[DEPRECATED]`. Pine doesn't log a console warning when a deprecated prop is used. For example, the [`pds-button` readme](https://github.com/Kajabi/pine/blob/main/libs/core/src/components/pds-button/readme.md) marks the `icon` prop, which the `start` slot replaces.
 2. **Deprecation period** — the deprecated API keeps working until a major release removes it.
 3. **Removal** — in a major release.
 
@@ -135,23 +135,23 @@ In React:
 
 ## Token Changes
 
-Design token renames are tracked separately in the <pds-link href="https://github.com/Kajabi/ds-tokens/releases" external>ds-tokens releases</pds-link>.
+Design token renames are tracked separately in the [ds-tokens releases](https://github.com/Kajabi/ds-tokens/releases).
 
 When tokens are renamed, the old token is aliased to the new one during a deprecation period. After removal, any usage of the old token name resolves to `unset` or produces no value.
 
-**How to catch stale token usage:** Search your styles for the old token names listed in the ds-tokens releases. Pine's <pds-link href="../?path=/docs/design-tokens-color-linting--docs">Color Linting</pds-link> rules check only Pine's own component styles, so they won't flag stale tokens in your app.
+**How to catch stale token usage:** Search your styles for the old token names listed in the ds-tokens releases. Pine's [Color Linting](/docs/design-tokens-color-linting--docs) rules check only Pine's own component styles, so they won't flag stale tokens in your app.
 
 ---
 
 ## Staying Current
 
 **Subscribe to releases:**
-- <pds-link href="https://github.com/Kajabi/pine/releases" external>Pine GitHub releases</pds-link> — watch for release notifications
-- <pds-link href="https://github.com/Kajabi/pine-icons/releases" external>Pine Icons releases</pds-link>
-- <pds-link href="https://github.com/Kajabi/ds-tokens/releases" external>Design Tokens releases</pds-link>
+- [Pine GitHub releases](https://github.com/Kajabi/pine/releases) — watch for release notifications
+- [Pine Icons releases](https://github.com/Kajabi/pine-icons/releases)
+- [Design Tokens releases](https://github.com/Kajabi/ds-tokens/releases)
 
 **Slack channels:**
-- <pds-link href="https://kajabi.slack.com/archives/C046HHS5KTN" external>#design-system-discussion</pds-link> (Kajabi-internal) — design system conversation. GitHub releases are the complete record of what shipped.
+- [#design-system-discussion](https://kajabi.slack.com/archives/C046HHS5KTN) (Kajabi-internal) — design system conversation. GitHub releases are the complete record of what shipped.
 
 **Before upgrading a major version:**
 1. Read the full changelog section for the new major version, and its entry under Version Migration Examples above

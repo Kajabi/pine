@@ -99,32 +99,32 @@ Options come from slotted `<option>` and `<optgroup>` elements, or from the `opt
       <pds-table-row>
         <pds-table-cell><code>disabled</code></pds-table-cell>
         <pds-table-cell><code>disabled</code> on <code>&lt;option&gt;</code>, or on <code>&lt;optgroup&gt;</code> for a whole group</pds-table-cell>
-        <pds-table-cell>Keeps the option listed but stops it being chosen. See <a href="#disabled-options">Disabled Options</a>.</pds-table-cell>
+        <pds-table-cell>Keeps the option listed but stops it being chosen. See [Disabled Options](#disabled-options).</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>icon</code></pds-table-cell>
         <pds-table-cell><code>data-icon</code> on <code>&lt;option&gt;</code></pds-table-cell>
-        <pds-table-cell>A Pine icon before the option's text. See <a href="#option-icons">Option Icons</a>.</pds-table-cell>
+        <pds-table-cell>A Pine icon before the option's text. See [Option Icons](#option-icons).</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>badge</code>: <code>{'{ label, sentiment, icon }'}</code></pds-table-cell>
         <pds-table-cell><code>data-badge</code>, <code>data-badge-sentiment</code> and <code>data-badge-icon</code> on <code>&lt;option&gt;</code></pds-table-cell>
-        <pds-table-cell>A small chip after the option's text. See <a href="#option-badges">Option Badges</a>.</pds-table-cell>
+        <pds-table-cell>A small chip after the option's text. See [Option Badges](#option-badges).</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>group</code></pds-table-cell>
         <pds-table-cell>An <code>&lt;optgroup label&gt;</code> around the options</pds-table-cell>
-        <pds-table-cell>The group the option is listed under. See <a href="#group-labels">Group Labels</a>.</pds-table-cell>
+        <pds-table-cell>The group the option is listed under. See [Group Labels](#group-labels).</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>groupIcon</code></pds-table-cell>
         <pds-table-cell><code>data-icon</code> on <code>&lt;optgroup&gt;</code></pds-table-cell>
-        <pds-table-cell>A Pine icon beside the group's label. See <a href="#group-icons">Group Icons</a>.</pds-table-cell>
+        <pds-table-cell>A Pine icon beside the group's label. See [Group Icons](#group-icons).</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell><code>groupBadge</code>: <code>{'{ label, sentiment, icon }'}</code></pds-table-cell>
         <pds-table-cell><code>data-badge</code>, <code>data-badge-sentiment</code> and <code>data-badge-icon</code> on <code>&lt;optgroup&gt;</code></pds-table-cell>
-        <pds-table-cell>A small chip after the group's label. See <a href="#group-badges">Group Badges</a>.</pds-table-cell>
+        <pds-table-cell>A small chip after the group's label. See [Group Badges](#group-badges).</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>None</pds-table-cell>
@@ -134,12 +134,12 @@ Options come from slotted `<option>` and `<optgroup>` elements, or from the `opt
       <pds-table-row>
         <pds-table-cell>None</pds-table-cell>
         <pds-table-cell><code>data-layout</code> on <code>&lt;option&gt;</code>, with <code>custom-option-layouts</code> on the combobox</pds-table-cell>
-        <pds-table-cell>Renders the option's HTML content as its row. See <a href="#layout-support">Layout Support</a>.</pds-table-cell>
+        <pds-table-cell>Renders the option's HTML content as its row. See [Layout Support](#layout-support).</pds-table-cell>
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>None</pds-table-cell>
         <pds-table-cell><code>chip-sentiment</code>, <code>chip-icon</code>, <code>chip-dot</code> and <code>chip-large</code> on <code>&lt;option&gt;</code></pds-table-cell>
-        <pds-table-cell>Shows the option as a chip in the list, and in the <code>chip</code> trigger once it's selected. See <a href="#chip-trigger-select-only">Chip Trigger</a>.</pds-table-cell>
+        <pds-table-cell>Shows the option as a chip in the list, and in the <code>chip</code> trigger once it's selected. See [Chip Trigger](#chip-trigger-select-only).</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>
@@ -2202,7 +2202,7 @@ In this example, a click listener on the Reset button calls `clear()` on the com
 
 ## Form Integration
 
-`pds-combobox` is a <pds-link href="https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals/formAssociated" external>form-associated custom element</pds-link>. This means the component participates in `<form>` submission just like native `<select>` / `<input>` controls.
+`pds-combobox` is a [form-associated custom element](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals/formAssociated). This means the component participates in `<form>` submission just like native `<select>` / `<input>` controls.
 
 - Provide a `name` attribute so the selected value is included in `FormData`. Without `name`, the control is ignored during submission.
 - The submitted value always matches the option's `value` attribute, even when a custom layout/chip trigger is used.
