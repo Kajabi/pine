@@ -1388,6 +1388,20 @@ By default Box has no border radius. Use `border-radius` to change the rounding 
   <pds-box border="true" border-radius="lg">lg border radius</pds-box>
 </DocCanvas>
 
+#### Border Style
+By default the border is solid. Set `border-style="dashed"` for an empty or loading placeholder, such as a drop zone or a section that's still loading. It applies to `border` and to each edge set with the per-side border props.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsBox border borderStyle="dashed" borderRadius="md" padding="md">Dashed border</PdsBox>
+<PdsBox borderBlockEnd borderStyle="dashed" padding="md">Dashed block-end edge</PdsBox>`,
+    webComponent: `<pds-box border="true" border-style="dashed" border-radius="md" padding="md">Dashed border</pds-box>
+<pds-box border-block-end="true" border-style="dashed" padding="md">Dashed block-end edge</pds-box>`
+}}>
+  <pds-box border="true" border-style="dashed" border-radius="md" padding="md">Dashed border</pds-box>
+  <pds-box border-block-end="true" border-style="dashed" padding="md">Dashed block-end edge</pds-box>
+</DocCanvas>
+
 #### Shadow
 By default Box has no shadow. Use `shadow` to add a shadow to the box.
 
