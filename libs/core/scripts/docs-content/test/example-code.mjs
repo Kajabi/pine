@@ -254,15 +254,26 @@ describe('remarkExampleCode', () => {
   <pds-widget></pds-widget>
 </DocCanvas>
 
+<DocCanvas
+  mdxSource={{
+    react: \`<PdsWidget\\n  title="One">\\
+    <span>One</span>
+</PdsWidget>\`,
+  }}
+>
+  <pds-widget></pds-widget>
+</DocCanvas>
+
 ${sameLine}`);
     const { after, before } = await compiled(source);
 
     assert.deepEqual(
-      after.slice(0, 2).map((canvas) => canvas.mdxSource.text),
-      before.slice(0, 2).map((canvas) => canvas.mdxSource.text),
+      after.slice(0, 3).map((canvas) => canvas.mdxSource.text),
+      before.slice(0, 3).map((canvas) => canvas.mdxSource.text),
     );
     assert.equal(before[1].mdxSource.value.webComponent, '\n    <pds-widget       size="sm">\n    </pds-widget>\n  ');
-    assert.deepEqual(after[2].mdxSource.value, { webComponent: sameLineCode });
+    assert.equal(before[2].mdxSource.value.react, '<PdsWidget\n  title="One">  <span>One</span>\n</PdsWidget>');
+    assert.deepEqual(after[3].mdxSource.value, { webComponent: sameLineCode });
   });
 
   it('finds a DocCanvas inside another element or a paragraph and reads quoted keys', async () => {
