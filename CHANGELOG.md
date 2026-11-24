@@ -1,3 +1,21 @@
+## 5.1.3 (2026-11-24)
+
+### Bug Fixes 🐛
+
+- **core:** keep example indentation, drop escapes and fill status tables in docs-content ([#1017](https://github.com/Kajabi/pine/pull/1017))
+- **core:** keep example indentation in Storybook's code panels and Copy button ([#1019](https://github.com/Kajabi/pine/pull/1019))
+
+### Documentation 📄
+
+- **core:** keep demo scaffolding out of divider, tabs and modal example code ([#1016](https://github.com/Kajabi/pine/pull/1016))
+- **core:** describe how Pine MCP's forceRefresh reads the newest Pine release ([#1018](https://github.com/Kajabi/pine/pull/1018))
+- **core:** add Examples sections, live code examples and pds-text modal previews ([#1020](https://github.com/Kajabi/pine/pull/1020))
+- **pds-combobox:** split the async examples by language and handle failed and stale requests ([#1015](https://github.com/Kajabi/pine/pull/1015))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 5.1.2 (2026-11-23)
 
 ### Bug Fixes 🐛
