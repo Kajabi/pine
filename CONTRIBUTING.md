@@ -100,7 +100,7 @@ Write each example as a `DocCanvas` with both sources, and the same markup as it
 - The MCP serves the `react` and `webComponent` strings, not the preview. Each string ends at its first backtick, so never put a backtick inside one.
 - Keep the `webComponent` snippet to markup, with no `<script>`. Use `Pds*` wrappers with camelCase props in the `react` snippet.
 - Keep the wording consumer-neutral: describe Pine's behavior, not a particular app or framework that uses it.
-- Write every link outside a `DocCanvas` as markdown, on any docs page: `[text](#heading)` for a heading on the same page, `[text](/docs/<id>)` for another Storybook page and `[text](https://…)` for another site. Storybook styles them like `pds-link`, and gives links to other sites the external-link icon and a new tab. Don't write `<pds-link>` or `<a>` in prose.
+- Write every link outside a `DocCanvas` as markdown, on any docs page: `[text](#heading)` for a heading on the same page, `[text](/docs/<id>)` for another Storybook page and `[text](https://…)` for another site. Storybook styles them like `pds-link`, and gives links to other sites the external-link icon and a new tab. Don't write `<pds-link>` or `<a>` in prose. Links in JSDoc are the exception: the Properties tables render them outside MDX, so they get the same look, but a link to another site opens in the same tab, without the icon.
 - Everything below `<!-- Auto Generated Below -->` in `readme.md` is generated. To change a prop, event or method description there, edit the JSDoc in the `.tsx` and rebuild.
 
 ### Docs as data (`docs-content.json`)
