@@ -76,7 +76,7 @@
     "test": "npm run test.docs-content && npm run test.docs-check && stencil test --spec --e2e --coverage",
     "test.a11y": "node scripts/a11y.mjs",
     "test.docs-check": "node --test scripts/docs-check/test/rules.mjs scripts/docs-check/test/examples.mjs scripts/docs-check/test/load.mjs scripts/docs-check/test/components.mjs scripts/docs-check/test/pages.mjs",
-    "test.docs-content": "node --test scripts/docs-content/test/extract.mjs scripts/docs-content/test/completeness.mjs scripts/docs-content/test/example-code.mjs",
+    "test.docs-content": "node --test scripts/docs-content/test/extract.mjs scripts/docs-content/test/completeness.mjs scripts/docs-content/test/example-code.mjs scripts/docs-content/test/external-links.mjs",
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
