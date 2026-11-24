@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "path";
 import { copyFileSync, mkdirSync, existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import react from '@vitejs/plugin-react';
+import { remarkExampleCode } from '../scripts/docs-content/example-code.mjs';
 
 // Get directory paths
 const currentDir = dirname(fileURLToPath(import.meta.url));
@@ -80,7 +81,16 @@ const config = {
     getAbsolutePath("@storybook/addon-links"),
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@chromatic-com/storybook"),
-    getAbsolutePath("@storybook/addon-docs"),
+    {
+      name: getAbsolutePath("@storybook/addon-docs"),
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkExampleCode],
+          },
+        },
+      },
+    },
   ],
 
   core: {},

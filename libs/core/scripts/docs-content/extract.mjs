@@ -8,6 +8,7 @@ import remarkParse from 'remark-parse';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import { toId } from 'storybook/internal/csf';
 import { unified } from 'unified';
+import { dedent, lineIndent, writtenTemplate } from './example-code.mjs';
 
 /** Repo-relative path of @pine-ds/core; every page's `file` starts with it. */
 export const CORE_ROOT = 'libs/core';
@@ -70,47 +71,12 @@ function staticString(expression) {
   return undefined;
 }
 
-const indentOf = (line) => line.length - line.trimStart().length;
-
-/**
- * A static template literal's text with each line indented as the MDX source has it: the MDX parser strips leading
- * spaces from continuation lines inside a JSX attribute. Keeps the parsed text when the lines don't match.
- */
-function writtenTemplate(literal, source) {
-  const { raw, cooked } = literal.quasis[0].value;
-  const written = source.slice(literal.start + 1, literal.end - 1).split(/\r?\n/);
-  const rawLines = raw.split('\n');
-  const cookedLines = cooked.split('\n');
-  const stripped = written.map((line, index) => line.slice(0, line.length - (rawLines[index]?.length ?? 0)));
-  const aligned =
-    written.length === rawLines.length &&
-    cookedLines.length === rawLines.length &&
-    written.every((line, index) => line.endsWith(rawLines[index]) && !stripped[index].trim());
-  return aligned ? cookedLines.map((line, index) => stripped[index] + line).join('\n') : cooked;
-}
-
-/**
- * Removes the indentation the lines share. Code that starts right after the backtick lines up with the left margin or
- * with its property's line, so the other lines lose that line's indentation only when they all have it.
- */
-function dedent(code, openingIndent = 0) {
-  const startsOnOpeningLine = !/^\s*\n/.test(code);
-  const lines = code.replace(/^\s*\n/, '').replace(/\n\s*$/, '').split('\n');
-  const first = startsOnOpeningLine ? [lines.shift().trimStart()] : [];
-  const indents = lines.filter((line) => line.trim()).map(indentOf);
-  const shared = startsOnOpeningLine
-    ? (indents.every((indent) => indent >= openingIndent) ? openingIndent : 0)
-    : Math.min(...indents);
-  return [...first, ...lines.map((line) => line.slice(Number.isFinite(shared) ? shared : 0))].join('\n');
-}
-
 /** An mdxSource value's code as the MDX writes it, or undefined when it isn't a static string. */
 function exampleCode(expression, source) {
   const value = staticString(expression);
   if (value === undefined) return undefined;
   if (expression.type !== 'TemplateLiteral') return dedent(value);
-  const openingLine = source.slice(source.lastIndexOf('\n', expression.start) + 1, expression.start);
-  return dedent(writtenTemplate(expression, source), indentOf(openingLine));
+  return dedent(writtenTemplate(expression, source) ?? value, lineIndent(expression, source));
 }
 
 /** A heading's text with inline code kept in backticks, the way readers see it. */
