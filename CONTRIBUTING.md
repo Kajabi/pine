@@ -79,7 +79,7 @@ Each component's page is `libs/core/src/components/<name>/docs/<name>.mdx`. Stor
 
 1. `<StatusBadge component="pds-name" />`, with the component listed in `libs/core/src/stories/resources/component-status.json`.
 2. `# Title`, then a one-paragraph summary. The MCP uses that first paragraph as the component's description.
-3. `## Guidelines`, containing `### When to use`, `### When not to use` and `### Accessibility`, with exactly these names, in this order. The MCP matches them case-sensitively and drops any other `###` heading inside Guidelines, so give other guidance its own `##` section. Leave a blank line after `### Accessibility`: without one, the MCP leaves out the component's accessibility notes.
+3. `## Guidelines`, containing `### When to use`, `### When not to use` and `### Accessibility`, with exactly these names, in this order. The MCP files any other heading inside Guidelines, at any depth, as part of Guidelines or Accessibility rather than as a section of its own, so give other guidance its own `##` section. Leave a blank line after `### Accessibility`: without one, the MCP leaves out the component's accessibility notes.
 4. `## Properties`, with `<DocArgsTable>`.
 5. `## Examples`, with one `###` heading per example.
 6. `## Playground`, with a `<Canvas>` of the main story (for example `<Canvas of={stories.Default} />`), as the last section. The MCP ignores everything from this heading on.
