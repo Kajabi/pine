@@ -201,12 +201,67 @@ To have a control of your own take Escape, call `preventDefault()` on the Escape
 
 `backdrop-dismiss` (default `true`) controls whether the modal can be dismissed by clicking outside it, pressing Escape, or the browser's own close request (such as a back gesture).
 
-```html
-<!-- Non-dismissible modal: backdrop clicks, Escape and the browser's close request are all ignored -->
-<pds-modal backdrop-dismiss="false">
-  <!-- Modal content that can only be closed via explicit button clicks -->
-</pds-modal>
-```
+<DocCanvas
+  mdxSource={{
+    react: `
+      <PdsModal componentId="non-dismissible-modal" backdropDismiss={false} open={open} onPdsModalClose={() => setOpen(false)}>
+        <PdsModalHeader>…</PdsModalHeader>
+        <PdsModalContent>…</PdsModalContent>
+        <PdsModalFooter>…</PdsModalFooter>
+      </PdsModal>
+    `,
+    webComponent: `
+      <pds-modal id="non-dismissible-modal" component-id="non-dismissible-modal" backdrop-dismiss="false">
+        <pds-modal-header>…</pds-modal-header>
+        <pds-modal-content>…</pds-modal-content>
+        <pds-modal-footer>…</pds-modal-footer>
+      </pds-modal>
+    `
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#non-dismissible-modal');
+      if (modal) modal.open = true;
+    }}>Non-dismissible Modal</pds-button>
+
+    <pds-modal id="non-dismissible-modal" component-id="non-dismissible-modal" backdrop-dismiss="false">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3" id="non-dismissible-modal-heading">Non-dismissible Modal</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#non-dismissible-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+          <pds-text tag="p">Escape and clicks on the backdrop don't close this modal. Close it with one of its buttons.</pds-text>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit justify-content="end" padding="md" gap="sm">
+          <pds-button variant="secondary" onClick={() => {
+            const modal = document.querySelector('#non-dismissible-modal');
+            if (modal) modal.open = false;
+          }}>Cancel</pds-button>
+          <pds-button variant="primary" onClick={() => {
+            const modal = document.querySelector('#non-dismissible-modal');
+            if (modal) modal.open = false;
+          }}>Confirm</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+</DocCanvas>
 
 > **Note:** While WAI-ARIA guidelines recommend Escape-to-close for standard modals, setting `backdrop-dismiss="false"` disables this for use cases requiring explicit user action (e.g., required onboarding flows, critical confirmations). Ensure users have a clear, accessible path to complete the required action.
 
