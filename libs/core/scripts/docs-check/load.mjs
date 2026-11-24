@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { toId } from 'storybook/internal/csf';
 import { loadCsf } from 'storybook/internal/csf-tools';
-import { parseMdx } from '../docs-content/extract.mjs';
+import { EXAMPLE_ELEMENTS, isJsx, parseMdx } from '../docs-content/extract.mjs';
 import { coreDir, generateDocsContent } from '../docs-content/generate.mjs';
 import { readComponentSource } from './component-source.mjs';
 import { buildContext, compareStrings } from './context.mjs';
@@ -16,6 +16,7 @@ const docsJsonPath = path.join(coreDir, 'dist/docs.json');
 const require = createRequire(import.meta.url);
 const STORIES_FILE = /\.stories\.(js|jsx|ts|tsx)$/;
 const UNTITLED = '\u0000untitled';
+const LINK_ELEMENTS = new Set(['a', 'pds-link', 'PdsLink']);
 
 const isInside = (dir, target) => {
   const relative = path.relative(dir, target);
@@ -102,26 +103,43 @@ function walkSections(sections, visit) {
 }
 
 /** The depth of each heading the extractor's MDX parser finds, by line. */
-function headingDepths(source) {
+function headingDepths(tree) {
   const depths = new Map();
   const visit = (node) => {
     if (node.type === 'heading') depths.set(node.position?.start.line, node.depth);
     node.children?.forEach(visit);
   };
-  visit(parseMdx(source));
+  visit(tree);
   return depths;
 }
 
 /**
+ * Each `<a>`, `<pds-link>` or `<PdsLink>` with an `href` written as JSX outside the extractor's example elements.
+ * Markdown code is a `code` node, not JSX, so links written in it never appear here.
+ */
+function jsxLinks(tree) {
+  const links = [];
+  const visit = (node) => {
+    if (isJsx(node) && EXAMPLE_ELEMENTS.has(node.name)) return;
+    const href = isJsx(node) && LINK_ELEMENTS.has(node.name) ? node.attributes.find((a) => a.type === 'mdxJsxAttribute' && a.name === 'href') : undefined;
+    if (href) links.push({ tag: node.name, href: typeof href.value === 'string' ? href.value : null, line: node.position?.start.line ?? null });
+    node.children?.forEach(visit);
+  };
+  visit(tree);
+  return links;
+}
+
+/**
  * Each docs page with its links, its headings in page order with their lines and depths, and its sections in page
- * order, from the docs-content extractor, and the lines of its MDX source.
+ * order, from the docs-content extractor, and the lines of its MDX source and the links it writes as JSX in prose.
  */
 export function pageTargets(content, pageLinks, readPage = readDocPage) {
   const linksByFile = new Map(pageLinks.map((page) => [page.file, page]));
   return content.docs.map((doc) => {
     const { headings, links } = linksByFile.get(doc.file);
     const source = readPage(doc.file);
-    const depths = headingDepths(source);
+    const tree = parseMdx(source);
+    const depths = headingDepths(tree);
     const sections = [];
     walkSections(doc.sections, (section) => sections.push(section));
     return {
@@ -134,6 +152,7 @@ export function pageTargets(content, pageLinks, readPage = readDocPage) {
       headings: headings.map((h) => ({ ...h, depth: depths.get(h.line) ?? null })),
       headingLines: new Map(headings.map((h) => [h.slug, h.line])),
       links,
+      jsxLinks: jsxLinks(tree),
       sections,
       lines: source.split('\n'),
     };

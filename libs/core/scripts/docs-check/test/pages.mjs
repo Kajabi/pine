@@ -43,6 +43,7 @@ function check(body, { other = OTHER_BODY, ...options } = {}) {
 }
 
 const messages = (result) => result.findings.map((f) => `${f.rule}:${f.line}: ${f.message}`);
+const ruleMessages = (result, rule) => messages(result).filter((message) => message.startsWith(`${rule}:`));
 const skips = (result) => result.skipped.map((s) => `${s.rule}:${s.line}`);
 
 describe('broken-anchor', () => {
@@ -87,7 +88,7 @@ describe('broken-anchor', () => {
       '  <pds-link href="#profile">Profile</pds-link>',
       '</DocCanvas>',
     ].join('\n');
-    assert.deepEqual(messages(check(body)), ['broken-anchor:10: #nope matches no heading on this page.']);
+    assert.deepEqual(ruleMessages(check(body), 'broken-anchor'), ['broken-anchor:10: #nope matches no heading on this page.']);
   });
 
   it('checks an anchor on another MDX page, and lists one on a page with no MDX file as not checked', () => {
@@ -119,7 +120,7 @@ describe('broken-anchor', () => {
       '',
       '</section>',
     ].join('\n');
-    assert.deepEqual(messages(check(body)), [
+    assert.deepEqual(ruleMessages(check(body), 'broken-anchor'), [
       'broken-anchor:12: #gone matches no heading on this page.',
       'broken-anchor:14: #also-gone matches no heading on this page.',
     ]);
@@ -150,6 +151,107 @@ describe('broken-docs-link', () => {
     assert.match(formatReport(unknown), /the docs page id of libs\/core\/src\/x\.stories\.js isn't known/);
     const cased = check('## Links\n\n[Other](../?path=/docs/Guides-Other--docs)');
     assert.deepEqual([messages(cased), skips(cased)], [[], ['broken-docs-link:10']]);
+  });
+});
+
+describe('prose-link', () => {
+  const found = (line, written) =>
+    `prose-link:${line}: ${written} is a JSX link in prose. Only markdown links get Storybook's link style, in-app navigation to headings and pages, and a new tab for other sites.`;
+
+  it('fails <a>, <pds-link> and <PdsLink> in a paragraph, a list item, a JSX table cell and a quote on a guide, at their lines', () => {
+    const body = [
+      '## Links',
+      '',
+      'See <a href="#links">links</a> and <pds-link href="/docs/guides-other--docs">Other</pds-link>.',
+      '',
+      '- <a href="https://example.com">Example</a>',
+      '- <PdsLink href="#links">Links</PdsLink>',
+      '',
+      '<pds-table>',
+      '  <pds-table-body>',
+      '    <pds-table-row>',
+      '      <pds-table-cell>See <a href="#links">Links</a>.</pds-table-cell>',
+      '      <pds-table-cell><pds-link href="#links">Links</pds-link></pds-table-cell>',
+      '    </pds-table-row>',
+      '  </pds-table-body>',
+      '</pds-table>',
+      '',
+      '> **Note:** see <a href="#links">links</a>, or <pds-link href="https://example.com" external>Example</pds-link>.',
+    ].join('\n');
+    const result = check(body);
+    assert.deepEqual(messages(result), [
+      found(10, '<a href="#links">'),
+      found(10, '<pds-link href="/docs/guides-other--docs">'),
+      found(12, '<a href="https://example.com">'),
+      found(13, '<PdsLink href="#links">'),
+      found(18, '<a href="#links">'),
+      found(19, '<pds-link href="#links">'),
+      found(24, '<a href="#links">'),
+      found(24, '<pds-link href="https://example.com">'),
+    ]);
+    assert.equal(
+      result.findings[0].hint,
+      'Write it as markdown: [text](#heading) for a heading on the same page, [text](/docs/<id>) for another Storybook page and [text](https://…) for another site.',
+    );
+  });
+
+  it('fails a JSX link on a component page too', () => {
+    const source = page('Widget', 'See <pds-link href="#widget">the widget</pds-link>.');
+    const result = checkPages([{ file: 'libs/core/src/components/pds-widget/docs/pds-widget.mdx', source }]);
+    assert.deepEqual(ruleMessages(result, 'prose-link'), [found(8, '<pds-link href="#widget">')]);
+  });
+
+  it("reports only the link in prose, not those in a DocCanvas preview or its mdxSource, a Canvas, a Story, a code fence or inline code", () => {
+    const body = [
+      '## Examples',
+      '',
+      '<DocCanvas mdxSource={{ webComponent: `<a href="#examples">Profile</a>`, react: `<PdsLink href="#examples">Profile</PdsLink>` }}>',
+      '  <pds-box>',
+      '    <pds-link href="#examples">Profile</pds-link>',
+      '  </pds-box>',
+      '</DocCanvas>',
+      '',
+      '<Canvas>',
+      '  <a href="#examples">Profile</a>',
+      '</Canvas>',
+      '',
+      '<Story name="Links">',
+      '  <pds-link href="#examples">Profile</pds-link>',
+      '</Story>',
+      '',
+      '```html',
+      '<a href="#examples">Profile</a>',
+      '```',
+      '',
+      'Write `<a href="#examples">` or `<pds-link href="#examples">` in code.',
+      '',
+      'Only <a href="#examples">this one</a> is prose.',
+    ].join('\n');
+    assert.deepEqual(messages(check(body)), [found(30, '<a href="#examples">')]);
+  });
+
+  it('reports only the JSX link, not markdown links, reference-style links or markdown inside a JSX wrapper', () => {
+    const body = [
+      '## Links',
+      '',
+      '[Links](#links), [Other](/docs/guides-other--docs), [Site](https://example.com) and [a reference][site].',
+      '',
+      '<pds-box>',
+      '',
+      '[Links](#links) inside a box.',
+      '',
+      '</pds-box>',
+      '',
+      '[site]: https://example.com',
+      '',
+      'Only <a href="#links">this one</a> is JSX.',
+    ].join('\n');
+    assert.deepEqual(messages(check(body)), [found(20, '<a href="#links">')]);
+  });
+
+  it('reports an <a> whose href is an expression by its tag, and not an <a> with no href, which is an anchor rather than a link', () => {
+    const body = ['## Links', '', '<a id="links-anchor"></a> <a name="old-anchor" />', '', 'See <a href={url}>the link</a>.'].join('\n');
+    assert.deepEqual(messages(check(body)), [found(12, '<a>')]);
   });
 });
 

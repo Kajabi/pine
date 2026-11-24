@@ -18,7 +18,7 @@ const COMPONENTS_DIR = `${CORE_ROOT}/src/components`;
 const STATUSES = ['stable', 'beta', 'deprecated'];
 const UNWRAPPED_ELEMENTS = new Set(['div', 'span', 'p', 'pds-box', 'pds-text']);
 const DROPPED_ELEMENTS = new Set(['Meta', 'Controls', 'Story', 'StatusBadge', 'img']);
-const EXAMPLE_ELEMENTS = new Set(['DocCanvas', 'Canvas', 'Story']);
+export const EXAMPLE_ELEMENTS = new Set(['DocCanvas', 'Canvas', 'Story']);
 const ABSOLUTE_URL = /^(?:[a-z][a-z\d+.-]*:|\/\/)/i;
 const UNTITLED = '\u0000untitled';
 
@@ -57,7 +57,7 @@ function tableToMarkdown(node, _parent, state, info) {
 }
 
 const compareStrings = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
-const isJsx = (node) => node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement';
+export const isJsx = (node) => node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement';
 const attribute = (node, name) => node?.attributes?.find((a) => a.type === 'mdxJsxAttribute' && a.name === name);
 const attributeString = (node, name) => {
   const value = attribute(node, name)?.value;

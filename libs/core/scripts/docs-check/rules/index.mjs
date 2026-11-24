@@ -4,6 +4,7 @@ import headingContract from './heading-contract.mjs';
 import invalidValue from './invalid-value.mjs';
 import missingDescription from './missing-description.mjs';
 import oversizeSection from './oversize-section.mjs';
+import proseLink from './prose-link.mjs';
 import undocumentedPart from './undocumented-part.mjs';
 import undocumentedSlot from './undocumented-slot.mjs';
 import unknownAttribute from './unknown-attribute.mjs';
@@ -29,6 +30,7 @@ export const RULES = [
   wrongDefault,
   brokenAnchor,
   brokenDocsLink,
+  proseLink,
   oversizeSection,
   headingContract,
 ];
