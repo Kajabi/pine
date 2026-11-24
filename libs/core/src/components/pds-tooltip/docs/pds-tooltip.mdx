@@ -399,11 +399,22 @@ const PublishButton = ({ tourStep }: { tourStep: string }) => (
 
 In HTML, the tooltip below starts open. Your tour code closes it by removing `opened` or calling `hideTooltip()`.
 
-```html
-<pds-tooltip content="Publish when you're ready to go live." placement="bottom" opened>
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-tooltip content="Publish when you're ready to go live." placement="right" opened>
   <pds-button variant="primary">Publish</pds-button>
-</pds-tooltip>
-```
+</pds-tooltip>`,
+    react: `import { PdsButton, PdsTooltip } from '@pine-ds/react';
+
+<PdsTooltip content="Publish when you're ready to go live." placement="right" opened>
+  <PdsButton variant="primary">Publish</PdsButton>
+</PdsTooltip>`,
+  }}
+>
+  <pds-tooltip content="Publish when you're ready to go live." placement="right" opened>
+    <pds-button variant="primary">Publish</pds-button>
+  </pds-tooltip>
+</DocCanvas>
 
 ## Additional Resources
 
