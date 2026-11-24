@@ -207,14 +207,24 @@ To have a control of your own take Escape, call `preventDefault()` on the Escape
       <PdsModal componentId="non-dismissible-modal" backdropDismiss={false} open={open} onPdsModalClose={() => setOpen(false)}>
         <PdsModalHeader>…</PdsModalHeader>
         <PdsModalContent>…</PdsModalContent>
-        <PdsModalFooter>…</PdsModalFooter>
+        <PdsModalFooter>
+          <PdsBox justifyContent="end" gap="sm" padding="md" fit>
+            <PdsButton variant="secondary" onClick={() => setOpen(false)}>Cancel</PdsButton>
+            <PdsButton variant="primary" onClick={() => setOpen(false)}>Confirm</PdsButton>
+          </PdsBox>
+        </PdsModalFooter>
       </PdsModal>
     `,
     webComponent: `
       <pds-modal id="non-dismissible-modal" component-id="non-dismissible-modal" backdrop-dismiss="false">
         <pds-modal-header>…</pds-modal-header>
         <pds-modal-content>…</pds-modal-content>
-        <pds-modal-footer>…</pds-modal-footer>
+        <pds-modal-footer>
+          <pds-box justify-content="end" gap="sm" padding="md" fit>
+            <pds-button variant="secondary" onclick="document.querySelector('#non-dismissible-modal').open = false">Cancel</pds-button>
+            <pds-button variant="primary" onclick="document.querySelector('#non-dismissible-modal').open = false">Confirm</pds-button>
+          </pds-box>
+        </pds-modal-footer>
       </pds-modal>
     `
   }}
@@ -248,7 +258,7 @@ To have a control of your own take Escape, call `preventDefault()` on the Escape
         </pds-box>
       </pds-modal-content>
       <pds-modal-footer>
-        <pds-box fit justify-content="end" padding="md" gap="sm">
+        <pds-box justify-content="end" gap="sm" padding="md" fit>
           <pds-button variant="secondary" onClick={() => {
             const modal = document.querySelector('#non-dismissible-modal');
             if (modal) modal.open = false;
