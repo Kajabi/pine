@@ -172,7 +172,7 @@ export class PdsBox {
 
   /**
    * Defines the style of the box's border, and of each edge set with the per-side border props.
-   * Use `dashed` for an empty or loading placeholder.
+   * Use `dashed` for an empty placeholder, such as a drop zone, and pair it with text that says what goes there.
    * @defaultValue solid
    */
   @Prop() borderStyle?: `solid` | `dashed`;
