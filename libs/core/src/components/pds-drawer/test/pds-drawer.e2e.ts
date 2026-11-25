@@ -244,6 +244,23 @@ describe('pds-drawer', () => {
       });
       expect(justifyContent).toBe('flex-start');
     });
+
+    it('fills the viewport height against its edge, not placed like a modal', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 1440, height: 900 });
+      await page.setContent(`<pds-drawer component-id="test" open><div>Content</div></pds-drawer>`);
+      await page.waitForChanges();
+
+      const gaps = await page.evaluate(() => {
+        const panel = (document.querySelector('pds-drawer pds-modal .pds-modal') as HTMLElement).getBoundingClientRect();
+        return {
+          top: Math.round(panel.top),
+          bottom: Math.round(window.innerHeight - panel.bottom),
+          right: Math.round(window.innerWidth - panel.right),
+        };
+      });
+      expect(gaps).toEqual({ top: 0, bottom: 0, right: 0 });
+    });
   });
 
   describe('size', () => {

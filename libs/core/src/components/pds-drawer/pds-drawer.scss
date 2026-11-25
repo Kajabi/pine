@@ -10,8 +10,12 @@
 // chain through `.pds-drawer` — both would also reach a pds-modal nested
 // *inside* the drawer's own content (e.g. a confirm dialog), since that one
 // sits inside ours too. Only our own wrapper carries the marker.
+//
+// The modal lays out its backdrop as a grid that places the panel near the center; a drawer docks
+// it to an edge with flex instead.
 .pds-drawer__modal > .pds-modal__backdrop {
   align-items: stretch;
+  display: flex;
 }
 
 .pds-drawer__modal:not(.pds-drawer__modal--modal) > .pds-modal__backdrop {
