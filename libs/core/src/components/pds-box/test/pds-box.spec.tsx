@@ -1163,6 +1163,7 @@ describe('pds-box', () => {
     ];
     const attributes: [string, string][] = [
       ['border-radius', 'md'],
+      ['border-style', 'dashed'],
       ['container', 'inline-size'],
       ['direction', 'column'],
       ['display', 'flex'],
