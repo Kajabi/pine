@@ -171,6 +171,13 @@ export class PdsBox {
   @Prop() borderRadius?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
 
   /**
+   * Defines the style of the box's border, and of each edge set with the per-side border props.
+   * Use `dashed` for an empty placeholder, such as a drop zone, and pair it with text that says what goes there.
+   * @defaultValue solid
+   */
+  @Prop() borderStyle?: `solid` | `dashed`;
+
+  /**
    * Makes the box a size container by setting `container-type`. `inline-size` stops the box's
    * content from setting its width, so long unwrapped text truncates instead of widening it, and
    * lets children use container query units. `size` does the same for both axes, so the box needs
@@ -772,6 +779,7 @@ export class PdsBox {
     ${this.borderInlineEnd === true ? 'pds-box--border-inline-end' : ''}
     ${this.borderInlineEnd === false ? 'pds-box--border-inline-end-none' : ''}
     ${this.borderRadius != null && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
+    ${this.borderStyle != null && this.borderStyle.trim() !== '' ? `pds-box--border-style-${this.borderStyle}` : ''}
     ${this.container != null && this.container.trim() !== '' ? `pds-box--container-${this.container}` : ''}
     ${this.direction != null && this.direction.trim() !== '' ? `pds-box-direction-${this.direction}` : ''}
     ${this.display != null && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}

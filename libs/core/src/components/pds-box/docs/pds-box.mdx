@@ -42,6 +42,7 @@ Box is our primitive layout component. It is intended to be used as a building b
 
 - `pds-box` adds no role or semantics. Use headings, lists and landmark elements, such as `nav` or a `pds-container` with `tag`, to structure the content.
 - Reading and focus order follow the DOM order. No `pds-box` prop reorders its children, so write the markup in the order the content should be read.
+- A dashed border is a visual cue only. When a box is an empty placeholder, add text that says what goes there.
 
 ## Properties
 
@@ -1386,6 +1387,20 @@ By default Box has no border radius. Use `border-radius` to change the rounding 
   <pds-box border="true" border-radius="sm">sm border radius</pds-box>
   <pds-box border="true" border-radius="md">md border radius</pds-box>
   <pds-box border="true" border-radius="lg">lg border radius</pds-box>
+</DocCanvas>
+
+#### Border Style
+By default the border is solid. Set `border-style="dashed"` for an empty placeholder, such as a drop zone. A dashed edge only shows sighted users that something is missing, so pair it with text that says what goes there. It applies to `border` and to each edge set with the per-side border props.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsBox border borderStyle="dashed" borderRadius="md" padding="md">Dashed border</PdsBox>
+<PdsBox borderBlockEnd borderStyle="dashed" padding="md">Dashed block-end edge</PdsBox>`,
+    webComponent: `<pds-box border="true" border-style="dashed" border-radius="md" padding="md">Dashed border</pds-box>
+<pds-box border-block-end="true" border-style="dashed" padding="md">Dashed block-end edge</pds-box>`
+}}>
+  <pds-box border="true" border-style="dashed" border-radius="md" padding="md">Dashed border</pds-box>
+  <pds-box border-block-end="true" border-style="dashed" padding="md">Dashed block-end edge</pds-box>
 </DocCanvas>
 
 #### Shadow

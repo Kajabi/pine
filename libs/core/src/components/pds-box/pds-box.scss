@@ -4,6 +4,8 @@ pds-box {
   --border-width-default: var(--pine-border-width-thin);
   --color-background-box: inherit;
   --color-border-box: inherit;
+  // Set on every box so a nested box doesn't inherit its parent's dashed border
+  --border-style-box: solid;
 
   display: block;
 }
@@ -122,17 +124,22 @@ $pine-spacing-tokens: (
 
 $logical-sides: ('block-start', 'block-end', 'inline-start', 'inline-end');
 $box-border-color: var(--color-border-box, var(--pine-color-border));
+$box-border-style: var(--border-style-box, solid);
+
+.pds-box--border-style-dashed {
+  --border-style-box: dashed;
+}
 
 .pds-box--border {
   border-color: $box-border-color;
-  border-style: solid;
+  border-style: $box-border-style;
   border-width: var(--border-width-default);
 }
 
 // Per-side border helpers
 @each $side in $logical-sides {
   .pds-box--border-#{$side} {
-    border-#{$side}: var(--border-width-default) solid $box-border-color;
+    border-#{$side}: var(--border-width-default) $box-border-style $box-border-color;
   }
 
   // Element selector outranks .pds-box--border so an explicit `false` wins regardless of rule order

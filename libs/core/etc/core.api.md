@@ -151,6 +151,7 @@ export namespace Components {
         "borderInlineEnd"?: boolean;
         "borderInlineStart"?: boolean;
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "borderStyle"?: `solid` | `dashed`;
         "container"?: BoxContainerType;
         "direction"?: `row` | `column`;
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
@@ -1217,6 +1218,7 @@ export namespace LocalJSX {
         "borderInlineEnd"?: boolean;
         "borderInlineStart"?: boolean;
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "borderStyle"?: `solid` | `dashed`;
         "container"?: BoxContainerType;
         "direction"?: `row` | `column`;
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
@@ -1370,6 +1372,8 @@ export namespace LocalJSX {
         "borderInlineStart": boolean;
         // (undocumented)
         "borderRadius": `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        // (undocumented)
+        "borderStyle": `solid` | `dashed`;
         // (undocumented)
         "container": BoxContainerType;
         // (undocumented)

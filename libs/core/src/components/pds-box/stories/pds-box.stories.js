@@ -22,6 +22,7 @@ const BaseTemplate = (args) => html`
   border-inline-end="${ifDefined(args.borderInlineEnd)}"
   border-color="${ifDefined(args.borderColor)}"
 	border-radius="${ifDefined(args.borderRadius)}"
+  border-style="${ifDefined(args.borderStyle)}"
   container="${ifDefined(args.container)}"
   direction="${ifDefined(args.direction)}"
 	display="${ifDefined(args.display)}"

@@ -342,6 +342,46 @@ describe('pds-box', () => {
     expect(element).not.toHaveAttribute('style');
   });
 
+  describe('border-style', () => {
+    it('renders the dashed class when border-style is dashed', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border="true" border-style="dashed"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass('pds-box--border');
+      expect(page.root).toHaveClass('pds-box--border-style-dashed');
+    });
+
+    it('applies to a per-side border', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border-block-end="true" border-style="dashed"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass('pds-box--border-block-end');
+      expect(page.root).toHaveClass('pds-box--border-style-dashed');
+    });
+
+    it('renders no border-style class without the prop', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border="true"></pds-box>`,
+      });
+
+      expect(page.root?.className).not.toContain('pds-box--border-style-');
+    });
+
+    it('omits the border-style class when whitespace-only is provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box border="true" border-style="   "></pds-box>`,
+      });
+
+      expect(page.root?.className).not.toContain('pds-box--border-style-');
+    });
+  });
+
   it('renders border-radius class when prop is set to none', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
@@ -1123,6 +1163,7 @@ describe('pds-box', () => {
     ];
     const attributes: [string, string][] = [
       ['border-radius', 'md'],
+      ['border-style', 'dashed'],
       ['container', 'inline-size'],
       ['direction', 'column'],
       ['display', 'flex'],

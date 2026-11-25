@@ -159,6 +159,52 @@ describe('pds-box per-side borders', () => {
     expect(styles.getPropertyValue('border-inline-start-color')).toBe('rgb(0, 114, 239)');
   });
 
+  describe('border-style', () => {
+    it('draws a dashed border on every side', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-box id="target" border="true" border-style="dashed">Box</pds-box>');
+
+      const styles = await (await page.find('#target')).getComputedStyle();
+
+      expect(styles.getPropertyValue('border-block-start-style')).toBe('dashed');
+      expect(styles.getPropertyValue('border-block-end-style')).toBe('dashed');
+      expect(styles.getPropertyValue('border-inline-start-style')).toBe('dashed');
+      expect(styles.getPropertyValue('border-inline-end-style')).toBe('dashed');
+    });
+
+    it('draws a dashed per-side border', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-box id="target" border-block-end="true" border-style="dashed">Box</pds-box>');
+
+      const styles = await (await page.find('#target')).getComputedStyle();
+
+      expect(styles.getPropertyValue('border-block-end-style')).toBe('dashed');
+      expect(styles.getPropertyValue('border-block-end-width')).toBe('1px');
+    });
+
+    it('stays solid without the prop', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-box id="target" border="true">Box</pds-box>');
+
+      const styles = await (await page.find('#target')).getComputedStyle();
+
+      expect(styles.getPropertyValue('border-block-start-style')).toBe('solid');
+    });
+
+    it('keeps a nested box solid inside a dashed box', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-box border="true" border-style="dashed">
+          <pds-box id="inner" border="true">Inner</pds-box>
+        </pds-box>
+      `);
+
+      const styles = await (await page.find('#inner')).getComputedStyle();
+
+      expect(styles.getPropertyValue('border-block-start-style')).toBe('solid');
+    });
+  });
+
   it('has no accessibility violations', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-box border-block-end="true">Box</pds-box>');
