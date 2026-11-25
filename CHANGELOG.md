@@ -1,3 +1,18 @@
+## 5.2.0 (2026-11-25)
+
+### Features 🚀
+
+- **pds-box:** add border-style prop for dashed borders ([#1023](https://github.com/Kajabi/pine/pull/1023))
+
+### Documentation 📄
+
+- **core:** write docs links as markdown, styled like pds-link ([#1021](https://github.com/Kajabi/pine/pull/1021))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 5.1.3 (2026-11-24)
 
 ### Bug Fixes 🐛
